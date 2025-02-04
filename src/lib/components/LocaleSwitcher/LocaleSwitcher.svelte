@@ -4,7 +4,7 @@
   import { goto } from "$app/navigation";
   import { config } from "$lib/i18n";
 
-  export let currentLocale = page?.params?.locale || config.defaultLocale;
+  $: currentLocale = page.data.locale || config.defaultLocale;
   export let availableLocales = config.availableLocales;
   export let onLocaleChange = async (newLocale: string) => {
     if (goto) {
@@ -16,20 +16,18 @@
   const localeLabels: Record<string, string> = {
     en: "English",
     es: "Español",
-    // ...add other locale labels
   };
 
   function getLocalePath(newLocale: string): string {
-    const currentPath = page?.url?.pathname || "/";
+    const currentPath = page.url.pathname;
     const segments = currentPath.split("/").filter(Boolean);
+    const currentLocaleSegment = config.availableLocales.includes(segments[0]) ? segments[0] : null;
+    const pathWithoutLocale = currentLocaleSegment 
+      ? `/${segments.slice(1).join("/")}` 
+      : currentPath;
 
-    if (newLocale === config.defaultLocale) {
-      return segments.length > 1 ? `/${segments.slice(1).join("/")}` : "/";
-    }
-
-    return currentLocale === config.defaultLocale
-      ? `/${newLocale}${currentPath}`
-      : currentPath.replace(`/${currentLocale}`, `/${newLocale}`);
+    // Always add locale prefix including default locale
+    return `/${newLocale}${pathWithoutLocale}`;
   }
 
   async function switchLocale(newLocale: string) {
