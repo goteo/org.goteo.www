@@ -1,7 +1,7 @@
 <script lang="ts">
   import { _ } from "svelte-i18n";
-  import LocaleSwitcher from "../../components/LocaleSwitcher.svelte";
-  import type { PageData } from './$types';
+  import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
+  import type { PageData } from "./$types";
 
   export let data: PageData;
 </script>
