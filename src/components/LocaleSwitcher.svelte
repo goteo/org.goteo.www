@@ -1,70 +1,53 @@
 <script lang="ts">
-  import { locale, isLoading } from "svelte-i18n";
-  import { browser } from "$app/environment";
-  import type { LocaleConfig } from "$lib/i18n/types";
+  import { fade } from "svelte/transition";
+  import { page } from "$app/stores";
+  import { goto } from "$app/navigation";
+  import { config } from "$lib/i18n";
 
-  const supportedLocales: LocaleConfig[] = [
-    { code: "en", label: "English" },
-    { code: "es", label: "Español" }
-  ];
+  const localeLabels: Record<string, string> = {
+    en: "English",
+    es: "Español",
+    // ...add other locale labels
+  };
 
-  async function setLocale(code: LocaleConfig['code']) {
-    try {
-      await locale.set(code);
-      if (browser) {
-        localStorage.setItem("locale", code);
-      }
-    } catch (error) {
-      console.error('Failed to set locale:', error);
+  $: currentLocale = $page.params.locale || config.defaultLocale;
+
+  function getLocalePath(newLocale: string): string {
+    const currentPath = $page.url.pathname;
+    const segments = currentPath.split("/").filter(Boolean);
+
+    if (newLocale === config.defaultLocale) {
+      return segments.length > 1 ? `/${segments.slice(1).join("/")}` : "/";
     }
+
+    return currentLocale === config.defaultLocale
+      ? `/${newLocale}${currentPath}`
+      : currentPath.replace(`/${currentLocale}`, `/${newLocale}`);
+  }
+
+  async function switchLocale(newLocale: string) {
+    const newPath = getLocalePath(newLocale);
+    await goto(newPath, { invalidateAll: true });
   }
 </script>
 
-<div class="locale-switcher" role="group" aria-label="Language selector">
-  {#each supportedLocales as { code, label }}
-    <button
-      class="locale-button"
-      class:active={$locale === code}
-      on:click={() => setLocale(code)}
-      aria-label={`Switch to ${label}`}
-      disabled={$isLoading}
-      aria-current={$locale === code}
-    >
-      {#if $isLoading && $locale === code}
-        <span class="loading">...</span>
-      {/if}
-      {label}
-    </button>
-  {/each}
+<div class="relative" role="group" aria-label="Language selector">
+  <select
+    class="appearance-none w-full py-2 px-4 pr-8 border border-gray-300 rounded-md bg-white cursor-pointer text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+    value={currentLocale}
+    on:change={(e) => switchLocale(e.currentTarget.value)}
+    aria-label="Select language"
+    transition:fade
+  >
+    {#each config.availableLocales as locale}
+      <option value={locale}>
+        {localeLabels[locale] || locale.toUpperCase()}
+      </option>
+    {/each}
+  </select>
+  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+      <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+    </svg>
+  </div>
 </div>
-
-<style>
-  .locale-switcher {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .locale-button {
-    padding: 0.5rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background: transparent;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .locale-button:disabled {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
-  .locale-button.active {
-    background: #ddd;
-  }
-
-  .loading {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-</style>

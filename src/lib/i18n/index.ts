@@ -1,42 +1,37 @@
 import { browser } from "$app/environment";
-import { init, register } from "svelte-i18n";
+import { init, register, getLocaleFromNavigator } from "svelte-i18n";
+import { config, hasTranslations } from "./config";
 import type { SupportedLocale } from "./types";
 
-const defaultLocale: SupportedLocale = "es";
-const supportedLocales: SupportedLocale[] = ["en", "es"];
+let initializationPromise: Promise<void> | null = null;
 
-register("en", () => import("./locales/en.json").catch(() => ({})));
-register("es", () => import("./locales/es.json").catch(() => ({})));
-
-/**
- * Determines the initial locale based on the following priority:
- * 1. Previously saved locale in localStorage
- * 2. Browser's language
- * 3. Default locale
- */
-const getInitialLocale = (): SupportedLocale => {
-  if (!browser) return defaultLocale;
-
-  try {
-    const savedLocale = localStorage.getItem("locale") as SupportedLocale;
-    if (savedLocale && supportedLocales.includes(savedLocale)) {
-      return savedLocale;
-    }
-
-    const browserLocale = window.navigator.language.split(
-      "-",
-    )[0] as SupportedLocale;
-    return supportedLocales.includes(browserLocale)
-      ? browserLocale
-      : defaultLocale;
-  } catch {
-    return defaultLocale;
-  }
-};
-
-init({
-  fallbackLocale: defaultLocale,
-  initialLocale: getInitialLocale(),
+// Pre-register all available locales
+config.availableLocales.forEach((locale) => {
+  register(locale, () => import(`./locales/${locale}.json`).then((module) => module.default));
 });
 
-export { supportedLocales, defaultLocale };
+export function getBrowserLocale(): SupportedLocale | null {
+  if (!browser) return null;
+  const navigatorLocale = getLocaleFromNavigator()?.split("-")[0] as SupportedLocale;
+  return hasTranslations(navigatorLocale) ? navigatorLocale : null;
+}
+
+export async function initI18n() {
+  if (initializationPromise) return initializationPromise;
+
+  initializationPromise = (async () => {
+    const initLocale = browser ? getBrowserLocale() || config.defaultLocale : config.defaultLocale;
+
+    init({
+      fallbackLocale: config.defaultLocale,
+      initialLocale: initLocale,
+    });
+  })();
+
+  return initializationPromise;
+}
+
+// Remove loadLocaleData as it's no longer needed
+export * from "./config";
+export { config, isValidLocale, hasTranslations } from "./config";
+export type { LocaleConfig, SupportedLocale } from "./types";

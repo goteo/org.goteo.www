@@ -1,6 +1,7 @@
-export type SupportedLocale = "en" | "es";
+export type SupportedLocale = "en" | "es" | "ca" | "fr" | "de";
 
 export interface LocaleConfig {
-  code: SupportedLocale;
-  label: string;
+  supportedLocales: SupportedLocale[];
+  defaultLocale: SupportedLocale;
+  availableLocales: SupportedLocale[];
 }
