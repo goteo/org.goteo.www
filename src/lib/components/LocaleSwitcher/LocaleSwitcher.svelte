@@ -1,8 +1,17 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
-  import { page } from "$app/stores";
+  import { page } from "$app/state";
   import { goto } from "$app/navigation";
   import { config } from "$lib/i18n";
+
+  export let currentLocale = page?.params?.locale || config.defaultLocale;
+  export let availableLocales = config.availableLocales;
+  export let onLocaleChange = async (newLocale: string) => {
+    if (goto) {
+      const newPath = getLocalePath(newLocale);
+      await goto(newPath, { invalidateAll: true });
+    }
+  };
 
   const localeLabels: Record<string, string> = {
     en: "English",
@@ -10,10 +19,8 @@
     // ...add other locale labels
   };
 
-  $: currentLocale = $page.params.locale || config.defaultLocale;
-
   function getLocalePath(newLocale: string): string {
-    const currentPath = $page.url.pathname;
+    const currentPath = page?.url?.pathname || "/";
     const segments = currentPath.split("/").filter(Boolean);
 
     if (newLocale === config.defaultLocale) {
@@ -26,8 +33,7 @@
   }
 
   async function switchLocale(newLocale: string) {
-    const newPath = getLocalePath(newLocale);
-    await goto(newPath, { invalidateAll: true });
+    await onLocaleChange(newLocale);
   }
 </script>
 
@@ -39,7 +45,7 @@
     aria-label="Select language"
     transition:fade
   >
-    {#each config.availableLocales as locale}
+    {#each availableLocales as locale}
       <option value={locale}>
         {localeLabels[locale] || locale.toUpperCase()}
       </option>
