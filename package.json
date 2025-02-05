@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.3",
+    "svelte-i18n": "^4.0.1",
     "tailwindcss": "^4.0.3"
   }
 }
