@@ -12,6 +12,7 @@
   $: currentLocale = page.data.locale || config.defaultLocale;
   
   export let locales: LocaleInfo[] = [];
+  export let loading = false;
   
   export let onLocaleChange = async (newLocale: string) => {
     if (goto) {
@@ -19,23 +20,6 @@
       await goto(newPath, { invalidateAll: true });
     }
   };
-
-  async function fetchLocaleData() {
-    try {
-      const response = await fetch('/api/locales');
-      const data = await response.json();
-      locales = data.locales;
-    } catch (error) {
-      console.error('Failed to fetch locale data:', error);
-      // Fallback to defaults from config
-      locales = config.availableLocales.map(code => ({ 
-        code, 
-        label: code.toUpperCase() 
-      }));
-    }
-  }
-
-  fetchLocaleData();
 
   function getLocalePath(newLocale: string): string {
     const currentPath = page.url.pathname;
@@ -67,13 +51,18 @@
     value={currentLocale}
     on:change={(e) => switchLocale(e.currentTarget.value)}
     aria-label="Select language"
+    disabled={loading}
     transition:fade
   >
-    {#each locales as locale}
-      <option value={locale.code}>
-        {locale.label}
-      </option>
-    {/each}
+    {#if loading}
+      <option>Loading...</option>
+    {:else}
+      {#each locales as locale}
+        <option value={locale.code}>
+          {locale.label}
+        </option>
+      {/each}
+    {/if}
   </select>
   <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

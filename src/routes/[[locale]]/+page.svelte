@@ -4,10 +4,15 @@
   import type { PageData } from "./$types";
 
   export let data: PageData;
+  
+  $: loading = !data.locales || data.locales.length === 0;
 </script>
 
 <div class="p-4">
-  <LocaleSwitcher />
+  <LocaleSwitcher 
+    locales={data.locales} 
+    loading={loading} 
+  />
   <h1 class="text-3xl font-bold underline mt-4">{$_("greeting")}</h1>
   <p class="mt-2">{$_("farewell")}</p>
   <p class="mt-2">Current locale: {data.locale}</p>
