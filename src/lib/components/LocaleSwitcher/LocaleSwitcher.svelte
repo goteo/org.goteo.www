@@ -4,8 +4,15 @@
   import { goto } from "$app/navigation";
   import { config } from "$lib/i18n";
 
+  interface LocaleInfo {
+    code: string;
+    label: string;
+  }
+
   $: currentLocale = page.data.locale || config.defaultLocale;
-  export let availableLocales = config.availableLocales;
+  
+  export let locales: LocaleInfo[] = [];
+  
   export let onLocaleChange = async (newLocale: string) => {
     if (goto) {
       const newPath = getLocalePath(newLocale);
@@ -13,18 +20,29 @@
     }
   };
 
-  const localeLabels: Record<string, string> = {
-    en: "English",
-    es: "Español",
-  };
+  async function fetchLocaleData() {
+    try {
+      const response = await fetch('/api/locales');
+      const data = await response.json();
+      locales = data.locales;
+    } catch (error) {
+      console.error('Failed to fetch locale data:', error);
+      // Fallback to defaults from config
+      locales = config.availableLocales.map(code => ({ 
+        code, 
+        label: code.toUpperCase() 
+      }));
+    }
+  }
+
+  fetchLocaleData();
 
   function getLocalePath(newLocale: string): string {
     const currentPath = page.url.pathname;
     const segments = currentPath.split("/").filter(Boolean);
-    const currentLocaleSegment = config.availableLocales.includes(segments[0]) ? segments[0] : null;
+    const currentLocaleSegment = locales.map(l => l.code).includes(segments[0]) ? segments[0] : null;
     const pathWithoutLocale = currentLocaleSegment ? `/${segments.slice(1).join("/")}` : currentPath;
 
-    // Always add locale prefix including default locale
     return `/${newLocale}${pathWithoutLocale}`;
   }
 
@@ -51,9 +69,9 @@
     aria-label="Select language"
     transition:fade
   >
-    {#each availableLocales as locale}
-      <option value={locale}>
-        {localeLabels[locale] || locale.toUpperCase()}
+    {#each locales as locale}
+      <option value={locale.code}>
+        {locale.label}
       </option>
     {/each}
   </select>
