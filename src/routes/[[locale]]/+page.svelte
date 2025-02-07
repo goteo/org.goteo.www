@@ -4,7 +4,18 @@
   import type { PageData } from "./$types";
   import { Button } from "$lib/components/ui/button";
 
+  import { Area, Axis, Chart, Svg } from "layerchart";
+  import { scaleTime } from "d3-scale";
+  import { format, PeriodType } from "@layerstack/utils";
+
   export let data: PageData;
+
+  const dateSeriesData = [
+    { date: new Date("2023-01-01"), value: 10 },
+    { date: new Date("2023-01-02"), value: 20 },
+    { date: new Date("2023-01-03"), value: 15 },
+    { date: new Date("2023-01-04"), value: 25 },
+  ];
 
   $: loading = !data.locales || data.locales.length === 0;
 </script>
@@ -15,6 +26,24 @@
   <p class="mt-2">{$_("farewell")}</p>
   <p class="mt-2">Current locale: {data.locale}</p>
   <Button>Click me</Button>
+</div>
+
+<div class="h-[300px] p-4 border rounded">
+  <Chart
+    data={dateSeriesData}
+    x="date"
+    xScale={scaleTime()}
+    y="value"
+    yDomain={[0, null]}
+    yNice
+    padding={{ left: 16, bottom: 24 }}
+  >
+    <Svg>
+      <Axis placement="left" grid rule />
+      <Axis placement="bottom" format={(d) => format(d, PeriodType.Day, { variant: "short" })} rule />
+      <Area line={{ class: "stroke-2 stroke-primary" }} class="fill-primary/30" />
+    </Svg>
+  </Chart>
 </div>
 
 <style>
