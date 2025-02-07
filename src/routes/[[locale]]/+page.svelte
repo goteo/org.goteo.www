@@ -7,6 +7,7 @@
   import { Area, Axis, Chart, Svg } from "layerchart";
   import { scaleTime } from "d3-scale";
   import { format, PeriodType } from "@layerstack/utils";
+  import CampaignProgress from "$lib/components/CampaignProgress/CampaignProgress.svelte";
 
   export let data: PageData;
 
@@ -45,6 +46,18 @@
     </Svg>
   </Chart>
 </div>
+
+<CampaignProgress
+  obtained={150547}
+  target={999999}
+  donations={2128}
+  minimum={20000}
+  timeSeriesData={[
+    { date: new Date("2024-01-01"), amount: 0 },
+    { date: new Date("2024-01-15"), amount: 75000 },
+    { date: new Date("2024-02-01"), amount: 150547 },
+  ]}
+/>
 
 <style>
   /* @reference "tailwindcss/theme"; */
