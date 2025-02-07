@@ -1,7 +1,6 @@
 <script lang="ts">
   import { isLoading, locale } from "svelte-i18n";
   import { page } from "$app/stores";
-  import "../../app.css";
 
   $: {
     const currentLocale = $page.data.locale;

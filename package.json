@@ -25,15 +25,19 @@
     "@sveltejs/adapter-node": "^5.2.12",
     "@sveltejs/kit": "^2.17.1",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.10",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.20",
     "storybook": "^8.5.3",
     "svelte": "^5.19.9",
     "svelte-check": "^4.1.4",
+    "tailwindcss": "^3.4.17",
     "typescript": "^5.7.3",
     "vite": "^6.1.0"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.4",
-    "svelte-i18n": "^4.0.1",
-    "tailwindcss": "^4.0.4"
+    "svelte-i18n": "^4.0.1"
   }
 }

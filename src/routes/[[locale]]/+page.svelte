@@ -19,8 +19,8 @@
 </div>
 
 <style>
-  @reference "tailwindcss/theme";
+  /* @reference "tailwindcss/theme"; */
   :global(html) {
-    background-color: theme(--color-gray-100);
+    /* background-color: theme(--color-gray-100); */
   }
 </style>
