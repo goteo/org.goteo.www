@@ -30,6 +30,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "@tailwindcss/vite": "^4.0.4",
     "autoprefixer": "^10.4.20",
+    "bits-ui": "^0.22.0",
     "clsx": "^2.1.1",
     "storybook": "^8.5.3",
     "svelte": "^5.19.9",
