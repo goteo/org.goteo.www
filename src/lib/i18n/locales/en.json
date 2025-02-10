@@ -1,4 +1,12 @@
 {
   "greeting": "Hello",
-  "farewell": "Goodbye"
+  "farewell": "Goodbye",
+  "campaignProgress": {
+    "minimumReached": "Minimum reached!",
+    "obtained": "Obtained",
+    "donations": "Donations made",
+    "optimal": "Optimal",
+    "minimum": "Minimum",
+    "donate": "Donate to this campaign"
+  }
 }
