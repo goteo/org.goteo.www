@@ -20,11 +20,11 @@
 <Card class="w-full max-w-md drop-shadow-lg">
   <CardContent class="p-6 space-y-6">
     <div class="space-y-6 border rounded-3xl">
-      {#if isMinimumReached}
-        <div class="flex justify-end mr-4 mt-4">
+      <div class="flex justify-end mr-4 mt-4">
+        {#if isMinimumReached}
           <Badge variant="outline">{$_("campaignProgress.minimumReached")}</Badge>
-        </div>
-      {/if}
+        {/if}
+      </div>
 
       <div class="h-[150px] w-full overflow-hidden rounded-b-3xl">
         <Chart
