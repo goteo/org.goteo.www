@@ -4,9 +4,6 @@
   import type { PageData } from "./$types";
   import { Button } from "$lib/components/ui/button";
 
-  import { Area, Axis, Chart, Svg } from "layerchart";
-  import { scaleTime } from "d3-scale";
-  import { format, PeriodType } from "@layerstack/utils";
   import CampaignProgress from "$lib/components/CampaignProgress/CampaignProgress.svelte";
 
   export let data: PageData;
@@ -29,33 +26,22 @@
   <Button>Click me</Button>
 </div>
 
-<div class="h-[300px] p-4 border rounded">
-  <Chart
-    data={dateSeriesData}
-    x="date"
-    xScale={scaleTime()}
-    y="value"
-    yDomain={[0, null]}
-    yNice
-    padding={{ left: 16, bottom: 24 }}
-  >
-    <Svg>
-      <Axis placement="left" grid rule />
-      <Axis placement="bottom" format={(d) => format(d, PeriodType.Day, { variant: "short" })} rule />
-      <Area line={{ class: "stroke-2 stroke-primary" }} class="fill-primary/30" />
-    </Svg>
-  </Chart>
-</div>
-
 <CampaignProgress
   obtained={150547}
-  target={999999}
+  target={300000}
   donations={2128}
-  minimum={20000}
+  minimum={100000}
   timeSeriesData={[
-    { date: new Date("2024-01-01"), amount: 0 },
-    { date: new Date("2024-01-15"), amount: 75000 },
-    { date: new Date("2024-02-01"), amount: 150547 },
+    { date: new Date("2024-01-01"), amount: 50000 },
+    { date: new Date("2024-01-15"), amount: 50000 },
+    { date: new Date("2024-02-01"), amount: 75000 },
+    { date: new Date("2024-02-15"), amount: 75000 },
+    { date: new Date("2024-03-01"), amount: 100000 },
+    { date: new Date("2024-03-15"), amount: 100000 },
+    { date: new Date("2024-04-01"), amount: 150000 },
+    { date: new Date("2024-04-15"), amount: 150000 },
+    { date: new Date("2024-05-01"), amount: 150000 },
+    { date: new Date("2024-12-15"), amount: 150000 },
   ]}
 />
 
