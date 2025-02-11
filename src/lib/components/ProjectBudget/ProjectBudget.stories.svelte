@@ -34,3 +34,14 @@
     target: 20000,
   }}
 />
+
+<!-- Default state with all values -->
+<Story
+  name="No Target"
+  args={{
+    header: "Coste de la campaña",
+    content:
+      "La campaña de crowdfunding está diseñada para que ayude a dar a conocer Climática y las informaciones que publica. Esta partida incluye la coordinación, el diseño y producción de materiales gráficos y el porcentaje de Goteo.",
+    minimum: 17000,
+  }}
+/>
