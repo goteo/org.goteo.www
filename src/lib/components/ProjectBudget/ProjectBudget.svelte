@@ -16,7 +16,9 @@
         <Card.Title>{header}</Card.Title>
       </Card.Header>
       <Card.CardContent>
-        <Card.Description>{content?.slice(0, 170)}...</Card.Description>
+        <Card.Description>
+          {content?.slice(0, 170)}{content?.length > 170 ? "..." : ""}
+        </Card.Description>
       </Card.CardContent>
 
       <Card.Footer class="flex gap-8">
@@ -24,10 +26,12 @@
           <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
           <p class="text-xl font-bold">{minimum.toLocaleString()}€</p>
         </div>
-        <div>
-          <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
-          <p class="text-xl font-bold">{target.toLocaleString()}€</p>
-        </div>
+        {#if target}
+          <div>
+            <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
+            <p class="text-xl font-bold">{target.toLocaleString()}€</p>
+          </div>
+        {/if}
       </Card.Footer>
     </Card.Root>
   </Dialog.Trigger>
@@ -43,10 +47,12 @@
         <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
         <p class="text-xl font-bold">{minimum.toLocaleString()}€</p>
       </div>
-      <div>
-        <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
-        <p class="text-xl font-bold">{target.toLocaleString()}€</p>
-      </div>
+      {#if target}
+        <div>
+          <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
+          <p class="text-xl font-bold">{target.toLocaleString()}€</p>
+        </div>
+      {/if}
     </div>
   </Dialog.Content>
 </Dialog.Root>
