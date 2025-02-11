@@ -1,4 +1,18 @@
 {
   "greeting": "Hola",
-  "farewell": "Adiós"
+  "farewell": "Adiós",
+  "campaignProgress": {
+    "minimumReached": "Mínimo conseguido!",
+    "obtained": "Obtenido",
+    "donations": "Donaciones realizadas",
+    "optimal": "Óptimo",
+    "minimum": "Mínimo",
+    "donate": "Donar a esta campaña"
+  },
+  "reward": {
+    "donate": "Dona",
+    "donors": "donates",
+    "units": "Quedan {units} unidades",
+    "noUnits": "No quedan unidades"
+  }
 }
