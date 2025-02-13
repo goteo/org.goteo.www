@@ -14,8 +14,8 @@ const ProjectSchema = z.object({
   ),
 });
 
-export const load: PageLoad = async ({ fetch }) => {
-  const res = await fetch("/api/projects");
+export const load: PageLoad = async ({ fetch, params }) => {
+  const res = await fetch(`/projects/${params.projectId}`);
   if (!res.ok) throw new Error("Failed to fetch project data");
 
   const json = await res.json();
