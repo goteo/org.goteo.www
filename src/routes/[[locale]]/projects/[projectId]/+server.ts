@@ -1,6 +1,17 @@
 import { json } from "@sveltejs/kit";
 
-const mapProjectFromSample = (
+export async function GET({ fetch, params }) {
+  const fetcher = service(fetch);
+
+  const project = await fetcher.getProject(params.projectId);
+  const accounting = await fetcher.getAccounting(project);
+  const transactions = await fetcher.getTransactions(project);
+
+  const payload = map(project, accounting, transactions);
+  return json(payload);
+}
+
+const map = (
   project: typeof ProjectSample,
   accounting: typeof AccountingSample,
   transactions: Array<typeof TransactionSample>
@@ -14,38 +25,40 @@ const mapProjectFromSample = (
   return { minimum, optimum, obtained, donations, timeSeriesData };
 };
 
-export async function GET({ fetch, params }) {
-  console.debug({ params });
-  const project: typeof ProjectSample = await fetch(`https://v4.goteo.org/v4/projects/${params.projectId}`, {
-    headers: {
-      "content-type": "application/json",
-      "accept-language": "en",
-    },
-  }).then((res) => res.json());
-  console.debug({ project });
+const service = (fetcher: typeof fetch) => {
+  const headers = {
+    "content-type": "application/json",
+    "accept-language": "en",
+  };
 
-  const accounting: typeof AccountingSample = await fetch(`https://v4.goteo.org${project.accounting}`, {
-    headers: {
-      "content-type": "application/json",
-      "accept-language": "en",
-    },
-  }).then((res) => res.json());
-  console.debug({ accounting });
+  const getProject = async (id: string): Promise<typeof ProjectSample> => {
+    const res = await fetcher(`https://v4.goteo.org/v4/projects/${id}`, { headers });
+    if (!res.ok) throw new Error("Failed to fetch project data");
 
-  const transactions: (typeof TransactionSample)[] = await fetch(
-    `https://v4.goteo.org/v4/accounting_transactions?target=${project.accounting}`,
-    {
-      headers: {
-        "content-type": "application/json",
-        "accept-language": "en",
-      },
-    }
-  ).then((res) => res.json());
-  console.debug({ transactions });
+    const json = await res.json();
+    return json;
+  };
 
-  const payload = mapProjectFromSample(project, accounting, transactions);
-  return json(payload);
-}
+  const getAccounting = async (project: typeof ProjectSample): Promise<typeof AccountingSample> => {
+    const res = await fetcher(`https://v4.goteo.org${project.accounting}`, { headers });
+    if (!res.ok) throw new Error("Failed to fetch accounting data");
+
+    const json = await res.json();
+    return json;
+  };
+
+  const getTransactions = async (project: typeof ProjectSample): Promise<Array<typeof TransactionSample>> => {
+    const res = await fetcher(`https://v4.goteo.org/v4/accounting_transactions?target=${project.accounting}`, {
+      headers,
+    });
+    if (!res.ok) throw new Error("Failed to fetch transactions data");
+
+    const json = await res.json();
+    return json;
+  };
+
+  return { getProject, getAccounting, getTransactions };
+};
 
 const ProjectSample = {
   accounting: "/v4/accountings/4",
