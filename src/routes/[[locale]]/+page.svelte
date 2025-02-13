@@ -28,7 +28,7 @@
 
 <CampaignProgress
   obtained={150547}
-  target={300000}
+  optimum={300000}
   donations={2128}
   minimum={100000}
   timeSeriesData={[

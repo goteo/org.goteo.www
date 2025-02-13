@@ -7,7 +7,7 @@
   import { _ } from "svelte-i18n";
 
   export let obtained: number = 0;
-  export let target: number = 0;
+  export let optimum: number = 0;
   export let donations: number = 0;
   export let minimum: number = 0;
   export let timeSeriesData: Array<{ date: Date; amount: number }> = [];
@@ -33,12 +33,12 @@
           xScale={scaleTime()}
           y="amount"
           yScale={scaleLinear()}
-          yDomain={[0, Math.max(obtained, target)]}
+          yDomain={[0, Math.max(obtained, optimum)]}
           {padding}
         >
           <Svg>
             <Area fill="#59E9D3" />
-            <Rule y={target} class="stroke-1 stroke-gray-400 [stroke-dasharray:2] [stroke-linecap:round] " />
+            <Rule y={optimum} class="stroke-1 stroke-gray-400 [stroke-dasharray:2] [stroke-linecap:round] " />
             <Rule y={minimum} class="stroke-1 stroke-gray-400 [stroke-dasharray:2] [stroke-linecap:round] " />
           </Svg>
         </Chart>
@@ -59,7 +59,7 @@
       <div class="space-y-4">
         <div>
           <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
-          <p class="text-3xl font-bold">{target.toLocaleString()}€</p>
+          <p class="text-3xl font-bold">{optimum.toLocaleString()}€</p>
         </div>
         <div>
           <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>

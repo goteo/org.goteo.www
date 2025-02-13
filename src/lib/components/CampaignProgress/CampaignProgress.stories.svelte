@@ -15,7 +15,7 @@
     component: CampaignProgress,
     argTypes: {
       obtained: { control: "number" },
-      target: { control: "number" },
+      optimum: { control: "number" },
       donations: { control: "number" },
       minimum: { control: "number" },
       timeSeriesData: { control: "object" },
@@ -37,7 +37,7 @@
   name="Default"
   args={{
     obtained: 150547,
-    target: 300000,
+    optimum: 300000,
     donations: 2128,
     minimum: 100000,
     timeSeriesData: defaultTimeSeriesData,
@@ -49,7 +49,7 @@
   name="Campaign Start"
   args={{
     obtained: 0,
-    target: 300000,
+    optimum: 300000,
     donations: 0,
     minimum: 100000,
     timeSeriesData: [],
@@ -61,7 +61,7 @@
   name="Below Minimum"
   args={{
     obtained: 75000,
-    target: 300000,
+    optimum: 300000,
     donations: 128,
     minimum: 100000,
     timeSeriesData: defaultTimeSeriesData.slice(0, 2),
@@ -73,19 +73,19 @@
   name="Just Reached Minimum"
   args={{
     obtained: 100000,
-    target: 300000,
+    optimum: 300000,
     donations: 1500,
     minimum: 100000,
     timeSeriesData: defaultTimeSeriesData.slice(0, 3),
   }}
 />
 
-<!-- Target exceeded -->
+<!-- optimum exceeded -->
 <Story
-  name="Target Exceeded"
+  name="Optimum Exceeded"
   args={{
     obtained: 350000,
-    target: 300000,
+    optimum: 300000,
     donations: 3500,
     minimum: 100000,
     timeSeriesData: [...defaultTimeSeriesData, { date: new Date("2024-06-01"), amount: 350000 }],
@@ -97,7 +97,7 @@
   name="High Volume"
   args={{
     obtained: 1500000,
-    target: 2000000,
+    optimum: 2000000,
     donations: 15000,
     minimum: 500000,
     timeSeriesData: defaultTimeSeriesData.map((d) => ({ ...d, amount: d.amount * 10 })),
