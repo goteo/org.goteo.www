@@ -1,4 +1,5 @@
 import { json } from "@sveltejs/kit";
+import { env } from '$env/dynamic/private';
 
 export async function GET({ fetch, params }) {
   const fetcher = service(fetch);
@@ -32,7 +33,7 @@ const service = (fetcher: typeof fetch) => {
   };
 
   const getProject = async (id: string): Promise<typeof ProjectSample> => {
-    const res = await fetcher(`https://v4.goteo.org/v4/projects/${id}`, { headers });
+    const res = await fetcher(`${env.API_BASE_URL}/v4/projects/${id}`, { headers });
     if (!res.ok) throw new Error("Failed to fetch project data");
 
     const json = await res.json();
@@ -40,7 +41,7 @@ const service = (fetcher: typeof fetch) => {
   };
 
   const getAccounting = async (project: typeof ProjectSample): Promise<typeof AccountingSample> => {
-    const res = await fetcher(`https://v4.goteo.org${project.accounting}`, { headers });
+    const res = await fetcher(`${env.API_BASE_URL}${project.accounting}`, { headers });
     if (!res.ok) throw new Error("Failed to fetch accounting data");
 
     const json = await res.json();
@@ -48,7 +49,7 @@ const service = (fetcher: typeof fetch) => {
   };
 
   const getTransactions = async (project: typeof ProjectSample): Promise<Array<typeof TransactionSample>> => {
-    const res = await fetcher(`https://v4.goteo.org/v4/accounting_transactions?target=${project.accounting}`, {
+    const res = await fetcher(`${env.API_BASE_URL}/v4/accounting_transactions?target=${project.accounting}`, {
       headers,
     });
     if (!res.ok) throw new Error("Failed to fetch transactions data");
