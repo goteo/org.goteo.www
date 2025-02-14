@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Clock, MapPin, Share2, Heart, Menu, CircleUserRound } from "lucide-svelte";
+  import { Menu, CircleUserRound } from "lucide-svelte";
   import { Button } from "$lib/components/ui/button";
   import Logo from "./Logo.svg";
   import Bag from "./bag.svg";
