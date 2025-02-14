@@ -12,6 +12,12 @@ const ProjectSchema = z.object({
       amount: z.number(),
     })
   ),
+  locales: z.array(
+    z.object({
+      code: z.string(),
+      label: z.string(),
+    })
+  ),
 });
 
 export const load: PageLoad = async ({ fetch, params }) => {

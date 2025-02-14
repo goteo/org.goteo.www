@@ -24,8 +24,25 @@ const map = (
   const obtained = accounting.balance.amount;
   const donations = transactions.reduce((acc, { money }) => acc + money.amount, 0);
   const timeSeriesData = balancePoints.map(({ start, balance }) => ({ date: start, amount: balance.amount }));
+  const projectLocales: Array<{ code: string; label: string }> = project.locales.map((code) => ({
+    code,
+    ...locales[code],
+  }));
 
-  return { minimum, optimum, obtained, donations, timeSeriesData };
+  return {
+    minimum,
+    optimum,
+    obtained,
+    donations,
+    timeSeriesData,
+    locales: projectLocales,
+  };
+};
+
+const locales: Record<string, { label: string }> = {
+  en: { label: "English" },
+  es: { label: "Español" },
+  ca: { label: "Català" },
 };
 
 const service = (fetcher: typeof fetch) => {

@@ -17,5 +17,7 @@
 {:else}
   <Header />
   <Navigation />
-  <slot />
+  <main class="max-w-7xl mx-auto flex flex-col gap-8 m-8">
+    <slot />
+  </main>
 {/if}
