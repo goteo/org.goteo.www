@@ -5,6 +5,7 @@
   import { Button } from "$lib/components/ui/button";
   import boxIcon from "./box.svg";
   import userIcon from "./user.svg";
+  import bagIcon from "./bag.svg";
 
   export let image: string = "";
   export let header: string = "";
@@ -56,19 +57,41 @@
       </Card.Footer>
     </Card.Root>
   </Dialog.Trigger>
-  <Dialog.Content>
-    <Dialog.Header>
-      <Dialog.Title>{header}</Dialog.Title>
+  <Dialog.Content class="w-full max-w-2xl gap-8">
+    <Dialog.Header class="gap-2">
+      <img src={image} alt="Reward" class="w-full h-80 object-cover" />
     </Dialog.Header>
-    <Dialog.Description>
+    <Dialog.Description class="grid grid-cols-1 gap-4">
+      <Dialog.Title class="text-2xl text-primary-foreground">{header}</Dialog.Title>
       {content}
     </Dialog.Description>
-    <Dialog.Footer class="grid grid-cols-1 gap-4">
-      <div class="flex justify-between">
-        <p>{donors} {$_("reward.donors")}</p>
-        <p>{($_("reward.units"), { units: $number(units || 0) })}</p>
+    <Dialog.Footer class="grid grid-cols-1 gap-6">
+      <div class="flex gap-4">
+        <p class="flex items-center gap-2 text-sm">
+          <img alt="donors" src={userIcon} class="w-6 h-6" />
+          {$number(donors)}
+          {$_("reward.donors")}
+        </p>
+
+        {#if units !== null}
+          <p class="flex items-center gap-2 text-sm">
+            <img alt="donors" src={boxIcon} class="w-6 h-6" />
+            {#if units > 0}
+              {$_("reward.units", {
+                values: { units: $number(units, { format: "compactShort", locale: "en-US" }) },
+              })}
+            {:else}
+              {$_("reward.noUnits")}
+            {/if}
+          </p>
+        {/if}
       </div>
-      <Button variant="secondary" size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
+      <div class="grid grid-cols-2 gap-4">
+        <Button variant="outline" size="lg" class="w-full"
+          ><img src={bagIcon} alt="Bag" class="h-6 mr-4" /> Añadir al carro y continuar</Button
+        >
+        <Button variant="default" size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
+      </div>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
