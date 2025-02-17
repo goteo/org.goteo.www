@@ -16,7 +16,7 @@
 
   export let src: string;
   export let title: string;
-  export let thumbnails: string;
+  export let thumbnails: string = "";
   export let poster: {
     src: string;
     alt: string;

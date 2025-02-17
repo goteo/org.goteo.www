@@ -8,9 +8,10 @@
   import CampaignProgress from "$lib/components/CampaignProgress/CampaignProgress.svelte";
   import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
   import Player from "$lib/components/Player";
+  import RewardCard from "$lib/components/RewardCard";
 
   let { data }: PageProps = $props();
-  let { locales, campaign, video, project } = data;
+  let { locales, campaign, video, rewards } = data;
 </script>
 
 <section class="flex flex-col gap-8">
@@ -44,5 +45,9 @@
     <Button variant="link">Ver todas</Button>
   </div>
 
-  <div class="grid md:grid-cols-3 gap-6"></div>
+  <div class="grid md:grid-cols-3 gap-6">
+    {#each rewards.slice(0, 3) as reward}
+      <RewardCard {...reward} />
+    {/each}
+  </div>
 </section>

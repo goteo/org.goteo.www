@@ -8,8 +8,9 @@ export async function GET({ fetch, params }) {
   const accounting = await fetcher.getAccounting(project);
   const transactions = await fetcher.getTransactions(project);
   const balancePoints = await fetcher.getAccountingBalancePoints(accounting);
+  const rewards = await fetcher.getRewards(project);
 
-  const payload = map(project, accounting, transactions, balancePoints);
+  const payload = map(project, accounting, transactions, balancePoints, rewards);
   return json(payload);
 }
 
@@ -17,13 +18,24 @@ const map = (
   project: typeof ProjectSample,
   accounting: typeof AccountingSample,
   transactions: Array<typeof TransactionSample>,
-  balancePoints: Array<typeof AccountingBalancePointSample>
+  balancePoints: Array<typeof AccountingBalancePointSample>,
+  rewards: Array<typeof RewardSample>
 ) => {
   const minimum = Object.values(project.budget.minimum).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget.optimum).reduce((acc, { amount }) => acc + amount, 0);
   const obtained = accounting.balance.amount;
   const donations = transactions.reduce((acc, { money }) => acc + money.amount, 0);
   const timeSeriesData = balancePoints.map(({ start, balance }) => ({ date: start, amount: balance.amount }));
+  const rewardsMap = rewards.map(({ id, title, description, money, hasUnits, unitsAvailable }) => ({
+    id,
+    image: "https://placehold.co/320x160",
+    header: title,
+    content: description,
+    donate: money.amount,
+    donors: 0,
+    units: hasUnits ? unitsAvailable : null,
+  }));
+
   const projectLocales: Array<{ code: string; label: string }> = project.locales.map((code) => ({
     code,
     ...locales[code],
@@ -37,6 +49,7 @@ const map = (
       alt: project.description,
     },
   };
+
   return {
     campaign: {
       minimum,
@@ -45,6 +58,7 @@ const map = (
       donations,
       timeSeriesData,
     },
+    rewards: rewardsMap,
     locales: projectLocales,
     video,
   };
@@ -110,7 +124,25 @@ const service = (fetcher: typeof fetch) => {
     return json;
   };
 
-  return { getProject, getAccounting, getTransactions, getAccountingBalancePoints };
+  const getRewards = async (project: typeof ProjectSample): Promise<Array<typeof RewardSample>> => {
+    if (mock) return RewardsSample;
+
+    const res = await fetcher(`${env.API_BASE_URL}/v4/project_rewards`, {
+      headers,
+    });
+    if (!res.ok) throw new Error("Failed to fetch transactions data");
+
+    const json = await res.json();
+    return json;
+  };
+
+  return {
+    getProject,
+    getAccounting,
+    getTransactions,
+    getAccountingBalancePoints,
+    getRewards,
+  };
 };
 
 const ProjectSample = {
@@ -317,3 +349,73 @@ const AccountingBalancePointsSample = [
 ];
 
 const AccountingBalancePointSample = AccountingBalancePointsSample[0];
+
+const RewardsSample = [
+  {
+    id: 1,
+    project: "https://api.goteo.org/v4/projects/1",
+    title: "Agradecimento no site",
+    description: "Seu nome será exibido na página de agradecimentos do projeto.",
+    money: {
+      amount: 20,
+      currency: "EUR",
+    },
+    hasUnits: false,
+    unitsTotal: 0,
+    unitsAvailable: 0,
+  },
+  {
+    id: 2,
+    project: "https://api.goteo.org/v4/projects/1",
+    title: "Camiseta exclusiva",
+    description: "Camiseta oficial do projeto, limitada a 100 unidades.",
+    money: {
+      amount: 50,
+      currency: "EUR",
+    },
+    hasUnits: true,
+    unitsTotal: 100,
+    unitsAvailable: 50,
+  },
+  {
+    id: 3,
+    project: "https://api.goteo.org/v4/projects/1",
+    title: "Acesso antecipado à plataforma",
+    description: "Experimente a plataforma antes do lançamento oficial.",
+    money: {
+      amount: 30,
+      currency: "EUR",
+    },
+    hasUnits: false,
+    unitsTotal: 0,
+    unitsAvailable: 0,
+  },
+  {
+    id: 4,
+    project: "https://api.goteo.org/v4/projects/1",
+    title: "Sessão exclusiva com a equipe",
+    description: "Participe de uma sessão de perguntas e respostas exclusiva com a equipe do projeto. Vagas limitadas.",
+    money: {
+      amount: 100,
+      currency: "EUR",
+    },
+    hasUnits: true,
+    unitsTotal: 20,
+    unitsAvailable: 20,
+  },
+  {
+    id: 5,
+    project: "https://api.goteo.org/v4/projects/1",
+    title: "Kit de brindes",
+    description: "Kit contendo diversos brindes exclusivos do projeto.",
+    money: {
+      amount: 75,
+      currency: "EUR",
+    },
+    hasUnits: true,
+    unitsTotal: 50,
+    unitsAvailable: 35,
+  },
+];
+
+const RewardSample = RewardsSample[0];

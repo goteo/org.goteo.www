@@ -29,6 +29,16 @@ const ProjectSchema = z.object({
       alt: z.string(),
     }),
   }),
+  rewards: z.array(
+    z.object({
+      image: z.string(),
+      header: z.string(),
+      content: z.string(),
+      donate: z.number(),
+      donors: z.number(),
+      units: z.number().nullable(),
+    })
+  ),
 });
 
 export const load: PageLoad = async ({ fetch, params }) => {
@@ -36,10 +46,14 @@ export const load: PageLoad = async ({ fetch, params }) => {
   if (!res.ok) throw new Error("Failed to fetch project data");
 
   const json = await res.json();
+  // console.debug(json);
   const parsed = ProjectSchema.safeParse(json);
-  if (!parsed.success) throw new Error("Failed to parse project data");
+  if (!parsed.success) {
+    console.error(parsed.error);
+    throw new Error("Failed to parse project data");
+  }
 
   const { data } = parsed;
-  const { campaign, locales, video, ...project } = data;
-  return { campaign, locales, video, project };
+  const { campaign, locales, video, rewards, ...project } = data;
+  return { campaign, locales, video, rewards, project };
 };

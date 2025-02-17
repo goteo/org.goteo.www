@@ -11,7 +11,7 @@
   export let content: string = "";
   export let donate: number = 0;
   export let donors: number = 0;
-  export let units: number;
+  export let units: number | null = null;
 </script>
 
 <Dialog.Root>
@@ -34,7 +34,7 @@
             {$_("reward.donors")}
           </p>
 
-          {#if units >= 0}
+          {#if units !== null}
             <p class="flex items-center gap-2 text-sm">
               <img alt="donors" src={boxIcon} class="w-6 h-6" />
               {#if units > 0}
@@ -61,7 +61,7 @@
     <Dialog.Footer class="grid grid-cols-1 gap-4">
       <div class="flex justify-between">
         <p>{donors} {$_("reward.donors")}</p>
-        <p>{($_("reward.units"), { units: $number(units) })}</p>
+        <p>{($_("reward.units"), { units: $number(units || 0) })}</p>
       </div>
       <Button size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
     </Dialog.Footer>
