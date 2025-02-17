@@ -12,41 +12,46 @@
   export let donate: number = 0;
   export let donors: number = 0;
   export let units: number | null = null;
+  export let size: "sm" | "lg" = "lg";
 </script>
 
 <Dialog.Root>
   <Dialog.Trigger class="text-left">
     <Card.Root class="w-full max-w-md drop-shadow-sm">
       <Card.Header>
-        <img src={image} alt="Reward" class="w-full h-40 object-cover" />
-      </Card.Header>
-      <Card.CardContent class="flex flex-col gap-4 h-80">
+        {#if size === "lg"}
+          <img src={image} alt="Reward" class="w-full h-40 object-cover" />
+        {/if}
         <Card.Title>{header}</Card.Title>
+      </Card.Header>
+      <Card.CardContent class="flex flex-col gap-4 h-28">
         <Card.Description>
           {content}
         </Card.Description>
       </Card.CardContent>
       <Card.Footer class="grid grid-cols-1 gap-4">
-        <div class="grid grid-cols-2 gap-4">
-          <p class="flex items-center gap-2 text-sm">
-            <img alt="donors" src={userIcon} class="w-6 h-6" />
-            {$number(donors)}
-            {$_("reward.donors")}
-          </p>
-
-          {#if units !== null}
+        {#if size === "lg"}
+          <div class="grid grid-cols-2 gap-4">
             <p class="flex items-center gap-2 text-sm">
-              <img alt="donors" src={boxIcon} class="w-6 h-6" />
-              {#if units > 0}
-                {$_("reward.units", {
-                  values: { units: $number(units, { format: "compactShort", locale: "en-US" }) },
-                })}
-              {:else}
-                {$_("reward.noUnits")}
-              {/if}
+              <img alt="donors" src={userIcon} class="w-6 h-6" />
+              {$number(donors)}
+              {$_("reward.donors")}
             </p>
-          {/if}
-        </div>
+
+            {#if units !== null}
+              <p class="flex items-center gap-2 text-sm">
+                <img alt="donors" src={boxIcon} class="w-6 h-6" />
+                {#if units > 0}
+                  {$_("reward.units", {
+                    values: { units: $number(units, { format: "compactShort", locale: "en-US" }) },
+                  })}
+                {:else}
+                  {$_("reward.noUnits")}
+                {/if}
+              </p>
+            {/if}
+          </div>
+        {/if}
         <Button size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
       </Card.Footer>
     </Card.Root>
