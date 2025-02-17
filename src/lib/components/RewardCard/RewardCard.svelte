@@ -22,10 +22,10 @@
         {#if size === "lg"}
           <img src={image} alt="Reward" class="w-full h-40 object-cover" />
         {/if}
-        <Card.Title>{header}</Card.Title>
+        <Card.Title class="text-2xl">{header}</Card.Title>
       </Card.Header>
-      <Card.CardContent class="flex flex-col gap-4 h-28">
-        <Card.Description>
+      <Card.CardContent class="flex flex-col gap-4">
+        <Card.Description class="line-clamp-3">
           {content}
         </Card.Description>
       </Card.CardContent>
@@ -52,7 +52,7 @@
             {/if}
           </div>
         {/if}
-        <Button size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
+        <Button variant="secondary" size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
       </Card.Footer>
     </Card.Root>
   </Dialog.Trigger>
@@ -68,7 +68,7 @@
         <p>{donors} {$_("reward.donors")}</p>
         <p>{($_("reward.units"), { units: $number(units || 0) })}</p>
       </div>
-      <Button size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
+      <Button variant="secondary" size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>
