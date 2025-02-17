@@ -2,6 +2,7 @@
 
 import type { Options as ClientOptions, TDataShape, Client } from '@hey-api/client-fetch';
 import type { ApiAccountingsGetCollectionData, ApiAccountingsGetCollectionResponse, ApiAccountingsIdGetData, ApiAccountingsIdGetResponse, ApiAccountingsIdPatchData, ApiAccountingsIdPatchResponse, ApiAccountingBalancePointsGetCollectionData, ApiAccountingBalancePointsGetCollectionResponse, ApiAccountingTransactionsGetCollectionData, ApiAccountingTransactionsGetCollectionResponse, ApiAccountingTransactionsIdGetData, ApiAccountingTransactionsIdGetResponse, ApiGatewaysGetCollectionData, ApiGatewaysGetCollectionResponse, ApiGatewaysNameGetData, ApiGatewaysNameGetResponse, ApiGatewayChargesIdGetData, ApiGatewayChargesIdGetResponse, ApiGatewayCheckoutsGetCollectionData, ApiGatewayCheckoutsGetCollectionResponse, ApiGatewayCheckoutsPostData, ApiGatewayCheckoutsPostResponse, ApiGatewayCheckoutsIdGetData, ApiGatewayCheckoutsIdGetResponse, ApiProjectsGetCollectionData, ApiProjectsGetCollectionResponse, ApiProjectsPostData, ApiProjectsPostResponse, ApiProjectsIdDeleteData, ApiProjectsIdDeleteResponse, ApiProjectsIdGetData, ApiProjectsIdGetResponse, ApiProjectsIdPatchData, ApiProjectsIdPatchResponse, ApiProjectBudgetItemsGetCollectionData, ApiProjectBudgetItemsGetCollectionResponse, ApiProjectBudgetItemsPostData, ApiProjectBudgetItemsPostResponse, ApiProjectBudgetItemsIdDeleteData, ApiProjectBudgetItemsIdDeleteResponse, ApiProjectBudgetItemsIdGetData, ApiProjectBudgetItemsIdGetResponse, ApiProjectBudgetItemsIdPatchData, ApiProjectBudgetItemsIdPatchResponse, ApiProjectRewardsGetCollectionData, ApiProjectRewardsGetCollectionResponse, ApiProjectRewardsPostData, ApiProjectRewardsPostResponse, ApiProjectRewardsIdDeleteData, ApiProjectRewardsIdDeleteResponse, ApiProjectRewardsIdGetData, ApiProjectRewardsIdGetResponse, ApiProjectRewardsIdPatchData, ApiProjectRewardsIdPatchResponse, ApiProjectRewardClaimsGetCollectionData, ApiProjectRewardClaimsGetCollectionResponse, ApiProjectRewardClaimsPostData, ApiProjectRewardClaimsPostResponse, ApiProjectRewardClaimsIdDeleteData, ApiProjectRewardClaimsIdDeleteResponse, ApiProjectRewardClaimsIdGetData, ApiProjectRewardClaimsIdGetResponse, ApiProjectRewardClaimsIdPatchData, ApiProjectRewardClaimsIdPatchResponse, ApiTipjarsGetCollectionData, ApiTipjarsGetCollectionResponse, ApiTipjarsPostData, ApiTipjarsPostResponse, ApiTipjarsIdDeleteData, ApiTipjarsIdDeleteResponse, ApiTipjarsIdGetData, ApiTipjarsIdGetResponse, ApiTipjarsIdPatchData, ApiTipjarsIdPatchResponse, ApiUsersGetCollectionData, ApiUsersGetCollectionResponse, ApiUsersPostData, ApiUsersPostResponse, ApiUsersIdDeleteData, ApiUsersIdDeleteResponse, ApiUsersIdGetData, ApiUsersIdGetResponse, ApiUsersIdPatchData, ApiUsersIdPatchResponse, ApiUserPersonalsGetCollectionData, ApiUserPersonalsGetCollectionResponse, ApiUserPersonalsPostData, ApiUserPersonalsPostResponse, ApiUserPersonalsUserDeleteData, ApiUserPersonalsUserDeleteResponse, ApiUserPersonalsUserGetData, ApiUserPersonalsUserGetResponse, ApiUserPersonalsUserPatchData, ApiUserPersonalsUserPatchResponse, ApiUserTokensPostData, ApiUserTokensPostResponse, ApiUserTokensIdDeleteData, ApiUserTokensIdDeleteResponse, ApiUserTokensIdGetData, ApiUserTokensIdGetResponse, ApiVersionsGetCollectionData, ApiVersionsGetCollectionResponse, ApiVersionsIdGetData, ApiVersionsIdGetResponse } from './types.gen';
+import { zApiAccountingsGetCollectionResponse, zApiAccountingsIdGetResponse, zApiAccountingsIdPatchResponse, zApiAccountingBalancePointsGetCollectionResponse, zApiAccountingTransactionsGetCollectionResponse, zApiAccountingTransactionsIdGetResponse, zApiGatewaysGetCollectionResponse, zApiGatewaysNameGetResponse, zApiGatewayChargesIdGetResponse, zApiGatewayCheckoutsGetCollectionResponse, zApiGatewayCheckoutsPostResponse, zApiGatewayCheckoutsIdGetResponse, zApiProjectsGetCollectionResponse, zApiProjectsPostResponse, zApiProjectsIdDeleteResponse, zApiProjectsIdGetResponse, zApiProjectsIdPatchResponse, zApiProjectBudgetItemsGetCollectionResponse, zApiProjectBudgetItemsPostResponse, zApiProjectBudgetItemsIdDeleteResponse, zApiProjectBudgetItemsIdGetResponse, zApiProjectBudgetItemsIdPatchResponse, zApiProjectRewardsGetCollectionResponse, zApiProjectRewardsPostResponse, zApiProjectRewardsIdDeleteResponse, zApiProjectRewardsIdGetResponse, zApiProjectRewardsIdPatchResponse, zApiProjectRewardClaimsGetCollectionResponse, zApiProjectRewardClaimsPostResponse, zApiProjectRewardClaimsIdDeleteResponse, zApiProjectRewardClaimsIdGetResponse, zApiProjectRewardClaimsIdPatchResponse, zApiTipjarsGetCollectionResponse, zApiTipjarsPostResponse, zApiTipjarsIdDeleteResponse, zApiTipjarsIdGetResponse, zApiTipjarsIdPatchResponse, zApiUsersGetCollectionResponse, zApiUsersPostResponse, zApiUsersIdDeleteResponse, zApiUsersIdGetResponse, zApiUsersIdPatchResponse, zApiUserPersonalsGetCollectionResponse, zApiUserPersonalsPostResponse, zApiUserPersonalsUserDeleteResponse, zApiUserPersonalsUserGetResponse, zApiUserPersonalsUserPatchResponse, zApiUserTokensPostResponse, zApiUserTokensIdDeleteResponse, zApiUserTokensIdGetResponse, zApiVersionsGetCollectionResponse, zApiVersionsIdGetResponse } from './zod.gen';
 import { client as _heyApiClient } from './client.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<TData, ThrowOnError> & {
@@ -30,6 +31,9 @@ export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/accountings',
         ...options
     });
@@ -47,6 +51,9 @@ export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(option
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/accountings/{id}',
         ...options
     });
@@ -64,6 +71,9 @@ export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(opti
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/accountings/{id}',
         ...options,
         headers: {
@@ -85,6 +95,9 @@ export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boo
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingBalancePointsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/accounting_balance_points',
         ...options
     });
@@ -102,6 +115,9 @@ export const apiAccountingTransactionsGetCollection = <ThrowOnError extends bool
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingTransactionsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/accounting_transactions',
         ...options
     });
@@ -119,6 +135,9 @@ export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = fa
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiAccountingTransactionsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/accounting_transactions/{id}',
         ...options
     });
@@ -136,6 +155,9 @@ export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(o
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewaysGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/gateways',
         ...options
     });
@@ -153,6 +175,9 @@ export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(options
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewaysNameGetResponse.parseAsync(data);
+        },
         url: '/v4/gateways/{name}',
         ...options
     });
@@ -170,6 +195,9 @@ export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(opt
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewayChargesIdGetResponse.parseAsync(data);
+        },
         url: '/v4/gateway_charges/{id}',
         ...options
     });
@@ -187,6 +215,9 @@ export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = 
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewayCheckoutsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/gateway_checkouts',
         ...options
     });
@@ -204,6 +235,9 @@ export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(op
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewayCheckoutsPostResponse.parseAsync(data);
+        },
         url: '/v4/gateway_checkouts',
         ...options,
         headers: {
@@ -225,6 +259,9 @@ export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(o
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiGatewayCheckoutsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/gateway_checkouts/{id}',
         ...options
     });
@@ -242,6 +279,9 @@ export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(o
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/projects',
         ...options
     });
@@ -259,6 +299,9 @@ export const apiProjectsPost = <ThrowOnError extends boolean = false>(options: O
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectsPostResponse.parseAsync(data);
+        },
         url: '/v4/projects',
         ...options,
         headers: {
@@ -280,6 +323,9 @@ export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(option
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectsIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/projects/{id}',
         ...options
     });
@@ -297,6 +343,9 @@ export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(options: 
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/projects/{id}',
         ...options
     });
@@ -314,6 +363,9 @@ export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(options
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/projects/{id}',
         ...options,
         headers: {
@@ -335,6 +387,9 @@ export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean 
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectBudgetItemsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/project_budget_items',
         ...options
     });
@@ -352,6 +407,9 @@ export const apiProjectBudgetItemsPost = <ThrowOnError extends boolean = false>(
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectBudgetItemsPostResponse.parseAsync(data);
+        },
         url: '/v4/project_budget_items',
         ...options,
         headers: {
@@ -373,6 +431,9 @@ export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = fal
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectBudgetItemsIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/project_budget_items/{id}',
         ...options
     });
@@ -390,6 +451,9 @@ export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectBudgetItemsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/project_budget_items/{id}',
         ...options
     });
@@ -407,6 +471,9 @@ export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = fals
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectBudgetItemsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/project_budget_items/{id}',
         ...options,
         headers: {
@@ -428,6 +495,9 @@ export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = fa
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/project_rewards',
         ...options
     });
@@ -445,6 +515,9 @@ export const apiProjectRewardsPost = <ThrowOnError extends boolean = false>(opti
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardsPostResponse.parseAsync(data);
+        },
         url: '/v4/project_rewards',
         ...options,
         headers: {
@@ -466,6 +539,9 @@ export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardsIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/project_rewards/{id}',
         ...options
     });
@@ -483,6 +559,9 @@ export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(opt
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/project_rewards/{id}',
         ...options
     });
@@ -500,6 +579,9 @@ export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(o
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/project_rewards/{id}',
         ...options,
         headers: {
@@ -521,6 +603,9 @@ export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardClaimsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/project_reward_claims',
         ...options
     });
@@ -538,6 +623,9 @@ export const apiProjectRewardClaimsPost = <ThrowOnError extends boolean = false>
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardClaimsPostResponse.parseAsync(data);
+        },
         url: '/v4/project_reward_claims',
         ...options,
         headers: {
@@ -559,6 +647,9 @@ export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = fa
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardClaimsIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/project_reward_claims/{id}',
         ...options
     });
@@ -576,6 +667,9 @@ export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardClaimsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/project_reward_claims/{id}',
         ...options
     });
@@ -593,6 +687,9 @@ export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = fal
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiProjectRewardClaimsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/project_reward_claims/{id}',
         ...options,
         headers: {
@@ -614,6 +711,9 @@ export const apiTipjarsGetCollection = <ThrowOnError extends boolean = false>(op
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiTipjarsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/tipjars',
         ...options
     });
@@ -631,6 +731,9 @@ export const apiTipjarsPost = <ThrowOnError extends boolean = false>(options: Op
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiTipjarsPostResponse.parseAsync(data);
+        },
         url: '/v4/tipjars',
         ...options,
         headers: {
@@ -652,6 +755,9 @@ export const apiTipjarsIdDelete = <ThrowOnError extends boolean = false>(options
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiTipjarsIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/tipjars/{id}',
         ...options
     });
@@ -669,6 +775,9 @@ export const apiTipjarsIdGet = <ThrowOnError extends boolean = false>(options: O
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiTipjarsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/tipjars/{id}',
         ...options
     });
@@ -686,6 +795,9 @@ export const apiTipjarsIdPatch = <ThrowOnError extends boolean = false>(options:
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiTipjarsIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/tipjars/{id}',
         ...options,
         headers: {
@@ -707,6 +819,9 @@ export const apiUsersGetCollection = <ThrowOnError extends boolean = false>(opti
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUsersGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/users',
         ...options
     });
@@ -724,6 +839,9 @@ export const apiUsersPost = <ThrowOnError extends boolean = false>(options: Opti
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUsersPostResponse.parseAsync(data);
+        },
         url: '/v4/users',
         ...options,
         headers: {
@@ -745,6 +863,9 @@ export const apiUsersIdDelete = <ThrowOnError extends boolean = false>(options: 
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUsersIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/users/{id}',
         ...options
     });
@@ -762,6 +883,9 @@ export const apiUsersIdGet = <ThrowOnError extends boolean = false>(options: Opt
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUsersIdGetResponse.parseAsync(data);
+        },
         url: '/v4/users/{id}',
         ...options
     });
@@ -779,6 +903,9 @@ export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(options: O
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUsersIdPatchResponse.parseAsync(data);
+        },
         url: '/v4/users/{id}',
         ...options,
         headers: {
@@ -800,6 +927,9 @@ export const apiUserPersonalsGetCollection = <ThrowOnError extends boolean = fal
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserPersonalsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/user_personals',
         ...options
     });
@@ -817,6 +947,9 @@ export const apiUserPersonalsPost = <ThrowOnError extends boolean = false>(optio
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserPersonalsPostResponse.parseAsync(data);
+        },
         url: '/v4/user_personals',
         ...options,
         headers: {
@@ -838,6 +971,9 @@ export const apiUserPersonalsUserDelete = <ThrowOnError extends boolean = false>
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserPersonalsUserDeleteResponse.parseAsync(data);
+        },
         url: '/v4/user_personals/{user}',
         ...options
     });
@@ -855,6 +991,9 @@ export const apiUserPersonalsUserGet = <ThrowOnError extends boolean = false>(op
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserPersonalsUserGetResponse.parseAsync(data);
+        },
         url: '/v4/user_personals/{user}',
         ...options
     });
@@ -872,6 +1011,9 @@ export const apiUserPersonalsUserPatch = <ThrowOnError extends boolean = false>(
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserPersonalsUserPatchResponse.parseAsync(data);
+        },
         url: '/v4/user_personals/{user}',
         ...options,
         headers: {
@@ -893,6 +1035,9 @@ export const apiUserTokensPost = <ThrowOnError extends boolean = false>(options:
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserTokensPostResponse.parseAsync(data);
+        },
         url: '/v4/user_tokens',
         ...options,
         headers: {
@@ -914,6 +1059,9 @@ export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(opti
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserTokensIdDeleteResponse.parseAsync(data);
+        },
         url: '/v4/user_tokens/{id}',
         ...options
     });
@@ -931,6 +1079,9 @@ export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(options
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiUserTokensIdGetResponse.parseAsync(data);
+        },
         url: '/v4/user_tokens/{id}',
         ...options
     });
@@ -948,6 +1099,9 @@ export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(o
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiVersionsGetCollectionResponse.parseAsync(data);
+        },
         url: '/v4/versions',
         ...options
     });
@@ -965,6 +1119,9 @@ export const apiVersionsIdGet = <ThrowOnError extends boolean = false>(options: 
                 type: 'http'
             }
         ],
+        responseValidator: async (data) => {
+            return await zApiVersionsIdGetResponse.parseAsync(data);
+        },
         url: '/v4/versions/{id}',
         ...options
     });
