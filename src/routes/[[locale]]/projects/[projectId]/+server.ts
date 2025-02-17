@@ -17,7 +17,7 @@ const map = (
   project: typeof ProjectSample,
   accounting: typeof AccountingSample,
   transactions: Array<typeof TransactionSample>,
-  balancePoints: Array<typeof AccountingBalancePointSample>
+  balancePoints: Array<typeof AccountingBalancePointSample>,
 ) => {
   const minimum = Object.values(project.budget.minimum).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget.optimum).reduce((acc, { amount }) => acc + amount, 0);
@@ -91,7 +91,7 @@ const service = (fetcher: typeof fetch) => {
       `${env.API_BASE_URL}/v4/accounting_balance_points?accounting=/v4/accountings/${accounting.id}`,
       {
         headers,
-      }
+      },
     );
     if (!res.ok) throw new Error("Failed to fetch accounting balance points data");
 

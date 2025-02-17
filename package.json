@@ -51,7 +51,9 @@
     "d3-shape": "^3.2.0",
     "layerchart": "^0.93.10",
     "lucide-svelte": "^0.475.0",
+    "media-icons": "^1.1.5",
     "svelte-i18n": "^4.0.1",
+    "vidstack": "^1.12.13",
     "zod": "^3.24.2"
   }
 }

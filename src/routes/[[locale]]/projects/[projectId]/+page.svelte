@@ -7,6 +7,7 @@
   import { Button } from "$lib/components/ui/button";
   import CampaignProgress from "$lib/components/CampaignProgress/CampaignProgress.svelte";
   import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
+  import Player from "$lib/components/Player";
 
   let { data }: PageProps = $props();
   let { project } = data;
@@ -32,13 +33,7 @@
   </div>
 
   <div class="grid grid-flow-col gap-8">
-    <div class="bg-[#F3FF73] rounded-lg aspect-video relative">
-      <div class="absolute inset-0 flex items-center justify-center">
-        <div class="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center">
-          <div class="w-0 h-0 border-l-[20px] border-l-gray-800 border-y-[12px] border-y-transparent ml-1" />
-        </div>
-      </div>
-    </div>
+    <Player />
     <CampaignProgress {...project} />
   </div>
 </section>

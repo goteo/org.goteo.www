@@ -34,6 +34,9 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --media-brand: 245 245 245;
+    --media-focus: 78 156 246;
   }
 
   .dark {
@@ -75,8 +78,6 @@
   body {
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

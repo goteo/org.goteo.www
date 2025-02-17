@@ -4,6 +4,7 @@ import typography from "@tailwindcss/typography";
 import forms from "@tailwindcss/forms";
 import containerQueries from "@tailwindcss/container-queries";
 import animate from "tailwindcss-animate";
+import vidstack from "vidstack/tailwind.cjs";
 
 const config: Config = {
   darkMode: ["class"],
@@ -52,6 +53,8 @@ const config: Config = {
           DEFAULT: "hsl(var(--card) / <alpha-value>)",
           foreground: "hsl(var(--card-foreground) / <alpha-value>)",
         },
+        "media-brand": "rgb(var(--media-brand) / <alpha-value>)",
+        "media-focus": "rgb(var(--media-focus) / <alpha-value>)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -63,7 +66,25 @@ const config: Config = {
       },
     },
   },
-  plugins: [typography, forms, containerQueries, animate],
+  plugins: [
+    typography,
+    forms,
+    containerQueries,
+    animate,
+    vidstack({
+      prefix: "media",
+      webComponents: true,
+    }),
+    customVariants,
+  ],
 };
+
+function customVariants({ addVariant, matchVariant }) {
+  // Strict version of `.group` to help with nesting.
+  matchVariant("parent-data", (value) => `.parent[data-${value}] > &`);
+
+  addVariant("hocus", ["&:hover", "&:focus-visible"]);
+  addVariant("group-hocus", [".group:hover &", ".group:focus-visible &"]);
+}
 
 export default config;

@@ -10,13 +10,13 @@ const ProjectSchema = z.object({
     z.object({
       date: z.coerce.date(),
       amount: z.number(),
-    })
+    }),
   ),
   locales: z.array(
     z.object({
       code: z.string(),
       label: z.string(),
-    })
+    }),
   ),
 });
 
