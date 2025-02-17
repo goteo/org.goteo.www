@@ -10,7 +10,7 @@
   import Player from "$lib/components/Player";
 
   let { data }: PageProps = $props();
-  let { project } = data;
+  let { locales, campaign, video, project } = data;
 </script>
 
 <section class="flex flex-col gap-8">
@@ -24,7 +24,7 @@
       </p>
     </div>
     <div class="flex flex-col items-end justify-between">
-      <LocaleSwitcher locales={project.locales} />
+      <LocaleSwitcher {locales} />
       <div class="flex items-center gap-2 text-2xl text-primary-foreground font-medium">
         <Clock size={32} />
         <span>Quedan 16d 23h 57m</span>
@@ -33,16 +33,8 @@
   </div>
 
   <div class="grid grid-flow-col gap-8">
-    <Player
-      src="https://files.vidstack.io/sprite-fight/720p.mp4"
-      title="Sprite Fight"
-      thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
-      poster={{
-        src: "https://files.vidstack.io/sprite-fight/poster.webp",
-        alt: "Girl walks into campfire with gnomes surrounding her friend ready for their next meal!",
-      }}
-    />
-    <CampaignProgress {...project} />
+    <Player {...video} />
+    <CampaignProgress {...campaign} />
   </div>
 </section>
 

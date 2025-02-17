@@ -17,7 +17,7 @@ const map = (
   project: typeof ProjectSample,
   accounting: typeof AccountingSample,
   transactions: Array<typeof TransactionSample>,
-  balancePoints: Array<typeof AccountingBalancePointSample>,
+  balancePoints: Array<typeof AccountingBalancePointSample>
 ) => {
   const minimum = Object.values(project.budget.minimum).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget.optimum).reduce((acc, { amount }) => acc + amount, 0);
@@ -29,13 +29,24 @@ const map = (
     ...locales[code],
   }));
 
+  const video = {
+    title: project.title,
+    src: project.videoEmbed.src,
+    poster: {
+      src: project.videoEmbed.thumbnail,
+      alt: project.description,
+    },
+  };
   return {
-    minimum,
-    optimum,
-    obtained,
-    donations,
-    timeSeriesData,
+    campaign: {
+      minimum,
+      optimum,
+      obtained,
+      donations,
+      timeSeriesData,
+    },
     locales: projectLocales,
+    video,
   };
 };
 
@@ -91,7 +102,7 @@ const service = (fetcher: typeof fetch) => {
       `${env.API_BASE_URL}/v4/accounting_balance_points?accounting=/v4/accountings/${accounting.id}`,
       {
         headers,
-      },
+      }
     );
     if (!res.ok) throw new Error("Failed to fetch accounting balance points data");
 
@@ -182,8 +193,8 @@ const ProjectSample = {
     },
   ],
   videoEmbed: {
-    src: "https://www.youtube.com/embed/example",
-    thumbnail: "https://example.com/thumbnail.jpg",
+    src: "https://files.vidstack.io/sprite-fight/720p.mp4",
+    thumbnail: "https://files.vidstack.io/sprite-fight/poster.webp",
   },
 };
 
