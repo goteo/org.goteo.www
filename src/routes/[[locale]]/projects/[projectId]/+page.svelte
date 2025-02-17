@@ -33,7 +33,15 @@
   </div>
 
   <div class="grid grid-flow-col gap-8">
-    <Player />
+    <Player
+      src="https://files.vidstack.io/sprite-fight/720p.mp4"
+      title="Sprite Fight"
+      thumbnails="https://files.vidstack.io/sprite-fight/thumbnails.vtt"
+      poster={{
+        src: "https://files.vidstack.io/sprite-fight/poster.webp",
+        alt: "Girl walks into campfire with gnomes surrounding her friend ready for their next meal!",
+      }}
+    />
     <CampaignProgress {...project} />
   </div>
 </section>
