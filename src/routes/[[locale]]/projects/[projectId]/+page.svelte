@@ -51,3 +51,15 @@
     {/each}
   </div>
 </section>
+
+<section class="bg-secondary p-8">
+  <div class="flex justify-between items-center mb-8">
+    <h2 class="text-4xl font-bold text-primary-foreground">Selecciona tu recompensa</h2>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-6">
+    {#each rewards as reward}
+      <RewardCard size="lg" {...reward} />
+    {/each}
+  </div>
+</section>

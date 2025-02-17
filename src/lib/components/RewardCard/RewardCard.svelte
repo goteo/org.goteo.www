@@ -24,14 +24,14 @@
         {/if}
         <Card.Title class="text-2xl">{header}</Card.Title>
       </Card.Header>
-      <Card.CardContent class="flex flex-col gap-4">
-        <Card.Description class="line-clamp-3">
+      <Card.CardContent class={`flex flex-col gap-4 ${size === "lg" ? "h-44" : "h-28"}`}>
+        <Card.Description class={size === "lg" ? "line-clamp-6" : "line-clamp-3"}>
           {content}
         </Card.Description>
       </Card.CardContent>
       <Card.Footer class="grid grid-cols-1 gap-4">
         {#if size === "lg"}
-          <div class="grid grid-cols-2 gap-4">
+          <div class="flex justify-between gap-4">
             <p class="flex items-center gap-2 text-sm">
               <img alt="donors" src={userIcon} class="w-6 h-6" />
               {$number(donors)}

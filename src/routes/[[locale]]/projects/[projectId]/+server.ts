@@ -358,7 +358,7 @@ const RewardsSample = [
     description:
       "La cooperativa de información Climática existe gracias a todas las personas que la apoyan. Ahora tú eres una de ellas. ¡Gracias! Incluiremos tu nombre en la lista de mecenas de nuestra web.",
     money: {
-      amount: 20,
+      amount: 5,
       currency: "EUR",
     },
     hasUnits: false,
@@ -372,12 +372,12 @@ const RewardsSample = [
     description:
       "¡Te damos la bienvenida a nuestra comunidad! Como recompensa, te llevas una suscripción Cooperante con la que recibirás el Magazine nº4 en formato digital ; el Magazine nº5 digital, que se publicará a partir de febrero 2025; y el acceso a las actividades de la comunidad Climática-.¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: https://www.goteo.org/calculadora-fiscal",
     money: {
-      amount: 50,
+      amount: 10,
       currency: "EUR",
     },
     hasUnits: true,
-    unitsTotal: 100,
-    unitsAvailable: 50,
+    unitsTotal: 100000,
+    unitsAvailable: 999000,
   },
   {
     id: 3,
