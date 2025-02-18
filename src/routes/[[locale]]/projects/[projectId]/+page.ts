@@ -11,14 +11,14 @@ const ProjectSchema = z.object({
       z.object({
         date: z.coerce.date(),
         amount: z.number(),
-      })
+      }),
     ),
   }),
   locales: z.array(
     z.object({
       code: z.string(),
       label: z.string(),
-    })
+    }),
   ),
   video: z.object({
     src: z.string(),
@@ -37,7 +37,7 @@ const ProjectSchema = z.object({
       donate: z.number(),
       donors: z.number(),
       units: z.number().nullable(),
-    })
+    }),
   ),
 });
 

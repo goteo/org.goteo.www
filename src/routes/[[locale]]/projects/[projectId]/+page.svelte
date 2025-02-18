@@ -5,12 +5,13 @@
 
   import type { PageProps } from "./$types";
 
+  import * as Tabs from "$lib/components/ui/tabs";
   import { Button } from "$lib/components/ui/button";
-  import CampaignProgress from "$lib/components/CampaignProgress/CampaignProgress.svelte";
-  import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
+
+  import LocaleSwitcher from "$lib/components/LocaleSwitcher";
+  import CampaignProgress from "$lib/components/CampaignProgress";
   import Player from "$lib/components/Player";
   import RewardCard from "$lib/components/RewardCard";
-  import * as Tabs from "$lib/components/ui/tabs";
 
   let { data }: PageProps = $props();
   let { locales, campaign, video, rewards } = data;

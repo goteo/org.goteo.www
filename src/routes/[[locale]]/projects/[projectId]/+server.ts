@@ -19,7 +19,7 @@ const map = (
   accounting: typeof AccountingSample,
   transactions: Array<typeof TransactionSample>,
   balancePoints: Array<typeof AccountingBalancePointSample>,
-  rewards: Array<typeof RewardSample>
+  rewards: Array<typeof RewardSample>,
 ) => {
   const minimum = Object.values(project.budget.minimum).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget.optimum).reduce((acc, { amount }) => acc + amount, 0);
@@ -116,7 +116,7 @@ const service = (fetcher: typeof fetch) => {
       `${env.API_BASE_URL}/v4/accounting_balance_points?accounting=/v4/accountings/${accounting.id}`,
       {
         headers,
-      }
+      },
     );
     if (!res.ok) throw new Error("Failed to fetch accounting balance points data");
 
@@ -383,7 +383,8 @@ const RewardsSample = [
     id: 3,
     project: "https://api.goteo.org/v4/projects/1",
     title: "Apoya a la redacción",
-    description: "La redacción de Climática es más libre gracias a ti. Podremos publicar más periodismo climático independiente y, para agradecértelo, recibirás una suscripción Cooperante -que incluye el Magazine nº4 en formato digital ; el Magazine nº5 digital, que se publicará a partir de febrero 2025; y el acceso a las actividades de la comunidad Climática-. También te mandaremos el gorro Climático para que te protejas de las inclemencias del tiempo.¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: https://www.goteo.org/calculadora-fiscal",
+    description:
+      "La redacción de Climática es más libre gracias a ti. Podremos publicar más periodismo climático independiente y, para agradecértelo, recibirás una suscripción Cooperante -que incluye el Magazine nº4 en formato digital ; el Magazine nº5 digital, que se publicará a partir de febrero 2025; y el acceso a las actividades de la comunidad Climática-. También te mandaremos el gorro Climático para que te protejas de las inclemencias del tiempo.¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: https://www.goteo.org/calculadora-fiscal",
     money: {
       amount: 30,
       currency: "EUR",
