@@ -46,6 +46,8 @@
       window.removeEventListener("hashchange", handleHashChange);
     };
   });
+
+  const tabs = ['project', 'budget', 'rewards', 'updates', 'community'] as const;
 </script>
 
 <section class="flex flex-col gap-8">
@@ -88,11 +90,9 @@
 
 <Tabs.Root value={currentTab} onValueChange={handleTabChange}>
   <Tabs.List>
-    <Tabs.Trigger value="project">Información de campaña</Tabs.Trigger>
-    <Tabs.Trigger value="budget">Necesidades</Tabs.Trigger>
-    <Tabs.Trigger value="rewards">Recompensas</Tabs.Trigger>
-    <Tabs.Trigger value="updates">Actualizaciones</Tabs.Trigger>
-    <Tabs.Trigger value="community">Comunidad</Tabs.Trigger>
+    {#each tabs as tab}
+      <Tabs.Trigger value={tab}>{$_(`project.tabs.${tab}`)}</Tabs.Trigger>
+    {/each}
   </Tabs.List>
   <Tabs.Content value="project">
     <section class="bg-secondary p-8">
