@@ -1,6 +1,7 @@
 <script lang="ts">
   import { _ } from "svelte-i18n";
-  import { Clock } from "lucide-svelte";
+  import { Clock, MoveRight } from "lucide-svelte";
+  import { onMount } from "svelte";
 
   import type { PageProps } from "./$types";
 
@@ -13,6 +14,37 @@
 
   let { data }: PageProps = $props();
   let { locales, campaign, video, rewards } = data;
+
+  let currentTab = $state("project");
+
+  function handleTabChange(value: string | undefined) {
+    if (value) {
+      currentTab = value;
+      window.location.hash = value;
+    }
+  }
+
+  onMount(() => {
+    const hash = window.location.hash.slice(1);
+    if (hash) {
+      currentTab = hash;
+    }
+
+    // Add event listener for hash changes
+    const handleHashChange = () => {
+      const newHash = window.location.hash.slice(1);
+      if (newHash) {
+        currentTab = newHash;
+      }
+    };
+
+    window.addEventListener("hashchange", handleHashChange);
+
+    // Clean up the event listener when component is destroyed
+    return () => {
+      window.removeEventListener("hashchange", handleHashChange);
+    };
+  });
 </script>
 
 <section class="flex flex-col gap-8">
@@ -43,7 +75,7 @@
 <section>
   <div class="flex justify-between items-center mb-8">
     <h2 class="text-2xl font-bold">Recompensas más populares</h2>
-    <Button variant="link">Ver todas</Button>
+    <Button variant="secondary" size="lg" href="#rewards"><MoveRight class="mr-4 h-6 w-6" /> Ver todas</Button>
   </div>
 
   <div class="grid md:grid-cols-3 gap-6">
@@ -53,7 +85,7 @@
   </div>
 </section>
 
-<Tabs.Root value="project" class="">
+<Tabs.Root value={currentTab} onValueChange={handleTabChange}>
   <Tabs.List>
     <Tabs.Trigger value="project">Información de campaña</Tabs.Trigger>
     <Tabs.Trigger value="budget">Necesidades</Tabs.Trigger>
