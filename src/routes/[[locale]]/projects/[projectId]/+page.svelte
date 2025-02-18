@@ -47,7 +47,7 @@
     };
   });
 
-  const tabs = ['project', 'budget', 'rewards', 'updates', 'community'] as const;
+  const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
 </script>
 
 <section class="flex flex-col gap-8">
@@ -95,19 +95,19 @@
     {/each}
   </Tabs.List>
   <Tabs.Content value="project">
-    <section class="bg-secondary p-8">
+    <section class="bg-secondary p-8 min-h-96">
       <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Selecciona tu recompensa</h2>
-      </div>
-
-      <div class="grid md:grid-cols-3 gap-6">
-        {#each rewards as reward}
-          <RewardCard size="lg" {...reward} />
-        {/each}
+        <h2 class="text-4xl font-bold text-primary-foreground">Información de campaña</h2>
       </div>
     </section>
   </Tabs.Content>
-  <Tabs.Content value="budget">Change your password here.</Tabs.Content>
+  <Tabs.Content value="budget">
+    <section class="bg-secondary p-8 min-h-96">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold text-primary-foreground">Necesidades</h2>
+      </div>
+    </section>
+  </Tabs.Content>
   <Tabs.Content value="rewards">
     <section class="bg-secondary p-8">
       <div class="flex justify-between items-center mb-8">
@@ -121,6 +121,18 @@
       </div>
     </section>
   </Tabs.Content>
-  <Tabs.Content value="updates">Change your password here.</Tabs.Content>
-  <Tabs.Content value="community">Change your password here.</Tabs.Content>
+  <Tabs.Content value="updates">
+    <section class="bg-secondary p-8 min-h-96">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
+      </div>
+    </section>
+  </Tabs.Content>
+  <Tabs.Content value="community">
+    <section class="bg-secondary p-8 min-h-96">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-4xl font-bold text-primary-foreground">Comunidad</h2>
+      </div>
+    </section>
+  </Tabs.Content>
 </Tabs.Root>
