@@ -14,7 +14,7 @@
   import RewardCard from "$lib/components/RewardCard";
 
   let { data }: PageProps = $props();
-  let { locales, campaign, video, rewards, extra } = data;
+  let { locales, campaign, video, rewards, project } = data;
 
   let currentTab = $state("project");
 
@@ -54,7 +54,7 @@
   <div class="grid grid-flow-col gap-8">
     <div class="space-y-4">
       <p class="text-gray-600 text-2xl">Campaña de crowfunding impulsada por Climática</p>
-      <h1 class="text-5xl font-bold">{ project.title }</h1>
+      <h1 class="text-5xl font-bold">{project.title}</h1>
       <p class="text-gray-600 max-w-3xl">{project.subtitle}</p>
     </div>
     <div class="flex flex-col items-end justify-between">
