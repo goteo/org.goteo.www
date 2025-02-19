@@ -1,8 +1,9 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import { vite as vidstack } from "vidstack/plugins";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [sveltekit()],
+  plugins: [vidstack(), sveltekit()],
   ssr: {
     noExternal: ["@fontsource-variable/karla"],
   },

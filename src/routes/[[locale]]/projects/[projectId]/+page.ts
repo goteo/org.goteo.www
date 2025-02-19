@@ -1,3 +1,4 @@
+import { z } from "zod";
 import type { PageLoad } from "./$types";
 import { apiAccountingBalancePointsGetCollection, apiProjectsIdGet, type Accounting, type AccountingBalancePoint, type Project } from "../../../../client";
 import { client } from "../../../../client/client.gen";
@@ -104,6 +105,46 @@ const map = (
   };
 };
 
+const ProjectSchema = z.object({
+  campaign: z.object({
+    obtained: z.number(),
+    optimum: z.number(),
+    donations: z.number(),
+    minimum: z.number(),
+    timeSeriesData: z.array(
+      z.object({
+        date: z.coerce.date(),
+        amount: z.number(),
+      }),
+    ),
+  }),
+  locales: z.array(
+    z.object({
+      code: z.string(),
+      label: z.string(),
+    }),
+  ),
+  video: z.object({
+    src: z.string(),
+    title: z.string(),
+    thumbnails: z.string().optional(),
+    poster: z.object({
+      src: z.string(),
+      alt: z.string(),
+    }),
+  }),
+  rewards: z.array(
+    z.object({
+      image: z.string(),
+      header: z.string(),
+      content: z.string(),
+      donate: z.number(),
+      donors: z.number(),
+      units: z.number().nullable(),
+    }),
+  ),
+});
+
 export const load: PageLoad = async ({ params }) => {
   const project = await getProject(params.projectId);
   const accounting = await getAccounting(project);
@@ -113,4 +154,16 @@ export const load: PageLoad = async ({ params }) => {
   const extra = map(project, accounting, transactions, balancePoints);
 
   return { project, extra };
+
+  /*
+  const parsed = ProjectSchema.safeParse(json);
+  if (!parsed.success) {
+    console.error(parsed.error);
+    throw new Error("Failed to parse project data");
+  }
+
+  const { data } = parsed;
+  const { campaign, locales, video, rewards, ...project } = data;
+  return { campaign, locales, video, rewards, project };
+  */
 };

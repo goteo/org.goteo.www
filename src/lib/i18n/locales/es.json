@@ -8,5 +8,20 @@
     "optimal": "Óptimo",
     "minimum": "Mínimo",
     "donate": "Donar a esta campaña"
+  },
+  "reward": {
+    "donate": "Dona",
+    "donors": "donates",
+    "units": "Quedan {units} unidades",
+    "noUnits": "No quedan unidades"
+  },
+  "project": {
+    "tabs": {
+      "project": "Información de campaña",
+      "budget": "Necesidades",
+      "rewards": "Recompensas",
+      "updates": "Actualizaciones",
+      "community": "Comunidad"
+    }
   }
 }
