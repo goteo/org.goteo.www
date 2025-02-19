@@ -7,15 +7,11 @@ export default defineConfig({
   plugins: [
     ...defaultPlugins,
     {
-      name: 'zod',
-    },
-    {
       name: '@hey-api/client-fetch',
       runtimeConfigPath: './src/api.ts'
     },
     {
       name: '@hey-api/sdk',
-      validator: true
     }
   ],
 });
