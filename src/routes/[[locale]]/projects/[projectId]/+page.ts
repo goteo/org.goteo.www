@@ -1,6 +1,12 @@
 import { z } from "zod";
 import type { PageLoad } from "./$types";
-import { apiAccountingBalancePointsGetCollection, apiProjectsIdGet, type Accounting, type AccountingBalancePoint, type Project } from "../../../../client";
+import {
+  apiAccountingBalancePointsGetCollection,
+  apiProjectsIdGet,
+  type Accounting,
+  type AccountingBalancePoint,
+  type Project,
+} from "../../../../client";
 import { client } from "../../../../client/client.gen";
 import { locales } from "$lib/i18n";
 
@@ -12,7 +18,7 @@ const getProject = async (projectId: string): Promise<Project> => {
   }
 
   return data;
-}
+};
 
 const getAccounting = async (project: Project): Promise<Accounting> => {
   if (typeof project.accounting === "undefined") {
@@ -20,7 +26,7 @@ const getAccounting = async (project: Project): Promise<Accounting> => {
   }
 
   const { data, error } = await client.get<Accounting>({
-    url: client.buildUrl({ url: project.accounting })
+    url: client.buildUrl({ url: project.accounting }),
   });
 
   if (error || typeof data === "undefined") {
@@ -28,10 +34,10 @@ const getAccounting = async (project: Project): Promise<Accounting> => {
   }
 
   return data;
-}
+};
 
 interface TransactionsData {
-  totalItems: number
+  totalItems: number;
 }
 
 const getTransactions = async (project: Project): Promise<TransactionsData> => {
@@ -40,13 +46,13 @@ const getTransactions = async (project: Project): Promise<TransactionsData> => {
   }
 
   const url = client.buildUrl({
-    url: '/v4/accounting_transactions',
-    query: { target: project.accounting }
+    url: "/v4/accounting_transactions",
+    query: { target: project.accounting },
   });
 
   const { data, error } = await client.get<TransactionsData>({
-    headers: { 'Accept': 'application/ld+json' },
-    url: url
+    headers: { Accept: "application/ld+json" },
+    url: url,
   });
 
   if (error || typeof data === "undefined") {
@@ -54,7 +60,7 @@ const getTransactions = async (project: Project): Promise<TransactionsData> => {
   }
 
   return data;
-}
+};
 
 const getBalancePoints = async (project: Project): Promise<AccountingBalancePoint[]> => {
   if (typeof project.accounting === "undefined") {
@@ -68,32 +74,36 @@ const getBalancePoints = async (project: Project): Promise<AccountingBalancePoin
   const { data, error } = await apiAccountingBalancePointsGetCollection({
     query: {
       accounting: project.accounting,
-      start: start.toISOString()
-    }
+      start: start.toISOString(),
+    },
   });
 
   if (error || typeof data === "undefined") {
     throw new Error("Failed to fetch project accounting balance data");
   }
-  
+
   return data;
-}
+};
 
 const map = (
   project: Project,
   accounting: Accounting,
   transactions: TransactionsData,
-  balancePoints: Array<AccountingBalancePoint>
+  balancePoints: Array<AccountingBalancePoint>,
 ) => {
   const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget?.optimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const obtained = accounting.balance?.amount ?? 0;
   const donations = transactions.totalItems;
-  const timeSeriesData = balancePoints.map(({ start, balance }) => ({ date: new Date(start ?? ''), amount: balance?.amount ?? 0 }));
-  const projectLocales: Array<{ code: string; label: string }> = project.locales?.map((code) => ({
-    code,
-    ...locales[code],
-  })) ?? [];
+  const timeSeriesData = balancePoints.map(({ start, balance }) => ({
+    date: new Date(start ?? ""),
+    amount: balance?.amount ?? 0,
+  }));
+  const projectLocales: Array<{ code: string; label: string }> =
+    project.locales?.map((code) => ({
+      code,
+      ...locales[code],
+    })) ?? [];
 
   return {
     minimum,
