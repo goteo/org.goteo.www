@@ -10,10 +10,12 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "openapi-ts": "openapi-ts"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
+    "@hey-api/openapi-ts": "^0.64.4",
     "@storybook/addon-essentials": "^8.5.3",
     "@storybook/addon-interactions": "^8.5.3",
     "@storybook/addon-svelte-csf": "^5.0.0-next.23",
@@ -46,11 +48,14 @@
     "vite": "^6.1.0"
   },
   "dependencies": {
-    "@fontsource-variable/inter": "^5.1.1",
+    "@fontsource-variable/karla": "^5.1.1",
+    "@hey-api/client-fetch": "^0.8.1",
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
     "layerchart": "^0.93.10",
-    "svelte-i18n": "^4.0.1"
+    "lucide-svelte": "^0.475.0",
+    "svelte-i18n": "^4.0.1",
+    "zod": "^3.24.2"
   }
 }
