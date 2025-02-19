@@ -8,7 +8,7 @@
     argTypes: {
       header: { control: "text" },
       content: { control: "text" },
-      target: { control: "number" },
+      optimum: { control: "number" },
       minimum: { control: "number" },
     },
   });
@@ -31,7 +31,7 @@
     content:
       "La campaña de crowdfunding está diseñada para que ayude a dar a conocer Climática y las informaciones que publica. Esta partida incluye la coordinación, el diseño y producción de materiales gráficos y el porcentaje de Goteo.",
     minimum: 17000,
-    target: 20000,
+    optimum: 20000,
   }}
 />
 
