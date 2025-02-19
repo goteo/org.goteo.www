@@ -35,3 +35,9 @@ export async function initI18n() {
 export * from "./config";
 export { config, isValidLocale, hasTranslations } from "./config";
 export type { LocaleConfig, SupportedLocale } from "./types";
+
+export const locales: Record<string, { label: string }> = {
+  en: { label: "English" },
+  es: { label: "Español" },
+  ca: { label: "Català" },
+};
