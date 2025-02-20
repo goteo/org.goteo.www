@@ -23,5 +23,18 @@
       "updates": "Actualizaciones",
       "community": "Comunidad"
     }
+  },
+  "navigation": {
+    "search": "Busca tu campaña"
+  },
+  "categories": {
+    "solidarity": "Solidario",
+    "employment": "Generar empleo",
+    "design": "Desde el diseño",
+    "journalism": "Periodismo independiente",
+    "education": "Educativo",
+    "culture": "Crea cultura",
+    "ecological": "Ecológico",
+    "health": "Salud y cuidados"
   }
 }
