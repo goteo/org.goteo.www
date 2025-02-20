@@ -41,5 +41,13 @@
     "culture": "Create Culture",
     "ecological": "Ecological",
     "health": "Health & Care"
+  },
+  "ShareButton": {
+    "title": "Spread this project around the world",
+    "description": "You can copy the link to send it and also share it on Facebook or X. You can even copy a code snippet to insert a campaign banner on another website. Make it go further!",
+    "global": "share global",
+    "facebook": "share on facebook",
+    "twitter": "share on X",
+    "code": "share as code"
   }
 }

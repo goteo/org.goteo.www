@@ -12,6 +12,7 @@
   import CampaignProgress from "$lib/components/CampaignProgress";
   import Player from "$lib/components/Player";
   import RewardCard from "$lib/components/RewardCard";
+  import ShareButton from "$lib/components/ShareButton";
 
   let { data }: PageProps = $props();
   let { locales, campaign, video, rewards, project } = data;
@@ -72,12 +73,12 @@
   </div>
   <div class="flex justify-between items-center">
     <div class="flex gap-4">
-      <Button variant="outline" size="sm"><Bookmark class="mr-2" /> Periodismo independiente</Button>
-      <Button variant="outline" size="sm"><MapPin class="mr-2" /> {project.territory}</Button>
+      <Button variant="outline" size="sm" class="border-black"><Bookmark class="mr-2" /> Periodismo independiente</Button>
+      <Button variant="outline" size="sm" class="border-black"><MapPin class="mr-2" /> {project.territory}</Button>
     </div>
     <div class="flex gap-4">
-      <Button variant="ghost" size="sm"><Share2 class="mr-2 h-4" /> {$_('project.actions.share')}</Button>
-      <Button variant="ghost" size="sm"><Heart class="mr-2 h-4" /> {$_('project.actions.remember')}</Button>
+      <ShareButton />
+      <Button variant="ghost" size="sm"><Heart class="mr-2 h-4" /> {$_("project.actions.remember")}</Button>
     </div>
   </div>
 </section>
@@ -86,7 +87,8 @@
   <div class="flex justify-between items-center mb-8">
     <h2 class="text-2xl font-bold">Recompensas más populares</h2>
     <Button variant="secondary" size="lg" href="#rewards">
-      <MoveRight class="mr-4 h-6 w-6" /> {$_('project.actions.viewAll')}
+      <MoveRight class="mr-4 h-6 w-6" />
+      {$_("project.actions.viewAll")}
     </Button>
   </div>
 

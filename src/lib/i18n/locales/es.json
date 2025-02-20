@@ -41,5 +41,13 @@
     "culture": "Crea cultura",
     "ecological": "Ecológico",
     "health": "Salud y cuidados"
+  },
+  "ShareButton": {
+    "title": "Difunde este proyecto por el mundo",
+    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
+    "global": "compartir global",
+    "facebook": "compartir en facebook",
+    "twitter": "compartir en X",
+    "code": "compartir como código"
   }
 }
