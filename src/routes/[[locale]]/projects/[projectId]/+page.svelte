@@ -13,9 +13,10 @@
   import Player from "$lib/components/Player";
   import RewardCard from "$lib/components/RewardCard";
   import ShareButton from "$lib/components/ShareButton";
+  import ProjectBudget from "$lib/components/ProjectBudget";
 
   let { data }: PageProps = $props();
-  let { locales, campaign, video, rewards, project } = data;
+  let { locales, campaign, video, rewards, budgets, project } = data;
 
   let currentTab = $state("rewards");
 
@@ -73,7 +74,9 @@
   </div>
   <div class="flex justify-between items-center">
     <div class="flex gap-4">
-      <Button variant="outline" size="sm" class="border-black"><Bookmark class="mr-2" /> Periodismo independiente</Button>
+      <Button variant="outline" size="sm" class="border-black"
+        ><Bookmark class="mr-2" /> Periodismo independiente</Button
+      >
       <Button variant="outline" size="sm" class="border-black"><MapPin class="mr-2" /> {project.territory}</Button>
     </div>
     <div class="flex gap-4">
@@ -116,6 +119,11 @@
     <section class="bg-secondary p-8 min-h-96">
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-4xl font-bold text-primary-foreground">Necesidades</h2>
+      </div>
+      <div>
+        {#each budgets as budget}
+          <ProjectBudget {...budget} />
+        {/each}
       </div>
     </section>
   </Tabs.Content>

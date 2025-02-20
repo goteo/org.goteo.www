@@ -16,8 +16,9 @@ export async function GET({ params }) {
   const transactions = await getTransactions(project);
   const balancePoints = await getBalancePoints(project);
   const rewards = await getRewards(project);
+  const budgets = await getBudgetItems(project);
 
-  const payload = map(project, accounting, transactions, balancePoints, rewards);
+  const payload = map(project, accounting, transactions, balancePoints, rewards, budgets);
   return json(payload);
 }
 
@@ -26,16 +27,19 @@ const map = (
   accounting: Accounting,
   transactions: TransactionsData,
   balancePoints: Array<AccountingBalancePoint>,
-  rewards: Array<typeof RewardSample>
+  rewards: Array<typeof RewardSample>,
+  budgets: Array<typeof BudgetSample>
 ) => {
   const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget?.optimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const obtained = accounting.balance?.amount ?? 0;
   const donations = transactions.totalItems;
+
   const timeSeriesData = balancePoints.map(({ start, balance }) => ({
     date: new Date(start ?? ""),
     amount: balance?.amount ?? 0,
   }));
+
   const rewardsMap = rewards.map(({ id, title, description, money, hasUnits, unitsAvailable }) => ({
     id,
     image: "https://placehold.co/320x160",
@@ -44,6 +48,15 @@ const map = (
     donate: money.amount,
     donors: 0,
     units: hasUnits ? unitsAvailable : null,
+  }));
+
+  const budgetItems = budgets.map(({ id, type, title, description, minimum, optimum }) => ({
+    id,
+    type,
+    header: title,
+    content: description,
+    minimum: minimum.amount,
+    optimum: optimum.amount,
   }));
 
   const projectLocales: Array<{ code: string; label: string }> =
@@ -71,6 +84,7 @@ const map = (
     territory: territoryLabel,
     video,
     rewards: rewardsMap,
+    budgets: budgetItems,
     locales: projectLocales,
     campaign: {
       minimum,
@@ -161,6 +175,10 @@ const getRewards = async (project: Project): Promise<Array<typeof RewardSample>>
   return RewardsSample;
 };
 
+const getBudgetItems = async (project: Project): Promise<Array<typeof BudgetSample>> => {
+  return BudgetItemsSample;
+};
+
 const RewardsSample = [
   {
     id: 1,
@@ -233,3 +251,152 @@ const RewardsSample = [
 ];
 
 const RewardSample = RewardsSample[0];
+
+const BudgetItemsSample = [
+  {
+    id: 1,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "infrastructure",
+    locales: ["en"],
+    title: "Infraestructura - Servidores",
+    description: "Investimento em servidores e infraestrutura de rede.",
+    minimum: {
+      amount: 1000,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 1500,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 2,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "infrastructure",
+    locales: ["en"],
+    title: "Infraestructura - Equipamentos de TI",
+    description: "Compra de equipamentos e dispositivos para manutenção da rede.",
+    minimum: {
+      amount: 2000,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 2500,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 3,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "infrastructure",
+    locales: ["en"],
+    title: "Infraestructura - Backup e Segurança",
+    description: "Soluções para backup de dados e segurança da informação.",
+    minimum: {
+      amount: 800,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 1200,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 4,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "infrastructure",
+    locales: ["en"],
+    title: "Infraestructura - Rede e Conectividade",
+    description: "Atualização da infraestrutura de rede para maior conectividade.",
+    minimum: {
+      amount: 500,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 700,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 5,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "infrastructure",
+    locales: ["en"],
+    title: "Infraestructura - Energia Renovável",
+    description: "Investimento em soluções de energia renovável para o data center.",
+    minimum: {
+      amount: 1500,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 1800,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 6,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "material",
+    locales: ["en"],
+    title: "Material - Suprimentos de Escritório",
+    description: "Compra de materiais e suprimentos essenciais para o projeto.",
+    minimum: {
+      amount: 300,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 500,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 7,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "task",
+    locales: ["en"],
+    title: "Tarea - Desenvolvimento Web",
+    description: "Horas destinadas ao desenvolvimento e implementação da plataforma.",
+    minimum: {
+      amount: 1000,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 1300,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 8,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "task",
+    locales: ["en"],
+    title: "Tarea - Design UI/UX",
+    description: "Projeto de design para interfaces e experiência do usuário.",
+    minimum: {
+      amount: 800,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 1000,
+      currency: "EUR",
+    },
+  },
+  {
+    id: 9,
+    project: "https://api.goteo.org/v4/projects/1",
+    type: "task",
+    locales: ["en"],
+    title: "Tarea - Testes e QA",
+    description: "Testes de usabilidade e garantia de qualidade da plataforma.",
+    minimum: {
+      amount: 600,
+      currency: "EUR",
+    },
+    optimum: {
+      amount: 900,
+      currency: "EUR",
+    },
+  },
+];
+
+const BudgetSample = BudgetItemsSample[0];
