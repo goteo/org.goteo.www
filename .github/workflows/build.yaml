@@ -25,6 +25,8 @@ jobs:
         with:
           push: true
           tags: ${{ secrets.REGISTRY_URL }}/goteo-v4-client:latest
+          secrets: |
+            PUBLIC_API_URL: $PUBLIC_API_URL 
 
       - name: Notify Webhook
         run: |
