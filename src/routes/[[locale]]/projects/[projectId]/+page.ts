@@ -5,6 +5,7 @@ const ProjectSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
   description: z.string(),
+  territory: z.string(),
   campaign: z.object({
     obtained: z.number(),
     optimum: z.number(),

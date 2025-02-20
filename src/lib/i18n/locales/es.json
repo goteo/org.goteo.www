@@ -22,6 +22,11 @@
       "rewards": "Recompensas",
       "updates": "Actualizaciones",
       "community": "Comunidad"
+    },
+    "actions": {
+      "share": "Compartir",
+      "remember": "Recordar",
+      "viewAll": "Ver todas"
     }
   },
   "navigation": {

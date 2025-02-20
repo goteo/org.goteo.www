@@ -61,12 +61,14 @@ const map = (
     },
   };
 
-  const { title, subtitle, description } = project;
+  const { title, subtitle, description, territory } = project;
+  const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
   return {
     title,
     subtitle,
     description,
+    territory: territoryLabel,
     video,
     rewards: rewardsMap,
     locales: projectLocales,

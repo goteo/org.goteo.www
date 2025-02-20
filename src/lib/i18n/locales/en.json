@@ -22,6 +22,11 @@
       "rewards": "Rewards",
       "updates": "Updates",
       "community": "Community"
+    },
+    "actions": {
+      "share": "Share",
+      "remember": "Remember",
+      "viewAll": "View all"
     }
   },
   "navigation": {
