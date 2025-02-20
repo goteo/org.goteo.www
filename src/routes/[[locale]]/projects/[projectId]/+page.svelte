@@ -16,7 +16,7 @@
   let { data }: PageProps = $props();
   let { locales, campaign, video, rewards, project } = data;
 
-  let currentTab = $state("project");
+  let currentTab = $state("rewards");
 
   function handleTabChange(value: string | undefined) {
     if (value) {
