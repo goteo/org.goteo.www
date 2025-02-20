@@ -50,6 +50,18 @@
   });
 
   const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
+
+  // Group budgets by type
+  const groupedBudgets = budgets.reduce(
+    (acc, budget) => {
+      if (!acc[budget.type]) {
+        acc[budget.type] = [];
+      }
+      acc[budget.type].push(budget);
+      return acc;
+    },
+    {} as Record<string, typeof budgets>,
+  );
 </script>
 
 <section class="flex flex-col gap-8">
@@ -120,9 +132,16 @@
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-4xl font-bold text-primary-foreground">Necesidades</h2>
       </div>
-      <div>
-        {#each budgets as budget}
-          <ProjectBudget {...budget} />
+      <div class="space-y-8">
+        {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
+          <div class="space-y-4">
+            <h3 class="text-2xl font-semibold text-primary-foreground">{type}</h3>
+            <div class="gap-4 flex flex-row overflow-x-auto">
+              {#each budgetGroup as budget}
+                <ProjectBudget {...budget} />
+              {/each}
+            </div>
+          </div>
         {/each}
       </div>
     </section>

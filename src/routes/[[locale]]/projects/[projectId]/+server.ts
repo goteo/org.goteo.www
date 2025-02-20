@@ -259,7 +259,8 @@ const BudgetItemsSample = [
     type: "infrastructure",
     locales: ["en"],
     title: "Infraestructura - Servidores",
-    description: "Investimento em servidores e infraestrutura de rede.",
+    description:
+      "Investimento em servidores e infraestrutura de rede. Investimento em servidores e infraestrutura de rede. Investimento em servidores e infraestrutura de rede. Investimento em servidores e infraestrutura de rede.",
     minimum: {
       amount: 1000,
       currency: "EUR",

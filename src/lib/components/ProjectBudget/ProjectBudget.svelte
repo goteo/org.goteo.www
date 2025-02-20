@@ -10,14 +10,14 @@
 </script>
 
 <Dialog.Root>
-  <Dialog.Trigger class="text-left">
-    <Card.Root class="w-full max-w-md drop-shadow-sm">
+  <Dialog.Trigger>
+    <Card.Root class="w-96 drop-shadow-sm text-left">
       <Card.Header>
         <Card.Title>{header}</Card.Title>
       </Card.Header>
       <Card.CardContent>
-        <Card.Description>
-          {content?.slice(0, 170)}{content?.length > 170 ? "..." : ""}
+        <Card.Description class="line-clamp-3 h-16">
+          {content}
         </Card.Description>
       </Card.CardContent>
 
