@@ -135,7 +135,7 @@
       <div class="space-y-8">
         {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
           <div class="space-y-4">
-            <h3 class="text-2xl font-semibold text-primary-foreground">{type}</h3>
+            <h3 class="text-2xl font-semibold text-primary-foreground">{$_(`project.budget.${type}`)}</h3>
             <div class="gap-4 flex flex-row overflow-x-auto">
               {#each budgetGroup as budget}
                 <ProjectBudget {...budget} />

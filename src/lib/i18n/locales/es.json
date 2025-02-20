@@ -27,6 +27,11 @@
       "share": "Compartir",
       "remember": "Recordar",
       "viewAll": "Ver todas"
+    },
+    "budget": {
+      "infrastructure": "Infraestructura",
+      "material": "Material",
+      "task": "Tareas"
     }
   },
   "navigation": {

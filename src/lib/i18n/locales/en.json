@@ -27,6 +27,11 @@
       "share": "Share",
       "remember": "Remember",
       "viewAll": "View all"
+    },
+    "budget": {
+      "infrastructure": "Infrastructure",
+      "material": "Material",
+      "task": "Tasks"
     }
   },
   "navigation": {
