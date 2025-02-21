@@ -14,6 +14,7 @@
   import RewardCard from "$lib/components/RewardCard";
   import ShareButton from "$lib/components/ShareButton";
   import ProjectBudget from "$lib/components/ProjectBudget";
+  import FundingChart from "$lib/components/FundingChart";
 
   let { data }: PageProps = $props();
   let { locales, campaign, video, rewards, budgets, project } = data;
@@ -128,9 +129,12 @@
     </section>
   </Tabs.Content>
   <Tabs.Content value="budget">
-    <section class="bg-secondary p-8 min-h-96">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Necesidades</h2>
+    <section class="flex flex-col bg-secondary p-8 gap-8">
+      <div class="flex flex-row gap-4">
+        <h2 class="basis-1/3 text-4xl font-bold text-primary-foreground">
+          Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.
+        </h2>
+        <FundingChart />
       </div>
       <div class="space-y-8">
         {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
