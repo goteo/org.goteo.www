@@ -25,7 +25,7 @@ export async function GET({ params }) {
 
 const transformBudgetToFundingGoal = (
   budget: Record<string, { amount: number; currency: string }>,
-  current: number
+  current: number,
 ): FundingGoal => {
   const typeMapping = {
     infra: { type: "infrastructure", label: "Infraestructura", color: "bg-primary-foreground" },
@@ -59,7 +59,7 @@ const map = (
   transactions: TransactionsData,
   balancePoints: Array<AccountingBalancePoint>,
   rewards: Array<typeof RewardSample>,
-  budgets: Array<typeof BudgetSample>
+  budgets: Array<typeof BudgetSample>,
 ) => {
   const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget?.optimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
