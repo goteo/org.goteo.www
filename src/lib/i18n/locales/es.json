@@ -31,7 +31,12 @@
     "budget": {
       "infrastructure": "Infraestructura",
       "material": "Material",
-      "task": "Tareas"
+      "task": "Tareas",
+      "chart": {
+        "minimum": "Mínimo",
+        "optimal": "Óptimo",
+        "progress": "Estado de la campaña"
+      }
     }
   },
   "navigation": {

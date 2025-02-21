@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from "svelte-i18n";
   import * as Card from "$lib/components/ui/card";
   import type { FundingGoal, FundingData } from "./types";
 
@@ -24,7 +25,7 @@
   <Card.Content class="space-y-8">
     <div class="space-y-2" style="width: {(minimum.amount / optimal.amount) * 100}%">
       <div class="text-sm">
-        <span class="font-medium">Mínimo: </span>
+        <span class="font-medium">{$_('project.budget.chart.minimum')}: </span>
         <span>{minimum.amount}€</span>
       </div>
       <div class="relative h-8">
@@ -40,14 +41,14 @@
           aria-valuenow={minimumPercentages.progress}
           aria-valuemin="0"
           aria-valuemax="100"
-          aria-label="Estado de la campaña"
+          aria-label={$_('project.budget.chart.progress')}
         ></div>
       </div>
     </div>
 
     <div class="space-y-2">
       <div class="text-sm">
-        <span class="font-medium">Óptimo: </span>
+        <span class="font-medium">{$_('project.budget.chart.optimal')}: </span>
         <span>{optimal.amount}€</span>
       </div>
       <div class="relative h-8">
@@ -77,7 +78,7 @@
     {/each}
     <div class="flex items-center gap-2">
       <div class="h-1.5 w-1.5 rounded-full bg-black"></div>
-      <span>Estado de la campaña</span>
+      <span>{$_('project.budget.chart.progress')}</span>
     </div>
   </Card.Footer>
 </Card.Root>
