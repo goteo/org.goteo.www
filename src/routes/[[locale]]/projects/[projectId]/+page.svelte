@@ -1,7 +1,8 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import { _ } from "svelte-i18n";
   import { Clock, MoveRight, MapPin, Bookmark, Heart } from "lucide-svelte";
-  import { onMount } from "svelte";
+  import { marked } from "marked";
 
   import type { PageProps } from "./$types";
 
@@ -63,6 +64,10 @@
     },
     {} as Record<string, typeof budgets>,
   );
+
+  function renderMarkdown(content: string) {
+    return marked(content, { sanitize: true });
+  }
 </script>
 
 <section class="flex flex-col gap-8">
@@ -70,7 +75,9 @@
     <div class="space-y-4">
       <p class="text-gray-600 text-2xl">{project.subtitle}</p>
       <h1 class="text-5xl font-bold">{project.title}</h1>
-      <p class="text-gray-600 max-w-3xl">{project.description}</p>
+      <p class="text-gray-600 max-w-3xl line-clamp-2">
+        {@html renderMarkdown(project.description)}
+      </p>
     </div>
     <div class="flex flex-col items-end justify-between">
       <LocaleSwitcher {locales} />
@@ -129,9 +136,7 @@
   </Tabs.List>
   <Tabs.Content value="project">
     <section class="bg-secondary p-8 min-h-96">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Información de campaña</h2>
-      </div>
+      {@html renderMarkdown(project.description)}
     </section>
   </Tabs.Content>
   <Tabs.Content value="budget">
