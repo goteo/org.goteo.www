@@ -83,7 +83,13 @@
 
   <div class="grid grid-flow-col gap-8">
     <Player {...video} />
-    <CampaignProgress {...campaign} />
+    <CampaignProgress
+      obtained={campaign.obtained}
+      optimum={campaign.optimum.amount}
+      minimum={campaign.minimum.amount}
+      donations={campaign.donations}
+      timeSeriesData={campaign.timeSeriesData}
+    />
   </div>
   <div class="flex justify-between items-center">
     <div class="flex gap-4">
