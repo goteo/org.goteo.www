@@ -74,7 +74,7 @@ const map = (
     },
   };
 
-  const { title, subtitle, description, territory } = project;
+  const { title, subtitle, description, territory, budget } = project;
   const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
   return {
@@ -92,6 +92,7 @@ const map = (
       obtained,
       donations,
       timeSeriesData,
+      budget,
     },
   };
 };
