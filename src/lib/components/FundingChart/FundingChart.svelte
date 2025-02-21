@@ -36,7 +36,10 @@
         <div
           class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black"
           style="left: {minimumPercentages.progress}%"
-          role="progressindicator"
+          role="progressbar"
+          aria-valuenow={minimumPercentages.progress}
+          aria-valuemin="0"
+          aria-valuemax="100"
           aria-label="Estado de la campaña"
         ></div>
       </div>
@@ -56,7 +59,10 @@
         <div
           class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black"
           style="left: {optimalPercentages.progress}%"
-          role="progressindicator"
+          role="progressbar"
+          aria-valuenow={optimalPercentages.progress}
+          aria-valuemin="0"
+          aria-valuemax="100"
           aria-label="Estado de la campaña"
         ></div>
       </div>

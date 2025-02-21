@@ -1,36 +1,38 @@
 import { z } from "zod";
 import type { PageLoad } from "./$types";
 
+const FundingItemSchema = z.object({
+  amount: z.number(),
+  label: z.string(),
+  color: z.string()
+});
+
+const FundingDataSchema = z.object({
+  items: z.array(FundingItemSchema),
+  current: z.number()
+});
+
+const FundingGoalSchema = z.object({
+  amount: z.number(),
+  data: FundingDataSchema
+});
+
 const ProjectSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
   description: z.string(),
   territory: z.string(),
   campaign: z.object({
+    minimum: FundingGoalSchema,
+    optimum: FundingGoalSchema,
     obtained: z.number(),
-    optimum: z.number(),
     donations: z.number(),
-    minimum: z.number(),
     timeSeriesData: z.array(
       z.object({
         date: z.coerce.date(),
         amount: z.number(),
       })
     ),
-    budget: z.object({
-      minimum: z.record(
-        z.object({
-          amount: z.number(),
-          currency: z.string(),
-        })
-      ),
-      optimum: z.record(
-        z.object({
-          amount: z.number(),
-          currency: z.string(),
-        })
-      ),
-    }),
   }),
   locales: z.array(
     z.object({

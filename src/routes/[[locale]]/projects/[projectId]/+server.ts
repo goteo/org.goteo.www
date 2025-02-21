@@ -9,6 +9,7 @@ import {
   apiProjectsIdGet,
 } from "$client";
 import { client } from "$client/client.gen";
+import type { FundingGoal } from "$lib/components/FundingChart/types";
 
 export async function GET({ params }) {
   const project = await getProject(params.projectId);
@@ -21,6 +22,36 @@ export async function GET({ params }) {
   const payload = map(project, accounting, transactions, balancePoints, rewards, budgets);
   return json(payload);
 }
+
+const transformBudgetToFundingGoal = (
+  budget: Record<string, { amount: number; currency: string }>,
+  current: number
+): FundingGoal => {
+  const typeMapping = {
+    infra: { type: "infrastructure", label: "Infraestructura", color: "bg-primary-foreground" },
+    material: { type: "material", label: "Material", color: "bg-destructive" },
+    task: { type: "task", label: "Tarea", color: "bg-primary" },
+    money: { type: "money", label: "Dinero", color: "bg-secondary" },
+  };
+
+  const items = Object.entries(budget).map(([key, { amount }]) => {
+    const mappedType = typeMapping[key as keyof typeof typeMapping] || { type: key, label: key, color: "bg-muted" };
+
+    return {
+      amount,
+      label: mappedType.label,
+      color: mappedType.color,
+    };
+  });
+
+  return {
+    amount: items.reduce((sum, item) => sum + item.amount, 0),
+    data: {
+      items,
+      current,
+    },
+  };
+};
 
 const map = (
   project: Project,
@@ -87,12 +118,11 @@ const map = (
     budgets: budgetItems,
     locales: projectLocales,
     campaign: {
-      minimum,
-      optimum,
+      minimum: transformBudgetToFundingGoal(project.budget?.minimum ?? {}, obtained),
+      optimum: transformBudgetToFundingGoal(project.budget?.optimum ?? {}, obtained),
       obtained,
       donations,
       timeSeriesData,
-      budget,
     },
   };
 };

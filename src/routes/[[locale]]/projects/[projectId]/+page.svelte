@@ -134,30 +134,7 @@
         <h2 class="basis-1/3 text-4xl font-bold text-primary-foreground">
           Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.
         </h2>
-        <FundingChart
-          minimum={{
-            amount: 100000,
-            data: {
-              items: [
-                { amount: 40000, label: "Infraestructura", color: "bg-primary-foreground" },
-                { amount: 35000, label: "Material", color: "bg-destructive" },
-                { amount: 25000, label: "Tarea", color: "bg-primary" },
-              ],
-              current: 38000,
-            },
-          }}
-          optimal={{
-            amount: 150000,
-            data: {
-              items: [
-                { amount: 67500, label: "Infraestructura", color: "bg-primary-foreground" },
-                { amount: 45000, label: "Material", color: "bg-destructive" },
-                { amount: 37500, label: "Tarea", color: "bg-primary" },
-              ],
-              current: 63000,
-            },
-          }}
-        />
+        <FundingChart minimum={campaign.minimum} optimal={campaign.optimum} />
       </div>
       <div class="space-y-8">
         {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
