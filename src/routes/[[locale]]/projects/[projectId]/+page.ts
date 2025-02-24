@@ -2,19 +2,24 @@ import { z } from "zod";
 import type { PageLoad } from "./$types";
 
 const FundingItemSchema = z.object({
-  amount: z.number(),
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
   label: z.string(),
   color: z.string(),
 });
 
 const FundingDataSchema = z.object({
   items: z.array(FundingItemSchema),
-  current: z.number(),
+  current: z.number().transform((num) => (!!num ? num / 100 : num)),
 });
 
 const FundingGoalSchema = z.object({
-  amount: z.number(),
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
   data: FundingDataSchema,
+});
+
+const MoneySchema = z.object({
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
+  currency: z.string(),
 });
 
 const ProjectSchema = z.object({
@@ -31,14 +36,14 @@ const ProjectSchema = z.object({
       z.object({
         date: z.coerce.date(),
         amount: z.number(),
-      }),
+      })
     ),
   }),
   locales: z.array(
     z.object({
       code: z.string(),
       label: z.string(),
-    }),
+    })
   ),
   video: z.object({
     src: z.string(),
@@ -54,19 +59,19 @@ const ProjectSchema = z.object({
       image: z.string(),
       header: z.string(),
       content: z.string(),
-      donate: z.number(),
+      donate: z.number().transform((num) => (!!num ? num / 100 : num)),
       donors: z.number(),
-      units: z.number().nullable(),
-    }),
+      units: z.number().optional(),
+    })
   ),
   budgets: z.array(
     z.object({
       type: z.string(),
       header: z.string(),
       content: z.string(),
-      minimum: z.number().optional(),
-      optimum: z.number().optional(),
-    }),
+      minimum: MoneySchema.optional(),
+      optimum: MoneySchema.optional(),
+    })
   ),
 });
 

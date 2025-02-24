@@ -1,3 +1,4 @@
+import { omitBy, isNil, isEmpty } from "lodash-es";
 import { json } from "@sveltejs/kit";
 import { locales } from "$lib/i18n";
 
@@ -72,24 +73,30 @@ const map = (
     amount: balance?.amount ?? 0,
   }));
 
-  const rewardsMap = rewards.map(({ id, title, description, money, hasUnits, unitsAvailable }) => ({
-    id,
-    image: "https://placehold.co/320x160",
-    header: title,
-    content: description,
-    donate: money.amount,
-    donors: 0,
-    units: hasUnits ? unitsAvailable : null,
-  }));
+  const rewardsMap = rewards.map(({ id, title, description, money, hasUnits, unitsAvailable }) => {
+    const data = {
+      id,
+      image: "https://placehold.co/320x160",
+      header: title,
+      content: description,
+      donate: money.amount,
+      donors: 0,
+      units: hasUnits ? unitsAvailable : null,
+    };
+    return omitBy(data, isNil);
+  });
 
-  const budgetItems = budgets.map(({ id, type, title, description, minimum, optimum }) => ({
-    id,
-    type,
-    header: title,
-    content: description,
-    minimum: minimum?.amount,
-    optimum: optimum?.amount,
-  }));
+  const budgetItems = budgets.map(({ id, type, title, description, minimum, optimum }) => {
+    const data = {
+      id,
+      type,
+      header: title,
+      content: description,
+      minimum,
+      optimum,
+    };
+    return omitBy(data, isEmpty);
+  });
 
   const projectLocales: Array<{ code: string; label: string }> =
     project.locales?.map((code) => ({
@@ -109,7 +116,7 @@ const map = (
   const { title, subtitle, description, territory, budget } = project;
   const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
-  return {
+  const data = {
     title,
     subtitle,
     description,
@@ -126,6 +133,8 @@ const map = (
       timeSeriesData,
     },
   };
+
+  return data;
 };
 
 const getProject = async (projectId: string): Promise<Project> => {
