@@ -29,5 +29,3 @@ jobs:
       - name: Notify Webhook
         run: |
           curl -X POST ${{ secrets.WEBHOOK_URL }} -d 'success'
-
-

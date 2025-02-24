@@ -4,17 +4,17 @@ import type { PageLoad } from "./$types";
 const FundingItemSchema = z.object({
   amount: z.number(),
   label: z.string(),
-  color: z.string()
+  color: z.string(),
 });
 
 const FundingDataSchema = z.object({
   items: z.array(FundingItemSchema),
-  current: z.number()
+  current: z.number(),
 });
 
 const FundingGoalSchema = z.object({
   amount: z.number(),
-  data: FundingDataSchema
+  data: FundingDataSchema,
 });
 
 const ProjectSchema = z.object({
@@ -31,14 +31,14 @@ const ProjectSchema = z.object({
       z.object({
         date: z.coerce.date(),
         amount: z.number(),
-      })
+      }),
     ),
   }),
   locales: z.array(
     z.object({
       code: z.string(),
       label: z.string(),
-    })
+    }),
   ),
   video: z.object({
     src: z.string(),
@@ -57,7 +57,7 @@ const ProjectSchema = z.object({
       donate: z.number(),
       donors: z.number(),
       units: z.number().nullable(),
-    })
+    }),
   ),
   budgets: z.array(
     z.object({
@@ -66,7 +66,7 @@ const ProjectSchema = z.object({
       content: z.string(),
       minimum: z.number(),
       optimum: z.number(),
-    })
+    }),
   ),
 });
 
