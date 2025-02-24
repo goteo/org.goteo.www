@@ -114,7 +114,7 @@
 
 <section>
   <div class="flex justify-between items-center mb-8">
-    <h2 class="text-2xl font-bold">Recompensas más populares</h2>
+    <h2 class="text-2xl font-bold">{$_("reward.trending")}</h2>
     <Button variant="secondary" size="lg" href="#rewards">
       <MoveRight class="mr-4 h-6 w-6" />
       {$_("project.actions.viewAll")}
@@ -145,14 +145,14 @@
     <section class="flex flex-col bg-secondary p-8 gap-8">
       <div class="flex flex-row gap-4">
         <h2 class="basis-1/3 text-4xl font-bold text-primary-foreground">
-          Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.
+          {$_("budget.headline")}
         </h2>
         <FundingChart minimum={campaign.minimum} optimal={campaign.optimum} />
       </div>
       <div class="space-y-8">
         {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
           <div class="space-y-4">
-            <h3 class="text-2xl font-semibold text-primary-foreground">{$_(`project.budget.${type}`)}</h3>
+            <h3 class="text-2xl font-semibold text-primary-foreground">{$_(`budget.${type}`)}</h3>
             <div class="gap-4 flex flex-row overflow-x-auto">
               {#each budgetGroup as budget}
                 <ProjectBudget {...budget} />
@@ -166,7 +166,7 @@
   <Tabs.Content value="rewards">
     <section class="bg-secondary p-8">
       <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Selecciona tu recompensa</h2>
+        <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
       </div>
 
       <div class="grid md:grid-cols-3 gap-6">

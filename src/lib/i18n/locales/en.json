@@ -13,7 +13,20 @@
     "donate": "Donate",
     "donors": "donors",
     "units": "{units} units left",
-    "noUnits": "No units left"
+    "noUnits": "No units left",
+    "trending": "Recompensas más populares",
+    "headline": "Selecciona tu recompensa"
+  },
+  "budget": {
+    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
+    "infrastructure": "Infrastructure",
+    "material": "Material",
+    "task": "Tasks",
+    "chart": {
+      "minimum": "Minimum",
+      "optimal": "Optimal",
+      "progress": "Campaign status"
+    }
   },
   "project": {
     "tabs": {
@@ -27,16 +40,6 @@
       "share": "Share",
       "remember": "Remember",
       "viewAll": "View all"
-    },
-    "budget": {
-      "infrastructure": "Infrastructure",
-      "material": "Material",
-      "task": "Tasks",
-      "chart": {
-        "minimum": "Minimum",
-        "optimal": "Optimal",
-        "progress": "Campaign status"
-      }
     }
   },
   "navigation": {
