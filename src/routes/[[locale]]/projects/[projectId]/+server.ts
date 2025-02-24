@@ -6,6 +6,7 @@ import {
   type AccountingBalancePoint,
   type Project,
   type ProjectBudgetItem,
+  type ProjectReward,
   apiAccountingBalancePointsGetCollection,
   apiProjectsIdGet,
 } from "$client";
@@ -60,7 +61,7 @@ const map = (
   accounting: Accounting,
   transactions: TransactionsData,
   balancePoints: Array<AccountingBalancePoint>,
-  rewards: Array<typeof RewardSample>,
+  rewards: Array<ProjectReward>,
   budgets: Array<ProjectBudgetItem>
 ) => {
   const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
@@ -204,8 +205,20 @@ const getBalancePoints = async (project: Project): Promise<AccountingBalancePoin
   return data;
 };
 
-const getRewards = async (project: Project): Promise<Array<typeof RewardSample>> => {
-  return RewardsSample;
+const getRewards = async (project: Project): Promise<ProjectReward[]> => {
+  const items = project.rewards ?? [];
+  const rewards = (
+    await Promise.all(
+      items.map(async (item) => {
+        const url = client.buildUrl({ url: item });
+        const { data, error } = await client.get<ProjectReward>({
+          url: client.buildUrl({ url }),
+        });
+        return data;
+      })
+    )
+  ).filter((item): item is ProjectReward => item !== undefined);
+  return rewards;
 };
 
 const getBudgetItems = async (project: Project): Promise<ProjectBudgetItem[]> => {
@@ -223,76 +236,3 @@ const getBudgetItems = async (project: Project): Promise<ProjectBudgetItem[]> =>
   ).filter((item): item is ProjectBudgetItem => item !== undefined);
   return budgetItems;
 };
-
-const RewardsSample = [
-  {
-    id: 1,
-    project: "https://api.goteo.org/v4/projects/1",
-    title: "¡Gracias por coperar!",
-    description:
-      "La cooperativa de información Climática existe gracias a todas las personas que la apoyan. Ahora tú eres una de ellas. ¡Gracias! Incluiremos tu nombre en la lista de mecenas de nuestra web.",
-    money: {
-      amount: 5,
-      currency: "EUR",
-    },
-    hasUnits: false,
-    unitsTotal: 0,
-    unitsAvailable: 0,
-  },
-  {
-    id: 2,
-    project: "https://api.goteo.org/v4/projects/1",
-    title: "Pásate a la cooperacción",
-    description:
-      "¡Te damos la bienvenida a nuestra comunidad! Como recompensa, te llevas una suscripción Cooperante con la que recibirás el Magazine nº4 en formato digital ; el Magazine nº5 digital, que se publicará a partir de febrero 2025; y el acceso a las actividades de la comunidad Climática-.¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: https://www.goteo.org/calculadora-fiscal",
-    money: {
-      amount: 10,
-      currency: "EUR",
-    },
-    hasUnits: true,
-    unitsTotal: 100000,
-    unitsAvailable: 999000,
-  },
-  {
-    id: 3,
-    project: "https://api.goteo.org/v4/projects/1",
-    title: "Apoya a la redacción",
-    description:
-      "La redacción de Climática es más libre gracias a ti. Podremos publicar más periodismo climático independiente y, para agradecértelo, recibirás una suscripción Cooperante -que incluye el Magazine nº4 en formato digital ; el Magazine nº5 digital, que se publicará a partir de febrero 2025; y el acceso a las actividades de la comunidad Climática-. También te mandaremos el gorro Climático para que te protejas de las inclemencias del tiempo.¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: https://www.goteo.org/calculadora-fiscal",
-    money: {
-      amount: 30,
-      currency: "EUR",
-    },
-    hasUnits: false,
-    unitsTotal: 0,
-    unitsAvailable: 0,
-  },
-  {
-    id: 4,
-    project: "https://api.goteo.org/v4/projects/1",
-    title: "Sessão exclusiva com a equipe",
-    description: "Participe de uma sessão de perguntas e respostas exclusiva com a equipe do projeto. Vagas limitadas.",
-    money: {
-      amount: 100,
-      currency: "EUR",
-    },
-    hasUnits: true,
-    unitsTotal: 20,
-    unitsAvailable: 20,
-  },
-  {
-    id: 5,
-    project: "https://api.goteo.org/v4/projects/1",
-    title: "Kit de brindes",
-    description: "Kit contendo diversos brindes exclusivos do projeto.",
-    money: {
-      amount: 75,
-      currency: "EUR",
-    },
-    hasUnits: true,
-    unitsTotal: 50,
-    unitsAvailable: 35,
-  },
-];
-
-const RewardSample = RewardsSample[0];
