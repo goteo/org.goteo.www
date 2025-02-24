@@ -25,24 +25,25 @@ export async function GET({ params }) {
 
 const transformBudgetToFundingGoal = (
   budget: Record<string, { amount: number; currency: string }>,
-  current: number,
+  current: number
 ): FundingGoal => {
   const typeMapping = {
     infra: { type: "infrastructure", label: "Infraestructura", color: "bg-primary-foreground" },
     material: { type: "material", label: "Material", color: "bg-destructive" },
     task: { type: "task", label: "Tarea", color: "bg-primary" },
-    money: { type: "money", label: "Dinero", color: "bg-secondary" },
   };
 
-  const items = Object.entries(budget).map(([key, { amount }]) => {
-    const mappedType = typeMapping[key as keyof typeof typeMapping] || { type: key, label: key, color: "bg-muted" };
+  const items = Object.entries(budget)
+    .filter(([key]) => Object.keys(typeMapping).includes(key))
+    .map(([key, { amount }]) => {
+      const mappedType = typeMapping[key as keyof typeof typeMapping] || { type: key, label: key, color: "bg-muted" };
 
-    return {
-      amount,
-      label: mappedType.label,
-      color: mappedType.color,
-    };
-  });
+      return {
+        amount,
+        label: mappedType.label,
+        color: mappedType.color,
+      };
+    });
 
   return {
     amount: items.reduce((sum, item) => sum + item.amount, 0),
@@ -59,7 +60,7 @@ const map = (
   transactions: TransactionsData,
   balancePoints: Array<AccountingBalancePoint>,
   rewards: Array<typeof RewardSample>,
-  budgets: Array<typeof BudgetSample>,
+  budgets: Array<typeof BudgetSample>
 ) => {
   const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const optimum = Object.values(project.budget?.optimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);

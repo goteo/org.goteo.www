@@ -25,7 +25,7 @@
   <Card.Content class="space-y-8">
     <div class="space-y-2" style="width: {(minimum.amount / optimal.amount) * 100}%">
       <div class="text-sm">
-        <span class="font-medium">{$_('budget.chart.minimum')}: </span>
+        <span class="font-medium">{$_("budget.chart.minimum")}: </span>
         <span>{minimum.amount}€</span>
       </div>
       <div class="relative h-8">
@@ -34,21 +34,24 @@
             <div class={item.color} style="width: {item.percentage}%"></div>
           {/each}
         </div>
-        <div
-          class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black"
-          style="left: {minimumPercentages.progress}%"
-          role="progressbar"
-          aria-valuenow={minimumPercentages.progress}
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-label={$_('budget.chart.progress')}
-        ></div>
+        <div class="absolute" style="left: {Math.min(minimumPercentages.progress, 100) - 1}%">
+          <div class="flex flex-col items-center">
+            <div class="h-10 border-l-2 border-dotted border-white"></div>
+            <div
+              class="w-1.5 h-1.5 rounded-full bg-black"
+              role="progressbar"
+              aria-valuenow={minimumPercentages.progress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label={$_("budget.chart.progress")}
+            ></div>
+          </div>
+        </div>
       </div>
     </div>
-
     <div class="space-y-2">
       <div class="text-sm">
-        <span class="font-medium">{$_('budget.chart.optimal')}: </span>
+        <span class="font-medium">{$_("budget.chart.optimal")}: </span>
         <span>{optimal.amount}€</span>
       </div>
       <div class="relative h-8">
@@ -57,15 +60,19 @@
             <div class={item.color} style="width: {item.percentage}%"></div>
           {/each}
         </div>
-        <div
-          class="absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-black"
-          style="left: {optimalPercentages.progress}%"
-          role="progressbar"
-          aria-valuenow={optimalPercentages.progress}
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-label="Estado de la campaña"
-        ></div>
+        <div class="absolute bottom-0" style="left: {Math.min(optimalPercentages.progress, 100) - 1}%">
+          <div class="flex flex-col items-center">
+            <div
+              class="w-1.5 h-1.5 rounded-full bg-black"
+              role="progressbar"
+              aria-valuenow={optimalPercentages.progress}
+              aria-valuemin="0"
+              aria-valuemax="100"
+              aria-label={$_("budget.chart.progress")}
+            ></div>
+            <div class="h-10 border-l-2 border-dotted border-white"></div>
+          </div>
+        </div>
       </div>
     </div>
   </Card.Content>
@@ -78,7 +85,7 @@
     {/each}
     <div class="flex items-center gap-2">
       <div class="h-1.5 w-1.5 rounded-full bg-black"></div>
-      <span>{$_('budget.chart.progress')}</span>
+      <span>{$_("budget.chart.progress")}</span>
     </div>
   </Card.Footer>
 </Card.Root>
