@@ -19,11 +19,12 @@
 
   $: minimumPercentages = calculatePercentages(minimum.data);
   $: optimalPercentages = calculatePercentages(optimal.data);
+  $: minimumPercentageOfOptimal = (minimum.amount / optimal.amount) * 100;
 </script>
 
 <Card.Root class="basis-2/3 bg-white/50">
   <Card.Content class="space-y-8">
-    <div class="space-y-2" style="width: {(minimum.amount / optimal.amount) * 100}%">
+    <div class="space-y-2" style="width: {minimumPercentageOfOptimal}%">
       <div class="text-sm">
         <span class="font-medium">{$_("budget.chart.minimum")}: </span>
         <span>{minimum.amount}€</span>

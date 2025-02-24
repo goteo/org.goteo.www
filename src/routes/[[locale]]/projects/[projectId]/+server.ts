@@ -64,8 +64,6 @@ const map = (
   rewards: Array<ProjectReward>,
   budgets: Array<ProjectBudgetItem>
 ) => {
-  const minimum = Object.values(project.budget?.minimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
-  const optimum = Object.values(project.budget?.optimum ?? {}).reduce((acc, { amount }) => acc + amount, 0);
   const obtained = accounting.balance?.amount ?? 0;
   const donations = transactions.totalItems;
 
