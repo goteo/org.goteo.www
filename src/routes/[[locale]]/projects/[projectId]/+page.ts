@@ -64,8 +64,8 @@ const ProjectSchema = z.object({
       type: z.string(),
       header: z.string(),
       content: z.string(),
-      minimum: z.number(),
-      optimum: z.number(),
+      minimum: z.number().optional(),
+      optimum: z.number().optional(),
     }),
   ),
 });

@@ -5,8 +5,8 @@
 
   export let header: string = "";
   export let content: string = "";
-  export let minimum: number = 0;
-  export let optimum: number = 0;
+  export let minimum: number;
+  export let optimum: number;
 </script>
 
 <Dialog.Root>
@@ -20,12 +20,13 @@
           {content}
         </Card.Description>
       </Card.CardContent>
-
       <Card.Footer class="flex gap-8">
-        <div>
-          <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
-          <p class="text-xl font-bold">{$number(minimum, { style: "currency", currency: "EUR" })}</p>
-        </div>
+        {#if minimum}
+          <div>
+            <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
+            <p class="text-xl font-bold">{$number(minimum, { style: "currency", currency: "EUR" })}</p>
+          </div>
+        {/if}
         {#if optimum}
           <div>
             <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
@@ -43,10 +44,12 @@
       {content}
     </Dialog.Description>
     <div class="flex justify-start gap-8">
-      <div>
-        <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
-        <p class="text-xl font-bold">{$number(minimum, { style: "currency", currency: "EUR" })}</p>
-      </div>
+      {#if minimum}
+        <div>
+          <p class="text-base font-medium text-gray-500">{$_("campaignProgress.minimum")}</p>
+          <p class="text-xl font-bold">{$number(minimum, { style: "currency", currency: "EUR" })}</p>
+        </div>
+      {/if}
       {#if optimum}
         <div>
           <p class="text-base font-medium text-gray-500">{$_("campaignProgress.optimal")}</p>
