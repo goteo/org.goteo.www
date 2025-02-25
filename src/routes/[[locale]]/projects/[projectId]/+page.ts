@@ -56,6 +56,7 @@ const ProjectSchema = z.object({
   }),
   rewards: z.array(
     z.object({
+      id: z.number(),
       image: z.string(),
       header: z.string(),
       content: z.string(),

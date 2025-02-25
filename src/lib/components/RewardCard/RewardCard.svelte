@@ -3,10 +3,12 @@
   import * as Card from "$lib/components/ui/card";
   import * as Dialog from "$lib/components/ui/dialog";
   import { Button } from "$lib/components/ui/button";
+  import { cart } from "$lib/stores/cart";
   import boxIcon from "./box.svg";
   import userIcon from "./user.svg";
   import bagIcon from "./bag.svg";
 
+  export let id: string = "";
   export let image: string = "";
   export let header: string = "";
   export let content: string = "";
@@ -14,9 +16,31 @@
   export let donors: number = 0;
   export let units: number | null = null;
   export let size: "sm" | "lg" = "lg";
+
+  let open = false;
+  let quantity = 1;
+
+  function addToCart() {
+    cart.addItem({
+      id,
+      type: "reward",
+      name: header,
+      amount: donate,
+      quantity,
+      image,
+    });
+
+    open = false;
+  }
+
+  function handleDirectDonate() {
+    addToCart();
+    // Redirect to checkout page
+    window.location.href = "/checkout";
+  }
 </script>
 
-<Dialog.Root>
+<Dialog.Root bind:open>
   <Dialog.Trigger class="text-left">
     <Card.Root class="w-full max-w-md drop-shadow-sm">
       <Card.Header>
@@ -87,10 +111,26 @@
         {/if}
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <Button variant="outline" size="lg" class="w-full"
-          ><img src={bagIcon} alt="Bag" class="h-6 mr-4" /> Añadir al carro y continuar</Button
+        <Button
+          variant="outline"
+          size="lg"
+          class="w-full"
+          on:click={() => addToCart()}
+          disabled={units !== null && units <= 0}
         >
-        <Button variant="default" size="lg" class="w-full">{$_("reward.donate")} {$number(donate)}€</Button>
+          <img src={bagIcon} alt="Bag" class="h-6 mr-4" />
+          {$_("reward.addAndContinue")}
+        </Button>
+        <Button
+          variant="default"
+          size="lg"
+          class="w-full"
+          on:click={handleDirectDonate}
+          disabled={units !== null && units <= 0}
+        >
+          {$_("reward.donate")}
+          {$number(donate * quantity)}€
+        </Button>
       </div>
     </Dialog.Footer>
   </Dialog.Content>
