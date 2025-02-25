@@ -13,7 +13,20 @@
     "donate": "Dona",
     "donors": "donates",
     "units": "Quedan {units} unidades",
-    "noUnits": "No quedan unidades"
+    "noUnits": "No quedan unidades",
+    "trending": "Recompensas más populares",
+    "headline": "Selecciona tu recompensa"
+  },
+  "budget": {
+    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
+    "infrastructure": "Infraestructura",
+    "material": "Material",
+    "task": "Tareas",
+    "chart": {
+      "minimum": "Mínimo",
+      "optimal": "Óptimo",
+      "progress": "Estado de la campaña"
+    }
   },
   "project": {
     "tabs": {

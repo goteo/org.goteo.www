@@ -1,16 +1,37 @@
 import { z } from "zod";
 import type { PageLoad } from "./$types";
 
+const FundingItemSchema = z.object({
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
+  label: z.string(),
+  color: z.string(),
+});
+
+const FundingDataSchema = z.object({
+  items: z.array(FundingItemSchema),
+  current: z.number().transform((num) => (!!num ? num / 100 : num)),
+});
+
+const FundingGoalSchema = z.object({
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
+  data: FundingDataSchema,
+});
+
+const MoneySchema = z.object({
+  amount: z.number().transform((num) => (!!num ? num / 100 : num)),
+  currency: z.string(),
+});
+
 const ProjectSchema = z.object({
   title: z.string(),
   subtitle: z.string(),
   description: z.string(),
   territory: z.string(),
   campaign: z.object({
+    minimum: FundingGoalSchema,
+    optimum: FundingGoalSchema,
     obtained: z.number(),
-    optimum: z.number(),
     donations: z.number(),
-    minimum: z.number(),
     timeSeriesData: z.array(
       z.object({
         date: z.coerce.date(),
@@ -38,9 +59,18 @@ const ProjectSchema = z.object({
       image: z.string(),
       header: z.string(),
       content: z.string(),
-      donate: z.number(),
+      donate: z.number().transform((num) => (!!num ? num / 100 : num)),
       donors: z.number(),
-      units: z.number().nullable(),
+      units: z.number().optional(),
+    })
+  ),
+  budgets: z.array(
+    z.object({
+      type: z.string(),
+      header: z.string(),
+      content: z.string(),
+      minimum: MoneySchema.optional(),
+      optimum: MoneySchema.optional(),
     })
   ),
 });
@@ -55,7 +85,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
     console.error(JSON.stringify(parsed.error));
     throw new Error("Failed to parse project data");
   }
-
-  const { campaign, locales, video, rewards, ...project } = parsed.data;
-  return { campaign, locales, video, rewards, project };
+  // console.debug(JSON.stringify(parsed.data, null, 2));
+  const { campaign, locales, video, rewards, budgets, ...project } = parsed.data;
+  return { campaign, locales, video, rewards, budgets, project };
 };
