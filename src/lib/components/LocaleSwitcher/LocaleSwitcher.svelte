@@ -1,7 +1,6 @@
 <script lang="ts">
   import { fade } from "svelte/transition";
   import { page } from "$app/state";
-  import { goto } from "$app/navigation";
   import { config } from "$lib/i18n";
 
   interface LocaleInfo {
@@ -10,21 +9,21 @@
   }
 
   $: currentLocale = page.data.locale || config.defaultLocale;
-  
+
   export let locales: LocaleInfo[] = [];
   export let loading = false;
-  
+
   export let onLocaleChange = async (newLocale: string) => {
-    if (goto) {
+    if (window.location) {
       const newPath = getLocalePath(newLocale);
-      await goto(newPath, { invalidateAll: true });
+      window.location.href = newPath;
     }
   };
 
   function getLocalePath(newLocale: string): string {
     const currentPath = page.url.pathname;
     const segments = currentPath.split("/").filter(Boolean);
-    const currentLocaleSegment = locales.map(l => l.code).includes(segments[0]) ? segments[0] : null;
+    const currentLocaleSegment = locales.map((l) => l.code).includes(segments[0]) ? segments[0] : null;
     const pathWithoutLocale = currentLocaleSegment ? `/${segments.slice(1).join("/")}` : currentPath;
 
     return `/${newLocale}${pathWithoutLocale}`;
@@ -64,9 +63,4 @@
       {/each}
     {/if}
   </select>
-  <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M3 6L8 11L13 6" stroke="#462949" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-  </div>
 </div>
