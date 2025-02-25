@@ -20,6 +20,9 @@ jobs:
           username: ${{ secrets.REGISTRY_USERNAME }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
+      - name: Copy .env.example to .env
+        run: cp .env.example .env
+
       - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
