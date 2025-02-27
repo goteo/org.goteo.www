@@ -2,7 +2,8 @@
   import { cart, totalAmount } from "$lib/stores/cart";
   import { Button } from "$lib/components/ui/button";
   import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "$lib/components/ui/card";
-  
+  import { goto } from "$app/navigation";  // added import for navigation
+
   // Group cart items by project property (if exists, otherwise group under "Others")
   $: groupedItems = $cart.items.reduce((acc, item) => {
     const project = item.project || "Others";
@@ -63,7 +64,9 @@
           <p class="text-2xl font-bold mt-4">Total: {$totalAmount}€</p>
         </CardContent>
         <CardFooter>
-          <Button variant="default" size="lg" class="w-full">Confirm Order</Button>
+          <Button variant="default" size="lg" class="w-full" on:click={() => goto('/payment')}>
+            Confirm Order
+          </Button>
         </CardFooter>
       </Card>
     </div>

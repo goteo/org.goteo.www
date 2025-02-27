@@ -2,6 +2,7 @@
   import { Menu, CircleUserRound } from "lucide-svelte";
   import { Button } from "$lib/components/ui/button";
   import { itemCount } from "$lib/stores/cart";
+  import { goto } from "$app/navigation"; // added navigation helper
   import Logo from "./Logo.svg";
   import Bag from "./bag.svg";
 </script>
@@ -10,11 +11,11 @@
   <div class="mx-auto flex items-center justify-between">
     <img src={Logo} alt="Goteo Logo" width={100} height={32} class="h-8 w-auto" />
     <div class="flex items-center gap-4">
-      <Button variant="ghost" class="text-primary-foreground text-base"
-        ><CircleUserRound strokeWidth={1} class="h-10 w-10 mr-2" /> Hola Richard</Button
-      >
+      <Button variant="ghost" class="text-primary-foreground text-base">
+        <CircleUserRound strokeWidth={1} class="h-10 w-10 mr-2" /> Hola Richard
+      </Button>
       <div class="relative">
-        <Button variant="ghost" size="icon" class="h-10 w-10">
+        <Button variant="ghost" size="icon" class="h-10 w-10" on:click={() => goto('/checkout')}>
           <img src={Bag} alt="Bag" />
         </Button>
         {#if $itemCount > 0}
