@@ -11,7 +11,10 @@
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "openapi-ts": "openapi-ts"
+    "openapi-ts": "openapi-ts",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^3.2.4",
@@ -37,6 +40,7 @@
     "autoprefixer": "^10.4.20",
     "bits-ui": "^0.22.0",
     "clsx": "^2.1.1",
+    "drizzle-kit": "^0.30.2",
     "lucide-svelte": "^0.475.0",
     "storybook": "^8.5.3",
     "svelte": "^5.19.9",
@@ -58,6 +62,7 @@
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
+    "drizzle-orm": "^0.40.0",
     "layerchart": "^0.93.10",
     "lodash-es": "^4.17.21",
     "lucide-svelte": "^0.475.0",
