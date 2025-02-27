@@ -10,6 +10,7 @@ export const actions: Actions = {
     await auth.invalidateSession(event.locals.session.id);
     auth.deleteSessionTokenCookie(event);
 
-    return redirect(302, "/login");
+    // Refresh current page instead of redirecting to "/login"
+    return redirect(302, event.url.pathname);
   },
 };
