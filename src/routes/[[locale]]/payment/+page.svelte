@@ -3,6 +3,7 @@
   import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "$lib/components/ui/card";
   import { cart, itemCount, totalAmount } from "$lib/stores/cart";
   import { goto } from "$app/navigation";
+  import CheckoutSummary from "$lib/components/CheckoutSummary";
 </script>
 
 <div class="container mx-auto max-w-6xl p-4">
@@ -46,28 +47,10 @@
     <!-- Right Column: Order Summary -->
     <div>
       <h1 class="text-3xl font-bold mb-4">Order Summary</h1>
-      <Card class="p-4">
-        <CardContent>
-          <!-- List each cart item -->
-          {#each $cart.items as item}
-            <div class="flex justify-between mb-2">
-              <span>{item.name} x {item.quantity}</span>
-              <span>{item.amount * item.quantity}€</span>
-            </div>
-          {/each}
-          <!-- Totals -->
-          <p class="text-lg mt-4">Total Items: {$itemCount}</p>
-          <p class="text-2xl font-bold mt-2">Total: €{$totalAmount}</p>
-        </CardContent>
-        <CardFooter>
-          <Button variant="default" size="lg" class="w-full" on:click={() => {
-            cart.clear();
-            goto('/confirmation'); // ensure this route exists or update accordingly
-          }}>
-            Confirm Payment
-          </Button>
-        </CardFooter>
-      </Card>
+      <CheckoutSummary confirmAction={() => {
+        cart.clear();
+        goto('/confirmation');
+      }} />
     </div>
   </div>
 </div>

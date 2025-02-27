@@ -2,7 +2,8 @@
   import { cart, totalAmount } from "$lib/stores/cart";
   import { Button } from "$lib/components/ui/button";
   import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "$lib/components/ui/card";
-  import { goto } from "$app/navigation";  // added import for navigation
+  import { goto } from "$app/navigation";
+  import CheckoutSummary from "$lib/components/CheckoutSummary"; // updated import
 
   // Group cart items by project property (if exists, otherwise group under "Others")
   $: groupedItems = $cart.items.reduce((acc, item) => {
@@ -54,21 +55,8 @@
         {/each}
       </div>
 
-      <!-- Right: Summary wrapped in a Card -->
-      <Card class="p-4 h-full">
-        <CardHeader>
-          <CardTitle class="text-xl font-bold">Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p class="text-lg">Total Items: {$cart.items.reduce((acc, item) => acc + item.quantity, 0)}</p>
-          <p class="text-2xl font-bold mt-4">Total: {$totalAmount}€</p>
-        </CardContent>
-        <CardFooter>
-          <Button variant="default" size="lg" class="w-full" on:click={() => goto('/payment')}>
-            Confirm Order
-          </Button>
-        </CardFooter>
-      </Card>
+      <!-- Right: Replaced summary with new CheckoutSummary component -->
+      <CheckoutSummary />
     </div>
   {/if}
 </div>
