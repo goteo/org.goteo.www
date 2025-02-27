@@ -31,29 +31,29 @@ const i18n: Handle = async ({ event, resolve }) => {
 };
 
 const handleAuth: Handle = async ({ event, resolve }) => {
-	console.log('Auth hook running');
-	const sessionToken = event.cookies.get(auth.sessionCookieName);
-	if (!sessionToken) {
-		console.log('No session token in cookies');
-		event.locals.user = null;
-		event.locals.session = null;
-		return resolve(event);
-	}
+  console.log("Auth hook running");
+  const sessionToken = event.cookies.get(auth.sessionCookieName);
+  if (!sessionToken) {
+    console.log("No session token in cookies");
+    event.locals.user = null;
+    event.locals.session = null;
+    return resolve(event);
+  }
 
-	console.log('Session token found, validating...');
-	const { session, user } = await auth.validateSessionToken(sessionToken);
-	if (session) {
-		console.log('Valid session, user logged in:', user.username);
-		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-	} else {
-		console.log('Invalid session, removing cookie');
-		auth.deleteSessionTokenCookie(event);
-	}
+  console.log("Session token found, validating...");
+  const { session, user } = await auth.validateSessionToken(sessionToken);
+  if (session) {
+    console.log("Valid session, user logged in:", user.username);
+    auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+  } else {
+    console.log("Invalid session, removing cookie");
+    auth.deleteSessionTokenCookie(event);
+  }
 
-	event.locals.user = user;
-	event.locals.session = session;
+  event.locals.user = user;
+  event.locals.session = session;
 
-	return resolve(event);
+  return resolve(event);
 };
 
 export const handle = sequence(i18n, handleAuth);

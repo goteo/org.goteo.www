@@ -2,7 +2,6 @@
   import { _ } from "svelte-i18n";
   import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
   import type { PageData } from "./$types";
-  import { Button } from "$lib/components/ui/button";
 
   export let data: PageData;
 
@@ -14,5 +13,7 @@
   <h1 class="text-3xl font-bold underline mt-4">{$_("greeting")}</h1>
   <p class="mt-2">{$_("farewell")}</p>
   <p class="mt-2">Current locale: {data.locale}</p>
-  <Button>Click me</Button>
+
+  <hr />
+  <a href="/projects/125">/projects/125</a>
 </div>

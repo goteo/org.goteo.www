@@ -1,1 +1,1 @@
-export { default } from './CheckoutSummary.svelte';
+export { default } from "./CheckoutSummary.svelte";
