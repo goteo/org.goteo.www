@@ -15,5 +15,9 @@
   <p class="mt-2">Current locale: {data.locale}</p>
 
   <hr />
-  <a href="/projects/125">/projects/125</a>
+  <ul>
+    <li><a href="/projects/124">/projects/124</a></li>
+    <li><a href="/projects/125">/projects/125</a></li>
+    <li><a href="/projects/126">/projects/126</a></li>
+  </ul>
 </div>

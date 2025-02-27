@@ -10,7 +10,9 @@ import type { Actions, PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async (event) => {
   if (event.locals.user) {
-    return redirect(302, "/");
+    // Get returnUrl from query params or default to home page
+    const returnUrl = event.url.searchParams.get('returnUrl') || '/';
+    return redirect(302, returnUrl);
   }
   return {};
 };
@@ -20,8 +22,11 @@ export const actions: Actions = {
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
+    
+    // Get returnUrl from form data instead of URL params
+    const returnUrl = formData.get("returnUrl") || '/';
 
-    console.log(`Login attempt: username=${username}`);
+    console.log(`Login attempt: username=${username}, returnUrl=${returnUrl}`);
 
     if (!validateUsername(username)) {
       return fail(400, { message: "Invalid username (min 3, max 31 characters, alphanumeric only)" });
@@ -53,8 +58,9 @@ export const actions: Actions = {
         return fail(500, { message: "Session creation error" });
       }
 
-      // Move redirect outside try/catch
-      return redirect(302, "/");
+      console.log(`Redirecting to: ${returnUrl}`);
+      // Use returnUrl from form data
+      return redirect(302, returnUrl);
     }
 
     let validPassword = false;
@@ -85,13 +91,17 @@ export const actions: Actions = {
       return fail(500, { message: "Session creation error" });
     }
 
-    // Move redirect outside try/catch
-    return redirect(302, "/");
+    console.log(`Redirecting to: ${returnUrl}`);
+    // Use returnUrl from form data
+    return redirect(302, returnUrl);
   },
   register: async (event) => {
     const formData = await event.request.formData();
     const username = formData.get("username");
     const password = formData.get("password");
+    
+    // Get returnUrl from form data instead of URL params
+    const returnUrl = formData.get("returnUrl") || '/';
 
     if (!validateUsername(username)) {
       return fail(400, { message: "Invalid username" });
@@ -118,7 +128,9 @@ export const actions: Actions = {
     } catch (e) {
       return fail(500, { message: "An error has occurred" });
     }
-    return redirect(302, "/");
+    
+    // Use returnUrl from form data
+    return redirect(302, returnUrl);
   },
 };
 

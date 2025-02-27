@@ -1,6 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
+  import { page } from '$app/stores';
 
   import { Label } from "$lib/components/ui/label";
   import { Input } from "$lib/components/ui/input";
@@ -9,6 +10,9 @@
   import CheckoutSummary from "$lib/components/CheckoutSummary/CheckoutSummary.svelte";
 
   let { form }: { form: ActionData } = $props();
+
+  // Get returnUrl from query parameters using derived rune
+  const returnUrl = $derived($page.url.searchParams.get('returnUrl') || '/');
 </script>
 
 <div class="container mx-auto p-4">
@@ -22,6 +26,9 @@
           <p style="color: red">{form?.message ?? ""}</p>
 
           <form method="POST" class="space-y-4" action="?/login" use:enhance>
+            <!-- Pass the returnUrl as a hidden field -->
+            <input type="hidden" name="returnUrl" value={returnUrl}>
+
             <div>
               <Label for="email">Email</Label>
               <Input id="username" name="username" type="text" required />
