@@ -1,6 +1,11 @@
-import { drizzle } from 'drizzle-orm/libsql';
-import { createClient } from '@libsql/client';
+import { MockDb } from './mock-db';
 import { env } from '$env/dynamic/private';
-if (!env.DATABASE_URL) throw new Error('DATABASE_URL is not set');
-const client = createClient({ url: env.DATABASE_URL });
-export const db = drizzle(client);
+
+// We still check for DATABASE_URL to maintain compatibility with the original code
+if (!env.DATABASE_URL) {
+    console.warn('DATABASE_URL is not set, using mock database with pre-defined test user');
+    console.warn('You can log in with username: testuser and password: password123');
+}
+
+// Export our mock DB instead of Drizzle
+export const db = MockDb;

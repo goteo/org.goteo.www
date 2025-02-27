@@ -1,18 +1,33 @@
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
+// Define types without Drizzle dependencies
+export interface User {
+    id: string;
+    age?: number;
+    username: string;
+    passwordHash: string;
+}
 
-export const user = sqliteTable('user', {
-    id: text('id').primaryKey(),
-    age: integer('age'),
-    username: text('username').notNull().unique(),
-    passwordHash: text('password_hash').notNull()
-});
+export interface Session {
+    id: string;
+    userId: string;
+    expiresAt: Date;
+}
 
-export const session = sqliteTable("session", {
-    id: text('id').primaryKey(),
-    userId: text('user_id').notNull().references(() => user.id),
-    expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
-});
+// Table names for our mock implementation
+export const TableNames = {
+    USER: 'user',
+    SESSION: 'session'
+} as const;
 
-export type Session = typeof session.$inferSelect;
+// These help replicate the table reference structure used in the original code
+export const user = {
+    id: 'id',
+    age: 'age',
+    username: 'username',
+    passwordHash: 'password_hash'
+};
 
-export type User = typeof user.$inferSelect;
+export const session = {
+    id: 'id',
+    userId: 'user_id',
+    expiresAt: 'expires_at'
+};

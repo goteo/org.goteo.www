@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { eq } from '$lib/server/db/mock-db';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
 import { db } from '$lib/server/db';
@@ -22,30 +22,46 @@ export async function createSession(token: string, userId: string) {
 		userId,
 		expiresAt: new Date(Date.now() + DAY_IN_MS * 30)
 	};
-	await db.insert(table.session).values(session);
+	await db.insert('session').values(session);
+	console.log(`Created session ${sessionId} for user ${userId}`);
 	return session;
 }
 
 export async function validateSessionToken(token: string) {
+	console.log('Validating session token');
 	const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-	const [result] = await db
-		.select({
-			// Adjust user table here to tweak returned data
-			user: { id: table.user.id, username: table.user.username },
-			session: table.session
-		})
-		.from(table.session)
-		.innerJoin(table.user, eq(table.session.userId, table.user.id))
-		.where(eq(table.session.id, sessionId));
-
-	if (!result) {
+	
+	// First get the session
+	const sessionResults = await db
+		.select()
+		.from('session')
+		.where(eq('id', sessionId))
+		.execute();
+	
+	if (!sessionResults || sessionResults.length === 0) {
+		console.log('No session found');
 		return { session: null, user: null };
 	}
-	const { session, user } = result;
+	
+	const session = sessionResults[0];
+	
+	// Now get the user
+	const userResults = await db
+		.select()
+		.from('user')
+		.where(eq('id', session.userId))
+		.execute();
+	
+	const user = userResults[0];
+	if (!user) {
+		console.log('No user found for session');
+		return { session: null, user: null };
+	}
 
 	const sessionExpired = Date.now() >= session.expiresAt.getTime();
 	if (sessionExpired) {
-		await db.delete(table.session).where(eq(table.session.id, session.id));
+		console.log('Session expired');
+		await db.delete('session').where(eq('id', session.id));
 		return { session: null, user: null };
 	}
 
@@ -53,9 +69,10 @@ export async function validateSessionToken(token: string) {
 	if (renewSession) {
 		session.expiresAt = new Date(Date.now() + DAY_IN_MS * 30);
 		await db
-			.update(table.session)
+			.update('session')
 			.set({ expiresAt: session.expiresAt })
-			.where(eq(table.session.id, session.id));
+			.where(eq('id', session.id));
+		console.log('Session renewed');
 	}
 
 	return { session, user };
@@ -64,10 +81,11 @@ export async function validateSessionToken(token: string) {
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
 export async function invalidateSession(sessionId: string) {
-	await db.delete(table.session).where(eq(table.session.id, sessionId));
+	await db.delete('session').where(eq('id', sessionId));
 }
 
 export function setSessionTokenCookie(event: RequestEvent, token: string, expiresAt: Date) {
+	console.log('Setting session cookie');
 	event.cookies.set(sessionCookieName, token, {
 		expires: expiresAt,
 		path: '/'
