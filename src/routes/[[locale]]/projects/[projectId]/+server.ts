@@ -113,10 +113,11 @@ const map = (
     },
   };
 
-  const { title, subtitle, description, territory, budget } = project;
+  const { id, title, subtitle, description, territory } = project;
   const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
   const data = {
+    id,
     title,
     subtitle,
     description,

@@ -23,6 +23,7 @@ const MoneySchema = z.object({
 });
 
 const ProjectSchema = z.object({
+  id: z.number(),
   title: z.string(),
   subtitle: z.string(),
   description: z.string(),

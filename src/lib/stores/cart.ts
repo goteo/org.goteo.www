@@ -8,6 +8,7 @@ export interface CartItem {
   amount: number;
   quantity: number;
   image?: string;
+  project?: number; // added property for grouping items by project
 }
 
 interface CartStore {
