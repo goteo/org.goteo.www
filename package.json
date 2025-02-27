@@ -51,6 +51,10 @@
   "dependencies": {
     "@fontsource-variable/karla": "^5.1.1",
     "@hey-api/client-fetch": "^0.8.1",
+    "@libsql/client": "^0.14.0",
+    "@node-rs/argon2": "^2.0.2",
+    "@oslojs/crypto": "^1.0.1",
+    "@oslojs/encoding": "^1.1.0",
     "d3-array": "^3.2.4",
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",

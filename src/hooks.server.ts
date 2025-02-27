@@ -1,3 +1,4 @@
+import * as auth from "$lib/server/auth.js";
 import { sequence } from "@sveltejs/kit/hooks";
 import { init, locale } from "svelte-i18n";
 import type { Handle } from "@sveltejs/kit";
@@ -29,4 +30,27 @@ const i18n: Handle = async ({ event, resolve }) => {
   return resolve(event);
 };
 
-export const handle = sequence(i18n);
+const originalHandle = sequence(i18n, handleAuth);
+
+const handleAuth: Handle = async ({ event, resolve }) => {
+	const sessionToken = event.cookies.get(auth.sessionCookieName);
+	if (!sessionToken) {
+		event.locals.user = null;
+		event.locals.session = null;
+		return resolve(event);
+	}
+
+	const { session, user } = await auth.validateSessionToken(sessionToken);
+	if (session) {
+		auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
+	} else {
+		auth.deleteSessionTokenCookie(event);
+	}
+
+	event.locals.user = user;
+	event.locals.session = session;
+
+	return resolve(event);
+};
+
+export const handle = sequence(originalHandle, handleAuth);
