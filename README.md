@@ -36,3 +36,10 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 > To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+
+
+http://localhost:5173/demo/lucia/login
+
+Now we've added a mock user with the following credentials:
+- Username: `testuser`
+- Password: `password123`

@@ -16,10 +16,3 @@
   <p class="mt-2">Current locale: {data.locale}</p>
   <Button>Click me</Button>
 </div>
-
-<style>
-  /* @reference "tailwindcss/theme"; */
-  :global(html) {
-    /* background-color: theme(--color-gray-100); */
-  }
-</style>
