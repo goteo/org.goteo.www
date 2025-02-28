@@ -1,7 +1,8 @@
-import { PUBLIC_API_URL } from "$env/dynamic/public";
+import { env } from "$env/dynamic/private";
+
 import type { CreateClientConfig } from "./client/client.gen";
 
 export const createClientConfig: CreateClientConfig = (config) => ({
   ...config,
-  baseUrl: PUBLIC_API_URL,
+  baseUrl: env.PUBLIC_API_URL,
 });
