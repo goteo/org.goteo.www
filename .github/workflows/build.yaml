@@ -26,7 +26,7 @@ jobs:
           push: true
           tags: ${{ secrets.REGISTRY_URL }}/goteo-v4-client:latest
           build-args: |
-            PUBLIC_API_URL=${{ secrets.PUBLIC_API_URL }} 
+            PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }} 
 
       - name: Notify Webhook
         run: |
