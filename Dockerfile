@@ -1,3 +1,5 @@
+ARG PUBLIC_API_URL="https://v4.goteo.org"
+
 # Build stage
 FROM node:22-alpine AS builder
 
@@ -6,6 +8,7 @@ WORKDIR /app
 # Copy package files and install dependencies
 COPY package*.json ./
 RUN npm ci
+ENV PUBLIC_API_URL=${PUBLIC_API_URL}
 
 # Copy the rest of the application and build it
 COPY . .
