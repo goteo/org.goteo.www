@@ -20,9 +20,9 @@
     <div>
       <Card>
         <CardHeader>
-          <CardTitle class="text-2xl font-bold">Login</CardTitle>
+          <CardTitle class="text-2xl font-bold">Register</CardTitle>
           <div class="flex justify-end">
-            <Button variant="outline" href="../register">Need an account? Register</Button>
+            <Button variant="outline" href="../login">Already have an account? Log in</Button>
           </div>
         </CardHeader>
         <CardContent>
