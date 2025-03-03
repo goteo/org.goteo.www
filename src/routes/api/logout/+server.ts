@@ -7,7 +7,7 @@ export const POST: RequestHandler = async (event) => {
     return new Response(null, { status: 401 });
   }
 
-  await auth.invalidateSession(event.locals.session.id);
+  await auth.invalidateSession(event.locals.session.id, event.locals.session.token);
   auth.deleteSessionTokenCookie(event);
 
   // Get the referrer URL or fallback to homepage

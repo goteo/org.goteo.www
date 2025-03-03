@@ -35,15 +35,15 @@ export const actions: Actions = {
       return fail(400, { message: "Invalid password (min 6, max 255 characters)" });
     }
 
-    const { data, error } = await apiUserTokensPost({ body: { identifier: username, password } });
+    const { data: existingUser, error } = await apiUserTokensPost({ body: { identifier: username, password } });
 
-    if (error || typeof data === "undefined") {
+    if (error || typeof existingUser === "undefined") {
       return fail(400, { message: "Incorrect username or password" });
     }
 
     // const results = await db.select().from("user").where(eq("username", username)).execute();
 
-    const existingUser = data;
+    // const existingUser = data;
 
     // const existingUser = results.at(0);
     // if (!existingUser) {
@@ -67,7 +67,7 @@ export const actions: Actions = {
     //   }
 
     //   console.log(`Redirecting to: ${returnUrl}`);
-    //   // Use returnUrl from form data
+    // Use returnUrl from form data
     //   return redirect(302, returnUrl);
     // }
 
@@ -91,15 +91,16 @@ export const actions: Actions = {
 
     // Session creation in separate try/catch
     try {
+      const sessionId = existingUser.id;
       const sessionToken = existingUser.token;
       const userId = existingUser.owner!.split("/").pop();
 
-      if (!sessionToken || !userId) {
+      if (!sessionToken || !userId || !sessionId) {
         return fail(400, { message: "Incorrect username or password" });
       }
 
-      const session = await auth.createSession(sessionToken, userId);
-      auth.setSessionTokenCookie(event, session.id, session.expiresAt);
+      const session = await auth.createSession(sessionToken, userId, sessionId);
+      auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
     } catch (error) {
       console.error("Session creation error:", error);
       return fail(500, { message: "Session creation error" });

@@ -1,7 +1,8 @@
-import * as auth from "$lib/server/auth.js";
-import { sequence } from "@sveltejs/kit/hooks";
 import { init, locale } from "svelte-i18n";
+import { sequence } from "@sveltejs/kit/hooks";
 import type { Handle } from "@sveltejs/kit";
+
+import * as auth from "$lib/server/auth.js";
 import { config, hasTranslations, isValidLocale } from "$lib/i18n";
 
 const i18n: Handle = async ({ event, resolve }) => {
