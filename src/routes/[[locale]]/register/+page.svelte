@@ -1,7 +1,7 @@
 <script lang="ts">
   import { enhance } from "$app/forms";
   import type { ActionData } from "./$types";
-  import { page } from '$app/stores';
+  import { page } from "$app/stores";
 
   import { Label } from "$lib/components/ui/label";
   import { Input } from "$lib/components/ui/input";
@@ -12,7 +12,7 @@
   let { form }: { form: ActionData } = $props();
 
   // Get returnUrl from query parameters using derived rune
-  const returnUrl = $derived($page.url.searchParams.get('returnUrl') || '/');
+  const returnUrl = $derived($page.url.searchParams.get("returnUrl") || "/");
 </script>
 
 <div class="container mx-auto p-4">
@@ -22,7 +22,7 @@
         <CardHeader>
           <CardTitle class="text-2xl font-bold">Register</CardTitle>
           <div class="flex justify-end">
-            <Button variant="outline" href="../login">Already have an account? Log in</Button>
+            <Button variant="outline" href={`/login?returnUrl=${encodeURIComponent(returnUrl)}`}>Already have an account? Log in</Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -30,7 +30,7 @@
 
           <form method="POST" class="space-y-4" action="?/login" use:enhance>
             <!-- Pass the returnUrl as a hidden field -->
-            <input type="hidden" name="returnUrl" value={returnUrl}>
+            <input type="hidden" name="returnUrl" value={returnUrl} />
 
             <div>
               <Label for="email">Email</Label>
