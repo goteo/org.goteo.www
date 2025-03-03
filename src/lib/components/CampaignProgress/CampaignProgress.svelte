@@ -6,10 +6,10 @@
   import { Card, CardContent } from "$lib/components/ui/card";
   import { _ } from "svelte-i18n";
 
-  export let obtained: number = 0;
-  export let optimum: number = 0;
-  export let donations: number = 0;
-  export let minimum: number = 0;
+  export let obtained = 0;
+  export let optimum = 0;
+  export let minimum = 0;
+  export let donations = 0;
   export let timeSeriesData: Array<{ date: Date; amount: number }> = [];
 
   $: isMinimumReached = obtained >= minimum;
