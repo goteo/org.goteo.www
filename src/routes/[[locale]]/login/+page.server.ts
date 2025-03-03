@@ -41,54 +41,6 @@ export const actions: Actions = {
       return fail(400, { message: "Incorrect username or password" });
     }
 
-    // const results = await db.select().from("user").where(eq("username", username)).execute();
-
-    // const existingUser = data;
-
-    // const existingUser = results.at(0);
-    // if (!existingUser) {
-    //   console.log("User not found");
-    //   return fail(400, { message: "Incorrect username or password" });
-    // }
-
-    // console.log("Found user, verifying password...");
-    // console.log(`Hash in DB: ${existingUser.passwordHash.substring(0, 20)}...`);
-
-    // // Special handling for testuser - hardcoded password check
-    // if (username === "testuser" && password === "password123") {
-    //   console.log("Test user detected - bypassing password verification");
-    //   try {
-    //     const sessionToken = auth.generateSessionToken();
-    //     const session = await auth.createSession(sessionToken, existingUser.id);
-    //     auth.setSessionTokenCookie(event, sessionToken, session.expiresAt);
-    //   } catch (error) {
-    //     console.error("Error creating session:", error);
-    //     return fail(500, { message: "Session creation error" });
-    //   }
-
-    //   console.log(`Redirecting to: ${returnUrl}`);
-    // Use returnUrl from form data
-    //   return redirect(302, returnUrl);
-    // }
-
-    // let validPassword = false;
-    // try {
-    //   validPassword = await verify(existingUser.passwordHash, password, {
-    //     memoryCost: 19456,
-    //     timeCost: 2,
-    //     outputLen: 32,
-    //     parallelism: 1,
-    //   });
-    //   console.log(`Password verification result: ${validPassword}`);
-    // } catch (error) {
-    //   console.error("Argon2 verification error:", error);
-    //   return fail(500, { message: "Password verification error" });
-    // }
-
-    // if (!validPassword) {
-    //   return fail(400, { message: "Incorrect username or password" });
-    // }
-
     // Session creation in separate try/catch
     try {
       const sessionId = existingUser.id;
