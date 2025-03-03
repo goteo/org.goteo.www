@@ -16,6 +16,7 @@
   export let donors: number = 0;
   export let units: number | null = null;
   export let size: "sm" | "lg" = "lg";
+  export let projectId: number | null = null;
 
   let open = false;
   let quantity = 1;
@@ -28,6 +29,7 @@
       amount: donate,
       quantity,
       image,
+      project: projectId  // pass project id to the cart store
     });
 
     open = false;

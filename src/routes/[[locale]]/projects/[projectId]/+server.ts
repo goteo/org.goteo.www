@@ -28,7 +28,7 @@ export async function GET({ params }) {
 
 const transformBudgetToFundingGoal = (
   budget: Record<string, { amount: number; currency: string }>,
-  current: number
+  current: number,
 ): FundingGoal => {
   const typeMapping = {
     infra: { type: "infrastructure", label: "Infraestructura", color: "bg-primary-foreground" },
@@ -63,7 +63,7 @@ const map = (
   transactions: TransactionsData,
   balancePoints: Array<AccountingBalancePoint>,
   rewards: Array<ProjectReward>,
-  budgets: Array<ProjectBudgetItem>
+  budgets: Array<ProjectBudgetItem>,
 ) => {
   const obtained = accounting.balance?.amount ?? 0;
   const donations = transactions.totalItems;
@@ -113,10 +113,11 @@ const map = (
     },
   };
 
-  const { title, subtitle, description, territory, budget } = project;
+  const { id, title, subtitle, description, territory } = project;
   const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
   const data = {
+    id,
     title,
     subtitle,
     description,
@@ -222,7 +223,7 @@ const getRewards = async (project: Project): Promise<ProjectReward[]> => {
           url: client.buildUrl({ url }),
         });
         return data;
-      })
+      }),
     )
   ).filter((item): item is ProjectReward => item !== undefined);
   return rewards;
@@ -238,7 +239,7 @@ const getBudgetItems = async (project: Project): Promise<ProjectBudgetItem[]> =>
           url: client.buildUrl({ url }),
         });
         return data;
-      })
+      }),
     )
   ).filter((item): item is ProjectBudgetItem => item !== undefined);
   return budgetItems;

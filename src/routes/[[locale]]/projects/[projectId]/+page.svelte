@@ -123,7 +123,7 @@
 
   <div class="grid md:grid-cols-3 gap-6">
     {#each rewards.slice(0, 3) as reward}
-      <RewardCard size="sm" {...reward} />
+      <RewardCard size="sm" projectId={project.id} {...reward} />
     {/each}
   </div>
 </section>
@@ -171,7 +171,7 @@
 
       <div class="grid md:grid-cols-3 gap-6">
         {#each rewards as reward}
-          <RewardCard size="lg" {...reward} />
+          <RewardCard size="lg" projectId={project.id} {...reward} />
         {/each}
       </div>
     </section>

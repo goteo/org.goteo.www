@@ -23,6 +23,7 @@ const MoneySchema = z.object({
 });
 
 const ProjectSchema = z.object({
+  id: z.number(),
   title: z.string(),
   subtitle: z.string(),
   description: z.string(),
@@ -36,14 +37,14 @@ const ProjectSchema = z.object({
       z.object({
         date: z.coerce.date(),
         amount: z.number(),
-      })
+      }),
     ),
   }),
   locales: z.array(
     z.object({
       code: z.string(),
       label: z.string(),
-    })
+    }),
   ),
   video: z.object({
     src: z.string(),
@@ -63,7 +64,7 @@ const ProjectSchema = z.object({
       donate: z.number().transform((num) => (!!num ? num / 100 : num)),
       donors: z.number(),
       units: z.number().optional(),
-    })
+    }),
   ),
   budgets: z.array(
     z.object({
@@ -72,7 +73,7 @@ const ProjectSchema = z.object({
       content: z.string(),
       minimum: MoneySchema.optional(),
       optimum: MoneySchema.optional(),
-    })
+    }),
   ),
 });
 
