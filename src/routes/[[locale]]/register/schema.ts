@@ -30,7 +30,7 @@ export const schema = z
     {
       message: "Tax ID must be at least 8 characters long when selected",
       path: ["taxId"],
-    }
+    },
   )
   .refine(
     (data) => {
@@ -43,7 +43,7 @@ export const schema = z
     {
       message: "Legal name is required for organizations",
       path: ["legalName"],
-    }
+    },
   );
 
 export type FormSchema = z.infer<typeof schema>;

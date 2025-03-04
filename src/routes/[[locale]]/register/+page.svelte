@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { _ } from "svelte-i18n";
   import SuperDebug, { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
   import { goto } from "$app/navigation";
@@ -44,26 +45,26 @@
 <div class="container mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
     <div class="space-y-4">
-      <h2 class="text-3xl font-bold">Indícanos tus datos personales</h2>
-      <p>Necesitamos saber quién eres antes de pagar.</p>
+      <h2 class="text-3xl font-bold">{$_("register.page.title")}</h2>
+      <p>{$_("register.page.description")}</p>
       <div class="flex items-center gap-4">
-        <h3 class="text-xl font-bold">Regístrate o</h3>
-        <Button variant="secondary" href={`/login`}>Entra con tu cuenta</Button>
+        <h3 class="text-xl font-bold">{$_("register.page.registerOr")}</h3>
+        <Button variant="secondary" href={`/login`}>{$_("register.page.loginButton")}</Button>
       </div>
       <form method="POST" class="max-w-md space-y-4" use:enhance>
-        <p>Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.</p>
+        <p>{$_("register.page.goteoUserInfo")}</p>
         <Form.Fieldset {form} name="type">
           <RadioGroup.Root bind:value={$formData.type} class="flex flex-row space-x-4">
             <div class="flex items-center space-x-3 space-y-0">
               <Form.Control let:attrs>
                 <RadioGroup.Item value="individual" {...attrs} />
-                <Form.Label class="font-normal">Persona física</Form.Label>
+                <Form.Label class="font-normal">{$_("register.form.userType.individual")}</Form.Label>
               </Form.Control>
             </div>
             <div class="flex items-center space-x-3 space-y-0">
               <Form.Control let:attrs>
                 <RadioGroup.Item value="organization" {...attrs} />
-                <Form.Label class="font-normal">Persona jurídica (empresas)</Form.Label>
+                <Form.Label class="font-normal">{$_("register.form.userType.organization")}</Form.Label>
               </Form.Control>
             </div>
             <RadioGroup.Input name="type" />
@@ -82,7 +83,7 @@
         <Form.Field {form} name="terms" class="flex items-center space-x-2">
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.terms} />
-            <Form.Label class="font-normal">Acepto las condiciones legales</Form.Label>
+            <Form.Label class="font-normal">{$_("register.form.termsCheckbox")}</Form.Label>
             <input name={attrs.name} value={$formData.terms} hidden />
           </Form.Control>
           <Form.FieldErrors />
@@ -91,15 +92,14 @@
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.policies} />
             <Form.Label class="font-normal">
-              Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de
-              cookies.
+              {$_("register.form.policiesCheckbox")}
             </Form.Label>
             <input name={attrs.name} value={$formData.policies} hidden />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
       </form>
-      <p>También puedes acceder a través de:</p>
+      <p>{$_("register.page.otherAccessMethods")}</p>
     </div>
 
     <div>
