@@ -7,7 +7,7 @@
   export let confirmAction: () => void = () => goto("/payment");
 </script>
 
-<Card class="p-4 h-full">
+<Card class="p-4">
   <CardHeader>
     <CardTitle class="text-xl font-bold">Summary</CardTitle>
   </CardHeader>

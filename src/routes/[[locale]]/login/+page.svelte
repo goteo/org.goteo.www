@@ -21,6 +21,9 @@
       <Card>
         <CardHeader>
           <CardTitle class="text-2xl font-bold">Login</CardTitle>
+          <div class="flex justify-end">
+            <Button variant="outline" href={`/register?returnUrl=${encodeURIComponent(returnUrl)}`}>Need an account? Register</Button>
+          </div>
         </CardHeader>
         <CardContent>
           <p style="color: red">{form?.message ?? ""}</p>
