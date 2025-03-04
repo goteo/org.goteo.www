@@ -1,49 +1,36 @@
 import { z } from "zod";
+import { localeErrorMap } from "$lib/localeErrorMap";
+
+// Set custom error map globally
+z.setErrorMap(localeErrorMap);
 
 export const schema = z
   .object({
     type: z.enum(["individual", "organization"]).default("individual"),
-    first_name: z.string().min(1, "First name is required"),
-    last_name: z.string().min(1, "Last name is required"),
-    email: z.string().email("Please enter a valid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    first_name: z.string().min(1), // Uses zod.string.too_small from translation
+    last_name: z.string().min(1),
+    email: z.string().email(), // Uses zod.email.invalid from translation
+    password: z.string().min(8),
     legalName: z.string().optional(),
     taxId: z.string().optional(),
     hasTaxId: z.boolean().default(false),
     terms: z
       .boolean()
       .default(false)
-      .refine((value) => value === true, { message: "You must agree to the terms" }),
+      .refine(Boolean, { message: "zod.terms_required" }),
     policies: z
       .boolean()
       .default(false)
-      .refine((value) => value === true, { message: "You must accept our privacy policies" }),
+      .refine(Boolean, { message: "zod.policies_required" }),
   })
+  // More concise refine conditions
   .refine(
-    (data) => {
-      // If hasTaxId is true, taxId must be provided and at least 8 characters long
-      if (data.hasTaxId && (!data.taxId || data.taxId.length < 8)) {
-        return false;
-      }
-      return true;
-    },
-    {
-      message: "Tax ID must be at least 8 characters long when selected",
-      path: ["taxId"],
-    },
+    (data) => !data.hasTaxId || (data.taxId && data.taxId.length >= 8),
+    { message: "zod.taxId_too_short", path: ["taxId"] }
   )
   .refine(
-    (data) => {
-      // If type is organization, legalName must be provided
-      if (data.type === "organization" && (!data.legalName || data.legalName.trim() === "")) {
-        return false;
-      }
-      return true;
-    },
-    {
-      message: "Legal name is required for organizations",
-      path: ["legalName"],
-    },
+    (data) => data.type !== "organization" || (data.legalName && data.legalName.trim() !== ""),
+    { message: "zod.legalName_required", path: ["legalName"] }
   );
 
 export type FormSchema = z.infer<typeof schema>;

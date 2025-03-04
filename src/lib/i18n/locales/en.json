@@ -99,5 +99,34 @@
       "firstName": "First Name",
       "lastName": "Last Name"
     }
+  },
+  "zod": {
+    "required": "This field is required",
+    "invalid_type": "Expected {expected} but received {received}",
+    "string": {
+      "too_small": "Must have at least {min} character(s)",
+      "too_big": "Must not exceed {max} characters",
+      "invalid": "Invalid string format"
+    },
+    "number": {
+      "too_small": "Must be at least {min}",
+      "too_big": "Must not exceed {max}"
+    },
+    "too_small": "Must be at least {min}",
+    "too_big": "Must not exceed {max}",
+    "email": {
+      "invalid": "Invalid email address"
+    },
+    "url": {
+      "invalid": "Invalid URL format"
+    },
+    "enum": {
+      "invalid": "Invalid option. Valid options are: {options}"
+    },
+    "invalid": "Invalid input",
+    "terms_required": "You must agree to the terms",
+    "policies_required": "You must accept our privacy policies",
+    "taxId_too_short": "Tax ID must be at least 8 characters long",
+    "legalName_required": "Legal name is required for organizations"
   }
 }
