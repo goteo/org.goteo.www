@@ -88,12 +88,16 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Field {form} name="taxId">
-          <Form.Control let:attrs>
-            <Input {...attrs} bind:value={$formData.taxId} placeholder="DNI*" />
-          </Form.Control>
-          <Form.FieldErrors />
-        </Form.Field>
+        
+        {#if $formData.hasTaxId}
+          <Form.Field {form} name="taxId">
+            <Form.Control let:attrs>
+              <Input {...attrs} bind:value={$formData.taxId} placeholder="DNI*" />
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+        {/if}
+        
         <Form.Field {form} name="terms" class="flex items-center space-x-2">
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.terms} />
