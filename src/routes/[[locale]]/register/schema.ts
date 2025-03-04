@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const schema = z
   .object({
+    type: z.enum(["individual", "organization"]).default("individual"),
     first_name: z.string().min(1, "First name is required"),
     last_name: z.string().min(1, "Last name is required"),
     email: z.string().email("Please enter a valid email address"),
@@ -28,7 +29,7 @@ export const schema = z
     {
       message: "Tax ID must be at least 8 characters long when selected",
       path: ["taxId"],
-    }
+    },
   );
 
 export type FormSchema = z.infer<typeof schema>;
