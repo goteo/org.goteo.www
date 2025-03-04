@@ -15,6 +15,8 @@
   let { data } = $props();
 
   const form = superForm(data.form, {
+    resetForm: false,
+    clearOnSubmit: "none",
     validators: zodClient(schema),
     // Optional: Handle form submission outcomes
     onResult: ({ result }) => {
@@ -74,14 +76,15 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Field {form} name="hasTaxId" class="flex flex-row items-start space-x-3 space-y-0 ">
+        <Form.Field {form} name="hasTaxId" class="flex items-center space-x-2">
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.hasTaxId} />
-            <div class="space-y-1 leading-none">
-              <Form.Label>
-                Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.
-              </Form.Label>
-            </div>
+            <Form.Label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.
+            </Form.Label>
+            <input name={attrs.name} value={$formData.hasTaxId} hidden />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
@@ -91,24 +94,27 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Field {form} name="terms" class="flex flex-row items-start space-x-3 space-y-0 ">
+        <Form.Field {form} name="terms" class="flex items-center space-x-2">
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.terms} />
-            <div class="space-y-1 leading-none">
-              <Form.Label>Acepto las condiciones legales</Form.Label>
-            </div>
+            <Form.Label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >Acepto las condiciones legales</Form.Label
+            >
+            <input name={attrs.name} value={$formData.terms} hidden />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-        <Form.Field {form} name="policies" class="flex flex-row items-start space-x-3 space-y-0 ">
+        <Form.Field {form} name="policies" class="flex items-center space-x-2">
           <Form.Control let:attrs>
             <Checkbox {...attrs} bind:checked={$formData.policies} />
-            <div class="space-y-1 leading-none">
-              <Form.Label>
-                Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de
-                cookies.
-              </Form.Label>
-            </div>
+            <Form.Label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de
+              cookies.
+            </Form.Label>
+            <input name={attrs.name} value={$formData.policies} hidden />
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
