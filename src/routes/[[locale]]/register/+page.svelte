@@ -1,15 +1,16 @@
 <script lang="ts">
-  import { superForm } from "sveltekit-superforms";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
+  import { goto } from "$app/navigation";
+  import { browser } from "$app/environment";
 
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
   import { Button } from "$lib/components/ui/button";
-  import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+  import { Checkbox } from "$lib/components/ui/checkbox";
 
   import CheckoutSummary from "$lib/components/CheckoutSummary";
   import { schema } from "./schema";
-  import { Checkbox } from "$lib/components/ui/checkbox";
 
   let { data } = $props();
 
@@ -17,15 +18,17 @@
     validators: zodClient(schema),
     // Optional: Handle form submission outcomes
     onResult: ({ result }) => {
+      console.debug({ result });
       // Handle result as needed (e.g., show a notification)
       if (result.type === "success") {
         // Handle success
+        goto("/payment");
       }
     },
   });
 
   // Destructure needed form properties
-  const { form: formData, enhance, submitting, submit } = form;
+  const { form: formData, enhance, submit } = form;
 
   // Create a form submission function using SuperForms' built-in submit method
   function submitForm() {
@@ -115,6 +118,9 @@
 
     <div>
       <CheckoutSummary confirmAction={submitForm} />
+      {#if browser}
+        <SuperDebug data={$formData} />
+      {/if}
     </div>
   </div>
 </div>
