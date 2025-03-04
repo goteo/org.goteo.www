@@ -9,6 +9,7 @@
 
   import CheckoutSummary from "$lib/components/CheckoutSummary";
   import { schema } from "./schema";
+  import { Checkbox } from "$lib/components/ui/checkbox";
 
   let { data } = $props();
 
@@ -21,53 +22,87 @@
 
 <div class="container mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-2xl font-bold">Register</CardTitle>
-          <div class="flex justify-end">
-            <Button variant="outline" href={`/login`}>Already have an account? Log in</Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <form method="POST" class="space-y-6" use:enhance>
-            <Form.Field {form} name="first_name">
-              <Form.Control let:attrs>
-                <Form.Label>First Name</Form.Label>
-                <Input {...attrs} bind:value={$formData.first_name} />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-            <Form.Field {form} name="last_name">
-              <Form.Control let:attrs>
-                <Form.Label>Last Name</Form.Label>
-                <Input {...attrs} bind:value={$formData.last_name} />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-            <Form.Field {form} name="email">
-              <Form.Control let:attrs>
-                <Form.Label>email</Form.Label>
-                <Input {...attrs} bind:value={$formData.email} />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
-            <Form.Field {form} name="password">
-              <Form.Control let:attrs>
-                <Form.Label>Password</Form.Label>
-                <Input {...attrs} bind:value={$formData.password} />
-              </Form.Control>
-              <Form.FieldErrors />
-            </Form.Field>
+    <div class="space-y-4">
+      <h2 class="text-3xl font-bold">Indícanos tus datos personales</h2>
+      <p>Necesitamos saber quién eres antes de pagar.</p>
+      <div class="flex items-center gap-4">
+        <h3 class="text-xl font-bold">Regístrate o</h3>
+        <Button variant="secondary" href={`/login`}>Entra con tu cuenta</Button>
+      </div>
+      <form method="POST" class="max-w-md space-y-4" use:enhance>
+        <p>Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Form.Field {form} name="first_name">
+            <Form.Control let:attrs>
+              <Input {...attrs} bind:value={$formData.first_name} placeholder="Nombre" />
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+          <Form.Field {form} name="last_name">
+            <Form.Control let:attrs>
+              <Input {...attrs} bind:value={$formData.last_name} placeholder="Apellidos" />
+            </Form.Control>
+            <Form.FieldErrors />
+          </Form.Field>
+        </div>
+        <Form.Field {form} name="email">
+          <Form.Control let:attrs>
+            <Input {...attrs} bind:value={$formData.email} placeholder="Correo electrónico" />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="password">
+          <Form.Control let:attrs>
+            <Input {...attrs} bind:value={$formData.password} placeholder="Contraseña" />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="hasTaxId" class="flex flex-row items-start space-x-3 space-y-0 ">
+          <Form.Control let:attrs>
+            <Checkbox {...attrs} bind:checked={$formData.hasTaxId} />
+            <div class="space-y-1 leading-none">
+              <Form.Label>
+                Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.
+              </Form.Label>
+            </div>
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="taxId">
+          <Form.Control let:attrs>
+            <Input {...attrs} bind:value={$formData.taxId} placeholder="DNI*" />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="terms" class="flex flex-row items-start space-x-3 space-y-0 ">
+          <Form.Control let:attrs>
+            <Checkbox {...attrs} bind:checked={$formData.terms} />
+            <div class="space-y-1 leading-none">
+              <Form.Label>Acepto las condiciones legales</Form.Label>
+            </div>
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="policies" class="flex flex-row items-start space-x-3 space-y-0 ">
+          <Form.Control let:attrs>
+            <Checkbox {...attrs} bind:checked={$formData.policies} />
+            <div class="space-y-1 leading-none">
+              <Form.Label>
+                Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de
+                cookies.
+              </Form.Label>
+            </div>
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
 
-            <Form.Button>Submit</Form.Button>
-          </form>
-        </CardContent>
-      </Card>
+        <Form.Button>Submit</Form.Button>
+      </form>
+      <p>También puedes acceder a través de:</p>
     </div>
 
     <div>
-      <CheckoutSummary />
+      <CheckoutSummary confirmAction={() => console.debug("ok")} />
     </div>
   </div>
 </div>
