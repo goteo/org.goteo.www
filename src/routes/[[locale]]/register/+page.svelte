@@ -12,6 +12,7 @@
   import CheckoutSummary from "$lib/components/CheckoutSummary";
   import { schema } from "./schema";
   import IndividualRegisterForm from "./IndividualRegisterForm.svelte";
+  import OrganizationRegisterForm from "./OrganizationRegisterForm.svelte";
 
   let { data } = $props();
 
@@ -72,6 +73,10 @@
 
         {#if $formData.type === "individual"}
           <IndividualRegisterForm {form} />
+        {/if}
+
+        {#if $formData.type === "organization"}
+          <OrganizationRegisterForm {form} />
         {/if}
 
         <Form.Field {form} name="terms" class="flex items-center space-x-2">

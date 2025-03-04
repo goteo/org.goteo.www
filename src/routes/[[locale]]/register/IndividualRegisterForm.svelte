@@ -1,16 +1,16 @@
 <script lang="ts">
+  import type { SuperForm } from "sveltekit-superforms";
   import * as Form from "$lib/components/ui/form";
   import { Input } from "$lib/components/ui/input";
   import { Checkbox } from "$lib/components/ui/checkbox";
-  import type { SuperForm } from "sveltekit-superforms";
   import type { FormSchema } from "./schema";
-  
+
   export let form: SuperForm<FormSchema>;
-  
+
   const { form: formData } = form;
 </script>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<Form.Fieldset {form} name="type" class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <Form.Field {form} name="first_name">
     <Form.Control let:attrs>
       <Input {...attrs} bind:value={$formData.first_name} placeholder="Nombre" />
@@ -23,7 +23,8 @@
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-</div>
+</Form.Fieldset>
+
 <Form.Field {form} name="email">
   <Form.Control let:attrs>
     <Input {...attrs} bind:value={$formData.email} placeholder="Correo electrónico" />

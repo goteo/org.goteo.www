@@ -7,6 +7,7 @@ export const schema = z
     last_name: z.string().min(1, "Last name is required"),
     email: z.string().email("Please enter a valid email address"),
     password: z.string().min(8, "Password must be at least 8 characters long"),
+    legalName: z.string().optional(),
     taxId: z.string().optional(),
     hasTaxId: z.boolean().default(false),
     terms: z
@@ -29,7 +30,20 @@ export const schema = z
     {
       message: "Tax ID must be at least 8 characters long when selected",
       path: ["taxId"],
+    }
+  )
+  .refine(
+    (data) => {
+      // If type is organization, legalName must be provided
+      if (data.type === "organization" && (!data.legalName || data.legalName.trim() === "")) {
+        return false;
+      }
+      return true;
     },
+    {
+      message: "Legal name is required for organizations",
+      path: ["legalName"],
+    }
   );
 
 export type FormSchema = z.infer<typeof schema>;
