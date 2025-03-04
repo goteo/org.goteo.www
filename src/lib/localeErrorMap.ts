@@ -49,7 +49,9 @@ export const localeErrorMap: ZodErrorMap = (issue, ctx) => {
 
         default:
           // If message is a string, use it as a key
-          return typeof issue.message === "string" ? issue.message : "zod.invalid";
+          return typeof issue.message === "string"
+            ? issue.message
+            : `${issue.params?.namespace || "zod"}.${issue.path.join(".")}.${issue.code}`;
       }
     };
 

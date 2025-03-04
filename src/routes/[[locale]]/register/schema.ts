@@ -14,16 +14,16 @@ export const schema = z
     legalName: z.string().optional(),
     taxId: z.string().optional(),
     hasTaxId: z.boolean().default(false),
-    terms: z.boolean().default(false).refine(Boolean, { message: "zod.terms_required" }),
-    policies: z.boolean().default(false).refine(Boolean, { message: "zod.policies_required" }),
+    terms: z.boolean().default(false).refine(Boolean),
+    policies: z.boolean().default(false).refine(Boolean),
   })
   // More concise refine conditions
   .refine((data) => !data.hasTaxId || (data.taxId && data.taxId.length >= 8), {
-    message: "zod.taxId_too_short",
+    params: { namespace: "register.form.zod" },
     path: ["taxId"],
   })
   .refine((data) => data.type !== "organization" || (data.legalName && data.legalName.trim() !== ""), {
-    message: "zod.legalName_required",
+    params: { namespace: "register.form.zod" },
     path: ["legalName"],
   });
 

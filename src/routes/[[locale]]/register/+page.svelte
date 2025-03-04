@@ -86,7 +86,6 @@
             <Form.Label class="font-normal">{$_("register.form.termsCheckbox")}</Form.Label>
             <input name={attrs.name} value={$formData.terms} hidden />
           </Form.Control>
-          <Form.FieldErrors />
         </Form.Field>
         <Form.Field {form} name="policies" class="flex items-center space-x-2">
           <Form.Control let:attrs>
@@ -96,7 +95,6 @@
             </Form.Label>
             <input name={attrs.name} value={$formData.policies} hidden />
           </Form.Control>
-          <Form.FieldErrors />
         </Form.Field>
       </form>
       <p>{$_("register.page.otherAccessMethods")}</p>

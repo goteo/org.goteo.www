@@ -79,7 +79,11 @@
         "organization": "Persona jurídica (empresas)"
       },
       "termsCheckbox": "Acepto las condiciones legales",
-      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies."
+      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+      "zod": {
+        "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
+        "legalName.custom": "La razón social es obligatoria para empresas"
+      }
     },
     "individual": {
       "firstName": "Nombre",
@@ -123,10 +127,6 @@
     "enum": {
       "invalid": "Opción no válida. Las opciones válidas son: {options}"
     },
-    "invalid": "Entrada no válida",
-    "terms_required": "Debes aceptar los términos",
-    "policies_required": "Debes aceptar nuestra política de privacidad",
-    "taxId_too_short": "El CIF/DNI debe tener al menos 8 caracteres",
-    "legalName_required": "La razón social es obligatoria para empresas"
+    "invalid": "Entrada no válida"
   }
 }

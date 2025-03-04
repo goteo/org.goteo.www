@@ -79,7 +79,11 @@
         "organization": "Legal entity (companies)"
       },
       "termsCheckbox": "I accept the legal conditions",
-      "policiesCheckbox": "By registering I confirm my acceptance of your terms of use, privacy policy and cookie policy."
+      "policiesCheckbox": "By registering I confirm my acceptance of your terms of use, privacy policy and cookie policy.",
+      "zod": {
+        "taxId.custom": "Tax ID must be at least 8 characters long",
+        "legalName.custom": "Legal name is required for organizations"
+      }
     },
     "individual": {
       "firstName": "First Name",
@@ -123,10 +127,6 @@
     "enum": {
       "invalid": "Invalid option. Valid options are: {options}"
     },
-    "invalid": "Invalid input",
-    "terms_required": "You must agree to the terms",
-    "policies_required": "You must accept our privacy policies",
-    "taxId_too_short": "Tax ID must be at least 8 characters long",
-    "legalName_required": "Legal name is required for organizations"
+    "invalid": "Invalid input"
   }
 }
