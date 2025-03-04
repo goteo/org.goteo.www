@@ -15,9 +15,23 @@
 
   const form = superForm(data.form, {
     validators: zodClient(schema),
+    // Optional: Handle form submission outcomes
+    onResult: ({ result }) => {
+      // Handle result as needed (e.g., show a notification)
+      if (result.type === "success") {
+        // Handle success
+      }
+    },
   });
 
-  const { form: formData, enhance } = form;
+  // Destructure needed form properties
+  const { form: formData, enhance, submitting, submit } = form;
+
+  // Create a form submission function using SuperForms' built-in submit method
+  function submitForm() {
+    // Use the superForm submit method directly
+    submit();
+  }
 </script>
 
 <div class="container mx-auto p-4">
@@ -95,14 +109,12 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
-
-        <Form.Button>Submit</Form.Button>
       </form>
       <p>También puedes acceder a través de:</p>
     </div>
 
     <div>
-      <CheckoutSummary confirmAction={() => console.debug("ok")} />
+      <CheckoutSummary confirmAction={submitForm} />
     </div>
   </div>
 </div>
