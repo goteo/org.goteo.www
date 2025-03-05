@@ -170,6 +170,39 @@ export type AccountingTransactionJsonld = {
   target?: string;
 };
 
+export type ApiResourceMoney = {
+  /**
+   * An amount of currency.\
+   * Expressed as the minor unit, e.g: cents, pennies, etc.
+   */
+  amount: number;
+  /**
+   * 3-letter ISO 4217 currency code.
+   */
+  currency: string;
+};
+
+export type ApiResourceMoneyJsonld = {
+  "@context"?:
+    | string
+    | {
+        "@vocab": string;
+        hydra: "http://www.w3.org/ns/hydra/core#";
+        [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
+      };
+  readonly "@id"?: string;
+  readonly "@type"?: string;
+  /**
+   * An amount of currency.\
+   * Expressed as the minor unit, e.g: cents, pennies, etc.
+   */
+  amount: number;
+  /**
+   * 3-letter ISO 4217 currency code.
+   */
+  currency: string;
+};
+
 export type Budget = {
   /**
    * A summary of the minimum budget. As described by items with specified minimum money.
@@ -491,11 +524,11 @@ export type Money = {
    * An amount of currency.\
    * Expressed as the minor unit, e.g: cents, pennies, etc.
    */
-  amount: number;
+  amount?: number | null;
   /**
    * 3-letter ISO 4217 currency code.
    */
-  currency: string;
+  currency?: string | null;
 };
 
 export type MoneyJsonld = {
@@ -512,11 +545,137 @@ export type MoneyJsonld = {
    * An amount of currency.\
    * Expressed as the minor unit, e.g: cents, pennies, etc.
    */
-  amount: number;
+  amount?: number | null;
   /**
    * 3-letter ISO 4217 currency code.
    */
-  currency: string;
+  currency?: string | null;
+};
+
+/**
+ * Sometimes an Organization is behind a User account,
+ * we keep their data separated from the User record to allow for other User types,
+ * like the ones owned by an individual, to exist all at the same level.\
+ * \
+ * All Organization records are only visible to their respective owners and platform admins.
+ * Sensitive data is encrypted before being stored in the database.
+ */
+export type Organization = {
+  readonly user?: string;
+  /**
+   * ID for tax purposes. e.g: NIF (formerly CIF), Umsatzsteuer-Id, EID, etc.
+   */
+  taxId: string;
+  /**
+   * Organization legal name before government,
+   * as it appears on legal documents issued by or for this organization.\
+   * Will be used as last option for the display name of the User.
+   */
+  legalName: string;
+  /**
+   * The name under which the organization presents itself.\
+   * Might be similar to the legal name or completely different.\
+   * Will be used as display name for the User when present.
+   */
+  businessName?: string;
+};
+
+/**
+ * Sometimes an Organization is behind a User account,
+ * we keep their data separated from the User record to allow for other User types,
+ * like the ones owned by an individual, to exist all at the same level.\
+ * \
+ * All Organization records are only visible to their respective owners and platform admins.
+ * Sensitive data is encrypted before being stored in the database.
+ */
+export type OrganizationJsonld = {
+  "@context"?:
+    | string
+    | {
+        "@vocab": string;
+        hydra: "http://www.w3.org/ns/hydra/core#";
+        [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
+      };
+  readonly "@id"?: string;
+  readonly "@type"?: string;
+  readonly user?: string;
+  /**
+   * ID for tax purposes. e.g: NIF (formerly CIF), Umsatzsteuer-Id, EID, etc.
+   */
+  taxId: string;
+  /**
+   * Organization legal name before government,
+   * as it appears on legal documents issued by or for this organization.\
+   * Will be used as last option for the display name of the User.
+   */
+  legalName: string;
+  /**
+   * The name under which the organization presents itself.\
+   * Might be similar to the legal name or completely different.\
+   * Will be used as display name for the User when present.
+   */
+  businessName?: string;
+};
+
+/**
+ * Most times a real person is behind a User account,
+ * we keep their data separated from the User record to allow for other User types,
+ * like the ones owned by an organization, to exist all at the same level.\
+ * \
+ * All Person records are only visible to their respective owners and platform admins.
+ * Sensitive personal data is encrypted before being stored in the database.
+ */
+export type Person = {
+  readonly user?: string;
+  /**
+   * Personal ID for tax purposes. e.g: NIF, Steuer-ID, SSN, ITIN, etc.
+   */
+  taxId?: string;
+  /**
+   * First-part of the name of the person,
+   * in most western conventions this is the given name(s). e.g: John, Juan, etc.
+   */
+  firstName?: string;
+  /**
+   * Last-part of the name of the person,
+   * in most western conventions this is the family name(s). e.g: Smith, Herrera García, etc.
+   */
+  lastName?: string;
+};
+
+/**
+ * Most times a real person is behind a User account,
+ * we keep their data separated from the User record to allow for other User types,
+ * like the ones owned by an organization, to exist all at the same level.\
+ * \
+ * All Person records are only visible to their respective owners and platform admins.
+ * Sensitive personal data is encrypted before being stored in the database.
+ */
+export type PersonJsonld = {
+  "@context"?:
+    | string
+    | {
+        "@vocab": string;
+        hydra: "http://www.w3.org/ns/hydra/core#";
+        [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
+      };
+  readonly "@id"?: string;
+  readonly "@type"?: string;
+  readonly user?: string;
+  /**
+   * Personal ID for tax purposes. e.g: NIF, Steuer-ID, SSN, ITIN, etc.
+   */
+  taxId?: string;
+  /**
+   * First-part of the name of the person,
+   * in most western conventions this is the given name(s). e.g: John, Juan, etc.
+   */
+  firstName?: string;
+  /**
+   * Last-part of the name of the person,
+   * in most western conventions this is the family name(s). e.g: Smith, Herrera García, etc.
+   */
+  lastName?: string;
 };
 
 /**
@@ -533,10 +692,6 @@ export type Project = {
    */
   readonly owner?: string;
   /**
-   * List of the available content locales.
-   */
-  readonly locales?: Array<string>;
-  /**
    * Main headline for the Project.
    */
   title: string;
@@ -544,6 +699,22 @@ export type Project = {
    * Secondary headline for the Project.
    */
   subtitle: string;
+  /**
+   * One of the available categories.
+   */
+  category:
+    | "solidary"
+    | "libre-software"
+    | "employment"
+    | "design"
+    | "journalism"
+    | "education"
+    | "culture"
+    | "ecology"
+    | "health-and-cares"
+    | "open-data"
+    | "democracy"
+    | "equity";
   /**
    * ISO 3166 data about the Project's territory of interest.
    */
@@ -576,6 +747,14 @@ export type Project = {
    * A list of the BudgetItems composing the budget of this Project.
    */
   readonly budgetItems?: Array<string>;
+  /**
+   * A list of the ProjectUpdates this Project has.
+   */
+  readonly updates?: Array<string>;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
 };
 
 /**
@@ -601,10 +780,6 @@ export type ProjectJsonld = {
    */
   readonly owner?: string;
   /**
-   * List of the available content locales.
-   */
-  readonly locales?: Array<string>;
-  /**
    * Main headline for the Project.
    */
   title: string;
@@ -612,6 +787,22 @@ export type ProjectJsonld = {
    * Secondary headline for the Project.
    */
   subtitle: string;
+  /**
+   * One of the available categories.
+   */
+  category:
+    | "solidary"
+    | "libre-software"
+    | "employment"
+    | "design"
+    | "journalism"
+    | "education"
+    | "culture"
+    | "ecology"
+    | "health-and-cares"
+    | "open-data"
+    | "democracy"
+    | "equity";
   /**
    * ISO 3166 data about the Project's territory of interest.
    */
@@ -644,6 +835,14 @@ export type ProjectJsonld = {
    * A list of the BudgetItems composing the budget of this Project.
    */
   readonly budgetItems?: Array<string>;
+  /**
+   * A list of the ProjectUpdates this Project has.
+   */
+  readonly updates?: Array<string>;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
 };
 
 /**
@@ -659,10 +858,6 @@ export type ProjectBudgetItem = {
    */
   type: "infrastructure" | "material" | "task";
   /**
-   * List of the available content locales.
-   */
-  readonly locales?: Array<string>;
-  /**
    * A short, descriptive string for the item.
    */
   title: string;
@@ -673,11 +868,15 @@ export type ProjectBudgetItem = {
   /**
    * How much money it's needed for this item to be succesfully satisfied.
    */
-  minimum?: Money;
+  minimum?: ApiResourceMoney | null;
   /**
    * How much money would be ideal for this item to be fully satisfied.
    */
-  optimum?: Money;
+  optimum?: ApiResourceMoney | null;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
 };
 
 /**
@@ -702,10 +901,6 @@ export type ProjectBudgetItemJsonld = {
    */
   type: "infrastructure" | "material" | "task";
   /**
-   * List of the available content locales.
-   */
-  readonly locales?: Array<string>;
-  /**
    * A short, descriptive string for the item.
    */
   title: string;
@@ -716,11 +911,15 @@ export type ProjectBudgetItemJsonld = {
   /**
    * How much money it's needed for this item to be succesfully satisfied.
    */
-  minimum?: MoneyJsonld;
+  minimum?: ApiResourceMoneyJsonld | null;
   /**
    * How much money would be ideal for this item to be fully satisfied.
    */
-  optimum?: MoneyJsonld;
+  optimum?: ApiResourceMoneyJsonld | null;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
 };
 
 /**
@@ -886,6 +1085,93 @@ export type ProjectTerritoryApiResourceJsonld = {
   subLvl2?: string;
 };
 
+/**
+ * A ProjectUpdate offers records of significant news during a Project's life.\
+ * \
+ * Updates can be for outstanding donation amounts, achievement of goals or thresholds,
+ * or any other body of information that the Project owner(s) may wish to make public to the Project's audience.
+ */
+export type ProjectUpdate = {
+  readonly id?: number;
+  /**
+   * The Project to which this update belongs to.
+   */
+  project: string;
+  /**
+   * Main headline for this update.
+   */
+  title: string;
+  /**
+   * Secondary headline for this update.
+   */
+  subtitle: string;
+  /**
+   * Main text body of the Project's update.
+   */
+  body: string;
+  /**
+   * Public display date for this update,
+   * not necessarily related to the actual dates of resource creation or update.
+   */
+  date?: string;
+  /**
+   * URL to an image resource to be displayed as header.
+   */
+  cover?: string;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
+};
+
+/**
+ * A ProjectUpdate offers records of significant news during a Project's life.\
+ * \
+ * Updates can be for outstanding donation amounts, achievement of goals or thresholds,
+ * or any other body of information that the Project owner(s) may wish to make public to the Project's audience.
+ */
+export type ProjectUpdateJsonld = {
+  "@context"?:
+    | string
+    | {
+        "@vocab": string;
+        hydra: "http://www.w3.org/ns/hydra/core#";
+        [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
+      };
+  readonly "@id"?: string;
+  readonly "@type"?: string;
+  readonly id?: number;
+  /**
+   * The Project to which this update belongs to.
+   */
+  project: string;
+  /**
+   * Main headline for this update.
+   */
+  title: string;
+  /**
+   * Secondary headline for this update.
+   */
+  subtitle: string;
+  /**
+   * Main text body of the Project's update.
+   */
+  body: string;
+  /**
+   * Public display date for this update,
+   * not necessarily related to the actual dates of resource creation or update.
+   */
+  date?: string;
+  /**
+   * URL to an image resource to be displayed as header.
+   */
+  cover?: string;
+  /**
+   * List of the available content locales.
+   */
+  readonly locales?: Array<string>;
+};
+
 export type ProjectVideo = {
   src?: string | null;
   thumbnail?: string | null;
@@ -979,19 +1265,32 @@ export type TrackingJsonld = {
 export type User = {
   readonly id?: number;
   email: string;
-  readonly emailConfirmed?: boolean;
   /**
    * A unique, non white space, byte-safe string identifier for this User.
    */
-  username: string;
+  handle: string;
   /**
-   * Display name chosen by the User.
+   * URL to the avatar image of this User.
    */
-  name?: string;
+  avatar?: string;
   /**
-   * A list of the roles assigned to this User. Admin scopped property.
+   * Is this User for an individual acting on their own or a group of individuals?
+   */
+  type?: "individual" | "organization";
+  /**
+   * A list of the roles assigned to this User. Admin scoped property.
    */
   roles?: Array<string>;
+  readonly displayName?: string;
+  /**
+   * For `individual` User types: personal data about the User themselves.\
+   * For `organization` User types: data for the organization representative or person managing the User.
+   */
+  readonly person?: string;
+  /**
+   * For `organization` User types only. Legal entity data.
+   */
+  readonly organization?: string | null;
   /**
    * The Accounting for this User monetary movements.
    */
@@ -1000,38 +1299,52 @@ export type User = {
    * The Projects that are owned by this User.
    */
   readonly projects?: Array<string>;
+  /**
+   * Has this User confirmed their email address?
+   */
+  readonly emailConfirmed?: boolean;
+  /**
+   * A flag determined by the platform for Users who are known to be active.
+   */
+  readonly active?: boolean;
 };
 
 /**
  * Users represent people who interact with the platform.
  */
 export type UserUserSignupDto = {
+  /**
+   * A valid e-mail address for the new User.
+   */
   email: string;
+  /**
+   * The auth password for the new User. Plaintext string,
+   * will be hashed by the API.
+   */
   password: string;
   /**
-   * A unique, non white space, byte-safe string identifier for this User.
+   * Is this User for an individual acting on their own or a group of individuals?
    */
-  username: string;
-  /**
-   * Display name chosen by the User.
-   */
-  name?: string;
+  type: "individual" | "organization";
 };
 
 /**
  * Users represent people who interact with the platform.
  */
 export type UserUserSignupDtoJsonld = {
+  /**
+   * A valid e-mail address for the new User.
+   */
   email: string;
+  /**
+   * The auth password for the new User. Plaintext string,
+   * will be hashed by the API.
+   */
   password: string;
   /**
-   * A unique, non white space, byte-safe string identifier for this User.
+   * Is this User for an individual acting on their own or a group of individuals?
    */
-  username: string;
-  /**
-   * Display name chosen by the User.
-   */
-  name?: string;
+  type: "individual" | "organization";
 };
 
 /**
@@ -1049,19 +1362,32 @@ export type UserJsonld = {
   readonly "@type"?: string;
   readonly id?: number;
   email: string;
-  readonly emailConfirmed?: boolean;
   /**
    * A unique, non white space, byte-safe string identifier for this User.
    */
-  username: string;
+  handle: string;
   /**
-   * Display name chosen by the User.
+   * URL to the avatar image of this User.
    */
-  name?: string;
+  avatar?: string;
   /**
-   * A list of the roles assigned to this User. Admin scopped property.
+   * Is this User for an individual acting on their own or a group of individuals?
+   */
+  type?: "individual" | "organization";
+  /**
+   * A list of the roles assigned to this User. Admin scoped property.
    */
   roles?: Array<string>;
+  readonly displayName?: string;
+  /**
+   * For `individual` User types: personal data about the User themselves.\
+   * For `organization` User types: data for the organization representative or person managing the User.
+   */
+  readonly person?: string;
+  /**
+   * For `organization` User types only. Legal entity data.
+   */
+  readonly organization?: string | null;
   /**
    * The Accounting for this User monetary movements.
    */
@@ -1070,47 +1396,14 @@ export type UserJsonld = {
    * The Projects that are owned by this User.
    */
   readonly projects?: Array<string>;
-};
-
-/**
- * UserPersonal is the detailed data of a User.
- */
-export type UserPersonal = {
-  user?: User;
   /**
-   * The Identity Document number of the User.
+   * Has this User confirmed their email address?
    */
-  identityDocument?: string | null;
+  readonly emailConfirmed?: boolean;
   /**
-   * The Postal Code of where the User lives.
+   * A flag determined by the platform for Users who are known to be active.
    */
-  postalCode?: string | null;
-  indetityDocumentType?: string | null;
-};
-
-/**
- * UserPersonal is the detailed data of a User.
- */
-export type UserPersonalJsonld = {
-  "@context"?:
-    | string
-    | {
-        "@vocab": string;
-        hydra: "http://www.w3.org/ns/hydra/core#";
-        [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-      };
-  readonly "@id"?: string;
-  readonly "@type"?: string;
-  user?: UserJsonld;
-  /**
-   * The Identity Document number of the User.
-   */
-  identityDocument?: string | null;
-  /**
-   * The Postal Code of where the User lives.
-   */
-  postalCode?: string | null;
-  indetityDocumentType?: string | null;
+  readonly active?: boolean;
 };
 
 /**
@@ -1139,7 +1432,7 @@ export type UserToken = {
  */
 export type UserTokenUserTokenLoginDto = {
   /**
-   * The identifier (email, username) of the User to be authenticated.
+   * The identifier (email, handle) of the User to be authenticated.
    */
   identifier: string;
   /**
@@ -1156,7 +1449,7 @@ export type UserTokenUserTokenLoginDto = {
  */
 export type UserTokenUserTokenLoginDtoJsonld = {
   /**
-   * The identifier (email, username) of the User to be authenticated.
+   * The identifier (email, handle) of the User to be authenticated.
    */
   identifier: string;
   /**
@@ -1620,6 +1913,158 @@ export type ApiGatewayCheckoutsIdGetResponses = {
 export type ApiGatewayCheckoutsIdGetResponse =
   ApiGatewayCheckoutsIdGetResponses[keyof ApiGatewayCheckoutsIdGetResponses];
 
+export type ApiUsersIdorganizationGetData = {
+  body?: never;
+  path: {
+    /**
+     * User identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/users/{id}/organization";
+};
+
+export type ApiUsersIdorganizationGetErrors = {
+  /**
+   * Forbidden
+   */
+  403: unknown;
+  /**
+   * Resource not found
+   */
+  404: unknown;
+};
+
+export type ApiUsersIdorganizationGetResponses = {
+  /**
+   * Organization resource
+   */
+  200: Organization;
+};
+
+export type ApiUsersIdorganizationGetResponse =
+  ApiUsersIdorganizationGetResponses[keyof ApiUsersIdorganizationGetResponses];
+
+export type ApiUsersIdorganizationPatchData = {
+  /**
+   * The updated Organization resource
+   */
+  body: Organization;
+  path: {
+    /**
+     * User identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/users/{id}/organization";
+};
+
+export type ApiUsersIdorganizationPatchErrors = {
+  /**
+   * Invalid input
+   */
+  400: unknown;
+  /**
+   * Forbidden
+   */
+  403: unknown;
+  /**
+   * Resource not found
+   */
+  404: unknown;
+  /**
+   * Unprocessable entity
+   */
+  422: unknown;
+};
+
+export type ApiUsersIdorganizationPatchResponses = {
+  /**
+   * Organization resource updated
+   */
+  200: Organization;
+};
+
+export type ApiUsersIdorganizationPatchResponse =
+  ApiUsersIdorganizationPatchResponses[keyof ApiUsersIdorganizationPatchResponses];
+
+export type ApiUsersIdpersonGetData = {
+  body?: never;
+  path: {
+    /**
+     * User identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/users/{id}/person";
+};
+
+export type ApiUsersIdpersonGetErrors = {
+  /**
+   * Forbidden
+   */
+  403: unknown;
+  /**
+   * Resource not found
+   */
+  404: unknown;
+};
+
+export type ApiUsersIdpersonGetResponses = {
+  /**
+   * Person resource
+   */
+  200: Person;
+};
+
+export type ApiUsersIdpersonGetResponse = ApiUsersIdpersonGetResponses[keyof ApiUsersIdpersonGetResponses];
+
+export type ApiUsersIdpersonPatchData = {
+  /**
+   * The updated Person resource
+   */
+  body: Person;
+  path: {
+    /**
+     * User identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/users/{id}/person";
+};
+
+export type ApiUsersIdpersonPatchErrors = {
+  /**
+   * Invalid input
+   */
+  400: unknown;
+  /**
+   * Forbidden
+   */
+  403: unknown;
+  /**
+   * Resource not found
+   */
+  404: unknown;
+  /**
+   * Unprocessable entity
+   */
+  422: unknown;
+};
+
+export type ApiUsersIdpersonPatchResponses = {
+  /**
+   * Person resource updated
+   */
+  200: Person;
+};
+
+export type ApiUsersIdpersonPatchResponse = ApiUsersIdpersonPatchResponses[keyof ApiUsersIdpersonPatchResponses];
+
 export type ApiProjectsGetCollectionData = {
   body?: never;
   path?: never;
@@ -1630,6 +2075,8 @@ export type ApiProjectsGetCollectionData = {
     page?: number;
     title?: string;
     subtitle?: string;
+    category?: string;
+    "category[]"?: Array<string>;
     description?: string;
     status?: string;
     "status[]"?: Array<string>;
@@ -1792,6 +2239,8 @@ export type ApiProjectBudgetItemsGetCollectionData = {
      * The collection page number
      */
     page?: number;
+    project?: string;
+    "project[]"?: Array<string>;
   };
   url: "/v4/project_budget_items";
 };
@@ -1943,6 +2392,8 @@ export type ApiProjectRewardsGetCollectionData = {
      * The collection page number
      */
     page?: number;
+    project?: string;
+    "project[]"?: Array<string>;
   };
   url: "/v4/project_rewards";
 };
@@ -2235,6 +2686,158 @@ export type ApiProjectRewardClaimsIdPatchResponses = {
 export type ApiProjectRewardClaimsIdPatchResponse =
   ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
 
+export type ApiProjectUpdatesGetCollectionData = {
+  body?: never;
+  path?: never;
+  query?: {
+    /**
+     * The collection page number
+     */
+    page?: number;
+    project?: string;
+    "project[]"?: Array<string>;
+    "order[date]"?: "asc" | "desc";
+  };
+  url: "/v4/project_updates";
+};
+
+export type ApiProjectUpdatesGetCollectionResponses = {
+  /**
+   * ProjectUpdate collection
+   */
+  200: Array<ProjectUpdate>;
+};
+
+export type ApiProjectUpdatesGetCollectionResponse =
+  ApiProjectUpdatesGetCollectionResponses[keyof ApiProjectUpdatesGetCollectionResponses];
+
+export type ApiProjectUpdatesPostData = {
+  /**
+   * The new ProjectUpdate resource
+   */
+  body: ProjectUpdate;
+  path?: never;
+  query?: never;
+  url: "/v4/project_updates";
+};
+
+export type ApiProjectUpdatesPostErrors = {
+  /**
+   * Invalid input
+   */
+  400: unknown;
+  /**
+   * Unprocessable entity
+   */
+  422: unknown;
+};
+
+export type ApiProjectUpdatesPostResponses = {
+  /**
+   * ProjectUpdate resource created
+   */
+  201: ProjectUpdate;
+};
+
+export type ApiProjectUpdatesPostResponse = ApiProjectUpdatesPostResponses[keyof ApiProjectUpdatesPostResponses];
+
+export type ApiProjectUpdatesIdDeleteData = {
+  body?: never;
+  path: {
+    /**
+     * ProjectUpdate identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/project_updates/{id}";
+};
+
+export type ApiProjectUpdatesIdDeleteErrors = {
+  /**
+   * Resource not found
+   */
+  404: unknown;
+};
+
+export type ApiProjectUpdatesIdDeleteResponses = {
+  /**
+   * ProjectUpdate resource deleted
+   */
+  204: void;
+};
+
+export type ApiProjectUpdatesIdDeleteResponse =
+  ApiProjectUpdatesIdDeleteResponses[keyof ApiProjectUpdatesIdDeleteResponses];
+
+export type ApiProjectUpdatesIdGetData = {
+  body?: never;
+  path: {
+    /**
+     * ProjectUpdate identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/project_updates/{id}";
+};
+
+export type ApiProjectUpdatesIdGetErrors = {
+  /**
+   * Resource not found
+   */
+  404: unknown;
+};
+
+export type ApiProjectUpdatesIdGetResponses = {
+  /**
+   * ProjectUpdate resource
+   */
+  200: ProjectUpdate;
+};
+
+export type ApiProjectUpdatesIdGetResponse = ApiProjectUpdatesIdGetResponses[keyof ApiProjectUpdatesIdGetResponses];
+
+export type ApiProjectUpdatesIdPatchData = {
+  /**
+   * The updated ProjectUpdate resource
+   */
+  body: ProjectUpdate;
+  path: {
+    /**
+     * ProjectUpdate identifier
+     */
+    id: string;
+  };
+  query?: never;
+  url: "/v4/project_updates/{id}";
+};
+
+export type ApiProjectUpdatesIdPatchErrors = {
+  /**
+   * Invalid input
+   */
+  400: unknown;
+  /**
+   * Resource not found
+   */
+  404: unknown;
+  /**
+   * Unprocessable entity
+   */
+  422: unknown;
+};
+
+export type ApiProjectUpdatesIdPatchResponses = {
+  /**
+   * ProjectUpdate resource updated
+   */
+  200: ProjectUpdate;
+};
+
+export type ApiProjectUpdatesIdPatchResponse =
+  ApiProjectUpdatesIdPatchResponses[keyof ApiProjectUpdatesIdPatchResponses];
+
 export type ApiTipjarsGetCollectionData = {
   body?: never;
   path?: never;
@@ -2390,11 +2993,10 @@ export type ApiUsersGetCollectionData = {
      */
     page?: number;
     /**
-     * Query Users by email, name or username. Fuzzy.
+     * Query Users by email or handle. Fuzzy.
      */
     query?: string;
-    username?: string;
-    name?: string;
+    handle?: string;
   };
   url: "/v4/users";
 };
@@ -2451,10 +3053,6 @@ export type ApiUsersIdDeleteData = {
 };
 
 export type ApiUsersIdDeleteErrors = {
-  /**
-   * Forbidden
-   */
-  403: unknown;
   /**
    * Resource not found
    */
@@ -2519,10 +3117,6 @@ export type ApiUsersIdPatchErrors = {
    */
   400: unknown;
   /**
-   * Forbidden
-   */
-  403: unknown;
-  /**
    * Resource not found
    */
   404: unknown;
@@ -2540,155 +3134,6 @@ export type ApiUsersIdPatchResponses = {
 };
 
 export type ApiUsersIdPatchResponse = ApiUsersIdPatchResponses[keyof ApiUsersIdPatchResponses];
-
-export type ApiUserPersonalsGetCollectionData = {
-  body?: never;
-  path?: never;
-  query?: {
-    /**
-     * The collection page number
-     */
-    page?: number;
-  };
-  url: "/v4/user_personals";
-};
-
-export type ApiUserPersonalsGetCollectionResponses = {
-  /**
-   * UserPersonal collection
-   */
-  200: Array<UserPersonal>;
-};
-
-export type ApiUserPersonalsGetCollectionResponse =
-  ApiUserPersonalsGetCollectionResponses[keyof ApiUserPersonalsGetCollectionResponses];
-
-export type ApiUserPersonalsPostData = {
-  /**
-   * The new UserPersonal resource
-   */
-  body: UserPersonal;
-  path?: never;
-  query?: never;
-  url: "/v4/user_personals";
-};
-
-export type ApiUserPersonalsPostErrors = {
-  /**
-   * Invalid input
-   */
-  400: unknown;
-  /**
-   * Unprocessable entity
-   */
-  422: unknown;
-};
-
-export type ApiUserPersonalsPostResponses = {
-  /**
-   * UserPersonal resource created
-   */
-  201: UserPersonal;
-};
-
-export type ApiUserPersonalsPostResponse = ApiUserPersonalsPostResponses[keyof ApiUserPersonalsPostResponses];
-
-export type ApiUserPersonalsUserDeleteData = {
-  body?: never;
-  path: {
-    /**
-     * UserPersonal identifier
-     */
-    user: string;
-  };
-  query?: never;
-  url: "/v4/user_personals/{user}";
-};
-
-export type ApiUserPersonalsUserDeleteErrors = {
-  /**
-   * Resource not found
-   */
-  404: unknown;
-};
-
-export type ApiUserPersonalsUserDeleteResponses = {
-  /**
-   * UserPersonal resource deleted
-   */
-  204: void;
-};
-
-export type ApiUserPersonalsUserDeleteResponse =
-  ApiUserPersonalsUserDeleteResponses[keyof ApiUserPersonalsUserDeleteResponses];
-
-export type ApiUserPersonalsUserGetData = {
-  body?: never;
-  path: {
-    /**
-     * UserPersonal identifier
-     */
-    user: string;
-  };
-  query?: never;
-  url: "/v4/user_personals/{user}";
-};
-
-export type ApiUserPersonalsUserGetErrors = {
-  /**
-   * Resource not found
-   */
-  404: unknown;
-};
-
-export type ApiUserPersonalsUserGetResponses = {
-  /**
-   * UserPersonal resource
-   */
-  200: UserPersonal;
-};
-
-export type ApiUserPersonalsUserGetResponse = ApiUserPersonalsUserGetResponses[keyof ApiUserPersonalsUserGetResponses];
-
-export type ApiUserPersonalsUserPatchData = {
-  /**
-   * The updated UserPersonal resource
-   */
-  body: UserPersonal;
-  path: {
-    /**
-     * UserPersonal identifier
-     */
-    user: string;
-  };
-  query?: never;
-  url: "/v4/user_personals/{user}";
-};
-
-export type ApiUserPersonalsUserPatchErrors = {
-  /**
-   * Invalid input
-   */
-  400: unknown;
-  /**
-   * Resource not found
-   */
-  404: unknown;
-  /**
-   * Unprocessable entity
-   */
-  422: unknown;
-};
-
-export type ApiUserPersonalsUserPatchResponses = {
-  /**
-   * UserPersonal resource updated
-   */
-  200: UserPersonal;
-};
-
-export type ApiUserPersonalsUserPatchResponse =
-  ApiUserPersonalsUserPatchResponses[keyof ApiUserPersonalsUserPatchResponses];
 
 export type ApiUserTokensPostData = {
   /**

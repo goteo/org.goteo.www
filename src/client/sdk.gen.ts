@@ -26,6 +26,14 @@ import type {
   ApiGatewayCheckoutsPostResponse,
   ApiGatewayCheckoutsIdGetData,
   ApiGatewayCheckoutsIdGetResponse,
+  ApiUsersIdorganizationGetData,
+  ApiUsersIdorganizationGetResponse,
+  ApiUsersIdorganizationPatchData,
+  ApiUsersIdorganizationPatchResponse,
+  ApiUsersIdpersonGetData,
+  ApiUsersIdpersonGetResponse,
+  ApiUsersIdpersonPatchData,
+  ApiUsersIdpersonPatchResponse,
   ApiProjectsGetCollectionData,
   ApiProjectsGetCollectionResponse,
   ApiProjectsPostData,
@@ -66,6 +74,16 @@ import type {
   ApiProjectRewardClaimsIdGetResponse,
   ApiProjectRewardClaimsIdPatchData,
   ApiProjectRewardClaimsIdPatchResponse,
+  ApiProjectUpdatesGetCollectionData,
+  ApiProjectUpdatesGetCollectionResponse,
+  ApiProjectUpdatesPostData,
+  ApiProjectUpdatesPostResponse,
+  ApiProjectUpdatesIdDeleteData,
+  ApiProjectUpdatesIdDeleteResponse,
+  ApiProjectUpdatesIdGetData,
+  ApiProjectUpdatesIdGetResponse,
+  ApiProjectUpdatesIdPatchData,
+  ApiProjectUpdatesIdPatchResponse,
   ApiTipjarsGetCollectionData,
   ApiTipjarsGetCollectionResponse,
   ApiTipjarsPostData,
@@ -86,16 +104,6 @@ import type {
   ApiUsersIdGetResponse,
   ApiUsersIdPatchData,
   ApiUsersIdPatchResponse,
-  ApiUserPersonalsGetCollectionData,
-  ApiUserPersonalsGetCollectionResponse,
-  ApiUserPersonalsPostData,
-  ApiUserPersonalsPostResponse,
-  ApiUserPersonalsUserDeleteData,
-  ApiUserPersonalsUserDeleteResponse,
-  ApiUserPersonalsUserGetData,
-  ApiUserPersonalsUserGetResponse,
-  ApiUserPersonalsUserPatchData,
-  ApiUserPersonalsUserPatchResponse,
   ApiUserTokensPostData,
   ApiUserTokensPostResponse,
   ApiUserTokensIdDeleteData,
@@ -359,6 +367,90 @@ export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(
     ],
     url: "/v4/gateway_checkouts/{id}",
     ...options,
+  });
+};
+
+/**
+ * Retrieve one Organization
+ * Retrieves one Organization resource.
+ */
+export const apiUsersIdorganizationGet = <ThrowOnError extends boolean = false>(
+  options: Options<ApiUsersIdorganizationGetData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).get<ApiUsersIdorganizationGetResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/users/{id}/organization",
+    ...options,
+  });
+};
+
+/**
+ * Updates the Organization resource.
+ * Updates the Organization resource.
+ */
+export const apiUsersIdorganizationPatch = <ThrowOnError extends boolean = false>(
+  options: Options<ApiUsersIdorganizationPatchData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).patch<ApiUsersIdorganizationPatchResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/users/{id}/organization",
+    ...options,
+    headers: {
+      "Content-Type": "application/merge-patch+json",
+      ...options?.headers,
+    },
+  });
+};
+
+/**
+ * Retrieve one Person
+ * Retrieves one Person resource.
+ */
+export const apiUsersIdpersonGet = <ThrowOnError extends boolean = false>(
+  options: Options<ApiUsersIdpersonGetData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).get<ApiUsersIdpersonGetResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/users/{id}/person",
+    ...options,
+  });
+};
+
+/**
+ * Updates the Person resource.
+ * Updates the Person resource.
+ */
+export const apiUsersIdpersonPatch = <ThrowOnError extends boolean = false>(
+  options: Options<ApiUsersIdpersonPatchData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).patch<ApiUsersIdpersonPatchResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/users/{id}/person",
+    ...options,
+    headers: {
+      "Content-Type": "application/merge-patch+json",
+      ...options?.headers,
+    },
   });
 };
 
@@ -775,6 +867,109 @@ export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = fal
 };
 
 /**
+ * List all ProjectUpdates
+ * Retrieves the collection of ProjectUpdate resources.
+ */
+export const apiProjectUpdatesGetCollection = <ThrowOnError extends boolean = false>(
+  options?: Options<ApiProjectUpdatesGetCollectionData, ThrowOnError>,
+) => {
+  return (options?.client ?? _heyApiClient).get<ApiProjectUpdatesGetCollectionResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/project_updates",
+    ...options,
+  });
+};
+
+/**
+ * Creates a ProjectUpdate resource.
+ * Creates a ProjectUpdate resource.
+ */
+export const apiProjectUpdatesPost = <ThrowOnError extends boolean = false>(
+  options: Options<ApiProjectUpdatesPostData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).post<ApiProjectUpdatesPostResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/project_updates",
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...options?.headers,
+    },
+  });
+};
+
+/**
+ * Removes the ProjectUpdate resource.
+ * Removes the ProjectUpdate resource.
+ */
+export const apiProjectUpdatesIdDelete = <ThrowOnError extends boolean = false>(
+  options: Options<ApiProjectUpdatesIdDeleteData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).delete<ApiProjectUpdatesIdDeleteResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/project_updates/{id}",
+    ...options,
+  });
+};
+
+/**
+ * Retrieve one ProjectUpdate
+ * Retrieves one ProjectUpdate resource.
+ */
+export const apiProjectUpdatesIdGet = <ThrowOnError extends boolean = false>(
+  options: Options<ApiProjectUpdatesIdGetData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).get<ApiProjectUpdatesIdGetResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/project_updates/{id}",
+    ...options,
+  });
+};
+
+/**
+ * Updates the ProjectUpdate resource.
+ * Updates the ProjectUpdate resource.
+ */
+export const apiProjectUpdatesIdPatch = <ThrowOnError extends boolean = false>(
+  options: Options<ApiProjectUpdatesIdPatchData, ThrowOnError>,
+) => {
+  return (options.client ?? _heyApiClient).patch<ApiProjectUpdatesIdPatchResponse, unknown, ThrowOnError>({
+    security: [
+      {
+        scheme: "bearer",
+        type: "http",
+      },
+    ],
+    url: "/v4/project_updates/{id}",
+    ...options,
+    headers: {
+      "Content-Type": "application/merge-patch+json",
+      ...options?.headers,
+    },
+  });
+};
+
+/**
  * List all Tipjars
  * Retrieves the collection of Tipjar resources.
  */
@@ -972,109 +1167,6 @@ export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(
       },
     ],
     url: "/v4/users/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
-};
-
-/**
- * List all UserPersonals
- * Retrieves the collection of UserPersonal resources.
- */
-export const apiUserPersonalsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiUserPersonalsGetCollectionData, ThrowOnError>,
-) => {
-  return (options?.client ?? _heyApiClient).get<ApiUserPersonalsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals",
-    ...options,
-  });
-};
-
-/**
- * Creates a UserPersonal resource.
- * Creates a UserPersonal resource.
- */
-export const apiUserPersonalsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsPostData, ThrowOnError>,
-) => {
-  return (options.client ?? _heyApiClient).post<ApiUserPersonalsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
-};
-
-/**
- * Removes the UserPersonal resource.
- * Removes the UserPersonal resource.
- */
-export const apiUserPersonalsUserDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserDeleteData, ThrowOnError>,
-) => {
-  return (options.client ?? _heyApiClient).delete<ApiUserPersonalsUserDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
-    ...options,
-  });
-};
-
-/**
- * Retrieve one UserPersonal
- * Retrieves one UserPersonal resource.
- */
-export const apiUserPersonalsUserGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserGetData, ThrowOnError>,
-) => {
-  return (options.client ?? _heyApiClient).get<ApiUserPersonalsUserGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
-    ...options,
-  });
-};
-
-/**
- * Updates the UserPersonal resource.
- * Updates the UserPersonal resource.
- */
-export const apiUserPersonalsUserPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserPatchData, ThrowOnError>,
-) => {
-  return (options.client ?? _heyApiClient).patch<ApiUserPersonalsUserPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
     ...options,
     headers: {
       "Content-Type": "application/merge-patch+json",
