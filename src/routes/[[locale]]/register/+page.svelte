@@ -18,28 +18,10 @@
   let { data } = $props();
 
   const form = superForm(data.form, {
-    resetForm: false,
-    clearOnSubmit: "none",
     validators: zodClient(schema),
-    // Optional: Handle form submission outcomes
-    onResult: ({ result }) => {
-      console.debug({ result });
-      // Handle result as needed (e.g., show a notification)
-      if (result.type === "success") {
-        // Handle success
-        goto("/payment");
-      }
-    },
   });
 
-  // Destructure needed form properties
   const { form: formData, enhance, submit } = form;
-
-  // Create a form submission function using SuperForms' built-in submit method
-  function submitForm() {
-    // Use the superForm submit method directly
-    submit();
-  }
 </script>
 
 <div class="container mx-auto p-4">
@@ -101,7 +83,7 @@
     </div>
 
     <div>
-      <CheckoutSummary confirmAction={submitForm} />
+      <CheckoutSummary confirmAction={submit} />
       {#if browser}
         <SuperDebug data={$formData} />
       {/if}

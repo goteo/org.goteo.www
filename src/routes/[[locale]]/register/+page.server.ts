@@ -1,4 +1,4 @@
-import { fail } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
@@ -8,7 +8,13 @@ import * as auth from "$lib/server/auth";
 import type { PageServerLoad, Actions } from "./$types.js";
 import { schema } from "./schema.js";
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async (event) => {
+  if (event.locals.user) {
+    // Get returnUrl from query params or default to home page
+    const returnUrl = event.url.searchParams.get("returnUrl") || "/";
+    return redirect(302, returnUrl);
+  }
+
   const form = await superValidate(zod(schema));
   return { form };
 };
@@ -45,14 +51,11 @@ export const actions: Actions = {
       return fail(400, { message: "Incorrect username or password" });
     }
 
-    const session = await auth.createSession(sessionToken, String(userId), sessionId);
-    auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
-
     const { firstName, lastName, taxId } = form.data;
     const { data: person, error: personError } = await apiUsersIdpersonPatch({
       headers: { Authorization: `Bearer ${sessionToken}` },
       path: { id: String(userId) },
-      body: { firstName, lastName, ...(type === "individual" && { taxId }) },
+      body: { firstName, lastName, ...(type === "individual" && taxId && { taxId }) },
     });
 
     if (personError || !person) {
@@ -75,6 +78,10 @@ export const actions: Actions = {
     }
 
     console.log(`User created successfully: ${email}`);
-    return message(form, "User created successfully");
+
+    const session = await auth.createSession(sessionToken, String(userId), sessionId);
+    auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
+
+    return { form };
   },
 };
