@@ -4,6 +4,7 @@ import { zod } from "sveltekit-superforms/adapters";
 
 import type { PageServerLoad, Actions } from "./$types.js";
 import { schema } from "./schema.js";
+import { apiUsersPost } from "$client";
 
 export const load: PageServerLoad = async () => {
   const form = await superValidate(zod(schema));
@@ -17,6 +18,9 @@ export const actions: Actions = {
     if (!form.valid) {
       return fail(400, { form });
     }
+
+    const { email, password, type } = form.data;
+    const { data: user, error } = await apiUsersPost({ body: { email, password, type } });
 
     return message(form, "Form posted successfully!");
   },
