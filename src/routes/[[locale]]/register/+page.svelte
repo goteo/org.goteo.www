@@ -1,16 +1,16 @@
 <script lang="ts">
   import { _ } from "svelte-i18n";
+  import { toast } from "svelte-sonner";
   import SuperDebug, { superForm } from "sveltekit-superforms";
   import { zodClient } from "sveltekit-superforms/adapters";
-  import { goto } from "$app/navigation";
   import { browser } from "$app/environment";
 
   import * as Form from "$lib/components/ui/form";
   import { Button } from "$lib/components/ui/button";
   import { Checkbox } from "$lib/components/ui/checkbox";
   import * as RadioGroup from "$lib/components/ui/radio-group";
-
   import CheckoutSummary from "$lib/components/CheckoutSummary";
+
   import { schema } from "./schema";
   import IndividualRegisterForm from "./IndividualRegisterForm.svelte";
   import OrganizationRegisterForm from "./OrganizationRegisterForm.svelte";
@@ -19,6 +19,17 @@
 
   const form = superForm(data.form, {
     validators: zodClient(schema),
+    onResult: ({ result }) => {
+      // console.log(result);
+      switch (result.type) {
+        case "success":
+          toast.success(result.data?.form.message);
+          break;
+        case "failure":
+          toast.error(result.data?.message);
+          break;
+      }
+    },
   });
 
   const { form: formData, enhance, submit } = form;

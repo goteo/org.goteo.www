@@ -82,6 +82,6 @@ export const actions: Actions = {
     const session = await auth.createSession(sessionToken, String(userId), sessionId);
     auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
 
-    return { form };
+    return message(form, "User created successfully");
   },
 };

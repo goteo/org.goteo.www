@@ -18,6 +18,6 @@
   console.debug("/+layout", page.data);
 </script>
 
-<Toaster />
+<Toaster richColors />
 <Header />
 <slot />
