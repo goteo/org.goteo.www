@@ -7,8 +7,8 @@ z.setErrorMap(localeErrorMap);
 export const schema = z
   .object({
     type: z.enum(["individual", "organization"]).default("individual"),
-    first_name: z.string().min(1), // Uses zod.string.too_small from translation
-    last_name: z.string().min(1),
+    firstName: z.string().min(1), // Uses zod.string.too_small from translation
+    lastName: z.string().min(1),
     email: z.string().email(), // Uses zod.email.invalid from translation
     password: z.string().min(8),
     legalName: z.string().optional(),

@@ -12,15 +12,15 @@
 </script>
 
 <Form.Fieldset {form} name="type" class="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-  <Form.Field {form} name="first_name" class="mt-2">
+  <Form.Field {form} name="firstName" class="mt-2">
     <Form.Control let:attrs>
-      <Input {...attrs} bind:value={$formData.first_name} placeholder={$_("register.individual.firstName")} />
+      <Input {...attrs} bind:value={$formData.firstName} placeholder={$_("register.individual.firstName")} />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-  <Form.Field {form} name="last_name">
+  <Form.Field {form} name="lastName">
     <Form.Control let:attrs>
-      <Input {...attrs} bind:value={$formData.last_name} placeholder={$_("register.individual.lastName")} />
+      <Input {...attrs} bind:value={$formData.lastName} placeholder={$_("register.individual.lastName")} />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>

@@ -39,15 +39,15 @@
 
 <Form.Fieldset {form} name="type" class="grid grid-cols-1 md:grid-cols-2 gap-4">
   <Form.Legend>{$_("register.organization.representativeTitle")}</Form.Legend>
-  <Form.Field {form} name="first_name">
+  <Form.Field {form} name="firstName">
     <Form.Control let:attrs>
-      <Input {...attrs} bind:value={$formData.first_name} placeholder={$_("register.organization.firstName")} />
+      <Input {...attrs} bind:value={$formData.firstName} placeholder={$_("register.organization.firstName")} />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
-  <Form.Field {form} name="last_name">
+  <Form.Field {form} name="lastName">
     <Form.Control let:attrs>
-      <Input {...attrs} bind:value={$formData.last_name} placeholder={$_("register.organization.lastName")} />
+      <Input {...attrs} bind:value={$formData.lastName} placeholder={$_("register.organization.lastName")} />
     </Form.Control>
     <Form.FieldErrors />
   </Form.Field>
