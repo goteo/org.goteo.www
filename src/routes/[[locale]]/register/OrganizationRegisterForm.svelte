@@ -36,6 +36,7 @@
             {...attrs}
             bind:value={$formData.password}
             placeholder={$_("register.organization.password")}
+            type="password"
         />
     </Form.Control>
     <Form.FieldErrors />

@@ -50,6 +50,7 @@
             {...attrs}
             bind:value={$formData.password}
             placeholder={$_("register.individual.password")}
+            type="password"
         />
     </Form.Control>
     <Form.FieldErrors />
