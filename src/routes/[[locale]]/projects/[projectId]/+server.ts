@@ -119,7 +119,7 @@ const map = (
         },
     };
 
-    const { id, title, subtitle, description, territory } = project;
+    const { id, title, subtitle, description, territory, category } = project;
     const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
     const data = {
@@ -127,6 +127,7 @@ const map = (
         title,
         subtitle,
         description,
+        category,
         territory: territoryLabel,
         video,
         rewards: rewardsMap,

@@ -16,6 +16,7 @@
     import ShareButton from "$lib/components/ShareButton";
     import ProjectBudget from "$lib/components/ProjectBudget";
     import FundingChart from "$lib/components/FundingChart";
+    import CategoryLabel from "$lib/components/CategoryLabel";
 
     let { data }: PageProps = $props();
     let { locales, campaign, video, rewards, budgets, project } = data;
@@ -100,9 +101,7 @@
     </div>
     <div class="flex items-center justify-between">
         <div class="flex gap-4">
-            <Button variant="outline" size="sm" class="border-black"
-                ><Bookmark class="mr-2" /> Periodismo independiente</Button
-            >
+            <CategoryLabel label={project.category} />
             <Button variant="outline" size="sm" class="border-black"
                 ><MapPin class="mr-2" /> {project.territory}</Button
             >
