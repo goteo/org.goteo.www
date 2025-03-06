@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { init, register, getLocaleFromNavigator } from "svelte-i18n";
+import { init, register, getLocaleFromNavigator, _ } from "svelte-i18n";
 import { config, hasTranslations } from "./config";
 import type { SupportedLocale } from "./types";
 
@@ -37,6 +37,7 @@ export async function initI18n() {
 export * from "./config";
 export { config, isValidLocale, hasTranslations } from "./config";
 export type { LocaleConfig, SupportedLocale } from "./types";
+export { _ as t };
 
 export const locales: Record<string, { label: string }> = {
     en: { label: "English" },
