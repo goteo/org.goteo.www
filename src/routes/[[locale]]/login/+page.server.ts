@@ -9,44 +9,46 @@ import type { PageServerLoad, Actions } from "./$types.js";
 import { schema } from "./schema.js";
 
 export const load: PageServerLoad = async (event) => {
-  if (event.locals.user) {
-    // Get returnUrl from query params or default to home page
-    const returnUrl = event.url.searchParams.get("returnUrl") || "/";
-    return redirect(302, returnUrl);
-  }
+    if (event.locals.user) {
+        // Get returnUrl from query params or default to home page
+        const returnUrl = event.url.searchParams.get("returnUrl") || "/";
+        return redirect(302, returnUrl);
+    }
 
-  const form = await superValidate(zod(schema));
-  return { form };
+    const form = await superValidate(zod(schema));
+    return { form };
 };
 
 export const actions: Actions = {
-  default: async (event) => {
-    const { request } = event;
-    const form = await superValidate(request, zod(schema));
-    console.log({ form });
-    if (!form.valid) {
-      return fail(400, { form });
-    }
+    default: async (event) => {
+        const { request } = event;
+        const form = await superValidate(request, zod(schema));
+        console.log({ form });
+        if (!form.valid) {
+            return fail(400, { form });
+        }
 
-    const { email, password } = form.data;
-    const { data: existingUser, error } = await apiUserTokensPost({ body: { identifier: email, password } });
+        const { email, password } = form.data;
+        const { data: existingUser, error } = await apiUserTokensPost({
+            body: { identifier: email, password },
+        });
 
-    if (error || typeof existingUser === "undefined") {
-      console.error("Incorrect username or password");
-      return fail(400, { message: "Incorrect username or password" });
-    }
+        if (error || typeof existingUser === "undefined") {
+            console.error("Incorrect username or password");
+            return fail(400, { message: "Incorrect username or password" });
+        }
 
-    const { id: userId } = existingUser;
-    const sessionId = existingUser.id;
-    const sessionToken = existingUser.token;
+        const { id: userId } = existingUser;
+        const sessionId = existingUser.id;
+        const sessionToken = existingUser.token;
 
-    if (!sessionToken || !userId || !sessionId) {
-      return fail(400, { message: "Incorrect username or password" });
-    }
+        if (!sessionToken || !userId || !sessionId) {
+            return fail(400, { message: "Incorrect username or password" });
+        }
 
-    const session = await auth.createSession(sessionToken, String(userId), sessionId);
-    auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
+        const session = await auth.createSession(sessionToken, String(userId), sessionId);
+        auth.setSessionTokenCookie(event, `${session.token}#${session.id}`, session.expiresAt);
 
-    return message(form, "User logged successfully");
-  },
+        return message(form, "User logged successfully");
+    },
 };

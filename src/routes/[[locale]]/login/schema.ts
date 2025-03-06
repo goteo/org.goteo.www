@@ -5,8 +5,8 @@ import { localeErrorMap } from "$lib/i18n/localeErrorMap";
 z.setErrorMap(localeErrorMap);
 
 export const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
+    email: z.string().email(),
+    password: z.string().min(8),
 });
 
 export type FormSchema = z.infer<typeof schema>;
