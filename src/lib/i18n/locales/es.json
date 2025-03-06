@@ -1,66 +1,66 @@
 {
-  "greeting": "Hola",
-  "farewell": "Adiós",
-  "campaignProgress": {
-    "minimumReached": "Mínimo conseguido!",
-    "obtained": "Obtenido",
-    "donations": "Donaciones realizadas",
-    "optimal": "Óptimo",
-    "minimum": "Mínimo",
-    "donate": "Donar a esta campaña"
-  },
-  "reward": {
-    "donate": "Dona",
-    "donors": "donates",
-    "units": "Quedan {units} unidades",
-    "noUnits": "No quedan unidades",
-    "trending": "Recompensas más populares",
-    "headline": "Selecciona tu recompensa"
-  },
-  "budget": {
-    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
-    "infrastructure": "Infraestructura",
-    "material": "Material",
-    "task": "Tareas",
-    "chart": {
-      "minimum": "Mínimo",
-      "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
-    }
-  },
-  "project": {
-    "tabs": {
-      "project": "Información de campaña",
-      "budget": "Necesidades",
-      "rewards": "Recompensas",
-      "updates": "Actualizaciones",
-      "community": "Comunidad"
+    "greeting": "Hola",
+    "farewell": "Adiós",
+    "campaignProgress": {
+        "minimumReached": "Mínimo conseguido!",
+        "obtained": "Obtenido",
+        "donations": "Donaciones realizadas",
+        "optimal": "Óptimo",
+        "minimum": "Mínimo",
+        "donate": "Donar a esta campaña"
     },
-    "actions": {
-      "share": "Compartir",
-      "remember": "Recordar",
-      "viewAll": "Ver todas"
+    "reward": {
+        "donate": "Dona",
+        "donors": "donates",
+        "units": "Quedan {units} unidades",
+        "noUnits": "No quedan unidades",
+        "trending": "Recompensas más populares",
+        "headline": "Selecciona tu recompensa"
+    },
+    "budget": {
+        "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
+        "infrastructure": "Infraestructura",
+        "material": "Material",
+        "task": "Tareas",
+        "chart": {
+            "minimum": "Mínimo",
+            "optimal": "Óptimo",
+            "progress": "Estado de la campaña"
+        }
+    },
+    "project": {
+        "tabs": {
+            "project": "Información de campaña",
+            "budget": "Necesidades",
+            "rewards": "Recompensas",
+            "updates": "Actualizaciones",
+            "community": "Comunidad"
+        },
+        "actions": {
+            "share": "Compartir",
+            "remember": "Recordar",
+            "viewAll": "Ver todas"
+        }
+    },
+    "navigation": {
+        "search": "Busca tu campaña"
+    },
+    "categories": {
+        "solidarity": "Solidario",
+        "employment": "Generar empleo",
+        "design": "Desde el diseño",
+        "journalism": "Periodismo independiente",
+        "education": "Educativo",
+        "culture": "Crea cultura",
+        "ecological": "Ecológico",
+        "health": "Salud y cuidados"
+    },
+    "ShareButton": {
+        "title": "Difunde este proyecto por el mundo",
+        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
+        "global": "compartir global",
+        "facebook": "compartir en facebook",
+        "twitter": "compartir en X",
+        "code": "compartir como código"
     }
-  },
-  "navigation": {
-    "search": "Busca tu campaña"
-  },
-  "categories": {
-    "solidarity": "Solidario",
-    "employment": "Generar empleo",
-    "design": "Desde el diseño",
-    "journalism": "Periodismo independiente",
-    "education": "Educativo",
-    "culture": "Crea cultura",
-    "ecological": "Ecológico",
-    "health": "Salud y cuidados"
-  },
-  "ShareButton": {
-    "title": "Difunde este proyecto por el mundo",
-    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
-    "global": "compartir global",
-    "facebook": "compartir en facebook",
-    "twitter": "compartir en X",
-    "code": "compartir como código"
-  }
 }
