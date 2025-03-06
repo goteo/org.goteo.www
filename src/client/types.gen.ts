@@ -23,20 +23,6 @@ export type Accounting = {
      * The resource owning this Accounting.
      */
     readonly owner?: string;
-    id?: number;
-    /**
-     * The preferred currency for monetary operations.\
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string;
-    /**
-     * The money currently held by the Accounting.
-     */
-    balance?: Money;
-    /**
-     * The resource owning this Accounting.
-     */
-    readonly owner?: string;
 };
 
 /**
@@ -48,38 +34,13 @@ export type Accounting = {
  * Many different actions can trigger changes in Accountings, such as GatewayCheckouts being successfully charged.
  */
 export type AccountingJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    id?: number;
-    /**
-     * The preferred currency for monetary operations.\
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string;
-    /**
-     * The money currently held by the Accounting.
-     */
-    balance?: MoneyJsonld;
-    /**
-     * The resource owning this Accounting.
-     */
-    readonly owner?: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     id?: number;
     /**
      * The preferred currency for monetary operations.\
@@ -119,22 +80,6 @@ export type AccountingBalancePoint = {
      * The number of items aggregated in this point.
      */
     length?: number;
-    /**
-     * The start date for items aggregated in this point.
-     */
-    start?: string;
-    /**
-     * The end date for items aggregated in this point. Not inclusive.
-     */
-    end?: string;
-    /**
-     * Resulting balance for items in this point.
-     */
-    balance?: Money;
-    /**
-     * The number of items aggregated in this point.
-     */
-    length?: number;
 };
 
 /**
@@ -144,26 +89,8 @@ export type AccountingBalancePoint = {
  * you can query multiple balance points to obtain the evolution of the Accounting's balance over time.
  */
 export type AccountingBalancePointJsonld = {
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * The start date for items aggregated in this point.
-     */
-    start?: string;
-    /**
-     * The end date for items aggregated in this point. Not inclusive.
-     */
-    end?: string;
-    /**
-     * Resulting balance for items in this point.
-     */
-    balance?: MoneyJsonld;
-    /**
-     * The number of items aggregated in this point.
-     */
-    length?: number;
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * The start date for items aggregated in this point.
      */
@@ -205,19 +132,6 @@ export type AccountingTransaction = {
      * The Accounting where the Transaction goes to.
      */
     target?: string;
-    readonly id?: number;
-    /**
-     * The monetary value received at target and issued at origin.
-     */
-    money?: Money;
-    /**
-     * The Accounting from which the Transaction comes from.
-     */
-    origin?: string;
-    /**
-     * The Accounting where the Transaction goes to.
-     */
-    target?: string;
 };
 
 /**
@@ -230,37 +144,13 @@ export type AccountingTransaction = {
  * AccountingTransactions are generated for each GatewayCharge in a GatewayCheckout once it becomes successful.
  */
 export type AccountingTransactionJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * The monetary value received at target and issued at origin.
-     */
-    money?: MoneyJsonld;
-    /**
-     * The Accounting from which the Transaction comes from.
-     */
-    origin?: string;
-    /**
-     * The Accounting where the Transaction goes to.
-     */
-    target?: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The monetary value received at target and issued at origin.
@@ -289,15 +179,13 @@ export type ApiResourceMoney = {
 };
 
 export type ApiResourceMoneyJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -318,43 +206,16 @@ export type Budget = {
      * A summary of the optimum, minimum included, budget. As described by items with specified optimum money plus minimum money.
      */
     optimum?: BudgetSummary;
-    /**
-     * A summary of the minimum budget. As described by items with specified minimum money.
-     */
-    minimum?: BudgetSummary;
-    /**
-     * A summary of the optimum, minimum included, budget. As described by items with specified optimum money plus minimum money.
-     */
-    optimum?: BudgetSummary;
 };
 
 export type BudgetJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * A summary of the minimum budget. As described by items with specified minimum money.
-     */
-    minimum?: BudgetSummaryJsonld;
-    /**
-     * A summary of the optimum, minimum included, budget. As described by items with specified optimum money plus minimum money.
-     */
-    optimum?: BudgetSummaryJsonld;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * A summary of the minimum budget. As described by items with specified minimum money.
      */
@@ -382,59 +243,16 @@ export type BudgetSummary = {
      * The total money of type 'infrastructure'.
      */
     infra?: Money;
-    /**
-     * The total money by the included items.
-     */
-    money?: Money;
-    /**
-     * The total money of type 'task'.
-     */
-    task?: Money;
-    /**
-     * The total money of type 'material'.
-     */
-    material?: Money;
-    /**
-     * The total money of type 'infrastructure'.
-     */
-    infra?: Money;
 };
 
 export type BudgetSummaryJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * The total money by the included items.
-     */
-    money?: MoneyJsonld;
-    /**
-     * The total money of type 'task'.
-     */
-    task?: MoneyJsonld;
-    /**
-     * The total money of type 'material'.
-     */
-    material?: MoneyJsonld;
-    /**
-     * The total money of type 'infrastructure'.
-     */
-    infra?: MoneyJsonld;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * The total money by the included items.
      */
@@ -462,9 +280,7 @@ export type BudgetSummaryJsonld = {
  */
 export type Gateway = {
     name?: string;
-    supports?: Array<"single" | "recurring">;
-    name?: string;
-    supports?: Array<"single" | "recurring">;
+    supports?: Array<'single' | 'recurring'>;
 };
 
 /**
@@ -475,28 +291,15 @@ export type Gateway = {
  * perform corroboration of funds and store the Transactions into the system.
  */
 export type GatewayJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     name?: string;
-    supports?: Array<"single" | "recurring">;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    name?: string;
-    supports?: Array<"single" | "recurring">;
+    supports?: Array<'single' | 'recurring'>;
 };
 
 /**
@@ -510,33 +313,7 @@ export type GatewayCharge = {
      * `single` is for one time payments.\
      * `recurring` is for payments repeated over time.
      */
-    type: "single" | "recurring";
-    /**
-     * A short, descriptive string for this charge item.\
-     * May be displayed to the payer.
-     */
-    title: string;
-    /**
-     * Detailed information about the charge item.\
-     * May be displayed to the payer.
-     */
-    description?: string | null;
-    /**
-     * The Accounting receiving the money after a successful payment.
-     */
-    target: string;
-    /**
-     * The money to-be-paid for this item at the Gateway.
-     */
-    money: Money;
-    readonly id?: number | null;
-    /**
-     * How this item should be processed by the Gateway.\
-     * \
-     * `single` is for one time payments.\
-     * `recurring` is for payments repeated over time.
-     */
-    type: "single" | "recurring";
+    type: 'single' | 'recurring';
     /**
      * A short, descriptive string for this charge item.\
      * May be displayed to the payer.
@@ -561,15 +338,13 @@ export type GatewayCharge = {
  * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
  */
 export type GatewayChargeJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number | null;
     /**
      * How this item should be processed by the Gateway.\
@@ -577,42 +352,7 @@ export type GatewayChargeJsonld = {
      * `single` is for one time payments.\
      * `recurring` is for payments repeated over time.
      */
-    type: "single" | "recurring";
-    /**
-     * A short, descriptive string for this charge item.\
-     * May be displayed to the payer.
-     */
-    title: string;
-    /**
-     * Detailed information about the charge item.\
-     * May be displayed to the payer.
-     */
-    description?: string | null;
-    /**
-     * The Accounting receiving the money after a successful payment.
-     */
-    target: string;
-    /**
-     * The money to-be-paid for this item at the Gateway.
-     */
-    money: MoneyJsonld;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number | null;
-    /**
-     * How this item should be processed by the Gateway.\
-     * \
-     * `single` is for one time payments.\
-     * `recurring` is for payments repeated over time.
-     */
-    type: "single" | "recurring";
+    type: 'single' | 'recurring';
     /**
      * A short, descriptive string for this charge item.\
      * May be displayed to the payer.
@@ -658,37 +398,7 @@ export type GatewayCheckout = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: "pending" | "charged";
-    /**
-     * A list of related hyperlinks, as provided by the Gateway.
-     */
-    readonly links?: Array<Link>;
-    /**
-     * A list of related tracking codes and numbers, as provided by the Gateway.
-     */
-    readonly trackings?: Array<Tracking>;
-    readonly id?: number;
-    /**
-     * The desired Gateway to checkout with.
-     */
-    gateway: string;
-    /**
-     * The Accounting paying for the charges.
-     */
-    origin: string;
-    /**
-     * A list of the payment items to be charged to the origin.
-     */
-    charges: Array<GatewayCharge>;
-    /**
-     * Gateways will redirect the user back to the v4 API,
-     * which will then redirect the user to this address.
-     */
-    returnUrl: string;
-    /**
-     * The status of this Checkout, as confirmed by the Gateway.
-     */
-    status?: "pending" | "charged";
+    status?: 'pending' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -703,15 +413,13 @@ export type GatewayCheckout = {
  * A GatewayCheckout represents a payment session with a Gateway.
  */
 export type GatewayCheckoutJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The desired Gateway to checkout with.
@@ -733,46 +441,7 @@ export type GatewayCheckoutJsonld = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: "pending" | "charged";
-    /**
-     * A list of related hyperlinks, as provided by the Gateway.
-     */
-    readonly links?: Array<LinkJsonld>;
-    /**
-     * A list of related tracking codes and numbers, as provided by the Gateway.
-     */
-    readonly trackings?: Array<TrackingJsonld>;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * The desired Gateway to checkout with.
-     */
-    gateway: string;
-    /**
-     * The Accounting paying for the charges.
-     */
-    origin: string;
-    /**
-     * A list of the payment items to be charged to the origin.
-     */
-    charges: Array<GatewayChargeJsonld>;
-    /**
-     * Gateways will redirect the user back to the v4 API,
-     * which will then redirect the user to this address.
-     */
-    returnUrl: string;
-    /**
-     * The status of this Checkout, as confirmed by the Gateway.
-     */
-    status?: "pending" | "charged";
+    status?: 'pending' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -801,37 +470,17 @@ export type Link = {
      * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
      * `payment` links are for end-users who must visit this link to complete the checkout.
      */
-    type?: "debug" | "payment";
-    /**
-     * The complete target URL.
-     */
-    href?: string;
-    /**
-     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
-     */
-    rel?: string;
-    /**
-     * The HTTP method required to make the related call.
-     */
-    method?: string;
-    /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
-     */
-    type?: "debug" | "payment";
+    type?: 'debug' | 'payment';
 };
 
 export type LinkJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * The complete target URL.
      */
@@ -849,34 +498,7 @@ export type LinkJsonld = {
      * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
      * `payment` links are for end-users who must visit this link to complete the checkout.
      */
-    type?: "debug" | "payment";
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * The complete target URL.
-     */
-    href?: string;
-    /**
-     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
-     */
-    rel?: string;
-    /**
-     * The HTTP method required to make the related call.
-     */
-    method?: string;
-    /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
-     */
-    type?: "debug" | "payment";
+    type?: 'debug' | 'payment';
 };
 
 export type Money = {
@@ -892,15 +514,13 @@ export type Money = {
 };
 
 export type MoneyJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -949,15 +569,13 @@ export type Organization = {
  * Sensitive data is encrypted before being stored in the database.
  */
 export type OrganizationJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly user?: string;
     /**
      * ID for tax purposes. e.g: NIF (formerly CIF), Umsatzsteuer-Id, EID, etc.
@@ -1012,15 +630,13 @@ export type Person = {
  * Sensitive personal data is encrypted before being stored in the database.
  */
 export type PersonJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly user?: string;
     /**
      * Personal ID for tax purposes. e.g: NIF, Steuer-ID, SSN, ITIN, etc.
@@ -1060,21 +676,19 @@ export type Project = {
      */
     subtitle: string;
     /**
+     * On `minimum`, Project will campaign until the minimum deadline.\
+     * On `optimum`, Project will campaing until the minimum deadline,
+     * and then until the optimum deadline if it did raise the minimum.
+     */
+    deadline?: 'minimum' | 'optimum';
+    /**
+     * Deadlines and important Project dates.
+     */
+    calendar?: ProjectCalendar;
+    /**
      * One of the available categories.
      */
-    category:
-        | "solidary"
-        | "libre-software"
-        | "employment"
-        | "design"
-        | "journalism"
-        | "education"
-        | "culture"
-        | "ecology"
-        | "health-and-cares"
-        | "open-data"
-        | "democracy"
-        | "equity";
+    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1084,24 +698,13 @@ export type Project = {
      */
     description: string;
     /**
-     * A URL to a video showcasing the Project.
-     */
-    video?: string;
-    /**
      * Extracted embedding data from the Project's video.
      */
-    videoEmbed?: ProjectVideo;
+    video?: ProjectVideo;
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?:
-        | "in_editing"
-        | "in_review"
-        | "rejected"
-        | "in_campaign"
-        | "unfunded"
-        | "in_funding"
-        | "fulfilled";
+    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1127,16 +730,127 @@ export type Project = {
 /**
  * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
  */
+export type ProjectProjectCreateDto = {
+    /**
+     * Main headline for the Project.
+     */
+    title: string;
+    /**
+     * Secondary headline for the Project.
+     */
+    subtitle: string;
+    /**
+     * One of the available categories.
+     */
+    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory: ProjectTerritoryApiResource;
+    /**
+     * Free-form rich text description for the Project.
+     */
+    description: string;
+    /**
+     * On `minimum`, Project will campaign until the minimum deadline.\
+     * On `optimum`, Project will campaing until the minimum deadline,
+     * and then until the optimum deadline if it did raise the minimum.
+     */
+    deadline?: 'minimum' | 'optimum';
+    /**
+     * A URL to a video showcasing the Project.
+     */
+    video?: string;
+};
+
+/**
+ * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
+ */
+export type ProjectProjectCreateDtoJsonld = {
+    /**
+     * Main headline for the Project.
+     */
+    title: string;
+    /**
+     * Secondary headline for the Project.
+     */
+    subtitle: string;
+    /**
+     * One of the available categories.
+     */
+    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory: ProjectTerritoryApiResourceJsonld;
+    /**
+     * Free-form rich text description for the Project.
+     */
+    description: string;
+    /**
+     * On `minimum`, Project will campaign until the minimum deadline.\
+     * On `optimum`, Project will campaing until the minimum deadline,
+     * and then until the optimum deadline if it did raise the minimum.
+     */
+    deadline?: 'minimum' | 'optimum';
+    /**
+     * A URL to a video showcasing the Project.
+     */
+    video?: string;
+};
+
+/**
+ * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
+ */
+export type ProjectProjectUpdateDto = {
+    readonly id?: number;
+    /**
+     * Main headline for the Project.
+     */
+    title?: string;
+    /**
+     * Secondary headline for the Project.
+     */
+    subtitle?: string;
+    /**
+     * One of the available categories.
+     */
+    category?: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory?: ProjectTerritoryApiResource;
+    /**
+     * Free-form rich text description for the Project.
+     */
+    description?: string;
+    /**
+     * On `minimum`, Project will campaign until the minimum deadline.\
+     * On `optimum`, Project will campaing until the minimum deadline,
+     * and then until the optimum deadline if it did raise the minimum.
+     */
+    deadline?: 'minimum' | 'optimum';
+    /**
+     * A URL to a video showcasing the Project.
+     */
+    video?: string;
+    /**
+     * The status of a Project represents how far it is in it's life-cycle.
+     */
+    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
+};
+
+/**
+ * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
+ */
 export type ProjectJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The Accounting holding the funds raised by this Project.
@@ -1155,21 +869,19 @@ export type ProjectJsonld = {
      */
     subtitle: string;
     /**
+     * On `minimum`, Project will campaign until the minimum deadline.\
+     * On `optimum`, Project will campaing until the minimum deadline,
+     * and then until the optimum deadline if it did raise the minimum.
+     */
+    deadline?: 'minimum' | 'optimum';
+    /**
+     * Deadlines and important Project dates.
+     */
+    calendar?: ProjectCalendarJsonld;
+    /**
      * One of the available categories.
      */
-    category:
-        | "solidary"
-        | "libre-software"
-        | "employment"
-        | "design"
-        | "journalism"
-        | "education"
-        | "culture"
-        | "ecology"
-        | "health-and-cares"
-        | "open-data"
-        | "democracy"
-        | "equity";
+    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1179,24 +891,13 @@ export type ProjectJsonld = {
      */
     description: string;
     /**
-     * A URL to a video showcasing the Project.
-     */
-    video?: string;
-    /**
      * Extracted embedding data from the Project's video.
      */
-    videoEmbed?: ProjectVideoJsonld;
+    video?: ProjectVideoJsonld;
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?:
-        | "in_editing"
-        | "in_review"
-        | "rejected"
-        | "in_campaign"
-        | "unfunded"
-        | "in_funding"
-        | "fulfilled";
+    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1230,7 +931,7 @@ export type ProjectBudgetItem = {
     /**
      * The type of need this item solves.
      */
-    type: "infrastructure" | "material" | "task";
+    type: 'infrastructure' | 'material' | 'task';
     /**
      * A short, descriptive string for the item.
      */
@@ -1259,21 +960,19 @@ export type ProjectBudgetItem = {
  * Each BudgetItem describes one specific monetary necessity. The total budget of a Project is then calculated from the related BudgetItems.
  */
 export type ProjectBudgetItemJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     project?: string;
     /**
      * The type of need this item solves.
      */
-    type: "infrastructure" | "material" | "task";
+    type: 'infrastructure' | 'material' | 'task';
     /**
      * A short, descriptive string for the item.
      */
@@ -1294,6 +993,55 @@ export type ProjectBudgetItemJsonld = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+};
+
+export type ProjectCalendar = {
+    /**
+     * The date at which the Project started campaigning.
+     */
+    release?: string | null;
+    /**
+     * 40 days after the date of release.\
+     * \
+     * The minimum budget must be raised by the end of this date.\
+     * Failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
+     */
+    minimum?: string | null;
+    /**
+     * 40 days after the minimum deadline. Optional.\
+     * \
+     * If the Project achieved their minimum budget by the minimum deadline,
+     * and this deadline is defined, it may still remain in campaign to raise the optimum.
+     */
+    optimum?: string | null;
+};
+
+export type ProjectCalendarJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The date at which the Project started campaigning.
+     */
+    release?: string | null;
+    /**
+     * 40 days after the date of release.\
+     * \
+     * The minimum budget must be raised by the end of this date.\
+     * Failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
+     */
+    minimum?: string | null;
+    /**
+     * 40 days after the minimum deadline. Optional.\
+     * \
+     * If the Project achieved their minimum budget by the minimum deadline,
+     * and this deadline is defined, it may still remain in campaign to raise the optimum.
+     */
+    optimum?: string | null;
 };
 
 /**
@@ -1330,90 +1078,19 @@ export type ProjectReward = {
      * For finite rewards, the currently available amount of unitsTotal that can be claimed.
      */
     readonly unitsAvailable?: number;
-    readonly id?: number;
-    /**
-     * The project which gives this reward.
-     */
-    project: string;
-    /**
-     * A short, descriptive title for this reward.
-     */
-    title: string;
-    /**
-     * Information about this reward. More detailed than the title.
-     */
-    description: string | null;
-    /**
-     * The minimal monetary sum to be able to claim this reward.
-     */
-    money: Money;
-    /**
-     * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
-     */
-    hasUnits: boolean;
-    /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
-     */
-    unitsTotal?: number;
-    /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
-     */
-    readonly unitsAvailable?: number;
 };
 
 /**
  * A ProjectReward is something the Project owner wishes to give in exchange for contributions to their Project.
  */
 export type ProjectRewardJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * The project which gives this reward.
-     */
-    project: string;
-    /**
-     * A short, descriptive title for this reward.
-     */
-    title: string;
-    /**
-     * Information about this reward. More detailed than the title.
-     */
-    description: string | null;
-    /**
-     * The minimal monetary sum to be able to claim this reward.
-     */
-    money: MoneyJsonld;
-    /**
-     * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
-     */
-    hasUnits: boolean;
-    /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
-     */
-    unitsTotal?: number;
-    /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
-     */
-    readonly unitsAvailable?: number;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The project which gives this reward.
@@ -1459,48 +1136,19 @@ export type ProjectRewardClaim = {
      * The User claiming the ProjectReward.
      */
     readonly owner?: string;
-    readonly id?: number;
-    /**
-     * The ProjectReward being claimed.
-     */
-    reward: string;
-    /**
-     * The User claiming the ProjectReward.
-     */
-    readonly owner?: string;
 };
 
 /**
  * A ProjectRewardClaim represents the will of an User who wishes to obtain one ProjectReward.
  */
 export type ProjectRewardClaimJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * The ProjectReward being claimed.
-     */
-    reward: string;
-    /**
-     * The User claiming the ProjectReward.
-     */
-    readonly owner?: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The ProjectReward being claimed.
@@ -1527,55 +1175,16 @@ export type ProjectTerritoryApiResource = {
      * e.g: ES-GR (Granada, Andalucía, Spain).
      */
     subLvl2?: string;
-    /**
-     * ISO 3166-1 alpha-2 two-letter country code.
-     */
-    country: string;
-    /**
-     * ISO 3166-2 first level subdivision code.\
-     * e.g: ES-AN (Andalucía, Spain).
-     */
-    subLvl1?: string;
-    /**
-     * ISO 3166-2 second level subdivision code.\
-     * e.g: ES-GR (Granada, Andalucía, Spain).
-     */
-    subLvl2?: string;
 };
 
 export type ProjectTerritoryApiResourceJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * ISO 3166-1 alpha-2 two-letter country code.
-     */
-    country: string;
-    /**
-     * ISO 3166-2 first level subdivision code.\
-     * e.g: ES-AN (Andalucía, Spain).
-     */
-    subLvl1?: string;
-    /**
-     * ISO 3166-2 second level subdivision code.\
-     * e.g: ES-GR (Granada, Andalucía, Spain).
-     */
-    subLvl2?: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * ISO 3166-1 alpha-2 two-letter country code.
      */
@@ -1638,15 +1247,13 @@ export type ProjectUpdate = {
  * or any other body of information that the Project owner(s) may wish to make public to the Project's audience.
  */
 export type ProjectUpdateJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The Project to which this update belongs to.
@@ -1682,31 +1289,16 @@ export type ProjectUpdateJsonld = {
 export type ProjectVideo = {
     src?: string | null;
     thumbnail?: string | null;
-    src?: string | null;
-    thumbnail?: string | null;
 };
 
 export type ProjectVideoJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    src?: string | null;
-    thumbnail?: string | null;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     src?: string | null;
     thumbnail?: string | null;
 };
@@ -1723,12 +1315,6 @@ export type Tipjar = {
      */
     name?: string;
     accounting?: Accounting | null;
-    readonly id?: number;
-    /**
-     * Human readable, non white space, unique string.
-     */
-    name?: string;
-    accounting?: Accounting | null;
 };
 
 /**
@@ -1737,30 +1323,13 @@ export type Tipjar = {
  * Tips to the platform owners and other no-purpose money can target a Tipjar.
  */
 export type TipjarJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * Human readable, non white space, unique string.
-     */
-    name?: string;
-    accounting?: AccountingJsonld | null;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * Human readable, non white space, unique string.
@@ -1778,43 +1347,16 @@ export type Tracking = {
      * The tracking number given by the Gateway.
      */
     value: string;
-    /**
-     * A descriptive title for the tracking number.
-     */
-    title: string;
-    /**
-     * The tracking number given by the Gateway.
-     */
-    value: string;
 };
 
 export type TrackingJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * A descriptive title for the tracking number.
-     */
-    title: string;
-    /**
-     * The tracking number given by the Gateway.
-     */
-    value: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * A descriptive title for the tracking number.
      */
@@ -1842,7 +1384,7 @@ export type User = {
     /**
      * Is this User for an individual acting on their own or a group of individuals?
      */
-    type?: "individual" | "organization";
+    type?: 'individual' | 'organization';
     /**
      * A list of the roles assigned to this User. Admin scoped property.
      */
@@ -1891,7 +1433,7 @@ export type UserUserSignupDto = {
     /**
      * Is this User for an individual acting on their own or a group of individuals?
      */
-    type: "individual" | "organization";
+    type: 'individual' | 'organization';
 };
 
 /**
@@ -1910,22 +1452,20 @@ export type UserUserSignupDtoJsonld = {
     /**
      * Is this User for an individual acting on their own or a group of individuals?
      */
-    type: "individual" | "organization";
+    type: 'individual' | 'organization';
 };
 
 /**
  * Users represent people who interact with the platform.
  */
 export type UserJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     email: string;
     /**
@@ -1939,7 +1479,7 @@ export type UserJsonld = {
     /**
      * Is this User for an individual acting on their own or a group of individuals?
      */
-    type?: "individual" | "organization";
+    type?: 'individual' | 'organization';
     /**
      * A list of the roles assigned to this User. Admin scoped property.
      */
@@ -1979,15 +1519,6 @@ export type UserJsonld = {
  * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
  */
 export type UserToken = {
-    readonly id?: number;
-    /**
-     * The User token itself.
-     */
-    readonly token?: string;
-    /**
-     * The User who this token grants access as.
-     */
-    readonly owner?: string;
     readonly id?: number;
     /**
      * The User token itself.
@@ -2040,33 +1571,13 @@ export type UserTokenUserTokenLoginDtoJsonld = {
  * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
  */
 export type UserTokenJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    readonly id?: number;
-    /**
-     * The User token itself.
-     */
-    readonly token?: string;
-    /**
-     * The User who this token grants access as.
-     */
-    readonly owner?: string;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     readonly id?: number;
     /**
      * The User token itself.
@@ -2113,34 +1624,6 @@ export type Version = {
      * The date at which this version was created.
      */
     readonly dateCreated?: string | null;
-    /**
-     * The ID of the version record.
-     */
-    readonly id?: number | null;
-    /**
-     * The ID of the version for this specific resource.
-     */
-    readonly version?: number | null;
-    /**
-     * The type of action that performed the recorded changes.
-     */
-    readonly action?: string | null;
-    /**
-     * The type of the recorded resource.
-     */
-    readonly resource?: string;
-    /**
-     * The ID of the recorded resource.
-     */
-    readonly resourceId?: number;
-    /**
-     * The changed resource data, i.e the new values of the changed properties.
-     */
-    readonly resourceChanges?: unknown;
-    /**
-     * The date at which this version was created.
-     */
-    readonly dateCreated?: string | null;
 };
 
 /**
@@ -2150,52 +1633,13 @@ export type Version = {
  * Looking at the changes done between one version and the next one we can reconstruct how a resource was at a certain point in time.
  */
 export type VersionJsonld = {
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
-    /**
-     * The ID of the version record.
-     */
-    readonly id?: number | null;
-    /**
-     * The ID of the version for this specific resource.
-     */
-    readonly version?: number | null;
-    /**
-     * The type of action that performed the recorded changes.
-     */
-    readonly action?: string | null;
-    /**
-     * The type of the recorded resource.
-     */
-    readonly resource?: string;
-    /**
-     * The ID of the recorded resource.
-     */
-    readonly resourceId?: number;
-    /**
-     * The changed resource data, i.e the new values of the changed properties.
-     */
-    readonly resourceChanges?: unknown;
-    /**
-     * The date at which this version was created.
-     */
-    readonly dateCreated?: string | null;
-    "@context"?:
-        | string
-        | {
-              "@vocab": string;
-              hydra: "http://www.w3.org/ns/hydra/core#";
-              [key: string]: unknown | string | "http://www.w3.org/ns/hydra/core#";
-          };
-    readonly "@id"?: string;
-    readonly "@type"?: string;
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
     /**
      * The ID of the version record.
      */
@@ -2235,16 +1679,7 @@ export type ApiAccountingsGetCollectionData = {
          */
         page?: number;
     };
-    url: "/v4/accountings";
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-    };
-    url: "/v4/accountings";
+    url: '/v4/accountings';
 };
 
 export type ApiAccountingsGetCollectionResponses = {
@@ -2252,15 +1687,9 @@ export type ApiAccountingsGetCollectionResponses = {
      * Accounting collection
      */
     200: Array<Accounting>;
-    /**
-     * Accounting collection
-     */
-    200: Array<Accounting>;
 };
 
-export type ApiAccountingsGetCollectionResponse =
-    ApiAccountingsGetCollectionResponses[keyof ApiAccountingsGetCollectionResponses];
-    ApiAccountingsGetCollectionResponses[keyof ApiAccountingsGetCollectionResponses];
+export type ApiAccountingsGetCollectionResponse = ApiAccountingsGetCollectionResponses[keyof ApiAccountingsGetCollectionResponses];
 
 export type ApiAccountingsIdGetData = {
     body?: never;
@@ -2271,23 +1700,10 @@ export type ApiAccountingsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/accountings/{id}";
-    body?: never;
-    path: {
-        /**
-         * Accounting identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/accountings/{id}";
+    url: '/v4/accountings/{id}';
 };
 
 export type ApiAccountingsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -2299,16 +1715,9 @@ export type ApiAccountingsIdGetResponses = {
      * Accounting resource
      */
     200: Accounting;
-    /**
-     * Accounting resource
-     */
-    200: Accounting;
 };
 
-export type ApiAccountingsIdGetResponse =
-    ApiAccountingsIdGetResponses[keyof ApiAccountingsIdGetResponses];
-export type ApiAccountingsIdGetResponse =
-    ApiAccountingsIdGetResponses[keyof ApiAccountingsIdGetResponses];
+export type ApiAccountingsIdGetResponse = ApiAccountingsIdGetResponses[keyof ApiAccountingsIdGetResponses];
 
 export type ApiAccountingsIdPatchData = {
     /**
@@ -2322,38 +1731,10 @@ export type ApiAccountingsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/accountings/{id}";
-    /**
-     * The updated Accounting resource
-     */
-    body: Accounting;
-    path: {
-        /**
-         * Accounting identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/accountings/{id}";
+    url: '/v4/accountings/{id}';
 };
 
 export type ApiAccountingsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -2377,16 +1758,9 @@ export type ApiAccountingsIdPatchResponses = {
      * Accounting resource updated
      */
     200: Accounting;
-    /**
-     * Accounting resource updated
-     */
-    200: Accounting;
 };
 
-export type ApiAccountingsIdPatchResponse =
-    ApiAccountingsIdPatchResponses[keyof ApiAccountingsIdPatchResponses];
-export type ApiAccountingsIdPatchResponse =
-    ApiAccountingsIdPatchResponses[keyof ApiAccountingsIdPatchResponses];
+export type ApiAccountingsIdPatchResponse = ApiAccountingsIdPatchResponses[keyof ApiAccountingsIdPatchResponses];
 
 export type ApiAccountingBalancePointsGetCollectionData = {
     body?: never;
@@ -2413,32 +1787,7 @@ export type ApiAccountingBalancePointsGetCollectionData = {
          */
         end?: string;
     };
-    url: "/v4/accounting_balance_points";
-    body?: never;
-    path?: never;
-    query: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-        /**
-         * AccountingBalancePoint accounting
-         */
-        accounting: string;
-        /**
-         * AccountingBalancePoint start
-         */
-        start: string;
-        /**
-         * AccountingBalancePoint interval
-         */
-        interval?: string;
-        /**
-         * AccountingBalancePoint end
-         */
-        end?: string;
-    };
-    url: "/v4/accounting_balance_points";
+    url: '/v4/accounting_balance_points';
 };
 
 export type ApiAccountingBalancePointsGetCollectionResponses = {
@@ -2446,15 +1795,9 @@ export type ApiAccountingBalancePointsGetCollectionResponses = {
      * AccountingBalancePoint collection
      */
     200: Array<AccountingBalancePoint>;
-    /**
-     * AccountingBalancePoint collection
-     */
-    200: Array<AccountingBalancePoint>;
 };
 
-export type ApiAccountingBalancePointsGetCollectionResponse =
-    ApiAccountingBalancePointsGetCollectionResponses[keyof ApiAccountingBalancePointsGetCollectionResponses];
-    ApiAccountingBalancePointsGetCollectionResponses[keyof ApiAccountingBalancePointsGetCollectionResponses];
+export type ApiAccountingBalancePointsGetCollectionResponse = ApiAccountingBalancePointsGetCollectionResponses[keyof ApiAccountingBalancePointsGetCollectionResponses];
 
 export type ApiAccountingTransactionsGetCollectionData = {
     body?: never;
@@ -2465,24 +1808,11 @@ export type ApiAccountingTransactionsGetCollectionData = {
          */
         page?: number;
         origin?: string;
-        "origin[]"?: Array<string>;
+        'origin[]'?: Array<string>;
         target?: string;
-        "target[]"?: Array<string>;
+        'target[]'?: Array<string>;
     };
-    url: "/v4/accounting_transactions";
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-        origin?: string;
-        "origin[]"?: Array<string>;
-        target?: string;
-        "target[]"?: Array<string>;
-    };
-    url: "/v4/accounting_transactions";
+    url: '/v4/accounting_transactions';
 };
 
 export type ApiAccountingTransactionsGetCollectionResponses = {
@@ -2490,15 +1820,9 @@ export type ApiAccountingTransactionsGetCollectionResponses = {
      * AccountingTransaction collection
      */
     200: Array<AccountingTransaction>;
-    /**
-     * AccountingTransaction collection
-     */
-    200: Array<AccountingTransaction>;
 };
 
-export type ApiAccountingTransactionsGetCollectionResponse =
-    ApiAccountingTransactionsGetCollectionResponses[keyof ApiAccountingTransactionsGetCollectionResponses];
-    ApiAccountingTransactionsGetCollectionResponses[keyof ApiAccountingTransactionsGetCollectionResponses];
+export type ApiAccountingTransactionsGetCollectionResponse = ApiAccountingTransactionsGetCollectionResponses[keyof ApiAccountingTransactionsGetCollectionResponses];
 
 export type ApiAccountingTransactionsIdGetData = {
     body?: never;
@@ -2509,23 +1833,10 @@ export type ApiAccountingTransactionsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/accounting_transactions/{id}";
-    body?: never;
-    path: {
-        /**
-         * AccountingTransaction identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/accounting_transactions/{id}";
+    url: '/v4/accounting_transactions/{id}';
 };
 
 export type ApiAccountingTransactionsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -2537,15 +1848,9 @@ export type ApiAccountingTransactionsIdGetResponses = {
      * AccountingTransaction resource
      */
     200: AccountingTransaction;
-    /**
-     * AccountingTransaction resource
-     */
-    200: AccountingTransaction;
 };
 
-export type ApiAccountingTransactionsIdGetResponse =
-    ApiAccountingTransactionsIdGetResponses[keyof ApiAccountingTransactionsIdGetResponses];
-    ApiAccountingTransactionsIdGetResponses[keyof ApiAccountingTransactionsIdGetResponses];
+export type ApiAccountingTransactionsIdGetResponse = ApiAccountingTransactionsIdGetResponses[keyof ApiAccountingTransactionsIdGetResponses];
 
 export type ApiGatewaysGetCollectionData = {
     body?: never;
@@ -2556,16 +1861,7 @@ export type ApiGatewaysGetCollectionData = {
          */
         page?: number;
     };
-    url: "/v4/gateways";
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-    };
-    url: "/v4/gateways";
+    url: '/v4/gateways';
 };
 
 export type ApiGatewaysGetCollectionResponses = {
@@ -2573,15 +1869,9 @@ export type ApiGatewaysGetCollectionResponses = {
      * Gateway collection
      */
     200: Array<Gateway>;
-    /**
-     * Gateway collection
-     */
-    200: Array<Gateway>;
 };
 
-export type ApiGatewaysGetCollectionResponse =
-    ApiGatewaysGetCollectionResponses[keyof ApiGatewaysGetCollectionResponses];
-    ApiGatewaysGetCollectionResponses[keyof ApiGatewaysGetCollectionResponses];
+export type ApiGatewaysGetCollectionResponse = ApiGatewaysGetCollectionResponses[keyof ApiGatewaysGetCollectionResponses];
 
 export type ApiGatewaysNameGetData = {
     body?: never;
@@ -2592,23 +1882,10 @@ export type ApiGatewaysNameGetData = {
         name: string;
     };
     query?: never;
-    url: "/v4/gateways/{name}";
-    body?: never;
-    path: {
-        /**
-         * Gateway identifier
-         */
-        name: string;
-    };
-    query?: never;
-    url: "/v4/gateways/{name}";
+    url: '/v4/gateways/{name}';
 };
 
 export type ApiGatewaysNameGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -2620,16 +1897,9 @@ export type ApiGatewaysNameGetResponses = {
      * Gateway resource
      */
     200: Gateway;
-    /**
-     * Gateway resource
-     */
-    200: Gateway;
 };
 
-export type ApiGatewaysNameGetResponse =
-    ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
-export type ApiGatewaysNameGetResponse =
-    ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
+export type ApiGatewaysNameGetResponse = ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
 
 export type ApiGatewayChargesIdGetData = {
     body?: never;
@@ -2640,23 +1910,10 @@ export type ApiGatewayChargesIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/gateway_charges/{id}";
-    body?: never;
-    path: {
-        /**
-         * GatewayCharge identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/gateway_charges/{id}";
+    url: '/v4/gateway_charges/{id}';
 };
 
 export type ApiGatewayChargesIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -2668,16 +1925,9 @@ export type ApiGatewayChargesIdGetResponses = {
      * GatewayCharge resource
      */
     200: GatewayCharge;
-    /**
-     * GatewayCharge resource
-     */
-    200: GatewayCharge;
 };
 
-export type ApiGatewayChargesIdGetResponse =
-    ApiGatewayChargesIdGetResponses[keyof ApiGatewayChargesIdGetResponses];
-export type ApiGatewayChargesIdGetResponse =
-    ApiGatewayChargesIdGetResponses[keyof ApiGatewayChargesIdGetResponses];
+export type ApiGatewayChargesIdGetResponse = ApiGatewayChargesIdGetResponses[keyof ApiGatewayChargesIdGetResponses];
 
 export type ApiGatewayCheckoutsGetCollectionData = {
     body?: never;
@@ -2688,16 +1938,7 @@ export type ApiGatewayCheckoutsGetCollectionData = {
          */
         page?: number;
     };
-    url: "/v4/gateway_checkouts";
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-    };
-    url: "/v4/gateway_checkouts";
+    url: '/v4/gateway_checkouts';
 };
 
 export type ApiGatewayCheckoutsGetCollectionResponses = {
@@ -2705,15 +1946,9 @@ export type ApiGatewayCheckoutsGetCollectionResponses = {
      * GatewayCheckout collection
      */
     200: Array<GatewayCheckout>;
-    /**
-     * GatewayCheckout collection
-     */
-    200: Array<GatewayCheckout>;
 };
 
-export type ApiGatewayCheckoutsGetCollectionResponse =
-    ApiGatewayCheckoutsGetCollectionResponses[keyof ApiGatewayCheckoutsGetCollectionResponses];
-    ApiGatewayCheckoutsGetCollectionResponses[keyof ApiGatewayCheckoutsGetCollectionResponses];
+export type ApiGatewayCheckoutsGetCollectionResponse = ApiGatewayCheckoutsGetCollectionResponses[keyof ApiGatewayCheckoutsGetCollectionResponses];
 
 export type ApiGatewayCheckoutsPostData = {
     /**
@@ -2722,25 +1957,10 @@ export type ApiGatewayCheckoutsPostData = {
     body: GatewayCheckout;
     path?: never;
     query?: never;
-    url: "/v4/gateway_checkouts";
-    /**
-     * The new GatewayCheckout resource
-     */
-    body: GatewayCheckout;
-    path?: never;
-    query?: never;
-    url: "/v4/gateway_checkouts";
+    url: '/v4/gateway_checkouts';
 };
 
 export type ApiGatewayCheckoutsPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -2756,16 +1976,9 @@ export type ApiGatewayCheckoutsPostResponses = {
      * GatewayCheckout resource created
      */
     201: GatewayCheckout;
-    /**
-     * GatewayCheckout resource created
-     */
-    201: GatewayCheckout;
 };
 
-export type ApiGatewayCheckoutsPostResponse =
-    ApiGatewayCheckoutsPostResponses[keyof ApiGatewayCheckoutsPostResponses];
-export type ApiGatewayCheckoutsPostResponse =
-    ApiGatewayCheckoutsPostResponses[keyof ApiGatewayCheckoutsPostResponses];
+export type ApiGatewayCheckoutsPostResponse = ApiGatewayCheckoutsPostResponses[keyof ApiGatewayCheckoutsPostResponses];
 
 export type ApiGatewayCheckoutsIdGetData = {
     body?: never;
@@ -2776,23 +1989,10 @@ export type ApiGatewayCheckoutsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/gateway_checkouts/{id}";
-    body?: never;
-    path: {
-        /**
-         * GatewayCheckout identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/gateway_checkouts/{id}";
+    url: '/v4/gateway_checkouts/{id}';
 };
 
 export type ApiGatewayCheckoutsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -2804,15 +2004,9 @@ export type ApiGatewayCheckoutsIdGetResponses = {
      * GatewayCheckout resource
      */
     200: GatewayCheckout;
-    /**
-     * GatewayCheckout resource
-     */
-    200: GatewayCheckout;
 };
 
-export type ApiGatewayCheckoutsIdGetResponse =
-    ApiGatewayCheckoutsIdGetResponses[keyof ApiGatewayCheckoutsIdGetResponses];
-    ApiGatewayCheckoutsIdGetResponses[keyof ApiGatewayCheckoutsIdGetResponses];
+export type ApiGatewayCheckoutsIdGetResponse = ApiGatewayCheckoutsIdGetResponses[keyof ApiGatewayCheckoutsIdGetResponses];
 
 export type ApiUsersIdorganizationGetData = {
     body?: never;
@@ -2823,7 +2017,7 @@ export type ApiUsersIdorganizationGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}/organization";
+    url: '/v4/users/{id}/organization';
 };
 
 export type ApiUsersIdorganizationGetErrors = {
@@ -2844,8 +2038,7 @@ export type ApiUsersIdorganizationGetResponses = {
     200: Organization;
 };
 
-export type ApiUsersIdorganizationGetResponse =
-    ApiUsersIdorganizationGetResponses[keyof ApiUsersIdorganizationGetResponses];
+export type ApiUsersIdorganizationGetResponse = ApiUsersIdorganizationGetResponses[keyof ApiUsersIdorganizationGetResponses];
 
 export type ApiUsersIdorganizationPatchData = {
     /**
@@ -2859,7 +2052,7 @@ export type ApiUsersIdorganizationPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}/organization";
+    url: '/v4/users/{id}/organization';
 };
 
 export type ApiUsersIdorganizationPatchErrors = {
@@ -2888,8 +2081,7 @@ export type ApiUsersIdorganizationPatchResponses = {
     200: Organization;
 };
 
-export type ApiUsersIdorganizationPatchResponse =
-    ApiUsersIdorganizationPatchResponses[keyof ApiUsersIdorganizationPatchResponses];
+export type ApiUsersIdorganizationPatchResponse = ApiUsersIdorganizationPatchResponses[keyof ApiUsersIdorganizationPatchResponses];
 
 export type ApiUsersIdpersonGetData = {
     body?: never;
@@ -2900,7 +2092,7 @@ export type ApiUsersIdpersonGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}/person";
+    url: '/v4/users/{id}/person';
 };
 
 export type ApiUsersIdpersonGetErrors = {
@@ -2921,8 +2113,7 @@ export type ApiUsersIdpersonGetResponses = {
     200: Person;
 };
 
-export type ApiUsersIdpersonGetResponse =
-    ApiUsersIdpersonGetResponses[keyof ApiUsersIdpersonGetResponses];
+export type ApiUsersIdpersonGetResponse = ApiUsersIdpersonGetResponses[keyof ApiUsersIdpersonGetResponses];
 
 export type ApiUsersIdpersonPatchData = {
     /**
@@ -2936,7 +2127,7 @@ export type ApiUsersIdpersonPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}/person";
+    url: '/v4/users/{id}/person';
 };
 
 export type ApiUsersIdpersonPatchErrors = {
@@ -2965,8 +2156,7 @@ export type ApiUsersIdpersonPatchResponses = {
     200: Person;
 };
 
-export type ApiUsersIdpersonPatchResponse =
-    ApiUsersIdpersonPatchResponses[keyof ApiUsersIdpersonPatchResponses];
+export type ApiUsersIdpersonPatchResponse = ApiUsersIdpersonPatchResponses[keyof ApiUsersIdpersonPatchResponses];
 
 export type ApiProjectsGetCollectionData = {
     body?: never;
@@ -2979,12 +2169,12 @@ export type ApiProjectsGetCollectionData = {
         title?: string;
         subtitle?: string;
         category?: string;
-        "category[]"?: Array<string>;
+        'category[]'?: Array<string>;
         description?: string;
         status?: string;
-        "status[]"?: Array<string>;
+        'status[]'?: Array<string>;
     };
-    url: "/v4/projects";
+    url: '/v4/projects';
 };
 
 export type ApiProjectsGetCollectionResponses = {
@@ -2992,46 +2182,21 @@ export type ApiProjectsGetCollectionResponses = {
      * Project collection
      */
     200: Array<Project>;
-    /**
-     * Project collection
-     */
-    200: Array<Project>;
 };
 
-export type ApiProjectsGetCollectionResponse =
-    ApiProjectsGetCollectionResponses[keyof ApiProjectsGetCollectionResponses];
-    ApiProjectsGetCollectionResponses[keyof ApiProjectsGetCollectionResponses];
+export type ApiProjectsGetCollectionResponse = ApiProjectsGetCollectionResponses[keyof ApiProjectsGetCollectionResponses];
 
 export type ApiProjectsPostData = {
     /**
      * The new Project resource
      */
-    body: Project;
+    body: ProjectProjectCreateDto;
     path?: never;
     query?: never;
-    url: "/v4/projects";
-    /**
-     * The new Project resource
-     */
-    body: Project;
-    path?: never;
-    query?: never;
-    url: "/v4/projects";
+    url: '/v4/projects';
 };
 
 export type ApiProjectsPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3051,10 +2216,6 @@ export type ApiProjectsPostResponses = {
      * Project resource created
      */
     201: Project;
-    /**
-     * Project resource created
-     */
-    201: Project;
 };
 
 export type ApiProjectsPostResponse = ApiProjectsPostResponses[keyof ApiProjectsPostResponses];
@@ -3068,27 +2229,10 @@ export type ApiProjectsIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/projects/{id}";
-    body?: never;
-    path: {
-        /**
-         * Project identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/projects/{id}";
+    url: '/v4/projects/{id}';
 };
 
 export type ApiProjectsIdDeleteErrors = {
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Forbidden
      */
@@ -3104,16 +2248,9 @@ export type ApiProjectsIdDeleteResponses = {
      * Project resource deleted
      */
     204: void;
-    /**
-     * Project resource deleted
-     */
-    204: void;
 };
 
-export type ApiProjectsIdDeleteResponse =
-    ApiProjectsIdDeleteResponses[keyof ApiProjectsIdDeleteResponses];
-export type ApiProjectsIdDeleteResponse =
-    ApiProjectsIdDeleteResponses[keyof ApiProjectsIdDeleteResponses];
+export type ApiProjectsIdDeleteResponse = ApiProjectsIdDeleteResponses[keyof ApiProjectsIdDeleteResponses];
 
 export type ApiProjectsIdGetData = {
     body?: never;
@@ -3124,16 +2261,7 @@ export type ApiProjectsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/projects/{id}";
-    body?: never;
-    path: {
-        /**
-         * Project identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/projects/{id}";
+    url: '/v4/projects/{id}';
 };
 
 export type ApiProjectsIdGetErrors = {
@@ -3141,17 +2269,9 @@ export type ApiProjectsIdGetErrors = {
      * Resource not found
      */
     404: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
 };
 
 export type ApiProjectsIdGetResponses = {
-    /**
-     * Project resource
-     */
-    200: Project;
     /**
      * Project resource
      */
@@ -3164,7 +2284,7 @@ export type ApiProjectsIdPatchData = {
     /**
      * The updated Project resource
      */
-    body: Project;
+    body: ProjectProjectUpdateDto;
     path: {
         /**
          * Project identifier
@@ -3172,38 +2292,10 @@ export type ApiProjectsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/projects/{id}";
-    /**
-     * The updated Project resource
-     */
-    body: Project;
-    path: {
-        /**
-         * Project identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/projects/{id}";
+    url: '/v4/projects/{id}';
 };
 
 export type ApiProjectsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3227,16 +2319,9 @@ export type ApiProjectsIdPatchResponses = {
      * Project resource updated
      */
     200: Project;
-    /**
-     * Project resource updated
-     */
-    200: Project;
 };
 
-export type ApiProjectsIdPatchResponse =
-    ApiProjectsIdPatchResponses[keyof ApiProjectsIdPatchResponses];
-export type ApiProjectsIdPatchResponse =
-    ApiProjectsIdPatchResponses[keyof ApiProjectsIdPatchResponses];
+export type ApiProjectsIdPatchResponse = ApiProjectsIdPatchResponses[keyof ApiProjectsIdPatchResponses];
 
 export type ApiProjectBudgetItemsGetCollectionData = {
     body?: never;
@@ -3247,9 +2332,9 @@ export type ApiProjectBudgetItemsGetCollectionData = {
          */
         page?: number;
         project?: string;
-        "project[]"?: Array<string>;
+        'project[]'?: Array<string>;
     };
-    url: "/v4/project_budget_items";
+    url: '/v4/project_budget_items';
 };
 
 export type ApiProjectBudgetItemsGetCollectionResponses = {
@@ -3257,15 +2342,9 @@ export type ApiProjectBudgetItemsGetCollectionResponses = {
      * ProjectBudgetItem collection
      */
     200: Array<ProjectBudgetItem>;
-    /**
-     * ProjectBudgetItem collection
-     */
-    200: Array<ProjectBudgetItem>;
 };
 
-export type ApiProjectBudgetItemsGetCollectionResponse =
-    ApiProjectBudgetItemsGetCollectionResponses[keyof ApiProjectBudgetItemsGetCollectionResponses];
-    ApiProjectBudgetItemsGetCollectionResponses[keyof ApiProjectBudgetItemsGetCollectionResponses];
+export type ApiProjectBudgetItemsGetCollectionResponse = ApiProjectBudgetItemsGetCollectionResponses[keyof ApiProjectBudgetItemsGetCollectionResponses];
 
 export type ApiProjectBudgetItemsPostData = {
     /**
@@ -3274,25 +2353,10 @@ export type ApiProjectBudgetItemsPostData = {
     body: ProjectBudgetItem;
     path?: never;
     query?: never;
-    url: "/v4/project_budget_items";
-    /**
-     * The new ProjectBudgetItem resource
-     */
-    body: ProjectBudgetItem;
-    path?: never;
-    query?: never;
-    url: "/v4/project_budget_items";
+    url: '/v4/project_budget_items';
 };
 
 export type ApiProjectBudgetItemsPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3308,15 +2372,9 @@ export type ApiProjectBudgetItemsPostResponses = {
      * ProjectBudgetItem resource created
      */
     201: ProjectBudgetItem;
-    /**
-     * ProjectBudgetItem resource created
-     */
-    201: ProjectBudgetItem;
 };
 
-export type ApiProjectBudgetItemsPostResponse =
-    ApiProjectBudgetItemsPostResponses[keyof ApiProjectBudgetItemsPostResponses];
-    ApiProjectBudgetItemsPostResponses[keyof ApiProjectBudgetItemsPostResponses];
+export type ApiProjectBudgetItemsPostResponse = ApiProjectBudgetItemsPostResponses[keyof ApiProjectBudgetItemsPostResponses];
 
 export type ApiProjectBudgetItemsIdDeleteData = {
     body?: never;
@@ -3327,23 +2385,10 @@ export type ApiProjectBudgetItemsIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_budget_items/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectBudgetItem identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_budget_items/{id}";
+    url: '/v4/project_budget_items/{id}';
 };
 
 export type ApiProjectBudgetItemsIdDeleteErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3355,15 +2400,9 @@ export type ApiProjectBudgetItemsIdDeleteResponses = {
      * ProjectBudgetItem resource deleted
      */
     204: void;
-    /**
-     * ProjectBudgetItem resource deleted
-     */
-    204: void;
 };
 
-export type ApiProjectBudgetItemsIdDeleteResponse =
-    ApiProjectBudgetItemsIdDeleteResponses[keyof ApiProjectBudgetItemsIdDeleteResponses];
-    ApiProjectBudgetItemsIdDeleteResponses[keyof ApiProjectBudgetItemsIdDeleteResponses];
+export type ApiProjectBudgetItemsIdDeleteResponse = ApiProjectBudgetItemsIdDeleteResponses[keyof ApiProjectBudgetItemsIdDeleteResponses];
 
 export type ApiProjectBudgetItemsIdGetData = {
     body?: never;
@@ -3374,23 +2413,10 @@ export type ApiProjectBudgetItemsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_budget_items/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectBudgetItem identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_budget_items/{id}";
+    url: '/v4/project_budget_items/{id}';
 };
 
 export type ApiProjectBudgetItemsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3402,15 +2428,9 @@ export type ApiProjectBudgetItemsIdGetResponses = {
      * ProjectBudgetItem resource
      */
     200: ProjectBudgetItem;
-    /**
-     * ProjectBudgetItem resource
-     */
-    200: ProjectBudgetItem;
 };
 
-export type ApiProjectBudgetItemsIdGetResponse =
-    ApiProjectBudgetItemsIdGetResponses[keyof ApiProjectBudgetItemsIdGetResponses];
-    ApiProjectBudgetItemsIdGetResponses[keyof ApiProjectBudgetItemsIdGetResponses];
+export type ApiProjectBudgetItemsIdGetResponse = ApiProjectBudgetItemsIdGetResponses[keyof ApiProjectBudgetItemsIdGetResponses];
 
 export type ApiProjectBudgetItemsIdPatchData = {
     /**
@@ -3424,34 +2444,10 @@ export type ApiProjectBudgetItemsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_budget_items/{id}";
-    /**
-     * The updated ProjectBudgetItem resource
-     */
-    body: ProjectBudgetItem;
-    path: {
-        /**
-         * ProjectBudgetItem identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_budget_items/{id}";
+    url: '/v4/project_budget_items/{id}';
 };
 
 export type ApiProjectBudgetItemsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3471,15 +2467,9 @@ export type ApiProjectBudgetItemsIdPatchResponses = {
      * ProjectBudgetItem resource updated
      */
     200: ProjectBudgetItem;
-    /**
-     * ProjectBudgetItem resource updated
-     */
-    200: ProjectBudgetItem;
 };
 
-export type ApiProjectBudgetItemsIdPatchResponse =
-    ApiProjectBudgetItemsIdPatchResponses[keyof ApiProjectBudgetItemsIdPatchResponses];
-    ApiProjectBudgetItemsIdPatchResponses[keyof ApiProjectBudgetItemsIdPatchResponses];
+export type ApiProjectBudgetItemsIdPatchResponse = ApiProjectBudgetItemsIdPatchResponses[keyof ApiProjectBudgetItemsIdPatchResponses];
 
 export type ApiProjectRewardsGetCollectionData = {
     body?: never;
@@ -3490,9 +2480,9 @@ export type ApiProjectRewardsGetCollectionData = {
          */
         page?: number;
         project?: string;
-        "project[]"?: Array<string>;
+        'project[]'?: Array<string>;
     };
-    url: "/v4/project_rewards";
+    url: '/v4/project_rewards';
 };
 
 export type ApiProjectRewardsGetCollectionResponses = {
@@ -3500,15 +2490,9 @@ export type ApiProjectRewardsGetCollectionResponses = {
      * ProjectReward collection
      */
     200: Array<ProjectReward>;
-    /**
-     * ProjectReward collection
-     */
-    200: Array<ProjectReward>;
 };
 
-export type ApiProjectRewardsGetCollectionResponse =
-    ApiProjectRewardsGetCollectionResponses[keyof ApiProjectRewardsGetCollectionResponses];
-    ApiProjectRewardsGetCollectionResponses[keyof ApiProjectRewardsGetCollectionResponses];
+export type ApiProjectRewardsGetCollectionResponse = ApiProjectRewardsGetCollectionResponses[keyof ApiProjectRewardsGetCollectionResponses];
 
 export type ApiProjectRewardsPostData = {
     /**
@@ -3517,25 +2501,10 @@ export type ApiProjectRewardsPostData = {
     body: ProjectReward;
     path?: never;
     query?: never;
-    url: "/v4/project_rewards";
-    /**
-     * The new ProjectReward resource
-     */
-    body: ProjectReward;
-    path?: never;
-    query?: never;
-    url: "/v4/project_rewards";
+    url: '/v4/project_rewards';
 };
 
 export type ApiProjectRewardsPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3551,16 +2520,9 @@ export type ApiProjectRewardsPostResponses = {
      * ProjectReward resource created
      */
     201: ProjectReward;
-    /**
-     * ProjectReward resource created
-     */
-    201: ProjectReward;
 };
 
-export type ApiProjectRewardsPostResponse =
-    ApiProjectRewardsPostResponses[keyof ApiProjectRewardsPostResponses];
-export type ApiProjectRewardsPostResponse =
-    ApiProjectRewardsPostResponses[keyof ApiProjectRewardsPostResponses];
+export type ApiProjectRewardsPostResponse = ApiProjectRewardsPostResponses[keyof ApiProjectRewardsPostResponses];
 
 export type ApiProjectRewardsIdDeleteData = {
     body?: never;
@@ -3571,23 +2533,10 @@ export type ApiProjectRewardsIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_rewards/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectReward identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_rewards/{id}";
+    url: '/v4/project_rewards/{id}';
 };
 
 export type ApiProjectRewardsIdDeleteErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3599,15 +2548,9 @@ export type ApiProjectRewardsIdDeleteResponses = {
      * ProjectReward resource deleted
      */
     204: void;
-    /**
-     * ProjectReward resource deleted
-     */
-    204: void;
 };
 
-export type ApiProjectRewardsIdDeleteResponse =
-    ApiProjectRewardsIdDeleteResponses[keyof ApiProjectRewardsIdDeleteResponses];
-    ApiProjectRewardsIdDeleteResponses[keyof ApiProjectRewardsIdDeleteResponses];
+export type ApiProjectRewardsIdDeleteResponse = ApiProjectRewardsIdDeleteResponses[keyof ApiProjectRewardsIdDeleteResponses];
 
 export type ApiProjectRewardsIdGetData = {
     body?: never;
@@ -3618,23 +2561,10 @@ export type ApiProjectRewardsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_rewards/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectReward identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_rewards/{id}";
+    url: '/v4/project_rewards/{id}';
 };
 
 export type ApiProjectRewardsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3646,16 +2576,9 @@ export type ApiProjectRewardsIdGetResponses = {
      * ProjectReward resource
      */
     200: ProjectReward;
-    /**
-     * ProjectReward resource
-     */
-    200: ProjectReward;
 };
 
-export type ApiProjectRewardsIdGetResponse =
-    ApiProjectRewardsIdGetResponses[keyof ApiProjectRewardsIdGetResponses];
-export type ApiProjectRewardsIdGetResponse =
-    ApiProjectRewardsIdGetResponses[keyof ApiProjectRewardsIdGetResponses];
+export type ApiProjectRewardsIdGetResponse = ApiProjectRewardsIdGetResponses[keyof ApiProjectRewardsIdGetResponses];
 
 export type ApiProjectRewardsIdPatchData = {
     /**
@@ -3669,34 +2592,10 @@ export type ApiProjectRewardsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_rewards/{id}";
-    /**
-     * The updated ProjectReward resource
-     */
-    body: ProjectReward;
-    path: {
-        /**
-         * ProjectReward identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_rewards/{id}";
+    url: '/v4/project_rewards/{id}';
 };
 
 export type ApiProjectRewardsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3716,15 +2615,9 @@ export type ApiProjectRewardsIdPatchResponses = {
      * ProjectReward resource updated
      */
     200: ProjectReward;
-    /**
-     * ProjectReward resource updated
-     */
-    200: ProjectReward;
 };
 
-export type ApiProjectRewardsIdPatchResponse =
-    ApiProjectRewardsIdPatchResponses[keyof ApiProjectRewardsIdPatchResponses];
-    ApiProjectRewardsIdPatchResponses[keyof ApiProjectRewardsIdPatchResponses];
+export type ApiProjectRewardsIdPatchResponse = ApiProjectRewardsIdPatchResponses[keyof ApiProjectRewardsIdPatchResponses];
 
 export type ApiProjectRewardClaimsGetCollectionData = {
     body?: never;
@@ -3735,16 +2628,7 @@ export type ApiProjectRewardClaimsGetCollectionData = {
          */
         page?: number;
     };
-    url: "/v4/project_reward_claims";
-    body?: never;
-    path?: never;
-    query?: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-    };
-    url: "/v4/project_reward_claims";
+    url: '/v4/project_reward_claims';
 };
 
 export type ApiProjectRewardClaimsGetCollectionResponses = {
@@ -3752,15 +2636,9 @@ export type ApiProjectRewardClaimsGetCollectionResponses = {
      * ProjectRewardClaim collection
      */
     200: Array<ProjectRewardClaim>;
-    /**
-     * ProjectRewardClaim collection
-     */
-    200: Array<ProjectRewardClaim>;
 };
 
-export type ApiProjectRewardClaimsGetCollectionResponse =
-    ApiProjectRewardClaimsGetCollectionResponses[keyof ApiProjectRewardClaimsGetCollectionResponses];
-    ApiProjectRewardClaimsGetCollectionResponses[keyof ApiProjectRewardClaimsGetCollectionResponses];
+export type ApiProjectRewardClaimsGetCollectionResponse = ApiProjectRewardClaimsGetCollectionResponses[keyof ApiProjectRewardClaimsGetCollectionResponses];
 
 export type ApiProjectRewardClaimsPostData = {
     /**
@@ -3769,25 +2647,10 @@ export type ApiProjectRewardClaimsPostData = {
     body: ProjectRewardClaim;
     path?: never;
     query?: never;
-    url: "/v4/project_reward_claims";
-    /**
-     * The new ProjectRewardClaim resource
-     */
-    body: ProjectRewardClaim;
-    path?: never;
-    query?: never;
-    url: "/v4/project_reward_claims";
+    url: '/v4/project_reward_claims';
 };
 
 export type ApiProjectRewardClaimsPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3803,15 +2666,9 @@ export type ApiProjectRewardClaimsPostResponses = {
      * ProjectRewardClaim resource created
      */
     201: ProjectRewardClaim;
-    /**
-     * ProjectRewardClaim resource created
-     */
-    201: ProjectRewardClaim;
 };
 
-export type ApiProjectRewardClaimsPostResponse =
-    ApiProjectRewardClaimsPostResponses[keyof ApiProjectRewardClaimsPostResponses];
-    ApiProjectRewardClaimsPostResponses[keyof ApiProjectRewardClaimsPostResponses];
+export type ApiProjectRewardClaimsPostResponse = ApiProjectRewardClaimsPostResponses[keyof ApiProjectRewardClaimsPostResponses];
 
 export type ApiProjectRewardClaimsIdDeleteData = {
     body?: never;
@@ -3822,23 +2679,10 @@ export type ApiProjectRewardClaimsIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_reward_claims/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectRewardClaim identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_reward_claims/{id}";
+    url: '/v4/project_reward_claims/{id}';
 };
 
 export type ApiProjectRewardClaimsIdDeleteErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3850,15 +2694,9 @@ export type ApiProjectRewardClaimsIdDeleteResponses = {
      * ProjectRewardClaim resource deleted
      */
     204: void;
-    /**
-     * ProjectRewardClaim resource deleted
-     */
-    204: void;
 };
 
-export type ApiProjectRewardClaimsIdDeleteResponse =
-    ApiProjectRewardClaimsIdDeleteResponses[keyof ApiProjectRewardClaimsIdDeleteResponses];
-    ApiProjectRewardClaimsIdDeleteResponses[keyof ApiProjectRewardClaimsIdDeleteResponses];
+export type ApiProjectRewardClaimsIdDeleteResponse = ApiProjectRewardClaimsIdDeleteResponses[keyof ApiProjectRewardClaimsIdDeleteResponses];
 
 export type ApiProjectRewardClaimsIdGetData = {
     body?: never;
@@ -3869,23 +2707,10 @@ export type ApiProjectRewardClaimsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_reward_claims/{id}";
-    body?: never;
-    path: {
-        /**
-         * ProjectRewardClaim identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_reward_claims/{id}";
+    url: '/v4/project_reward_claims/{id}';
 };
 
 export type ApiProjectRewardClaimsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -3897,15 +2722,9 @@ export type ApiProjectRewardClaimsIdGetResponses = {
      * ProjectRewardClaim resource
      */
     200: ProjectRewardClaim;
-    /**
-     * ProjectRewardClaim resource
-     */
-    200: ProjectRewardClaim;
 };
 
-export type ApiProjectRewardClaimsIdGetResponse =
-    ApiProjectRewardClaimsIdGetResponses[keyof ApiProjectRewardClaimsIdGetResponses];
-    ApiProjectRewardClaimsIdGetResponses[keyof ApiProjectRewardClaimsIdGetResponses];
+export type ApiProjectRewardClaimsIdGetResponse = ApiProjectRewardClaimsIdGetResponses[keyof ApiProjectRewardClaimsIdGetResponses];
 
 export type ApiProjectRewardClaimsIdPatchData = {
     /**
@@ -3919,34 +2738,10 @@ export type ApiProjectRewardClaimsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_reward_claims/{id}";
-    /**
-     * The updated ProjectRewardClaim resource
-     */
-    body: ProjectRewardClaim;
-    path: {
-        /**
-         * ProjectRewardClaim identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/project_reward_claims/{id}";
+    url: '/v4/project_reward_claims/{id}';
 };
 
 export type ApiProjectRewardClaimsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -3966,15 +2761,9 @@ export type ApiProjectRewardClaimsIdPatchResponses = {
      * ProjectRewardClaim resource updated
      */
     200: ProjectRewardClaim;
-    /**
-     * ProjectRewardClaim resource updated
-     */
-    200: ProjectRewardClaim;
 };
 
-export type ApiProjectRewardClaimsIdPatchResponse =
-    ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
-    ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
+export type ApiProjectRewardClaimsIdPatchResponse = ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
 
 export type ApiProjectUpdatesGetCollectionData = {
     body?: never;
@@ -3985,10 +2774,10 @@ export type ApiProjectUpdatesGetCollectionData = {
          */
         page?: number;
         project?: string;
-        "project[]"?: Array<string>;
-        "order[date]"?: "asc" | "desc";
+        'project[]'?: Array<string>;
+        'order[date]'?: 'asc' | 'desc';
     };
-    url: "/v4/project_updates";
+    url: '/v4/project_updates';
 };
 
 export type ApiProjectUpdatesGetCollectionResponses = {
@@ -3998,8 +2787,7 @@ export type ApiProjectUpdatesGetCollectionResponses = {
     200: Array<ProjectUpdate>;
 };
 
-export type ApiProjectUpdatesGetCollectionResponse =
-    ApiProjectUpdatesGetCollectionResponses[keyof ApiProjectUpdatesGetCollectionResponses];
+export type ApiProjectUpdatesGetCollectionResponse = ApiProjectUpdatesGetCollectionResponses[keyof ApiProjectUpdatesGetCollectionResponses];
 
 export type ApiProjectUpdatesPostData = {
     /**
@@ -4008,7 +2796,7 @@ export type ApiProjectUpdatesPostData = {
     body: ProjectUpdate;
     path?: never;
     query?: never;
-    url: "/v4/project_updates";
+    url: '/v4/project_updates';
 };
 
 export type ApiProjectUpdatesPostErrors = {
@@ -4029,8 +2817,7 @@ export type ApiProjectUpdatesPostResponses = {
     201: ProjectUpdate;
 };
 
-export type ApiProjectUpdatesPostResponse =
-    ApiProjectUpdatesPostResponses[keyof ApiProjectUpdatesPostResponses];
+export type ApiProjectUpdatesPostResponse = ApiProjectUpdatesPostResponses[keyof ApiProjectUpdatesPostResponses];
 
 export type ApiProjectUpdatesIdDeleteData = {
     body?: never;
@@ -4041,7 +2828,7 @@ export type ApiProjectUpdatesIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_updates/{id}";
+    url: '/v4/project_updates/{id}';
 };
 
 export type ApiProjectUpdatesIdDeleteErrors = {
@@ -4058,8 +2845,7 @@ export type ApiProjectUpdatesIdDeleteResponses = {
     204: void;
 };
 
-export type ApiProjectUpdatesIdDeleteResponse =
-    ApiProjectUpdatesIdDeleteResponses[keyof ApiProjectUpdatesIdDeleteResponses];
+export type ApiProjectUpdatesIdDeleteResponse = ApiProjectUpdatesIdDeleteResponses[keyof ApiProjectUpdatesIdDeleteResponses];
 
 export type ApiProjectUpdatesIdGetData = {
     body?: never;
@@ -4070,7 +2856,7 @@ export type ApiProjectUpdatesIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_updates/{id}";
+    url: '/v4/project_updates/{id}';
 };
 
 export type ApiProjectUpdatesIdGetErrors = {
@@ -4087,8 +2873,7 @@ export type ApiProjectUpdatesIdGetResponses = {
     200: ProjectUpdate;
 };
 
-export type ApiProjectUpdatesIdGetResponse =
-    ApiProjectUpdatesIdGetResponses[keyof ApiProjectUpdatesIdGetResponses];
+export type ApiProjectUpdatesIdGetResponse = ApiProjectUpdatesIdGetResponses[keyof ApiProjectUpdatesIdGetResponses];
 
 export type ApiProjectUpdatesIdPatchData = {
     /**
@@ -4102,7 +2887,7 @@ export type ApiProjectUpdatesIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/project_updates/{id}";
+    url: '/v4/project_updates/{id}';
 };
 
 export type ApiProjectUpdatesIdPatchErrors = {
@@ -4127,8 +2912,7 @@ export type ApiProjectUpdatesIdPatchResponses = {
     200: ProjectUpdate;
 };
 
-export type ApiProjectUpdatesIdPatchResponse =
-    ApiProjectUpdatesIdPatchResponses[keyof ApiProjectUpdatesIdPatchResponses];
+export type ApiProjectUpdatesIdPatchResponse = ApiProjectUpdatesIdPatchResponses[keyof ApiProjectUpdatesIdPatchResponses];
 
 export type ApiTipjarsGetCollectionData = {
     body?: never;
@@ -4139,7 +2923,7 @@ export type ApiTipjarsGetCollectionData = {
          */
         page?: number;
     };
-    url: "/v4/tipjars";
+    url: '/v4/tipjars';
 };
 
 export type ApiTipjarsGetCollectionResponses = {
@@ -4149,8 +2933,7 @@ export type ApiTipjarsGetCollectionResponses = {
     200: Array<Tipjar>;
 };
 
-export type ApiTipjarsGetCollectionResponse =
-    ApiTipjarsGetCollectionResponses[keyof ApiTipjarsGetCollectionResponses];
+export type ApiTipjarsGetCollectionResponse = ApiTipjarsGetCollectionResponses[keyof ApiTipjarsGetCollectionResponses];
 
 export type ApiTipjarsPostData = {
     /**
@@ -4159,7 +2942,7 @@ export type ApiTipjarsPostData = {
     body: Tipjar;
     path?: never;
     query?: never;
-    url: "/v4/tipjars";
+    url: '/v4/tipjars';
 };
 
 export type ApiTipjarsPostErrors = {
@@ -4191,7 +2974,7 @@ export type ApiTipjarsIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/tipjars/{id}";
+    url: '/v4/tipjars/{id}';
 };
 
 export type ApiTipjarsIdDeleteErrors = {
@@ -4208,8 +2991,7 @@ export type ApiTipjarsIdDeleteResponses = {
     204: void;
 };
 
-export type ApiTipjarsIdDeleteResponse =
-    ApiTipjarsIdDeleteResponses[keyof ApiTipjarsIdDeleteResponses];
+export type ApiTipjarsIdDeleteResponse = ApiTipjarsIdDeleteResponses[keyof ApiTipjarsIdDeleteResponses];
 
 export type ApiTipjarsIdGetData = {
     body?: never;
@@ -4220,7 +3002,7 @@ export type ApiTipjarsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/tipjars/{id}";
+    url: '/v4/tipjars/{id}';
 };
 
 export type ApiTipjarsIdGetErrors = {
@@ -4251,7 +3033,7 @@ export type ApiTipjarsIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/tipjars/{id}";
+    url: '/v4/tipjars/{id}';
 };
 
 export type ApiTipjarsIdPatchErrors = {
@@ -4276,8 +3058,7 @@ export type ApiTipjarsIdPatchResponses = {
     200: Tipjar;
 };
 
-export type ApiTipjarsIdPatchResponse =
-    ApiTipjarsIdPatchResponses[keyof ApiTipjarsIdPatchResponses];
+export type ApiTipjarsIdPatchResponse = ApiTipjarsIdPatchResponses[keyof ApiTipjarsIdPatchResponses];
 
 export type ApiUsersGetCollectionData = {
     body?: never;
@@ -4293,7 +3074,7 @@ export type ApiUsersGetCollectionData = {
         query?: string;
         handle?: string;
     };
-    url: "/v4/users";
+    url: '/v4/users';
 };
 
 export type ApiUsersGetCollectionResponses = {
@@ -4303,8 +3084,7 @@ export type ApiUsersGetCollectionResponses = {
     200: Array<User>;
 };
 
-export type ApiUsersGetCollectionResponse =
-    ApiUsersGetCollectionResponses[keyof ApiUsersGetCollectionResponses];
+export type ApiUsersGetCollectionResponse = ApiUsersGetCollectionResponses[keyof ApiUsersGetCollectionResponses];
 
 export type ApiUsersPostData = {
     /**
@@ -4313,7 +3093,7 @@ export type ApiUsersPostData = {
     body: UserUserSignupDto;
     path?: never;
     query?: never;
-    url: "/v4/users";
+    url: '/v4/users';
 };
 
 export type ApiUsersPostErrors = {
@@ -4345,7 +3125,7 @@ export type ApiUsersIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}";
+    url: '/v4/users/{id}';
 };
 
 export type ApiUsersIdDeleteErrors = {
@@ -4373,7 +3153,7 @@ export type ApiUsersIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}";
+    url: '/v4/users/{id}';
 };
 
 export type ApiUsersIdGetErrors = {
@@ -4404,7 +3184,7 @@ export type ApiUsersIdPatchData = {
         id: string;
     };
     query?: never;
-    url: "/v4/users/{id}";
+    url: '/v4/users/{id}';
 };
 
 export type ApiUsersIdPatchErrors = {
@@ -4438,25 +3218,10 @@ export type ApiUserTokensPostData = {
     body: UserTokenUserTokenLoginDto;
     path?: never;
     query?: never;
-    url: "/v4/user_tokens";
-    /**
-     * The new UserToken resource
-     */
-    body: UserTokenUserTokenLoginDto;
-    path?: never;
-    query?: never;
-    url: "/v4/user_tokens";
+    url: '/v4/user_tokens';
 };
 
 export type ApiUserTokensPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: unknown;
-    /**
-     * Unprocessable entity
-     */
-    422: unknown;
     /**
      * Invalid input
      */
@@ -4472,16 +3237,9 @@ export type ApiUserTokensPostResponses = {
      * UserToken resource created
      */
     201: UserToken;
-    /**
-     * UserToken resource created
-     */
-    201: UserToken;
 };
 
-export type ApiUserTokensPostResponse =
-    ApiUserTokensPostResponses[keyof ApiUserTokensPostResponses];
-export type ApiUserTokensPostResponse =
-    ApiUserTokensPostResponses[keyof ApiUserTokensPostResponses];
+export type ApiUserTokensPostResponse = ApiUserTokensPostResponses[keyof ApiUserTokensPostResponses];
 
 export type ApiUserTokensIdDeleteData = {
     body?: never;
@@ -4492,27 +3250,10 @@ export type ApiUserTokensIdDeleteData = {
         id: string;
     };
     query?: never;
-    url: "/v4/user_tokens/{id}";
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/user_tokens/{id}";
+    url: '/v4/user_tokens/{id}';
 };
 
 export type ApiUserTokensIdDeleteErrors = {
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Forbidden
      */
@@ -4528,16 +3269,9 @@ export type ApiUserTokensIdDeleteResponses = {
      * UserToken resource deleted
      */
     204: void;
-    /**
-     * UserToken resource deleted
-     */
-    204: void;
 };
 
-export type ApiUserTokensIdDeleteResponse =
-    ApiUserTokensIdDeleteResponses[keyof ApiUserTokensIdDeleteResponses];
-export type ApiUserTokensIdDeleteResponse =
-    ApiUserTokensIdDeleteResponses[keyof ApiUserTokensIdDeleteResponses];
+export type ApiUserTokensIdDeleteResponse = ApiUserTokensIdDeleteResponses[keyof ApiUserTokensIdDeleteResponses];
 
 export type ApiUserTokensIdGetData = {
     body?: never;
@@ -4548,27 +3282,10 @@ export type ApiUserTokensIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/user_tokens/{id}";
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/user_tokens/{id}";
+    url: '/v4/user_tokens/{id}';
 };
 
 export type ApiUserTokensIdGetErrors = {
-    /**
-     * Forbidden
-     */
-    403: unknown;
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Forbidden
      */
@@ -4584,16 +3301,9 @@ export type ApiUserTokensIdGetResponses = {
      * UserToken resource
      */
     200: UserToken;
-    /**
-     * UserToken resource
-     */
-    200: UserToken;
 };
 
-export type ApiUserTokensIdGetResponse =
-    ApiUserTokensIdGetResponses[keyof ApiUserTokensIdGetResponses];
-export type ApiUserTokensIdGetResponse =
-    ApiUserTokensIdGetResponses[keyof ApiUserTokensIdGetResponses];
+export type ApiUserTokensIdGetResponse = ApiUserTokensIdGetResponses[keyof ApiUserTokensIdGetResponses];
 
 export type ApiVersionsGetCollectionData = {
     body?: never;
@@ -4606,30 +3316,13 @@ export type ApiVersionsGetCollectionData = {
         /**
          * The name of the resource.
          */
-        resource: "user" | "checkout";
+        resource: 'user' | 'checkout';
         /**
          * The ID of the named resource.
          */
         resourceId: number;
     };
-    url: "/v4/versions";
-    body?: never;
-    path?: never;
-    query: {
-        /**
-         * The collection page number
-         */
-        page?: number;
-        /**
-         * The name of the resource.
-         */
-        resource: "user" | "checkout";
-        /**
-         * The ID of the named resource.
-         */
-        resourceId: number;
-    };
-    url: "/v4/versions";
+    url: '/v4/versions';
 };
 
 export type ApiVersionsGetCollectionResponses = {
@@ -4637,15 +3330,9 @@ export type ApiVersionsGetCollectionResponses = {
      * Version collection
      */
     200: Array<Version>;
-    /**
-     * Version collection
-     */
-    200: Array<Version>;
 };
 
-export type ApiVersionsGetCollectionResponse =
-    ApiVersionsGetCollectionResponses[keyof ApiVersionsGetCollectionResponses];
-    ApiVersionsGetCollectionResponses[keyof ApiVersionsGetCollectionResponses];
+export type ApiVersionsGetCollectionResponse = ApiVersionsGetCollectionResponses[keyof ApiVersionsGetCollectionResponses];
 
 export type ApiVersionsIdGetData = {
     body?: never;
@@ -4656,23 +3343,10 @@ export type ApiVersionsIdGetData = {
         id: string;
     };
     query?: never;
-    url: "/v4/versions/{id}";
-    body?: never;
-    path: {
-        /**
-         * Version identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: "/v4/versions/{id}";
+    url: '/v4/versions/{id}';
 };
 
 export type ApiVersionsIdGetErrors = {
-    /**
-     * Resource not found
-     */
-    404: unknown;
     /**
      * Resource not found
      */
@@ -4684,15 +3358,10 @@ export type ApiVersionsIdGetResponses = {
      * Version resource
      */
     200: Version;
-    /**
-     * Version resource
-     */
-    200: Version;
 };
 
 export type ApiVersionsIdGetResponse = ApiVersionsIdGetResponses[keyof ApiVersionsIdGetResponses];
 
 export type ClientOptions = {
-    baseUrl: `${string}://${string}` | (string & {});
     baseUrl: `${string}://${string}` | (string & {});
 };
