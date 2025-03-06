@@ -41,6 +41,7 @@ const ProjectSchema = z.object({
     description: z.string(),
     category: z.string(),
     territory: z.string(),
+    status: z.string(),
     owner: z.string(),
     campaign: z.object({
         minimum: FundingGoalSchema,
