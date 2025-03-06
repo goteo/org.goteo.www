@@ -132,6 +132,21 @@ export type Options<
      * used to access values that aren't defined as part of the SDK function.
      */
     meta?: Record<string, unknown>;
+export type Options<
+    TData extends TDataShape = TDataShape,
+    ThrowOnError extends boolean = boolean,
+> = ClientOptions<TData, ThrowOnError> & {
+    /**
+     * You can provide a client instance returned by `createClient()` instead of
+     * individual options. This might be also useful if you want to implement a
+     * custom client.
+     */
+    client?: Client;
+    /**
+     * You can pass arbitrary values through the `meta` object. This can be
+     * used to access values that aren't defined as part of the SDK function.
+     */
+    meta?: Record<string, unknown>;
 };
 
 /**
@@ -140,7 +155,22 @@ export type Options<
  */
 export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiAccountingsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiAccountingsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiAccountingsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiAccountingsGetCollectionResponse,
         unknown,
@@ -163,7 +193,22 @@ export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false
  */
 export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiAccountingsIdGetData, ThrowOnError>,
+    options: Options<ApiAccountingsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiAccountingsIdGetResponse,
         unknown,
@@ -186,7 +231,26 @@ export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(
  */
 export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(
     options: Options<ApiAccountingsIdPatchData, ThrowOnError>,
+    options: Options<ApiAccountingsIdPatchData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).patch<
+        ApiAccountingsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).patch<
         ApiAccountingsIdPatchResponse,
         unknown,
@@ -213,7 +277,22 @@ export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(
  */
 export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boolean = false>(
     options: Options<ApiAccountingBalancePointsGetCollectionData, ThrowOnError>,
+    options: Options<ApiAccountingBalancePointsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingBalancePointsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_balance_points",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiAccountingBalancePointsGetCollectionResponse,
         unknown,
@@ -236,7 +315,22 @@ export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boo
  */
 export const apiAccountingTransactionsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiAccountingTransactionsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiAccountingTransactionsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiAccountingTransactionsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_transactions",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiAccountingTransactionsGetCollectionResponse,
         unknown,
@@ -259,7 +353,22 @@ export const apiAccountingTransactionsGetCollection = <ThrowOnError extends bool
  */
 export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiAccountingTransactionsIdGetData, ThrowOnError>,
+    options: Options<ApiAccountingTransactionsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingTransactionsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_transactions/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiAccountingTransactionsIdGetResponse,
         unknown,
@@ -282,7 +391,22 @@ export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = fa
  */
 export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiGatewaysGetCollectionData, ThrowOnError>,
+    options?: Options<ApiGatewaysGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiGatewaysGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateways",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiGatewaysGetCollectionResponse,
         unknown,
@@ -305,7 +429,20 @@ export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(
  */
 export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiGatewaysNameGetData, ThrowOnError>,
+    options: Options<ApiGatewaysNameGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<ApiGatewaysNameGetResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/gateways/{name}",
+            ...options,
+        },
+    );
     return (options.client ?? _heyApiClient).get<ApiGatewaysNameGetResponse, unknown, ThrowOnError>(
         {
             security: [
@@ -326,7 +463,22 @@ export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(
  */
 export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiGatewayChargesIdGetData, ThrowOnError>,
+    options: Options<ApiGatewayChargesIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiGatewayChargesIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_charges/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiGatewayChargesIdGetResponse,
         unknown,
@@ -349,7 +501,22 @@ export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(
  */
 export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiGatewayCheckoutsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiGatewayCheckoutsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiGatewayCheckoutsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiGatewayCheckoutsGetCollectionResponse,
         unknown,
@@ -372,7 +539,26 @@ export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = 
  */
 export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiGatewayCheckoutsPostData, ThrowOnError>,
+    options: Options<ApiGatewayCheckoutsPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<
+        ApiGatewayCheckoutsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).post<
         ApiGatewayCheckoutsPostResponse,
         unknown,
@@ -399,7 +585,22 @@ export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(
  */
 export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiGatewayCheckoutsIdGetData, ThrowOnError>,
+    options: Options<ApiGatewayCheckoutsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiGatewayCheckoutsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiGatewayCheckoutsIdGetResponse,
         unknown,
@@ -522,7 +723,22 @@ export const apiUsersIdpersonPatch = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiProjectsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiProjectsGetCollectionResponse,
         unknown,
@@ -545,7 +761,22 @@ export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectsPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectsPostData, ThrowOnError>,
+    options: Options<ApiProjectsPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<ApiProjectsPostResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).post<ApiProjectsPostResponse, unknown, ThrowOnError>({
         security: [
             {
@@ -568,7 +799,22 @@ export const apiProjectsPost = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectsIdDeleteData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).delete<
         ApiProjectsIdDeleteResponse,
         unknown,
@@ -591,7 +837,18 @@ export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<ApiProjectsIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<ApiProjectsIdGetResponse, unknown, ThrowOnError>({
         security: [
             {
@@ -610,7 +867,26 @@ export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectsIdPatchData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).patch<
         ApiProjectsIdPatchResponse,
         unknown,
@@ -637,7 +913,22 @@ export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiProjectBudgetItemsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectBudgetItemsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectBudgetItemsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiProjectBudgetItemsGetCollectionResponse,
         unknown,
@@ -660,7 +951,26 @@ export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean 
  */
 export const apiProjectBudgetItemsPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectBudgetItemsPostData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectBudgetItemsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).post<
         ApiProjectBudgetItemsPostResponse,
         unknown,
@@ -687,7 +997,22 @@ export const apiProjectBudgetItemsPost = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectBudgetItemsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdDeleteData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectBudgetItemsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).delete<
         ApiProjectBudgetItemsIdDeleteResponse,
         unknown,
@@ -710,7 +1035,22 @@ export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = fal
  */
 export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectBudgetItemsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectBudgetItemsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiProjectBudgetItemsIdGetResponse,
         unknown,
@@ -733,7 +1073,26 @@ export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>
  */
 export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectBudgetItemsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdPatchData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectBudgetItemsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).patch<
         ApiProjectBudgetItemsIdPatchResponse,
         unknown,
@@ -760,7 +1119,22 @@ export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = fals
  */
 export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiProjectRewardsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectRewardsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectRewardsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiProjectRewardsGetCollectionResponse,
         unknown,
@@ -783,7 +1157,26 @@ export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = fa
  */
 export const apiProjectRewardsPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardsPostData, ThrowOnError>,
+    options: Options<ApiProjectRewardsPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectRewardsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).post<
         ApiProjectRewardsPostResponse,
         unknown,
@@ -810,7 +1203,22 @@ export const apiProjectRewardsPost = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdDeleteData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectRewardsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).delete<
         ApiProjectRewardsIdDeleteResponse,
         unknown,
@@ -833,7 +1241,22 @@ export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectRewardsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiProjectRewardsIdGetResponse,
         unknown,
@@ -856,7 +1279,26 @@ export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdPatchData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectRewardsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).patch<
         ApiProjectRewardsIdPatchResponse,
         unknown,
@@ -883,7 +1325,22 @@ export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(
  */
 export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean = false>(
     options?: Options<ApiProjectRewardClaimsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectRewardClaimsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectRewardClaimsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims",
+        ...options,
+    });
     return (options?.client ?? _heyApiClient).get<
         ApiProjectRewardClaimsGetCollectionResponse,
         unknown,
@@ -906,7 +1363,26 @@ export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean
  */
 export const apiProjectRewardClaimsPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardClaimsPostData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectRewardClaimsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).post<
         ApiProjectRewardClaimsPostResponse,
         unknown,
@@ -933,7 +1409,22 @@ export const apiProjectRewardClaimsPost = <ThrowOnError extends boolean = false>
  */
 export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardClaimsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdDeleteData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectRewardClaimsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).delete<
         ApiProjectRewardClaimsIdDeleteResponse,
         unknown,
@@ -956,7 +1447,22 @@ export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = fa
  */
 export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardClaimsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectRewardClaimsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiProjectRewardClaimsIdGetResponse,
         unknown,
@@ -979,7 +1485,26 @@ export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false
  */
 export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = false>(
     options: Options<ApiProjectRewardClaimsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdPatchData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectRewardClaimsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
     return (options.client ?? _heyApiClient).patch<
         ApiProjectRewardClaimsIdPatchResponse,
         unknown,
@@ -1355,7 +1880,24 @@ export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(
  */
 export const apiUserTokensPost = <ThrowOnError extends boolean = false>(
     options: Options<ApiUserTokensPostData, ThrowOnError>,
+    options: Options<ApiUserTokensPostData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).post<ApiUserTokensPostResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/user_tokens",
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...options?.headers,
+            },
+        },
+    );
     return (options.client ?? _heyApiClient).post<ApiUserTokensPostResponse, unknown, ThrowOnError>(
         {
             security: [
@@ -1380,7 +1922,22 @@ export const apiUserTokensPost = <ThrowOnError extends boolean = false>(
  */
 export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(
     options: Options<ApiUserTokensIdDeleteData, ThrowOnError>,
+    options: Options<ApiUserTokensIdDeleteData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).delete<
+        ApiUserTokensIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_tokens/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).delete<
         ApiUserTokensIdDeleteResponse,
         unknown,
@@ -1403,7 +1960,20 @@ export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(
  */
 export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiUserTokensIdGetData, ThrowOnError>,
+    options: Options<ApiUserTokensIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<ApiUserTokensIdGetResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/user_tokens/{id}",
+            ...options,
+        },
+    );
     return (options.client ?? _heyApiClient).get<ApiUserTokensIdGetResponse, unknown, ThrowOnError>(
         {
             security: [
@@ -1424,7 +1994,22 @@ export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(
  */
 export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(
     options: Options<ApiVersionsGetCollectionData, ThrowOnError>,
+    options: Options<ApiVersionsGetCollectionData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<
+        ApiVersionsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/versions",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<
         ApiVersionsGetCollectionResponse,
         unknown,
@@ -1447,7 +2032,18 @@ export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(
  */
 export const apiVersionsIdGet = <ThrowOnError extends boolean = false>(
     options: Options<ApiVersionsIdGetData, ThrowOnError>,
+    options: Options<ApiVersionsIdGetData, ThrowOnError>,
 ) => {
+    return (options.client ?? _heyApiClient).get<ApiVersionsIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/versions/{id}",
+        ...options,
+    });
     return (options.client ?? _heyApiClient).get<ApiVersionsIdGetResponse, unknown, ThrowOnError>({
         security: [
             {
