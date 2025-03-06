@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { _ } from "svelte-i18n";
-  import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
-  import type { PageData } from "./$types";
-  import { Button } from "$lib/components/ui/button";
+    import { _ } from "svelte-i18n";
+    import LocaleSwitcher from "$lib/components/LocaleSwitcher/LocaleSwitcher.svelte";
+    import type { PageData } from "./$types";
+    import { Button } from "$lib/components/ui/button";
 
-  export let data: PageData;
+    export let data: PageData;
 
-  $: loading = !data.locales || data.locales.length === 0;
+    $: loading = !data.locales || data.locales.length === 0;
 </script>
 
 <div class="p-4">
-  <LocaleSwitcher locales={data.locales} {loading} />
-  <h1 class="text-3xl font-bold underline mt-4">{$_("greeting")}</h1>
-  <p class="mt-2">{$_("farewell")}</p>
-  <p class="mt-2">Current locale: {data.locale}</p>
-  <Button>Click me</Button>
+    <LocaleSwitcher locales={data.locales} {loading} />
+    <h1 class="mt-4 text-3xl font-bold underline">{$_("greeting")}</h1>
+    <p class="mt-2">{$_("farewell")}</p>
+    <p class="mt-2">Current locale: {data.locale}</p>
+    <Button>Click me</Button>
 </div>
 
 <style>
-  /* @reference "tailwindcss/theme"; */
-  :global(html) {
-    /* background-color: theme(--color-gray-100); */
-  }
+    /* @reference "tailwindcss/theme"; */
+    :global(html) {
+        /* background-color: theme(--color-gray-100); */
+    }
 </style>
