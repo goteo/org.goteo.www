@@ -9,6 +9,7 @@
   import { Button } from "$lib/components/ui/button";
   import { Input } from "$lib/components/ui/input";
   import CheckoutSummary from "$lib/components/CheckoutSummary";
+  import LoginCard from "$lib/components/LoginCard";
 
   import { schema } from "./schema";
 
@@ -55,9 +56,9 @@
           </Form.Control>
           <Form.FieldErrors />
         </Form.Field>
+        <a href="#" class="font-bold">{$_("login.page.forgotPassword")}</a>
+        <LoginCard />
       </form>
-      <a href="#" class="font-bold">{$_("login.page.forgotPassword")}</a>
-      <p>{$_("login.page.otherAccessMethods")}</p>
     </div>
 
     <div>

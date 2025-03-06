@@ -106,9 +106,9 @@ const map = (
 
   const video = {
     title: project.title,
-    src: project.videoEmbed?.src,
+    src: project.video?.src,
     poster: {
-      src: project.videoEmbed?.thumbnail,
+      src: project.video?.thumbnail,
       alt: project.description,
     },
   };
