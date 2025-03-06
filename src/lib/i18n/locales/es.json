@@ -104,6 +104,21 @@
       "lastName": "Apellidos"
     }
   },
+  "login": {
+    "page": {
+      "title": "Indícanos tus datos personales",
+      "description": "Necesitamos saber quién eres antes de pagar.",
+      "registerOr": "Entra en tu cuenta o",
+      "loginButton": "Regístrate",
+      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+      "otherAccessMethods": "También puedes acceder a través de:",
+      "forgotPassword": "¿Olvidaste tu contraseña?"
+    },
+    "form": {
+      "email": "Email o nombre de usuario",
+      "password": "Contraseña"
+    }
+  },
   "zod": {
     "required": "Este campo es obligatorio",
     "invalid_type": "Se esperaba {expected} pero se recibió {received}",

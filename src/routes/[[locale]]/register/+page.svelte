@@ -10,6 +10,7 @@
   import { Checkbox } from "$lib/components/ui/checkbox";
   import * as RadioGroup from "$lib/components/ui/radio-group";
   import CheckoutSummary from "$lib/components/CheckoutSummary";
+  import LoginCard from "$lib/components/LoginCard";
 
   import { schema } from "./schema";
   import IndividualRegisterForm from "./IndividualRegisterForm.svelte";
@@ -89,8 +90,8 @@
             <input name={attrs.name} value={$formData.policies} hidden />
           </Form.Control>
         </Form.Field>
+        <LoginCard />
       </form>
-      <p>{$_("register.page.otherAccessMethods")}</p>
     </div>
 
     <div>

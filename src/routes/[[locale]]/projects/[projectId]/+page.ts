@@ -82,6 +82,7 @@ export const load: PageLoad = async ({ fetch, params }) => {
   if (!res.ok) throw new Error("Failed to fetch project data");
 
   const json = await res.json();
+  console.log(json);
   const parsed = ProjectSchema.safeParse(json);
   if (!parsed.success) {
     console.error(JSON.stringify(parsed.error));

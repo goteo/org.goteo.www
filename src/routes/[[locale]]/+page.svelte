@@ -16,8 +16,9 @@
 
   <hr />
   <ul>
-    <li><a href="/projects/124">/projects/124</a></li>
-    <li><a href="/projects/125">/projects/125</a></li>
-    <li><a href="/projects/126">/projects/126</a></li>
+    <li><a href="/projects/252">/projects/252</a></li>
+    <li><a href="/projects/246">/projects/246</a></li>
+    <li><a href="/projects/234">/projects/234</a></li>
+    <li><a href="/projects/231">/projects/231</a></li>
   </ul>
 </div>
