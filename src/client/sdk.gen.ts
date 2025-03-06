@@ -2,128 +2,128 @@
 
 import type { Options as ClientOptions, TDataShape, Client } from "@hey-api/client-fetch";
 import type {
-  ApiAccountingsGetCollectionData,
-  ApiAccountingsGetCollectionResponse,
-  ApiAccountingsIdGetData,
-  ApiAccountingsIdGetResponse,
-  ApiAccountingsIdPatchData,
-  ApiAccountingsIdPatchResponse,
-  ApiAccountingBalancePointsGetCollectionData,
-  ApiAccountingBalancePointsGetCollectionResponse,
-  ApiAccountingTransactionsGetCollectionData,
-  ApiAccountingTransactionsGetCollectionResponse,
-  ApiAccountingTransactionsIdGetData,
-  ApiAccountingTransactionsIdGetResponse,
-  ApiGatewaysGetCollectionData,
-  ApiGatewaysGetCollectionResponse,
-  ApiGatewaysNameGetData,
-  ApiGatewaysNameGetResponse,
-  ApiGatewayChargesIdGetData,
-  ApiGatewayChargesIdGetResponse,
-  ApiGatewayCheckoutsGetCollectionData,
-  ApiGatewayCheckoutsGetCollectionResponse,
-  ApiGatewayCheckoutsPostData,
-  ApiGatewayCheckoutsPostResponse,
-  ApiGatewayCheckoutsIdGetData,
-  ApiGatewayCheckoutsIdGetResponse,
-  ApiProjectsGetCollectionData,
-  ApiProjectsGetCollectionResponse,
-  ApiProjectsPostData,
-  ApiProjectsPostResponse,
-  ApiProjectsIdDeleteData,
-  ApiProjectsIdDeleteResponse,
-  ApiProjectsIdGetData,
-  ApiProjectsIdGetResponse,
-  ApiProjectsIdPatchData,
-  ApiProjectsIdPatchResponse,
-  ApiProjectBudgetItemsGetCollectionData,
-  ApiProjectBudgetItemsGetCollectionResponse,
-  ApiProjectBudgetItemsPostData,
-  ApiProjectBudgetItemsPostResponse,
-  ApiProjectBudgetItemsIdDeleteData,
-  ApiProjectBudgetItemsIdDeleteResponse,
-  ApiProjectBudgetItemsIdGetData,
-  ApiProjectBudgetItemsIdGetResponse,
-  ApiProjectBudgetItemsIdPatchData,
-  ApiProjectBudgetItemsIdPatchResponse,
-  ApiProjectRewardsGetCollectionData,
-  ApiProjectRewardsGetCollectionResponse,
-  ApiProjectRewardsPostData,
-  ApiProjectRewardsPostResponse,
-  ApiProjectRewardsIdDeleteData,
-  ApiProjectRewardsIdDeleteResponse,
-  ApiProjectRewardsIdGetData,
-  ApiProjectRewardsIdGetResponse,
-  ApiProjectRewardsIdPatchData,
-  ApiProjectRewardsIdPatchResponse,
-  ApiProjectRewardClaimsGetCollectionData,
-  ApiProjectRewardClaimsGetCollectionResponse,
-  ApiProjectRewardClaimsPostData,
-  ApiProjectRewardClaimsPostResponse,
-  ApiProjectRewardClaimsIdDeleteData,
-  ApiProjectRewardClaimsIdDeleteResponse,
-  ApiProjectRewardClaimsIdGetData,
-  ApiProjectRewardClaimsIdGetResponse,
-  ApiProjectRewardClaimsIdPatchData,
-  ApiProjectRewardClaimsIdPatchResponse,
-  ApiTipjarsGetCollectionData,
-  ApiTipjarsGetCollectionResponse,
-  ApiTipjarsPostData,
-  ApiTipjarsPostResponse,
-  ApiTipjarsIdDeleteData,
-  ApiTipjarsIdDeleteResponse,
-  ApiTipjarsIdGetData,
-  ApiTipjarsIdGetResponse,
-  ApiTipjarsIdPatchData,
-  ApiTipjarsIdPatchResponse,
-  ApiUsersGetCollectionData,
-  ApiUsersGetCollectionResponse,
-  ApiUsersPostData,
-  ApiUsersPostResponse,
-  ApiUsersIdDeleteData,
-  ApiUsersIdDeleteResponse,
-  ApiUsersIdGetData,
-  ApiUsersIdGetResponse,
-  ApiUsersIdPatchData,
-  ApiUsersIdPatchResponse,
-  ApiUserPersonalsGetCollectionData,
-  ApiUserPersonalsGetCollectionResponse,
-  ApiUserPersonalsPostData,
-  ApiUserPersonalsPostResponse,
-  ApiUserPersonalsUserDeleteData,
-  ApiUserPersonalsUserDeleteResponse,
-  ApiUserPersonalsUserGetData,
-  ApiUserPersonalsUserGetResponse,
-  ApiUserPersonalsUserPatchData,
-  ApiUserPersonalsUserPatchResponse,
-  ApiUserTokensPostData,
-  ApiUserTokensPostResponse,
-  ApiUserTokensIdDeleteData,
-  ApiUserTokensIdDeleteResponse,
-  ApiUserTokensIdGetData,
-  ApiUserTokensIdGetResponse,
-  ApiVersionsGetCollectionData,
-  ApiVersionsGetCollectionResponse,
-  ApiVersionsIdGetData,
-  ApiVersionsIdGetResponse,
+    ApiAccountingsGetCollectionData,
+    ApiAccountingsGetCollectionResponse,
+    ApiAccountingsIdGetData,
+    ApiAccountingsIdGetResponse,
+    ApiAccountingsIdPatchData,
+    ApiAccountingsIdPatchResponse,
+    ApiAccountingBalancePointsGetCollectionData,
+    ApiAccountingBalancePointsGetCollectionResponse,
+    ApiAccountingTransactionsGetCollectionData,
+    ApiAccountingTransactionsGetCollectionResponse,
+    ApiAccountingTransactionsIdGetData,
+    ApiAccountingTransactionsIdGetResponse,
+    ApiGatewaysGetCollectionData,
+    ApiGatewaysGetCollectionResponse,
+    ApiGatewaysNameGetData,
+    ApiGatewaysNameGetResponse,
+    ApiGatewayChargesIdGetData,
+    ApiGatewayChargesIdGetResponse,
+    ApiGatewayCheckoutsGetCollectionData,
+    ApiGatewayCheckoutsGetCollectionResponse,
+    ApiGatewayCheckoutsPostData,
+    ApiGatewayCheckoutsPostResponse,
+    ApiGatewayCheckoutsIdGetData,
+    ApiGatewayCheckoutsIdGetResponse,
+    ApiProjectsGetCollectionData,
+    ApiProjectsGetCollectionResponse,
+    ApiProjectsPostData,
+    ApiProjectsPostResponse,
+    ApiProjectsIdDeleteData,
+    ApiProjectsIdDeleteResponse,
+    ApiProjectsIdGetData,
+    ApiProjectsIdGetResponse,
+    ApiProjectsIdPatchData,
+    ApiProjectsIdPatchResponse,
+    ApiProjectBudgetItemsGetCollectionData,
+    ApiProjectBudgetItemsGetCollectionResponse,
+    ApiProjectBudgetItemsPostData,
+    ApiProjectBudgetItemsPostResponse,
+    ApiProjectBudgetItemsIdDeleteData,
+    ApiProjectBudgetItemsIdDeleteResponse,
+    ApiProjectBudgetItemsIdGetData,
+    ApiProjectBudgetItemsIdGetResponse,
+    ApiProjectBudgetItemsIdPatchData,
+    ApiProjectBudgetItemsIdPatchResponse,
+    ApiProjectRewardsGetCollectionData,
+    ApiProjectRewardsGetCollectionResponse,
+    ApiProjectRewardsPostData,
+    ApiProjectRewardsPostResponse,
+    ApiProjectRewardsIdDeleteData,
+    ApiProjectRewardsIdDeleteResponse,
+    ApiProjectRewardsIdGetData,
+    ApiProjectRewardsIdGetResponse,
+    ApiProjectRewardsIdPatchData,
+    ApiProjectRewardsIdPatchResponse,
+    ApiProjectRewardClaimsGetCollectionData,
+    ApiProjectRewardClaimsGetCollectionResponse,
+    ApiProjectRewardClaimsPostData,
+    ApiProjectRewardClaimsPostResponse,
+    ApiProjectRewardClaimsIdDeleteData,
+    ApiProjectRewardClaimsIdDeleteResponse,
+    ApiProjectRewardClaimsIdGetData,
+    ApiProjectRewardClaimsIdGetResponse,
+    ApiProjectRewardClaimsIdPatchData,
+    ApiProjectRewardClaimsIdPatchResponse,
+    ApiTipjarsGetCollectionData,
+    ApiTipjarsGetCollectionResponse,
+    ApiTipjarsPostData,
+    ApiTipjarsPostResponse,
+    ApiTipjarsIdDeleteData,
+    ApiTipjarsIdDeleteResponse,
+    ApiTipjarsIdGetData,
+    ApiTipjarsIdGetResponse,
+    ApiTipjarsIdPatchData,
+    ApiTipjarsIdPatchResponse,
+    ApiUsersGetCollectionData,
+    ApiUsersGetCollectionResponse,
+    ApiUsersPostData,
+    ApiUsersPostResponse,
+    ApiUsersIdDeleteData,
+    ApiUsersIdDeleteResponse,
+    ApiUsersIdGetData,
+    ApiUsersIdGetResponse,
+    ApiUsersIdPatchData,
+    ApiUsersIdPatchResponse,
+    ApiUserPersonalsGetCollectionData,
+    ApiUserPersonalsGetCollectionResponse,
+    ApiUserPersonalsPostData,
+    ApiUserPersonalsPostResponse,
+    ApiUserPersonalsUserDeleteData,
+    ApiUserPersonalsUserDeleteResponse,
+    ApiUserPersonalsUserGetData,
+    ApiUserPersonalsUserGetResponse,
+    ApiUserPersonalsUserPatchData,
+    ApiUserPersonalsUserPatchResponse,
+    ApiUserTokensPostData,
+    ApiUserTokensPostResponse,
+    ApiUserTokensIdDeleteData,
+    ApiUserTokensIdDeleteResponse,
+    ApiUserTokensIdGetData,
+    ApiUserTokensIdGetResponse,
+    ApiVersionsGetCollectionData,
+    ApiVersionsGetCollectionResponse,
+    ApiVersionsIdGetData,
+    ApiVersionsIdGetResponse,
 } from "./types.gen";
 import { client as _heyApiClient } from "./client.gen";
 
-export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<
-  TData,
-  ThrowOnError
-> & {
-  /**
-   * You can provide a client instance returned by `createClient()` instead of
-   * individual options. This might be also useful if you want to implement a
-   * custom client.
-   */
-  client?: Client;
-  /**
-   * You can pass arbitrary values through the `meta` object. This can be
-   * used to access values that aren't defined as part of the SDK function.
-   */
-  meta?: Record<string, unknown>;
+export type Options<
+    TData extends TDataShape = TDataShape,
+    ThrowOnError extends boolean = boolean,
+> = ClientOptions<TData, ThrowOnError> & {
+    /**
+     * You can provide a client instance returned by `createClient()` instead of
+     * individual options. This might be also useful if you want to implement a
+     * custom client.
+     */
+    client?: Client;
+    /**
+     * You can pass arbitrary values through the `meta` object. This can be
+     * used to access values that aren't defined as part of the SDK function.
+     */
+    meta?: Record<string, unknown>;
 };
 
 /**
@@ -131,18 +131,22 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
  * Retrieves the collection of Accounting resources.
  */
 export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiAccountingsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiAccountingsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiAccountingsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accountings",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiAccountingsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings",
+        ...options,
+    });
 };
 
 /**
@@ -150,18 +154,22 @@ export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false
  * Retrieves one Accounting resource.
  */
 export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiAccountingsIdGetData, ThrowOnError>,
+    options: Options<ApiAccountingsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiAccountingsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accountings/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -169,22 +177,26 @@ export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(
  * Updates the Accounting resource.
  */
 export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiAccountingsIdPatchData, ThrowOnError>,
+    options: Options<ApiAccountingsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiAccountingsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accountings/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiAccountingsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accountings/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -192,18 +204,22 @@ export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of AccountingBalancePoint resources.
  */
 export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boolean = false>(
-  options: Options<ApiAccountingBalancePointsGetCollectionData, ThrowOnError>,
+    options: Options<ApiAccountingBalancePointsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiAccountingBalancePointsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accounting_balance_points",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingBalancePointsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_balance_points",
+        ...options,
+    });
 };
 
 /**
@@ -211,18 +227,22 @@ export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boo
  * Retrieves the collection of AccountingTransaction resources.
  */
 export const apiAccountingTransactionsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiAccountingTransactionsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiAccountingTransactionsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiAccountingTransactionsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accounting_transactions",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiAccountingTransactionsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_transactions",
+        ...options,
+    });
 };
 
 /**
@@ -230,18 +250,22 @@ export const apiAccountingTransactionsGetCollection = <ThrowOnError extends bool
  * Retrieves one AccountingTransaction resource.
  */
 export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiAccountingTransactionsIdGetData, ThrowOnError>,
+    options: Options<ApiAccountingTransactionsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiAccountingTransactionsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/accounting_transactions/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiAccountingTransactionsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/accounting_transactions/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -249,18 +273,22 @@ export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = fa
  * Retrieves the collection of Gateway resources.
  */
 export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiGatewaysGetCollectionData, ThrowOnError>,
+    options?: Options<ApiGatewaysGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiGatewaysGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateways",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiGatewaysGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateways",
+        ...options,
+    });
 };
 
 /**
@@ -268,18 +296,20 @@ export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(
  * Retrieves one Gateway resource.
  */
 export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiGatewaysNameGetData, ThrowOnError>,
+    options: Options<ApiGatewaysNameGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiGatewaysNameGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateways/{name}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiGatewaysNameGetResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/gateways/{name}",
+            ...options,
+        },
+    );
 };
 
 /**
@@ -287,18 +317,22 @@ export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(
  * Retrieves one GatewayCharge resource.
  */
 export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiGatewayChargesIdGetData, ThrowOnError>,
+    options: Options<ApiGatewayChargesIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiGatewayChargesIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateway_charges/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiGatewayChargesIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_charges/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -306,18 +340,22 @@ export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of GatewayCheckout resources.
  */
 export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiGatewayCheckoutsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiGatewayCheckoutsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiGatewayCheckoutsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateway_checkouts",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiGatewayCheckoutsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts",
+        ...options,
+    });
 };
 
 /**
@@ -325,22 +363,26 @@ export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = 
  * Creates a GatewayCheckout resource.
  */
 export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiGatewayCheckoutsPostData, ThrowOnError>,
+    options: Options<ApiGatewayCheckoutsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiGatewayCheckoutsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateway_checkouts",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<
+        ApiGatewayCheckoutsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -348,18 +390,22 @@ export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(
  * Retrieves one GatewayCheckout resource.
  */
 export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiGatewayCheckoutsIdGetData, ThrowOnError>,
+    options: Options<ApiGatewayCheckoutsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiGatewayCheckoutsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/gateway_checkouts/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiGatewayCheckoutsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/gateway_checkouts/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -367,18 +413,22 @@ export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of Project resources.
  */
 export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiProjectsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiProjectsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/projects",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects",
+        ...options,
+    });
 };
 
 /**
@@ -386,22 +436,22 @@ export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(
  * Creates a Project resource.
  */
 export const apiProjectsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectsPostData, ThrowOnError>,
+    options: Options<ApiProjectsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiProjectsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/projects",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<ApiProjectsPostResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -409,18 +459,22 @@ export const apiProjectsPost = <ThrowOnError extends boolean = false>(
  * Removes the Project resource.
  */
 export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectsIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiProjectsIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/projects/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -428,18 +482,18 @@ export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(
  * Retrieves one Project resource.
  */
 export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiProjectsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/projects/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiProjectsIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -447,22 +501,26 @@ export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(
  * Updates the Project resource.
  */
 export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiProjectsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/projects/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/projects/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -470,18 +528,22 @@ export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of ProjectBudgetItem resources.
  */
 export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiProjectBudgetItemsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectBudgetItemsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiProjectBudgetItemsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_budget_items",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectBudgetItemsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items",
+        ...options,
+    });
 };
 
 /**
@@ -489,22 +551,26 @@ export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean 
  * Creates a ProjectBudgetItem resource.
  */
 export const apiProjectBudgetItemsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectBudgetItemsPostData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiProjectBudgetItemsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_budget_items",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectBudgetItemsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -512,18 +578,22 @@ export const apiProjectBudgetItemsPost = <ThrowOnError extends boolean = false>(
  * Removes the ProjectBudgetItem resource.
  */
 export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectBudgetItemsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiProjectBudgetItemsIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_budget_items/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectBudgetItemsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -531,18 +601,22 @@ export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = fal
  * Retrieves one ProjectBudgetItem resource.
  */
 export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectBudgetItemsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiProjectBudgetItemsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_budget_items/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectBudgetItemsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -550,22 +624,26 @@ export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>
  * Updates the ProjectBudgetItem resource.
  */
 export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectBudgetItemsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectBudgetItemsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiProjectBudgetItemsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_budget_items/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectBudgetItemsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_budget_items/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -573,18 +651,22 @@ export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = fals
  * Retrieves the collection of ProjectReward resources.
  */
 export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiProjectRewardsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectRewardsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiProjectRewardsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_rewards",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectRewardsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards",
+        ...options,
+    });
 };
 
 /**
@@ -592,22 +674,26 @@ export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = fa
  * Creates a ProjectReward resource.
  */
 export const apiProjectRewardsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardsPostData, ThrowOnError>,
+    options: Options<ApiProjectRewardsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiProjectRewardsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_rewards",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectRewardsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -615,18 +701,22 @@ export const apiProjectRewardsPost = <ThrowOnError extends boolean = false>(
  * Removes the ProjectReward resource.
  */
 export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiProjectRewardsIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_rewards/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectRewardsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -634,18 +724,22 @@ export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
  * Retrieves one ProjectReward resource.
  */
 export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiProjectRewardsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_rewards/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectRewardsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -653,22 +747,26 @@ export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(
  * Updates the ProjectReward resource.
  */
 export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectRewardsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiProjectRewardsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_rewards/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectRewardsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_rewards/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -676,18 +774,22 @@ export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of ProjectRewardClaim resources.
  */
 export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiProjectRewardClaimsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiProjectRewardClaimsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiProjectRewardClaimsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_reward_claims",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiProjectRewardClaimsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims",
+        ...options,
+    });
 };
 
 /**
@@ -695,22 +797,26 @@ export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean
  * Creates a ProjectRewardClaim resource.
  */
 export const apiProjectRewardClaimsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardClaimsPostData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiProjectRewardClaimsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_reward_claims",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<
+        ApiProjectRewardClaimsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -718,18 +824,22 @@ export const apiProjectRewardClaimsPost = <ThrowOnError extends boolean = false>
  * Removes the ProjectRewardClaim resource.
  */
 export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardClaimsIdDeleteData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiProjectRewardClaimsIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_reward_claims/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiProjectRewardClaimsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -737,18 +847,22 @@ export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = fa
  * Retrieves one ProjectRewardClaim resource.
  */
 export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardClaimsIdGetData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiProjectRewardClaimsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_reward_claims/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiProjectRewardClaimsIdGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -756,22 +870,26 @@ export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false
  * Updates the ProjectRewardClaim resource.
  */
 export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiProjectRewardClaimsIdPatchData, ThrowOnError>,
+    options: Options<ApiProjectRewardClaimsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiProjectRewardClaimsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/project_reward_claims/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiProjectRewardClaimsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/project_reward_claims/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -779,18 +897,22 @@ export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = fal
  * Retrieves the collection of Tipjar resources.
  */
 export const apiTipjarsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiTipjarsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiTipjarsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiTipjarsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/tipjars",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiTipjarsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/tipjars",
+        ...options,
+    });
 };
 
 /**
@@ -798,22 +920,22 @@ export const apiTipjarsGetCollection = <ThrowOnError extends boolean = false>(
  * Creates a Tipjar resource.
  */
 export const apiTipjarsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiTipjarsPostData, ThrowOnError>,
+    options: Options<ApiTipjarsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiTipjarsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/tipjars",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<ApiTipjarsPostResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/tipjars",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -821,18 +943,22 @@ export const apiTipjarsPost = <ThrowOnError extends boolean = false>(
  * Removes the Tipjar resource.
  */
 export const apiTipjarsIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiTipjarsIdDeleteData, ThrowOnError>,
+    options: Options<ApiTipjarsIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiTipjarsIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/tipjars/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiTipjarsIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/tipjars/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -840,18 +966,18 @@ export const apiTipjarsIdDelete = <ThrowOnError extends boolean = false>(
  * Retrieves one Tipjar resource.
  */
 export const apiTipjarsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiTipjarsIdGetData, ThrowOnError>,
+    options: Options<ApiTipjarsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiTipjarsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/tipjars/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiTipjarsIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/tipjars/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -859,22 +985,26 @@ export const apiTipjarsIdGet = <ThrowOnError extends boolean = false>(
  * Updates the Tipjar resource.
  */
 export const apiTipjarsIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiTipjarsIdPatchData, ThrowOnError>,
+    options: Options<ApiTipjarsIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiTipjarsIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/tipjars/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiTipjarsIdPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/tipjars/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -882,18 +1012,22 @@ export const apiTipjarsIdPatch = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of User resources.
  */
 export const apiUsersGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiUsersGetCollectionData, ThrowOnError>,
+    options?: Options<ApiUsersGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiUsersGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/users",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiUsersGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/users",
+        ...options,
+    });
 };
 
 /**
@@ -901,22 +1035,22 @@ export const apiUsersGetCollection = <ThrowOnError extends boolean = false>(
  * Creates a User resource.
  */
 export const apiUsersPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUsersPostData, ThrowOnError>,
+    options: Options<ApiUsersPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiUsersPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/users",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<ApiUsersPostResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/users",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -924,18 +1058,22 @@ export const apiUsersPost = <ThrowOnError extends boolean = false>(
  * Removes the User resource.
  */
 export const apiUsersIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUsersIdDeleteData, ThrowOnError>,
+    options: Options<ApiUsersIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiUsersIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/users/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiUsersIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/users/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -943,18 +1081,18 @@ export const apiUsersIdDelete = <ThrowOnError extends boolean = false>(
  * Retrieves one User resource.
  */
 export const apiUsersIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUsersIdGetData, ThrowOnError>,
+    options: Options<ApiUsersIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiUsersIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/users/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiUsersIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/users/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -962,22 +1100,22 @@ export const apiUsersIdGet = <ThrowOnError extends boolean = false>(
  * Updates the User resource.
  */
 export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUsersIdPatchData, ThrowOnError>,
+    options: Options<ApiUsersIdPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiUsersIdPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/users/{id}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<ApiUsersIdPatchResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/users/{id}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -985,18 +1123,22 @@ export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of UserPersonal resources.
  */
 export const apiUserPersonalsGetCollection = <ThrowOnError extends boolean = false>(
-  options?: Options<ApiUserPersonalsGetCollectionData, ThrowOnError>,
+    options?: Options<ApiUserPersonalsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options?.client ?? _heyApiClient).get<ApiUserPersonalsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals",
-    ...options,
-  });
+    return (options?.client ?? _heyApiClient).get<
+        ApiUserPersonalsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_personals",
+        ...options,
+    });
 };
 
 /**
@@ -1004,22 +1146,26 @@ export const apiUserPersonalsGetCollection = <ThrowOnError extends boolean = fal
  * Creates a UserPersonal resource.
  */
 export const apiUserPersonalsPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsPostData, ThrowOnError>,
+    options: Options<ApiUserPersonalsPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiUserPersonalsPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<
+        ApiUserPersonalsPostResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_personals",
+        ...options,
+        headers: {
+            "Content-Type": "application/json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -1027,18 +1173,22 @@ export const apiUserPersonalsPost = <ThrowOnError extends boolean = false>(
  * Removes the UserPersonal resource.
  */
 export const apiUserPersonalsUserDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserDeleteData, ThrowOnError>,
+    options: Options<ApiUserPersonalsUserDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiUserPersonalsUserDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiUserPersonalsUserDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_personals/{user}",
+        ...options,
+    });
 };
 
 /**
@@ -1046,18 +1196,22 @@ export const apiUserPersonalsUserDelete = <ThrowOnError extends boolean = false>
  * Retrieves one UserPersonal resource.
  */
 export const apiUserPersonalsUserGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserGetData, ThrowOnError>,
+    options: Options<ApiUserPersonalsUserGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiUserPersonalsUserGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiUserPersonalsUserGetResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_personals/{user}",
+        ...options,
+    });
 };
 
 /**
@@ -1065,22 +1219,26 @@ export const apiUserPersonalsUserGet = <ThrowOnError extends boolean = false>(
  * Updates the UserPersonal resource.
  */
 export const apiUserPersonalsUserPatch = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserPersonalsUserPatchData, ThrowOnError>,
+    options: Options<ApiUserPersonalsUserPatchData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).patch<ApiUserPersonalsUserPatchResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_personals/{user}",
-    ...options,
-    headers: {
-      "Content-Type": "application/merge-patch+json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).patch<
+        ApiUserPersonalsUserPatchResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_personals/{user}",
+        ...options,
+        headers: {
+            "Content-Type": "application/merge-patch+json",
+            ...options?.headers,
+        },
+    });
 };
 
 /**
@@ -1088,22 +1246,24 @@ export const apiUserPersonalsUserPatch = <ThrowOnError extends boolean = false>(
  * Creates a new UserToken resource.
  */
 export const apiUserTokensPost = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserTokensPostData, ThrowOnError>,
+    options: Options<ApiUserTokensPostData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).post<ApiUserTokensPostResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_tokens",
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-  });
+    return (options.client ?? _heyApiClient).post<ApiUserTokensPostResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/user_tokens",
+            ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...options?.headers,
+            },
+        },
+    );
 };
 
 /**
@@ -1111,18 +1271,22 @@ export const apiUserTokensPost = <ThrowOnError extends boolean = false>(
  * Removes the UserToken resource.
  */
 export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserTokensIdDeleteData, ThrowOnError>,
+    options: Options<ApiUserTokensIdDeleteData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).delete<ApiUserTokensIdDeleteResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_tokens/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).delete<
+        ApiUserTokensIdDeleteResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/user_tokens/{id}",
+        ...options,
+    });
 };
 
 /**
@@ -1130,18 +1294,20 @@ export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(
  * Retrieves one UserToken resource.
  */
 export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiUserTokensIdGetData, ThrowOnError>,
+    options: Options<ApiUserTokensIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiUserTokensIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/user_tokens/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiUserTokensIdGetResponse, unknown, ThrowOnError>(
+        {
+            security: [
+                {
+                    scheme: "bearer",
+                    type: "http",
+                },
+            ],
+            url: "/v4/user_tokens/{id}",
+            ...options,
+        },
+    );
 };
 
 /**
@@ -1149,18 +1315,22 @@ export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(
  * Retrieves the collection of Version resources.
  */
 export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(
-  options: Options<ApiVersionsGetCollectionData, ThrowOnError>,
+    options: Options<ApiVersionsGetCollectionData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiVersionsGetCollectionResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/versions",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<
+        ApiVersionsGetCollectionResponse,
+        unknown,
+        ThrowOnError
+    >({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/versions",
+        ...options,
+    });
 };
 
 /**
@@ -1168,16 +1338,16 @@ export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(
  * Retrieves one Version resource.
  */
 export const apiVersionsIdGet = <ThrowOnError extends boolean = false>(
-  options: Options<ApiVersionsIdGetData, ThrowOnError>,
+    options: Options<ApiVersionsIdGetData, ThrowOnError>,
 ) => {
-  return (options.client ?? _heyApiClient).get<ApiVersionsIdGetResponse, unknown, ThrowOnError>({
-    security: [
-      {
-        scheme: "bearer",
-        type: "http",
-      },
-    ],
-    url: "/v4/versions/{id}",
-    ...options,
-  });
+    return (options.client ?? _heyApiClient).get<ApiVersionsIdGetResponse, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: "bearer",
+                type: "http",
+            },
+        ],
+        url: "/v4/versions/{id}",
+        ...options,
+    });
 };
