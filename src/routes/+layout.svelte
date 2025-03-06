@@ -1,6 +1,6 @@
 <script lang="ts">
-  import "@fontsource-variable/karla";
-  import "../app.css";
+    import "@fontsource-variable/karla";
+    import "../app.css";
 </script>
 
 <slot />
