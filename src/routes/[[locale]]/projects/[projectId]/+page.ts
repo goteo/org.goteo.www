@@ -39,6 +39,7 @@ const ProjectSchema = z.object({
     title: z.string(),
     subtitle: z.string(),
     description: z.string(),
+    category: z.string(),
     territory: z.string(),
     owner: z.string(),
     campaign: z.object({
