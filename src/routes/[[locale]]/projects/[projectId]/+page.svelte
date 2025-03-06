@@ -1,193 +1,199 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { _ } from "svelte-i18n";
-  import { Clock, MoveRight, MapPin, Bookmark, Heart } from "lucide-svelte";
-  import { marked } from "marked";
+    import { onMount } from "svelte";
+    import { _ } from "svelte-i18n";
+    import { Clock, MoveRight, MapPin, Bookmark, Heart } from "lucide-svelte";
+    import { marked } from "marked";
 
-  import type { PageProps } from "./$types";
+    import type { PageProps } from "./$types";
 
-  import * as Tabs from "$lib/components/ui/tabs";
-  import { Button } from "$lib/components/ui/button";
+    import * as Tabs from "$lib/components/ui/tabs";
+    import { Button } from "$lib/components/ui/button";
 
-  import LocaleSwitcher from "$lib/components/LocaleSwitcher";
-  import CampaignProgress from "$lib/components/CampaignProgress";
-  import Player from "$lib/components/Player";
-  import RewardCard from "$lib/components/RewardCard";
-  import ShareButton from "$lib/components/ShareButton";
-  import ProjectBudget from "$lib/components/ProjectBudget";
-  import FundingChart from "$lib/components/FundingChart";
+    import LocaleSwitcher from "$lib/components/LocaleSwitcher";
+    import CampaignProgress from "$lib/components/CampaignProgress";
+    import Player from "$lib/components/Player";
+    import RewardCard from "$lib/components/RewardCard";
+    import ShareButton from "$lib/components/ShareButton";
+    import ProjectBudget from "$lib/components/ProjectBudget";
+    import FundingChart from "$lib/components/FundingChart";
 
-  let { data }: PageProps = $props();
-  let { locales, campaign, video, rewards, budgets, project } = data;
+    let { data }: PageProps = $props();
+    let { locales, campaign, video, rewards, budgets, project } = data;
 
-  let currentTab = $state("rewards");
+    let currentTab = $state("rewards");
 
-  function handleTabChange(value: string | undefined) {
-    if (value) {
-      currentTab = value;
-      window.location.hash = value;
-    }
-  }
-
-  onMount(() => {
-    const hash = window.location.hash.slice(1);
-    if (hash) {
-      currentTab = hash;
+    function handleTabChange(value: string | undefined) {
+        if (value) {
+            currentTab = value;
+            window.location.hash = value;
+        }
     }
 
-    // Add event listener for hash changes
-    const handleHashChange = () => {
-      const newHash = window.location.hash.slice(1);
-      if (newHash) {
-        currentTab = newHash;
-      }
-    };
+    onMount(() => {
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+            currentTab = hash;
+        }
 
-    window.addEventListener("hashchange", handleHashChange);
+        // Add event listener for hash changes
+        const handleHashChange = () => {
+            const newHash = window.location.hash.slice(1);
+            if (newHash) {
+                currentTab = newHash;
+            }
+        };
 
-    // Clean up the event listener when component is destroyed
-    return () => {
-      window.removeEventListener("hashchange", handleHashChange);
-    };
-  });
+        window.addEventListener("hashchange", handleHashChange);
 
-  const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
+        // Clean up the event listener when component is destroyed
+        return () => {
+            window.removeEventListener("hashchange", handleHashChange);
+        };
+    });
 
-  // Group budgets by type
-  const groupedBudgets = budgets.reduce(
-    (acc, budget) => {
-      if (!acc[budget.type]) {
-        acc[budget.type] = [];
-      }
-      acc[budget.type].push(budget);
-      return acc;
-    },
-    {} as Record<string, typeof budgets>,
-  );
+    const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
 
-  function renderMarkdown(content: string) {
-    return marked(content, { sanitize: true });
-  }
+    // Group budgets by type
+    const groupedBudgets = budgets.reduce(
+        (acc, budget) => {
+            if (!acc[budget.type]) {
+                acc[budget.type] = [];
+            }
+            acc[budget.type].push(budget);
+            return acc;
+        },
+        {} as Record<string, typeof budgets>,
+    );
+
+    function renderMarkdown(content: string) {
+        return marked(content, { sanitize: true });
+    }
 </script>
 
 <section class="flex flex-col gap-8">
-  <div class="grid grid-flow-col gap-8">
-    <div class="space-y-4">
-      <p class="text-gray-600 text-2xl">{project.subtitle}</p>
-      <h1 class="text-5xl font-bold">{project.title}</h1>
-      <div class="text-gray-600 max-w-3xl line-clamp-2">
-        {@html renderMarkdown(project.description)}
-      </div>
+    <div class="grid grid-flow-col gap-8">
+        <div class="space-y-4">
+            <p class="text-2xl text-gray-600">{project.subtitle}</p>
+            <h1 class="text-5xl font-bold">{project.title}</h1>
+            <div class="line-clamp-2 max-w-3xl text-gray-600">
+                {@html renderMarkdown(project.description)}
+            </div>
+        </div>
+        <div class="flex flex-col items-end justify-between">
+            <LocaleSwitcher {locales} />
+            <div class="flex items-center gap-2 text-2xl font-medium text-primary-foreground">
+                <Clock size={32} />
+                <span>Quedan 16d 23h 57m</span>
+            </div>
+        </div>
     </div>
-    <div class="flex flex-col items-end justify-between">
-      <LocaleSwitcher {locales} />
-      <div class="flex items-center gap-2 text-2xl text-primary-foreground font-medium">
-        <Clock size={32} />
-        <span>Quedan 16d 23h 57m</span>
-      </div>
-    </div>
-  </div>
 
-  <div class="grid grid-flow-col gap-8">
-    <Player {...video} />
-    <CampaignProgress
-      obtained={campaign.obtained}
-      optimum={campaign.optimum.amount}
-      minimum={campaign.minimum.amount}
-      donations={campaign.donations}
-      timeSeriesData={campaign.timeSeriesData}
-    />
-  </div>
-  <div class="flex justify-between items-center">
-    <div class="flex gap-4">
-      <Button variant="outline" size="sm" class="border-black"
-        ><Bookmark class="mr-2" /> Periodismo independiente</Button
-      >
-      <Button variant="outline" size="sm" class="border-black"><MapPin class="mr-2" /> {project.territory}</Button>
+    <div class="grid grid-flow-col gap-8">
+        <Player {...video} />
+        <CampaignProgress
+            obtained={campaign.obtained}
+            optimum={campaign.optimum.amount}
+            minimum={campaign.minimum.amount}
+            donations={campaign.donations}
+            timeSeriesData={campaign.timeSeriesData}
+        />
     </div>
-    <div class="flex gap-4">
-      <ShareButton />
-      <Button variant="ghost" size="sm"><Heart class="mr-2 h-4" /> {$_("project.actions.remember")}</Button>
+    <div class="flex items-center justify-between">
+        <div class="flex gap-4">
+            <Button variant="outline" size="sm" class="border-black"
+                ><Bookmark class="mr-2" /> Periodismo independiente</Button
+            >
+            <Button variant="outline" size="sm" class="border-black"
+                ><MapPin class="mr-2" /> {project.territory}</Button
+            >
+        </div>
+        <div class="flex gap-4">
+            <ShareButton />
+            <Button variant="ghost" size="sm"
+                ><Heart class="mr-2 h-4" /> {$_("project.actions.remember")}</Button
+            >
+        </div>
     </div>
-  </div>
 </section>
 
 <section>
-  <div class="flex justify-between items-center mb-8">
-    <h2 class="text-2xl font-bold">{$_("reward.trending")}</h2>
-    <Button variant="secondary" size="lg" href="#rewards">
-      <MoveRight class="mr-4 h-6 w-6" />
-      {$_("project.actions.viewAll")}
-    </Button>
-  </div>
+    <div class="mb-8 flex items-center justify-between">
+        <h2 class="text-2xl font-bold">{$_("reward.trending")}</h2>
+        <Button variant="secondary" size="lg" href="#rewards">
+            <MoveRight class="mr-4 h-6 w-6" />
+            {$_("project.actions.viewAll")}
+        </Button>
+    </div>
 
-  <div class="grid md:grid-cols-3 gap-6">
-    {#each rewards.slice(0, 3) as reward}
-      <RewardCard size="sm" projectId={project.id} {...reward} />
-    {/each}
-  </div>
+    <div class="grid gap-6 md:grid-cols-3">
+        {#each rewards.slice(0, 3) as reward}
+            <RewardCard size="sm" projectId={project.id} {...reward} />
+        {/each}
+    </div>
 </section>
 
 <Tabs.Root value={currentTab} onValueChange={handleTabChange}>
-  <Tabs.List>
-    {#each tabs as tab}
-      <Tabs.Trigger value={tab}>{$_(`project.tabs.${tab}`)}</Tabs.Trigger>
-    {/each}
-  </Tabs.List>
-  <Tabs.Content value="project">
-    <section class="bg-secondary p-32">
-      <div class="max-w-4xl m-auto prose prose-lg">
-        {@html renderMarkdown(project.description)}
-      </div>
-    </section>
-  </Tabs.Content>
-  <Tabs.Content value="budget">
-    <section class="flex flex-col bg-secondary p-8 gap-8">
-      <div class="flex flex-row gap-4">
-        <h2 class="basis-1/3 text-4xl font-bold text-primary-foreground">
-          {$_("budget.headline")}
-        </h2>
-        <FundingChart minimum={campaign.minimum} optimal={campaign.optimum} />
-      </div>
-      <div class="space-y-8">
-        {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
-          <div class="space-y-4">
-            <h3 class="text-2xl font-semibold text-primary-foreground">{$_(`budget.${type}`)}</h3>
-            <div class="gap-4 flex flex-row overflow-x-auto">
-              {#each budgetGroup as budget}
-                <ProjectBudget {...budget} />
-              {/each}
+    <Tabs.List>
+        {#each tabs as tab}
+            <Tabs.Trigger value={tab}>{$_(`project.tabs.${tab}`)}</Tabs.Trigger>
+        {/each}
+    </Tabs.List>
+    <Tabs.Content value="project">
+        <section class="bg-secondary p-32">
+            <div class="prose prose-lg m-auto max-w-4xl">
+                {@html renderMarkdown(project.description)}
             </div>
-          </div>
-        {/each}
-      </div>
-    </section>
-  </Tabs.Content>
-  <Tabs.Content value="rewards">
-    <section class="bg-secondary p-8">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
-      </div>
+        </section>
+    </Tabs.Content>
+    <Tabs.Content value="budget">
+        <section class="flex flex-col gap-8 bg-secondary p-8">
+            <div class="flex flex-row gap-4">
+                <h2 class="basis-1/3 text-4xl font-bold text-primary-foreground">
+                    {$_("budget.headline")}
+                </h2>
+                <FundingChart minimum={campaign.minimum} optimal={campaign.optimum} />
+            </div>
+            <div class="space-y-8">
+                {#each Object.entries(groupedBudgets) as [type, budgetGroup]}
+                    <div class="space-y-4">
+                        <h3 class="text-2xl font-semibold text-primary-foreground">
+                            {$_(`budget.${type}`)}
+                        </h3>
+                        <div class="flex flex-row gap-4 overflow-x-auto">
+                            {#each budgetGroup as budget}
+                                <ProjectBudget {...budget} />
+                            {/each}
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        </section>
+    </Tabs.Content>
+    <Tabs.Content value="rewards">
+        <section class="bg-secondary p-8">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
+            </div>
 
-      <div class="grid md:grid-cols-3 gap-6">
-        {#each rewards as reward}
-          <RewardCard size="lg" projectId={project.id} {...reward} />
-        {/each}
-      </div>
-    </section>
-  </Tabs.Content>
-  <Tabs.Content value="updates">
-    <section class="bg-secondary p-8 min-h-96">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
-      </div>
-    </section>
-  </Tabs.Content>
-  <Tabs.Content value="community">
-    <section class="bg-secondary p-8 min-h-96">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-4xl font-bold text-primary-foreground">Comunidad</h2>
-      </div>
-    </section>
-  </Tabs.Content>
+            <div class="grid gap-6 md:grid-cols-3">
+                {#each rewards as reward}
+                    <RewardCard size="lg" projectId={project.id} {...reward} />
+                {/each}
+            </div>
+        </section>
+    </Tabs.Content>
+    <Tabs.Content value="updates">
+        <section class="min-h-96 bg-secondary p-8">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
+            </div>
+        </section>
+    </Tabs.Content>
+    <Tabs.Content value="community">
+        <section class="min-h-96 bg-secondary p-8">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 class="text-4xl font-bold text-primary-foreground">Comunidad</h2>
+            </div>
+        </section>
+    </Tabs.Content>
 </Tabs.Root>
