@@ -1,53 +1,70 @@
 <script lang="ts">
-  import { enhance } from "$app/forms";
-  import type { ActionData } from "./$types";
-  import { page } from '$app/stores';
+  import { _ } from "svelte-i18n";
+  import { toast } from "svelte-sonner";
+  import SuperDebug, { superForm } from "sveltekit-superforms";
+  import { zodClient } from "sveltekit-superforms/adapters";
+  import { browser } from "$app/environment";
 
-  import { Label } from "$lib/components/ui/label";
-  import { Input } from "$lib/components/ui/input";
+  import * as Form from "$lib/components/ui/form";
   import { Button } from "$lib/components/ui/button";
-  import { Card, CardHeader, CardTitle, CardContent } from "$lib/components/ui/card";
-  import CheckoutSummary from "$lib/components/CheckoutSummary/CheckoutSummary.svelte";
+  import { Input } from "$lib/components/ui/input";
+  import CheckoutSummary from "$lib/components/CheckoutSummary";
 
-  let { form }: { form: ActionData } = $props();
+  import { schema } from "./schema";
 
-  // Get returnUrl from query parameters using derived rune
-  const returnUrl = $derived($page.url.searchParams.get('returnUrl') || '/');
+  let { data } = $props();
+
+  const form = superForm(data.form, {
+    validators: zodClient(schema),
+    onResult: ({ result }) => {
+      // console.log(result);
+      switch (result.type) {
+        case "success":
+          toast.success(result.data?.form.message);
+          break;
+        case "failure":
+          toast.error(result.data?.message);
+          break;
+      }
+    },
+  });
+
+  const { form: formData, enhance, submit } = form;
 </script>
 
 <div class="container mx-auto p-4">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    <div>
-      <Card>
-        <CardHeader>
-          <CardTitle class="text-2xl font-bold">Login</CardTitle>
-          <div class="flex justify-end">
-            <Button variant="outline" href={`/register?returnUrl=${encodeURIComponent(returnUrl)}`}>Need an account? Register</Button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p style="color: red">{form?.message ?? ""}</p>
-
-          <form method="POST" class="space-y-4" action="?/login" use:enhance>
-            <!-- Pass the returnUrl as a hidden field -->
-            <input type="hidden" name="returnUrl" value={returnUrl}>
-
-            <div>
-              <Label for="email">Email</Label>
-              <Input id="username" name="username" type="text" required />
-            </div>
-            <div>
-              <Label for="password">Password</Label>
-              <Input id="password" name="password" type="password" required />
-            </div>
-            <Button type="submit" class="w-full">Sign In</Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div class="space-y-4">
+      <h2 class="text-3xl font-bold">{$_("login.page.title")}</h2>
+      <p>{$_("login.page.description")}</p>
+      <div class="flex items-center gap-4">
+        <h3 class="text-xl font-bold">{$_("login.page.registerOr")}</h3>
+        <Button variant="secondary" href={`/register`}>{$_("login.page.loginButton")}</Button>
+      </div>
+      <form method="POST" class="max-w-md space-y-4" use:enhance>
+        <p>{$_("login.page.goteoUserInfo")}</p>
+        <Form.Field {form} name="email">
+          <Form.Control let:attrs>
+            <Input {...attrs} bind:value={$formData.email} placeholder={$_("login.form.email")} />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+        <Form.Field {form} name="password">
+          <Form.Control let:attrs>
+            <Input {...attrs} bind:value={$formData.password} placeholder={$_("login.form.password")} />
+          </Form.Control>
+          <Form.FieldErrors />
+        </Form.Field>
+      </form>
+      <a href="#" class="font-bold">{$_("login.page.forgotPassword")}</a>
+      <p>{$_("login.page.otherAccessMethods")}</p>
     </div>
 
     <div>
-      <CheckoutSummary />
+      <CheckoutSummary confirmAction={submit} />
+      {#if browser}
+        <SuperDebug data={$formData} />
+      {/if}
     </div>
   </div>
 </div>
