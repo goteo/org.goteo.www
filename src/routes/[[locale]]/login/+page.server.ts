@@ -2,7 +2,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { message, superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 
-import { apiUsersIdorganizationPatch, apiUsersIdpersonPatch, apiUsersPost, apiUserTokensPost } from "$client";
+import { apiUserTokensPost } from "$client";
 import * as auth from "$lib/server/auth";
 
 import type { PageServerLoad, Actions } from "./$types.js";
