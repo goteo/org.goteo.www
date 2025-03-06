@@ -4,5 +4,5 @@ import type { CreateClientConfig } from "./client/client.gen";
 
 export const createClientConfig: CreateClientConfig = (config) => ({
     ...config,
-    baseUrl: PUBLIC_API_URL,
+    baseUrl: env.PUBLIC_API_URL,
 });
