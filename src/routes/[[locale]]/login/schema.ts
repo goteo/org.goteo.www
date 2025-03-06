@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { localeErrorMap } from "$lib/localeErrorMap";
+import { localeErrorMap } from "$lib/i18n/localeErrorMap";
 
 // Set custom error map globally
 z.setErrorMap(localeErrorMap);
