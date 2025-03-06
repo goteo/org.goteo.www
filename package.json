@@ -37,6 +37,8 @@
     "bits-ui": "^0.22.0",
     "clsx": "^2.1.1",
     "lucide-svelte": "^0.475.0",
+    "prettier-plugin-svelte": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "storybook": "^8.5.3",
     "svelte": "^5.19.9",
     "svelte-check": "^4.1.4",
