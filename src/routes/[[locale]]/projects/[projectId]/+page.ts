@@ -41,7 +41,16 @@ const ProjectSchema = z.object({
     description: z.string(),
     category: z.string(),
     territory: z.string(),
-    status: z.string(),
+    deadline: z.coerce.date().optional(),
+    status: z.enum([
+        "in_editing",
+        "in_review",
+        "rejected",
+        "in_campaign",
+        "unfunded",
+        "in_funding",
+        "fulfilled",
+    ]),
     owner: z.string(),
     campaign: z.object({
         minimum: FundingGoalSchema,

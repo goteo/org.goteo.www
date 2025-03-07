@@ -86,7 +86,9 @@
         </div>
         <div class="flex flex-col items-end justify-between">
             <LocaleSwitcher {locales} />
-            <CountdownLabel />
+            {#if project.status === "in_campaign"}
+                <CountdownLabel />
+            {/if}
         </div>
     </div>
 

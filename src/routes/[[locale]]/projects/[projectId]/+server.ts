@@ -125,14 +125,17 @@ const map = (
         },
     };
 
-    const { id, title, subtitle, description, territory, category, status } = project;
+    const { id, title, subtitle, description, territory, category, status, calendar } = project;
     const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
+
+    const deadline = calendar && project.deadline ? calendar[project.deadline] : null;
 
     const data = {
         id,
         title,
         subtitle,
         description,
+        deadline,
         status,
         category,
         territory: territoryLabel,
