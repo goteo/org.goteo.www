@@ -17,6 +17,6 @@ export const load: LayoutLoad = async ({ params, url, parent }) => {
         const redirectUrl = url.pathname.replace(`/${urlLocale}`, "") || "/";
         throw redirect(302, redirectUrl);
     }
-
+    console.debug({ urlLocale, parentData });
     return { locale: urlLocale, ...parentData };
 };

@@ -15,7 +15,8 @@
         "units": "Quedan {units} unidades",
         "noUnits": "No quedan unidades",
         "trending": "Recompensas más populares",
-        "headline": "Selecciona tu recompensa"
+        "headline": "Selecciona tu recompensa",
+        "addAndContinue": "Añadir al carro y continuar"
     },
     "budget": {
         "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
@@ -62,5 +63,85 @@
         "facebook": "compartir en facebook",
         "twitter": "compartir en X",
         "code": "compartir como código"
+    },
+    "register": {
+        "page": {
+            "title": "Indícanos tus datos personales",
+            "description": "Necesitamos saber quién eres antes de pagar.",
+            "registerOr": "Regístrate o",
+            "loginButton": "Entra con tu cuenta",
+            "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+            "otherAccessMethods": "También puedes acceder a través de:"
+        },
+        "form": {
+            "userType": {
+                "individual": "Persona física",
+                "organization": "Persona jurídica (empresas)"
+            },
+            "termsCheckbox": "Acepto las condiciones legales",
+            "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+            "zod": {
+                "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
+                "legalName.custom": "La razón social es obligatoria para empresas"
+            }
+        },
+        "individual": {
+            "firstName": "Nombre",
+            "lastName": "Apellidos",
+            "email": "Correo electrónico",
+            "password": "Contraseña",
+            "taxIdCheckbox": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+            "taxId": "DNI*"
+        },
+        "organization": {
+            "legalName": "Razón social",
+            "email": "Correo electrónico",
+            "password": "Contraseña",
+            "taxId": "CIF*",
+            "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
+            "representativeTitle": "Datos del representante de la empresa.",
+            "firstName": "Nombre",
+            "lastName": "Apellidos"
+        }
+    },
+    "login": {
+        "page": {
+            "title": "Indícanos tus datos personales",
+            "description": "Necesitamos saber quién eres antes de pagar.",
+            "registerOr": "Entra en tu cuenta o",
+            "loginButton": "Regístrate",
+            "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+            "otherAccessMethods": "También puedes acceder a través de:",
+            "forgotPassword": "¿Olvidaste tu contraseña?"
+        },
+        "form": {
+            "email": "Email o nombre de usuario",
+            "password": "Contraseña"
+        }
+    },
+    "zod": {
+        "required": "Este campo es obligatorio",
+        "invalid_type": "Se esperaba {expected} pero se recibió {received}",
+        "string": {
+            "too_small": "Debe tener al menos {min} carácter(es)",
+            "too_big": "No debe exceder los {max} caracteres",
+            "invalid": "Formato de texto no válido"
+        },
+        "number": {
+            "too_small": "Debe ser al menos {min}",
+            "too_big": "No debe exceder {max}"
+        },
+        "too_small": "Debe ser al menos {min}",
+        "too_big": "No debe exceder {max}",
+        "email": {
+            "invalid": "Correo electrónico no válido"
+        },
+        "url": {
+            "invalid": "Formato de URL no válido"
+        },
+        "enum": {
+            "invalid": "Opción no válida. Las opciones válidas son: {options}"
+        },
+        "invalid": "Entrada no válida"
     }
 }

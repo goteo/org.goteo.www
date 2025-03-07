@@ -15,7 +15,8 @@
         "units": "{units} units left",
         "noUnits": "No units left",
         "trending": "Recompensas más populares",
-        "headline": "Selecciona tu recompensa"
+        "headline": "Selecciona tu recompensa",
+        "addAndContinue": "Añadir al carro y continuar"
     },
     "budget": {
         "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
@@ -62,5 +63,70 @@
         "facebook": "share on facebook",
         "twitter": "share on X",
         "code": "share as code"
+    },
+    "register": {
+        "page": {
+            "title": "Tell us your personal information",
+            "description": "We need to know who you are before payment.",
+            "registerOr": "Register or",
+            "loginButton": "Log in with your account",
+            "goteoUserInfo": "If you are already a Goteo user, log in. You can use your wallet to make these donations.",
+            "otherAccessMethods": "You can also access through:"
+        },
+        "form": {
+            "userType": {
+                "individual": "Individual",
+                "organization": "Legal entity (companies)"
+            },
+            "termsCheckbox": "I accept the legal conditions",
+            "policiesCheckbox": "By registering I confirm my acceptance of your terms of use, privacy policy and cookie policy.",
+            "zod": {
+                "taxId.custom": "Tax ID must be at least 8 characters long",
+                "legalName.custom": "Legal name is required for organizations"
+            }
+        },
+        "individual": {
+            "firstName": "First Name",
+            "lastName": "Last Name",
+            "email": "Email",
+            "password": "Password",
+            "taxIdCheckbox": "I want to deduct this donation. It is necessary to provide the ID number to inform the tax authorities.",
+            "taxId": "ID Number*"
+        },
+        "organization": {
+            "legalName": "Legal Name",
+            "email": "Email",
+            "password": "Password",
+            "taxId": "Tax ID*",
+            "taxIdDescription": "*With the Tax ID we will notify the tax agency for your income tax return.",
+            "representativeTitle": "Company representative details.",
+            "firstName": "First Name",
+            "lastName": "Last Name"
+        }
+    },
+    "zod": {
+        "required": "This field is required",
+        "invalid_type": "Expected {expected} but received {received}",
+        "string": {
+            "too_small": "Must have at least {min} character(s)",
+            "too_big": "Must not exceed {max} characters",
+            "invalid": "Invalid string format"
+        },
+        "number": {
+            "too_small": "Must be at least {min}",
+            "too_big": "Must not exceed {max}"
+        },
+        "too_small": "Must be at least {min}",
+        "too_big": "Must not exceed {max}",
+        "email": {
+            "invalid": "Invalid email address"
+        },
+        "url": {
+            "invalid": "Invalid URL format"
+        },
+        "enum": {
+            "invalid": "Invalid option. Valid options are: {options}"
+        },
+        "invalid": "Invalid input"
     }
 }

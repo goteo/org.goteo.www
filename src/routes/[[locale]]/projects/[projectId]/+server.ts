@@ -112,17 +112,18 @@ const map = (
 
     const video = {
         title: project.title,
-        src: project.videoEmbed?.src,
+        src: project.video?.src,
         poster: {
-            src: project.videoEmbed?.thumbnail,
+            src: project.video?.thumbnail,
             alt: project.description,
         },
     };
 
-    const { title, subtitle, description, territory, budget } = project;
+    const { id, title, subtitle, description, territory } = project;
     const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
     const data = {
+        id,
         title,
         subtitle,
         description,
