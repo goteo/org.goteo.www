@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
-    import { Clock, MoveRight, MapPin, Bookmark, Heart } from "lucide-svelte";
+    import { Clock, MoveRight, MapPin, Heart } from "lucide-svelte";
     import { marked } from "marked";
 
     import type { PageProps } from "./$types";

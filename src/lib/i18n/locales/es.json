@@ -56,7 +56,6 @@
         "search": "Busca tu campaña"
     },
     "categories": {
-        "solidarity": "Solidario",
         "solidary": "Solidario",
         "libre-software": "Software Libre",
         "employment": "Generar empleo",
@@ -64,9 +63,7 @@
         "journalism": "Periodismo independiente",
         "education": "Educativo",
         "culture": "Crea cultura",
-        "ecological": "Ecológico",
         "ecology": "Ecológico",
-        "health": "Salud y cuidados",
         "health-and-cares": "Salud y cuidados",
         "open-data": "Datos abiertos",
         "democracy": "Democracia y participación",
