@@ -7,19 +7,19 @@
     export let optimal: FundingGoal;
 
     function calculatePercentages(data: FundingData) {
-        const total = data.items.reduce((sum, item) => sum + item.amount, 0);
+        const total = data.items.reduce((sum, item) => sum + item.amount.amount, 0);
         return {
             items: data.items.map((item) => ({
                 ...item,
-                percentage: (item.amount / total) * 100,
+                percentage: (item.amount.amount / total) * 100,
             })),
-            progress: (data.current / total) * 100,
+            progress: (data.current.amount / total) * 100,
         };
     }
 
     $: minimumPercentages = calculatePercentages(minimum.data);
     $: optimalPercentages = calculatePercentages(optimal.data);
-    $: minimumPercentageOfOptimal = (minimum.amount / optimal.amount) * 100;
+    $: minimumPercentageOfOptimal = (minimum.amount.amount / optimal.amount.amount) * 100;
 </script>
 
 <Card.Root class="basis-2/3 bg-white/50">
