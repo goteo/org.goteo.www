@@ -74,7 +74,7 @@ const ProjectSchema = z.object({
             image: z.string(),
             header: z.string(),
             content: z.string(),
-            donate: z.number().transform((num) => (!!num ? num / 100 : num)),
+            donate: MoneySchema,
             donors: z.number(),
             units: z.number().optional(),
         }),

@@ -1,9 +1,12 @@
 <script lang="ts">
     import { _, number } from "svelte-i18n";
+
+    import type { Money } from "$client";
+    import { cart } from "$lib/stores/cart";
     import * as Card from "$lib/components/ui/card";
     import * as Dialog from "$lib/components/ui/dialog";
     import { Button } from "$lib/components/ui/button";
-    import { cart } from "$lib/stores/cart";
+
     import boxIcon from "./box.svg";
     import userIcon from "./user.svg";
     import bagIcon from "./bag.svg";
@@ -12,11 +15,11 @@
     export let image: string = "";
     export let header: string = "";
     export let content: string = "";
-    export let donate: number = 0;
+    export let donate: Money;
     export let donors: number = 0;
     export let units: number | null = null;
     export let size: "sm" | "lg" = "lg";
-    export let projectId: number | null = null;
+    export let projectId: number;
 
     let open = false;
     let quantity = 1;
@@ -26,7 +29,7 @@
             id,
             type: "reward",
             name: header,
-            amount: donate,
+            amount: donate.amount || 0,
             quantity,
             image,
             project: projectId, // pass project id to the cart store
@@ -85,7 +88,11 @@
                     </div>
                 {/if}
                 <Button variant="secondary" size="lg" class="w-full"
-                    >{$_("reward.donate")} {$number(donate)}€</Button
+                    >{$_("reward.donate")}
+                    {$number(donate.amount || 0, {
+                        style: "currency",
+                        currency: donate.currency || "EUR",
+                    })}</Button
                 >
             </Card.Footer>
         </Card.Root>
@@ -143,7 +150,10 @@
                     disabled={units !== null && units <= 0}
                 >
                     {$_("reward.donate")}
-                    {$number(donate * quantity)}€
+                    {$number(donate.amount || 0, {
+                        style: "currency",
+                        currency: donate.currency || "EUR",
+                    })}
                 </Button>
             </div>
         </Dialog.Footer>

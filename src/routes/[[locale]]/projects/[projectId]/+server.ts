@@ -87,7 +87,7 @@ const map = (
                 image: "https://placehold.co/320x160",
                 header: title,
                 content: description,
-                donate: money.amount,
+                donate: money,
                 donors: 0,
                 units: hasUnits ? unitsAvailable : null,
             };
