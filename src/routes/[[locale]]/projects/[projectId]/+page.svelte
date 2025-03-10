@@ -73,11 +73,9 @@
 <section class="flex flex-col gap-8">
     <div class="grid grid-flow-col gap-8">
         <div class="space-y-4">
-            <p class="text-2xl text-gray-600">{project.subtitle}</p>
+            <p class="text-2xl text-gray-600">{$_("project.owner", { values: { owner: project.owner}})}</p>
             <h1 class="text-5xl font-bold">{project.title}</h1>
-            <div class="line-clamp-2 max-w-3xl text-gray-600">
-                {@html renderMarkdown(project.description)}
-            </div>
+            <p class="line-clamp-2 max-w-3xl text-gray-600">{project.subtitle}</p>
         </div>
         <div class="flex flex-col items-end justify-between">
             <LocaleSwitcher {locales} />

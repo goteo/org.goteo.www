@@ -8,6 +8,7 @@ import {
     type Project,
     type ProjectBudgetItem,
     type ProjectReward,
+    type User,
     apiAccountingBalancePointsGetCollection,
     apiProjectsIdGet,
 } from "$client";
@@ -21,8 +22,9 @@ export async function GET({ params }) {
     const balancePoints = await getBalancePoints(project);
     const rewards = await getRewards(project);
     const budgets = await getBudgetItems(project);
+    const owner = await getOwner(project);
 
-    const payload = map(project, accounting, transactions, balancePoints, rewards, budgets);
+    const payload = map(project, accounting, transactions, balancePoints, rewards, budgets, owner);
     return json(payload);
 }
 
@@ -68,6 +70,7 @@ const map = (
     balancePoints: Array<AccountingBalancePoint>,
     rewards: Array<ProjectReward>,
     budgets: Array<ProjectBudgetItem>,
+    owner: User,
 ) => {
     const obtained = accounting.balance?.amount ?? 0;
     const donations = transactions.totalItems;
@@ -128,6 +131,7 @@ const map = (
         subtitle,
         description,
         territory: territoryLabel,
+        owner: owner.displayName,
         video,
         rewards: rewardsMap,
         budgets: budgetItems,
@@ -249,4 +253,20 @@ const getBudgetItems = async (project: Project): Promise<ProjectBudgetItem[]> =>
         )
     ).filter((item): item is ProjectBudgetItem => item !== undefined);
     return budgetItems;
+};
+
+const getOwner = async (project: Project): Promise<User> => {
+    if (typeof project.owner === "undefined") {
+        throw new Error("Project does not have an owner");
+    }
+
+    const { data, error } = await client.get<User>({
+        url: client.buildUrl({ url: project.owner }),
+    });
+
+    if (error || typeof data === "undefined") {
+        throw new Error("Failed to fetch project owner");
+    }
+
+    return data;
 };
