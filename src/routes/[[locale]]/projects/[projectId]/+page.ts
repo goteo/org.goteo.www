@@ -17,10 +17,22 @@ const FundingGoalSchema = z.object({
     data: FundingDataSchema,
 });
 
-const MoneySchema = z.object({
-    amount: z.number().transform((num) => (!!num ? num / 100 : num)),
-    currency: z.string(),
-});
+const currencyDigits = {
+    EUR: 100,
+    USD: 100,
+    // Add other currencies as needed
+};
+
+const MoneySchema = z
+    .object({
+        amount: z.number(),
+        currency: z.string(),
+    })
+    .refine((data) => {
+        const digits = currencyDigits[data.currency] || 100; // Default to 100 if currency not found
+        data.amount = !!data.amount ? data.amount / digits : data.amount;
+        return true;
+    });
 
 const ProjectSchema = z.object({
     id: z.number(),
