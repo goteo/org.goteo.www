@@ -1,15 +1,17 @@
+import type { Money } from "$client";
+
 export interface FundingItem {
-    amount: number;
+    amount: Money;
     label: string;
     color: string;
 }
 
 export interface FundingData {
     items: FundingItem[];
-    current: number;
+    current: Money;
 }
 
 export interface FundingGoal {
-    amount: number;
+    amount: Money;
     data: FundingData;
 }

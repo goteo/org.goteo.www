@@ -1,28 +1,6 @@
 import { z } from "zod";
 import type { PageLoad } from "./$types";
 
-const FundingItemSchema = z.object({
-    amount: z.number().transform((num) => (!!num ? num / 100 : num)),
-    label: z.string(),
-    color: z.string(),
-});
-
-const FundingDataSchema = z.object({
-    items: z.array(FundingItemSchema),
-    current: z.number().transform((num) => (!!num ? num / 100 : num)),
-});
-
-const FundingGoalSchema = z.object({
-    amount: z.number().transform((num) => (!!num ? num / 100 : num)),
-    data: FundingDataSchema,
-});
-
-const currencyDigits = {
-    EUR: 100,
-    USD: 100,
-    // Add other currencies as needed
-};
-
 const MoneySchema = z
     .object({
         amount: z.number(),
@@ -34,6 +12,28 @@ const MoneySchema = z
         return true;
     });
 
+const FundingItemSchema = z.object({
+    amount: MoneySchema,
+    label: z.string(),
+    color: z.string(),
+});
+
+const FundingDataSchema = z.object({
+    items: z.array(FundingItemSchema),
+    current: MoneySchema,
+});
+
+const FundingGoalSchema = z.object({
+    amount: MoneySchema,
+    data: FundingDataSchema,
+});
+
+const currencyDigits = {
+    EUR: 100,
+    USD: 100,
+    // Add other currencies as needed
+};
+
 const ProjectSchema = z.object({
     id: z.number(),
     title: z.string(),
@@ -44,7 +44,7 @@ const ProjectSchema = z.object({
     campaign: z.object({
         minimum: FundingGoalSchema,
         optimum: FundingGoalSchema,
-        obtained: z.number(),
+        obtained: MoneySchema,
         donations: z.number(),
         timeSeriesData: z.array(
             z.object({

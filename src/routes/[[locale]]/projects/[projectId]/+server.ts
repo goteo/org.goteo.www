@@ -30,7 +30,7 @@ export async function GET({ params }) {
 
 const transformBudgetToFundingGoal = (
     budget: Record<string, { amount: number; currency: string }>,
-    current: number,
+    current: { amount: number; currency: string },
 ): FundingGoal => {
     const typeMapping = {
         infra: { type: "infrastructure", label: "Infraestructura", color: "bg-primary-foreground" },
@@ -40,7 +40,7 @@ const transformBudgetToFundingGoal = (
 
     const items = Object.entries(budget)
         .filter(([key]) => Object.keys(typeMapping).includes(key))
-        .map(([key, { amount }]) => {
+        .map(([key, { amount, currency }]) => {
             const mappedType = typeMapping[key as keyof typeof typeMapping] || {
                 type: key,
                 label: key,
@@ -48,14 +48,17 @@ const transformBudgetToFundingGoal = (
             };
 
             return {
-                amount,
+                amount: { amount, currency },
                 label: mappedType.label,
                 color: mappedType.color,
             };
         });
 
     return {
-        amount: items.reduce((sum, item) => sum + item.amount, 0),
+        amount: {
+            amount: items.reduce((sum, item) => sum + item.amount.amount, 0),
+            currency: current.currency,
+        },
         data: {
             items,
             current,
@@ -72,7 +75,7 @@ const map = (
     budgets: Array<ProjectBudgetItem>,
     owner: User,
 ) => {
-    const obtained = accounting.balance?.amount ?? 0;
+    const obtained = accounting.balance;
     const donations = transactions.totalItems;
 
     const timeSeriesData = balancePoints.map(({ start, balance }) => ({
