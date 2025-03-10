@@ -17,6 +17,9 @@
     import ProjectBudget from "$lib/components/ProjectBudget";
     import FundingChart from "$lib/components/FundingChart";
 
+    import aboutIco from "./about.svg";
+    import impactIco from "./impact.svg";
+
     let { data }: PageProps = $props();
     let { locales, campaign, video, rewards, budgets, project } = data;
 
@@ -73,7 +76,9 @@
 <section class="flex flex-col gap-8">
     <div class="grid grid-flow-col gap-8">
         <div class="space-y-4">
-            <p class="text-2xl text-gray-600">{$_("project.owner", { values: { owner: project.owner}})}</p>
+            <p class="text-2xl text-gray-600">
+                {$_("project.owner", { values: { owner: project.owner } })}
+            </p>
             <h1 class="text-5xl font-bold">{project.title}</h1>
             <p class="line-clamp-2 max-w-3xl text-gray-600">{project.subtitle}</p>
         </div>
@@ -127,6 +132,23 @@
         {#each rewards.slice(0, 3) as reward}
             <RewardCard size="sm" projectId={project.id} {...reward} />
         {/each}
+    </div>
+</section>
+
+<section class="grid grid-cols-2 gap-8">
+    <div class="flex flex-row gap-4">
+        <img src={aboutIco} alt="About" class="h-16 w-16" />
+        <p class="text-gray-500">
+            {$_("project.about.description")}
+            <a class="font-semibold" href="#">{$_("project.about.learnMore")}</a>
+        </p>
+    </div>
+    <div class="flex flex-row gap-4">
+        <img src={impactIco} alt="Impact" class="h-16 w-16" />
+        <p class="text-gray-500">
+            {$_("project.impact.description")}
+            <a class="font-semibold" href="#">{$_("project.impact.learnMore")}</a>
+        </p>
     </div>
 </section>
 

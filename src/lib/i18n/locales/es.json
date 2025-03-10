@@ -42,6 +42,14 @@
             "share": "Compartir",
             "remember": "Recordar",
             "viewAll": "Ver todas"
+        },
+        "about": {
+            "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a Climática en caso de llegar a los objetivos de éxito marcados.",
+            "learnMore": "Saber más."
+        },
+        "impact": {
+            "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
+            "learnMore": "Saber más."
         }
     },
     "navigation": {

@@ -42,6 +42,14 @@
             "share": "Share",
             "remember": "Remember",
             "viewAll": "View all"
+        },
+        "about": {
+            "description": "Goteo belongs to the Platoniq Foundation. By collaborating on a campaign, your money will be safeguarded by Platoniq and donated to Climática if the success goals are met.",
+            "learnMore": "Learn more."
+        },
+        "impact": {
+            "description": "By collaborating with a project promoted on Goteo, you can request a donation certificate. Thus, you can deduct up to 80% of what you have contributed in your next tax return.",
+            "learnMore": "Learn more."
         }
     },
     "navigation": {
