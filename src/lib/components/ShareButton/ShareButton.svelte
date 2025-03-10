@@ -34,7 +34,7 @@
             >
             <Button variant="outline" size="icon" class="h-24 w-24"
                 on:click={() => {
-                    const facebookShareUrl = `https://www.facebook.com/dialog/share?app_id=YOUR_APP_ID&display=popup&href=${encodeURIComponent(window.location.href)}&redirect_uri=${encodeURIComponent(window.location.href)}`;
+                    const facebookShareUrl = `https://www.facebook.com/dialog/share?app_id=184483011630708&display=popup&href=${encodeURIComponent(window.location.href)}&redirect_uri=${encodeURIComponent(window.location.href)}`;
                     window.open(facebookShareUrl, '_blank');
                 }}
                 ><img src={facebook} alt={$_("ShareButton.facebook")} /></Button
