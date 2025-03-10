@@ -1,15 +1,17 @@
 <script lang="ts">
+    import { _, number } from "svelte-i18n";
     import { Area, Chart, Svg, Rule } from "layerchart";
     import { scaleLinear, scaleTime } from "d3-scale";
+
+    import { Badge } from "$lib/components/ui/badge";
     import { Button } from "$lib/components/ui/button";
-    import { Badge } from "$lib/components/ui/badge/index.js";
     import { Card, CardContent } from "$lib/components/ui/card";
-    import { _ } from "svelte-i18n";
 
     export let obtained = 0;
     export let optimum = 0;
     export let minimum = 0;
     export let donations = 0;
+    export let currency = "EUR";
     export let timeSeriesData: Array<{ date: Date; amount: number }> = [];
 
     $: isMinimumReached = obtained >= minimum;
@@ -57,13 +59,15 @@
                     <p class="text-base font-medium text-gray-500">
                         {$_("campaignProgress.obtained")}
                     </p>
-                    <p class="text-3xl font-bold">{obtained.toLocaleString()}€</p>
+                    <p class="text-3xl font-bold">
+                        {$number(obtained, { style: "currency", currency })}
+                    </p>
                 </div>
                 <div>
                     <p class="text-base font-medium text-gray-500">
                         {$_("campaignProgress.donations")}
                     </p>
-                    <p class="text-xl font-semibold">{donations}</p>
+                    <p class="text-xl font-semibold">{$number(donations)}</p>
                 </div>
             </div>
             <div class="space-y-4">
@@ -71,13 +75,17 @@
                     <p class="text-base font-medium text-gray-500">
                         {$_("campaignProgress.optimal")}
                     </p>
-                    <p class="text-3xl font-bold">{optimum.toLocaleString()}€</p>
+                    <p class="text-3xl font-bold">
+                        {$number(optimum, { style: "currency", currency })}
+                    </p>
                 </div>
                 <div>
                     <p class="text-base font-medium text-gray-500">
                         {$_("campaignProgress.minimum")}
                     </p>
-                    <p class="text-xl font-semibold">{minimum.toLocaleString()}€</p>
+                    <p class="text-xl font-semibold">
+                        {$number(minimum, { style: "currency", currency })}
+                    </p>
                 </div>
             </div>
         </div>

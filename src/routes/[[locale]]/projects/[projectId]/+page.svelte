@@ -94,9 +94,10 @@
     <div class="grid grid-flow-col gap-8">
         <Player {...video} />
         <CampaignProgress
-            obtained={campaign.obtained}
-            optimum={campaign.optimum.amount}
-            minimum={campaign.minimum.amount}
+            obtained={campaign.obtained.amount}
+            optimum={campaign.optimum.amount.amount}
+            minimum={campaign.minimum.amount.amount}
+            currency={campaign.minimum.amount.currency}
             donations={campaign.donations}
             timeSeriesData={campaign.timeSeriesData}
         />
