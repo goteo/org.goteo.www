@@ -40,6 +40,10 @@
                 ><img src={facebook} alt={$_("ShareButton.facebook")} /></Button
             >
             <Button variant="outline" size="icon" class="h-24 w-24"
+                on:click={() => {
+                    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(window.location.href)}`;
+                    window.open(twitterShareUrl, '_blank');
+                }}
                 ><img src={twitter} alt={$_("ShareButton.twitter")} /></Button
             >
             <Button variant="outline" size="icon" class="h-24 w-24"
