@@ -8,6 +8,7 @@
     import facebook from "./facebook.svg";
     import twitter from "./twitter.svg";
     import code from "./code.svg";
+    import { toast } from 'svelte-sonner'; // Import toast from svelte-sonner
 </script>
 
 <Dialog.Root>
@@ -25,6 +26,10 @@
         </Dialog.Description>
         <div class="flex justify-around">
             <Button variant="outline" size="icon" class="h-24 w-24"
+                on:click={() => {
+                    navigator.clipboard.writeText(window.location.href);
+                    toast.info($_("ShareButton.copied")); // Display toast message
+                }}
                 ><img src={global} alt={$_("ShareButton.global")} /></Button
             >
             <Button variant="outline" size="icon" class="h-24 w-24"

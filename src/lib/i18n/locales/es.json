@@ -62,7 +62,8 @@
         "global": "compartir global",
         "facebook": "compartir en facebook",
         "twitter": "compartir en X",
-        "code": "compartir como código"
+        "code": "compartir como código",
+        "copied": "¡Enlace copiado al portapapeles!"
     },
     "register": {
         "page": {

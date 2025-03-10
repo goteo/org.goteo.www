@@ -62,7 +62,8 @@
         "global": "share global",
         "facebook": "share on facebook",
         "twitter": "share on X",
-        "code": "share as code"
+        "code": "share as code",
+        "copied": "Link copied to clipboard!"
     },
     "register": {
         "page": {
