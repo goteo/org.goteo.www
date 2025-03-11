@@ -1,5 +1,8 @@
-export function load({ locals }) {
+import type { LayoutServerLoad } from "./$types";
+
+export const load: LayoutServerLoad = async ({ locals }) => {
+    console.debug("/+layout.server", locals);
     return {
-        lang: locals.locale,
+        user: locals.user,
     };
-}
+};
