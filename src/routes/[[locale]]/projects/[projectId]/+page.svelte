@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
-    import { Clock, MoveRight, MapPin, Bookmark, Heart } from "lucide-svelte";
+    import { Clock, MoveRight, MapPin, Heart } from "lucide-svelte";
     import { marked } from "marked";
 
     import type { PageProps } from "./$types";
@@ -16,6 +16,7 @@
     import ShareButton from "$lib/components/ShareButton";
     import ProjectBudget from "$lib/components/ProjectBudget";
     import FundingChart from "$lib/components/FundingChart";
+    import CategoryLabel from "$lib/components/CategoryLabel";
 
     import aboutIco from "./about.svg";
     import impactIco from "./impact.svg";
@@ -104,9 +105,7 @@
     </div>
     <div class="flex items-center justify-between">
         <div class="flex gap-4">
-            <Button variant="outline" size="sm" class="border-black"
-                ><Bookmark class="mr-2" /> Periodismo independiente</Button
-            >
+            <CategoryLabel label={project.category} />
             <Button variant="outline" size="sm" class="border-black"
                 ><MapPin class="mr-2" /> {project.territory}</Button
             >
