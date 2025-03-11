@@ -128,7 +128,26 @@ const map = (
     const { id, title, subtitle, description, territory, category, status, calendar } = project;
     const territoryLabel = territory.subLvl2 || territory.subLvl1 || territory.country || "";
 
-    const deadline = calendar && project.deadline ? calendar[project.deadline] : null;
+    let deadline = null;
+    if (calendar) {
+        if (project.deadline === "optimum") {
+            // When deadline is "optimum", always count down to the minimum deadline first.
+            const minimumDeadline = calendar["minimum"];
+            const optimumDeadline = calendar["optimum"];
+            const now = new Date();
+            if (minimumDeadline) {
+                if (new Date(minimumDeadline) > now) {
+                    deadline = minimumDeadline;
+                } else {
+                    // After the minimum deadline has been surpassed, start watching the optimum deadline
+                    // (if available), but fall back to the minimum if not.
+                    deadline = optimumDeadline || minimumDeadline;
+                }
+            }
+        } else {
+            deadline = calendar[project.deadline] || null;
+        }
+    }
 
     const data = {
         id,
