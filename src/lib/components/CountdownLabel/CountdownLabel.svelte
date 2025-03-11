@@ -27,25 +27,8 @@
         hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
-        // Use Intl.RelativeTimeFormat for human-readable relative time
-        try {
-            const rtf = new Intl.RelativeTimeFormat($locale, {
-                numeric: "always",
-                style: "long",
-            });
-
-            // Choose the most appropriate unit
-            if (days > 0) {
-                formattedTime = rtf.format(days, "day");
-            } else if (hours > 0) {
-                formattedTime = rtf.format(hours, "hour");
-            } else {
-                formattedTime = rtf.format(minutes, "minute");
-            }
-        } catch (e) {
-            // Fallback for browsers that don't support RelativeTimeFormat
-            formattedTime = `${days}d ${hours}h ${minutes}m`;
-        }
+        // Format with two digits in the format: XXd XXh XXm
+        formattedTime = `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
     }
 
     // Update when locale changes
