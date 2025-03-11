@@ -142,5 +142,9 @@
             "invalid": "Invalid option. Valid options are: {options}"
         },
         "invalid": "Invalid input"
+    },
+    "countdown": {
+        "ended": "Campaign finished",
+        "remaining": "Remaining {time}"
     }
 }

@@ -18,7 +18,7 @@
 
         if (diff <= 0) {
             // Deadline has passed
-            formattedTime = $_("countdown.ended") || "Campaña finalizada";
+            formattedTime = $_("countdown.ended");
             return;
         }
 
@@ -28,7 +28,7 @@
         minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 
         // Format with two digits in the format: XXd XXh XXm
-        formattedTime = `${days.toString().padStart(2, '0')}d ${hours.toString().padStart(2, '0')}h ${minutes.toString().padStart(2, '0')}m`;
+        formattedTime = `${days.toString().padStart(2, "0")}d ${hours.toString().padStart(2, "0")}h ${minutes.toString().padStart(2, "0")}m`;
     }
 
     // Update when locale changes
@@ -47,5 +47,5 @@
 
 <div class="flex items-center gap-2 text-2xl font-medium text-primary-foreground">
     <Clock size={32} />
-    <span>{formattedTime}</span>
+    <span>{$_("countdown.remaining", { values: { time: formattedTime } })}</span>
 </div>

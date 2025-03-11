@@ -157,5 +157,9 @@
             "invalid": "Opción no válida. Las opciones válidas son: {options}"
         },
         "invalid": "Entrada no válida"
+    },
+    "countdown": {
+        "ended": "Campaña finalizada",
+        "remaining": "Quedan {time}"
     }
 }
