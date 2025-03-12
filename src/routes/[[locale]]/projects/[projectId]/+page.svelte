@@ -25,6 +25,34 @@
 
     let { data }: PageProps = $props();
     let { locales, campaign, video, rewards, budgets, project } = data;
+    let updates = [
+        {
+            image: "https://placehold.co/256",
+            date: new Date(Date.now()),
+            title: "Esto es todo un apoyo",
+            subtitle: "Donación superior a 2.500 euros a la campaña. ¡Super-agradecimiento!",
+            description:
+                "Llevamos años demostrando que otro mundo es posible. En esta plataforma, sin ir más lejos, tenemos todo un catálogo de iniciativas que demuestran que hay esperanza.",
+        },
+        {
+            image: "https://placehold.co/256",
+            date: new Date(Date.now()),
+            title: "Quedan 7 días",
+            subtitle:
+                "Hablar de billones de dólares como meta global de financiación climática. Necesitar 220.500€ para contarlo.",
+            description:
+                "En Climática hablamos de la gran crisis que afecta a nuestra generación y las futuras y tratamos de hacerlo. Necesitamos tu ayuda para seguir adelante.",
+        },
+        {
+            image: "https://placehold.co/256",
+            date: new Date(Date.now()),
+            title: "Quedan 7 días",
+            subtitle:
+                "Hablar de billones de dólares como meta global de financiación climática. Necesitar 220.500€ para contarlo.",
+            description:
+                "En Climática hablamos de la gran crisis que afecta a nuestra generación y las futuras y tratamos de hacerlo. Necesitamos tu ayuda para seguir adelante.",
+        },
+    ];
 
     let currentTab = $state("rewards");
 
@@ -208,8 +236,16 @@
             <div class="mb-8 flex items-center justify-between">
                 <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
             </div>
-            <div>
-                <UpdateCard />
+
+            <div class="flex flex-row gap-4 overflow-x-auto">
+                <div class="flex-none">
+                    <UpdateCard {...updates[0]} />
+                </div>
+                <div class="flex w-auto flex-row gap-4">
+                    {#each updates as update}
+                        <UpdateCard {...update} />
+                    {/each}
+                </div>
             </div>
         </section>
     </Tabs.Content>
