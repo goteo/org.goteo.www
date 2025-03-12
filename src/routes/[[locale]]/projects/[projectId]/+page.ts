@@ -99,6 +99,15 @@ const ProjectSchema = z.object({
             optimum: MoneySchema.optional(),
         }),
     ),
+    updates: z.array(
+        z.object({
+            title: z.string(),
+            subtitle: z.string(),
+            description: z.string(),
+            image: z.string().optional(),
+            date: z.coerce.date(),
+        }),
+    ),
 });
 
 export const load: PageLoad = async ({ fetch, params }) => {
@@ -113,6 +122,6 @@ export const load: PageLoad = async ({ fetch, params }) => {
         throw new Error("Failed to parse project data");
     }
     // console.debug(JSON.stringify(parsed.data, null, 2));
-    const { campaign, locales, video, rewards, budgets, ...project } = parsed.data;
-    return { campaign, locales, video, rewards, budgets, project };
+    const { campaign, locales, video, rewards, budgets, updates, ...project } = parsed.data;
+    return { campaign, locales, video, rewards, budgets, updates, project };
 };

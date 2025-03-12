@@ -4,12 +4,11 @@
     import type { ButtonEventHandler } from "bits-ui";
     import { date as formatDate } from "svelte-i18n";
 
-    export let image: string = "https://placehold.co/256";
+    export let image: string;
     export let date: Date;
-    export let title = "Esto es todo un apoyo";
-    export let subtitle = "Donación superior a 2.500 euros a la campaña. ¡Super-agradecimiento!";
-    export let description =
-        "Llevamos años demostrando que otro mundo es posible. En esta plataforma, sin ir más lejos, tenemos todo un catálogo de iniciativas que demuestran que hay esperanza.";
+    export let title: string;
+    export let subtitle: string;
+    export let description : string;
 
     function action(e: ButtonEventHandler<MouseEvent>): void {
         throw new Error("Function not implemented.");
@@ -17,8 +16,8 @@
 </script>
 
 <Card.Root class="flex h-full w-full min-w-[512px] max-w-2xl flex-col drop-shadow-sm">
-    <Card.Header>
-        <p class="text-xl font-bold">{$formatDate(date, { format: "medium" })}</p>
+    <Card.Header class="space-y-4">
+        <p class="text-2xl font-bold">{$formatDate(date, { format: "medium" })}</p>
         <img src={image} alt="Reward" class="h-64 w-full rounded-3xl object-cover" />
         <Card.Title tag="h1" class="text-3xl font-bold">{title}</Card.Title>
     </Card.Header>
