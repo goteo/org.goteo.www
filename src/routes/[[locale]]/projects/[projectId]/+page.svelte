@@ -21,6 +21,7 @@
 
     import aboutIco from "./about.svg";
     import impactIco from "./impact.svg";
+    import UpdateCard from "$lib/components/UpdateCard";
 
     let { data }: PageProps = $props();
     let { locales, campaign, video, rewards, budgets, project } = data;
@@ -206,6 +207,9 @@
         <section class="min-h-96 bg-secondary p-8">
             <div class="mb-8 flex items-center justify-between">
                 <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
+            </div>
+            <div>
+                <UpdateCard />
             </div>
         </section>
     </Tabs.Content>
