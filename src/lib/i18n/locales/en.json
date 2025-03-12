@@ -56,14 +56,18 @@
         "search": "Search for your campaign"
     },
     "categories": {
-        "solidarity": "Solidarity",
+        "solidary": "Solidarity",
+        "libre-software": "Free Software",
         "employment": "Generate Employment",
         "design": "From Design",
         "journalism": "Independent Journalism",
         "education": "Educational",
         "culture": "Create Culture",
-        "ecological": "Ecological",
-        "health": "Health & Care"
+        "ecology": "Ecological",
+        "health-and-cares": "Health & Care",
+        "open-data": "Open Data",
+        "democracy": "Democracy and Participation",
+        "equity": "Gender Equality"
     },
     "ShareButton": {
         "title": "Spread this project around the world",
@@ -138,5 +142,9 @@
             "invalid": "Invalid option. Valid options are: {options}"
         },
         "invalid": "Invalid input"
+    },
+    "countdown": {
+        "ended": "Campaign finished",
+        "remaining": "Remaining {time}"
     }
 }

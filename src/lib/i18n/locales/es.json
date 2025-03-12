@@ -56,14 +56,18 @@
         "search": "Busca tu campaña"
     },
     "categories": {
-        "solidarity": "Solidario",
+        "solidary": "Solidario",
+        "libre-software": "Software Libre",
         "employment": "Generar empleo",
         "design": "Desde el diseño",
         "journalism": "Periodismo independiente",
         "education": "Educativo",
         "culture": "Crea cultura",
-        "ecological": "Ecológico",
-        "health": "Salud y cuidados"
+        "ecology": "Ecológico",
+        "health-and-cares": "Salud y cuidados",
+        "open-data": "Datos abiertos",
+        "democracy": "Democracia y participación",
+        "equity": "Igualdad de género"
     },
     "ShareButton": {
         "title": "Difunde este proyecto por el mundo",
@@ -153,5 +157,9 @@
             "invalid": "Opción no válida. Las opciones válidas son: {options}"
         },
         "invalid": "Entrada no válida"
+    },
+    "countdown": {
+        "ended": "Campaña finalizada",
+        "remaining": "Quedan {time}"
     }
 }
