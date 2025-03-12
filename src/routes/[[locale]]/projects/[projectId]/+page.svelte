@@ -212,15 +212,21 @@
                 </h2>
             </div>
             <div class="flex flex-row gap-4 overflow-x-auto">
-                <div class="flex-none">
-                    <UpdateCard {...update} />
-                </div>
-                {#if updates.length > 0}
-                    <div class="flex w-auto flex-row gap-4">
-                        {#each updates as update}
-                            <UpdateCard {...update} />
-                        {/each}
+                {#if update}
+                    <div class="flex-none">
+                        <UpdateCard {...update} />
                     </div>
+                    {#if updates.length > 0}
+                        <div class="flex w-auto flex-row gap-4">
+                            {#each updates as update}
+                                <UpdateCard {...update} />
+                            {/each}
+                        </div>
+                    {:else}
+                        <p class="border-l border-slate-950 pl-6 text-6xl">
+                            {$_("updates.empty")}
+                        </p>
+                    {/if}
                 {:else}
                     <p class="border-l border-slate-950 pl-6 text-6xl">
                         {$_("updates.empty")}
