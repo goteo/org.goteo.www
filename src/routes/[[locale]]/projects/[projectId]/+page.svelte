@@ -208,10 +208,9 @@
         <section class="min-h-96 bg-secondary p-8 py-16">
             <div class="mb-8 flex items-center justify-between">
                 <h2 class="max-w-2xl text-4xl font-bold text-primary-foreground">
-                    No pierdas detalle de los avances de esta campaña
+                    {$_("updates.heading")}
                 </h2>
             </div>
-
             <div class="flex flex-row gap-4 overflow-x-auto">
                 <div class="flex-none">
                     <UpdateCard {...update} />
@@ -224,7 +223,7 @@
                     </div>
                 {:else}
                     <p class="border-l border-slate-950 pl-6 text-6xl">
-                        No existen más actualizaciones previstas.
+                        {$_("updates.empty")}
                     </p>
                 {/if}
             </div>

@@ -146,5 +146,9 @@
     "countdown": {
         "ended": "Campaign finished",
         "remaining": "Remaining {time}"
+    },
+    "updates": {
+        "heading": "Don't miss any campaign updates",
+        "empty": "No more updates planned."
     }
 }
