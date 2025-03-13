@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { date as formatDate } from "svelte-i18n";
-    import type { ButtonEventHandler } from "bits-ui";
+    import { _, date as formatDate } from "svelte-i18n";
+    import { Share2 } from "lucide-svelte";
 
     import * as Card from "$lib/components/ui/card";
+    import * as Dialog from "$lib/components/ui/dialog";
     import { Button } from "$lib/components/ui/button";
 
     export let image: string | undefined = undefined;
@@ -16,10 +17,6 @@
         subtitle: image ? "text-base" : "text-3xl",
         description: image ? "line-clamp-2" : "line-clamp-4",
     };
-
-    function action(e: ButtonEventHandler<MouseEvent>): void {
-        throw new Error("Function not implemented.");
-    }
 </script>
 
 <Card.Root class="flex h-full w-full min-w-[512px] max-w-2xl flex-col drop-shadow-sm">
@@ -35,6 +32,34 @@
         <p class={`${styles.description}`}>{description}</p>
     </Card.Content>
     <Card.Footer class="mt-auto justify-end">
-        <Button variant="outline" size="lg" class="" on:click={action}>Seguir leyendo</Button>
+        <Dialog.Root>
+            <Dialog.Trigger class="text-left">
+                <Button variant="outline" size="lg">
+                    {$_("updateCard.readMore")}
+                </Button>
+            </Dialog.Trigger>
+            <Dialog.Content class="w-full max-w-2xl gap-8">
+                <Dialog.Header class="gap-2">
+                    {#if image}
+                        <img
+                            src={image}
+                            alt="Reward"
+                            class="h-64 w-full rounded-3xl object-cover"
+                        />
+                    {/if}
+                    <Dialog.Title class="text-3xl text-primary-foreground">{title}</Dialog.Title>
+                </Dialog.Header>
+                <Dialog.Description class="grid grid-cols-1 gap-4">
+                    <Dialog.Title class="text-2xl text-primary-foreground">{subtitle}</Dialog.Title>
+                    {description}
+                </Dialog.Description>
+                <Dialog.Footer>
+                    <Button variant="default" size="lg">
+                        <Share2 class="mr-2 h-4" />
+                        {$_("project.actions.share")}
+                    </Button>
+                </Dialog.Footer>
+            </Dialog.Content>
+        </Dialog.Root>
     </Card.Footer>
 </Card.Root>

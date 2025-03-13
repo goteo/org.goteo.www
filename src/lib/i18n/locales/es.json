@@ -165,5 +165,8 @@
     "updates": {
         "heading": "No pierdas detalle de los avances de esta campaña",
         "empty": "No existen más actualizaciones previstas."
+    },
+    "updateCard": {
+        "readMore": "Seguir leyendo"
     }
 }

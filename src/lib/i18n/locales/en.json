@@ -150,5 +150,8 @@
     "updates": {
         "heading": "Don't miss any campaign updates",
         "empty": "No more updates planned."
+    },
+    "updateCard": {
+        "readMore": "Continue reading"
     }
 }
