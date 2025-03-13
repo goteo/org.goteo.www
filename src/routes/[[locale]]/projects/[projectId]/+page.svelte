@@ -58,7 +58,7 @@
         };
     });
 
-    const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
+    const tabs = ["rewards", "project", "budget", "updates", "community"] as const;
 
     // Group budgets by type
     const groupedBudgets = budgets.reduce(
@@ -160,6 +160,19 @@
             <Tabs.Trigger value={tab}>{$_(`project.tabs.${tab}`)}</Tabs.Trigger>
         {/each}
     </Tabs.List>
+    <Tabs.Content value="rewards">
+        <section class="bg-secondary p-8">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+                {#each rewards as reward}
+                    <RewardCard size="lg" projectId={project.id} {...reward} />
+                {/each}
+            </div>
+        </section>
+    </Tabs.Content>
     <Tabs.Content value="project">
         <section class="bg-secondary p-32">
             <div class="prose prose-lg m-auto max-w-4xl">
@@ -187,19 +200,6 @@
                             {/each}
                         </div>
                     </div>
-                {/each}
-            </div>
-        </section>
-    </Tabs.Content>
-    <Tabs.Content value="rewards">
-        <section class="bg-secondary p-8">
-            <div class="mb-8 flex items-center justify-between">
-                <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-3">
-                {#each rewards as reward}
-                    <RewardCard size="lg" projectId={project.id} {...reward} />
                 {/each}
             </div>
         </section>
