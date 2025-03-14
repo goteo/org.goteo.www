@@ -21,9 +21,11 @@
 
     import aboutIco from "./about.svg";
     import impactIco from "./impact.svg";
+    import UpdateCard from "$lib/components/UpdateCard";
 
     let { data }: PageProps = $props();
     let { locales, campaign, video, rewards, budgets, project } = data;
+    let [update, ...updates] = data.updates;
 
     let currentTab = $state("rewards");
 
@@ -56,7 +58,7 @@
         };
     });
 
-    const tabs = ["project", "budget", "rewards", "updates", "community"] as const;
+    const tabs = ["rewards", "project", "budget", "updates", "community"] as const;
 
     // Group budgets by type
     const groupedBudgets = budgets.reduce(
@@ -158,6 +160,19 @@
             <Tabs.Trigger value={tab}>{$_(`project.tabs.${tab}`)}</Tabs.Trigger>
         {/each}
     </Tabs.List>
+    <Tabs.Content value="rewards">
+        <section class="bg-secondary p-8">
+            <div class="mb-8 flex items-center justify-between">
+                <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+                {#each rewards as reward}
+                    <RewardCard size="lg" projectId={project.id} {...reward} />
+                {/each}
+            </div>
+        </section>
+    </Tabs.Content>
     <Tabs.Content value="project">
         <section class="bg-secondary p-32">
             <div class="prose prose-lg m-auto max-w-4xl">
@@ -189,23 +204,34 @@
             </div>
         </section>
     </Tabs.Content>
-    <Tabs.Content value="rewards">
-        <section class="bg-secondary p-8">
-            <div class="mb-8 flex items-center justify-between">
-                <h2 class="text-4xl font-bold text-primary-foreground">{$_("reward.headline")}</h2>
-            </div>
-
-            <div class="grid gap-6 md:grid-cols-3">
-                {#each rewards as reward}
-                    <RewardCard size="lg" projectId={project.id} {...reward} />
-                {/each}
-            </div>
-        </section>
-    </Tabs.Content>
     <Tabs.Content value="updates">
-        <section class="min-h-96 bg-secondary p-8">
+        <section class="min-h-96 bg-secondary p-8 py-16">
             <div class="mb-8 flex items-center justify-between">
-                <h2 class="text-4xl font-bold text-primary-foreground">Actualizaciones</h2>
+                <h2 class="max-w-2xl text-4xl font-bold text-primary-foreground">
+                    {$_("updates.heading")}
+                </h2>
+            </div>
+            <div class="flex flex-row gap-4 overflow-x-auto">
+                {#if update}
+                    <div class="flex-none">
+                        <UpdateCard {...update} />
+                    </div>
+                    {#if updates.length > 0}
+                        <div class="flex w-auto flex-row gap-4">
+                            {#each updates as update}
+                                <UpdateCard {...update} />
+                            {/each}
+                        </div>
+                    {:else}
+                        <p class="border-l border-slate-950 pl-6 text-6xl">
+                            {$_("updates.empty")}
+                        </p>
+                    {/if}
+                {:else}
+                    <p class="border-l border-slate-950 pl-6 text-6xl">
+                        {$_("updates.empty")}
+                    </p>
+                {/if}
             </div>
         </section>
     </Tabs.Content>

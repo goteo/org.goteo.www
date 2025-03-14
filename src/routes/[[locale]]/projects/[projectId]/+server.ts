@@ -8,6 +8,7 @@ import {
     type Project,
     type ProjectBudgetItem,
     type ProjectReward,
+    type ProjectUpdate,
     type User,
     apiAccountingBalancePointsGetCollection,
     apiProjectsIdGet,
@@ -23,8 +24,18 @@ export async function GET({ params }) {
     const rewards = await getRewards(project);
     const budgets = await getBudgetItems(project);
     const owner = await getOwner(project);
+    const updates = await getUpdates(project);
 
-    const payload = map(project, accounting, transactions, balancePoints, rewards, budgets, owner);
+    const payload = map(
+        project,
+        accounting,
+        transactions,
+        balancePoints,
+        rewards,
+        budgets,
+        owner,
+        updates,
+    );
     return json(payload);
 }
 
@@ -74,6 +85,7 @@ const map = (
     rewards: Array<ProjectReward>,
     budgets: Array<ProjectBudgetItem>,
     owner: User,
+    updates: Array<ProjectUpdate>,
 ) => {
     const obtained = accounting.balance;
     const donations = transactions.totalItems;
@@ -149,6 +161,42 @@ const map = (
         }
     }
 
+    // const updatesMap = [
+    //     {
+    //         date: new Date(Date.now()),
+    //         title: "Hemos recibido una donación de 1000€ a la campaña ¡Muchas gracias!",
+    //         subtitle:
+    //             "Queremos expresarle nuestro más sincero agradecimiento por su increíble donación",
+    //         description:
+    //             "Cada euro aporta esperanza y oportunidades, y su apoyo demuestra un compromiso excepcional con nuestra causa. Sabemos que confiar en una organización es una decisión importante, y no tomamos su gesto a la ligera. Estamos comprometidos a usar estos fondos de manera transparente y eficiente, y estaremos encantados de mantenerle informado/a sobre los avances y logros alcanzados gracias a usted. Una vez más, ¡muchísimas gracias por ser parte de este cambio! Su solidaridad nos motiva a seguir trabajando con más fuerza y dedicación.",
+    //     },
+    //     {
+    //         image: "https://placehold.co/256",
+    //         date: new Date(Date.now()),
+    //         title: "Esto es todo un apoyo",
+    //         subtitle: "Donación superior a 2.500 euros a la campaña. ¡Super-agradecimiento!",
+    //         description:
+    //             "Llevamos años demostrando que otro mundo es posible. En esta plataforma, sin ir más lejos, tenemos todo un catálogo de iniciativas que demuestran que hay esperanza.",
+    //     },
+    //     {
+    //         image: "https://placehold.co/256",
+    //         date: new Date(Date.now()),
+    //         title: "Quedan 7 días",
+    //         subtitle:
+    //             "Hablar de billones de dólares como meta global de financiación climática. Necesitar 220.500€ para contarlo.",
+    //         description:
+    //             "En Climática hablamos de la gran crisis que afecta a nuestra generación y las futuras y tratamos de hacerlo. Necesitamos tu ayuda para seguir adelante.",
+    //     },
+    // ];
+
+    const updatesMap = updates.map(({ title, subtitle, body, cover, date }) => ({
+        title,
+        subtitle,
+        description: body,
+        image: cover,
+        date,
+    }));
+
     const data = {
         id,
         title,
@@ -170,6 +218,7 @@ const map = (
             donations,
             timeSeriesData,
         },
+        updates: updatesMap,
     };
 
     return data;
@@ -296,4 +345,20 @@ const getOwner = async (project: Project): Promise<User> => {
     }
 
     return data;
+};
+
+const getUpdates = async (project: Project): Promise<ProjectUpdate[]> => {
+    const items = project.updates ?? [];
+    const updates = (
+        await Promise.all(
+            items.map(async (item) => {
+                const url = client.buildUrl({ url: item });
+                const { data, error } = await client.get<ProjectUpdate>({
+                    url: client.buildUrl({ url }),
+                });
+                return data;
+            }),
+        )
+    ).filter((item): item is ProjectUpdate => item !== undefined);
+    return updates;
 };
