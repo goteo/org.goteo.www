@@ -10,6 +10,7 @@
         "format": "prettier --write ."
     },
     "dependencies": {
+        "@astrojs/node": "^9.1.3",
         "@astrojs/svelte": "^7.0.6",
         "astro": "^5.5.2",
         "svelte": "^5.23.1",
