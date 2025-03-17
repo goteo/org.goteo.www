@@ -1,7 +1,7 @@
 ---
-import type { languagesList } from "../i18n/ui";
-import { useTranslations } from "../i18n/utils";
-import Layout from "../layouts/Layout.astro";
+import type { languagesList } from "../../i18n/ui";
+import { useTranslations } from "../../i18n/utils";
+import Layout from "../../layouts/Layout.astro";
 const currentLang = Astro.currentLocale || "es";
 const translateLabels = useTranslations(currentLang as keyof typeof languagesList);
 ---

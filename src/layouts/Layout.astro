@@ -6,10 +6,11 @@ export interface Props {
     description: string;
 }
 const { title, description } = Astro.props;
+const currentLang = Astro.currentLocale || "es";
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={currentLang}>
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
