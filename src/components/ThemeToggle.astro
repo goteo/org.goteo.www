@@ -1,0 +1,38 @@
+<button
+    class="bg-primary px-4 py-2 text-body font-bold w-[200px] rounded-lg"
+    onclick="toggleTheme()"
+>
+    Cambiar Tema
+</button>
+
+<script is:inline>
+    function getPreferredTheme() {
+        const storedTheme = localStorage.getItem("theme");
+        if (storedTheme) return storedTheme;
+
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+
+    function applyTheme(theme) {
+        if (document.documentElement.getAttribute("data-theme") !== theme) {
+            document.documentElement.setAttribute("data-theme", theme);
+            localStorage.setItem("theme", theme);
+        }
+    }
+
+    function toggleTheme() {
+        applyTheme(
+            document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark",
+        );
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        applyTheme(getPreferredTheme());
+    });
+
+    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) {
+            applyTheme(e.matches ? "dark" : "light");
+        }
+    });
+</script>

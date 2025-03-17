@@ -1,6 +1,7 @@
 ---
 import "./src/styles/global.css";
 import Metatags from "../components/Metatags.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 export interface Props {
     title: string;
     description: string;
@@ -10,7 +11,7 @@ const currentLang = Astro.currentLocale || "es";
 ---
 
 <!doctype html>
-<html lang={currentLang}>
+<html lang={currentLang} data-theme="light" class="bg-background">
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -21,5 +22,9 @@ const currentLang = Astro.currentLocale || "es";
     </head>
     <body class="grid">
         <slot />
+        <!-- TODO: Review ThemeToggle-->
+        <div class="wrapper">
+            <ThemeToggle />
+        </div>
     </body>
 </html>

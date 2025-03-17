@@ -10,5 +10,7 @@ const translateLabels = useTranslations(currentLang as keyof typeof languagesLis
     title={translateLabels("metadata.title")}
     description={translateLabels("metadata.description")}
 >
-    <div>{translateLabels("title")}</div>
+    <main class="wrapper">
+        <h1 class="text-body">{translateLabels("title")}</h1>
+    </main>
 </Layout>
