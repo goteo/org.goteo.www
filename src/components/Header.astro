@@ -1,0 +1,30 @@
+---
+import type { languagesList } from "../i18n/ui";
+import { useTranslations } from "../i18n/utils";
+import BagIcon from "../svgs/BagIcon.astro";
+import MenuIcon from "../svgs/MenuIcon.astro";
+import Logo from "../svgs/Logo.astro";
+import UserIcon from "../svgs/UserIcon.astro";
+const currentLang = Astro.currentLocale || "es";
+const translateLabels = useTranslations(currentLang as keyof typeof languagesList);
+---
+
+<header class="bg-primary py-8">
+    <div class="wrapper flex justify-between items-center">
+        <Logo />
+        <nav>
+            <ul class="flex gap-4 justify-center items-center">
+                <li class="flex gap-1 justify-center items-center">
+                    <UserIcon />
+                    {translateLabels("header.login")}
+                </li>
+                <li class="flex justify-center items-center">
+                    <BagIcon />
+                </li>
+                <li class="flex justify-center items-center">
+                    <MenuIcon />
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

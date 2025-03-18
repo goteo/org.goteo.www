@@ -10,6 +10,9 @@ export const labels = {
             description: "Página de inicio",
         },
         title: "Hola!",
+        header: {
+            login: "Iniciar sesión",
+        },
     },
     en: {
         metadata: {
@@ -17,5 +20,8 @@ export const labels = {
             description: "Home page",
         },
         title: "Hello!",
+        header: {
+            login: "Login",
+        },
     },
 };
