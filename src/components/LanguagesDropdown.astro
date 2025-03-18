@@ -1,0 +1,46 @@
+---
+import { languagesList } from "../i18n/ui";
+const currentLang = Astro.currentLocale || "es";
+const languagesJSON = JSON.stringify(Object.keys(languagesList));
+---
+
+<section>
+    <select name="language" id="language-select" data-languages={languagesJSON}>
+        {
+            Object.entries(languagesList).map(([lang, label]) => (
+                <option value={lang} selected={lang === currentLang}>
+                    {label}
+                </option>
+            ))
+        }
+    </select>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const selectElement = document.getElementById("language-select");
+
+        if (!selectElement) return;
+
+        const languages = JSON.parse(selectElement.getAttribute("data-languages") || "[]");
+
+        selectElement.addEventListener("change", (event) => {
+            const selectedLang = (event.target as HTMLSelectElement)?.value || "";
+
+            let pathParts = window.location.pathname.split("/");
+
+            if (languages.includes(pathParts[1])) {
+                pathParts.splice(1, 1);
+            }
+
+            let newPath =
+                selectedLang === "es"
+                    ? `/${pathParts.join("/")}`
+                    : `/${selectedLang}/${pathParts.join("/")}`;
+
+            newPath = newPath.replace(/\/+/g, "/");
+
+            window.location.href = newPath;
+        });
+    });
+</script>

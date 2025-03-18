@@ -1,4 +1,5 @@
 ---
+import LanguagesDropdown from "../components/LanguagesDropdown.astro";
 import type { languagesList } from "../i18n/ui";
 import { useTranslations } from "../i18n/utils";
 import Layout from "../layouts/Layout.astro";
@@ -12,5 +13,6 @@ const translateLabels = useTranslations(currentLang as keyof typeof languagesLis
 >
     <main class="wrapper">
         <h1 class="text-body">{translateLabels("title")}</h1>
+        <LanguagesDropdown />
     </main>
 </Layout>
