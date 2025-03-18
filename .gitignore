@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # vscode setting folder
 .vscode/
+
+#Other
+pnpm-lock.yaml
+yarn.lock

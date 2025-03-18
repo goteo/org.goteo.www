@@ -1,11 +1,16 @@
 @import "tailwindcss";
+@import "@fontsource/karla";
 
 @theme {
     /* Light Theme (default) */
     --color-primary: #59e9d3;
     --color-secondary: #3d3d3d;
+    --color-tertiary: #462949;
     --color-background: #f8fafc;
     --color-body: #1e293b;
+    --font-body: "Karla", sans-serif;
+    --body-regular: 1rem;
+    --body-small: 0.875rem;
 }
 
 @layer base {
@@ -15,12 +20,6 @@
         --color-background: #0f172a;
         --color-body: #e2e8f0;
     }
-}
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
 }
 
 html {
@@ -37,10 +36,6 @@ body {
     background-color: var(--primary-950);
 }
 
-body > * {
-    flex: 0 1 auto;
-}
-
 body.grid {
     display: grid;
     grid-template-rows: auto 1fr auto;
@@ -49,6 +44,7 @@ body.grid {
 .wrapper {
     max-width: 1440px;
     margin: 0 auto;
+    padding: 0 2.5rem;
     width: 100%;
 }
 
