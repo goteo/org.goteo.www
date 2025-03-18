@@ -3,16 +3,18 @@ import "./src/styles/global.css";
 import Metatags from "../components/Metatags.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import Header from "../components/Header.astro";
+
+const { lang } = Astro.locals;
+
 export interface Props {
     title: string;
     description: string;
 }
 const { title, description } = Astro.props;
-const currentLang = Astro.currentLocale || "es";
 ---
 
 <!doctype html>
-<html lang={currentLang} data-theme="light" class="bg-background">
+<html {lang} data-theme="light" class="bg-background">
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />

@@ -1,18 +1,14 @@
 ---
 import LanguagesDropdown from "../components/LanguagesDropdown.astro";
-import type { languagesList } from "../i18n/ui";
-import { useTranslations } from "../i18n/utils";
+import Countdown from "../components/Countdown.svelte";
 import Layout from "../layouts/Layout.astro";
-const currentLang = Astro.currentLocale || "es";
-const translateLabels = useTranslations(currentLang as keyof typeof languagesList);
+const { t } = Astro.locals;
 ---
 
-<Layout
-    title={translateLabels("metadata.title")}
-    description={translateLabels("metadata.description")}
->
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
-        <h1 class="text-body">{translateLabels("title")}</h1>
+        <h1 class="text-body">{t("title")}</h1>
+        <Countdown client:load />
         <LanguagesDropdown />
     </main>
 </Layout>

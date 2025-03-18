@@ -1,4 +1,4 @@
-import { labels } from "./ui";
+import { labels } from "./locales/index";
 
 const defaultLang = "es";
 

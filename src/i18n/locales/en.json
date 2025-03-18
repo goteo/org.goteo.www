@@ -145,7 +145,7 @@
   },
   "countdown": {
     "ended": "Campaign finished",
-    "remaining": "Remaining {time}"
+    "remaining": "Remaining "
   },
   "updates": {
     "heading": "Don't miss any campaign updates",

@@ -1,6 +1,6 @@
 ---
-import { languagesList } from "../i18n/ui";
-const currentLang = Astro.currentLocale || "es";
+import { languagesList } from "../i18n/locales/index";
+const currentLang: string = Astro.locals.lang || "es";
 const languagesJSON = JSON.stringify(Object.keys(languagesList));
 ---
 
@@ -25,8 +25,10 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
         const languages = JSON.parse(selectElement.getAttribute("data-languages") || "[]");
 
         selectElement.addEventListener("change", (event) => {
-            const selectedLang = (event.target as HTMLSelectElement)?.value || "";
+            const target = event.target as HTMLSelectElement;
+            if (!target) return;
 
+            const selectedLang = target.value;
             let pathParts = window.location.pathname.split("/");
 
             if (languages.includes(pathParts[1])) {
@@ -40,7 +42,9 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
 
             newPath = newPath.replace(/\/+/g, "/");
 
-            window.location.href = newPath;
+            history.pushState({}, "", newPath);
+
+            location.href = newPath;
         });
     });
 </script>

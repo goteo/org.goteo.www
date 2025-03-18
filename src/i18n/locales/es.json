@@ -160,7 +160,7 @@
   },
   "countdown": {
     "ended": "Campaña finalizada",
-    "remaining": "Quedan {time}"
+    "remaining": "Quedan"
   },
   "updates": {
     "heading": "No pierdas detalle de los avances de esta campaña",
@@ -170,11 +170,11 @@
     "readMore": "Seguir leyendo"
   },
   "metadata": {
-    "title": "Home",
-    "description": "Home page"
+    "title": "Inicio",
+    "description": "Página de inicio"
   },
-  "title": "Hello!",
+  "title": "Hola!",
   "header": {
-    "login": "Login"
+    "login": "Iniciar Sesión"
   }
 }
