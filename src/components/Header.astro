@@ -10,18 +10,18 @@ const translateLabels = useTranslations(currentLang as keyof typeof languagesLis
 ---
 
 <header class="bg-primary py-8">
-    <div class="wrapper flex justify-between items-center">
+    <div class="wrapper flex items-center justify-between">
         <Logo />
         <nav>
-            <ul class="flex gap-4 justify-center items-center">
-                <li class="flex gap-1 justify-center items-center">
+            <ul class="flex items-center justify-center gap-4">
+                <li class="flex items-center justify-center gap-1">
                     <UserIcon />
                     {translateLabels("header.login")}
                 </li>
-                <li class="flex justify-center items-center">
+                <li class="flex items-center justify-center">
                     <BagIcon />
                 </li>
-                <li class="flex justify-center items-center">
+                <li class="flex items-center justify-center">
                     <MenuIcon />
                 </li>
             </ul>

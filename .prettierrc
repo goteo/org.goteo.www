@@ -2,19 +2,10 @@
     "tabWidth": 4,
     "useTabs": false,
     "printWidth": 100,
-    "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte"],
+    "plugins": ["prettier-plugin-astro", "prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
     "overrides": [
-        {
-            "files": "*.astro",
-            "options": {
-                "parser": "astro"
-            }
-        },
-        {
-            "files": "*.svelte",
-            "options": {
-                "parser": "svelte"
-            }
-        }
+        { "files": "*.astro", "options": { "parser": "astro" } },
+        { "files": "*.svelte", "options": { "parser": "svelte" } },
+        { "files": "*.json", "options": { "parser": "json", "tabWidth": 2 } }
     ]
 }
