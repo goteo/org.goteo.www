@@ -1,5 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
+
 import { useTranslations } from "../i18n/utils";
+
 import type { Locale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
 
