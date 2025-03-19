@@ -1,0 +1,37 @@
+---
+import Project from "../../components/project/page.svelte";
+import Layout from "../../layouts/Layout.astro";
+const { id } = Astro.params;
+const data = {
+    title: "Apoya la cooperativa de información " + id,
+    description:
+        "Si crees que los medios deben informar sobre la crisis climática señalando a los culpables en lugar de lavar su imagen, apoya a " +
+        id,
+    subtitle: "Campaña de crowfunding impulsada por " + id,
+    video: "https://www.youtube.com/embed/6JYIGclVQdw",
+    rewards: [
+        {
+            title: "Reward 1",
+            description: "This is the description of reward 1",
+            image: "https://via.placeholder.com/150",
+            price: 10,
+        },
+        {
+            title: "Reward 2",
+            description: "This is the description of reward 2",
+            image: "https://via.placeholder.com/150",
+            price: 20,
+        },
+        {
+            title: "Reward 3",
+            description: "This is the description of reward 3",
+            image: "https://via.placeholder.com/150",
+            price: 30,
+        },
+    ],
+};
+---
+
+<Layout title={data.title} description={data.description}>
+    <Project {data} client:load />
+</Layout>
