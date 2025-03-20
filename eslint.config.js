@@ -16,6 +16,7 @@ export default [
             "eslint.config.js",
             ".astro/**",
             ".astro/**/*",
+            "openapi/client/**",
         ],
     },
     { files: ["**/*.{js,mjs,cjs,ts}"] },
