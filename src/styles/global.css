@@ -33,7 +33,6 @@ body {
     font-size: var(--body-regular);
     line-height: 140%;
     color: var(--text-primary);
-    background-color: var(--primary-950);
 }
 
 body.grid {
