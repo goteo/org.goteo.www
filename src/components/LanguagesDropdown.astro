@@ -15,7 +15,6 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
         }
     </select>
 </section>
-
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const selectElement = document.getElementById("language-select");
@@ -25,25 +24,21 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
         const languages = JSON.parse(selectElement.getAttribute("data-languages") || "[]");
 
         selectElement.addEventListener("change", (event) => {
-            const target = event.target as HTMLSelectElement;
+            const target = event.target;
             if (!target) return;
 
-            const selectedLang = target.value;
-            let pathParts = window.location.pathname.split("/");
+            const selectedLang = (target as HTMLSelectElement).value;
+            let pathParts = window.location.pathname.split("/").filter(Boolean);
 
-            if (languages.includes(pathParts[1])) {
-                pathParts.splice(1, 1);
+            if (languages.includes(pathParts[0])) {
+                pathParts[0] = selectedLang;
+            } else {
+                pathParts.unshift(selectedLang);
             }
 
-            let newPath =
-                selectedLang === "es"
-                    ? `/${pathParts.join("/")}`
-                    : `/${selectedLang}/${pathParts.join("/")}`;
-
-            newPath = newPath.replace(/\/+/g, "/");
+            let newPath = `/${pathParts.join("/")}`;
 
             history.pushState({}, "", newPath);
-
             location.href = newPath;
         });
     });

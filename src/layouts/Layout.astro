@@ -8,7 +8,7 @@ const { lang } = Astro.locals;
 
 export interface Props {
     title: string;
-    description: string;
+    description?: string;
 }
 const { title, description } = Astro.props;
 ---
