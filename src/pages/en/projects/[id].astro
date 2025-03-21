@@ -1,11 +1,11 @@
 ---
-import SingleProjectC from "../../components/project/SingleProject.svelte";
-import Layout from "../../layouts/Layout.astro";
-import Navigation from "../../components/Navigation/Navigation.svelte";
-import LanguagesDropdown from "../../components/LanguagesDropdown.astro";
+import SingleProjectC from "../../../components/project/SingleProject.svelte";
+import Layout from "../../../layouts/Layout.astro";
+import Navigation from "../../../components/Navigation/Navigation.svelte";
+import LanguagesDropdown from "../../../components/LanguagesDropdown.astro";
 const { id } = Astro.params;
 
-import { apiProjectsIdGet } from "../../openapi/client/index";
+import { apiProjectsIdGet } from "../../../openapi/client/index";
 
 if (!id) {
     throw new Error("Project ID is undefined.");
