@@ -11,7 +11,7 @@
         Tooltip,
     } from "chart.js";
 
-    export let obtenido = 400000; // Monto obtenido (puede superar el óptimo)
+    export let obtenido = 4000000; // Monto obtenido (puede superar el óptimo)
     export let optimo = 999999; // Meta óptima
     export let minimo = 500000; // Meta mínima
     export let diasTotales = 10; // Número de días
@@ -69,9 +69,9 @@
                 },
                 scales: {
                     x: {
-                        display: true,
+                        display: false,
                         title: {
-                            display: true,
+                            display: false,
                             text: "Días",
                         },
                         grid: {
@@ -79,9 +79,9 @@
                         },
                     },
                     y: {
-                        display: true,
+                        display: false,
                         title: {
-                            display: true,
+                            display: false,
                             text: "Progreso",
                         },
                         min: 0,
@@ -152,7 +152,7 @@
 <style>
     .chart-container {
         width: 100%;
-        height: 300px;
+        height: 200px;
         position: relative;
         border-radius: 10px;
         overflow: hidden;

@@ -58,7 +58,7 @@
 </script>
 
 <media-player
-    class="ring-media-focus aspect-video w-full overflow-hidden rounded-md bg-slate-900 font-sans text-white data-[focus]:ring-4"
+    class="ring-media-focus aspect-video h-full w-full overflow-hidden rounded-md bg-slate-900 font-sans text-white data-[focus]:ring-4"
     {title}
     {src}
     crossOrigin

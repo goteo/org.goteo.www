@@ -36,7 +36,7 @@
 
 <div>
     {#if timeLeft.total > 0}
-        <div class="flex items-center gap-2">
+        <div class="text-tertiary flex items-center gap-2 text-2xl/[32px] font-bold">
             <ClockIcon />
             <p>{$t("countdown.remaining")}</p>
             <div class="flex items-center gap-1">
