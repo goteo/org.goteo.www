@@ -1,5 +1,7 @@
 <script lang="ts">
     import type { Project } from "../../openapi/client/index";
+    import Tags from "../Tags.svelte";
+    import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
@@ -11,6 +13,8 @@
     const getOwner = () => {
         return "My Org Example";
     };
+
+    const tags = { categoryTag: data.category, territoryTag: getTerritoryTag(data.territory) };
 </script>
 
 <section class="wrapper">
@@ -47,7 +51,7 @@
         </div>
     </div>
 
-    <div>tags</div>
+    <Tags {tags} />
 
     <div>Recompensas más populares</div>
 </section>
