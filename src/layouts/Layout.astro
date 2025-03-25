@@ -1,0 +1,33 @@
+---
+import "../styles/global.css";
+import Metatags from "../components/Metatags.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import Header from "../components/Header.astro";
+
+const { lang } = Astro.locals;
+
+export interface Props {
+    title: string;
+    description?: string;
+}
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html {lang} data-theme="light" class="bg-background">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
+        <Metatags {title} {description} />
+    </head>
+    <body class="grid">
+        <Header />
+        <slot />
+        <!-- TODO: Review ThemeToggle-->
+        <div class="wrapper">
+            <ThemeToggle />
+        </div>
+    </body>
+</html>

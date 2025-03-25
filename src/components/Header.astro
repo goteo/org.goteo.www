@@ -1,0 +1,27 @@
+---
+import BagIcon from "../svgs/BagIcon.astro";
+import MenuIcon from "../svgs/MenuIcon.astro";
+import Logo from "../svgs/Logo.astro";
+import UserIcon from "../svgs/UserIcon.astro";
+const { t } = Astro.locals;
+---
+
+<header class="bg-primary py-8">
+    <div class="wrapper flex items-center justify-between">
+        <Logo />
+        <nav>
+            <ul class="flex items-center justify-center gap-4">
+                <li class="flex items-center justify-center gap-1">
+                    <UserIcon />
+                    {t("header.login")}
+                </li>
+                <li class="flex items-center justify-center">
+                    <BagIcon />
+                </li>
+                <li class="flex items-center justify-center">
+                    <MenuIcon />
+                </li>
+            </ul>
+        </nav>
+    </div>
+</header>

@@ -1,6 +1,5 @@
 # build output
 dist/
-
 # generated types
 .astro/
 
@@ -13,6 +12,7 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+
 # environment variables
 .env
 .env.production
@@ -20,12 +20,10 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# jetbrains setting folder
-.idea/
+#openapi
+src/openapi/client/
 
-# vscode setting folder
-.vscode/
-
-#Other
+# Others
 pnpm-lock.yaml
-yarn.lock
+
+
