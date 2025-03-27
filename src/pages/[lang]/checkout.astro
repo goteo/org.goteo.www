@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+const { t } = Astro.locals;
+import Cart from "../../components/Checkout/Cart.svelte";
+---
+
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <main class="wrapper">
+        <h2 class="text-body">{t("checkout.title")}</h2>
+        <p>Te mostramos las que has seleccionado, pulsa el botón "continuar" para pagar.</p>
+        <Cart client:load />
+        <div></div>
+    </main>
+</Layout>

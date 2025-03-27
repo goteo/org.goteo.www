@@ -25,7 +25,3 @@ src/openapi/client/
 
 # Others
 pnpm-lock.yaml
-
-# This will be format with eslint
-**/*.ts
-**/*.js

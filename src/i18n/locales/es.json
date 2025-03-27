@@ -176,5 +176,8 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión"
+  },
+  "checkout": {
+    "title": "Resumen de tus donaciones seleccionadas"
   }
 }

@@ -5,6 +5,7 @@
     import Countdown from "../Countdown.svelte";
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
+    import Rewards from "../Rewards.svelte";
     import { t } from "../../i18n/store";
 
     export let data: Project;
@@ -54,4 +55,5 @@
     <Tags {tags} />
 
     <div>Recompensas más populares</div>
+    <Rewards />
 </section>
