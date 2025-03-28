@@ -67,12 +67,6 @@ function createCartStore() {
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
                 const key = generateKey(item);
-                console.log("🧩 addItem KEY:", key);
-                console.log(
-                    "📦 ANTES:",
-                    cart.items.map((i) => i.key),
-                );
-
                 const index = cart.items.findIndex((i) => i.key === key);
                 const updatedItems = [...cart.items];
 
@@ -85,11 +79,6 @@ function createCartStore() {
                 } else {
                     updatedItems.push({ ...item, key });
                 }
-
-                console.log(
-                    "📦 DESPUÉS:",
-                    updatedItems.map((i) => i.key),
-                );
                 return { items: updatedItems };
             }),
 
