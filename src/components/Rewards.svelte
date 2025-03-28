@@ -37,10 +37,6 @@
         } catch (err) {
             console.warn("No se pudo obtener los datos del proyecto o del owner:", err);
         }
-        console.log(
-            "🧾 Antes de agregar Donación Libre:",
-            JSON.parse(localStorage.getItem("cart") ?? "null"),
-        );
 
         cart.addItem({
             title: reward.title,
