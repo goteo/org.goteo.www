@@ -1,12 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import LoginC from "../../components/LoginC.astro";
+import Summary from "../../components/Checkout/Summary.svelte";
+
 const { t } = Astro.locals;
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
-        <h1 class="text-body">{t("title")}</h1>
         <LoginC />
+        <Summary client:load />
     </main>
 </Layout>
