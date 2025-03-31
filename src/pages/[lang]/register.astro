@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import RegisterC from "../../components/RegisterC.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
+import Steps from "../../components/Checkout/Steps.svelte";
 
 const { t } = Astro.locals;
 ---
@@ -11,5 +12,6 @@ const { t } = Astro.locals;
         <h1 class="text-body">{t("title")}</h1>
         <RegisterC />
         <Summary client:load />
+        <Steps step={2} client:load />
     </main>
 </Layout>

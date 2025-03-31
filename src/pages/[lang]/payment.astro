@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../components/Checkout/PaymentMethod.svelte";
+import Steps from "../../components/Checkout/Steps.svelte";
 const { t } = Astro.locals;
 ---
 
@@ -10,5 +11,6 @@ const { t } = Astro.locals;
         <h1 class="text-body">payment page</h1>
         <PaymentMethod client:load />
         <Summary client:load />
+        <Steps step={3} client:load />
     </main>
 </Layout>

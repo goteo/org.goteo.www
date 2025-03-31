@@ -50,7 +50,6 @@ function loadInitialCart(): CartStore {
 function createCartStore() {
     const { subscribe, set, update } = writable<CartStore>(loadInitialCart());
 
-    // Guardar en localStorage en cada cambio
     if (isBrowser) {
         subscribe((cart) => {
             try {

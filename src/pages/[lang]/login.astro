@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import LoginC from "../../components/LoginC.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
+import Steps from "../../components/Checkout/Steps.svelte";
 
 const { t } = Astro.locals;
 ---
@@ -10,5 +11,6 @@ const { t } = Astro.locals;
     <main class="wrapper">
         <LoginC />
         <Summary client:load />
+        <Steps step={2} client:load />
     </main>
 </Layout>

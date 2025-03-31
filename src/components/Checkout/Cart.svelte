@@ -1,7 +1,6 @@
 <script lang="ts">
     import CartItem from "./CartItem.svelte";
     import Tipjar from "./Tipjar.svelte";
-    import Summary from "./Summary.svelte";
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
@@ -63,7 +62,6 @@
 {/if}
 
 <Tipjar />
-<Summary />
 
 <button
     on:click={redirectToPayment}
