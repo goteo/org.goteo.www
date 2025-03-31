@@ -85,7 +85,6 @@ export const register = defineAction({
                         Authorization: `Bearer ${authData?.token}`,
                     },
                     body: {
-                        taxId: dni ?? "",
                         firstName: firstname,
                         lastName: lastname,
                     },
