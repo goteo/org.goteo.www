@@ -1,4 +1,5 @@
 <script>
+    import { getCurrency } from "../../utils/currencies";
     export let item;
     export let onIncrement;
     export let onDecrement;
@@ -18,7 +19,9 @@
                 {/if}
             </div>
             <div>
-                <p class="text-lg font-semibold">{item.amount / 100}€</p>
+                <p class="text-lg font-semibold">
+                    {getCurrency(item.amount, "EUR", { showSymbol: true })}
+                </p>
                 <p class="text-sm text-gray-700">{item.name}</p>
                 <p class="text-xs text-gray-500">100 personas ya han donado</p>
             </div>

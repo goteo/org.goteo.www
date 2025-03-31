@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import type { ProjectReward } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
+    import { getCurrency } from "../utils/currencies";
 
     import {
         apiProjectRewardsGetCollection,
@@ -13,14 +14,6 @@
     let rewards: ProjectReward[] = [];
     let error: string | null = null;
     let amount: string;
-
-    function formatCurrency(amount?: number, currency?: string): string {
-        if (amount == null || !currency) return "Monto no disponible";
-        return new Intl.NumberFormat("es-ES", {
-            style: "currency",
-            currency,
-        }).format(amount / 100);
-    }
 
     async function addToCart(reward: ProjectReward) {
         const projectId = extractId(reward.project) ?? "0";
@@ -47,8 +40,6 @@
             owner: owner?.data?.displayName,
         });
     }
-
-    // objet
 
     async function handleDirectDonate(reward: ProjectReward) {
         await addToCart(reward);
@@ -92,7 +83,8 @@
                     on:click={() =>
                         cart.addItem({
                             title: "Donación Libre",
-                            amount: Number(amount) * 100 || 0,
+                            /* TODO: Fix currency */
+                            amount: parseFloat(getCurrency(parseFloat(amount), "EUR") || "0"),
                             quantity: 1,
                             image: "",
                         })}
@@ -114,10 +106,11 @@
                         on:click={() => handleDirectDonate(reward)}
                         class="mt-2 inline-block rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
                     >
-                        {formatCurrency(
-                            reward.money?.amount ?? undefined,
-                            reward.money?.currency ?? undefined,
-                        )}
+                        {reward.money?.currency && reward.money?.amount != null
+                            ? getCurrency(reward.money.amount, reward.money.currency, {
+                                  showSymbol: true,
+                              })
+                            : ""}
                     </button>
                 </li>
             {/each}
