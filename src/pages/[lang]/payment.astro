@@ -1,12 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
+import PaymentMethod from "../../components/Checkout/PaymentMethod.svelte";
 const { t } = Astro.locals;
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
         <h1 class="text-body">payment page</h1>
+        <PaymentMethod client:load />
         <Summary client:load />
     </main>
 </Layout>
