@@ -36,16 +36,30 @@
             </div>
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-4">
-                    <button on:click={() => onDecrement(item)} class="text-xl text-purple-800">
+                    <button
+                        on:click={() => onDecrement(item)}
+                        class="cursor-pointer text-xl text-purple-800"
+                    >
                         <MinusIcon />
                     </button>
-                    <span class="text-tertiary text-2xl font-bold">{item.quantity}</span>
-                    <button on:click={() => onIncrement(item)} class="text-xl text-purple-800">
+                    <div class="relative flex w-4 items-center justify-center">
+                        <span class="text-tertiary absolute text-2xl font-bold"
+                            >{item.quantity}</span
+                        >
+                    </div>
+
+                    <button
+                        on:click={() => onIncrement(item)}
+                        class="cursor-pointer text-xl text-purple-800"
+                    >
                         <PlusIcon />
                     </button>
                 </div>
 
-                <button on:click={() => onRemove(item)} class="text-xl text-purple-800">
+                <button
+                    on:click={() => onRemove(item)}
+                    class="cursor-pointer text-xl text-purple-800"
+                >
                     <TrashIcon />
                 </button>
             </div>
