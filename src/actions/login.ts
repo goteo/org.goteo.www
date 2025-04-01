@@ -18,8 +18,6 @@ export const login = defineAction({
                 },
             });
 
-            console.log("data", data);
-
             if (!data) {
                 throw new ActionError({
                     code: "BAD_REQUEST",

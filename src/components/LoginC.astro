@@ -52,8 +52,6 @@
 
             if (!error) {
                 const lang = location.pathname.split("/")[1];
-                console.log("lang", lang);
-                console.log("location", window.location.href);
                 window.location.href = `/${lang}/payment`;
             }
 

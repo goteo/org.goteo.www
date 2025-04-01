@@ -22,8 +22,6 @@ export const register = defineAction({
     }),
     handler: async (input, context) => {
         try {
-            console.log("🔁 Iniciando proceso de registro para tipo:", input.type);
-            console.log("ℹ️ Datos de registro:", input);
             const { identifier, password, firstname, lastname, dni, razonSocial, cif } = input;
 
             if (input.type === "individual") {
@@ -44,7 +42,6 @@ export const register = defineAction({
                 }
             }
 
-            console.log("👤 Creando usuario...");
             const createUserResponse = await apiUsersPost({
                 body: {
                     email: identifier,
@@ -53,19 +50,15 @@ export const register = defineAction({
                 },
             });
             const userId = String(createUserResponse.data?.id ?? "");
-            console.log("✅ Usuario creado con ID:", userId);
 
-            console.log("🔐 Generando token...");
             const { data: authData } = await apiUserTokensPost({
                 body: {
                     identifier,
                     password,
                 },
             });
-            console.log("✅ Token generado");
 
             if (input.type === "individual") {
-                console.log("📝 Actualizando perfil de persona física...");
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
                     headers: {
@@ -78,7 +71,6 @@ export const register = defineAction({
                     },
                 });
             } else {
-                console.log("📝 Actualizando perfil de organización...");
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
                     headers: {
@@ -91,7 +83,7 @@ export const register = defineAction({
                 });
 
                 /* TODO: Check if  works */
-                const resOrg = await apiUsersIdorganizationPatch({
+                await apiUsersIdorganizationPatch({
                     path: { id: userId },
                     headers: {
                         Authorization: `Bearer ${authData?.token}`,
@@ -101,7 +93,6 @@ export const register = defineAction({
                         legalName: razonSocial ?? "",
                     },
                 });
-                console.log("✅ Organización actualizada", resOrg);
             }
 
             context.cookies.set(
@@ -115,7 +106,6 @@ export const register = defineAction({
                 },
             );
 
-            console.log("🎉 Registro completado con éxito.");
             return { success: true };
         } catch (error) {
             console.error("🚨 Error al registrar:", JSON.stringify(error, null, 2));
