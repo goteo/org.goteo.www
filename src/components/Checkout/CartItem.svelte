@@ -67,10 +67,10 @@
         <div class="flex items-center gap-2">
             <input
                 type="checkbox"
-                id="donation-checkbox"
-                class="focus:bg-primary h-6 w-6 rounded border-gray-300 text-blue-600"
+                id={`reward-checkbox-${item.key}`}
+                class="accent-primary h-6 w-6 rounded"
             />
-            <label for="donation-checkbox" class=" text-[#575757]">
+            <label for={`reward-checkbox-${item.key}`} class="text-[#575757]">
                 Enviar esta recompensa a una dirección distinta a la mia.
             </label>
         </div>

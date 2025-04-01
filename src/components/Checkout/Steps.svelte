@@ -1,5 +1,13 @@
 <script>
     export let step = 1;
+    async function redirectToPayment() {
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
+        const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
+
+        const newPath = `/${currentLang}/payment`;
+        window.location.href = newPath;
+    }
 </script>
 
 <div class="bg-primary flex w-full items-center justify-between rounded-full border">
@@ -20,3 +28,10 @@
     <div class={step >= 3 ? "text-purple-900" : ""}>Método de pago</div>
     <div class={step >= 4 ? "text-purple-900" : ""}>Confirmar</div>
 </div>
+
+<button
+    on:click={redirectToPayment}
+    class="mt-4 rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+>
+    Continuar
+</button>
