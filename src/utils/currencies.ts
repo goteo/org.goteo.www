@@ -169,7 +169,7 @@ const currencySymbols: Record<string, CurrencyData> = {
     ZWG: { symbol: "ZiG", name: "Oro de Zimbabue", decimals: 2 },
 };
 
-export function getCurrency(
+export function formatCurrency(
     amount?: number,
     currency?: string,
     options?: { showSymbol?: boolean },
@@ -179,8 +179,20 @@ export function getCurrency(
     if (!currencyData) return "";
 
     const { symbol, decimals } = currencyData;
-    const formattedAmount = (amount / Math.pow(10, decimals)).toFixed(decimals);
+    const rawAmount = amount / Math.pow(10, decimals);
+    const hasDecimals = rawAmount % 1 !== 0;
+    const formattedAmount = hasDecimals ? rawAmount.toFixed(decimals) : rawAmount.toFixed(0);
     const showSymbol = options?.showSymbol ?? false;
 
-    return showSymbol ? `${formattedAmount} ${symbol}` : formattedAmount;
+    return showSymbol ? `${formattedAmount}${symbol}` : formattedAmount;
+}
+
+export function getUnit(currency?: string): number {
+    if (!currency) return 0;
+    const currencyData = currencySymbols[currency];
+    if (!currencyData) return 0;
+
+    const { decimals } = currencyData;
+
+    return Math.pow(10, decimals);
 }

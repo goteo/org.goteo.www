@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import type { ProjectReward } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
-    import { getCurrency } from "../utils/currencies";
+    import { formatCurrency, getUnit } from "../utils/currencies";
 
     import {
         apiProjectRewardsGetCollection,
@@ -84,7 +84,7 @@
                         cart.addItem({
                             title: "Donación Libre",
                             /* TODO: Fix currency */
-                            amount: parseFloat(getCurrency(parseFloat(amount), "EUR") || "0"),
+                            amount: Number(amount) * getUnit("EUR"),
                             quantity: 1,
                             image: "",
                         })}
@@ -107,7 +107,7 @@
                         class="mt-2 inline-block rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
                     >
                         {reward.money?.currency && reward.money?.amount != null
-                            ? getCurrency(reward.money.amount, reward.money.currency, {
+                            ? formatCurrency(reward.money.amount, reward.money.currency, {
                                   showSymbol: true,
                               })
                             : ""}

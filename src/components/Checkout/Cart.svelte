@@ -7,8 +7,8 @@
 
     const items = derived(cart, ($cart) => $cart.items);
 
-    const groupedByOwner = derived(items, ($items) =>
-        $items.reduce(
+    const groupedByOwner = derived(items, ($items) => {
+        const grouped = $items.reduce(
             (acc, item) => {
                 const key = item.owner || "Donación Libre";
                 if (key.toLowerCase().trim() === "platoniq") return acc;
@@ -18,8 +18,10 @@
                 return acc;
             },
             {} as Record<string, typeof $items>,
-        ),
-    );
+        );
+
+        return Object.fromEntries(Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)));
+    });
 
     function increment(item: { key: string; quantity: number }) {
         cart.updateQuantity(item.key, item.quantity + 1);
@@ -46,19 +48,25 @@
 </script>
 
 {#if $groupedByOwner}
-    {#each Object.entries($groupedByOwner) as [owner, items]}
-        <h2 class="mt-6 mb-2 text-xl font-bold">
-            {owner === "Donación Libre" ? "Donación Libre" : `${$t("project.owner")} ${owner}`}
-        </h2>
-        {#each items as item (item.key)}
-            <CartItem
-                {item}
-                onIncrement={() => increment(item)}
-                onDecrement={() => decrement(item)}
-                onRemove={() => remove(item)}
-            />
+    <div class="flex flex-col gap-10">
+        {#each Object.entries($groupedByOwner) as [owner, items]}
+            <div class="flex flex-col gap-6">
+                <h2 class="text-secondary text-2xl font-bold">
+                    {owner === "Donación Libre"
+                        ? "Donación Libre"
+                        : `${$t("project.owner")} ${owner}`}
+                </h2>
+                {#each items as item (item.key)}
+                    <CartItem
+                        {item}
+                        onIncrement={() => increment(item)}
+                        onDecrement={() => decrement(item)}
+                        onRemove={() => remove(item)}
+                    />
+                {/each}
+            </div>
         {/each}
-    {/each}
+    </div>
 {/if}
 
 <Tipjar />
