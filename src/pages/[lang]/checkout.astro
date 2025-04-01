@@ -7,22 +7,25 @@ import Steps from "../../components/Checkout/Steps.svelte";
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
-    <main class="wrapper flex flex-row gap-8">
-        <div class="w-1/2">
-            <div class="flex flex-col gap-4">
-                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
-                    {t("checkout.title")}
-                </h2>
-                <p class="text-[#575757]">
-                    Te mostramos las que has seleccionado, pulsa el botón "continuar" para pagar.
-                </p>
-            </div>
+    <main class="wrapper">
+        <div class="flex flex-row gap-8 py-10">
+            <div class="flex w-1/2 flex-col gap-10">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                        {t("checkout.title")}
+                    </h2>
+                    <p class="text-[#575757]">
+                        Te mostramos las que has seleccionado, pulsa el botón "continuar" para
+                        pagar.
+                    </p>
+                </div>
 
-            <Cart client:load />
-        </div>
-        <div class="w-1/2">
-            <Summary client:load />
-            <Steps step={1} client:load />
+                <Cart client:load />
+            </div>
+            <div class="w-1/2">
+                <Summary client:load />
+                <Steps step={1} client:load />
+            </div>
         </div>
     </main>
 </Layout>
