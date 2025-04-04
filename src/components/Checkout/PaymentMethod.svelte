@@ -1,50 +1,30 @@
-<script>
-    import { writable } from "svelte/store";
+<script lang="ts">
+    import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
 
-    // Declare selectedPaymentMethod as a writable store
-    export let selectedPaymentMethod = writable("");
+    export let paymentGateways: ApiGatewaysNameGetResponse[] = [];
+
+    let selectedPaymentMethod = ""; // 👈 variable normal
 </script>
 
 <section>
     <h1>Indícanos tus datos de pago</h1>
     <p>Ahora necesitamos que nos digas cómo quieres pagar.</p>
     <p>Selecciona método de pago:</p>
+
     <div>
-        <label>
-            <input
-                type="radio"
-                name="paymentMethod"
-                value="creditCard"
-                bind:group={selectedPaymentMethod}
-            />
-            Monedero Goteo
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="paymentMethod"
-                value="creditCard"
-                bind:group={selectedPaymentMethod}
-            />
-            Tarjeta
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="paymentMethod"
-                value="paypal"
-                bind:group={selectedPaymentMethod}
-            />
-            PayPal
-        </label>
-        <label>
-            <input
-                type="radio"
-                name="paymentMethod"
-                value="bankTransfer"
-                bind:group={selectedPaymentMethod}
-            />
-            Stripe
-        </label>
+        {#each paymentGateways as gateway}
+            <label>
+                <input
+                    type="radio"
+                    name="paymentMethod"
+                    value={gateway.name}
+                    bind:group={selectedPaymentMethod}
+                />
+                <span
+                    >{(gateway.name ?? "").charAt(0).toUpperCase() +
+                        (gateway.name ?? "").slice(1)}</span
+                >
+            </label>
+        {/each}
     </div>
 </section>
