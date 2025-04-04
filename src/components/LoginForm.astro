@@ -1,8 +1,14 @@
+---
+const { t } = Astro.locals;
+---
+
 <div>
     <div class="mt-8 sm:w-full sm:max-w-md">
         <form id="login" method="POST">
             <div>
-                <label for="email" class="block text-lg font-medium text-white"> Correo </label>
+                <label for="email" class="block text-lg font-medium">
+                    {t("login.form.email")}
+                </label>
                 <div class="mt-2">
                     <input
                         type="text"
@@ -15,8 +21,8 @@
             </div>
 
             <div>
-                <label for="password" class="block text-lg font-medium text-white">
-                    Contraseña
+                <label for="password" class="block text-lg font-medium">
+                    {t("login.form.password")}
                 </label>
                 <div class="mt-2">
                     <input
@@ -29,7 +35,7 @@
                 </div>
             </div>
 
-            <button type="submit"> Iniciar sesión </button>
+            <button type="submit"> {t("login.form.btnSubmit")} </button>
         </form>
 
         <div id="login-error-content" class="mt-4 text-center text-red-500"></div>
@@ -49,6 +55,7 @@
             const formData = new FormData(form);
 
             const { error } = await actions.login(formData);
+            console.log("error", error);
 
             if (!error) {
                 const lang = location.pathname.split("/")[1];
