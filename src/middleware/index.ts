@@ -10,13 +10,17 @@ export const onRequest = defineMiddleware((context: APIContext, next) => {
     const url = new URL(context.request.url);
     const pathParts = url.pathname.split("/").filter(Boolean);
 
-    if (pathParts[0] === "_actions") {
-        return next();
-    }
-
     const validLangs = Object.keys(languagesList);
     const maybeLang = pathParts[0];
     const defaultLang = "es";
+
+    const lang = maybeLang as Locale;
+    context.locals.lang = lang;
+    context.locals.t = useTranslations(lang);
+
+    if (pathParts[0] === "_actions") {
+        return next();
+    }
 
     if (!maybeLang) {
         return context.redirect(`/${defaultLang}${url.pathname}`, 302);
@@ -25,10 +29,6 @@ export const onRequest = defineMiddleware((context: APIContext, next) => {
     if (!validLangs.includes(maybeLang)) {
         return context.redirect(`/${defaultLang}/404`, 302);
     }
-
-    const lang = maybeLang as Locale;
-    context.locals.lang = lang;
-    context.locals.t = useTranslations(lang);
 
     const accessToken = context.cookies.get("access-token")?.value;
 
