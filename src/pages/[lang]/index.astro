@@ -1,7 +1,7 @@
 ---
 import LanguagesDropdown from "../../components/LanguagesDropdown.astro";
 import Countdown from "../../components/Countdown.svelte";
-import LogoutC from "../../components/LogoutC.astro";
+import Logout from "../../components/Logout.astro";
 import Layout from "../../layouts/Layout.astro";
 const { t } = Astro.locals;
 ---
@@ -11,6 +11,6 @@ const { t } = Astro.locals;
         <h1 class="text-body">{t("title")}</h1>
         <Countdown client:load />
         <LanguagesDropdown />
-        <LogoutC />
+        <Logout />
     </main>
 </Layout>
