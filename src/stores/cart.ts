@@ -1,21 +1,22 @@
 import { writable, derived } from "svelte/store";
 
-export interface CartItem {
+export type CartItem = {
     key: string;
     title: string;
     amount: number;
     quantity: number;
     image?: string;
     project?: number;
-    owner?: string;
-}
+    target: string;
+    claimed?: number;
+};
 
-interface CartStore {
+type CartStore = {
     items: CartItem[];
-}
+};
 
 function generateKey(item: Omit<CartItem, "key">): string {
-    const base = `${item.title}-${item.project ?? "none"}-${item.owner ?? "none"}`;
+    const base = `${item.title}-${item.project ?? "none"}-${item.target ?? "none"}`;
     return base.toLowerCase().replace(/\s+/g, "_");
 }
 
@@ -24,7 +25,7 @@ const defaultDonation = {
     amount: 300,
     quantity: 1,
     image: "",
-    owner: "Platoniq",
+    target: "Platoniq",
 };
 
 const defaultItem = { ...defaultDonation, key: generateKey(defaultDonation) };
@@ -41,7 +42,6 @@ function loadInitialCart(): CartStore {
         console.warn("⚠️ Error al leer localStorage:", e);
     }
 
-    // Primera carga si no hay nada
     const fresh = { items: [defaultItem] };
     localStorage.setItem("cart", JSON.stringify(fresh));
     return fresh;

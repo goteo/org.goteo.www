@@ -55,5 +55,5 @@
     <Tags {tags} />
 
     <div>Recompensas más populares</div>
-    <Rewards />
+    <Rewards {data} />
 </section>

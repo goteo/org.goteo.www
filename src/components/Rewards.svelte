@@ -1,35 +1,38 @@
 <script lang="ts">
     import { cart } from "../stores/cart.ts";
     import { onMount } from "svelte";
-    import type { ProjectReward } from "../openapi/client/index";
+    import type { ProjectReward, Project } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
     import { formatCurrency, getUnit } from "../utils/currencies";
-
     import {
         apiProjectRewardsGetCollection,
         apiProjectsIdGet,
         apiUsersIdGet,
     } from "../openapi/client/index";
 
+    export let data: Project;
+
     let rewards: ProjectReward[] = [];
     let error: string | null = null;
-    let amount: string;
+    let amount: string = "";
+
+    async function getDisplayName(projectId: string): Promise<string> {
+        try {
+            const project = await apiProjectsIdGet({ path: { id: projectId } });
+            const ownerId = extractId(project.data?.owner);
+            if (ownerId) {
+                const user = await apiUsersIdGet({ path: { id: ownerId } });
+                return user.data?.displayName ?? "";
+            }
+        } catch (err) {
+            console.warn("No se pudo obtener el owner del proyecto:", err);
+        }
+        return "";
+    }
 
     async function addToCart(reward: ProjectReward) {
         const projectId = extractId(reward.project) ?? "0";
-
-        let owner = null;
-
-        try {
-            const project = await apiProjectsIdGet({ path: { id: projectId } });
-
-            const ownerId = extractId(project.data?.owner);
-            if (ownerId) {
-                owner = await apiUsersIdGet({ path: { id: ownerId } });
-            }
-        } catch (err) {
-            console.warn("No se pudo obtener los datos del proyecto o del owner:", err);
-        }
+        const target = await getDisplayName(projectId);
 
         cart.addItem({
             title: reward.title,
@@ -37,7 +40,8 @@
             quantity: 1,
             image: "",
             project: Number(projectId),
-            owner: owner?.data?.displayName,
+            target,
+            claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
         });
     }
 
@@ -48,17 +52,35 @@
         const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
         const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
 
-        const newPath = `/${currentLang}/checkout`;
-        window.location.href = newPath;
+        window.location.href = `/${currentLang}/checkout`;
+    }
+
+    async function handleFreeDonation() {
+        const numericAmount = Number(amount);
+        if (isNaN(numericAmount) || numericAmount <= 0) {
+            alert("Por favor ingresa una cantidad válida.");
+            return;
+        }
+
+        const projectId = extractId(`${data.id}`) ?? "0";
+        const target = await getDisplayName(projectId);
+
+        cart.addItem({
+            title: "Donación Libre",
+            amount: numericAmount * getUnit("EUR"),
+            quantity: 1,
+            image: "",
+            project: Number(projectId),
+            target,
+        });
     }
 
     onMount(async () => {
         try {
             const response = await apiProjectRewardsGetCollection({
-                // query: { project: data.id ? String(data.id) : undefined },
-                query: {},
+                query: { project: data.id ? String(data.id) : undefined },
+                //query: {},
             });
-
             rewards = response.data as ProjectReward[];
         } catch (err) {
             console.error(err);
@@ -77,17 +99,11 @@
                     type="text"
                     class="w-full rounded border border-gray-300 p-2"
                     bind:value={amount}
+                    placeholder="Ingresa una cantidad"
                 />
                 <button
                     type="button"
-                    on:click={() =>
-                        cart.addItem({
-                            title: "Donación Libre",
-                            /* TODO: Fix currency */
-                            amount: Number(amount) * getUnit("EUR"),
-                            quantity: 1,
-                            image: "",
-                        })}
+                    on:click={handleFreeDonation}
                     class="mt-2 inline-block rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
                 >
                     Donar

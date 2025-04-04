@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
     import { formatCurrency } from "../../utils/currencies";
     import MinusIcon from "../../svgs/MinusIcon.svelte";
     import PlusIcon from "../../svgs/PlusIcon.svelte";
     import TrashIcon from "../../svgs/TrashIcon.svelte";
-    export let item;
+    import type { CartItem } from "../../stores/cart";
+    // import { t } from "../../i18n/store";
+    export let item: CartItem;
     export let onIncrement;
     export let onDecrement;
     export let onRemove;
@@ -31,7 +33,19 @@
                         {formatCurrency(item.amount, "EUR", { showSymbol: true })}
                     </p>
                     <p class="text-tertiary font-bold">{item.title}</p>
-                    <p class="text-[#575757]">100 personas ya han donado</p>
+                    <p class="text-[#575757]">
+                        {#if typeof item.claimed === "number"}
+                            {#if item.claimed > 0}
+                                <span
+                                    >{item.claimed} personas ya han reclamado esta recompensa
+                                </span>
+                            {:else}
+                                <span
+                                    >Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!
+                                </span>
+                            {/if}
+                        {/if}
+                    </p>
                 </div>
             </div>
             <div class="flex items-center gap-6">
@@ -64,15 +78,16 @@
                 </button>
             </div>
         </div>
-        <div class="flex items-center gap-2">
+        <!-- TODO: feature is not yet fully designed.  -->
+        <!-- <div class="flex items-center gap-2">
             <input
                 type="checkbox"
                 id="donation-checkbox"
                 class="focus:bg-primary h-6 w-6 rounded border-gray-300 text-blue-600"
             />
             <label for="donation-checkbox" class=" text-[#575757]">
-                Enviar esta recompensa a una dirección distinta a la mia.
+                {$t("checkout.changeAddressLabel")}
             </label>
-        </div>
+        </div> -->
     </div>
 {/if}
