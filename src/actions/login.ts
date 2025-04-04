@@ -10,6 +10,8 @@ export const login = defineAction({
         password: z.string(),
     }),
     handler: async (input, context) => {
+        const { t } = context.locals;
+
         try {
             const { data } = await apiUserTokensPost({
                 body: {
@@ -21,7 +23,7 @@ export const login = defineAction({
             if (!data) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: "Correo electrónico o contraseña inválidos.",
+                    message: t("login.error.invalidCredentials"),
                 });
             }
 
@@ -37,11 +39,16 @@ export const login = defineAction({
             );
 
             return { success: true };
-        } catch (error) {
-            console.error("Ocurrió un error inesperado:", error);
+        } catch (err) {
+            console.error(err);
+
+            if (err instanceof ActionError) {
+                throw err;
+            }
+
             throw new ActionError({
-                code: "BAD_REQUEST",
-                message: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+                code: "INTERNAL_SERVER_ERROR",
+                message: t("login.error.unexpectedLogin"),
             });
         }
     },

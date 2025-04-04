@@ -2,6 +2,7 @@
     import { cart } from "../../stores/cart";
     import { get } from "svelte/store";
     import { getUnit } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
 
     let value = 3;
     let previousValue = value;
@@ -12,12 +13,12 @@
         amount: Math.round(amount * getUnit("EUR")),
         quantity: 1,
         image: "",
-        owner: "Platoniq",
+        target: "Platoniq",
     });
 
     cart.subscribe(($cart) => {
         if (!initialized) {
-            const item = $cart.items.find((i) => i.owner === "Platoniq");
+            const item = $cart.items.find((i) => i.target === "Platoniq");
             if (item) {
                 value = item.amount / getUnit("EUR");
                 previousValue = value;
@@ -29,7 +30,7 @@
     $: if (initialized && !isNaN(value) && value >= 0 && value !== previousValue) {
         previousValue = value;
         const $cart = get(cart);
-        const key = $cart.items.find((i) => i.owner === "Platoniq")?.key;
+        const key = $cart.items.find((i) => i.target === "Platoniq")?.key;
 
         if (value > 0) {
             cart.addItem(createDonationItem(value));
@@ -42,7 +43,7 @@
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-6">
         <h2 class="text-secondary text-2xl font-bold">
-            Quiero contribuir con la fundación Platoniq
+            {$t("checkout.tipjar.community")}
         </h2>
         <input
             class="w-full rounded border border-gray-300 p-2"

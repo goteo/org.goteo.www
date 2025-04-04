@@ -1,4 +1,5 @@
 <script>
+    import { t } from "../../i18n/store";
     export let step = 1;
 </script>
 
@@ -15,8 +16,8 @@
 </div>
 
 <div class="mt-2 flex w-full items-center justify-between text-sm font-medium text-gray-700">
-    <div class={step >= 1 ? "text-purple-900" : ""}>Recompensas</div>
-    <div class={step >= 2 ? "text-purple-900" : ""}>Tus datos</div>
-    <div class={step >= 3 ? "text-purple-900" : ""}>Método de pago</div>
-    <div class={step >= 4 ? "text-purple-900" : ""}>Confirmar</div>
+    <div class={step >= 1 ? "text-purple-900" : ""}>{$t("checkout.steps.reward.title")}</div>
+    <div class={step >= 2 ? "text-purple-900" : ""}>{$t("checkout.steps.data.title")}</div>
+    <div class={step >= 3 ? "text-purple-900" : ""}>{$t("checkout.steps.payment.title")}</div>
+    <div class={step >= 4 ? "text-purple-900" : ""}>{$t("checkout.steps.confirmation.title")}</div>
 </div>
