@@ -21,6 +21,8 @@ export const register = defineAction({
         cif: z.string().optional(),
     }),
     handler: async (input, context) => {
+        const { t } = context.locals;
+
         try {
             const { identifier, password, firstname, lastname, dni, razonSocial, cif } = input;
 
@@ -28,7 +30,7 @@ export const register = defineAction({
                 if (!firstname.trim() || !lastname.trim() || !dni?.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: "Faltan datos obligatorios para persona física",
+                        message: t("register.error.incompletePersonFields"),
                     });
                 }
             }
@@ -37,7 +39,7 @@ export const register = defineAction({
                 if (!razonSocial?.trim() || !cif?.trim() || !firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: "Faltan datos obligatorios para persona jurídica",
+                        message: t("register.error.incompleteOrgFields"),
                     });
                 }
             }
@@ -82,7 +84,6 @@ export const register = defineAction({
                     },
                 });
 
-                /* TODO: Check if  works */
                 await apiUsersIdorganizationPatch({
                     path: { id: userId },
                     headers: {
@@ -111,7 +112,7 @@ export const register = defineAction({
             console.error("🚨 Error al registrar:", JSON.stringify(error, null, 2));
             throw new ActionError({
                 code: "BAD_REQUEST",
-                message: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.",
+                message: t("register.error.unexpectedRegistration"),
             });
         }
     },

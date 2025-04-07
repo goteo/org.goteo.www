@@ -10,7 +10,7 @@
     const groupedByOwner = derived(items, ($items) => {
         const grouped = $items.reduce(
             (acc, item) => {
-                const key = item.owner || "Donación Libre";
+                const key = item.target || "";
                 if (key.toLowerCase().trim() === "platoniq") return acc;
 
                 if (!acc[key]) acc[key] = [];
@@ -40,12 +40,10 @@
 
 {#if $groupedByOwner}
     <div class="flex flex-col gap-10">
-        {#each Object.entries($groupedByOwner) as [owner, items]}
+        {#each Object.entries($groupedByOwner) as [target, items]}
             <div class="flex flex-col gap-6">
                 <h2 class="text-secondary text-2xl font-bold">
-                    {owner === "Donación Libre"
-                        ? "Donación Libre"
-                        : `${$t("project.owner")} ${owner}`}
+                    {`${$t("project.owner")} ${target}`}
                 </h2>
                 {#each items as item (item.key)}
                     <CartItem
@@ -61,3 +59,10 @@
 {/if}
 
 <Tipjar />
+
+<button
+    on:click={redirectToPayment}
+    class="mt-4 rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+>
+    {$t("checkout.btnContinue.label")}
+</button>

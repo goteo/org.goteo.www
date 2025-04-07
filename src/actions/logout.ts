@@ -4,13 +4,15 @@ import { apiUserTokensIdDelete } from "../openapi/client/index.ts";
 
 export const logout = defineAction({
     handler: async (_, context) => {
+        const { t } = context.locals;
+
         try {
             const cookieValue = context.cookies.get("access-token");
 
             if (!cookieValue) {
                 throw new ActionError({
                     code: "UNAUTHORIZED",
-                    message: "Token de acceso no encontrado.",
+                    message: t("logout.error.cookieNotFound"),
                 });
             }
 
@@ -19,11 +21,9 @@ export const logout = defineAction({
             if (!id || !token) {
                 throw new ActionError({
                     code: "UNAUTHORIZED",
-                    message: "Credenciales inválidas en la cookie.",
+                    message: t("logout.error.invalidToken"),
                 });
             }
-
-            /* TODO: Check if  works */
 
             await apiUserTokensIdDelete({
                 path: {
@@ -37,11 +37,16 @@ export const logout = defineAction({
             context.cookies.delete("access-token", { path: "/" });
 
             return { success: true };
-        } catch (error) {
-            console.error("Error al cerrar sesión:", error);
+        } catch (err) {
+            console.error(err);
+
+            if (err instanceof ActionError) {
+                throw err;
+            }
+
             throw new ActionError({
-                code: "BAD_REQUEST",
-                message: "No se pudo cerrar la sesión. Intenta de nuevo.",
+                code: "INTERNAL_SERVER_ERROR",
+                message: t("logout.error.unexpectedLogout"),
             });
         }
     },

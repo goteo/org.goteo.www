@@ -1,38 +1,43 @@
 import { writable, derived } from "svelte/store";
 
-export interface CartItem {
+export type CartItem = {
     key: string;
     title: string;
     amount: number;
     quantity: number;
     image?: string;
     project?: number;
-    owner?: string;
-}
-
-interface CartStore {
-    items: CartItem[];
-}
-
-function generateKey(item: Omit<CartItem, "key">): string {
-    const base = `${item.title}-${item.project ?? "none"}-${item.owner ?? "none"}`;
-    return base.toLowerCase().replace(/\s+/g, "_");
-}
-
-const defaultDonation = {
-    title: "Donación Platoniq",
-    amount: 300,
-    quantity: 1,
-    image: "",
-    owner: "Platoniq",
+    target: string;
+    claimed?: number;
+    accountingId: string;
 };
 
-const defaultItem = { ...defaultDonation, key: generateKey(defaultDonation) };
+type CartStore = {
+    items: CartItem[];
+};
 
 const isBrowser = typeof window !== "undefined";
 
+function generateKey({
+    title,
+    accountingId,
+    position,
+}: {
+    title: string;
+    accountingId: string;
+    position: number;
+}) {
+    const normalizedTitle = title.trim().toLowerCase();
+    const prefix = normalizedTitle === "donación libre" ? "O" : "R";
+    const finalKey = `${accountingId}-${prefix}-${position}`;
+
+    return {
+        key: finalKey,
+    };
+}
+
 function loadInitialCart(): CartStore {
-    if (!isBrowser) return { items: [defaultItem] };
+    if (!isBrowser) return { items: [] };
 
     try {
         const stored = localStorage.getItem("cart");
@@ -41,8 +46,7 @@ function loadInitialCart(): CartStore {
         console.warn("⚠️ Error al leer localStorage:", e);
     }
 
-    // Primera carga si no hay nada
-    const fresh = { items: [defaultItem] };
+    const fresh = { items: [] };
     localStorage.setItem("cart", JSON.stringify(fresh));
     return fresh;
 }
@@ -65,19 +69,27 @@ function createCartStore() {
 
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
-                const key = generateKey(item);
-                const index = cart.items.findIndex((i) => i.key === key);
+                const existingIndex = cart.items.findIndex(
+                    (i) => i.accountingId === item.accountingId && i.title === item.title,
+                );
+
                 const updatedItems = [...cart.items];
 
-                if (index >= 0) {
-                    updatedItems[index] = {
-                        ...updatedItems[index],
-                        quantity: item.quantity ?? updatedItems[index].quantity,
-                        amount: item.amount,
+                if (existingIndex >= 0) {
+                    updatedItems[existingIndex] = {
+                        ...updatedItems[existingIndex],
+                        quantity: updatedItems[existingIndex].quantity + (item.quantity ?? 1),
                     };
                 } else {
+                    const position = cart.items.length;
+                    const { key } = generateKey({
+                        title: item.title,
+                        accountingId: item.accountingId,
+                        position,
+                    });
                     updatedItems.push({ ...item, key });
                 }
+
                 return { items: updatedItems };
             }),
 

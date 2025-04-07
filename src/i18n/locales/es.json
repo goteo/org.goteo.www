@@ -83,7 +83,7 @@
       "title": "Indícanos tus datos personales",
       "description": "Necesitamos saber quién eres antes de pagar.",
       "registerOr": "Regístrate o",
-      "loginButton": "Entra con tu cuenta",
+      "loginBtnLabel": "Entra con tu cuenta",
       "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
       "otherAccessMethods": "También puedes acceder a través de:"
     },
@@ -92,6 +92,7 @@
         "individual": "Persona física",
         "organization": "Persona jurídica (empresas)"
       },
+      "btnSubmit": "Registrarse",
       "termsCheckbox": "Acepto las condiciones legales",
       "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
       "zod": {
@@ -116,6 +117,11 @@
       "representativeTitle": "Datos del representante de la empresa.",
       "firstName": "Nombre",
       "lastName": "Apellidos"
+    },
+    "error": {
+      "incompletePersonFields ": "Por favor, completa todos los campos obligatorios para persona física.",
+      "incompleteOrgFields ": "Por favor, completa todos los campos obligatorios para persona jurídica.",
+      "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
     }
   },
   "login": {
@@ -123,14 +129,29 @@
       "title": "Indícanos tus datos personales",
       "description": "Necesitamos saber quién eres antes de pagar.",
       "registerOr": "Entra en tu cuenta o",
-      "loginButton": "Regístrate",
+      "registerBtnLabel": "Regístrate",
       "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
       "otherAccessMethods": "También puedes acceder a través de:",
       "forgotPassword": "¿Olvidaste tu contraseña?"
     },
     "form": {
       "email": "Email o nombre de usuario",
-      "password": "Contraseña"
+      "password": "Contraseña",
+      "btnSubmit": "Iniciar sesión"
+    },
+    "error": {
+      "invalidCredentials": "Correo electrónico o contraseña inválidos.",
+      "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
+      "invalidEmail": "El correo electrónico no es válido.",
+      "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
+    }
+  },
+  "logout": {
+    "error": {
+      "cookieNotFound": "No se ha encontrado la cookie de sesión.",
+      "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
+      "logoutSuccess": "Has cerrado sesión correctamente.",
+      "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
     }
   },
   "zod": {
@@ -178,6 +199,35 @@
     "login": "Iniciar Sesión"
   },
   "checkout": {
-    "title": "Resumen de tus donaciones seleccionadas"
+    "title": "Resumen de tus donaciones seleccionadas",
+    "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+    "tipjar": {
+      "community": "Quiero contribuir con la fundación Platoniq"
+    },
+    "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
+    "summary": {
+      "total": {
+        "title": "Total que vas a donar",
+        "description": "Descripción del total"
+      },
+      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación."
+    },
+    "steps": {
+      "reward": {
+        "title": "Recompensa"
+      },
+      "data": {
+        "title": "Tus datos"
+      },
+      "payment": {
+        "title": "Método de pago"
+      },
+      "confirmation": {
+        "title": "Confirmar"
+      }
+    },
+    "btnContinue": {
+      "label": "Continuar"
+    }
   }
 }

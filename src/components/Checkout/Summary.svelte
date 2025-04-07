@@ -2,6 +2,7 @@
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -17,7 +18,7 @@
 </script>
 
 <div class="rounded-xl border border-purple-200 bg-white p-6 text-purple-900">
-    <h2 class="mb-2 text-lg font-semibold">Total que vas a donar:</h2>
+    <h2 class="mb-2 text-lg font-semibold">{$t("checkout.summary.total.title")}</h2>
     <p class="mb-2 text-3xl leading-tight font-bold">
         {formatCurrency($total, "EUR", { showSymbol: true })}
     </p>
@@ -27,4 +28,5 @@
         <strong>{formatCurrency($foundation, "EUR", { showSymbol: true })}</strong>
         de aporte a la fundación
     </p>
+    <p>{$t("checkout.summary.deduct")}</p>
 </div>
