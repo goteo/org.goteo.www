@@ -1,5 +1,5 @@
 ---
-import SingleProjectC from "../../../components/project/SingleProject.svelte";
+import SingleProject from "../../../components/project/SingleProject.svelte";
 import Layout from "../../../layouts/Layout.astro";
 import Navigation from "../../../components/Navigation/Navigation.svelte";
 import LanguagesDropdown from "../../../components/LanguagesDropdown.astro";
@@ -11,17 +11,15 @@ if (!id) {
     throw new Error("Project ID is undefined.");
 }
 
-const response = await apiProjectsIdGet({ path: { id } });
+const { data: project, error } = await apiProjectsIdGet({ path: { id } });
 
-const { data, error } = response;
-
-if (error || typeof data === "undefined") {
+if (error || typeof project === "undefined") {
     throw new Error("No se pudo obtener el proyecto.");
 }
 ---
 
-<Layout title={data.title} description={data.description}>
+<Layout title={project.title} description={project.description}>
     <Navigation />
     <div class="wrapper"><LanguagesDropdown /></div>
-    <SingleProjectC {data} client:load />
+    <SingleProject {project} client:load />
 </Layout>

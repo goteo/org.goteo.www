@@ -10,7 +10,7 @@
         apiUsersIdGet,
     } from "../openapi/client/index";
 
-    export let data: Project;
+    export let project: Project;
 
     let rewards: ProjectReward[] = [];
     let error: string | null = null;
@@ -42,6 +42,7 @@
             project: Number(projectId),
             target,
             claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
+            accountingId: extractId(project.accounting) ?? "",
         });
     }
 
@@ -62,23 +63,23 @@
             return;
         }
 
-        const projectId = extractId(`${data.id}`) ?? "0";
-        const target = await getDisplayName(projectId);
+        const target = await getDisplayName(`${project.id}`);
 
         cart.addItem({
             title: "Donación Libre",
             amount: numericAmount * getUnit("EUR"),
             quantity: 1,
             image: "",
-            project: Number(projectId),
+            project: Number(project.id),
             target,
+            accountingId: extractId(project.accounting) ?? "",
         });
     }
 
     onMount(async () => {
         try {
             const response = await apiProjectRewardsGetCollection({
-                query: { project: data.id ? String(data.id) : undefined },
+                query: { project: project.id ? String(project.id) : undefined },
                 //query: {},
             });
             rewards = response.data as ProjectReward[];
