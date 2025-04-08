@@ -4,41 +4,54 @@ const { t } = Astro.locals;
 
 <div>
     <div class="mt-8 sm:w-full sm:max-w-md">
-        <form id="login" method="POST">
-            <div>
-                <label for="email" class="block text-lg font-medium">
+        <form id="login" method="POST" class="flex flex-col gap-4">
+            <div class="relative w-full">
+                <input
+                    type="text"
+                    id="identifier"
+                    name="identifier"
+                    placeholder=""
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                />
+                <label
+                    for="identifier"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
                     {t("login.form.email")}
                 </label>
-                <div class="mt-2">
-                    <input
-                        type="text"
-                        id="identifier"
-                        name="identifier"
-                        placeholder="Ingresa tu correo"
-                        required
-                    />
-                </div>
             </div>
 
-            <div>
-                <label for="password" class="block text-lg font-medium">
+            <div class="relative w-full">
+                <input
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder=""
+                    required
+                />
+                <label
+                    for="password"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
                     {t("login.form.password")}
                 </label>
-                <div class="mt-2">
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        placeholder="Ingresa tu contraseña"
-                        required
-                    />
-                </div>
             </div>
 
-            <button type="submit"> {t("login.form.btnSubmit")} </button>
+            <button
+                class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                type="submit"
+            >
+                {t("login.form.btnSubmit")}
+            </button>
         </form>
 
         <div id="login-error-content" class="mt-4 text-center text-red-500"></div>
+        <a href="#" class="text-tertiary font-bold underline">
+            {t("login.page.forgotPassword")}
+        </a>
     </div>
 </div>
 
