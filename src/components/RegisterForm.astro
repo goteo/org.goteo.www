@@ -5,17 +5,66 @@ const { t } = Astro.locals;
 <div>
     <div class="mt-8 sm:w-full sm:max-w-md">
         <form id="register" method="POST" class="flex flex-col gap-4">
-            <fieldset>
-                <legend>Tipo de usuario</legend>
-                <label>
-                    <input type="radio" name="type" value="individual" checked />
-                    {t("register.form.userType.individual")}
+            <fieldset class="flex gap-6">
+                <label class="flex cursor-pointer items-center gap-2">
+                    <input
+                        type="radio"
+                        name="type"
+                        value="individual"
+                        checked
+                        class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                    />
+                    <span class="text-gray-700"> {t("register.form.userType.individual")}</span>
                 </label>
-                <label>
-                    <input type="radio" name="type" value="organization" />
-                    {t("register.form.userType.organization")}
+
+                <label class="flex cursor-pointer items-center gap-2">
+                    <input
+                        type="radio"
+                        name="type"
+                        value="organization"
+                        class="relative h-6 w-6 appearance-none rounded-full border border-[#855a96] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                    />
+                    <span class="text-gray-700">{t("register.form.userType.organization")}</span>
                 </label>
             </fieldset>
+
+            <div class="flex flex-row gap-4">
+                <div class="relative w-full">
+                    <input
+                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        required
+                        type="text"
+                        id="firstname"
+                        name="firstname"
+                        placeholder=""
+                        required
+                    />
+                    <label
+                        for="firstname"
+                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    >
+                        {t("register.individual.firstName")}
+                    </label>
+                </div>
+
+                <div class="relative w-full">
+                    <input
+                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        required
+                        type="text"
+                        id="lastname"
+                        name="lastname"
+                        placeholder=""
+                        required
+                    />
+                    <label
+                        for="lastname"
+                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    >
+                        {t("register.individual.lastName")}
+                    </label>
+                </div>
+            </div>
 
             <div class="relative w-full">
                 <input
@@ -52,58 +101,40 @@ const { t } = Astro.locals;
                 </label>
             </div>
 
-            <div class="relative w-full">
-                <input
-                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
-                    required
-                    type="text"
-                    id="firstname"
-                    name="firstname"
-                    placeholder=""
-                    required
-                />
-                <label
-                    for="firstname"
-                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
-                >
-                    {t("register.individual.firstName")}
-                </label>
+            <div class="relative w-full text-xs font-medium text-[#575757]">
+                <span> {t("register.form.validation.password.minLength")}</span>
             </div>
 
-            <div class="relative w-full">
-                <input
-                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
-                    required
-                    type="text"
-                    id="lastname"
-                    name="lastname"
-                    placeholder=""
-                    required
-                />
-                <label
-                    for="lastname"
-                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
-                >
-                    {t("register.individual.lastName")}
-                </label>
-            </div>
+            <div class="relative flex w-full flex-col gap-4" id="fields-individual">
+                <div>
+                    <label class="flex flex-row items-start gap-2">
+                        <input
+                            type="checkbox"
+                            id="toggle-dni"
+                            class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                        />
+                        <span class="text-sm text-gray-700"
+                            >{t("register.individual.taxId.msgDeduction")}</span
+                        >
+                    </label>
+                </div>
 
-            <div class="relative w-full" id="fields-individual">
-                <input
-                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
-                    required
-                    type="text"
-                    id="dni"
-                    name="dni"
-                    placeholder=""
-                    required
-                />
-                <label
-                    for="dni"
-                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
-                >
-                    {t("register.individual.taxId")}
-                </label>
+                <div class="relative w-full" id="fields-individual">
+                    <input
+                        class="peer w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none disabled:cursor-not-allowed"
+                        type="text"
+                        id="dni"
+                        name="dni"
+                        placeholder=""
+                        disabled
+                    />
+                    <label
+                        for="dni"
+                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    >
+                        {t("register.individual.taxId.label")}
+                    </label>
+                </div>
             </div>
 
             <div id="fields-organization" style="display: none;" class="flex flex-col gap-4">
@@ -144,6 +175,30 @@ const { t } = Astro.locals;
                 </div>
             </div>
 
+            <div class="space-y-2">
+                <label class="flex items-start gap-2">
+                    <input
+                        type="checkbox"
+                        id="terms"
+                        class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                    />
+                    <span class="text-sm text-gray-700">
+                        {t("register.form.termsCheckbox")}
+                    </span>
+                </label>
+                <label class="flex items-start gap-2">
+                    <input
+                        type="checkbox"
+                        id="cookies"
+                        class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                    />
+                    <span class="text-sm text-gray-700">
+                        {t("register.form.policiesCheckbox")}
+                    </span>
+                </label>
+            </div>
+
+            <!-- TODO: Merge with Btn "Continuar" -->
             <button
                 class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
                 type="submit"
@@ -202,7 +257,7 @@ const { t } = Astro.locals;
         const fieldsOrganization = document.getElementById("fields-organization");
 
         if (fieldsIndividual && fieldsOrganization) {
-            fieldsIndividual.style.display = isIndividual ? "block" : "none";
+            fieldsIndividual.style.display = isIndividual ? "flex" : "none";
             fieldsOrganization.style.display = isIndividual ? "none" : "flex";
         }
     }
@@ -213,5 +268,29 @@ const { t } = Astro.locals;
         document.querySelectorAll('input[name="type"]').forEach((radio) => {
             radio.addEventListener("change", toggleFields);
         });
+
+        const toggleDni = document.getElementById("toggle-dni");
+
+        if (toggleDni) {
+            toggleDni.addEventListener("change", function () {
+                const dniInput = document.getElementById("dni") as HTMLInputElement;
+                const labelInput = document.querySelector('label[for="dni"]');
+
+                if (dniInput && labelInput) {
+                    const isChecked = (this as HTMLInputElement).checked;
+                    dniInput.disabled = !isChecked;
+
+                    dniInput.classList.remove("border-[#e6e6e6]", "focus:ring-transparent");
+
+                    if (isChecked) {
+                        dniInput.classList.add("border-[#855a96]", "focus:ring-[#855a96]");
+                        dniInput.classList.remove("cursor-not-allowed");
+                        labelInput.classList.remove("cursor-not-allowed");
+                    }
+                }
+            });
+
+            toggleDni.dispatchEvent(new Event("change"));
+        }
     });
 </script>
