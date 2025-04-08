@@ -1,0 +1,120 @@
+---
+const { t } = Astro.locals;
+---
+
+<div>
+    <form id="register" method="POST">
+        <fieldset>
+            <legend>Tipo de usuario</legend>
+            <label>
+                <input type="radio" name="type" value="individual" checked />
+                {t("register.form.userType.individual")}
+            </label>
+            <label>
+                <input type="radio" name="type" value="organization" />
+                {t("register.form.userType.organization")}
+            </label>
+        </fieldset>
+
+        <label>
+            {t("register.individual.email")}:
+            <input type="email" name="identifier" required />
+        </label>
+
+        <label>
+            {t("register.individual.password")}:
+            <input type="password" name="password" required />
+        </label>
+
+        <label>
+            {t("register.individual.firstName")}:
+            <input type="text" name="firstname" />
+        </label>
+        <label>
+            {t("register.individual.lastName")}: :
+            <input type="text" name="lastname" />
+        </label>
+
+        <div id="fields-individual">
+            <label>
+                {t("register.individual.taxId")}:
+                <input type="text" name="dni" />
+            </label>
+        </div>
+
+        <div id="fields-organization" style="display: none;">
+            <label>
+                {t("register.organization.legalName")}
+                <input type="text" name="razonSocial" />
+            </label>
+            <label>
+                {t("register.organization.taxId")}
+                <input type="text" name="cif" />
+            </label>
+        </div>
+
+        <button class="cursor-pointer border" type="submit"> {t("register.form.btnSubmit")}</button>
+    </form>
+    <div id="register-error-content" class="mt-4 text-center text-red-500"></div>
+</div>
+
+<script>
+    import { actions, isInputError } from "astro:actions";
+
+    const form = document.getElementById("register");
+    const errorContent = document.getElementById("register-error-content");
+
+    if (form instanceof HTMLFormElement) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            const { error } = await actions.register(formData);
+
+            // if (!error) {
+            //     const lang = location.pathname.split("/")[1];
+            //     window.location.href = `/${lang}/`;
+            // }
+
+            if (error && errorContent instanceof HTMLElement) {
+                errorContent.innerHTML = "";
+
+                if (isInputError(error)) {
+                    const ul = document.createElement("ul");
+                    error.issues.forEach((err) => {
+                        const li = document.createElement("li");
+                        li.innerText = err.message;
+                        ul.appendChild(li);
+                    });
+
+                    errorContent.appendChild(ul);
+                    return;
+                }
+                errorContent.innerText = error.message;
+            }
+        });
+    }
+
+    function toggleFields() {
+        const isIndividual =
+            document.querySelector<HTMLInputElement>('input[name="type"]:checked')?.value ===
+            "individual";
+
+        const fieldsIndividual = document.getElementById("fields-individual");
+        const fieldsOrganization = document.getElementById("fields-organization");
+
+        if (fieldsIndividual && fieldsOrganization) {
+            fieldsIndividual.style.display = isIndividual ? "block" : "none";
+            fieldsOrganization.style.display = isIndividual ? "none" : "block";
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        toggleFields();
+
+        document.querySelectorAll('input[name="type"]').forEach((radio) => {
+            radio.addEventListener("change", toggleFields);
+        });
+    });
+</script>

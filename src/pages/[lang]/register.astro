@@ -1,0 +1,24 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RegisterForm from "../../components/RegisterForm.astro";
+import Summary from "../../components/Checkout/Summary.svelte";
+import Steps from "../../components/Checkout/Steps.svelte";
+
+const { t } = Astro.locals;
+---
+
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <main class="wrapper">
+        <h2>{t("register.page.title")}</h2>
+        <p>{t("register.page.description")}</p>
+        <div>
+            {t("register.page.registerOr")}
+            <button>{t("register.page.loginBtnLabel")} </button>
+        </div>
+        <p>{t("register.page.goteoUserInfo")}</p>
+
+        <RegisterForm />
+        <Summary client:load />
+        <Steps step={2} client:load />
+    </main>
+</Layout>

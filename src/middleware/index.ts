@@ -7,25 +7,41 @@ import type { Locale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
 
 export const onRequest = defineMiddleware((context: APIContext, next) => {
-    const { pathname } = new URL(context.request.url);
-    const pathParts = pathname.split("/").filter(Boolean);
+    const url = new URL(context.request.url);
+    const pathParts = url.pathname.split("/").filter(Boolean);
 
-    if (pathParts.length < 1) {
-        return context.redirect("/es/", 302);
-    }
-
-    const langSegment = pathParts[0];
     const validLangs = Object.keys(languagesList);
+    const maybeLang = pathParts[0];
+    const defaultLang = "es";
 
-    if (!validLangs.includes(langSegment)) {
-        return context.redirect("/es/404", 302);
+    const lang = maybeLang as Locale;
+    context.locals.lang = lang;
+    context.locals.t = useTranslations(lang);
+
+    if (pathParts[0] === "_actions") {
+        return next();
     }
 
-    const lang: Locale = langSegment as Locale;
-    const t = useTranslations(lang);
+    if (!maybeLang) {
+        return context.redirect(`/${defaultLang}${url.pathname}`, 302);
+    }
 
-    context.locals.lang = lang;
-    context.locals.t = t;
+    if (!validLangs.includes(maybeLang)) {
+        return context.redirect(`/${defaultLang}/404`, 302);
+    }
+
+    const accessToken = context.cookies.get("access-token")?.value;
+
+    const nextSegment = pathParts[1];
+    if (accessToken && (nextSegment === "login" || nextSegment === "register")) {
+        return context.redirect(`/${lang}/`, 302);
+    }
+
+    const protectedRoutes = ["payment"];
+
+    if (!accessToken && protectedRoutes.includes(nextSegment)) {
+        return context.redirect(`/${lang}/login`, 302);
+    }
 
     return next();
 });

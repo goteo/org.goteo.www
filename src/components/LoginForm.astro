@@ -1,0 +1,83 @@
+---
+const { t } = Astro.locals;
+---
+
+<div>
+    <div class="mt-8 sm:w-full sm:max-w-md">
+        <form id="login" method="POST">
+            <div>
+                <label for="email" class="block text-lg font-medium">
+                    {t("login.form.email")}
+                </label>
+                <div class="mt-2">
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        placeholder="Ingresa tu correo"
+                        required
+                    />
+                </div>
+            </div>
+
+            <div>
+                <label for="password" class="block text-lg font-medium">
+                    {t("login.form.password")}
+                </label>
+                <div class="mt-2">
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        placeholder="Ingresa tu contraseña"
+                        required
+                    />
+                </div>
+            </div>
+
+            <button type="submit"> {t("login.form.btnSubmit")} </button>
+        </form>
+
+        <div id="login-error-content" class="mt-4 text-center text-red-500"></div>
+    </div>
+</div>
+
+<script>
+    import { actions, isInputError } from "astro:actions";
+
+    const form = document.getElementById("login");
+    const errorContent = document.getElementById("login-error-content");
+
+    if (form instanceof HTMLFormElement) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            const { error } = await actions.login(formData);
+            console.log("error", error);
+
+            if (!error) {
+                const lang = location.pathname.split("/")[1];
+                window.location.href = `/${lang}/payment`;
+            }
+
+            if (error && errorContent instanceof HTMLElement) {
+                errorContent.innerHTML = "";
+
+                if (isInputError(error)) {
+                    const ul = document.createElement("ul");
+                    error.issues.forEach((err) => {
+                        const li = document.createElement("li");
+                        li.innerText = err.message;
+                        ul.appendChild(li);
+                    });
+
+                    errorContent.appendChild(ul);
+                    return;
+                }
+                errorContent.innerText = error.message;
+            }
+        });
+    }
+</script>

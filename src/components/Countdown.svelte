@@ -43,7 +43,6 @@
                 <p class="flex items-center">{timeLeft.days}d</p>
                 <p class="flex items-center">{timeLeft.hours}h</p>
                 <p class="flex items-center">{timeLeft.minutes}m</p>
-                <p class="flex items-center">{timeLeft.seconds}s</p>
             </div>
         </div>
     {:else}

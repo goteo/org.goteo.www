@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Project, Budget } from "../../openapi/client/index";
-    import { getCurrencySymbol } from "../../utils/currencySymbols";
+    import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
-    export let data: Project;
+    export let project: Project;
     const campaignLabel: (keyof Budget)[] = ["optimum", "minimum"];
 </script>
 
@@ -29,12 +29,13 @@
             {#each campaignLabel as key}
                 <div>
                     <p class="text-[#575757]">{$t(`campaignProgress.${key}`)}</p>
-                    {#if data.budget?.[key]?.money}
+                    {#if project.budget?.[key]?.money}
                         <p class="text-secondary text-[32px] font-bold">
-                            {data.budget[key].money.amount?.toLocaleString("es-ES")}
-                            {data.budget[key].money.currency
-                                ? getCurrencySymbol(data.budget[key].money.currency)
-                                : ""}
+                            {formatCurrency(
+                                project.budget?.[key]?.money?.amount ?? 0,
+                                project.budget?.[key]?.money?.currency ?? undefined,
+                                { showSymbol: true },
+                            )}
                         </p>
                     {/if}
                 </div>

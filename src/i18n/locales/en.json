@@ -161,5 +161,8 @@
   "title": "Hello!",
   "header": {
     "login": "Login"
+  },
+  "checkout": {
+    "title": "Checkout"
   }
 }
