@@ -98,6 +98,11 @@
       "zod": {
         "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
         "legalName.custom": "La razón social es obligatoria para empresas"
+      },
+      "validation": {
+        "password": {
+          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+        }
       }
     },
     "individual": {
@@ -106,7 +111,10 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "taxIdCheckbox": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
-      "taxId": "DNI*"
+      "taxId": {
+        "label": "DNI*",
+        "msgDeduction": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+      }
     },
     "organization": {
       "legalName": "Razón social",
@@ -228,6 +236,13 @@
     },
     "btnContinue": {
       "label": "Continuar"
+    }
+  },
+  "payment": {
+    "page": {
+      "title": "Indícanos tus datos de pago",
+      "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
+      "selectMethod": "Selecciona método de pago:"
     }
   }
 }

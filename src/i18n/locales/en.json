@@ -97,6 +97,9 @@
       "zod": {
         "taxId.custom": "Tax ID must be at least 8 characters long",
         "legalName.custom": "Legal name is required for organizations"
+      },
+      "password": {
+        "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
       }
     },
     "individual": {
