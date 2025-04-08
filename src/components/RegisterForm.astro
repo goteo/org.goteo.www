@@ -3,59 +3,156 @@ const { t } = Astro.locals;
 ---
 
 <div>
-    <form id="register" method="POST">
-        <fieldset>
-            <legend>Tipo de usuario</legend>
-            <label>
-                <input type="radio" name="type" value="individual" checked />
-                {t("register.form.userType.individual")}
-            </label>
-            <label>
-                <input type="radio" name="type" value="organization" />
-                {t("register.form.userType.organization")}
-            </label>
-        </fieldset>
+    <div class="mt-8 sm:w-full sm:max-w-md">
+        <form id="register" method="POST" class="flex flex-col gap-4">
+            <fieldset>
+                <legend>Tipo de usuario</legend>
+                <label>
+                    <input type="radio" name="type" value="individual" checked />
+                    {t("register.form.userType.individual")}
+                </label>
+                <label>
+                    <input type="radio" name="type" value="organization" />
+                    {t("register.form.userType.organization")}
+                </label>
+            </fieldset>
 
-        <label>
-            {t("register.individual.email")}:
-            <input type="email" name="identifier" required />
-        </label>
+            <div class="relative w-full">
+                <input
+                    type="email"
+                    id="identifier"
+                    name="identifier"
+                    placeholder=""
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                />
+                <label
+                    for="identifier"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
+                    {t("register.individual.email")}:
+                </label>
+            </div>
 
-        <label>
-            {t("register.individual.password")}:
-            <input type="password" name="password" required />
-        </label>
+            <div class="relative w-full">
+                <input
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder=""
+                    required
+                />
+                <label
+                    for="password"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
+                    {t("register.individual.password")}
+                </label>
+            </div>
 
-        <label>
-            {t("register.individual.firstName")}:
-            <input type="text" name="firstname" />
-        </label>
-        <label>
-            {t("register.individual.lastName")}: :
-            <input type="text" name="lastname" />
-        </label>
+            <div class="relative w-full">
+                <input
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                    type="text"
+                    id="firstname"
+                    name="firstname"
+                    placeholder=""
+                    required
+                />
+                <label
+                    for="firstname"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
+                    {t("register.individual.firstName")}
+                </label>
+            </div>
 
-        <div id="fields-individual">
-            <label>
-                {t("register.individual.taxId")}:
-                <input type="text" name="dni" />
-            </label>
-        </div>
+            <div class="relative w-full">
+                <input
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                    type="text"
+                    id="lastname"
+                    name="lastname"
+                    placeholder=""
+                    required
+                />
+                <label
+                    for="lastname"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
+                    {t("register.individual.lastName")}
+                </label>
+            </div>
 
-        <div id="fields-organization" style="display: none;">
-            <label>
-                {t("register.organization.legalName")}
-                <input type="text" name="razonSocial" />
-            </label>
-            <label>
-                {t("register.organization.taxId")}
-                <input type="text" name="cif" />
-            </label>
-        </div>
+            <div class="relative w-full" id="fields-individual">
+                <input
+                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    required
+                    type="text"
+                    id="dni"
+                    name="dni"
+                    placeholder=""
+                    required
+                />
+                <label
+                    for="dni"
+                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                >
+                    {t("register.individual.taxId")}
+                </label>
+            </div>
 
-        <button class="cursor-pointer border" type="submit"> {t("register.form.btnSubmit")}</button>
-    </form>
-    <div id="register-error-content" class="mt-4 text-center text-red-500"></div>
+            <div id="fields-organization" style="display: none;" class="flex flex-col gap-4">
+                <div class="relative w-full">
+                    <input
+                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        required
+                        type="text"
+                        id="razonSocial"
+                        name="razonSocial"
+                        placeholder=""
+                        required
+                    />
+                    <label
+                        for="razonSocial"
+                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    >
+                        {t("register.organization.legalName")}
+                    </label>
+                </div>
+
+                <div class="relative w-full">
+                    <input
+                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        required
+                        type="text"
+                        id="cif"
+                        name="cif"
+                        placeholder=""
+                        required
+                    />
+                    <label
+                        for="cif"
+                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    >
+                        {t("register.organization.taxId")}
+                    </label>
+                </div>
+            </div>
+
+            <button
+                class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                type="submit"
+            >
+                {t("register.form.btnSubmit")}</button
+            >
+        </form>
+        <div id="register-error-content" class="mt-4 text-center text-red-500"></div>
+    </div>
 </div>
 
 <script>
@@ -106,7 +203,7 @@ const { t } = Astro.locals;
 
         if (fieldsIndividual && fieldsOrganization) {
             fieldsIndividual.style.display = isIndividual ? "block" : "none";
-            fieldsOrganization.style.display = isIndividual ? "none" : "block";
+            fieldsOrganization.style.display = isIndividual ? "none" : "flex";
         }
     }
 
