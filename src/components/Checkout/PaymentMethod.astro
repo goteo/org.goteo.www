@@ -75,9 +75,17 @@ const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = 
 
                 if (!error) {
                     const lang = location.pathname.split("/")[1];
-                    //window.location.href = `/${lang}/{data?.checkout?.links?.href}`;
-                    //redifirgimos a otra pagina externa
-                    window.location.href = `${data?.checkout?.links?.[0]?.href}`;
+                    const checkoutLink = data?.checkout?.links?.find(
+                        (link) => link.rel === "payer-action",
+                    )?.href;
+
+                    console.log("checkoutLink", checkoutLink);
+
+                    if (checkoutLink) {
+                        window.location.href = checkoutLink;
+                    } else {
+                        console.error("No se encontró el enlace de 'payer-action'.");
+                    }
                 }
 
                 if (error && errorContent instanceof HTMLElement) {

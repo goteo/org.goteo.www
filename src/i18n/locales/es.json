@@ -243,6 +243,26 @@
       "title": "Indícanos tus datos de pago",
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
       "selectMethod": "Selecciona método de pago:"
+    },
+    "page-aproved": {
+      "title": "Tu medio de pago se ha procesado con un éxito apabullante",
+      "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
+      "form-goal": {
+        "title": "Si la campaña no logra su objetivo",
+        "options": {
+          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+          "2": "Devolverlo a mi medio de pago Tarjeta"
+        }
+      },
+      "form-review": {
+        "title": "Deja un mensaje en los proyectos a los que has apoyado",
+        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+        "labels": {
+          "name": "Label",
+          "anonymous": "Colaborar de forma anónima",
+          "leave-a-message": "Dejar un mensaje en la campaña"
+        }
+      }
     }
   }
 }
