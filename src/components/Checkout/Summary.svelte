@@ -32,9 +32,9 @@
     <div>
         <p class="text-[#575757]">
             <strong>{formatCurrency($donations, "EUR", { showSymbol: true })}</strong>
-            de donaciones +
+            {$t("checkout.summary.resume.donationsPrefix")} +
             <strong>{formatCurrency($foundation, "EUR", { showSymbol: true })}</strong>
-            de aporte a la fundación
+            {$t("checkout.summary.resume.foundationPrefix")}
         </p>
     </div>
 </div>

@@ -58,7 +58,7 @@
                 class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
                 type="submit"
             >
-                Enviar
+                {$t("global.btn.send")}
             </button>
         </form>
     </div>
