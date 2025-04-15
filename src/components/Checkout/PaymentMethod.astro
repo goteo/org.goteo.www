@@ -74,17 +74,14 @@ const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = 
                 console.log("checkout", data?.checkout?.links);
 
                 if (!error) {
-                    const lang = location.pathname.split("/")[1];
                     const checkoutLink = data?.checkout?.links?.find(
-                        (link) => link.rel === "payer-action",
+                        (link) => link.type === "payment",
                     )?.href;
-
-                    console.log("checkoutLink", checkoutLink);
 
                     if (checkoutLink) {
                         window.location.href = checkoutLink;
                     } else {
-                        console.error("No se encontró el enlace de 'payer-action'.");
+                        console.error("No se encontró el enlace de pago.");
                     }
                 }
 
@@ -106,8 +103,6 @@ const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = 
                 }
             });
         }
-
-        // ------
 
         document.addEventListener("DOMContentLoaded", () => {
             const labels = document.querySelectorAll("label[data-gateway]");
