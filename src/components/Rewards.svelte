@@ -9,6 +9,7 @@
         apiProjectsIdGet,
         apiUsersIdGet,
     } from "../openapi/client/index";
+    import { t } from "../i18n/store.ts";
 
     export let project: Project;
 
@@ -133,6 +134,6 @@
             {/each}
         </ul>
     {:else}
-        <p>No hay recompensas disponibles.</p>
+        <p>{$t("rewards.unavailable")}</p>
     {/if}
 </section>

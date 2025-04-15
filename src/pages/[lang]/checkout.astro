@@ -21,9 +21,19 @@ import Steps from "../../components/Checkout/Steps.svelte";
 
                 <Cart client:load />
             </div>
-            <div class="border-tertiary w-1/2 border">
+            <div
+                class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+            >
                 <Summary client:load />
                 <Steps step={1} client:load />
+                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
+                    <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
+                    <a
+                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                    >
+                        {t("global.btn.continue")}
+                    </a>
+                </div>
             </div>
         </div>
     </main>

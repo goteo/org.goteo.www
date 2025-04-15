@@ -4,7 +4,7 @@
     import PlusIcon from "../../svgs/PlusIcon.svelte";
     import TrashIcon from "../../svgs/TrashIcon.svelte";
     import type { CartItem } from "../../stores/cart";
-    // import { t } from "../../i18n/store";
+    import { t } from "../../i18n/store";
     export let item: CartItem;
     export let onIncrement;
     export let onDecrement;
@@ -36,13 +36,9 @@
                     <p class="text-[#575757]">
                         {#if typeof item.claimed === "number"}
                             {#if item.claimed > 0}
-                                <span
-                                    >{item.claimed} personas ya han reclamado esta recompensa
-                                </span>
+                                <span>{item.claimed} {$t("checkout.reward.claimed")} </span>
                             {:else}
-                                <span
-                                    >Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!
-                                </span>
+                                <span>{$t("checkout.reward.unclaimed")} </span>
                             {/if}
                         {/if}
                     </p>

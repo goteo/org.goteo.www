@@ -59,7 +59,7 @@
         <div class="flex items-center gap-2">
             <input id="donation-checkbox" type="checkbox" class="accent-primary h-6 w-6 rounded" />
             <label for="donation-checkbox" class="text-tertiary">
-                Contribuir por una sociedad más ética y colaborativa
+                {$t("checkout.tipjar.checkboxLabel")}
             </label>
         </div>
     </div>
