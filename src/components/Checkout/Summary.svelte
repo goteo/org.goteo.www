@@ -17,16 +17,24 @@
     const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
 </script>
 
-<div class="rounded-xl border border-purple-200 bg-white p-6 text-purple-900">
-    <h2 class="mb-2 text-lg font-semibold">{$t("checkout.summary.total.title")}</h2>
-    <p class="mb-2 text-3xl leading-tight font-bold">
-        {formatCurrency($total, "EUR", { showSymbol: true })}
-    </p>
-    <hr class="my-2 border-purple-200" />
-    <p class="text-sm text-purple-900">
-        <strong>{formatCurrency($donations, "EUR", { showSymbol: true })}</strong> de donaciones +
-        <strong>{formatCurrency($foundation, "EUR", { showSymbol: true })}</strong>
-        de aporte a la fundación
-    </p>
-    <p>{$t("checkout.summary.deduct")}</p>
+<div class="flex flex-col gap-6 px-6 pt-6 pb-0">
+    <div>
+        <h2 class="text-[32px] font-semibold text-[#462949]">
+            {$t("checkout.summary.total.title")}
+        </h2>
+        <p class="text-[56px] leading-tight font-bold text-[#462949]">
+            {formatCurrency($total, "EUR", { showSymbol: true })}
+        </p>
+    </div>
+
+    <hr class="bg-[#462949]" />
+
+    <div>
+        <p class="text-[#575757]">
+            <strong>{formatCurrency($donations, "EUR", { showSymbol: true })}</strong>
+            {$t("checkout.summary.resume.donationsPrefix")} +
+            <strong>{formatCurrency($foundation, "EUR", { showSymbol: true })}</strong>
+            {$t("checkout.summary.resume.foundationPrefix")}
+        </p>
+    </div>
 </div>

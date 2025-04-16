@@ -3,22 +3,62 @@ import Layout from "../../layouts/Layout.astro";
 import RegisterForm from "../../components/RegisterForm.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
+import Oauth from "../../components/Oauth.astro";
 
 const { t } = Astro.locals;
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
-        <h2>{t("register.page.title")}</h2>
-        <p>{t("register.page.description")}</p>
-        <div>
-            {t("register.page.registerOr")}
-            <button>{t("register.page.loginBtnLabel")} </button>
-        </div>
-        <p>{t("register.page.goteoUserInfo")}</p>
+        <div class="flex flex-row gap-8 py-10">
+            <div class="flex w-1/2 flex-col gap-10">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-10">
+                        <div class="flex flex-col gap-4">
+                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                {t("register.page.title")}
+                            </h2>
+                            <p class="text-[#575757]">{t("register.page.description")}</p>
+                        </div>
 
-        <RegisterForm />
-        <Summary client:load />
-        <Steps step={2} client:load />
+                        <div>
+                            <div class="flex flex-col gap-4">
+                                <div class="flex flex-row items-center gap-2">
+                                    <h2 class="text-secondary text-2xl font-bold">
+                                        {t("register.page.registerOr")}
+                                    </h2>
+                                    <a
+                                        href="#"
+                                        class="text-tertiary rounded-2xl bg-[#E6E5F7] px-4 py-2 font-bold"
+                                        >{t("register.page.loginBtnLabel")}
+                                    </a>
+                                </div>
+                                <p class="text-[#575757]">{t("register.page.goteoUserInfo")}</p>
+                            </div>
+                            <RegisterForm />
+                        </div>
+
+                        <div>
+                            <p>{t("login.page.otherAccessMethods")}</p>
+                            <Oauth />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+            >
+                <Summary client:load />
+                <Steps step={2} client:load />
+                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
+                    <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
+                    <a
+                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                    >
+                        {t("global.btn.continue")}
+                    </a>
+                </div>
+            </div>
+        </div>
     </main>
 </Layout>

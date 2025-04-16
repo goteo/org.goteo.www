@@ -1,0 +1,26 @@
+---
+import GoogleIcon from "../svgs/GoogleIcon.astro";
+import FacebookIcon from "../svgs/FacebookIcon.astro";
+import XIcon from "../svgs/XIcon.astro";
+import LinkedinIcon from "../svgs/LinkedinIcon.astro";
+
+const providers = [
+    { icon: GoogleIcon },
+    { icon: XIcon },
+    { icon: FacebookIcon },
+    { icon: LinkedinIcon },
+];
+---
+
+<div class="flex w-full flex-row gap-4">
+    {
+        providers.map(({ icon: Icon }) => (
+            <a
+                href="#"
+                class="flex items-center justify-center rounded-xl border border-gray-200 p-[18px]"
+            >
+                <Icon />
+            </a>
+        ))
+    }
+</div>

@@ -7,6 +7,15 @@
 
     const items = derived(cart, ($cart) => $cart.items);
 
+    async function redirectToPayment() {
+        const pathParts = window.location.pathname.split("/").filter(Boolean);
+        const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
+        const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
+
+        const newPath = `/${currentLang}/payment`;
+        window.location.href = newPath;
+    }
+
     const groupedByOwner = derived(items, ($items) => {
         const grouped = $items.reduce(
             (acc, item) => {
@@ -35,15 +44,6 @@
 
     function remove(item: { key: string }) {
         cart.removeItem(item.key);
-    }
-
-    async function redirectToPayment() {
-        const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
-        const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
-
-        const newPath = `/${currentLang}/payment`;
-        window.location.href = newPath;
     }
 </script>
 

@@ -98,6 +98,11 @@
       "zod": {
         "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
         "legalName.custom": "La razón social es obligatoria para empresas"
+      },
+      "validation": {
+        "password": {
+          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+        }
       }
     },
     "individual": {
@@ -106,7 +111,10 @@
       "email": "Correo electrónico",
       "password": "Contraseña",
       "taxIdCheckbox": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
-      "taxId": "DNI*"
+      "taxId": {
+        "label": "DNI*",
+        "msgDeduction": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+      }
     },
     "organization": {
       "legalName": "Razón social",
@@ -183,6 +191,9 @@
     "ended": "Campaña finalizada",
     "remaining": "Quedan"
   },
+  "rewards": {
+    "unavailable": "No hay recompensas disponibles."
+  },
   "updates": {
     "heading": "No pierdas detalle de los avances de esta campaña",
     "empty": "No existen más actualizaciones previstas."
@@ -201,8 +212,13 @@
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
     "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+    "reward": {
+      "claimed": "personas ya han reclamado esta recompensa",
+      "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
+    },
     "tipjar": {
-      "community": "Quiero contribuir con la fundación Platoniq"
+      "community": "Quiero contribuir con la fundación Platoniq",
+      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa"
     },
     "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
     "summary": {
@@ -210,7 +226,11 @@
         "title": "Total que vas a donar",
         "description": "Descripción del total"
       },
-      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación."
+      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
+      "resume": {
+        "donationsPrefix": "de donaciones",
+        "foundationPrefix": "de aporte a la fundación"
+      }
     },
     "steps": {
       "reward": {
@@ -228,6 +248,19 @@
     },
     "btnContinue": {
       "label": "Continuar"
+    }
+  },
+  "payment": {
+    "page": {
+      "title": "Indícanos tus datos de pago",
+      "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
+      "selectMethod": "Selecciona método de pago:"
+    }
+  },
+  "global": {
+    "btn": {
+      "continue": "Continuar",
+      "send": "Enviar"
     }
   }
 }

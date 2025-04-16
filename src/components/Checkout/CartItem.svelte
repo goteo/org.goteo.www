@@ -4,7 +4,7 @@
     import PlusIcon from "../../svgs/PlusIcon.svelte";
     import TrashIcon from "../../svgs/TrashIcon.svelte";
     import type { CartItem } from "../../stores/cart";
-    // import { t } from "../../i18n/store";
+    import { t } from "../../i18n/store";
     export let item: CartItem;
     export let onIncrement;
     export let onDecrement;
@@ -36,13 +36,9 @@
                     <p class="text-[#575757]">
                         {#if typeof item.claimed === "number"}
                             {#if item.claimed > 0}
-                                <span
-                                    >{item.claimed} personas ya han reclamado esta recompensa
-                                </span>
+                                <span>{item.claimed} {$t("checkout.reward.claimed")} </span>
                             {:else}
-                                <span
-                                    >Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!
-                                </span>
+                                <span>{$t("checkout.reward.unclaimed")} </span>
                             {/if}
                         {/if}
                     </p>
@@ -82,8 +78,8 @@
         <!-- <div class="flex items-center gap-2">
             <input
                 type="checkbox"
-                id="donation-checkbox"
-                class="focus:bg-primary h-6 w-6 rounded border-gray-300 text-blue-600"
+                id={`reward-checkbox-${item.key}`}
+                class="accent-primary h-6 w-6 rounded"
             />
             <label for="donation-checkbox" class=" text-[#575757]">
                 {$t("checkout.changeAddressLabel")}
