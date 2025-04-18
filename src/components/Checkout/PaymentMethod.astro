@@ -71,12 +71,15 @@ const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = 
                 const formData = new FormData(form);
 
                 const { error, data } = await actions.payment(formData);
-                console.log("checkout", data?.checkout?.links);
+                console.log("checkout", data?.checkout);
 
                 if (!error) {
+                    localStorage.setItem("checkout_id", String(data?.checkout?.id ?? ""));
                     const checkoutLink = data?.checkout?.links?.find(
                         (link) => link.type === "payment",
                     )?.href;
+
+                    console.log("checkoutLink", checkoutLink);
 
                     if (checkoutLink) {
                         window.location.href = checkoutLink;

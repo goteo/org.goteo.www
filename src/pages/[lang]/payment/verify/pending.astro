@@ -1,0 +1,29 @@
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Redirigiendo al estado de tu pago...</title>
+        <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const id = localStorage.getItem("checkout_id");
+
+                if (id) {
+                    localStorage.removeItem("checkout_id");
+                    const lang = location.pathname.split("/")[1];
+                    window.location.href = `/${lang}/payment/verify/${id}`;
+                } else {
+                    document.body.innerHTML = `
+            <main style="padding: 2rem; font-family: sans-serif; text-align: center;">
+              <h1>Error</h1>
+              <p>No pudimos recuperar tu operación. Por favor vuelve a intentarlo.</p>
+            </main>
+          `;
+                }
+            });
+        </script>
+    </head>
+    <body>
+        <main style="padding: 2rem; font-family: sans-serif; text-align: center;">
+            <p>Redirigiendo al estado de tu pago...</p>
+        </main>
+    </body>
+</html>
