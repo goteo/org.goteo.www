@@ -1,24 +1,6 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { t } from "../../i18n/store";
-
-    onMount(() => {
-        const select = document.getElementById("campaign") as HTMLSelectElement | null;
-        const textarea = document.getElementById("review-message") as HTMLTextAreaElement | null;
-
-        if (!select || !textarea) return;
-
-        const toggle = () => {
-            if (select.value === "msg") {
-                textarea.classList.remove("hidden");
-            } else {
-                textarea.classList.add("hidden");
-            }
-        };
-
-        toggle();
-        select.addEventListener("change", toggle);
-    });
+    let campaign = "anonymous";
 </script>
 
 <div>
@@ -43,8 +25,8 @@
                         />
                     </div>
                     <span class="text-gray-700">
-                        {$t("payment.page-aproved.form-goal.options.1")}</span
-                    >
+                        {$t("payment.page-aproved.form-goal.options.1")}
+                    </span>
                 </label>
 
                 <label class="flex cursor-pointer items-center gap-2">
@@ -75,10 +57,11 @@
                 <select
                     id="campaign"
                     name="campaign"
+                    bind:value={campaign}
                     class="peer w-full appearance-none rounded-md border border-[#855a96] bg-white px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
                     required
                 >
-                    <option value="anonymous" selected>
+                    <option value="anonymous">
                         {$t("payment.page-aproved.form-review.labels.anonymous")}
                     </option>
                     <option value="msg">
@@ -93,11 +76,13 @@
                     {$t("payment.page-aproved.form-review.labels.name")}:
                 </label>
 
-                <textarea
-                    id="review-message"
-                    class="peer hidden w-full appearance-none rounded-md border border-[#855a96] bg-white p-2 text-base text-gray-700 placeholder-gray-400 focus:ring-[#855a96] focus:outline-none"
-                    name="review"
-                ></textarea>
+                {#if campaign === "msg"}
+                    <textarea
+                        id="review-message"
+                        class="peer w-full appearance-none rounded-md border border-[#855a96] bg-white p-2 text-base text-gray-700 placeholder-gray-400 focus:ring-[#855a96] focus:outline-none"
+                        name="review"
+                    ></textarea>
+                {/if}
             </div>
 
             <!-- TODO: Merge with Btn "Continuar" -->
