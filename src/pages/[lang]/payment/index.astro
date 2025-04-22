@@ -5,7 +5,6 @@ import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 const { data: paymentGateways } = await apiGatewaysGetCollection();
-console.log("paymentGateways", paymentGateways);
 const { t } = Astro.locals;
 ---
 
