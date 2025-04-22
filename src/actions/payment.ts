@@ -1,14 +1,27 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { apiGatewayCheckoutsPost } from "../openapi/client/index.ts";
+import { apiGatewayCheckoutsPost, apiGatewaysGetCollection } from "../openapi/client/index.ts";
 
-import type { GatewayCharge } from "../openapi/client/index.ts";
+import type { GatewayCharge, ApiGatewaysNameGetResponse } from "../openapi/client/index.ts";
+
+const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+
+const response = await apiGatewaysGetCollection();
+const paymentGateways: ApiGatewaysNameGetResponse[] | undefined = response.data;
+
+if (!paymentGateways) {
+    throw new Error("Payment gateways not found");
+}
+
+const paymentGatewayNames = paymentGateways
+    .map((gateway) => gateway.name)
+    .filter((name): name is string => name !== undefined);
 
 export const payment = defineAction({
     accept: "form",
     input: z.object({
-        paymentMethod: z.enum(["wallet", "paypal", "stripe"]),
+        paymentMethod: z.enum(paymentGatewayNames as [string, ...string[]]),
         cartData: z.string().min(1),
     }),
     handler: async (input, context) => {
@@ -32,7 +45,7 @@ export const payment = defineAction({
                 target: `/v4/accountings/${item.accountingId}`,
                 money: {
                     amount: item.amount * item.quantity,
-                    currency: "EUR",
+                    currency: defaultCurrency,
                 },
             }));
 

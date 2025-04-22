@@ -4,13 +4,16 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
+    import { languagesList, type Locale } from "../../i18n/locales/index";
 
     const items = derived(cart, ($cart) => $cart.items);
 
     async function redirectToPayment() {
         const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
-        const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
+        const languages = Object.keys(languagesList) as Locale[];
+        const currentLang: Locale = languages.includes(pathParts[0] as Locale)
+            ? (pathParts[0] as Locale)
+            : "es";
 
         const newPath = `/${currentLang}/payment`;
         window.location.href = newPath;
