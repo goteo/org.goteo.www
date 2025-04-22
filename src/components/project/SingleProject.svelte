@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Project } from "../../openapi/client/index";
+    import type { Project, Accounting } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
@@ -9,6 +9,7 @@
     import { t } from "../../i18n/store";
 
     export let project: Project;
+    export let projectCurrency: string;
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
 
     const getOwner = () => {
@@ -58,5 +59,5 @@
     <Tags {tags} />
 
     <div>Recompensas más populares</div>
-    <Rewards {project} />
+    <Rewards {project} {projectCurrency} />
 </section>
