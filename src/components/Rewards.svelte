@@ -10,8 +10,10 @@
         apiUsersIdGet,
     } from "../openapi/client/index";
     import { t } from "../i18n/store.ts";
+    import { languagesList, type Locale } from "../i18n/locales/index.ts";
 
     export let project: Project;
+    export let projectCurrency: string;
 
     let rewards: ProjectReward[] = [];
     let error: string | null = null;
@@ -44,6 +46,7 @@
             target,
             claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
             accountingId: extractId(project.accounting) ?? "",
+            currency: reward.money?.currency ?? projectCurrency,
         });
     }
 
@@ -51,8 +54,10 @@
         await addToCart(reward);
 
         const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const languages = ["es", "en", "ca", "eu", "gl", "fr", "de"];
-        const currentLang = languages.includes(pathParts[0]) ? pathParts[0] : "es";
+        const languages = Object.keys(languagesList) as Locale[];
+        const currentLang: Locale = languages.includes(pathParts[0] as Locale)
+            ? (pathParts[0] as Locale)
+            : "es";
 
         window.location.href = `/${currentLang}/checkout`;
     }
@@ -68,12 +73,13 @@
 
         cart.addItem({
             title: "Donación Libre",
-            amount: numericAmount * getUnit("EUR"),
+            amount: numericAmount * getUnit(projectCurrency),
             quantity: 1,
             image: "",
             project: Number(project.id),
             target,
             accountingId: extractId(project.accounting) ?? "",
+            currency: projectCurrency,
         });
     }
 
