@@ -14,11 +14,19 @@ export const onRequest = defineMiddleware((context: APIContext, next) => {
     const maybeLang = pathParts[0];
     const defaultLang = "es";
 
-    const lang = maybeLang as Locale;
-    context.locals.lang = lang;
-    context.locals.t = useTranslations(lang);
+    const languageExemptRoutes = ["_actions", "api"];
+    const isLanguageExemptPath = languageExemptRoutes.includes(maybeLang);
 
-    if (pathParts[0] === "_actions") {
+    const lang: Locale = isLanguageExemptPath
+        ? defaultLang
+        : validLangs.includes(maybeLang)
+          ? (maybeLang as Locale)
+          : defaultLang;
+
+    context.locals.lang = defaultLang;
+    context.locals.t = useTranslations(defaultLang);
+
+    if (languageExemptRoutes) {
         return next();
     }
 

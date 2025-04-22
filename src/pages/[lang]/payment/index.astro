@@ -1,11 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Summary from "../../components/Checkout/Summary.svelte";
-import PaymentMethod from "../../components/Checkout/PaymentMethod.svelte";
-import Steps from "../../components/Checkout/Steps.svelte";
-import { apiGatewaysGetCollection } from "../../openapi/client/index";
+import Layout from "../../../layouts/Layout.astro";
+import Summary from "../../../components/Checkout/Summary.svelte";
+import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
+import Steps from "../../../components/Checkout/Steps.svelte";
+import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 const { data: paymentGateways } = await apiGatewaysGetCollection();
-
 const { t } = Astro.locals;
 ---
 
@@ -24,7 +23,7 @@ const { t } = Astro.locals;
                             </p>
                         </div>
 
-                        <PaymentMethod client:load {paymentGateways} />
+                        <PaymentMethod {paymentGateways} />
                     </div>
                 </div>
             </div>

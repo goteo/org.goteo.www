@@ -1,0 +1,136 @@
+---
+import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
+import CreditCardIcon from "../../svgs/CreditCardIcon.astro";
+import PaypalIcon from "../../svgs/PaypalIcon.astro";
+import StripeIcon from "../../svgs/StripeIcon.astro";
+const { t } = Astro.locals;
+const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = Astro.props;
+---
+
+<section>
+    <div class="flex flex-col gap-6 sm:w-full sm:max-w-md">
+        <p class="text-2xl font-bold">
+            {t("payment.page.selectMethod")}
+        </p>
+
+        <form id="payment" method="POST" class="flex flex-col gap-4">
+            <div class="grid grid-cols-2 gap-4">
+                {
+                    (paymentGateways ?? []).map((gateway) => (
+                        <label
+                            class="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-[#F3F3EF] px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            data-gateway={gateway.name}
+                        >
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value={gateway.name}
+                                    class="after:bg-primary relative h-6 w-6 appearance-none rounded-full border border-[#462949] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:border-[#462949] checked:bg-[#462949] checked:after:block"
+                                />
+                                <div class="flex flex-col leading-tight">
+                                    <span class="font-semibold capitalize">{gateway.name}</span>
+                                </div>
+                            </div>
+                            <div>
+                                {gateway.name === "paypal" ? (
+                                    <PaypalIcon />
+                                ) : gateway.name === "stripe" ? (
+                                    <StripeIcon />
+                                ) : gateway.name === "wallet" ? (
+                                    <CreditCardIcon />
+                                ) : null}
+                            </div>
+                        </label>
+                    ))
+                }
+            </div>
+            <input type="hidden" name="cartData" id="cart-data-input" />
+
+            <button
+                class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                type="submit"
+            >
+                Enviar
+            </button>
+        </form>
+        <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
+    </div>
+
+    <script>
+        import { actions, isInputError } from "astro:actions";
+
+        const form = document.getElementById("payment");
+        const errorContent = document.getElementById("payment-error-content");
+        const cartDataInput = document.getElementById("cart-data-input");
+
+        if (form instanceof HTMLFormElement) {
+            form.addEventListener("submit", async (event) => {
+                event.preventDefault();
+
+                const formData = new FormData(form);
+
+                const { error, data } = await actions.payment(formData);
+                console.log("checkout", data?.checkout?.links);
+
+                if (!error) {
+                    const checkoutLink = data?.checkout?.links?.find(
+                        (link) => link.type === "payment",
+                    )?.href;
+
+                    if (checkoutLink) {
+                        window.location.href = checkoutLink;
+                    } else {
+                        console.error("No se encontró el enlace de pago.");
+                    }
+                }
+
+                if (error && errorContent instanceof HTMLElement) {
+                    errorContent.innerHTML = "";
+
+                    if (isInputError(error)) {
+                        const ul = document.createElement("ul");
+                        error.issues.forEach((err) => {
+                            const li = document.createElement("li");
+                            li.innerText = err.message;
+                            ul.appendChild(li);
+                        });
+
+                        errorContent.appendChild(ul);
+                        return;
+                    }
+                    errorContent.innerText = error.message;
+                }
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const labels = document.querySelectorAll("label[data-gateway]");
+            const inputs = document.querySelectorAll("input[name='paymentMethod']");
+
+            const cartData = localStorage.getItem("cart");
+            if (cartData && cartDataInput) {
+                (cartDataInput as HTMLInputElement).value = cartData;
+            }
+
+            inputs.forEach((input) => {
+                input.addEventListener("change", () => {
+                    labels.forEach((label) => {
+                        label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
+                        label.classList.add("border-[#F3F3EF]");
+                    });
+
+                    const selectedLabel = input.closest("label");
+                    if (selectedLabel) {
+                        selectedLabel.classList.remove("border-[#F3F3EF]");
+                        selectedLabel.classList.add(
+                            "bg-teal-300",
+                            "text-[#2f1e2e]",
+                            "border-teal-400",
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+</section>

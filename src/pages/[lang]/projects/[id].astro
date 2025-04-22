@@ -3,15 +3,24 @@ import SingleProject from "../../../components/project/SingleProject.svelte";
 import Layout from "../../../layouts/Layout.astro";
 import Navigation from "../../../components/Navigation/Navigation.svelte";
 import LanguagesDropdown from "../../../components/LanguagesDropdown.astro";
+import { extractId } from "../../../utils/extractId";
 const { id } = Astro.params;
 
-import { apiProjectsIdGet } from "../../../openapi/client/index";
+import { apiAccountingsIdGet, apiProjectsIdGet } from "../../../openapi/client/index";
+const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
 
 if (!id) {
     throw new Error("Project ID is undefined.");
 }
 
 const { data: project, error } = await apiProjectsIdGet({ path: { id } });
+const accountingId = extractId(project?.accounting);
+
+if (!accountingId) {
+    throw new Error("Accounting ID is undefined.");
+}
+const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingId } });
+const projectCurrency: string = accounting?.currency || defaultCurrency;
 
 if (error || typeof project === "undefined") {
     throw new Error("No se pudo obtener el proyecto.");
@@ -21,5 +30,5 @@ if (error || typeof project === "undefined") {
 <Layout title={project.title} description={project.description}>
     <Navigation />
     <div class="wrapper"><LanguagesDropdown /></div>
-    <SingleProject {project} client:load />
+    <SingleProject {project} {projectCurrency} client:load />
 </Layout>

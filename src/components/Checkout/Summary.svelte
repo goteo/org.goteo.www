@@ -4,6 +4,8 @@
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
 
+    export let defaultCurrency: string;
+
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
     );
@@ -23,7 +25,7 @@
             {$t("checkout.summary.total.title")}
         </h2>
         <p class="text-[56px] leading-tight font-bold text-[#462949]">
-            {formatCurrency($total, "EUR", { showSymbol: true })}
+            {formatCurrency($total, defaultCurrency, { showSymbol: true })}
         </p>
     </div>
 
@@ -31,9 +33,9 @@
 
     <div>
         <p class="text-[#575757]">
-            <strong>{formatCurrency($donations, "EUR", { showSymbol: true })}</strong>
+            <strong>{formatCurrency($donations, defaultCurrency, { showSymbol: true })}</strong>
             {$t("checkout.summary.resume.donationsPrefix")} +
-            <strong>{formatCurrency($foundation, "EUR", { showSymbol: true })}</strong>
+            <strong>{formatCurrency($foundation, defaultCurrency, { showSymbol: true })}</strong>
             {$t("checkout.summary.resume.foundationPrefix")}
         </p>
     </div>

@@ -10,6 +10,7 @@ export type CartItem = {
     target: string;
     claimed?: number;
     accountingId: string;
+    currency: string;
 };
 
 type CartStore = {
