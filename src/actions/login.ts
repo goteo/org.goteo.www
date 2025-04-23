@@ -34,7 +34,7 @@ export const login = defineAction({
                     path: "/",
                     httpOnly: true,
                     secure: true,
-                    sameSite: "strict",
+                    sameSite: "lax",
                 },
             );
 

@@ -26,7 +26,7 @@ export const onRequest = defineMiddleware((context: APIContext, next) => {
     context.locals.lang = defaultLang;
     context.locals.t = useTranslations(defaultLang);
 
-    if (languageExemptRoutes) {
+    if (isLanguageExemptPath) {
         return next();
     }
 
@@ -46,8 +46,9 @@ export const onRequest = defineMiddleware((context: APIContext, next) => {
     }
 
     const protectedRoutes = ["payment"];
+    const isProtected = protectedRoutes.some((route) => pathParts.includes(route));
 
-    if (!accessToken && protectedRoutes.includes(nextSegment)) {
+    if (!accessToken && isProtected) {
         return context.redirect(`/${lang}/login`, 302);
     }
 
