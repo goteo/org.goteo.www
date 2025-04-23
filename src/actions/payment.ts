@@ -51,7 +51,7 @@ export const payment = defineAction({
 
             const origin = "/v4/accountings/2955";
             const base = context.url.origin;
-            const returnUrl = `${base}/${lang}/payment/verify/pending`;
+            const returnUrl = `${base}/${lang}/payment/verify`;
             const gateway = `/v4/gateways/${input.paymentMethod}`;
 
             const response = await apiGatewayCheckoutsPost({
