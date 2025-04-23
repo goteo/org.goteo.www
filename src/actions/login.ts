@@ -1,7 +1,8 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { apiUserTokensPost } from "../openapi/client/index.ts";
+import { apiUserTokensPost, apiUsersIdGet } from "../openapi/client/index.ts";
+import { extractId } from "../utils/extractId.ts";
 
 export const login = defineAction({
     accept: "form",
@@ -13,14 +14,32 @@ export const login = defineAction({
         const { t } = context.locals;
 
         try {
-            const { data } = await apiUserTokensPost({
+            const { data: tokenData } = await apiUserTokensPost({
                 body: {
                     identifier: input.identifier,
                     password: input.password,
                 },
             });
 
-            if (!data) {
+            if (!tokenData?.id || !tokenData.token) {
+                throw new ActionError({
+                    code: "BAD_REQUEST",
+                    message: t("login.error.invalidCredentials"),
+                });
+            }
+
+            const id = extractId(String(tokenData.owner));
+
+            if (!id) {
+                throw new ActionError({
+                    code: "BAD_REQUEST",
+                    message: t("login.error.invalidCredentials"),
+                });
+            }
+
+            const { data: userData } = await apiUsersIdGet({ path: { id } });
+
+            if (!userData || !userData.accounting) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
                     message: t("login.error.invalidCredentials"),
@@ -29,7 +48,11 @@ export const login = defineAction({
 
             context.cookies.set(
                 "access-token",
-                { id: data.id, token: data.token },
+                {
+                    id: tokenData.id,
+                    token: tokenData.token,
+                    accountingId: extractId(userData.accounting),
+                },
                 {
                     path: "/",
                     httpOnly: true,
