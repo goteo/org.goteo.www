@@ -8,12 +8,14 @@ import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
 import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
+const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
 
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 const { t } = Astro.locals;
 
 let error = null;
+let amount: number | undefined = undefined;
 
 try {
     const accessCookie = Astro.cookies.get("access-token");
@@ -42,6 +44,8 @@ try {
     if (!response.data) {
         throw new Error("No se encontró información del checkout.");
     }
+
+    amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
 } catch (err) {
     console.error("Error al verificar el pago:", err);
     error = err instanceof Error ? err.message : "Error desconocido";
@@ -74,7 +78,7 @@ try {
                             </div>
                         </div>
                         <div class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                            <Summary client:load hasError={!!error} />
+                            <Summary client:load hasError={!!error} {defaultCurrency} {amount} />
                             <Steps client:load step={4} hasError={!!error} />
                             <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
                                 <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
@@ -109,7 +113,7 @@ try {
                             </div>
                         </div>
                         <div class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                            <Summary client:load />
+                            <Summary client:load {defaultCurrency} {amount} />
                             <Steps step={2} client:load />
                             <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
                                 <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>

@@ -6,6 +6,9 @@
     import { derived } from "svelte/store";
     import { languagesList, type Locale } from "../../i18n/locales/index";
 
+    export let defaultCurrency: string;
+    export let accountingIdPlatoniq: string;
+
     const items = derived(cart, ($cart) => $cart.items);
 
     async function redirectToPayment() {
@@ -70,7 +73,7 @@
     </div>
 {/if}
 
-<Tipjar />
+<Tipjar {accountingIdPlatoniq} {defaultCurrency} />
 
 <button
     on:click={redirectToPayment}

@@ -5,6 +5,7 @@ import Cart from "../../components/Checkout/Cart.svelte";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
 const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+const accountingIdPlatoniq = import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_ID || "";
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -20,7 +21,7 @@ const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
                     </p>
                 </div>
 
-                <Cart client:load />
+                <Cart client:load {defaultCurrency} {accountingIdPlatoniq} />
             </div>
             <div
                 class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"

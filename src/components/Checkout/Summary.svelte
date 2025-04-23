@@ -7,6 +7,7 @@
 
     export let defaultCurrency: string;
     export let hasError: boolean;
+    export let amount: number | undefined;
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -36,7 +37,7 @@
         <p
             class={`text-[56px] leading-tight font-bold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
         >
-            {formatCurrency($total, defaultCurrency, { showSymbol: true })}
+            {formatCurrency(amount ?? $total, defaultCurrency, { showSymbol: true })}
         </p>
     </div>
 
