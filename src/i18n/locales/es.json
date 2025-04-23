@@ -275,6 +275,12 @@
           "leave-a-message": "Dejar un mensaje en la campaña"
         }
       }
+    },
+    "page-error": {
+      "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
+      "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
+      "selectMethod": "Selecciona de nuevo un método de pago:",
+      "btnContinue": "Volver a intentarlo"
     }
   },
   "global": {

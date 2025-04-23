@@ -1,10 +1,12 @@
 <script lang="ts">
+    import WarningIcon from "../../svgs/WarningIcon.svelte";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
 
     export let defaultCurrency: string;
+    export let hasError: boolean;
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -21,10 +23,19 @@
 
 <div class="flex flex-col gap-6 px-6 pt-6 pb-0">
     <div>
-        <h2 class="text-[32px] font-semibold text-[#462949]">
+        <h2
+            class={`flex items-center gap-2 text-[32px] font-semibold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+        >
+            {#if hasError}
+                <span class="h-6 w-6">
+                    <WarningIcon />
+                </span>
+            {/if}
             {$t("checkout.summary.total.title")}
         </h2>
-        <p class="text-[56px] leading-tight font-bold text-[#462949]">
+        <p
+            class={`text-[56px] leading-tight font-bold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+        >
             {formatCurrency($total, defaultCurrency, { showSymbol: true })}
         </p>
     </div>
