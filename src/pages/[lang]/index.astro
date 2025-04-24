@@ -1,5 +1,5 @@
 ---
-import LanguagesDropdown from "../../components/LanguagesDropdown.astro";
+import UiLanguages from "../../components/UiLanguages.astro";
 import Countdown from "../../components/Countdown.svelte";
 import Logout from "../../components/Logout.astro";
 import Layout from "../../layouts/Layout.astro";
@@ -10,7 +10,7 @@ const { t } = Astro.locals;
     <main class="wrapper">
         <h1 class="text-body">{t("title")}</h1>
         <Countdown client:load />
-        <LanguagesDropdown />
+        <UiLanguages />
         <Logout />
     </main>
 </Layout>
