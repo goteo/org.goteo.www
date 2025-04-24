@@ -9,7 +9,6 @@ export type CartItem = {
     project?: number;
     target: string;
     claimed?: number;
-    accountingId: string;
     currency: string;
 };
 
@@ -71,7 +70,7 @@ function createCartStore() {
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
                 const existingIndex = cart.items.findIndex(
-                    (i) => i.accountingId === item.accountingId && i.title === item.title,
+                    (i) => i.target === item.target && i.title === item.title,
                 );
 
                 const updatedItems = [...cart.items];
@@ -85,7 +84,7 @@ function createCartStore() {
                     const position = cart.items.length;
                     const { key } = generateKey({
                         title: item.title,
-                        accountingId: item.accountingId,
+                        accountingId: item.target,
                         position,
                     });
                     updatedItems.push({ ...item, key });

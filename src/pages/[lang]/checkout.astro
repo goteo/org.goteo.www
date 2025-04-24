@@ -26,7 +26,7 @@ const accountingIdPlatoniq = import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_ID || ""
             <div
                 class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
             >
-                <Summary client:load {defaultCurrency} />
+                <Summary client:load {defaultCurrency} {accountingIdPlatoniq} />
                 <Steps step={1} client:load />
                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
                     <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
