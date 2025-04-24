@@ -1,0 +1,301 @@
+{
+  "greeting": "Hola",
+  "farewell": "Adiós",
+  "campaignProgress": {
+    "minimumReached": "Mínimo conseguido!",
+    "obtained": "Obtenido",
+    "donations": "Donaciones realizadas",
+    "optimum": "Óptimo",
+    "minimum": "Mínimo",
+    "donate": "Donar a esta campaña"
+  },
+  "reward": {
+    "donate": "Dona",
+    "donors": "donates",
+    "units": "Quedan {units} unidades",
+    "noUnits": "No quedan unidades",
+    "trending": "Recompensas más populares",
+    "headline": "Selecciona tu recompensa",
+    "addAndContinue": "Añadir al carro y continuar"
+  },
+  "budget": {
+    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
+    "infrastructure": "Infraestructura",
+    "material": "Material",
+    "task": "Tareas",
+    "chart": {
+      "minimum": "Mínimo",
+      "optimal": "Óptimo",
+      "progress": "Estado de la campaña"
+    }
+  },
+  "project": {
+    "owner": "Campaña de crowdfunding impulsada por ",
+    "tabs": {
+      "project": "Información de campaña",
+      "budget": "Necesidades",
+      "rewards": "Recompensas",
+      "updates": "Actualizaciones",
+      "community": "Comunidad"
+    },
+    "actions": {
+      "share": "Compartir",
+      "remember": "Recordar",
+      "viewAll": "Ver todas"
+    },
+    "about": {
+      "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a Climática en caso de llegar a los objetivos de éxito marcados.",
+      "learnMore": "Saber más."
+    },
+    "impact": {
+      "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
+      "learnMore": "Saber más."
+    }
+  },
+  "navigation": {
+    "search": "Busca tu campaña"
+  },
+  "categories": {
+    "solidary": "Solidario",
+    "libre-software": "Software Libre",
+    "employment": "Generar empleo",
+    "design": "Desde el diseño",
+    "journalism": "Periodismo independiente",
+    "education": "Educativo",
+    "culture": "Crea cultura",
+    "ecology": "Ecológico",
+    "health-and-cares": "Salud y cuidados",
+    "open-data": "Datos abiertos",
+    "democracy": "Democracia y participación",
+    "equity": "Igualdad de género"
+  },
+  "ShareButton": {
+    "title": "Difunde este proyecto por el mundo",
+    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
+    "global": "compartir global",
+    "facebook": "compartir en facebook",
+    "twitter": "compartir en X",
+    "code": "compartir como código",
+    "copied": "¡Enlace copiado al portapapeles!"
+  },
+  "register": {
+    "page": {
+      "title": "Indícanos tus datos personales",
+      "description": "Necesitamos saber quién eres antes de pagar.",
+      "registerOr": "Regístrate o",
+      "loginBtnLabel": "Entra con tu cuenta",
+      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+      "otherAccessMethods": "También puedes acceder a través de:"
+    },
+    "form": {
+      "userType": {
+        "individual": "Persona física",
+        "organization": "Persona jurídica (empresas)"
+      },
+      "btnSubmit": "Registrarse",
+      "termsCheckbox": "Acepto las condiciones legales",
+      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+      "zod": {
+        "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
+        "legalName.custom": "La razón social es obligatoria para empresas"
+      },
+      "validation": {
+        "password": {
+          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+        }
+      }
+    },
+    "individual": {
+      "firstName": "Nombre",
+      "lastName": "Apellidos",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "taxIdCheckbox": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+      "taxId": {
+        "label": "DNI*",
+        "msgDeduction": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+      }
+    },
+    "organization": {
+      "legalName": "Razón social",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "taxId": "CIF*",
+      "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
+      "representativeTitle": "Datos del representante de la empresa.",
+      "firstName": "Nombre",
+      "lastName": "Apellidos"
+    },
+    "error": {
+      "incompletePersonFields ": "Por favor, completa todos los campos obligatorios para persona física.",
+      "incompleteOrgFields ": "Por favor, completa todos los campos obligatorios para persona jurídica.",
+      "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "login": {
+    "page": {
+      "title": "Indícanos tus datos personales",
+      "description": "Necesitamos saber quién eres antes de pagar.",
+      "registerOr": "Entra en tu cuenta o",
+      "registerBtnLabel": "Regístrate",
+      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+      "otherAccessMethods": "También puedes acceder a través de:",
+      "forgotPassword": "¿Olvidaste tu contraseña?"
+    },
+    "form": {
+      "email": "Email o nombre de usuario",
+      "password": "Contraseña",
+      "btnSubmit": "Iniciar sesión"
+    },
+    "error": {
+      "invalidCredentials": "Correo electrónico o contraseña inválidos.",
+      "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
+      "invalidEmail": "El correo electrónico no es válido.",
+      "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
+    }
+  },
+  "logout": {
+    "error": {
+      "cookieNotFound": "No se ha encontrado la cookie de sesión.",
+      "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
+      "logoutSuccess": "Has cerrado sesión correctamente.",
+      "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
+    }
+  },
+  "zod": {
+    "required": "Este campo es obligatorio",
+    "invalid_type": "Se esperaba {expected} pero se recibió {received}",
+    "string": {
+      "too_small": "Debe tener al menos {min} carácter(es)",
+      "too_big": "No debe exceder los {max} caracteres",
+      "invalid": "Formato de texto no válido"
+    },
+    "number": {
+      "too_small": "Debe ser al menos {min}",
+      "too_big": "No debe exceder {max}"
+    },
+    "too_small": "Debe ser al menos {min}",
+    "too_big": "No debe exceder {max}",
+    "email": {
+      "invalid": "Correo electrónico no válido"
+    },
+    "url": {
+      "invalid": "Formato de URL no válido"
+    },
+    "enum": {
+      "invalid": "Opción no válida. Las opciones válidas son: {options}"
+    },
+    "invalid": "Entrada no válida"
+  },
+  "countdown": {
+    "ended": "Campaña finalizada",
+    "remaining": "Quedan"
+  },
+  "rewards": {
+    "unavailable": "No hay recompensas disponibles."
+  },
+  "updates": {
+    "heading": "No pierdas detalle de los avances de esta campaña",
+    "empty": "No existen más actualizaciones previstas."
+  },
+  "updateCard": {
+    "readMore": "Seguir leyendo"
+  },
+  "metadata": {
+    "title": "Inicio",
+    "description": "Página de inicio"
+  },
+  "title": "Hola!",
+  "header": {
+    "login": "Iniciar Sesión"
+  },
+  "checkout": {
+    "title": "Resumen de tus donaciones seleccionadas",
+    "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+    "reward": {
+      "claimed": "personas ya han reclamado esta recompensa",
+      "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
+    },
+    "tipjar": {
+      "community": "Quiero contribuir con la fundación Platoniq",
+      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
+      "error": {
+        "invalidAmount": "La cantidad mínima es de 1€"
+      }
+    },
+    "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
+    "summary": {
+      "total": {
+        "title": "Total que vas a donar",
+        "description": "Descripción del total"
+      },
+      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
+      "resume": {
+        "donationsPrefix": "de donaciones",
+        "foundationPrefix": "de aporte a la fundación"
+      }
+    },
+    "steps": {
+      "reward": {
+        "title": "Recompensa"
+      },
+      "data": {
+        "title": "Tus datos"
+      },
+      "payment": {
+        "title": "Método de pago"
+      },
+      "confirmation": {
+        "title": "Confirmar"
+      }
+    },
+    "btnContinue": {
+      "label": "Continuar"
+    }
+  },
+  "payment": {
+    "page": {
+      "title": "Indícanos tus datos de pago",
+      "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
+      "selectMethod": "Selecciona método de pago:"
+    },
+    "page-aproved": {
+      "title": "Tu medio de pago se ha procesado con un éxito apabullante",
+      "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
+      "form-goal": {
+        "title": "Si la campaña no logra su objetivo",
+        "options": {
+          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+          "2": "Devolverlo a mi medio de pago Tarjeta"
+        }
+      },
+      "form-review": {
+        "title": "Deja un mensaje en los proyectos a los que has apoyado",
+        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+        "labels": {
+          "name": "Label",
+          "anonymous": "Colaborar de forma anónima",
+          "leave-a-message": "Dejar un mensaje en la campaña"
+        }
+      }
+    },
+    "page-error": {
+      "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
+      "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
+      "selectMethod": "Selecciona de nuevo un método de pago:",
+      "btnContinue": "Volver a intentarlo"
+    },
+    "error": {
+      "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
+      "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
+      "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
+      "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
+    }
+  },
+  "global": {
+    "btn": {
+      "continue": "Continuar",
+      "send": "Enviar"
+    }
+  }
+}
