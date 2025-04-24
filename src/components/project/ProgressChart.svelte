@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import { onMount } from "svelte";
     import {
         Chart,
@@ -10,28 +10,41 @@
         CategoryScale,
         Tooltip,
     } from "chart.js";
+    import type {
+        Accounting,
+        ApiAccountingBalancePointsGetCollectionData,
+        Project,
+    } from "../../openapi/client/index";
 
-    export let obtenido = 4000000; // Monto obtenido (puede superar el óptimo)
-    export let optimo = 999999; // Meta óptima
-    export let minimo = 500000; // Meta mínima
-    export let diasTotales = 10; // Número de días
+    export let accounting: Accounting;
+    export let project: Project;
+    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
-    let canvas;
+    let received = accounting.balance?.amount ?? 0;
+    let optimal = project.budget?.optimum?.money?.amount ?? 0;
 
-    // Generar etiquetas para el número de días
-    let dias = Array.from({ length: diasTotales }, (_, i) => `Día ${i + 1}`);
+    let canvas: HTMLCanvasElement | null = null;
+    let labels = Array.isArray(balancePoints)
+        ? balancePoints.map((point, i) => {
+              const date = new Date(point.start);
+              return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+          })
+        : [];
 
-    // Calcular progresión acumulativa hasta `obtenido`
-    let incrementoDiario = obtenido / diasTotales;
-    let dataPoints = dias.map((_, i) => ((incrementoDiario * (i + 1)) / optimo) * 100);
+    let progressData: number[] = [];
+    let cumulative = 0;
 
-    // Determinar si se supera el óptimo
-    let extra = obtenido > optimo ? (obtenido / optimo) * 100 : null;
+    for (const point of Array.isArray(balancePoints) ? balancePoints : []) {
+        cumulative += point.balance.amount;
+        const percentage = optimal ? (cumulative / optimal) * 100 : 0;
+        progressData.push(percentage);
+    }
 
-    // Calcular valores de referencia
-    let minValue = Math.round((minimo / optimo) * 100);
-    let optimoValue = 100;
-    let maxValue = extra ? extra : optimoValue; // Ajustar máximo en el eje Y, pero sin eliminar mínimo
+    let extraPercentage = received > optimal ? (received / optimal) * 100 : null;
+    let optimalValue = 100;
+    let maxValue = extraPercentage ?? optimalValue;
+    let y25 = Math.round(maxValue * 0.25);
+    let y75 = Math.round(maxValue * 0.75);
 
     onMount(() => {
         Chart.register(
@@ -44,20 +57,50 @@
             Tooltip,
         );
 
+        Chart.register({
+            id: "twoSectionLines",
+            beforeDraw(chart) {
+                const {
+                    ctx,
+                    chartArea: { left, right },
+                    scales: { y },
+                } = chart;
+                ctx.save();
+
+                const drawLine = (value: number, color: string) => {
+                    const yPos = y.getPixelForValue(value);
+                    ctx.beginPath();
+                    ctx.moveTo(left, yPos);
+                    ctx.lineTo(right, yPos);
+                    ctx.lineWidth = 0.25;
+                    ctx.strokeStyle = color;
+                    ctx.setLineDash([1, 4]);
+                    ctx.stroke();
+                };
+
+                drawLine(y25, "text-black");
+                drawLine(y75, "text-black");
+
+                ctx.restore();
+            },
+        });
+
+        if (!canvas) return;
+
         new Chart(canvas, {
             type: "line",
             data: {
-                labels: dias,
+                labels,
                 datasets: [
                     {
-                        label: "Progreso acumulativo",
-                        data: dataPoints,
+                        label: "Cumulative progress",
+                        data: progressData,
                         borderColor: "rgba(94, 234, 212, 1)",
                         backgroundColor: "rgba(94, 234, 212, 0.2)",
-                        borderWidth: 2,
+                        borderWidth: 1,
                         fill: "start",
                         tension: 0.4,
-                        pointRadius: 3,
+                        pointRadius: 2,
                     },
                 ],
             },
@@ -70,74 +113,20 @@
                 scales: {
                     x: {
                         display: false,
-                        title: {
-                            display: false,
-                            text: "Días",
-                        },
-                        grid: {
-                            display: false,
-                        },
+                        grid: { display: false },
                     },
                     y: {
                         display: false,
-                        title: {
-                            display: false,
-                            text: "Progreso",
-                        },
                         min: 0,
-                        max: maxValue, // Ajusta dinámicamente si se pasa el óptimo
-                        ticks: {
-                            callback: function (value) {
-                                const roundedValue = Math.round(value);
-                                if (roundedValue === 0) return "0";
-                                if (roundedValue === minValue) return `Mínimo (${minimo})`;
-                                if (roundedValue === optimoValue) return `Óptimo (${optimo})`;
-                                if (extra && roundedValue === Math.round(extra))
-                                    return `Extra (${obtenido})`;
-                                return "";
-                            },
-                        },
-                        grid: {
-                            drawTicks: true,
-                            drawBorder: false,
-                            color: function (context) {
-                                const roundedValue = Math.round(context.tick.value);
-                                if (
-                                    roundedValue === 0 ||
-                                    roundedValue === minValue ||
-                                    roundedValue === optimoValue ||
-                                    (extra && roundedValue === Math.round(extra))
-                                ) {
-                                    return "rgba(0, 0, 0, 0.3)"; // Líneas dashed para los valores clave
-                                }
-                                return "rgba(0, 0, 0, 0)";
-                            },
-                            borderDash: function (context) {
-                                const roundedValue = Math.round(context.tick.value);
-                                if (
-                                    roundedValue === 0 ||
-                                    roundedValue === minValue ||
-                                    roundedValue === optimoValue ||
-                                    (extra && roundedValue === Math.round(extra))
-                                ) {
-                                    return [5, 5]; // Línea dashed
-                                }
-                                return [];
-                            },
-                        },
+                        max: maxValue,
                     },
                 },
                 plugins: {
                     legend: { display: false },
                     tooltip: {
                         callbacks: {
-                            label: (tooltipItem) => `${tooltipItem.raw.toFixed(2)}%`,
+                            label: (tooltipItem) => `${(tooltipItem.raw as number).toFixed(2)}%`,
                         },
-                    },
-                },
-                elements: {
-                    line: {
-                        borderWidth: 2,
                     },
                 },
             },
@@ -145,17 +134,6 @@
     });
 </script>
 
-<div class="chart-container">
+<div class="relative h-[200px] w-full overflow-hidden rounded-lg bg-white">
     <canvas bind:this={canvas}></canvas>
 </div>
-
-<style>
-    .chart-container {
-        width: 100%;
-        height: 200px;
-        position: relative;
-        border-radius: 10px;
-        overflow: hidden;
-        background: white;
-    }
-</style>
