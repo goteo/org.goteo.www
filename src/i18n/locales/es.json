@@ -188,8 +188,11 @@
     "invalid": "Entrada no válida"
   },
   "countdown": {
-    "ended": "Campaña finalizada",
-    "remaining": "Quedan"
+    "expired": "Campaña finalizada",
+    "remaining": "Quedan",
+    "error": {
+      "not-found": "No se ha encontrado la fecha de finalización de la campaña."
+    }
   },
   "rewards": {
     "unavailable": "No hay recompensas disponibles."

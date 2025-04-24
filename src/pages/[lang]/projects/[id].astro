@@ -39,6 +39,6 @@ const ownerName = owner?.displayName || "";
 
 <Layout title={project.title} description={project.description}>
     <Navigation />
-    <div class="wrapper"><UiLanguages /></div>
+    <!-- <div class="wrapper"><UiLanguages /></div> -->
     <SingleProject {project} {projectCurrency} {ownerName} client:load />
 </Layout>

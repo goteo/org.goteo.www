@@ -3,14 +3,35 @@
     import { onMount } from "svelte";
     import ClockIcon from "../svgs/ClockIcon.svelte";
 
-    /* TODO: Setup custom time*/
-    let countdownEnd = new Date("2025-03-23T23:59:59-05:00").getTime();
-    let timeLeft = calculateTimeLeft();
+    export let countdownEnd: Date | undefined = undefined;
+
+    let timeLeft: {
+        total: number;
+        days?: number;
+        hours?: number;
+        minutes?: number;
+        seconds?: number;
+    } = { total: 0 };
+    let errorMessage = "";
+
+    if (!countdownEnd) {
+        errorMessage = $t("countdown.error.not-found");
+    } else {
+        const now = new Date().getTime();
+        const diff = countdownEnd.getTime() - now;
+        if (diff <= 0) {
+            errorMessage = $t("countdown.expired");
+        } else {
+            timeLeft = calculateTimeLeft();
+        }
+    }
 
     onMount(() => {
+        if (errorMessage || !countdownEnd) return;
+
         const interval = setInterval(() => {
             timeLeft = calculateTimeLeft();
-            if (timeLeft.total !== undefined && timeLeft.total <= 0) {
+            if (timeLeft.total <= 0) {
                 clearInterval(interval);
             }
         }, 1000);
@@ -19,8 +40,8 @@
     });
 
     function calculateTimeLeft() {
-        let now = new Date().getTime();
-        let difference = countdownEnd - now;
+        const now = new Date().getTime();
+        const difference = countdownEnd!.getTime() - now;
 
         return difference > 0
             ? {
@@ -35,17 +56,19 @@
 </script>
 
 <div>
-    {#if timeLeft.total > 0}
+    {#if errorMessage}
+        <p>{errorMessage}</p>
+    {:else if timeLeft.total > 0}
         <div class="text-tertiary flex items-center gap-2 text-2xl/[32px] font-bold">
             <ClockIcon />
             <p>{$t("countdown.remaining")}</p>
             <div class="flex items-center gap-1">
-                <p class="flex items-center">{timeLeft.days}d</p>
-                <p class="flex items-center">{timeLeft.hours}h</p>
-                <p class="flex items-center">{timeLeft.minutes}m</p>
+                <p>{timeLeft.days}d</p>
+                <p>{timeLeft.hours}h</p>
+                <p>{timeLeft.minutes}m</p>
             </div>
         </div>
     {:else}
-        <p>{$t("countdown.ended")}</p>
+        <p>{$t("countdown.expired")}</p>
     {/if}
 </div>

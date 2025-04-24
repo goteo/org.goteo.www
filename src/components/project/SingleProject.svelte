@@ -26,6 +26,7 @@
 
     let paragraphRef: HTMLParagraphElement;
     let showToggle = false;
+    const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
 
     onMount(() => {
         const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
@@ -36,8 +37,8 @@
 </script>
 
 <section class="wrapper">
-    <div class="my-10 flex flex-row justify-between gap-5">
-        <div class="flex flex-col gap-2.5">
+    <div class="my-10 flex w-full flex-row justify-between gap-5">
+        <div class="flex w-4/5 flex-col gap-2.5">
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl/[32px] font-bold text-[#575757]">
                     {$t("project.owner")}
@@ -70,9 +71,10 @@
             </div>
         </div>
 
-        <div class="flex min-w-[300px]">
-            <Countdown />
+        <div class="flex w-1/5 flex-col justify-between">
             <LanguagesDropdown {languages} />
+
+            <Countdown {countdownEnd} />
         </div>
     </div>
 
