@@ -46,6 +46,6 @@
             </div>
         </div>
     {:else}
-        <p>{$t("countdown.finished")}</p>
+        <p>{$t("countdown.ended")}</p>
     {/if}
 </div>
