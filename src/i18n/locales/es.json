@@ -50,6 +50,14 @@
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
+    },
+    "banner": {
+      "donator": {
+        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados."
+      },
+      "certificate": {
+        "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta."
+      }
     }
   },
   "navigation": {
