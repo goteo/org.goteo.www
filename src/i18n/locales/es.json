@@ -163,6 +163,7 @@
     }
   },
   "logout": {
+    "label": "Cerrar sesión",
     "error": {
       "cookieNotFound": "No se ha encontrado la cookie de sesión.",
       "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
