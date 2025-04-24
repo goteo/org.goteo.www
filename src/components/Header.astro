@@ -1,5 +1,5 @@
 ---
-import BagIcon from "../svgs/BagIcon.astro";
+import CartButton from "./CartButton.svelte";
 import MenuIcon from "../svgs/MenuIcon.astro";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
@@ -8,7 +8,7 @@ const { t } = Astro.locals;
 
 <header class="bg-primary py-8">
     <div class="wrapper flex items-center justify-between">
-        <Logo />
+        <a href="/"><Logo /></a>
         <nav>
             <ul class="flex items-center justify-center gap-4">
                 <li class="flex items-center justify-center gap-1">
@@ -16,7 +16,7 @@ const { t } = Astro.locals;
                     {t("header.login")}
                 </li>
                 <li class="flex items-center justify-center">
-                    <BagIcon />
+                    <CartButton client:load />
                 </li>
                 <li class="flex items-center justify-center">
                     <MenuIcon />
