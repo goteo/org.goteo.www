@@ -8,6 +8,7 @@
     export let defaultCurrency: string;
     export let hasError: boolean;
     export let amount: number | undefined;
+    export let accountingIdPlatoniq: string;
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -15,7 +16,7 @@
 
     const foundation = derived(cart, ($cart) =>
         $cart.items
-            .filter((item) => item.owner?.toLowerCase() === "platoniq")
+            .filter((item) => item.target === accountingIdPlatoniq)
             .reduce((sum, item) => sum + item.amount * item.quantity, 0),
     );
 
@@ -46,9 +47,13 @@
     <div>
         <p class="text-[#575757]">
             <strong>{formatCurrency($donations, defaultCurrency, { showSymbol: true })}</strong>
-            {$t("checkout.summary.resume.donationsPrefix")} +
-            <strong>{formatCurrency($foundation, defaultCurrency, { showSymbol: true })}</strong>
-            {$t("checkout.summary.resume.foundationPrefix")}
+            {$t("checkout.summary.resume.donationsPrefix")}
+            {#if $foundation > 0}
+                +
+                <strong>{formatCurrency($foundation, defaultCurrency, { showSymbol: true })}</strong
+                >
+                {$t("checkout.summary.resume.foundationPrefix")}
+            {/if}
         </p>
     </div>
 </div>
