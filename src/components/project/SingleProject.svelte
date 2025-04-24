@@ -15,6 +15,7 @@
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Rewards from "../Rewards.svelte";
+    import Banner from "./Banner.svelte";
     import { t } from "../../i18n/store";
 
     export let project: Project;
@@ -101,6 +102,7 @@
 
     <Tags {tags} />
 
+    <Banner />
     <div>Recompensas más populares</div>
     <Rewards {project} {accounting} />
 </section>
