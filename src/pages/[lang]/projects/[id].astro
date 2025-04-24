@@ -27,7 +27,7 @@ const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingI
 const projectCurrency: string = accounting?.currency || defaultCurrency;
 
 if (error || typeof project === "undefined") {
-    throw new Error("No se pudo obtener el proyecto.");
+    throw new Error("Project not found");
 }
 
 const { data: owner } = await apiUsersIdGet({

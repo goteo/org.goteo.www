@@ -222,6 +222,7 @@
     "tipjar": {
       "community": "Quiero contribuir con la fundación Platoniq",
       "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
+      "input": "Ingrese monto libre",
       "error": {
         "invalidAmount": "La cantidad mínima es de 1€"
       }

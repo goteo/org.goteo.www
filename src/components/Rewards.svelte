@@ -4,11 +4,7 @@
     import type { ProjectReward, Project } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
     import { formatCurrency, getUnit } from "../utils/currencies";
-    import {
-        apiProjectRewardsGetCollection,
-        apiProjectsIdGet,
-        apiUsersIdGet,
-    } from "../openapi/client/index";
+    import { apiProjectRewardsGetCollection } from "../openapi/client/index";
     import { t } from "../i18n/store.ts";
     import { languagesList, type Locale } from "../i18n/locales/index.ts";
 
@@ -19,23 +15,9 @@
     let error: string | null = null;
     let amount: string = "";
 
-    async function getDisplayName(projectId: string): Promise<string> {
-        try {
-            const project = await apiProjectsIdGet({ path: { id: projectId } });
-            const ownerId = extractId(project.data?.owner);
-            if (ownerId) {
-                const user = await apiUsersIdGet({ path: { id: ownerId } });
-                return user.data?.displayName ?? "";
-            }
-        } catch (err) {
-            console.warn("No se pudo obtener el owner del proyecto:", err);
-        }
-        return "";
-    }
-
     async function addToCart(reward: ProjectReward) {
         const projectId = extractId(reward.project) ?? "0";
-        const target = await getDisplayName(projectId);
+        const target = extractId(project.accounting) ?? "";
 
         cart.addItem({
             title: reward.title,
@@ -45,7 +27,6 @@
             project: Number(projectId),
             target,
             claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
-            accountingId: extractId(project.accounting) ?? "",
             currency: reward.money?.currency ?? projectCurrency,
         });
     }
@@ -69,7 +50,7 @@
             return;
         }
 
-        const target = await getDisplayName(`${project.id}`);
+        const target = extractId(project.accounting) ?? "";
 
         cart.addItem({
             title: "Donación Libre",
@@ -78,7 +59,6 @@
             image: "",
             project: Number(project.id),
             target,
-            accountingId: extractId(project.accounting) ?? "",
             currency: projectCurrency,
         });
     }
