@@ -2,11 +2,15 @@
 import SingleProject from "../../../components/project/SingleProject.svelte";
 import Layout from "../../../layouts/Layout.astro";
 import Navigation from "../../../components/Navigation/Navigation.svelte";
-import LanguagesDropdown from "../../../components/LanguagesDropdown.astro";
+import UiLanguages from "../../../components/UiLanguages.astro";
 import { extractId } from "../../../utils/extractId";
 const { id } = Astro.params;
 
-import { apiAccountingsIdGet, apiProjectsIdGet } from "../../../openapi/client/index";
+import {
+    apiAccountingsIdGet,
+    apiProjectsIdGet,
+    apiUsersIdGet,
+} from "../../../openapi/client/index";
 const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
 
 if (!id) {
@@ -25,10 +29,16 @@ const projectCurrency: string = accounting?.currency || defaultCurrency;
 if (error || typeof project === "undefined") {
     throw new Error("No se pudo obtener el proyecto.");
 }
+
+const { data: owner } = await apiUsersIdGet({
+    path: { id: extractId(project.owner) || "" },
+});
+
+const ownerName = owner?.displayName || "";
 ---
 
 <Layout title={project.title} description={project.description}>
     <Navigation />
-    <div class="wrapper"><LanguagesDropdown /></div>
-    <SingleProject {project} {projectCurrency} client:load />
+    <div class="wrapper"><UiLanguages /></div>
+    <SingleProject {project} {projectCurrency} {ownerName} client:load />
 </Layout>
