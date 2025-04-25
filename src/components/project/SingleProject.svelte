@@ -11,6 +11,7 @@
     export let project: Project;
     export let projectCurrency: string;
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
+    const limit = 3;
 
     const getOwner = () => {
         return "My Org Example";
@@ -58,6 +59,5 @@
 
     <Tags {tags} />
 
-    <div>Recompensas más populares</div>
-    <Rewards {project} {projectCurrency} />
+    <Rewards {project} {projectCurrency} {limit} />
 </section>
