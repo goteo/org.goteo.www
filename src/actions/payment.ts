@@ -22,36 +22,57 @@ export const payment = defineAction({
     accept: "form",
     input: z.object({
         paymentMethod: z.enum(paymentGatewayNames as [string, ...string[]]),
-        cartData: z.string().min(1),
+        cartData: z.preprocess(
+            (val) => {
+                try {
+                    return typeof val === "string" ? JSON.parse(val) : null;
+                } catch {
+                    return null;
+                }
+            },
+            z.object({
+                items: z
+                    .array(
+                        z.object({
+                            title: z.string(),
+                            amount: z.number(),
+                            quantity: z.number(),
+                            target: z.number(),
+                        }),
+                    )
+                    .min(1),
+            }),
+        ),
     }),
     handler: async (input, context) => {
         const { t, lang } = context.locals;
 
         try {
-            const cart = JSON.parse(input.cartData) as {
-                items: {
-                    title: string;
-                    amount: number;
-                    quantity: number;
-                    target: string;
-                    accountingId: string;
-                }[];
-            };
-
+            const cart = input.cartData;
             const charges: GatewayCharge[] = cart.items.map((item) => ({
                 type: "single",
                 title: item.title,
                 description: item.title,
-                target: `/v4/accountings/${item.accountingId}`,
+                target: `/v4/accountings/${item.target}`,
                 money: {
                     amount: item.amount * item.quantity,
                     currency: defaultCurrency,
                 },
             }));
 
-            const origin = "/v4/accountings/2955";
+            const accessToken = context.cookies.get("access-token")?.json();
+            const accountingId = accessToken?.accountingId ?? null;
+
+            if (!accountingId) {
+                throw new ActionError({
+                    code: "UNAUTHORIZED",
+                    message: t("payment.error.missingAccountingId"),
+                });
+            }
+
+            const origin = `/v4/accountings/${accountingId}`;
             const base = context.url.origin;
-            const returnUrl = `${base}/${lang}/payment/approved`;
+            const returnUrl = `${base}/${lang}/payment/verify`;
             const gateway = `/v4/gateways/${input.paymentMethod}`;
 
             const response = await apiGatewayCheckoutsPost({
@@ -63,8 +84,6 @@ export const payment = defineAction({
                 },
             });
 
-            console.log("Response from API:", response);
-
             return { success: true, checkout: response.data };
         } catch (err) {
             console.error(err);
@@ -75,7 +94,7 @@ export const payment = defineAction({
 
             throw new ActionError({
                 code: "INTERNAL_SERVER_ERROR",
-                message: t("login.error.unexpectedLogin"),
+                message: t("payment.error.unexpectedPayment"),
             });
         }
     },

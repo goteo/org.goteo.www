@@ -4,13 +4,16 @@ import CreditCardIcon from "../../svgs/CreditCardIcon.astro";
 import PaypalIcon from "../../svgs/PaypalIcon.astro";
 import StripeIcon from "../../svgs/StripeIcon.astro";
 const { t } = Astro.locals;
-const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = Astro.props;
+const {
+    paymentGateways,
+    hasError,
+}: { paymentGateways?: ApiGatewaysNameGetResponse[]; hasError?: boolean } = Astro.props;
 ---
 
 <section>
     <div class="flex flex-col gap-6 sm:w-full sm:max-w-md">
         <p class="text-2xl font-bold">
-            {t("payment.page.selectMethod")}
+            {hasError ? t("payment.page-error.selectMethod") : t("payment.page.selectMethod")}
         </p>
 
         <form id="payment" method="POST" class="flex flex-col gap-4">
@@ -71,12 +74,14 @@ const { paymentGateways }: { paymentGateways?: ApiGatewaysNameGetResponse[] } = 
                 const formData = new FormData(form);
 
                 const { error, data } = await actions.payment(formData);
-                console.log("checkout", data?.checkout?.links);
+                console.log("checkout", data?.checkout);
 
                 if (!error) {
                     const checkoutLink = data?.checkout?.links?.find(
                         (link) => link.type === "payment",
                     )?.href;
+
+                    console.log("checkoutLink", checkoutLink);
 
                     if (checkoutLink) {
                         window.location.href = checkoutLink;

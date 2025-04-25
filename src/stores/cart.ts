@@ -1,4 +1,7 @@
 import { writable, derived } from "svelte/store";
+import { get } from "svelte/store";
+
+import { t } from "../i18n/store";
 
 export type CartItem = {
     key: string;
@@ -7,9 +10,8 @@ export type CartItem = {
     quantity: number;
     image?: string;
     project?: number;
-    target: string;
+    target: number;
     claimed?: number;
-    accountingId: string;
     currency: string;
 };
 
@@ -19,22 +21,21 @@ type CartStore = {
 
 const isBrowser = typeof window !== "undefined";
 
-function generateKey({
-    title,
-    accountingId,
-    position,
-}: {
+type GenerateKeyOptions = {
     title: string;
-    accountingId: string;
+    target: number;
     position: number;
-}) {
-    const normalizedTitle = title.trim().toLowerCase();
-    const prefix = normalizedTitle === "donación libre" ? "O" : "R";
-    const finalKey = `${accountingId}-${prefix}-${position}`;
+    freeDonationTitle: string;
+};
 
-    return {
-        key: finalKey,
-    };
+function generateKey({ title, target, position, freeDonationTitle }: GenerateKeyOptions) {
+    const normalize = (str: string) => str.trim().toLowerCase();
+
+    const isFreeDonation = normalize(title) === normalize(freeDonationTitle);
+    const prefix = isFreeDonation ? "O" : "R";
+    const finalKey = `${target}-${prefix}-${position}`;
+
+    return { key: finalKey };
 }
 
 function loadInitialCart(): CartStore {
@@ -44,7 +45,7 @@ function loadInitialCart(): CartStore {
         const stored = localStorage.getItem("cart");
         if (stored) return JSON.parse(stored);
     } catch (e) {
-        console.warn("⚠️ Error al leer localStorage:", e);
+        console.warn("⚠️ Error loading cart from localStorage:", e);
     }
 
     const fresh = { items: [] };
@@ -60,10 +61,13 @@ function createCartStore() {
             try {
                 localStorage.setItem("cart", JSON.stringify(cart));
             } catch (e) {
-                console.error("❌ Error guardando en localStorage:", e);
+                console.error("❌ Error to save cart to localStorage:", e);
             }
         });
     }
+
+    const translations = get(t);
+    const freeDonationTitle = translations("checkout.cart.freeDonation.title");
 
     return {
         subscribe,
@@ -71,7 +75,7 @@ function createCartStore() {
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
                 const existingIndex = cart.items.findIndex(
-                    (i) => i.accountingId === item.accountingId && i.title === item.title,
+                    (i) => i.target === item.target && i.title === item.title,
                 );
 
                 const updatedItems = [...cart.items];
@@ -85,8 +89,9 @@ function createCartStore() {
                     const position = cart.items.length;
                     const { key } = generateKey({
                         title: item.title,
-                        accountingId: item.accountingId,
+                        target: item.target,
                         position,
+                        freeDonationTitle,
                     });
                     updatedItems.push({ ...item, key });
                 }

@@ -218,7 +218,11 @@
     },
     "tipjar": {
       "community": "Quiero contribuir con la fundación Platoniq",
-      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa"
+      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
+      "input": "Ingrese monto libre",
+      "error": {
+        "invalidAmount": "La cantidad mínima es de 1€"
+      }
     },
     "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
     "summary": {
@@ -230,6 +234,11 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
+      }
+    },
+    "cart": {
+      "freeDonation": {
+        "title": "Donación libre"
       }
     },
     "steps": {
@@ -275,6 +284,18 @@
           "leave-a-message": "Dejar un mensaje en la campaña"
         }
       }
+    },
+    "page-error": {
+      "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
+      "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
+      "selectMethod": "Selecciona de nuevo un método de pago:",
+      "btnContinue": "Volver a intentarlo"
+    },
+    "error": {
+      "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
+      "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
+      "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
+      "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
     }
   },
   "global": {
