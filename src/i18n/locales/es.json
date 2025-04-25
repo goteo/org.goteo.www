@@ -246,6 +246,11 @@
         "foundationPrefix": "de aporte a la fundación"
       }
     },
+    "cart": {
+      "freeDonation": {
+        "title": "Donación libre"
+      }
+    },
     "steps": {
       "reward": {
         "title": "Recompensa"

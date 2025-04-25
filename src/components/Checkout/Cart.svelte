@@ -19,7 +19,7 @@
         const grouped = $items.reduce(
             (acc, item) => {
                 const key = item.target || "";
-                if (key.toLowerCase().trim() === accountingIdPlatoniq) return acc;
+                if (key === accountingIdPlatoniq) return acc;
 
                 if (!acc[key]) acc[key] = [];
                 acc[key].push(item);
@@ -52,7 +52,7 @@
         const $grouped = get(groupedByOwner);
 
         for (const [target, items] of Object.entries($grouped)) {
-            if (target.toLowerCase().trim() === "platoniq") continue;
+            if (target === accountingIdPlatoniq) continue;
             const projectId = items[0]?.project;
             if (projectId) {
                 names[target] = await getOwnerName(target, projectId);
