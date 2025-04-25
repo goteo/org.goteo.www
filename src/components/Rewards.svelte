@@ -17,7 +17,7 @@
 
     async function addToCart(reward: ProjectReward) {
         const projectId = extractId(reward.project) ?? "0";
-        const target = extractId(project.accounting) ?? "";
+        const target = Number(extractId(project.accounting));
 
         cart.addItem({
             title: reward.title,
@@ -50,10 +50,10 @@
             return;
         }
 
-        const target = extractId(project.accounting) ?? "";
+        const target = Number(extractId(project.accounting));
 
         cart.addItem({
-            title: "Donación Libre",
+            title: $t("checkout.cart.freeDonation.title"),
             amount: numericAmount * getUnit(projectCurrency),
             quantity: 1,
             image: "",
