@@ -96,6 +96,6 @@
     <Tags {tags} />
 
     <div>Recompensas más populares</div>
-    <Banner />
+    <Banner {ownerName} />
     <Rewards {project} {projectCurrency} />
 </section>
