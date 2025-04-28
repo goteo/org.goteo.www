@@ -221,7 +221,8 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión"
+    "login": "Iniciar Sesión",
+    "btnCart": "Ir al checkout"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
