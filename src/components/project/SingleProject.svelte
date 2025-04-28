@@ -105,7 +105,6 @@
     <Tags {tags} />
 
     <Banner {ownerName} />
-
     <Rewards {project} {accounting} {limit} />
     <Tabs />
 </section>
