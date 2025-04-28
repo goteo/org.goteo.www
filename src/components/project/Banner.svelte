@@ -13,7 +13,7 @@
             {@html $t(
                 "project.banner.donator.description",
                 { owner: `<a href="#" class="font-bold  text-tertiary">${ownerName}</a>` },
-                true,
+                { allowHTML: true },
             )}
             <a href="#" class="text-tertiary font-bold"
                 >{$t("project.banner.donator.learnMore")}
