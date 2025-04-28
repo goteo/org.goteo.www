@@ -17,6 +17,7 @@
     export let projectCurrency: string;
     export let ownerName: string;
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
+    const limit = 3;
     let showFull = false;
     const languages = project?.locales as (keyof typeof languagesList)[];
 
@@ -95,7 +96,6 @@
 
     <Tags {tags} />
 
-    <div>Recompensas más populares</div>
     <Banner {ownerName} />
-    <Rewards {project} {projectCurrency} />
+    <Rewards {project} {projectCurrency} {limit} />
 </section>
