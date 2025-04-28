@@ -53,7 +53,7 @@
     },
     "banner": {
       "donator": {
-        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados.",
+        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados.",
         "learnMore": "Saber más."
       },
       "certificate": {
