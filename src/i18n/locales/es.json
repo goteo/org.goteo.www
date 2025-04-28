@@ -18,7 +18,9 @@
     "headline": "Selecciona tu recompensa",
     "addAndContinue": "Añadir al carro y continuar",
     "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonation": "Donar"
+    "btnFreeDonation": "Donar",
+    "btnFreeDonationLabel": "Donación libre",
+    "showAll": "Ver todas"
   },
   "budget": {
     "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
@@ -45,20 +47,18 @@
       "remember": "Recordar",
       "viewAll": "Ver todas"
     },
-    "about": {
-      "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a Climática en caso de llegar a los objetivos de éxito marcados.",
-      "learnMore": "Saber más."
-    },
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
     },
     "banner": {
       "donator": {
-        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados."
+        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados.",
+        "learnMore": "Saber más."
       },
       "certificate": {
-        "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta."
+        "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
+        "learnMore": "Saber más."
       }
     }
   },
@@ -248,6 +248,11 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
+      }
+    },
+    "cart": {
+      "freeDonation": {
+        "title": "Donación libre"
       }
     },
     "steps": {

@@ -37,8 +37,7 @@ export const payment = defineAction({
                             title: z.string(),
                             amount: z.number(),
                             quantity: z.number(),
-                            target: z.string(),
-                            accountingId: z.string(),
+                            target: z.number(),
                         }),
                     )
                     .min(1),
@@ -54,7 +53,7 @@ export const payment = defineAction({
                 type: "single",
                 title: item.title,
                 description: item.title,
-                target: `/v4/accountings/${item.accountingId}`,
+                target: `/v4/accountings/${item.target}`,
                 money: {
                     amount: item.amount * item.quantity,
                     currency: defaultCurrency,
