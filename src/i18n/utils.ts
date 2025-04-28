@@ -20,14 +20,47 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string | un
 }
 
 /**
- * Hook to retrieve a translation function based on the selected language.
+ * Hook to retrieve a translation function based on the selected language, supporting interpolation and optional HTML.
  *
  * @template T - The key of the language within the `labels` object.
  * @param {T} lang - The language code to use for translations.
- * @returns {(key: string) => string} - A function that takes a translation key and returns the translated string.
+ * @returns {(key: string, vars?: Record<string, string | number>, allowHTML?: boolean) => string} - A function that takes a translation key, optional interpolation variables, and an optional flag for allowing HTML.
  */
 export function useTranslations<T extends keyof typeof labels>(lang: T) {
-    return (key: string): string => {
-        return getNestedValue(labels[lang], key) ?? getNestedValue(labels[defaultLang], key) ?? key;
+    return (
+        key: string,
+        vars?: Record<string, string | number>,
+        allowHTML: boolean = false,
+    ): string => {
+        let text =
+            getNestedValue(labels[lang], key) ?? getNestedValue(labels[defaultLang], key) ?? key;
+
+        if (vars) {
+            Object.entries(vars).forEach(([varKey, value]) => {
+                const safeValue = allowHTML ? String(value) : escapeHTML(String(value));
+                text = text.replace(new RegExp(`{${varKey}}`, "g"), safeValue);
+            });
+        }
+
+        return text;
     };
+}
+
+/**
+ * Escapes HTML special characters to prevent XSS.
+ *
+ * @param {string} unsafe - The string to escape.
+ * @returns {string} - The escaped string.
+ */
+function escapeHTML(unsafe: string): string {
+    return unsafe.replace(/[&<>"']/g, (match) => {
+        const map: Record<string, string> = {
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;",
+        };
+        return map[match];
+    });
 }

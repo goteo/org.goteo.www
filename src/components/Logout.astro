@@ -1,12 +1,16 @@
-<button class="cursor-pointer border">Logout</button>
+---
+const { t } = Astro.locals;
+---
+
+<button id="btn-logout" class="cursor-pointer border">{t("logout.label")}</button>
 
 <script>
     import { actions } from "astro:actions";
 
-    const button = document.querySelector("button");
+    const button = document.querySelector("#btn-logout");
     button?.addEventListener("click", async () => {
         const { error } = await actions.logout();
-        if (!error) alert("Logged out");
+        console.log("error", error);
         const lang = location.pathname.split("/")[1];
         window.location.href = `/${lang}/`;
     });

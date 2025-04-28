@@ -16,8 +16,7 @@
     "noUnits": "No quedan unidades",
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
-    "addAndContinue": "Añadir al carro y continuar",
-    "showAll": "Ver todas"
+    "addAndContinue": "Añadir al carro y continuar"
   },
   "budget": {
     "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
@@ -44,19 +43,10 @@
       "remember": "Recordar",
       "viewAll": "Ver todas"
     },
+
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
-    },
-    "banner": {
-      "donator": {
-        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados.",
-        "learnMore": "Saber más."
-      },
-      "certificate": {
-        "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-        "learnMore": "Saber más."
-      }
     }
   },
   "navigation": {
@@ -162,7 +152,6 @@
     }
   },
   "logout": {
-    "label": "Cerrar sesión",
     "error": {
       "cookieNotFound": "No se ha encontrado la cookie de sesión.",
       "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
@@ -196,11 +185,8 @@
     "invalid": "Entrada no válida"
   },
   "countdown": {
-    "expired": "Campaña finalizada",
-    "remaining": "Quedan",
-    "error": {
-      "not-found": "No se ha encontrado la fecha de finalización de la campaña."
-    }
+    "ended": "Campaña finalizada",
+    "remaining": "Quedan"
   },
   "rewards": {
     "unavailable": "No hay recompensas disponibles."
@@ -230,7 +216,6 @@
     "tipjar": {
       "community": "Quiero contribuir con la fundación Platoniq",
       "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
-      "input": "Ingrese monto libre",
       "error": {
         "invalidAmount": "La cantidad mínima es de 1€"
       }
@@ -245,11 +230,6 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
-      }
-    },
-    "cart": {
-      "freeDonation": {
-        "title": "Donación libre"
       }
     },
     "steps": {

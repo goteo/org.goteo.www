@@ -1,16 +1,17 @@
 ---
-import LanguagesDropdown from "../../components/LanguagesDropdown.astro";
-import Countdown from "../../components/Countdown.svelte";
+import UiLanguages from "../../components/UiLanguages.astro";
 import Logout from "../../components/Logout.astro";
 import Layout from "../../layouts/Layout.astro";
+
 const { t } = Astro.locals;
+const hasAccessToken = Boolean(Astro.cookies.get("access-token"));
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
         <h1 class="text-body">{t("title")}</h1>
-        <Countdown client:load />
-        <LanguagesDropdown />
-        <Logout />
+
+        <UiLanguages />
+        {hasAccessToken && <Logout />}
     </main>
 </Layout>
