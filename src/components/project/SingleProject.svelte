@@ -25,6 +25,7 @@
     export let donations: GatewayCheckoutJsonld;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
+    const limit = 3;
     let showFull = false;
     const languages = project?.locales as (keyof typeof languagesList)[];
 
@@ -103,8 +104,8 @@
 
     <Tags {tags} />
 
-    <Banner />
-    <div>Recompensas más populares</div>
+    <Banner {ownerName} />
+
+    <Rewards {project} {accounting} {limit} />
     <Tabs />
-    <Rewards {project} {accounting} />
 </section>
