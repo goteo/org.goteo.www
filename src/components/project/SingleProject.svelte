@@ -11,6 +11,7 @@
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import { languagesList } from "../../i18n/locales";
+    import Tabs from "./Tabs.svelte";
 
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
@@ -105,4 +106,5 @@
 
     <Banner {ownerName} />
     <Rewards {project} {accounting} {limit} />
+    <Tabs />
 </section>
