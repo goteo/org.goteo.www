@@ -1,32 +1,43 @@
+import { languagesList } from "../i18n/locales/index";
+
 import type { APIContext } from "astro";
 
-const defaultLang = import.meta.env.PUBLIC_LANGUAGE_DEFAULT || "es";
-
-/**
- * Builds a clean redirect URL by combining the language code and pathname.
- * Ensures no double slashes.
- *
- * @param {string} lang - The selected language (e.g., "en", "es", "ca").
- * @param {string} pathname - The current request pathname.
- * @returns {string} - A safe redirect URL.
- */
-export function buildRedirectUrl(lang: string, pathname: string): string {
-    const cleanPath = pathname === "/" ? "" : pathname;
-    const newUrl = `/${lang}${cleanPath}`;
-    return newUrl;
+const defaultLang = import.meta.env.PUBLIC_LANGUAGE_DEFAULT;
+if (!defaultLang) {
+    throw new Error("PUBLIC_LANGUAGE_DEFAULT is not defined in env");
 }
 
 /**
- * Detects the appropriate locale based on URL, cookie or Accept-Language header.
- * Redirects if needed.
+ * Builds a clean redirect URL by combining the language code and pathname.
  */
-export function detectLocale(
-    context: APIContext,
-    maybeLang: string | undefined,
-    validLangs: string[],
-): string {
+export function buildRedirectUrl(lang: string, pathname: string): string {
+    const cleanPath = pathname.replace(/^\/+/, "").replace(/\/+$/, "");
+    return `/${lang}${cleanPath ? `/${cleanPath}` : ""}`;
+}
+
+/**
+ * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
+ * Always ensures the preferred-lang cookie is synchronized.
+ */
+export function detectLocale(context: APIContext): string {
+    const validLangs = Object.keys(languagesList);
+    const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
+
     if (maybeLang && validLangs.includes(maybeLang)) {
+        context.cookies.set("preferred-lang", maybeLang, {
+            path: "/",
+            httpOnly: false,
+            maxAge: 60 * 60 * 24 * 365,
+        });
         return maybeLang;
+    }
+
+    const acceptLangHeader = context.request.headers.get("accept-language") || "";
+    const preferredLang = detectPreferredLocale(acceptLangHeader, validLangs);
+
+    if (preferredLang && preferredLang !== defaultLang) {
+        const newUrl = buildRedirectUrl(preferredLang, context.url.pathname);
+        throw context.redirect(newUrl, 302);
     }
 
     const preferredLangCookie = context.cookies.get("preferred-lang")?.value;
@@ -39,14 +50,11 @@ export function detectLocale(
         return defaultLang;
     }
 
-    const acceptLangHeader = context.request.headers.get("accept-language") || "";
-
-    const preferredLang = detectPreferredLocale(acceptLangHeader, validLangs);
-
-    if (preferredLang && preferredLang !== defaultLang) {
-        const newUrl = buildRedirectUrl(preferredLang, context.url.pathname);
-        throw context.redirect(newUrl, 302);
-    }
+    context.cookies.set("preferred-lang", defaultLang, {
+        path: "/",
+        httpOnly: false,
+        maxAge: 60 * 60 * 24 * 365, // 1 año
+    });
 
     return defaultLang;
 }
@@ -54,12 +62,9 @@ export function detectLocale(
 /**
  * Protects routes based on access token presence.
  */
-export function handleProtectedRoutes(
-    context: APIContext,
-    lang: string,
-    pathParts: string[],
-): string | null {
+export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
     const accessToken = context.cookies.get("access-token")?.value;
+    const pathParts = context.url.pathname.replace(/^\/+/, "").split("/");
     const pathAfterLang = lang === defaultLang ? pathParts : pathParts.slice(1);
     const nextSegment = pathAfterLang[0];
 
@@ -80,9 +85,10 @@ export function handleProtectedRoutes(
 /**
  * Checks if the path is exempt from language detection (e.g., _actions, api).
  */
-export function isLanguageExemptPath(maybeLang: string | undefined): boolean {
+export function isLanguageExemptPath(context: APIContext): boolean {
+    const firstSegment = context.url.pathname.replace(/^\/+/, "").split("/")[0];
     const exemptRoutes = ["_actions", "api"];
-    return maybeLang ? exemptRoutes.includes(maybeLang) : false;
+    return exemptRoutes.includes(firstSegment);
 }
 
 /**
