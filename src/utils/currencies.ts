@@ -196,3 +196,8 @@ export function getUnit(currency?: string): number {
 
     return Math.pow(10, decimals);
 }
+
+export function defaultCurrency(): string {
+    const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+    return defaultCurrency;
+}

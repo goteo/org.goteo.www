@@ -1,6 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { Project } from "../../openapi/client/index";
+    import type {
+        Project,
+        Accounting,
+        GatewayCheckoutJsonld,
+        ApiAccountingBalancePointsGetCollectionData,
+    } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
@@ -14,8 +19,10 @@
     import { t } from "../../i18n/store";
 
     export let project: Project;
-    export let projectCurrency: string;
+    export let accounting: Accounting;
     export let ownerName: string;
+    export let donations: GatewayCheckoutJsonld;
+    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
     const limit = 3;
     let showFull = false;
@@ -90,12 +97,12 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} />
+            <Card {project} {accounting} {donations} {balancePoints} />
         </div>
     </div>
 
     <Tags {tags} />
 
     <Banner {ownerName} />
-    <Rewards {project} {projectCurrency} {limit} />
+    <Rewards {project} {accounting} {limit} />
 </section>

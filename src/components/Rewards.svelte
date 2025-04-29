@@ -1,16 +1,16 @@
 <script lang="ts">
     import { cart } from "../stores/cart.ts";
     import { onMount } from "svelte";
-    import type { ProjectReward, Project } from "../openapi/client/index";
+    import type { ProjectReward, Project, Accounting } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
-    import { formatCurrency, getUnit } from "../utils/currencies";
+    import { formatCurrency, getUnit, defaultCurrency } from "../utils/currencies";
     import { apiProjectRewardsGetCollection } from "../openapi/client/index";
     import { t } from "../i18n/store.ts";
     import { languagesList, type Locale } from "../i18n/locales/index.ts";
     import ArrowRightIcon from "../svgs/ArrowRightIcon.svelte";
 
     export let project: Project;
-    export let projectCurrency: string;
+    export let accounting: Accounting;
     export let limit: number = 0;
 
     let rewards: ProjectReward[] = [];
@@ -29,7 +29,7 @@
             project: Number(projectId),
             target,
             claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
-            currency: reward.money?.currency ?? projectCurrency,
+            currency: reward.money?.currency || defaultCurrency(),
         });
     }
 
@@ -48,20 +48,20 @@
     // async function handleFreeDonation() {
     //     const numericAmount = Number(amount);
     //     if (isNaN(numericAmount) || numericAmount <= 0) {
-    //         alert("Por favor ingresa una cantidad válida.");
+    //         alert("Please enter a valid amount.");
     //         return;
     //     }
 
     //     const target = Number(extractId(project.accounting));
 
     //     cart.addItem({
-    //         title: $t("checkout.cart.freeDonation.title"),
-    //         amount: numericAmount * getUnit(projectCurrency),
+    //         title: $t("reward.btnFreeDonationLabel"),
+    //         amount: numericAmount * getUnit(accounting.currency),
     //         quantity: 1,
     //         image: "",
     //         project: Number(project.id),
     //         target,
-    //         currency: projectCurrency,
+    //         currency: accounting.currency || defaultCurrency(),
     //     });
     // }
 
@@ -74,7 +74,7 @@
             rewards = response.data as ProjectReward[];
         } catch (err) {
             console.error(err);
-            error = "Error al cargar las recompensas o los datos del proyecto.";
+            error = "Error fetching rewards";
         }
     });
 </script>

@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import BagIcon from "../svgs/BagIcon.svelte";
     import { languagesList, type Locale } from "../i18n/locales";
+    import { t } from "../i18n/store";
 
     let count = 0;
 
@@ -28,7 +29,7 @@
     type="button"
     on:click={handleDirect}
     class="group relative inline-flex cursor-pointer items-center"
-    aria-label="Ir al checkout"
+    aria-label={$t("header.btnCart")}
 >
     <BagIcon />
 

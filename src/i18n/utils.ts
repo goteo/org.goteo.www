@@ -19,26 +19,35 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string | un
         ) as string | undefined;
 }
 
+type TranslationOptions = {
+    allowHTML?: boolean;
+};
+
 /**
- * Hook to retrieve a translation function based on the selected language, supporting interpolation and optional HTML.
+ * Hook to retrieve a translation function based on the selected language, supporting interpolation and optional HTML escaping.
  *
  * @template T - The key of the language within the `labels` object.
  * @param {T} lang - The language code to use for translations.
- * @returns {(key: string, vars?: Record<string, string | number>, allowHTML?: boolean) => string} - A function that takes a translation key, optional interpolation variables, and an optional flag for allowing HTML.
+ * @returns {(key: string, vars?: Record<string, string | number>, options?: TranslationOptions) => string} - A function that takes a translation key, optional interpolation variables, and optional settings.
  */
 export function useTranslations<T extends keyof typeof labels>(lang: T) {
     return (
         key: string,
         vars?: Record<string, string | number>,
-        allowHTML: boolean = false,
+        options?: TranslationOptions,
     ): string => {
         let text =
             getNestedValue(labels[lang], key) ?? getNestedValue(labels[defaultLang], key) ?? key;
 
+        const allowHTML = options?.allowHTML ?? false;
+
         if (vars) {
+            const escape = allowHTML ? (v: string) => v : escapeHTML;
             Object.entries(vars).forEach(([varKey, value]) => {
-                const safeValue = allowHTML ? String(value) : escapeHTML(String(value));
-                text = text.replace(new RegExp(`{${varKey}}`, "g"), safeValue);
+                text = text.replace(
+                    new RegExp(`\\{\\{\\s*${varKey}\\s*\\}\\}`, "g"),
+                    escape(String(value)),
+                );
             });
         }
 

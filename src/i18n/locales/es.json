@@ -17,6 +17,9 @@
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
     "addAndContinue": "Añadir al carro y continuar",
+    "input": "Seleccione el aporte  Ej.20€",
+    "btnFreeDonation": "Donar",
+    "btnFreeDonationLabel": "Donación libre",
     "showAll": "Ver todas"
   },
   "budget": {
@@ -50,7 +53,7 @@
     },
     "banner": {
       "donator": {
-        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {owner} en caso de llegar a los objetivos de éxito marcados.",
+        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados.",
         "learnMore": "Saber más."
       },
       "certificate": {
@@ -218,7 +221,8 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión"
+    "login": "Iniciar Sesión",
+    "btnCart": "Ir al checkout"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",

@@ -30,7 +30,7 @@
     }
   },
   "project": {
-    "owner": "Campaña de crowdfunding impulsada por {owner}",
+    "owner": "Campaña de crowdfunding impulsada por {{owner}}",
     "tabs": {
       "project": "Campaign Information",
       "budget": "Needs",
