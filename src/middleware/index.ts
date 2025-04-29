@@ -1,55 +1,37 @@
 import { defineMiddleware } from "astro:middleware";
 
+import { detectLocale, handleProtectedRoutes, isLanguageExemptPath } from "./utils";
 import { languagesList } from "../i18n/locales/index";
 import { useTranslations } from "../i18n/utils";
 
 import type { Locale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
 
-export const onRequest = defineMiddleware((context: APIContext, next) => {
-    const url = new URL(context.request.url);
-    const pathParts = url.pathname.split("/").filter(Boolean);
+export const onRequest = defineMiddleware(async (context: APIContext, next) => {
+    const pathParts = context.url.pathname.split("/").filter(Boolean);
+
+    const maybeLang = pathParts[0];
 
     const validLangs = Object.keys(languagesList);
-    const maybeLang = pathParts[0];
-    const defaultLang = "es";
 
-    const languageExemptRoutes = ["_actions", "api"];
-    const isLanguageExemptPath = languageExemptRoutes.includes(maybeLang);
-
-    const lang: Locale = isLanguageExemptPath
-        ? defaultLang
-        : validLangs.includes(maybeLang)
-          ? (maybeLang as Locale)
-          : defaultLang;
-
-    context.locals.lang = defaultLang;
-    context.locals.t = useTranslations(defaultLang);
-
-    if (isLanguageExemptPath) {
+    if (isLanguageExemptPath(maybeLang)) {
         return next();
     }
 
-    if (!maybeLang) {
-        return context.redirect(`/${defaultLang}${url.pathname}`, 302);
-    }
+    try {
+        const lang = detectLocale(context, maybeLang, validLangs) as Locale;
+        context.locals.lang = lang;
+        context.locals.t = useTranslations(lang);
 
-    if (!validLangs.includes(maybeLang)) {
-        return context.redirect(`/${defaultLang}/404`, 302);
-    }
-
-    const accessToken = context.cookies.get("access-token")?.value;
-
-    const nextSegment = pathParts[1];
-    if (accessToken && (nextSegment === "login" || nextSegment === "register")) {
-        return context.redirect(`/${lang}/`, 302);
-    }
-
-    const protectedRoutes = ["payment"];
-    const isProtected = protectedRoutes.some((route) => pathParts.includes(route));
-
-    if (!accessToken && isProtected) {
-        return context.redirect(`/${lang}/login`, 302);
+        const redirectPath = handleProtectedRoutes(context, lang, pathParts);
+        if (redirectPath) {
+            return context.redirect(redirectPath, 302);
+        }
+    } catch (e) {
+        if (e instanceof Response) {
+            return e;
+        }
+        throw e;
     }
 
     return next();
