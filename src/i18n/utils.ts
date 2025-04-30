@@ -1,7 +1,5 @@
 import { labels } from "./locales/index";
 
-const defaultLang = "es";
-
 /**
  * Retrieves a nested value from an object using a dot-separated path.
  *
@@ -30,14 +28,19 @@ type TranslationOptions = {
  * @param {T} lang - The language code to use for translations.
  * @returns {(key: string, vars?: Record<string, string | number>, options?: TranslationOptions) => string} - A function that takes a translation key, optional interpolation variables, and optional settings.
  */
-export function useTranslations<T extends keyof typeof labels>(lang: T) {
+export function useTranslations<T extends string>(lang: T) {
     return (
         key: string,
         vars?: Record<string, string | number>,
         options?: TranslationOptions,
     ): string => {
-        let text =
-            getNestedValue(labels[lang], key) ?? getNestedValue(labels[defaultLang], key) ?? key;
+        const langLabels = labels[lang as keyof typeof labels];
+
+        let text = getNestedValue(langLabels, key) ?? key;
+
+        if (!getNestedValue(langLabels, key)) {
+            console.warn(`[i18n] Missing key "${key}" in language "${lang}"`);
+        }
 
         const allowHTML = options?.allowHTML ?? false;
 

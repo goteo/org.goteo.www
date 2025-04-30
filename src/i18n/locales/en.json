@@ -167,11 +167,11 @@
     "login": "Login"
   },
   "checkout": {
-    "title": "Resumen de tus donaciones seleccionadas",
-    "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+    "title": "Summary of your selected donations",
+    "subtitle": "Here are the ones you've selected. Press the \"continue\" button to proceed with the payment.",
     "reward": {
-      "claimed": "personas ya han reclamado esta recompensa",
-      "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
+      "claimed": "people have already claimed this reward",
+      "unclaimed": "No one has claimed this reward yet. Be the first!"
     }
   }
 }
