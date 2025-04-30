@@ -12,6 +12,7 @@ if (!defaultLang) {
  */
 export function buildRedirectUrl(lang: string, pathname: string): string {
     const cleanPath = pathname.replace(/^\/+|\/+$/g, "");
+
     return `/${lang}${cleanPath ? `/${cleanPath}` : ""}`;
 }
 
@@ -19,14 +20,12 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
  * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
  * Always ensures the preferred-lang cookie is synchronized.
  */
-
-export function getUserLanguagePreference(context: APIContext): string[] {
-    const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
-    if (maybeLang) return [maybeLang];
+export function getUserLangPreferences(context: APIContext): string[] {
+    const preferredFromPath = parsePathLang(context.url.pathname);
+    if (preferredFromPath) return [preferredFromPath];
 
     const acceptLangHeader = context.request.headers.get("accept-language") || "";
     const preferredFromHeader = parseAcceptLanguageHeader(acceptLangHeader);
-
     if (preferredFromHeader?.length > 0) {
         return preferredFromHeader.map((lang) => lang.code);
     }
@@ -38,11 +37,10 @@ export function getUserLanguagePreference(context: APIContext): string[] {
 }
 
 export function getLanguage(context: APIContext): string {
-    const userPreferredLangs = getUserLanguagePreference(context);
+    const userPreferredLangs = getUserLangPreferences(context);
     if (!userPreferredLangs) return defaultLang;
 
     const validLangs = Object.keys(languagesList);
-
     for (const lang of userPreferredLangs) {
         if (validLangs.includes(lang)) {
             context.cookies.set("preferred-lang", lang, {
@@ -50,7 +48,7 @@ export function getLanguage(context: APIContext): string {
                 httpOnly: false,
                 maxAge: 60 * 60 * 24 * 365,
             });
-            //throw new Error(lang);
+
             return lang;
         }
     }
@@ -58,49 +56,6 @@ export function getLanguage(context: APIContext): string {
     return defaultLang;
 }
 
-// export function detectLocale(context: APIContext): string {
-//     const validLangs = Object.keys(languagesList);
-//     const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
-
-//     if (maybeLang && validLangs.includes(maybeLang)) {
-//         context.cookies.set("preferred-lang", maybeLang, {
-//             path: "/",
-//             httpOnly: false,
-//             maxAge: 60 * 60 * 24 * 365,
-//         });
-//         return maybeLang;
-//     }
-
-//     const acceptLangHeader = context.request.headers.get("accept-language") || "";
-//     const preferredLang = parseAcceptLanguageHeader(acceptLangHeader);
-
-//     if (preferredLang && preferredLang !== defaultLang) {
-//         const newUrl = buildRedirectUrl(preferredLang, context.url.pathname);
-//         throw context.redirect(newUrl, 302);
-//     }
-
-//     const preferredLangCookie = context.cookies.get("preferred-lang")?.value;
-
-//     if (preferredLangCookie && validLangs.includes(preferredLangCookie)) {
-//         if (preferredLangCookie !== defaultLang) {
-//             const newUrl = buildRedirectUrl(preferredLangCookie, context.url.pathname);
-//             throw context.redirect(newUrl, 302);
-//         }
-//         return defaultLang;
-//     }
-
-//     context.cookies.set("preferred-lang", defaultLang, {
-//         path: "/",
-//         httpOnly: false,
-//         maxAge: 60 * 60 * 24 * 365, // 1 año
-//     });
-
-//     return defaultLang;
-// }
-
-/**
- * Protects routes based on access token presence.
- */
 export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
     const accessToken = context.cookies.get("access-token")?.value;
     const pathParts = context.url.pathname.replace(/^\/+/, "").split("/");
@@ -125,8 +80,9 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
  * Checks if the path is exempt from language detection (e.g., _actions, api).
  */
 export function isLanguageExemptPath(context: APIContext): boolean {
-    const firstSegment = context.url.pathname.replace(/^\/+/, "").split("/")[0];
+    const firstSegment = context.url.pathname.split("/")[1];
     const exemptRoutes = ["_actions", "api"];
+
     return exemptRoutes.includes(firstSegment);
 }
 
@@ -146,4 +102,14 @@ export function parseAcceptLanguageHeader(header: string): { code: string; q: nu
     });
 
     return languages.sort((a, b) => b.q - a.q);
+}
+
+export function parsePathLang(path: string): string | null {
+    const firstSegment = path.split("/")[1];
+
+    if (Object.keys(languagesList).includes(firstSegment)) {
+        return firstSegment;
+    }
+
+    return null;
 }
