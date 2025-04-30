@@ -11,7 +11,7 @@ if (!defaultLang) {
  * Builds a clean redirect URL by combining the language code and pathname.
  */
 export function buildRedirectUrl(lang: string, pathname: string): string {
-    const cleanPath = pathname.replace(/^\/+/, "").replace(/\/+$/, "");
+    const cleanPath = pathname.replace(/^\/+|\/+$/g, "");
     return `/${lang}${cleanPath ? `/${cleanPath}` : ""}`;
 }
 
@@ -19,45 +19,84 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
  * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
  * Always ensures the preferred-lang cookie is synchronized.
  */
-export function detectLocale(context: APIContext): string {
-    const validLangs = Object.keys(languagesList);
-    const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
 
-    if (maybeLang && validLangs.includes(maybeLang)) {
-        context.cookies.set("preferred-lang", maybeLang, {
-            path: "/",
-            httpOnly: false,
-            maxAge: 60 * 60 * 24 * 365,
-        });
-        return maybeLang;
-    }
+export function getUserLanguagePreference(context: APIContext): string[] {
+    const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
+    if (maybeLang) return [maybeLang];
 
     const acceptLangHeader = context.request.headers.get("accept-language") || "";
-    const preferredLang = detectPreferredLocale(acceptLangHeader, validLangs);
+    const preferredFromHeader = parseAcceptLanguageHeader(acceptLangHeader);
 
-    if (preferredLang && preferredLang !== defaultLang) {
-        const newUrl = buildRedirectUrl(preferredLang, context.url.pathname);
-        throw context.redirect(newUrl, 302);
+    if (preferredFromHeader?.length > 0) {
+        return preferredFromHeader.map((lang) => lang.code);
     }
 
-    const preferredLangCookie = context.cookies.get("preferred-lang")?.value;
+    const cookieLang = context.cookies.get("preferred-lang")?.value;
+    if (cookieLang) return [cookieLang];
 
-    if (preferredLangCookie && validLangs.includes(preferredLangCookie)) {
-        if (preferredLangCookie !== defaultLang) {
-            const newUrl = buildRedirectUrl(preferredLangCookie, context.url.pathname);
-            throw context.redirect(newUrl, 302);
+    return [];
+}
+
+export function getLanguage(context: APIContext): string {
+    const userPreferredLangs = getUserLanguagePreference(context);
+    if (!userPreferredLangs) return defaultLang;
+
+    const validLangs = Object.keys(languagesList);
+
+    for (const lang of userPreferredLangs) {
+        if (validLangs.includes(lang)) {
+            context.cookies.set("preferred-lang", lang, {
+                path: "/",
+                httpOnly: false,
+                maxAge: 60 * 60 * 24 * 365,
+            });
+            //throw new Error(lang);
+            return lang;
         }
-        return defaultLang;
     }
-
-    context.cookies.set("preferred-lang", defaultLang, {
-        path: "/",
-        httpOnly: false,
-        maxAge: 60 * 60 * 24 * 365, // 1 año
-    });
 
     return defaultLang;
 }
+
+// export function detectLocale(context: APIContext): string {
+//     const validLangs = Object.keys(languagesList);
+//     const maybeLang = context.url.pathname.replace(/^\/+/, "").split("/")[0];
+
+//     if (maybeLang && validLangs.includes(maybeLang)) {
+//         context.cookies.set("preferred-lang", maybeLang, {
+//             path: "/",
+//             httpOnly: false,
+//             maxAge: 60 * 60 * 24 * 365,
+//         });
+//         return maybeLang;
+//     }
+
+//     const acceptLangHeader = context.request.headers.get("accept-language") || "";
+//     const preferredLang = parseAcceptLanguageHeader(acceptLangHeader);
+
+//     if (preferredLang && preferredLang !== defaultLang) {
+//         const newUrl = buildRedirectUrl(preferredLang, context.url.pathname);
+//         throw context.redirect(newUrl, 302);
+//     }
+
+//     const preferredLangCookie = context.cookies.get("preferred-lang")?.value;
+
+//     if (preferredLangCookie && validLangs.includes(preferredLangCookie)) {
+//         if (preferredLangCookie !== defaultLang) {
+//             const newUrl = buildRedirectUrl(preferredLangCookie, context.url.pathname);
+//             throw context.redirect(newUrl, 302);
+//         }
+//         return defaultLang;
+//     }
+
+//     context.cookies.set("preferred-lang", defaultLang, {
+//         path: "/",
+//         httpOnly: false,
+//         maxAge: 60 * 60 * 24 * 365, // 1 año
+//     });
+
+//     return defaultLang;
+// }
 
 /**
  * Protects routes based on access token presence.
@@ -94,28 +133,17 @@ export function isLanguageExemptPath(context: APIContext): boolean {
 /**
  * Detects the user's preferred locale from the Accept-Language HTTP header.
  */
-export function detectPreferredLocale(header: string, supportedLocales: string[]): string | null {
-    if (!header) return null;
+export function parseAcceptLanguageHeader(header: string): { code: string; q: number }[] {
+    if (!header) return [];
 
     const languages = header.split(",").map((lang) => {
-        const [langCode, qValue] = lang.trim().split(";q=");
+        const [code, qValue] = lang.trim().split(";q=");
+
         return {
-            lang: langCode.toLowerCase(),
+            code: code.toLowerCase().split("-")[0],
             q: qValue ? parseFloat(qValue) : 1.0,
         };
     });
 
-    languages.sort((a, b) => b.q - a.q);
-
-    for (const { lang } of languages) {
-        if (supportedLocales.includes(lang)) {
-            return lang;
-        }
-        const baseLang = lang.split("-")[0];
-        if (supportedLocales.includes(baseLang)) {
-            return baseLang;
-        }
-    }
-
-    return null;
+    return languages.sort((a, b) => b.q - a.q);
 }

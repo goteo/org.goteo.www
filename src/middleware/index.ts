@@ -1,6 +1,6 @@
 import { defineMiddleware } from "astro:middleware";
 
-import { detectLocale, handleProtectedRoutes, isLanguageExemptPath } from "./utils";
+import { getLanguage, handleProtectedRoutes, isLanguageExemptPath } from "./utils";
 import { useTranslations } from "../i18n/utils";
 
 import type { Locale } from "../i18n/locales/index";
@@ -12,7 +12,9 @@ export const onRequest = defineMiddleware(async (context: APIContext, next) => {
     }
 
     try {
-        const lang = detectLocale(context) as Locale;
+        const lang = getLanguage(context) as Locale;
+
+        //throw new Error(lang);
         context.locals.lang = lang;
         context.locals.t = useTranslations(lang);
 
