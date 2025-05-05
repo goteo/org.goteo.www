@@ -8,13 +8,16 @@
     let count = 0;
 
     function handleDirect() {
-        const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const languages = Object.keys(languagesList) as Locale[];
-        const currentLang: Locale = languages.includes(pathParts[0] as Locale)
-            ? (pathParts[0] as Locale)
-            : "es";
+        // const pathParts = window.location.pathname.split("/").filter(Boolean);
+        // console.log(pathParts);
+        // const languages = Object.keys(languagesList) as Locale[];
+        // console.log(languages);
+        // const currentLang: Locale = languages.includes(pathParts[0] as Locale)
+        //     ? (pathParts[0] as Locale)
+        //     : "es";
+        // console.log(currentLang);
 
-        window.location.href = `/${currentLang}/checkout`;
+        window.location.href = `/checkout`;
     }
 
     onMount(() => {

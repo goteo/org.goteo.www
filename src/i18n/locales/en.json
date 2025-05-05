@@ -78,6 +78,7 @@
     "code": "share as code",
     "copied": "Link copied to clipboard!"
   },
+
   "register": {
     "page": {
       "title": "Tell us your personal information",
@@ -166,6 +167,11 @@
     "login": "Login"
   },
   "checkout": {
-    "title": "Checkout"
+    "title": "Summary of your selected donations",
+    "subtitle": "Here are the ones you've selected. Press the \"continue\" button to proceed with the payment.",
+    "reward": {
+      "claimed": "people have already claimed this reward",
+      "unclaimed": "No one has claimed this reward yet. Be the first!"
+    }
   }
 }

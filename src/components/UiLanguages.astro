@@ -15,10 +15,10 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
         }
     </select>
 </section>
+
 <script>
     document.addEventListener("DOMContentLoaded", () => {
         const selectElement = document.getElementById("language-select");
-
         if (!selectElement) return;
 
         const languages = JSON.parse(selectElement.getAttribute("data-languages") || "[]");
@@ -28,18 +28,27 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
             if (!target) return;
 
             const selectedLang = (target as HTMLSelectElement).value;
+
+            if (!languages.includes(selectedLang)) {
+                console.error("Idioma no permitido:", selectedLang);
+                return;
+            }
+
+            document.cookie = `preferred-lang=${encodeURIComponent(selectedLang)}; Path=/; Max-Age=31536000; SameSite=Strict`;
+
             let pathParts = window.location.pathname.split("/").filter(Boolean);
 
             if (languages.includes(pathParts[0])) {
-                pathParts[0] = selectedLang;
-            } else {
+                pathParts.shift();
+            }
+
+            if (selectedLang !== "es") {
                 pathParts.unshift(selectedLang);
             }
 
-            let newPath = `/${pathParts.join("/")}`;
+            const newPath = `/${pathParts.join("/")}`;
 
-            history.pushState({}, "", newPath);
-            location.href = newPath;
+            window.location.href = newPath;
         });
     });
 </script>
