@@ -3,10 +3,23 @@ import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
-import { apiGatewaysGetCollection } from "../../../openapi/client/index";
+import { apiGatewaysGetCollection, apiAccountingsIdGet } from "../../../openapi/client/index";
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 const { t } = Astro.locals;
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT;
+
+const cookieValue = Astro.cookies.get("access-token");
+if (!cookieValue) {
+    throw new Error("Token not found");
+}
+const { accountingId, token } = JSON.parse(cookieValue.value);
+
+const { data: accounting } = await apiAccountingsIdGet({
+    path: { id: accountingId },
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+});
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -24,7 +37,7 @@ const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
                             </p>
                         </div>
 
-                        <PaymentMethod {paymentGateways} />
+                        <PaymentMethod {paymentGateways} {accounting} />
                     </div>
                 </div>
             </div>

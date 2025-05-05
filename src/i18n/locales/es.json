@@ -306,6 +306,10 @@
       "selectMethod": "Selecciona de nuevo un método de pago:",
       "btnContinue": "Volver a intentarlo"
     },
+
+    "wallet": {
+      "balanceLabel": "Saldo: "
+    },
     "error": {
       "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
       "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",

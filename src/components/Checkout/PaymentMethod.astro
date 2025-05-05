@@ -3,11 +3,14 @@ import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
 import CreditCardIcon from "../../svgs/CreditCardIcon.astro";
 import PaypalIcon from "../../svgs/PaypalIcon.astro";
 import StripeIcon from "../../svgs/StripeIcon.astro";
+import { formatCurrency } from "../../utils/currencies";
 const { t } = Astro.locals;
 const {
     paymentGateways,
     hasError,
 }: { paymentGateways?: ApiGatewaysNameGetResponse[]; hasError?: boolean } = Astro.props;
+
+const { accounting } = Astro.props;
 ---
 
 <section>
@@ -33,6 +36,16 @@ const {
                                 />
                                 <div class="flex flex-col leading-tight">
                                     <span class="font-semibold capitalize">{gateway.name}</span>
+                                    {gateway.name === "wallet" && (
+                                        <span class="text-sm font-normal">
+                                            {t("payment.wallet.balanceLabel")}
+                                            {formatCurrency(
+                                                accounting.balance.amount,
+                                                accounting.balance.currency,
+                                                { showSymbol: true },
+                                            )}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                             <div>
@@ -59,83 +72,78 @@ const {
         </form>
         <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
     </div>
+</section>
+<script>
+    import { actions, isInputError } from "astro:actions";
 
-    <script>
-        import { actions, isInputError } from "astro:actions";
+    const form = document.getElementById("payment");
+    const errorContent = document.getElementById("payment-error-content");
+    const cartDataInput = document.getElementById("cart-data-input");
 
-        const form = document.getElementById("payment");
-        const errorContent = document.getElementById("payment-error-content");
-        const cartDataInput = document.getElementById("cart-data-input");
+    if (form instanceof HTMLFormElement) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
 
-        if (form instanceof HTMLFormElement) {
-            form.addEventListener("submit", async (event) => {
-                event.preventDefault();
+            const formData = new FormData(form);
 
-                const formData = new FormData(form);
+            const { error, data } = await actions.payment(formData);
+            console.log("checkout", data?.checkout);
 
-                const { error, data } = await actions.payment(formData);
-                console.log("checkout", data?.checkout);
+            if (!error) {
+                const checkoutLink = data?.checkout?.links?.find(
+                    (link) => link.type === "payment",
+                )?.href;
 
-                if (!error) {
-                    const checkoutLink = data?.checkout?.links?.find(
-                        (link) => link.type === "payment",
-                    )?.href;
+                console.log("checkoutLink", checkoutLink);
 
-                    console.log("checkoutLink", checkoutLink);
-
-                    if (checkoutLink) {
-                        window.location.href = checkoutLink;
-                    } else {
-                        console.error("No se encontró el enlace de pago.");
-                    }
+                if (checkoutLink) {
+                    window.location.href = checkoutLink;
+                } else {
+                    console.error("No se encontró el enlace de pago.");
                 }
-
-                if (error && errorContent instanceof HTMLElement) {
-                    errorContent.innerHTML = "";
-
-                    if (isInputError(error)) {
-                        const ul = document.createElement("ul");
-                        error.issues.forEach((err) => {
-                            const li = document.createElement("li");
-                            li.innerText = err.message;
-                            ul.appendChild(li);
-                        });
-
-                        errorContent.appendChild(ul);
-                        return;
-                    }
-                    errorContent.innerText = error.message;
-                }
-            });
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const labels = document.querySelectorAll("label[data-gateway]");
-            const inputs = document.querySelectorAll("input[name='paymentMethod']");
-
-            const cartData = localStorage.getItem("cart");
-            if (cartData && cartDataInput) {
-                (cartDataInput as HTMLInputElement).value = cartData;
             }
 
-            inputs.forEach((input) => {
-                input.addEventListener("change", () => {
-                    labels.forEach((label) => {
-                        label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
-                        label.classList.add("border-[#F3F3EF]");
+            if (error && errorContent instanceof HTMLElement) {
+                errorContent.innerHTML = "";
+
+                if (isInputError(error)) {
+                    const ul = document.createElement("ul");
+                    error.issues.forEach((err) => {
+                        const li = document.createElement("li");
+                        li.innerText = err.message;
+                        ul.appendChild(li);
                     });
 
-                    const selectedLabel = input.closest("label");
-                    if (selectedLabel) {
-                        selectedLabel.classList.remove("border-[#F3F3EF]");
-                        selectedLabel.classList.add(
-                            "bg-teal-300",
-                            "text-[#2f1e2e]",
-                            "border-teal-400",
-                        );
-                    }
+                    errorContent.appendChild(ul);
+                    return;
+                }
+                errorContent.innerText = error.message;
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const labels = document.querySelectorAll("label[data-gateway]");
+        const inputs = document.querySelectorAll("input[name='paymentMethod']");
+
+        const cartData = localStorage.getItem("cart");
+        if (cartData && cartDataInput) {
+            (cartDataInput as HTMLInputElement).value = cartData;
+        }
+
+        inputs.forEach((input) => {
+            input.addEventListener("change", () => {
+                labels.forEach((label) => {
+                    label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
+                    label.classList.add("border-[#F3F3EF]");
                 });
+
+                const selectedLabel = input.closest("label");
+                if (selectedLabel) {
+                    selectedLabel.classList.remove("border-[#F3F3EF]");
+                    selectedLabel.classList.add("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
+                }
             });
         });
-    </script>
-</section>
+    });
+</script>
