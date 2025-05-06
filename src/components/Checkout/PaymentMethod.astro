@@ -19,7 +19,12 @@ const { accounting } = Astro.props;
             {hasError ? t("payment.page-error.selectMethod") : t("payment.page.selectMethod")}
         </p>
 
-        <form id="payment" method="POST" class="flex flex-col gap-4">
+        <form
+            id="payment"
+            method="POST"
+            class="flex flex-col gap-4"
+            data-balance={accounting.balance.amount}
+        >
             <div class="grid grid-cols-2 gap-4">
                 {
                     (paymentGateways ?? []).map((gateway) => (
@@ -32,6 +37,11 @@ const { accounting } = Astro.props;
                                     type="radio"
                                     name="paymentMethod"
                                     value={gateway.name}
+                                    disabled={gateway.name === "wallet"}
+                                    checked={
+                                        gateway.name !== "wallet" &&
+                                        paymentGateways?.[0]?.name === gateway.name
+                                    }
                                     class="after:bg-primary relative h-6 w-6 appearance-none rounded-full border border-[#462949] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:border-[#462949] checked:bg-[#462949] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
@@ -85,21 +95,24 @@ const { accounting } = Astro.props;
             event.preventDefault();
 
             const formData = new FormData(form);
+            // const selectedMethod = formData.get("paymentMethod");
+
+            // if (selectedMethod === "wallet") {
+            //     window.location.href = "/payment/wallet";
+            //     return;
+            // }
 
             const { error, data } = await actions.payment(formData);
-            console.log("checkout", data?.checkout);
 
             if (!error) {
                 const checkoutLink = data?.checkout?.links?.find(
                     (link) => link.type === "payment",
                 )?.href;
 
-                console.log("checkoutLink", checkoutLink);
-
                 if (checkoutLink) {
                     window.location.href = checkoutLink;
                 } else {
-                    console.error("No se encontró el enlace de pago.");
+                    console.error("No payment link found in the response");
                 }
             }
 
@@ -125,10 +138,36 @@ const { accounting } = Astro.props;
     document.addEventListener("DOMContentLoaded", () => {
         const labels = document.querySelectorAll("label[data-gateway]");
         const inputs = document.querySelectorAll("input[name='paymentMethod']");
-
+        const walletInput = document.querySelector("input[value='wallet']");
         const cartData = localStorage.getItem("cart");
+
         if (cartData && cartDataInput) {
             (cartDataInput as HTMLInputElement).value = cartData;
+        }
+
+        if (cartData && walletInput) {
+            try {
+                const cart = JSON.parse(cartData);
+                const total = cart.items.reduce(
+                    (sum: number, item: { amount: number; quantity: number }) =>
+                        sum + item.amount * item.quantity,
+                    0,
+                );
+
+                const balanceAttr = form?.dataset.balance;
+                const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
+
+                const shouldDisable = balance < total;
+                (walletInput as HTMLInputElement).disabled = shouldDisable;
+
+                const walletLabel = walletInput.closest("label");
+                if (walletLabel) {
+                    walletLabel.classList.toggle("opacity-50", shouldDisable);
+                    walletLabel.classList.toggle("cursor-not-allowed", shouldDisable);
+                }
+            } catch (e) {
+                console.log("Error parsing cart data:", e);
+            }
         }
 
         inputs.forEach((input) => {
