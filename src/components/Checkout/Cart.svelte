@@ -11,7 +11,7 @@
     import { get } from "svelte/store";
 
     export let defaultCurrency: string;
-    export let accountingIdPlatoniq: string;
+    export let accountingIdPlatoniq: number;
 
     const items = derived(cart, ($cart) => $cart.items);
 
@@ -52,7 +52,7 @@
         const $grouped = get(groupedByOwner);
 
         for (const [target, items] of Object.entries($grouped)) {
-            if (target === accountingIdPlatoniq) continue;
+            if (target === accountingIdPlatoniq.toString()) continue;
             const projectId = items[0]?.project;
             if (projectId) {
                 names[target] = await getOwnerName(target, projectId);

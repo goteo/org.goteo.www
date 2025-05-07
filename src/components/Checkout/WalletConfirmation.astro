@@ -1,0 +1,89 @@
+---
+import WalletInfo from "./WalletInfo.svelte";
+
+const { t } = Astro.locals;
+const { accounting, defaultCurrency } = Astro.props;
+---
+
+<section>
+    <WalletInfo client:load {accounting} {defaultCurrency} />
+
+    <form
+        id="payment"
+        method="POST"
+        class="flex flex-col gap-4"
+        data-balance={accounting.balance.amount}
+    >
+        <input type="hidden" name="paymentMethod" value="wallet" />
+        <input type="hidden" name="cartData" id="cartData" />
+
+        <!-- TODO: Merge with Btn "Continuar" -->
+        <button
+            id="submit-button"
+            class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+            type="submit"
+        >
+            {t("payment.global.btn.continue")}
+        </button>
+    </form>
+
+    <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
+</section>
+
+<script>
+    import { actions, isInputError } from "astro:actions";
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("payment");
+        const errorContent = document.getElementById("payment-error-content");
+        const cartDataInput = document.getElementById("cartData");
+
+        if (!(form instanceof HTMLFormElement) || !(cartDataInput instanceof HTMLInputElement))
+            return;
+
+        const cartData = localStorage.getItem("cart");
+        if (cartData) {
+            try {
+                JSON.parse(cartData);
+                cartDataInput.value = cartData;
+            } catch (e) {
+                console.error("Error parsing cart data:", e);
+            }
+        }
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const { error, data } = await actions.payment(formData);
+
+            if (!error) {
+                const checkout = data?.checkout;
+
+                if (checkout?.returnUrl) {
+                    window.location.href = `${checkout.returnUrl}?checkoutId=${checkout.id}`;
+                    return;
+                }
+
+                console.log("No returnUrl found in the response");
+                return;
+            }
+
+            if (errorContent) {
+                errorContent.innerHTML = "";
+
+                if (isInputError(error)) {
+                    const ul = document.createElement("ul");
+                    error.issues.forEach((err) => {
+                        const li = document.createElement("li");
+                        li.innerText = err.message;
+                        ul.appendChild(li);
+                    });
+                    errorContent.appendChild(ul);
+                } else {
+                    errorContent.innerText = error.message;
+                }
+            }
+        });
+    });
+</script>
