@@ -1,5 +1,59 @@
 ---
+import Layout from "../../../layouts/Layout.astro";
+import Summary from "../../../components/Checkout/Summary.svelte";
+import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.astro";
+import Steps from "../../../components/Checkout/Steps.svelte";
+import { apiAccountingsIdGet } from "../../../openapi/client/index";
+const { t } = Astro.locals;
+const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT;
 
+const cookieValue = Astro.cookies.get("access-token");
+if (!cookieValue) {
+    throw new Error("Token not found");
+}
+const { accountingId, token } = JSON.parse(cookieValue.value);
+
+const { data: accounting } = await apiAccountingsIdGet({
+    path: { id: accountingId },
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+});
 ---
 
-<!-- <h1>wallet</h1> -->
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <main class="wrapper">
+        <div class="flex flex-row gap-8 py-10">
+            <div class="flex w-1/2 flex-col gap-10">
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-10">
+                        <div class="flex flex-col gap-4">
+                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                {t("payment.wallet-confirmation.title")}
+                            </h2>
+                            <p class="text-[#575757]">
+                                {t("payment.wallet-confirmation.description")}
+                            </p>
+                        </div>
+
+                        <WalletConfirmation {accounting} {defaultCurrency} />
+                    </div>
+                </div>
+            </div>
+            <div
+                class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+            >
+                <Summary client:load {defaultCurrency} />
+                <Steps step={3} client:load />
+                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
+                    <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
+                    <a
+                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                    >
+                        {t("global.btn.continue")}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

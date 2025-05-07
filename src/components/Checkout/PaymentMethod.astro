@@ -73,11 +73,12 @@ const { accounting } = Astro.props;
             </div>
             <input type="hidden" name="cartData" id="cart-data-input" />
 
+            <!-- TODO: Merge with Btn "Continuar" -->
             <button
                 class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
                 type="submit"
             >
-                Enviar
+                {t("payment.global.btn.continue")}
             </button>
         </form>
         <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
@@ -95,12 +96,12 @@ const { accounting } = Astro.props;
             event.preventDefault();
 
             const formData = new FormData(form);
-            // const selectedMethod = formData.get("paymentMethod");
+            const selectedMethod = formData.get("paymentMethod");
 
-            // if (selectedMethod === "wallet") {
-            //     window.location.href = "/payment/wallet";
-            //     return;
-            // }
+            if (selectedMethod === "wallet") {
+                window.location.href = "/payment/wallet";
+                return;
+            }
 
             const { error, data } = await actions.payment(formData);
 
