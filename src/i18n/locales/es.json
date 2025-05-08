@@ -318,5 +318,20 @@
       "continue": "Continuar",
       "send": "Enviar"
     }
+  },
+  "contributions": {
+    "title": "Aportes",
+    "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
+    "table": {
+      "headers": {
+        "target": "Destino",
+        "amount": "Importe",
+        "origin": "Origen",
+        "paymentMethod": "Método",
+        "date": "Fecha",
+        "statusProject": "Estado de proyecto",
+        "refundToWallet": "A Monedero"
+      }
+    }
   }
 }
