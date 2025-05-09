@@ -272,6 +272,110 @@ export type BudgetSummaryJsonld = {
 };
 
 /**
+ * Unprocessable entity
+ */
+export type ConstraintViolationJson = {
+    status?: number;
+    violations?: Array<{
+        /**
+         * The property path of the violation
+         */
+        propertyPath?: string;
+        /**
+         * The message associated with the violation
+         */
+        message?: string;
+    }>;
+    readonly detail?: string;
+    readonly type?: string;
+    readonly title?: string | null;
+    readonly instance?: string | null;
+};
+
+/**
+ * Unprocessable entity
+ */
+export type ConstraintViolationJsonldJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    status?: number;
+    violations?: Array<{
+        /**
+         * The property path of the violation
+         */
+        propertyPath?: string;
+        /**
+         * The message associated with the violation
+         */
+        message?: string;
+    }>;
+    readonly detail?: string;
+    readonly description?: string;
+    readonly type?: string;
+    readonly title?: string | null;
+    readonly instance?: string | null;
+};
+
+/**
+ * A representation of common errors.
+ */
+export type _Error = {
+    /**
+     * A short, human-readable summary of the problem.
+     */
+    readonly title?: string | null;
+    /**
+     * A human-readable explanation specific to this occurrence of the problem.
+     */
+    readonly detail?: string | null;
+    status?: number;
+    /**
+     * A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+     */
+    readonly instance?: string | null;
+    /**
+     * A URI reference that identifies the problem type
+     */
+    readonly type?: string;
+};
+
+/**
+ * A representation of common errors.
+ */
+export type ErrorJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * A short, human-readable summary of the problem.
+     */
+    readonly title?: string | null;
+    /**
+     * A human-readable explanation specific to this occurrence of the problem.
+     */
+    readonly detail?: string | null;
+    status?: number;
+    /**
+     * A URI reference that identifies the specific occurrence of the problem. It may or may not yield further information if dereferenced.
+     */
+    readonly instance?: string | null;
+    /**
+     * A URI reference that identifies the problem type
+     */
+    readonly type?: string;
+    readonly description?: string | null;
+};
+
+/**
  * Gateways represent payment services used to perform the necessary payments for Transactions between Accounts.\
  * \
  * For each Gateway there is an internal implementation that handles the creation and validation of Transactions between Accounts.
@@ -308,6 +412,10 @@ export type GatewayJsonld = {
 export type GatewayCharge = {
     readonly id?: number | null;
     /**
+     * The Checkout to which this Charge item belongs to.
+     */
+    readonly checkout?: string;
+    /**
      * How this item should be processed by the Gateway.\
      * \
      * `single` is for one time payments.\
@@ -332,6 +440,36 @@ export type GatewayCharge = {
      * The money to-be-paid for this item at the Gateway.
      */
     money: Money;
+    /**
+     * The status of the charge item with the Gateway.
+     */
+    status: 'pending' | 'charged' | 'to_refund' | 'refunded';
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
+export type GatewayChargeChargeUpdationDto = {
+    /**
+     * The unique identifier for the charge.
+     */
+    id?: number;
+    /**
+     * The type of the charge.
+     */
+    type?: 'single' | 'recurring';
+    /**
+     * The title or name of the charge.
+     */
+    title?: string;
+    /**
+     * A detailed description of the charge.
+     */
+    description?: string;
+    /**
+     * The current payment status of the charge.
+     */
+    status?: 'pending' | 'charged' | 'to_refund' | 'refunded';
 };
 
 /**
@@ -346,6 +484,10 @@ export type GatewayChargeJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number | null;
+    /**
+     * The Checkout to which this Charge item belongs to.
+     */
+    readonly checkout?: string;
     /**
      * How this item should be processed by the Gateway.\
      * \
@@ -371,6 +513,10 @@ export type GatewayChargeJsonld = {
      * The money to-be-paid for this item at the Gateway.
      */
     money: MoneyJsonld;
+    /**
+     * The status of the charge item with the Gateway.
+     */
+    status: 'pending' | 'charged' | 'to_refund' | 'refunded';
 };
 
 /**
@@ -392,9 +538,17 @@ export type GatewayCheckout = {
     charges: Array<GatewayCharge>;
     /**
      * Gateways will redirect the user back to the v4 API,
-     * which will then redirect the user to this address.
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
      */
     returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
@@ -407,6 +561,18 @@ export type GatewayCheckout = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<Tracking>;
+};
+
+/**
+ * A GatewayCheckout represents a payment session with a Gateway.
+ */
+export type GatewayCheckoutCheckoutUpdationDto = {
+    readonly id?: number;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
 };
 
 /**
@@ -435,9 +601,17 @@ export type GatewayCheckoutJsonld = {
     charges: Array<GatewayChargeJsonld>;
     /**
      * Gateways will redirect the user back to the v4 API,
-     * which will then redirect the user to this address.
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
      */
     returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
@@ -704,7 +878,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
+    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -730,7 +904,7 @@ export type Project = {
 /**
  * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
  */
-export type ProjectProjectCreateDto = {
+export type ProjectProjectCreationDto = {
     /**
      * Main headline for the Project.
      */
@@ -766,7 +940,7 @@ export type ProjectProjectCreateDto = {
 /**
  * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
  */
-export type ProjectProjectCreateDtoJsonld = {
+export type ProjectProjectCreationDtoJsonld = {
     /**
      * Main headline for the Project.
      */
@@ -802,7 +976,7 @@ export type ProjectProjectCreateDtoJsonld = {
 /**
  * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
  */
-export type ProjectProjectUpdateDto = {
+export type ProjectProjectUpdationDto = {
     readonly id?: number;
     /**
      * Main headline for the Project.
@@ -837,7 +1011,7 @@ export type ProjectProjectUpdateDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
+    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -897,7 +1071,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_editing' | 'in_review' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'fulfilled';
+    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1129,13 +1303,17 @@ export type ProjectRewardJsonld = {
 export type ProjectRewardClaim = {
     readonly id?: number;
     /**
-     * The ProjectReward being claimed.
-     */
-    reward: string;
-    /**
      * The User claiming the ProjectReward.
      */
     readonly owner?: string;
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
 };
 
 /**
@@ -1151,13 +1329,84 @@ export type ProjectRewardClaimJsonld = {
     readonly '@type'?: string;
     readonly id?: number;
     /**
-     * The ProjectReward being claimed.
-     */
-    reward: string;
-    /**
      * The User claiming the ProjectReward.
      */
     readonly owner?: string;
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
+};
+
+export type ProjectSupport = {
+    readonly id?: number;
+    /**
+     * The User who created the ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
+     */
+    readonly owner?: string | null;
+    /**
+     * The Project being targeted in the Charges.
+     */
+    readonly project?: string;
+    /**
+     * The Charges that were paid by the User.
+     */
+    readonly charges?: Array<string>;
+    /**
+     * The total monetary value of the Charges paid by the User.
+     */
+    money?: Money;
+    /**
+     * User's will to have their support to the Project be shown publicly.
+     */
+    anonymous: boolean;
+    /**
+     * A message of support from the User to the Project.
+     */
+    message?: string | null;
+};
+
+export type ProjectSupportJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    /**
+     * The User who created the ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
+     */
+    readonly owner?: string | null;
+    /**
+     * The Project being targeted in the Charges.
+     */
+    readonly project?: string;
+    /**
+     * The Charges that were paid by the User.
+     */
+    readonly charges?: Array<string>;
+    /**
+     * The total monetary value of the Charges paid by the User.
+     */
+    money?: MoneyJsonld;
+    /**
+     * User's will to have their support to the Project be shown publicly.
+     */
+    anonymous: boolean;
+    /**
+     * A message of support from the User to the Project.
+     */
+    message?: string | null;
 };
 
 export type ProjectTerritoryApiResource = {
@@ -1310,11 +1559,11 @@ export type ProjectVideoJsonld = {
  */
 export type Tipjar = {
     readonly id?: number;
+    readonly accounting?: string;
     /**
      * Human readable, non white space, unique string.
      */
-    name?: string;
-    accounting?: Accounting | null;
+    name: string;
 };
 
 /**
@@ -1331,11 +1580,11 @@ export type TipjarJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
+    readonly accounting?: string;
     /**
      * Human readable, non white space, unique string.
      */
-    name?: string;
-    accounting?: AccountingJsonld | null;
+    name: string;
 };
 
 export type Tracking = {
@@ -1678,6 +1927,14 @@ export type ApiAccountingsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
     };
     url: '/v4/accountings';
 };
@@ -1705,10 +1962,12 @@ export type ApiAccountingsIdGetData = {
 
 export type ApiAccountingsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiAccountingsIdGetError = ApiAccountingsIdGetErrors[keyof ApiAccountingsIdGetErrors];
 
 export type ApiAccountingsIdGetResponses = {
     /**
@@ -1738,20 +1997,22 @@ export type ApiAccountingsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiAccountingsIdPatchError = ApiAccountingsIdPatchErrors[keyof ApiAccountingsIdPatchErrors];
 
 export type ApiAccountingsIdPatchResponses = {
     /**
@@ -1771,6 +2032,14 @@ export type ApiAccountingBalancePointsGetCollectionData = {
          */
         page?: number;
         /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
+        /**
          * AccountingBalancePoint accounting
          */
         accounting: string;
@@ -1786,6 +2055,10 @@ export type ApiAccountingBalancePointsGetCollectionData = {
          * AccountingBalancePoint end
          */
         end?: string;
+        /**
+         * If true, the balance points are cumulative over time.
+         */
+        aggregate?: boolean;
     };
     url: '/v4/accounting_balance_points';
 };
@@ -1807,6 +2080,14 @@ export type ApiAccountingTransactionsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         origin?: string;
         'origin[]'?: Array<string>;
         target?: string;
@@ -1838,10 +2119,12 @@ export type ApiAccountingTransactionsIdGetData = {
 
 export type ApiAccountingTransactionsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiAccountingTransactionsIdGetError = ApiAccountingTransactionsIdGetErrors[keyof ApiAccountingTransactionsIdGetErrors];
 
 export type ApiAccountingTransactionsIdGetResponses = {
     /**
@@ -1860,6 +2143,14 @@ export type ApiGatewaysGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
     };
     url: '/v4/gateways';
 };
@@ -1887,10 +2178,12 @@ export type ApiGatewaysNameGetData = {
 
 export type ApiGatewaysNameGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiGatewaysNameGetError = ApiGatewaysNameGetErrors[keyof ApiGatewaysNameGetErrors];
 
 export type ApiGatewaysNameGetResponses = {
     /**
@@ -1900,6 +2193,48 @@ export type ApiGatewaysNameGetResponses = {
 };
 
 export type ApiGatewaysNameGetResponse = ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
+
+export type ApiGatewayChargesGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
+        type?: string;
+        'type[]'?: Array<string>;
+        target?: string;
+        'target[]'?: Array<string>;
+        'money.amount'?: number;
+        'money.amount[]'?: Array<number>;
+        status?: string;
+        'status[]'?: Array<string>;
+        'money.amount[between]'?: string;
+        'money.amount[gt]'?: string;
+        'money.amount[gte]'?: string;
+        'money.amount[lt]'?: string;
+        'money.amount[lte]'?: string;
+    };
+    url: '/v4/gateway_charges';
+};
+
+export type ApiGatewayChargesGetCollectionResponses = {
+    /**
+     * GatewayCharge collection
+     */
+    200: Array<GatewayCharge>;
+};
+
+export type ApiGatewayChargesGetCollectionResponse = ApiGatewayChargesGetCollectionResponses[keyof ApiGatewayChargesGetCollectionResponses];
 
 export type ApiGatewayChargesIdGetData = {
     body?: never;
@@ -1915,10 +2250,12 @@ export type ApiGatewayChargesIdGetData = {
 
 export type ApiGatewayChargesIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiGatewayChargesIdGetError = ApiGatewayChargesIdGetErrors[keyof ApiGatewayChargesIdGetErrors];
 
 export type ApiGatewayChargesIdGetResponses = {
     /**
@@ -1929,6 +2266,47 @@ export type ApiGatewayChargesIdGetResponses = {
 
 export type ApiGatewayChargesIdGetResponse = ApiGatewayChargesIdGetResponses[keyof ApiGatewayChargesIdGetResponses];
 
+export type ApiGatewayChargesIdPatchData = {
+    /**
+     * The updated GatewayCharge resource
+     */
+    body: GatewayChargeChargeUpdationDto;
+    path: {
+        /**
+         * GatewayCharge identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/gateway_charges/{id}';
+};
+
+export type ApiGatewayChargesIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiGatewayChargesIdPatchError = ApiGatewayChargesIdPatchErrors[keyof ApiGatewayChargesIdPatchErrors];
+
+export type ApiGatewayChargesIdPatchResponses = {
+    /**
+     * GatewayCharge resource updated
+     */
+    200: GatewayCharge;
+};
+
+export type ApiGatewayChargesIdPatchResponse = ApiGatewayChargesIdPatchResponses[keyof ApiGatewayChargesIdPatchResponses];
+
 export type ApiGatewayCheckoutsGetCollectionData = {
     body?: never;
     path?: never;
@@ -1937,9 +2315,26 @@ export type ApiGatewayCheckoutsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
     };
     url: '/v4/gateway_checkouts';
 };
+
+export type ApiGatewayCheckoutsGetCollectionErrors = {
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+};
+
+export type ApiGatewayCheckoutsGetCollectionError = ApiGatewayCheckoutsGetCollectionErrors[keyof ApiGatewayCheckoutsGetCollectionErrors];
 
 export type ApiGatewayCheckoutsGetCollectionResponses = {
     /**
@@ -1964,12 +2359,14 @@ export type ApiGatewayCheckoutsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiGatewayCheckoutsPostError = ApiGatewayCheckoutsPostErrors[keyof ApiGatewayCheckoutsPostErrors];
 
 export type ApiGatewayCheckoutsPostResponses = {
     /**
@@ -1994,10 +2391,12 @@ export type ApiGatewayCheckoutsIdGetData = {
 
 export type ApiGatewayCheckoutsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiGatewayCheckoutsIdGetError = ApiGatewayCheckoutsIdGetErrors[keyof ApiGatewayCheckoutsIdGetErrors];
 
 export type ApiGatewayCheckoutsIdGetResponses = {
     /**
@@ -2007,6 +2406,51 @@ export type ApiGatewayCheckoutsIdGetResponses = {
 };
 
 export type ApiGatewayCheckoutsIdGetResponse = ApiGatewayCheckoutsIdGetResponses[keyof ApiGatewayCheckoutsIdGetResponses];
+
+export type ApiGatewayCheckoutsIdPatchData = {
+    /**
+     * The updated GatewayCheckout resource
+     */
+    body: GatewayCheckoutCheckoutUpdationDto;
+    path: {
+        /**
+         * GatewayCheckout identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/gateway_checkouts/{id}';
+};
+
+export type ApiGatewayCheckoutsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiGatewayCheckoutsIdPatchError = ApiGatewayCheckoutsIdPatchErrors[keyof ApiGatewayCheckoutsIdPatchErrors];
+
+export type ApiGatewayCheckoutsIdPatchResponses = {
+    /**
+     * GatewayCheckout resource updated
+     */
+    200: GatewayCheckout;
+};
+
+export type ApiGatewayCheckoutsIdPatchResponse = ApiGatewayCheckoutsIdPatchResponses[keyof ApiGatewayCheckoutsIdPatchResponses];
 
 export type ApiUsersIdorganizationGetData = {
     body?: never;
@@ -2024,12 +2468,14 @@ export type ApiUsersIdorganizationGetErrors = {
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUsersIdorganizationGetError = ApiUsersIdorganizationGetErrors[keyof ApiUsersIdorganizationGetErrors];
 
 export type ApiUsersIdorganizationGetResponses = {
     /**
@@ -2059,20 +2505,22 @@ export type ApiUsersIdorganizationPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiUsersIdorganizationPatchError = ApiUsersIdorganizationPatchErrors[keyof ApiUsersIdorganizationPatchErrors];
 
 export type ApiUsersIdorganizationPatchResponses = {
     /**
@@ -2099,12 +2547,14 @@ export type ApiUsersIdpersonGetErrors = {
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUsersIdpersonGetError = ApiUsersIdpersonGetErrors[keyof ApiUsersIdpersonGetErrors];
 
 export type ApiUsersIdpersonGetResponses = {
     /**
@@ -2134,20 +2584,22 @@ export type ApiUsersIdpersonPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiUsersIdpersonPatchError = ApiUsersIdpersonPatchErrors[keyof ApiUsersIdpersonPatchErrors];
 
 export type ApiUsersIdpersonPatchResponses = {
     /**
@@ -2166,6 +2618,14 @@ export type ApiProjectsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         title?: string;
         subtitle?: string;
         category?: string;
@@ -2190,7 +2650,7 @@ export type ApiProjectsPostData = {
     /**
      * The new Project resource
      */
-    body: ProjectProjectCreateDto;
+    body: ProjectProjectCreationDto;
     path?: never;
     query?: never;
     url: '/v4/projects';
@@ -2200,16 +2660,18 @@ export type ApiProjectsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectsPostError = ApiProjectsPostErrors[keyof ApiProjectsPostErrors];
 
 export type ApiProjectsPostResponses = {
     /**
@@ -2236,12 +2698,14 @@ export type ApiProjectsIdDeleteErrors = {
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectsIdDeleteError = ApiProjectsIdDeleteErrors[keyof ApiProjectsIdDeleteErrors];
 
 export type ApiProjectsIdDeleteResponses = {
     /**
@@ -2266,10 +2730,12 @@ export type ApiProjectsIdGetData = {
 
 export type ApiProjectsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectsIdGetError = ApiProjectsIdGetErrors[keyof ApiProjectsIdGetErrors];
 
 export type ApiProjectsIdGetResponses = {
     /**
@@ -2284,7 +2750,7 @@ export type ApiProjectsIdPatchData = {
     /**
      * The updated Project resource
      */
-    body: ProjectProjectUpdateDto;
+    body: ProjectProjectUpdationDto;
     path: {
         /**
          * Project identifier
@@ -2299,20 +2765,22 @@ export type ApiProjectsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectsIdPatchError = ApiProjectsIdPatchErrors[keyof ApiProjectsIdPatchErrors];
 
 export type ApiProjectsIdPatchResponses = {
     /**
@@ -2331,6 +2799,14 @@ export type ApiProjectBudgetItemsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
     };
@@ -2360,12 +2836,14 @@ export type ApiProjectBudgetItemsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectBudgetItemsPostError = ApiProjectBudgetItemsPostErrors[keyof ApiProjectBudgetItemsPostErrors];
 
 export type ApiProjectBudgetItemsPostResponses = {
     /**
@@ -2390,10 +2868,12 @@ export type ApiProjectBudgetItemsIdDeleteData = {
 
 export type ApiProjectBudgetItemsIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectBudgetItemsIdDeleteError = ApiProjectBudgetItemsIdDeleteErrors[keyof ApiProjectBudgetItemsIdDeleteErrors];
 
 export type ApiProjectBudgetItemsIdDeleteResponses = {
     /**
@@ -2418,10 +2898,12 @@ export type ApiProjectBudgetItemsIdGetData = {
 
 export type ApiProjectBudgetItemsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectBudgetItemsIdGetError = ApiProjectBudgetItemsIdGetErrors[keyof ApiProjectBudgetItemsIdGetErrors];
 
 export type ApiProjectBudgetItemsIdGetResponses = {
     /**
@@ -2451,16 +2933,18 @@ export type ApiProjectBudgetItemsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectBudgetItemsIdPatchError = ApiProjectBudgetItemsIdPatchErrors[keyof ApiProjectBudgetItemsIdPatchErrors];
 
 export type ApiProjectBudgetItemsIdPatchResponses = {
     /**
@@ -2479,6 +2963,14 @@ export type ApiProjectRewardsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
     };
@@ -2508,12 +3000,14 @@ export type ApiProjectRewardsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectRewardsPostError = ApiProjectRewardsPostErrors[keyof ApiProjectRewardsPostErrors];
 
 export type ApiProjectRewardsPostResponses = {
     /**
@@ -2538,10 +3032,12 @@ export type ApiProjectRewardsIdDeleteData = {
 
 export type ApiProjectRewardsIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectRewardsIdDeleteError = ApiProjectRewardsIdDeleteErrors[keyof ApiProjectRewardsIdDeleteErrors];
 
 export type ApiProjectRewardsIdDeleteResponses = {
     /**
@@ -2566,10 +3062,12 @@ export type ApiProjectRewardsIdGetData = {
 
 export type ApiProjectRewardsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectRewardsIdGetError = ApiProjectRewardsIdGetErrors[keyof ApiProjectRewardsIdGetErrors];
 
 export type ApiProjectRewardsIdGetResponses = {
     /**
@@ -2599,16 +3097,18 @@ export type ApiProjectRewardsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectRewardsIdPatchError = ApiProjectRewardsIdPatchErrors[keyof ApiProjectRewardsIdPatchErrors];
 
 export type ApiProjectRewardsIdPatchResponses = {
     /**
@@ -2627,6 +3127,14 @@ export type ApiProjectRewardClaimsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
     };
     url: '/v4/project_reward_claims';
 };
@@ -2654,12 +3162,14 @@ export type ApiProjectRewardClaimsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectRewardClaimsPostError = ApiProjectRewardClaimsPostErrors[keyof ApiProjectRewardClaimsPostErrors];
 
 export type ApiProjectRewardClaimsPostResponses = {
     /**
@@ -2684,10 +3194,12 @@ export type ApiProjectRewardClaimsIdDeleteData = {
 
 export type ApiProjectRewardClaimsIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectRewardClaimsIdDeleteError = ApiProjectRewardClaimsIdDeleteErrors[keyof ApiProjectRewardClaimsIdDeleteErrors];
 
 export type ApiProjectRewardClaimsIdDeleteResponses = {
     /**
@@ -2712,10 +3224,12 @@ export type ApiProjectRewardClaimsIdGetData = {
 
 export type ApiProjectRewardClaimsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectRewardClaimsIdGetError = ApiProjectRewardClaimsIdGetErrors[keyof ApiProjectRewardClaimsIdGetErrors];
 
 export type ApiProjectRewardClaimsIdGetResponses = {
     /**
@@ -2745,16 +3259,18 @@ export type ApiProjectRewardClaimsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectRewardClaimsIdPatchError = ApiProjectRewardClaimsIdPatchErrors[keyof ApiProjectRewardClaimsIdPatchErrors];
 
 export type ApiProjectRewardClaimsIdPatchResponses = {
     /**
@@ -2765,6 +3281,114 @@ export type ApiProjectRewardClaimsIdPatchResponses = {
 
 export type ApiProjectRewardClaimsIdPatchResponse = ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
 
+export type ApiProjectSupportsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
+        owner?: string;
+        'owner[]'?: Array<string>;
+        project?: string;
+        'project[]'?: Array<string>;
+    };
+    url: '/v4/project_supports';
+};
+
+export type ApiProjectSupportsGetCollectionResponses = {
+    /**
+     * ProjectSupport collection
+     */
+    200: Array<ProjectSupport>;
+};
+
+export type ApiProjectSupportsGetCollectionResponse = ApiProjectSupportsGetCollectionResponses[keyof ApiProjectSupportsGetCollectionResponses];
+
+export type ApiProjectSupportsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectSupport identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_supports/{id}';
+};
+
+export type ApiProjectSupportsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectSupportsIdGetError = ApiProjectSupportsIdGetErrors[keyof ApiProjectSupportsIdGetErrors];
+
+export type ApiProjectSupportsIdGetResponses = {
+    /**
+     * ProjectSupport resource
+     */
+    200: ProjectSupport;
+};
+
+export type ApiProjectSupportsIdGetResponse = ApiProjectSupportsIdGetResponses[keyof ApiProjectSupportsIdGetResponses];
+
+export type ApiProjectSupportsIdPatchData = {
+    /**
+     * The updated ProjectSupport resource
+     */
+    body: ProjectSupport;
+    path: {
+        /**
+         * ProjectSupport identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_supports/{id}';
+};
+
+export type ApiProjectSupportsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectSupportsIdPatchError = ApiProjectSupportsIdPatchErrors[keyof ApiProjectSupportsIdPatchErrors];
+
+export type ApiProjectSupportsIdPatchResponses = {
+    /**
+     * ProjectSupport resource updated
+     */
+    200: ProjectSupport;
+};
+
+export type ApiProjectSupportsIdPatchResponse = ApiProjectSupportsIdPatchResponses[keyof ApiProjectSupportsIdPatchResponses];
+
 export type ApiProjectUpdatesGetCollectionData = {
     body?: never;
     path?: never;
@@ -2773,6 +3397,14 @@ export type ApiProjectUpdatesGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
         'order[date]'?: 'asc' | 'desc';
@@ -2803,12 +3435,14 @@ export type ApiProjectUpdatesPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectUpdatesPostError = ApiProjectUpdatesPostErrors[keyof ApiProjectUpdatesPostErrors];
 
 export type ApiProjectUpdatesPostResponses = {
     /**
@@ -2833,10 +3467,12 @@ export type ApiProjectUpdatesIdDeleteData = {
 
 export type ApiProjectUpdatesIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectUpdatesIdDeleteError = ApiProjectUpdatesIdDeleteErrors[keyof ApiProjectUpdatesIdDeleteErrors];
 
 export type ApiProjectUpdatesIdDeleteResponses = {
     /**
@@ -2861,10 +3497,12 @@ export type ApiProjectUpdatesIdGetData = {
 
 export type ApiProjectUpdatesIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiProjectUpdatesIdGetError = ApiProjectUpdatesIdGetErrors[keyof ApiProjectUpdatesIdGetErrors];
 
 export type ApiProjectUpdatesIdGetResponses = {
     /**
@@ -2894,16 +3532,18 @@ export type ApiProjectUpdatesIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiProjectUpdatesIdPatchError = ApiProjectUpdatesIdPatchErrors[keyof ApiProjectUpdatesIdPatchErrors];
 
 export type ApiProjectUpdatesIdPatchResponses = {
     /**
@@ -2922,6 +3562,14 @@ export type ApiTipjarsGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
     };
     url: '/v4/tipjars';
 };
@@ -2949,12 +3597,14 @@ export type ApiTipjarsPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiTipjarsPostError = ApiTipjarsPostErrors[keyof ApiTipjarsPostErrors];
 
 export type ApiTipjarsPostResponses = {
     /**
@@ -2979,10 +3629,12 @@ export type ApiTipjarsIdDeleteData = {
 
 export type ApiTipjarsIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiTipjarsIdDeleteError = ApiTipjarsIdDeleteErrors[keyof ApiTipjarsIdDeleteErrors];
 
 export type ApiTipjarsIdDeleteResponses = {
     /**
@@ -3007,10 +3659,12 @@ export type ApiTipjarsIdGetData = {
 
 export type ApiTipjarsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiTipjarsIdGetError = ApiTipjarsIdGetErrors[keyof ApiTipjarsIdGetErrors];
 
 export type ApiTipjarsIdGetResponses = {
     /**
@@ -3040,16 +3694,18 @@ export type ApiTipjarsIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiTipjarsIdPatchError = ApiTipjarsIdPatchErrors[keyof ApiTipjarsIdPatchErrors];
 
 export type ApiTipjarsIdPatchResponses = {
     /**
@@ -3068,6 +3724,14 @@ export type ApiUsersGetCollectionData = {
          * The collection page number
          */
         page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
         /**
          * Query Users by email or handle. Fuzzy.
          */
@@ -3100,12 +3764,14 @@ export type ApiUsersPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiUsersPostError = ApiUsersPostErrors[keyof ApiUsersPostErrors];
 
 export type ApiUsersPostResponses = {
     /**
@@ -3130,10 +3796,12 @@ export type ApiUsersIdDeleteData = {
 
 export type ApiUsersIdDeleteErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUsersIdDeleteError = ApiUsersIdDeleteErrors[keyof ApiUsersIdDeleteErrors];
 
 export type ApiUsersIdDeleteResponses = {
     /**
@@ -3158,10 +3826,12 @@ export type ApiUsersIdGetData = {
 
 export type ApiUsersIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUsersIdGetError = ApiUsersIdGetErrors[keyof ApiUsersIdGetErrors];
 
 export type ApiUsersIdGetResponses = {
     /**
@@ -3191,16 +3861,18 @@ export type ApiUsersIdPatchErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiUsersIdPatchError = ApiUsersIdPatchErrors[keyof ApiUsersIdPatchErrors];
 
 export type ApiUsersIdPatchResponses = {
     /**
@@ -3225,12 +3897,14 @@ export type ApiUserTokensPostErrors = {
     /**
      * Invalid input
      */
-    400: unknown;
+    400: ErrorJsonld;
     /**
-     * Unprocessable entity
+     * An error occurred
      */
-    422: unknown;
+    422: ConstraintViolationJsonldJsonld;
 };
+
+export type ApiUserTokensPostError = ApiUserTokensPostErrors[keyof ApiUserTokensPostErrors];
 
 export type ApiUserTokensPostResponses = {
     /**
@@ -3257,12 +3931,14 @@ export type ApiUserTokensIdDeleteErrors = {
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUserTokensIdDeleteError = ApiUserTokensIdDeleteErrors[keyof ApiUserTokensIdDeleteErrors];
 
 export type ApiUserTokensIdDeleteResponses = {
     /**
@@ -3289,12 +3965,14 @@ export type ApiUserTokensIdGetErrors = {
     /**
      * Forbidden
      */
-    403: unknown;
+    403: ErrorJsonld;
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiUserTokensIdGetError = ApiUserTokensIdGetErrors[keyof ApiUserTokensIdGetErrors];
 
 export type ApiUserTokensIdGetResponses = {
     /**
@@ -3314,9 +3992,17 @@ export type ApiVersionsGetCollectionData = {
          */
         page?: number;
         /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        /**
+         * Enable or disable pagination
+         */
+        pagination?: boolean;
+        /**
          * The name of the resource.
          */
-        resource: 'user' | 'checkout';
+        resource: 'user' | 'checkout' | 'charge';
         /**
          * The ID of the named resource.
          */
@@ -3348,10 +4034,12 @@ export type ApiVersionsIdGetData = {
 
 export type ApiVersionsIdGetErrors = {
     /**
-     * Resource not found
+     * Not found
      */
-    404: unknown;
+    404: ErrorJsonld;
 };
+
+export type ApiVersionsIdGetError = ApiVersionsIdGetErrors[keyof ApiVersionsIdGetErrors];
 
 export type ApiVersionsIdGetResponses = {
     /**
