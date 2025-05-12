@@ -45,7 +45,7 @@ export const payment = defineAction({
         ),
     }),
     handler: async (input, context) => {
-        const { t, lang } = context.locals;
+        const { t } = context.locals;
 
         try {
             const cart = input.cartData;
@@ -72,7 +72,7 @@ export const payment = defineAction({
 
             const origin = `/v4/accountings/${accountingId}`;
             const base = context.url.origin;
-            const returnUrl = `${base}/${lang}/payment/verify`;
+            const returnUrl = `${base}/payment/verify`;
             const gateway = `/v4/gateways/${input.paymentMethod}`;
 
             const response = await apiGatewayCheckoutsPost({
