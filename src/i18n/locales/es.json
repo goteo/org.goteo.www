@@ -329,7 +329,7 @@
         "origin": "Origen",
         "paymentMethod": "Método",
         "date": "Fecha",
-        "statusProject": "Estado de proyecto",
+        "chargeStatus": "Estado de la operación",
         "refundToWallet": "A Monedero"
       },
       "rows": {
@@ -339,18 +339,10 @@
           "wallet": "Monedero"
         },
         "status": {
-          "in_draft": "En borrador",
           "in_pending": "Pendiente",
-          "in_review": "En revisión",
-          "in_editing": "En edición",
-          "rejected": "Rechazado",
-          "in_campaign": "En campaña",
-          "unfunded": "No financiado",
-          "in_funding": "En financiación",
-          "funded": "Financiado"
-        },
-        "if-status-is": {
-          "rejected": "rejected"
+          "charged": "Cobrado",
+          "to_refund": "Por reembolsar",
+          "refunded": "Reembolsado"
         },
         "refund": {
           "to_wallet": "Sí",

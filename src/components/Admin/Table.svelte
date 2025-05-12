@@ -28,7 +28,6 @@
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
         originDisplayName: string;
-        projectStatus: string;
         paymentMethod: string;
         refundToWallet: string;
         platformLink: string;
@@ -41,7 +40,7 @@
         { name: "contributions.table.headers.origin" },
         { name: "contributions.table.headers.paymentMethod" },
         { name: "contributions.table.headers.date" },
-        { name: "contributions.table.headers.statusProject" },
+        { name: "contributions.table.headers.chargeStatus" },
         { name: "contributions.table.headers.refundToWallet" },
     ];
 
@@ -169,7 +168,6 @@
                             ...charge,
                             targetDisplayName,
                             originDisplayName,
-                            projectStatus: project?.status ?? "—",
                             paymentMethod: extractId(checkout?.gateway) ?? "—",
                             refundToWallet: checkout?.refund
                                 ? $t(`contributions.table.rows.refund.${checkout.refund}`)
@@ -183,7 +181,6 @@
                             ...charge,
                             targetDisplayName: "—",
                             originDisplayName: "—",
-                            projectStatus: "—",
                             paymentMethod: "—",
                             refundToWallet: "—",
                             platformLink: "—",
@@ -264,11 +261,11 @@
 </div>
 
 <Table class="w-full border-separate border-spacing-y-2">
-    <TableHead class="bg-secondary py-4">
+    <TableHead class="bg-secondary">
         {#each tableHeaders as { name }}
             <TableHeadCell
-                class="text-base whitespace-nowrap text-[#FBFBFB] 
-                       first:rounded-l-md last:rounded-r-md"
+                class="py-4 text-base whitespace-nowrap 
+                       text-[#FBFBFB] first:rounded-l-md last:rounded-r-md"
             >
                 {$t(name)}
             </TableHeadCell>
@@ -314,20 +311,9 @@
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">-</TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         <button
-                            class="
-                            flex items-center gap-1 rounded border px-3 py-1 text-sm font-medium
-                            {charge.projectStatus ===
-                            $t('contributions.table.rows.if-status-is.rejected')
-                                ? 'border-[#E94668] text-[#E94668]'
-                                : charge.projectStatus === 'pending'
-                                  ? 'border-secondary text-secondary'
-                                  : 'border-secondary text-secondary'}
-                          "
+                            class="border-secondary text-secondary} flex items-center gap-1 rounded border px-3 py-1 text-sm font-medium"
                         >
-                            {#if charge.projectStatus === $t("contributions.table.rows.if-status-is.rejected")}
-                                <RejectedIcon />
-                            {/if}
-                            {$t(`contributions.table.rows.status.${charge.projectStatus}`)}
+                            {$t(`contributions.table.rows.status.${charge.status}`)}
                         </button>
                     </TableBodyCell>
 
