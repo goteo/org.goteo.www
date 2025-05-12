@@ -339,7 +339,7 @@
           "wallet": "Monedero"
         },
         "status": {
-          "in_pending": "Pendiente",
+          "pending": "Pendiente",
           "charged": "Cobrado",
           "to_refund": "Por reembolsar",
           "refunded": "Reembolsado"
