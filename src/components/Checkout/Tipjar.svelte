@@ -7,7 +7,7 @@
     import type { CartItem } from "../../stores/cart";
 
     export let defaultCurrency: string;
-    export let accountingIdPlatoniq: string;
+    export let accountingIdPlatoniq: number;
 
     let value = 3;
     let rawInput = "3";

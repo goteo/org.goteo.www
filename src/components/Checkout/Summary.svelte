@@ -8,7 +8,7 @@
     export let defaultCurrency: string;
     export let hasError: boolean;
     export let amount: number | undefined;
-    export let accountingIdPlatoniq: string;
+    export let accountingIdPlatoniq: number;
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
