@@ -331,7 +331,61 @@
         "date": "Fecha",
         "statusProject": "Estado de proyecto",
         "refundToWallet": "A Monedero"
+      },
+      "rows": {
+        "payments": {
+          "paypal": "Paypal",
+          "stripe": "Tarjeta",
+          "wallet": "Monedero"
+        },
+        "status": {
+          "in_draft": "En borrador",
+          "in_pending": "Pendiente",
+          "in_review": "En revisión",
+          "in_editing": "En edición",
+          "rejected": "Rechazado",
+          "in_campaign": "En campaña",
+          "unfunded": "No financiado",
+          "in_funding": "En financiación",
+          "funded": "Financiado"
+        },
+        "if-status-is": {
+          "rejected": "rejected"
+        },
+        "refund": {
+          "to_wallet": "Sí",
+          "to_gateway": "No"
+        }
       }
+    },
+    "grid": {
+      "details": {
+        "operationTime": "Hora de la operación",
+        "trackingCode": "Código de seguimiento",
+        "toWallet": "A monedero",
+        "platformLink": "Enlace a plataforma",
+        "estimatedFee": "Comisión estimada"
+      }
+    },
+    "filters": {
+      "order": {
+        "title": "Ordenar por:",
+        "options": {
+          "date-desc": "Fecha (más reciente primero)"
+        }
+      },
+      "itemsPerPage": {
+        "title": "Líneas por página:",
+        "options": {
+          "10": "10",
+          "20": "20",
+          "30": "30",
+          "50": "50"
+        }
+      }
+    },
+    "pagination": {
+      "showing": "Mostrando {{items}} de {{total}}"
     }
   }
 }
