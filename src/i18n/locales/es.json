@@ -368,6 +368,17 @@
         "toWallet": "A monedero",
         "platformLink": "Enlace a plataforma",
         "estimatedFee": "Comisión estimada"
+      },
+      "actions": {
+        "refundToWallet": "Devolución a monedero",
+        "refundToUser": "Devolución a usuario",
+        "changeUser": "Cambiar de usuario",
+        "manageReward": "Gestionar recompensa"
+      },
+      "content-footer": {
+        "lastEdited": "Última modificación por: {{name}} ({{date}}) {{time}}h",
+        "downloadDetails": "Descarga detalle",
+        "annotations": "{{annotations}} Anotaciones"
       }
     },
     "filters": {
