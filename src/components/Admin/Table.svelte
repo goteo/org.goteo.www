@@ -257,6 +257,29 @@
         return "—";
     }
 
+    function getDate(chargeDate: string | null | undefined): { date: string; time: string } {
+        if (!chargeDate) {
+            return { date: "—", time: "—" };
+        }
+
+        const d = new Date(chargeDate);
+
+        if (isNaN(d.getTime())) {
+            return { date: "1970-01-01", time: "00:00h" };
+        }
+
+        const year = String(d.getFullYear()).slice(2);
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const day = String(d.getDate()).padStart(2, "0");
+        const hour = String(d.getHours()).padStart(2, "0");
+        const minute = String(d.getMinutes()).padStart(2, "0");
+
+        return {
+            date: `${year}-${month}-${day}`,
+            time: `${hour}:${minute}h`,
+        };
+    }
+
     $effect(() => {
         loadCharges();
     });
@@ -302,7 +325,7 @@
         {/each}
     </TableHead>
 
-    <TableBody>
+    <TableBody class="text-base">
         {#if isFirstLoad}
             <TableBodyRow>
                 <TableBodyCell colspan={tableHeaders.length}>
@@ -339,9 +362,9 @@
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
-                        {charge.dateUpdated?.slice(0, 10) ?? "-"}
+                        {getDate(charge.dateUpdated).date}
                         <p
-                            class="text-tertiary max-w-[180px] cursor-pointer truncate whitespace-nowrap underline"
+                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-sm whitespace-nowrap underline"
                             title={charge.trackingCode}
                         >
                             {charge.trackingCode}
@@ -349,7 +372,7 @@
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         <button
-                            class="border-secondary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-sm font-medium"
+                            class="border-secondary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
                         >
                             {$t(`contributions.table.rows.status.${charge.status}`)}
                         </button>
@@ -368,7 +391,8 @@
                             <DetailsRow
                                 platformLink={charge.platformLink}
                                 trackingCode={charge.trackingCode}
-                                date={charge.dateUpdated ?? "-"}
+                                time={getDate(charge.dateUpdated).time}
+                                id={charge.id ? String(charge.id) : "-"}
                             />
                         </TableBodyCell>
                     </TableBodyRow>

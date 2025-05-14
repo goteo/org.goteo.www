@@ -2,18 +2,22 @@
     import { t } from "../../i18n/store";
     import ActionsBtn from "./ActionsBtn.svelte";
     import ContentFooter from "./ContentFooter.svelte";
-    export let trackingCode: string;
-    export let platformLink: string;
-    export let date: string;
+
+    const { id, trackingCode, time, platformLink } = $props<{
+        id: string;
+        trackingCode: string;
+        time: string;
+        platformLink: string;
+    }>();
 </script>
 
 <section class="flex flex-col gap-10">
     <div
-        class="grid grid-cols-4 gap-x-8 gap-y-6 rounded-md bg-[#fbfafe] p-6 text-[16px] text-[#575757]"
+        class="grid grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-[16px] text-[#575757]"
     >
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
-            <p>{date.slice(11, 16)}h</p>
+            <p>{time}</p>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.trackingCode")}</p>
@@ -29,8 +33,8 @@
             <p>Sí</p>
         </div>
         <div class="flex flex-col gap-1">
-            <p class="font-semibold">…</p>
-            <p>…</p>
+            <p class="font-semibold"></p>
+            <p></p>
         </div>
 
         <div class="flex flex-col gap-1">
@@ -47,14 +51,14 @@
             <p>-</p>
         </div>
         <div class="flex flex-col gap-1">
-            <p class="font-semibold">…</p>
-            <p>…</p>
+            <p class="font-semibold"></p>
+            <p></p>
         </div>
         <div class="flex flex-col gap-1">
-            <p class="font-semibold">…</p>
-            <p>…</p>
+            <p class="font-semibold"></p>
+            <p></p>
         </div>
     </div>
     <ActionsBtn />
-    <ContentFooter {date} />
+    <ContentFooter {id} />
 </section>
