@@ -443,7 +443,9 @@ export type GatewayCharge = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'pending' | 'charged' | 'to_refund' | 'refunded';
+    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    dateCreated?: string;
+    dateUpdated?: string;
 };
 
 /**
@@ -469,7 +471,7 @@ export type GatewayChargeChargeUpdationDto = {
     /**
      * The current payment status of the charge.
      */
-    status?: 'pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
 };
 
 /**
@@ -516,7 +518,9 @@ export type GatewayChargeJsonld = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'pending' | 'charged' | 'to_refund' | 'refunded';
+    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    dateCreated?: string;
+    dateUpdated?: string;
 };
 
 /**
@@ -552,7 +556,7 @@ export type GatewayCheckout = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'pending' | 'charged';
+    status?: 'in_pending' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -561,6 +565,8 @@ export type GatewayCheckout = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<Tracking>;
+    dateCreated?: string;
+    dateUpdated?: string;
 };
 
 /**
@@ -615,7 +621,7 @@ export type GatewayCheckoutJsonld = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'pending' | 'charged';
+    status?: 'in_pending' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -624,6 +630,8 @@ export type GatewayCheckoutJsonld = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<TrackingJsonld>;
+    dateCreated?: string;
+    dateUpdated?: string;
 };
 
 export type Link = {
@@ -878,7 +886,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1011,7 +1019,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1071,7 +1079,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'in_pending' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1850,10 +1858,6 @@ export type Version = {
      */
     readonly id?: number | null;
     /**
-     * The ID of the version for this specific resource.
-     */
-    readonly version?: number | null;
-    /**
      * The type of action that performed the recorded changes.
      */
     readonly action?: string | null;
@@ -1865,6 +1869,10 @@ export type Version = {
      * The ID of the recorded resource.
      */
     readonly resourceId?: number;
+    /**
+     * The version number for this specific resource.
+     */
+    readonly resourceVersion?: number | null;
     /**
      * The changed resource data, i.e the new values of the changed properties.
      */
@@ -1894,10 +1902,6 @@ export type VersionJsonld = {
      */
     readonly id?: number | null;
     /**
-     * The ID of the version for this specific resource.
-     */
-    readonly version?: number | null;
-    /**
      * The type of action that performed the recorded changes.
      */
     readonly action?: string | null;
@@ -1909,6 +1913,10 @@ export type VersionJsonld = {
      * The ID of the recorded resource.
      */
     readonly resourceId?: number;
+    /**
+     * The version number for this specific resource.
+     */
+    readonly resourceVersion?: number | null;
     /**
      * The changed resource data, i.e the new values of the changed properties.
      */
@@ -4002,7 +4010,7 @@ export type ApiVersionsGetCollectionData = {
         /**
          * The name of the resource.
          */
-        resource: 'user' | 'checkout' | 'charge';
+        resource: 'GatewayCharge' | 'GatewayCheckout' | 'User';
         /**
          * The ID of the named resource.
          */
