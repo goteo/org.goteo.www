@@ -1,11 +1,21 @@
 <script>
     import { t } from "../../i18n/store";
     import AnnotationIcon from "../../svgs/AnnotationIcon.svelte";
+    export let date;
 </script>
 
 <section class="flex flex-row items-center justify-between">
     <div>
-        <p>{$t("contributions.grid.content-footer.lastEdited")}</p>
+        <p>
+            {@html $t(
+                "contributions.grid.content-footer.lastEdited",
+                {
+                    date: date ? `<span class="font-bold">(${date.slice(0, 10)})</span>` : "-",
+                    time: date ? `<span class="font-bold">${date.slice(11, 16)}h</span>` : "-",
+                },
+                { allowHTML: true },
+            )}
+        </p>
     </div>
     <div class="flex flex-row items-center gap-4">
         <p class="text-tertiary font-bold">

@@ -56,6 +56,7 @@
     let isFirstLoad = $state(true);
     let totalItems = $state(0);
     let lastItemsPerPage = $state(10);
+    let lastItemsPerPageSnapshot = 10;
 
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
@@ -78,7 +79,8 @@
     let largestLoaded = 0;
 
     async function loadCharges() {
-        const isPageChange = Number(itemsPerPage) === lastItemsPerPage;
+        const current = Number(itemsPerPage);
+        const isPageChange = current === lastItemsPerPageSnapshot;
 
         isLoading = true;
 
@@ -87,7 +89,7 @@
             openRow = null;
         }
 
-        lastItemsPerPage = Number(itemsPerPage);
+        lastItemsPerPageSnapshot = current;
 
         try {
             const token = getAccessToken();
@@ -217,7 +219,6 @@
                 }),
             );
 
-            console.log("Loaded charges", charges);
             chargesCache.set(cacheKey, charges);
 
             if (currentPage === 1 && currentCount > largestLoaded) {
@@ -228,6 +229,7 @@
         } catch (err) {
             console.error("Error loading charges", err);
         } finally {
+            lastItemsPerPage = Number(itemsPerPage);
             isLoading = false;
             if (isFirstLoad) isFirstLoad = false;
         }
@@ -256,7 +258,6 @@
     }
 
     $effect(() => {
-        lastItemsPerPage = Number(itemsPerPage);
         loadCharges();
     });
 </script>
@@ -337,7 +338,15 @@
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
-                    <TableBodyCell class="border-t border-b border-[#E6E5F7]">-</TableBodyCell>
+                    <TableBodyCell class="border-t border-b border-[#E6E5F7]">
+                        {charge.dateUpdated?.slice(0, 10) ?? "-"}
+                        <p
+                            class="text-tertiary max-w-[180px] cursor-pointer truncate whitespace-nowrap underline"
+                            title={charge.trackingCode}
+                        >
+                            {charge.trackingCode}
+                        </p>
+                    </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         <button
                             class="border-secondary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-sm font-medium"
@@ -359,6 +368,7 @@
                             <DetailsRow
                                 platformLink={charge.platformLink}
                                 trackingCode={charge.trackingCode}
+                                date={charge.dateUpdated ?? "-"}
                             />
                         </TableBodyCell>
                     </TableBodyRow>

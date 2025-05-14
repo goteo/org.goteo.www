@@ -4,6 +4,7 @@
     import ContentFooter from "./ContentFooter.svelte";
     export let trackingCode: string;
     export let platformLink: string;
+    export let date: string;
 </script>
 
 <section class="flex flex-col gap-10">
@@ -12,7 +13,7 @@
     >
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
-            <p>-</p>
+            <p>{date.slice(11, 16)}h</p>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.trackingCode")}</p>
@@ -55,5 +56,5 @@
         </div>
     </div>
     <ActionsBtn />
-    <ContentFooter />
+    <ContentFooter {date} />
 </section>
