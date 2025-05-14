@@ -350,7 +350,7 @@
           "wallet": "Monedero"
         },
         "status": {
-          "pending": "Pendiente",
+          "in_pending": "Pendiente",
           "charged": "Cobrado",
           "to_refund": "Por reembolsar",
           "refunded": "Reembolsado"
@@ -376,7 +376,7 @@
         "manageReward": "Gestionar recompensa"
       },
       "content-footer": {
-        "lastEdited": "Última modificación por: {{name}} ({{date}}) {{time}}h",
+        "lastEdited": "Última modificación: {{date}} {{time}}",
         "downloadDetails": "Descarga detalle",
         "annotations": "{{annotations}} Anotaciones"
       }
