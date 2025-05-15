@@ -10,7 +10,9 @@
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
     "format:prettier": "prettier --write .",
-    "openapi": "openapi-ts"
+    "openapi": "openapi-ts",
+    "check:format:prettier": "prettier --check . --plugin prettier-plugin-astro --plugin prettier-plugin-svelte",
+    "check": "pnpm check:format:prettier"
   },
   "dependencies": {
     "@astrojs/node": "^9.1.3",
