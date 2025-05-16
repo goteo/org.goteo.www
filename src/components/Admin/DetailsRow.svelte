@@ -3,10 +3,14 @@
     import ActionsBtn from "./ActionsBtn.svelte";
     import ContentFooter from "./ContentFooter.svelte";
 
-    const { id, trackingCode, time, platformLink } = $props<{
+    const { id, trackingCode, dataTime, platformLink } = $props<{
         id: string;
         trackingCode: string;
-        time: string;
+        dataTime: {
+            date: string;
+            time: string;
+            fulltime: string;
+        };
         platformLink: string;
     }>();
 </script>
@@ -17,7 +21,7 @@
     >
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
-            <p>{time}</p>
+            <span title={dataTime.fulltime}>{dataTime.time}</span>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.trackingCode")}</p>

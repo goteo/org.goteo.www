@@ -257,18 +257,21 @@
         return "—";
     }
 
-    function getDate(chargeDate: string | null | undefined): { date: string; time: string } {
+    function getDate(chargeDate: string | null | undefined): {
+        date: string;
+        time: string;
+        fulltime: string;
+    } {
         if (!chargeDate) {
-            return { date: "—", time: "—" };
+            return { date: "—", time: "—", fulltime: "—" };
         }
 
         const d = new Date(chargeDate);
-
         if (isNaN(d.getTime())) {
-            return { date: "1970-01-01", time: "00:00h" };
+            return { date: "—", time: "—", fulltime: "—" };
         }
 
-        const year = String(d.getFullYear()).slice(2);
+        const year = d.getFullYear();
         const month = String(d.getMonth() + 1).padStart(2, "0");
         const day = String(d.getDate()).padStart(2, "0");
         const hour = String(d.getHours()).padStart(2, "0");
@@ -277,6 +280,7 @@
         return {
             date: `${year}-${month}-${day}`,
             time: `${hour}:${minute}h`,
+            fulltime: `${year}-${month}-${day} ${hour}:${minute}`,
         };
     }
 
@@ -391,7 +395,7 @@
                             <DetailsRow
                                 platformLink={charge.platformLink}
                                 trackingCode={charge.trackingCode}
-                                time={getDate(charge.dateUpdated).time}
+                                dataTime={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
                             />
                         </TableBodyCell>
