@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "@fontsource/karla";
 
+@plugin "flowbite/plugin";
+@import "flowbite/src/themes/default";
+
+@source "../node_modules/flowbite-svelte/dist";
+@source "../node_modules/flowbite-svelte-icons/dist";
+
 @theme {
     /* Light Theme (default) */
     --color-primary: #59e9d3;

@@ -66,7 +66,7 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
         return lang === defaultLang ? `/` : `/${lang}/`;
     }
 
-    const protectedRoutes = ["payment"];
+    const protectedRoutes = ["payment", "admin"];
     const isProtected = protectedRoutes.some((route) => pathAfterLang.includes(route));
 
     if (!accessToken && isProtected) {
