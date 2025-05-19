@@ -329,5 +329,77 @@
       "continue": "Continuar",
       "send": "Enviar"
     }
+  },
+  "contributions": {
+    "title": "Aportes",
+    "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
+    "table": {
+      "headers": {
+        "target": "Destino",
+        "amount": "Importe",
+        "origin": "Origen",
+        "paymentMethod": "Método",
+        "date": "Fecha",
+        "chargeStatus": "Estado de la operación",
+        "refundToWallet": "A Monedero"
+      },
+      "rows": {
+        "payments": {
+          "paypal": "Paypal",
+          "stripe": "Tarjeta",
+          "wallet": "Monedero"
+        },
+        "status": {
+          "in_pending": "Pendiente",
+          "charged": "Cobrado",
+          "to_refund": "Por reembolsar",
+          "refunded": "Reembolsado"
+        },
+        "refund": {
+          "to_wallet": "Sí",
+          "to_gateway": "No"
+        }
+      }
+    },
+    "grid": {
+      "details": {
+        "operationTime": "Hora de la operación",
+        "trackingCode": "Código de seguimiento",
+        "toWallet": "A monedero",
+        "platformLink": "Enlace a plataforma",
+        "estimatedFee": "Comisión estimada"
+      },
+      "actions": {
+        "refundToWallet": "Devolución a monedero",
+        "refundToUser": "Devolución a usuario",
+        "changeUser": "Cambiar de usuario",
+        "manageReward": "Gestionar recompensa"
+      },
+      "content-footer": {
+        "lastEdited": "Última modificación: {{date}} {{time}}",
+        "downloadDetails": "Descarga detalle",
+        "annotations": "{{annotations}} Anotaciones"
+      }
+    },
+    "filters": {
+      "order": {
+        "title": "Ordenar por:",
+        "options": {
+          "date-desc": "Fecha (más reciente primero)"
+        }
+      },
+      "itemsPerPage": {
+        "title": "Líneas por página:",
+        "options": {
+          "10": "10",
+          "20": "20",
+          "30": "30",
+          "50": "50"
+        }
+      }
+    },
+    "pagination": {
+      "showing": "Mostrando {{items}} de {{total}}"
+    }
   }
 }
