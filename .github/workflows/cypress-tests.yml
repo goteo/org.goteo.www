@@ -2,14 +2,6 @@ name: Cypress E2E Tests
 
 on:
     push:
-        branches:
-            - main
-            - "feat/**"
-            - "feature/**"
-            - "fix/**"
-    pull_request:
-        branches:
-            - main
 
 jobs:
     cypress-run:
