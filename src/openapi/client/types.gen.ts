@@ -842,6 +842,10 @@ export type PersonJsonld = {
 export type Project = {
     readonly id?: number;
     /**
+     * A unique, non white space, string identifier for this Project.
+     */
+    readonly slug?: string;
+    /**
      * The Accounting holding the funds raised by this Project.
      */
     readonly accounting?: string;
@@ -914,7 +918,7 @@ export type Project = {
  */
 export type ProjectProjectCreationDto = {
     /**
-     * Main headline for the Project.
+     * Main headline for the Project. Must include at least one character between a-Z.
      */
     title: string;
     /**
@@ -950,7 +954,7 @@ export type ProjectProjectCreationDto = {
  */
 export type ProjectProjectCreationDtoJsonld = {
     /**
-     * Main headline for the Project.
+     * Main headline for the Project. Must include at least one character between a-Z.
      */
     title: string;
     /**
@@ -1034,6 +1038,10 @@ export type ProjectJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
+    /**
+     * A unique, non white space, string identifier for this Project.
+     */
+    readonly slug?: string;
     /**
      * The Accounting holding the funds raised by this Project.
      */
@@ -1260,6 +1268,10 @@ export type ProjectReward = {
      * For finite rewards, the currently available amount of unitsTotal that can be claimed.
      */
     readonly unitsAvailable?: number;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
 /**
@@ -1303,6 +1315,10 @@ export type ProjectRewardJsonld = {
      * For finite rewards, the currently available amount of unitsTotal that can be claimed.
      */
     readonly unitsAvailable?: number;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
 /**
@@ -2634,6 +2650,8 @@ export type ApiProjectsGetCollectionData = {
          * Enable or disable pagination
          */
         pagination?: boolean;
+        slug?: string;
+        'slug[]'?: Array<string>;
         title?: string;
         subtitle?: string;
         category?: string;
@@ -2690,6 +2708,36 @@ export type ApiProjectsPostResponses = {
 
 export type ApiProjectsPostResponse = ApiProjectsPostResponses[keyof ApiProjectsPostResponses];
 
+export type ApiProjectsIdOrSlugGetData = {
+    body?: never;
+    path: {
+        /**
+         * Project identifier or slug
+         */
+        idOrSlug: string;
+    };
+    query?: never;
+    url: '/v4/projects/{idOrSlug}';
+};
+
+export type ApiProjectsIdOrSlugGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectsIdOrSlugGetError = ApiProjectsIdOrSlugGetErrors[keyof ApiProjectsIdOrSlugGetErrors];
+
+export type ApiProjectsIdOrSlugGetResponses = {
+    /**
+     * Project resource
+     */
+    200: Project;
+};
+
+export type ApiProjectsIdOrSlugGetResponse = ApiProjectsIdOrSlugGetResponses[keyof ApiProjectsIdOrSlugGetResponses];
+
 export type ApiProjectsIdDeleteData = {
     body?: never;
     path: {
@@ -2723,36 +2771,6 @@ export type ApiProjectsIdDeleteResponses = {
 };
 
 export type ApiProjectsIdDeleteResponse = ApiProjectsIdDeleteResponses[keyof ApiProjectsIdDeleteResponses];
-
-export type ApiProjectsIdGetData = {
-    body?: never;
-    path: {
-        /**
-         * Project identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/projects/{id}';
-};
-
-export type ApiProjectsIdGetErrors = {
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiProjectsIdGetError = ApiProjectsIdGetErrors[keyof ApiProjectsIdGetErrors];
-
-export type ApiProjectsIdGetResponses = {
-    /**
-     * Project resource
-     */
-    200: Project;
-};
-
-export type ApiProjectsIdGetResponse = ApiProjectsIdGetResponses[keyof ApiProjectsIdGetResponses];
 
 export type ApiProjectsIdPatchData = {
     /**
@@ -3578,6 +3596,7 @@ export type ApiTipjarsGetCollectionData = {
          * Enable or disable pagination
          */
         pagination?: boolean;
+        name?: string;
     };
     url: '/v4/tipjars';
 };
