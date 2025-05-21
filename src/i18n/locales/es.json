@@ -396,6 +396,44 @@
           "30": "30",
           "50": "50"
         }
+      },
+      "paymentMethod": {
+        "title": "Método de pago",
+        "options": {
+          "paypal": "Paypal",
+          "stripe": "Tarjeta",
+          "wallet": "Monedero"
+        }
+      },
+      "rangeAmount": {
+        "title": "Selecciona importe",
+        "options": {
+          "all": "Todos",
+          "range0to100": "0€ - 100€",
+          "range100to500": "100€ - 500€",
+          "range500to1000": "500€ - 1.000€",
+          "range1000to5000": "1.000€ - 5.000€",
+          "moreThan5000": "> 5.000€"
+        }
+      },
+      "chargeStatus": {
+        "title": "Estado de la operación",
+        "options": {
+          "all": "Todos",
+          "in_pending": "Pendiente",
+          "charged": "Cobrado",
+          "to_refund": "Por reembolsar",
+          "refunded": "Reembolsado"
+        }
+      },
+      "projectStatus": {
+        "title": "Estado de la campaña",
+        "options": {
+          "all": "Todas",
+          "active": "Activas",
+          "finished": "Finalizadas",
+          "cancelled": "Canceladas"
+        }
       }
     },
     "pagination": {

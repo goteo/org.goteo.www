@@ -78,7 +78,7 @@
     const chargesCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
-    async function loadCharges() {
+    async function loadCharges(filters: { chargeStatus: string }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
 
@@ -100,7 +100,11 @@
 
             const headers = { Authorization: `Bearer ${token}` };
             const currentCount = Number(itemsPerPage);
-            const cacheKey = JSON.stringify({ page: currentPage, itemsPerPage: currentCount });
+            const cacheKey = JSON.stringify({
+                page: currentPage,
+                itemsPerPage: currentCount,
+                filters,
+            });
             const baseKey = JSON.stringify({ page: 1, itemsPerPage: largestLoaded });
 
             if (chargesCache.has(cacheKey)) {
@@ -113,16 +117,20 @@
                 return;
             }
 
+            const query: Record<string, any> = {
+                page: currentPage,
+                itemsPerPage: currentCount,
+                pagination: true,
+                ...(filters.chargeStatus &&
+                    filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
+            };
+
             const { data } = await apiGatewayChargesGetCollection({
                 headers: {
                     ...headers,
                     Accept: "application/ld+json",
                 },
-                query: {
-                    page: currentPage,
-                    itemsPerPage: currentCount,
-                    pagination: true,
-                },
+                query,
             });
 
             if (!data) {
@@ -284,8 +292,20 @@
         };
     }
 
+    let { filters } = $props<{
+        filters: {
+            paymentMethod: string;
+            chargeStatus: string;
+        };
+    }>();
+
+    $inspect(filters);
+
     $effect(() => {
-        loadCharges();
+        const { chargeStatus } = filters;
+        console.log("Filters changed:", chargeStatus);
+        charges = [];
+        loadCharges({ chargeStatus });
     });
 </script>
 
