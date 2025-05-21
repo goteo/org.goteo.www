@@ -5,7 +5,7 @@
     import { cart } from "../../stores/cart";
     import { derived, writable } from "svelte/store";
     import { languagesList, type Locale } from "../../i18n/locales/index";
-    import { apiProjectsIdGet, apiUsersIdGet } from "../../openapi/client";
+    import { apiProjectsIdOrSlugGet, apiUsersIdGet } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
@@ -35,7 +35,9 @@
 
     async function getOwnerName(target: string, projectId: number): Promise<string> {
         try {
-            const project = await apiProjectsIdGet({ path: { id: projectId.toString() } });
+            const project = await apiProjectsIdOrSlugGet({
+                path: { idOrSlug: projectId.toString() },
+            });
             const ownerId = extractId(project.data?.owner);
             if (ownerId) {
                 const user = await apiUsersIdGet({ path: { id: ownerId } });
