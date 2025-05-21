@@ -1,0 +1,94 @@
+name: Cypress E2E Tests
+
+on:
+    push:
+
+jobs:
+    cypress-run:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            # Configuración mejorada para caché de Cypress
+            - name: Cache Cypress binary
+              uses: actions/cache@v4
+              id: cypress-cache
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      cypress-${{ runner.os }}-
+
+            # Instalación explícita de Cypress si el caché falla
+            - name: Install Cypress binary
+              if: steps.cypress-cache.outputs.cache-hit != 'true'
+              run: pnpm exec cypress install
+
+            # Verificar instalación de Cypress después de instalar explícitamente
+            - name: Verify Cypress installation
+              run: pnpm exec cypress verify
+
+            # Create test .env file with required variables
+            - name: Create test env file
+              run: |
+                  echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
+                  echo "NODE_ENV=test" >> .env
+                  echo "PUBLIC_API_URL=https://v4.goteo.org" >> .env
+
+            # Ejecutar los tests de Cypress
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v6
+              with:
+                  build: pnpm build
+                  command: pnpm test:e2e:ci
+                  browser: chrome
+              env:
+                  CI: true
+                  NODE_ENV: test
+                  PUBLIC_LANGUAGE_DEFAULT: es
+                  CYPRESS_CONFIG_FILE: cypress.github.js
+                  PUBLIC_API_URL: https://v4.goteo.org
+
+            # Subir capturas de pantalla y videos como artefactos en caso de fallos
+            - name: Prepare artifact directories if tests failed
+              if: failure()
+              run: |
+                  mkdir -p cypress/screenshots
+                  mkdir -p cypress/videos
+                  # Verificar si hay archivos
+                  echo "Screenshot files found:"
+                  find cypress/screenshots -type f | wc -l
+                  echo "Video files found:"
+                  find cypress/videos -type f | wc -l
+
+            - name: Upload screenshots if tests failed
+              uses: actions/upload-artifact@v4
+              if: failure() && hashFiles('cypress/screenshots/**/*') != ''
+              with:
+                  name: cypress-screenshots
+                  path: cypress/screenshots
+                  retention-days: 7
+
+            - name: Upload videos if tests failed
+              uses: actions/upload-artifact@v4
+              if: failure() && hashFiles('cypress/videos/**/*') != ''
+              with:
+                  name: cypress-videos
+                  path: cypress/videos
+                  retention-days: 7

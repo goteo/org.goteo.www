@@ -2,6 +2,7 @@ import pluginJs from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 import globals from "globals";
 import tseslint from "typescript-eslint";
+import cypressPlugin from "eslint-plugin-cypress";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -46,6 +47,30 @@ export default [
                 },
             ],
             "@typescript-eslint/no-explicit-any": "off",
+        },
+    },
+    // Cypress configuration
+    {
+        files: ["cypress/**/*.{js,mjs,cjs,ts}"],
+        plugins: {
+            cypress: cypressPlugin,
+        },
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                cy: "readonly",
+                Cypress: "readonly",
+                describe: "readonly",
+                context: "readonly",
+                beforeEach: "readonly",
+                afterEach: "readonly",
+                it: "readonly",
+                expect: "readonly",
+                assert: "readonly",
+            },
+        },
+        rules: {
+            ...cypressPlugin.configs.recommended.rules,
         },
     },
 ];
