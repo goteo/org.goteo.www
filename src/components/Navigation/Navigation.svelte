@@ -13,7 +13,9 @@
                 placeholder="Busca tu campaña"
                 class="placeholder:text-tertiary w-full rounded-lg bg-[#E6E5F7] p-2 pl-10 placeholder:font-bold focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
             />
-            <SearchIcon />
+            <div class="absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2 transform text-gray-500">
+                <SearchIcon />
+            </div>
         </div>
         <div class="relative min-w-52"></div>
 
