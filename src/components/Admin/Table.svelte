@@ -78,7 +78,7 @@
     const chargesCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
-    async function loadCharges(filters: { chargeStatus: string }) {
+    async function loadCharges(filters: { chargeStatus: string; rangeAmount: string }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
 
@@ -123,6 +123,10 @@
                 pagination: true,
                 ...(filters.chargeStatus &&
                     filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
+                ...(filters.rangeAmount &&
+                    filters.rangeAmount !== "all" && {
+                        "money.amount[between]": filters.rangeAmount,
+                    }),
             };
 
             const { data } = await apiGatewayChargesGetCollection({
@@ -296,16 +300,17 @@
         filters: {
             paymentMethod: string;
             chargeStatus: string;
+            rangeAmount: string;
         };
     }>();
 
     $inspect(filters);
 
     $effect(() => {
-        const { chargeStatus } = filters;
+        const { chargeStatus, rangeAmount } = filters;
         console.log("Filters changed:", chargeStatus);
         charges = [];
-        loadCharges({ chargeStatus });
+        loadCharges({ chargeStatus, rangeAmount });
     });
 </script>
 

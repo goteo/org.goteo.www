@@ -7,6 +7,7 @@
 
     let selectedPaymentMethod = $state("");
     let selectedChargeStatus = $state("");
+    let selectedRangeAmount = $state("");
     let dateFrom = $state("");
     let dateTo = $state("");
 
@@ -31,6 +32,7 @@
         onApplyFilters({
             paymentMethod: selectedPaymentMethod,
             chargeStatus: selectedChargeStatus,
+            rangeAmount: selectedRangeAmount,
             from: dateFrom,
             to: dateTo,
         });
@@ -71,7 +73,7 @@
 
         <select
             class="border-tertiary w-full rounded-lg border p-4"
-            bind:value={selectedChargeStatus}
+            bind:value={selectedRangeAmount}
         >
             <option value="" disabled>{$t("contributions.filters.rangeAmount.title")}</option>
             {#each rangeAmountOptions as [value, label]}
