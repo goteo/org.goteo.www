@@ -21,7 +21,7 @@
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
     } from "../../../src/openapi/client/index.ts";
-    import type { GatewayCharge } from "../../../src/openapi/client/index.ts";
+    import type { GatewayCharge, Tracking } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
 
     type ExtendedCharge = GatewayCharge & {
@@ -30,7 +30,7 @@
         paymentMethod: string;
         refundToWallet: string;
         platformLink: string;
-        trackingCode: string;
+        trackingCodes: Tracking[];
     };
 
     type GatewayChargesCollection<T> = {
@@ -202,7 +202,7 @@
                                 ? $t(`contributions.table.rows.refund.${checkout.refund}`)
                                 : "—",
                             platformLink: checkout?.links[0].href ?? "—",
-                            trackingCode: checkout?.trackings[0].value ?? "—",
+                            trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
                         };
                     } catch (error) {
                         console.warn("Error loading charge", error);
@@ -213,7 +213,7 @@
                             paymentMethod: "—",
                             refundToWallet: "—",
                             platformLink: "—",
-                            trackingCode: "—",
+                            trackingCodes: [{ title: "—", value: "—" }],
                         };
                     }
                 }),
@@ -368,10 +368,10 @@
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         {getDate(charge.dateUpdated).date}
                         <p
-                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-sm whitespace-nowrap underline"
-                            title={charge.trackingCode}
+                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                            title={charge.trackingCodes[0].value}
                         >
-                            {charge.trackingCode}
+                            {charge.trackingCodes[0].value}
                         </p>
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
@@ -394,7 +394,7 @@
                         >
                             <DetailsRow
                                 platformLink={charge.platformLink}
-                                trackingCode={charge.trackingCode}
+                                trackingCodes={charge.trackingCodes}
                                 dataTime={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
                                 refundToWallet={charge.refundToWallet}
