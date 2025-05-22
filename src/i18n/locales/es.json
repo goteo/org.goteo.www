@@ -396,6 +396,10 @@
           "30": "30",
           "50": "50"
         }
+      },
+      "search": {
+        "placeholder": "Buscar...",
+        "btnLabel": "Buscar"
       }
     },
     "pagination": {

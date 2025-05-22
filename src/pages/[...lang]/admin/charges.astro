@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 const { t } = Astro.locals;
 import Table from "../../../components/Admin/Table.svelte";
 import Slider from "../../../components/Admin/Slider.svelte";
+import Search from "../../../components/Admin/Search.svelte";
 
 /* TODO: Add data to slider and set locales */
 const slides = [
@@ -23,6 +24,7 @@ const slides = [
                 </h2>
                 <p class="text-[#575757]">{t("contributions.description")}</p>
             </div>
+            <Search client:load />
             <Slider client:load {slides} />
             <Table client:load />
         </div>
