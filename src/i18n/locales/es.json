@@ -372,7 +372,14 @@
           }
         },
         "toWallet": "A monedero",
-        "platformLink": "Enlace a plataforma",
+        "platformLinks": {
+          "title": "Enlace a la plataforma",
+          "headers": {
+            "type": "Tipo de Enlace",
+            "rel": "Relación",
+            "href": "Url"
+          }
+        },
         "estimatedFee": "Comisión estimada"
       },
       "actions": {

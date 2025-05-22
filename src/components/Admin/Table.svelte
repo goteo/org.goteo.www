@@ -21,7 +21,7 @@
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
     } from "../../../src/openapi/client/index.ts";
-    import type { GatewayCharge, Tracking } from "../../../src/openapi/client/index.ts";
+    import type { GatewayCharge, Tracking, Link } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
 
     type ExtendedCharge = GatewayCharge & {
@@ -29,7 +29,7 @@
         originDisplayName: string;
         paymentMethod: string;
         refundToWallet: string;
-        platformLink: string;
+        platformLinks: Link[];
         trackingCodes: Tracking[];
     };
 
@@ -201,7 +201,9 @@
                             refundToWallet: checkout?.refund
                                 ? $t(`contributions.table.rows.refund.${checkout.refund}`)
                                 : "—",
-                            platformLink: checkout?.links[0].href ?? "—",
+                            platformLinks: checkout?.links ?? [
+                                { href: "-", rel: "—", method: "—" },
+                            ],
                             trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
                         };
                     } catch (error) {
@@ -212,7 +214,7 @@
                             originDisplayName: "—",
                             paymentMethod: "—",
                             refundToWallet: "—",
-                            platformLink: "—",
+                            platformLinks: [{ href: "-", rel: "—", method: "—" }],
                             trackingCodes: [{ title: "—", value: "—" }],
                         };
                     }
@@ -393,7 +395,7 @@
                             class="rounded-lg border border-[#E6E5F7] bg-[#FAF9FF] shadow-[0px_1px_3px_0px_#0000001A]"
                         >
                             <DetailsRow
-                                platformLink={charge.platformLink}
+                                platformLinks={charge.platformLinks}
                                 trackingCodes={charge.trackingCodes}
                                 dataTime={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
