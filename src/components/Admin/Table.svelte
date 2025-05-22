@@ -397,6 +397,7 @@
                                 trackingCode={charge.trackingCode}
                                 dataTime={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
+                                refundToWallet={charge.refundToWallet}
                             />
                         </TableBodyCell>
                     </TableBodyRow>

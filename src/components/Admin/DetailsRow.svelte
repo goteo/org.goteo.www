@@ -3,7 +3,7 @@
     import ActionsBtn from "./ActionsBtn.svelte";
     import ContentFooter from "./ContentFooter.svelte";
 
-    const { id, trackingCode, dataTime, platformLink } = $props<{
+    const { id, trackingCode, dataTime, platformLink, refundToWallet } = $props<{
         id: string;
         trackingCode: string;
         dataTime: {
@@ -12,6 +12,7 @@
             fulltime: string;
         };
         platformLink: string;
+        refundToWallet: string;
     }>();
 </script>
 
@@ -34,7 +35,7 @@
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.toWallet")}</p>
-            <p>Sí</p>
+            <p>{refundToWallet}</p>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold"></p>
