@@ -2,7 +2,7 @@
 
 import { client as _heyApiClient } from './client.gen';
 
-import type { ApiAccountingsGetCollectionData, ApiAccountingsGetCollectionResponse, ApiAccountingsIdGetData, ApiAccountingsIdGetResponse, ApiAccountingsIdGetError, ApiAccountingsIdPatchData, ApiAccountingsIdPatchResponse, ApiAccountingsIdPatchError, ApiAccountingBalancePointsGetCollectionData, ApiAccountingBalancePointsGetCollectionResponse, ApiAccountingTransactionsGetCollectionData, ApiAccountingTransactionsGetCollectionResponse, ApiAccountingTransactionsIdGetData, ApiAccountingTransactionsIdGetResponse, ApiAccountingTransactionsIdGetError, ApiGatewaysGetCollectionData, ApiGatewaysGetCollectionResponse, ApiGatewaysNameGetData, ApiGatewaysNameGetResponse, ApiGatewaysNameGetError, ApiGatewayChargesGetCollectionData, ApiGatewayChargesGetCollectionResponse, ApiGatewayChargesIdGetData, ApiGatewayChargesIdGetResponse, ApiGatewayChargesIdGetError, ApiGatewayChargesIdPatchData, ApiGatewayChargesIdPatchResponse, ApiGatewayChargesIdPatchError, ApiGatewayCheckoutsGetCollectionData, ApiGatewayCheckoutsGetCollectionResponse, ApiGatewayCheckoutsGetCollectionError, ApiGatewayCheckoutsPostData, ApiGatewayCheckoutsPostResponse, ApiGatewayCheckoutsPostError, ApiGatewayCheckoutsIdGetData, ApiGatewayCheckoutsIdGetResponse, ApiGatewayCheckoutsIdGetError, ApiGatewayCheckoutsIdPatchData, ApiGatewayCheckoutsIdPatchResponse, ApiGatewayCheckoutsIdPatchError, ApiUsersIdorganizationGetData, ApiUsersIdorganizationGetResponse, ApiUsersIdorganizationGetError, ApiUsersIdorganizationPatchData, ApiUsersIdorganizationPatchResponse, ApiUsersIdorganizationPatchError, ApiUsersIdpersonGetData, ApiUsersIdpersonGetResponse, ApiUsersIdpersonGetError, ApiUsersIdpersonPatchData, ApiUsersIdpersonPatchResponse, ApiUsersIdpersonPatchError, ApiProjectsGetCollectionData, ApiProjectsGetCollectionResponse, ApiProjectsPostData, ApiProjectsPostResponse, ApiProjectsPostError, ApiProjectsIdDeleteData, ApiProjectsIdDeleteResponse, ApiProjectsIdDeleteError, ApiProjectsIdGetData, ApiProjectsIdGetResponse, ApiProjectsIdGetError, ApiProjectsIdPatchData, ApiProjectsIdPatchResponse, ApiProjectsIdPatchError, ApiProjectBudgetItemsGetCollectionData, ApiProjectBudgetItemsGetCollectionResponse, ApiProjectBudgetItemsPostData, ApiProjectBudgetItemsPostResponse, ApiProjectBudgetItemsPostError, ApiProjectBudgetItemsIdDeleteData, ApiProjectBudgetItemsIdDeleteResponse, ApiProjectBudgetItemsIdDeleteError, ApiProjectBudgetItemsIdGetData, ApiProjectBudgetItemsIdGetResponse, ApiProjectBudgetItemsIdGetError, ApiProjectBudgetItemsIdPatchData, ApiProjectBudgetItemsIdPatchResponse, ApiProjectBudgetItemsIdPatchError, ApiProjectRewardsGetCollectionData, ApiProjectRewardsGetCollectionResponse, ApiProjectRewardsPostData, ApiProjectRewardsPostResponse, ApiProjectRewardsPostError, ApiProjectRewardsIdDeleteData, ApiProjectRewardsIdDeleteResponse, ApiProjectRewardsIdDeleteError, ApiProjectRewardsIdGetData, ApiProjectRewardsIdGetResponse, ApiProjectRewardsIdGetError, ApiProjectRewardsIdPatchData, ApiProjectRewardsIdPatchResponse, ApiProjectRewardsIdPatchError, ApiProjectRewardClaimsGetCollectionData, ApiProjectRewardClaimsGetCollectionResponse, ApiProjectRewardClaimsPostData, ApiProjectRewardClaimsPostResponse, ApiProjectRewardClaimsPostError, ApiProjectRewardClaimsIdDeleteData, ApiProjectRewardClaimsIdDeleteResponse, ApiProjectRewardClaimsIdDeleteError, ApiProjectRewardClaimsIdGetData, ApiProjectRewardClaimsIdGetResponse, ApiProjectRewardClaimsIdGetError, ApiProjectRewardClaimsIdPatchData, ApiProjectRewardClaimsIdPatchResponse, ApiProjectRewardClaimsIdPatchError, ApiProjectSupportsGetCollectionData, ApiProjectSupportsGetCollectionResponse, ApiProjectSupportsIdGetData, ApiProjectSupportsIdGetResponse, ApiProjectSupportsIdGetError, ApiProjectSupportsIdPatchData, ApiProjectSupportsIdPatchResponse, ApiProjectSupportsIdPatchError, ApiProjectUpdatesGetCollectionData, ApiProjectUpdatesGetCollectionResponse, ApiProjectUpdatesPostData, ApiProjectUpdatesPostResponse, ApiProjectUpdatesPostError, ApiProjectUpdatesIdDeleteData, ApiProjectUpdatesIdDeleteResponse, ApiProjectUpdatesIdDeleteError, ApiProjectUpdatesIdGetData, ApiProjectUpdatesIdGetResponse, ApiProjectUpdatesIdGetError, ApiProjectUpdatesIdPatchData, ApiProjectUpdatesIdPatchResponse, ApiProjectUpdatesIdPatchError, ApiTipjarsGetCollectionData, ApiTipjarsGetCollectionResponse, ApiTipjarsPostData, ApiTipjarsPostResponse, ApiTipjarsPostError, ApiTipjarsIdDeleteData, ApiTipjarsIdDeleteResponse, ApiTipjarsIdDeleteError, ApiTipjarsIdGetData, ApiTipjarsIdGetResponse, ApiTipjarsIdGetError, ApiTipjarsIdPatchData, ApiTipjarsIdPatchResponse, ApiTipjarsIdPatchError, ApiUsersGetCollectionData, ApiUsersGetCollectionResponse, ApiUsersPostData, ApiUsersPostResponse, ApiUsersPostError, ApiUsersIdDeleteData, ApiUsersIdDeleteResponse, ApiUsersIdDeleteError, ApiUsersIdGetData, ApiUsersIdGetResponse, ApiUsersIdGetError, ApiUsersIdPatchData, ApiUsersIdPatchResponse, ApiUsersIdPatchError, ApiUserTokensPostData, ApiUserTokensPostResponse, ApiUserTokensPostError, ApiUserTokensIdDeleteData, ApiUserTokensIdDeleteResponse, ApiUserTokensIdDeleteError, ApiUserTokensIdGetData, ApiUserTokensIdGetResponse, ApiUserTokensIdGetError, ApiVersionsGetCollectionData, ApiVersionsGetCollectionResponse, ApiVersionsIdGetData, ApiVersionsIdGetResponse, ApiVersionsIdGetError } from './types.gen';
+import type { ApiAccountingsGetCollectionData, ApiAccountingsGetCollectionResponse, ApiAccountingsIdGetData, ApiAccountingsIdGetResponse, ApiAccountingsIdGetError, ApiAccountingsIdPatchData, ApiAccountingsIdPatchResponse, ApiAccountingsIdPatchError, ApiAccountingBalancePointsGetCollectionData, ApiAccountingBalancePointsGetCollectionResponse, ApiAccountingTransactionsGetCollectionData, ApiAccountingTransactionsGetCollectionResponse, ApiAccountingTransactionsIdGetData, ApiAccountingTransactionsIdGetResponse, ApiAccountingTransactionsIdGetError, ApiGatewaysGetCollectionData, ApiGatewaysGetCollectionResponse, ApiGatewaysNameGetData, ApiGatewaysNameGetResponse, ApiGatewaysNameGetError, ApiGatewayChargesGetCollectionData, ApiGatewayChargesGetCollectionResponse, ApiGatewayChargesIdGetData, ApiGatewayChargesIdGetResponse, ApiGatewayChargesIdGetError, ApiGatewayChargesIdPatchData, ApiGatewayChargesIdPatchResponse, ApiGatewayChargesIdPatchError, ApiGatewayCheckoutsGetCollectionData, ApiGatewayCheckoutsGetCollectionResponse, ApiGatewayCheckoutsGetCollectionError, ApiGatewayCheckoutsPostData, ApiGatewayCheckoutsPostResponse, ApiGatewayCheckoutsPostError, ApiGatewayCheckoutsIdGetData, ApiGatewayCheckoutsIdGetResponse, ApiGatewayCheckoutsIdGetError, ApiGatewayCheckoutsIdPatchData, ApiGatewayCheckoutsIdPatchResponse, ApiGatewayCheckoutsIdPatchError, ApiUsersIdorganizationGetData, ApiUsersIdorganizationGetResponse, ApiUsersIdorganizationGetError, ApiUsersIdorganizationPatchData, ApiUsersIdorganizationPatchResponse, ApiUsersIdorganizationPatchError, ApiUsersIdpersonGetData, ApiUsersIdpersonGetResponse, ApiUsersIdpersonGetError, ApiUsersIdpersonPatchData, ApiUsersIdpersonPatchResponse, ApiUsersIdpersonPatchError, ApiProjectsGetCollectionData, ApiProjectsGetCollectionResponse, ApiProjectsPostData, ApiProjectsPostResponse, ApiProjectsPostError, ApiProjectsIdOrSlugGetData, ApiProjectsIdOrSlugGetResponse, ApiProjectsIdOrSlugGetError, ApiProjectsIdDeleteData, ApiProjectsIdDeleteResponse, ApiProjectsIdDeleteError, ApiProjectsIdPatchData, ApiProjectsIdPatchResponse, ApiProjectsIdPatchError, ApiProjectBudgetItemsGetCollectionData, ApiProjectBudgetItemsGetCollectionResponse, ApiProjectBudgetItemsPostData, ApiProjectBudgetItemsPostResponse, ApiProjectBudgetItemsPostError, ApiProjectBudgetItemsIdDeleteData, ApiProjectBudgetItemsIdDeleteResponse, ApiProjectBudgetItemsIdDeleteError, ApiProjectBudgetItemsIdGetData, ApiProjectBudgetItemsIdGetResponse, ApiProjectBudgetItemsIdGetError, ApiProjectBudgetItemsIdPatchData, ApiProjectBudgetItemsIdPatchResponse, ApiProjectBudgetItemsIdPatchError, ApiProjectRewardsGetCollectionData, ApiProjectRewardsGetCollectionResponse, ApiProjectRewardsPostData, ApiProjectRewardsPostResponse, ApiProjectRewardsPostError, ApiProjectRewardsIdDeleteData, ApiProjectRewardsIdDeleteResponse, ApiProjectRewardsIdDeleteError, ApiProjectRewardsIdGetData, ApiProjectRewardsIdGetResponse, ApiProjectRewardsIdGetError, ApiProjectRewardsIdPatchData, ApiProjectRewardsIdPatchResponse, ApiProjectRewardsIdPatchError, ApiProjectRewardClaimsGetCollectionData, ApiProjectRewardClaimsGetCollectionResponse, ApiProjectRewardClaimsPostData, ApiProjectRewardClaimsPostResponse, ApiProjectRewardClaimsPostError, ApiProjectRewardClaimsIdDeleteData, ApiProjectRewardClaimsIdDeleteResponse, ApiProjectRewardClaimsIdDeleteError, ApiProjectRewardClaimsIdGetData, ApiProjectRewardClaimsIdGetResponse, ApiProjectRewardClaimsIdGetError, ApiProjectRewardClaimsIdPatchData, ApiProjectRewardClaimsIdPatchResponse, ApiProjectRewardClaimsIdPatchError, ApiProjectSupportsGetCollectionData, ApiProjectSupportsGetCollectionResponse, ApiProjectSupportsIdGetData, ApiProjectSupportsIdGetResponse, ApiProjectSupportsIdGetError, ApiProjectSupportsIdPatchData, ApiProjectSupportsIdPatchResponse, ApiProjectSupportsIdPatchError, ApiProjectUpdatesGetCollectionData, ApiProjectUpdatesGetCollectionResponse, ApiProjectUpdatesPostData, ApiProjectUpdatesPostResponse, ApiProjectUpdatesPostError, ApiProjectUpdatesIdDeleteData, ApiProjectUpdatesIdDeleteResponse, ApiProjectUpdatesIdDeleteError, ApiProjectUpdatesIdGetData, ApiProjectUpdatesIdGetResponse, ApiProjectUpdatesIdGetError, ApiProjectUpdatesIdPatchData, ApiProjectUpdatesIdPatchResponse, ApiProjectUpdatesIdPatchError, ApiTipjarsGetCollectionData, ApiTipjarsGetCollectionResponse, ApiTipjarsPostData, ApiTipjarsPostResponse, ApiTipjarsPostError, ApiTipjarsIdDeleteData, ApiTipjarsIdDeleteResponse, ApiTipjarsIdDeleteError, ApiTipjarsIdGetData, ApiTipjarsIdGetResponse, ApiTipjarsIdGetError, ApiTipjarsIdPatchData, ApiTipjarsIdPatchResponse, ApiTipjarsIdPatchError, ApiUsersGetCollectionData, ApiUsersGetCollectionResponse, ApiUsersPostData, ApiUsersPostResponse, ApiUsersPostError, ApiUsersIdDeleteData, ApiUsersIdDeleteResponse, ApiUsersIdDeleteError, ApiUsersIdGetData, ApiUsersIdGetResponse, ApiUsersIdGetError, ApiUsersIdPatchData, ApiUsersIdPatchResponse, ApiUsersIdPatchError, ApiUserTokensPostData, ApiUserTokensPostResponse, ApiUserTokensPostError, ApiUserTokensIdDeleteData, ApiUserTokensIdDeleteResponse, ApiUserTokensIdDeleteError, ApiUserTokensIdGetData, ApiUserTokensIdGetResponse, ApiUserTokensIdGetError, ApiVersionsGetCollectionData, ApiVersionsGetCollectionResponse, ApiVersionsIdGetData, ApiVersionsIdGetResponse, ApiVersionsIdGetError } from './types.gen';
 import type { Options as ClientOptions, TDataShape, Client } from '@hey-api/client-fetch';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<TData, ThrowOnError> & {
@@ -20,7 +20,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 };
 
 /**
- * List all Accountings
+ * Retrieves the collection of Accounting resources.
  * Retrieves the collection of Accounting resources.
  */
 export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiAccountingsGetCollectionData, ThrowOnError>) => {
@@ -37,7 +37,7 @@ export const apiAccountingsGetCollection = <ThrowOnError extends boolean = false
 };
 
 /**
- * Retrieve one Accounting
+ * Retrieves a Accounting resource.
  * Retrieves one Accounting resource.
  */
 export const apiAccountingsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiAccountingsIdGetData, ThrowOnError>) => {
@@ -75,7 +75,7 @@ export const apiAccountingsIdPatch = <ThrowOnError extends boolean = false>(opti
 };
 
 /**
- * List all AccountingBalancePoints
+ * Retrieves the collection of AccountingBalancePoint resources.
  * Retrieves the collection of AccountingBalancePoint resources.
  */
 export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boolean = false>(options: Options<ApiAccountingBalancePointsGetCollectionData, ThrowOnError>) => {
@@ -92,7 +92,7 @@ export const apiAccountingBalancePointsGetCollection = <ThrowOnError extends boo
 };
 
 /**
- * List all AccountingTransactions
+ * Retrieves the collection of AccountingTransaction resources.
  * Retrieves the collection of AccountingTransaction resources.
  */
 export const apiAccountingTransactionsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiAccountingTransactionsGetCollectionData, ThrowOnError>) => {
@@ -109,7 +109,7 @@ export const apiAccountingTransactionsGetCollection = <ThrowOnError extends bool
 };
 
 /**
- * Retrieve one AccountingTransaction
+ * Retrieves a AccountingTransaction resource.
  * Retrieves one AccountingTransaction resource.
  */
 export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiAccountingTransactionsIdGetData, ThrowOnError>) => {
@@ -126,7 +126,7 @@ export const apiAccountingTransactionsIdGet = <ThrowOnError extends boolean = fa
 };
 
 /**
- * List all Gateways
+ * Retrieves the collection of Gateway resources.
  * Retrieves the collection of Gateway resources.
  */
 export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiGatewaysGetCollectionData, ThrowOnError>) => {
@@ -143,7 +143,7 @@ export const apiGatewaysGetCollection = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * Retrieve one Gateway
+ * Retrieves a Gateway resource.
  * Retrieves one Gateway resource.
  */
 export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(options: Options<ApiGatewaysNameGetData, ThrowOnError>) => {
@@ -160,7 +160,7 @@ export const apiGatewaysNameGet = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * List all GatewayCharges
+ * Retrieves the collection of GatewayCharge resources.
  * Retrieves the collection of GatewayCharge resources.
  */
 export const apiGatewayChargesGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiGatewayChargesGetCollectionData, ThrowOnError>) => {
@@ -177,7 +177,7 @@ export const apiGatewayChargesGetCollection = <ThrowOnError extends boolean = fa
 };
 
 /**
- * Retrieve one GatewayCharge
+ * Retrieves a GatewayCharge resource.
  * Retrieves one GatewayCharge resource.
  */
 export const apiGatewayChargesIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiGatewayChargesIdGetData, ThrowOnError>) => {
@@ -215,7 +215,7 @@ export const apiGatewayChargesIdPatch = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * List all GatewayCheckouts
+ * Retrieves the collection of GatewayCheckout resources.
  * Retrieves the collection of GatewayCheckout resources.
  */
 export const apiGatewayCheckoutsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiGatewayCheckoutsGetCollectionData, ThrowOnError>) => {
@@ -253,7 +253,7 @@ export const apiGatewayCheckoutsPost = <ThrowOnError extends boolean = false>(op
 };
 
 /**
- * Retrieve one GatewayCheckout
+ * Retrieves a GatewayCheckout resource.
  * Retrieves one GatewayCheckout resource.
  */
 export const apiGatewayCheckoutsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiGatewayCheckoutsIdGetData, ThrowOnError>) => {
@@ -291,7 +291,7 @@ export const apiGatewayCheckoutsIdPatch = <ThrowOnError extends boolean = false>
 };
 
 /**
- * Retrieve one Organization
+ * Retrieves a Organization resource.
  * Retrieves one Organization resource.
  */
 export const apiUsersIdorganizationGet = <ThrowOnError extends boolean = false>(options: Options<ApiUsersIdorganizationGetData, ThrowOnError>) => {
@@ -329,7 +329,7 @@ export const apiUsersIdorganizationPatch = <ThrowOnError extends boolean = false
 };
 
 /**
- * Retrieve one Person
+ * Retrieves a Person resource.
  * Retrieves one Person resource.
  */
 export const apiUsersIdpersonGet = <ThrowOnError extends boolean = false>(options: Options<ApiUsersIdpersonGetData, ThrowOnError>) => {
@@ -367,7 +367,7 @@ export const apiUsersIdpersonPatch = <ThrowOnError extends boolean = false>(opti
 };
 
 /**
- * List all Projects
+ * Retrieves the collection of Project resources.
  * Retrieves the collection of Project resources.
  */
 export const apiProjectsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectsGetCollectionData, ThrowOnError>) => {
@@ -405,28 +405,28 @@ export const apiProjectsPost = <ThrowOnError extends boolean = false>(options: O
 };
 
 /**
- * Removes the Project resource.
- * Removes the Project resource.
+ * Retrieves a Project resource.
+ * Retrieves one Project resource.
  */
-export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(options: Options<ApiProjectsIdDeleteData, ThrowOnError>) => {
-    return (options.client ?? _heyApiClient).delete<ApiProjectsIdDeleteResponse, ApiProjectsIdDeleteError, ThrowOnError>({
+export const apiProjectsIdOrSlugGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectsIdOrSlugGetData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).get<ApiProjectsIdOrSlugGetResponse, ApiProjectsIdOrSlugGetError, ThrowOnError>({
         security: [
             {
                 scheme: 'bearer',
                 type: 'http'
             }
         ],
-        url: '/v4/projects/{id}',
+        url: '/v4/projects/{idOrSlug}',
         ...options
     });
 };
 
 /**
- * Retrieve one Project
- * Retrieves one Project resource.
+ * Removes the Project resource.
+ * Removes the Project resource.
  */
-export const apiProjectsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectsIdGetData, ThrowOnError>) => {
-    return (options.client ?? _heyApiClient).get<ApiProjectsIdGetResponse, ApiProjectsIdGetError, ThrowOnError>({
+export const apiProjectsIdDelete = <ThrowOnError extends boolean = false>(options: Options<ApiProjectsIdDeleteData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).delete<ApiProjectsIdDeleteResponse, ApiProjectsIdDeleteError, ThrowOnError>({
         security: [
             {
                 scheme: 'bearer',
@@ -460,7 +460,7 @@ export const apiProjectsIdPatch = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * List all ProjectBudgetItems
+ * Retrieves the collection of ProjectBudgetItem resources.
  * Retrieves the collection of ProjectBudgetItem resources.
  */
 export const apiProjectBudgetItemsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectBudgetItemsGetCollectionData, ThrowOnError>) => {
@@ -515,7 +515,7 @@ export const apiProjectBudgetItemsIdDelete = <ThrowOnError extends boolean = fal
 };
 
 /**
- * Retrieve one ProjectBudgetItem
+ * Retrieves a ProjectBudgetItem resource.
  * Retrieves one ProjectBudgetItem resource.
  */
 export const apiProjectBudgetItemsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectBudgetItemsIdGetData, ThrowOnError>) => {
@@ -553,7 +553,7 @@ export const apiProjectBudgetItemsIdPatch = <ThrowOnError extends boolean = fals
 };
 
 /**
- * List all ProjectRewards
+ * Retrieves the collection of ProjectReward resources.
  * Retrieves the collection of ProjectReward resources.
  */
 export const apiProjectRewardsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectRewardsGetCollectionData, ThrowOnError>) => {
@@ -608,7 +608,7 @@ export const apiProjectRewardsIdDelete = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Retrieve one ProjectReward
+ * Retrieves a ProjectReward resource.
  * Retrieves one ProjectReward resource.
  */
 export const apiProjectRewardsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectRewardsIdGetData, ThrowOnError>) => {
@@ -646,7 +646,7 @@ export const apiProjectRewardsIdPatch = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * List all ProjectRewardClaims
+ * Retrieves the collection of ProjectRewardClaim resources.
  * Retrieves the collection of ProjectRewardClaim resources.
  */
 export const apiProjectRewardClaimsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectRewardClaimsGetCollectionData, ThrowOnError>) => {
@@ -701,7 +701,7 @@ export const apiProjectRewardClaimsIdDelete = <ThrowOnError extends boolean = fa
 };
 
 /**
- * Retrieve one ProjectRewardClaim
+ * Retrieves a ProjectRewardClaim resource.
  * Retrieves one ProjectRewardClaim resource.
  */
 export const apiProjectRewardClaimsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectRewardClaimsIdGetData, ThrowOnError>) => {
@@ -739,7 +739,7 @@ export const apiProjectRewardClaimsIdPatch = <ThrowOnError extends boolean = fal
 };
 
 /**
- * List all ProjectSupports
+ * Retrieves the collection of ProjectSupport resources.
  * Retrieves the collection of ProjectSupport resources.
  */
 export const apiProjectSupportsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectSupportsGetCollectionData, ThrowOnError>) => {
@@ -756,7 +756,7 @@ export const apiProjectSupportsGetCollection = <ThrowOnError extends boolean = f
 };
 
 /**
- * Retrieve one ProjectSupport
+ * Retrieves a ProjectSupport resource.
  * Retrieves one ProjectSupport resource.
  */
 export const apiProjectSupportsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectSupportsIdGetData, ThrowOnError>) => {
@@ -794,7 +794,7 @@ export const apiProjectSupportsIdPatch = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * List all ProjectUpdates
+ * Retrieves the collection of ProjectUpdate resources.
  * Retrieves the collection of ProjectUpdate resources.
  */
 export const apiProjectUpdatesGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiProjectUpdatesGetCollectionData, ThrowOnError>) => {
@@ -849,7 +849,7 @@ export const apiProjectUpdatesIdDelete = <ThrowOnError extends boolean = false>(
 };
 
 /**
- * Retrieve one ProjectUpdate
+ * Retrieves a ProjectUpdate resource.
  * Retrieves one ProjectUpdate resource.
  */
 export const apiProjectUpdatesIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiProjectUpdatesIdGetData, ThrowOnError>) => {
@@ -887,7 +887,7 @@ export const apiProjectUpdatesIdPatch = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * List all Tipjars
+ * Retrieves the collection of Tipjar resources.
  * Retrieves the collection of Tipjar resources.
  */
 export const apiTipjarsGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiTipjarsGetCollectionData, ThrowOnError>) => {
@@ -942,7 +942,7 @@ export const apiTipjarsIdDelete = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * Retrieve one Tipjar
+ * Retrieves a Tipjar resource.
  * Retrieves one Tipjar resource.
  */
 export const apiTipjarsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiTipjarsIdGetData, ThrowOnError>) => {
@@ -980,7 +980,7 @@ export const apiTipjarsIdPatch = <ThrowOnError extends boolean = false>(options:
 };
 
 /**
- * List all Users
+ * Retrieves the collection of User resources.
  * Retrieves the collection of User resources.
  */
 export const apiUsersGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiUsersGetCollectionData, ThrowOnError>) => {
@@ -1035,7 +1035,7 @@ export const apiUsersIdDelete = <ThrowOnError extends boolean = false>(options: 
 };
 
 /**
- * Retrieve one User
+ * Retrieves a User resource.
  * Retrieves one User resource.
  */
 export const apiUsersIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiUsersIdGetData, ThrowOnError>) => {
@@ -1073,7 +1073,7 @@ export const apiUsersIdPatch = <ThrowOnError extends boolean = false>(options: O
 };
 
 /**
- * Create one UserToken
+ * Creates a UserToken resource.
  * Creates a new UserToken resource.
  */
 export const apiUserTokensPost = <ThrowOnError extends boolean = false>(options: Options<ApiUserTokensPostData, ThrowOnError>) => {
@@ -1111,7 +1111,7 @@ export const apiUserTokensIdDelete = <ThrowOnError extends boolean = false>(opti
 };
 
 /**
- * Retrieve one UserToken
+ * Retrieves a UserToken resource.
  * Retrieves one UserToken resource.
  */
 export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiUserTokensIdGetData, ThrowOnError>) => {
@@ -1128,7 +1128,7 @@ export const apiUserTokensIdGet = <ThrowOnError extends boolean = false>(options
 };
 
 /**
- * List all Versions
+ * Retrieves the collection of Version resources.
  * Retrieves the collection of Version resources.
  */
 export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(options: Options<ApiVersionsGetCollectionData, ThrowOnError>) => {
@@ -1145,7 +1145,7 @@ export const apiVersionsGetCollection = <ThrowOnError extends boolean = false>(o
 };
 
 /**
- * Retrieve one Version
+ * Retrieves a Version resource.
  * Retrieves one Version resource.
  */
 export const apiVersionsIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiVersionsIdGetData, ThrowOnError>) => {

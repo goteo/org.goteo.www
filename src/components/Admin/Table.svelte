@@ -17,7 +17,7 @@
     import {
         apiGatewayChargesGetCollection,
         apiAccountingsIdGet,
-        apiProjectsIdGet,
+        apiProjectsIdOrSlugGet,
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
     } from "../../../src/openapi/client/index.ts";
@@ -150,7 +150,7 @@
             const getCachedProject = async (id: string | null) => {
                 if (!id) return null;
                 if (projectCache.has(id)) return projectCache.get(id);
-                const { data } = await apiProjectsIdGet({ path: { id }, headers });
+                const { data } = await apiProjectsIdOrSlugGet({ path: { idOrSlug: id }, headers });
                 projectCache.set(id, data);
                 return data;
             };
