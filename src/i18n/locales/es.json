@@ -364,7 +364,13 @@
     "grid": {
       "details": {
         "operationTime": "Hora de la operación",
-        "trackingCode": "Código de seguimiento",
+        "trackingCodes": {
+          "title": "Códigos de seguimiento",
+          "headers": {
+            "title": "Título",
+            "trackingCode": "Código de seguimiento"
+          }
+        },
         "toWallet": "A monedero",
         "platformLink": "Enlace a plataforma",
         "estimatedFee": "Comisión estimada"
@@ -400,6 +406,9 @@
     },
     "pagination": {
       "showing": "Mostrando {{items}} de {{total}}"
+    },
+    "tootip": {
+      "copied": "¡Copiado!"
     }
   }
 }
