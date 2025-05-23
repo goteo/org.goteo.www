@@ -2,18 +2,6 @@
 import Layout from "../../../layouts/Layout.astro";
 const { t } = Astro.locals;
 import Contributions from "../../../components/Admin/Contributions.svelte";
-import Table from "../../../components/Admin/Table.svelte";
-import Slider from "../../../components/Admin/Slider.svelte";
-import Search from "../../../components/Admin/Search.svelte";
-
-/* TODO: Add data to slider and set locales */
-const slides = [
-    { title: "Total aportes:", amount: "250,95€" },
-    { title: "Total Tips:", amount: "250,96€" },
-    { title: "Total comisiones:", amount: "250,97€" },
-    { title: "Pasar a operativa:", amount: "250,98€" },
-    { title: "Slide 5", amount: "250,99€" },
-];
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -27,9 +15,6 @@ const slides = [
             </div>
 
             <Contributions client:load />
-            <Search client:load />
-            <Slider client:load {slides} />
-            <Table client:load />
         </div>
     </main>
 </Layout>

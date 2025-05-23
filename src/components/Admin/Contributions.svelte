@@ -2,6 +2,7 @@
     import Slider from "./Slider.svelte";
     import Filters from "./Filters.svelte";
     import Table from "./Table.svelte";
+    import Search from "./Search.svelte";
 
     /* TODO: Add data to slider and set locales */
     const slides = [
@@ -20,6 +21,7 @@
     $inspect(filters);
 </script>
 
+<Search />
 <Slider {slides} />
 <Filters onApplyFilters={applyFilters} />
 <Table {filters} />
