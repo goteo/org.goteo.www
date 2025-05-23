@@ -6,6 +6,7 @@ on:
 jobs:
     cypress-run:
         runs-on: ubuntu-latest
+        environment: ${{ github.ref_name }}
 
         steps:
             - name: Checkout code
@@ -49,7 +50,7 @@ jobs:
               run: |
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
                   echo "NODE_ENV=test" >> .env
-                  echo "PUBLIC_API_URL=https://v4.goteo.org" >> .env
+                  echo "PUBLIC_API_URL=${{ vars.API_URL || 'https://api-develop.goteo.org' }}" >> .env
 
             # Ejecutar los tests de Cypress
             - name: Run Cypress tests
@@ -63,7 +64,7 @@ jobs:
                   NODE_ENV: test
                   PUBLIC_LANGUAGE_DEFAULT: es
                   CYPRESS_CONFIG_FILE: cypress.github.js
-                  PUBLIC_API_URL: https://v4.goteo.org
+                  PUBLIC_API_URL: ${{ vars.API_URL || 'https://api-develop.goteo.org' }}
 
             # Subir capturas de pantalla y videos como artefactos en caso de fallos
             - name: Prepare artifact directories if tests failed
