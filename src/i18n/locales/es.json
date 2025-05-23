@@ -412,7 +412,8 @@
       }
     },
     "pagination": {
-      "showing": "Mostrando {{items}} de {{total}}"
+      "showing": "Mostrando {{items}} de {{total}}",
+      "unloaded": "Mostrando..."
     },
     "tootip": {
       "copied": "¡Copiado!"
