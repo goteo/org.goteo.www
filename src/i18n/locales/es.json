@@ -397,6 +397,10 @@
           "50": "50"
         }
       },
+      "search": {
+        "placeholder": "Buscar...",
+        "btnLabel": "Buscar"
+      },
       "paymentMethod": {
         "title": "Método de pago",
         "options": {

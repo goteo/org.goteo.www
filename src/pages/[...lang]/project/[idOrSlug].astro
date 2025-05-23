@@ -4,22 +4,22 @@ import Layout from "../../../layouts/Layout.astro";
 import Navigation from "../../../components/Navigation/Navigation.svelte";
 // import UiLanguages from "../../../components/UiLanguages.astro";
 import { extractId } from "../../../utils/extractId";
-const { id } = Astro.params;
+const { idOrSlug } = Astro.params;
 
 import {
     apiAccountingsIdGet,
-    apiProjectsIdGet,
+    apiProjectsIdOrSlugGet,
     apiUsersIdGet,
     apiGatewayCheckoutsGetCollection,
 } from "../../../openapi/client/index";
 import type { Project } from "../../../openapi/client/types.gen";
 import { apiAccountingBalancePointsGetCollection } from "../../../openapi/client/sdk.gen";
 
-if (!id) {
-    throw new Error("Project ID is undefined.");
+if (!idOrSlug) {
+    throw new Error("Project ID or Project Slug is undefined.");
 }
 
-const { data: project, error } = await apiProjectsIdGet({ path: { id } });
+const { data: project, error } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
 const accountingId = extractId(project?.accounting);
 
 if (!accountingId) {
