@@ -21,7 +21,7 @@
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
     } from "../../../src/openapi/client/index.ts";
-    import type { GatewayCharge } from "../../../src/openapi/client/index.ts";
+    import type { GatewayCharge, Tracking, Link } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
 
     type ExtendedCharge = GatewayCharge & {
@@ -29,8 +29,8 @@
         originDisplayName: string;
         paymentMethod: string;
         refundToWallet: string;
-        platformLink: string;
-        trackingCode: string;
+        platformLinks: Link[];
+        trackingCodes: Tracking[];
     };
 
     type GatewayChargesCollection<T> = {
@@ -201,8 +201,10 @@
                             refundToWallet: checkout?.refund
                                 ? $t(`contributions.table.rows.refund.${checkout.refund}`)
                                 : "—",
-                            platformLink: checkout?.links[0].href ?? "—",
-                            trackingCode: checkout?.trackings[0].value ?? "—",
+                            platformLinks: checkout?.links ?? [
+                                { href: "-", rel: "—", method: "—" },
+                            ],
+                            trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
                         };
                     } catch (error) {
                         console.warn("Error loading charge", error);
@@ -212,8 +214,8 @@
                             originDisplayName: "—",
                             paymentMethod: "—",
                             refundToWallet: "—",
-                            platformLink: "—",
-                            trackingCode: "—",
+                            platformLinks: [{ href: "-", rel: "—", method: "—" }],
+                            trackingCodes: [{ title: "—", value: "—" }],
                         };
                     }
                 }),
@@ -368,10 +370,10 @@
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         {getDate(charge.dateUpdated).date}
                         <p
-                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-sm whitespace-nowrap underline"
-                            title={charge.trackingCode}
+                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                            title={charge.trackingCodes[0]?.value || "—"}
                         >
-                            {charge.trackingCode}
+                            {charge.trackingCodes[0]?.value || "—"}
                         </p>
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
@@ -393,10 +395,11 @@
                             class="rounded-lg border border-[#E6E5F7] bg-[#FAF9FF] shadow-[0px_1px_3px_0px_#0000001A]"
                         >
                             <DetailsRow
-                                platformLink={charge.platformLink}
-                                trackingCode={charge.trackingCode}
+                                platformLinks={charge.platformLinks}
+                                trackingCodes={charge.trackingCodes}
                                 dataTime={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
+                                refundToWallet={charge.refundToWallet}
                             />
                         </TableBodyCell>
                     </TableBodyRow>

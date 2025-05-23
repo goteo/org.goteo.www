@@ -1,18 +1,54 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import ActionsBtn from "./ActionsBtn.svelte";
+    import CopyIcon from "../../svgs/CopyIcon.svelte";
     import ContentFooter from "./ContentFooter.svelte";
+    import Tooltip from "./Tooltip.svelte";
+    import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
 
-    const { id, trackingCode, dataTime, platformLink } = $props<{
+    import {
+        Modal,
+        Table,
+        TableBody,
+        TableBodyCell,
+        TableBodyRow,
+        TableHead,
+        TableHeadCell,
+    } from "flowbite-svelte";
+
+    const { id, trackingCodes, dataTime, platformLinks, refundToWallet } = $props<{
         id: string;
-        trackingCode: string;
+        trackingCodes: Tracking[];
         dataTime: {
             date: string;
             time: string;
             fulltime: string;
         };
-        platformLink: string;
+        platformLinks: Link[];
+        refundToWallet: string;
     }>();
+
+    let trackingModal = $state(false);
+    let linksModal = $state(false);
+
+    function cleanCloseButton() {
+        const closeBtn = document.querySelector('button[aria-label="Close"]');
+        if (closeBtn) {
+            closeBtn.removeAttribute("aria-label");
+            closeBtn.querySelectorAll("span").forEach((el) => {
+                if (el.textContent?.trim() === "Close") el.remove();
+            });
+        }
+    }
+
+    $effect(() => {
+        if (trackingModal || linksModal) {
+            document.body.classList.add("no-scroll");
+            cleanCloseButton();
+        } else {
+            document.body.classList.remove("no-scroll");
+        }
+    });
 </script>
 
 <section class="flex flex-col gap-10">
@@ -24,17 +60,78 @@
             <span title={dataTime.fulltime}>{dataTime.time}</span>
         </div>
         <div class="flex flex-col gap-1">
-            <p class="font-semibold">{$t("contributions.grid.details.trackingCode")}</p>
-            <p
-                class="text-tertiary cursor-pointer truncate overflow-hidden whitespace-nowrap underline"
-                title={trackingCode}
+            <p class="font-semibold">{$t("contributions.grid.details.trackingCodes.title")}</p>
+            <button
+                class="text-tertiary flex cursor-pointer items-start truncate whitespace-nowrap underline"
+                title={trackingCodes.map((tc: Tracking) => tc.value).join(", ")}
+                onclick={() => (trackingModal = true)}
             >
-                {trackingCode}
-            </p>
+                <span class="truncate">{trackingCodes[0]?.value ?? "—"}</span>
+                <span> ({trackingCodes.length})</span>
+            </button>
+
+            <Modal
+                bind:open={trackingModal}
+                closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
+                class="!left-1/2 max-w-[800px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+                title={$t("contributions.grid.details.trackingCodes.title")}
+                headerClass="py-2"
+            >
+                <Table class="w-full table-fixed border-separate border-spacing-y-2">
+                    <TableHead>
+                        <TableHeadCell
+                            class="bg-secondary rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap text-white"
+                        >
+                            {$t("contributions.grid.details.trackingCodes.headers.title")}
+                        </TableHeadCell>
+                        <TableHeadCell
+                            class="bg-secondary rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap text-white"
+                        >
+                            {$t("contributions.grid.details.trackingCodes.headers.trackingCode")}
+                        </TableHeadCell>
+                    </TableHead>
+                    <TableBody class="text-base">
+                        {#each trackingCodes as item}
+                            <TableBodyRow class=" bg-[#FBFBFB]">
+                                <TableBodyCell
+                                    class="rounded-l-md  border-t border-b border-l border-[#E6E5F7]"
+                                    >{item.title}</TableBodyCell
+                                >
+                                <TableBodyCell
+                                    class="rounded-r-md border-t border-r border-b border-[#E6E5F7] align-top"
+                                >
+                                    <div class="flex w-full items-center gap-4">
+                                        <div
+                                            class="w-full leading-snug break-all whitespace-normal"
+                                            style="word-break: break-word;"
+                                        >
+                                            {item.value}
+                                        </div>
+                                        <Tooltip
+                                            text={$t("contributions.tootip.copied")}
+                                            tooltipClass="bg-[#462949]"
+                                            className="h-[20px] w-[20px] cursor-copy shrink-0"
+                                        >
+                                            <button
+                                                id={`copy-${item.value}`}
+                                                type="button"
+                                                onclick={() =>
+                                                    navigator.clipboard.writeText(item.value)}
+                                            >
+                                                <CopyIcon />
+                                            </button>
+                                        </Tooltip>
+                                    </div>
+                                </TableBodyCell>
+                            </TableBodyRow>
+                        {/each}
+                    </TableBody>
+                </Table>
+            </Modal>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.toWallet")}</p>
-            <p>Sí</p>
+            <p>{refundToWallet}</p>
         </div>
         <div class="flex flex-col gap-1">
             <p class="font-semibold"></p>
@@ -42,14 +139,100 @@
         </div>
 
         <div class="flex flex-col gap-1">
-            <p class="font-semibold">{$t("contributions.grid.details.platformLink")}</p>
-            <p
-                class="text-tertiary cursor-pointer truncate overflow-hidden whitespace-nowrap underline"
-                title={platformLink}
+            <p class="font-semibold">{$t("contributions.grid.details.platformLinks.title")}</p>
+
+            <button
+                class="text-tertiary flex cursor-pointer items-start truncate whitespace-nowrap underline"
+                title={platformLinks
+                    .map((pl: Link) => pl.href ?? "")
+                    .filter(Boolean)
+                    .join(", ")}
+                onclick={() => (linksModal = true)}
             >
-                {platformLink}
-            </p>
+                <span class="truncate">
+                    {platformLinks.find((pl: Link) => pl.type === "payment")?.href ??
+                        platformLinks[0]?.href ??
+                        "—"}
+                </span>
+                <span> ({platformLinks.length})</span>
+            </button>
+
+            <Modal
+                bind:open={linksModal}
+                closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
+                class="!left-1/2 max-w-[800px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+                title={$t("contributions.grid.details.platformLinks.title")}
+                headerClass="py-2"
+            >
+                <Table class="w-full table-fixed border-separate border-spacing-y-2">
+                    <TableHead>
+                        <TableHeadCell
+                            class="bg-secondary rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap text-white"
+                        >
+                            {$t("contributions.grid.details.platformLinks.headers.type")}
+                        </TableHeadCell>
+                        <TableHeadCell
+                            class="bg-secondary border-t-lg border-b-lg py-4 text-base whitespace-nowrap text-white"
+                        >
+                            {$t("contributions.grid.details.platformLinks.headers.rel")}
+                        </TableHeadCell>
+                        <TableHeadCell
+                            class="bg-secondary rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap text-white"
+                        >
+                            {$t("contributions.grid.details.platformLinks.headers.href")}
+                        </TableHeadCell>
+                    </TableHead>
+                    <TableBody class="text-base">
+                        {#each platformLinks as item}
+                            <TableBodyRow class=" bg-[#FBFBFB]">
+                                <TableBodyCell
+                                    class="rounded-l-md  border-t border-b border-l border-[#E6E5F7]"
+                                >
+                                    {item.type}
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="rounded-l-md  border-t border-b  border-[#E6E5F7]"
+                                >
+                                    {item.rel}
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="rounded-r-md border-t border-r border-b border-[#E6E5F7] align-top"
+                                >
+                                    <div class="flex w-full items-center gap-4">
+                                        <div
+                                            class=" w-full cursor-pointer leading-snug break-all whitespace-normal"
+                                            style="word-break: break-word; text-decoration-line: underline;"
+                                        >
+                                            <a
+                                                href={item.href}
+                                                class=" text-tertiary"
+                                                target="_blank"
+                                                >{item.href}
+                                            </a>
+                                        </div>
+                                        <Tooltip
+                                            text={$t("contributions.tootip.copied")}
+                                            tooltipClass="bg-[#462949]"
+                                            className="h-[20px] w-[20px] cursor-copy shrink-0"
+                                        >
+                                            <button
+                                                id={`copy-${item.href}`}
+                                                type="button"
+                                                onclick={() =>
+                                                    navigator.clipboard.writeText(item.href)}
+                                            >
+                                                <CopyIcon />
+                                            </button>
+                                        </Tooltip>
+                                    </div>
+                                </TableBodyCell>
+                            </TableBodyRow>
+                        {/each}
+                    </TableBody>
+                </Table>
+            </Modal>
         </div>
+
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.estimatedFee")}</p>
             <p>-</p>
