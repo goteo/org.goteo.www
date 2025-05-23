@@ -371,9 +371,9 @@
                         {getDate(charge.dateUpdated).date}
                         <p
                             class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
-                            title={charge.trackingCodes[0].value}
+                            title={charge.trackingCodes[0]?.value || "—"}
                         >
-                            {charge.trackingCodes[0].value}
+                            {charge.trackingCodes[0]?.value || "—"}
                         </p>
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
