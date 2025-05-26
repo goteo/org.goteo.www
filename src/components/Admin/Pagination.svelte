@@ -78,7 +78,13 @@
         >
     </nav>
 
-    <span class="text-sm font-bold text-[#575757]">
-        {@html $t("contributions.pagination.showing", { items, total }, { allowHTML: true })}
-    </span>
+    {#if total}
+        <span class="text-sm font-bold text-[#575757]">
+            {@html $t("contributions.pagination.showing", { items, total }, { allowHTML: true })}
+        </span>
+    {:else}
+        <span class="text-sm font-bold text-[#575757]">
+            {@html $t("contributions.pagination.unloaded")}
+        </span>
+    {/if}
 </section>
