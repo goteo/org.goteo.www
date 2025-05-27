@@ -364,9 +364,22 @@
     "grid": {
       "details": {
         "operationTime": "Hora de la operación",
-        "trackingCode": "Código de seguimiento",
+        "trackingCodes": {
+          "title": "Códigos de seguimiento",
+          "headers": {
+            "title": "Título",
+            "trackingCode": "Código de seguimiento"
+          }
+        },
         "toWallet": "A monedero",
-        "platformLink": "Enlace a plataforma",
+        "platformLinks": {
+          "title": "Enlace a la plataforma",
+          "headers": {
+            "type": "Tipo de Enlace",
+            "rel": "Relación",
+            "href": "Url"
+          }
+        },
         "estimatedFee": "Comisión estimada"
       },
       "actions": {
@@ -403,7 +416,11 @@
       }
     },
     "pagination": {
-      "showing": "Mostrando {{items}} de {{total}}"
+      "showing": "Mostrando {{items}} de {{total}}",
+      "unloaded": "Mostrando..."
+    },
+    "tootip": {
+      "copied": "¡Copiado!"
     }
   }
 }
