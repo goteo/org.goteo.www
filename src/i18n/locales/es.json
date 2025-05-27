@@ -430,7 +430,17 @@
           "10000..50000": "100€ - 500€",
           "50000..100000": "500€ - 1.000€",
           "100000..500000": "1.000€ - 5.000€",
-          "500000..": "> 5.000€"
+          "500000": "> 5.000€"
+        }
+      },
+      "dateRange": {
+        "initDate": "Fecha Inicio",
+        "endDate": "Fecha Fin",
+        "from": "Desde",
+        "to": "Hasta",
+        "errors": {
+          "invalidDate": "Fecha no válida",
+          "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
         }
       },
       "chargeStatus": {
@@ -451,6 +461,12 @@
           "finished": "Finalizadas",
           "cancelled": "Canceladas"
         }
+      },
+      "btns": {
+        "openFilters": "Filtros",
+        "closeFilters": "Cerrar filtros",
+        "reset": "Reiniciar filtros",
+        "apply": "Aplicar filtros"
       }
     },
     "pagination": {
