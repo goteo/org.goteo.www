@@ -78,7 +78,12 @@
     const chargesCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
-    async function loadCharges(filters: { chargeStatus: string; rangeAmount: string }) {
+    async function loadCharges(filters: {
+        chargeStatus: string;
+        rangeAmount: string;
+        from?: string;
+        to?: string;
+    }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
 
@@ -124,9 +129,12 @@
                 ...(filters.chargeStatus &&
                     filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
                 ...(filters.rangeAmount &&
-                    filters.rangeAmount !== "all" && {
-                        "money.amount[between]": filters.rangeAmount,
-                    }),
+                    filters.rangeAmount !== "all" &&
+                    (filters.rangeAmount.includes("..")
+                        ? { "money.amount[between]": filters.rangeAmount }
+                        : { "money.amount[gte]": filters.rangeAmount })),
+                ...(filters.from && { "dateCreated[strictly_after]": filters.from }),
+                ...(filters.to && { "dateCreated[strictly_before]": filters.to }),
             };
 
             const { data } = await apiGatewayChargesGetCollection({
@@ -303,16 +311,15 @@
             paymentMethod: string;
             chargeStatus: string;
             rangeAmount: string;
+            from?: string;
+            to?: string;
         };
     }>();
 
-    $inspect(filters);
-
     $effect(() => {
-        const { chargeStatus, rangeAmount } = filters;
-        console.log("Filters changed:", chargeStatus);
+        const { chargeStatus, rangeAmount, from, to } = filters;
         charges = [];
-        loadCharges({ chargeStatus, rangeAmount });
+        loadCharges({ chargeStatus, rangeAmount, from, to });
     });
 </script>
 
@@ -393,7 +400,7 @@
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
-                        {getDate(charge.dateUpdated).date}
+                        {getDate(charge.dateCreated).date}
                         <p
                             class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
                             title={charge.trackingCodes[0]?.value || "—"}
@@ -422,7 +429,8 @@
                             <DetailsRow
                                 platformLinks={charge.platformLinks}
                                 trackingCodes={charge.trackingCodes}
-                                dataTime={getDate(charge.dateUpdated)}
+                                dataTimeCreated={getDate(charge.dateCreated)}
+                                dataTimeUpdated={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
                                 refundToWallet={charge.refundToWallet}
                             />
