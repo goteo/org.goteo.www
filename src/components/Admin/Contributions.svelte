@@ -12,7 +12,13 @@
         { title: "Slide 5", amount: "250,99€" },
     ];
 
-    let filters = $state({ paymentMethod: "", chargeStatus: "", rangeAmount: "" });
+    let filters = $state({
+        paymentMethod: "",
+        chargeStatus: "",
+        rangeAmount: "",
+        from: "",
+        to: "",
+    });
     function applyFilters(newFilters) {
         filters = { ...filters, ...newFilters };
     }

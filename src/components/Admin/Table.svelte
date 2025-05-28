@@ -83,6 +83,7 @@
         rangeAmount: string;
         from?: string;
         to?: string;
+        paymentMethod: string;
     }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
@@ -135,6 +136,10 @@
                         : { "money.amount[gte]": filters.rangeAmount })),
                 ...(filters.from && { "dateCreated[strictly_after]": filters.from }),
                 ...(filters.to && { "dateCreated[strictly_before]": filters.to }),
+                ...(filters.paymentMethod &&
+                    filters.paymentMethod !== "all" && {
+                        "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
+                    }),
             };
 
             const { data } = await apiGatewayChargesGetCollection({
@@ -317,9 +322,9 @@
     }>();
 
     $effect(() => {
-        const { chargeStatus, rangeAmount, from, to } = filters;
+        const { chargeStatus, rangeAmount, from, to, paymentMethod } = filters;
         charges = [];
-        loadCharges({ chargeStatus, rangeAmount, from, to });
+        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod });
     });
 </script>
 

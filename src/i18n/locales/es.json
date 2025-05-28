@@ -417,6 +417,7 @@
       "paymentMethod": {
         "title": "Método de pago",
         "options": {
+          "all": "Todos",
           "paypal": "Paypal",
           "stripe": "Tarjeta",
           "wallet": "Monedero"
@@ -444,7 +445,7 @@
         }
       },
       "chargeStatus": {
-        "title": "Estado de la operación",
+        "title": "Estado de Aporte",
         "options": {
           "all": "Todos",
           "in_pending": "Pendiente",

@@ -22,10 +22,13 @@
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
-        paymentMethodOptions = (paymentGateways ?? []).map((g) => [
-            g.name!,
-            $t(`contributions.filters.paymentMethod.options.${g.name}`),
-        ]);
+        paymentMethodOptions = [
+            ["all", $t("contributions.filters.paymentMethod.options.all")],
+            ...(paymentGateways ?? []).map((g): [string, string] => [
+                g.name!,
+                $t(`contributions.filters.paymentMethod.options.${g.name}`),
+            ]),
+        ];
 
         chargeStatusOptions = Object.entries($t("contributions.filters.chargeStatus.options"));
         rangeAmountOptions = Object.entries($t("contributions.filters.rangeAmount.options")).sort(
@@ -88,13 +91,9 @@
     {#if showFilters}
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
             <div class="grid grid-cols-3 gap-4">
-                <!-- <select
-            class="border-tertiary w-full rounded-lg border p-4"
-            bind:value={selectedPaymentMethod}
-        > -->
                 <select
-                    class="border-tertiary w-full cursor-not-allowed rounded-lg border p-4 disabled:opacity-50"
-                    disabled
+                    class="border-tertiary w-full rounded-lg border p-4"
+                    bind:value={selectedPaymentMethod}
                 >
                     <option value="" disabled selected
                         >{$t("contributions.filters.paymentMethod.title")}</option
@@ -102,17 +101,6 @@
                     {#each paymentMethodOptions as [value, label]}
                         <option {value}>{label}</option>
                     {/each}
-                </select>
-
-                <select
-                    class="border-tertiary w-full cursor-not-allowed rounded-lg border p-4 disabled:opacity-50"
-                    disabled
-                >
-                    <option disabled selected>Estado de Aporte</option>
-                    <option value="option1">Option 1</option>
-                    <option value="option2">Option 2</option>
-                    <option value="option3">Option 3</option>
-                    <option value="option4">Option 4</option>
                 </select>
 
                 <select
