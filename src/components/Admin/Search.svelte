@@ -3,7 +3,7 @@
     import { t } from "../../i18n/store";
 </script>
 
-<form class="search-form flex flex-row items-center gap-4">
+<form class="search-form flex w-full flex-row items-center gap-4">
     <div class="relative flex w-full">
         <input
             type="text"

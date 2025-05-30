@@ -1615,11 +1615,11 @@ export type Tracking = {
     /**
      * A descriptive title for the tracking number.
      */
-    title: string;
+    title?: string;
     /**
      * The tracking number given by the Gateway.
      */
-    value: string;
+    value?: string;
 };
 
 export type TrackingJsonld = {
@@ -1633,11 +1633,11 @@ export type TrackingJsonld = {
     /**
      * A descriptive title for the tracking number.
      */
-    title: string;
+    title?: string;
     /**
      * The tracking number given by the Gateway.
      */
-    value: string;
+    value?: string;
 };
 
 /**
@@ -2234,12 +2234,16 @@ export type ApiGatewayChargesGetCollectionData = {
          * Enable or disable pagination
          */
         pagination?: boolean;
+        'checkout.gateway'?: string;
+        'checkout.gateway[]'?: Array<string>;
+        'checkout.trackings.value'?: string;
+        'checkout.trackings.value[]'?: Array<string>;
         type?: string;
         'type[]'?: Array<string>;
         target?: string;
         'target[]'?: Array<string>;
-        'money.amount'?: number;
-        'money.amount[]'?: Array<number>;
+        'money.currency'?: string;
+        'money.currency[]'?: Array<string>;
         status?: string;
         'status[]'?: Array<string>;
         'money.amount[between]'?: string;
@@ -2247,6 +2251,14 @@ export type ApiGatewayChargesGetCollectionData = {
         'money.amount[gte]'?: string;
         'money.amount[lt]'?: string;
         'money.amount[lte]'?: string;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
     };
     url: '/v4/gateway_charges';
 };

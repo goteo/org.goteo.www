@@ -78,7 +78,13 @@
     const chargesCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
-    async function loadCharges() {
+    async function loadCharges(filters: {
+        chargeStatus: string;
+        rangeAmount: string;
+        from?: string;
+        to?: string;
+        paymentMethod: string;
+    }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
 
@@ -100,7 +106,11 @@
 
             const headers = { Authorization: `Bearer ${token}` };
             const currentCount = Number(itemsPerPage);
-            const cacheKey = JSON.stringify({ page: currentPage, itemsPerPage: currentCount });
+            const cacheKey = JSON.stringify({
+                page: currentPage,
+                itemsPerPage: currentCount,
+                filters,
+            });
             const baseKey = JSON.stringify({ page: 1, itemsPerPage: largestLoaded });
 
             if (chargesCache.has(cacheKey)) {
@@ -113,16 +123,31 @@
                 return;
             }
 
+            const query: Record<string, any> = {
+                page: currentPage,
+                itemsPerPage: currentCount,
+                pagination: true,
+                ...(filters.chargeStatus &&
+                    filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
+                ...(filters.rangeAmount &&
+                    filters.rangeAmount !== "all" &&
+                    (filters.rangeAmount.includes("..")
+                        ? { "money.amount[between]": filters.rangeAmount }
+                        : { "money.amount[gte]": filters.rangeAmount })),
+                ...(filters.from && { "dateCreated[strictly_after]": filters.from }),
+                ...(filters.to && { "dateCreated[strictly_before]": filters.to }),
+                ...(filters.paymentMethod &&
+                    filters.paymentMethod !== "all" && {
+                        "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
+                    }),
+            };
+
             const { data } = await apiGatewayChargesGetCollection({
                 headers: {
                     ...headers,
                     Accept: "application/ld+json",
                 },
-                query: {
-                    page: currentPage,
-                    itemsPerPage: currentCount,
-                    pagination: true,
-                },
+                query,
             });
 
             if (!data) {
@@ -286,8 +311,20 @@
         };
     }
 
+    let { filters } = $props<{
+        filters: {
+            paymentMethod: string;
+            chargeStatus: string;
+            rangeAmount: string;
+            from?: string;
+            to?: string;
+        };
+    }>();
+
     $effect(() => {
-        loadCharges();
+        const { chargeStatus, rangeAmount, from, to, paymentMethod } = filters;
+        charges = [];
+        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod });
     });
 </script>
 
@@ -368,7 +405,7 @@
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
-                        {getDate(charge.dateUpdated).date}
+                        {getDate(charge.dateCreated).date}
                         <p
                             class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
                             title={charge.trackingCodes[0]?.value || "—"}
@@ -397,7 +434,8 @@
                             <DetailsRow
                                 platformLinks={charge.platformLinks}
                                 trackingCodes={charge.trackingCodes}
-                                dataTime={getDate(charge.dateUpdated)}
+                                dataTimeCreated={getDate(charge.dateCreated)}
+                                dataTimeUpdated={getDate(charge.dateUpdated)}
                                 id={charge.id ? String(charge.id) : "-"}
                                 refundToWallet={charge.refundToWallet}
                             />

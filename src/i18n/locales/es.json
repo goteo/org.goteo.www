@@ -413,6 +413,61 @@
       "search": {
         "placeholder": "Buscar...",
         "btnLabel": "Buscar"
+      },
+      "paymentMethod": {
+        "title": "Método de pago",
+        "options": {
+          "all": "Todos",
+          "paypal": "Paypal",
+          "stripe": "Stripe",
+          "wallet": "Monedero"
+        }
+      },
+      "rangeAmount": {
+        "title": "Selecciona importe",
+        "options": {
+          "all": "Todos",
+          "000..10000": "0€ - 100€",
+          "10000..50000": "100€ - 500€",
+          "50000..100000": "500€ - 1.000€",
+          "100000..500000": "1.000€ - 5.000€",
+          "500000": "> 5.000€"
+        }
+      },
+      "dateRange": {
+        "initDate": "Fecha Inicio",
+        "endDate": "Fecha Fin",
+        "from": "Desde",
+        "to": "Hasta",
+        "errors": {
+          "invalidDate": "Fecha no válida",
+          "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
+        }
+      },
+      "chargeStatus": {
+        "title": "Estado de Aporte",
+        "options": {
+          "all": "Todos",
+          "in_pending": "Pendiente",
+          "charged": "Cobrado",
+          "to_refund": "Por reembolsar",
+          "refunded": "Reembolsado"
+        }
+      },
+      "projectStatus": {
+        "title": "Estado de la campaña",
+        "options": {
+          "all": "Todas",
+          "active": "Activas",
+          "finished": "Finalizadas",
+          "cancelled": "Canceladas"
+        }
+      },
+      "btns": {
+        "openFilters": "Filtros",
+        "closeFilters": "Cerrar filtros",
+        "reset": "Reiniciar filtros",
+        "apply": "Aplicar filtros"
       }
     },
     "pagination": {

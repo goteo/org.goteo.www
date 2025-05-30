@@ -171,6 +171,12 @@ export const apiGatewayChargesGetCollection = <ThrowOnError extends boolean = fa
                 type: 'http'
             }
         ],
+        querySerializer: {
+            array: {
+                explode: false,
+                style: 'form'
+            }
+        },
         url: '/v4/gateway_charges',
         ...options
     });
