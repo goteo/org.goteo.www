@@ -419,7 +419,7 @@
         "options": {
           "all": "Todos",
           "paypal": "Paypal",
-          "stripe": "Tarjeta",
+          "stripe": "Stripe",
           "wallet": "Monedero"
         }
       },
