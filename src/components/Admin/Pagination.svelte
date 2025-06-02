@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
 
-    let { items, total, currentPage = $bindable(1) } = $props();
+    let { items, total, currentPage = $bindable(1), isLoading } = $props();
     const totalPages = $derived(() => Math.ceil(total / items));
 
     function goToPage(page: number) {
@@ -78,9 +78,13 @@
         >
     </nav>
 
-    {#if total}
+    {#if total > 0}
         <span class="text-sm font-bold text-[#575757]">
             {@html $t("contributions.pagination.showing", { items, total }, { allowHTML: true })}
+        </span>
+    {:else if total === 0 && !isLoading}
+        <span class="text-sm font-bold text-[#575757]">
+            {@html $t("contributions.pagination.noResults")}
         </span>
     {:else}
         <span class="text-sm font-bold text-[#575757]">
