@@ -60,13 +60,18 @@
                 : undefined,
         });
     }
+
+    function handleSelectTarget(accounting: string) {
+        onApplyFilters({ target: accounting });
+    }
 </script>
 
 <div
-    class="flex flex-col gap-10 rounded-[40px] border border-[#E6E5F7] px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="relative flex flex-col gap-10 rounded-[40px] border border-[#E6E5F7] px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
-        <Search />
+        <Search onSelectTarget={handleSelectTarget} />
+
         <button
             type="button"
             onclick={() => (showFilters = !showFilters)}

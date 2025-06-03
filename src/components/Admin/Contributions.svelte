@@ -18,6 +18,7 @@
         rangeAmount: "",
         from: "",
         to: "",
+        target: "",
     });
     function applyFilters(newFilters) {
         filters = { ...filters, ...newFilters };
