@@ -323,7 +323,7 @@
 
         if (resource.owner.startsWith("/v4/projects/")) {
             const project = await getCachedProject(ownerId);
-            
+
             return project.title;
         }
 

@@ -1,5 +1,5 @@
 export interface Config {
-    name: 'operation-paths';
+    name: "operation-paths";
 
     /**
      * @default 'operation-paths'
