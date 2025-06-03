@@ -323,8 +323,8 @@
 
         if (resource.owner.startsWith("/v4/projects/")) {
             const project = await getCachedProject(ownerId);
-            const userId = extractId(project?.owner);
-            return (await getCachedUser(userId))?.displayName ?? "—";
+            
+            return project.title;
         }
 
         if (resource.owner.startsWith("/v4/users/")) {
