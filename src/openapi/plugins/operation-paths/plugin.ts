@@ -9,8 +9,7 @@ export const handler: Plugin.Handler<Config> = ({ context, plugin }) => {
     });
 
     context.subscribe('operation', ({ operation }) => {
-        const url = operation.path.replace(/{\w+}/g, (match) => `\${${match.slice(1, -1)}}`);
-        const node = `export const ${operation.id}Url = '${url}';`;
+        const node = `export const ${operation.id}Url = '${operation.path}';`;
 
         file.add(node);
     });
