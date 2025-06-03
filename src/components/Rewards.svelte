@@ -1,21 +1,19 @@
 <script lang="ts">
     import { cart } from "../stores/cart.ts";
     import { onMount } from "svelte";
-    import type { ProjectReward, Project, Accounting } from "../openapi/client/index";
+    import type { ProjectReward, Project } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
-    import { formatCurrency, getUnit, defaultCurrency } from "../utils/currencies";
+    import { formatCurrency, defaultCurrency } from "../utils/currencies";
     import { apiProjectRewardsGetCollection } from "../openapi/client/index";
     import { t } from "../i18n/store.ts";
     import { languagesList, type Locale } from "../i18n/locales/index.ts";
     import ArrowRightIcon from "../svgs/ArrowRightIcon.svelte";
 
     export let project: Project;
-    export let accounting: Accounting;
     export let limit: number = 0;
 
     let rewards: ProjectReward[] = [];
     let error: string | null = null;
-    let amount: string = "";
 
     async function addToCart(reward: ProjectReward) {
         const projectId = extractId(reward.project) ?? "0";
@@ -111,18 +109,22 @@
                 </div> -->
                 {#each limit ? rewards.slice(0, limit) : rewards as reward}
                     <li
-                        class="flex flex-col gap-2 rounded-4xl border border-[#F3F3EF] p-4 shadow-[0px_1px_3px_0px_#0000001A]"
+                        class="flex basis-1/3 flex-col gap-2 rounded-4xl border border-[#F3F3EF] p-4 shadow-[0px_1px_3px_0px_#0000001A]"
                     >
                         <h3 class="text-tertiary text-2xl font-semibold">
                             {reward.title
                                 .toLowerCase()
                                 .replace(/^./, (match) => match.toUpperCase())}
                         </h3>
+
                         {#if reward.description}
                             <p class="mb-2 text-sm whitespace-pre-line text-gray-800">
                                 {reward.description}
                             </p>
                         {/if}
+
+                        <div class="flex-grow"></div>
+
                         <button
                             type="button"
                             on:click={() => handleDirectDonate(reward)}

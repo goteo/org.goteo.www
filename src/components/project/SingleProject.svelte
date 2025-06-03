@@ -3,7 +3,6 @@
     import type {
         Project,
         Accounting,
-        GatewayCheckoutJsonld,
         ApiAccountingBalancePointsGetCollectionData,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
@@ -22,8 +21,8 @@
     export let project: Project;
     export let accounting: Accounting;
     export let ownerName: string;
-    export let donations: GatewayCheckoutJsonld;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
     const limit = 3;
     let showFull = false;
@@ -98,13 +97,13 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} {accounting} {donations} {balancePoints} />
+            <Card {project} {accounting} {balancePoints} />
         </div>
     </div>
 
     <Tags {tags} />
 
+    <Rewards {project} {limit} />
     <Banner {ownerName} />
-    <Rewards {project} {accounting} {limit} />
     <Tabs {project} />
 </section>
