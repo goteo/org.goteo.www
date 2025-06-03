@@ -9,10 +9,12 @@
     import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
+
     export let project: Project;
     export let accounting: Accounting;
     // export let donations: GatewayCheckoutJsonld;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+
     const campaignLabel: (keyof Budget)[] = ["optimum", "minimum"];
 
     $: minReached =
