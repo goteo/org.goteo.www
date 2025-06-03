@@ -3,7 +3,7 @@ import { defaultPlugins } from "@hey-api/openapi-ts";
 import { defineConfig as operationPathsConfig } from "./src/openapi/plugins/operation-paths";
 
 export default defineConfig({
-    input: "https://v4.goteo.org/v4/docs.json",
+    input: "http://localhost:8090/v4/docs.json",
     output: "src/openapi/client",
     plugins: [
         ...defaultPlugins,
@@ -13,6 +13,11 @@ export default defineConfig({
         },
         {
             name: "@hey-api/sdk",
+        },
+        {
+            name: "@hey-api/typescript",
+            enums: 'javascript',
+            readOnlyWriteOnlyBehavior: 'off'
         },
         operationPathsConfig()
     ],
