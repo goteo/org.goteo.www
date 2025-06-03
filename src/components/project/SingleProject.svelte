@@ -106,5 +106,5 @@
 
     <Banner {ownerName} />
     <Rewards {project} {accounting} {limit} />
-    <Tabs />
+    <Tabs {project} />
 </section>
