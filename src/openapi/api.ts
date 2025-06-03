@@ -1,6 +1,6 @@
 import type { CreateClientConfig } from "./client/client.gen";
 
-function getBaseUrl() {
+export function getBaseUrl() {
     if (typeof import.meta !== "undefined" && import.meta.env) {
         if (import.meta.env.PUBLIC_API_URL) {
             return import.meta.env.PUBLIC_API_URL;

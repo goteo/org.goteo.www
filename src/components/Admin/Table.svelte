@@ -17,12 +17,27 @@
     import {
         apiGatewayChargesGetCollection,
         apiAccountingsIdGet,
-        apiProjectsIdOrSlugGet,
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
+        apiProjectsIdOrSlugGet,
     } from "../../../src/openapi/client/index.ts";
-    import type { GatewayCharge, Tracking, Link } from "../../../src/openapi/client/index.ts";
+    import type {
+        GatewayCharge,
+        Tracking,
+        Link,
+        ApiAccountingsIdGetData,
+        Accounting,
+        ApiProjectsIdOrSlugGetData,
+        ApiUsersIdGetData,
+    } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
+    import { client } from "../../openapi/client/client.gen.ts";
+    import {
+        apiAccountingsIdGetUrl,
+        apiProjectsIdOrSlugGetUrl,
+        apiUsersIdGetUrl,
+    } from "../../openapi/client/paths.gen.ts";
+    import { getBaseUrl } from "../../openapi/api.ts";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -163,35 +178,66 @@
             const loadedCharges = chargesResult.member ?? [];
             totalItems = chargesResult.totalItems ?? 0;
 
-            const accountingCache = new Map<string, any>();
-            const checkoutCache = new Map<string, any>();
-            const projectCache = new Map<string, any>();
-            const userCache = new Map<string, any>();
+            const getCached = async (
+                iri: string,
+                resolver: CallableFunction,
+            ): Promise<any | null> => {
+                const resCache = await caches.open("loadCharges");
+                const cachedRes = await resCache.match(iri);
 
-            const getCachedAccounting = async (id: string | null) => {
-                if (!id) return null;
-                if (accountingCache.has(id)) return accountingCache.get(id);
-                const { data } = await apiAccountingsIdGet({ path: { id }, headers });
-                accountingCache.set(id, data);
+                if (cachedRes) return await cachedRes.json();
+
+                const { data } = await resolver();
+
+                resCache.add(iri);
+
                 return data;
+            };
+
+            const getCachedAccounting = async (id: string | null): Promise<Accounting | null> => {
+                if (!id) return null;
+
+                const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
+                    path: { id: id },
+                    baseUrl: getBaseUrl(),
+                    url: apiAccountingsIdGetUrl,
+                });
+
+                return await getCached(accountingIri, () =>
+                    apiAccountingsIdGet({ path: { id }, headers }),
+                );
             };
 
             const getCachedProject = async (id: string | null) => {
                 if (!id) return null;
-                if (projectCache.has(id)) return projectCache.get(id);
-                const { data } = await apiProjectsIdOrSlugGet({ path: { idOrSlug: id }, headers });
-                projectCache.set(id, data);
-                return data;
+
+                const projectIri = client.buildUrl<ApiProjectsIdOrSlugGetData>({
+                    path: { idOrSlug: id },
+                    baseUrl: getBaseUrl(),
+                    url: apiProjectsIdOrSlugGetUrl,
+                });
+
+                return await getCached(projectIri, () =>
+                    apiProjectsIdOrSlugGet({
+                        path: { idOrSlug: id },
+                        headers,
+                    }),
+                );
             };
 
             const getCachedUser = async (id: string | null) => {
                 if (!id) return null;
-                if (userCache.has(id)) return userCache.get(id);
-                const { data } = await apiUsersIdGet({ path: { id }, headers });
-                userCache.set(id, data);
-                return data;
+
+                const userIri = client.buildUrl<ApiUsersIdGetData>({
+                    path: { id: id },
+                    baseUrl: getBaseUrl(),
+                    url: apiUsersIdGetUrl,
+                });
+
+                return await getCached(userIri, () => apiUsersIdGet({ path: { id }, headers }));
             };
 
+            const checkoutCache = new Map<string, any>();
             const getCachedCheckout = async (id: string | null) => {
                 if (!id) return null;
                 if (checkoutCache.has(id)) return checkoutCache.get(id);
@@ -277,8 +323,8 @@
 
         if (resource.owner.startsWith("/v4/projects/")) {
             const project = await getCachedProject(ownerId);
-            const userId = extractId(project?.owner);
-            return (await getCachedUser(userId))?.displayName ?? "—";
+
+            return project.title;
         }
 
         if (resource.owner.startsWith("/v4/users/")) {
