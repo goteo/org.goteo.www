@@ -358,7 +358,8 @@
         "refund": {
           "to_wallet": "Sí",
           "to_gateway": "No"
-        }
+        },
+        "noData": "No hay datos disponibles"
       }
     },
     "grid": {
@@ -412,7 +413,15 @@
       },
       "search": {
         "placeholder": "Buscar...",
-        "btnLabel": "Buscar"
+        "btnLabel": "Buscar",
+        "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
+        "noResults": "No se han encontrado resultados",
+        "labels": {
+          "projects": "Proyectos",
+          "users": "Usuarios",
+          "tipjars": "Botes de propina",
+          "tipjar-id": "ID del bote de propina"
+        }
       },
       "paymentMethod": {
         "title": "Método de pago",
@@ -472,7 +481,8 @@
     },
     "pagination": {
       "showing": "Mostrando {{items}} de {{total}}",
-      "unloaded": "Mostrando..."
+      "unloaded": "Mostrando...",
+      "noResults": "No hay resultados"
     },
     "tootip": {
       "copied": "¡Copiado!"

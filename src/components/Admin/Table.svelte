@@ -99,6 +99,7 @@
         from?: string;
         to?: string;
         paymentMethod: string;
+        target?: string;
     }) {
         const current = Number(itemsPerPage);
         const isPageChange = current === lastItemsPerPageSnapshot;
@@ -155,6 +156,9 @@
                     filters.paymentMethod !== "all" && {
                         "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
                     }),
+                ...(filters.target && {
+                    target: filters.target,
+                }),
             };
 
             const { data } = await apiGatewayChargesGetCollection({
@@ -364,13 +368,15 @@
             rangeAmount: string;
             from?: string;
             to?: string;
+            target?: string;
         };
     }>();
 
     $effect(() => {
-        const { chargeStatus, rangeAmount, from, to, paymentMethod } = filters;
+        const { chargeStatus, rangeAmount, from, to, paymentMethod, target } = filters;
         charges = [];
-        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod });
+
+        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod, target });
     });
 </script>
 
@@ -421,6 +427,12 @@
                     <div class="flex justify-center py-6">
                         <Loader />
                     </div>
+                </TableBodyCell>
+            </TableBodyRow>
+        {:else if charges.length === 0 && !isLoading}
+            <TableBodyRow>
+                <TableBodyCell colspan={tableHeaders.length} class="text-center">
+                    {$t("contributions.table.rows.noData")}
                 </TableBodyCell>
             </TableBodyRow>
         {:else}
@@ -503,4 +515,4 @@
     </TableBody>
 </Table>
 
-<Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} />
+<Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} {isLoading} />
