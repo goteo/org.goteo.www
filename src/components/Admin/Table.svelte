@@ -21,8 +21,17 @@
         apiUsersIdGet,
         apiGatewayCheckoutsIdGet,
     } from "../../../src/openapi/client/index.ts";
-    import type { GatewayCharge, Tracking, Link } from "../../../src/openapi/client/index.ts";
+    import type {
+        GatewayCharge,
+        Tracking,
+        Link,
+        ApiAccountingsIdGetData,
+        Accounting,
+    } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
+    import { client } from "../../openapi/client/client.gen.ts";
+    import { apiAccountingsIdGetUrl } from "../../openapi/client/paths.gen.ts";
+    import { getBaseUrl } from "../../openapi/api.ts";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -159,16 +168,32 @@
             const loadedCharges = chargesResult.member ?? [];
             totalItems = chargesResult.totalItems ?? 0;
 
-            const accountingCache = new Map<string, any>();
             const checkoutCache = new Map<string, any>();
             const projectCache = new Map<string, any>();
             const userCache = new Map<string, any>();
 
-            const getCachedAccounting = async (id: string | null) => {
+            const getCachedAccounting = async (id: string | null): Promise<Accounting | null> => {
                 if (!id) return null;
-                if (accountingCache.has(id)) return accountingCache.get(id);
+
+                const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
+                    path: { id: id },
+                    baseUrl: getBaseUrl(),
+                    url: apiAccountingsIdGetUrl,
+                });
+
+                const accountingsCache = await caches.open("accountings");
+                const cachedAccounting = await accountingsCache.match(accountingIri);
+
+                if (cachedAccounting) return await cachedAccounting.json();
+
                 const { data } = await apiAccountingsIdGet({ path: { id }, headers });
-                accountingCache.set(id, data);
+
+                if (typeof data === "undefined") {
+                    throw new Error("Could not retrieve Accounting from API");
+                }
+
+                accountingsCache.add(accountingIri);
+
                 return data;
             };
 
