@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import ProjectUpdate from "./ProjectUpdate.svelte";
 
     let { project } = $props();
     let contentDescription = $state("");
@@ -45,7 +46,7 @@
 <div class="flex justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
         <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards">
-            Contenido de las recompensas
+            <ProjectUpdate {project} />
         </div>
     {:else if activeTab === "project"}
         <div
@@ -62,7 +63,7 @@
         </div>
     {:else if activeTab === "updates"}
         <div id="tab-updates" role="tabpanel" aria-labelledby="tab-button-updates">
-            Contenido de actualizaciones
+            <!-- <ProjectUpdate {project} active /> -->
         </div>
     {:else if activeTab === "community"}
         <div id="tab-community" role="tabpanel" aria-labelledby="tab-button-community">
