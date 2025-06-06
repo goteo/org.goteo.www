@@ -71,6 +71,8 @@ export default [
         },
         rules: {
             ...cypressPlugin.configs.recommended.rules,
+            "@typescript-eslint/no-unused-expressions": "off",
+            "cypress/no-unnecessary-waiting": "off",
         },
     },
 ];
