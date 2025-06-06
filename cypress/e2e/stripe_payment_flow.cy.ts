@@ -1,5 +1,4 @@
 /// <reference types="cypress" />
-/* eslint-disable cypress/no-unnecessary-waiting */
 
 describe("Stripe Payment Flow", () => {
     beforeEach(() => {
