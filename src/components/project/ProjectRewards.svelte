@@ -12,7 +12,7 @@
             const { data } = await apiProjectRewardsGetCollection({
                 query: { project: `/v4/projects/${project.id}` },
             });
-            projectsRewards = data && data[200] ? data[200] : [];
+            projectsRewards = data || [];
         } catch (error) {
             console.error("Error fetching project rewards:", error);
         }

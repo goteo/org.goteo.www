@@ -10,13 +10,15 @@
     import UserIcon from "../svgs/UserIcon.svelte";
     import UnitIcon from "../svgs/UnitIcon.svelte";
     import { getUnit } from "../utils/currencies.ts";
-    import { A, Modal } from "flowbite-svelte";
+    import { Modal } from "flowbite-svelte";
 
     let { project, limit, rewards } = $props<{
         project: Project;
         limit?: number;
         rewards?: ProjectReward[] | null;
     }>();
+
+    console.log("Project Rewards", rewards);
 
     let amount = $state("");
     let rewardModal = $state(false);
