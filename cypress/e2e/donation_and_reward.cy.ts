@@ -9,12 +9,8 @@ describe("Project Page - Donation and Reward Verification", () => {
                     id: 3827,
                     project: "/v4/projects/100",
                     title: 'CD "Al Paso de los Caracoles" + 2 Camisetas',
-                    description:
-                        "CD físico del álbum junto con 2 camisetas oficiales del proyecto musical",
-                    money: {
-                        amount: 4000,
-                        currency: "EUR",
-                    },
+                    description: "CD físico del álbum junto con 2 camisetas oficiales",
+                    money: { amount: 4000, currency: "EUR" },
                     hasUnits: true,
                     unitsTotal: 5,
                     unitsAvailable: 5,
@@ -31,16 +27,13 @@ describe("Project Page - Donation and Reward Verification", () => {
         cy.visit("/es/projects/100");
         cy.wait("@project100Rewards");
 
-        cy.get("li.flex.flex-col.gap-2.rounded-4xl.border", { timeout: 10000 }).within(() => {
-            cy.get("h3.text-tertiary.text-2xl.font-semibold").should("exist").and("be.visible");
+        cy.get("li.flex.flex-col.gap-2.rounded-4xl.border").within(() => {
+            cy.get("h3.text-tertiary.text-2xl.font-semibold").should("be.visible");
 
-            cy.get("p.mb-2.text-sm.whitespace-pre-line.text-gray-800")
-                .should("exist")
-                .and("be.visible");
+            cy.get("p.mb-2.text-sm.whitespace-pre-line.text-gray-800").should("be.visible");
 
             cy.get('button[type="button"]')
-                .should("exist")
-                .and("be.visible")
+                .should("be.visible")
                 .and("contain.text", "Dona")
                 .and("contain.text", "40€");
         });
