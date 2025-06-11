@@ -36,7 +36,7 @@ describe("Checkout Flow - Stripe Payment Integration", () => {
 
         cy.contains("button", "Continuar").should("be.visible").click();
 
-        cy.url({ timeout: 10000 }).should("not.include", "/login");
+        cy.url({ timeout: 3000 }).should("not.include", "/login");
         cy.url().should("include", "payment");
     };
 

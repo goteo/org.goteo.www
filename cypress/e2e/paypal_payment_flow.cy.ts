@@ -38,7 +38,7 @@ describe("PayPal Payment Flow", () => {
 
         cy.contains("button", "Continuar").should("be.visible").should("be.enabled").click();
 
-        cy.url({ timeout: 10000 }).should("not.include", "/login");
+        cy.url({ timeout: 3000 }).should("not.include", "/login");
         cy.url().should("include", "payment");
 
         cy.get("form#payment", { timeout: 5000 }).should("exist");
