@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import ProjectRewards from "./ProjectRewards.svelte";
 
     let { project } = $props();
     let contentDescription = $state("");
@@ -45,7 +46,7 @@
 <div class="flex justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
         <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards">
-            Contenido de las recompensas
+            <ProjectRewards {project} />
         </div>
     {:else if activeTab === "project"}
         <div

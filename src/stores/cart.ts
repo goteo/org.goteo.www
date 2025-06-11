@@ -1,5 +1,4 @@
-import { writable, derived } from "svelte/store";
-import { get } from "svelte/store";
+import { writable, derived, get } from "svelte/store";
 
 import { t } from "../i18n/store";
 
@@ -30,12 +29,8 @@ type GenerateKeyOptions = {
 
 function generateKey({ title, target, position, freeDonationTitle }: GenerateKeyOptions) {
     const normalize = (str: string) => str.trim().toLowerCase();
-
-    const isFreeDonation = normalize(title) === normalize(freeDonationTitle);
-    const prefix = isFreeDonation ? "O" : "R";
-    const finalKey = `${target}-${prefix}-${position}`;
-
-    return { key: finalKey };
+    const prefix = normalize(title) === normalize(freeDonationTitle) ? "O" : "R";
+    return { key: `${target}-${prefix}-${position}` };
 }
 
 function loadInitialCart(): CartStore {
@@ -61,7 +56,7 @@ function createCartStore() {
             try {
                 localStorage.setItem("cart", JSON.stringify(cart));
             } catch (e) {
-                console.error("❌ Error to save cart to localStorage:", e);
+                console.error("Error to save cart to localStorage:", e);
             }
         });
     }
@@ -83,16 +78,18 @@ function createCartStore() {
                 if (existingIndex >= 0) {
                     updatedItems[existingIndex] = {
                         ...updatedItems[existingIndex],
-                        quantity: updatedItems[existingIndex].quantity + (item.quantity ?? 1),
+                        quantity: item.quantity ?? 1,
+                        amount: item.amount,
                     };
                 } else {
-                    const position = cart.items.length;
+                    const position = updatedItems.length;
                     const { key } = generateKey({
                         title: item.title,
                         target: item.target,
                         position,
                         freeDonationTitle,
                     });
+
                     updatedItems.push({ ...item, key });
                 }
 
@@ -100,26 +97,21 @@ function createCartStore() {
             }),
 
         removeItem: (key: string) =>
-            update((cart) => {
-                const filteredItems = cart.items.filter((i) => i.key !== key);
-                if (filteredItems.length === cart.items.length) return cart;
-                return { items: filteredItems };
-            }),
+            update((cart) => ({
+                items: cart.items.filter((i) => i.key !== key),
+            })),
 
         updateQuantity: (key: string, quantity: number) =>
-            update((cart) => {
-                if (quantity <= 0) {
-                    return {
-                        items: cart.items.filter((item) => item.key !== key),
-                    };
-                }
-
-                const updatedItems = cart.items.map((item) =>
-                    item.key === key && item.quantity !== quantity ? { ...item, quantity } : item,
-                );
-
-                return { items: updatedItems };
-            }),
+            update((cart) => ({
+                items:
+                    quantity <= 0
+                        ? cart.items.filter((item) => item.key !== key)
+                        : cart.items.map((item) =>
+                              item.key === key && item.quantity !== quantity
+                                  ? { ...item, quantity }
+                                  : item,
+                          ),
+            })),
 
         clear: () => set({ items: [] }),
     };
@@ -137,16 +129,11 @@ export const totalAmount = derived(cart, ($cart) =>
 
 export const itemsByProject = derived(cart, ($cart) => {
     const grouped: Record<number, CartItem[]> = {};
-
     for (const item of $cart.items) {
-        if (item.project == null) continue;
-
-        if (!grouped[item.project]) {
-            grouped[item.project] = [];
+        if (item.project != null) {
+            grouped[item.project] ??= [];
+            grouped[item.project].push(item);
         }
-
-        grouped[item.project].push(item);
     }
-
     return grouped;
 });

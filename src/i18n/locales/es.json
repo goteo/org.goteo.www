@@ -206,7 +206,24 @@
     }
   },
   "rewards": {
-    "unavailable": "No hay recompensas disponibles."
+    "title": "Selecciona tus recompensas",
+    "unavailable": "No hay recompensas disponibles.",
+    "donators": "{{donators}} donantes",
+    "units-available": "Quedan {{units}} unidades",
+    "donation-free": {
+      "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
+      "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
+      "placeholder": "Seleccione el aporte  Ej.20€",
+      "btn": "Donar"
+    },
+    "by-amount": "Por {{amount}}",
+    "by-amount-or-more": "Por {{amount}} o más",
+    "thanks-message": "Gracias por cooperar",
+    "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
+    "reward-donate-close": "Añadir al carro y continuar",
+    "error-invalid-amount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa",
+    "error-amount": "Por favor, ingresa una monto válido",
+    "loading": "Cargando recompensas..."
   },
   "updates": {
     "heading": "No pierdas detalle de los avances de esta campaña",

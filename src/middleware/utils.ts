@@ -81,7 +81,7 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
  */
 export function isLanguageExemptPath(context: APIContext): boolean {
     const firstSegment = context.url.pathname.split("/")[1];
-    const exemptRoutes = ["_actions", "api"];
+    const exemptRoutes = ["api"];
 
     return exemptRoutes.includes(firstSegment);
 }

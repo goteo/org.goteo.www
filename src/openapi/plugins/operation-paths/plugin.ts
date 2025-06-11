@@ -1,6 +1,5 @@
-import type { Plugin } from "@hey-api/openapi-ts";
-
 import type { Config } from "./types";
+import type { Plugin } from "@hey-api/openapi-ts";
 
 export const handler: Plugin.Handler<Config> = ({ context, plugin }) => {
     const file = context.createFile({

@@ -1,5 +1,6 @@
 import { defineConfig } from "@hey-api/openapi-ts";
 import { defaultPlugins } from "@hey-api/openapi-ts";
+
 import { defineConfig as operationPathsConfig } from "./src/openapi/plugins/operation-paths";
 
 export default defineConfig({
