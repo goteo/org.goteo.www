@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Stripe Payment Flow", () => {
+describe("Stripe Verification Flow", () => {
     beforeEach(() => {
         cy.login();
         cy.url().should("not.include", "/login");
@@ -9,8 +9,6 @@ describe("Stripe Payment Flow", () => {
     it("should handle successful payment verification with checkoutId", () => {
         cy.visit("/payment/verify?checkoutId=100");
 
-        cy.get("body", { timeout: 15000 }).should("be.visible");
-
-        cy.contains(/pago se ha procesado/, { timeout: 15000 }).should("exist");
+        cy.contains(/pago se ha procesado/, { timeout: 10000 }).should("be.visible");
     });
 });
