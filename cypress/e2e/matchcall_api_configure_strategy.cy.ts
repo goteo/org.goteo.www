@@ -28,17 +28,6 @@ describe("MatchCall API - Configure Strategy", () => {
     });
 
     it("should configure MatchCall strategy", () => {
-        const strategyData = {
-            rules: ["/v4/match_rules/SingleUserPerProjectRule"],
-            formula: "/v4/match_formulas/multiplication",
-            limit: {
-                amount: 50000,
-                currency: "EUR",
-            },
-            factor: 1.0,
-            against: "charge",
-        };
-
         const mockStrategyResponse = {
             status: 200,
             body: {

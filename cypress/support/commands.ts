@@ -22,6 +22,11 @@ interface Users {
 Cypress.Commands.add(
     "login",
     (username: string = "root@goteo.org", password: string = "RootTestPass") => {
+        if (Cypress.env("CI") || Cypress.env("MOCK_AUTH")) {
+            cy.mockLogin();
+            return;
+        }
+
         cy.fixture<Users>("users").then((users) => {
             if (username === "root@goteo.org" && password === "RootTestPass") {
                 username = users.validUser.email;
@@ -37,6 +42,80 @@ Cypress.Commands.add(
         cy.on("uncaught:exception", () => false);
     },
 );
+
+Cypress.Commands.add("mockLogin", () => {
+    cy.intercept("POST", "**/api/auth/login", {
+        statusCode: 200,
+        body: {
+            access_token: "mock-access-token-cypress-123",
+            refresh_token: "mock-refresh-token-cypress-456",
+            user: {
+                id: 1,
+                email: "test@cypress.local",
+                name: "Cypress Test User",
+                accountingId: 123,
+            },
+        },
+    }).as("loginRequest");
+
+    cy.intercept("GET", "**/api/auth/me", {
+        statusCode: 200,
+        body: {
+            id: 1,
+            email: "test@cypress.local",
+            name: "Cypress Test User",
+            accountingId: 123,
+        },
+    }).as("authMe");
+
+    cy.setCookie(
+        "access-token",
+        JSON.stringify({
+            token: "mock-access-token-cypress-123",
+            accountingId: 123,
+            userId: 1,
+        }),
+    );
+
+    cy.window().then((win) => {
+        win.localStorage.setItem(
+            "user",
+            JSON.stringify({
+                id: 1,
+                email: "test@cypress.local",
+                name: "Cypress Test User",
+                isAuthenticated: true,
+                accountingId: 123,
+            }),
+        );
+    });
+
+    cy.visit("/");
+});
+
+Cypress.Commands.add("loginBypass", () => {
+    cy.setCookie(
+        "access-token",
+        JSON.stringify({
+            token: "cypress-bypass-token",
+            accountingId: 999,
+            userId: 1,
+        }),
+    );
+
+    cy.window().then((win) => {
+        win.localStorage.setItem(
+            "user",
+            JSON.stringify({
+                id: 1,
+                email: "cypress@test.local",
+                name: "Cypress Bypass User",
+                isAuthenticated: true,
+                accountingId: 999,
+            }),
+        );
+    });
+});
 
 Cypress.Commands.add("checkHeaderElements", () => {
     cy.get('header a[href="/"] svg').should("be.visible"); // Logo

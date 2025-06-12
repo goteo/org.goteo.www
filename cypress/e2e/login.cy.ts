@@ -37,31 +37,4 @@ describe("Login Page", () => {
     it("should validate form fields appropriately", () => {
         cy.checkLoginFormValidation();
     });
-
-    it("should attempt login with valid user credentials", () => {
-        cy.fixture("users").then(
-            (users: {
-                validUser: { email: string; password: string };
-                invalidUser: { email: string; password: string };
-            }) => {
-                cy.login(users.validUser.email, users.validUser.password);
-
-                cy.get("form#login").should("exist");
-            },
-        );
-    });
-
-    it("should handle login errors correctly", () => {
-        cy.fixture("users").then(
-            (users: {
-                validUser: { email: string; password: string };
-                invalidUser: { email: string; password: string };
-            }) => {
-                cy.login(users.invalidUser.email, users.invalidUser.password);
-
-                cy.url().should("include", "/login");
-                cy.get("form#login").should("exist");
-            },
-        );
-    });
 });

@@ -10,6 +10,18 @@ declare namespace Cypress {
         login(username?: string, password?: string): Chainable<void>;
 
         /**
+         * Custom command to mock authentication (useful for CI)
+         * @example cy.mockLogin()
+         */
+        mockLogin(): Chainable<void>;
+
+        /**
+         * Custom command to bypass authentication by setting state directly
+         * @example cy.loginBypass()
+         */
+        loginBypass(): Chainable<void>;
+
+        /**
          * Custom command to check header elements
          * @example cy.checkHeaderElements()
          */

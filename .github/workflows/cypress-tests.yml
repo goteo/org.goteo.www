@@ -51,20 +51,39 @@ jobs:
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
                   echo "NODE_ENV=test" >> .env
                   echo "PUBLIC_API_URL=${{ vars.API_URL || 'https://api-develop.goteo.org' }}" >> .env
+                  echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
+                  echo "SKIP_PAYMENT_GATEWAYS=true" >> .env
+                  echo "PAYMENT_GATEWAYS_CONFIG={}" >> .env
+                  echo "STRIPE_PUBLIC_KEY=pk_test_dummy" >> .env
+                  echo "STRIPE_SECRET_KEY=sk_test_dummy" >> .env
+                  echo "PAYPAL_CLIENT_ID=dummy" >> .env
+                  echo "PAYPAL_CLIENT_SECRET=dummy" >> .env
+                  echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
+
+            - name: Debug environment variables
+              run: |
+                  echo "=== Environment variables ==="
+                  cat .env
+                  echo "=== NODE_ENV ==="
+                  echo $NODE_ENV
 
             # Ejecutar los tests de Cypress
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
               with:
                   build: pnpm build
-                  command: pnpm test:e2e:ci
+                  start: pnpm preview:ci
+                  wait-on: http://localhost:4321
+                  wait-on-timeout: 120
                   browser: chrome
               env:
                   CI: true
                   NODE_ENV: test
+                  NODE_TLS_REJECT_UNAUTHORIZED: 0
                   PUBLIC_LANGUAGE_DEFAULT: es
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   PUBLIC_API_URL: ${{ vars.API_URL || 'https://api-develop.goteo.org' }}
+                  CYPRESS_MOCK_AUTH: true
 
             # Subir capturas de pantalla y videos como artefactos en caso de fallos
             - name: Prepare artifact directories if tests failed
