@@ -6,6 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SKIP_PAYMENT_GATEWAYS=true PAYMENT_GATEWAYS_ENABLED=false astro preview",
     "astro": "astro",
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
@@ -17,7 +18,7 @@
     "cypress:run": "cypress run",
     "cypress:verify": "cypress verify",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
-    "test:e2e:ci": "start-server-and-test preview http://localhost:4321 cypress:run"
+    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run"
   },
   "dependencies": {
     "@astrojs/node": "^9.2.2",
