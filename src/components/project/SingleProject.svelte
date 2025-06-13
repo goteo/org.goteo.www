@@ -9,6 +9,8 @@
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
+    // import TestSlider from "../TestSlider.svelte";
+
     import { languagesList } from "../../i18n/locales";
     import Tabs from "./Tabs.svelte";
 
@@ -105,5 +107,6 @@
 
     <Rewards {project} {limit} />
     <Banner {ownerName} />
+    <!-- <TestSlider /> -->
     <Tabs {project} />
 </section>
