@@ -1,7 +1,7 @@
-import type { Plugin } from "@hey-api/openapi-ts";
-
 import { handler } from "./plugin";
+
 import type { Config } from "./types";
+import type { Plugin } from "@hey-api/openapi-ts";
 
 export const defaultConfig: Plugin.Config<Config> = {
     _dependencies: ["@hey-api/typescript"],

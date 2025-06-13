@@ -1,4 +1,5 @@
 <script lang="ts">
+    // import TestSlider from "../TestSlider.svelte";
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
@@ -43,9 +44,9 @@
     </div>
 </div>
 
-<div class="flex justify-center bg-[#E6E5F7] py-20">
+<div class="flex w-full justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
-        <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards">
+        <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards" class="w-full">
             <ProjectUpdate {project} />
         </div>
     {:else if activeTab === "project"}
@@ -58,15 +59,21 @@
             {@html contentDescription}
         </div>
     {:else if activeTab === "budget"}
-        <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget">
+        <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
             Contenido de necesidades del presupuesto
         </div>
     {:else if activeTab === "updates"}
-        <div id="tab-updates" role="tabpanel" aria-labelledby="tab-button-updates">
+        <div id="tab-updates" role="tabpanel" aria-labelledby="tab-button-updates" class="w-full">
+            <!-- <TestSlider /> -->
             <!-- <ProjectUpdate {project} active /> -->
         </div>
     {:else if activeTab === "community"}
-        <div id="tab-community" role="tabpanel" aria-labelledby="tab-button-community">
+        <div
+            id="tab-community"
+            role="tabpanel"
+            aria-labelledby="tab-button-community"
+            class="w-full"
+        >
             Contenido de comunidad
         </div>
     {/if}
