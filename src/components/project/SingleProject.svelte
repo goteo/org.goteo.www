@@ -98,12 +98,12 @@
 
     <div class="flex items-stretch justify-between gap-6">
         <div class="h-full w-[70%]">
-            <!-- <Player
+            <Player
                 src={project.video?.src || ""}
                 title={project.title || ""}
                 thumbnails={project.video?.thumbnail || ""}
                 {poster}
-            /> -->
+            />
         </div>
         <div class="h-full w-[30%]">
             <Card {project} {accounting} {balancePoints} />
