@@ -1,14 +1,17 @@
 <script lang="ts">
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import { writable } from "svelte/store";
 
     export let itemsPerGroup: number = 1;
     export let gap: number = 16;
     export let showDots: boolean = true;
+    export let highlightActive: boolean = false;
+    export let dimNext: boolean = false;
 
     let container: HTMLDivElement;
     let totalItems = 0;
+    let activeGroupValue = 0;
     const activeGroup = writable(0);
 
     let totalGroups = 0;
@@ -29,8 +32,7 @@
     function handleMove(x: number, event: Event) {
         if (!isDragging) return;
         event.preventDefault();
-        const currentX = x - container.offsetLeft;
-        const walk = (currentX - startX) * 1.5;
+        const walk = (x - container.offsetLeft - startX) * 1.5;
         container.scrollLeft = scrollLeft - walk;
     }
 
@@ -39,33 +41,17 @@
         container.classList.remove("dragging");
     }
 
-    function handleMouseDown(e: MouseEvent) {
-        handleStart(e.pageX);
-    }
-    function handleMouseMove(e: MouseEvent) {
-        handleMove(e.pageX, e);
-    }
-
-    function handleTouchStart(e: TouchEvent) {
-        handleStart(e.touches[0].pageX);
-    }
-    function handleTouchMove(e: TouchEvent) {
-        handleMove(e.touches[0].pageX, e);
-    }
-
-    function scrollToGroup(groupIndex: number) {
+    function scrollToGroup(index: number) {
         const children = Array.from(container.children) as HTMLElement[];
-        const firstItemIndex = groupIndex * itemsPerGroup;
-        const firstItem = children[firstItemIndex];
-
-        if (!firstItem) return;
+        const first = children[index * itemsPerGroup];
+        if (!first) return;
 
         container.scrollTo({
-            left: firstItem.offsetLeft - container.offsetLeft,
+            left: first.offsetLeft - container.offsetLeft,
             behavior: "smooth",
         });
 
-        activeGroup.set(groupIndex);
+        activeGroup.set(index);
     }
 
     function scroll(direction: "left" | "right") {
@@ -86,11 +72,9 @@
         for (let i = 0; i < totalGroups; i++) {
             const firstIndex = i * itemsPerGroup;
             const firstItem = children[firstIndex];
-
             if (!firstItem) continue;
 
             const itemLeft = firstItem.getBoundingClientRect().left;
-
             if (itemLeft >= containerLeft - 1) {
                 activeGroup.set(i);
                 break;
@@ -103,7 +87,6 @@
         const paddingLeft = parseFloat(styles.paddingLeft);
         const paddingRight = parseFloat(styles.paddingRight);
         const availableWidth = container.clientWidth - paddingLeft - paddingRight;
-
         const childWidth = (availableWidth - gap * (itemsPerGroup - 1)) / itemsPerGroup;
 
         for (const child of Array.from(container.children) as HTMLElement[]) {
@@ -113,49 +96,72 @@
         }
     }
 
-    onMount(() => {
-        totalItems = container.children.length;
-        totalGroups = Math.ceil(totalItems / itemsPerGroup);
+    function updateChildrenClasses() {
+        const children = Array.from(container.children) as HTMLElement[];
+        children.forEach((child, i) => {
+            child.classList.remove("carousel-primary", "carousel-next");
+            if (highlightActive && i === activeGroupValue) {
+                child.classList.add("carousel-primary");
+            }
+            if (dimNext && i === activeGroupValue + 1) {
+                child.classList.add("carousel-next");
+            }
+        });
+    }
 
+    onMount(async () => {
+        await tick();
         updateChildrenWidth();
 
         const resizeObserver = new ResizeObserver(() => {
             updateChildrenWidth();
         });
-
         resizeObserver.observe(container);
 
         const unsubscribe = activeGroup.subscribe((index) => {
+            activeGroupValue = index;
             isAtStart = index === 0;
             isAtEnd = index === totalGroups - 1;
+            updateChildrenClasses();
         });
+
+        const mutationObserver = new MutationObserver(() => {
+            totalItems = container.children.length;
+            totalGroups = Math.ceil(totalItems / itemsPerGroup);
+            if (totalItems > 0) {
+                activeGroup.set(0);
+                mutationObserver.disconnect();
+            }
+        });
+        mutationObserver.observe(container, { childList: true });
 
         return () => {
             resizeObserver.disconnect();
+            mutationObserver.disconnect();
             unsubscribe();
         };
     });
 </script>
 
-<div class="relative w-full overflow-hidden">
+<div class="relative w-full">
     <button
         on:click={() => scroll("left")}
-        class="absolute top-1/2 left-2 z-10 h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow disabled:cursor-not-allowed disabled:opacity-50"
+        class="absolute top-1/2 -left-4 z-10 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Scroll left"
         disabled={isAtStart}
     >
-        <ArrowSliderIcon direction={"left"} />
+        <ArrowSliderIcon direction="left" />
     </button>
 
     <div
         bind:this={container}
-        class="no-select hide-scrollbar flex cursor-grab touch-none snap-x snap-mandatory gap-[16px] overflow-x-auto px-8 py-8"
-        on:mousedown={handleMouseDown}
-        on:mousemove={handleMouseMove}
+        class="no-select hide-scrollbar flex cursor-grab touch-none snap-x snap-mandatory gap-[16px] overflow-hidden overflow-x-auto"
+        on:mousedown={(e) => handleStart(e.pageX)}
+        on:mousemove={(e) => handleMove(e.pageX, e)}
         on:mouseup={endDrag}
         on:mouseleave={endDrag}
-        on:touchstart={handleTouchStart}
-        on:touchmove={handleTouchMove}
+        on:touchstart={(e) => handleStart(e.touches[0].pageX)}
+        on:touchmove={(e) => handleMove(e.touches[0].pageX, e)}
         on:touchend={endDrag}
         on:scroll={handleScroll}
     >
@@ -164,21 +170,21 @@
 
     <button
         on:click={() => scroll("right")}
-        class="absolute top-1/2 right-2 z-10 h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow disabled:cursor-not-allowed disabled:opacity-50"
+        class="absolute top-1/2 -right-4 z-10 h-10 w-10 -translate-y-1/2 cursor-pointer rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Scroll right"
         disabled={isAtEnd}
     >
         <ArrowSliderIcon />
     </button>
 
-    {#if showDots}
+    {#if showDots && totalGroups > 1}
         <div class="mt-4 flex justify-center gap-2">
             {#each Array(totalGroups) as _, i}
                 <button
                     on:click={() => scrollToGroup(i)}
                     class="h-2 w-2 rounded-full transition-all"
-                    class:bg-indigo-500={i === $activeGroup}
-                    class:bg-gray-300={i !== $activeGroup}
+                    class:bg-indigo-500={i === activeGroupValue}
+                    class:bg-gray-300={i !== activeGroupValue}
                 />
             {/each}
         </div>
@@ -191,6 +197,7 @@
         -webkit-user-select: none;
         -ms-user-select: none;
     }
+
     .dragging {
         cursor: grabbing;
     }
@@ -199,6 +206,7 @@
         scrollbar-width: none;
         -ms-overflow-style: none;
     }
+
     .hide-scrollbar::-webkit-scrollbar {
         display: none;
     }

@@ -1,5 +1,4 @@
 <script lang="ts">
-    // import TestSlider from "../TestSlider.svelte";
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
@@ -13,7 +12,7 @@
         { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "project", label: $t("project.tabs.project") },
         { id: "budget", label: $t("project.tabs.budget") },
-        { id: "updates", label: $t("project.tabs.updates") },
+        { id: "updates", label: $t("project.tabs.updates.title") },
         { id: "community", label: $t("project.tabs.community") },
     ];
 
@@ -46,15 +45,20 @@
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
-        <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards" class="w-full">
-            <ProjectUpdate {project} />
+        <div
+            id="tab-rewards"
+            role="tabpanel"
+            aria-labelledby="tab-button-rewards"
+            class="w-full px-4"
+        >
+            Contenido de rewards
         </div>
     {:else if activeTab === "project"}
         <div
             id="tab-project"
             role="tabpanel"
             aria-labelledby="tab-button-project"
-            class="flex max-w-4xl flex-col items-center gap-4 px-4"
+            class="flex max-w-4xl flex-col items-center gap-4 px-8"
         >
             {@html contentDescription}
         </div>
@@ -63,9 +67,13 @@
             Contenido de necesidades del presupuesto
         </div>
     {:else if activeTab === "updates"}
-        <div id="tab-updates" role="tabpanel" aria-labelledby="tab-button-updates" class="w-full">
-            <!-- <TestSlider /> -->
-            <!-- <ProjectUpdate {project} active /> -->
+        <div
+            id="tab-updates"
+            role="tabpanel"
+            aria-labelledby="tab-button-updates"
+            class="w-full px-10"
+        >
+            <ProjectUpdate {project} />
         </div>
     {:else if activeTab === "community"}
         <div
