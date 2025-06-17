@@ -5,6 +5,7 @@
     import type { Project, ProjectBudgetItem } from "../../openapi/client/index";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
+    import ResumeBudget from "./ResumeBudget.svelte";
 
     const { project } = $props<{ project: Project }>();
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
@@ -27,6 +28,9 @@
     });
 </script>
 
+<div>
+    <ResumeBudget {project} />
+</div>
 <div class="flex flex-col gap-10">
     <div class="flex flex-col gap-6">
         <span class="text-tertiary text-2xl font-bold">
