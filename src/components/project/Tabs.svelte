@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import ProjectRewards from "./ProjectRewards.svelte";
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
     import type { Project, Accounting } from "../../openapi/client/index";
@@ -51,9 +52,9 @@
             id="tab-rewards"
             role="tabpanel"
             aria-labelledby="tab-button-rewards"
-            class="w-full px-4"
+            class="w-full px-10"
         >
-            Contenido de rewards
+            <ProjectRewards {project} />
         </div>
     {:else if activeTab === "project"}
         <div
