@@ -47,7 +47,12 @@
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
-        <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards">
+        <div
+            id="tab-rewards"
+            role="tabpanel"
+            aria-labelledby="tab-button-rewards"
+            class="w-full px-10"
+        >
             <ProjectRewards {project} />
         </div>
     {:else if activeTab === "project"}
