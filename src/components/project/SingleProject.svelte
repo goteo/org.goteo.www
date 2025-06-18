@@ -17,6 +17,7 @@
     import Rewards from "../Rewards.svelte";
     import Banner from "./Banner.svelte";
     import { t } from "../../i18n/store";
+    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
 
     export let project: Project;
     export let accounting: Accounting;
@@ -103,7 +104,19 @@
 
     <Tags {tags} />
 
-    <Rewards {project} {limit} />
+    <div>
+        <div class="flex items-center justify-between">
+            <h2 class="text-secondary text-2xl font-bold">
+                {$t("reward.trending")}
+            </h2>
+            <button
+                class="text-tertiary flex cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+                ><ArrowRightIcon />{$t("reward.showAll")}</button
+            >
+        </div>
+        <Rewards {project} {limit} />
+    </div>
+
     <Banner {ownerName} />
     <Tabs {project} />
 </section>
