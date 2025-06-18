@@ -2,17 +2,17 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem } from "../../openapi/client/index";
+    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import ResumeBudget from "./ResumeBudget.svelte";
 
-    const { project } = $props<{ project: Project }>();
+    const { project, accounting } = $props<{ project: Project; accounting: Accounting }>();
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
 
-    const statusBudget: Record<ProjectBudgetItem["type"], string> = {
+    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
         infrastructure: "#462949",
         material: "#E94668",
@@ -30,7 +30,7 @@
 
 <div class="flex flex-col gap-10">
     <div>
-        <ResumeBudget {project} />
+        <ResumeBudget {project} {accounting} />
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
@@ -75,7 +75,7 @@
                             <div class="flex items-center gap-2">
                                 <div
                                     class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${statusBudget[item.type]}`}
+                                    style={`background-color: ${typeBudget[item.type]}`}
                                 ></div>
                                 <span class="capitalize">{item.type}</span>
                             </div>
@@ -128,7 +128,7 @@
                             <div class="flex items-center gap-2">
                                 <div
                                     class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${statusBudget[item.type]}`}
+                                    style={`background-color: ${typeBudget[item.type]}`}
                                 ></div>
                                 <span class="capitalize">{item.type}</span>
                             </div>

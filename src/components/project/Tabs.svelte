@@ -4,8 +4,9 @@
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
+    import type { Project, Accounting } from "../../openapi/client/index";
 
-    let { project } = $props();
+    let { project, accounting } = $props<{ project: Project; accounting: Accounting }>();
     let contentDescription = $state("");
     let activeTab = $state("rewards");
 
@@ -70,7 +71,7 @@
             aria-labelledby="tab-button-budget"
             class="w-full px-10"
         >
-            <ProjectBudget {project} />
+            <ProjectBudget {project} {accounting} />
         </div>
     {:else if activeTab === "updates"}
         <div
