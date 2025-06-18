@@ -30,6 +30,36 @@ export const apiGatewayCheckoutsIdGetUrl = '/v4/gateway_checkouts/{id}';
 
 export const apiGatewayCheckoutsIdPatchUrl = '/v4/gateway_checkouts/{id}';
 
+export const apiMatchCallsGetCollectionUrl = '/v4/match_calls';
+
+export const apiMatchCallsPostUrl = '/v4/match_calls';
+
+export const apiMatchCallsIdDeleteUrl = '/v4/match_calls/{id}';
+
+export const apiMatchCallsIdGetUrl = '/v4/match_calls/{id}';
+
+export const apiMatchCallsIdPatchUrl = '/v4/match_calls/{id}';
+
+export const apiMatchCallSubmissionsGetCollectionUrl = '/v4/match_call_submissions';
+
+export const apiMatchCallSubmissionsPostUrl = '/v4/match_call_submissions';
+
+export const apiMatchCallSubmissionsIdGetUrl = '/v4/match_call_submissions/{id}';
+
+export const apiMatchCallSubmissionsIdPatchUrl = '/v4/match_call_submissions/{id}';
+
+export const apiMatchFormulasGetCollectionUrl = '/v4/match_formulas';
+
+export const apiMatchFormulasNameGetUrl = '/v4/match_formulas/{name}';
+
+export const apiMatchRulesGetCollectionUrl = '/v4/match_rules';
+
+export const apiMatchRulesNameGetUrl = '/v4/match_rules/{name}';
+
+export const apiMatchCallIdstrategyGetUrl = '/v4/match_call/{id}/strategy';
+
+export const apiMatchCallIdstrategyPatchUrl = '/v4/match_call/{id}/strategy';
+
 export const apiUsersIdorganizationGetUrl = '/v4/users/{id}/organization';
 
 export const apiUsersIdorganizationPatchUrl = '/v4/users/{id}/organization';
