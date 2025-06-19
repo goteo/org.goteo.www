@@ -4,6 +4,7 @@
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ProjectRewards from "./ProjectRewards.svelte";
     import ProjectUpdate from "./ProjectUpdate.svelte";
+    import ProjectBudget from "./ProjectBudget.svelte";
 
     let { project } = $props();
     let contentDescription = $state("");
@@ -12,7 +13,7 @@
     const tabs = [
         { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "project", label: $t("project.tabs.project") },
-        { id: "budget", label: $t("project.tabs.budget") },
+        { id: "budget", label: $t("project.tabs.budget.title") },
         { id: "updates", label: $t("project.tabs.updates.title") },
         { id: "community", label: $t("project.tabs.community") },
     ];
@@ -64,8 +65,13 @@
             {@html contentDescription}
         </div>
     {:else if activeTab === "budget"}
-        <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-            Contenido de necesidades del presupuesto
+        <div
+            id="tab-budget"
+            role="tabpanel"
+            aria-labelledby="tab-button-budget"
+            class="w-full px-10"
+        >
+            <ProjectBudget {project} />
         </div>
     {:else if activeTab === "updates"}
         <div
