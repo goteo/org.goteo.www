@@ -41,11 +41,13 @@
       "rewards": "Recompensas",
       "updates": {
         "title": "Actualizaciones",
+        "modal-title": "Nueva actualización",
         "content": {
           "title": "No pierdas detalle de los avances de esta campaña",
           "empty": "No existen más actualizaciones previstas.",
           "btn": {
-            "read-more": "Seguir leyendo"
+            "read-more": "Seguir leyendo",
+            "share": "Compartir"
           }
         }
       },
