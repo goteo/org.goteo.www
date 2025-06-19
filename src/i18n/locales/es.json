@@ -37,9 +37,22 @@
     "owner": "Campaña de crowdfunding impulsada por ",
     "tabs": {
       "project": "Información de campaña",
-      "budget": "Presupuesto",
+      "budget": {
+        "title": "Presupuesto",
+        "minimum": "Mínimo",
+        "optimal": "Óptimo"
+      },
       "rewards": "Recompensas",
-      "updates": "Actualizaciones",
+      "updates": {
+        "title": "Actualizaciones",
+        "content": {
+          "title": "No pierdas detalle de los avances de esta campaña",
+          "empty": "No existen más actualizaciones previstas.",
+          "btn": {
+            "read-more": "Seguir leyendo"
+          }
+        }
+      },
       "community": "Comunidad"
     },
     "actions": {

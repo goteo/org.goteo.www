@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Slider from "./../Admin/Slider.svelte";
     import { onMount } from "svelte";
     import type {
         Project,
@@ -9,6 +10,7 @@
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
+
     import { languagesList } from "../../i18n/locales";
     import Tabs from "./Tabs.svelte";
 
@@ -37,6 +39,13 @@
     let paragraphRef: HTMLParagraphElement;
     let showToggle = false;
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
+    const slides = [
+        { title: "Total aportes:", amount: "250,95€" },
+        { title: "Total Tips:", amount: "250,96€" },
+        { title: "Total comisiones:", amount: "250,97€" },
+        { title: "Pasar a operativa:", amount: "250,98€" },
+        { title: "Slide 5", amount: "250,99€" },
+    ];
 
     onMount(() => {
         const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
@@ -118,5 +127,6 @@
     </div>
 
     <Banner {ownerName} />
+    <Slider {slides} />
     <Tabs {project} />
 </section>
