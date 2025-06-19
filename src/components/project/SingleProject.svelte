@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Slider from "./../Admin/Slider.svelte";
     import { onMount } from "svelte";
     import type {
         Project,
@@ -9,7 +10,6 @@
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
-    // import TestSlider from "../TestSlider.svelte";
 
     import { languagesList } from "../../i18n/locales";
     import Tabs from "./Tabs.svelte";
@@ -19,6 +19,7 @@
     import Rewards from "../Rewards.svelte";
     import Banner from "./Banner.svelte";
     import { t } from "../../i18n/store";
+    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
 
     export let project: Project;
     export let accounting: Accounting;
@@ -38,6 +39,13 @@
     let paragraphRef: HTMLParagraphElement;
     let showToggle = false;
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
+    const slides = [
+        { title: "Total aportes:", amount: "250,95€" },
+        { title: "Total Tips:", amount: "250,96€" },
+        { title: "Total comisiones:", amount: "250,97€" },
+        { title: "Pasar a operativa:", amount: "250,98€" },
+        { title: "Slide 5", amount: "250,99€" },
+    ];
 
     onMount(() => {
         const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
@@ -105,8 +113,20 @@
 
     <Tags {tags} />
 
-    <Rewards {project} {limit} />
+    <div>
+        <div class="flex items-center justify-between">
+            <h2 class="text-secondary text-2xl font-bold">
+                {$t("reward.trending")}
+            </h2>
+            <button
+                class="text-tertiary flex cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+                ><ArrowRightIcon />{$t("reward.showAll")}</button
+            >
+        </div>
+        <Rewards {project} {limit} />
+    </div>
+
     <Banner {ownerName} />
-    <!-- <TestSlider /> -->
+    <Slider {slides} />
     <Tabs {project} />
 </section>

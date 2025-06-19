@@ -1,8 +1,10 @@
 <script lang="ts">
-    // import TestSlider from "../TestSlider.svelte";
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import ProjectRewards from "./ProjectRewards.svelte";
+    import ProjectUpdate from "./ProjectUpdate.svelte";
+    import ProjectBudget from "./ProjectBudget.svelte";
 
     let { project } = $props();
     let contentDescription = $state("");
@@ -11,8 +13,8 @@
     const tabs = [
         { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "project", label: $t("project.tabs.project") },
-        { id: "budget", label: $t("project.tabs.budget") },
-        { id: "updates", label: $t("project.tabs.updates") },
+        { id: "budget", label: $t("project.tabs.budget.title") },
+        { id: "updates", label: $t("project.tabs.updates.title") },
         { id: "community", label: $t("project.tabs.community") },
     ];
 
@@ -45,25 +47,40 @@
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
     {#if activeTab === "rewards"}
-        <div id="tab-rewards" role="tabpanel" aria-labelledby="tab-button-rewards" class="w-full">
-            Contenido de las recompensas
+        <div
+            id="tab-rewards"
+            role="tabpanel"
+            aria-labelledby="tab-button-rewards"
+            class="w-full px-10"
+        >
+            <ProjectRewards {project} />
         </div>
     {:else if activeTab === "project"}
         <div
             id="tab-project"
             role="tabpanel"
             aria-labelledby="tab-button-project"
-            class="flex max-w-4xl flex-col items-center gap-4 px-4"
+            class="flex max-w-4xl flex-col items-center gap-4 px-8"
         >
             {@html contentDescription}
         </div>
     {:else if activeTab === "budget"}
-        <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-            Contenido de necesidades del presupuesto
+        <div
+            id="tab-budget"
+            role="tabpanel"
+            aria-labelledby="tab-button-budget"
+            class="w-full px-10"
+        >
+            <ProjectBudget {project} />
         </div>
     {:else if activeTab === "updates"}
-        <div id="tab-updates" role="tabpanel" aria-labelledby="tab-button-updates" class="w-full">
-            <!-- <TestSlider /> -->
+        <div
+            id="tab-updates"
+            role="tabpanel"
+            aria-labelledby="tab-button-updates"
+            class="w-full px-10"
+        >
+            <ProjectUpdate {project} />
         </div>
     {:else if activeTab === "community"}
         <div

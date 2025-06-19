@@ -683,6 +683,333 @@ export type LinkJsonld = {
     type?: 'debug' | 'payment';
 };
 
+/**
+ * A MatchCall is a managed event which accepts MatchCallSubmissions from Projects to receive *matchfunding* financement.
+ * This means money going to a Project in a MatchCall can be matched with funds from the MatchCall accounting.
+ * \
+ * \
+ * MatchCallSubmissions from Projects can be accepted or rejected by the managers.
+ * \
+ * \
+ * How and when does a MatchCall match funds is determined by the MatchStrategy.
+ * Everytime there is a Charge item going to a Project accepted in a MatchCall the strategy is evaluated for matching.
+ * The strategy defines a series of rules that determine if the Charge is eligible for triggering the matching of funds.
+ * When a Charge is to be matched the strategy uses a MatchFormula,
+ * which is a predefined implementation for common mathematical operations used to match money.
+ * The formula is fine-tuned in the strategy by defining the variables in the formula.
+ */
+export type MatchCall = {
+    readonly id?: number;
+    /**
+     * The Accounting which holds and spends the funds for this MatchCall.
+     */
+    readonly accounting?: string;
+    /**
+     * The MatchStrategy defines the match behaviour for this MatchCall.
+     */
+    readonly strategy?: string;
+    /**
+     * A list of the MatchCallSubmissions received by this MatchCall.
+     */
+    readonly submissions?: Array<string>;
+    /**
+     * A list of Users who can modify this MatchCall.
+     */
+    managers?: Array<string>;
+    /**
+     * Main display title.
+     */
+    title: string;
+    /**
+     * Long-form secondary display text.
+     */
+    description?: string;
+    /**
+     * Codes for the territory of interest in this MatchCall.
+     */
+    territory: Territory;
+    /**
+     * The current status of the MatchCall.
+     */
+    status?: 'in_editing' | 'in_calling' | 'in_matchmaking' | 'to_closed' | 'closed';
+};
+
+/**
+ * A MatchCall is a managed event which accepts MatchCallSubmissions from Projects to receive *matchfunding* financement.
+ * This means money going to a Project in a MatchCall can be matched with funds from the MatchCall accounting.
+ * \
+ * \
+ * MatchCallSubmissions from Projects can be accepted or rejected by the managers.
+ * \
+ * \
+ * How and when does a MatchCall match funds is determined by the MatchStrategy.
+ * Everytime there is a Charge item going to a Project accepted in a MatchCall the strategy is evaluated for matching.
+ * The strategy defines a series of rules that determine if the Charge is eligible for triggering the matching of funds.
+ * When a Charge is to be matched the strategy uses a MatchFormula,
+ * which is a predefined implementation for common mathematical operations used to match money.
+ * The formula is fine-tuned in the strategy by defining the variables in the formula.
+ */
+export type MatchCallJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    /**
+     * The Accounting which holds and spends the funds for this MatchCall.
+     */
+    readonly accounting?: string;
+    /**
+     * The MatchStrategy defines the match behaviour for this MatchCall.
+     */
+    readonly strategy?: string;
+    /**
+     * A list of the MatchCallSubmissions received by this MatchCall.
+     */
+    readonly submissions?: Array<string>;
+    /**
+     * A list of Users who can modify this MatchCall.
+     */
+    managers?: Array<string>;
+    /**
+     * Main display title.
+     */
+    title: string;
+    /**
+     * Long-form secondary display text.
+     */
+    description?: string;
+    /**
+     * Codes for the territory of interest in this MatchCall.
+     */
+    territory: TerritoryJsonld;
+    /**
+     * The current status of the MatchCall.
+     */
+    status?: 'in_editing' | 'in_calling' | 'in_matchmaking' | 'to_closed' | 'closed';
+};
+
+/**
+ * MatchCallSubmissions represent the will of a Project to be held under a MatchCall and receive matchfunding financement.
+ */
+export type MatchCallSubmission = {
+    readonly id?: number;
+    /**
+     * The MatchCall to which this MatchCallSubmission belongs to.
+     */
+    readonly call?: string;
+    /**
+     * The Project that applied for the MatchCall.
+     */
+    readonly project?: string;
+    /**
+     * The status of the Project's application for the MatchCall.\
+     * Only MatchCallSubmissions with an status `accepted` will receive matchfunding.
+     */
+    status?: 'to_review' | 'in_review' | 'accepted' | 'rejected';
+};
+
+/**
+ * MatchCallSubmissions represent the will of a Project to be held under a MatchCall and receive matchfunding financement.
+ */
+export type MatchCallSubmissionMatchCallSubmissionCreationDto = {
+    /**
+     * The MatchCall to which this MatchCallSubmission belongs to.
+     */
+    call: string;
+    /**
+     * The Project that applied for the MatchCall.
+     */
+    project: string;
+};
+
+/**
+ * MatchCallSubmissions represent the will of a Project to be held under a MatchCall and receive matchfunding financement.
+ */
+export type MatchCallSubmissionMatchCallSubmissionCreationDtoJsonld = {
+    /**
+     * The MatchCall to which this MatchCallSubmission belongs to.
+     */
+    call: string;
+    /**
+     * The Project that applied for the MatchCall.
+     */
+    project: string;
+};
+
+/**
+ * MatchCallSubmissions represent the will of a Project to be held under a MatchCall and receive matchfunding financement.
+ */
+export type MatchCallSubmissionJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    /**
+     * The MatchCall to which this MatchCallSubmission belongs to.
+     */
+    readonly call?: string;
+    /**
+     * The Project that applied for the MatchCall.
+     */
+    readonly project?: string;
+    /**
+     * The status of the Project's application for the MatchCall.\
+     * Only MatchCallSubmissions with an status `accepted` will receive matchfunding.
+     */
+    status?: 'to_review' | 'in_review' | 'accepted' | 'rejected';
+};
+
+/**
+ * A MatchFormula is a predefined code implementation for matching funds in Transactions under a MatchCall.
+ * MatchFormulas can be chosen by the managers in a MatchCall and their behaviour fine-tuned.
+ */
+export type MatchFormula = {
+    readonly name?: string;
+    /**
+     * The underlying math expressed as a common-notation formula.
+     */
+    readonly expression?: string;
+};
+
+/**
+ * A MatchFormula is a predefined code implementation for matching funds in Transactions under a MatchCall.
+ * MatchFormulas can be chosen by the managers in a MatchCall and their behaviour fine-tuned.
+ */
+export type MatchFormulaJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly name?: string;
+    /**
+     * The underlying math expressed as a common-notation formula.
+     */
+    readonly expression?: string;
+};
+
+/**
+ * A MatchRule is a predefined code implementation for validating
+ * that a match making condition is met when there is a Charge to be matched.
+ */
+export type MatchRule = {
+    readonly name?: string;
+    /**
+     * A plain-text description about what the rules validates for.
+     */
+    readonly description?: string;
+};
+
+/**
+ * A MatchRule is a predefined code implementation for validating
+ * that a match making condition is met when there is a Charge to be matched.
+ */
+export type MatchRuleJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly name?: string;
+    /**
+     * A plain-text description about what the rules validates for.
+     */
+    readonly description?: string;
+};
+
+/**
+ * A MatchStrategy defines how will a MatchCall perform the match-making process.
+ * \
+ * The match-making flow is:
+ * 1. A Project accepted in a MatchCall receives a successful Charge.
+ * 2. The match-making loads the MatchCall's MatchStrategy.
+ * 3. The MatchStrategy rules are executed, if one rule fails the match-making is cancelled for the Charge.
+ * 3. The MatchStrategy formula function is passed the respective limit, factor and money of the MatchAgainst.
+ * 4. The result of the MatchStrategy formula function execution is put in a Transaction from the MatchCall to the Project.
+ */
+export type MatchStrategy = {
+    readonly call?: string;
+    /**
+     * The MatchRules used to decide if the match making strategy should be executed or not.
+     */
+    rules?: Array<string>;
+    /**
+     * The MatchFormula used to calculate matched funds.
+     */
+    formula: string;
+    /**
+     * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
+     */
+    limit: ApiResourceMoney;
+    /**
+     * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
+     */
+    factor: number;
+    /**
+     * The money to be matched by the formula is
+     * - `charge` the money in the Charge item
+     * - `budget_min` the minimum in the Project's budget
+     * - `budget_opt` the optimum in the Project's budget.
+     */
+    against?: 'charge' | 'budget_min' | 'budget_opt';
+};
+
+/**
+ * A MatchStrategy defines how will a MatchCall perform the match-making process.
+ * \
+ * The match-making flow is:
+ * 1. A Project accepted in a MatchCall receives a successful Charge.
+ * 2. The match-making loads the MatchCall's MatchStrategy.
+ * 3. The MatchStrategy rules are executed, if one rule fails the match-making is cancelled for the Charge.
+ * 3. The MatchStrategy formula function is passed the respective limit, factor and money of the MatchAgainst.
+ * 4. The result of the MatchStrategy formula function execution is put in a Transaction from the MatchCall to the Project.
+ */
+export type MatchStrategyJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly call?: string;
+    /**
+     * The MatchRules used to decide if the match making strategy should be executed or not.
+     */
+    rules?: Array<string>;
+    /**
+     * The MatchFormula used to calculate matched funds.
+     */
+    formula: string;
+    /**
+     * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
+     */
+    limit: ApiResourceMoneyJsonld;
+    /**
+     * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
+     */
+    factor: number;
+    /**
+     * The money to be matched by the formula is
+     * - `charge` the money in the Charge item
+     * - `budget_min` the minimum in the Project's budget
+     * - `budget_opt` the optimum in the Project's budget.
+     */
+    against?: 'charge' | 'budget_min' | 'budget_opt';
+};
+
 export type Money = {
     /**
      * An amount of currency.\
@@ -878,7 +1205,7 @@ export type Project = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory: ProjectTerritoryApiResource;
+    territory: Territory;
     /**
      * Free-form rich text description for the Project.
      */
@@ -932,7 +1259,7 @@ export type ProjectProjectCreationDto = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory: ProjectTerritoryApiResource;
+    territory: Territory;
     /**
      * Free-form rich text description for the Project.
      */
@@ -968,7 +1295,7 @@ export type ProjectProjectCreationDtoJsonld = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory: ProjectTerritoryApiResourceJsonld;
+    territory: TerritoryJsonld;
     /**
      * Free-form rich text description for the Project.
      */
@@ -1005,7 +1332,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory?: ProjectTerritoryApiResource;
+    territory?: Territory;
     /**
      * Free-form rich text description for the Project.
      */
@@ -1075,7 +1402,7 @@ export type ProjectJsonld = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory: ProjectTerritoryApiResourceJsonld;
+    territory: TerritoryJsonld;
     /**
      * Free-form rich text description for the Project.
      */
@@ -1433,47 +1760,6 @@ export type ProjectSupportJsonld = {
     message?: string | null;
 };
 
-export type ProjectTerritoryApiResource = {
-    /**
-     * ISO 3166-1 alpha-2 two-letter country code.
-     */
-    country: string;
-    /**
-     * ISO 3166-2 first level subdivision code.\
-     * e.g: ES-AN (Andalucía, Spain).
-     */
-    subLvl1?: string;
-    /**
-     * ISO 3166-2 second level subdivision code.\
-     * e.g: ES-GR (Granada, Andalucía, Spain).
-     */
-    subLvl2?: string;
-};
-
-export type ProjectTerritoryApiResourceJsonld = {
-    '@context'?: string | {
-        '@vocab': string;
-        hydra: 'http://www.w3.org/ns/hydra/core#';
-        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
-    };
-    readonly '@id'?: string;
-    readonly '@type'?: string;
-    /**
-     * ISO 3166-1 alpha-2 two-letter country code.
-     */
-    country: string;
-    /**
-     * ISO 3166-2 first level subdivision code.\
-     * e.g: ES-AN (Andalucía, Spain).
-     */
-    subLvl1?: string;
-    /**
-     * ISO 3166-2 second level subdivision code.\
-     * e.g: ES-GR (Granada, Andalucía, Spain).
-     */
-    subLvl2?: string;
-};
-
 /**
  * A ProjectUpdate offers records of significant news during a Project's life.\
  * \
@@ -1574,6 +1860,49 @@ export type ProjectVideoJsonld = {
     readonly '@type'?: string;
     src?: string | null;
     thumbnail?: string | null;
+};
+
+export type Territory = {
+    /**
+     * ISO 3166-1 alpha-2 two-letter country code.\
+     * e.g: ES (Spain).
+     */
+    country: string;
+    /**
+     * ISO 3166-2 first level subdivision code.\
+     * e.g: ES-AN (Andalucía, Spain).
+     */
+    subLvl1?: string | null;
+    /**
+     * ISO 3166-2 second level subdivision code.\
+     * e.g: ES-GR (Granada, Andalucía, Spain).
+     */
+    subLvl2?: string | null;
+};
+
+export type TerritoryJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * ISO 3166-1 alpha-2 two-letter country code.\
+     * e.g: ES (Spain).
+     */
+    country: string;
+    /**
+     * ISO 3166-2 first level subdivision code.\
+     * e.g: ES-AN (Andalucía, Spain).
+     */
+    subLvl1?: string | null;
+    /**
+     * ISO 3166-2 second level subdivision code.\
+     * e.g: ES-GR (Granada, Andalucía, Spain).
+     */
+    subLvl2?: string | null;
 };
 
 /**
@@ -1955,10 +2284,6 @@ export type ApiAccountingsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
     };
     url: '/v4/accountings';
 };
@@ -2060,10 +2385,6 @@ export type ApiAccountingBalancePointsGetCollectionData = {
          */
         itemsPerPage?: number;
         /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
-        /**
          * AccountingBalancePoint accounting
          */
         accounting: string;
@@ -2108,10 +2429,6 @@ export type ApiAccountingTransactionsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         origin?: string;
         'origin[]'?: Array<string>;
         target?: string;
@@ -2171,10 +2488,6 @@ export type ApiGatewaysGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
     };
     url: '/v4/gateways';
 };
@@ -2230,10 +2543,6 @@ export type ApiGatewayChargesGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         'checkout.gateway'?: string;
         'checkout.gateway[]'?: Array<string>;
         'checkout.trackings.value'?: string;
@@ -2355,10 +2664,6 @@ export type ApiGatewayCheckoutsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
     };
     url: '/v4/gateway_checkouts';
 };
@@ -2487,6 +2792,477 @@ export type ApiGatewayCheckoutsIdPatchResponses = {
 };
 
 export type ApiGatewayCheckoutsIdPatchResponse = ApiGatewayCheckoutsIdPatchResponses[keyof ApiGatewayCheckoutsIdPatchResponses];
+
+export type ApiMatchCallsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+    };
+    url: '/v4/match_calls';
+};
+
+export type ApiMatchCallsGetCollectionResponses = {
+    /**
+     * MatchCall collection
+     */
+    200: Array<MatchCall>;
+};
+
+export type ApiMatchCallsGetCollectionResponse = ApiMatchCallsGetCollectionResponses[keyof ApiMatchCallsGetCollectionResponses];
+
+export type ApiMatchCallsPostData = {
+    /**
+     * The new MatchCall resource
+     */
+    body: MatchCall;
+    path?: never;
+    query?: never;
+    url: '/v4/match_calls';
+};
+
+export type ApiMatchCallsPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchCallsPostError = ApiMatchCallsPostErrors[keyof ApiMatchCallsPostErrors];
+
+export type ApiMatchCallsPostResponses = {
+    /**
+     * MatchCall resource created
+     */
+    201: MatchCall;
+};
+
+export type ApiMatchCallsPostResponse = ApiMatchCallsPostResponses[keyof ApiMatchCallsPostResponses];
+
+export type ApiMatchCallsIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * MatchCall identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_calls/{id}';
+};
+
+export type ApiMatchCallsIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchCallsIdDeleteError = ApiMatchCallsIdDeleteErrors[keyof ApiMatchCallsIdDeleteErrors];
+
+export type ApiMatchCallsIdDeleteResponses = {
+    /**
+     * MatchCall resource deleted
+     */
+    204: void;
+};
+
+export type ApiMatchCallsIdDeleteResponse = ApiMatchCallsIdDeleteResponses[keyof ApiMatchCallsIdDeleteResponses];
+
+export type ApiMatchCallsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchCall identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_calls/{id}';
+};
+
+export type ApiMatchCallsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchCallsIdGetError = ApiMatchCallsIdGetErrors[keyof ApiMatchCallsIdGetErrors];
+
+export type ApiMatchCallsIdGetResponses = {
+    /**
+     * MatchCall resource
+     */
+    200: MatchCall;
+};
+
+export type ApiMatchCallsIdGetResponse = ApiMatchCallsIdGetResponses[keyof ApiMatchCallsIdGetResponses];
+
+export type ApiMatchCallsIdPatchData = {
+    /**
+     * The updated MatchCall resource
+     */
+    body: MatchCall;
+    path: {
+        /**
+         * MatchCall identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_calls/{id}';
+};
+
+export type ApiMatchCallsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchCallsIdPatchError = ApiMatchCallsIdPatchErrors[keyof ApiMatchCallsIdPatchErrors];
+
+export type ApiMatchCallsIdPatchResponses = {
+    /**
+     * MatchCall resource updated
+     */
+    200: MatchCall;
+};
+
+export type ApiMatchCallsIdPatchResponse = ApiMatchCallsIdPatchResponses[keyof ApiMatchCallsIdPatchResponses];
+
+export type ApiMatchCallSubmissionsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+    };
+    url: '/v4/match_call_submissions';
+};
+
+export type ApiMatchCallSubmissionsGetCollectionResponses = {
+    /**
+     * MatchCallSubmission collection
+     */
+    200: Array<MatchCallSubmission>;
+};
+
+export type ApiMatchCallSubmissionsGetCollectionResponse = ApiMatchCallSubmissionsGetCollectionResponses[keyof ApiMatchCallSubmissionsGetCollectionResponses];
+
+export type ApiMatchCallSubmissionsPostData = {
+    /**
+     * The new MatchCallSubmission resource
+     */
+    body: MatchCallSubmissionMatchCallSubmissionCreationDto;
+    path?: never;
+    query?: never;
+    url: '/v4/match_call_submissions';
+};
+
+export type ApiMatchCallSubmissionsPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchCallSubmissionsPostError = ApiMatchCallSubmissionsPostErrors[keyof ApiMatchCallSubmissionsPostErrors];
+
+export type ApiMatchCallSubmissionsPostResponses = {
+    /**
+     * MatchCallSubmission resource created
+     */
+    201: MatchCallSubmission;
+};
+
+export type ApiMatchCallSubmissionsPostResponse = ApiMatchCallSubmissionsPostResponses[keyof ApiMatchCallSubmissionsPostResponses];
+
+export type ApiMatchCallSubmissionsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchCallSubmission identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_call_submissions/{id}';
+};
+
+export type ApiMatchCallSubmissionsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchCallSubmissionsIdGetError = ApiMatchCallSubmissionsIdGetErrors[keyof ApiMatchCallSubmissionsIdGetErrors];
+
+export type ApiMatchCallSubmissionsIdGetResponses = {
+    /**
+     * MatchCallSubmission resource
+     */
+    200: MatchCallSubmission;
+};
+
+export type ApiMatchCallSubmissionsIdGetResponse = ApiMatchCallSubmissionsIdGetResponses[keyof ApiMatchCallSubmissionsIdGetResponses];
+
+export type ApiMatchCallSubmissionsIdPatchData = {
+    /**
+     * The updated MatchCallSubmission resource
+     */
+    body: MatchCallSubmission;
+    path: {
+        /**
+         * MatchCallSubmission identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_call_submissions/{id}';
+};
+
+export type ApiMatchCallSubmissionsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchCallSubmissionsIdPatchError = ApiMatchCallSubmissionsIdPatchErrors[keyof ApiMatchCallSubmissionsIdPatchErrors];
+
+export type ApiMatchCallSubmissionsIdPatchResponses = {
+    /**
+     * MatchCallSubmission resource updated
+     */
+    200: MatchCallSubmission;
+};
+
+export type ApiMatchCallSubmissionsIdPatchResponse = ApiMatchCallSubmissionsIdPatchResponses[keyof ApiMatchCallSubmissionsIdPatchResponses];
+
+export type ApiMatchFormulasGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+    };
+    url: '/v4/match_formulas';
+};
+
+export type ApiMatchFormulasGetCollectionResponses = {
+    /**
+     * MatchFormula collection
+     */
+    200: Array<MatchFormula>;
+};
+
+export type ApiMatchFormulasGetCollectionResponse = ApiMatchFormulasGetCollectionResponses[keyof ApiMatchFormulasGetCollectionResponses];
+
+export type ApiMatchFormulasNameGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchFormula identifier
+         */
+        name: string;
+    };
+    query?: never;
+    url: '/v4/match_formulas/{name}';
+};
+
+export type ApiMatchFormulasNameGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchFormulasNameGetError = ApiMatchFormulasNameGetErrors[keyof ApiMatchFormulasNameGetErrors];
+
+export type ApiMatchFormulasNameGetResponses = {
+    /**
+     * MatchFormula resource
+     */
+    200: MatchFormula;
+};
+
+export type ApiMatchFormulasNameGetResponse = ApiMatchFormulasNameGetResponses[keyof ApiMatchFormulasNameGetResponses];
+
+export type ApiMatchRulesGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+    };
+    url: '/v4/match_rules';
+};
+
+export type ApiMatchRulesGetCollectionResponses = {
+    /**
+     * MatchRule collection
+     */
+    200: Array<MatchRule>;
+};
+
+export type ApiMatchRulesGetCollectionResponse = ApiMatchRulesGetCollectionResponses[keyof ApiMatchRulesGetCollectionResponses];
+
+export type ApiMatchRulesNameGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchRule identifier
+         */
+        name: string;
+    };
+    query?: never;
+    url: '/v4/match_rules/{name}';
+};
+
+export type ApiMatchRulesNameGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchRulesNameGetError = ApiMatchRulesNameGetErrors[keyof ApiMatchRulesNameGetErrors];
+
+export type ApiMatchRulesNameGetResponses = {
+    /**
+     * MatchRule resource
+     */
+    200: MatchRule;
+};
+
+export type ApiMatchRulesNameGetResponse = ApiMatchRulesNameGetResponses[keyof ApiMatchRulesNameGetResponses];
+
+export type ApiMatchCallIdstrategyGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchCall identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_call/{id}/strategy';
+};
+
+export type ApiMatchCallIdstrategyGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchCallIdstrategyGetError = ApiMatchCallIdstrategyGetErrors[keyof ApiMatchCallIdstrategyGetErrors];
+
+export type ApiMatchCallIdstrategyGetResponses = {
+    /**
+     * MatchStrategy resource
+     */
+    200: MatchStrategy;
+};
+
+export type ApiMatchCallIdstrategyGetResponse = ApiMatchCallIdstrategyGetResponses[keyof ApiMatchCallIdstrategyGetResponses];
+
+export type ApiMatchCallIdstrategyPatchData = {
+    /**
+     * The updated MatchStrategy resource
+     */
+    body: MatchStrategy;
+    path: {
+        /**
+         * MatchCall identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_call/{id}/strategy';
+};
+
+export type ApiMatchCallIdstrategyPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchCallIdstrategyPatchError = ApiMatchCallIdstrategyPatchErrors[keyof ApiMatchCallIdstrategyPatchErrors];
+
+export type ApiMatchCallIdstrategyPatchResponses = {
+    /**
+     * MatchStrategy resource updated
+     */
+    200: MatchStrategy;
+};
+
+export type ApiMatchCallIdstrategyPatchResponse = ApiMatchCallIdstrategyPatchResponses[keyof ApiMatchCallIdstrategyPatchResponses];
 
 export type ApiUsersIdorganizationGetData = {
     body?: never;
@@ -2658,10 +3434,6 @@ export type ApiProjectsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         slug?: string;
         'slug[]'?: Array<string>;
         title?: string;
@@ -2841,10 +3613,6 @@ export type ApiProjectBudgetItemsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
     };
@@ -3005,10 +3773,6 @@ export type ApiProjectRewardsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
     };
@@ -3169,10 +3933,6 @@ export type ApiProjectRewardClaimsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
     };
     url: '/v4/project_reward_claims';
 };
@@ -3331,10 +4091,6 @@ export type ApiProjectSupportsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         owner?: string;
         'owner[]'?: Array<string>;
         project?: string;
@@ -3439,10 +4195,6 @@ export type ApiProjectUpdatesGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         project?: string;
         'project[]'?: Array<string>;
         'order[date]'?: 'asc' | 'desc';
@@ -3604,10 +4356,6 @@ export type ApiTipjarsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         name?: string;
     };
     url: '/v4/tipjars';
@@ -3767,10 +4515,6 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         /**
          * Query Users by email or handle. Fuzzy.
          */
@@ -4034,10 +4778,6 @@ export type ApiVersionsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Enable or disable pagination
-         */
-        pagination?: boolean;
         /**
          * The name of the resource.
          */
