@@ -47,7 +47,7 @@
 </div>
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
-    <div class="wrapper">
+    <div class="wrapper flex items-center justify-center">
         {#if activeTab === "rewards"}
             <div
                 id="tab-rewards"
