@@ -154,7 +154,7 @@
     {#if error}
         <p class="text-red-600">{error}</p>
     {:else if rewards && rewards.length}
-        <div class="flex flex-col gap-12 px-10">
+        <div class="flex flex-col gap-12">
             {#if !limit}
                 <h2 class="text-tertiary text-3xl font-bold">
                     {$t("rewards.title")}

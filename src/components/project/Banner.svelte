@@ -6,7 +6,7 @@
     export let ownerName: string;
 </script>
 
-<section class="flex flex-row gap-6">
+<section class="flex flex-row gap-6 py-10">
     <div class="flex flex-row gap-4">
         <div><DonatorIcon /></div>
         <div class="text-[#575757]">

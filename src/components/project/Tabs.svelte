@@ -28,7 +28,7 @@
     });
 </script>
 
-<div class="border-b border-gray-200">
+<div class="wrapper">
     <div class="flex space-x-6" role="tablist" aria-label="Project tabs">
         {#each tabs as tab}
             <button
@@ -36,7 +36,7 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-tertiary inline-flex items-center rounded-t-lg px-6 py-2 font-bold transition-colors duration-100 ease-in-out"
+                class="text-tertiary inline-flex items-center rounded-t-lg border-t-1 border-r-1 border-l-1 border-[#E6E5F7] px-6 py-2 font-bold transition-colors duration-100 ease-in-out"
                 class:bg-[#E6E5F7]={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
@@ -47,50 +47,47 @@
 </div>
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
-    {#if activeTab === "rewards"}
-        <div
-            id="tab-rewards"
-            role="tabpanel"
-            aria-labelledby="tab-button-rewards"
-            class="w-full px-10"
-        >
-            <ProjectRewards {project} />
-        </div>
-    {:else if activeTab === "project"}
-        <div
-            id="tab-project"
-            role="tabpanel"
-            aria-labelledby="tab-button-project"
-            class="flex max-w-4xl flex-col items-center gap-4 px-8"
-        >
-            {@html contentDescription}
-        </div>
-    {:else if activeTab === "budget"}
-        <div
-            id="tab-budget"
-            role="tabpanel"
-            aria-labelledby="tab-button-budget"
-            class="w-full px-10"
-        >
-            <ProjectBudget {project} {accounting} />
-        </div>
-    {:else if activeTab === "updates"}
-        <div
-            id="tab-updates"
-            role="tabpanel"
-            aria-labelledby="tab-button-updates"
-            class="w-full px-10"
-        >
-            <ProjectUpdate {project} />
-        </div>
-    {:else if activeTab === "community"}
-        <div
-            id="tab-community"
-            role="tabpanel"
-            aria-labelledby="tab-button-community"
-            class="w-full"
-        >
-            Contenido de comunidad
-        </div>
-    {/if}
+    <div class="wrapper flex items-center justify-center">
+        {#if activeTab === "rewards"}
+            <div
+                id="tab-rewards"
+                role="tabpanel"
+                aria-labelledby="tab-button-rewards"
+                class="w-full"
+            >
+                <ProjectRewards {project} />
+            </div>
+        {:else if activeTab === "project"}
+            <div
+                id="tab-project"
+                role="tabpanel"
+                aria-labelledby="tab-button-project"
+                class="flex max-w-4xl flex-col items-center gap-4"
+            >
+                {@html contentDescription}
+            </div>
+        {:else if activeTab === "budget"}
+            <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
+                <ProjectBudget {project} {accounting} />
+            </div>
+        {:else if activeTab === "updates"}
+            <div
+                id="tab-updates"
+                role="tabpanel"
+                aria-labelledby="tab-button-updates"
+                class="w-full"
+            >
+                <ProjectUpdate {project} />
+            </div>
+        {:else if activeTab === "community"}
+            <div
+                id="tab-community"
+                role="tabpanel"
+                aria-labelledby="tab-button-community"
+                class="w-full"
+            >
+                Contenido de comunidad
+            </div>
+        {/if}
+    </div>
 </div>
