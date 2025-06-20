@@ -73,6 +73,18 @@
         "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
         "learnMore": "Saber más."
       }
+    },
+    "share": {
+      "modal": {
+        "title": "Difunde este proyecto por el mundo",
+        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X.  Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!"
+      },
+      "iframe-modal": {
+        "title": "Así es como se verá en tu plataforma",
+        "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
+        "btnCopy": "Copiar código",
+        "btnCopied": "¡Código copiado!"
+      }
     }
   },
   "navigation": {
