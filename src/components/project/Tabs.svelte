@@ -67,12 +67,7 @@
                 {@html contentDescription}
             </div>
         {:else if activeTab === "budget"}
-            <div
-                id="tab-budget"
-                role="tabpanel"
-                aria-labelledby="tab-button-budget"
-                class="w-full"
-            >
+            <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
                 <ProjectBudget {project} {accounting} />
             </div>
         {:else if activeTab === "updates"}
