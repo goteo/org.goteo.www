@@ -127,6 +127,5 @@
     </div>
 
     <Banner {ownerName} />
-    <Slider {slides} />
     <Tabs {project} {accounting} />
 </section>
