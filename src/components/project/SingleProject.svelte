@@ -114,7 +114,7 @@
     <Tags {tags} />
 
     <div>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between py-10">
             <h2 class="text-secondary text-2xl font-bold">
                 {$t("reward.trending")}
             </h2>
