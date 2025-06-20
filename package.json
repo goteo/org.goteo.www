@@ -21,6 +21,7 @@
     "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^12.6.0",
     "@astrojs/node": "^9.2.2",
     "@astrojs/svelte": "^7.1.0",
     "@fontsource/karla": "^5.2.5",
