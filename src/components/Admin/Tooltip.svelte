@@ -20,7 +20,7 @@
         tooltip.textContent = text;
 
         tooltip.className = `
-      absolute left-1/2 -translate-x-[90%] bottom-full mb-0.5
+      absolute left-1/2  bottom-full mb-0.5
       opacity-0 transition-all duration-200 transform pointer-events-none
       ${tooltipClasses}
     `.trim();
