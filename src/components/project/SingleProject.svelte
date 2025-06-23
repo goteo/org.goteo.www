@@ -1,5 +1,4 @@
 <script lang="ts">
-    import Slider from "./../Admin/Slider.svelte";
     import { onMount } from "svelte";
     import type {
         Project,
@@ -39,13 +38,6 @@
     let paragraphRef: HTMLParagraphElement;
     let showToggle = false;
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
-    const slides = [
-        { title: "Total aportes:", amount: "250,95€" },
-        { title: "Total Tips:", amount: "250,96€" },
-        { title: "Total comisiones:", amount: "250,97€" },
-        { title: "Pasar a operativa:", amount: "250,98€" },
-        { title: "Slide 5", amount: "250,99€" },
-    ];
 
     onMount(() => {
         const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
@@ -114,7 +106,7 @@
     <Tags {tags} />
 
     <div>
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between py-10">
             <h2 class="text-secondary text-2xl font-bold">
                 {$t("reward.trending")}
             </h2>
@@ -127,6 +119,5 @@
     </div>
 
     <Banner {ownerName} />
-    <Slider {slides} />
-    <Tabs {project} {accounting} />
 </section>
+<Tabs {project} {accounting} />
