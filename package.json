@@ -18,7 +18,8 @@
     "cypress:run": "cypress run",
     "cypress:verify": "cypress verify",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
-    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run"
+    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321",
+    "dev:worker": "npx wrangler dev --port 9099 --ip 0.0.0.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
@@ -56,6 +57,7 @@
     "prettier-plugin-svelte": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.6.12",
     "start-server-and-test": "^2.0.12",
-    "typescript-eslint": "^8.33.1"
+    "typescript-eslint": "^8.33.1",
+    "wrangler": "^4.20.5"
   }
 }

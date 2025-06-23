@@ -1,0 +1,18 @@
+name = "goteo-v4-frontend"
+main = "./dist/_worker.js/index.js"
+
+compatibility_date = "2025-06-19"
+compatibility_flags = ["nodejs_compat"]
+
+keep_vars = true
+workers_dev = false
+
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+
+[observability]
+enabled = true
+
+[env.testing]
+workers_dev = true
