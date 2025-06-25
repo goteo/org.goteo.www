@@ -62,7 +62,16 @@
           }
         }
       },
-      "community": "Comunidad"
+      "community": {
+        "title": "Comunidad",
+        "owner-anonymous": "Anónimo",
+        "contribution": "Aporte",
+        "matchfunding": {
+          "contribution": "Suma de los aportes",
+          "aported": "Aportados",
+          "up_to": "de hasta"
+        }
+      }
     },
     "actions": {
       "share": "Compartir",

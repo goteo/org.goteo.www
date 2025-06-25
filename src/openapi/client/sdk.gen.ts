@@ -2,7 +2,7 @@
 
 import { client as _heyApiClient } from './client.gen';
 
-import type { ApiAccountingsGetCollectionData, ApiAccountingsGetCollectionResponses, ApiAccountingsIdGetData, ApiAccountingsIdGetResponses, ApiAccountingsIdGetErrors, ApiAccountingsIdPatchData, ApiAccountingsIdPatchResponses, ApiAccountingsIdPatchErrors, ApiAccountingBalancePointsGetCollectionData, ApiAccountingBalancePointsGetCollectionResponses, ApiAccountingTransactionsGetCollectionData, ApiAccountingTransactionsGetCollectionResponses, ApiAccountingTransactionsIdGetData, ApiAccountingTransactionsIdGetResponses, ApiAccountingTransactionsIdGetErrors, ApiGatewaysGetCollectionData, ApiGatewaysGetCollectionResponses, ApiGatewaysNameGetData, ApiGatewaysNameGetResponses, ApiGatewaysNameGetErrors, ApiGatewayChargesGetCollectionData, ApiGatewayChargesGetCollectionResponses, ApiGatewayChargesIdGetData, ApiGatewayChargesIdGetResponses, ApiGatewayChargesIdGetErrors, ApiGatewayChargesIdPatchData, ApiGatewayChargesIdPatchResponses, ApiGatewayChargesIdPatchErrors, ApiGatewayCheckoutsGetCollectionData, ApiGatewayCheckoutsGetCollectionResponses, ApiGatewayCheckoutsGetCollectionErrors, ApiGatewayCheckoutsPostData, ApiGatewayCheckoutsPostResponses, ApiGatewayCheckoutsPostErrors, ApiGatewayCheckoutsIdGetData, ApiGatewayCheckoutsIdGetResponses, ApiGatewayCheckoutsIdGetErrors, ApiGatewayCheckoutsIdPatchData, ApiGatewayCheckoutsIdPatchResponses, ApiGatewayCheckoutsIdPatchErrors, ApiMatchCallsGetCollectionData, ApiMatchCallsGetCollectionResponses, ApiMatchCallsPostData, ApiMatchCallsPostResponses, ApiMatchCallsPostErrors, ApiMatchCallsIdDeleteData, ApiMatchCallsIdDeleteResponses, ApiMatchCallsIdDeleteErrors, ApiMatchCallsIdGetData, ApiMatchCallsIdGetResponses, ApiMatchCallsIdGetErrors, ApiMatchCallsIdPatchData, ApiMatchCallsIdPatchResponses, ApiMatchCallsIdPatchErrors, ApiMatchCallSubmissionsGetCollectionData, ApiMatchCallSubmissionsGetCollectionResponses, ApiMatchCallSubmissionsPostData, ApiMatchCallSubmissionsPostResponses, ApiMatchCallSubmissionsPostErrors, ApiMatchCallSubmissionsIdGetData, ApiMatchCallSubmissionsIdGetResponses, ApiMatchCallSubmissionsIdGetErrors, ApiMatchCallSubmissionsIdPatchData, ApiMatchCallSubmissionsIdPatchResponses, ApiMatchCallSubmissionsIdPatchErrors, ApiMatchFormulasGetCollectionData, ApiMatchFormulasGetCollectionResponses, ApiMatchFormulasNameGetData, ApiMatchFormulasNameGetResponses, ApiMatchFormulasNameGetErrors, ApiMatchRulesGetCollectionData, ApiMatchRulesGetCollectionResponses, ApiMatchRulesNameGetData, ApiMatchRulesNameGetResponses, ApiMatchRulesNameGetErrors, ApiMatchCallIdstrategyGetData, ApiMatchCallIdstrategyGetResponses, ApiMatchCallIdstrategyGetErrors, ApiMatchCallIdstrategyPatchData, ApiMatchCallIdstrategyPatchResponses, ApiMatchCallIdstrategyPatchErrors, ApiUsersIdorganizationGetData, ApiUsersIdorganizationGetResponses, ApiUsersIdorganizationGetErrors, ApiUsersIdorganizationPatchData, ApiUsersIdorganizationPatchResponses, ApiUsersIdorganizationPatchErrors, ApiUsersIdpersonGetData, ApiUsersIdpersonGetResponses, ApiUsersIdpersonGetErrors, ApiUsersIdpersonPatchData, ApiUsersIdpersonPatchResponses, ApiUsersIdpersonPatchErrors, ApiProjectsGetCollectionData, ApiProjectsGetCollectionResponses, ApiProjectsPostData, ApiProjectsPostResponses, ApiProjectsPostErrors, ApiProjectsIdOrSlugGetData, ApiProjectsIdOrSlugGetResponses, ApiProjectsIdOrSlugGetErrors, ApiProjectsIdDeleteData, ApiProjectsIdDeleteResponses, ApiProjectsIdDeleteErrors, ApiProjectsIdPatchData, ApiProjectsIdPatchResponses, ApiProjectsIdPatchErrors, ApiProjectBudgetItemsGetCollectionData, ApiProjectBudgetItemsGetCollectionResponses, ApiProjectBudgetItemsPostData, ApiProjectBudgetItemsPostResponses, ApiProjectBudgetItemsPostErrors, ApiProjectBudgetItemsIdDeleteData, ApiProjectBudgetItemsIdDeleteResponses, ApiProjectBudgetItemsIdDeleteErrors, ApiProjectBudgetItemsIdGetData, ApiProjectBudgetItemsIdGetResponses, ApiProjectBudgetItemsIdGetErrors, ApiProjectBudgetItemsIdPatchData, ApiProjectBudgetItemsIdPatchResponses, ApiProjectBudgetItemsIdPatchErrors, ApiProjectRewardsGetCollectionData, ApiProjectRewardsGetCollectionResponses, ApiProjectRewardsPostData, ApiProjectRewardsPostResponses, ApiProjectRewardsPostErrors, ApiProjectRewardsIdDeleteData, ApiProjectRewardsIdDeleteResponses, ApiProjectRewardsIdDeleteErrors, ApiProjectRewardsIdGetData, ApiProjectRewardsIdGetResponses, ApiProjectRewardsIdGetErrors, ApiProjectRewardsIdPatchData, ApiProjectRewardsIdPatchResponses, ApiProjectRewardsIdPatchErrors, ApiProjectRewardClaimsGetCollectionData, ApiProjectRewardClaimsGetCollectionResponses, ApiProjectRewardClaimsPostData, ApiProjectRewardClaimsPostResponses, ApiProjectRewardClaimsPostErrors, ApiProjectRewardClaimsIdDeleteData, ApiProjectRewardClaimsIdDeleteResponses, ApiProjectRewardClaimsIdDeleteErrors, ApiProjectRewardClaimsIdGetData, ApiProjectRewardClaimsIdGetResponses, ApiProjectRewardClaimsIdGetErrors, ApiProjectRewardClaimsIdPatchData, ApiProjectRewardClaimsIdPatchResponses, ApiProjectRewardClaimsIdPatchErrors, ApiProjectSupportsGetCollectionData, ApiProjectSupportsGetCollectionResponses, ApiProjectSupportsIdGetData, ApiProjectSupportsIdGetResponses, ApiProjectSupportsIdGetErrors, ApiProjectSupportsIdPatchData, ApiProjectSupportsIdPatchResponses, ApiProjectSupportsIdPatchErrors, ApiProjectUpdatesGetCollectionData, ApiProjectUpdatesGetCollectionResponses, ApiProjectUpdatesPostData, ApiProjectUpdatesPostResponses, ApiProjectUpdatesPostErrors, ApiProjectUpdatesIdDeleteData, ApiProjectUpdatesIdDeleteResponses, ApiProjectUpdatesIdDeleteErrors, ApiProjectUpdatesIdGetData, ApiProjectUpdatesIdGetResponses, ApiProjectUpdatesIdGetErrors, ApiProjectUpdatesIdPatchData, ApiProjectUpdatesIdPatchResponses, ApiProjectUpdatesIdPatchErrors, ApiTipjarsGetCollectionData, ApiTipjarsGetCollectionResponses, ApiTipjarsPostData, ApiTipjarsPostResponses, ApiTipjarsPostErrors, ApiTipjarsIdDeleteData, ApiTipjarsIdDeleteResponses, ApiTipjarsIdDeleteErrors, ApiTipjarsIdGetData, ApiTipjarsIdGetResponses, ApiTipjarsIdGetErrors, ApiTipjarsIdPatchData, ApiTipjarsIdPatchResponses, ApiTipjarsIdPatchErrors, ApiUsersGetCollectionData, ApiUsersGetCollectionResponses, ApiUsersPostData, ApiUsersPostResponses, ApiUsersPostErrors, ApiUsersIdDeleteData, ApiUsersIdDeleteResponses, ApiUsersIdDeleteErrors, ApiUsersIdGetData, ApiUsersIdGetResponses, ApiUsersIdGetErrors, ApiUsersIdPatchData, ApiUsersIdPatchResponses, ApiUsersIdPatchErrors, ApiUserTokensPostData, ApiUserTokensPostResponses, ApiUserTokensPostErrors, ApiUserTokensIdDeleteData, ApiUserTokensIdDeleteResponses, ApiUserTokensIdDeleteErrors, ApiUserTokensIdGetData, ApiUserTokensIdGetResponses, ApiUserTokensIdGetErrors, ApiVersionsGetCollectionData, ApiVersionsGetCollectionResponses, ApiVersionsIdGetData, ApiVersionsIdGetResponses, ApiVersionsIdGetErrors } from './types.gen';
+import type { ApiAccountingsGetCollectionData, ApiAccountingsGetCollectionResponses, ApiAccountingsIdGetData, ApiAccountingsIdGetResponses, ApiAccountingsIdGetErrors, ApiAccountingsIdPatchData, ApiAccountingsIdPatchResponses, ApiAccountingsIdPatchErrors, ApiAccountingBalancePointsGetCollectionData, ApiAccountingBalancePointsGetCollectionResponses, ApiAccountingTransactionsGetCollectionData, ApiAccountingTransactionsGetCollectionResponses, ApiAccountingTransactionsIdGetData, ApiAccountingTransactionsIdGetResponses, ApiAccountingTransactionsIdGetErrors, ApiGatewaysGetCollectionData, ApiGatewaysGetCollectionResponses, ApiGatewaysNameGetData, ApiGatewaysNameGetResponses, ApiGatewaysNameGetErrors, ApiGatewayChargesGetCollectionData, ApiGatewayChargesGetCollectionResponses, ApiGatewayChargesIdGetData, ApiGatewayChargesIdGetResponses, ApiGatewayChargesIdGetErrors, ApiGatewayChargesIdPatchData, ApiGatewayChargesIdPatchResponses, ApiGatewayChargesIdPatchErrors, ApiGatewayCheckoutsGetCollectionData, ApiGatewayCheckoutsGetCollectionResponses, ApiGatewayCheckoutsGetCollectionErrors, ApiGatewayCheckoutsPostData, ApiGatewayCheckoutsPostResponses, ApiGatewayCheckoutsPostErrors, ApiGatewayCheckoutsIdGetData, ApiGatewayCheckoutsIdGetResponses, ApiGatewayCheckoutsIdGetErrors, ApiGatewayCheckoutsIdPatchData, ApiGatewayCheckoutsIdPatchResponses, ApiGatewayCheckoutsIdPatchErrors, ApiMatchCallsGetCollectionData, ApiMatchCallsGetCollectionResponses, ApiMatchCallsPostData, ApiMatchCallsPostResponses, ApiMatchCallsPostErrors, ApiMatchCallsIdDeleteData, ApiMatchCallsIdDeleteResponses, ApiMatchCallsIdDeleteErrors, ApiMatchCallsIdGetData, ApiMatchCallsIdGetResponses, ApiMatchCallsIdGetErrors, ApiMatchCallsIdPatchData, ApiMatchCallsIdPatchResponses, ApiMatchCallsIdPatchErrors, ApiMatchCallSubmissionsGetCollectionData, ApiMatchCallSubmissionsGetCollectionResponses, ApiMatchCallSubmissionsPostData, ApiMatchCallSubmissionsPostResponses, ApiMatchCallSubmissionsPostErrors, ApiMatchCallSubmissionsIdGetData, ApiMatchCallSubmissionsIdGetResponses, ApiMatchCallSubmissionsIdGetErrors, ApiMatchCallSubmissionsIdPatchData, ApiMatchCallSubmissionsIdPatchResponses, ApiMatchCallSubmissionsIdPatchErrors, ApiMatchFormulasGetCollectionData, ApiMatchFormulasGetCollectionResponses, ApiMatchFormulasNameGetData, ApiMatchFormulasNameGetResponses, ApiMatchFormulasNameGetErrors, ApiMatchRulesGetCollectionData, ApiMatchRulesGetCollectionResponses, ApiMatchRulesNameGetData, ApiMatchRulesNameGetResponses, ApiMatchRulesNameGetErrors, ApiMatchStrategiesGetCollectionData, ApiMatchStrategiesGetCollectionResponses, ApiMatchStrategiesPostData, ApiMatchStrategiesPostResponses, ApiMatchStrategiesPostErrors, ApiMatchStrategiesIdDeleteData, ApiMatchStrategiesIdDeleteResponses, ApiMatchStrategiesIdDeleteErrors, ApiMatchStrategiesIdGetData, ApiMatchStrategiesIdGetResponses, ApiMatchStrategiesIdGetErrors, ApiMatchStrategiesIdPatchData, ApiMatchStrategiesIdPatchResponses, ApiMatchStrategiesIdPatchErrors, ApiUsersIdorganizationGetData, ApiUsersIdorganizationGetResponses, ApiUsersIdorganizationGetErrors, ApiUsersIdorganizationPatchData, ApiUsersIdorganizationPatchResponses, ApiUsersIdorganizationPatchErrors, ApiUsersIdpersonGetData, ApiUsersIdpersonGetResponses, ApiUsersIdpersonGetErrors, ApiUsersIdpersonPatchData, ApiUsersIdpersonPatchResponses, ApiUsersIdpersonPatchErrors, ApiProjectsGetCollectionData, ApiProjectsGetCollectionResponses, ApiProjectsPostData, ApiProjectsPostResponses, ApiProjectsPostErrors, ApiProjectsIdOrSlugGetData, ApiProjectsIdOrSlugGetResponses, ApiProjectsIdOrSlugGetErrors, ApiProjectsIdDeleteData, ApiProjectsIdDeleteResponses, ApiProjectsIdDeleteErrors, ApiProjectsIdPatchData, ApiProjectsIdPatchResponses, ApiProjectsIdPatchErrors, ApiProjectBudgetItemsGetCollectionData, ApiProjectBudgetItemsGetCollectionResponses, ApiProjectBudgetItemsPostData, ApiProjectBudgetItemsPostResponses, ApiProjectBudgetItemsPostErrors, ApiProjectBudgetItemsIdDeleteData, ApiProjectBudgetItemsIdDeleteResponses, ApiProjectBudgetItemsIdDeleteErrors, ApiProjectBudgetItemsIdGetData, ApiProjectBudgetItemsIdGetResponses, ApiProjectBudgetItemsIdGetErrors, ApiProjectBudgetItemsIdPatchData, ApiProjectBudgetItemsIdPatchResponses, ApiProjectBudgetItemsIdPatchErrors, ApiProjectRewardsGetCollectionData, ApiProjectRewardsGetCollectionResponses, ApiProjectRewardsPostData, ApiProjectRewardsPostResponses, ApiProjectRewardsPostErrors, ApiProjectRewardsIdDeleteData, ApiProjectRewardsIdDeleteResponses, ApiProjectRewardsIdDeleteErrors, ApiProjectRewardsIdGetData, ApiProjectRewardsIdGetResponses, ApiProjectRewardsIdGetErrors, ApiProjectRewardsIdPatchData, ApiProjectRewardsIdPatchResponses, ApiProjectRewardsIdPatchErrors, ApiProjectRewardClaimsGetCollectionData, ApiProjectRewardClaimsGetCollectionResponses, ApiProjectRewardClaimsPostData, ApiProjectRewardClaimsPostResponses, ApiProjectRewardClaimsPostErrors, ApiProjectRewardClaimsIdDeleteData, ApiProjectRewardClaimsIdDeleteResponses, ApiProjectRewardClaimsIdDeleteErrors, ApiProjectRewardClaimsIdGetData, ApiProjectRewardClaimsIdGetResponses, ApiProjectRewardClaimsIdGetErrors, ApiProjectRewardClaimsIdPatchData, ApiProjectRewardClaimsIdPatchResponses, ApiProjectRewardClaimsIdPatchErrors, ApiProjectSupportsGetCollectionData, ApiProjectSupportsGetCollectionResponses, ApiProjectSupportsIdGetData, ApiProjectSupportsIdGetResponses, ApiProjectSupportsIdGetErrors, ApiProjectSupportsIdPatchData, ApiProjectSupportsIdPatchResponses, ApiProjectSupportsIdPatchErrors, ApiProjectUpdatesGetCollectionData, ApiProjectUpdatesGetCollectionResponses, ApiProjectUpdatesPostData, ApiProjectUpdatesPostResponses, ApiProjectUpdatesPostErrors, ApiProjectUpdatesIdDeleteData, ApiProjectUpdatesIdDeleteResponses, ApiProjectUpdatesIdDeleteErrors, ApiProjectUpdatesIdGetData, ApiProjectUpdatesIdGetResponses, ApiProjectUpdatesIdGetErrors, ApiProjectUpdatesIdPatchData, ApiProjectUpdatesIdPatchResponses, ApiProjectUpdatesIdPatchErrors, ApiTipjarsGetCollectionData, ApiTipjarsGetCollectionResponses, ApiTipjarsPostData, ApiTipjarsPostResponses, ApiTipjarsPostErrors, ApiTipjarsIdDeleteData, ApiTipjarsIdDeleteResponses, ApiTipjarsIdDeleteErrors, ApiTipjarsIdGetData, ApiTipjarsIdGetResponses, ApiTipjarsIdGetErrors, ApiTipjarsIdPatchData, ApiTipjarsIdPatchResponses, ApiTipjarsIdPatchErrors, ApiUsersGetCollectionData, ApiUsersGetCollectionResponses, ApiUsersPostData, ApiUsersPostResponses, ApiUsersPostErrors, ApiUsersIdDeleteData, ApiUsersIdDeleteResponses, ApiUsersIdDeleteErrors, ApiUsersIdGetData, ApiUsersIdGetResponses, ApiUsersIdGetErrors, ApiUsersIdPatchData, ApiUsersIdPatchResponses, ApiUsersIdPatchErrors, ApiUserTokensPostData, ApiUserTokensPostResponses, ApiUserTokensPostErrors, ApiUserTokensIdDeleteData, ApiUserTokensIdDeleteResponses, ApiUserTokensIdDeleteErrors, ApiUserTokensIdGetData, ApiUserTokensIdGetResponses, ApiUserTokensIdGetErrors, ApiVersionsGetCollectionData, ApiVersionsGetCollectionResponses, ApiVersionsIdGetData, ApiVersionsIdGetResponses, ApiVersionsIdGetErrors } from './types.gen';
 import type { Options as ClientOptions, TDataShape, Client } from '@hey-api/client-fetch';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = ClientOptions<TData, ThrowOnError> & {
@@ -534,18 +534,73 @@ export const apiMatchRulesNameGet = <ThrowOnError extends boolean = false>(optio
 };
 
 /**
- * Retrieves a MatchStrategy resource.
- * Retrieves one MatchStrategy resource.
+ * Retrieves the collection of MatchStrategy resources.
+ * Retrieves the collection of MatchStrategy resources.
  */
-export const apiMatchCallIdstrategyGet = <ThrowOnError extends boolean = false>(options: Options<ApiMatchCallIdstrategyGetData, ThrowOnError>) => {
-    return (options.client ?? _heyApiClient).get<ApiMatchCallIdstrategyGetResponses, ApiMatchCallIdstrategyGetErrors, ThrowOnError>({
+export const apiMatchStrategiesGetCollection = <ThrowOnError extends boolean = false>(options?: Options<ApiMatchStrategiesGetCollectionData, ThrowOnError>) => {
+    return (options?.client ?? _heyApiClient).get<ApiMatchStrategiesGetCollectionResponses, unknown, ThrowOnError>({
         security: [
             {
                 scheme: 'bearer',
                 type: 'http'
             }
         ],
-        url: '/v4/match_call/{id}/strategy',
+        url: '/v4/match_strategies',
+        ...options
+    });
+};
+
+/**
+ * Creates a MatchStrategy resource.
+ * Creates a MatchStrategy resource.
+ */
+export const apiMatchStrategiesPost = <ThrowOnError extends boolean = false>(options: Options<ApiMatchStrategiesPostData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).post<ApiMatchStrategiesPostResponses, ApiMatchStrategiesPostErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/v4/match_strategies',
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+};
+
+/**
+ * Removes the MatchStrategy resource.
+ * Removes the MatchStrategy resource.
+ */
+export const apiMatchStrategiesIdDelete = <ThrowOnError extends boolean = false>(options: Options<ApiMatchStrategiesIdDeleteData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).delete<ApiMatchStrategiesIdDeleteResponses, ApiMatchStrategiesIdDeleteErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/v4/match_strategies/{id}',
+        ...options
+    });
+};
+
+/**
+ * Retrieves a MatchStrategy resource.
+ * Retrieves one MatchStrategy resource.
+ */
+export const apiMatchStrategiesIdGet = <ThrowOnError extends boolean = false>(options: Options<ApiMatchStrategiesIdGetData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).get<ApiMatchStrategiesIdGetResponses, ApiMatchStrategiesIdGetErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/v4/match_strategies/{id}',
         ...options
     });
 };
@@ -554,15 +609,15 @@ export const apiMatchCallIdstrategyGet = <ThrowOnError extends boolean = false>(
  * Updates the MatchStrategy resource.
  * Updates the MatchStrategy resource.
  */
-export const apiMatchCallIdstrategyPatch = <ThrowOnError extends boolean = false>(options: Options<ApiMatchCallIdstrategyPatchData, ThrowOnError>) => {
-    return (options.client ?? _heyApiClient).patch<ApiMatchCallIdstrategyPatchResponses, ApiMatchCallIdstrategyPatchErrors, ThrowOnError>({
+export const apiMatchStrategiesIdPatch = <ThrowOnError extends boolean = false>(options: Options<ApiMatchStrategiesIdPatchData, ThrowOnError>) => {
+    return (options.client ?? _heyApiClient).patch<ApiMatchStrategiesIdPatchResponses, ApiMatchStrategiesIdPatchErrors, ThrowOnError>({
         security: [
             {
                 scheme: 'bearer',
                 type: 'http'
             }
         ],
-        url: '/v4/match_call/{id}/strategy',
+        url: '/v4/match_strategies/{id}',
         ...options,
         headers: {
             'Content-Type': 'application/merge-patch+json',
