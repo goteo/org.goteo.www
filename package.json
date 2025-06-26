@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SKIP_PAYMENT_GATEWAYS=true PAYMENT_GATEWAYS_ENABLED=false astro preview",
+    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SKIP_PAYMENT_GATEWAYS=true PAYMENT_GATEWAYS_ENABLED=false wrangler dev --env preview --port 4321 --ip 0.0.0.0",
     "astro": "astro",
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
@@ -18,8 +18,8 @@
     "cypress:run": "cypress run",
     "cypress:verify": "cypress verify",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
-    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321",
-    "dev:worker": "npx wrangler dev --port 9099 --ip 0.0.0.0"
+    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run",
+    "dev:worker": "npx wrangler dev --port 4321 --ip 0.0.0.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
