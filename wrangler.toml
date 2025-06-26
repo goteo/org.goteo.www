@@ -1,18 +1,21 @@
 name = "goteo-v4-frontend"
 main = "./dist/_worker.js/index.js"
-
-compatibility_date = "2025-06-19"
+compatibility_date = "2025-06-26"
 compatibility_flags = ["nodejs_compat"]
-
-keep_vars = true
 workers_dev = false
-
-[assets]
-binding = "ASSETS"
-directory = "./dist"
-
-[observability]
-enabled = true
+keep_vars = true
 
 [env.testing]
+workers_dev = true
+
+[env.staging]
+routes = [
+    { pattern = "v4.staging.goteo.org", zone_name = "goteo.org", custom_domain = true },
+]
+
+[env.prod]
+routes = [
+    { pattern = "v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
+]
+[env.preview]
 workers_dev = true
