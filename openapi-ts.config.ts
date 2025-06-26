@@ -2,9 +2,10 @@ import { defineConfig } from "@hey-api/openapi-ts";
 import { defaultPlugins } from "@hey-api/openapi-ts";
 
 import { defineConfig as operationPathsConfig } from "./src/openapi/plugins/operation-paths";
+import { getBaseUrl, getApiVersion } from "./src/utils/consts";
 
 export default defineConfig({
-    input: "https://v4.goteo.org/v4/docs.json",
+    input: `${getBaseUrl()}/${getApiVersion()}/docs.json`,
     output: "src/openapi/client",
     plugins: [
         ...defaultPlugins,

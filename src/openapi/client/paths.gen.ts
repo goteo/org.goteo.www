@@ -56,9 +56,15 @@ export const apiMatchRulesGetCollectionUrl = '/v4/match_rules';
 
 export const apiMatchRulesNameGetUrl = '/v4/match_rules/{name}';
 
-export const apiMatchCallIdstrategyGetUrl = '/v4/match_call/{id}/strategy';
+export const apiMatchStrategiesGetCollectionUrl = '/v4/match_strategies';
 
-export const apiMatchCallIdstrategyPatchUrl = '/v4/match_call/{id}/strategy';
+export const apiMatchStrategiesPostUrl = '/v4/match_strategies';
+
+export const apiMatchStrategiesIdDeleteUrl = '/v4/match_strategies/{id}';
+
+export const apiMatchStrategiesIdGetUrl = '/v4/match_strategies/{id}';
+
+export const apiMatchStrategiesIdPatchUrl = '/v4/match_strategies/{id}';
 
 export const apiUsersIdorganizationGetUrl = '/v4/users/{id}/organization';
 

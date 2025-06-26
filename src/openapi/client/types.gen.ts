@@ -705,9 +705,9 @@ export type MatchCall = {
      */
     readonly accounting?: string;
     /**
-     * The MatchStrategy defines the match behaviour for this MatchCall.
+     * The MatchStrategies define the matching behaviour for this MatchCall.
      */
-    readonly strategy?: string;
+    readonly strategies?: Array<string>;
     /**
      * A list of the MatchCallSubmissions received by this MatchCall.
      */
@@ -763,9 +763,9 @@ export type MatchCallJsonld = {
      */
     readonly accounting?: string;
     /**
-     * The MatchStrategy defines the match behaviour for this MatchCall.
+     * The MatchStrategies define the matching behaviour for this MatchCall.
      */
-    readonly strategy?: string;
+    readonly strategies?: Array<string>;
     /**
      * A list of the MatchCallSubmissions received by this MatchCall.
      */
@@ -934,13 +934,23 @@ export type MatchRuleJsonld = {
  * \
  * The match-making flow is:
  * 1. A Project accepted in a MatchCall receives a successful Charge.
- * 2. The match-making loads the MatchCall's MatchStrategy.
- * 3. The MatchStrategy rules are executed, if one rule fails the match-making is cancelled for the Charge.
- * 3. The MatchStrategy formula function is passed the respective limit, factor and money of the MatchAgainst.
+ * 2. The match-making loads the MatchCall's MatchStrategies.
+ * 3. For each MatchStrategy the rules are executed, if one rule fails the match-making is cancelled for the strategy.
+ * 3. The first valid MatchStrategy's formula function is passed the respective limit, factor and money of the MatchAgainst.
  * 4. The result of the MatchStrategy formula function execution is put in a Transaction from the MatchCall to the Project.
  */
 export type MatchStrategy = {
-    readonly call?: string;
+    readonly id?: number;
+    /**
+     * The MatchCall to which this strategy belongs to.
+     */
+    call: string;
+    /**
+     * The ranking is the index order of this strategy among the others of the MatchCall
+     * when this is up for match making. The ranking value of items will be sorted
+     * after each change in the number of strategies or the ranking values.
+     */
+    ranking?: number;
     /**
      * The MatchRules used to decide if the match making strategy should be executed or not.
      */
@@ -971,9 +981,9 @@ export type MatchStrategy = {
  * \
  * The match-making flow is:
  * 1. A Project accepted in a MatchCall receives a successful Charge.
- * 2. The match-making loads the MatchCall's MatchStrategy.
- * 3. The MatchStrategy rules are executed, if one rule fails the match-making is cancelled for the Charge.
- * 3. The MatchStrategy formula function is passed the respective limit, factor and money of the MatchAgainst.
+ * 2. The match-making loads the MatchCall's MatchStrategies.
+ * 3. For each MatchStrategy the rules are executed, if one rule fails the match-making is cancelled for the strategy.
+ * 3. The first valid MatchStrategy's formula function is passed the respective limit, factor and money of the MatchAgainst.
  * 4. The result of the MatchStrategy formula function execution is put in a Transaction from the MatchCall to the Project.
  */
 export type MatchStrategyJsonld = {
@@ -984,7 +994,17 @@ export type MatchStrategyJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    readonly call?: string;
+    readonly id?: number;
+    /**
+     * The MatchCall to which this strategy belongs to.
+     */
+    call: string;
+    /**
+     * The ranking is the index order of this strategy among the others of the MatchCall
+     * when this is up for match making. The ranking value of items will be sorted
+     * after each change in the number of strategies or the ranking values.
+     */
+    ranking?: number;
     /**
      * The MatchRules used to decide if the match making strategy should be executed or not.
      */
@@ -3193,56 +3213,154 @@ export type ApiMatchRulesNameGetResponses = {
 
 export type ApiMatchRulesNameGetResponse = ApiMatchRulesNameGetResponses[keyof ApiMatchRulesNameGetResponses];
 
-export type ApiMatchCallIdstrategyGetData = {
+export type ApiMatchStrategiesGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        call?: string;
+        'call[]'?: Array<string>;
+        'order[ranking]'?: 'asc' | 'desc';
+    };
+    url: '/v4/match_strategies';
+};
+
+export type ApiMatchStrategiesGetCollectionResponses = {
+    /**
+     * MatchStrategy collection
+     */
+    200: Array<MatchStrategy>;
+};
+
+export type ApiMatchStrategiesGetCollectionResponse = ApiMatchStrategiesGetCollectionResponses[keyof ApiMatchStrategiesGetCollectionResponses];
+
+export type ApiMatchStrategiesPostData = {
+    /**
+     * The new MatchStrategy resource
+     */
+    body: MatchStrategy;
+    path?: never;
+    query?: never;
+    url: '/v4/match_strategies';
+};
+
+export type ApiMatchStrategiesPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiMatchStrategiesPostError = ApiMatchStrategiesPostErrors[keyof ApiMatchStrategiesPostErrors];
+
+export type ApiMatchStrategiesPostResponses = {
+    /**
+     * MatchStrategy resource created
+     */
+    201: MatchStrategy;
+};
+
+export type ApiMatchStrategiesPostResponse = ApiMatchStrategiesPostResponses[keyof ApiMatchStrategiesPostResponses];
+
+export type ApiMatchStrategiesIdDeleteData = {
     body?: never;
     path: {
         /**
-         * MatchCall identifier
+         * MatchStrategy identifier
          */
         id: string;
     };
     query?: never;
-    url: '/v4/match_call/{id}/strategy';
+    url: '/v4/match_strategies/{id}';
 };
 
-export type ApiMatchCallIdstrategyGetErrors = {
+export type ApiMatchStrategiesIdDeleteErrors = {
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
     /**
      * Not found
      */
     404: ErrorJsonld;
 };
 
-export type ApiMatchCallIdstrategyGetError = ApiMatchCallIdstrategyGetErrors[keyof ApiMatchCallIdstrategyGetErrors];
+export type ApiMatchStrategiesIdDeleteError = ApiMatchStrategiesIdDeleteErrors[keyof ApiMatchStrategiesIdDeleteErrors];
 
-export type ApiMatchCallIdstrategyGetResponses = {
+export type ApiMatchStrategiesIdDeleteResponses = {
+    /**
+     * MatchStrategy resource deleted
+     */
+    204: void;
+};
+
+export type ApiMatchStrategiesIdDeleteResponse = ApiMatchStrategiesIdDeleteResponses[keyof ApiMatchStrategiesIdDeleteResponses];
+
+export type ApiMatchStrategiesIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * MatchStrategy identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/match_strategies/{id}';
+};
+
+export type ApiMatchStrategiesIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiMatchStrategiesIdGetError = ApiMatchStrategiesIdGetErrors[keyof ApiMatchStrategiesIdGetErrors];
+
+export type ApiMatchStrategiesIdGetResponses = {
     /**
      * MatchStrategy resource
      */
     200: MatchStrategy;
 };
 
-export type ApiMatchCallIdstrategyGetResponse = ApiMatchCallIdstrategyGetResponses[keyof ApiMatchCallIdstrategyGetResponses];
+export type ApiMatchStrategiesIdGetResponse = ApiMatchStrategiesIdGetResponses[keyof ApiMatchStrategiesIdGetResponses];
 
-export type ApiMatchCallIdstrategyPatchData = {
+export type ApiMatchStrategiesIdPatchData = {
     /**
      * The updated MatchStrategy resource
      */
     body: MatchStrategy;
     path: {
         /**
-         * MatchCall identifier
+         * MatchStrategy identifier
          */
         id: string;
     };
     query?: never;
-    url: '/v4/match_call/{id}/strategy';
+    url: '/v4/match_strategies/{id}';
 };
 
-export type ApiMatchCallIdstrategyPatchErrors = {
+export type ApiMatchStrategiesIdPatchErrors = {
     /**
      * Invalid input
      */
     400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
     /**
      * Not found
      */
@@ -3253,16 +3371,16 @@ export type ApiMatchCallIdstrategyPatchErrors = {
     422: ConstraintViolationJsonldJsonld;
 };
 
-export type ApiMatchCallIdstrategyPatchError = ApiMatchCallIdstrategyPatchErrors[keyof ApiMatchCallIdstrategyPatchErrors];
+export type ApiMatchStrategiesIdPatchError = ApiMatchStrategiesIdPatchErrors[keyof ApiMatchStrategiesIdPatchErrors];
 
-export type ApiMatchCallIdstrategyPatchResponses = {
+export type ApiMatchStrategiesIdPatchResponses = {
     /**
      * MatchStrategy resource updated
      */
     200: MatchStrategy;
 };
 
-export type ApiMatchCallIdstrategyPatchResponse = ApiMatchCallIdstrategyPatchResponses[keyof ApiMatchCallIdstrategyPatchResponses];
+export type ApiMatchStrategiesIdPatchResponse = ApiMatchStrategiesIdPatchResponses[keyof ApiMatchStrategiesIdPatchResponses];
 
 export type ApiUsersIdorganizationGetData = {
     body?: never;

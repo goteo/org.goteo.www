@@ -31,6 +31,7 @@
     "astro": "^5.8.1",
     "bits-ui": "^2.4.1",
     "chart.js": "^4.4.9",
+    "dotenv": "^16.5.0",
     "flickity": "^3.0.0",
     "marked": "^15.0.12",
     "media-icons": "^1.1.5",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@eslint/js": "^9.28.0",
     "@hey-api/openapi-ts": "^0.69.2",
+    "@types/node": "^24.0.4",
     "@typescript-eslint/eslint-plugin": "^8.33.1",
     "@typescript-eslint/parser": "^8.33.1",
     "cypress": "^14.4.0",

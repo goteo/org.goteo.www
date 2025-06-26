@@ -1,8 +1,9 @@
 import { languagesList } from "../i18n/locales/index";
+import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
 
-const defaultLang = import.meta.env.PUBLIC_LANGUAGE_DEFAULT;
+const defaultLang = getDefaultLanguage();
 if (!defaultLang) {
     throw new Error("PUBLIC_LANGUAGE_DEFAULT is not defined in env");
 }
