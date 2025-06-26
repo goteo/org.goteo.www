@@ -1,0 +1,25 @@
+name: Cleanup PR Preview
+
+on:
+    pull_request:
+        types: [closed]
+
+jobs:
+    cleanup:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Delete PR preview route
+              run: |
+                  curl -X DELETE "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID }}/workers/routes" \
+                    -H "Authorization: Bearer ${{ secrets.CLOUDFLARE_API_TOKEN }}" \
+                    -H "Content-Type: application/json" \
+                    --data '{
+                      "pattern": "pr-${{ github.event.pull_request.number }}.v4.preview.goteo.org"
+                    }'
+
+            - name: Delete PR Worker
+              run: wrangler delete --env preview --name goteo-pr-${{ github.event.pull_request.number }}-preview --yes
+              env:
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
