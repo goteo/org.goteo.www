@@ -5,6 +5,10 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 keep_vars = true
 
+[assets]
+binding = "ASSETS"
+directory = "./dist"
+
 [env.testing]
 workers_dev = true
 
