@@ -38,22 +38,43 @@
     "tabs": {
       "project": "Información de campaña",
       "budget": {
+        "chart-title": "Este es el presupuesto necesario para hacer realidad esta campaña y descubre cómo tu apoyo puede llevarnos al éxito.",
         "title": "Presupuesto",
         "minimum": "Mínimo",
-        "optimal": "Óptimo"
+        "optimal": "Óptimo",
+        "typeBudget": {
+          "infrastructure": "Infraestructura",
+          "material": "Material",
+          "task": "Tareas"
+        },
+        "campaingState": "Estado de la campaña"
       },
       "rewards": "Recompensas",
       "updates": {
         "title": "Actualizaciones",
+        "modal-title": "Nueva actualización",
         "content": {
           "title": "No pierdas detalle de los avances de esta campaña",
           "empty": "No existen más actualizaciones previstas.",
           "btn": {
-            "read-more": "Seguir leyendo"
+            "read-more": "Seguir leyendo",
+            "share": "Compartir"
           }
         }
       },
-      "community": "Comunidad"
+      "community": {
+        "title": "Comunidad",
+        "owner-anonymous": "Anónimo",
+        "content": {
+          "title": "Donaciones y mensajes de apoyo de la comunidad"
+        },
+        "contribution": "Aporte",
+        "matchfunding": {
+          "contribution": "Suma de los aportes",
+          "aported": "Aportados",
+          "up_to": "de hasta"
+        }
+      }
     },
     "actions": {
       "share": "Compartir",

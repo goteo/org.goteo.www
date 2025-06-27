@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
+    import AlertIcon from "../../svgs/AlertIcon.svelte";
+    import ShareIcon from "../../svgs/ShareIcon.svelte";
     import { Modal } from "flowbite-svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
@@ -34,6 +36,14 @@
                 el.remove();
             }
         });
+    }
+
+    function shouldShowHeader(dateStr?: string): boolean {
+        if (!dateStr) return false;
+        const now = new Date();
+        const date = new Date(dateStr);
+        const diffHours = (now.getTime() - date.getTime()) / (1000 * 60 * 60);
+        return diffHours <= 72;
     }
 
     onMount(async () => {
@@ -103,13 +113,30 @@
     <Modal
         bind:open={openModal}
         closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
-        class="!left-1/2 max-w-[800px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-        title={selectedProject?.title}
-        headerClass="py-2"
+        class="!left-1/2 max-w-[800px] p-2 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     >
         {#if selectedProject}
+            {#if shouldShowHeader(selectedProject.date)}
+                <div class="flex items-center gap-2 text-base font-bold text-[#462949]">
+                    <AlertIcon />
+                    {$t("project.tabs.updates.modal-title")}
+                </div>
+            {/if}
+            <h3 class="text-[32px] text-[#462949]">
+                {selectedProject?.title}
+            </h3>
             <div class="flex flex-col gap-4">
                 <p class="text-sm text-[#575757]">{selectedProject.body}</p>
+            </div>
+
+            <div class="flex w-full justify-end">
+                <button
+                    class="bg-primary flex cursor-pointer flex-row gap-2 rounded-3xl px-6 py-4 font-bold text-[#462949]
+"
+                >
+                    <ShareIcon />
+                    {$t("project.tabs.updates.content.btn.share")}
+                </button>
             </div>
         {/if}
     </Modal>
