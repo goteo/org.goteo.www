@@ -30,6 +30,9 @@ jobs:
             - name: Build project
               run: pnpm run build
 
+            - name: Export CLOUDFLARE_API_TOKEN
+              run: echo "CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }}" >> $GITHUB_ENV
+
             - name: Deploy Worker for PR
               run: pnpm exec wrangler deploy --env preview --name goteo-pr-${{ github.event.pull_request.number }}-preview
 
