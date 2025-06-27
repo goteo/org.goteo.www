@@ -40,6 +40,13 @@ jobs:
 
             - name: Deploy Worker for PR
               run: pnpm exec wrangler deploy --env preview --name goteo-pr-${{ github.event.pull_request.number }}-preview
+              env:
+                  API_URL: ${{ secrets.API_URL }}
+                  API_VERSION: ${{ secrets.API_VERSION }}
+                  PLATONIQ_ACCOUNTING_ID: ${{ secrets.PLATONIQ_ACCOUNTING_ID }}
+                  FACEBOOK_APP_ID: ${{ secrets.FACEBOOK_APP_ID }}
+                  PUBLIC_CURRENCY_DEFAULT: ${{ secrets.PUBLIC_CURRENCY_DEFAULT }}
+                  PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT }}
 
             - name: Create route for custom subdomain
               run: >

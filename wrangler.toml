@@ -9,6 +9,9 @@ keep_vars = true
 binding = "ASSETS"
 directory = "./dist"
 
+[observability.logs]
+enabled = true
+
 [env.testing]
 workers_dev = true
 
