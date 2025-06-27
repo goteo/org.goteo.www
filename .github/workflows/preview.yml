@@ -41,7 +41,9 @@ jobs:
             - name: Send secrets to Cloudflare
               run: |
                   for secret in API_URL API_VERSION PLATONIQ_ACCOUNTING_ID FACEBOOK_APP_ID PUBLIC_CURRENCY_DEFAULT PUBLIC_LANGUAGE_DEFAULT; do
-                  echo "${!secret}" | pnpm exec wrangler secret put $secret --env preview --name goteo-pr-${{ github.event.pull_request.number }}-preview --yes
+                  echo "${!secret}" | pnpm exec wrangler secret put $secret \
+                    --env preview \
+                    --name goteo-pr-${{ github.event.pull_request.number }}-preview
                   done
               env:
                   API_URL: ${{ secrets.API_URL }}
