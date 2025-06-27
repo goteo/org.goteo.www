@@ -5,6 +5,7 @@
     import ProjectRewards from "./ProjectRewards.svelte";
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
+    import ProjectCommunity from "./ProjectCommunity.svelte";
     import type { Project, Accounting } from "../../openapi/client/index";
 
     let { project, accounting } = $props<{ project: Project; accounting: Accounting }>();
@@ -16,7 +17,7 @@
         { id: "project", label: $t("project.tabs.project") },
         { id: "budget", label: $t("project.tabs.budget.title") },
         { id: "updates", label: $t("project.tabs.updates.title") },
-        { id: "community", label: $t("project.tabs.community") },
+        { id: "community", label: $t("project.tabs.community.title") },
     ];
 
     function selectTab(tabId: string) {
@@ -86,7 +87,7 @@
                 aria-labelledby="tab-button-community"
                 class="w-full"
             >
-                Contenido de comunidad
+                <ProjectCommunity {project} />
             </div>
         {/if}
     </div>
