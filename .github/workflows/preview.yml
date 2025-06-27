@@ -31,9 +31,7 @@ jobs:
               run: pnpm run build
 
             - name: Deploy Worker for PR
-              run: >
-                  wrangler deploy --env preview --name goteo-pr-${{
-                  github.event.pull_request.number }}-preview
+              run: pnpm exec wrangler deploy --env preview --name goteo-pr-${{ github.event.pull_request.number }}-preview
 
             - name: Create route for custom subdomain
               run: >
