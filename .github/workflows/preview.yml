@@ -5,6 +5,9 @@ on:
         branches:
             - staging
             - main
+permissions:
+    pull-requests: write
+    contents: read
 
 jobs:
     preview:
