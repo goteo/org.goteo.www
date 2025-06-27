@@ -172,9 +172,9 @@ const currencySymbols: Record<string, CurrencyData> = {
 export function formatCurrency(
     amount?: number,
     currency?: string,
-    options?: { showSymbol?: boolean },
+    options?: { showSymbol?: boolean; spaceBetween?: boolean },
 ): string {
-    if (!amount || !currency) return "";
+    if (amount === undefined || !currency) return "";
     const currencyData = currencySymbols[currency];
     if (!currencyData) return "";
 
@@ -182,9 +182,11 @@ export function formatCurrency(
     const rawAmount = amount / Math.pow(10, decimals);
     const hasDecimals = rawAmount % 1 !== 0;
     const formattedAmount = hasDecimals ? rawAmount.toFixed(decimals) : rawAmount.toFixed(0);
-    const showSymbol = options?.showSymbol ?? false;
 
-    return showSymbol ? `${formattedAmount}${symbol}` : formattedAmount;
+    const showSymbol = options?.showSymbol ?? false;
+    const spaceBetween = options?.spaceBetween ?? false;
+
+    return showSymbol ? `${formattedAmount}${spaceBetween ? " " : ""}${symbol}` : formattedAmount;
 }
 
 export function getUnit(currency?: string): number {
