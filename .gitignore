@@ -15,6 +15,7 @@ pnpm-debug.log*
 
 # environment variables
 .env
+.dev.vars
 .env.production
 
 # macOS-specific files
@@ -28,3 +29,5 @@ pnpm-debug.log*
 
 #Other
 yarn.lock
+.wrangler/
+

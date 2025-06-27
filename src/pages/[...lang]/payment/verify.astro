@@ -8,7 +8,9 @@ import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
 import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+import { getDefaultCurrency } from "../../../utils/consts.ts";
+
+const defaultCurrency = getDefaultCurrency();
 
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 

@@ -5,7 +5,8 @@ import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.
 import Steps from "../../../components/Checkout/Steps.svelte";
 import { apiAccountingsIdGet } from "../../../openapi/client/index";
 const { t } = Astro.locals;
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT;
+import { getDefaultCurrency } from "../../../utils/consts.ts";
+const defaultCurrency = getDefaultCurrency();
 
 const cookieValue = Astro.cookies.get("access-token");
 if (!cookieValue) {
