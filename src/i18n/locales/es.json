@@ -94,6 +94,13 @@
         "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
         "learnMore": "Saber más."
       }
+    },
+    "video": {
+      "title": "Vídeo de la campaña",
+      "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
+      "poster": "Imagen del vídeo",
+      "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
+      "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
     }
   },
   "navigation": {
