@@ -192,7 +192,7 @@
                 {/if}
                 {#each rewards ? (limit ? rewards.slice(0, limit) : rewards) : [] as reward}
                     <li
-                        class="flex basis-1/3 flex-col items-center justify-center gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                        class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
                         class:opacity-50={!reward.hasUnits}
                         class:cursor-not-allowed={!reward.hasUnits}
                     >
