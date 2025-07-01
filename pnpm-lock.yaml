@@ -20,9 +20,6 @@ importers:
       '@hey-api/client-fetch':
         specifier: ^0.11.0
         version: 0.11.0(@hey-api/openapi-ts@0.69.2(magicast@0.3.5)(typescript@5.8.3))
-      '@peertube/embed-api':
-        specifier: ^0.2.0
-        version: 0.2.0
       '@tailwindcss/vite':
         specifier: ^4.1.8
         version: 4.1.8(vite@6.3.5(@types/node@22.15.17)(jiti@2.4.2)(lightningcss@1.30.1))
@@ -38,9 +35,6 @@ importers:
       flickity:
         specifier: ^3.0.0
         version: 3.0.0
-      jschannel:
-        specifier: ^1.0.2
-        version: 1.0.2
       marked:
         specifier: ^15.0.12
         version: 15.0.12
@@ -576,9 +570,6 @@ packages:
 
   '@oslojs/encoding@1.1.0':
     resolution: {integrity: sha512-70wQhgYmndg4GCPxPPxPGevRKqTIJ2Nh4OkiMWmDAVYsTQ+Ta7Sq+rPevXyXGdzr30/qZBnyOalCszoMxlyldQ==}
-
-  '@peertube/embed-api@0.2.0':
-    resolution: {integrity: sha512-jUXGiLgjeplQpGMZpIEnH28GbxXcySro1XbxeIQml8Fd/9nCt/RhmHoZivzCuiPg/2fOlRrvQzR8vxec2zqp4A==}
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -2235,9 +2226,6 @@ packages:
 
   jsbn@0.1.1:
     resolution: {integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==}
-
-  jschannel@1.0.2:
-    resolution: {integrity: sha512-y3cXMp8IWckhlCOvDxg+TcuNSHYA6PLm9tVuYHdfMhjtFgTrinv6gcoOdeg9RG4XA8UzmgFsM92EpUKJ8qmcpw==}
 
   json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
@@ -4187,8 +4175,6 @@ snapshots:
       fastq: 1.19.1
 
   '@oslojs/encoding@1.1.0': {}
-
-  '@peertube/embed-api@0.2.0': {}
 
   '@popperjs/core@2.11.8': {}
 
@@ -6154,8 +6140,6 @@ snapshots:
       argparse: 2.0.1
 
   jsbn@0.1.1: {}
-
-  jschannel@1.0.2: {}
 
   json-buffer@3.0.1: {}
 
