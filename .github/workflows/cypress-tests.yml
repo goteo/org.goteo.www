@@ -51,6 +51,7 @@ jobs:
                   echo "PUBLIC_API_URL=${{ vars.API_URL || 'https://api-develop.goteo.org' }}" >> .env
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
                   echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
+                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
                   echo "NODE_ENV=test" >> .env
                   echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
                   echo "SKIP_PAYMENT_GATEWAYS=true" >> .env
