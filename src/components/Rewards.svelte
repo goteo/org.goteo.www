@@ -18,8 +18,6 @@
         rewards?: ProjectReward[] | null;
     }>();
 
-    console.log("Project Rewards", rewards);
-
     let amount = $state("");
     let rewardModal = $state(false);
     let selectedReward = $state<ProjectReward | null>(null);
