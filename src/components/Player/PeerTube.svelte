@@ -55,7 +55,7 @@
                 player = new PeerTubePlayer(iframe);
                 await player.ready;
                 isReady = true;
-                onReady(); // usamos callback en lugar de evento
+                onReady();
             } else {
                 console.error("PeerTubePlayer is not available.");
             }
