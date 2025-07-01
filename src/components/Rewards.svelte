@@ -199,42 +199,43 @@
                         {#if !limit}
                             <div class="flex h-[160px] items-center justify-center">🙂</div>
                         {/if}
-                        <h3
-                            class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold"
-                        >
-                            {#if !limit}
-                                <div>
-                                    {@html $t(
-                                        "rewards.by-amount",
-                                        {
-                                            amount: `${
-                                                reward.money?.currency &&
-                                                reward.money?.amount != null
-                                                    ? formatCurrency(
-                                                          reward.money.amount,
-                                                          reward.money.currency,
-                                                          {
-                                                              showSymbol: true,
-                                                          },
-                                                      )
-                                                    : ""
-                                            }`,
-                                        },
-                                        { allowHTML: true },
-                                    )}
-                                </div>
+                        <div class="flex flex-col gap-4">
+                            <h3
+                                class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold"
+                            >
+                                {#if !limit}
+                                    <div>
+                                        {@html $t(
+                                            "rewards.by-amount",
+                                            {
+                                                amount: `${
+                                                    reward.money?.currency &&
+                                                    reward.money?.amount != null
+                                                        ? formatCurrency(
+                                                              reward.money.amount,
+                                                              reward.money.currency,
+                                                              {
+                                                                  showSymbol: true,
+                                                              },
+                                                          )
+                                                        : ""
+                                                }`,
+                                            },
+                                            { allowHTML: true },
+                                        )}
+                                    </div>
+                                {/if}
+                                {reward.title
+                                    .toLowerCase()
+                                    .replace(/^./, (match: string) => match.toUpperCase())}
+                            </h3>
+
+                            {#if reward.description}
+                                <p class="line-clamp-6 text-sm whitespace-pre-line text-gray-800">
+                                    {@html reward.description}
+                                </p>
                             {/if}
-                            {reward.title
-                                .toLowerCase()
-                                .replace(/^./, (match: string) => match.toUpperCase())}
-                        </h3>
-
-                        {#if reward.description}
-                            <p class="line-clamp-6 text-sm whitespace-pre-line text-gray-800">
-                                {@html reward.description}
-                            </p>
-                        {/if}
-
+                        </div>
                         {#if !limit}
                             <div class="flex w-full justify-between">
                                 <div
