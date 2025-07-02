@@ -1,11 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-const { t } = Astro.locals;
 import Cart from "../../components/Checkout/Cart.svelte";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
-const accountingIdPlatoniq = Number(import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_ID || 0);
+import { getPlatoniqAccountingId, getDefaultCurrency } from "../../utils/consts";
+
+const { t } = Astro.locals;
+const defaultCurrency = getDefaultCurrency();
+const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>

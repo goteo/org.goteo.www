@@ -2,11 +2,11 @@ import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
 import { apiGatewayCheckoutsPost, apiGatewaysGetCollection } from "../openapi/client/index.ts";
+import { getDefaultCurrency } from "../utils/consts.ts";
 
 import type { GatewayCharge, ApiGatewaysNameGetResponse } from "../openapi/client/index.ts";
 
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
-
+const defaultCurrency = getDefaultCurrency();
 async function getPaymentGateways(): Promise<ApiGatewaysNameGetResponse[]> {
     if (import.meta.env.NODE_ENV === "test" || process.env.NODE_ENV === "test") {
         return [{ name: "test-gateway" }] as ApiGatewaysNameGetResponse[];
