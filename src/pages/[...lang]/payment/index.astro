@@ -3,13 +3,14 @@ import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
-import { apiGatewaysGetCollection, apiAccountingsIdGet } from "../../../openapi/client/index";
-const { data: paymentGateways } = await apiGatewaysGetCollection();
 import { getDefaultCurrency } from "../../../utils/consts.ts";
+import { apiGatewaysGetCollection, apiAccountingsIdGet } from "../../../openapi/client/index";
+
+const { data: paymentGateways } = await apiGatewaysGetCollection();
 const { t } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();
-
 const cookieValue = Astro.cookies.get("access-token");
+
 if (!cookieValue) {
     throw new Error("Token not found");
 }
@@ -43,7 +44,7 @@ const { data: accounting } = await apiAccountingsIdGet({
                 </div>
             </div>
             <div
-                class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+                class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
             >
                 <Summary client:load {defaultCurrency} />
                 <Steps step={3} client:load />

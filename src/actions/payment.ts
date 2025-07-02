@@ -7,7 +7,6 @@ import { getDefaultCurrency } from "../utils/consts.ts";
 import type { GatewayCharge, ApiGatewaysNameGetResponse } from "../openapi/client/index.ts";
 
 const defaultCurrency = getDefaultCurrency();
-
 async function getPaymentGateways(): Promise<ApiGatewaysNameGetResponse[]> {
     if (import.meta.env.NODE_ENV === "test" || process.env.NODE_ENV === "test") {
         return [{ name: "test-gateway" }] as ApiGatewaysNameGetResponse[];

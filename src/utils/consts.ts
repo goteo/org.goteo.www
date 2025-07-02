@@ -1,28 +1,31 @@
-import { config } from "dotenv";
-config();
-
 export function getEnvVariable(key: string): string {
     const envVar = import.meta.env?.[key] ?? process.env?.[key];
-    if (!envVar) {
-        throw new Error(`Missing env variable: ${key}`);
+
+    if (envVar === undefined) {
+        throw new Error(`Missing env variable: ${key} is not defined`);
     }
+
+    if (envVar === "") {
+        throw new Error(`Env variable: ${key} is defined but empty`);
+    }
+
     return envVar;
 }
 
 export function getBaseUrl(): string {
-    return getEnvVariable("API_URL");
+    return getEnvVariable("PUBLIC_API_URL");
 }
 
 export function getApiVersion(): string {
-    return getEnvVariable("API_VERSION");
+    return getEnvVariable("PUBLIC_API_VERSION");
 }
 
 export function getPlatoniqAccountingId(): string {
-    return getEnvVariable("PLATONIQ_ACCOUNTING_ID");
+    return getEnvVariable("PUBLIC_PLATONIQ_ACCOUNTING_ID");
 }
 
 export function getFacebookAppId(): string {
-    return getEnvVariable("FACEBOOK_APP_ID");
+    return getEnvVariable("PUBLIC_FACEBOOK_APP_ID");
 }
 
 export function getDefaultCurrency(): string {

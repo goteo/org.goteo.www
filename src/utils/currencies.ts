@@ -1,4 +1,4 @@
-import { getDefaultCurrency } from "./consts.ts";
+import { getDefaultCurrency } from "./consts";
 
 type CurrencyData = {
     symbol: string;
