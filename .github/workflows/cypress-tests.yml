@@ -26,6 +26,9 @@ jobs:
             - name: Install dependencies
               run: pnpm install
 
+            - name: Install Wrangler
+              run: pnpm add --global wrangler
+
             # Configuración mejorada para caché de Cypress
             - name: Cache Cypress binary
               uses: actions/cache@v4

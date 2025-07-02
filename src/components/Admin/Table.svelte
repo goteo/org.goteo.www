@@ -38,6 +38,7 @@
         apiUsersIdGetUrl,
     } from "../../openapi/client/paths.gen.ts";
     import { getBaseUrl } from "../../utils/consts.ts";
+
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
         originDisplayName: string;

@@ -1,6 +1,4 @@
-// @ts-check
-
-import node from "@astrojs/node";
+import cloudflare from "@astrojs/cloudflare";
 import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
@@ -11,8 +9,8 @@ export default defineConfig({
     integrations: [svelte()],
     output: "server",
 
-    adapter: node({
-        mode: "standalone",
+    adapter: cloudflare({
+        imageService: "passthrough",
     }),
 
     vite: {
