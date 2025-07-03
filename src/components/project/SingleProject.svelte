@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { client } from "./../../openapi/client/client.gen.ts";
     import { onMount } from "svelte";
     import type {
         Project,
@@ -89,7 +90,7 @@
         </div>
     </div>
 
-    <div class="flex items-stretch justify-between gap-6">
+    <div class="mb-6 flex items-stretch justify-between gap-6">
         <div class="h-full w-[70%]">
             <Player
                 src={project.video?.src || ""}

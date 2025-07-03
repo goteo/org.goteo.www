@@ -1,78 +1,194 @@
 <script lang="ts">
-    // Import styles.
-    import "vidstack/player/styles/base.css";
-    // Register elements.
-    import "vidstack/player";
-    import "vidstack/player/ui";
-    import "vidstack/icons";
+    import Loader from "../../svgs/Loader.svelte";
+    import Spinner from "../../svgs/Spinner.svelte";
+    import { t } from "../../i18n/store";
+    import PeerTube from "./PeerTube.svelte";
 
-    import { onMount } from "svelte";
-    import { isHLSProvider, type MediaCanPlayEvent, type MediaProviderChangeEvent } from "vidstack";
-    import type { MediaPlayerElement } from "vidstack/elements";
-
-    import VideoLayout from "./components/layouts/VideoLayout.svelte";
-
-    let player: MediaPlayerElement;
-
-    export let src: string;
-    export let title: string;
-    export let thumbnails: string = "";
-    export let poster: {
+    let {
+        src,
+        title = $t("project.video.title"),
+        thumbnails = "",
+        poster = { src: "", alt: $t("project.video.poster") },
+    } = $props<{
         src: string;
-        alt: string;
-    };
+        title?: string;
+        thumbnails?: string;
+        poster?: {
+            src: string;
+            alt: string;
+        };
+    }>();
 
-    onMount(() => {
-        /**
-         * You can add these tracks using HTML as well.
-         *
-         * @example
-         * ```html
-         * <media-provider>
-         *   <track label="..." src="..." kind="..." srclang="..." default />
-         *   <track label="..." src="..." kind="..." srclang="..." />
-         * </media-provider>
-         * ```
-         */
-        // for (const track of textTracks) player.textTracks.add(track);
+    let showIframe = $state(false);
+    let isCheckingProvider = $state(true);
+    let isYouTube = $state(false);
+    let isVimeo = $state(false);
+    let noVideoSrc = $state(false);
+    let isPeerTube = $state(false);
+    let isLoading = $state(false);
+    let iframeEl: HTMLIFrameElement | null = $state(null);
 
-        // Subscribe to state updates.
-        return player.subscribe(({ paused, viewType }) => {
-            // console.log('is paused?', '->', paused);
-            // console.log('is audio view?', '->', viewType === 'audio');
-        });
+    const previewImage = poster.src || thumbnails;
+
+    $effect(() => {
+        noVideoSrc = !src;
+        isYouTube = src.includes("youtube.com") || src.includes("youtu.be");
+        isVimeo = src.includes("vimeo.com");
+        isPeerTube = src.includes("/videos/watch/");
+        isCheckingProvider = false;
     });
 
-    function onProviderChange(event: MediaProviderChangeEvent) {
-        const provider = event.detail;
-        // We can configure provider's here.
-        if (isHLSProvider(provider)) {
-            provider.config = {};
+    function normalizeYouTubeUrl(original: string): string {
+        try {
+            const url = new URL(original);
+            let videoId = "";
+
+            if (url.hostname === "youtu.be") {
+                videoId = url.pathname.slice(1);
+            } else if (url.hostname.includes("youtube.com")) {
+                if (url.pathname === "/watch") {
+                    videoId = url.searchParams.get("v") ?? "";
+                } else if (url.pathname.startsWith("/embed/")) {
+                    videoId = url.pathname.split("/embed/")[1];
+                }
+            }
+
+            if (!videoId) return original;
+
+            const params = new URLSearchParams({
+                autoplay: "1",
+                rel: "0",
+                modestbranding: "1",
+            });
+
+            return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
+        } catch (err) {
+            console.warn("Invalid YouTube URL", original);
+            return original;
         }
     }
 
-    // We can listen for the `can-play` event to be notified when the player is ready.
-    function onCanPlay(event: MediaCanPlayEvent) {
-        // ...
+    function handlePlay() {
+        isLoading = true;
+        showIframe = true;
+
+        if (isYouTube) {
+            src = normalizeYouTubeUrl(src);
+        } else {
+            const separator = src.includes("?") ? "&" : "?";
+            src = `${src}${separator}autoplay=1`;
+        }
+
+        requestAnimationFrame(() => {
+            iframeEl?.focus();
+        });
     }
 </script>
 
-<media-player
-    class="ring-media-focus aspect-video h-full w-full overflow-hidden rounded-md bg-slate-900 font-sans text-white data-[focus]:ring-4"
-    {title}
-    {src}
-    crossOrigin
-    playsInline
-    on:provider-change={onProviderChange}
-    on:can-play={onCanPlay}
-    bind:this={player}
->
-    <media-provider>
-        <media-poster
-            class="absolute inset-0 block h-full w-full rounded-md opacity-0 transition-opacity data-[visible]:opacity-100 [&>img]:h-full [&>img]:w-full [&>img]:object-cover"
-            {...poster}
-        ></media-poster>
-    </media-provider>
-
-    <VideoLayout {thumbnails} />
-</media-player>
+{#if isCheckingProvider}
+    <div class="flex aspect-video items-center justify-center rounded-lg bg-gray-100">
+        <Loader />
+    </div>
+{:else if isPeerTube}
+    <div class="relative aspect-video w-full overflow-hidden rounded-lg">
+        {#if !showIframe}
+            <button
+                onclick={() => {
+                    showIframe = true;
+                    isLoading = true;
+                }}
+                aria-label="Play video"
+                class="group relative h-full w-full"
+            >
+                <img
+                    src={previewImage}
+                    alt={poster.alt}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                />
+                <div
+                    class="absolute inset-0 flex items-center justify-center bg-black/10 transition-colors duration-300 group-hover:bg-black/20"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-16 w-16 text-white opacity-90"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </div>
+            </button>
+        {:else}
+            <div class="absolute inset-0 z-10 h-full w-full bg-black">
+                {#if isLoading}
+                    <div
+                        class="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
+                    >
+                        <Spinner />
+                    </div>
+                {/if}
+                <PeerTube {src} {title} onReady={() => (isLoading = false)} />
+            </div>
+        {/if}
+    </div>
+{:else if isYouTube || isVimeo}
+    <div class="relative aspect-video w-full overflow-hidden rounded-lg">
+        {#if !showIframe}
+            <button
+                class="group relative h-full w-full"
+                onclick={handlePlay}
+                aria-label="Play video"
+            >
+                <img
+                    src={previewImage}
+                    alt={poster.alt}
+                    class="h-full w-full object-cover"
+                    loading="lazy"
+                />
+                <div
+                    class="absolute inset-0 flex items-center justify-center bg-black/10 transition-colors duration-300 group-hover:bg-black/20"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-16 w-16 text-white opacity-90"
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path d="M8 5v14l11-7z" />
+                    </svg>
+                </div>
+            </button>
+        {:else}
+            <div class="absolute inset-0 z-10 h-full w-full bg-black">
+                {#if isLoading}
+                    <div class="absolute inset-0 z-20 flex items-center justify-center">
+                        <Spinner />
+                    </div>
+                {/if}
+                <iframe
+                    bind:this={iframeEl}
+                    {src}
+                    {title}
+                    class={`absolute inset-0 h-full w-full transition-opacity duration-500 ${isLoading ? "opacity-0" : "opacity-100"}`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                    allowfullscreen
+                    loading="lazy"
+                    onload={() => (isLoading = false)}
+                ></iframe>
+            </div>
+        {/if}
+    </div>
+{:else if noVideoSrc}
+    <div
+        class="flex aspect-video items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
+    >
+        {$t("project.video.not-found")}
+    </div>
+{:else}
+    <div
+        class="flex aspect-video items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
+    >
+        {$t("project.video.not-supported")}
+    </div>
+{/if}
