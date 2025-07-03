@@ -190,49 +190,50 @@
                 {/if}
                 {#each rewards ? (limit ? rewards.slice(0, limit) : rewards) : [] as reward}
                     <li
-                        class="flex basis-1/3 flex-col items-center justify-center gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                        class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
                         class:opacity-50={!reward.hasUnits}
                         class:cursor-not-allowed={!reward.hasUnits}
                     >
                         {#if !limit}
                             <div class="flex h-[160px] items-center justify-center">🙂</div>
                         {/if}
-                        <h3
-                            class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold"
-                        >
-                            {#if !limit}
-                                <div>
-                                    {@html $t(
-                                        "rewards.by-amount",
-                                        {
-                                            amount: `${
-                                                reward.money?.currency &&
-                                                reward.money?.amount != null
-                                                    ? formatCurrency(
-                                                          reward.money.amount,
-                                                          reward.money.currency,
-                                                          {
-                                                              showSymbol: true,
-                                                          },
-                                                      )
-                                                    : ""
-                                            }`,
-                                        },
-                                        { allowHTML: true },
-                                    )}
-                                </div>
+                        <div class="flex flex-col gap-4">
+                            <h3
+                                class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold"
+                            >
+                                {#if !limit}
+                                    <div>
+                                        {@html $t(
+                                            "rewards.by-amount",
+                                            {
+                                                amount: `${
+                                                    reward.money?.currency &&
+                                                    reward.money?.amount != null
+                                                        ? formatCurrency(
+                                                              reward.money.amount,
+                                                              reward.money.currency,
+                                                              {
+                                                                  showSymbol: true,
+                                                              },
+                                                          )
+                                                        : ""
+                                                }`,
+                                            },
+                                            { allowHTML: true },
+                                        )}
+                                    </div>
+                                {/if}
+                                {reward.title
+                                    .toLowerCase()
+                                    .replace(/^./, (match: string) => match.toUpperCase())}
+                            </h3>
+
+                            {#if reward.description}
+                                <p class="line-clamp-6 text-sm whitespace-pre-line text-gray-800">
+                                    {@html reward.description}
+                                </p>
                             {/if}
-                            {reward.title
-                                .toLowerCase()
-                                .replace(/^./, (match: string) => match.toUpperCase())}
-                        </h3>
-
-                        {#if reward.description}
-                            <p class="line-clamp-6 text-sm whitespace-pre-line text-gray-800">
-                                {@html reward.description}
-                            </p>
-                        {/if}
-
+                        </div>
                         {#if !limit}
                             <div class="flex w-full justify-between">
                                 <div
