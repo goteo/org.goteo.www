@@ -8,7 +8,9 @@ import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
 import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+import { getDefaultCurrency } from "../../../utils/consts.ts";
+
+const defaultCurrency = getDefaultCurrency();
 
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
@@ -77,7 +79,7 @@ try {
                                 </div>
                             </div>
                         </div>
-                        <div class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
+                        <div class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
                             <Summary client:load hasError={!!error} {defaultCurrency} {amount} />
                             <Steps client:load step={4} hasError={!!error} />
                             <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
@@ -112,7 +114,7 @@ try {
                                 </div>
                             </div>
                         </div>
-                        <div class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
+                        <div class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
                             <Summary client:load {defaultCurrency} {amount} />
                             <Steps step={2} client:load />
                             <div class="flex flex-col gap-4 px-6 pt-0 pb-6">

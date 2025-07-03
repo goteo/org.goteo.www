@@ -1,3 +1,5 @@
+import { getDefaultCurrency } from "./consts";
+
 type CurrencyData = {
     symbol: string;
     name: string;
@@ -200,6 +202,6 @@ export function getUnit(currency?: string): number {
 }
 
 export function defaultCurrency(): string {
-    const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
+    const defaultCurrency = getDefaultCurrency();
     return defaultCurrency;
 }
