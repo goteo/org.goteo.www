@@ -72,14 +72,6 @@ const { accounting } = Astro.props;
                 }
             </div>
             <input type="hidden" name="cartData" id="cart-data-input" />
-
-            <!-- TODO: Merge with Btn "Continuar" -->
-            <button
-                class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
-                type="submit"
-            >
-                {t("payment.global.btn.continue")}
-            </button>
         </form>
         <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
     </div>
