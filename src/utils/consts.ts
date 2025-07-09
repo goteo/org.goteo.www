@@ -1,12 +1,25 @@
+import dotenv from "dotenv";
+
+let dotenvLoaded = false;
+
+function loadEnv() {
+    if (typeof process !== "undefined" && !dotenvLoaded) {
+        dotenv.config();
+        dotenvLoaded = true;
+    }
+}
+
 export function getEnvVariable(key: string): string {
+    loadEnv();
+
     const envVar = import.meta.env?.[key] ?? process.env?.[key];
 
     if (envVar === undefined) {
-        throw new Error(`Missing env variable: ${key} is not defined`);
+        throw new Error(`Missing env variable: ${key}`);
     }
 
-    if (envVar === "") {
-        throw new Error(`Env variable: ${key} is defined but empty`);
+    if (envVar === null || envVar === "") {
+        throw new Error(`Env variable ${key} is empty`);
     }
 
     return envVar;

@@ -19,7 +19,7 @@
     "cypress:verify": "cypress verify",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
     "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run",
-    "dev:worker": "npx wrangler dev --port 4321 --ip 0.0.0.0"
+    "dev:worker": "npx astro build && npx wrangler dev --port 4321 --ip 0.0.0.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
