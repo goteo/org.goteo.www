@@ -78,16 +78,6 @@
         cart.removeItem(item.key);
     }
 
-    function redirectToPayment() {
-        const pathParts = window.location.pathname.split("/").filter(Boolean);
-        const languages = Object.keys(languagesList) as Locale[];
-        const currentLang: Locale = languages.includes(pathParts[0] as Locale)
-            ? (pathParts[0] as Locale)
-            : "es";
-
-        window.location.href = `/${currentLang}/payment`;
-    }
-
     onMount(() => {
         const unsubscribe = groupedByOwner.subscribe(() => {
             loadDisplayNames();
@@ -118,10 +108,3 @@
 {/if}
 
 <Tipjar {accountingIdPlatoniq} {defaultCurrency} />
-
-<button
-    on:click={redirectToPayment}
-    class="mt-4 rounded bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
->
-    {$t("checkout.btnContinue.label")}
-</button>
