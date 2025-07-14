@@ -13,7 +13,9 @@ directory = "./dist"
 enabled = true
 
 [env.testing]
-workers_dev = true
+routes = [
+    { pattern = "v4.testing.goteo.org", zone_name = "goteo.org", custom_domain = true },
+]
 
 [env.staging]
 routes = [
