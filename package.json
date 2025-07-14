@@ -19,7 +19,7 @@
     "cypress:verify": "cypress verify",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
     "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run",
-    "dev:worker": "npx wrangler dev --port 4321 --ip 0.0.0.0"
+    "dev:worker": "npx astro build && npx wrangler dev --port 4321 --ip 0.0.0.0"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^12.6.0",
@@ -37,8 +37,7 @@
     "media-icons": "^1.1.5",
     "svelte": "^5.33.13",
     "tailwindcss": "^4.1.8",
-    "typescript": "^5.8.3",
-    "vidstack": "^1.12.13"
+    "typescript": "^5.8.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.28.0",
