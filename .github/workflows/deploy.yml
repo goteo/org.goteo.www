@@ -26,14 +26,14 @@ jobs:
               if: github.ref_name == 'develop'
               uses: cloudflare/wrangler-action@v3
               with:
-                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                command: wrangler deploy --env staging
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: wrangler deploy --env staging
 
             - name: Deploy to Production
               if: github.ref_name == 'main'
               uses: cloudflare/wrangler-action@v3
               with:
-                apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-                accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                command: wrangler deploy --env prod
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: wrangler deploy --env prod
