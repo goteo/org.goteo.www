@@ -28,7 +28,7 @@ jobs:
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                  command: wrangler deploy --env staging
+                  command: deploy --env staging
 
             - name: Deploy to Production
               if: github.ref_name == 'main'
@@ -36,4 +36,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                  command: wrangler deploy --env prod
+                  command: deploy --env prod
