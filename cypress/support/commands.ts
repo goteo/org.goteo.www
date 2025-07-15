@@ -37,7 +37,7 @@ Cypress.Commands.add(
         cy.visit("/login");
         cy.get("input#identifier").type(username);
         cy.get("input#password").type(password);
-        cy.get('button[type="submit"]').click();
+        cy.get('button[form="login"]').click();
 
         cy.on("uncaught:exception", () => false);
     },
@@ -128,10 +128,10 @@ Cypress.Commands.add("changeLanguage", (language: string) => {
 });
 
 Cypress.Commands.add("checkLoginFormValidation", () => {
-    cy.get('button[type="submit"]').click();
+    cy.get('button[form="login"]').click();
     cy.get("input#identifier:invalid").should("exist");
 
     cy.get("input#identifier").type("test@example.com");
-    cy.get('button[type="submit"]').click();
+    cy.get('button[form="login"]').click();
     cy.get("input#password:invalid").should("exist");
 });

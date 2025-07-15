@@ -51,11 +51,14 @@ const { t } = Astro.locals;
                 <Steps step={2} client:load />
                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
                     <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
-                    <a
+
+                    <button
                         class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                        form="login"
+                        onclick="document.getElementById('login')?.requestSubmit(); return false;"
                     >
                         {t("global.btn.continue")}
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
