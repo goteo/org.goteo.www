@@ -3,12 +3,8 @@ name: Deploy to Cloudflare
 on:
     push:
         branches:
-            - develop
             - main
-
-env:
-    PROD_BRANCH: main
-    STAGING_BRANCH: develop
+            - develop
 
 jobs:
     deploy:
@@ -26,14 +22,18 @@ jobs:
             - run: pnpm install
             - run: pnpm run build
 
-            - name: Deploy to Cloudflare Workers
+            - name: Deploy to Staging
+              if: github.ref_name == 'develop'
               uses: cloudflare/wrangler-action@v3
               with:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-                  command: |
-                      if [ "${{ github.ref_name }}" = "${{ env.STAGING_BRANCH }}" ]; then
-                        wrangler deploy --env staging
-                      elif [ "${{ github.ref_name }}" = "${{ env.PROD_BRANCH }}" ]; then
-                        wrangler deploy --env prod
-                      fi
+                  command: wrangler deploy --env staging
+
+            - name: Deploy to Production
+              if: github.ref_name == 'main'
+              uses: cloudflare/wrangler-action@v3
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: wrangler deploy --env prod
