@@ -19,6 +19,8 @@
     }>();
 
     let amount = $state("");
+    let rawInput = $state("");
+    let customAmount = $state(0);
     let rewardModal = $state(false);
     let selectedReward = $state<ProjectReward | null>(null);
     let link = $state(`/calculadora-fiscal`);
@@ -42,7 +44,7 @@
     }
 
     async function updateAmount(action: "close" | "checkout") {
-        const numericAmount = Number(amount);
+        const numericAmount = customAmount;
 
         if (
             isNaN(numericAmount) ||
@@ -81,6 +83,14 @@
             ...selectedReward,
             description: await renderMarkdown(selectedReward.description || ""),
         };
+        customAmount =
+            (reward.money?.amount ?? 0) / getUnit(reward.money?.currency ?? defaultCurrency());
+        rawInput = formatCurrency(
+            customAmount * getUnit(reward.money?.currency ?? defaultCurrency()),
+            reward.money?.currency ?? defaultCurrency(),
+            { showSymbol: true },
+        );
+
         rewardModal = true;
     }
 
@@ -339,7 +349,30 @@
                                     <input
                                         type="text"
                                         class="focus-ring-2 focus:ring-tertiary w-full rounded border border-gray-300 p-4"
-                                        bind:value={amount}
+                                        bind:value={rawInput}
+                                        onfocus={() => {
+                                            rawInput = customAmount.toString();
+                                        }}
+                                        onblur={() => {
+                                            const currency =
+                                                selectedReward?.money?.currency ??
+                                                defaultCurrency();
+                                            const unit = getUnit(currency);
+
+                                            const parsed = parseFloat(
+                                                rawInput.replace(/[^\d.,]/g, "").replace(",", "."),
+                                            );
+                                            customAmount = isNaN(parsed) ? 0 : parsed;
+
+                                            rawInput =
+                                                customAmount > 0
+                                                    ? formatCurrency(
+                                                          customAmount * unit,
+                                                          currency,
+                                                          { showSymbol: true },
+                                                      )
+                                                    : "";
+                                        }}
                                         placeholder={$t("rewards.donation-free.placeholder")}
                                     />
                                 </div>
