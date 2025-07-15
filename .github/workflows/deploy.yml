@@ -3,12 +3,12 @@ name: Deploy to Cloudflare
 on:
     push:
         branches:
-            - testing
-            - staging
+            - develop
             - main
 
 env:
     PROD_BRANCH: main
+    STAGING_BRANCH: develop
 
 jobs:
     deploy:
@@ -32,9 +32,7 @@ jobs:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                   command: |
-                      if [ "${{ github.ref_name }}" = "testing" ]; then
-                        wrangler deploy --env testing
-                      elif [ "${{ github.ref_name }}" = "staging" ]; then
+                      if [ "${{ github.ref_name }}" = "${{ env.STAGING_BRANCH }}" ]; then
                         wrangler deploy --env staging
                       elif [ "${{ github.ref_name }}" = "${{ env.PROD_BRANCH }}" ]; then
                         wrangler deploy --env prod
