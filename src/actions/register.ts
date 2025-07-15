@@ -27,7 +27,7 @@ export const register = defineAction({
             const { identifier, password, firstname, lastname, dni, razonSocial, cif } = input;
 
             if (input.type === "individual") {
-                if (!firstname.trim() || !lastname.trim()) {
+                if (!firstname.trim() || !lastname.trim() || !dni?.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
                         message: t("register.error.incompletePersonFields"),
