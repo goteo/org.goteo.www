@@ -13,11 +13,13 @@ directory = "./dist"
 enabled = true
 
 [env.testing]
-workers_dev = true
+routes = [
+    { pattern = "testing.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
+]
 
 [env.staging]
 routes = [
-    { pattern = "v4.staging.goteo.org", zone_name = "goteo.org", custom_domain = true },
+    { pattern = "staging.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
 ]
 
 [env.prod]
