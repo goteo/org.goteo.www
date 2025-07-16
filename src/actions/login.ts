@@ -37,7 +37,12 @@ export const login = defineAction({
                 });
             }
 
-            const { data: userData } = await apiUsersIdGet({ path: { id } });
+            const { data: userData } = await apiUsersIdGet({
+                path: { id },
+                headers: {
+                    Authorization: `Bearer ${tokenData.token}`,
+                },
+            });
 
             if (!userData || !userData.accounting) {
                 throw new ActionError({
@@ -46,19 +51,21 @@ export const login = defineAction({
                 });
             }
 
-            context.cookies.set(
-                "access-token",
-                {
-                    id: tokenData.id,
-                    token: tokenData.token,
-                    accountingId: extractId(userData.accounting),
-                },
-                {
-                    path: "/",
-                    secure: true,
-                    sameSite: "lax",
-                },
-            );
+            const cookieValue: Record<string, unknown> = {
+                id: userData.id,
+                token: tokenData.token,
+                accountingId: extractId(userData.accounting),
+            };
+
+            if (userData.roles?.includes("ROLE_ADMIN")) {
+                cookieValue.isAdmin = true;
+            }
+
+            context.cookies.set("access-token", cookieValue, {
+                path: "/",
+                secure: true,
+                sameSite: "lax",
+            });
 
             return { success: true };
         } catch (err) {
