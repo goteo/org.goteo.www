@@ -1,0 +1,42 @@
+---
+const envTest = import.meta.env.PUBLIC_ENV_TEST;
+---
+
+{
+    envTest && (
+        <div class="env-indicator" data-env={envTest}>
+            <span>ENV: {envTest.toUpperCase()}</span>
+        </div>
+    )
+}
+
+<style>
+    .env-indicator {
+        position: fixed;
+        top: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1f2937;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 1000;
+        font-family: monospace;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        text-align: center;
+    }
+
+    .env-indicator[data-env*="staging"] {
+        background: #f59e0b;
+    }
+
+    .env-indicator[data-env*="development"] {
+        background: #3b82f6;
+    }
+
+    .env-indicator[data-env*="production"] {
+        background: #ef4444;
+    }
+</style>
