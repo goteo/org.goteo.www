@@ -10,7 +10,10 @@
     onMount(async () => {
         try {
             const { data } = await apiProjectRewardsGetCollection({
-                query: { project: `/v4/projects/${project.id}` },
+                query: { 
+                    project: `/v4/projects/${project.id}`,
+                    'order[money.amount]': 'asc'
+                },
             });
             projectsRewards = data || [];
         } catch (error) {

@@ -147,7 +147,10 @@
         if (!rewards) {
             try {
                 const response = await apiProjectRewardsGetCollection({
-                    query: { project: project.id ? String(project.id) : undefined },
+                    query: {
+                        project: project.id ? String(project.id) : undefined,
+                        'order[money.amount]': 'asc'
+                    },
                 });
                 rewards = Array.isArray(response.data) ? (response.data as ProjectReward[]) : [];
             } catch (err) {
@@ -204,9 +207,6 @@
                         class:opacity-50={!reward.hasUnits}
                         class:cursor-not-allowed={!reward.hasUnits}
                     >
-                        {#if !limit}
-                            <div class="flex h-[160px] items-center justify-center">🙂</div>
-                        {/if}
                         <div class="flex flex-col gap-4">
                             <h3
                                 class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold"
@@ -233,15 +233,15 @@
                                         )}
                                     </div>
                                 {/if}
-                                {reward.title
-                                    .toLowerCase()
-                                    .replace(/^./, (match: string) => match.toUpperCase())}
+                                {reward.title}
                             </h3>
 
                             {#if reward.description}
-                                <p class="line-clamp-6 text-sm whitespace-pre-line text-gray-800">
-                                    {@html reward.description}
-                                </p>
+                                <div class="line-clamp-7 text-sm whitespace-pre-line text-gray-800">
+                                    {#await renderMarkdown(reward.description) then description}
+                                        {@html description}
+                                    {/await}
+                                </div>
                             {/if}
                         </div>
                         {#if !limit}
