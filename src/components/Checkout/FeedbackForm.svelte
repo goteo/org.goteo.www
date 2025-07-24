@@ -5,7 +5,7 @@
 
 <div>
     <div class=" sm:w-full sm:max-w-md">
-        <form id="register" method="POST" class="flex flex-col gap-4">
+        <form id="feedback" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-secondary text-2xl font-bold">
@@ -85,14 +85,8 @@
                 {/if}
             </div>
 
-            <!-- TODO: Merge with Btn "Continuar" -->
-            <button
-                class="bg-primary cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
-                type="submit"
-            >
-                {$t("register.form.btnSubmit")}</button
-            >
+            <!-- TODO: Add Btn "Continuar" -->
         </form>
-        <div id="register-error-content" class="mt-4 text-center text-red-500"></div>
+        <div id="feedback-error-content" class="mt-4 text-center text-red-500"></div>
     </div>
 </div>

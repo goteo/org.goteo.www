@@ -12,6 +12,6 @@ const { t } = Astro.locals;
         const { error } = await actions.logout();
         console.log("error", error);
         const lang = location.pathname.split("/")[1];
-        window.location.href = `/${lang}/`;
+        window.location.href = `/${lang}`;
     });
 </script>

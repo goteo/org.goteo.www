@@ -1,0 +1,7 @@
+## This file defines environment variables for the Goteo project used by Wrangler.
+API_URL=""
+API_VERSION=""
+PLATONIQ_ACCOUNTING_ID=""
+FACEBOOK_APP_ID=""
+PUBLIC_CURRENCY_DEFAULT=""
+PUBLIC_LANGUAGE_DEFAULT=""

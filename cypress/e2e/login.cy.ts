@@ -14,8 +14,9 @@ describe("Login Page", () => {
         cy.get("form#login").within(() => {
             cy.get("input#identifier").should("exist");
             cy.get("input#password").should("exist");
-            cy.get('button[type="submit"]').contains("Iniciar sesión").should("be.visible");
         });
+
+        cy.get('button[form="login"]').should("be.visible");
 
         cy.contains("También puedes acceder a través de:").should("be.visible");
 

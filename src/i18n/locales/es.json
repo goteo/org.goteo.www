@@ -106,6 +106,13 @@
         "btnCopy": "Copiar código",
         "btnCopied": "¡Código copiado!"
       }
+    },
+    "video": {
+      "title": "Vídeo de la campaña",
+      "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
+      "poster": "Imagen del vídeo",
+      "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
+      "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
     }
   },
   "navigation": {

@@ -26,6 +26,9 @@ jobs:
             - name: Install dependencies
               run: pnpm install
 
+            - name: Install Wrangler
+              run: pnpm add --global wrangler
+
             # Configuración mejorada para caché de Cypress
             - name: Cache Cypress binary
               uses: actions/cache@v4
@@ -48,9 +51,11 @@ jobs:
             # Create test .env file with required variables
             - name: Create test env file
               run: |
-                  echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
-                  echo "NODE_ENV=test" >> .env
                   echo "PUBLIC_API_URL=${{ vars.API_URL || 'https://api-develop.goteo.org' }}" >> .env
+                  echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
+                  echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
+                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
+                  echo "NODE_ENV=test" >> .env
                   echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
                   echo "SKIP_PAYMENT_GATEWAYS=true" >> .env
                   echo "PAYMENT_GATEWAYS_CONFIG={}" >> .env

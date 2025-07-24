@@ -1,8 +1,9 @@
 import { languagesList } from "../i18n/locales/index";
+import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
 
-const defaultLang = import.meta.env.PUBLIC_LANGUAGE_DEFAULT;
+const defaultLang = getDefaultLanguage();
 if (!defaultLang) {
     throw new Error("PUBLIC_LANGUAGE_DEFAULT is not defined in env");
 }
@@ -57,20 +58,27 @@ export function getLanguage(context: APIContext): string {
 }
 
 export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
+    const pathname = context.url.pathname;
+    if (pathname === "/favicon.ico") return null;
+
     const accessToken = context.cookies.get("access-token")?.value;
-    const pathParts = context.url.pathname.replace(/^\/+/, "").split("/");
-    const pathAfterLang = lang === defaultLang ? pathParts : pathParts.slice(1);
-    const nextSegment = pathAfterLang[0];
+    const pathParts = pathname.replace(/^\/+/, "").split("/");
+
+    const langFromPath = parsePathLang(pathname);
+    const isLangInPath = langFromPath !== null;
+    const currentLang = langFromPath ?? lang;
+    const pathAfterLang = isLangInPath ? pathParts.slice(1) : pathParts;
+    const nextSegment = pathAfterLang[0] ?? "";
 
     if (accessToken && (nextSegment === "login" || nextSegment === "register")) {
-        return lang === defaultLang ? `/` : `/${lang}/`;
+        return isLangInPath ? `/${currentLang}/payment` : `/payment`;
     }
 
     const protectedRoutes = ["payment", "admin"];
-    const isProtected = protectedRoutes.some((route) => pathAfterLang.includes(route));
+    const isProtected = protectedRoutes.includes(nextSegment);
 
     if (!accessToken && isProtected) {
-        return lang === defaultLang ? `/login` : `/${lang}/login`;
+        return isLangInPath ? `/${currentLang}/login` : `/login`;
     }
 
     return null;

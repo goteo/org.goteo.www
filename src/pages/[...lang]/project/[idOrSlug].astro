@@ -20,6 +20,7 @@ if (!idOrSlug) {
 }
 
 const { data: project, error } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
+
 const accountingId = extractId(project?.accounting);
 
 if (!accountingId) {

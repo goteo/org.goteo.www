@@ -1,11 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-const { t } = Astro.locals;
 import Cart from "../../components/Checkout/Cart.svelte";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
-const defaultCurrency = import.meta.env.PUBLIC_CURRENCY_DEFAULT || "EUR";
-const accountingIdPlatoniq = Number(import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_ID || 0);
+import { getPlatoniqAccountingId, getDefaultCurrency } from "../../utils/consts";
+
+const { t } = Astro.locals;
+const defaultCurrency = getDefaultCurrency();
+const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -24,7 +26,7 @@ const accountingIdPlatoniq = Number(import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_I
                 <Cart client:load {defaultCurrency} {accountingIdPlatoniq} />
             </div>
             <div
-                class="border-tertiary flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+                class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
             >
                 <Summary client:load {defaultCurrency} {accountingIdPlatoniq} />
                 <Steps step={1} client:load />
@@ -32,6 +34,7 @@ const accountingIdPlatoniq = Number(import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_I
                     <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
                     <a
                         class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                        href="/payment"
                     >
                         {t("global.btn.continue")}
                     </a>

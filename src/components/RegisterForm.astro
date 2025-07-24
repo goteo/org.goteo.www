@@ -140,8 +140,8 @@ const { t } = Astro.locals;
             <div id="fields-organization" style="display: none;" class="flex flex-col gap-4">
                 <div class="relative w-full">
                     <input
+                        id="fields-organization-razonSocial"
                         class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
-                        required
                         type="text"
                         id="razonSocial"
                         name="razonSocial"
@@ -158,8 +158,8 @@ const { t } = Astro.locals;
 
                 <div class="relative w-full">
                     <input
+                        id="fields-organization-cif"
                         class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
-                        required
                         type="text"
                         id="cif"
                         name="cif"
@@ -224,10 +224,10 @@ const { t } = Astro.locals;
 
             const { error } = await actions.register(formData);
 
-            // if (!error) {
-            //     const lang = location.pathname.split("/")[1];
-            //     window.location.href = `/${lang}/`;
-            // }
+            if (!error) {
+                const lang = location.pathname.split("/")[1];
+                window.location.href = `/${lang}/`;
+            }
 
             if (error && errorContent instanceof HTMLElement) {
                 errorContent.innerHTML = "";
@@ -259,6 +259,22 @@ const { t } = Astro.locals;
         if (fieldsIndividual && fieldsOrganization) {
             fieldsIndividual.style.display = isIndividual ? "flex" : "none";
             fieldsOrganization.style.display = isIndividual ? "none" : "flex";
+        }
+
+        const inputRazonSocial = document.querySelector<HTMLInputElement>(
+            'input[id="fields-organization-razonSocial"',
+        );
+
+        if (inputRazonSocial) {
+            inputRazonSocial.required = !isIndividual;
+        }
+
+        const inputCif = document.querySelector<HTMLInputElement>(
+            'input[id="fields-organization-cif"',
+        );
+
+        if (inputCif) {
+            inputCif.required = !isIndividual;
         }
     }
 

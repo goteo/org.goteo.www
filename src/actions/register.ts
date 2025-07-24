@@ -8,6 +8,8 @@ import {
     apiUsersIdorganizationPatch,
 } from "../openapi/client/index.ts";
 
+import { extractId } from "../utils/extractId.ts";
+
 export const register = defineAction({
     accept: "form",
     input: z.object({
@@ -27,7 +29,7 @@ export const register = defineAction({
             const { identifier, password, firstname, lastname, dni, razonSocial, cif } = input;
 
             if (input.type === "individual") {
-                if (!firstname.trim() || !lastname.trim() || !dni?.trim()) {
+                if (!firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
                         message: t("register.error.incompletePersonFields"),
@@ -52,6 +54,7 @@ export const register = defineAction({
                 },
             });
             const userId = String(createUserResponse.data?.id ?? "");
+            const accountingId = extractId(createUserResponse.data?.accounting);
 
             const { data: authData } = await apiUserTokensPost({
                 body: {
@@ -59,6 +62,13 @@ export const register = defineAction({
                     password,
                 },
             });
+
+            if (!authData?.id || !authData.token) {
+                throw new ActionError({
+                    code: "BAD_REQUEST",
+                    message: t("login.error.invalidCredentials"),
+                });
+            }
 
             if (input.type === "individual") {
                 await apiUsersIdpersonPatch({
@@ -98,7 +108,11 @@ export const register = defineAction({
 
             context.cookies.set(
                 "access-token",
-                { id: authData?.id ?? "", token: authData?.token ?? "" },
+                {
+                    id: authData.id,
+                    token: authData.token,
+                    accountingId,
+                },
                 {
                     path: "/",
                     httpOnly: true,
