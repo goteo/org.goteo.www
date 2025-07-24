@@ -10,6 +10,7 @@
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
+    import Sharebutton from "./Sharebutton.svelte";
 
     import { languagesList } from "../../i18n/locales";
     import Tabs from "./Tabs.svelte";
@@ -20,6 +21,7 @@
     import Banner from "./Banner.svelte";
     import { t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+    import RememberIcon from "../../svgs/RememberIcon.svelte";
 
     export let project: Project;
     export let accounting: Accounting;
@@ -104,8 +106,17 @@
         </div>
     </div>
 
-    <Tags {tags} />
-
+    <div class="mb-12 flex w-full flex-row justify-between">
+        <Tags {tags} />
+        <div class="flex flex-row items-center gap-6">
+            <Sharebutton {project} />
+            <button
+                class="text-tertiary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
+            >
+                <RememberIcon /> {$t("project.actions.remember")}</button
+            >
+        </div>
+    </div>
     <div>
         <div class="flex items-center justify-between py-10">
             <h2 class="text-secondary text-2xl font-bold">
@@ -118,7 +129,6 @@
         </div>
         <Rewards {project} {limit} />
     </div>
-
     <Banner {ownerName} />
 </section>
 <Tabs {project} {accounting} />

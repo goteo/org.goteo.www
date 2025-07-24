@@ -7,7 +7,6 @@ import {
     apiUsersIdpersonPatch,
     apiUsersIdorganizationPatch,
 } from "../openapi/client/index.ts";
-
 import { extractId } from "../utils/extractId.ts";
 
 export const register = defineAction({

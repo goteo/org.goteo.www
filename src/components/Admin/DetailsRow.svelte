@@ -115,7 +115,7 @@
                                         </div>
                                         <Tooltip
                                             text={$t("contributions.tootip.copied")}
-                                            tooltipClass="bg-[#462949]"
+                                            tooltipClass="bg-[#462949] -translate-x-[90%]"
                                             className="h-[20px] w-[20px] cursor-copy shrink-0"
                                         >
                                             <button
