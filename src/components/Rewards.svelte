@@ -149,7 +149,7 @@
                 const response = await apiProjectRewardsGetCollection({
                     query: {
                         project: project.id ? String(project.id) : undefined,
-                        'order[money.amount]': 'asc'
+                        "order[money.amount]": "asc",
                     },
                 });
                 rewards = Array.isArray(response.data) ? (response.data as ProjectReward[]) : [];
@@ -298,7 +298,7 @@
             <Modal
                 bind:open={rewardModal}
                 closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
-                class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 max-w-[900px] w-full p-6 rounded-3xl bg-white shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+                class="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
                 headerClass="py-2"
             >
                 {#if selectedReward}
