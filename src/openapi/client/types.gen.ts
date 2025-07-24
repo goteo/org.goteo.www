@@ -3893,6 +3893,9 @@ export type ApiProjectRewardsGetCollectionData = {
         itemsPerPage?: number;
         project?: string;
         'project[]'?: Array<string>;
+        'order[money.amount]'?: 'asc' | 'desc';
+        'order[unitsAvailable]'?: 'asc' | 'desc';
+        hasUnits?: boolean;
     };
     url: '/v4/project_rewards';
 };
