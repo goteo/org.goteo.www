@@ -2,12 +2,15 @@
 import UiLanguages from "../../components/UiLanguages.astro";
 import Logout from "../../components/Logout.astro";
 import Layout from "../../layouts/Layout.astro";
+import EnvIndicator from "../../components/EnvIndicator.astro";
 
 const { t } = Astro.locals;
 const hasAccessToken = Boolean(Astro.cookies.get("access-token"));
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <EnvIndicator />
+
     <main class="wrapper">
         <h1 class="text-body">{t("title")}</h1>
 
