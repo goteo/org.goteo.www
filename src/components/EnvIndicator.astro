@@ -1,5 +1,6 @@
 ---
-const envTest = import.meta.env.PUBLIC_ENV_TEST;
+import { getTestEnv } from "../utils/consts.ts";
+const envTest = getTestEnv();
 ---
 
 {

@@ -48,3 +48,7 @@ export function getDefaultCurrency(): string {
 export function getDefaultLanguage(): string {
     return getEnvVariable("PUBLIC_LANGUAGE_DEFAULT");
 }
+
+export function getTestEnv(): string {
+    return getEnvVariable("PUBLIC_ENV_TEST");
+}
