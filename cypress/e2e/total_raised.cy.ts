@@ -10,6 +10,7 @@ describe("View Total Raised by One-time Payments", () => {
                 name: "Cypress Test User",
                 accountingId: 123,
                 isAuthenticated: true,
+                roles: ["ROLE_ADMIN"],
             },
         }).as("authMe");
 
@@ -75,6 +76,8 @@ describe("View Total Raised by One-time Payments", () => {
                     name: "Cypress Test User",
                     isAuthenticated: true,
                     accountingId: 123,
+                    roles: ["ROLE_ADMIN"],
+                    isAdmin: true,
                 }),
             );
         });
@@ -82,13 +85,13 @@ describe("View Total Raised by One-time Payments", () => {
         cy.setCookie(
             "access-token",
             JSON.stringify({
+                id: 1,
                 token: "mock-access-token-cypress-123",
                 accountingId: 123,
-                userId: 1,
+                isAdmin: true,
             }),
         );
 
-        cy.mockLogin();
         cy.on("uncaught:exception", () => false);
     });
 
