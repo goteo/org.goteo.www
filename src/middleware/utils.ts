@@ -81,6 +81,18 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
         return isLangInPath ? `/${currentLang}/login` : `/login`;
     }
 
+    if (nextSegment === "admin") {
+        try {
+            const token = JSON.parse(accessToken || "{}");
+
+            if (!token.isAdmin) {
+                return isLangInPath ? `/${currentLang}/login` : `/login`;
+            }
+        } catch {
+            return isLangInPath ? `/${currentLang}/login` : `/login`;
+        }
+    }
+
     return null;
 }
 
