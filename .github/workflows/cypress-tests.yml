@@ -51,8 +51,8 @@ jobs:
             # Create test .env file with required variables
             - name: Create test env file
               run: |
-                  echo "PUBLIC_API_URL=${{ vars.API_URL || 'https://api-develop.goteo.org' }}" >> .env
-                  echo "PUBLIC_LANGUAGE_DEFAULT=es" > .env
+                  echo "PUBLIC_API_URL=https://api-staging.v4.goteo.org" >> .env
+                  echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
                   echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
                   echo "NODE_ENV=test" >> .env
@@ -65,14 +65,6 @@ jobs:
                   echo "PAYPAL_CLIENT_SECRET=dummy" >> .env
                   echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
 
-            - name: Debug environment variables
-              run: |
-                  echo "=== Environment variables ==="
-                  cat .env
-                  echo "=== NODE_ENV ==="
-                  echo $NODE_ENV
-
-            # Ejecutar los tests de Cypress
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
               with:
@@ -87,7 +79,7 @@ jobs:
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
                   PUBLIC_LANGUAGE_DEFAULT: es
                   CYPRESS_CONFIG_FILE: cypress.github.js
-                  PUBLIC_API_URL: ${{ vars.API_URL || 'https://api-develop.goteo.org' }}
+                  PUBLIC_API_URL: https://api-staging.v4.goteo.org
                   CYPRESS_MOCK_AUTH: true
 
             # Subir capturas de pantalla y videos como artefactos en caso de fallos
