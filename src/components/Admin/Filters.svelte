@@ -5,9 +5,15 @@
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
+    import { getBaseUrl } from "../../utils/consts";
 
-    let { onApplyFilters } = $props();
+    let { onApplyFilters, currentTarget } = $props<{
+        onApplyFilters: (filters: any) => void;
+        currentTarget?: string;
+    }>();
+
     let showFilters = $state(false);
+    let isExporting = $state(false);
 
     let selectedPaymentMethod = $state("");
     let selectedChargeStatus = $state("");
@@ -64,6 +70,131 @@
     function handleSelectTarget(accounting: string) {
         onApplyFilters({ target: accounting });
     }
+
+    function getAccessToken(): string | null {
+        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
+        if (!match) return null;
+
+        try {
+            const decoded = decodeURIComponent(match[1]);
+            const parsed = JSON.parse(decoded);
+            return parsed?.token ?? null;
+        } catch {
+            return null;
+        }
+    }
+
+    async function handleExportCSV() {
+        isExporting = true;
+
+        try {
+            const token = getAccessToken();
+            if (!token) {
+                alert($t("contributions.export.errorAuth"));
+                return;
+            }
+
+            const queryParams = new URLSearchParams();
+
+            if (selectedChargeStatus && selectedChargeStatus !== "all") {
+                queryParams.append("status", selectedChargeStatus);
+            }
+
+            if (selectedRangeAmount && selectedRangeAmount !== "all") {
+                if (selectedRangeAmount.includes("..")) {
+                    queryParams.append("money.amount[between]", selectedRangeAmount);
+                } else {
+                    queryParams.append("money.amount[gte]", selectedRangeAmount);
+                }
+            }
+
+            if (dateFrom) {
+                const fromDate = new Date(
+                    new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000,
+                ).toISOString();
+                queryParams.append("dateCreated[strictly_after]", fromDate);
+            }
+
+            if (dateTo) {
+                const toDate = new Date(
+                    new Date(dateTo).getTime() + 24 * 60 * 60 * 1000,
+                ).toISOString();
+                queryParams.append("dateCreated[strictly_before]", toDate);
+            }
+
+            if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
+                queryParams.append("checkout.gateway", `/v4/gateways/${selectedPaymentMethod}`);
+            }
+
+            if (currentTarget) {
+                queryParams.append("target", currentTarget);
+            }
+
+            queryParams.append("pagination", "false");
+            queryParams.append("itemsPerPage", "0");
+            queryParams.append("export", "all");
+
+            const baseUrl = getBaseUrl();
+            const exportUrl = `${baseUrl}/v4/gateway_charges/export?${queryParams.toString()}`;
+
+            const response = await fetch(exportUrl, {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "text/csv",
+                },
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    alert($t("contributions.export.errorAuth"));
+                    return;
+                }
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const contentType = response.headers.get("content-type");
+            if (!contentType?.includes("text/csv")) {
+                throw new Error("Response is not a CSV file");
+            }
+
+            const csvBlob = await response.blob();
+
+            const url = window.URL.createObjectURL(csvBlob);
+            const link = document.createElement("a");
+            link.href = url;
+
+            const contentDisposition = response.headers.get("content-disposition");
+            let filename = "charges-export.csv";
+
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(
+                    /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+                );
+                if (filenameMatch) {
+                    filename = filenameMatch[1].replace(/['"]/g, "");
+                }
+            } else {
+                const now = new Date();
+                const timestamp = now.toISOString().slice(0, 19).replace(/[T:]/g, "-");
+                filename = `charges-export-${timestamp}.csv`;
+            }
+
+            link.download = filename;
+            link.style.display = "none";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error exporting CSV:", error);
+            alert($t("contributions.export.error"));
+        } finally {
+            isExporting = false;
+        }
+    }
 </script>
 
 <div
@@ -72,25 +203,84 @@
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />
 
-        <button
-            type="button"
-            onclick={() => (showFilters = !showFilters)}
-            class="border-tertiary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
-        >
-            <span class="relative">
-                <FiltersIcon />
-                {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
-                    <span class="absolute -top-1 -right-1">
-                        <ActiveFilterIcon />
-                    </span>
+        <div class="flex items-center gap-3">
+            <button
+                type="button"
+                onclick={handleExportCSV}
+                disabled={isExporting}
+                class="border-primary text-primary hover:bg-primary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+                {#if isExporting}
+                    <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        ></circle>
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    {$t("contributions.export.exporting")}
+                {:else}
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <path
+                            d="M7 10L12 15L17 10"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <path
+                            d="M12 15V3"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                    {$t("contributions.export.csv")}
                 {/if}
-            </span>
-            {#if showFilters}
-                {$t("contributions.filters.btns.closeFilters")}
-            {:else}
-                {$t("contributions.filters.btns.openFilters")}
-            {/if}
-        </button>
+            </button>
+
+            <button
+                type="button"
+                onclick={() => (showFilters = !showFilters)}
+                class="border-tertiary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+            >
+                <span class="relative">
+                    <FiltersIcon />
+                    {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
+                        <span class="absolute -top-1 -right-1">
+                            <ActiveFilterIcon />
+                        </span>
+                    {/if}
+                </span>
+                {#if showFilters}
+                    {$t("contributions.filters.btns.closeFilters")}
+                {:else}
+                    {$t("contributions.filters.btns.openFilters")}
+                {/if}
+            </button>
+        </div>
     </div>
 
     {#if showFilters}
