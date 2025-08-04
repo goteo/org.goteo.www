@@ -8,7 +8,6 @@ interface UserProfile {
     accountingId: number | null;
     roles: string[];
     isAdmin: boolean;
-    isAuthenticated: boolean;
     token: string | null;
 }
 

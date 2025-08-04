@@ -6,7 +6,6 @@
     "accountingId": 123,
     "roles": ["ROLE_ADMIN"],
     "isAdmin": true,
-    "isAuthenticated": true,
     "token": "mock-admin-token-cypress-123"
   },
   "user": {
@@ -16,7 +15,6 @@
     "accountingId": 456,
     "roles": ["ROLE_USER"],
     "isAdmin": false,
-    "isAuthenticated": true,
     "token": "mock-user-token-cypress-456"
   },
   "userWithAdmin": {
@@ -26,7 +24,6 @@
     "accountingId": 789,
     "roles": ["ROLE_USER", "ROLE_ADMIN"],
     "isAdmin": true,
-    "isAuthenticated": true,
     "token": "mock-useradmin-token-cypress-789"
   },
   "moderator": {
@@ -36,7 +33,6 @@
     "accountingId": 321,
     "roles": ["ROLE_USER", "ROLE_MODERATOR"],
     "isAdmin": false,
-    "isAuthenticated": true,
     "token": "mock-moderator-token-cypress-321"
   },
   "guest": {
@@ -46,7 +42,6 @@
     "accountingId": null,
     "roles": [],
     "isAdmin": false,
-    "isAuthenticated": false,
     "token": null
   }
 }

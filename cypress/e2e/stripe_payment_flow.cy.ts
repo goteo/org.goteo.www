@@ -9,7 +9,6 @@ describe("Stripe Payment Flow", () => {
                 email: "test@cypress.local",
                 name: "Cypress Test User",
                 accountingId: 123,
-                isAuthenticated: true,
             },
         }).as("authMe");
 
@@ -88,7 +87,6 @@ describe("Stripe Payment Flow", () => {
                     id: 1,
                     email: "test@cypress.local",
                     name: "Cypress Test User",
-                    isAuthenticated: true,
                     accountingId: 123,
                 }),
             );

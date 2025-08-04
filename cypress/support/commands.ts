@@ -49,7 +49,6 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
                 email: profile.email,
                 name: profile.name,
                 accountingId: profile.accountingId,
-                isAuthenticated: profile.isAuthenticated,
                 roles: profile.roles,
                 isAdmin: profile.isAdmin,
             },
@@ -90,7 +89,6 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
                     id: profile.id,
                     email: profile.email,
                     name: profile.name,
-                    isAuthenticated: profile.isAuthenticated,
                     accountingId: profile.accountingId,
                     roles: profile.roles,
                     isAdmin: profile.isAdmin,
@@ -251,7 +249,6 @@ Cypress.Commands.add("mockLogin", () => {
                 id: 1,
                 email: "test@cypress.local",
                 name: "Cypress Test User",
-                isAuthenticated: true,
                 accountingId: 123,
             }),
         );
@@ -277,7 +274,6 @@ Cypress.Commands.add("loginBypass", () => {
                 id: 1,
                 email: "cypress@test.local",
                 name: "Cypress Bypass User",
-                isAuthenticated: true,
                 accountingId: 999,
             }),
         );
