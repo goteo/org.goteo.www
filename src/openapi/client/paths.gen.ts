@@ -6,6 +6,8 @@ export const apiAccountingsIdGetUrl = '/v4/accountings/{id}';
 
 export const apiAccountingsIdPatchUrl = '/v4/accountings/{id}';
 
+export const apiAccountingsIdbalanceGetUrl = '/v4/accountings/{id}/balance';
+
 export const apiAccountingBalancePointsGetCollectionUrl = '/v4/accounting_balance_points';
 
 export const apiAccountingTransactionsGetCollectionUrl = '/v4/accounting_transactions';
