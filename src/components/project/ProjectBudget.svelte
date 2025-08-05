@@ -2,12 +2,15 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
+    import type { Project, ProjectBudgetItem, AccountingBalance } from "../../openapi/client/index";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import ResumeBudget from "./ResumeBudget.svelte";
 
-    const { project, accounting } = $props<{ project: Project; accounting: Accounting }>();
+    const { project, accountingBalance } = $props<{
+        project: Project;
+        accountingBalance: AccountingBalance;
+    }>();
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
@@ -30,7 +33,7 @@
 
 <div class="flex flex-col gap-10">
     <div>
-        <ResumeBudget {project} {accounting} />
+        <ResumeBudget {project} {accountingBalance} />
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
@@ -59,10 +62,7 @@
                     >
                         <div class="flex flex-col gap-4">
                             <h2 class="text-tertiary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p
-                                class="line-clamp-3 font-normal text-[#575757]
-"
-                            >
+                            <p class="line-clamp-3 font-normal text-[#575757]">
                                 {item.description}
                             </p>
                         </div>

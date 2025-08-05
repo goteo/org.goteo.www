@@ -9,7 +9,7 @@
         return $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0);
     });
 
-    export let accounting;
+    export let accountingBalance;
     export let defaultCurrency;
 </script>
 
@@ -19,7 +19,7 @@
             >{$t("payment.wallet-confirmation.currentBalance")}</span
         >
         <p class="text-[32px] font-bold text-[#462949]">
-            {formatCurrency(accounting.balance.amount, accounting.balance.currency, {
+            {formatCurrency(accountingBalance.amount, accountingBalance.currency, {
                 showSymbol: true,
             })}
         </p>
@@ -39,7 +39,7 @@
             >{$t("payment.wallet-confirmation.remainingBalance")}
         </span>
         <p id="cart-difference" class="text-[32px] font-bold text-[#462949]">
-            {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency, {
+            {formatCurrency(accountingBalance.amount - $total, accountingBalance.currency, {
                 showSymbol: true,
             })}
         </p>

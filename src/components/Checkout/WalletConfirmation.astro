@@ -2,7 +2,7 @@
 import WalletInfo from "./WalletInfo.svelte";
 
 const { t } = Astro.locals;
-const { accounting, defaultCurrency } = Astro.props;
+const { accounting, accountingBalance, defaultCurrency } = Astro.props;
 ---
 
 <section>
@@ -12,7 +12,7 @@ const { accounting, defaultCurrency } = Astro.props;
         id="payment"
         method="POST"
         class="flex flex-col gap-4"
-        data-balance={accounting.balance.amount}
+        data-balance={accountingBalance.amount}
     >
         <input type="hidden" name="paymentMethod" value="wallet" />
         <input type="hidden" name="cartData" id="cartData" />

@@ -6,9 +6,13 @@
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
-    import type { Project, Accounting } from "../../openapi/client/index";
+    import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
 
-    let { project, accounting } = $props<{ project: Project; accounting: Accounting }>();
+    let { project, accounting, accountingBalance } = $props<{
+        project: Project;
+        accounting: Accounting;
+        accountingBalance: AccountingBalance;
+    }>();
     let contentDescription = $state("");
     let activeTab = $state("rewards");
 
@@ -69,7 +73,7 @@
             </div>
         {:else if activeTab === "budget"}
             <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget {project} {accounting} />
+                <ProjectBudget {project} {accountingBalance} />
             </div>
         {:else if activeTab === "updates"}
             <div

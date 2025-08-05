@@ -1,10 +1,15 @@
 <script lang="ts">
-    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
+    import type {
+        Project,
+        ProjectBudgetItem,
+        Accounting,
+        AccountingBalance,
+    } from "../../openapi/client/index";
     import { onMount, tick } from "svelte";
 
-    let { project, budgetAmount, accounting } = $props<{
+    let { project, budgetAmount, accountingBalance } = $props<{
         project: Project;
-        accounting: Accounting;
+        accountingBalance: AccountingBalance;
         budgetAmount: "minimum" | "optimum";
     }>();
 
@@ -19,7 +24,7 @@
     const amountTask = project.budget[budgetAmount].task.amount;
     const amountMaterial = project.budget[budgetAmount].material.amount;
     const amountInfra = project.budget[budgetAmount].infra.amount;
-    const balanceAmount = accounting.balance.amount;
+    const balanceAmount = accountingBalance.amount;
 
     let widthInfra = $state(0);
     let widthMaterial = $state(0);
