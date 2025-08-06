@@ -9,7 +9,6 @@ describe("Stripe Verification Flow", () => {
                     id: 1,
                     email: "test@cypress.local",
                     name: "Cypress Test User",
-                    isAuthenticated: true,
                     accountingId: 123,
                     balance: 0,
                 }),

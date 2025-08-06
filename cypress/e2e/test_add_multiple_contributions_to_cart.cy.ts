@@ -9,7 +9,6 @@ describe("Checkout Flow - Multiple Contributions", () => {
                 email: "test@cypress.local",
                 name: "Cypress Test User",
                 accountingId: 123,
-                isAuthenticated: true,
             },
         }).as("authMe");
 
@@ -125,7 +124,6 @@ describe("Checkout Flow - Multiple Contributions", () => {
                     id: 1,
                     email: "test@cypress.local",
                     name: "Cypress Test User",
-                    isAuthenticated: true,
                     accountingId: 123,
                 }),
             );

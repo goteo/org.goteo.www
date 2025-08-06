@@ -9,7 +9,6 @@ describe("Project Page - Donation and Reward Verification", () => {
                 email: "test@cypress.local",
                 name: "Cypress Test User",
                 accountingId: 123,
-                isAuthenticated: true,
             },
         }).as("authMe");
 
@@ -77,7 +76,6 @@ describe("Project Page - Donation and Reward Verification", () => {
                     id: 1,
                     email: "test@cypress.local",
                     name: "Cypress Test User",
-                    isAuthenticated: true,
                     accountingId: 123,
                 }),
             );
