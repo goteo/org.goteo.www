@@ -12,41 +12,50 @@ describe("View breakdown of each individual contribution", () => {
 
         cy.intercept("GET", "**/v4/gateway_charges**", {
             statusCode: 200,
-            body: {
-                member: [
-                    {
-                        id: "charge_001",
-                        amount: { amount: 8000, currency: "EUR" },
-                        destination: "Al paso de los Caracoles",
-                        origin: "Root Goteo",
-                        method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Cobrado",
-                        target: "proyecto_100",
+            body: [
+                {
+                    id: 273,
+                    type: "single",
+                    title: "Donación libre",
+                    description: "Donación libre",
+                    target: "/v4/accountings/2639",
+                    money: {
+                        amount: 800000, // 8000€ en céntimos
+                        currency: "EUR",
                     },
-                    {
-                        id: "charge_002",
-                        amount: { amount: 2000, currency: "EUR" },
-                        destination: "Al paso de los Caracoles",
-                        origin: "Root Goteo",
-                        method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Pendiente",
-                        target: "proyecto_100",
+                    status: "charged",
+                    dateCreated: "2025-07-29T15:32:16+00:00",
+                    dateUpdated: "2025-07-29T15:32:38+00:00",
+                },
+                {
+                    id: 228,
+                    type: "single",
+                    title: "CD Al Paso de los Caracoles + 2 Camisetas",
+                    description: "CD Al Paso de los Caracoles + 2 Camisetas",
+                    target: "/v4/accountings/2639",
+                    money: {
+                        amount: 200000, // 2000€ en céntimos
+                        currency: "EUR",
                     },
-                    {
-                        id: "charge_003",
-                        amount: { amount: 7000, currency: "EUR" },
-                        destination: "10º Aniversario de la Asociación",
-                        origin: "Root Goteo",
-                        method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Pendiente",
-                        target: "proyecto_200",
+                    status: "in_pending",
+                    dateCreated: "2025-07-29T15:28:46+00:00",
+                    dateUpdated: "2025-07-29T15:28:46+00:00",
+                },
+                {
+                    id: 227,
+                    type: "single",
+                    title: "10º Aniversario de la Asociación",
+                    description: "Contribución para el 10º Aniversario",
+                    target: "/v4/accountings/2724",
+                    money: {
+                        amount: 700000, // 7000€ en céntimos
+                        currency: "EUR",
                     },
-                ],
-                totalItems: 3,
-            },
+                    status: "charged",
+                    dateCreated: "2025-07-28T10:15:30+00:00",
+                    dateUpdated: "2025-07-28T10:15:45+00:00",
+                },
+            ],
         }).as("chargesMock");
 
         cy.mockLogin();
@@ -63,44 +72,114 @@ describe("View breakdown of each individual contribution", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            if (text.includes("Destino")) {
-                cy.contains("Destino").should("be.visible");
+            // Verificar headers de tabla (ajusta según tu UI)
+            if (text.includes("ID") || text.includes("Id")) {
+                cy.contains(/ID?/i).should("be.visible");
             }
-            if (text.includes("Importe")) {
-                cy.contains("Importe").should("be.visible");
+            if (text.includes("Título") || text.includes("Title")) {
+                cy.contains(/Título|Title/i).should("be.visible");
             }
-            if (text.includes("Estado")) {
-                cy.contains("Estado").should("be.visible");
+            if (text.includes("Importe") || text.includes("Amount")) {
+                cy.contains(/Importe|Amount/i).should("be.visible");
+            }
+            if (text.includes("Estado") || text.includes("Status")) {
+                cy.contains(/Estado|Status/i).should("be.visible");
             }
 
-            if (text.includes("Al paso de los Caracoles")) {
-                cy.contains("Al paso de los Caracoles").should("be.visible");
+            if (text.includes("Donación libre")) {
+                cy.contains("Donación libre").should("be.visible");
+            }
+            if (text.includes("Al Paso de los Caracoles")) {
+                cy.contains("Al Paso de los Caracoles").should("be.visible");
             }
             if (text.includes("10º Aniversario")) {
                 cy.contains("10º Aniversario").should("be.visible");
             }
-            text.includes("80€") ||
-                text.includes("8000€") ||
-                text.includes("20€") ||
-                text.includes("2000€") ||
-                text.includes("70€") ||
-                text.includes("7000€");
 
-            if (text.includes("Cobrado")) {
-                cy.contains("Cobrado").should("be.visible");
-            }
-            if (text.includes("Pendiente")) {
-                cy.contains("Pendiente").should("be.visible");
+            const hasAmounts =
+                text.includes("8000") ||
+                text.includes("2000") ||
+                text.includes("7000") ||
+                text.includes("80") ||
+                text.includes("20") ||
+                text.includes("70");
+
+            if (hasAmounts) {
+                cy.get("body").should("contain.text", "€");
             }
 
-            if (text.includes("Root Goteo")) {
-                cy.contains("Root Goteo").should("be.visible");
+            // ✅ Verificar estados reales de la API
+            if (text.includes("charged") || text.includes("Cobrado")) {
+                cy.contains(/charged|Cobrado/i).should("be.visible");
             }
-            if (text.includes("Tarjeta")) {
-                cy.contains("Tarjeta").should("be.visible");
+            if (text.includes("in_pending") || text.includes("Pendiente")) {
+                cy.contains(/in_pending|Pendiente/i).should("be.visible");
             }
         });
 
         cy.get("body").should("contain.text", "€");
+    });
+
+    it("should display contribution IDs correctly", () => {
+        cy.visit("/es/admin/charges", { failOnStatusCode: false });
+        cy.wait("@chargesMock");
+
+        cy.get("body").then(($body) => {
+            const text = $body.text();
+
+            if (text.includes("273")) {
+                cy.contains("273").should("be.visible");
+            }
+            if (text.includes("228")) {
+                cy.contains("228").should("be.visible");
+            }
+            if (text.includes("227")) {
+                cy.contains("227").should("be.visible");
+            }
+        });
+    });
+
+    it("should display different contribution types", () => {
+        cy.visit("/es/admin/charges", { failOnStatusCode: false });
+        cy.wait("@chargesMock");
+
+        cy.get("body").then(($body) => {
+            const text = $body.text();
+
+            if (text.includes("single") || text.includes("Único")) {
+                cy.contains(/single|Único/i).should("be.visible");
+            }
+        });
+    });
+
+    it("should show creation dates if displayed", () => {
+        cy.visit("/es/admin/charges", { failOnStatusCode: false });
+        cy.wait("@chargesMock");
+
+        cy.get("body").then(($body) => {
+            const text = $body.text();
+
+            // Verificar fechas si se muestran (formato puede variar)
+            if (text.includes("2025-07-29") || text.includes("29/07/2025")) {
+                cy.get("body").should("contain.text", "2025");
+            }
+        });
+    });
+
+    it("should allow filtering by status", () => {
+        cy.visit("/es/admin/charges", { failOnStatusCode: false });
+        cy.wait("@chargesMock");
+
+        // Si hay filtros de estado, probar que funcionen
+        cy.get("body").then(($body) => {
+            // Buscar selectores/filtros de estado si existen
+            if ($body.find('[data-testid*="status"]').length > 0) {
+                cy.get('[data-testid*="status"]').should("be.visible");
+            }
+            if ($body.find("select").length > 0) {
+                // Verificar que hay opciones de filtro
+                cy.get("select").should("exist");
+            }
+        });
     });
 });

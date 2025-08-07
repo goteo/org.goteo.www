@@ -29,7 +29,6 @@ jobs:
             - name: Install Wrangler
               run: pnpm add --global wrangler
 
-            # Configuración mejorada para caché de Cypress
             - name: Cache Cypress binary
               uses: actions/cache@v4
               id: cypress-cache
@@ -39,19 +38,30 @@ jobs:
                   restore-keys: |
                       cypress-${{ runner.os }}-
 
-            # Instalación explícita de Cypress si el caché falla
             - name: Install Cypress binary
               if: steps.cypress-cache.outputs.cache-hit != 'true'
               run: pnpm exec cypress install
 
-            # Verificar instalación de Cypress después de instalar explícitamente
             - name: Verify Cypress installation
               run: pnpm exec cypress verify
 
-            # Create test .env file with required variables
+            - name: Set API URL based on branch
+              id: api-url
+              run: |
+                  if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "master" ]]; then
+                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
+                    echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
+                  elif [[ "${{ github.ref_name }}" == "develop" ]]; then
+                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
+                    echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
+                  else
+                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
+                    echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Create test env file
               run: |
-                  echo "PUBLIC_API_URL=https://api-staging.v4.goteo.org" >> .env
+                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
                   echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
@@ -64,6 +74,8 @@ jobs:
                   echo "PAYPAL_CLIENT_ID=dummy" >> .env
                   echo "PAYPAL_CLIENT_SECRET=dummy" >> .env
                   echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
+                  echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
+                  echo "API URL: ${{ steps.api-url.outputs.API_URL }}"
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
@@ -79,16 +91,15 @@ jobs:
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
                   PUBLIC_LANGUAGE_DEFAULT: es
                   CYPRESS_CONFIG_FILE: cypress.github.js
-                  PUBLIC_API_URL: https://api-staging.v4.goteo.org
+                  PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
                   CYPRESS_MOCK_AUTH: true
+                  CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
 
-            # Subir capturas de pantalla y videos como artefactos en caso de fallos
             - name: Prepare artifact directories if tests failed
               if: failure()
               run: |
                   mkdir -p cypress/screenshots
                   mkdir -p cypress/videos
-                  # Verificar si hay archivos
                   echo "Screenshot files found:"
                   find cypress/screenshots -type f | wc -l
                   echo "Video files found:"
@@ -98,7 +109,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/screenshots/**/*') != ''
               with:
-                  name: cypress-screenshots
+                  name: cypress-screenshots-${{ steps.api-url.outputs.ENVIRONMENT }}
                   path: cypress/screenshots
                   retention-days: 7
 
@@ -106,6 +117,6 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/videos/**/*') != ''
               with:
-                  name: cypress-videos
+                  name: cypress-videos-${{ steps.api-url.outputs.ENVIRONMENT }}
                   path: cypress/videos
                   retention-days: 7
