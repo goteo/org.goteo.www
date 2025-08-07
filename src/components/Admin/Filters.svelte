@@ -3,11 +3,17 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
+    import { apiGatewayChargesGetCollection } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
 
-    let { onApplyFilters } = $props();
+    let { onApplyFilters, currentTarget } = $props<{
+        onApplyFilters: (filters: any) => void;
+        currentTarget?: string;
+    }>();
+
     let showFilters = $state(false);
+    let isExporting = $state(false);
 
     let selectedPaymentMethod = $state("");
     let selectedChargeStatus = $state("");
@@ -64,6 +70,99 @@
     function handleSelectTarget(accounting: string) {
         onApplyFilters({ target: accounting });
     }
+
+    async function handleExportCSV() {
+        isExporting = true;
+
+        try {
+            const queryParams: Record<string, string> = {};
+            const filenameParams: Record<string, string> = {};
+
+            if (selectedChargeStatus && selectedChargeStatus !== "all") {
+                queryParams.status = selectedChargeStatus;
+                filenameParams.status = selectedChargeStatus;
+            }
+
+            if (selectedRangeAmount && selectedRangeAmount !== "all") {
+                if (selectedRangeAmount.includes("..")) {
+                    queryParams["money.amount[between]"] = selectedRangeAmount;
+                    filenameParams.amount = selectedRangeAmount.replace("..", "-");
+                } else {
+                    queryParams["money.amount[gte]"] = selectedRangeAmount;
+                    filenameParams.amount = `gte${selectedRangeAmount}`;
+                }
+            }
+
+            if (dateFrom) {
+                const fromDate = new Date(
+                    new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000,
+                ).toISOString();
+                queryParams["dateCreated[strictly_after]"] = fromDate;
+                filenameParams.from = dateFrom;
+            }
+
+            if (dateTo) {
+                const toDate = new Date(
+                    new Date(dateTo).getTime() + 24 * 60 * 60 * 1000,
+                ).toISOString();
+                queryParams["dateCreated[strictly_before]"] = toDate;
+                filenameParams.to = dateTo;
+            }
+
+            if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
+                queryParams["checkout.gateway"] = `/v4/gateways/${selectedPaymentMethod}`;
+                filenameParams.gateway = selectedPaymentMethod;
+            }
+
+            if (currentTarget) {
+                queryParams.target = currentTarget;
+                filenameParams.target = currentTarget;
+            }
+
+            const timestamp = new Date().toISOString().split("T")[0];
+            const filterParts = Object.entries(filenameParams)
+                .map(([key, value]) => `${key}-${value}`)
+                .join("_");
+            const filename = `gateway-charges_${timestamp}${filterParts ? "_" + filterParts : ""}.csv`;
+
+            const response = await apiGatewayChargesGetCollection({
+                query: queryParams,
+                headers: {
+                    Accept: "text/csv",
+                },
+            });
+
+            let csvBlob: Blob;
+            if (response instanceof Blob) {
+                csvBlob = response;
+            } else if (response?.data instanceof Blob) {
+                csvBlob = response.data;
+            } else if (typeof response === "string") {
+                csvBlob = new Blob([response], { type: "text/csv;charset=utf-8" });
+            } else if (typeof (response as any)?.data === "string") {
+                csvBlob = new Blob([(response as any).data], { type: "text/csv;charset=utf-8" });
+            } else {
+                const csvContent = JSON.stringify(response, null, 2);
+                csvBlob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+            }
+
+            const url = window.URL.createObjectURL(csvBlob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            link.style.display = "none";
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error exporting CSV:", error);
+            alert($t("contributions.export.error"));
+        } finally {
+            isExporting = false;
+        }
+    }
 </script>
 
 <div
@@ -72,25 +171,84 @@
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />
 
-        <button
-            type="button"
-            onclick={() => (showFilters = !showFilters)}
-            class="border-tertiary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
-        >
-            <span class="relative">
-                <FiltersIcon />
-                {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
-                    <span class="absolute -top-1 -right-1">
-                        <ActiveFilterIcon />
-                    </span>
+        <div class="flex items-center gap-3">
+            <button
+                type="button"
+                onclick={handleExportCSV}
+                disabled={isExporting}
+                class="border-primary text-primary hover:bg-primary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+            >
+                {#if isExporting}
+                    <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                        <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                        ></circle>
+                        <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                    </svg>
+                    {$t("contributions.export.exporting")}
+                {:else}
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+                        <path
+                            d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <path
+                            d="M7 10L12 15L17 10"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                        <path
+                            d="M12 15V3"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+                    </svg>
+                    {$t("contributions.export.csv")}
                 {/if}
-            </span>
-            {#if showFilters}
-                {$t("contributions.filters.btns.closeFilters")}
-            {:else}
-                {$t("contributions.filters.btns.openFilters")}
-            {/if}
-        </button>
+            </button>
+
+            <button
+                type="button"
+                onclick={() => (showFilters = !showFilters)}
+                class="border-tertiary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+            >
+                <span class="relative">
+                    <FiltersIcon />
+                    {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
+                        <span class="absolute -top-1 -right-1">
+                            <ActiveFilterIcon />
+                        </span>
+                    {/if}
+                </span>
+                {#if showFilters}
+                    {$t("contributions.filters.btns.closeFilters")}
+                {:else}
+                    {$t("contributions.filters.btns.openFilters")}
+                {/if}
+            </button>
+        </div>
     </div>
 
     {#if showFilters}

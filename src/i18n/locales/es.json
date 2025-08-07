@@ -556,6 +556,12 @@
     },
     "tootip": {
       "copied": "¡Copiado!"
+    },
+    "export": {
+      "csv": "Exportar CSV",
+      "exporting": "Exportando...",
+      "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
+      "errorAuth": "Error de autenticación. Por favor, inicia sesión de nuevo."
     }
   }
 }
