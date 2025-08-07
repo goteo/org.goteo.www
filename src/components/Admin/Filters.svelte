@@ -3,9 +3,9 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
+    import { apiGatewayChargesGetCollection } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
-    import { getBaseUrl } from "../../utils/consts";
 
     let { onApplyFilters, currentTarget } = $props<{
         onApplyFilters: (filters: any) => void;
@@ -71,40 +71,25 @@
         onApplyFilters({ target: accounting });
     }
 
-    function getAccessToken(): string | null {
-        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
-        if (!match) return null;
-
-        try {
-            const decoded = decodeURIComponent(match[1]);
-            const parsed = JSON.parse(decoded);
-            return parsed?.token ?? null;
-        } catch {
-            return null;
-        }
-    }
-
     async function handleExportCSV() {
         isExporting = true;
 
         try {
-            const token = getAccessToken();
-            if (!token) {
-                alert($t("contributions.export.errorAuth"));
-                return;
-            }
-
-            const queryParams = new URLSearchParams();
+            const queryParams: Record<string, string> = {};
+            const filenameParams: Record<string, string> = {};
 
             if (selectedChargeStatus && selectedChargeStatus !== "all") {
-                queryParams.append("status", selectedChargeStatus);
+                queryParams.status = selectedChargeStatus;
+                filenameParams.status = selectedChargeStatus;
             }
 
             if (selectedRangeAmount && selectedRangeAmount !== "all") {
                 if (selectedRangeAmount.includes("..")) {
-                    queryParams.append("money.amount[between]", selectedRangeAmount);
+                    queryParams["money.amount[between]"] = selectedRangeAmount;
+                    filenameParams.amount = selectedRangeAmount.replace("..", "-");
                 } else {
-                    queryParams.append("money.amount[gte]", selectedRangeAmount);
+                    queryParams["money.amount[gte]"] = selectedRangeAmount;
+                    filenameParams.amount = `gte${selectedRangeAmount}`;
                 }
             }
 
@@ -112,81 +97,64 @@
                 const fromDate = new Date(
                     new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000,
                 ).toISOString();
-                queryParams.append("dateCreated[strictly_after]", fromDate);
+                queryParams["dateCreated[strictly_after]"] = fromDate;
+                filenameParams.from = dateFrom;
             }
 
             if (dateTo) {
                 const toDate = new Date(
                     new Date(dateTo).getTime() + 24 * 60 * 60 * 1000,
                 ).toISOString();
-                queryParams.append("dateCreated[strictly_before]", toDate);
+                queryParams["dateCreated[strictly_before]"] = toDate;
+                filenameParams.to = dateTo;
             }
 
             if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
-                queryParams.append("checkout.gateway", `/v4/gateways/${selectedPaymentMethod}`);
+                queryParams["checkout.gateway"] = `/v4/gateways/${selectedPaymentMethod}`;
+                filenameParams.gateway = selectedPaymentMethod;
             }
 
             if (currentTarget) {
-                queryParams.append("target", currentTarget);
+                queryParams.target = currentTarget;
+                filenameParams.target = currentTarget;
             }
 
-            queryParams.append("pagination", "false");
-            queryParams.append("itemsPerPage", "0");
-            queryParams.append("export", "all");
+            const timestamp = new Date().toISOString().split("T")[0];
+            const filterParts = Object.entries(filenameParams)
+                .map(([key, value]) => `${key}-${value}`)
+                .join("_");
+            const filename = `gateway-charges_${timestamp}${filterParts ? "_" + filterParts : ""}.csv`;
 
-            const baseUrl = getBaseUrl();
-            const exportUrl = `${baseUrl}/v4/gateway_charges/export?${queryParams.toString()}`;
-
-            const response = await fetch(exportUrl, {
-                method: "GET",
+            const response = await apiGatewayChargesGetCollection({
+                query: queryParams,
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     Accept: "text/csv",
                 },
             });
 
-            if (!response.ok) {
-                if (response.status === 401) {
-                    alert($t("contributions.export.errorAuth"));
-                    return;
-                }
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            let csvBlob: Blob;
+            if (response instanceof Blob) {
+                csvBlob = response;
+            } else if (response?.data instanceof Blob) {
+                csvBlob = response.data;
+            } else if (typeof response === "string") {
+                csvBlob = new Blob([response], { type: "text/csv;charset=utf-8" });
+            } else if (typeof (response as any)?.data === "string") {
+                csvBlob = new Blob([(response as any).data], { type: "text/csv;charset=utf-8" });
+            } else {
+                const csvContent = JSON.stringify(response, null, 2);
+                csvBlob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
             }
-
-            const contentType = response.headers.get("content-type");
-            if (!contentType?.includes("text/csv")) {
-                throw new Error("Response is not a CSV file");
-            }
-
-            const csvBlob = await response.blob();
 
             const url = window.URL.createObjectURL(csvBlob);
             const link = document.createElement("a");
             link.href = url;
-
-            const contentDisposition = response.headers.get("content-disposition");
-            let filename = "charges-export.csv";
-
-            if (contentDisposition) {
-                const filenameMatch = contentDisposition.match(
-                    /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
-                );
-                if (filenameMatch) {
-                    filename = filenameMatch[1].replace(/['"]/g, "");
-                }
-            } else {
-                const now = new Date();
-                const timestamp = now.toISOString().slice(0, 19).replace(/[T:]/g, "-");
-                filename = `charges-export-${timestamp}.csv`;
-            }
-
             link.download = filename;
             link.style.display = "none";
 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error("Error exporting CSV:", error);
