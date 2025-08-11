@@ -2,43 +2,71 @@
 
 describe("View total collected by single payments", () => {
     beforeEach(() => {
+        cy.loginAs("admin");
+
         cy.intercept("GET", "**/v4/gateway_charges**", {
             statusCode: 200,
+            headers: {
+                "content-type": "application/ld+json",
+            },
             body: {
-                member: [
+                "@context": "/v4/contexts/GatewayCharge",
+                "@id": "/v4/gateway_charges",
+                "@type": "hydra:Collection",
+                "hydra:member": [
                     {
+                        "@id": "/v4/gateway_charges/charge_001",
+                        "@type": "GatewayCharge",
                         id: "charge_001",
-                        amount: { amount: 4000, currency: "EUR" },
+                        amount: 4000,
+                        currency: "EUR",
+                        status: "completed",
+                        gateway: "stripe",
+                        created_at: "2025-07-29T15:32:16+00:00",
                         destination: "Al paso de los Caracoles",
                         origin: "Root Goteo",
                         method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Cobrado",
                     },
                     {
+                        "@id": "/v4/gateway_charges/charge_002",
+                        "@type": "GatewayCharge",
                         id: "charge_002",
-                        amount: { amount: 2000, currency: "EUR" },
+                        amount: 2000,
+                        currency: "EUR",
+                        status: "pending",
+                        gateway: "stripe",
+                        created_at: "2025-07-29T15:28:46+00:00",
                         destination: "Al paso de los Caracoles",
                         origin: "Root Goteo",
                         method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Pendiente",
                     },
                     {
+                        "@id": "/v4/gateway_charges/charge_003",
+                        "@type": "GatewayCharge",
                         id: "charge_003",
-                        amount: { amount: 3500, currency: "EUR" },
+                        amount: 3500,
+                        currency: "EUR",
+                        status: "completed",
+                        gateway: "paypal",
+                        created_at: "2025-07-29T10:15:30+00:00",
                         destination: "10º Aniversario de la Asociación",
                         origin: "Root Goteo",
                         method: "Tarjeta",
-                        date: "2025-07-29",
-                        status: "Cobrado",
                     },
                 ],
-                totalItems: 3,
+                "hydra:totalItems": 3,
+                "hydra:view": {
+                    "@id": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "@type": "hydra:PartialCollectionView",
+                    "hydra:first": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "hydra:last": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                },
+                total_amount: "9,500",
+                total_count: 3,
+                currency: "EUR",
             },
         }).as("chargesMock");
 
-        cy.mockLogin();
         cy.on("uncaught:exception", () => false);
     });
 
