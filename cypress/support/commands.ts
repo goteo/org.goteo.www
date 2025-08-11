@@ -8,7 +8,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-// Define la interfaz User para el objeto fixture
+// ========== INTERFACES EXISTENTES ==========
 interface User {
     email: string;
     password: string;
@@ -19,9 +19,172 @@ interface Users {
     invalidUser: User;
 }
 
+// ========== COMANDOS ESCALABLES NUEVOS ==========
+// NOTA: Los tipos UserProfile y UserRole están definidos en index.d.ts
+
+/**
+ * Comando escalable para autenticación por rol
+ * Configura automáticamente intercepts, localStorage y cookies
+ */
+Cypress.Commands.add("loginAs", (role: UserRole) => {
+    cy.fixture("user-profiles").then((profiles) => {
+        const profile = profiles[role];
+
+        if (!profile) {
+            throw new Error(`Profile '${role}' not found in user-profiles.json`);
+        }
+
+        // Si es guest, no configurar autenticación
+        if (role === "guest") {
+            cy.clearCookies();
+            cy.clearLocalStorage();
+            return;
+        }
+
+        // 1. Configurar intercept para /api/auth/me
+        cy.intercept("GET", "**/api/auth/me", {
+            statusCode: 200,
+            body: {
+                id: profile.id,
+                email: profile.email,
+                name: profile.name,
+                accountingId: profile.accountingId,
+                roles: profile.roles,
+                isAdmin: profile.isAdmin,
+            },
+        }).as("authMe");
+
+        // 2. Configurar intercept para login (opcional)
+        cy.intercept("POST", "**/api/auth/login", {
+            statusCode: 200,
+            body: {
+                access_token: profile.token,
+                refresh_token: `refresh-${profile.token}`,
+                user: {
+                    id: profile.id,
+                    email: profile.email,
+                    name: profile.name,
+                    accountingId: profile.accountingId,
+                    roles: profile.roles,
+                },
+            },
+        }).as("loginRequest");
+
+        // 3. Configurar cookie access-token
+        cy.setCookie(
+            "access-token",
+            JSON.stringify({
+                id: profile.id,
+                token: profile.token,
+                accountingId: profile.accountingId,
+                isAdmin: profile.isAdmin,
+            }),
+        );
+
+        // 4. Configurar localStorage
+        cy.window().then((win) => {
+            win.localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    id: profile.id,
+                    email: profile.email,
+                    name: profile.name,
+                    accountingId: profile.accountingId,
+                    roles: profile.roles,
+                    isAdmin: profile.isAdmin,
+                }),
+            );
+        });
+
+        // 5. Configurar intercepts adicionales comunes
+        cy.setupCommonIntercepts(profile);
+
+        // 6. Manejar excepciones no capturadas
+        cy.on("uncaught:exception", () => false);
+    });
+});
+
+/**
+ * Configurar intercepts comunes basados en el perfil del usuario
+ */
+Cypress.Commands.add("setupCommonIntercepts", (profile: UserProfile) => {
+    // Intercept genérico para otras llamadas API
+    cy.intercept("GET", "**/v4/**", {
+        statusCode: 200,
+        body: {
+            accountingId: profile.accountingId,
+            id: profile.id,
+        },
+    }).as("otherApiCalls");
+
+    // Intercept específico para gateway_charges si es admin
+    if (profile.isAdmin) {
+        cy.intercept("GET", "**/v4/gateway_charges*", {
+            statusCode: 200,
+            headers: {
+                "content-type": "application/ld+json",
+            },
+            body: {
+                "@context": "/v4/contexts/GatewayCharge",
+                "@id": "/v4/gateway_charges",
+                "@type": "hydra:Collection",
+                "hydra:member": [
+                    {
+                        "@id": "/v4/gateway_charges/1",
+                        "@type": "GatewayCharge",
+                        id: 1,
+                        amount: 2500,
+                        currency: "EUR",
+                        status: "completed",
+                        gateway: "stripe",
+                        created_at: "2025-01-15T10:00:00Z",
+                    },
+                ],
+                "hydra:totalItems": 247,
+                "hydra:view": {
+                    "@id": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "@type": "hydra:PartialCollectionView",
+                },
+                total_amount: "148,750",
+                total_count: 247,
+                currency: "EUR",
+            },
+        }).as("gatewayCharges");
+    }
+});
+
+/**
+ * Comando para verificar que el usuario tiene los roles correctos
+ */
+Cypress.Commands.add("verifyUserRole", (expectedRole: UserRole) => {
+    cy.fixture("user-profiles").then((profiles) => {
+        const profile = profiles[expectedRole];
+
+        cy.window().then((win) => {
+            const user = JSON.parse(win.localStorage.getItem("user") || "{}");
+            expect(user.roles).to.deep.equal(profile.roles);
+            expect(user.isAdmin).to.equal(profile.isAdmin);
+        });
+    });
+});
+
+/**
+ * Comando para visitar página con autenticación automática
+ */
+Cypress.Commands.add("visitAs", (role: UserRole, url: string) => {
+    cy.loginAs(role);
+    cy.visit(url, { failOnStatusCode: false });
+});
+
+// ========== COMANDOS EXISTENTES (MANTENER COMPATIBILIDAD) ==========
+
 Cypress.Commands.add(
     "login",
     (username: string = "root@goteo.org", password: string = "RootTestPass") => {
+        console.warn(
+            '⚠️  cy.login() is deprecated. Use cy.loginAs("user") or cy.loginAs("admin") instead',
+        );
+
         if (Cypress.env("CI") || Cypress.env("MOCK_AUTH")) {
             cy.mockLogin();
             return;
@@ -44,6 +207,8 @@ Cypress.Commands.add(
 );
 
 Cypress.Commands.add("mockLogin", () => {
+    console.warn('⚠️  cy.mockLogin() is deprecated. Use cy.loginAs("admin") instead');
+
     cy.intercept("POST", "**/api/auth/login", {
         statusCode: 200,
         body: {
@@ -84,7 +249,6 @@ Cypress.Commands.add("mockLogin", () => {
                 id: 1,
                 email: "test@cypress.local",
                 name: "Cypress Test User",
-                isAuthenticated: true,
                 accountingId: 123,
             }),
         );
@@ -110,7 +274,6 @@ Cypress.Commands.add("loginBypass", () => {
                 id: 1,
                 email: "cypress@test.local",
                 name: "Cypress Bypass User",
-                isAuthenticated: true,
                 accountingId: 999,
             }),
         );

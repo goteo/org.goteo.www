@@ -18,6 +18,7 @@ export default defineConfig({
         ): Cypress.PluginConfigOptions {
             console.log("Ejecutando Cypress en GitHub Actions");
             config.env.CI = true;
+            process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             return config;
         },
     },

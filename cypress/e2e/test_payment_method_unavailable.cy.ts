@@ -9,7 +9,6 @@ describe("Checkout Flow - Stripe Payment Integration", () => {
                     id: 1,
                     email: "test@cypress.local",
                     name: "Cypress Test User",
-                    isAuthenticated: true,
                     accountingId: 123,
                     balance: 0,
                 }),
@@ -69,14 +68,17 @@ describe("Checkout Flow - Stripe Payment Integration", () => {
         cy.log("✅ Test de manejo de flujo de pago");
 
         const paymentFlowHandler = {
-            validateUser: (user: any) => user.accountingId && user.isAuthenticated,
-            validateProject: (project: any) => project.id && project.status === "active",
+            validateUser: (user: any) => !!(user.accountingId && user.id),
+            validateProject: (project: any) => !!(project.id && project.status === "active"),
             canProcessPayment: (user: any, project: any) =>
                 paymentFlowHandler.validateUser(user) &&
                 paymentFlowHandler.validateProject(project),
         };
 
-        const mockUser = { accountingId: 123, isAuthenticated: true };
+        const mockUser = {
+            id: 1,
+            accountingId: 123,
+        };
         const mockProject = { id: 100, status: "active" };
 
         expect(paymentFlowHandler.validateUser(mockUser)).to.be.true;
