@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiGatewayCheckoutsIdGet } from "../../../openapi/client";
+import { apiAccountingsIdbalanceGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
@@ -14,27 +14,32 @@ const defaultCurrency = getDefaultCurrency();
 
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
+const accessCookie = Astro.cookies.get("access-token");
+
+if (!accessCookie) {
+    throw new Error("Token not found");
+}
+
+const { accountingId, token } = JSON.parse(accessCookie.value);
+const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
+    path: { id: accountingId },
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+});
+
 const { t } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
 
 try {
-    const accessCookie = Astro.cookies.get("access-token");
-
-    if (!accessCookie) {
-        throw new Error("Token not found");
-    }
-
     const url = new URL(Astro.request.url);
     const checkoutId = url.searchParams.get("checkoutId");
 
     if (!checkoutId) {
         throw new Error("Checkout ID not found");
     }
-
-    const decoded = decodeURIComponent(accessCookie.value);
-    const { token } = JSON.parse(decoded);
 
     const response = await apiGatewayCheckoutsIdGet({
         path: { id: checkoutId },
@@ -75,7 +80,11 @@ try {
                                         <PaymentErrorIcon />
                                     </div>
 
-                                    <PaymentMethod {paymentGateways} hasError={!!error} />
+                                    <PaymentMethod
+                                        {paymentGateways}
+                                        {accountingBalance}
+                                        hasError={!!error}
+                                    />
                                 </div>
                             </div>
                         </div>
