@@ -469,7 +469,12 @@
       "order": {
         "title": "Ordenar por:",
         "options": {
-          "date-desc": "Fecha (más reciente primero)"
+          "date-desc": "Fecha (más reciente primero)",
+          "date-asc": "Fecha (más antigua primero)",
+          "amount-desc": "Importe (mayor a menor)",
+          "amount-asc": "Importe (menor a mayor)",
+          "status-desc": "Estado (Z-A)",
+          "status-asc": "Estado (A-Z)"
         }
       },
       "itemsPerPage": {

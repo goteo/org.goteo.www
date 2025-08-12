@@ -53,14 +53,62 @@
         totalItems: number;
     };
 
+    type SortOption = {
+        key: string;
+        field: string;
+        direction: "asc" | "desc";
+        label: string;
+    };
+
+    const sortOptions: SortOption[] = [
+        {
+            key: "date-desc",
+            field: "dateCreated",
+            direction: "desc",
+            label: "contributions.filters.order.options.date-desc",
+        },
+        {
+            key: "date-asc",
+            field: "dateCreated",
+            direction: "asc",
+            label: "contributions.filters.order.options.date-asc",
+        },
+        {
+            key: "amount-desc",
+            field: "money.amount",
+            direction: "desc",
+            label: "contributions.filters.order.options.amount-desc",
+        },
+        {
+            key: "amount-asc",
+            field: "money.amount",
+            direction: "asc",
+            label: "contributions.filters.order.options.amount-asc",
+        },
+        {
+            key: "status-desc",
+            field: "status",
+            direction: "desc",
+            label: "contributions.filters.order.options.status-desc",
+        },
+        {
+            key: "status-asc",
+            field: "status",
+            direction: "asc",
+            label: "contributions.filters.order.options.status-asc",
+        },
+    ];
+
+    let selectedSort = $state("date-desc");
+
     const tableHeaders = [
-        { name: "contributions.table.headers.target" },
-        { name: "contributions.table.headers.amount" },
-        { name: "contributions.table.headers.origin" },
-        { name: "contributions.table.headers.paymentMethod" },
-        { name: "contributions.table.headers.date" },
-        { name: "contributions.table.headers.chargeStatus" },
-        { name: "contributions.table.headers.refundToWallet" },
+        { name: "contributions.table.headers.target", sortable: false },
+        { name: "contributions.table.headers.amount", sortable: true, sortKey: "amount" },
+        { name: "contributions.table.headers.origin", sortable: false },
+        { name: "contributions.table.headers.paymentMethod", sortable: false },
+        { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
+        { name: "contributions.table.headers.chargeStatus", sortable: true, sortKey: "status" },
+        { name: "contributions.table.headers.refundToWallet", sortable: false },
     ];
 
     let openRow = $state<number | null>(null);
@@ -93,6 +141,71 @@
     const chargesCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
+    function getCurrentSortParams() {
+        const currentSortOption = sortOptions.find((option) => option.key === selectedSort);
+        if (!currentSortOption) return {};
+
+        const orderParam = `order[${currentSortOption.field}]`;
+        return {
+            [orderParam]: currentSortOption.direction,
+        };
+    }
+
+    function handleHeaderClick(header: any) {
+        if (!header.sortable) return;
+
+        const currentSortOption = sortOptions.find((option) => option.key === selectedSort);
+        const isCurrentField =
+            currentSortOption?.field === `money.${header.sortKey}` ||
+            currentSortOption?.field === header.sortKey ||
+            (header.sortKey === "date" && currentSortOption?.field === "dateCreated");
+
+        if (isCurrentField) {
+            const newDirection = currentSortOption?.direction === "asc" ? "desc" : "asc";
+            const newSortKey = sortOptions.find(
+                (option) =>
+                    (option.field === currentSortOption?.field ||
+                        (header.sortKey === "amount" && option.field === "money.amount") ||
+                        (header.sortKey === "date" && option.field === "dateCreated")) &&
+                    option.direction === newDirection,
+            )?.key;
+
+            if (newSortKey) {
+                selectedSort = newSortKey;
+            }
+        } else {
+            let targetField = header.sortKey;
+            if (header.sortKey === "amount") targetField = "money.amount";
+            if (header.sortKey === "date") targetField = "dateCreated";
+
+            const newSortKey = sortOptions.find(
+                (option) => option.field === targetField && option.direction === "desc",
+            )?.key;
+
+            if (newSortKey) {
+                selectedSort = newSortKey;
+            }
+        }
+    }
+
+    function getSortIndicator(header: any): string {
+        if (!header.sortable) return "";
+
+        const currentSortOption = sortOptions.find((option) => option.key === selectedSort);
+        if (!currentSortOption) return "↕️";
+
+        const isCurrentField =
+            currentSortOption?.field === header.sortKey ||
+            (header.sortKey === "amount" && currentSortOption?.field === "money.amount") ||
+            (header.sortKey === "date" && currentSortOption?.field === "dateCreated");
+
+        if (isCurrentField) {
+            return currentSortOption.direction === "asc" ? "▲" : "▼";
+        }
+
+        return "↕️";
+    }
+
     async function loadCharges(filters: {
         chargeStatus: string;
         rangeAmount: string;
@@ -122,12 +235,20 @@
 
             const headers = { Authorization: `Bearer ${token}` };
             const currentCount = Number(itemsPerPage);
+
+            const sortParams = getCurrentSortParams();
+
             const cacheKey = JSON.stringify({
                 page: currentPage,
                 itemsPerPage: currentCount,
                 filters,
+                sort: sortParams,
             });
-            const baseKey = JSON.stringify({ page: 1, itemsPerPage: largestLoaded });
+            const baseKey = JSON.stringify({
+                page: 1,
+                itemsPerPage: largestLoaded,
+                sort: sortParams,
+            });
 
             if (chargesCache.has(cacheKey)) {
                 charges = chargesCache.get(cacheKey)!;
@@ -143,6 +264,7 @@
                 page: currentPage,
                 itemsPerPage: currentCount,
                 pagination: true,
+                ...sortParams,
                 ...(filters.chargeStatus &&
                     filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
                 ...(filters.rangeAmount &&
@@ -300,7 +422,11 @@
 
             if (currentPage === 1 && currentCount > largestLoaded) {
                 largestLoaded = currentCount;
-                const newBaseKey = JSON.stringify({ page: 1, itemsPerPage: currentCount });
+                const newBaseKey = JSON.stringify({
+                    page: 1,
+                    itemsPerPage: currentCount,
+                    sort: sortParams,
+                });
                 chargesCache.set(newBaseKey, charges);
             }
         } catch (err) {
@@ -375,7 +501,6 @@
     $effect(() => {
         const { chargeStatus, rangeAmount, from, to, paymentMethod, target } = filters;
         charges = [];
-
         loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod, target });
     });
 </script>
@@ -385,8 +510,14 @@
         <p class="font-bold text-[#575757]">
             {$t("contributions.filters.order.title")}
         </p>
-        <select name="data" id="date" class="border-tertiary text-tertiary rounded-sm py-1">
-            <option value="date">{$t("contributions.filters.order.options.date-desc")}</option>
+        <select
+            bind:value={selectedSort}
+            class="border-tertiary text-tertiary min-w-[200px] rounded-sm py-1"
+            disabled={isLoading}
+        >
+            {#each sortOptions as option}
+                <option value={option.key}>{$t(option.label)}</option>
+            {/each}
         </select>
     </div>
 
@@ -410,12 +541,20 @@
 
 <Table class="w-full border-separate border-spacing-y-2">
     <TableHead class="bg-secondary">
-        {#each tableHeaders as { name }}
+        {#each tableHeaders as header}
             <TableHeadCell
-                class="py-4 text-base whitespace-nowrap 
-                       text-[#FBFBFB] first:rounded-l-md last:rounded-r-md"
+                class="py-4 text-base whitespace-nowrap text-[#FBFBFB] first:rounded-l-md last:rounded-r-md
+                       {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
+                onclick={() => handleHeaderClick(header)}
             >
-                {$t(name)}
+                <div class="flex items-center justify-between">
+                    <span>{$t(header.name)}</span>
+                    {#if header.sortable}
+                        <span class="ml-2 text-sm opacity-70">
+                            {getSortIndicator(header)}
+                        </span>
+                    {/if}
+                </div>
             </TableHeadCell>
         {/each}
     </TableHead>
