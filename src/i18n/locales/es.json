@@ -397,6 +397,7 @@
   "global": {
     "btn": {
       "continue": "Continuar",
+      "back": "Atrás",
       "send": "Enviar"
     }
   },
