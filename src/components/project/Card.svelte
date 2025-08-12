@@ -4,6 +4,7 @@
         Budget,
         Accounting,
         ApiAccountingBalancePointsGetCollectionData,
+        AccountingBalance,
         // GatewayCheckoutJsonld,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
@@ -12,15 +13,16 @@
 
     export let project: Project;
     export let accounting: Accounting;
+    export let accountingBalance: AccountingBalance;
     // export let donations: GatewayCheckoutJsonld;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
     const campaignLabel: (keyof Budget)[] = ["optimum", "minimum"];
 
     $: minReached =
-        accounting.balance?.amount !== undefined &&
+        accountingBalance.balance?.amount !== undefined &&
         project.budget?.minimum?.money?.amount !== undefined &&
-        Number(accounting.balance.amount) - Number(project.budget.minimum.money.amount) > 0;
+        Number(accountingBalance.balance.amount) - Number(project.budget.minimum.money.amount) > 0;
 </script>
 
 <div
@@ -40,8 +42,8 @@
                 <p class="text-[#575757]">{$t(`campaignProgress.obtained`)}</p>
                 <p class="text-secondary text-[32px] font-bold">
                     {formatCurrency(
-                        Number(accounting.balance?.amount) || 0,
-                        accounting.balance?.currency ?? undefined,
+                        Number(accountingBalance.balance?.amount) || 0,
+                        accountingBalance.balance?.currency ?? undefined,
                         {
                             showSymbol: true,
                         },

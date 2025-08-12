@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { client } from "./../../openapi/client/client.gen.ts";
     import { onMount } from "svelte";
     import type {
         Project,
         Accounting,
         ApiAccountingBalancePointsGetCollectionData,
+        AccountingBalance,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
@@ -25,6 +25,7 @@
 
     export let project: Project;
     export let accounting: Accounting;
+    export let accountingBalance: AccountingBalance;
     export let ownerName: string;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
@@ -102,7 +103,7 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} {accounting} {balancePoints} />
+            <Card {project} {accounting} {accountingBalance} {balancePoints} />
         </div>
     </div>
 
@@ -131,4 +132,4 @@
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs {project} {accounting} />
+<Tabs {project} {accounting} {accountingBalance} />

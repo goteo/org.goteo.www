@@ -2,6 +2,8 @@
 
 describe("View breakdown of each individual contribution", () => {
     beforeEach(() => {
+        cy.loginAs("admin");
+
         cy.intercept("GET", "**/v4/gateways**", {
             statusCode: 200,
             body: [
@@ -12,53 +14,76 @@ describe("View breakdown of each individual contribution", () => {
 
         cy.intercept("GET", "**/v4/gateway_charges**", {
             statusCode: 200,
-            body: [
-                {
-                    id: 273,
-                    type: "single",
-                    title: "Donación libre",
-                    description: "Donación libre",
-                    target: "/v4/accountings/2639",
-                    money: {
-                        amount: 800000, // 8000€ en céntimos
-                        currency: "EUR",
+            headers: {
+                "content-type": "application/ld+json",
+            },
+            body: {
+                "@context": "/v4/contexts/GatewayCharge",
+                "@id": "/v4/gateway_charges",
+                "@type": "hydra:Collection",
+                "hydra:member": [
+                    {
+                        "@id": "/v4/gateway_charges/273",
+                        "@type": "GatewayCharge",
+                        id: 273,
+                        type: "single",
+                        title: "Donación libre",
+                        description: "Donación libre",
+                        target: "/v4/accountings/2639",
+                        money: {
+                            amount: 800000, // 8000€ en céntimos
+                            currency: "EUR",
+                        },
+                        status: "charged",
+                        dateCreated: "2025-07-29T15:32:16+00:00",
+                        dateUpdated: "2025-07-29T15:32:38+00:00",
                     },
-                    status: "charged",
-                    dateCreated: "2025-07-29T15:32:16+00:00",
-                    dateUpdated: "2025-07-29T15:32:38+00:00",
-                },
-                {
-                    id: 228,
-                    type: "single",
-                    title: "CD Al Paso de los Caracoles + 2 Camisetas",
-                    description: "CD Al Paso de los Caracoles + 2 Camisetas",
-                    target: "/v4/accountings/2639",
-                    money: {
-                        amount: 200000, // 2000€ en céntimos
-                        currency: "EUR",
+                    {
+                        "@id": "/v4/gateway_charges/228",
+                        "@type": "GatewayCharge",
+                        id: 228,
+                        type: "single",
+                        title: "CD Al Paso de los Caracoles + 2 Camisetas",
+                        description: "CD Al Paso de los Caracoles + 2 Camisetas",
+                        target: "/v4/accountings/2639",
+                        money: {
+                            amount: 200000, // 2000€ en céntimos
+                            currency: "EUR",
+                        },
+                        status: "in_pending",
+                        dateCreated: "2025-07-29T15:28:46+00:00",
+                        dateUpdated: "2025-07-29T15:28:46+00:00",
                     },
-                    status: "in_pending",
-                    dateCreated: "2025-07-29T15:28:46+00:00",
-                    dateUpdated: "2025-07-29T15:28:46+00:00",
-                },
-                {
-                    id: 227,
-                    type: "single",
-                    title: "10º Aniversario de la Asociación",
-                    description: "Contribución para el 10º Aniversario",
-                    target: "/v4/accountings/2724",
-                    money: {
-                        amount: 700000, // 7000€ en céntimos
-                        currency: "EUR",
+                    {
+                        "@id": "/v4/gateway_charges/227",
+                        "@type": "GatewayCharge",
+                        id: 227,
+                        type: "single",
+                        title: "10º Aniversario de la Asociación",
+                        description: "Contribución para el 10º Aniversario",
+                        target: "/v4/accountings/2724",
+                        money: {
+                            amount: 700000, // 7000€ en céntimos
+                            currency: "EUR",
+                        },
+                        status: "charged",
+                        dateCreated: "2025-07-28T10:15:30+00:00",
+                        dateUpdated: "2025-07-28T10:15:45+00:00",
                     },
-                    status: "charged",
-                    dateCreated: "2025-07-28T10:15:30+00:00",
-                    dateUpdated: "2025-07-28T10:15:45+00:00",
+                ],
+                "hydra:totalItems": 3,
+                "hydra:view": {
+                    "@id": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "@type": "hydra:PartialCollectionView",
+                    "hydra:first": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "hydra:last": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
                 },
-            ],
+                total_amount: "17,000",
+                total_count: 3,
+                currency: "EUR",
+            },
         }).as("chargesMock");
 
-        cy.mockLogin();
         cy.on("uncaught:exception", () => false);
     });
 
@@ -72,7 +97,6 @@ describe("View breakdown of each individual contribution", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            // Verificar headers de tabla (ajusta según tu UI)
             if (text.includes("ID") || text.includes("Id")) {
                 cy.contains(/ID?/i).should("be.visible");
             }
@@ -159,7 +183,6 @@ describe("View breakdown of each individual contribution", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            // Verificar fechas si se muestran (formato puede variar)
             if (text.includes("2025-07-29") || text.includes("29/07/2025")) {
                 cy.get("body").should("contain.text", "2025");
             }
@@ -170,14 +193,11 @@ describe("View breakdown of each individual contribution", () => {
         cy.visit("/es/admin/charges", { failOnStatusCode: false });
         cy.wait("@chargesMock");
 
-        // Si hay filtros de estado, probar que funcionen
         cy.get("body").then(($body) => {
-            // Buscar selectores/filtros de estado si existen
             if ($body.find('[data-testid*="status"]').length > 0) {
                 cy.get('[data-testid*="status"]').should("be.visible");
             }
             if ($body.find("select").length > 0) {
-                // Verificar que hay opciones de filtro
                 cy.get("select").should("exist");
             }
         });

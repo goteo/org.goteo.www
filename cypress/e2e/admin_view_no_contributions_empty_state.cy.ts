@@ -2,6 +2,8 @@
 
 describe("Visualization without contributions", () => {
     beforeEach(() => {
+        cy.loginAs("admin");
+
         cy.intercept("GET", "**/v4/gateways**", {
             statusCode: 200,
             body: [
@@ -12,13 +14,25 @@ describe("Visualization without contributions", () => {
 
         cy.intercept("GET", "**/v4/gateway_charges**", {
             statusCode: 200,
+            headers: {
+                "content-type": "application/ld+json",
+            },
             body: {
-                member: [],
-                totalItems: 0,
+                "@context": "/v4/contexts/GatewayCharge",
+                "@id": "/v4/gateway_charges",
+                "@type": "hydra:Collection",
+                "hydra:member": [],
+                "hydra:totalItems": 0,
+                "hydra:view": {
+                    "@id": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
+                    "@type": "hydra:PartialCollectionView",
+                },
+                total_amount: "0",
+                total_count: 0,
+                currency: "EUR",
             },
         }).as("emptyChargesMock");
 
-        cy.mockLogin();
         cy.on("uncaught:exception", () => false);
     });
 

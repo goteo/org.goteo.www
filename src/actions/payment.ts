@@ -68,7 +68,10 @@ export const payment = defineAction({
                     .filter((name): name is string => name !== undefined);
             }
 
-            if (!cachedPaymentGatewayNames.includes(input.paymentMethod)) {
+            if (
+                cachedPaymentGatewayNames === null ||
+                !cachedPaymentGatewayNames.includes(input.paymentMethod)
+            ) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
                     message: t("payment.error.invalidPaymentMethod"),
@@ -78,6 +81,7 @@ export const payment = defineAction({
             const cart = input.cartData;
             const charges: GatewayCharge[] = cart.items.map((item) => ({
                 type: "single",
+                status: "in_pending",
                 title: item.title,
                 description: item.title,
                 target: `/v4/accountings/${item.target}`,
@@ -110,6 +114,8 @@ export const payment = defineAction({
                     returnUrl,
                 },
             });
+
+            console.log({ response });
 
             return { success: true, checkout: response.data };
         } catch (err) {

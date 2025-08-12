@@ -3,11 +3,11 @@
     import LegendBudgetBar from "./LegendBudgetBar.svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, Accounting } from "../../openapi/client/index";
+    import type { Project, AccountingBalance } from "../../openapi/client/index";
 
-    let { project, accounting } = $props<{
+    let { project, accountingBalance } = $props<{
         project: Project;
-        accounting: Accounting;
+        accountingBalance: AccountingBalance;
     }>();
 </script>
 
@@ -32,7 +32,7 @@
                     </p>
                 </span>
             </div>
-            <BudgetBar {project} {accounting} budgetAmount={"minimum"} />
+            <BudgetBar {project} {accountingBalance} budgetAmount={"minimum"} />
         </div>
 
         <div class="text-tertiary flex flex-col gap-4">
@@ -50,7 +50,7 @@
                     </p>
                 </span>
             </div>
-            <BudgetBar {project} {accounting} budgetAmount={"optimum"} />
+            <BudgetBar {project} {accountingBalance} budgetAmount={"optimum"} />
         </div>
         <LegendBudgetBar />
     </div>
