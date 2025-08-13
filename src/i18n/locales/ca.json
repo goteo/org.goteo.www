@@ -292,7 +292,8 @@
   "global": {
     "btn": {
       "continue": "Continuar",
-      "send": "Enviar"
+      "send": "Enviar",
+      "back": "Atrás"
     }
   }
 }
