@@ -16,15 +16,16 @@
         paymentMethod: "",
         chargeStatus: "",
         rangeAmount: "",
-        from: "",
-        to: "",
-        target: "",
+        from: undefined,
+        to: undefined,
+        target: undefined,
     });
-    function applyFilters(newFilters) {
+
+    function handleApplyFilters(newFilters) {
         filters = { ...filters, ...newFilters };
     }
 </script>
 
-<Filters onApplyFilters={applyFilters} />
+<Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
 <Slider {slides} />
 <Table {filters} />
