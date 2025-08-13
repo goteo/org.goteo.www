@@ -127,7 +127,7 @@
             while (hasMoreData) {
                 const pageQueryParams = {
                     ...queryParams,
-                    itemsPerPage: "50", // Máximo permitido
+                    itemsPerPage: "50",
                     page: currentPage.toString(),
                 };
 
@@ -152,16 +152,19 @@
                 }
             }
 
+            if (allData.length === 0) {
+                alert($t("contributions.export.noData") || "No se encontraron datos para exportar");
+                return;
+            }
+
             const timestamp = new Date().toISOString().split("T")[0];
             const filterParts = Object.entries(filenameParams)
                 .map(([key, value]) => `${key}-${value}`)
                 .join("_");
-            const filename = `gateway-charges_${timestamp}${filterParts ? "_" + filterParts : ""}_${totalItems}items.csv`;
 
-            if (allData.length === 0) {
-                alert("No se encontraron datos para exportar");
-                return;
-            }
+            const baseFilename = $t("contributions.export.filename") || "gateway-charges";
+            const itemsText = $t("contributions.export.itemsText") || "items";
+            const filename = `${baseFilename}_${timestamp}${filterParts ? "_" + filterParts : ""}_${totalItems}${itemsText}.csv`;
 
             const headers = Object.keys(allData[0]);
             const csvRows = [
