@@ -43,17 +43,4 @@
     </div>
 
     <hr class="bg-[#462949]" />
-
-    <div>
-        <p class="text-[#575757]">
-            <strong>{formatCurrency($donations, defaultCurrency, { showSymbol: true })}</strong>
-            {$t("checkout.summary.resume.donationsPrefix")}
-            {#if $foundation > 0}
-                +
-                <strong>{formatCurrency($foundation, defaultCurrency, { showSymbol: true })}</strong
-                >
-                {$t("checkout.summary.resume.foundationPrefix")}
-            {/if}
-        </p>
-    </div>
 </div>
