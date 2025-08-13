@@ -119,32 +119,74 @@
                 filenameParams.target = currentTarget;
             }
 
+            let allData: any[] = [];
+            let currentPage = 1;
+            let hasMoreData = true;
+            let totalItems = 0;
+
+            while (hasMoreData) {
+                const pageQueryParams = {
+                    ...queryParams,
+                    itemsPerPage: "50", // Máximo permitido
+                    page: currentPage.toString(),
+                };
+
+                const pageResponse = await apiGatewayChargesGetCollection({
+                    query: pageQueryParams,
+                });
+
+                const pageData = pageResponse?.data || [];
+                const itemsInPage = pageData.length;
+                totalItems += itemsInPage;
+
+                if (itemsInPage === 0) {
+                    hasMoreData = false;
+                } else {
+                    allData.push(...pageData);
+
+                    if (itemsInPage < 50) {
+                        hasMoreData = false;
+                    } else {
+                        currentPage++;
+                    }
+                }
+            }
+
             const timestamp = new Date().toISOString().split("T")[0];
             const filterParts = Object.entries(filenameParams)
                 .map(([key, value]) => `${key}-${value}`)
                 .join("_");
-            const filename = `gateway-charges_${timestamp}${filterParts ? "_" + filterParts : ""}.csv`;
+            const filename = `gateway-charges_${timestamp}${filterParts ? "_" + filterParts : ""}_${totalItems}items.csv`;
 
-            const response = await apiGatewayChargesGetCollection({
-                query: queryParams,
-                headers: {
-                    Accept: "text/csv",
-                },
-            });
-
-            let csvBlob: Blob;
-            if (response instanceof Blob) {
-                csvBlob = response;
-            } else if (response?.data instanceof Blob) {
-                csvBlob = response.data;
-            } else if (typeof response === "string") {
-                csvBlob = new Blob([response], { type: "text/csv;charset=utf-8" });
-            } else if (typeof (response as any)?.data === "string") {
-                csvBlob = new Blob([(response as any).data], { type: "text/csv;charset=utf-8" });
-            } else {
-                const csvContent = JSON.stringify(response, null, 2);
-                csvBlob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+            if (allData.length === 0) {
+                alert("No se encontraron datos para exportar");
+                return;
             }
+
+            const headers = Object.keys(allData[0]);
+            const csvRows = [
+                headers.join(","),
+                ...allData.map((item) =>
+                    headers
+                        .map((header) => {
+                            const value = item[header];
+                            if (
+                                typeof value === "string" &&
+                                (value.includes(",") || value.includes('"') || value.includes("\n"))
+                            ) {
+                                return `"${value.replace(/"/g, '""')}"`;
+                            }
+                            if (typeof value === "object") {
+                                return `"${JSON.stringify(value).replace(/"/g, '""')}"`;
+                            }
+                            return value?.toString() || "";
+                        })
+                        .join(","),
+                ),
+            ];
+
+            const csvContent = csvRows.join("\n");
+            const csvBlob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
 
             const url = window.URL.createObjectURL(csvBlob);
             const link = document.createElement("a");
