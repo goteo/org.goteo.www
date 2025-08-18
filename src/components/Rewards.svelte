@@ -204,8 +204,9 @@
                 {#each rewards ? (limit ? rewards.slice(0, limit) : rewards) : [] as reward}
                     <li
                         class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
-                        class:opacity-50={!reward.hasUnits}
-                        class:cursor-not-allowed={!reward.hasUnits}
+                        class:opacity-50={reward.hasUnits && (reward.unitsAvailable ?? 0) === 0}
+                        class:cursor-not-allowed={reward.hasUnits &&
+                            (reward.unitsAvailable ?? 0) === 0}
                     >
                         <div class="flex flex-col gap-4">
                             <h3
@@ -280,9 +281,11 @@
                         <button
                             type="button"
                             onclick={() => handleDirectDonate(reward)}
-                            disabled={!reward.hasUnits}
-                            class:cursor-not-allowed={!reward.hasUnits}
-                            class:cursor-pointer={reward.hasUnits}
+                            disabled={reward.hasUnits && (reward.unitsAvailable ?? 0) === 0}
+                            class:cursor-not-allowed={reward.hasUnits &&
+                                (reward.unitsAvailable ?? 0) === 0}
+                            class:cursor-pointer={!reward.hasUnits ||
+                                (reward.unitsAvailable ?? 0) > 0}
                             class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
                         >
                             {$t("reward.donate")}
