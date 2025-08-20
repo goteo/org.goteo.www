@@ -61,9 +61,9 @@ jobs:
 
             - name: Create test env file
               run: |
-                  echo "API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "LANGUAGE_DEFAULT=es" >> .env
-                  echo "CURRENCY_DEFAULT=EUR" >> .env
+                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
+                  echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
+                  echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
                   echo "NODE_ENV=test" >> .env
                   echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
@@ -76,6 +76,9 @@ jobs:
                   echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
                   echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
                   echo "API URL: ${{ steps.api-url.outputs.API_URL }}"
+                  echo "API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
+                  echo "LANGUAGE_DEFAULT=es" >> .env
+                  echo "CURRENCY_DEFAULT=EUR" >> .env
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6

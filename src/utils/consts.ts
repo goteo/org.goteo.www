@@ -70,11 +70,15 @@ export function getEnvFromAstroRequest(key: string, astroRequest: any): string {
 }
 
 export function getBaseUrl(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("API_URL", astroRequest) : getEnvVariable("API_URL");
+    return astroRequest
+        ? getEnvFromAstroRequest("API_URL", astroRequest)
+        : getEnvVariable("API_URL");
 }
 
 export function getApiVersion(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("API_VERSION", astroRequest) : getEnvVariable("API_VERSION");
+    return astroRequest
+        ? getEnvFromAstroRequest("API_VERSION", astroRequest)
+        : getEnvVariable("API_VERSION");
 }
 
 export function getPlatoniqAccountingId(): string {
@@ -86,25 +90,37 @@ export function getFacebookAppId(): string {
 }
 
 export function getDefaultCurrency(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest) : getEnvVariable("CURRENCY_DEFAULT");
+    return astroRequest
+        ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest)
+        : getEnvVariable("CURRENCY_DEFAULT");
 }
 
 export function getDefaultLanguage(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest) : getEnvVariable("LANGUAGE_DEFAULT");
+    return astroRequest
+        ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest)
+        : getEnvVariable("LANGUAGE_DEFAULT");
 }
 
 export function getPrivateApiUrl(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("API_URL", astroRequest) : getEnvVariable("API_URL");
+    return astroRequest
+        ? getEnvFromAstroRequest("API_URL", astroRequest)
+        : getEnvVariable("API_URL");
 }
 
 export function getPrivateApiVersion(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("API_VERSION", astroRequest) : getEnvVariable("API_VERSION");
+    return astroRequest
+        ? getEnvFromAstroRequest("API_VERSION", astroRequest)
+        : getEnvVariable("API_VERSION");
 }
 
 export function getPrivateCurrencyDefault(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest) : getEnvVariable("CURRENCY_DEFAULT");
+    return astroRequest
+        ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest)
+        : getEnvVariable("CURRENCY_DEFAULT");
 }
 
 export function getPrivateLanguageDefault(astroRequest?: any): string {
-    return astroRequest ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest) : getEnvVariable("LANGUAGE_DEFAULT");
+    return astroRequest
+        ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest)
+        : getEnvVariable("LANGUAGE_DEFAULT");
 }
