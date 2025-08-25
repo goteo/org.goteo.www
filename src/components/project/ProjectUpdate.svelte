@@ -46,30 +46,19 @@
         return diffHours <= 72;
     }
 
-    function sortUpdatesByDate(updates: ProjectUpdate[]): ProjectUpdate[] {
-        return updates.sort((a, b) => {
-            if (!a.date && !b.date) return 0;
-            if (!a.date) return 1;
-            if (!b.date) return -1;
-
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-
-            // Verificar que las fechas sean válidas
-            if (isNaN(dateA.getTime()) && isNaN(dateB.getTime())) return 0;
-            if (isNaN(dateA.getTime())) return 1;
-            if (isNaN(dateB.getTime())) return -1;
-
-            return dateA.getTime() - dateB.getTime();
-        });
-    }
-
     onMount(async () => {
-        const { data } = await apiProjectUpdatesGetCollection({
-            query: { project: `/v4/projects/${project.id}` },
-        });
+        try {
+            const { data } = await apiProjectUpdatesGetCollection({
+                query: {
+                    project: `/v4/projects/${project.id}`,
+                    'order[date]': 'asc',
+                },
+            });
 
-        projectsUpdates = sortUpdatesByDate(data || []);
+            projectsUpdates = data || [];
+        } catch (error) {
+            console.error("Error fetching project updates:", error);
+        }
     });
 
     $effect(() => {
