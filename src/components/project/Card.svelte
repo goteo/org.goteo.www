@@ -23,6 +23,16 @@
         accountingBalance.balance?.amount !== undefined &&
         project.budget?.minimum?.money?.amount !== undefined &&
         Number(accountingBalance.balance.amount) - Number(project.budget.minimum.money.amount) > 0;
+
+    function scrollToRewards() {
+        const rewardsElement = document.getElementById("tab-rewards");
+        if (rewardsElement) {
+            rewardsElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+            });
+        }
+    }
 </script>
 
 <div
@@ -77,6 +87,7 @@
     </div>
     <button
         class="bg-primary bold text-tertiary w-full cursor-pointer rounded-3xl px-6 py-4 font-bold"
+        on:click={scrollToRewards}
     >
         {$t("campaignProgress.donate")}
     </button>
