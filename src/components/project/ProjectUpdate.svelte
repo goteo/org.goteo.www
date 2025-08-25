@@ -47,10 +47,18 @@
     }
 
     onMount(async () => {
-        const { data } = await apiProjectUpdatesGetCollection({
-            query: { project: `/v4/projects/${project.id}` },
-        });
-        projectsUpdates = data || [];
+        try {
+            const { data } = await apiProjectUpdatesGetCollection({
+                query: {
+                    project: `/v4/projects/${project.id}`,
+                    "order[date]": "asc",
+                },
+            });
+
+            projectsUpdates = data || [];
+        } catch (error) {
+            console.error("Error fetching project updates:", error);
+        }
     });
 
     $effect(() => {
