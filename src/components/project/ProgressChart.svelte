@@ -11,40 +11,48 @@
         Tooltip,
     } from "chart.js";
     import type {
-        Accounting,
+        AccountingBalance,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
     } from "../../openapi/client/index";
+    import { formatCurrency } from "../../utils/currencies";
 
-    export let accounting: Accounting;
+    export let balance: AccountingBalance;
     export let project: Project;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
-    let received = accounting.balance?.amount ?? 0;
-    let optimal = project.budget?.optimum?.money?.amount ?? 0;
+    let received = +formatCurrency(balance.balance?.amount ?? 0);
+    let minimal = +formatCurrency(project.budget?.minimum?.money?.amount ?? 0);
+    let optimal = +formatCurrency(project.budget?.optimum?.money?.amount ?? 0);
 
     let canvas: HTMLCanvasElement | null = null;
     let labels = Array.isArray(balancePoints)
         ? balancePoints.map((point, i) => {
               const date = new Date(point.start);
-              return date.toLocaleDateString(undefined, { month: "short", day: "numeric" });
+              return date.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "numeric",
+                  day: "numeric",
+              });
           })
         : [];
 
     let progressData: number[] = [];
-    let cumulative = 0;
-
     for (const point of Array.isArray(balancePoints) ? balancePoints : []) {
-        cumulative += point.balance.amount;
-        const percentage = optimal ? (cumulative / optimal) * 100 : 0;
-        progressData.push(percentage);
+        progressData.push(+formatCurrency(point.balance.amount, point.balance.currency));
     }
 
-    let extraPercentage = received > optimal ? (received / optimal) * 100 : null;
-    let optimalValue = 100;
-    let maxValue = extraPercentage ?? optimalValue;
-    let y25 = Math.round(maxValue * 0.25);
-    let y75 = Math.round(maxValue * 0.75);
+    let maxValue = minimal;
+
+    if (received > minimal) {
+        maxValue = optimal;
+    }
+
+    if (received > optimal) {
+        maxValue = received;
+    }
+
+    maxValue = maxValue + (maxValue / 20);
 
     onMount(() => {
         Chart.register(
@@ -78,8 +86,8 @@
                     ctx.stroke();
                 };
 
-                drawLine(y25, "text-black");
-                drawLine(y75, "text-black");
+                drawLine(minimal, "text-black");
+                drawLine(optimal, "text-black");
 
                 ctx.restore();
             },
@@ -93,23 +101,18 @@
                 labels,
                 datasets: [
                     {
-                        label: "Cumulative progress",
                         data: progressData,
                         borderColor: "rgba(94, 234, 212, 1)",
                         backgroundColor: "rgba(94, 234, 212, 0.2)",
                         borderWidth: 1,
                         fill: "start",
-                        tension: 0.4,
-                        pointRadius: 2,
+                        pointRadius: 1,
                     },
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: {
-                    padding: 10,
-                },
                 scales: {
                     x: {
                         display: false,
@@ -122,12 +125,7 @@
                     },
                 },
                 plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: (tooltipItem) => `${(tooltipItem.raw as number).toFixed(2)}%`,
-                        },
-                    },
+                    legend: { display: false }
                 },
             },
         });
