@@ -1,7 +1,9 @@
-## This file defines environment variables for the Goteo project used by Wrangler.
+; # Private variables (server-only): DO NOT use a PUBLIC_ prefix. These variables are only accessible in server contexts.
 API_URL=""
 API_VERSION=""
-PLATONIQ_ACCOUNTING_ID=""
-FACEBOOK_APP_ID=""
-PUBLIC_CURRENCY_DEFAULT=""
-PUBLIC_LANGUAGE_DEFAULT=""
+CURRENCY_DEFAULT=""
+LANGUAGE_DEFAULT=""
+
+; # Public variables (accessible on both client and server): MUST use a PUBLIC_ prefix to indicate availability to clients.
+PUBLIC_PLATONIQ_ACCOUNTING_ID=""
+PUBLIC_FACEBOOK_APP_ID=""

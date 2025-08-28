@@ -150,7 +150,7 @@ describe("MatchCall API - Configure Strategy", () => {
                         id: 101,
                         call: `/v4/match_calls/${workingMatchCallId}`,
                         formula: "/v4/match_formulas/multiplication",
-                        factor: 2.0, // Updated
+                        factor: 2.0,
                         against: "charge",
                         limit: { amount: 50000, currency: "EUR" },
                         rules: ["/v4/match_rules/SingleUserPerProjectRule"],
@@ -168,7 +168,7 @@ describe("MatchCall API - Configure Strategy", () => {
                         formula: "/v4/match_formulas/multiplication",
                         factor: 1.0,
                         against: "charge",
-                        limit: { amount: 100000, currency: "EUR" }, // Updated
+                        limit: { amount: 100000, currency: "EUR" },
                         rules: ["/v4/match_rules/SingleUserPerProjectRule"],
                     },
                 },

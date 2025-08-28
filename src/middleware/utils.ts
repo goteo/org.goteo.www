@@ -3,9 +3,12 @@ import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
 
-const defaultLang = getDefaultLanguage();
-if (!defaultLang) {
-    throw new Error("PUBLIC_LANGUAGE_DEFAULT is not defined in env");
+function getDefaultLang(context?: APIContext): string {
+    try {
+        return context ? getDefaultLanguage(context) : getDefaultLanguage();
+    } catch {
+        throw new Error(`LANGUAGE_DEFAULT is not defined in env`);
+    }
 }
 
 /**
@@ -38,6 +41,7 @@ export function getUserLangPreferences(context: APIContext): string[] {
 }
 
 export function getLanguage(context: APIContext): string {
+    const defaultLang = getDefaultLang(context);
     const userPreferredLangs = getUserLangPreferences(context);
     if (!userPreferredLangs) return defaultLang;
 

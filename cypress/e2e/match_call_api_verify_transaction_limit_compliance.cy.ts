@@ -344,7 +344,7 @@ describe("MatchCall API - Verify Transaction Limit Compliance", () => {
                             money: { amount: 60000, currency: "EUR" },
                             status: "completed",
                             matching_triggered: true,
-                            matching_amount: testData.limitAmount, // Limited amount
+                            matching_amount: testData.limitAmount,
                             limit_applied: true,
                         },
                     ],
@@ -384,7 +384,7 @@ describe("MatchCall API - Verify Transaction Limit Compliance", () => {
                     id: "tx_donation_001",
                     origin: `/v4/accountings/${testData.user443AccountingId}`,
                     target: `/v4/accountings/${testData.projectAccountingId}`,
-                    money: { amount: 60000, currency: "EUR" }, // Donación original
+                    money: { amount: 60000, currency: "EUR" },
                     type: "donation",
                     created_at: "2025-01-15T10:00:00Z",
                 },
@@ -392,7 +392,7 @@ describe("MatchCall API - Verify Transaction Limit Compliance", () => {
                     id: "tx_matching_limited_001",
                     origin: `/v4/accountings/${testData.matchCallAccountingId}`,
                     target: `/v4/accountings/${testData.projectAccountingId}`,
-                    money: { amount: testData.limitAmount, currency: "EUR" }, // Matching limitado
+                    money: { amount: testData.limitAmount, currency: "EUR" },
                     type: "matching",
                     limit_applied: true,
                     created_at: "2025-01-15T10:01:00Z",
