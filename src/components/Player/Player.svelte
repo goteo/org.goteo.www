@@ -86,11 +86,11 @@
 </script>
 
 {#if isCheckingProvider}
-    <div class="flex aspect-video items-center justify-center rounded-lg bg-gray-100">
+    <div class="flex h-full items-center justify-center rounded-lg bg-gray-100">
         <Loader />
     </div>
 {:else if isPeerTube}
-    <div class="relative aspect-video w-full overflow-hidden rounded-lg">
+    <div class="relative h-full w-full overflow-hidden rounded-lg">
         {#if !showIframe}
             <button
                 onclick={() => {
@@ -133,7 +133,7 @@
         {/if}
     </div>
 {:else if isYouTube || isVimeo}
-    <div class="relative aspect-video w-full overflow-hidden rounded-lg">
+    <div class="relative h-full w-full overflow-hidden rounded-lg">
         {#if !showIframe}
             <button
                 class="group relative h-full w-full"
@@ -181,13 +181,13 @@
     </div>
 {:else if noVideoSrc}
     <div
-        class="flex aspect-video items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
+        class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
         {$t("project.video.not-found")}
     </div>
 {:else}
     <div
-        class="flex aspect-video items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
+        class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
         {$t("project.video.not-supported")}
     </div>
