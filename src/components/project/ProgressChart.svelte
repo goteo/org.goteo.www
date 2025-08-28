@@ -52,7 +52,7 @@
         maxValue = received;
     }
 
-    maxValue = maxValue + (maxValue / 20);
+    maxValue = maxValue + maxValue / 20;
 
     onMount(() => {
         Chart.register(
@@ -125,7 +125,7 @@
                     },
                 },
                 plugins: {
-                    legend: { display: false }
+                    legend: { display: false },
                 },
             },
         });

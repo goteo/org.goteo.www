@@ -59,7 +59,7 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
         accounting: project?.accounting ?? "",
         start: project?.calendar?.release ?? "",
         end: project?.calendar?.[deadlineKey] ?? "",
-        aggregate: true
+        aggregate: true,
     },
 });
 ---
