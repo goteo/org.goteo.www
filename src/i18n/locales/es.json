@@ -365,8 +365,8 @@
         "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
         "labels": {
           "name": "Label",
-          "anonymous": "Colaborar de forma anónima",
-          "leave-a-message": "Dejar un mensaje en la campaña"
+          "anonymous": "Dejar un mensaje de forma anónima",
+          "leave-a-message": "Dejar un mensaje de forma pública"
         }
       }
     },
