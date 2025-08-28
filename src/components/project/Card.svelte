@@ -2,19 +2,15 @@
     import type {
         Project,
         Budget,
-        Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         AccountingBalance,
-        // GatewayCheckoutJsonld,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
 
     export let project: Project;
-    export let accounting: Accounting;
     export let accountingBalance: AccountingBalance;
-    // export let donations: GatewayCheckoutJsonld;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
     const campaignLabel: (keyof Budget)[] = ["optimum", "minimum"];
@@ -45,7 +41,7 @@
             </span>
         {/if}
     </div>
-    <ProgressChart {accounting} {project} {balancePoints} />
+    <ProgressChart balance={accountingBalance} {project} {balancePoints} />
     <div class="col-span-2 mt-4 grid grid-cols-2 gap-6">
         <div class="flex flex-col gap-4">
             <div>

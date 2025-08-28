@@ -103,7 +103,7 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} {accounting} {accountingBalance} {balancePoints} />
+            <Card {project} {accountingBalance} {balancePoints} />
         </div>
     </div>
 
