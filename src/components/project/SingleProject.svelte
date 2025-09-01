@@ -93,7 +93,7 @@
         </div>
     </div>
 
-    <div class="mb-6 flex h-150 items-stretch justify-between gap-6">
+    <div class="mb-6 flex h-132 items-stretch justify-between gap-6">
         <div class="h-full w-[70%]">
             <Player
                 src={project.video?.src || ""}
