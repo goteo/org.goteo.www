@@ -49,7 +49,7 @@
 
     onMount(async () => {
         const { data } = await apiProjectSupportsGetCollection({
-            query: { project: `/v4/project/${project.id}` },
+            query: { project: project.id },
         });
 
         const supportsWithOwners = await Promise.all(
