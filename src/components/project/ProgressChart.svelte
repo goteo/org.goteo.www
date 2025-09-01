@@ -39,7 +39,7 @@
 
     let progressData: number[] = [];
     for (const point of Array.isArray(balancePoints) ? balancePoints : []) {
-        progressData.push(+formatCurrency(point.balance.amount, point.balance.currency));
+        progressData.push(+formatCurrency(point.balance.amount));
     }
 
     let maxValue = minimal;
