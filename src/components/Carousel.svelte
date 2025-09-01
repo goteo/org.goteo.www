@@ -2,14 +2,17 @@
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import { onMount } from "svelte";
 
-    let { itemsPerGroup, gap, showDots, children } = $props<{
-        itemsPerGroup?: number;
-        gap?: number;
-        showDots?: boolean;
-    }>();
-    itemsPerGroup ??= 1;
-    gap ??= 16;
-    showDots ??= true;
+    let {
+        itemsPerGroup = 1,
+        gap = 16,
+        showDots = true,
+        children = null,
+    }: {
+        itemsPerGroup: number;
+        gap: number;
+        showDots: boolean;
+        children?: any;
+    } = $props();
 
     let container: HTMLDivElement;
 
@@ -159,7 +162,9 @@
         ontouchmove={(e) => handleMove(e.touches[0].pageX, e)}
         ontouchend={endDrag}
     >
-        {@render children()}
+        {#if children}
+            {@render children()}
+        {/if}
     </div>
 
     <button

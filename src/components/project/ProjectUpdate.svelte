@@ -50,7 +50,7 @@
         try {
             const { data } = await apiProjectUpdatesGetCollection({
                 query: {
-                    project: `/v4/projects/${project.id}`,
+                    project: project.id,
                     "order[date]": "asc",
                 },
             });

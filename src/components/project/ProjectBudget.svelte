@@ -23,7 +23,7 @@
 
     onMount(async () => {
         const { data } = await apiProjectBudgetItemsGetCollection({
-            query: { project: `/v4/projects/${project.id}` },
+            query: { project: project.id },
         });
         projectsBudgetItems = data || [];
         minimumItems = projectsBudgetItems.filter((item) => item.deadline === "minimum");
