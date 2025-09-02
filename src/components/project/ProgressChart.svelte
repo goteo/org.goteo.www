@@ -80,9 +80,9 @@
                     ctx.beginPath();
                     ctx.moveTo(left, yPos);
                     ctx.lineTo(right, yPos);
-                    ctx.lineWidth = 0.25;
+                    ctx.lineWidth = 1;
                     ctx.strokeStyle = color;
-                    ctx.setLineDash([1, 4]);
+                    ctx.setLineDash([2, 3]);
                     ctx.stroke();
                 };
 
