@@ -186,7 +186,7 @@
     "invalid": "Entrada no válida"
   },
   "countdown": {
-    "ended": "Campaña finalizada",
+    "expired": "Campaña finalizada",
     "remaining": "Quedan"
   },
   "rewards": {
