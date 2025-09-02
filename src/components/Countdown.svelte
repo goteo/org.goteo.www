@@ -12,22 +12,17 @@
         minutes?: number;
         seconds?: number;
     } = { total: 0 };
-    let errorMessage = "";
 
-    if (!countdownEnd) {
-        errorMessage = $t("countdown.error.not-found");
-    } else {
+    if (countdownEnd) {
         const now = new Date().getTime();
         const diff = countdownEnd.getTime() - now;
-        if (diff <= 0) {
-            errorMessage = $t("countdown.expired");
-        } else {
+        if (diff > 0) {
             timeLeft = calculateTimeLeft();
         }
     }
 
     onMount(() => {
-        if (errorMessage || !countdownEnd) return;
+        if (!countdownEnd) return;
 
         const interval = setInterval(() => {
             timeLeft = calculateTimeLeft();
@@ -55,20 +50,12 @@
     }
 </script>
 
-<div>
-    {#if errorMessage}
-        <p>{errorMessage}</p>
-    {:else if timeLeft.total > 0}
-        <div class="text-tertiary flex items-center gap-2 text-2xl/[32px] font-bold">
-            <ClockIcon />
-            <p>{$t("countdown.remaining")}</p>
-            <div class="flex items-center gap-1">
-                <p>{timeLeft.days}d</p>
-                <p>{timeLeft.hours}h</p>
-                <p>{timeLeft.minutes}m</p>
-            </div>
-        </div>
+<div class="text-tertiary flex items-center justify-end gap-2 text-end text-2xl font-bold">
+    {#if timeLeft.total > 0}
+        <ClockIcon />
+        <p>{$t("countdown.remaining")} {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</p>
     {:else}
+        <ClockIcon />
         <p>{$t("countdown.expired")}</p>
     {/if}
 </div>

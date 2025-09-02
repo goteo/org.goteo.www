@@ -3,6 +3,7 @@
   "farewell": "Goodbye",
   "campaignProgress": {
     "minimumReached": "Minimum reached!",
+    "optimumReached": "Optimum reached!",
     "obtained": "Obtained",
     "donations": "Donations made",
     "optimum": "Optimal",
