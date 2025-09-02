@@ -55,18 +55,16 @@
     }
 </script>
 
-<div>
+<div class="text-tertiary flex items-center justify-end gap-2 text-end text-2xl font-bold">
+    <ClockIcon />
     {#if errorMessage}
         <p>{errorMessage}</p>
     {:else if timeLeft.total > 0}
-        <div class="text-tertiary flex items-center gap-2 text-2xl/[32px] font-bold">
-            <ClockIcon />
-            <p>{$t("countdown.remaining")}</p>
-            <div class="flex items-center gap-1">
-                <p>{timeLeft.days}d</p>
-                <p>{timeLeft.hours}h</p>
-                <p>{timeLeft.minutes}m</p>
-            </div>
+        <p>{$t("countdown.remaining")}</p>
+        <div class="flex items-center gap-1">
+            <p>{timeLeft.days}d</p>
+            <p>{timeLeft.hours}h</p>
+            <p>{timeLeft.minutes}m</p>
         </div>
     {:else}
         <p>{$t("countdown.expired")}</p>
