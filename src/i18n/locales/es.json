@@ -2,7 +2,8 @@
   "greeting": "Hola",
   "farewell": "Adiós",
   "campaignProgress": {
-    "minimumReached": "Mínimo conseguido!",
+    "minimumReached": "¡Mínimo conseguido!",
+    "optimumReached": "¡Óptimo conseguido!",
     "obtained": "Obtenido",
     "donations": "Donaciones realizadas",
     "optimum": "Óptimo",
@@ -416,8 +417,9 @@
       },
       "rows": {
         "payments": {
+          "tpv": "Tarjeta",
           "paypal": "Paypal",
-          "stripe": "Tarjeta",
+          "stripe": "Stripe",
           "wallet": "Monedero"
         },
         "status": {
