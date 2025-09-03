@@ -261,20 +261,22 @@
                                         )}
                                     </span>
                                 </div>
-                                <div
-                                    class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
-                                >
-                                    <UnitIcon />
-                                    <span>
-                                        {@html $t(
-                                            "rewards.units-available",
-                                            {
-                                                units: `${reward.unitsAvailable}`,
-                                            },
-                                            { allowHTML: true },
-                                        )}
-                                    </span>
-                                </div>
+                                {#if reward.hasUnits}
+                                    <div
+                                        class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
+                                    >
+                                        <UnitIcon />
+                                        <span>
+                                            {@html $t(
+                                                "rewards.units-available",
+                                                {
+                                                    units: `${reward.unitsAvailable}`,
+                                                },
+                                                { allowHTML: true },
+                                            )}
+                                        </span>
+                                    </div>
+                                {/if}
                             </div>
                         {/if}
 
@@ -393,20 +395,22 @@
                                     )}
                                 </span>
                             </div>
-                            <div
-                                class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
-                            >
-                                <UnitIcon />
-                                <span>
-                                    {@html $t(
-                                        "rewards.units-available",
-                                        {
-                                            units: `${selectedReward.unitsAvailable}`,
-                                        },
-                                        { allowHTML: true },
-                                    )}
-                                </span>
-                            </div>
+                            {#if selectedReward.hasUnits}
+                                <div
+                                    class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
+                                >
+                                    <UnitIcon />
+                                    <span>
+                                        {@html $t(
+                                            "rewards.units-available",
+                                            {
+                                                units: `${selectedReward.unitsAvailable}`,
+                                            },
+                                            { allowHTML: true },
+                                        )}
+                                    </span>
+                                </div>
+                            {/if}
                         </div>
                         <div class="flex flex-row gap-4">
                             <button
