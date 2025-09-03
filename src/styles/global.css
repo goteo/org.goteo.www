@@ -4,6 +4,8 @@
 @plugin "flowbite/plugin";
 @import "flowbite/src/themes/default";
 
+@import "./tab-project";
+
 @source "../node_modules/flowbite-svelte/dist";
 @source "../node_modules/flowbite-svelte-icons/dist";
 
