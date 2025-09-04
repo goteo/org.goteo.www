@@ -53,7 +53,7 @@
 
 <section class="wrapper">
     <div class="my-10 flex w-full flex-row justify-between gap-5">
-        <div class="flex w-4/5 flex-col gap-2.5">
+        <div class="flex w-[70%] flex-col gap-2.5">
             <div class="flex flex-col gap-2">
                 <h3 class="text-2xl/[32px] font-bold text-[#575757]">
                     {$t("project.owner")}
@@ -86,14 +86,16 @@
             </div>
         </div>
 
-        <div class="flex w-1/5 flex-col justify-between">
-            <LanguagesDropdown {languages} />
+        <div class="flex w-[30%] flex-col justify-between">
+            <div class="flex justify-end">
+                <LanguagesDropdown {languages} />
+            </div>
 
             <Countdown {countdownEnd} />
         </div>
     </div>
 
-    <div class="mb-6 flex items-stretch justify-between gap-6">
+    <div class="mb-6 flex h-132 items-stretch justify-between gap-6">
         <div class="h-full w-[70%]">
             <Player
                 src={project.video?.src || ""}

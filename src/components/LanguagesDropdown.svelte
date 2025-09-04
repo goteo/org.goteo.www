@@ -54,7 +54,7 @@
     });
 </script>
 
-<div class="relative inline-block w-full text-left" bind:this={dropdownRef}>
+<div class="relative inline-block w-full max-w-max text-left" bind:this={dropdownRef}>
     <button
         type="button"
         class="flex w-full items-center gap-2 rounded-md border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-100"

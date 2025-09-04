@@ -2,7 +2,8 @@
   "greeting": "Hola",
   "farewell": "Adiós",
   "campaignProgress": {
-    "minimumReached": "Mínimo conseguido!",
+    "minimumReached": "!Mínimo conseguido!",
+    "optimumReached": "!Óptimo conseguido!",
     "obtained": "Obtenido",
     "donations": "Donaciones realizadas",
     "optimum": "Óptimo",
@@ -185,7 +186,7 @@
     "invalid": "Entrada no válida"
   },
   "countdown": {
-    "ended": "Campaña finalizada",
+    "expired": "Campaña finalizada",
     "remaining": "Quedan"
   },
   "rewards": {

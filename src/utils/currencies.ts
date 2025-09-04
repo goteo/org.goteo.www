@@ -176,7 +176,9 @@ export function formatCurrency(
     currency?: string,
     options?: { showSymbol?: boolean; spaceBetween?: boolean },
 ): string {
-    if (amount === undefined || !currency) return "";
+    if (amount === undefined) return "";
+    if (currency === undefined) currency = getDefaultCurrency();
+
     const currencyData = currencySymbols[currency];
     if (!currencyData) return "";
 
