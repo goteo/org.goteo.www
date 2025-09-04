@@ -93,5 +93,10 @@ declare namespace Cypress {
          * Command that actually uses the Subject type parameter
          */
         customCommand(): Chainable<Subject>;
+
+        setupTestSpecificIntercepts(options: {
+            skipGlobalGateways?: boolean;
+            skipGlobalAuth?: boolean;
+        }): void;
     }
 }

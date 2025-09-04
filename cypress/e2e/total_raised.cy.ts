@@ -2,8 +2,6 @@
 
 describe("View Total Raised by One-time Payments", () => {
     beforeEach(() => {
-        // ✅ ANTES: 50+ líneas de configuración manual
-        // ✅ AHORA: 1 línea que configura todo automáticamente
         cy.loginAs("admin");
     });
 

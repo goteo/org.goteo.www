@@ -56,7 +56,7 @@ describe("MatchCall API - Verify SingleUserPerProjectRule Compliance", () => {
                 managers: matchCallData.managers,
                 status: "draft",
                 accounting: "/v4/accountings/22222",
-                balance: 1000000, // 10,000€ disponibles
+                balance: 1000000,
                 created_at: new Date().toISOString(),
             },
         };
@@ -218,7 +218,7 @@ describe("MatchCall API - Verify SingleUserPerProjectRule Compliance", () => {
                     id: "tx_matching_first_001",
                     origin: `/v4/accountings/${testData.matchCallAccountingId}`,
                     target: `/v4/accountings/${testData.projectAccountingId}`,
-                    money: { amount: 10000, currency: "EUR" }, // 100€ matching (1:1)
+                    money: { amount: 10000, currency: "EUR" },
                     type: "matching",
                     reference_charge: "charge_first_123",
                     user_reference: `/v4/users/2541`,
@@ -270,8 +270,8 @@ describe("MatchCall API - Verify SingleUserPerProjectRule Compliance", () => {
                         target: `/v4/accountings/${testData.projectAccountingId}`,
                         money: { amount: 15000, currency: "EUR" },
                         status: "completed",
-                        user_project_previous_donations: 1, // Ya donó antes a este proyecto
-                        matching_eligible: false, // NO elegible por SingleUserPerProjectRule
+                        user_project_previous_donations: 1,
+                        matching_eligible: false,
                     },
                 ],
                 status: "completed",
@@ -351,7 +351,7 @@ describe("MatchCall API - Verify SingleUserPerProjectRule Compliance", () => {
                     expect(matching.project_reference).to.eq(`/v4/projects/${testData.projectId}`);
                 });
 
-                expect(matchings.length).to.eq(1); // Solo UNA transacción de matching
+                expect(matchings.length).to.eq(1);
             } else {
                 cy.log("⚠️ Cannot verify rule - no baseline transactions found");
             }
@@ -413,7 +413,7 @@ describe("MatchCall API - Verify SingleUserPerProjectRule Compliance", () => {
             cy.log(`Matching transactions: ${matchingTransactions.length}`);
 
             expect(donationTransactions.length).to.eq(2);
-            expect(matchingTransactions.length).to.eq(1); // Solo UNO por la regla
+            expect(matchingTransactions.length).to.eq(1);
 
             const totalDonations = donationTransactions.reduce(
                 (sum: number, t: any) => sum + t.money.amount,
