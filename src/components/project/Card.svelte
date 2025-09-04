@@ -1,7 +1,6 @@
 <script lang="ts">
     import type {
         Project,
-        Budget,
         ApiAccountingBalancePointsGetCollectionData,
         AccountingBalance,
         Money,
@@ -14,7 +13,7 @@
     export let accountingBalance: AccountingBalance;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
-    const campaignLabel: (keyof Budget)[] = ["optimum", "minimum"];
+    const projectDonations = Array.isArray(balancePoints) ? balancePoints.reduce((acc, point) => acc + point.length, 0) : 0;
 
     function hasReached(money?: Money) {
         return (
@@ -53,8 +52,8 @@
     <div class="col-span-2 mt-4 grid grid-cols-2 gap-6">
         <div class="flex flex-col gap-4">
             <div>
-                <p class="text-[#575757]">{$t(`campaignProgress.obtained`)}</p>
-                <p class="text-secondary text-[32px] font-bold">
+                <p class="text-sm text-[#575757]">{$t(`campaignProgress.obtained`)}</p>
+                <p class="text-secondary text-3xl font-bold">
                     {formatCurrency(
                         Number(accountingBalance.balance?.amount) || 0,
                         accountingBalance.balance?.currency ?? undefined,
@@ -62,27 +61,31 @@
                 </p>
             </div>
             <div>
-                <p class="text-[#575757]">{$t(`campaignProgress.donations`)}</p>
-                <!-- TODO: fix get donations from API -->
-                <p class="text-secondary text-[32px] font-bold">
-                    <!-- {donations.totalItems} -->
+                <p class="text-sm text-[#575757]">{$t(`campaignProgress.donations`)}</p>
+                <p class="text-secondary text-2xl font-bold">
+                    {projectDonations}
                 </p>
             </div>
         </div>
         <div class="flex flex-col gap-4">
-            {#each campaignLabel as key}
-                <div>
-                    <p class="text-[#575757]">{$t(`campaignProgress.${key}`)}</p>
-                    {#if project.budget?.[key]?.money}
-                        <p class="text-secondary text-[32px] font-bold">
-                            {formatCurrency(
-                                project.budget?.[key]?.money?.amount ?? 0,
-                                project.budget?.[key]?.money?.currency ?? undefined,
-                            )}
-                        </p>
-                    {/if}
-                </div>
-            {/each}
+            <div>
+                <p class="text-sm text-[#575757]">{$t(`campaignProgress.optimum`)}</p>
+                <p class="text-secondary text-3xl font-bold">
+                    {formatCurrency(
+                        project.budget?.optimum?.money?.amount ?? 0,
+                        project.budget?.optimum?.money?.currency ?? undefined,
+                    )}
+                </p>
+            </div>
+            <div>
+                <p class="text-sm text-[#575757]">{$t(`campaignProgress.minimum`)}</p>
+                <p class="text-secondary text-2xl font-bold">
+                    {formatCurrency(
+                        project.budget?.minimum?.money?.amount ?? 0,
+                        project.budget?.minimum?.money?.currency ?? undefined,
+                    )}
+                </p>
+            </div>
         </div>
     </div>
     <button
