@@ -4,10 +4,10 @@
         Chart,
         LineController,
         LinearScale,
+        CategoryScale,
         PointElement,
         LineElement,
         Filler,
-        CategoryScale,
         Tooltip,
     } from "chart.js";
     import type {
@@ -21,26 +21,23 @@
     export let project: Project;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
-    let received = +formatCurrency(balance.balance?.amount ?? 0);
-    let minimal = +formatCurrency(project.budget?.minimum?.money?.amount ?? 0);
-    let optimal = +formatCurrency(project.budget?.optimum?.money?.amount ?? 0);
+    function formatAmount(amount: number | null | undefined): number {
+        return +formatCurrency(amount ?? 0, balance.balance?.currency, { asLocaleString: false });
+    }
+
+    let received = formatAmount(balance.balance?.amount);
+    let minimal = formatAmount(project.budget?.minimum?.money?.amount);
+    let optimal = formatAmount(project.budget?.optimum?.money?.amount);
 
     let canvas: HTMLCanvasElement | null = null;
-    let labels = Array.isArray(balancePoints)
+    let data = Array.isArray(balancePoints)
         ? balancePoints.map((point, i) => {
-              const date = new Date(point.start);
-              return date.toLocaleDateString(undefined, {
-                  year: "numeric",
-                  month: "numeric",
-                  day: "numeric",
-              });
+              return {
+                  x: i,
+                  y: formatAmount(point.balance.amount),
+              };
           })
         : [];
-
-    let progressData: number[] = [];
-    for (const point of Array.isArray(balancePoints) ? balancePoints : []) {
-        progressData.push(+formatCurrency(point.balance.amount));
-    }
 
     let maxValue = minimal;
 
@@ -58,10 +55,10 @@
         Chart.register(
             LineController,
             LinearScale,
+            CategoryScale,
             PointElement,
             LineElement,
             Filler,
-            CategoryScale,
             Tooltip,
         );
 
@@ -98,15 +95,15 @@
         new Chart(canvas, {
             type: "line",
             data: {
-                labels,
                 datasets: [
                     {
-                        data: progressData,
+                        data,
                         borderColor: "rgba(94, 234, 212, 1)",
                         backgroundColor: "rgba(94, 234, 212, 0.2)",
                         borderWidth: 1,
                         fill: "start",
                         pointRadius: 1,
+                        tension: 0.25,
                     },
                 ],
             },
@@ -115,7 +112,10 @@
                 maintainAspectRatio: false,
                 scales: {
                     x: {
-                        display: false,
+                        type: "linear",
+                        display: true,
+                        beginAtZero: true,
+                        max: data.length - 1,
                         grid: { display: false },
                     },
                     y: {
@@ -126,6 +126,16 @@
                 },
                 plugins: {
                     legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            title: (items) => {
+                                // @ts-ignore
+                                const point = balancePoints[items[0].dataIndex];
+
+                                return new Date(point.start).toLocaleDateString();
+                            },
+                        },
+                    },
                 },
             },
         });
