@@ -1262,7 +1262,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1395,7 +1395,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1459,7 +1459,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1738,24 +1738,30 @@ export type ProjectRewardClaimJsonld = {
     reward: string;
 };
 
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
 export type ProjectSupport = {
     readonly id?: number;
     /**
-     * The User who created the ProjectSupport record.\
-     * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
-     */
-    readonly owner?: string | null;
-    /**
-     * The Project being targeted in the Charges.
+     * The Project being supported.
      */
     readonly project?: string;
     /**
-     * The Charges that were paid by the User.
+     * The Accounting of origin for the Transactions under this ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
      */
-    readonly charges?: Array<string>;
+    readonly origin?: string | null;
     /**
-     * The total monetary value of the Charges paid by the User.
+     * The Transactions that were issued to the Project by the origin.
+     */
+    readonly transactions?: Array<string>;
+    /**
+     * The total monetary value of the Transactions going to the Project.
      */
     money?: Money;
     /**
@@ -1768,6 +1774,12 @@ export type ProjectSupport = {
     message?: string | null;
 };
 
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
 export type ProjectSupportJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -1778,21 +1790,21 @@ export type ProjectSupportJsonld = {
     readonly '@type'?: string;
     readonly id?: number;
     /**
-     * The User who created the ProjectSupport record.\
-     * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
-     */
-    readonly owner?: string | null;
-    /**
-     * The Project being targeted in the Charges.
+     * The Project being supported.
      */
     readonly project?: string;
     /**
-     * The Charges that were paid by the User.
+     * The Accounting of origin for the Transactions under this ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
      */
-    readonly charges?: Array<string>;
+    readonly origin?: string | null;
     /**
-     * The total monetary value of the Charges paid by the User.
+     * The Transactions that were issued to the Project by the origin.
+     */
+    readonly transactions?: Array<string>;
+    /**
+     * The total monetary value of the Transactions going to the Project.
      */
     money?: MoneyJsonld;
     /**
@@ -4267,10 +4279,10 @@ export type ApiProjectSupportsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        owner?: string;
-        'owner[]'?: Array<string>;
         project?: string;
         'project[]'?: Array<string>;
+        origin?: string;
+        'origin[]'?: Array<string>;
     };
     url: '/v4/project_supports';
 };
