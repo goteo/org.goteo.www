@@ -116,7 +116,6 @@
                                                 {formatCurrency(
                                                     item.money?.amount ?? 0,
                                                     item.money?.currency ?? "undefined",
-                                                    { showSymbol: true, spaceBetween: true },
                                                 )}
                                             </span>
                                         </div>
@@ -130,7 +129,6 @@
                                                 {formatCurrency(
                                                     item.money?.amount ?? 0,
                                                     item.money?.currency ?? "",
-                                                    { showSymbol: true, spaceBetween: true },
                                                 )}
                                             </span>
                                         </div>
@@ -174,7 +172,6 @@
                                         {formatCurrency(
                                             item.money?.amount ?? 0,
                                             item.money?.currency ?? "",
-                                            { showSymbol: true, spaceBetween: true },
                                         )}
                                     </p>
                                 </div>
@@ -215,10 +212,6 @@
                         {formatCurrency(
                             selectedProjectSupport.money?.amount ?? 0,
                             selectedProjectSupport.money?.currency ?? "undefined",
-                            {
-                                showSymbol: true,
-                                spaceBetween: true,
-                            },
                         )}
                     </p>
                 </div>

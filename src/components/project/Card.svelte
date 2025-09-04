@@ -58,9 +58,6 @@
                     {formatCurrency(
                         Number(accountingBalance.balance?.amount) || 0,
                         accountingBalance.balance?.currency ?? undefined,
-                        {
-                            showSymbol: true,
-                        },
                     )}
                 </p>
             </div>
@@ -81,7 +78,6 @@
                             {formatCurrency(
                                 project.budget?.[key]?.money?.amount ?? 0,
                                 project.budget?.[key]?.money?.currency ?? undefined,
-                                { showSymbol: true },
                             )}
                         </p>
                     {/if}
