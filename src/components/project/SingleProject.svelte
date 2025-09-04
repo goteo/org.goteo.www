@@ -60,7 +60,7 @@
                     <span class="text-tertiary text-2xl font-bold underline"> {ownerName}</span>
                 </h3>
                 <h1 class="text-[40px]/[48px] font-bold text-[#575757]">
-                    {project.title} <span>{ownerName}</span>
+                    {project.title}
                 </h1>
             </div>
 
