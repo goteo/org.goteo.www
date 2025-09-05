@@ -51,21 +51,16 @@
 
     onMount(async () => {
         const { data } = await apiProjectSupportsGetCollection({
-            query: { project: project.id },
+            query: { project: project.id, anonymous: false },
         });
 
         const supportsWithOwners = await Promise.all(
             (data || []).map(async (support) => {
-                const id = extractId(support?.origin ?? "");
-                let displayName = $t("project.tabs.community.owner-anonymous");
-                if (id && !support.anonymous) {
-                    try {
-                        const { data: user } = await apiUsersIdGet({ path: { id } });
-                        displayName = user?.displayName ?? displayName;
-                    } catch (e) {
-                        console.error(`Error fetching user ${id}:`, e);
-                    }
-                }
+                const id = extractId(support?.origin!);
+
+                const { data: user } = await apiUsersIdGet({ path: { id: id! } });
+                const displayName = user?.displayName!;
+
                 return {
                     ...support,
                     displayName,

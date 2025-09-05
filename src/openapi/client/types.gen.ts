@@ -4283,6 +4283,7 @@ export type ApiProjectSupportsGetCollectionData = {
         'project[]'?: Array<string>;
         origin?: string;
         'origin[]'?: Array<string>;
+        anonymous?: boolean;
     };
     url: '/v4/project_supports';
 };
