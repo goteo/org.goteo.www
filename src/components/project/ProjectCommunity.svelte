@@ -7,6 +7,8 @@
     import { extractId } from "../../utils/extractId";
     import Loader from "../../svgs/Loader.svelte";
     import { Modal } from "flowbite-svelte";
+    import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
+    import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
 
     const { project } = $props<{ project: Project }>();
 
@@ -54,7 +56,7 @@
 
         const supportsWithOwners = await Promise.all(
             (data || []).map(async (support) => {
-                const id = extractId(support?.owner ?? "");
+                const id = extractId(support?.origin ?? "");
                 let displayName = $t("project.tabs.community.owner-anonymous");
                 if (id && !support.anonymous) {
                     try {
@@ -67,8 +69,7 @@
                 return {
                     ...support,
                     displayName,
-                    // TODO : Replace with actual matchfunding logic
-                    matchfunding: Math.random() < 0.5,
+                    matchfunding: support.origin?.includes("match")!,
                 };
             }),
         );
@@ -90,62 +91,11 @@
             {#if groupedItems.matchfunding?.length}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     {#each groupedItems.matchfunding as item (item.id)}
-                        <button
-                            class="flex cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg"
-                            onclick={() => {
-                                selectedProjectSupport = item;
-                                openModal = true;
-                            }}
-                        >
-                            <div class="flex w-1/3 items-center justify-center bg-red-500">😀</div>
-                            <div class="flex w-2/3 flex-col gap-4 p-6">
-                                <div class="text-secondary flex flex-col items-end gap-2 font-bold">
-                                    <span
-                                        >{$t(
-                                            "project.tabs.community.matchfunding.contribution",
-                                        )}</span
-                                    >
-                                    <div class="flex flex-col items-end text-2xl">
-                                        <div class="flex items-center gap-2">
-                                            <span
-                                                >{$t(
-                                                    "project.tabs.community.matchfunding.aported",
-                                                )}</span
-                                            >
-                                            <span>
-                                                {formatCurrency(
-                                                    item.money?.amount ?? 0,
-                                                    item.money?.currency ?? "undefined",
-                                                )}
-                                            </span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-[#5757577A]">
-                                            <span
-                                                >{$t(
-                                                    "project.tabs.community.matchfunding.up_to",
-                                                )}</span
-                                            >
-                                            <span class="font-bold">
-                                                {formatCurrency(
-                                                    item.money?.amount ?? 0,
-                                                    item.money?.currency ?? "",
-                                                )}
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="text-secondary text-2xl font-bold">
-                                    {item.displayName}
-                                </div>
-                                <!-- TODO :  Replace with actual description -->
-                                <p class="line-clamp-2 text-sm text-[#575757]">
-                                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    Voluptate suscipit nemo eius ab error itaque nostrum neque earum
-                                    dolor molestiae obcaecati ipsum aliquam, odit, rem natus
-                                    perferendis at ea in.
-                                </p>
-                            </div>
-                        </button>
+                        <ProjectCommunityMatchfunding
+                            {item}
+                            bind:openModal
+                            bind:selectedProjectSupport
+                        />
                     {/each}
                 </div>
             {/if}
@@ -153,38 +103,11 @@
             {#if groupedItems.default?.length}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#each groupedItems.default as item (item.id)}
-                        <button
-                            class="flex cursor-pointer flex-col gap-4 rounded-4xl bg-white p-4 px-6 py-4 transition-shadow duration-200 ease-in-out hover:shadow-lg"
-                            onclick={() => {
-                                selectedProjectSupport = item;
-                                openModal = true;
-                            }}
-                        >
-                            <div class="flex flex-row items-center justify-between gap-4">
-                                <div class="flex h-16 w-16 items-center justify-center rounded-lg">
-                                    😀
-                                </div>
-                                <div class="flex flex-col items-end">
-                                    <div class="text-secondary font-bold">
-                                        {$t("project.tabs.community.contribution")}
-                                    </div>
-                                    <p class="text-secondary text-2xl font-bold">
-                                        {formatCurrency(
-                                            item.money?.amount ?? 0,
-                                            item.money?.currency ?? "",
-                                        )}
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="text-secondary text-2xl font-bold">{item.displayName}</div>
-                            <!-- TODO :  Replace with actual description -->
-                            <div class="line-clamp-2 text-sm text-[#575757]">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate
-                                suscipit nemo eius ab error itaque nostrum neque earum dolor
-                                molestiae obcaecati ipsum aliquam, odit, rem natus perferendis at ea
-                                in.
-                            </div>
-                        </button>
+                        <ProjectCommunityMessage
+                            {item}
+                            bind:openModal
+                            bind:selectedProjectSupport
+                        />
                     {/each}
                 </div>
             {/if}
@@ -219,11 +142,8 @@
             <div class="text-secondary text-2xl font-bold">
                 {selectedProjectSupport.displayName}
             </div>
-            <!-- TODO :  Replace with actual description -->
-            <div class="line-clamp-2 text-sm text-[#575757]">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptate suscipit nemo
-                eius ab error itaque nostrum neque earum dolor molestiae obcaecati ipsum aliquam,
-                odit, rem natus perferendis at ea in.
+            <div class="text-sm text-[#575757]">
+                {selectedProjectSupport.message}
             </div>
         </div>
     {/if}
