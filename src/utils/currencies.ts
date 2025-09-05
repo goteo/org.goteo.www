@@ -189,14 +189,12 @@ export function formatCurrency(
 
     const asLocaleString = options.asLocaleString;
 
-    const locale = (typeof navigator !== "undefined") ? navigator.language : getDefaultLanguage();
-    const formatter = new Intl.NumberFormat(locale,
-        {
-            currency,
-            style: 'currency',
-            minimumFractionDigits: 0
-        }
-    );
+    const locale = typeof navigator !== "undefined" ? navigator.language : getDefaultLanguage();
+    const formatter = new Intl.NumberFormat(locale, {
+        currency,
+        style: "currency",
+        minimumFractionDigits: 0,
+    });
 
     return asLocaleString ? formatter.format(rawAmount) : formattedAmount;
 }
