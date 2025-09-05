@@ -14,6 +14,7 @@
         AccountingBalance,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
+        ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
 
@@ -50,6 +51,15 @@
     }
 
     maxValue = maxValue + maxValue / 20;
+
+    function calcDaysForMinimum(calendar: ProjectCalendar): number {
+        const release = new Date(calendar.release!).getTime();
+        const minimum = new Date(calendar.minimum!).getTime();
+
+        return Math.round(Math.abs((release - minimum) / 86400000));
+    }
+
+    const daysForMinimum = calcDaysForMinimum(project.calendar!);
 
     onMount(() => {
         Chart.register(
@@ -90,6 +100,32 @@
             },
         });
 
+        Chart.register({
+            id: "deadlineLine",
+            beforeDraw(chart) {
+                const {
+                    ctx,
+                    chartArea: { top, bottom },
+                    scales: { x },
+                } = chart;
+
+                ctx.save();
+
+                const xPos = x.getPixelForValue(daysForMinimum);
+
+                // Draw vertical line
+                ctx.beginPath();
+                ctx.moveTo(xPos, top - 100);
+                ctx.lineTo(xPos, bottom + 100);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
+                ctx.setLineDash([]);
+                ctx.stroke();
+
+                ctx.restore();
+            },
+        });
+
         if (!canvas) return;
 
         new Chart(canvas, {
@@ -102,8 +138,8 @@
                         backgroundColor: "rgba(94, 234, 212, 0.2)",
                         borderWidth: 1,
                         fill: "start",
-                        pointRadius: 1,
                         tension: 0.25,
+                        pointRadius: 0.5,
                     },
                 ],
             },
@@ -142,6 +178,6 @@
     });
 </script>
 
-<div class="relative h-[200px] w-full overflow-hidden rounded-lg bg-white">
+<div class="relative h-full w-full overflow-hidden rounded-lg bg-white">
     <canvas bind:this={canvas}></canvas>
 </div>
