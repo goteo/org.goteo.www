@@ -59,7 +59,7 @@ export type AccountingBalance = {
     /**
      * The money currently held by the Accounting.
      */
-    balance?: Money;
+    balance?: ApiMoney;
 };
 
 /**
@@ -79,7 +79,7 @@ export type AccountingBalanceJsonld = {
     /**
      * The money currently held by the Accounting.
      */
-    balance?: MoneyJsonld;
+    balance?: ApiMoneyJsonld;
 };
 
 /**
@@ -100,7 +100,7 @@ export type AccountingBalancePoint = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: Money;
+    balance?: ApiMoney;
     /**
      * The number of items aggregated in this point.
      */
@@ -127,7 +127,7 @@ export type AccountingBalancePointJsonld = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyJsonld;
+    balance?: ApiMoneyJsonld;
     /**
      * The number of items aggregated in this point.
      */
@@ -148,7 +148,7 @@ export type AccountingTransaction = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: Money;
+    money?: ApiMoney;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -180,7 +180,7 @@ export type AccountingTransactionJsonld = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyJsonld;
+    money?: ApiMoneyJsonld;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -191,7 +191,7 @@ export type AccountingTransactionJsonld = {
     target?: string;
 };
 
-export type ApiResourceMoney = {
+export type ApiMoney = {
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -201,9 +201,13 @@ export type ApiResourceMoney = {
      * 3-letter ISO 4217 currency code.
      */
     currency: string;
+    /**
+     * Conversion metadata.
+     */
+    conversion?: Conversion | null;
 };
 
-export type ApiResourceMoneyJsonld = {
+export type ApiMoneyJsonld = {
     '@context'?: string | {
         '@vocab': string;
         hydra: 'http://www.w3.org/ns/hydra/core#';
@@ -220,6 +224,10 @@ export type ApiResourceMoneyJsonld = {
      * 3-letter ISO 4217 currency code.
      */
     currency: string;
+    /**
+     * Conversion metadata.
+     */
+    conversion?: ConversionJsonld | null;
 };
 
 export type Budget = {
@@ -255,19 +263,19 @@ export type BudgetSummary = {
     /**
      * The total money by the included items.
      */
-    money?: Money;
+    money?: ApiMoney;
     /**
      * The total money of type 'task'.
      */
-    task?: Money;
+    task?: ApiMoney;
     /**
      * The total money of type 'material'.
      */
-    material?: Money;
+    material?: ApiMoney;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: Money;
+    infra?: ApiMoney;
 };
 
 export type BudgetSummaryJsonld = {
@@ -281,19 +289,19 @@ export type BudgetSummaryJsonld = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyJsonld;
+    money?: ApiMoneyJsonld;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyJsonld;
+    task?: ApiMoneyJsonld;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyJsonld;
+    material?: ApiMoneyJsonld;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyJsonld;
+    infra?: ApiMoneyJsonld;
 };
 
 /**
@@ -344,6 +352,31 @@ export type ConstraintViolationJsonldJsonld = {
     readonly type?: string;
     readonly title?: string | null;
     readonly instance?: string | null;
+};
+
+export type Conversion = {
+    rounding?: string;
+    from?: Money;
+    to?: Money;
+    rate?: number;
+    date?: string;
+    provider?: string;
+};
+
+export type ConversionJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    rounding?: string;
+    from?: MoneyJsonld;
+    to?: MoneyJsonld;
+    rate?: number;
+    date?: string;
+    provider?: string;
 };
 
 /**
@@ -464,7 +497,7 @@ export type GatewayCharge = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: Money;
+    money: ApiMoney;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -539,7 +572,7 @@ export type GatewayChargeJsonld = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -987,7 +1020,7 @@ export type MatchStrategy = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiResourceMoney;
+    limit: ApiMoney;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1041,7 +1074,7 @@ export type MatchStrategyJsonld = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiResourceMoneyJsonld;
+    limit: ApiMoneyJsonld;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1056,15 +1089,9 @@ export type MatchStrategyJsonld = {
 };
 
 export type Money = {
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount?: number | null;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string | null;
+    amount?: number;
+    currency?: string;
+    conversion?: Conversion | null;
 };
 
 export type MoneyJsonld = {
@@ -1075,15 +1102,9 @@ export type MoneyJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount?: number | null;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string | null;
+    amount?: number;
+    currency?: string;
+    conversion?: ConversionJsonld | null;
 };
 
 /**
@@ -1505,7 +1526,7 @@ export type ProjectBudgetItem = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiResourceMoney;
+    money: ApiMoney;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1546,7 +1567,7 @@ export type ProjectBudgetItemJsonld = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiResourceMoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1626,7 +1647,7 @@ export type ProjectReward = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: Money;
+    money: ApiMoney;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1673,7 +1694,7 @@ export type ProjectRewardJsonld = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1763,7 +1784,7 @@ export type ProjectSupport = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: Money;
+    money?: ApiMoney;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -1772,6 +1793,32 @@ export type ProjectSupport = {
      * A message of support from the User to the Project.
      */
     message?: string | null;
+};
+
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
+export type ProjectSupportTotalizedMoney = {
+    amount?: number;
+    currency?: string;
+    length?: number;
+};
+
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
+export type ProjectSupportTotalizedMoneyJsonld = {
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    amount?: number;
+    currency?: string;
+    length?: number;
 };
 
 /**
@@ -1806,7 +1853,7 @@ export type ProjectSupportJsonld = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: MoneyJsonld;
+    money?: ApiMoneyJsonld;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -4296,6 +4343,28 @@ export type ApiProjectSupportsGetCollectionResponses = {
 };
 
 export type ApiProjectSupportsGetCollectionResponse = ApiProjectSupportsGetCollectionResponses[keyof ApiProjectSupportsGetCollectionResponses];
+
+export type ApiProjectSupportsmoneyTotalGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        project?: string;
+        'project[]'?: Array<string>;
+        origin?: string;
+        'origin[]'?: Array<string>;
+        anonymous?: boolean;
+    };
+    url: '/v4/project_supports/money_total';
+};
+
+export type ApiProjectSupportsmoneyTotalGetCollectionResponses = {
+    /**
+     * Totalized money
+     */
+    200: ProjectSupportTotalizedMoney;
+};
+
+export type ApiProjectSupportsmoneyTotalGetCollectionResponse = ApiProjectSupportsmoneyTotalGetCollectionResponses[keyof ApiProjectSupportsmoneyTotalGetCollectionResponses];
 
 export type ApiProjectSupportsIdGetData = {
     body?: never;

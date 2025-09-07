@@ -118,6 +118,8 @@ export const apiProjectRewardClaimsIdPatchUrl = '/v4/project_reward_claims/{id}'
 
 export const apiProjectSupportsGetCollectionUrl = '/v4/project_supports';
 
+export const apiProjectSupportsmoneyTotalGetCollectionUrl = '/v4/project_supports/money_total';
+
 export const apiProjectSupportsIdGetUrl = '/v4/project_supports/{id}';
 
 export const apiProjectSupportsIdPatchUrl = '/v4/project_supports/{id}';
