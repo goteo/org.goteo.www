@@ -25,9 +25,6 @@
                         {formatCurrency(
                             project.budget.minimum.money.amount,
                             project.budget.minimum.money.currency,
-                            {
-                                showSymbol: true,
-                            },
                         )}
                     </p>
                 </span>
@@ -43,9 +40,6 @@
                         {formatCurrency(
                             project.budget.optimum.money.amount,
                             project.budget.optimum.money.currency,
-                            {
-                                showSymbol: true,
-                            },
                         )}
                     </p>
                 </span>

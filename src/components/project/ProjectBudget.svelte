@@ -42,9 +42,6 @@
                 {formatCurrency(
                     project.budget.minimum.money.amount,
                     project.budget.minimum.money.currency,
-                    {
-                        showSymbol: true,
-                    },
                 )}
             </span>
             <Carousel gap={16} showDots={true} itemsPerGroup={3}>
@@ -68,9 +65,7 @@
                         </div>
                         <div class="flex flex-row items-center justify-between">
                             <p class="text-secondary text-2xl">
-                                {formatCurrency(item.money.amount, item.money.currency, {
-                                    showSymbol: true,
-                                })}
+                                {formatCurrency(item.money.amount, item.money.currency)}
                             </p>
                             <div class="flex items-center gap-2">
                                 <div
@@ -92,9 +87,6 @@
                 {formatCurrency(
                     project.budget.optimum.money.amount,
                     project.budget.optimum.money.currency,
-                    {
-                        showSymbol: true,
-                    },
                 )}
             </span>
             <Carousel gap={16} showDots={true} itemsPerGroup={3}>
@@ -121,9 +113,7 @@
                         </div>
                         <div class="flex flex-row items-center justify-between">
                             <p class="text-secondary text-2xl">
-                                {formatCurrency(item.money.amount, item.money.currency, {
-                                    showSymbol: true,
-                                })}
+                                {formatCurrency(item.money.amount, item.money.currency)}
                             </p>
                             <div class="flex items-center gap-2">
                                 <div
