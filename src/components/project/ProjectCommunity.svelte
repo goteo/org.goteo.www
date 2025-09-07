@@ -9,6 +9,7 @@
     import { Modal } from "flowbite-svelte";
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
+    import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
 
     const { project } = $props<{ project: Project }>();
 
@@ -50,12 +51,12 @@
     );
 
     onMount(async () => {
-        const { data } = await apiProjectSupportsGetCollection({
+        const { data: publicSupports } = await apiProjectSupportsGetCollection({
             query: { project: project.id, anonymous: false },
         });
 
         const supportsWithOwners = await Promise.all(
-            (data || []).map(async (support) => {
+            (publicSupports || []).map(async (support) => {
                 const id = extractId(support?.origin!);
 
                 const { data: user } = await apiUsersIdGet({ path: { id: id! } });
@@ -68,6 +69,7 @@
                 };
             }),
         );
+
         projectsSupportItems = supportsWithOwners;
         isLoaded = true;
     });
@@ -83,17 +85,16 @@
             {$t("project.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            {#if groupedItems.matchfunding?.length}
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    {#each groupedItems.matchfunding as item (item.id)}
-                        <ProjectCommunityMatchfunding
-                            {item}
-                            bind:openModal
-                            bind:selectedProjectSupport
-                        />
-                    {/each}
-                </div>
-            {/if}
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                {#each groupedItems.matchfunding as item (item.id)}
+                    <ProjectCommunityMatchfunding
+                        {item}
+                        bind:openModal
+                        bind:selectedProjectSupport
+                    />
+                {/each}
+                <ProjectCommunityAnonymous {project} />
+            </div>
 
             {#if groupedItems.default?.length}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

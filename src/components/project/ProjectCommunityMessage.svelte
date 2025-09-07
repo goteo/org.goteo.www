@@ -6,7 +6,7 @@
 </script>
 
 <button
-    class="flex cursor-pointer flex-col gap-4 rounded-4xl bg-white p-4 px-6 py-4 transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="flex cursor-pointer flex-col gap-4 rounded-4xl bg-white p-6 transition-shadow duration-200 ease-in-out hover:shadow-lg"
     onclick={() => {
         selectedProjectSupport = item;
         openModal = true;
@@ -27,6 +27,10 @@
         {item.displayName}
     </div>
     <div class="line-clamp-2 self-start text-left text-sm text-[#575757]">
-        {item.message}
+        {#if item.message}
+            {item.message}
+        {:else}
+            {$t("project.tabs.community.noComment")}
+        {/if}
     </div>
 </button>
