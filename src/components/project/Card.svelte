@@ -4,15 +4,13 @@
         type ApiAccountingBalancePointsGetCollectionData,
         type AccountingBalance,
         type Money,
-        apiProjectSupportsGetCollection,
-        type ProjectSupport,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
 
     export let project: Project;
-    export let supports: ProjectSupport[];
+    export let totalSupports: number = 0;
     export let accountingBalance: AccountingBalance;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
@@ -64,7 +62,7 @@
             <div>
                 <p class="text-sm text-[#575757]">{$t(`campaignProgress.supports`)}</p>
                 <p class="text-secondary text-2xl font-bold">
-                    {supports.length}
+                    {totalSupports}
                 </p>
             </div>
         </div>

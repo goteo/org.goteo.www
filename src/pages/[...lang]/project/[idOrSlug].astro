@@ -46,10 +46,12 @@ const { data: owner } = await apiUsersIdGet({
 const ownerName = owner?.displayName || "";
 
 const { data: supports } = await apiProjectSupportsGetCollection({
-    query: {
-        project: String(project.id!),
-    },
+    query: { project: String(project.id!) },
+    headers: { Accept: "application/ld+json" },
 });
+
+// @ts-ignore
+const totalSupports = supports.totalItems;
 
 const deadlineKey = project?.deadline as keyof Project["calendar"];
 
@@ -79,7 +81,7 @@ const balancePoints = await (async () => {
         {accounting}
         {accountingBalance}
         {ownerName}
-        {supports}
+        {totalSupports}
         {balancePoints}
         client:load
     />

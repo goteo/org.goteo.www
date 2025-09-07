@@ -29,7 +29,7 @@
     export let accountingBalance: AccountingBalance;
     export let ownerName: string;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
-    export let supports: ProjectSupport[];
+    export let totalSupports: number = 0;
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
     const limit = 3;
@@ -107,7 +107,7 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} {supports} {accountingBalance} {balancePoints} />
+            <Card {project} {totalSupports} {accountingBalance} {balancePoints} />
         </div>
     </div>
 
