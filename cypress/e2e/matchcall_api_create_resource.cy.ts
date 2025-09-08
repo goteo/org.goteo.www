@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 
 describe("MatchCall API - Create Resource", () => {
-    let matchCallId: number = 12345; // Mock ID estático
+    let matchCallId: number = 12345;
 
     it("should create a new MatchCall resource successfully", () => {
         const mockMatchCallData = {

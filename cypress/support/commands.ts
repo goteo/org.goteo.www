@@ -108,17 +108,35 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
  * Configurar intercepts comunes basados en el perfil del usuario
  */
 Cypress.Commands.add("setupCommonIntercepts", (profile: UserProfile) => {
-    // Intercept genérico para otras llamadas API
-    cy.intercept("GET", "**/v4/**", {
+    cy.intercept("GET", "**/v4/projects/**", {
+        statusCode: 200,
+        body: {
+            id: 100,
+            title: "Test Project",
+            accountingId: profile.accountingId,
+        },
+    }).as("projectsApi");
+
+    cy.intercept("GET", "**/v4/accountings/**", {
         statusCode: 200,
         body: {
             accountingId: profile.accountingId,
             id: profile.id,
         },
-    }).as("otherApiCalls");
+    }).as("accountingsApi");
 
-    // Intercept específico para gateway_charges si es admin
-    if (profile.isAdmin) {
+    if (
+        profile.isAdmin &&
+        !(Cypress.env("SKIP_GLOBAL_GATEWAYS") || Cypress.env("SKIP_GATEWAY_INTERCEPTS"))
+    ) {
+        cy.intercept("GET", "**/v4/gateways", {
+            statusCode: 200,
+            body: [
+                { name: "stripe", title: "Stripe" },
+                { name: "paypal", title: "PayPal" },
+            ],
+        }).as("globalGateways");
+
         cy.intercept("GET", "**/v4/gateway_charges*", {
             statusCode: 200,
             headers: {
@@ -133,20 +151,21 @@ Cypress.Commands.add("setupCommonIntercepts", (profile: UserProfile) => {
                         "@id": "/v4/gateway_charges/1",
                         "@type": "GatewayCharge",
                         id: 1,
-                        amount: 2500,
-                        currency: "EUR",
-                        status: "completed",
-                        gateway: "stripe",
-                        created_at: "2025-01-15T10:00:00Z",
+                        title: "Test charge",
+                        description: "Test charge description",
+                        status: "charged",
+                        money: { amount: 2500, currency: "EUR" },
+                        target: "/v4/accountings/100",
+                        dateCreated: "2025-01-15T10:00:00Z",
                     },
                 ],
-                "hydra:totalItems": 247,
+                "hydra:totalItems": 1,
                 "hydra:view": {
                     "@id": "/v4/gateway_charges?page=1&itemsPerPage=10&pagination=true",
                     "@type": "hydra:PartialCollectionView",
                 },
-                total_amount: "148,750",
-                total_count: 247,
+                total_amount: "2,500",
+                total_count: 1,
                 currency: "EUR",
             },
         }).as("gatewayCharges");
@@ -298,3 +317,16 @@ Cypress.Commands.add("checkLoginFormValidation", () => {
     cy.get('button[form="login"]').click();
     cy.get("input#password:invalid").should("exist");
 });
+
+Cypress.Commands.add(
+    "setupTestSpecificIntercepts",
+    (options: { skipGlobalGateways?: boolean; skipGlobalAuth?: boolean }) => {
+        if (options.skipGlobalGateways) {
+            Cypress.env("SKIP_GLOBAL_GATEWAYS", true);
+        }
+
+        if (options.skipGlobalAuth) {
+            Cypress.env("SKIP_GLOBAL_AUTH", true);
+        }
+    },
+);

@@ -76,6 +76,9 @@ jobs:
                   echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
                   echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
                   echo "API URL: ${{ steps.api-url.outputs.API_URL }}"
+                  echo "API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
+                  echo "LANGUAGE_DEFAULT=es" >> .env
+                  echo "CURRENCY_DEFAULT=EUR" >> .env
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
