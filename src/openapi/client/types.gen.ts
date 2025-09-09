@@ -1651,16 +1651,21 @@ export type ProjectReward = {
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
-    hasUnits: boolean;
+    isFinite: boolean;
     /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
+     * For finite rewards, the total amount of existing units.\
+     * Required if `isFinite`.
      */
-    unitsTotal?: number;
+    unitsTotal?: number | null;
     /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
+     * The total amount of claims on this Reward.
+     */
+    readonly unitsClaimed?: number;
+    /**
+     * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
+    readonly claims?: Array<string>;
     /**
      * List of the available content locales.
      */
@@ -1698,16 +1703,21 @@ export type ProjectRewardJsonld = {
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
-    hasUnits: boolean;
+    isFinite: boolean;
     /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
+     * For finite rewards, the total amount of existing units.\
+     * Required if `isFinite`.
      */
-    unitsTotal?: number;
+    unitsTotal?: number | null;
     /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
+     * The total amount of claims on this Reward.
+     */
+    readonly unitsClaimed?: number;
+    /**
+     * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
+    readonly claims?: Array<string>;
     /**
      * List of the available content locales.
      */
@@ -4008,8 +4018,9 @@ export type ApiProjectRewardsGetCollectionData = {
         project?: string;
         'project[]'?: Array<string>;
         'order[money.amount]'?: 'asc' | 'desc';
+        'order[unitsClaimed]'?: 'asc' | 'desc';
         'order[unitsAvailable]'?: 'asc' | 'desc';
-        hasUnits?: boolean;
+        isFinite?: boolean;
     };
     url: '/v4/project_rewards';
 };
