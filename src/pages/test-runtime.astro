@@ -1,0 +1,165 @@
+---
+// test-runtime.astro - Test completo para todas las variables
+import { getEnvVariable, getBaseUrl, getApiVersion, getDefaultCurrency, getDefaultLanguage, getPlatoniqAccountingId, getFacebookAppId } from '../utils/consts.ts';
+
+// Test variables privadas
+let privateResults = [];
+
+try {
+    const apiUrl = getBaseUrl(Astro);
+    privateResults.push({ name: 'API_URL', value: apiUrl, status: 'success' });
+} catch (e) {
+    privateResults.push({ name: 'API_URL', value: e.message, status: 'error' });
+}
+
+try {
+    const apiVersion = getApiVersion(Astro);
+    privateResults.push({ name: 'API_VERSION', value: apiVersion, status: 'success' });
+} catch (e) {
+    privateResults.push({ name: 'API_VERSION', value: e.message, status: 'error' });
+}
+
+try {
+    const currency = getDefaultCurrency(Astro);
+    privateResults.push({ name: 'CURRENCY_DEFAULT', value: currency, status: 'success' });
+} catch (e) {
+    privateResults.push({ name: 'CURRENCY_DEFAULT', value: e.message, status: 'error' });
+}
+
+try {
+    const envTest = getEnvVariable("ENV_TEST");
+    privateResults.push({ name: 'ENV_TEST', value: envTest, status: 'success' });
+} catch (e) {
+    privateResults.push({ name: 'ENV_TEST', value: e.message, status: 'error' });
+}
+
+try {
+    const language = getDefaultLanguage(Astro);
+    privateResults.push({ name: 'LANGUAGE_DEFAULT', value: language, status: 'success' });
+} catch (e) {
+    privateResults.push({ name: 'LANGUAGE_DEFAULT', value: e.message, status: 'error' });
+}
+
+// Test variables públicas
+let publicResults = [];
+
+try {
+    const publicEnvTest = getEnvVariable("PUBLIC_ENV_TEST");
+    publicResults.push({ name: 'PUBLIC_ENV_TEST', value: publicEnvTest, status: 'success' });
+} catch (e) {
+    publicResults.push({ name: 'PUBLIC_ENV_TEST', value: e.message, status: 'error' });
+}
+
+try {
+    const facebookId = getFacebookAppId();
+    publicResults.push({ name: 'PUBLIC_FACEBOOK_APP_ID', value: facebookId, status: 'success' });
+} catch (e) {
+    publicResults.push({ name: 'PUBLIC_FACEBOOK_APP_ID', value: e.message, status: 'error' });
+}
+
+try {
+    const platoniqId = getPlatoniqAccountingId();
+    publicResults.push({ name: 'PUBLIC_PLATONIQ_ACCOUNTING_ID', value: platoniqId, status: 'success' });
+} catch (e) {
+    publicResults.push({ name: 'PUBLIC_PLATONIQ_ACCOUNTING_ID', value: e.message, status: 'error' });
+}
+
+// Info del runtime
+const hasRuntime = !!Astro.locals?.runtime;
+const runtimeVars = Astro.locals?.runtime?.env ? Object.keys(Astro.locals.runtime.env).length : 0;
+const runtimeVarNames = Astro.locals?.runtime?.env ? Object.keys(Astro.locals.runtime.env) : [];
+
+// Log para Cloudflare Logs
+console.log('🔍 PRIVATE VARIABLES:', privateResults);
+console.log('🔍 PUBLIC VARIABLES:', publicResults);
+console.log('🔍 RUNTIME INFO:', { hasRuntime, runtimeVars, runtimeVarNames });
+---
+
+<html>
+<head>
+    <title>Variables Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 50px auto; padding: 20px; }
+        .success { color: #2e7d32; font-weight: bold; }
+        .error { color: #d32f2f; font-weight: bold; }
+        .info { background: #f5f5f5; padding: 15px; border-radius: 5px; margin: 15px 0; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background-color: #f5f5f5; font-weight: bold; }
+        .variable { font-family: monospace; font-weight: bold; color: #1976d2; }
+        h2 { color: #424242; margin-top: 30px; }
+        details { margin-top: 10px; }
+        summary { cursor: pointer; font-weight: bold; color: #1976d2; }
+        code { background: #e3f2fd; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+        tr:hover { background-color: #fafafa; }
+    </style>
+</head>
+<body>
+<h1>🔍 Variables Test - Completo</h1>
+
+<div class="info">
+    <strong>Runtime Info:</strong><br>
+    Runtime disponible: {hasRuntime ? '✅ Sí' : '❌ No'}<br>
+    Variables en runtime: {runtimeVars}<br>
+    <details>
+        <summary>Ver nombres de variables en runtime</summary>
+        <code>{runtimeVarNames.join(', ')}</code>
+    </details>
+</div>
+
+<h2>🔒 Variables Privadas (solo servidor):</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Variable</th>
+        <th>Valor</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {privateResults.map(result => (
+        <tr>
+            <td class="variable">{result.name}</td>
+            <td>{result.value}</td>
+            <td class={result.status === 'success' ? 'success' : 'error'}>
+                {result.status === 'success' ? '✅ OK' : '❌ Error'}
+            </td>
+        </tr>
+    ))}
+    </tbody>
+</table>
+
+<h2>🌐 Variables Públicas (frontend + servidor):</h2>
+<table>
+    <thead>
+    <tr>
+        <th>Variable</th>
+        <th>Valor</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {publicResults.map(result => (
+        <tr>
+            <td class="variable">{result.name}</td>
+            <td>{result.value}</td>
+            <td class={result.status === 'success' ? 'success' : 'error'}>
+                {result.status === 'success' ? '✅ OK' : '❌ Error'}
+            </td>
+        </tr>
+    ))}
+    </tbody>
+</table>
+
+<div class="info">
+    <strong>📊 Resumen:</strong><br>
+    Variables privadas: {privateResults.filter(r => r.status === 'success').length}/{privateResults.length} funcionando<br>
+    Variables públicas: {publicResults.filter(r => r.status === 'success').length}/{publicResults.length} funcionando<br>
+    <br>
+    <strong>💡 Nota:</strong> Las variables privadas usan prioridad Cloudflare → .env<br>
+    Las variables públicas siempre usan configuración tradicional.
+</div>
+
+<p><small>Borra este archivo cuando termines de verificar</small></p>
+</body>
+</html>
