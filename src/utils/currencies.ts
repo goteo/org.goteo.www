@@ -1,4 +1,4 @@
-import { getDefaultCurrency } from "./consts";
+import { getDefaultCurrency, getDefaultLanguage } from "./consts";
 
 type CurrencyData = {
     symbol: string;
@@ -173,24 +173,30 @@ const currencySymbols: Record<string, CurrencyData> = {
 
 export function formatCurrency(
     amount?: number,
-    currency?: string,
-    options?: { showSymbol?: boolean; spaceBetween?: boolean },
+    currency?: string | null,
+    options: { asLocaleString: boolean } = { asLocaleString: true },
 ): string {
     if (amount === undefined) return "";
-    if (currency === undefined) currency = getDefaultCurrency();
+    if (currency === undefined || currency === null) currency = getDefaultCurrency();
 
     const currencyData = currencySymbols[currency];
     if (!currencyData) return "";
 
-    const { symbol, decimals } = currencyData;
+    const { decimals } = currencyData;
     const rawAmount = amount / Math.pow(10, decimals);
     const hasDecimals = rawAmount % 1 !== 0;
     const formattedAmount = hasDecimals ? rawAmount.toFixed(decimals) : rawAmount.toFixed(0);
 
-    const showSymbol = options?.showSymbol ?? false;
-    const spaceBetween = options?.spaceBetween ?? false;
+    const asLocaleString = options.asLocaleString;
 
-    return showSymbol ? `${formattedAmount}${spaceBetween ? " " : ""}${symbol}` : formattedAmount;
+    const locale = typeof navigator !== "undefined" ? navigator.language : getDefaultLanguage();
+    const formatter = new Intl.NumberFormat(locale, {
+        currency,
+        style: "currency",
+        minimumFractionDigits: 0,
+    });
+
+    return asLocaleString ? formatter.format(rawAmount) : formattedAmount;
 }
 
 export function getUnit(currency?: string): number {

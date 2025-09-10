@@ -5,7 +5,7 @@
     "minimumReached": "¡Mínimo conseguido!",
     "optimumReached": "¡Óptimo conseguido!",
     "obtained": "Obtenido",
-    "donations": "Donaciones realizadas",
+    "supports": "Donantes únicos",
     "optimum": "Óptimo",
     "minimum": "Mínimo",
     "donate": "Donar a esta campaña"
@@ -70,10 +70,16 @@
           "title": "Donaciones y mensajes de apoyo de la comunidad"
         },
         "contribution": "Aporte",
+        "noComment": "Sin comentario.",
         "matchfunding": {
           "contribution": "Suma de los aportes",
           "aported": "Aportados",
           "up_to": "de hasta"
+        },
+        "anonymous": {
+          "length": "anónimos",
+          "title": "Donaciones anónimas",
+          "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
         }
       }
     },

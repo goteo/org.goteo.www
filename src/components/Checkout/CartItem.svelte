@@ -30,7 +30,7 @@
                 </div>
                 <div class="flex flex-col gap-4">
                     <p class="text-tertiary text-[32px] font-bold">
-                        {formatCurrency(item.amount, item.currency, { showSymbol: true })}
+                        {formatCurrency(item.amount, item.currency)}
                     </p>
                     <p class="text-tertiary font-bold">{item.title}</p>
                     <p class="text-[#575757]">

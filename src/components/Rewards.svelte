@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import type { ProjectReward, Project, Accounting } from "../openapi/client/index";
     import { extractId } from "../utils/extractId";
-    import { formatCurrency, defaultCurrency } from "../utils/currencies";
+    import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import { apiProjectRewardsGetCollection, apiAccountingsIdGet } from "../openapi/client/index";
     import { t } from "../i18n/store.ts";
@@ -33,13 +33,13 @@
 
         cart.addItem({
             title: reward.title,
-            amount: reward.money?.amount ?? 0,
+            amount: reward.money?.amount,
             quantity: 1,
             image: "",
             project: Number(projectId),
             target,
-            claimed: (reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0),
-            currency: reward.money?.currency || defaultCurrency(),
+            claimed: reward.unitsTotal! - reward.unitsAvailable!,
+            currency: reward.money?.currency,
         });
     }
 
@@ -49,7 +49,7 @@
         if (
             isNaN(numericAmount) ||
             !selectedReward ||
-            numericAmount * getUnit(selectedReward.money?.currency ?? undefined) <
+            numericAmount * getUnit(selectedReward.money?.currency) <
                 (selectedReward.money?.amount ?? 0)
         ) {
             alert($t("rewards.error-invalid-amount"));
@@ -60,13 +60,13 @@
 
         cart.addItem({
             title: selectedReward.title,
-            amount: numericAmount * getUnit(selectedReward.money?.currency ?? undefined),
+            amount: numericAmount * getUnit(selectedReward.money?.currency),
             quantity: 1,
             image: "",
             project: Number(extractId(selectedReward.project)),
             target,
-            claimed: (selectedReward.unitsTotal ?? 0) - (selectedReward.unitsAvailable ?? 0),
-            currency: selectedReward.money?.currency || defaultCurrency(),
+            claimed: selectedReward.unitsTotal! - selectedReward.unitsAvailable!,
+            currency: selectedReward.money?.currency,
         });
 
         if (action === "checkout") {
@@ -83,12 +83,10 @@
             ...selectedReward,
             description: await renderMarkdown(selectedReward.description || ""),
         };
-        customAmount =
-            (reward.money?.amount ?? 0) / getUnit(reward.money?.currency ?? defaultCurrency());
+        customAmount = reward.money?.amount! / getUnit(reward.money?.currency);
         rawInput = formatCurrency(
-            customAmount * getUnit(reward.money?.currency ?? defaultCurrency()),
-            reward.money?.currency ?? defaultCurrency(),
-            { showSymbol: true },
+            customAmount * getUnit(reward.money?.currency),
+            reward.money?.currency,
         );
 
         rewardModal = true;
@@ -119,7 +117,7 @@
             image: "",
             project: Number(project.id),
             target,
-            currency: (accounting as Accounting)?.currency || defaultCurrency(),
+            currency: accounting?.currency!,
         });
         window.location.href = "/checkout";
     }
@@ -204,8 +202,8 @@
                 {#each rewards ? (limit ? rewards.slice(0, limit) : rewards) : [] as reward}
                     <li
                         class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
-                        class:opacity-50={reward.hasUnits && (reward.unitsAvailable ?? 0) === 0}
-                        class:cursor-not-allowed={reward.hasUnits &&
+                        class:opacity-50={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
+                        class:cursor-not-allowed={reward.isFinite &&
                             (reward.unitsAvailable ?? 0) === 0}
                     >
                         <div class="flex flex-col gap-4">
@@ -217,18 +215,10 @@
                                         {@html $t(
                                             "rewards.by-amount",
                                             {
-                                                amount: `${
-                                                    reward.money?.currency &&
-                                                    reward.money?.amount != null
-                                                        ? formatCurrency(
-                                                              reward.money.amount,
-                                                              reward.money.currency,
-                                                              {
-                                                                  showSymbol: true,
-                                                              },
-                                                          )
-                                                        : ""
-                                                }`,
+                                                amount: `${formatCurrency(
+                                                    reward.money.amount,
+                                                    reward.money.currency,
+                                                )}`,
                                             },
                                             { allowHTML: true },
                                         )}
@@ -245,8 +235,9 @@
                                 </div>
                             {/if}
                         </div>
+
                         {#if !limit}
-                            <div class="flex w-full justify-between">
+                            <div class="mt-auto flex w-full justify-between">
                                 <div
                                     class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
                                 >
@@ -254,14 +245,12 @@
                                     <span>
                                         {@html $t(
                                             "rewards.donators",
-                                            {
-                                                donators: `${(reward.unitsTotal ?? 0) - (reward.unitsAvailable ?? 0)}`,
-                                            },
+                                            { donators: reward.unitsClaimed },
                                             { allowHTML: true },
                                         )}
                                     </span>
                                 </div>
-                                {#if reward.hasUnits}
+                                {#if reward.isFinite}
                                     <div
                                         class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
                                     >
@@ -269,9 +258,7 @@
                                         <span>
                                             {@html $t(
                                                 "rewards.units-available",
-                                                {
-                                                    units: `${reward.unitsAvailable}`,
-                                                },
+                                                { units: `${reward.unitsAvailable}` },
                                                 { allowHTML: true },
                                             )}
                                         </span>
@@ -283,19 +270,15 @@
                         <button
                             type="button"
                             onclick={() => handleDirectDonate(reward)}
-                            disabled={reward.hasUnits && (reward.unitsAvailable ?? 0) === 0}
-                            class:cursor-not-allowed={reward.hasUnits &&
+                            disabled={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
+                            class:cursor-not-allowed={reward.isFinite &&
                                 (reward.unitsAvailable ?? 0) === 0}
-                            class:cursor-pointer={!reward.hasUnits ||
+                            class:cursor-pointer={!reward.isFinite ||
                                 (reward.unitsAvailable ?? 0) > 0}
                             class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
                         >
                             {$t("reward.donate")}
-                            {reward.money?.currency && reward.money?.amount != null
-                                ? formatCurrency(reward.money.amount, reward.money.currency, {
-                                      showSymbol: true,
-                                  })
-                                : ""}
+                            {formatCurrency(reward.money.amount, reward.money.currency)}
                         </button>
                     </li>
                 {/each}
@@ -315,18 +298,10 @@
                                 {@html $t(
                                     "rewards.by-amount-or-more",
                                     {
-                                        amount: `${
-                                            selectedReward.money?.currency &&
-                                            selectedReward.money?.amount != null
-                                                ? formatCurrency(
-                                                      selectedReward.money.amount,
-                                                      selectedReward.money.currency,
-                                                      {
-                                                          showSymbol: true,
-                                                      },
-                                                  )
-                                                : ""
-                                        }`,
+                                        amount: `${formatCurrency(
+                                            selectedReward.money.amount,
+                                            selectedReward.money.currency,
+                                        )}`,
                                     },
                                     { allowHTML: true },
                                 )}
@@ -356,9 +331,7 @@
                                             rawInput = customAmount.toString();
                                         }}
                                         onblur={() => {
-                                            const currency =
-                                                selectedReward?.money?.currency ??
-                                                defaultCurrency();
+                                            const currency = selectedReward?.money?.currency!;
                                             const unit = getUnit(currency);
 
                                             const parsed = parseFloat(
@@ -368,11 +341,7 @@
 
                                             rawInput =
                                                 customAmount > 0
-                                                    ? formatCurrency(
-                                                          customAmount * unit,
-                                                          currency,
-                                                          { showSymbol: true },
-                                                      )
+                                                    ? formatCurrency(customAmount * unit, currency)
                                                     : "";
                                         }}
                                         placeholder={$t("rewards.donation-free.placeholder")}
@@ -388,14 +357,12 @@
                                 <span>
                                     {@html $t(
                                         "rewards.donators",
-                                        {
-                                            donators: `${(selectedReward.unitsTotal ?? 0) - (selectedReward.unitsAvailable ?? 0)}`,
-                                        },
+                                        { donators: selectedReward.unitsClaimed! },
                                         { allowHTML: true },
                                     )}
                                 </span>
                             </div>
-                            {#if selectedReward.hasUnits}
+                            {#if selectedReward.isFinite}
                                 <div
                                     class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
                                 >
@@ -403,9 +370,7 @@
                                     <span>
                                         {@html $t(
                                             "rewards.units-available",
-                                            {
-                                                units: `${selectedReward.unitsAvailable}`,
-                                            },
+                                            { units: selectedReward.unitsAvailable! },
                                             { allowHTML: true },
                                         )}
                                     </span>

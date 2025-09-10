@@ -67,7 +67,7 @@
                 id="tab-project"
                 role="tabpanel"
                 aria-labelledby="tab-button-project"
-                class="flex max-w-4xl flex-col items-center gap-4"
+                class="flex max-w-4xl flex-col gap-4"
             >
                 {@html contentDescription}
             </div>

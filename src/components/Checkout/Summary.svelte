@@ -38,7 +38,7 @@
         <p
             class={`text-[56px] leading-tight font-bold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
         >
-            {formatCurrency(amount ?? $total, defaultCurrency, { showSymbol: true })}
+            {formatCurrency(amount ?? $total, defaultCurrency)}
         </p>
     </div>
 

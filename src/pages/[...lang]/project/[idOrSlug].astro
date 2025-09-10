@@ -17,6 +17,7 @@ import {
     apiAccountingBalancePointsGetCollection,
     apiAccountingsIdbalanceGet,
 } from "../../../openapi/client/sdk.gen";
+import { apiProjectSupportsGetCollection } from "../../../openapi/client/sdk.gen";
 
 if (!idOrSlug) {
     throw new Error("Project ID or Project Slug is undefined.");
@@ -44,24 +45,32 @@ const { data: owner } = await apiUsersIdGet({
 
 const ownerName = owner?.displayName || "";
 
-const { data: donations } = await apiGatewayCheckoutsGetCollection({
-    headers: {
-        Accept: "application/ld+json",
-        //TODO: fix get donations from API
-        // Authorization: `Bearer ${Astro.cookies.get("access-token")}`,
-    },
+const { data: supports } = await apiProjectSupportsGetCollection({
+    query: { project: String(project.id!) },
+    headers: { Accept: "application/ld+json" },
 });
+
+// @ts-ignore
+const totalSupports = supports.totalItems;
 
 const deadlineKey = project?.deadline as keyof Project["calendar"];
 
-const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
-    query: {
-        accounting: project?.accounting ?? "",
-        start: project?.calendar?.release ?? "",
-        end: project?.calendar?.[deadlineKey] ?? "",
-        aggregate: true,
-    },
-});
+const balancePoints = await (async () => {
+    const end = new Date(project?.calendar?.[deadlineKey]!);
+
+    end.setDate(end.getDate() + 1);
+
+    const { data: points } = await apiAccountingBalancePointsGetCollection({
+        query: {
+            accounting: project?.accounting ?? "",
+            start: project?.calendar?.release ?? "",
+            end: end.toISOString(),
+            aggregate: true,
+        },
+    });
+
+    return points;
+})();
 ---
 
 <Layout title={project.title} description={project.description}>
@@ -72,7 +81,7 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
         {accounting}
         {accountingBalance}
         {ownerName}
-        {donations}
+        {totalSupports}
         {balancePoints}
         client:load
     />
