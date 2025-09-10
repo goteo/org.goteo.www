@@ -501,9 +501,9 @@ export type GatewayCharge = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
-    dateCreated?: string;
-    dateUpdated?: string;
+    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -511,23 +511,11 @@ export type GatewayCharge = {
  */
 export type GatewayChargeChargeUpdationDto = {
     /**
-     * The unique identifier for the charge.
+     * The unique identifier for the GatewayCharge.
      */
-    id?: number;
+    readonly id?: number;
     /**
-     * The type of the charge.
-     */
-    type?: 'single' | 'recurring';
-    /**
-     * The title or name of the charge.
-     */
-    title?: string;
-    /**
-     * A detailed description of the charge.
-     */
-    description?: string;
-    /**
-     * The current payment status of the charge.
+     * To ask for a refund, set the status `to_refund`.
      */
     status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
 };
@@ -576,9 +564,9 @@ export type GatewayChargeJsonld = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
-    dateCreated?: string;
-    dateUpdated?: string;
+    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -623,8 +611,8 @@ export type GatewayCheckout = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<Tracking>;
-    dateCreated?: string;
-    dateUpdated?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -688,8 +676,8 @@ export type GatewayCheckoutJsonld = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<TrackingJsonld>;
-    dateCreated?: string;
-    dateUpdated?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 export type Link = {
@@ -1665,7 +1653,6 @@ export type ProjectReward = {
      * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
-    readonly claims?: Array<string>;
     /**
      * List of the available content locales.
      */
@@ -1717,7 +1704,6 @@ export type ProjectRewardJsonld = {
      * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
-    readonly claims?: Array<string>;
     /**
      * List of the available content locales.
      */
@@ -1733,6 +1719,34 @@ export type ProjectRewardClaim = {
      * The User claiming the ProjectReward.
      */
     readonly owner?: string;
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
+};
+
+/**
+ * A ProjectRewardClaim represents the will of an User who wishes to obtain one ProjectReward.
+ */
+export type ProjectRewardClaimRewardClaimCreationDto = {
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
+};
+
+/**
+ * A ProjectRewardClaim represents the will of an User who wishes to obtain one ProjectReward.
+ */
+export type ProjectRewardClaimRewardClaimCreationDtoJsonld = {
     /**
      * The GatewayCharge granting access to the ProjectReward.
      */
@@ -4179,6 +4193,12 @@ export type ApiProjectRewardClaimsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        owner?: string;
+        'owner[]'?: Array<string>;
+        charge?: string;
+        'charge[]'?: Array<string>;
+        reward?: string;
+        'reward[]'?: Array<string>;
     };
     url: '/v4/project_reward_claims';
 };
@@ -4196,7 +4216,7 @@ export type ApiProjectRewardClaimsPostData = {
     /**
      * The new ProjectRewardClaim resource
      */
-    body: ProjectRewardClaim;
+    body: ProjectRewardClaimRewardClaimCreationDto;
     path?: never;
     query?: never;
     url: '/v4/project_reward_claims';
@@ -4283,47 +4303,6 @@ export type ApiProjectRewardClaimsIdGetResponses = {
 };
 
 export type ApiProjectRewardClaimsIdGetResponse = ApiProjectRewardClaimsIdGetResponses[keyof ApiProjectRewardClaimsIdGetResponses];
-
-export type ApiProjectRewardClaimsIdPatchData = {
-    /**
-     * The updated ProjectRewardClaim resource
-     */
-    body: ProjectRewardClaim;
-    path: {
-        /**
-         * ProjectRewardClaim identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/project_reward_claims/{id}';
-};
-
-export type ApiProjectRewardClaimsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-    /**
-     * An error occurred
-     */
-    422: ConstraintViolationJsonldJsonld;
-};
-
-export type ApiProjectRewardClaimsIdPatchError = ApiProjectRewardClaimsIdPatchErrors[keyof ApiProjectRewardClaimsIdPatchErrors];
-
-export type ApiProjectRewardClaimsIdPatchResponses = {
-    /**
-     * ProjectRewardClaim resource updated
-     */
-    200: ProjectRewardClaim;
-};
-
-export type ApiProjectRewardClaimsIdPatchResponse = ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
 
 export type ApiProjectSupportsGetCollectionData = {
     body?: never;
