@@ -235,8 +235,9 @@
                                 </div>
                             {/if}
                         </div>
+
                         {#if !limit}
-                            <div class="flex w-full justify-between">
+                            <div class="flex w-full justify-between mt-auto">
                                 <div
                                     class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
                                 >
