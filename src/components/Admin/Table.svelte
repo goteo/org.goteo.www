@@ -37,7 +37,7 @@
         apiProjectsIdOrSlugGetUrl,
         apiUsersIdGetUrl,
     } from "../../openapi/client/paths.gen.ts";
-    import { getBaseUrl } from "../../utils/consts.ts";
+    import { getApiUrl } from "../../utils/consts.ts";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -321,7 +321,7 @@
 
                 const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
                     path: { id: id },
-                    baseUrl: getBaseUrl(),
+                    baseUrl: getApiUrl(),
                     url: apiAccountingsIdGetUrl,
                 });
 
@@ -335,7 +335,7 @@
 
                 const projectIri = client.buildUrl<ApiProjectsIdOrSlugGetData>({
                     path: { idOrSlug: id },
-                    baseUrl: getBaseUrl(),
+                    baseUrl: getApiUrl(),
                     url: apiProjectsIdOrSlugGetUrl,
                 });
 
@@ -352,7 +352,7 @@
 
                 const userIri = client.buildUrl<ApiUsersIdGetData>({
                     path: { id: id },
-                    baseUrl: getBaseUrl(),
+                    baseUrl: getApiUrl(),
                     url: apiUsersIdGetUrl,
                 });
 

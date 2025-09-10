@@ -1,8 +1,8 @@
-import { getBaseUrl } from "../utils/consts";
+import { getApiUrl } from "../utils/consts";
 
 import type { CreateClientConfig } from "./client/client.gen";
 
 export const createClientConfig: CreateClientConfig = (config) => ({
     ...config,
-    baseUrl: getBaseUrl(),
+    baseUrl: getApiUrl()
 });
