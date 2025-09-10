@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+import { formatCurrency } from "../../src/utils/currencies";
+
 describe("Project Page - Donation and Reward Verification", () => {
     beforeEach(() => {
         cy.intercept("GET", "**/api/auth/me", {
@@ -56,8 +58,9 @@ describe("Project Page - Donation and Reward Verification", () => {
                     title: 'CD "Al Paso de los Caracoles" + 2 Camisetas',
                     description: "CD físico del álbum junto con 2 camisetas oficiales",
                     money: { amount: 4000, currency: "EUR" },
-                    hasUnits: true,
+                    isFinite: true,
                     unitsTotal: 5,
+                    unitsClaimed: 0,
                     unitsAvailable: 5,
                     locales: ["es"],
                 },
@@ -111,7 +114,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                     cy.get('button[type="button"]')
                         .should("be.visible")
                         .and("contain.text", "Dona")
-                        .and("contain.text", "40€");
+                        .and("contain.text", formatCurrency(4000, "EUR"));
                 });
             } else {
                 cy.log(

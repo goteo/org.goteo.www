@@ -1,3 +1,5 @@
+import { formatCurrency } from "../../../src/utils/currencies";
+
 describe("View project rewards", () => {
     beforeEach(() => {
         cy.intercept("GET", "**/v4/project_rewards**", {
@@ -9,8 +11,9 @@ describe("View project rewards", () => {
                     title: "CD + 2 Camisetas",
                     description: "CD físico firmado + 2 camisetas edición limitada",
                     money: { amount: 4000, currency: "EUR" },
-                    hasUnits: true,
+                    isFinite: true,
                     unitsTotal: 5,
+                    unitsClaimed: 0,
                     unitsAvailable: 5,
                     locales: ["es"],
                 },
@@ -20,8 +23,9 @@ describe("View project rewards", () => {
                     title: "CD Al Paso de los Caracoles",
                     description: "CD físico firmado",
                     money: { amount: 1500, currency: "EUR" },
-                    hasUnits: false,
+                    isFinite: false,
                     unitsTotal: 0,
+                    unitsClaimed: 0,
                     unitsAvailable: 0,
                     locales: ["es"],
                 },
@@ -36,8 +40,8 @@ describe("View project rewards", () => {
         cy.visit("/es/project/100", { failOnStatusCode: false });
         cy.wait("@rewardsMock");
 
-        cy.get("body").should("contain", "40€");
-        cy.get("body").should("contain", "15€");
+        cy.get("body").should("contain", formatCurrency(4000, "EUR"));
+        cy.get("body").should("contain", formatCurrency(1500, "EUR"));
 
         cy.get("body").should("contain", "CD + 2 Camisetas");
         cy.get("body").should("contain", "CD Al Paso de los Caracoles");
