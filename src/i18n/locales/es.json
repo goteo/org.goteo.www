@@ -123,7 +123,10 @@
     }
   },
   "navigation": {
-    "search": "Busca tu campaña"
+    "search": {
+      "placeholder": "Busca tu campaña"
+    },
+    "categories": "Categorías"
   },
   "categories": {
     "solidary": "Solidario",

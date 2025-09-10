@@ -54,7 +54,10 @@
     }
   },
   "navigation": {
-    "search": "Search for your campaign"
+    "search": {
+      "placeholder": "Search for your campaign"
+    },
+    "categories": "Categories"
   },
   "categories": {
     "solidary": "Solidarity",

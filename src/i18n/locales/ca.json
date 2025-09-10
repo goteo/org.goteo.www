@@ -51,7 +51,10 @@
     }
   },
   "navigation": {
-    "search": "Busca tu campaña"
+    "search": {
+      "placeholder": "Cerca la teva campanya"
+    },
+    "categories": "Categories"
   },
   "categories": {
     "solidary": "Solidario",
