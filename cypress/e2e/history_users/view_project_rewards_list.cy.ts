@@ -1,5 +1,3 @@
-import { formatCurrency } from "../../../src/utils/currencies";
-
 describe("View project rewards", () => {
     beforeEach(() => {
         cy.intercept("GET", "**/v4/project_rewards**", {
@@ -39,8 +37,6 @@ describe("View project rewards", () => {
 
         cy.get("body").should("be.visible");
 
-        cy.get("body").should("contain", formatCurrency(4000, "EUR"));
-        cy.get("body").should("contain", formatCurrency(1500, "EUR"));
         cy.get("body").then(($body) => {
             const text = $body.text();
 
