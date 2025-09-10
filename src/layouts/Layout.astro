@@ -18,13 +18,15 @@ const { title, description } = Astro.props;
     <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
         <title>{title}</title>
         <Metatags {title} {description} />
     </head>
-    <body class="grid">
+    <body class="grid min-h-screen overflow-x-hidden">
         <Header />
-        <slot />
+        <main class="flex-1">
+            <slot />
+        </main>
         <!-- TODO: Review ThemeToggle-->
         <!-- <div class="wrapper">
             <ThemeToggle />
