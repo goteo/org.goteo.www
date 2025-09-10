@@ -57,9 +57,7 @@
         }
 
         hasError = false;
-        rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency, {
-            showSymbol: true,
-        });
+        rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency);
 
         const $cart = get(cart);
         const existing = $cart.items.find((i) => i.target === accountingIdPlatoniq);
@@ -75,12 +73,10 @@
 
         if (item) {
             value = item.amount / getUnit(defaultCurrency);
-            rawInput = formatCurrency(item.amount, defaultCurrency, { showSymbol: true });
+            rawInput = formatCurrency(item.amount, defaultCurrency);
         } else {
             cart.addItem(createDonationItem(value));
-            rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency, {
-                showSymbol: true,
-            });
+            rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency);
         }
 
         initialized = true;

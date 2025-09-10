@@ -588,9 +588,7 @@
                     >
                     {#if charge.money.amount && charge.money.currency}
                         <TableBodyCell class="border-t border-b border-[#E6E5F7]">
-                            {formatCurrency(charge.money.amount, charge.money.currency, {
-                                showSymbol: true,
-                            })}
+                            {formatCurrency(charge.money.amount, charge.money.currency)}
                         </TableBodyCell>
                     {:else}
                         <TableBodyCell class="border-t border-b border-[#E6E5F7]">—</TableBodyCell>

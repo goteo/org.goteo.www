@@ -5,6 +5,7 @@
         Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         AccountingBalance,
+        ProjectSupport,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
@@ -28,6 +29,7 @@
     export let accountingBalance: AccountingBalance;
     export let ownerName: string;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    export let totalSupports: number = 0;
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
     const limit = 3;
@@ -60,7 +62,7 @@
                     <span class="text-tertiary text-2xl font-bold underline"> {ownerName}</span>
                 </h3>
                 <h1 class="text-[40px]/[48px] font-bold text-[#575757]">
-                    {project.title} <span>{ownerName}</span>
+                    {project.title}
                 </h1>
             </div>
 
@@ -105,7 +107,7 @@
             />
         </div>
         <div class="h-full w-[30%]">
-            <Card {project} {accountingBalance} {balancePoints} />
+            <Card {project} {totalSupports} {accountingBalance} {balancePoints} />
         </div>
     </div>
 

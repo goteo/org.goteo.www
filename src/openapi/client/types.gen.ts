@@ -59,7 +59,7 @@ export type AccountingBalance = {
     /**
      * The money currently held by the Accounting.
      */
-    balance?: Money;
+    balance?: ApiMoney;
 };
 
 /**
@@ -79,7 +79,7 @@ export type AccountingBalanceJsonld = {
     /**
      * The money currently held by the Accounting.
      */
-    balance?: MoneyJsonld;
+    balance?: ApiMoneyJsonld;
 };
 
 /**
@@ -100,7 +100,7 @@ export type AccountingBalancePoint = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: Money;
+    balance?: ApiMoney;
     /**
      * The number of items aggregated in this point.
      */
@@ -127,7 +127,7 @@ export type AccountingBalancePointJsonld = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyJsonld;
+    balance?: ApiMoneyJsonld;
     /**
      * The number of items aggregated in this point.
      */
@@ -148,7 +148,7 @@ export type AccountingTransaction = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: Money;
+    money?: ApiMoney;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -180,7 +180,7 @@ export type AccountingTransactionJsonld = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyJsonld;
+    money?: ApiMoneyJsonld;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -191,7 +191,7 @@ export type AccountingTransactionJsonld = {
     target?: string;
 };
 
-export type ApiResourceMoney = {
+export type ApiMoney = {
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -201,9 +201,13 @@ export type ApiResourceMoney = {
      * 3-letter ISO 4217 currency code.
      */
     currency: string;
+    /**
+     * Conversion metadata.
+     */
+    conversion?: Conversion | null;
 };
 
-export type ApiResourceMoneyJsonld = {
+export type ApiMoneyJsonld = {
     '@context'?: string | {
         '@vocab': string;
         hydra: 'http://www.w3.org/ns/hydra/core#';
@@ -220,6 +224,10 @@ export type ApiResourceMoneyJsonld = {
      * 3-letter ISO 4217 currency code.
      */
     currency: string;
+    /**
+     * Conversion metadata.
+     */
+    conversion?: ConversionJsonld | null;
 };
 
 export type Budget = {
@@ -255,19 +263,19 @@ export type BudgetSummary = {
     /**
      * The total money by the included items.
      */
-    money?: Money;
+    money?: ApiMoney;
     /**
      * The total money of type 'task'.
      */
-    task?: Money;
+    task?: ApiMoney;
     /**
      * The total money of type 'material'.
      */
-    material?: Money;
+    material?: ApiMoney;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: Money;
+    infra?: ApiMoney;
 };
 
 export type BudgetSummaryJsonld = {
@@ -281,19 +289,19 @@ export type BudgetSummaryJsonld = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyJsonld;
+    money?: ApiMoneyJsonld;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyJsonld;
+    task?: ApiMoneyJsonld;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyJsonld;
+    material?: ApiMoneyJsonld;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyJsonld;
+    infra?: ApiMoneyJsonld;
 };
 
 /**
@@ -344,6 +352,31 @@ export type ConstraintViolationJsonldJsonld = {
     readonly type?: string;
     readonly title?: string | null;
     readonly instance?: string | null;
+};
+
+export type Conversion = {
+    rounding?: string;
+    from?: Money;
+    to?: Money;
+    rate?: number;
+    date?: string;
+    provider?: string;
+};
+
+export type ConversionJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    rounding?: string;
+    from?: MoneyJsonld;
+    to?: MoneyJsonld;
+    rate?: number;
+    date?: string;
+    provider?: string;
 };
 
 /**
@@ -464,13 +497,13 @@ export type GatewayCharge = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: Money;
+    money: ApiMoney;
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
-    dateCreated?: string;
-    dateUpdated?: string;
+    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -478,23 +511,11 @@ export type GatewayCharge = {
  */
 export type GatewayChargeChargeUpdationDto = {
     /**
-     * The unique identifier for the charge.
+     * The unique identifier for the GatewayCharge.
      */
-    id?: number;
+    readonly id?: number;
     /**
-     * The type of the charge.
-     */
-    type?: 'single' | 'recurring';
-    /**
-     * The title or name of the charge.
-     */
-    title?: string;
-    /**
-     * A detailed description of the charge.
-     */
-    description?: string;
-    /**
-     * The current payment status of the charge.
+     * To ask for a refund, set the status `to_refund`.
      */
     status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
 };
@@ -539,13 +560,13 @@ export type GatewayChargeJsonld = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * The status of the charge item with the Gateway.
      */
-    status: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
-    dateCreated?: string;
-    dateUpdated?: string;
+    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -590,8 +611,8 @@ export type GatewayCheckout = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<Tracking>;
-    dateCreated?: string;
-    dateUpdated?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -655,8 +676,8 @@ export type GatewayCheckoutJsonld = {
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<TrackingJsonld>;
-    dateCreated?: string;
-    dateUpdated?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 export type Link = {
@@ -987,7 +1008,7 @@ export type MatchStrategy = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiResourceMoney;
+    limit: ApiMoney;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1041,7 +1062,7 @@ export type MatchStrategyJsonld = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiResourceMoneyJsonld;
+    limit: ApiMoneyJsonld;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1056,15 +1077,9 @@ export type MatchStrategyJsonld = {
 };
 
 export type Money = {
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount?: number | null;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string | null;
+    amount?: number;
+    currency?: string;
+    conversion?: Conversion | null;
 };
 
 export type MoneyJsonld = {
@@ -1075,15 +1090,9 @@ export type MoneyJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount?: number | null;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency?: string | null;
+    amount?: number;
+    currency?: string;
+    conversion?: ConversionJsonld | null;
 };
 
 /**
@@ -1262,7 +1271,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1395,7 +1404,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1459,7 +1468,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1505,7 +1514,7 @@ export type ProjectBudgetItem = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiResourceMoney;
+    money: ApiMoney;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1546,7 +1555,7 @@ export type ProjectBudgetItemJsonld = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiResourceMoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1626,18 +1635,22 @@ export type ProjectReward = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: Money;
+    money: ApiMoney;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
-    hasUnits: boolean;
+    isFinite: boolean;
     /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
+     * For finite rewards, the total amount of existing units.\
+     * Required if `isFinite`.
      */
-    unitsTotal?: number;
+    unitsTotal?: number | null;
     /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
+     * The total amount of claims on this Reward.
+     */
+    readonly unitsClaimed?: number;
+    /**
+     * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
     /**
@@ -1673,18 +1686,22 @@ export type ProjectRewardJsonld = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyJsonld;
+    money: ApiMoneyJsonld;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
-    hasUnits: boolean;
+    isFinite: boolean;
     /**
-     * For finite rewards, the total amount of existing unitsTotal.\
-     * Required if `hasUnits`.
+     * For finite rewards, the total amount of existing units.\
+     * Required if `isFinite`.
      */
-    unitsTotal?: number;
+    unitsTotal?: number | null;
     /**
-     * For finite rewards, the currently available amount of unitsTotal that can be claimed.
+     * The total amount of claims on this Reward.
+     */
+    readonly unitsClaimed?: number;
+    /**
+     * For finite rewards, the currently available amount of units that can be claimed.
      */
     readonly unitsAvailable?: number;
     /**
@@ -1702,6 +1719,34 @@ export type ProjectRewardClaim = {
      * The User claiming the ProjectReward.
      */
     readonly owner?: string;
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
+};
+
+/**
+ * A ProjectRewardClaim represents the will of an User who wishes to obtain one ProjectReward.
+ */
+export type ProjectRewardClaimRewardClaimCreationDto = {
+    /**
+     * The GatewayCharge granting access to the ProjectReward.
+     */
+    charge: string;
+    /**
+     * The ProjectReward being claimed.
+     */
+    reward: string;
+};
+
+/**
+ * A ProjectRewardClaim represents the will of an User who wishes to obtain one ProjectReward.
+ */
+export type ProjectRewardClaimRewardClaimCreationDtoJsonld = {
     /**
      * The GatewayCharge granting access to the ProjectReward.
      */
@@ -1738,26 +1783,32 @@ export type ProjectRewardClaimJsonld = {
     reward: string;
 };
 
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
 export type ProjectSupport = {
     readonly id?: number;
     /**
-     * The User who created the ProjectSupport record.\
-     * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
-     */
-    readonly owner?: string | null;
-    /**
-     * The Project being targeted in the Charges.
+     * The Project being supported.
      */
     readonly project?: string;
     /**
-     * The Charges that were paid by the User.
+     * The Accounting of origin for the Transactions under this ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
      */
-    readonly charges?: Array<string>;
+    readonly origin?: string | null;
     /**
-     * The total monetary value of the Charges paid by the User.
+     * The Transactions that were issued to the Project by the origin.
      */
-    money?: Money;
+    readonly transactions?: Array<string>;
+    /**
+     * The total monetary value of the Transactions going to the Project.
+     */
+    money?: ApiMoney;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -1768,6 +1819,38 @@ export type ProjectSupport = {
     message?: string | null;
 };
 
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
+export type ProjectSupportTotalizedMoney = {
+    amount?: number;
+    currency?: string;
+    length?: number;
+};
+
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
+export type ProjectSupportTotalizedMoneyJsonld = {
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    amount?: number;
+    currency?: string;
+    length?: number;
+};
+
+/**
+ * ProjectSupports gather Transactions going from one same origin to one same Project.\
+ * \
+ * MatchCalls specially might make several different Transactions to the same Project,
+ * but their ProjectSupport remains the same just with updated money.
+ */
 export type ProjectSupportJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -1778,23 +1861,23 @@ export type ProjectSupportJsonld = {
     readonly '@type'?: string;
     readonly id?: number;
     /**
-     * The User who created the ProjectSupport record.\
-     * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
-     */
-    readonly owner?: string | null;
-    /**
-     * The Project being targeted in the Charges.
+     * The Project being supported.
      */
     readonly project?: string;
     /**
-     * The Charges that were paid by the User.
+     * The Accounting of origin for the Transactions under this ProjectSupport record.\
+     * \
+     * When `anonymous` is *true* it will only be public to admins and the User.
      */
-    readonly charges?: Array<string>;
+    readonly origin?: string | null;
     /**
-     * The total monetary value of the Charges paid by the User.
+     * The Transactions that were issued to the Project by the origin.
      */
-    money?: MoneyJsonld;
+    readonly transactions?: Array<string>;
+    /**
+     * The total monetary value of the Transactions going to the Project.
+     */
+    money?: ApiMoneyJsonld;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -3949,8 +4032,9 @@ export type ApiProjectRewardsGetCollectionData = {
         project?: string;
         'project[]'?: Array<string>;
         'order[money.amount]'?: 'asc' | 'desc';
+        'order[unitsClaimed]'?: 'asc' | 'desc';
         'order[unitsAvailable]'?: 'asc' | 'desc';
-        hasUnits?: boolean;
+        isFinite?: boolean;
     };
     url: '/v4/project_rewards';
 };
@@ -4109,6 +4193,12 @@ export type ApiProjectRewardClaimsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        owner?: string;
+        'owner[]'?: Array<string>;
+        charge?: string;
+        'charge[]'?: Array<string>;
+        reward?: string;
+        'reward[]'?: Array<string>;
     };
     url: '/v4/project_reward_claims';
 };
@@ -4126,7 +4216,7 @@ export type ApiProjectRewardClaimsPostData = {
     /**
      * The new ProjectRewardClaim resource
      */
-    body: ProjectRewardClaim;
+    body: ProjectRewardClaimRewardClaimCreationDto;
     path?: never;
     query?: never;
     url: '/v4/project_reward_claims';
@@ -4214,47 +4304,6 @@ export type ApiProjectRewardClaimsIdGetResponses = {
 
 export type ApiProjectRewardClaimsIdGetResponse = ApiProjectRewardClaimsIdGetResponses[keyof ApiProjectRewardClaimsIdGetResponses];
 
-export type ApiProjectRewardClaimsIdPatchData = {
-    /**
-     * The updated ProjectRewardClaim resource
-     */
-    body: ProjectRewardClaim;
-    path: {
-        /**
-         * ProjectRewardClaim identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/project_reward_claims/{id}';
-};
-
-export type ApiProjectRewardClaimsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-    /**
-     * An error occurred
-     */
-    422: ConstraintViolationJsonldJsonld;
-};
-
-export type ApiProjectRewardClaimsIdPatchError = ApiProjectRewardClaimsIdPatchErrors[keyof ApiProjectRewardClaimsIdPatchErrors];
-
-export type ApiProjectRewardClaimsIdPatchResponses = {
-    /**
-     * ProjectRewardClaim resource updated
-     */
-    200: ProjectRewardClaim;
-};
-
-export type ApiProjectRewardClaimsIdPatchResponse = ApiProjectRewardClaimsIdPatchResponses[keyof ApiProjectRewardClaimsIdPatchResponses];
-
 export type ApiProjectSupportsGetCollectionData = {
     body?: never;
     path?: never;
@@ -4267,10 +4316,11 @@ export type ApiProjectSupportsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        owner?: string;
-        'owner[]'?: Array<string>;
         project?: string;
         'project[]'?: Array<string>;
+        origin?: string;
+        'origin[]'?: Array<string>;
+        anonymous?: boolean;
     };
     url: '/v4/project_supports';
 };
@@ -4283,6 +4333,28 @@ export type ApiProjectSupportsGetCollectionResponses = {
 };
 
 export type ApiProjectSupportsGetCollectionResponse = ApiProjectSupportsGetCollectionResponses[keyof ApiProjectSupportsGetCollectionResponses];
+
+export type ApiProjectSupportsmoneyTotalGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        project?: string;
+        'project[]'?: Array<string>;
+        origin?: string;
+        'origin[]'?: Array<string>;
+        anonymous?: boolean;
+    };
+    url: '/v4/project_supports/money_total';
+};
+
+export type ApiProjectSupportsmoneyTotalGetCollectionResponses = {
+    /**
+     * Totalized money
+     */
+    200: ProjectSupportTotalizedMoney;
+};
+
+export type ApiProjectSupportsmoneyTotalGetCollectionResponse = ApiProjectSupportsmoneyTotalGetCollectionResponses[keyof ApiProjectSupportsmoneyTotalGetCollectionResponses];
 
 export type ApiProjectSupportsIdGetData = {
     body?: never;

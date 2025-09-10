@@ -19,9 +19,7 @@
             >{$t("payment.wallet-confirmation.currentBalance")}</span
         >
         <p class="text-[32px] font-bold text-[#462949]">
-            {formatCurrency(accountingBalance.amount, accountingBalance.currency, {
-                showSymbol: true,
-            })}
+            {formatCurrency(accountingBalance.amount, accountingBalance.currency)}
         </p>
     </div>
 
@@ -30,7 +28,7 @@
             >{$t("payment.wallet-confirmation.amountToUse")}
         </span>
         <p id="cart-total" class="text-[32px] font-bold text-red-500">
-            {formatCurrency($total, defaultCurrency, { showSymbol: true })}
+            {formatCurrency($total, defaultCurrency)}
         </p>
     </div>
 
@@ -39,9 +37,7 @@
             >{$t("payment.wallet-confirmation.remainingBalance")}
         </span>
         <p id="cart-difference" class="text-[32px] font-bold text-[#462949]">
-            {formatCurrency(accountingBalance.amount - $total, accountingBalance.currency, {
-                showSymbol: true,
-            })}
+            {formatCurrency(accountingBalance.amount - $total, accountingBalance.currency)}
         </p>
     </div>
 </div>
