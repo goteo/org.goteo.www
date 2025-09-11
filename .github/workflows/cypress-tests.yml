@@ -48,7 +48,7 @@ jobs:
             - name: Set API URL based on branch
               id: api-url
               run: |
-                  if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "master" ]]; then
+                  if [[ "${{ github.ref_name }}" == "main" ]]; then
                     echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
                     echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.ref_name }}" == "develop" ]]; then
@@ -61,24 +61,13 @@ jobs:
 
             - name: Create test env file
               run: |
+                  echo "NODE_ENV=test" >> .env
+                  echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
                   echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
                   echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
-                  echo "NODE_ENV=test" >> .env
-                  echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
-                  echo "SKIP_PAYMENT_GATEWAYS=true" >> .env
-                  echo "PAYMENT_GATEWAYS_CONFIG={}" >> .env
-                  echo "STRIPE_PUBLIC_KEY=pk_test_dummy" >> .env
-                  echo "STRIPE_SECRET_KEY=sk_test_dummy" >> .env
-                  echo "PAYPAL_CLIENT_ID=dummy" >> .env
-                  echo "PAYPAL_CLIENT_SECRET=dummy" >> .env
-                  echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
                   echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
-                  echo "API URL: ${{ steps.api-url.outputs.API_URL }}"
-                  echo "API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "LANGUAGE_DEFAULT=es" >> .env
-                  echo "CURRENCY_DEFAULT=EUR" >> .env
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
@@ -92,11 +81,13 @@ jobs:
                   CI: true
                   NODE_ENV: test
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
-                  PUBLIC_LANGUAGE_DEFAULT: es
                   CYPRESS_CONFIG_FILE: cypress.github.js
-                  PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
+                  PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
+                  PUBLIC_API_VERSION: v4
+                  PUBLIC_LANGUAGE_DEFAULT: es
+                  PUBLIC_CURRENCY_DEFAULT: EUR
 
             - name: Prepare artifact directories if tests failed
               if: failure()

@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SKIP_PAYMENT_GATEWAYS=true PAYMENT_GATEWAYS_ENABLED=false wrangler dev --env preview --port 4321 --ip 0.0.0.0",
+    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 wrangler dev --env preview --port 4321 --ip 0.0.0.0",
     "astro": "astro",
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",

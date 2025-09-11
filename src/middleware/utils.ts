@@ -4,11 +4,7 @@ import { getDefaultLanguage } from "../utils/consts";
 import type { APIContext } from "astro";
 
 function getDefaultLang(): string {
-    try {
-        return getDefaultLanguage();
-    } catch {
-        throw new Error(`LANGUAGE_DEFAULT is not defined in env`);
-    }
+    return getDefaultLanguage();
 }
 
 /**
