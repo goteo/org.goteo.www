@@ -2,10 +2,10 @@ import { defineConfig } from "@hey-api/openapi-ts";
 import { defaultPlugins } from "@hey-api/openapi-ts";
 
 import { defineConfig as operationPathsConfig } from "./src/openapi/plugins/operation-paths";
-import { getBaseUrl, getApiVersion } from "./src/utils/consts";
+import { getApiUrl, getApiVersion } from "./src/utils/consts";
 
 export default defineConfig({
-    input: `${getBaseUrl()}/${getApiVersion()}/docs.json`,
+    input: `${getApiUrl()}/${getApiVersion()}/docs.json`,
     output: "src/openapi/client",
     plugins: [
         ...defaultPlugins,
