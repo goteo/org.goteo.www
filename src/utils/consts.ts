@@ -1,7 +1,15 @@
 import dotenv from "dotenv";
 
+let isDotenvLoaded = false;
+
 export function getRuntimeEnvs() {
     if (typeof process !== "undefined") {
+        if (!isDotenvLoaded) {
+            dotenv.config();
+
+            isDotenvLoaded = true;
+        }
+
         if (import.meta.env.DEV) {
             dotenv.config({ override: true });
         }
