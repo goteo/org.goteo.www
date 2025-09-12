@@ -45,30 +45,8 @@ jobs:
             - name: Verify Cypress installation
               run: pnpm exec cypress verify
 
-            - name: Set API URL based on branch
-              id: api-url
-              run: |
-                  if [[ "${{ github.ref_name }}" == "main" ]]; then
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.ref_name }}" == "develop" ]]; then
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
-                  else
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
-                  fi
-
             - name: Create test env file
-              run: |
-                  echo "NODE_ENV=test" >> .env
-                  echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
-                  echo "CLOUDFLARE_INCLUDE_PROCESS_ENV=true >> .env"
-                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
-                  echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
-                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
-                  echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
+              run: cp .env.example .env
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
@@ -84,9 +62,8 @@ jobs:
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
-                  CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
                   CLOUDFLARE_INCLUDE_PROCESS_ENV: true
-                  PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
+                  PUBLIC_API_URL: ${{ env.PUBLIC_API_URL }}
                   PUBLIC_API_VERSION: v4
                   PUBLIC_LANGUAGE_DEFAULT: es
                   PUBLIC_CURRENCY_DEFAULT: EUR
@@ -105,7 +82,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/screenshots/**/*') != ''
               with:
-                  name: cypress-screenshots-${{ steps.api-url.outputs.ENVIRONMENT }}
+                  name: cypress-screenshots
                   path: cypress/screenshots
                   retention-days: 7
 
@@ -113,6 +90,6 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/videos/**/*') != ''
               with:
-                  name: cypress-videos-${{ steps.api-url.outputs.ENVIRONMENT }}
+                  name: cypress-videos
                   path: cypress/videos
                   retention-days: 7

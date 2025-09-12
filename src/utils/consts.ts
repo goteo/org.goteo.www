@@ -13,7 +13,7 @@ export function getRuntimeEnvs() {
         return import.meta.env;
     }
 
-    throw new Error("PUBLIC_Runtime not supported");
+    throw new Error("Runtime not supported");
 }
 
 export function getEnv(key: string): string {
