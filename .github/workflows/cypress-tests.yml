@@ -1,31 +1,93 @@
 name: Cypress E2E Tests
 
 on:
-  push:
+    push:
 
 jobs:
-  cypress-run:
-    runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}
+    cypress-run:
+        runs-on: ubuntu-latest
+        environment:
+            name: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
 
-      - name: Debug dynamic environment
-        run: |
-          echo "Branch: $GITHUB_REF_NAME"
-          echo "Resolved environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}"
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
+              with:
+                  version: 9
 
-      - name: Debug environment variables
-        env:
-            PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
-            PUBLIC_API_VERSION: ${{ secrets.PUBLIC_API_VERSION }}
-            PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT }}
-            PUBLIC_CURRENCY_DEFAULT: ${{ secrets.PUBLIC_CURRENCY_DEFAULT }}
-        run: |
-          echo "PUBLIC_API_URL: $PUBLIC_API_URL"
-          echo "PUBLIC_API_VERSION: $PUBLIC_API_VERSION"
-          echo "PUBLIC_LANGUAGE_DEFAULT: $PUBLIC_LANGUAGE_DEFAULT"
-          echo "PUBLIC_CURRENCY_DEFAULT: $PUBLIC_CURRENCY_DEFAULT"
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Install Wrangler
+              run: pnpm add --global wrangler
+
+            - name: Cache Cypress binary
+              uses: actions/cache@v4
+              id: cypress-cache
+              with:
+                  path: ~/.cache/Cypress
+                  key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      cypress-${{ runner.os }}-
+
+            - name: Install Cypress binary
+              if: steps.cypress-cache.outputs.cache-hit != 'true'
+              run: pnpm exec cypress install
+
+            - name: Verify Cypress installation
+              run: pnpm exec cypress verify
+
+            - name: Run Cypress tests
+              uses: cypress-io/github-action@v6
+              with:
+                  build: pnpm build
+                  start: pnpm preview:ci
+                  wait-on: http://localhost:4321
+                  wait-on-timeout: 120
+                  browser: chrome
+              env:
+                  CI: true
+                  NODE_ENV: test
+                  NODE_TLS_REJECT_UNAUTHORIZED: 0
+                  CYPRESS_CONFIG_FILE: cypress.github.js
+                  CYPRESS_MOCK_AUTH: true
+                  CLOUDFLARE_INCLUDE_PROCESS_ENV: true
+                  PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
+                  PUBLIC_API_VERSION: ${{ secrets.PUBLIC_API_VERSION }}
+                  PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT }}
+                  PUBLIC_CURRENCY_DEFAULT: ${{ secrets.PUBLIC_CURRENCY_DEFAULT }}
+
+            - name: Prepare artifact directories if tests failed
+              if: failure()
+              run: |
+                  mkdir -p cypress/screenshots
+                  mkdir -p cypress/videos
+                  echo "Screenshot files found:"
+                  find cypress/screenshots -type f | wc -l
+                  echo "Video files found:"
+                  find cypress/videos -type f | wc -l
+
+            - name: Upload screenshots if tests failed
+              uses: actions/upload-artifact@v4
+              if: failure() && hashFiles('cypress/screenshots/**/*') != ''
+              with:
+                  name: cypress-screenshots
+                  path: cypress/screenshots
+                  retention-days: 7
+
+            - name: Upload videos if tests failed
+              uses: actions/upload-artifact@v4
+              if: failure() && hashFiles('cypress/videos/**/*') != ''
+              with:
+                  name: cypress-videos
+                  path: cypress/videos
+                  retention-days: 7
