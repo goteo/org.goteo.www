@@ -19,6 +19,11 @@ jobs:
           echo "Resolved environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}"
 
       - name: Debug environment variables
+        env:
+            PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
+            PUBLIC_API_VERSION: ${{ secrets.PUBLIC_API_VERSION }}
+            PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT }}
+            PUBLIC_CURRENCY_DEFAULT: ${{ secrets.PUBLIC_CURRENCY_DEFAULT }}
         run: |
           echo "PUBLIC_API_URL: $PUBLIC_API_URL"
           echo "PUBLIC_API_VERSION: $PUBLIC_API_VERSION"
