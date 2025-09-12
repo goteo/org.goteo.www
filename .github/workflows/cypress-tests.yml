@@ -63,6 +63,7 @@ jobs:
               run: |
                   echo "NODE_ENV=test" >> .env
                   echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
+                  echo "CLOUDFLARE_INCLUDE_PROCESS_ENV=true >> .env"
                   echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
                   echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
                   echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
