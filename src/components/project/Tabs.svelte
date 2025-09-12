@@ -34,14 +34,19 @@
 </script>
 
 <div class="wrapper">
-    <div class="flex space-x-6" role="tablist" aria-label="Project tabs">
+    <div
+        class="flex overflow-x-auto no-scrollbar lg:space-x-6"
+        role="tablist"
+        aria-label="Project tabs"
+        style="scrollbar-width: none;"
+    >
         {#each tabs as tab}
             <button
                 role="tab"
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-tertiary inline-flex items-center rounded-t-lg border-t-1 border-r-1 border-l-1 border-[#E6E5F7] px-6 py-2 font-bold transition-colors duration-100 ease-in-out"
+                class="text-tertiary inline-flex items-center rounded-t-lg lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7] px-6 py-2 font-bold transition-colors duration-100 ease-in-out whitespace-nowrap flex-shrink-0"
                 class:bg-[#E6E5F7]={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
@@ -49,6 +54,15 @@
             </button>
         {/each}
     </div>
+    <style>
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </div>
 
 <div class="flex w-full justify-center bg-[#E6E5F7] py-20">
