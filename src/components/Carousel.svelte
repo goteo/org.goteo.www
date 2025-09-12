@@ -138,7 +138,7 @@
 <div class="relative w-full">
     <button
         onclick={() => scroll("left")}
-        class="absolute top-1/2 -left-4 z-10 h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:opacity-50"
+        class="absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:opacity-50 lg:block"
         disabled={isAtStart}
         aria-label="Scroll left"
     >
@@ -169,7 +169,7 @@
 
     <button
         onclick={() => scroll("right")}
-        class="absolute top-1/2 -right-4 z-10 h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:opacity-50"
+        class="absolute top-1/2 -right-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-2 shadow-md disabled:opacity-50 lg:block"
         disabled={isAtEnd}
         aria-label="Scroll right"
     >

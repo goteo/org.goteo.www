@@ -65,7 +65,7 @@
     </style>
 </div>
 
-<div class="flex w-full justify-center bg-[#E6E5F7] py-20">
+<div class="flex w-full justify-center bg-[#E6E5F7] py-10 lg:py-20">
     <div class="wrapper flex items-center justify-center">
         {#if activeTab === "rewards"}
             <div

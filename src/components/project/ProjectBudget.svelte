@@ -14,12 +14,25 @@
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
+    let itemsPerGroup = $state(3);
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
         infrastructure: "#462949",
         material: "#E94668",
     };
+
+    function updateItemsPerGroup() {
+        // Check for mobile devices using multiple criteria
+        const isMobileScreen = window.innerWidth <= 768;
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        
+        // Consider it mobile if it's a small screen OR (touch device AND mobile user agent)
+        const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
+        
+        itemsPerGroup = isMobile ? 1 : 3;
+    }
 
     onMount(async () => {
         const { data } = await apiProjectBudgetItemsGetCollection({
@@ -28,6 +41,19 @@
         projectsBudgetItems = data || [];
         minimumItems = projectsBudgetItems.filter((item) => item.deadline === "minimum");
         optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
+        
+        // Set initial value
+        updateItemsPerGroup();
+        
+        // Listen for window resize
+        window.addEventListener("resize", updateItemsPerGroup);
+    });
+
+    // Cleanup on component destroy
+    $effect(() => {
+        return () => {
+            window.removeEventListener("resize", updateItemsPerGroup);
+        };
     });
 </script>
 
@@ -44,7 +70,7 @@
                     project.budget.minimum.money.currency,
                 )}
             </span>
-            <Carousel gap={16} showDots={true} itemsPerGroup={3}>
+            <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if minimumItems.length === 0}
                     <div
                         class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
@@ -89,7 +115,7 @@
                     project.budget.optimum.money.currency,
                 )}
             </span>
-            <Carousel gap={16} showDots={true} itemsPerGroup={3}>
+            <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if optimumItems.length === 0}
                     <div
                         class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
