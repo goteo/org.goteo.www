@@ -25,12 +25,15 @@
     function updateItemsPerGroup() {
         // Check for mobile devices using multiple criteria
         const isMobileScreen = window.innerWidth <= 768;
-        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        const isMobileUserAgent = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        
+        const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const isMobileUserAgent =
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent,
+            );
+
         // Consider it mobile if it's a small screen OR (touch device AND mobile user agent)
         const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
-        
+
         itemsPerGroup = isMobile ? 1 : 3;
     }
 
@@ -41,10 +44,10 @@
         projectsBudgetItems = data || [];
         minimumItems = projectsBudgetItems.filter((item) => item.deadline === "minimum");
         optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
-        
+
         // Set initial value
         updateItemsPerGroup();
-        
+
         // Listen for window resize
         window.addEventListener("resize", updateItemsPerGroup);
     });
