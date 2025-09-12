@@ -6,10 +6,13 @@ on:
 jobs:
     cypress-run:
         runs-on: ubuntu-latest
-        environment: 
-          name: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}
+        environment:
+            name: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'develop' && 'staging' || 'dev' }}
 
         steps:
+            - name: Dump all environment variables
+              run: printenv | sort
+
             - name: Checkout code
               uses: actions/checkout@v4
 
