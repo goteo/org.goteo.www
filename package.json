@@ -6,7 +6,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 CLOUDFLARE_INCLUDE_PROCESS_ENV=true wrangler dev --env preview --port 4321 --ip 0.0.0.0",
+    "preview:ci": "wrangler dev --env preview --port 4321 --ip 0.0.0.0",
     "astro": "astro",
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
@@ -59,6 +59,6 @@
     "prettier-plugin-tailwindcss": "^0.6.12",
     "start-server-and-test": "^2.0.12",
     "typescript-eslint": "^8.33.1",
-    "wrangler": "^4.20.5"
+    "wrangler": "^4.36.0"
   }
 }
