@@ -84,6 +84,7 @@ jobs:
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
+                  CLOUDFLARE_INCLUDE_PROCESS_ENV: true
                   PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
                   PUBLIC_API_VERSION: v4
                   PUBLIC_LANGUAGE_DEFAULT: es
