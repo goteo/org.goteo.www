@@ -65,6 +65,7 @@ jobs:
                   PUBLIC_API_VERSION: ${{ secrets.PUBLIC_API_VERSION || 'v4' }}
                   PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT || 'es' }}
                   PUBLIC_CURRENCY_DEFAULT: ${{ secrets.PUBLIC_CURRENCY_DEFAULT || 'EUR' }}
+                  PUBLIC_PLATONIQ_ACCOUNTING_ID: ${{ secrets.PUBLIC_PLATONIQ_ACCOUNTING_ID || '375592' }}
 
             - name: Prepare artifact directories if tests failed
               if: failure()
