@@ -6,19 +6,24 @@ import UserIcon from "../svgs/UserIcon.astro";
 const { t } = Astro.locals;
 ---
 
-<header class="bg-primary py-8">
+<header class="bg-primary w-full max-w-screen py-4 md:py-8">
     <div class="wrapper flex items-center justify-between">
-        <a href="/"><Logo /></a>
+        <a href="/" class="flex-shrink-0"><Logo /></a>
         <nav>
-            <ul class="flex items-center justify-center gap-4">
-                <li class="flex items-center justify-center gap-1">
+            <ul class="flex items-center gap-2 md:gap-4">
+                <li class="items-center gap-1 text-sm sm:flex md:text-base">
                     <UserIcon />
-                    {t("header.login")}
+                    <span class="hidden md:inline">{t("header.login")}</span>
                 </li>
-                <li class="flex items-center justify-center">
+                <li class="flex items-center">
                     <CartButton client:load />
                 </li>
-                <li class="flex items-center justify-center">
+                <li class="flex items-center md:hidden">
+                    <button class="p-1" aria-label="Menu">
+                        <MenuIcon />
+                    </button>
+                </li>
+                <li class="hidden items-center md:flex">
                     <MenuIcon />
                 </li>
             </ul>

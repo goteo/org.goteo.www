@@ -31,3 +31,4 @@ pnpm-debug.log*
 yarn.lock
 .wrangler/
 
+.pnpm-store

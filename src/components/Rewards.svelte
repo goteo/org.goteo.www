@@ -169,7 +169,7 @@
                     {$t("rewards.title")}
                 </h2>
             {/if}
-            <ul class={limit ? "flex flex-row gap-6" : "grid grid-cols-3 gap-6"}>
+            <ul class={limit ? "flex flex-col lg:flex-row gap-6" : "grid lg:grid-cols-3 gap-6"}>
                 {#if !limit}
                     <div
                         class="flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
