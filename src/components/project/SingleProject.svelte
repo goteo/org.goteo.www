@@ -18,11 +18,11 @@
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
-    import { locale, t } from "../../i18n/store";
+    import { locale, setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
-    import type { Locale } from "../../i18n/locales";
+    import { isSupportedLocale, type Locale } from "../../i18n/locales";
     import TopRewards from "./TopRewards.svelte";
 
     let {
@@ -56,7 +56,7 @@
     async function getProjectData(code?: string) {
         lang = code ? code : getDefaultLanguage();
 
-        locale.set(code as Locale);
+        setLocale(lang);
 
         const { data } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
