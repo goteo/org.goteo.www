@@ -3,17 +3,17 @@
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
     import ChevronDown from "../svgs/ChevronDown.svelte";
 
-    export let languages: string[];
+    let { lang, languages, select } = $props();
 
-    let currentLang = languages[0];
-    let open = false;
-    $: rotate = open;
+    let open = $state(false);
     let dropdownRef: HTMLElement;
 
-    function selectLanguage(lang: string) {
-        currentLang = lang;
+    function selectLanguage(code: string) {
+        lang = code;
         open = false;
         removeClickOutsideListener();
+
+        select(lang);
     }
 
     function handleClickOutside(event: MouseEvent) {
@@ -49,7 +49,7 @@
     }
 
     function getLanguageDisplayName(lang: string): string {
-        const displayNames = new Intl.DisplayNames(lang, { type: "language", });
+        const displayNames = new Intl.DisplayNames(lang, { type: "language" });
         const displayName = displayNames.of(lang)!;
 
         if (["es", "ca", "eu", "gl"].includes(lang)) {
@@ -64,17 +64,17 @@
     });
 </script>
 
-<div class="relative inline-block w-full lg:max-w-max text-left" bind:this={dropdownRef}>
+<div class="relative inline-block w-full text-left lg:max-w-max" bind:this={dropdownRef}>
     <button
         type="button"
         class="flex w-full items-center gap-2 rounded-md border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-100"
-        on:click={toggleDropdown}
+        onclick={toggleDropdown}
         aria-haspopup="true"
         aria-expanded={open}
     >
         <LanguageIcon />
-        <span class="flex-1 text-left">{getLanguageDisplayName(currentLang)}</span>
-        <ChevronDown {rotate} />
+        <span class="flex-1 text-left">{getLanguageDisplayName(lang)}</span>
+        <ChevronDown rotate={open} />
     </button>
 
     {#if open}
@@ -83,7 +83,7 @@
                 <button
                     type="button"
                     class="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-gray-100"
-                    on:click={() => selectLanguage(lang)}
+                    onclick={() => selectLanguage(lang)}
                 >
                     <LanguageIcon />
                     {getLanguageDisplayName(lang)}
