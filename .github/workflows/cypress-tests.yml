@@ -61,6 +61,8 @@ jobs:
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CLOUDFLARE_INCLUDE_PROCESS_ENV: true
+                  SKIP_PAYMENT_GATEWAYS: true
+                  PAYMENT_GATEWAYS_ENABLED: false
                   PUBLIC_API_URL: ${{ secrets.PUBLIC_API_URL }}
                   PUBLIC_API_VERSION: ${{ secrets.PUBLIC_API_VERSION || 'v4' }}
                   PUBLIC_LANGUAGE_DEFAULT: ${{ secrets.PUBLIC_LANGUAGE_DEFAULT || 'es' }}
