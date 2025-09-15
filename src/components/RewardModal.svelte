@@ -57,7 +57,9 @@
 
     onMount(() => {
         rawInput = formatCurrency(reward.money.amount, reward.money.currency);
-        customAmount = +formatCurrency(reward.money.amount, reward.money.currency, { asLocaleString: false });
+        customAmount = +formatCurrency(reward.money.amount, reward.money.currency, {
+            asLocaleString: false,
+        });
     });
 </script>
 
