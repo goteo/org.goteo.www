@@ -172,4 +172,4 @@
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs bind:project {accounting} {accountingBalance} />
+<Tabs bind:lang bind:project {accounting} {accountingBalance} />

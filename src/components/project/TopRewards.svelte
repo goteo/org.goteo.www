@@ -14,11 +14,13 @@
         project: Project;
     } = $props();
 
+    const projectId = project.id!.toString();
+
     let rewards: ProjectReward[] = $state([]);
 
     $effect(() => {
         apiProjectRewardsGetCollection({
-            query: { project: project.id!.toString(), itemsPerPage: 3 },
+            query: { project: projectId, itemsPerPage: 3 },
             headers: { "Accept-Language": lang },
         }).then((data) => {
             rewards = data.data!;

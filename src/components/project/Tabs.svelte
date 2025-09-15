@@ -7,7 +7,12 @@
     import ProjectCommunity from "./ProjectCommunity.svelte";
     import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
 
-    let { project = $bindable(), accountingBalance } = $props<{
+    let {
+        lang = $bindable(),
+        project = $bindable(),
+        accountingBalance,
+    } = $props<{
+        lang: string;
         project: Project;
         accounting: Accounting;
         accountingBalance: AccountingBalance;
@@ -69,7 +74,7 @@
                 aria-labelledby="tab-button-rewards"
                 class="w-full"
             >
-                <ProjectRewards {project} />
+                <ProjectRewards bind:lang {project} />
             </div>
         {:else if activeTab === "project"}
             <div
