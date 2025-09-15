@@ -1,17 +1,16 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import { languagesList } from "../i18n/locales";
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
     import ChevronDown from "../svgs/ChevronDown.svelte";
 
-    export let languages: (keyof typeof languagesList)[];
+    export let languages: string[];
 
-    let currentLang: keyof typeof languagesList = languages[0];
+    let currentLang = languages[0];
     let open = false;
     $: rotate = open;
     let dropdownRef: HTMLElement;
 
-    function selectLanguage(lang: keyof typeof languagesList) {
+    function selectLanguage(lang: string) {
         currentLang = lang;
         open = false;
         removeClickOutsideListener();
@@ -49,6 +48,17 @@
         }
     }
 
+    function getLanguageDisplayName(lang: string): string {
+        const displayNames = new Intl.DisplayNames(lang, { type: "language", });
+        const displayName = displayNames.of(lang)!;
+
+        if (["es", "ca", "eu", "gl"].includes(lang)) {
+            return displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        }
+
+        return displayName;
+    }
+
     onDestroy(() => {
         removeClickOutsideListener();
     });
@@ -63,7 +73,7 @@
         aria-expanded={open}
     >
         <LanguageIcon />
-        <span class="flex-1 text-left">{languagesList[currentLang]}</span>
+        <span class="flex-1 text-left">{getLanguageDisplayName(currentLang)}</span>
         <ChevronDown {rotate} />
     </button>
 
@@ -76,7 +86,7 @@
                     on:click={() => selectLanguage(lang)}
                 >
                     <LanguageIcon />
-                    {languagesList[lang]}
+                    {getLanguageDisplayName(lang)}
                 </button>
             {/each}
         </div>
