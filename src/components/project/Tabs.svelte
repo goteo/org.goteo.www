@@ -89,7 +89,7 @@
             </div>
         {:else if activeTab === "budget"}
             <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget {project} {accountingBalance} />
+                <ProjectBudget bind:lang {project} {accountingBalance} />
             </div>
         {:else if activeTab === "updates"}
             <div
@@ -98,7 +98,7 @@
                 aria-labelledby="tab-button-updates"
                 class="w-full"
             >
-                <ProjectUpdate {project} />
+                <ProjectUpdate bind:lang {project} />
             </div>
         {:else if activeTab === "community"}
             <div

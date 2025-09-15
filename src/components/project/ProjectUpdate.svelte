@@ -1,20 +1,37 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { t } from "../../i18n/store";
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import AlertIcon from "../../svgs/AlertIcon.svelte";
     import ShareIcon from "../../svgs/ShareIcon.svelte";
     import { Modal } from "flowbite-svelte";
-
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
 
-    const { project } = $props<{ project: Project }>();
+    let {
+        lang = $bindable(),
+        project,
+    }: {
+        lang: string;
+        project: Project;
+    } = $props();
+
+    const projectId = project.id!.toString();
+
     let projectsUpdates: ProjectUpdate[] = $state([]);
     let openModal = $state(false);
     let selectedProject: ProjectUpdate | null = $state(null);
     let itemsPerGroup = $state(2);
+
+    $effect(() => {
+        apiProjectUpdatesGetCollection({
+            query: { project: projectId, "order[date]": "asc" },
+            headers: { "Accept-Language": lang },
+        }).then((data) => {
+            projectsUpdates = data.data!;
+        });
+    });
 
     function updateItemsPerGroup() {
         // Check for mobile devices using multiple criteria
@@ -63,28 +80,12 @@
     }
 
     onMount(async () => {
-        try {
-            const { data } = await apiProjectUpdatesGetCollection({
-                query: {
-                    project: project.id,
-                    "order[date]": "asc",
-                },
-            });
-
-            projectsUpdates = data || [];
-        } catch (error) {
-            console.error("Error fetching project updates:", error);
-        }
-
-        // Set initial value
         updateItemsPerGroup();
 
-        // Listen for window resize
         window.addEventListener("resize", updateItemsPerGroup);
     });
 
-    // Cleanup on component destroy
-    $effect(() => {
+    onDestroy(() => {
         return () => {
             window.removeEventListener("resize", updateItemsPerGroup);
         };
