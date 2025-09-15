@@ -1,0 +1,57 @@
+---
+import heroImage from "./hero.png";
+---
+
+<section class="hero-section flex min-h-[80vh] items-center">
+    <div class="container mx-auto px-6 lg:px-8">
+        <div class="grid items-center gap-12 lg:grid-cols-2">
+            <!-- Hero Content -->
+            <div class="space-y-8">
+                <h1 class="text-4xl leading-tight font-bold text-[#462949] lg:text-5xl xl:text-6xl">
+                    Financia el cambio<br />
+                    que el mundo necesita
+                </h1>
+
+                <div class="space-y-1 text-lg leading-relaxed text-[#575757]">
+                    <p>
+                        Únete a una comunidad que transforma realidades. Cada donación impulsa
+                        proyectos sociales innovadores: desde educación inclusiva hasta
+                        sostenibilidad ambiental.
+                    </p>
+                    <p>
+                        Aquí, tu contribución no es solo un gesto; es la semilla de un impacto
+                        duradero.
+                    </p>
+                    <p>¡Sé parte de la solución!</p>
+                </div>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col gap-4 sm:flex-row">
+                    <button
+                        class="rounded-full border-0 bg-[#e6d9f3] px-8 py-4 font-semibold text-[#462949] transition-all duration-200 hover:opacity-90"
+                    >
+                        Descubre proyectos a los que apoyar
+                    </button>
+                    <button
+                        class="rounded-full border-0 bg-[#59E9D3] px-8 py-4 font-semibold text-[#462949] transition-all duration-200 hover:opacity-90"
+                    >
+                        Impulsa tu proyecto con Goteo
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hero Illustration -->
+            <div class="relative flex justify-center lg:justify-end">
+                <div class="relative w-full max-w-lg">
+                    <img
+                        src={heroImage.src}
+                        alt="Hero Illustration"
+                        class="h-auto w-full"
+                        loading="eager"
+                        decoding="async"
+                    />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
