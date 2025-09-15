@@ -54,15 +54,15 @@
 </script>
 
 <section class="wrapper">
-    <div class="my-10 flex w-full flex-row justify-between gap-5">
-        <div class="flex w-[70%] flex-col gap-2.5">
+    <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
+        <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
-                <h3 class="text-2xl/[32px] font-bold text-[#575757]">
+                <h3 class="text-xl font-bold text-[#575757] lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="text-tertiary text-2xl font-bold underline"> {ownerName}</span>
+                    <span class="text-tertiary font-bold underline"> {ownerName}</span>
                 </h3>
-                <h1 class="text-[40px]/[48px] font-bold text-[#575757]">
-                    {project.title}
+                <h1 class="text-3xl font-bold text-[#575757] lg:text-4xl">
+                    {project.title} <span>{ownerName}</span>
                 </h1>
             </div>
 
@@ -88,17 +88,19 @@
             </div>
         </div>
 
-        <div class="flex w-[30%] flex-col justify-between">
+        <div class="flex w-full flex-col gap-4 lg:w-[30%] lg:justify-between">
             <div class="flex justify-end">
                 <LanguagesDropdown {languages} />
             </div>
 
-            <Countdown {countdownEnd} />
+            <div class="hidden lg:block">
+                <Countdown {countdownEnd} />
+            </div>
         </div>
     </div>
 
-    <div class="mb-6 flex h-132 items-stretch justify-between gap-6">
-        <div class="h-full w-[70%]">
+    <div class="mb-6 flex h-auto flex-col items-stretch justify-between gap-6 lg:h-132 lg:flex-row">
+        <div class="h-64 w-full lg:h-full lg:w-[70%]">
             <Player
                 src={project.video?.src || ""}
                 title={project.title || ""}
@@ -106,14 +108,17 @@
                 {poster}
             />
         </div>
-        <div class="h-full w-[30%]">
-            <Card {project} {totalSupports} {accountingBalance} {balancePoints} />
+        <div class="flex h-auto w-full flex-col gap-4 lg:h-full lg:w-[30%]">
+            <div class="lg:hidden">
+                <Countdown {countdownEnd} />
+            </div>
+            <Card {project} {accountingBalance} {balancePoints} />
         </div>
     </div>
 
-    <div class="mb-12 flex w-full flex-row justify-between">
+    <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
         <Tags {tags} />
-        <div class="flex flex-row items-center gap-6">
+        <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <button
                 class="text-tertiary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
@@ -122,17 +127,23 @@
             >
         </div>
     </div>
-    <div>
-        <div class="flex items-center justify-between py-10">
+    <div class="flex flex-col gap-8">
+        <div class="flex items-center justify-between">
             <h2 class="text-secondary text-2xl font-bold">
                 {$t("reward.trending")}
             </h2>
             <button
-                class="text-tertiary flex cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
-                ><ArrowRightIcon />{$t("reward.showAll")}</button
+                class="text-tertiary hidden cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:flex"
             >
+                <ArrowRightIcon />{$t("reward.showAll")}
+            </button>
         </div>
         <Rewards {project} {limit} />
+        <button
+            class="text-tertiary flex cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:hidden justify-center"
+        >
+            <ArrowRightIcon />{$t("reward.showAll")}
+        </button>
     </div>
     <Banner {ownerName} />
 </section>

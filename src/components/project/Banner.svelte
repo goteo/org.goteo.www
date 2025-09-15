@@ -6,8 +6,8 @@
     export let ownerName: string;
 </script>
 
-<section class="flex flex-row gap-6 py-10">
-    <div class="flex flex-row gap-4">
+<section class="flex flex-col lg:flex-row gap-6 py-10">
+    <div class="flex flex-row gap-4 items-center justify-center">
         <div><DonatorIcon /></div>
         <div class="text-[#575757]">
             {@html $t(
@@ -20,7 +20,7 @@
             </a>
         </div>
     </div>
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-row gap-4 items-center justify-center">
         <div><CertificateIcon /></div>
         <div>
             <div class="text-[#575757]">

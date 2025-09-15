@@ -14,6 +14,22 @@
     let projectsUpdates: ProjectUpdate[] = $state([]);
     let openModal = $state(false);
     let selectedProject: ProjectUpdate | null = $state(null);
+    let itemsPerGroup = $state(2);
+
+    function updateItemsPerGroup() {
+        // Check for mobile devices using multiple criteria
+        const isMobileScreen = window.innerWidth <= 768;
+        const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const isMobileUserAgent =
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent,
+            );
+
+        // Consider it mobile if it's a small screen OR (touch device AND mobile user agent)
+        const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
+
+        itemsPerGroup = isMobile ? 1 : 2;
+    }
 
     function formatDate(date: string): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -59,6 +75,19 @@
         } catch (error) {
             console.error("Error fetching project updates:", error);
         }
+
+        // Set initial value
+        updateItemsPerGroup();
+
+        // Listen for window resize
+        window.addEventListener("resize", updateItemsPerGroup);
+    });
+
+    // Cleanup on component destroy
+    $effect(() => {
+        return () => {
+            window.removeEventListener("resize", updateItemsPerGroup);
+        };
     });
 
     $effect(() => {
@@ -71,7 +100,7 @@
     <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-[40px] leading-tight font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
-    <Carousel gap={16} showDots={true} itemsPerGroup={2}>
+    <Carousel gap={16} showDots={true} {itemsPerGroup}>
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
@@ -105,7 +134,7 @@
                 </div>
                 <div class="flex w-full items-center justify-end">
                     <button
-                        class="text-tertiary border-tertiary flex cursor-pointer items-start truncate rounded-3xl border px-6 py-4 whitespace-nowrap"
+                        class="text-tertiary border-tertiary flex w-full cursor-pointer justify-center truncate rounded-3xl border px-6 py-4 whitespace-nowrap lg:max-w-max"
                         onclick={() => {
                             selectedProject = project;
                             openModal = true;
