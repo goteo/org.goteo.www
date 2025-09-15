@@ -206,6 +206,18 @@
     "title": "Inicio",
     "description": "Página de inicio"
   },
+  "hero": {
+    "title": "Finança el canvi que el món necessita",
+    "description": {
+      "paragraph1": "Uneix-te a una comunitat que transforma realitats. Cada donació impulsa projectes socials innovadors: des d'educació inclusiva fins a sostenibilitat ambiental.",
+      "paragraph2": "Aquí, la teva contribució no és només un gest; és la llavor d'un impacte durador.",
+      "paragraph3": "Sigues part de la solució!"
+    },
+    "buttons": {
+      "discover": "Descobreix projectes per donar suport",
+      "impulse": "Impulsa el teu projecte amb Goteo"
+    }
+  },
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión"

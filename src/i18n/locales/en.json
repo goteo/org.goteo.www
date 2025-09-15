@@ -166,6 +166,18 @@
     "title": "Home",
     "description": "Home page"
   },
+  "hero": {
+    "title": "Finance the change the world needs",
+    "description": {
+      "paragraph1": "Join a community that transforms realities. Every donation drives innovative social projects: from inclusive education to environmental sustainability.",
+      "paragraph2": "Here, your contribution is not just a gesture; it's the seed of lasting impact.",
+      "paragraph3": "Be part of the solution!"
+    },
+    "buttons": {
+      "discover": "Discover projects to support",
+      "impulse": "Boost your project with Goteo"
+    }
+  },
   "title": "Hello!",
   "header": {
     "login": "Login"

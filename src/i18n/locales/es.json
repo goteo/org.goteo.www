@@ -299,6 +299,18 @@
     "title": "Inicio",
     "description": "Página de inicio"
   },
+  "hero": {
+    "title": "Financia el cambio que el mundo necesita",
+    "description": {
+      "paragraph1": "Únete a una comunidad que transforma realidades. Cada donación impulsa proyectos sociales innovadores: desde educación inclusiva hasta sostenibilidad ambiental.",
+      "paragraph2": "Aquí, tu contribución no es solo un gesto; es la semilla de un impacto duradero.",
+      "paragraph3": "¡Sé parte de la solución!"
+    },
+    "buttons": {
+      "discover": "Descubre proyectos a los que apoyar",
+      "impulse": "Impulsa tu proyecto con Goteo"
+    }
+  },
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión",
