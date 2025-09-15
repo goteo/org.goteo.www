@@ -107,7 +107,7 @@
                 aria-labelledby="tab-button-community"
                 class="w-full"
             >
-                <ProjectCommunity {project} />
+                <ProjectCommunity {project} balance={accountingBalance} />
             </div>
         {/if}
     </div>

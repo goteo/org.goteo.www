@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectSupport } from "../../openapi/client/index";
+    import type { AccountingBalance, Project, ProjectSupport } from "../../openapi/client/index";
     import { apiProjectSupportsGetCollection, apiUsersIdGet } from "../../openapi/client/index";
     import { extractId } from "../../utils/extractId";
     import Loader from "../../svgs/Loader.svelte";
@@ -11,7 +11,15 @@
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
     import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
 
-    const { project } = $props<{ project: Project }>();
+    let {
+        project,
+        balance,
+    }: {
+        project: Project;
+        balance: AccountingBalance;
+    } = $props();
+
+    const projectId = project.id!.toString();
 
     let projectsSupportItems = $state<
         (ProjectSupport & {
@@ -52,7 +60,7 @@
 
     onMount(async () => {
         const { data: publicSupports } = await apiProjectSupportsGetCollection({
-            query: { project: project.id, anonymous: false },
+            query: { project: projectId, anonymous: false },
         });
 
         const supportsWithOwners = await Promise.all(
@@ -93,7 +101,7 @@
                         bind:selectedProjectSupport
                     />
                 {/each}
-                <ProjectCommunityAnonymous {project} />
+                <ProjectCommunityAnonymous {project} currency={balance.balance?.currency!} />
             </div>
 
             {#if groupedItems.default?.length}

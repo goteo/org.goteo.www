@@ -1,8 +1,7 @@
 import { writable, derived } from "svelte/store";
 
-import { useTranslations } from "./utils";
-
 import { isSupportedLocale, type Locale } from "./locales/index";
+import { useTranslations } from "./utils";
 
 const pathLang = typeof window !== "undefined" ? window.location.pathname.split("/")[1] : "es";
 const initialLocale: Locale = pathLang === "en" ? "en" : "es";
