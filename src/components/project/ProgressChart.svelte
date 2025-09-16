@@ -74,7 +74,7 @@
 
         Chart.register({
             id: "twoSectionLines",
-            beforeDraw(chart) {
+            afterDatasetDraw(chart) {
                 const {
                     ctx,
                     chartArea: { left, right },
@@ -100,31 +100,31 @@
             },
         });
 
-        Chart.register({
-            id: "deadlineLine",
-            beforeDraw(chart) {
-                const {
-                    ctx,
-                    chartArea: { top, bottom },
-                    scales: { x },
-                } = chart;
+        // Chart.register({
+        //     id: "deadlineLine",
+        //     afterDatasetDraw(chart) {
+        //         const {
+        //             ctx,
+        //             chartArea: { top, bottom },
+        //             scales: { x },
+        //         } = chart;
 
-                ctx.save();
+        //         ctx.save();
 
-                const xPos = x.getPixelForValue(daysForMinimum);
+        //         const xPos = x.getPixelForValue(daysForMinimum);
 
-                // Draw vertical line
-                ctx.beginPath();
-                ctx.moveTo(xPos, top - 100);
-                ctx.lineTo(xPos, bottom + 100);
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
-                ctx.setLineDash([]);
-                ctx.stroke();
+        //         // Draw vertical line
+        //         ctx.beginPath();
+        //         ctx.moveTo(xPos, top - 100);
+        //         ctx.lineTo(xPos, bottom + 100);
+        //         ctx.lineWidth = 2;
+        //         ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
+        //         ctx.setLineDash([]);
+        //         ctx.stroke();
 
-                ctx.restore();
-            },
-        });
+        //         ctx.restore();
+        //     },
+        // });
 
         if (!canvas) return;
 
@@ -135,7 +135,7 @@
                     {
                         data,
                         borderColor: "rgba(94, 234, 212, 1)",
-                        backgroundColor: "rgba(94, 234, 212, 0.2)",
+                        backgroundColor: "rgba(94, 234, 212, 1)",
                         borderWidth: 1,
                         fill: "start",
                         tension: 0.25,
