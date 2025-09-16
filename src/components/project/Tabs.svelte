@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ProjectRewards from "./ProjectRewards.svelte";
@@ -8,12 +7,17 @@
     import ProjectCommunity from "./ProjectCommunity.svelte";
     import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
 
-    let { project, accounting, accountingBalance } = $props<{
+    let {
+        lang = $bindable(),
+        project = $bindable(),
+        accountingBalance,
+    } = $props<{
+        lang: string;
         project: Project;
         accounting: Accounting;
         accountingBalance: AccountingBalance;
     }>();
-    let contentDescription = $state("");
+
     let activeTab = $state("rewards");
 
     const tabs = [
@@ -27,15 +31,11 @@
     function selectTab(tabId: string) {
         activeTab = tabId;
     }
-
-    onMount(async () => {
-        contentDescription = await renderMarkdown(project.description || "");
-    });
 </script>
 
 <div class="wrapper">
     <div
-        class="flex overflow-x-auto no-scrollbar lg:space-x-6"
+        class="no-scrollbar flex overflow-x-auto lg:space-x-6"
         role="tablist"
         aria-label="Project tabs"
         style="scrollbar-width: none;"
@@ -46,7 +46,7 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-tertiary inline-flex items-center rounded-t-lg lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7] px-6 py-2 font-bold transition-colors duration-100 ease-in-out whitespace-nowrap flex-shrink-0"
+                class="text-tertiary inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7]"
                 class:bg-[#E6E5F7]={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
@@ -74,7 +74,7 @@
                 aria-labelledby="tab-button-rewards"
                 class="w-full"
             >
-                <ProjectRewards {project} />
+                <ProjectRewards bind:lang {project} />
             </div>
         {:else if activeTab === "project"}
             <div
@@ -83,11 +83,13 @@
                 aria-labelledby="tab-button-project"
                 class="flex max-w-4xl flex-col gap-4"
             >
-                {@html contentDescription}
+                {#await renderMarkdown(project.description) then content}
+                    {@html content}
+                {/await}
             </div>
         {:else if activeTab === "budget"}
             <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget {project} {accountingBalance} />
+                <ProjectBudget bind:lang {project} {accountingBalance} />
             </div>
         {:else if activeTab === "updates"}
             <div
@@ -96,7 +98,7 @@
                 aria-labelledby="tab-button-updates"
                 class="w-full"
             >
-                <ProjectUpdate {project} />
+                <ProjectUpdate bind:lang {project} />
             </div>
         {:else if activeTab === "community"}
             <div
@@ -105,7 +107,7 @@
                 aria-labelledby="tab-button-community"
                 class="w-full"
             >
-                <ProjectCommunity {project} />
+                <ProjectCommunity {project} balance={accountingBalance} />
             </div>
         {/if}
     </div>
