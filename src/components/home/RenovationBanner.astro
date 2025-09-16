@@ -1,0 +1,85 @@
+---
+const { t } = Astro.locals;
+---
+
+<section
+    data-renovation-banner
+    class="wrapper renovation-banner bg-tertiary relative overflow-hidden rounded-3xl text-white"
+>
+    <!-- Content -->
+    <div class="relative mx-auto flex items-center justify-between gap-6 py-8">
+        <!-- Main Content -->
+        <div class="flex-1 space-y-3 pr-0 md:pr-6">
+            <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
+                {t("renovationBanner.title")}
+            </h2>
+            <p class="max-w-3xl text-base leading-relaxed text-purple-100/90 md:text-lg">
+                {t("renovationBanner.description")}
+            </p>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="flex items-center gap-3 md:gap-4">
+            <a
+                href="#"
+                class="text-tertiary rounded-full bg-[#e6d9f3] px-8 py-4 font-semibold whitespace-nowrap shadow-md transition-colors duration-200 hover:bg-white"
+                aria-label={t("renovationBanner.ctaButton")}
+            >
+                {t("renovationBanner.ctaButton")}
+            </a>
+
+            <!-- Close Button -->
+            <button
+                class="renovation-banner-close flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full"
+                aria-label="Close banner"
+                data-close-renovation-banner
+            >
+                <svg
+                    class="h-10 w-10"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                <span class="sr-only">Close</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Handle banner close functionality
+    document.addEventListener("DOMContentLoaded", () => {
+        // Guard for SSR
+        if (typeof window === "undefined") return;
+
+        const banner = document.querySelector("[data-renovation-banner]");
+        const closeButton = document.querySelector("[data-close-renovation-banner]");
+
+        const storageKey = "renovationBannerClosed";
+
+        const hide = () => {
+            if (!banner) return;
+            banner.setAttribute("hidden", "");
+        };
+
+        if (window.localStorage.getItem(storageKey) === "true") {
+            hide();
+        }
+
+        if (closeButton && banner) {
+            closeButton.addEventListener("click", () => {
+                hide();
+                try {
+                    window.localStorage.setItem(storageKey, "true");
+                } catch (_) {}
+            });
+        }
+    });
+</script>

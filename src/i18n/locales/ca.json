@@ -218,6 +218,11 @@
       "impulse": "Impulsa el teu projecte amb Goteo"
     }
   },
+  "renovationBanner": {
+    "title": "Renovem Goteo!",
+    "description": "Goteo ha construït una història única al món del micromecenatge. Vols seguir formant part d'ella?",
+    "ctaButton": "Suma't a la nostra història"
+  },
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión"

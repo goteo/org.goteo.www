@@ -178,6 +178,11 @@
       "impulse": "Boost your project with Goteo"
     }
   },
+  "renovationBanner": {
+    "title": "We're renovating Goteo!",
+    "description": "Goteo has built a unique story in the world of crowdfunding. Do you want to continue being part of it?",
+    "ctaButton": "Join our story"
+  },
   "title": "Hello!",
   "header": {
     "login": "Login"

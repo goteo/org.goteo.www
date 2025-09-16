@@ -4,16 +4,16 @@ import heroImage from "./hero.png";
 const { t } = Astro.locals;
 ---
 
-<section class="hero-section flex min-h-[80vh] items-center">
+<section class="hero-section flex min-h-[60vh] items-center">
     <div class="container mx-auto px-6 lg:px-8">
         <div class="grid items-center gap-12 lg:grid-cols-2">
             <!-- Hero Content -->
             <div class="space-y-8">
-                <h1 class="text-4xl leading-tight font-bold text-[#462949] lg:text-5xl xl:text-6xl">
+                <h1 class="text-tertiary text-4xl leading-tight font-bold lg:text-5xl xl:text-6xl">
                     {t("hero.title")}
                 </h1>
 
-                <div class="space-y-1 text-lg leading-relaxed text-[#575757]">
+                <div class="space-y-1 text-lg leading-relaxed text-neutral-500">
                     <p>
                         {t("hero.description.paragraph1")}
                     </p>
@@ -26,12 +26,12 @@ const { t } = Astro.locals;
                 <!-- CTA Buttons -->
                 <div class="flex flex-col gap-4 sm:flex-row">
                     <button
-                        class="rounded-full border-0 bg-[#e6d9f3] px-8 py-4 font-semibold text-[#462949] transition-all duration-200 hover:opacity-90"
+                        class="text-tertiary rounded-full border-0 bg-[#e6d9f3] px-8 py-4 font-semibold transition-all duration-200 hover:opacity-90"
                     >
                         {t("hero.buttons.discover")}
                     </button>
                     <button
-                        class="rounded-full border-0 bg-[#59E9D3] px-8 py-4 font-semibold text-[#462949] transition-all duration-200 hover:opacity-90"
+                        class="bg-primary text-tertiary rounded-full border-0 px-8 py-4 font-semibold transition-all duration-200 hover:opacity-90"
                     >
                         {t("hero.buttons.impulse")}
                     </button>
@@ -44,7 +44,7 @@ const { t } = Astro.locals;
                     <img
                         src={heroImage.src}
                         alt="Hero Illustration"
-                        class="h-auto w-full"
+                        class="h-auto w-full scale-120"
                         loading="eager"
                         decoding="async"
                     />

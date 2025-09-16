@@ -311,6 +311,11 @@
       "impulse": "Impulsa tu proyecto con Goteo"
     }
   },
+  "renovationBanner": {
+    "title": "¡Renovamos Goteo!",
+    "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
+    "ctaButton": "Súmate a nuestra historia"
+  },
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión",
