@@ -61,13 +61,13 @@ jobs:
 
             - name: Set env vars
               run: |
-                  export CLOUDFLARE_INCLUDE_PROCESS_ENV='true'
-                  export PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}
-                  export PUBLIC_API_VERSION='v4'
-                  export PUBLIC_DEFAULT_CURRENCY='EUR'
-                  export PUBLIC_DEFAULT_LANGUAGE='es'
-                  export PUBLIC_PLATONIQ_ACCOUNTING_ID='375592'
-                  export PUBLIC_FACEBOOK_APP_ID=''
+                  echo "CLOUDFLARE_INCLUDE_PROCESS_ENV='true'" >> .env
+                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
+                  echo "PUBLIC_API_VERSION='v4'" >> .env
+                  echo "PUBLIC_DEFAULT_CURRENCY='EUR'" >> .env
+                  echo "PUBLIC_DEFAULT_LANGUAGE='es'" >> .env
+                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='375592'" >> .env
+                  echo "PUBLIC_FACEBOOK_APP_ID=''" >> .env
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
