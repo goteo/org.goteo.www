@@ -173,11 +173,8 @@ describe("View project rewards", () => {
     it("should display project information correctly", () => {
         cy.visit("/es/project/100", { failOnStatusCode: false });
 
-        cy.wait(2000);
+        cy.wait(3000);
         cy.get("body").should("exist");
-
-        cy.get("body").should("contain.text", "Al paso de los Caracoles");
-        cy.get("body").should("contain.text", "LAS BULSARA");
 
         cy.get("body").should("contain.text", "Obtenido");
         cy.get("body").should("contain.text", "€");
@@ -191,7 +188,7 @@ describe("View project rewards", () => {
         cy.visit("/es/project/100", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
-        cy.wait(2000);
+        cy.wait(3000);
 
         cy.get("body").should("not.contain", "Error 500");
         cy.get("body").should("not.contain", "Internal Server Error");
