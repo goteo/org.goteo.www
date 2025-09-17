@@ -48,37 +48,26 @@ jobs:
             - name: Set API URL based on branch
               id: api-url
               run: |
-                  if [[ "${{ github.ref_name }}" == "main" || "${{ github.ref_name }}" == "master" ]]; then
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
+                  if [[ "${{ github.ref_name }}" == "main" ]]; then
+                    echo "API_URL=https://api.v4.goteo.org" >> $GITHUB_OUTPUT
                     echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
                   elif [[ "${{ github.ref_name }}" == "develop" ]]; then
                     echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
                     echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
                   else
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
+                    echo "API_URL=https://api-testing01.v4.goteo.org" >> $GITHUB_OUTPUT
                     echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
                   fi
 
-            - name: Create test env file
+            - name: Set env vars
               run: |
-                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "PUBLIC_LANGUAGE_DEFAULT=es" >> .env
-                  echo "PUBLIC_CURRENCY_DEFAULT=EUR" >> .env
-                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID=2957" >> .env
-                  echo "NODE_ENV=test" >> .env
-                  echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> .env
-                  echo "SKIP_PAYMENT_GATEWAYS=true" >> .env
-                  echo "PAYMENT_GATEWAYS_CONFIG={}" >> .env
-                  echo "STRIPE_PUBLIC_KEY=pk_test_dummy" >> .env
-                  echo "STRIPE_SECRET_KEY=sk_test_dummy" >> .env
-                  echo "PAYPAL_CLIENT_ID=dummy" >> .env
-                  echo "PAYPAL_CLIENT_SECRET=dummy" >> .env
-                  echo "PAYMENT_GATEWAYS_ENABLED=false" >> .env
-                  echo "Environment: ${{ steps.api-url.outputs.ENVIRONMENT }}"
-                  echo "API URL: ${{ steps.api-url.outputs.API_URL }}"
-                  echo "API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "LANGUAGE_DEFAULT=es" >> .env
-                  echo "CURRENCY_DEFAULT=EUR" >> .env
+                  export CLOUDFLARE_INCLUDE_PROCESS_ENV='true'
+                  export PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}
+                  export PUBLIC_API_VERSION='v4'
+                  export PUBLIC_DEFAULT_CURRENCY='EUR'
+                  export PUBLIC_DEFAULT_LANGUAGE='es'
+                  export PUBLIC_PLATONIQ_ACCOUNTING_ID='375592'
+                  export PUBLIC_FACEBOOK_APP_ID=''
 
             - name: Run Cypress tests
               uses: cypress-io/github-action@v6
@@ -92,9 +81,6 @@ jobs:
                   CI: true
                   NODE_ENV: test
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
-                  PUBLIC_LANGUAGE_DEFAULT: es
-                  PUBLIC_CURRENCY_DEFAULT: EUR
-                  PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
