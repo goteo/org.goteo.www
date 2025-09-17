@@ -13,7 +13,7 @@
   "reward": {
     "donate": "Dona",
     "donors": "donates",
-    "units": "Quedan {units} unidades",
+    "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
@@ -323,7 +323,7 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
-      "daysRemaining": "Queden {days} dies",
+      "daysRemaining": "Queden {{days}} dies",
       "matchfunding": "Matchfunding",
       "featuredProject": {
         "title": "TRÍPTIC DADÀ. Pòdcast de cultura i pensament."

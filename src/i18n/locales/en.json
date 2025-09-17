@@ -13,7 +13,7 @@
   "reward": {
     "donate": "Donate",
     "donors": "donors",
-    "units": "{units} units left",
+    "units": "{{units}} units left",
     "noUnits": "No units left",
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
@@ -201,7 +201,7 @@
       "viewAll": "View all",
       "obtained": "Obtained",
       "minimum": "Minimum",
-      "daysRemaining": "{days} days remaining",
+      "daysRemaining": "{{days}} days remaining",
       "matchfunding": "Matchfunding",
       "featuredProject": {
         "title": "TRÍPTIC DADÀ. Culture and thought podcast."
