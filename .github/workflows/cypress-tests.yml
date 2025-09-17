@@ -72,15 +72,17 @@ jobs:
             - name: Start server
               run: pnpm build && pnpm preview:ci &
 
-            - name: Sleep for 60 seconds
-              run: sleep 60s
-              shell: bash
-
-            - name: Check website availability
-              run: curl -I http://localhost:4321
+            - name: Wait for server
+              run: npx wait-on http://localhost:4321
 
             - name: Run Cypress tests
-              run: pnpm cypress run
+              run: |
+                SPEC_FILES=(cypress/e2e/*.cy.ts)
+                BATCH_SIZE=10
+                TOTAL=${#SPEC_FILES[@]}
+                for ((i=0;i<TOTAL;i+=BATCH_SIZE)); do
+                  pnpm cypress run --spec "${SPEC_FILES[@]:i:BATCH_SIZE}"
+                done
 
             - name: Prepare artifact directories if tests failed
               if: failure()
