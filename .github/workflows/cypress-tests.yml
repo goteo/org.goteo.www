@@ -70,7 +70,7 @@ jobs:
                   echo "PUBLIC_FACEBOOK_APP_ID=''" >> .env
 
             - name: Start server
-              run: pnpm preview:ci &
+              run: pnpm build && pnpm preview:ci &
 
             - name: Sleep for 60 seconds
               run: sleep 60s
