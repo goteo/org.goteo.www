@@ -2,7 +2,7 @@
 
 describe("Homepage", () => {
     beforeEach(() => {
-        cy.visit("/");
+        cy.visit("/es");
     });
 
     it("should display the main header components", () => {

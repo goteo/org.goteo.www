@@ -1,4 +1,4 @@
-#tab-project h2 {
+.marked-content h2 {
     padding-top: var(--text-xl);
     padding-bottom: var(--text-xl);
 
@@ -9,8 +9,17 @@
     line-height: var(--text-xs--line-height);
 }
 
-#tab-project img {
+.marked-content img {
     margin: auto;
-    padding-top: var(--text-xl);
-    padding-bottom: var(--text-xl);
+    margin-top: var(--text-xl);
+    margin-bottom: var(--text-xl);
+
+    border-radius: var(--radius-2xl);
+}
+
+.marked-content ul,
+.marked-content ol {
+    padding: var(--text-xl);
+
+    list-style: initial;
 }

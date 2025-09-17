@@ -8,7 +8,6 @@
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
-    import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Sharebutton from "./Sharebutton.svelte";
@@ -18,11 +17,10 @@
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
-    import { locale, setLocale, t } from "../../i18n/store";
+    import { setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
-    import { isSupportedLocale, type Locale } from "../../i18n/locales";
     import TopRewards from "./TopRewards.svelte";
 
     let {
@@ -31,6 +29,7 @@
         accounting,
         accountingBalance,
         ownerName,
+        totalSupports,
         balancePoints,
     }: {
         lang: string;
@@ -38,16 +37,12 @@
         accounting: Accounting;
         accountingBalance: AccountingBalance;
         ownerName: string;
+        totalSupports: number;
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
     let showFull = $state(false);
-
-    const tags = {
-        categoryTag: project.category,
-        territoryTag: getTerritoryTag(project.territory),
-    };
 
     let paragraphRef: HTMLParagraphElement;
     let showToggle = $state(false);
@@ -137,12 +132,12 @@
             <div class="lg:hidden">
                 <Countdown {countdownEnd} />
             </div>
-            <Card {project} {accountingBalance} {balancePoints} />
+            <Card {project} {accountingBalance} {balancePoints} {totalSupports} />
         </div>
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {tags} />
+        <Tags {project} {lang} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <button

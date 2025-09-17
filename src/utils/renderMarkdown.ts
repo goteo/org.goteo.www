@@ -15,20 +15,6 @@ export async function renderMarkdown(rawText: string): Promise<string> {
 
     const cleaned = rawText.replace(/\r\n/g, "\n").trim();
 
-    const renderer = new marked.Renderer();
-
-    renderer.link = function ({ href, title, text }) {
-        const titleAttr = title ? ` title="${title}"` : "";
-        return `<a href="${href}" class="underline" target="_blank" rel="noopener noreferrer"${titleAttr}>${text}</a>`;
-    };
-
-    renderer.image = function ({ href, title, text }) {
-        const titleAttr = title ? ` title="${title}"` : "";
-        return `<img src="${href}" alt="${text}" class="rounded-4xl" ${titleAttr}>`;
-    };
-
-    marked.use({ renderer });
-
     const result = marked.parse(cleaned);
 
     return typeof result === "string" ? result : await result;

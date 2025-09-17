@@ -682,6 +682,12 @@ export type GatewayCheckoutJsonld = {
 
 export type Link = {
     /**
+     * The type of the link indicates who is the intended user of a link.\
+     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
+     * `payment` links are for end-users who must visit this link to complete the checkout.
+     */
+    type?: 'debug' | 'payment';
+    /**
      * The complete target URL.
      */
     href?: string;
@@ -694,11 +700,11 @@ export type Link = {
      */
     method?: string;
     /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
+     * A body of data required to successfully make the related call.
      */
-    type?: 'debug' | 'payment';
+    body?: {
+        [key: string]: string;
+    } | null;
 };
 
 export type LinkJsonld = {
@@ -710,6 +716,12 @@ export type LinkJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     /**
+     * The type of the link indicates who is the intended user of a link.\
+     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
+     * `payment` links are for end-users who must visit this link to complete the checkout.
+     */
+    type?: 'debug' | 'payment';
+    /**
      * The complete target URL.
      */
     href?: string;
@@ -722,11 +734,11 @@ export type LinkJsonld = {
      */
     method?: string;
     /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
+     * A body of data required to successfully make the related call.
      */
-    type?: 'debug' | 'payment';
+    body?: {
+        [key: string]: string;
+    } | null;
 };
 
 /**

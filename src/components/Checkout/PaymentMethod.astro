@@ -4,11 +4,16 @@ import CreditCardIcon from "../../svgs/CreditCardIcon.astro";
 import PaypalIcon from "../../svgs/PaypalIcon.astro";
 import StripeIcon from "../../svgs/StripeIcon.astro";
 import { formatCurrency } from "../../utils/currencies";
+
 const { t } = Astro.locals;
+
 const {
-    paymentGateways,
     hasError,
-}: { paymentGateways?: ApiGatewaysNameGetResponse[]; hasError?: boolean } = Astro.props;
+    paymentGateways,
+}: {
+    hasError?: boolean;
+    paymentGateways?: ApiGatewaysNameGetResponse[];
+} = Astro.props;
 
 const { accountingBalance } = Astro.props;
 ---
@@ -97,16 +102,34 @@ const { accountingBalance } = Astro.props;
             const { error, data } = await actions.payment(formData);
 
             if (!error) {
-                const checkoutLink = data?.checkout?.links?.find(
-                    (link) => link.type === "payment",
-                )?.href;
+                const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
 
-                console.log(data);
+                if (!checkoutLink) {
+                    throw new Error("No payment link found in the response");
+                }
 
-                if (checkoutLink) {
-                    window.location.href = checkoutLink;
-                } else {
-                    console.error("No payment link found in the response");
+                if (checkoutLink.method === "GET") {
+                    window.location.href = checkoutLink.href!;
+                }
+
+                if (checkoutLink.method === "POST") {
+                    const form = document.createElement("form");
+
+                    form.method = "POST";
+                    form.action = checkoutLink.href!;
+
+                    if (checkoutLink.body) {
+                        Object.entries(checkoutLink.body).forEach(([key, value]) => {
+                            const input = document.createElement("input");
+                            input.type = "hidden";
+                            input.name = key;
+                            input.value = value as string;
+                            form.appendChild(input);
+                        });
+                    }
+
+                    document.body.appendChild(form);
+                    form.submit();
                 }
             }
 

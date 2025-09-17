@@ -9,14 +9,15 @@ import {
     apiAccountingsIdbalanceGet,
 } from "../../../openapi/client/index";
 
-const { data: paymentGateways } = await apiGatewaysGetCollection();
 const { t } = Astro.locals;
+
 const defaultCurrency = getDefaultCurrency();
 const cookieValue = Astro.cookies.get("access-token");
 
 if (!cookieValue) {
     throw new Error("Token not found");
 }
+
 const { accountingId, token } = JSON.parse(cookieValue.value);
 
 const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
@@ -25,6 +26,8 @@ const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
         Authorization: `Bearer ${token}`,
     },
 });
+
+const { data: paymentGateways } = await apiGatewaysGetCollection();
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>

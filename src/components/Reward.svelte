@@ -38,7 +38,7 @@
         </h3>
 
         {#if reward.description}
-            <div class="line-clamp-7 text-sm whitespace-pre-line text-gray-800">
+            <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
                 {#await renderMarkdown(reward.description) then description}
                     {@html description}
                 {/await}
