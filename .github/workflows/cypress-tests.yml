@@ -93,8 +93,9 @@ jobs:
                   NODE_ENV: test
                   NODE_TLS_REJECT_UNAUTHORIZED: 0
                   PUBLIC_LANGUAGE_DEFAULT: es
-                  CYPRESS_CONFIG_FILE: cypress.github.js
+                  PUBLIC_CURRENCY_DEFAULT: EUR
                   PUBLIC_API_URL: ${{ steps.api-url.outputs.API_URL }}
+                  CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
 
