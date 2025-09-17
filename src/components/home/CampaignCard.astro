@@ -1,5 +1,8 @@
 ---
 import type { Campaign, CampaignSize } from "../../types/campaign";
+import ShareIcon from "../../svgs/ShareIcon.svelte";
+import ClockIcon from "../../svgs/ClockIcon.svelte";
+import MatchFundingIcon from "../../svgs/MatchFunding.astro";
 
 export interface Props {
     size: CampaignSize;
@@ -11,90 +14,93 @@ const { t } = Astro.locals;
 
 // Define responsive classes based on size
 // Large cards span 2 columns in lg+ (3-column grid), 2 columns in md (2-column grid), full width on mobile
-const containerClasses = size === "large" 
-    ? "col-span-1 md:col-span-2 lg:col-span-2 h-[633px]" 
-    : "col-span-1 h-auto";
+const containerClasses =
+    size === "large" ? "col-span-1 md:col-span-2 lg:col-span-2 h-[633px]" : "col-span-1 h-auto";
 
 const imageHeight = "h-[389px]"; // Same height for both sizes
 ---
 
-<div class={`bg-[#fbfbfb] rounded-[32px] border border-[#f3f3ef] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}>
+<div
+    class={`bg-[#fbfbfb] rounded-[32px] border border-[#f3f3ef] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
+>
     <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
         <!-- Project Image -->
-        <div 
+        <div
             class={`relative ${imageHeight} w-full rounded-3xl bg-center bg-cover`}
             style={`background-image: url('${campaign.image}')`}
         >
             <!-- Share Button (only for small cards) -->
-            {size === "small" && (
-                <button class="absolute bottom-4 right-4 w-10 h-10 bg-[#fbfbfb] rounded-full border border-[#f3f3ef] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.16)] flex items-center justify-center transition-all duration-200 hover:opacity-80">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="w-6 h-6">
-                        <path d="M8 12L16 4L8 20V12Z" stroke="#462949" stroke-width="2" fill="none"/>
-                    </svg>
-                </button>
-            )}
+            {
+                size === "small" && (
+                    <button class="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border border-[#f3f3ef] bg-[#fbfbfb] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.16)] transition-all duration-200 hover:opacity-80">
+                        <ShareIcon />
+                    </button>
+                )
+            }
 
             <!-- Tags Overlay -->
             <div class="absolute top-4 left-4 flex gap-2">
                 <!-- Days Remaining Tag -->
-                <div class="bg-[#f3f3ef] border border-[#faf9ff] rounded flex items-center gap-2 px-2 py-1">
+                <div
+                    class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1"
+                >
                     <!-- Clock Icon -->
-                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="w-8 h-8">
-                        <circle cx="16" cy="16" r="13" stroke="#462949" stroke-width="2" fill="none"/>
-                        <path d="M16 8v8l4 4" stroke="#462949" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    <span class="text-[#462949] font-bold text-sm whitespace-nowrap">
+                    <ClockIcon />
+                    <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
                         {t("home.campaigns.daysRemaining", { days: campaign.daysRemaining })}
                     </span>
                 </div>
 
                 <!-- Matchfunding Tag (conditional) -->
-                {campaign.hasMatchfunding && (
-                    <div class="bg-[#f3f3ef] border border-[#faf9ff] rounded flex items-center gap-2 px-2 py-1">
-                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" class="w-8 h-8">
-                            <path d="M7 16L14 9L21 16L14 23Z" stroke="#462949" stroke-width="2" fill="none"/>
-                        </svg>
-                        <span class="text-[#462949] font-bold text-sm whitespace-nowrap">
-                            {t("home.campaigns.matchfunding")}
-                        </span>
-                    </div>
-                )}
+                {
+                    campaign.hasMatchfunding && (
+                        <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
+                            <MatchFundingIcon />
+                            <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
+                                {t("home.campaigns.matchfunding")}
+                            </span>
+                        </div>
+                    )
+                }
 
                 <!-- Additional Tags -->
-                {campaign.tags?.map((tag) => (
-                    <div class="bg-[#f3f3ef] border border-[#faf9ff] rounded flex items-center gap-2 px-2 py-1">
-                        <span class="text-[#462949] font-bold text-sm whitespace-nowrap">
-                            {tag}
-                        </span>
-                    </div>
-                ))}
+                {
+                    campaign.tags?.map((tag) => (
+                        <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
+                            <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
+                                {tag}
+                            </span>
+                        </div>
+                    ))
+                }
             </div>
         </div>
 
         <!-- Project Content -->
         <div class={`flex flex-col gap-6 ${size === "large" ? "flex-1" : ""}`}>
-            <h3 class="text-[#462949] text-2xl font-bold leading-8 overflow-hidden max-h-16">
+            <h3 class="max-h-16 overflow-hidden text-2xl leading-8 font-bold text-[#462949]">
                 {campaign.title}
             </h3>
 
             <!-- Progress Bar -->
             <div class="flex flex-col gap-4">
-                <div class="relative w-full h-4 bg-[#fbfbfb] border border-[#e6e5f7] rounded-2xl">
-                    <div 
-                        class="absolute left-0 top-0 h-full bg-gradient-to-r from-[#59e9d3] to-[#e6e5f7] rounded-2xl transition-all duration-300"
+                <div class="relative h-4 w-full rounded-2xl border border-[#e6e5f7] bg-[#fbfbfb]">
+                    <div
+                        class="absolute top-0 left-0 h-full rounded-2xl bg-gradient-to-r from-[#59e9d3] to-[#e6e5f7] transition-all duration-300"
                         style={`width: ${campaign.progressPercentage}%`}
-                    ></div>
+                    >
+                    </div>
                 </div>
 
                 <!-- Amount Information -->
-                <div class="flex justify-between items-start">
+                <div class="flex items-start justify-between">
                     <div class="flex flex-col gap-1">
-                        <span class="text-[#3d3d3d] text-base">{t("home.campaigns.obtained")}</span>
-                        <span class="text-[#3d3d3d] text-2xl font-bold">{campaign.obtained}</span>
+                        <span class="text-base text-[#3d3d3d]">{t("home.campaigns.obtained")}</span>
+                        <span class="text-2xl font-bold text-[#3d3d3d]">{campaign.obtained}</span>
                     </div>
                     <div class="flex flex-col gap-1 text-right">
-                        <span class="text-[#3d3d3d] text-base">{t("home.campaigns.minimum")}</span>
-                        <span class="text-[#3d3d3d] text-2xl font-bold">{campaign.minimum}</span>
+                        <span class="text-base text-[#3d3d3d]">{t("home.campaigns.minimum")}</span>
+                        <span class="text-2xl font-bold text-[#3d3d3d]">{campaign.minimum}</span>
                     </div>
                 </div>
             </div>

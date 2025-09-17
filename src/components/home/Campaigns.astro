@@ -1,6 +1,7 @@
 ---
 import CampaignCard from "./CampaignCard.astro";
 import type { Campaign } from "../../types/campaign";
+import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
 
 const { t } = Astro.locals;
 
@@ -115,21 +116,7 @@ const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
             class="flex items-center gap-2 rounded-3xl bg-[#e6e5f7] px-6 py-4 transition-all duration-200 hover:opacity-90"
         >
             <!-- Arrow Icon -->
-            <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-            >
-                <path
-                    d="M8 4L16 12L8 20"
-                    stroke="#462949"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"></path>
-            </svg>
+            <ArrowRightIcon />
             <span class="text-base font-bold text-[#462949]">
                 {t("home.campaigns.viewAll")}
             </span>
