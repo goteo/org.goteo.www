@@ -2,7 +2,7 @@
 
 describe("Login Page", () => {
     beforeEach(() => {
-        cy.visit("/login");
+        cy.visit("/es/login");
         cy.on("uncaught:exception", () => false);
     });
 
