@@ -177,7 +177,14 @@ export function formatCurrency(
     options: { asLocaleString: boolean } = { asLocaleString: true },
 ): string {
     if (amount === undefined) return "";
-    if (currency === undefined || currency === null) currency = getDefaultCurrency();
+
+    if (currency === undefined || currency === null) {
+        currency = import.meta.env.PUBLIC_CURRENCY_DEFAULT;
+
+        if (!currency) {
+            throw new Error("PUBLIC_CURRENCY_DEFAULT NOT DEFINED");
+        }
+    }
 
     const currencyData = currencySymbols[currency];
     if (!currencyData) return "";
