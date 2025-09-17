@@ -75,7 +75,7 @@ jobs:
                   build: pnpm build
                   start: pnpm preview:ci
                   wait-on: http://localhost:4321
-                  wait-on-timeout: 300
+                  wait-on-timeout: 4000
                   browser: chrome
               env:
                   CI: true
