@@ -177,14 +177,7 @@ export function formatCurrency(
     options: { asLocaleString: boolean } = { asLocaleString: true },
 ): string {
     if (amount === undefined) return "";
-
-    if (currency === undefined || currency === null) {
-        currency = import.meta.env.PUBLIC_CURRENCY_DEFAULT;
-
-        if (!currency) {
-            throw new Error("PUBLIC_CURRENCY_DEFAULT NOT DEFINED");
-        }
-    }
+    if (currency === undefined || currency === null) currency = getDefaultCurrency();
 
     const currencyData = currencySymbols[currency];
     if (!currencyData) return "";
@@ -196,7 +189,7 @@ export function formatCurrency(
 
     const asLocaleString = options.asLocaleString;
 
-    const locale = typeof navigator !== "undefined" ? navigator.language : getDefaultLanguage();
+    const locale = getDefaultLanguage();
     const formatter = new Intl.NumberFormat(locale, {
         currency,
         style: "currency",

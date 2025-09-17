@@ -1,126 +1,46 @@
-import dotenv from "dotenv";
+let runtimeEnv: Record<string, string>;
 
-let dotenvLoaded = false;
-
-function loadEnv() {
-    if (typeof process !== "undefined" && !dotenvLoaded) {
-        dotenv.config();
-        dotenvLoaded = true;
-    }
+if (typeof import.meta !== "undefined" && import.meta.env) {
+    runtimeEnv = import.meta.env;
+} else if (typeof process !== "undefined" && process.env) {
+    runtimeEnv = process.env as Record<string, string>;
+} else {
+    throw new Error("Runtime not supported");
 }
 
-function getRuntimeEnv(request?: Request): Record<string, string> | undefined {
-    if (request && typeof globalThis !== "undefined") {
-        const astroGlobal = (globalThis as any).Astro;
-        if (astroGlobal?.locals?.runtime?.env) {
-            return astroGlobal.locals.runtime.env;
-        }
-    }
+export function getEnvVar(key: string): string {
+    const val = runtimeEnv[key];
 
-    if (typeof globalThis !== "undefined") {
-        if ((globalThis as any).context?.env) {
-            return (globalThis as any).context.env;
-        }
-
-        if ((globalThis as any).platform?.env) {
-            return (globalThis as any).platform.env;
-        }
-    }
-
-    return undefined;
-}
-
-export function getEnvVariable(key: string, request?: Request): string {
-    loadEnv();
-
-    if (request) {
-        const runtimeEnv = getRuntimeEnv(request);
-        if (runtimeEnv && runtimeEnv[key] !== undefined) {
-            const envVar = runtimeEnv[key];
-            if (envVar === null || envVar === "") {
-                throw new Error(`Runtime env variable ${key} is empty`);
-            }
-            return envVar;
-        }
-    }
-
-    const envVar = import.meta.env?.[key] ?? process.env?.[key];
-
-    if (envVar === undefined) {
+    if (!val) {
         throw new Error(`Missing env variable: ${key}`);
     }
 
-    if (envVar === null || envVar === "") {
-        throw new Error(`Env variable ${key} is empty`);
-    }
-
-    return envVar;
+    return val;
 }
 
-export function getEnvFromAstroRequest(key: string, astroRequest: any): string {
-    if (astroRequest?.locals?.runtime?.env?.[key]) {
-        const envVar = astroRequest.locals.runtime.env[key];
-        if (envVar === null || envVar === "") {
-            throw new Error(`Runtime env variable ${key} is empty`);
-        }
-        return envVar;
-    }
-
-    return getEnvVariable(key);
+export function getBaseUrl(): string {
+    return getEnvVar("PUBLIC_API_URL");
 }
 
-export function getBaseUrl(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("API_URL", astroRequest)
-        : getEnvVariable("API_URL");
-}
-
-export function getApiVersion(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("API_VERSION", astroRequest)
-        : getEnvVariable("API_VERSION");
+export function getApiVersion(): string {
+    return getEnvVar("PUBLIC_API_VERSION");
 }
 
 export function getPlatoniqAccountingId(): string {
-    return getEnvVariable("PUBLIC_PLATONIQ_ACCOUNTING_ID");
+    return getEnvVar("PUBLIC_PLATONIQ_ACCOUNTING_ID");
 }
 
 export function getFacebookAppId(): string {
-    return getEnvVariable("PUBLIC_FACEBOOK_APP_ID");
+    return getEnvVar("PUBLIC_FACEBOOK_APP_ID");
 }
 
-export function getDefaultCurrency(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest)
-        : getEnvVariable("CURRENCY_DEFAULT");
+export function getDefaultCurrency(): string {
+    return getEnvVar("PUBLIC_DEFAULT_CURRENCY");
 }
 
-export function getDefaultLanguage(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest)
-        : getEnvVariable("LANGUAGE_DEFAULT");
-}
-
-export function getPrivateApiUrl(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("API_URL", astroRequest)
-        : getEnvVariable("API_URL");
-}
-
-export function getPrivateApiVersion(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("API_VERSION", astroRequest)
-        : getEnvVariable("API_VERSION");
-}
-
-export function getPrivateCurrencyDefault(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("CURRENCY_DEFAULT", astroRequest)
-        : getEnvVariable("CURRENCY_DEFAULT");
-}
-
-export function getPrivateLanguageDefault(astroRequest?: any): string {
-    return astroRequest
-        ? getEnvFromAstroRequest("LANGUAGE_DEFAULT", astroRequest)
-        : getEnvVariable("LANGUAGE_DEFAULT");
+export function getDefaultLanguage(): string {
+    if (typeof navigator !== "undefined" && navigator.language) {
+        return navigator.language;
+    }
+    return getEnvVar("PUBLIC_DEFAULT_LANGUAGE");
 }
