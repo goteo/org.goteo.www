@@ -1,0 +1,147 @@
+---
+import CampaignCard from "./CampaignCard.astro";
+import type { Campaign } from "../../types/campaign";
+
+const { t } = Astro.locals;
+
+// Mock campaign data
+const mockCampaigns: Campaign[] = [
+    // Large featured campaign
+    {
+        id: "featured",
+        title: t("home.campaigns.featuredProject.title"),
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=400&q=80",
+        daysRemaining: 120,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 72,
+        hasMatchfunding: false,
+        size: "large" as const, // Mark this card as large
+    },
+    // Regular campaigns
+    {
+        id: "project1",
+        title: t("home.campaigns.projects.project1.title"),
+        image: "https://images.unsplash.com/photo-1544027993-37dbfe43562a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 120,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "project2",
+        title: t("home.campaigns.projects.project2.title"),
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 11,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: true,
+        size: "small" as const,
+    },
+    {
+        id: "project3",
+        title: t("home.campaigns.projects.project3.title"),
+        image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 16,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "project4",
+        title: t("home.campaigns.projects.project4.title"),
+        image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 14,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "project5",
+        title: "Radio Comunitaria Local",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 25,
+        obtained: "2.500€",
+        minimum: "5.000€",
+        progressPercentage: 50,
+        hasMatchfunding: false,
+        size: "large" as const, // Second large card
+    },
+];
+
+// Smart grid layout logic:
+// - Max grid is 2 rows x 3 columns = 6 slots
+// - Large cards take 2 slots, small cards take 1 slot
+// - We need to calculate how many campaigns fit within 6 slots
+function selectCampaignsForGrid(campaigns: Campaign[], maxSlots: number = 6): Campaign[] {
+    const selectedCampaigns: Campaign[] = [];
+    let usedSlots = 0;
+
+    for (const campaign of campaigns) {
+        const slotsNeeded = campaign.size === "large" ? 2 : 1;
+
+        // Check if we can fit this campaign in the remaining slots
+        if (usedSlots + slotsNeeded <= maxSlots) {
+            selectedCampaigns.push(campaign);
+            usedSlots += slotsNeeded;
+        } else {
+            // Can't fit more campaigns
+            break;
+        }
+    }
+
+    return selectedCampaigns;
+}
+
+const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
+---
+
+<section class="container mx-auto px-10 py-18">
+    <!-- Header Section -->
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-black">
+            {t("home.campaigns.title")}
+        </h2>
+
+        <!-- "Ver todas" Button -->
+        <button
+            class="flex items-center gap-2 rounded-3xl bg-[#e6e5f7] px-6 py-4 transition-all duration-200 hover:opacity-90"
+        >
+            <!-- Arrow Icon -->
+            <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6"
+            >
+                <path
+                    d="M8 4L16 12L8 20"
+                    stroke="#462949"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"></path>
+            </svg>
+            <span class="text-base font-bold text-[#462949]">
+                {t("home.campaigns.viewAll")}
+            </span>
+        </button>
+    </div>
+
+    <!-- Campaigns Grid: 3 columns max, 2 rows, large cards take 2 columns -->
+    <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+            displayCampaigns.map((campaign) => (
+                <CampaignCard size={campaign.size} campaign={campaign} />
+            ))
+        }
+    </div>
+</section>

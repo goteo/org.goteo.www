@@ -194,5 +194,32 @@
       "claimed": "people have already claimed this reward",
       "unclaimed": "No one has claimed this reward yet. Be the first!"
     }
+  },
+  "home": {
+    "campaigns": {
+      "title": "Most recent campaigns",
+      "viewAll": "View all",
+      "obtained": "Obtained",
+      "minimum": "Minimum",
+      "daysRemaining": "{days} days remaining",
+      "matchfunding": "Matchfunding",
+      "featuredProject": {
+        "title": "TRÍPTIC DADÀ. Culture and thought podcast."
+      },
+      "projects": {
+        "project1": {
+          "title": "Narrate to not disappear: three documentaries that illuminate what the world silences"
+        },
+        "project2": {
+          "title": "We are the resistance: let's grow CE Europa"
+        },
+        "project3": {
+          "title": "CLOSURE FEST"
+        },
+        "project4": {
+          "title": "Radio Valdivielso needs a new home"
+        }
+      }
+    }
   }
 }

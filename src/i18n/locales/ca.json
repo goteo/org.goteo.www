@@ -316,5 +316,32 @@
       "send": "Enviar",
       "back": "Atrás"
     }
+  },
+  "home": {
+    "campaigns": {
+      "title": "Campanyes més recents",
+      "viewAll": "Veure totes",
+      "obtained": "Obtingut",
+      "minimum": "Mínim",
+      "daysRemaining": "Queden {days} dies",
+      "matchfunding": "Matchfunding",
+      "featuredProject": {
+        "title": "TRÍPTIC DADÀ. Pòdcast de cultura i pensament."
+      },
+      "projects": {
+        "project1": {
+          "title": "Narrar per a no desaparèixer: tres documentals que il·luminen el que el món calla"
+        },
+        "project2": {
+          "title": "Som la resistència: fem créixer el CE Europa"
+        },
+        "project3": {
+          "title": "CLAUSURA FEST"
+        },
+        "project4": {
+          "title": "Ràdio Valdivielso necessita una nova llar"
+        }
+      }
+    }
   }
 }
