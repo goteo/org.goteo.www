@@ -69,21 +69,18 @@ jobs:
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='375592'" >> .env
                   echo "PUBLIC_FACEBOOK_APP_ID=''" >> .env
 
+            - name: Start server
+              run: pnpm start &
+
+            - name: Sleep for 60 seconds
+              run: sleep 60s
+              shell: bash
+
+            - name: Check website availability
+              run: curl -I http://localhost:4321
+
             - name: Run Cypress tests
-              uses: cypress-io/github-action@v6
-              with:
-                  build: pnpm build
-                  start: pnpm preview:ci
-                  wait-on: http://localhost:4321
-                  wait-on-timeout: 4000
-                  browser: chrome
-              env:
-                  CI: true
-                  NODE_ENV: test
-                  NODE_TLS_REJECT_UNAUTHORIZED: 0
-                  CYPRESS_CONFIG_FILE: cypress.github.js
-                  CYPRESS_MOCK_AUTH: true
-                  CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
+              run: pnpm cypress run
 
             - name: Prepare artifact directories if tests failed
               if: failure()
