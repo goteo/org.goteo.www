@@ -11,6 +11,7 @@ export default [
             "node_modules/**",
             "dist/**",
             "build/**",
+            ".wrangler/**",
             "coverage/**",
             "public/**",
             "*.min.js",
