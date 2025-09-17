@@ -67,7 +67,9 @@ jobs:
                   echo "PUBLIC_FACEBOOK_APP_ID=''" >> .env
 
             - name: Start server
-              run: pnpm build && pnpm preview:ci &
+              run: |
+                pnpm build
+                nohup pnpm preview:ci > preview.log 2>&1 &
 
             - name: Wait for server
               run: pnpm wait-on http://localhost:4321
@@ -80,6 +82,13 @@ jobs:
                 for ((i=0;i<TOTAL;i+=BATCH_SIZE)); do
                   pnpm cypress run --spec "${SPEC_FILES[@]:i:BATCH_SIZE}"
                 done
+              env:
+                CI: true
+                NODE_ENV: test
+                NODE_TLS_REJECT_UNAUTHORIZED: 0
+                CYPRESS_CONFIG_FILE: cypress.github.js
+                CYPRESS_MOCK_AUTH: true
+                CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
 
             - name: Prepare artifact directories if tests failed
               if: failure()
