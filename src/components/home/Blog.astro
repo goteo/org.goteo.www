@@ -1,0 +1,54 @@
+---
+// Blog component for the homepage
+
+const { t } = Astro.locals;
+
+// Blog data using translations
+const blogPost = {
+    id: "blog-migration",
+    title: t("home.blog.title"),
+    excerpt: t("home.blog.excerpt"),
+    buttonText: t("home.blog.readMore"),
+    href: "/blog/grandes-cambios",
+};
+---
+
+<section class="wrapper">
+    <!-- Blog Entry Container -->
+    <div class="bg-light-accent flex flex-col rounded-4xl lg:flex-row lg:items-stretch">
+        <!-- Content Section (Left) -->
+        <div class="flex flex-col gap-6 p-10 lg:min-h-0 lg:flex-1">
+            <!-- Main Content -->
+            <div class="flex flex-col gap-2">
+                <h2 class="text-tertiary text-4xl leading-12 font-bold">
+                    {blogPost.title}
+                </h2>
+                <p class="text-tertiary text-base leading-6">
+                    {blogPost.excerpt}
+                </p>
+            </div>
+
+            <!-- Button -->
+            <div class="flex">
+                <a
+                    href={blogPost.href}
+                    class="group border-tertiary hover:bg-tertiary flex items-center justify-center gap-2 rounded-3xl border px-6 py-4 transition-all duration-200"
+                >
+                    <span class="text-tertiary text-base font-bold group-hover:text-white">
+                        {blogPost.buttonText}
+                    </span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Right Side - Blog Image (background so height follows left content) -->
+        <div class="relative hidden overflow-hidden rounded-r-4xl lg:block lg:flex-1">
+            <div
+                aria-label="Technology and digital transformation"
+                role="img"
+                class="h-full w-full bg-center bg-cover"
+                style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');"
+            ></div>
+        </div>
+    </div>
+</section>

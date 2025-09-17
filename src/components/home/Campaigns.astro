@@ -104,7 +104,7 @@ function selectCampaignsForGrid(campaigns: Campaign[], maxSlots: number = 6): Ca
 const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
 ---
 
-<section class="container mx-auto px-10 py-18">
+<section class="wrapper">
     <!-- Header Section -->
     <div class="mb-6 flex items-center justify-between">
         <h2 class="text-2xl font-bold text-black">
@@ -113,11 +113,11 @@ const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
 
         <!-- "Ver todas" Button -->
         <button
-            class="flex items-center gap-2 rounded-3xl bg-purple-tint px-6 py-4 transition-all duration-200 hover:opacity-90"
+            class="bg-purple-tint flex items-center gap-2 rounded-3xl px-6 py-4 transition-all duration-200 hover:opacity-90"
         >
             <!-- Arrow Icon -->
             <ArrowRightIcon />
-            <span class="text-base font-bold text-tertiary">
+            <span class="text-tertiary text-base font-bold">
                 {t("home.campaigns.viewAll")}
             </span>
         </button>

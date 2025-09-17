@@ -3,13 +3,14 @@ import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/Hero/Hero.astro";
 import RenovationBanner from "../../components/home/RenovationBanner.astro";
 import Campaigns from "../../components/home/Campaigns.astro";
+import Blog from "../../components/home/Blog.astro";
 
 const { t } = Astro.locals;
-const hasAccessToken = Boolean(Astro.cookies.get("access-token"));
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <Hero />
     <RenovationBanner />
     <Campaigns />
+    <Blog />
 </Layout>

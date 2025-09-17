@@ -342,6 +342,11 @@
           "title": "Ràdio Valdivielso necessita una nova llar"
         }
       }
+    },
+    "blog": {
+      "title": "S'apropen grans canvis... no et perdis res!",
+      "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions...",
+      "readMore": "Continuar llegint"
     }
   }
 }

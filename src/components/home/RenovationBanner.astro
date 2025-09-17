@@ -2,12 +2,11 @@
 const { t } = Astro.locals;
 ---
 
-<section
-    data-renovation-banner
-    class="wrapper renovation-banner bg-tertiary relative overflow-hidden rounded-3xl text-white"
->
+<section data-renovation-banner class="wrapper renovation-banner">
     <!-- Content -->
-    <div class="relative mx-auto flex items-center justify-between gap-6 py-8">
+    <div
+        class="bg-tertiary relative mx-auto flex items-center justify-between gap-6 overflow-hidden rounded-3xl p-8 text-white"
+    >
         <!-- Main Content -->
         <div class="flex-1 space-y-3 pr-0 md:pr-6">
             <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
@@ -22,7 +21,7 @@ const { t } = Astro.locals;
         <div class="flex items-center gap-3 md:gap-4">
             <a
                 href="#"
-                class="text-tertiary rounded-full bg-light-accent px-8 py-4 font-semibold whitespace-nowrap shadow-md transition-colors duration-200 hover:bg-white"
+                class="text-tertiary bg-light-accent rounded-full px-8 py-4 font-semibold whitespace-nowrap shadow-md transition-colors duration-200 hover:bg-white"
                 aria-label={t("renovationBanner.ctaButton")}
             >
                 {t("renovationBanner.ctaButton")}

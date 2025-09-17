@@ -220,6 +220,11 @@
           "title": "Radio Valdivielso needs a new home"
         }
       }
+    },
+    "blog": {
+      "title": "Big changes are coming... don't miss anything!",
+      "excerpt": "A process that involves an important technical migration of the current platform, and to do it with all security guarantees and without loss of information, we need to carry out an orderly transition, with key dates for the publication of campaigns and donations...",
+      "readMore": "Read more"
     }
   }
 }
