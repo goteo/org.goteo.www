@@ -21,7 +21,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 ---
 
 <div
-    class={`bg-[#fbfbfb] rounded-[32px] border border-[#f3f3ef] shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
+    class={`bg-light-surface rounded-[32px] border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
 >
     <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
         <!-- Project Image -->
@@ -42,11 +42,11 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
             <div class="absolute top-4 left-4 flex gap-2">
                 <!-- Days Remaining Tag -->
                 <div
-                    class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1"
+                    class="flex items-center gap-2 rounded border border-white bg-light-muted px-2 py-1"
                 >
                     <!-- Clock Icon -->
                     <ClockIcon />
-                    <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
+                    <span class="text-sm font-bold whitespace-nowrap text-tertiary">
                         {t("home.campaigns.daysRemaining", { days: campaign.daysRemaining })}
                     </span>
                 </div>
@@ -56,7 +56,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                     campaign.hasMatchfunding && (
                         <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
                             <MatchFundingIcon />
-                            <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
+                            <span class="text-sm font-bold whitespace-nowrap text-tertiary">
                                 {t("home.campaigns.matchfunding")}
                             </span>
                         </div>
@@ -67,7 +67,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                 {
                     campaign.tags?.map((tag) => (
                         <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
-                            <span class="text-sm font-bold whitespace-nowrap text-[#462949]">
+                            <span class="text-sm font-bold whitespace-nowrap text-tertiary">
                                 {tag}
                             </span>
                         </div>
@@ -78,15 +78,15 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 
         <!-- Project Content -->
         <div class={`flex flex-col gap-6 ${size === "large" ? "flex-1" : ""}`}>
-            <h3 class="max-h-16 overflow-hidden text-2xl leading-8 font-bold text-[#462949]">
+            <h3 class="max-h-16 overflow-hidden text-2xl leading-8 font-bold text-tertiary">
                 {campaign.title}
             </h3>
 
             <!-- Progress Bar -->
             <div class="flex flex-col gap-4">
-                <div class="relative h-4 w-full rounded-2xl border border-[#e6e5f7] bg-[#fbfbfb]">
+                <div class="relative h-4 w-full rounded-2xl border border-purple-tint bg-light-surface">
                     <div
-                        class="absolute top-0 left-0 h-full rounded-2xl bg-gradient-to-r from-[#59e9d3] to-[#e6e5f7] transition-all duration-300"
+                        class="absolute top-0 left-0 h-full rounded-2xl bg-gradient-to-r from-primary to-purple-tint transition-all duration-300"
                         style={`width: ${campaign.progressPercentage}%`}
                     >
                     </div>
