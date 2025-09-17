@@ -1,7 +1,7 @@
 import { languagesList } from "../i18n/locales/index";
+import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
-import { getDefaultLanguage } from "../utils/consts";
 
 /**
  * Builds a clean redirect URL by combining the language code and pathname.
