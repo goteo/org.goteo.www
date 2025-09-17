@@ -73,7 +73,7 @@ jobs:
               run: pnpm build && pnpm preview:ci &
 
             - name: Wait for server
-              run: npx wait-on http://localhost:4321
+              run: pnpm wait-on http://localhost:4321
 
             - name: Run Cypress tests
               run: |
