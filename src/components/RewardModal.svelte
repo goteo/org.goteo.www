@@ -83,12 +83,10 @@
             <h3>{$t("rewards.thanks-message")}</h3>
         </div>
         <div class="flex flex-row gap-4">
-            <div class=" flex min-w-0 flex-1 flex-col gap-2">
-                <p class="text-gray-700">
-                    {#await renderMarkdown(reward.description!) then content}
-                        {@html content}
-                    {/await}
-                </p>
+            <div class="marked-content flex min-w-0 flex-1 flex-col gap-2 text-gray-700">
+                {#await renderMarkdown(reward.description!) then content}
+                    {@html content}
+                {/await}
                 <p class="mb-8">
                     {@html $t(
                         "rewards.reward-iva-message",

@@ -81,7 +81,7 @@
                 id="tab-project"
                 role="tabpanel"
                 aria-labelledby="tab-button-project"
-                class="flex max-w-4xl flex-col gap-4"
+                class="marked-content flex max-w-4xl flex-col gap-4"
             >
                 {#await renderMarkdown(project.description) then content}
                     {@html content}

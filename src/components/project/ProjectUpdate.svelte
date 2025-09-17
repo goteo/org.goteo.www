@@ -8,6 +8,7 @@
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
 
     let {
         lang = $bindable(),
@@ -169,8 +170,10 @@
             <h3 class="text-[32px] text-[#462949]">
                 {selected?.title}
             </h3>
-            <div class="flex flex-col gap-4">
-                <p class="text-sm text-[#575757]">{selected.body}</p>
+            <div class="marked-content flex flex-col gap-4 text-gray-700">
+                {#await renderMarkdown(selected.body) then content}
+                    {@html content}
+                {/await}
             </div>
 
             <div class="flex w-full justify-end">
