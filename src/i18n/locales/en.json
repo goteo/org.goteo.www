@@ -225,6 +225,29 @@
       "title": "Big changes are coming... don't miss anything!",
       "excerpt": "A process that involves an important technical migration of the current platform, and to do it with all security guarantees and without loss of information, we need to carry out an orderly transition, with key dates for the publication of campaigns and donations...",
       "readMore": "Read more"
+    },
+    "matchfunding": {
+      "title": "Matchfunding",
+      "description": "Matchfunding is a model where each private donation is multiplied by a sponsoring entity to maximize social impact.",
+      "actions": {
+        "learnMore": "Learn more",
+        "viewCalls": "View active calls"
+      },
+      "impact": {
+        "title": "Impact data",
+        "description": "Matchfunding turns micro-donations into macro impact by validating projects with community support and optimizing public/private resources.",
+        "matchers": "Contributed by Matchers:",
+        "successRate": "Successful projects:",
+        "community": "User community:"
+      },
+      "cards": {
+        "grant": "Call funding",
+        "inscription": "Registration date",
+        "participants": "Participating projects",
+        "apply": "Apply to the call",
+        "viewCampaigns": "View campaign calls",
+        "finished": "Finished {{date}}"
+      }
     }
   }
 }
