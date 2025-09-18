@@ -5,6 +5,10 @@ import es from "./es.json";
 export const labels = { es, en, ca };
 export type Locale = keyof typeof labels;
 
+export function isSupportedLocale(code: string): code is Locale {
+    return code in labels;
+}
+
 export const languagesList: Record<Locale, string> = {
     es: "Español",
     en: "English",

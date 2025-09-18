@@ -6,7 +6,7 @@ describe("Register with Invalid Email", () => {
     });
 
     it("Register with invalid email address (Negative Case)", () => {
-        cy.visit("/register", { failOnStatusCode: false });
+        cy.visit("/es/register", { failOnStatusCode: false });
         cy.wait(2000);
 
         cy.get("body").should("exist");

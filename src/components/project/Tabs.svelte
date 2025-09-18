@@ -1,20 +1,28 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ProjectRewards from "./ProjectRewards.svelte";
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
-    import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
+    import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
+    import { onMount } from "svelte";
+    import type { Project, Accounting } from "../../openapi/client/index";
 
-    let { project, accounting, accountingBalance } = $props<{
+    let {
+        lang = $bindable(),
+        project = $bindable(),
+        accounting,
+    } = $props<{
+        lang: string;
         project: Project;
         accounting: Accounting;
-        accountingBalance: AccountingBalance;
     }>();
-    let contentDescription = $state("");
+
     let activeTab = $state("rewards");
+    let tabsContainer: HTMLDivElement;
+    let canScrollLeft = $state(false);
+    let canScrollRight = $state(true);
 
     const tabs = [
         { id: "rewards", label: $t("project.tabs.rewards") },
@@ -28,17 +36,52 @@
         activeTab = tabId;
     }
 
-    onMount(async () => {
-        contentDescription = await renderMarkdown(project.description || "");
+    function updateScrollButtons() {
+        if (!tabsContainer) return;
+
+        const scrollEnd = tabsContainer.scrollWidth - tabsContainer.clientWidth;
+        const scrollLeft = Math.round(tabsContainer.scrollLeft);
+
+        canScrollLeft = scrollLeft > 0;
+        canScrollRight = scrollLeft < scrollEnd;
+    }
+
+    function scrollTabs(direction: "left" | "right") {
+        if (!tabsContainer) return;
+        const scrollAmount = 200;
+        const targetScroll =
+            direction === "left"
+                ? tabsContainer.scrollLeft - scrollAmount
+                : tabsContainer.scrollLeft + scrollAmount;
+        tabsContainer.scrollTo({ left: targetScroll, behavior: "smooth" });
+    }
+
+    onMount(() => {
+        updateScrollButtons();
+        const handleScroll = () => updateScrollButtons();
+        tabsContainer?.addEventListener("scroll", handleScroll);
+        return () => tabsContainer?.removeEventListener("scroll", handleScroll);
     });
 </script>
 
-<div class="wrapper">
+<div class="wrapper relative">
+    <button
+        onclick={() => scrollTabs("left")}
+        class="absolute top-1/2 left-0 z-10 h-full w-10 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class:opacity-50={!canScrollLeft}
+        class:pointer-events-none={!canScrollLeft}
+        aria-label="Scroll tabs left"
+    >
+        <ArrowSliderIcon direction="left" />
+    </button>
+
     <div
-        class="flex overflow-x-auto no-scrollbar lg:space-x-6"
+        bind:this={tabsContainer}
+        class="no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
         role="tablist"
         aria-label="Project tabs"
         style="scrollbar-width: none;"
+        onscroll={updateScrollButtons}
     >
         {#each tabs as tab}
             <button
@@ -46,7 +89,7 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-tertiary inline-flex items-center rounded-t-lg lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7] px-6 py-2 font-bold transition-colors duration-100 ease-in-out whitespace-nowrap flex-shrink-0"
+                class="text-tertiary inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7]"
                 class:bg-[#E6E5F7]={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
@@ -54,6 +97,16 @@
             </button>
         {/each}
     </div>
+
+    <button
+        onclick={() => scrollTabs("right")}
+        class="absolute top-1/2 right-0 z-10 h-full w-10 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class:opacity-50={!canScrollRight}
+        class:pointer-events-none={!canScrollRight}
+        aria-label="Scroll tabs right"
+    >
+        <ArrowSliderIcon direction="right" />
+    </button>
     <style>
         .no-scrollbar::-webkit-scrollbar {
             display: none;
@@ -74,20 +127,22 @@
                 aria-labelledby="tab-button-rewards"
                 class="w-full"
             >
-                <ProjectRewards {project} />
+                <ProjectRewards bind:lang {project} />
             </div>
         {:else if activeTab === "project"}
             <div
                 id="tab-project"
                 role="tabpanel"
                 aria-labelledby="tab-button-project"
-                class="flex max-w-4xl flex-col gap-4"
+                class="marked-content flex max-w-4xl flex-col gap-4"
             >
-                {@html contentDescription}
+                {#await renderMarkdown(project.description) then content}
+                    {@html content}
+                {/await}
             </div>
         {:else if activeTab === "budget"}
             <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget {project} {accountingBalance} />
+                <ProjectBudget bind:lang {project} {accounting} />
             </div>
         {:else if activeTab === "updates"}
             <div
@@ -96,7 +151,7 @@
                 aria-labelledby="tab-button-updates"
                 class="w-full"
             >
-                <ProjectUpdate {project} />
+                <ProjectUpdate bind:lang {project} />
             </div>
         {:else if activeTab === "community"}
             <div
@@ -105,7 +160,7 @@
                 aria-labelledby="tab-button-community"
                 class="w-full"
             >
-                <ProjectCommunity {project} />
+                <ProjectCommunity {project} {accounting} />
             </div>
         {/if}
     </div>

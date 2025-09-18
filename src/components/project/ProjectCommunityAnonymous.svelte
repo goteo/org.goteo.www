@@ -5,6 +5,7 @@
     import { apiProjectSupportsmoneyTotalGetCollection, type Project } from "../../openapi/client";
 
     export let project: Project;
+    export let currency: string;
 
     const projectId = String(project.id!);
 
@@ -37,7 +38,7 @@
                 </div>
                 <div class="flex items-center gap-2">
                     <span class="font-bold">
-                        {formatCurrency(money)}
+                        {formatCurrency(money, currency)}
                     </span>
                 </div>
             </div>

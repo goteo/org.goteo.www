@@ -6,7 +6,7 @@ describe("Register with Valid Email", () => {
     });
 
     it("Register with valid email address", () => {
-        cy.visit("/register", { failOnStatusCode: false });
+        cy.visit("/es/register", { failOnStatusCode: false });
         cy.wait(2000);
 
         cy.get("body").should("exist");

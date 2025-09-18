@@ -189,7 +189,7 @@ export function formatCurrency(
 
     const asLocaleString = options.asLocaleString;
 
-    const locale = typeof navigator !== "undefined" ? navigator.language : getDefaultLanguage();
+    const locale = getDefaultLanguage();
     const formatter = new Intl.NumberFormat(locale, {
         currency,
         style: "currency",

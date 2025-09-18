@@ -1,20 +1,39 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem, AccountingBalance } from "../../openapi/client/index";
+    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import ResumeBudget from "./ResumeBudget.svelte";
 
-    const { project, accountingBalance } = $props<{
+    let {
+        lang = $bindable(),
+        project,
+        accounting,
+    }: {
+        lang: string;
         project: Project;
-        accountingBalance: AccountingBalance;
-    }>();
+        accounting: Accounting;
+    } = $props();
+
+    const projectId = project.id!.toString();
+
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
     let itemsPerGroup = $state(3);
+
+    $effect(() => {
+        apiProjectBudgetItemsGetCollection({
+            query: { project: projectId },
+            headers: { "Accept-Language": lang },
+        }).then((data) => {
+            projectsBudgetItems = data.data!;
+            minimumItems = projectsBudgetItems.filter((item) => item.deadline === "minimum");
+            optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
+        });
+    });
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
@@ -37,23 +56,13 @@
         itemsPerGroup = isMobile ? 1 : 3;
     }
 
-    onMount(async () => {
-        const { data } = await apiProjectBudgetItemsGetCollection({
-            query: { project: project.id },
-        });
-        projectsBudgetItems = data || [];
-        minimumItems = projectsBudgetItems.filter((item) => item.deadline === "minimum");
-        optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
-
-        // Set initial value
+    onMount(() => {
         updateItemsPerGroup();
 
-        // Listen for window resize
         window.addEventListener("resize", updateItemsPerGroup);
     });
 
-    // Cleanup on component destroy
-    $effect(() => {
+    onDestroy(() => {
         return () => {
             window.removeEventListener("resize", updateItemsPerGroup);
         };
@@ -62,15 +71,15 @@
 
 <div class="flex flex-col gap-10">
     <div>
-        <ResumeBudget {project} {accountingBalance} />
+        <ResumeBudget {project} {accounting} />
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
             <span class="text-tertiary text-2xl font-bold">
                 {$t("project.tabs.budget.minimum")}:
                 {formatCurrency(
-                    project.budget.minimum.money.amount,
-                    project.budget.minimum.money.currency,
+                    project.budget?.minimum?.money?.amount,
+                    project.budget?.minimum?.money?.currency,
                 )}
             </span>
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
@@ -114,8 +123,8 @@
                 {$t("project.tabs.budget.optimal")}:
 
                 {formatCurrency(
-                    project.budget.optimum.money.amount,
-                    project.budget.optimum.money.currency,
+                    project.budget?.optimum?.money?.amount,
+                    project.budget?.optimum?.money?.currency,
                 )}
             </span>
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
@@ -133,10 +142,7 @@
                     >
                         <div class="flex flex-col gap-4">
                             <h2 class="text-tertiary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p
-                                class="line-clamp-3 font-normal text-[#575757]
-"
-                            >
+                            <p class="line-clamp-3 font-normal text-[#575757]">
                                 {item.description}
                             </p>
                         </div>

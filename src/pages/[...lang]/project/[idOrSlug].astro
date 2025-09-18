@@ -2,7 +2,6 @@
 import SingleProject from "../../../components/project/SingleProject.svelte";
 import Layout from "../../../layouts/Layout.astro";
 import Navigation from "../../../components/Navigation/Navigation.svelte";
-// import UiLanguages from "../../../components/UiLanguages.astro";
 import { extractId } from "../../../utils/extractId";
 const { idOrSlug } = Astro.params;
 
@@ -10,34 +9,33 @@ import {
     apiAccountingsIdGet,
     apiProjectsIdOrSlugGet,
     apiUsersIdGet,
-    apiGatewayCheckoutsGetCollection,
 } from "../../../openapi/client/index";
 import type { Project } from "../../../openapi/client/types.gen";
-import {
-    apiAccountingBalancePointsGetCollection,
-    apiAccountingsIdbalanceGet,
-} from "../../../openapi/client/sdk.gen";
+import { apiAccountingBalancePointsGetCollection } from "../../../openapi/client/sdk.gen";
 import { apiProjectSupportsGetCollection } from "../../../openapi/client/sdk.gen";
 
 if (!idOrSlug) {
     throw new Error("Project ID or Project Slug is undefined.");
 }
 
-const { data: project, error } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
+let lang = Astro.locals.lang;
+
+const { data: project, error } = await apiProjectsIdOrSlugGet({
+    path: { idOrSlug },
+    headers: { "Accept-Language": lang },
+});
+
+if (error || typeof project === "undefined") {
+    throw new Error("Project not found");
+}
 
 const accountingId = extractId(project?.accounting);
 
 if (!accountingId) {
     throw new Error("Accounting ID is undefined.");
 }
-const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingId } });
-const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
-    path: { id: accountingId },
-});
 
-if (error || typeof project === "undefined") {
-    throw new Error("Project not found");
-}
+const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingId } });
 
 const { data: owner } = await apiUsersIdGet({
     path: { id: extractId(project.owner) || "" },
@@ -54,32 +52,26 @@ const { data: supports } = await apiProjectSupportsGetCollection({
 const totalSupports = supports.totalItems;
 
 const deadlineKey = project?.deadline as keyof Project["calendar"];
+const deadline = new Date(project?.calendar?.[deadlineKey]!);
+deadline.setDate(deadline.getDate() + 1);
 
-const balancePoints = await (async () => {
-    const end = new Date(project?.calendar?.[deadlineKey]!);
-
-    end.setDate(end.getDate() + 1);
-
-    const { data: points } = await apiAccountingBalancePointsGetCollection({
-        query: {
-            accounting: project?.accounting ?? "",
-            start: project?.calendar?.release ?? "",
-            end: end.toISOString(),
-            aggregate: true,
-        },
-    });
-
-    return points;
-})();
+const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
+    query: {
+        accounting: project?.accounting ?? "",
+        start: project?.calendar?.release ?? "",
+        end: deadline.toISOString(),
+        aggregate: true,
+    },
+});
 ---
 
 <Layout title={project.title} description={project.description}>
     <Navigation />
     <!-- <div class="wrapper"><UiLanguages /></div> -->
     <SingleProject
+        {lang}
         {project}
         {accounting}
-        {accountingBalance}
         {ownerName}
         {totalSupports}
         {balancePoints}

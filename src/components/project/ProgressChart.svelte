@@ -11,22 +11,24 @@
         Tooltip,
     } from "chart.js";
     import type {
-        AccountingBalance,
+        Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
         ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
 
-    export let balance: AccountingBalance;
+    export let accounting: Accounting;
     export let project: Project;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
     function formatAmount(amount: number | null | undefined): number {
-        return +formatCurrency(amount ?? 0, balance.balance?.currency, { asLocaleString: false });
+        return +formatCurrency(amount ?? 0, accounting.balance?.currency, {
+            asLocaleString: false,
+        });
     }
 
-    let received = formatAmount(balance.balance?.amount);
+    let received = formatAmount(accounting.balance?.amount);
     let minimal = formatAmount(project.budget?.minimum?.money?.amount);
     let optimal = formatAmount(project.budget?.optimum?.money?.amount);
 
@@ -74,7 +76,7 @@
 
         Chart.register({
             id: "twoSectionLines",
-            beforeDraw(chart) {
+            afterDatasetDraw(chart) {
                 const {
                     ctx,
                     chartArea: { left, right },
@@ -100,31 +102,31 @@
             },
         });
 
-        Chart.register({
-            id: "deadlineLine",
-            beforeDraw(chart) {
-                const {
-                    ctx,
-                    chartArea: { top, bottom },
-                    scales: { x },
-                } = chart;
+        // Chart.register({
+        //     id: "deadlineLine",
+        //     afterDatasetDraw(chart) {
+        //         const {
+        //             ctx,
+        //             chartArea: { top, bottom },
+        //             scales: { x },
+        //         } = chart;
 
-                ctx.save();
+        //         ctx.save();
 
-                const xPos = x.getPixelForValue(daysForMinimum);
+        //         const xPos = x.getPixelForValue(daysForMinimum);
 
-                // Draw vertical line
-                ctx.beginPath();
-                ctx.moveTo(xPos, top - 100);
-                ctx.lineTo(xPos, bottom + 100);
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
-                ctx.setLineDash([]);
-                ctx.stroke();
+        //         // Draw vertical line
+        //         ctx.beginPath();
+        //         ctx.moveTo(xPos, top - 100);
+        //         ctx.lineTo(xPos, bottom + 100);
+        //         ctx.lineWidth = 2;
+        //         ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
+        //         ctx.setLineDash([]);
+        //         ctx.stroke();
 
-                ctx.restore();
-            },
-        });
+        //         ctx.restore();
+        //     },
+        // });
 
         if (!canvas) return;
 
@@ -135,7 +137,7 @@
                     {
                         data,
                         borderColor: "rgba(94, 234, 212, 1)",
-                        backgroundColor: "rgba(94, 234, 212, 0.2)",
+                        backgroundColor: "rgba(94, 234, 212, 1)",
                         borderWidth: 1,
                         fill: "start",
                         tension: 0.25,

@@ -1,49 +1,62 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type {
-        Project,
-        Accounting,
-        ApiAccountingBalancePointsGetCollectionData,
-        AccountingBalance,
-        ProjectSupport,
+    import {
+        type Project,
+        type Accounting,
+        type ApiAccountingBalancePointsGetCollectionData,
+        apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
-    import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Sharebutton from "./Sharebutton.svelte";
 
-    import { languagesList } from "../../i18n/locales";
     import Tabs from "./Tabs.svelte";
 
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
-    import Rewards from "../Rewards.svelte";
     import Banner from "./Banner.svelte";
-    import { t } from "../../i18n/store";
+    import { setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
+    import { getDefaultLanguage } from "../../utils/consts";
+    import TopRewards from "./TopRewards.svelte";
 
-    export let project: Project;
-    export let accounting: Accounting;
-    export let accountingBalance: AccountingBalance;
-    export let ownerName: string;
-    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
-    export let totalSupports: number = 0;
+    let {
+        lang = $bindable(),
+        project,
+        accounting,
+        ownerName,
+        totalSupports,
+        balancePoints,
+    }: {
+        lang: string;
+        project: Project;
+        accounting: Accounting;
+        ownerName: string;
+        totalSupports: number;
+        balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    } = $props();
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
-    const limit = 3;
-    let showFull = false;
-    const languages = project?.locales as (keyof typeof languagesList)[];
-
-    const tags = {
-        categoryTag: project.category,
-        territoryTag: getTerritoryTag(project.territory),
-    };
+    let showFull = $state(false);
 
     let paragraphRef: HTMLParagraphElement;
-    let showToggle = false;
+    let showToggle = $state(false);
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
+
+    async function getProjectData(code?: string) {
+        lang = code ? code : getDefaultLanguage();
+
+        setLocale(lang);
+
+        const { data } = await apiProjectsIdOrSlugGet({
+            path: { idOrSlug: project?.id!.toString() },
+            headers: { "Accept-Language": lang },
+        });
+
+        project = data!;
+    }
 
     onMount(() => {
         const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
@@ -62,7 +75,7 @@
                     <span class="text-tertiary font-bold underline"> {ownerName}</span>
                 </h3>
                 <h1 class="text-3xl font-bold text-[#575757] lg:text-4xl">
-                    {project.title} <span>{ownerName}</span>
+                    {project.title}
                 </h1>
             </div>
 
@@ -80,7 +93,7 @@
                     <button
                         type="button"
                         class="mt-2 text-sm font-medium text-blue-600 hover:underline"
-                        on:click={() => (showFull = !showFull)}
+                        onclick={() => (showFull = !showFull)}
                     >
                         {showFull ? "Ver menos" : "Ver más"}
                     </button>
@@ -90,7 +103,11 @@
 
         <div class="flex w-full flex-col gap-4 lg:w-[30%] lg:justify-between">
             <div class="flex justify-end">
-                <LanguagesDropdown {languages} />
+                <LanguagesDropdown
+                    {lang}
+                    languages={project.locales!}
+                    select={(lang: string) => getProjectData(lang)}
+                />
             </div>
 
             <div class="hidden lg:block">
@@ -112,12 +129,12 @@
             <div class="lg:hidden">
                 <Countdown {countdownEnd} />
             </div>
-            <Card {project} {accountingBalance} {balancePoints} />
+            <Card {project} {accounting} {balancePoints} {totalSupports} />
         </div>
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {tags} />
+        <Tags {project} {lang} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <button
@@ -138,13 +155,13 @@
                 <ArrowRightIcon />{$t("reward.showAll")}
             </button>
         </div>
-        <Rewards {project} {limit} />
+        <TopRewards bind:lang {project} />
         <button
-            class="text-tertiary flex cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:hidden justify-center"
+            class="text-tertiary flex cursor-pointer items-center justify-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:hidden"
         >
             <ArrowRightIcon />{$t("reward.showAll")}
         </button>
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs {project} {accounting} {accountingBalance} />
+<Tabs bind:lang bind:project {accounting} />

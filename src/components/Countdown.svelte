@@ -50,7 +50,7 @@
     }
 </script>
 
-<div class="text-tertiary flex items-center lg:justify-end gap-2 text-end text-2xl font-bold">
+<div class="text-tertiary flex items-center gap-2 text-end text-2xl font-bold lg:justify-end">
     {#if timeLeft.total > 0}
         <ClockIcon />
         <p>{$t("countdown.remaining")} {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</p>

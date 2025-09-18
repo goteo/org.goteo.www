@@ -5,9 +5,9 @@
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
 
-    export let defaultCurrency: string;
     export let hasError: boolean;
     export let amount: number | undefined;
+    export let currency: string;
     export let accountingIdPlatoniq: number;
 
     const total = derived(cart, ($cart) =>
@@ -38,9 +38,8 @@
         <p
             class={`text-[56px] leading-tight font-bold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
         >
-            {formatCurrency(amount ?? $total, defaultCurrency)}
+            {formatCurrency(amount ?? $total, currency)}
         </p>
     </div>
-
     <hr class="bg-[#462949]" />
 </div>

@@ -3,14 +3,6 @@ import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
 
-function getDefaultLang(context?: APIContext): string {
-    try {
-        return context ? getDefaultLanguage(context) : getDefaultLanguage();
-    } catch {
-        throw new Error(`LANGUAGE_DEFAULT is not defined in env`);
-    }
-}
-
 /**
  * Builds a clean redirect URL by combining the language code and pathname.
  */
@@ -41,7 +33,7 @@ export function getUserLangPreferences(context: APIContext): string[] {
 }
 
 export function getLanguage(context: APIContext): string {
-    const defaultLang = getDefaultLang(context);
+    const defaultLang = getDefaultLanguage();
     const userPreferredLangs = getUserLangPreferences(context);
     if (!userPreferredLangs) return defaultLang;
 

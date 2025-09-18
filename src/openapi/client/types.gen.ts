@@ -11,14 +11,15 @@
 export type Accounting = {
     id?: number;
     /**
+     * IRI of the resource owning this Accounting.
+     */
+    owner?: string;
+    /**
      * The preferred currency for monetary operations.\
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    /**
-     * The resource owning this Accounting.
-     */
-    readonly owner?: string;
+    balance?: ApiMoney;
 };
 
 /**
@@ -39,46 +40,14 @@ export type AccountingJsonld = {
     readonly '@type'?: string;
     id?: number;
     /**
+     * IRI of the resource owning this Accounting.
+     */
+    owner?: string;
+    /**
      * The preferred currency for monetary operations.\
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    /**
-     * The resource owning this Accounting.
-     */
-    readonly owner?: string;
-};
-
-/**
- * The AccountingBalance represents how much Money is currently held under one Accounting.\
- * \
- * This is calculated from incoming vs outgoing Transactions in the Accounting's history.
- */
-export type AccountingBalance = {
-    accounting?: string;
-    /**
-     * The money currently held by the Accounting.
-     */
-    balance?: ApiMoney;
-};
-
-/**
- * The AccountingBalance represents how much Money is currently held under one Accounting.\
- * \
- * This is calculated from incoming vs outgoing Transactions in the Accounting's history.
- */
-export type AccountingBalanceJsonld = {
-    '@context'?: string | {
-        '@vocab': string;
-        hydra: 'http://www.w3.org/ns/hydra/core#';
-        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
-    };
-    readonly '@id'?: string;
-    readonly '@type'?: string;
-    accounting?: string;
-    /**
-     * The money currently held by the Accounting.
-     */
     balance?: ApiMoneyJsonld;
 };
 
@@ -2499,36 +2468,6 @@ export type ApiAccountingsIdPatchResponses = {
 };
 
 export type ApiAccountingsIdPatchResponse = ApiAccountingsIdPatchResponses[keyof ApiAccountingsIdPatchResponses];
-
-export type ApiAccountingsIdbalanceGetData = {
-    body?: never;
-    path: {
-        /**
-         * Accounting identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/accountings/{id}/balance';
-};
-
-export type ApiAccountingsIdbalanceGetErrors = {
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiAccountingsIdbalanceGetError = ApiAccountingsIdbalanceGetErrors[keyof ApiAccountingsIdbalanceGetErrors];
-
-export type ApiAccountingsIdbalanceGetResponses = {
-    /**
-     * AccountingBalance resource
-     */
-    200: AccountingBalance;
-};
-
-export type ApiAccountingsIdbalanceGetResponse = ApiAccountingsIdbalanceGetResponses[keyof ApiAccountingsIdbalanceGetResponses];
 
 export type ApiAccountingBalancePointsGetCollectionData = {
     body?: never;

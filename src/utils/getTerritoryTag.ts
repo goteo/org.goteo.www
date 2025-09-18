@@ -1,14 +1,7 @@
-import type { ProjectTerritoryApiResource } from "../openapi/client/index";
+import type { Territory } from "../openapi/client";
 
-export const getTerritoryTag = (territory: ProjectTerritoryApiResource): string | undefined => {
-    const entries = Object.entries(territory)
-        .filter(([key, value]) => /^subLvl\d+$/.test(key) && typeof value === "string")
-        .sort(([a], [b]) => {
-            const aNum = parseInt(a.replace("subLvl", ""), 10);
-            const bNum = parseInt(b.replace("subLvl", ""), 10);
-            return aNum - bNum;
-        });
+export const getTerritoryTag = (territory: Territory): string | undefined => {
+    const entries = Object.entries(territory).reverse();
 
-    const last = entries.at(-1);
-    return last?.[1];
+    return entries.at(0)?.[1] ?? undefined;
 };
