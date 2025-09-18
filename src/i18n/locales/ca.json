@@ -320,6 +320,12 @@
   "home": {
     "campaigns": {
       "title": "Campanyes més recents",
+      "tabsTitle": "Campanyes a Goteo",
+      "tabs": {
+        "endingSoon": "Acaben aviat",
+        "mostSuccessful": "Més exitoses",
+        "withMatchfunding": "Amb Matchfunding"
+      },
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",

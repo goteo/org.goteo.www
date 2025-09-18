@@ -45,12 +45,14 @@
 
     function observeVisibility() {
         const children = Array.from(container.children) as HTMLElement[];
-        intersectionObs.disconnect();
-        observerMap.clear();
-        children.forEach((el, idx) => {
-            observerMap.set(idx, el);
-            intersectionObs.observe(el);
-        });
+        if (intersectionObs) {
+            intersectionObs.disconnect();
+            observerMap.clear();
+            children.forEach((el, idx) => {
+                observerMap.set(idx, el);
+                intersectionObs.observe(el);
+            });
+        }
 
         totalGroups = Math.ceil(children.length / itemsPerGroup);
         updateNavForShort();
@@ -99,22 +101,25 @@
         isDragging = false;
     }
 
-    const intersectionObs = new IntersectionObserver(
-        (entries) => {
-            for (const e of entries) {
-                if (e.isIntersecting) {
-                    const idx = Array.from(container.children).indexOf(e.target as HTMLElement);
-                    if (idx !== -1) {
-                        const group = Math.floor(idx / itemsPerGroup);
-                        if (group !== activeGroup) updateNavState(group);
-                    }
-                }
-            }
-        },
-        { threshold: 0.6 },
-    );
+    let intersectionObs: IntersectionObserver;
 
     onMount(() => {
+        // Create IntersectionObserver only in the browser
+        intersectionObs = new IntersectionObserver(
+            (entries) => {
+                for (const e of entries) {
+                    if (e.isIntersecting) {
+                        const idx = Array.from(container.children).indexOf(e.target as HTMLElement);
+                        if (idx !== -1) {
+                            const group = Math.floor(idx / itemsPerGroup);
+                            if (group !== activeGroup) updateNavState(group);
+                        }
+                    }
+                }
+            },
+            { threshold: 0.6 },
+        );
+
         updateItemWidths();
         observeVisibility();
 
@@ -128,7 +133,7 @@
         mutationObs.observe(container, { childList: true });
 
         return () => {
-            intersectionObs.disconnect();
+            if (intersectionObs) intersectionObs.disconnect();
             resizeObs.disconnect();
             mutationObs.disconnect();
         };
@@ -150,10 +155,11 @@
         bind:this={container}
         role="region"
         aria-label="Carousel"
-        class="hide-scrollbar flex gap-[16px] overflow-x-auto scroll-smooth select-none"
+        class="hide-scrollbar flex overflow-x-auto scroll-smooth select-none"
         class:cursor-grab={isScrollable && !isDragging}
         class:cursor-default={!isScrollable}
         class:cursor-grabbing={isDragging && isScrollable}
+        style="gap: {gap}px"
         onmousedown={(e) => handleStart(e.pageX)}
         onmousemove={(e) => handleMove(e.pageX, e)}
         onmouseup={endDrag}

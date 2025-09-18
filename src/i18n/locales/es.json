@@ -604,6 +604,12 @@
   "home": {
     "campaigns": {
       "title": "Campañas más recientes",
+      "tabsTitle": "Campañas en Goteo",
+      "tabs": {
+        "endingSoon": "Acaban pronto",
+        "mostSuccessful": "Más exitosas",
+        "withMatchfunding": "Con Matchfunding"
+      },
       "viewAll": "Ver todas",
       "obtained": "Obtenido",
       "minimum": "Mínimo",

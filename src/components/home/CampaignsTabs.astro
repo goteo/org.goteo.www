@@ -1,0 +1,142 @@
+---
+import CampaignCard from "./CampaignCard.astro";
+import Carousel from "../Carousel.svelte";
+import type { Campaign } from "../../types/campaign";
+import ClockIcon from "../../svgs/ClockIcon.svelte";
+import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
+import FlashIcon from "../../svgs/FlashIcon.astro";
+
+const { t } = Astro.locals;
+
+// Mock campaign data - using same campaigns as the main Campaigns component
+const mockCampaigns: Campaign[] = [
+    {
+        id: "project1",
+        title: "Somos la resistencia: hagamos crecer el CE Europa",
+        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 11,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: true,
+        size: "small" as const,
+    },
+    {
+        id: "project2",
+        title: "CLAUSURA FEST",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 16,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "project3",
+        title: "Todos somos Gaza",
+        image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 37, // hours -> display as "37 hrs"
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "project4",
+        title: "Radio Valdivielso necesita un nuevo hogar",
+        image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        daysRemaining: 14,
+        obtained: "999.999€",
+        minimum: "1.520€",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+];
+
+// Get campaigns for the currently active tab
+const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
+---
+
+<section class="wrapper flex flex-col gap-6">
+    <!-- Header Section -->
+    <div class="flex items-center justify-start">
+        <h2 class="text-2xl font-bold text-black">{t("home.campaigns.tabsTitle")}</h2>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-0">
+            <!-- Active Tab: Acaban pronto -->
+            <button
+                class="border-primary flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
+                data-tab="ending-soon"
+            >
+                <ClockIcon width="16" height="16" class="h-4 w-4" />
+                <span class="text-tertiary text-base font-bold"
+                    >{t("home.campaigns.tabs.endingSoon")}</span
+                >
+            </button>
+
+            <!-- Inactive Tab: Más exitosas -->
+            <button
+                class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
+                data-tab="most-successful"
+            >
+                <FlashIcon width="16" height="16" class="h-4 w-4" />
+                <span class="text-secondary text-base font-bold"
+                    >{t("home.campaigns.tabs.mostSuccessful")}</span
+                >
+            </button>
+
+            <!-- Inactive Tab: Con Matchfunding -->
+            <button
+                class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
+                data-tab="matchfunding"
+            >
+                <MatchFundingIcon width="16" height="16" class="h-4 w-4" />
+                <span class="text-secondary text-base font-bold">
+                    {t("home.campaigns.tabs.withMatchfunding")}
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Campaigns Carousel -->
+    <div>
+        <Carousel client:load itemsPerGroup={3} gap={24} showDots={false}>
+            {displayCampaigns.map((campaign) => <CampaignCard size="small" campaign={campaign} />)}
+        </Carousel>
+    </div>
+</section>
+
+<script>
+    // Tab switching functionality
+    const tabs = document.querySelectorAll("[data-tab]") as NodeListOf<HTMLButtonElement>;
+
+    tabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+            // Remove active state from all tabs
+            tabs.forEach((t) => {
+                t.classList.remove("border-primary");
+                t.classList.add("border-purple-tint");
+                const span = t.querySelector("span");
+                if (span) span.classList.remove("text-tertiary");
+                if (span) span.classList.add("text-secondary");
+            });
+
+            // Add active state to clicked tab
+            tab.classList.add("border-primary");
+            tab.classList.remove("border-purple-tint");
+            const span = tab.querySelector("span");
+            if (span) span.classList.add("text-tertiary");
+            if (span) span.classList.remove("text-secondary");
+
+            // Here you would typically fetch/filter campaigns based on the selected tab
+            const tabType = tab.getAttribute("data-tab");
+            console.log("Selected tab:", tabType);
+        });
+    });
+</script>

@@ -2,7 +2,7 @@
 import type { Campaign, CampaignSize } from "../../types/campaign";
 import ShareIcon from "../../svgs/ShareIcon.svelte";
 import ClockIcon from "../../svgs/ClockIcon.svelte";
-import MatchFundingIcon from "../../svgs/MatchFunding.astro";
+import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
 
 export interface Props {
     size: CampaignSize;
@@ -21,7 +21,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 ---
 
 <div
-    class={`bg-light-surface rounded-[32px] border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
+    class={`bg-light-surface rounded-[32px] min-w-sm border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
 >
     <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
         <!-- Project Image -->
@@ -32,7 +32,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
             <!-- Share Button (only for small cards) -->
             {
                 size === "small" && (
-                    <button class="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border border-[#f3f3ef] bg-[#fbfbfb] shadow-[0px_2px_4px_0px_rgba(0,0,0,0.16)] transition-all duration-200 hover:opacity-80">
+                    <button class="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border border-light-muted bg-light-surface shadow-[0px_2px_4px_0px_rgba(0,0,0,0.16)] transition-all duration-200 hover:opacity-80">
                         <ShareIcon />
                     </button>
                 )
@@ -54,7 +54,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                 <!-- Matchfunding Tag (conditional) -->
                 {
                     campaign.hasMatchfunding && (
-                        <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
+                        <div class="flex items-center gap-2 rounded border border-white bg-light-muted px-2 py-1">
                             <MatchFundingIcon />
                             <span class="text-sm font-bold whitespace-nowrap text-tertiary">
                                 {t("home.campaigns.matchfunding")}
@@ -66,7 +66,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                 <!-- Additional Tags -->
                 {
                     campaign.tags?.map((tag) => (
-                        <div class="flex items-center gap-2 rounded border border-[#faf9ff] bg-[#f3f3ef] px-2 py-1">
+                        <div class="flex items-center gap-2 rounded border border-white bg-light-muted px-2 py-1">
                             <span class="text-sm font-bold whitespace-nowrap text-tertiary">
                                 {tag}
                             </span>
@@ -95,12 +95,12 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                 <!-- Amount Information -->
                 <div class="flex items-start justify-between">
                     <div class="flex flex-col gap-1">
-                        <span class="text-base text-[#3d3d3d]">{t("home.campaigns.obtained")}</span>
-                        <span class="text-2xl font-bold text-[#3d3d3d]">{campaign.obtained}</span>
+                        <span class="text-base text-secondary">{t("home.campaigns.obtained")}</span>
+                        <span class="text-2xl font-bold text-secondary">{campaign.obtained}</span>
                     </div>
                     <div class="flex flex-col gap-1 text-right">
-                        <span class="text-base text-[#3d3d3d]">{t("home.campaigns.minimum")}</span>
-                        <span class="text-2xl font-bold text-[#3d3d3d]">{campaign.minimum}</span>
+                        <span class="text-base text-secondary">{t("home.campaigns.minimum")}</span>
+                        <span class="text-2xl font-bold text-secondary">{campaign.minimum}</span>
                     </div>
                 </div>
             </div>

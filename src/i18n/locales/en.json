@@ -198,6 +198,12 @@
   "home": {
     "campaigns": {
       "title": "Most recent campaigns",
+      "tabsTitle": "Campaigns in Goteo",
+      "tabs": {
+        "endingSoon": "Ending soon",
+        "mostSuccessful": "Most successful",
+        "withMatchfunding": "With Matchfunding"
+      },
       "viewAll": "View all",
       "obtained": "Obtained",
       "minimum": "Minimum",
