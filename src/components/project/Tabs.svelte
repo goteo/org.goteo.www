@@ -39,9 +39,12 @@
 
     function updateScrollButtons() {
         if (!tabsContainer) return;
-        canScrollLeft = tabsContainer.scrollLeft > 0;
-        canScrollRight =
-            tabsContainer.scrollLeft < tabsContainer.scrollWidth - tabsContainer.clientWidth;
+
+        const scrollEnd = tabsContainer.scrollWidth - tabsContainer.clientWidth;
+        const scrollLeft = Math.round(tabsContainer.scrollLeft);
+
+        canScrollLeft = scrollLeft > 0;
+        canScrollRight = scrollLeft < scrollEnd;
     }
 
     function scrollTabs(direction: "left" | "right") {
@@ -65,7 +68,7 @@
 <div class="wrapper relative">
     <button
         onclick={() => scrollTabs("left")}
-        class="absolute top-1/2 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-1 shadow-md lg:hidden"
+        class="absolute top-1/2 left-0 z-10 h-full w-10 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollLeft}
         class:pointer-events-none={!canScrollLeft}
         aria-label="Scroll tabs left"
@@ -98,7 +101,7 @@
 
     <button
         onclick={() => scrollTabs("right")}
-        class="absolute top-1/2 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-full bg-[#e6e5f7] p-1 shadow-md lg:hidden"
+        class="absolute top-1/2 right-0 z-10 h-full w-10 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollRight}
         class:pointer-events-none={!canScrollRight}
         aria-label="Scroll tabs right"
