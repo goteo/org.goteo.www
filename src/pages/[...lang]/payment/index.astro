@@ -4,10 +4,7 @@ import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
-import {
-    apiGatewaysGetCollection,
-    apiAccountingsIdbalanceGet,
-} from "../../../openapi/client/index";
+import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
 
 const { t } = Astro.locals;
 
@@ -20,7 +17,7 @@ if (!cookieValue) {
 
 const { accountingId, token } = JSON.parse(cookieValue.value);
 
-const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
+const { data: accounting } = await apiAccountingsIdGet({
     path: { id: accountingId },
     headers: {
         Authorization: `Bearer ${token}`,
@@ -45,7 +42,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                             </p>
                         </div>
 
-                        <PaymentMethod {paymentGateways} {accountingBalance} />
+                        <PaymentMethod {paymentGateways} {accounting} />
                     </div>
                 </div>
             </div>

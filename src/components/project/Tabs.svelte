@@ -7,17 +7,16 @@
     import ProjectCommunity from "./ProjectCommunity.svelte";
     import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
     import { onMount } from "svelte";
-    import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
+    import type { Project, Accounting } from "../../openapi/client/index";
 
     let {
         lang = $bindable(),
         project = $bindable(),
-        accountingBalance,
+        accounting,
     } = $props<{
         lang: string;
         project: Project;
         accounting: Accounting;
-        accountingBalance: AccountingBalance;
     }>();
 
     let activeTab = $state("rewards");
@@ -143,7 +142,7 @@
             </div>
         {:else if activeTab === "budget"}
             <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget bind:lang {project} {accountingBalance} />
+                <ProjectBudget bind:lang {project} {accounting} />
             </div>
         {:else if activeTab === "updates"}
             <div
@@ -161,7 +160,7 @@
                 aria-labelledby="tab-button-community"
                 class="w-full"
             >
-                <ProjectCommunity {project} balance={accountingBalance} />
+                <ProjectCommunity {project} {accounting} />
             </div>
         {/if}
     </div>

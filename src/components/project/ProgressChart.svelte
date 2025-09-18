@@ -11,22 +11,24 @@
         Tooltip,
     } from "chart.js";
     import type {
-        AccountingBalance,
+        Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
         ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
 
-    export let balance: AccountingBalance;
+    export let accounting: Accounting;
     export let project: Project;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
     function formatAmount(amount: number | null | undefined): number {
-        return +formatCurrency(amount ?? 0, balance.balance?.currency, { asLocaleString: false });
+        return +formatCurrency(amount ?? 0, accounting.balance?.currency, {
+            asLocaleString: false,
+        });
     }
 
-    let received = formatAmount(balance.balance?.amount);
+    let received = formatAmount(accounting.balance?.amount);
     let minimal = formatAmount(project.budget?.minimum?.money?.amount);
     let optimal = formatAmount(project.budget?.optimum?.money?.amount);
 
