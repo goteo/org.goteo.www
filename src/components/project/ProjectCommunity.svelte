@@ -93,7 +93,7 @@
             {$t("project.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
                 {#each groupedItems.matchfunding as item (item.id)}
                     <ProjectCommunityMatchfunding
                         {item}
@@ -105,7 +105,7 @@
             </div>
 
             {#if groupedItems.default?.length}
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-4">
                     {#each groupedItems.default as item (item.id)}
                         <ProjectCommunityMessage
                             {item}
