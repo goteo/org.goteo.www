@@ -2,6 +2,9 @@
 // Matchfunding section derived from Figma design
 // Uses design tokens and Tailwind utility classes.
 // Later this could be powered by real API data.
+import hacenderaImage from "./hacendera-de-proyectos.png";
+import reeiximImage from "./reeixim-loesst.png";
+
 const { t } = Astro.locals;
 
 // Mock impact metrics (could be localized / formatted later)
@@ -12,13 +15,14 @@ const impact = [
 ];
 
 // Mock active / past calls (simplified from Figma example)
+interface CallCardStat {
+    label: string;
+    value: string;
+}
+
 interface CallCard {
     title: string;
-    grant: string; // Dotación
-    statLabel1: string;
-    statValue1: string;
-    statLabel2: string;
-    statValue2: string;
+    stats: CallCardStat[]; // supports 2 or more stats depending on the card
     cta: string;
     tag?: string;
     background: string; // temp image url
@@ -28,24 +32,25 @@ interface CallCard {
 const calls: CallCard[] = [
     {
         title: "Hacendera de proyectos",
-        grant: "200.000€",
-        statLabel1: t("home.matchfunding.cards.grant"),
-        statValue1: "200.000€",
-        statLabel2: t("home.matchfunding.cards.inscription"),
-        statValue2: "15/08/2025",
-        cta: t("home.matchfunding.cards.apply"),
-        background: "http://localhost:3845/assets/a268eb672b839cca7cd25039c6fe9e3d713a71c2.png",
+        stats: [
+            { label: t("home.matchfunding.cards.grant"), value: "200.000€" },
+            { label: t("home.matchfunding.cards.inscription"), value: "15/08/2025" },
+        ],
+        // Figma CTA copy
+        cta: "Inscríbete en la convocatoria",
+        background: hacenderaImage.src,
     },
     {
         title: "Reeixim L`oesst",
-        grant: "200.000€",
-        statLabel1: t("home.matchfunding.cards.grant"),
-        statValue1: "200.000€",
-        statLabel2: t("home.matchfunding.cards.participants"),
-        statValue2: "15 proyectos",
-        cta: t("home.matchfunding.cards.viewCampaigns"),
-        background: "http://localhost:3845/assets/80a5ced65d80e65f6f33002188dd4c385641c66e.png",
-        tag: t("home.matchfunding.cards.finished", { date: "24/09/25" }),
+        stats: [
+            { label: t("home.matchfunding.cards.grant"), value: "200.000€" },
+            { label: t("home.matchfunding.cards.participants"), value: "15 proyectos" },
+            // TODO i18n: add proper key for "Proyectos acabados con éxito"
+            { label: "Proyectos acabados con éxito", value: "4 proyectos" },
+        ],
+        cta: "Ver las campañas de la convocatoria",
+        background: reeiximImage.src,
+        tag: `Finalizada 24/09/25`,
         finished: true,
     },
 ];
@@ -58,13 +63,13 @@ const calls: CallCard[] = [
             <div class="flex flex-col gap-6 lg:flex-row lg:justify-between">
                 <!-- What is Matchfunding -->
                 <div
-                    class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[#543f59] p-10 lg:w-1/2"
+                    class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[rgba(143,124,146,0.4)] p-10 lg:w-1/2"
                 >
-                    <div class="text-purple-tint flex flex-col gap-4 text-balance">
-                        <h2 class="text-purple-tint text-4xl font-bold">
+                    <div class="text-light-accent flex flex-col gap-4 text-balance">
+                        <h2 class="text-light-accent text-4xl font-bold">
                             {t("home.matchfunding.title")}
                         </h2>
-                        <p class="text-base leading-6 text-white/90">
+                        <p class="text-base leading-6 text-white">
                             {t("home.matchfunding.description")}
                         </p>
                     </div>
@@ -77,7 +82,7 @@ const calls: CallCard[] = [
                         </a>
                         <a
                             href="/convocatorias"
-                            class="bg-purple-tint text-tertiary rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
+                            class="bg-light-accent text-tertiary rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
                         >
                             {t("home.matchfunding.actions.viewCalls")}
                         </a>
@@ -85,13 +90,13 @@ const calls: CallCard[] = [
                 </div>
                 <!-- Impact data -->
                 <div
-                    class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[#543f59] p-10 lg:w-1/2"
+                    class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[rgba(143,124,146,0.4)] p-10 lg:w-1/2"
                 >
-                    <div class="text-purple-tint flex flex-col gap-4">
-                        <h3 class="text-purple-tint text-4xl font-bold">
+                    <div class="text-light-accent flex flex-col gap-4">
+                        <h3 class="text-light-accent text-4xl font-bold">
                             {t("home.matchfunding.impact.title")}
                         </h3>
-                        <p class="text-base leading-6 text-white/90">
+                        <p class="text-base leading-6 text-white">
                             {t("home.matchfunding.impact.description")}
                         </p>
                     </div>
@@ -99,7 +104,7 @@ const calls: CallCard[] = [
                         {
                             impact.map((item) => (
                                 <div class="flex flex-col gap-2" data-label={item.label}>
-                                    <span class="text-sm text-white/80">{item.label}</span>
+                                    <span class="text-sm text-white">{item.label}</span>
                                     <span class="text-4xl font-bold tracking-tight">
                                         {item.value}
                                     </span>
@@ -118,41 +123,31 @@ const calls: CallCard[] = [
                             class="relative flex w-full flex-col justify-between overflow-hidden rounded-3xl bg-cover bg-center text-white lg:w-1/2"
                             style={`background-image:url(${card.background});`}
                         >
-                            <div class="flex flex-col gap-10 p-10">
+                            <div class="relative z-10 flex flex-col gap-10 p-10">
                                 <div class="flex flex-col gap-4">
                                     <h4 class="text-3xl font-bold">{card.title}</h4>
                                     <div class="flex gap-6">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-white/80">
-                                                {card.statLabel1}
-                                            </span>
-                                            <span class="text-2xl font-bold">
-                                                {card.statValue1}
-                                            </span>
-                                        </div>
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-white/80">
-                                                {card.statLabel2}
-                                            </span>
-                                            <span class="text-2xl font-bold">
-                                                {card.statValue2}
-                                            </span>
-                                        </div>
+                                        {card.stats.map((s) => (
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-white">{s.label}</span>
+                                                <span class="text-2xl font-bold">{s.value}</span>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
                                 <a
                                     href="/convocatorias"
-                                    class="bg-purple-tint text-tertiary inline-block rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
+                                    class="bg-light-accent text-tertiary w-fit rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
                                 >
                                     {card.cta}
                                 </a>
                             </div>
                             {card.tag && (
-                                <div class="absolute top-6 right-6 rounded bg-[var(--color-tertiary,#e94668)] px-2 py-1 text-xs font-medium text-white">
+                                <div class="absolute top-6 right-6 z-20 rounded bg-[#E94668] px-2 py-1 text-xs font-medium text-white">
                                     {card.tag}
                                 </div>
                             )}
-                            <div class="pointer-events-none absolute inset-0 bg-black/30" />
+                            <div class="pointer-events-none absolute inset-0 z-0 bg-gradient-to-r from-black/70 to-black/30" />
                         </div>
                     ))
                 }

@@ -282,7 +282,7 @@
     "by-amount": "Por {{amount}}",
     "by-amount-or-more": "Por {{amount}} o más",
     "thanks-message": "Gracias por cooperar",
-    "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
+    "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
     "reward-donate-close": "Añadir al carro y continuar",
     "error-invalid-amount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa",
     "error-amount": "Por favor, ingresa una monto válido",
@@ -634,14 +634,14 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "El matchfunding (o financiación combinada) es un modelo donde cada donación privada es multiplicada por una entidad patrocinadora para maximizar el impacto social.",
+      "description": "El matchfunding (o \"financiación combinada\") es un modelo de financiación colectiva en el que cada donación privada es multiplicada por una entidad patrocinadora (como una institución pública, una empresa o una fundación). Su objetivo es incentivar la participación ciudadana y maximizar el impacto de proyectos sociales, culturales, educativos o medioambientales.",
       "actions": {
         "learnMore": "Quiero saber más",
         "viewCalls": "Ver convocatorias activas"
       },
       "impact": {
         "title": "Datos de impacto",
-        "description": "El matchfunding transforma microdonaciones en impacto macro validando proyectos con apoyo ciudadano y optimizando recursos públicos/privados.",
+        "description": "El matchfunding no solo multiplica recursos económicos, sino que genera un impacto social tangible. En esencia, el matchfunding transforma microdonaciones en impacto macro, validando proyectos con apoyo ciudadano y optimizando recursos públicos/privados.",
         "matchers": "Aportado por Matchers:",
         "successRate": "Proyectos exitosos:",
         "community": "Comunidad de usuarias:"
