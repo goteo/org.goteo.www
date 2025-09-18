@@ -5,6 +5,8 @@
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
+    import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
+    import { onMount } from "svelte";
     import type { Project, Accounting, AccountingBalance } from "../../openapi/client/index";
 
     let {
@@ -19,6 +21,9 @@
     }>();
 
     let activeTab = $state("rewards");
+    let tabsContainer: HTMLDivElement;
+    let canScrollLeft = $state(false);
+    let canScrollRight = $state(true);
 
     const tabs = [
         { id: "rewards", label: $t("project.tabs.rewards") },
@@ -31,14 +36,53 @@
     function selectTab(tabId: string) {
         activeTab = tabId;
     }
+
+    function updateScrollButtons() {
+        if (!tabsContainer) return;
+
+        const scrollEnd = tabsContainer.scrollWidth - tabsContainer.clientWidth;
+        const scrollLeft = Math.round(tabsContainer.scrollLeft);
+
+        canScrollLeft = scrollLeft > 0;
+        canScrollRight = scrollLeft < scrollEnd;
+    }
+
+    function scrollTabs(direction: "left" | "right") {
+        if (!tabsContainer) return;
+        const scrollAmount = 200;
+        const targetScroll =
+            direction === "left"
+                ? tabsContainer.scrollLeft - scrollAmount
+                : tabsContainer.scrollLeft + scrollAmount;
+        tabsContainer.scrollTo({ left: targetScroll, behavior: "smooth" });
+    }
+
+    onMount(() => {
+        updateScrollButtons();
+        const handleScroll = () => updateScrollButtons();
+        tabsContainer?.addEventListener("scroll", handleScroll);
+        return () => tabsContainer?.removeEventListener("scroll", handleScroll);
+    });
 </script>
 
-<div class="wrapper">
+<div class="wrapper relative">
+    <button
+        onclick={() => scrollTabs("left")}
+        class="absolute top-1/2 left-0 z-10 h-full w-10 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class:opacity-50={!canScrollLeft}
+        class:pointer-events-none={!canScrollLeft}
+        aria-label="Scroll tabs left"
+    >
+        <ArrowSliderIcon direction="left" />
+    </button>
+
     <div
-        class="no-scrollbar flex overflow-x-auto lg:space-x-6"
+        bind:this={tabsContainer}
+        class="no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
         role="tablist"
         aria-label="Project tabs"
         style="scrollbar-width: none;"
+        onscroll={updateScrollButtons}
     >
         {#each tabs as tab}
             <button
@@ -54,6 +98,16 @@
             </button>
         {/each}
     </div>
+
+    <button
+        onclick={() => scrollTabs("right")}
+        class="absolute top-1/2 right-0 z-10 h-full w-10 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class:opacity-50={!canScrollRight}
+        class:pointer-events-none={!canScrollRight}
+        aria-label="Scroll tabs right"
+    >
+        <ArrowSliderIcon direction="right" />
+    </button>
     <style>
         .no-scrollbar::-webkit-scrollbar {
             display: none;
