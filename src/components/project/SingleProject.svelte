@@ -4,7 +4,6 @@
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
-        type AccountingBalance,
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
     import Tags from "../Tags.svelte";
@@ -27,7 +26,6 @@
         lang = $bindable(),
         project,
         accounting,
-        accountingBalance,
         ownerName,
         totalSupports,
         balancePoints,
@@ -35,7 +33,6 @@
         lang: string;
         project: Project;
         accounting: Accounting;
-        accountingBalance: AccountingBalance;
         ownerName: string;
         totalSupports: number;
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
@@ -132,7 +129,7 @@
             <div class="lg:hidden">
                 <Countdown {countdownEnd} />
             </div>
-            <Card {project} {accountingBalance} {balancePoints} {totalSupports} />
+            <Card {project} {accounting} {balancePoints} {totalSupports} />
         </div>
     </div>
 
@@ -167,4 +164,4 @@
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs bind:lang bind:project {accounting} {accountingBalance} />
+<Tabs bind:lang bind:project {accounting} />

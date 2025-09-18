@@ -11,10 +11,7 @@ import {
     apiUsersIdGet,
 } from "../../../openapi/client/index";
 import type { Project } from "../../../openapi/client/types.gen";
-import {
-    apiAccountingBalancePointsGetCollection,
-    apiAccountingsIdbalanceGet,
-} from "../../../openapi/client/sdk.gen";
+import { apiAccountingBalancePointsGetCollection } from "../../../openapi/client/sdk.gen";
 import { apiProjectSupportsGetCollection } from "../../../openapi/client/sdk.gen";
 
 if (!idOrSlug) {
@@ -28,35 +25,49 @@ const { data: project, error } = await apiProjectsIdOrSlugGet({
     headers: { "Accept-Language": lang },
 });
 
+console.log(new Date().toISOString(), "post_project");
+
 const accountingId = extractId(project?.accounting);
 
 if (!accountingId) {
     throw new Error("Accounting ID is undefined.");
 }
+
+console.log(new Date().toISOString(), "pre_accounting");
+
 const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingId } });
-const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
-    path: { id: accountingId },
-});
+
+console.log(new Date().toISOString(), "post_accounting");
 
 if (error || typeof project === "undefined") {
     throw new Error("Project not found");
 }
 
+console.log(new Date().toISOString(), "pre_user");
+
 const { data: owner } = await apiUsersIdGet({
     path: { id: extractId(project.owner) || "" },
 });
 
+console.log(new Date().toISOString(), "post_user");
+
 const ownerName = owner?.displayName || "";
+
+console.log(new Date().toISOString(), "pre_project_supports");
 
 const { data: supports } = await apiProjectSupportsGetCollection({
     query: { project: String(project.id!) },
     headers: { Accept: "application/ld+json" },
 });
 
+console.log(new Date().toISOString(), "post_project_supports");
+
 // @ts-ignore
 const totalSupports = supports.totalItems;
 
 const deadlineKey = project?.deadline as keyof Project["calendar"];
+
+console.log(new Date().toISOString(), "pre_accounting_balance_points");
 
 const balancePoints = await (async () => {
     const end = new Date(project?.calendar?.[deadlineKey]!);
@@ -74,6 +85,8 @@ const balancePoints = await (async () => {
 
     return points;
 })();
+
+console.log(new Date().toISOString(), "post_accounting_balance_points");
 ---
 
 <Layout title={project.title} description={project.description}>
@@ -83,7 +96,6 @@ const balancePoints = await (async () => {
         {lang}
         {project}
         {accounting}
-        {accountingBalance}
         {ownerName}
         {totalSupports}
         {balancePoints}
