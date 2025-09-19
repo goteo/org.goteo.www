@@ -6,7 +6,12 @@ import UserIcon from "../svgs/UserIcon.astro";
 
 const { t } = Astro.locals;
 
+let user;
 const accessToken = Astro.cookies.get("access-token");
+
+if (accessToken) {
+    user = JSON.parse(accessToken.value);
+}
 ---
 
 <header class="bg-primary w-full max-w-screen py-4 md:py-8">
@@ -16,7 +21,17 @@ const accessToken = Astro.cookies.get("access-token");
             <ul class="flex items-center gap-2 md:gap-4">
                 <li class="items-center gap-1 text-sm sm:flex md:text-base">
                     <UserIcon />
-                    <span class="hidden md:inline">{t("header.login")}</span>
+                    {
+                        accessToken ? (
+                            <span class="hidden md:inline">
+                                {t("greeting")}, {user.person.firstName}
+                            </span>
+                        ) : (
+                            <a href="/login">
+                                <span class="hidden md:inline">{t("header.login")}</span>
+                            </a>
+                        )
+                    }
                 </li>
                 {
                     accessToken && (
