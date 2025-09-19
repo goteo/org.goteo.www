@@ -64,20 +64,9 @@
     });
 </script>
 
-<div class="wrapper relative">
-    <button
-        onclick={() => scrollTabs("left")}
-        class="absolute top-1/2 left-0 z-10 h-full w-10 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
-        class:opacity-50={!canScrollLeft}
-        class:pointer-events-none={!canScrollLeft}
-        aria-label="Scroll tabs left"
-    >
-        <ArrowSliderIcon direction="left" />
-    </button>
-
+<div class="wrapper">
     <div
-        bind:this={tabsContainer}
-        class="no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
+        class="no-scrollbar flex overflow-x-auto lg:space-x-6"
         role="tablist"
         aria-label="Project tabs"
         style="scrollbar-width: none;"

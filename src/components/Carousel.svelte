@@ -1,6 +1,9 @@
 <script lang="ts">
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
+
+    // Browser check for SSR compatibility
+    const browser = typeof window !== "undefined";
 
     let {
         itemsPerGroup = 1,
@@ -29,33 +32,43 @@
     const observerMap = new Map<number, HTMLElement>();
 
     function updateItemWidths() {
-        const styles = getComputedStyle(container);
-        const paddingLeft = parseFloat(styles.paddingLeft);
-        const paddingRight = parseFloat(styles.paddingRight);
-        const available = container.clientWidth - paddingLeft - paddingRight;
-        const childWidth = (available - gap * (itemsPerGroup - 1)) / itemsPerGroup;
+        if (!browser || !container || !mounted) return;
 
-        for (const el of Array.from(container.children) as HTMLElement[]) {
-            el.style.minWidth = `${childWidth}px`;
-            el.style.maxWidth = `${childWidth}px`;
-            el.style.flex = "0 0 auto";
+        try {
+            const styles = getComputedStyle(container);
+            const paddingLeft = parseFloat(styles.paddingLeft);
+            const paddingRight = parseFloat(styles.paddingRight);
+            const available = container.clientWidth - paddingLeft - paddingRight;
+            const childWidth = (available - gap * (itemsPerGroup - 1)) / itemsPerGroup;
+
+            for (const el of Array.from(container.children) as HTMLElement[]) {
+                el.style.minWidth = `${childWidth}px`;
+                el.style.maxWidth = `${childWidth}px`;
+                el.style.flex = "0 0 auto";
+            }
+            updateNavForShort();
+        } catch (error) {
+            console.warn("Carousel: Error updating item widths:", error);
         }
-        updateNavForShort();
     }
 
     function observeVisibility() {
-        const children = Array.from(container.children) as HTMLElement[];
-        if (intersectionObs) {
+        if (!browser || !container || !intersectionObs || !mounted) return;
+
+        try {
+            const children = Array.from(container.children) as HTMLElement[];
             intersectionObs.disconnect();
             observerMap.clear();
             children.forEach((el, idx) => {
                 observerMap.set(idx, el);
-                intersectionObs.observe(el);
+                intersectionObs?.observe(el);
             });
-        }
 
-        totalGroups = Math.ceil(children.length / itemsPerGroup);
-        updateNavForShort();
+            totalGroups = Math.ceil(children.length / itemsPerGroup);
+            updateNavForShort();
+        } catch (error) {
+            console.warn("Carousel: Error observing visibility:", error);
+        }
     }
 
     function updateNavState(group: number) {
@@ -65,15 +78,27 @@
     }
 
     function updateNavForShort() {
-        isScrollable = container.scrollWidth > container.clientWidth;
-        isAtStart = true;
-        isAtEnd = !isScrollable;
+        if (!browser || !container || !mounted) return;
+
+        try {
+            isScrollable = container.scrollWidth > container.clientWidth;
+            isAtStart = true;
+            isAtEnd = !isScrollable;
+        } catch (error) {
+            console.warn("Carousel: Error updating navigation state:", error);
+        }
     }
 
     function scrollToGroup(i: number) {
-        const kids = Array.from(container.children) as HTMLElement[];
-        const target = kids[i * itemsPerGroup];
-        target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+        if (!browser || !container || !mounted) return;
+
+        try {
+            const kids = Array.from(container.children) as HTMLElement[];
+            const target = kids[i * itemsPerGroup];
+            target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+        } catch (error) {
+            console.warn("Carousel: Error scrolling to group:", error);
+        }
     }
 
     function scroll(dir: "left" | "right") {
@@ -85,13 +110,16 @@
     }
 
     function handleStart(x: number) {
+        if (!browser || !container || !mounted) return;
+
         isDragging = true;
         startX = x - container.offsetLeft;
         scrollLeft = container.scrollLeft;
     }
 
     function handleMove(x: number, ev: Event) {
-        if (!isDragging) return;
+        if (!browser || !container || !mounted || !isDragging) return;
+
         ev.preventDefault();
         const walk = (x - container.offsetLeft - startX) * 1.5;
         container.scrollLeft = scrollLeft - walk;
@@ -101,41 +129,69 @@
         isDragging = false;
     }
 
-    let intersectionObs: IntersectionObserver;
+    let intersectionObs: IntersectionObserver | undefined;
+    let resizeObs: ResizeObserver | undefined;
+    let mutationObs: MutationObserver | undefined;
+    let mounted = false;
 
     onMount(() => {
-        // Create IntersectionObserver only in the browser
-        intersectionObs = new IntersectionObserver(
-            (entries) => {
-                for (const e of entries) {
-                    if (e.isIntersecting) {
-                        const idx = Array.from(container.children).indexOf(e.target as HTMLElement);
-                        if (idx !== -1) {
-                            const group = Math.floor(idx / itemsPerGroup);
-                            if (group !== activeGroup) updateNavState(group);
+        // Ensure we're in the browser and DOM is ready
+        if (!browser || !container) return;
+
+        const init = async () => {
+            // Wait for next tick to ensure DOM is fully rendered
+            await tick();
+
+            mounted = true;
+
+            try {
+                // Create IntersectionObserver only in the browser
+                intersectionObs = new IntersectionObserver(
+                    (entries) => {
+                        if (!mounted) return;
+                        for (const e of entries) {
+                            if (e.isIntersecting && container) {
+                                const idx = Array.from(container.children).indexOf(
+                                    e.target as HTMLElement,
+                                );
+                                if (idx !== -1) {
+                                    const group = Math.floor(idx / itemsPerGroup);
+                                    if (group !== activeGroup) updateNavState(group);
+                                }
+                            }
                         }
+                    },
+                    { threshold: 0.6 },
+                );
+
+                // Initialize component after observers are created
+                updateItemWidths();
+                observeVisibility();
+
+                resizeObs = new ResizeObserver(() => {
+                    if (mounted && container) updateItemWidths();
+                });
+                resizeObs.observe(container);
+
+                mutationObs = new MutationObserver(() => {
+                    if (mounted && container) {
+                        updateItemWidths();
+                        observeVisibility();
                     }
-                }
-            },
-            { threshold: 0.6 },
-        );
+                });
+                mutationObs.observe(container, { childList: true });
+            } catch (error) {
+                console.warn("Carousel: Error initializing observers:", error);
+            }
+        };
 
-        updateItemWidths();
-        observeVisibility();
-
-        const resizeObs = new ResizeObserver(() => updateItemWidths());
-        resizeObs.observe(container);
-
-        const mutationObs = new MutationObserver(() => {
-            updateItemWidths();
-            observeVisibility();
-        });
-        mutationObs.observe(container, { childList: true });
+        init();
 
         return () => {
+            mounted = false;
             if (intersectionObs) intersectionObs.disconnect();
-            resizeObs.disconnect();
-            mutationObs.disconnect();
+            if (resizeObs) resizeObs.disconnect();
+            if (mutationObs) mutationObs.disconnect();
         };
     });
 </script>
