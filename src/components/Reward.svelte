@@ -77,7 +77,7 @@
         disabled={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
         class:cursor-not-allowed={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
         class:cursor-pointer={!reward.isFinite || (reward.unitsAvailable ?? 0) > 0}
-        class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+        class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition -mt-4"
     >
         {$t("reward.donate")}
         {formatCurrency(reward.money.amount, reward.money.currency)}
