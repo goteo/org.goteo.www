@@ -3,6 +3,7 @@ import CartButton from "./CartButton.svelte";
 import MenuIcon from "../svgs/MenuIcon.astro";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
+import Logout from "./Logout.astro";
 
 const { t } = Astro.locals;
 
@@ -14,8 +15,10 @@ if (accessToken) {
 }
 ---
 
-<header class="bg-primary w-full max-w-screen py-4 md:py-8">
-    <div class="wrapper flex items-center justify-between">
+<header class="w-full max-w-screen py-4 px-6 md:py-8">
+    <div
+        class="wrapper flex items-center justify-between rounded-xl border-1 border-[#f3f3f3] bg-[#fbfbfb] px-4 py-6"
+    >
         <a href="/" class="flex-shrink-0"><Logo /></a>
         <nav>
             <ul class="flex items-center gap-2 md:gap-4">
