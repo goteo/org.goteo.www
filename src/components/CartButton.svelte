@@ -1,13 +1,22 @@
 <script lang="ts">
     import { itemCount } from "../stores/cart";
-    import { onMount } from "svelte";
     import BagIcon from "../svgs/BagIcon.svelte";
-    import { languagesList, type Locale } from "../i18n/locales";
     import { t } from "../i18n/store";
 
+    // Browser check for SSR compatibility
+    const browser = typeof window !== "undefined";
+
+    // Use reactive store directly in Svelte 5 - safer for SSR
     let count = 0;
 
+    // Reactive statement to update count when store changes
+    $: if (browser) {
+        count = $itemCount;
+    }
+
     function handleDirect() {
+        if (!browser) return;
+
         // const pathParts = window.location.pathname.split("/").filter(Boolean);
         // console.log(pathParts);
         // const languages = Object.keys(languagesList) as Locale[];
@@ -19,13 +28,6 @@
 
         window.location.href = `/checkout`;
     }
-
-    onMount(() => {
-        const unsubscribe = itemCount.subscribe((val) => {
-            count = val;
-        });
-        return unsubscribe;
-    });
 </script>
 
 <button

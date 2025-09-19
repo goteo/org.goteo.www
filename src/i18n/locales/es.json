@@ -649,6 +649,115 @@
         "viewCampaigns": "Ver las campañas de la convocatoria",
         "finished": "Finalizada {{date}}"
       }
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "De la teoría a la acción",
+        "subtitle": "Las cifras que revelan nuestra huella real",
+        "advisedOnline": {
+          "value": "155",
+          "label": "Asesorados Online"
+        },
+        "workshopParticipants": {
+          "value": "48",
+          "label": "Participantes en talleres"
+        },
+        "fundedProjects": {
+          "value": "77",
+          "label": "Proyectos financiados"
+        },
+        "button": "Ver Stats de Goteo"
+      },
+      "whyGoteo": {
+        "title": "¿Por qué Goteo?",
+        "subtitle": "Tenemos valores y los datos nos avalan.",
+        "successRate": {
+          "value": "80%",
+          "label": "Porcentaje de éxito"
+        },
+        "publishedProjects": {
+          "value": "2.800",
+          "label": "Proyectos publicados"
+        },
+        "totalRaised": {
+          "value": "800 M",
+          "label": "Recaudado"
+        },
+        "button": "Quiero saber más"
+      }
+    },
+    "stories": {
+      "title": "Goteo estrena nueva web!",
+      "subtitle": "Encantados de compartirlo contigo",
+      "description": "¡Goteo tiene una nueva cara! Navega por nuestra web renovada y descubre una experiencia de crowdfunding social más intuitiva y atractiva. Explora proyectos innovadores, conoce a los creadores detrás de ellos y únete a nuestra comunidad.\n¡Conviértete en donante y haz realidad tus ideas!",
+      "button": "Conviértete en donante"
+    },
+    "featuredPromoters": {
+      "title": "Impulsores destacados",
+      "viewAll": "Ver todes",
+      "projectsPromoted": "Proyectos impulados",
+      "capitalRaised": "Capital recaudado",
+      "promoterImage": "Foto del impulsor",
+      "shareProfile": "Compartir perfil de {{name}}"
+    },
+    "resources": {
+      "title": "Recursos: Combustible para Proyectos Creativos",
+      "viewAll": "Ver más recursos",
+      "readMore": "Leer más",
+      "articles": {
+        "firstCampaign": {
+          "title": "¿Cómo hago mi primera campaña?",
+          "description": "Tu proyecto merece despegar: Domina el crowdfunding social con nuestra CAJA DE HERRAMIENTAS GRATUITA. Guía práctica + plantillas descargables para conquistar a tu audiencia."
+        },
+        "testimonials": {
+          "title": "Testimonios de nuestros impulsores",
+          "description": "¿Quién puede contarte mejor como es impulsar campañas exitosas? Nuestros impulsores nos cuentan de primera mano como es gestionar una campaña con Goteo."
+        }
+      }
+    }
+  },
+  "footer": {
+    "funding": {
+      "title": "Financia:",
+      "partOf": "Somos parte de:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Colabora",
+        "createProject": "Crea un proyecto",
+        "matchfunding": "Matchfunding",
+        "workshops": "Talleres"
+      },
+      "help": {
+        "title": "Ayuda",
+        "faqs": "FAQs",
+        "contact": "Contacto",
+        "taxCalculator": "Calculadora fiscal"
+      },
+      "aboutGoteo": {
+        "title": "Sobre Goteo",
+        "whoWeAre": "¿Quiénes somos?",
+        "goteoBenefits": "Ventajas de Goteo",
+        "foundationImpact": "Impacto de la fundación",
+        "platoniqFoundation": "Fundación Platoniq"
+      },
+      "forUsers": {
+        "title": "Para usuarias",
+        "rechargeWallet": "Recarga tu monedero",
+        "downloadCertificate": "Descarga certificado",
+        "accessComplementaryFunds": "Accede a fondos complementarios",
+        "designFundingProgram": "Diseña un programa de financiación"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Condiciones de uso",
+      "privacyPolicy": "Política de privacidad",
+      "licenses": "Licencias",
+      "stats": "Stats"
+    },
+    "platoniq": {
+      "foundation": "Fundación",
+      "name": "Platoniq"
     }
   }
 }

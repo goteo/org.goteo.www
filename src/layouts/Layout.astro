@@ -3,6 +3,7 @@ import "../styles/global.css";
 import Metatags from "../components/Metatags.astro";
 // import ThemeToggle from "../components/ThemeToggle.astro";
 import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 const { lang } = Astro.locals;
 
@@ -26,13 +27,10 @@ const { title, description, class: className } = Astro.props;
     <body class="grid min-h-screen overflow-x-hidden">
         <Header />
         <main
-            class={`w-full max-w-screen flex-1 flex flex-col gap-16 ${className ? ` ${className}` : ""}`}
+            class={`w-full max-w-screen flex-1 flex flex-col ${className ? ` ${className}` : ""}`}
         >
             <slot />
         </main>
-        <!-- TODO: Review ThemeToggle-->
-        <!-- <div class="wrapper">
-            <ThemeToggle />
-        </div> -->
+        <Footer />
     </body>
 </html>

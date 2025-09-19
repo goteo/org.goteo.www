@@ -353,6 +353,115 @@
       "title": "S'apropen grans canvis... no et perdis res!",
       "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions...",
       "readMore": "Continuar llegint"
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "De la teoria a l'acció",
+        "subtitle": "Les xifres que revelen la nostra petjada real",
+        "advisedOnline": {
+          "value": "155",
+          "label": "Assessorats Online"
+        },
+        "workshopParticipants": {
+          "value": "48",
+          "label": "Participants en tallers"
+        },
+        "fundedProjects": {
+          "value": "77",
+          "label": "Projectes finançats"
+        },
+        "button": "Veure Stats de Goteo"
+      },
+      "whyGoteo": {
+        "title": "Per què Goteo?",
+        "subtitle": "Tenim valors i les dades ens avalen.",
+        "successRate": {
+          "value": "80%",
+          "label": "Percentatge d'èxit"
+        },
+        "publishedProjects": {
+          "value": "2.800",
+          "label": "Projectes publicats"
+        },
+        "totalRaised": {
+          "value": "800 M",
+          "label": "Recaptat"
+        },
+        "button": "Vull saber més"
+      }
+    },
+    "stories": {
+      "title": "Goteo estrena nova web!",
+      "subtitle": "Encantats de compartir-ho amb tu",
+      "description": "Goteo té una nova cara! Navega per la nostra web renovada i descobreix una experiència de crowdfunding social més intuïtiva i atractiva. Explora projectes innovadors, coneix els creadors que hi ha al darrere i uneix-te a la nostra comunitat.\nConverteix-te en donant i fes realitat les teves idees!",
+      "button": "Converteix-te en donant"
+    },
+    "featuredPromoters": {
+      "title": "Impulsors destacats",
+      "viewAll": "Veure tots",
+      "projectsPromoted": "Projectes impulsats",
+      "capitalRaised": "Capital recaptat",
+      "promoterImage": "Foto de l'impulsor",
+      "shareProfile": "Compartir perfil de {{name}}"
+    },
+    "resources": {
+      "title": "Recursos: Combustible per a Projectes Creatius",
+      "viewAll": "Veure més recursos",
+      "readMore": "Llegir més",
+      "articles": {
+        "firstCampaign": {
+          "title": "Com faig la meva primera campanya?",
+          "description": "El teu projecte mereix enlairar-se: Domina el crowdfunding social amb la nostra CAIXA D'EINES GRATUÏTA. Guia pràctica + plantilles descarregables per conquistar la teva audiència."
+        },
+        "testimonials": {
+          "title": "Testimonis dels nostres impulsors",
+          "description": "Qui et pot explicar millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
+        }
+      }
+    }
+  },
+  "footer": {
+    "funding": {
+      "title": "Finança:",
+      "partOf": "Som part de:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Col·labora",
+        "createProject": "Crea un projecte",
+        "matchfunding": "Matchfunding",
+        "workshops": "Tallers"
+      },
+      "help": {
+        "title": "Ajuda",
+        "faqs": "Preguntes freqüents",
+        "contact": "Contacte",
+        "taxCalculator": "Calculadora fiscal"
+      },
+      "aboutGoteo": {
+        "title": "Sobre Goteo",
+        "whoWeAre": "Qui som?",
+        "goteoBenefits": "Avantatges de Goteo",
+        "foundationImpact": "Impacte de la fundació",
+        "platoniqFoundation": "Fundació Platoniq"
+      },
+      "forUsers": {
+        "title": "Per a usuàries",
+        "rechargeWallet": "Recarrega la teva cartera",
+        "downloadCertificate": "Descarrega certificat",
+        "accessComplementaryFunds": "Accedeix a fons complementaris",
+        "designFundingProgram": "Dissenya un programa de finançament"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Condicions d'ús",
+      "privacyPolicy": "Política de privacitat",
+      "licenses": "Llicències",
+      "stats": "Estadístiques"
+    },
+    "platoniq": {
+      "foundation": "Fundació",
+      "name": "Platoniq"
     }
   }
 }
