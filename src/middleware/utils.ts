@@ -20,14 +20,14 @@ export function getUserLangPreferences(context: APIContext): string[] {
     const preferredFromPath = parsePathLang(context.url.pathname);
     if (preferredFromPath) return [preferredFromPath];
 
+    const cookieLang = context.cookies.get("preferred-lang")?.value;
+    if (cookieLang) return [cookieLang];
+
     const acceptLangHeader = context.request.headers.get("accept-language") || "";
     const preferredFromHeader = parseAcceptLanguageHeader(acceptLangHeader);
     if (preferredFromHeader?.length > 0) {
         return preferredFromHeader.map((lang) => lang.code);
     }
-
-    const cookieLang = context.cookies.get("preferred-lang")?.value;
-    if (cookieLang) return [cookieLang];
 
     return [];
 }

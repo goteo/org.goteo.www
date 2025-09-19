@@ -26,9 +26,7 @@ export const logout = defineAction({
             }
 
             await apiUserTokensIdDelete({
-                path: {
-                    id,
-                },
+                path: { id },
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
