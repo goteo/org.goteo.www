@@ -4,7 +4,12 @@ const currentLang: string = Astro.locals.lang || "es";
 const languagesJSON = JSON.stringify(Object.keys(languagesList));
 ---
 
-<select class="rounded-lg bg-[#fbfbfb] border-none shadow-sm font-bold" name="language" id="language-select" data-languages={languagesJSON}>
+<select
+    class="rounded-lg border-none bg-[#fbfbfb] font-bold shadow-sm"
+    name="language"
+    id="language-select"
+    data-languages={languagesJSON}
+>
     {
         Object.entries(languagesList).map(([lang, label]) => (
             <option value={lang} selected={lang === currentLang}>
