@@ -213,7 +213,11 @@
       "registerBtnLabel": "Regístrate",
       "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
       "otherAccessMethods": "También puedes acceder a través de:",
-      "forgotPassword": "¿Olvidaste tu contraseña?"
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "welcome": {
+        "title": "Bienvenid@ al nuevo Goteo.",
+        "subtitle": "Estamos trabajando en muchas cosas que todavía no te podemos mostrar. Pero si ya tenías una cuenta en Goteo puedes acceder con tu misma dirección de correo y contraseña y comenzar a navegar por nuestro archivo de proyectos."
+      }
     },
     "form": {
       "email": "Email o nombre de usuario",

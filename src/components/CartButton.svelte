@@ -38,7 +38,7 @@
 >
     <BagIcon />
 
-    {#if count > 0}
+    {#if count > 1}
         <span
             class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
         >
