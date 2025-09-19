@@ -3,7 +3,10 @@ import CartButton from "./CartButton.svelte";
 import MenuIcon from "../svgs/MenuIcon.astro";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
+
 const { t } = Astro.locals;
+
+const accessToken = Astro.cookies.get("access-token");
 ---
 
 <header class="bg-primary w-full max-w-screen py-4 md:py-8">
@@ -15,9 +18,13 @@ const { t } = Astro.locals;
                     <UserIcon />
                     <span class="hidden md:inline">{t("header.login")}</span>
                 </li>
-                <li class="flex items-center">
-                    <CartButton client:load />
-                </li>
+                {
+                    accessToken && (
+                        <li class="flex items-center">
+                            <CartButton client:load />
+                        </li>
+                    )
+                }
                 <li class="flex items-center md:hidden">
                     <button class="p-1" aria-label="Menu">
                         <MenuIcon />
