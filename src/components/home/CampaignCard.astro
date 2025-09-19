@@ -23,68 +23,68 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 <div
     class={`bg-light-surface rounded-[32px] min-w-sm border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
 >
-    <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
-        <!-- Project Image -->
-        <div
-            class={`relative ${imageHeight} w-full rounded-3xl bg-center bg-cover`}
-            style={`background-image: url('${campaign.image}')`}
-        >
-            <!-- Share Button (only for small cards) -->
-            {
+    <a href=`/project/${campaign.id}`>
+        <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
+            <!-- Project Image -->
+            <div
+                class={`relative ${imageHeight} w-full rounded-3xl bg-center bg-cover`}
+                style={`background-image: url('${campaign.image}')`}
+            >
+                <!-- Share Button (only for small cards) -->
+                <!-- {
                 size === "small" && (
                     <button class="border-light-muted bg-light-surface absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.16)] transition-all duration-200 hover:opacity-80">
                         <ShareIcon />
                     </button>
                 )
-            }
+            } -->
 
-            <!-- Tags Overlay -->
-            <div class="absolute top-4 left-4 flex gap-2">
-                <!-- Days Remaining Tag -->
-                <div
+                <!-- Tags Overlay -->
+                <div class="absolute top-4 left-4 flex gap-2">
+                    <!-- Days Remaining Tag -->
+                    <!-- <div
                     class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1"
                 >
-                    <!-- Clock Icon -->
                     <ClockIcon />
                     <span class="text-tertiary text-sm font-bold whitespace-nowrap">
                         {t("home.campaigns.daysRemaining", { days: campaign.daysRemaining })}
                     </span>
+                </div> -->
+
+                    <!-- Matchfunding Tag (conditional) -->
+                    {
+                        campaign.hasMatchfunding && (
+                            <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
+                                <MatchFundingIcon />
+                                <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                                    {t("home.campaigns.matchfunding")}
+                                </span>
+                            </div>
+                        )
+                    }
+
+                    <!-- Additional Tags -->
+                    {
+                        campaign.tags?.map((tag) => (
+                            <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
+                                <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                                    {tag}
+                                </span>
+                            </div>
+                        ))
+                    }
                 </div>
-
-                <!-- Matchfunding Tag (conditional) -->
-                {
-                    campaign.hasMatchfunding && (
-                        <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
-                            <MatchFundingIcon />
-                            <span class="text-tertiary text-sm font-bold whitespace-nowrap">
-                                {t("home.campaigns.matchfunding")}
-                            </span>
-                        </div>
-                    )
-                }
-
-                <!-- Additional Tags -->
-                {
-                    campaign.tags?.map((tag) => (
-                        <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
-                            <span class="text-tertiary text-sm font-bold whitespace-nowrap">
-                                {tag}
-                            </span>
-                        </div>
-                    ))
-                }
             </div>
-        </div>
 
-        <!-- Project Content -->
-        <div class={`flex flex-col gap-6 ${size === "large" ? "flex-1" : ""}`}>
-            <h3 class="text-tertiary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
-                {campaign.title}
-            </h3>
+            <!-- Project Content -->
+            <div class={`flex flex-col gap-6 ${size === "large" ? "flex-1" : ""}`}>
+                <h3 class="text-tertiary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
+                    {campaign.title}
+                </h3>
 
-            <!-- Progress Bar -->
-            <div class="flex flex-col gap-4">
-                <div
+                <!-- Progress Bar -->
+                <div class="flex flex-col gap-4">
+                    <!-- <div
                     class="border-purple-tint bg-light-surface relative h-4 w-full rounded-2xl border"
                 >
                     <div
@@ -92,20 +92,28 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                         style={`width: ${campaign.progressPercentage}%`}
                     >
                     </div>
-                </div>
+                </div> -->
 
-                <!-- Amount Information -->
-                <div class="flex items-start justify-between">
-                    <div class="flex flex-col gap-1">
-                        <span class="text-secondary text-base">{t("home.campaigns.obtained")}</span>
-                        <span class="text-secondary text-2xl font-bold">{campaign.obtained}</span>
-                    </div>
-                    <div class="flex flex-col gap-1 text-right">
-                        <span class="text-secondary text-base">{t("home.campaigns.minimum")}</span>
-                        <span class="text-secondary text-2xl font-bold">{campaign.minimum}</span>
+                    <!-- Amount Information -->
+                    <div class="flex items-start justify-between">
+                        <div class="flex flex-col gap-1">
+                            <span class="text-secondary text-base"
+                                >{t("home.campaigns.obtained")}</span
+                            >
+                            <span class="text-secondary text-2xl font-bold"
+                                >{campaign.obtained}</span
+                            >
+                        </div>
+                        <div class="flex flex-col gap-1 text-right">
+                            <span class="text-secondary text-base"
+                                >{t("home.campaigns.minimum")}</span
+                            >
+                            <span class="text-secondary text-2xl font-bold">{campaign.minimum}</span
+                            >
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </a>
 </div>

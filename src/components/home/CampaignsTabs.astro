@@ -11,45 +11,34 @@ const { t } = Astro.locals;
 // Mock campaign data - using same campaigns as the main Campaigns component
 const mockCampaigns: Campaign[] = [
     {
-        id: "project1",
-        title: "Somos la resistencia: hagamos crecer el CE Europa",
-        image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        id: "la-benefica",
+        title: "La Benéfica de Piloña - Espaciu Cultural",
+        image: "https://www.goteo.org/img/700x700/pantalla-1.0.png",
         daysRemaining: 11,
-        obtained: "999.999€",
-        minimum: "1.520€",
+        obtained: "136.415 €",
+        minimum: "94.185 €",
         progressPercentage: 20,
         hasMatchfunding: true,
         size: "small" as const,
     },
     {
-        id: "project2",
-        title: "CLAUSURA FEST",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        id: "compra-del-castell-de-santa-pau",
+        title: "Salvem el Castell de Santa Pau",
+        image: "https://www.goteo.org/img/700x700/dji-0139.jpg",
         daysRemaining: 16,
-        obtained: "999.999€",
-        minimum: "1.520€",
+        obtained: "231.618 €",
+        minimum: "100.000 €",
         progressPercentage: 20,
         hasMatchfunding: false,
         size: "small" as const,
     },
     {
-        id: "project3",
-        title: "Todos somos Gaza",
-        image: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
+        id: "sindicat-de-llogaters-i-llogateres",
+        title: "Sindicat de Llogaters i Llogateres",
+        image: "https://www.goteo.org/img/780x478/banner-goteo-17.jpg",
         daysRemaining: 37, // hours -> display as "37 hrs"
-        obtained: "999.999€",
-        minimum: "1.520€",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-    {
-        id: "project4",
-        title: "Radio Valdivielso necesita un nuevo hogar",
-        image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80",
-        daysRemaining: 14,
-        obtained: "999.999€",
-        minimum: "1.520€",
+        obtained: "36.051 €",
+        minimum: "20.307 €",
         progressPercentage: 20,
         hasMatchfunding: false,
         size: "small" as const,
@@ -74,14 +63,14 @@ const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
                 class="border-primary flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
                 data-tab="ending-soon"
             >
-                <ClockIcon width="16" height="16" class="h-4 w-4" />
+                <FlashIcon width="16" height="16" class="h-4 w-4" />
                 <span class="text-tertiary text-base font-bold"
-                    >{t("home.campaigns.tabs.endingSoon")}</span
+                    >{t("home.campaigns.tabs.mostSuccessful")}</span
                 >
             </button>
 
             <!-- Inactive Tab: Más exitosas -->
-            <button
+            <!-- <button
                 class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
                 data-tab="most-successful"
             >
@@ -89,10 +78,10 @@ const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
                 <span class="text-secondary text-base font-bold"
                     >{t("home.campaigns.tabs.mostSuccessful")}</span
                 >
-            </button>
+            </button> -->
 
             <!-- Inactive Tab: Con Matchfunding -->
-            <button
+            <!-- <button
                 class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
                 data-tab="matchfunding"
             >
@@ -100,7 +89,7 @@ const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
                 <span class="text-secondary text-base font-bold">
                     {t("home.campaigns.tabs.withMatchfunding")}
                 </span>
-            </button>
+            </button> -->
         </div>
     </div>
 
