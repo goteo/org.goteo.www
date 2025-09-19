@@ -1,0 +1,58 @@
+---
+import PromoterCard from "./PromoterCard.astro";
+import type { Promoter } from "../../types/promoter";
+import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+
+const { t } = Astro.locals;
+
+// Mock data for the featured promoters - would typically come from an API
+const promoters: Promoter[] = [
+    {
+        id: 1,
+        name: "Fabiola Cespedes",
+        image: "/imgs/promoter-1.jpg",
+        projectsPromoted: 20,
+        capitalRaised: "180.284€",
+        variant: "1",
+    },
+    {
+        id: 2,
+        name: "Enric Bermejo",
+        image: "/imgs/promoter-2.jpg",
+        projectsPromoted: 16,
+        capitalRaised: "90.923€",
+        variant: "2",
+    },
+    {
+        id: 3,
+        name: "Luz Marina Saiz",
+        image: "/imgs/promoter-3.jpg",
+        projectsPromoted: 32,
+        capitalRaised: "1.248.235€",
+        variant: "3",
+    },
+];
+---
+
+<section class="wrapper py-16">
+    <div class="flex flex-col gap-6">
+        <!-- Header with title and view all button -->
+        <div class="flex items-center justify-between px-0 md:px-0">
+            <h2 class="text-secondary text-2xl leading-8 font-bold md:text-4xl md:leading-[48px]">
+                {t("home.featuredPromoters.title")}
+            </h2>
+            <a
+                href="/promoters"
+                class="bg-purple-tint text-tertiary hover:bg-tertiary flex items-center gap-2 rounded-3xl px-6 py-4 text-base leading-6 font-bold transition-all duration-200 hover:text-white"
+            >
+                <ArrowRightIcon />
+                {t("home.featuredPromoters.viewAll")}
+            </a>
+        </div>
+
+        <!-- Promoters cards grid -->
+        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {promoters.map((promoter) => <PromoterCard promoter={promoter} />)}
+        </div>
+    </div>
+</section>

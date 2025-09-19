@@ -13,7 +13,7 @@
   "reward": {
     "donate": "Donate",
     "donors": "donors",
-    "units": "{units} units left",
+    "units": "{{units}} units left",
     "noUnits": "No units left",
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
@@ -166,6 +166,23 @@
     "title": "Home",
     "description": "Home page"
   },
+  "hero": {
+    "title": "Finance the change the world needs",
+    "description": {
+      "paragraph1": "Join a community that transforms realities. Every donation drives innovative social projects: from inclusive education to environmental sustainability.",
+      "paragraph2": "Here, your contribution is not just a gesture; it's the seed of lasting impact.",
+      "paragraph3": "Be part of the solution!"
+    },
+    "buttons": {
+      "discover": "Discover projects to support",
+      "impulse": "Boost your project with Goteo"
+    }
+  },
+  "renovationBanner": {
+    "title": "We're renovating Goteo!",
+    "description": "Goteo has built a unique story in the world of crowdfunding. Do you want to continue being part of it?",
+    "ctaButton": "Join our story"
+  },
   "title": "Hello!",
   "header": {
     "login": "Login"
@@ -176,6 +193,176 @@
     "reward": {
       "claimed": "people have already claimed this reward",
       "unclaimed": "No one has claimed this reward yet. Be the first!"
+    }
+  },
+  "home": {
+    "campaigns": {
+      "title": "Most recent campaigns",
+      "tabsTitle": "Campaigns in Goteo",
+      "tabs": {
+        "endingSoon": "Ending soon",
+        "mostSuccessful": "Most successful",
+        "withMatchfunding": "With Matchfunding"
+      },
+      "viewAll": "View all",
+      "obtained": "Obtained",
+      "minimum": "Minimum",
+      "daysRemaining": "{{days}} days remaining",
+      "matchfunding": "Matchfunding",
+      "featuredProject": {
+        "title": "TRÍPTIC DADÀ. Culture and thought podcast."
+      },
+      "projects": {
+        "project1": {
+          "title": "Narrate to not disappear: three documentaries that illuminate what the world silences"
+        },
+        "project2": {
+          "title": "We are the resistance: let's grow CE Europa"
+        },
+        "project3": {
+          "title": "CLOSURE FEST"
+        },
+        "project4": {
+          "title": "Radio Valdivielso needs a new home"
+        }
+      }
+    },
+    "blog": {
+      "title": "Big changes are coming... don't miss anything!",
+      "excerpt": "A process that involves an important technical migration of the current platform, and to do it with all security guarantees and without loss of information, we need to carry out an orderly transition, with key dates for the publication of campaigns and donations...",
+      "readMore": "Read more"
+    },
+    "matchfunding": {
+      "title": "Matchfunding",
+      "description": "Matchfunding is a model where each private donation is multiplied by a sponsoring entity to maximize social impact.",
+      "actions": {
+        "learnMore": "Learn more",
+        "viewCalls": "View active calls"
+      },
+      "impact": {
+        "title": "Impact data",
+        "description": "Matchfunding turns micro-donations into macro impact by validating projects with community support and optimizing public/private resources.",
+        "matchers": "Contributed by Matchers:",
+        "successRate": "Successful projects:",
+        "community": "User community:"
+      },
+      "cards": {
+        "grant": "Call funding",
+        "inscription": "Registration date",
+        "participants": "Participating projects",
+        "apply": "Apply to the call",
+        "viewCampaigns": "View campaign calls",
+        "finished": "Finished {{date}}"
+      }
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "From theory to action",
+        "subtitle": "The figures that reveal our real footprint",
+        "advisedOnline": {
+          "value": "+2.500",
+          "label": "Advised Online"
+        },
+        "workshopParticipants": {
+          "value": "41",
+          "label": "Workshop sponsors"
+        },
+        "fundedProjects": {
+          "value": "+2.300",
+          "label": "Funded projects"
+        },
+        "button": "View Goteo Stats"
+      },
+      "whyGoteo": {
+        "title": "Why Goteo?",
+        "subtitle": "We have values and the data backs us up.",
+        "successRate": {
+          "value": "+80%",
+          "label": "Success rate"
+        },
+        "publishedProjects": {
+          "value": "+2.800",
+          "label": "Published projects"
+        },
+        "totalRaised": {
+          "value": "+23M €",
+          "label": "Raised"
+        },
+        "button": "Learn more"
+      }
+    },
+    "stories": {
+      "title": "Goteo launches new website!",
+      "subtitle": "Delighted to share it with you",
+      "description": "Goteo has a new face! Browse through our renewed website and discover a more intuitive and attractive social crowdfunding experience. Explore innovative projects, meet the creators behind them and join our community.\nBecome a donor and make your ideas come true!",
+      "button": "Become a donor"
+    },
+    "featuredPromoters": {
+      "title": "Featured Promoters",
+      "viewAll": "View all",
+      "projectsPromoted": "Projects promoted",
+      "capitalRaised": "Capital raised",
+      "promoterImage": "Promoter photo",
+      "shareProfile": "Share {{name}}'s profile"
+    },
+    "resources": {
+      "title": "Resources: Fuel for Creative Projects",
+      "viewAll": "View more resources",
+      "readMore": "Read more",
+      "articles": {
+        "firstCampaign": {
+          "title": "How do I make my first campaign?",
+          "description": "Your project deserves to take off: Master social crowdfunding with our FREE TOOLKIT. Practical guide + downloadable templates to conquer your audience."
+        },
+        "testimonials": {
+          "title": "Testimonials from our promoters",
+          "description": "Who can tell you better what it's like to drive successful campaigns? Our promoters tell us first-hand what it's like to manage a campaign with Goteo."
+        }
+      }
+    }
+  },
+  "footer": {
+    "funding": {
+      "title": "Funding:",
+      "partOf": "We are part of:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Collaborate",
+        "createProject": "Create a project",
+        "matchfunding": "Matchfunding",
+        "workshops": "Workshops"
+      },
+      "help": {
+        "title": "Help",
+        "faqs": "FAQs",
+        "contact": "Contact",
+        "taxCalculator": "Tax calculator"
+      },
+      "aboutGoteo": {
+        "title": "About Goteo",
+        "whoWeAre": "Who are we?",
+        "goteoBenefits": "Goteo benefits",
+        "foundationImpact": "Foundation impact",
+        "platoniqFoundation": "Platoniq Foundation"
+      },
+      "forUsers": {
+        "title": "For users",
+        "rechargeWallet": "Recharge your wallet",
+        "downloadCertificate": "Download certificate",
+        "accessComplementaryFunds": "Access complementary funds",
+        "designFundingProgram": "Design a funding program"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Terms of use",
+      "privacyPolicy": "Privacy policy",
+      "licenses": "Licenses",
+      "stats": "Stats"
+    },
+    "platoniq": {
+      "foundation": "Foundation",
+      "name": "Platoniq"
     }
   }
 }

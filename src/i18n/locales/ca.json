@@ -13,7 +13,7 @@
   "reward": {
     "donate": "Dona",
     "donors": "donates",
-    "units": "Quedan {units} unidades",
+    "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",
     "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
@@ -44,7 +44,6 @@
       "remember": "Recordar",
       "viewAll": "Ver todas"
     },
-
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
@@ -206,6 +205,23 @@
     "title": "Inicio",
     "description": "Página de inicio"
   },
+  "hero": {
+    "title": "Finança el canvi que el món necessita",
+    "description": {
+      "paragraph1": "Uneix-te a una comunitat que transforma realitats. Cada donació impulsa projectes socials innovadors: des d'educació inclusiva fins a sostenibilitat ambiental.",
+      "paragraph2": "Aquí, la teva contribució no és només un gest; és la llavor d'un impacte durador.",
+      "paragraph3": "Sigues part de la solució!"
+    },
+    "buttons": {
+      "discover": "Descobreix projectes per donar suport",
+      "impulse": "Impulsa el teu projecte amb Goteo"
+    }
+  },
+  "renovationBanner": {
+    "title": "Renovem Goteo!",
+    "description": "Goteo ha construït una història única al món del micromecenatge. Vols seguir formant part d'ella?",
+    "ctaButton": "Suma't a la nostra història"
+  },
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión"
@@ -298,6 +314,176 @@
       "continue": "Continuar",
       "send": "Enviar",
       "back": "Atrás"
+    }
+  },
+  "home": {
+    "campaigns": {
+      "title": "Campanyes més recents",
+      "tabsTitle": "Campanyes a Goteo",
+      "tabs": {
+        "endingSoon": "Acaben aviat",
+        "mostSuccessful": "Més exitoses",
+        "withMatchfunding": "Amb Matchfunding"
+      },
+      "viewAll": "Veure totes",
+      "obtained": "Obtingut",
+      "minimum": "Mínim",
+      "daysRemaining": "Queden {{days}} dies",
+      "matchfunding": "Matchfunding",
+      "featuredProject": {
+        "title": "TRÍPTIC DADÀ. Pòdcast de cultura i pensament."
+      },
+      "projects": {
+        "project1": {
+          "title": "Narrar per a no desaparèixer: tres documentals que il·luminen el que el món calla"
+        },
+        "project2": {
+          "title": "Som la resistència: fem créixer el CE Europa"
+        },
+        "project3": {
+          "title": "CLAUSURA FEST"
+        },
+        "project4": {
+          "title": "Ràdio Valdivielso necessita una nova llar"
+        }
+      }
+    },
+    "blog": {
+      "title": "S'apropen grans canvis... no et perdis res!",
+      "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions...",
+      "readMore": "Continuar llegint"
+    },
+    "matchfunding": {
+      "title": "Matchfunding",
+      "description": "Matchfunding és un model on cada donació privada es multiplica per una entitat patrocinadora per maximitzar l’impacte social.",
+      "actions": {
+        "learnMore": "Obteniu més informació",
+        "viewCalls": "Consulteu les trucades actives"
+      },
+      "impact": {
+        "title": "Dades d’impacte",
+        "description": "Matchfunding converteix les micro-donacions en impactes macro mitjançant la validació de projectes amb el suport comunitari i l’optimització dels recursos públics/privats.",
+        "matchers": "Contribuït per Matchers:",
+        "successRate": "Projectes amb èxit:",
+        "community": "Comunitat d'usuaris:"
+      },
+      "cards": {
+        "grant": "Trucada de finançament",
+        "inscription": "Data d’inscripció",
+        "participants": "Projectes participants",
+        "apply": "Sol·liciteu la trucada",
+        "viewCampaigns": "Consulteu les trucades de la campanya",
+        "finished": "Acabat {{date}}"
+      }
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "De la teoria a l'acció",
+        "subtitle": "Les xifres que revelen la nostra petjada real",
+        "advisedOnline": {
+          "value": "+2.500",
+          "label": "Assessorats Online"
+        },
+        "workshopParticipants": {
+          "value": "41",
+          "label": "Patrocinadors en tallers"
+        },
+        "fundedProjects": {
+          "value": "+2.300",
+          "label": "Projectes finançats"
+        },
+        "button": "Veure Stats de Goteo"
+      },
+      "whyGoteo": {
+        "title": "Per què Goteo?",
+        "subtitle": "Tenim valors i les dades ens avalen.",
+        "successRate": {
+          "value": "+80%",
+          "label": "Percentatge d'èxit"
+        },
+        "publishedProjects": {
+          "value": "+2.800",
+          "label": "Projectes publicats"
+        },
+        "totalRaised": {
+          "value": "+23M €",
+          "label": "Recaptat"
+        },
+        "button": "Vull saber més"
+      }
+    },
+    "stories": {
+      "title": "Goteo estrena nova web!",
+      "subtitle": "Encantats de compartir-ho amb tu",
+      "description": "Goteo té una nova cara! Navega per la nostra web renovada i descobreix una experiència de crowdfunding social més intuïtiva i atractiva. Explora projectes innovadors, coneix els creadors que hi ha al darrere i uneix-te a la nostra comunitat.\nConverteix-te en donant i fes realitat les teves idees!",
+      "button": "Converteix-te en donant"
+    },
+    "featuredPromoters": {
+      "title": "Impulsors destacats",
+      "viewAll": "Veure tots",
+      "projectsPromoted": "Projectes impulsats",
+      "capitalRaised": "Capital recaptat",
+      "promoterImage": "Foto de l'impulsor",
+      "shareProfile": "Compartir perfil de {{name}}"
+    },
+    "resources": {
+      "title": "Recursos: Combustible per a Projectes Creatius",
+      "viewAll": "Veure més recursos",
+      "readMore": "Llegir més",
+      "articles": {
+        "firstCampaign": {
+          "title": "Com faig la meva primera campanya?",
+          "description": "El teu projecte mereix enlairar-se: Domina el crowdfunding social amb la nostra CAIXA D'EINES GRATUÏTA. Guia pràctica + plantilles descarregables per conquistar la teva audiència."
+        },
+        "testimonials": {
+          "title": "Testimonis dels nostres impulsors",
+          "description": "Qui et pot explicar millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
+        }
+      }
+    }
+  },
+  "footer": {
+    "funding": {
+      "title": "Finança:",
+      "partOf": "Som part de:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Col·labora",
+        "createProject": "Crea un projecte",
+        "matchfunding": "Matchfunding",
+        "workshops": "Tallers"
+      },
+      "help": {
+        "title": "Ajuda",
+        "faqs": "Preguntes freqüents",
+        "contact": "Contacte",
+        "taxCalculator": "Calculadora fiscal"
+      },
+      "aboutGoteo": {
+        "title": "Sobre Goteo",
+        "whoWeAre": "Qui som?",
+        "goteoBenefits": "Avantatges de Goteo",
+        "foundationImpact": "Impacte de la fundació",
+        "platoniqFoundation": "Fundació Platoniq"
+      },
+      "forUsers": {
+        "title": "Per a usuàries",
+        "rechargeWallet": "Recarrega la teva cartera",
+        "downloadCertificate": "Descarrega certificat",
+        "accessComplementaryFunds": "Accedeix a fons complementaris",
+        "designFundingProgram": "Dissenya un programa de finançament"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Condicions d'ús",
+      "privacyPolicy": "Política de privacitat",
+      "licenses": "Llicències",
+      "stats": "Estadístiques"
+    },
+    "platoniq": {
+      "foundation": "Fundació",
+      "name": "Platoniq"
     }
   }
 }
