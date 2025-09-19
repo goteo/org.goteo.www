@@ -726,5 +726,49 @@
         }
       }
     }
+  },
+  "footer": {
+    "funding": {
+      "title": "Financia:",
+      "partOf": "Somos parte de:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Colabora",
+        "createProject": "Crea un proyecto",
+        "matchfunding": "Matchfunding",
+        "workshops": "Talleres"
+      },
+      "help": {
+        "title": "Ayuda",
+        "faqs": "FAQs",
+        "contact": "Contacto",
+        "taxCalculator": "Calculadora fiscal"
+      },
+      "aboutGoteo": {
+        "title": "Sobre Goteo",
+        "whoWeAre": "¿Quiénes somos?",
+        "goteoBenefits": "Ventajas de Goteo",
+        "foundationImpact": "Impacto de la fundación",
+        "platoniqFoundation": "Fundación Platoniq"
+      },
+      "forUsers": {
+        "title": "Para usuarias",
+        "rechargeWallet": "Recarga tu monedero",
+        "downloadCertificate": "Descarga certificado",
+        "accessComplementaryFunds": "Accede a fondos complementarios",
+        "designFundingProgram": "Diseña un programa de financiación"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Condiciones de uso",
+      "privacyPolicy": "Política de privacidad",
+      "licenses": "Licencias",
+      "stats": "Stats"
+    },
+    "platoniq": {
+      "foundation": "Fundación",
+      "name": "Platoniq"
+    }
   }
 }

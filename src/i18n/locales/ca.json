@@ -419,5 +419,49 @@
         }
       }
     }
+  },
+  "footer": {
+    "funding": {
+      "title": "Finança:",
+      "partOf": "Som part de:"
+    },
+    "navigation": {
+      "collaborate": {
+        "title": "Col·labora",
+        "createProject": "Crea un projecte",
+        "matchfunding": "Matchfunding",
+        "workshops": "Tallers"
+      },
+      "help": {
+        "title": "Ajuda",
+        "faqs": "Preguntes freqüents",
+        "contact": "Contacte",
+        "taxCalculator": "Calculadora fiscal"
+      },
+      "aboutGoteo": {
+        "title": "Sobre Goteo",
+        "whoWeAre": "Qui som?",
+        "goteoBenefits": "Avantatges de Goteo",
+        "foundationImpact": "Impacte de la fundació",
+        "platoniqFoundation": "Fundació Platoniq"
+      },
+      "forUsers": {
+        "title": "Per a usuàries",
+        "rechargeWallet": "Recarrega la teva cartera",
+        "downloadCertificate": "Descarrega certificat",
+        "accessComplementaryFunds": "Accedeix a fons complementaris",
+        "designFundingProgram": "Dissenya un programa de finançament"
+      }
+    },
+    "legal": {
+      "termsOfUse": "Condicions d'ús",
+      "privacyPolicy": "Política de privacitat",
+      "licenses": "Llicències",
+      "stats": "Estadístiques"
+    },
+    "platoniq": {
+      "foundation": "Fundació",
+      "name": "Platoniq"
+    }
   }
 }

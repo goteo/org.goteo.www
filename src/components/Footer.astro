@@ -1,0 +1,319 @@
+---
+import FooterXIcon from "../svgs/footer/FooterXIcon.astro";
+import FooterFacebookIcon from "../svgs/footer/FooterFacebookIcon.astro";
+import FooterLinkedinIcon from "../svgs/footer/FooterLinkedinIcon.astro";
+import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.astro";
+import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.astro";
+
+const { t } = Astro.locals;
+---
+
+<footer class="text-purple-tint bg-[#FAF9FF]">
+    <!-- Funding Partners Section -->
+    <div class="text-secondary rounded-t-3xl border-purple-tint border-2 border-b-0 py-10">
+        <div class="wrapper">
+            <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+                <!-- Funding Partners -->
+                <div class="flex flex-col gap-6 md:flex-row md:items-center">
+                    <h3 class="text-tertiary text-base font-bold">{t("footer.funding.title")}</h3>
+                    <div class="flex items-center gap-6">
+                        <!-- Funding Partner Logos -->
+                        <div class="flex items-center gap-4">
+                            <img
+                                src="/imgs/funding-partner-1.svg"
+                                alt="Funding Partner 1"
+                                class="h-10 w-auto"
+                            />
+                            <img
+                                src="/imgs/funding-partner-2.svg"
+                                alt="Funding Partner 2"
+                                class="h-10 w-auto"
+                            />
+                            <img
+                                src="/imgs/funding-partner-3.svg"
+                                alt="Funding Partner 3"
+                                class="h-10 w-auto"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Part Of Section -->
+                <div class="flex flex-col gap-4 md:flex-row md:items-center">
+                    <h3 class="text-tertiary text-base font-medium">
+                        {t("footer.funding.partOf")}
+                    </h3>
+                    <div class="flex items-center gap-3">
+                        <img
+                            src="/imgs/org-1.png"
+                            alt="Organization 1"
+                            class="h-14 w-14 rounded-lg object-cover"
+                        />
+                        <img
+                            src="/imgs/org-2.png"
+                            alt="Organization 2"
+                            class="h-14 w-14 rounded-lg object-cover"
+                        />
+                        <img
+                            src="/imgs/org-3.png"
+                            alt="Organization 3"
+                            class="h-14 w-auto rounded-lg object-cover"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Footer Content -->
+    <div class="bg-tertiary rounded-t-3xl py-10">
+        <div class="wrapper">
+            <div class="flex flex-row justify-between gap-8">
+                <!-- Navigation Links -->
+                <div class="flex flex-row gap-10">
+                    <!-- Collaborate -->
+                    <div class="space-y-2">
+                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                            {t("footer.navigation.collaborate.title")}
+                        </h4>
+                        <ul class="space-y-1 text-sm leading-6">
+                            <li>
+                                <a
+                                    href="/create-project"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.collaborate.createProject")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/matchfunding"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.collaborate.matchfunding")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/workshops"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.collaborate.workshops")}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Help -->
+                    <div class="space-y-2">
+                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                            {t("footer.navigation.help.title")}
+                        </h4>
+                        <ul class="space-y-1 text-sm leading-6">
+                            <li>
+                                <a
+                                    href="/faqs"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.help.faqs")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/contact"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.help.contact")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/tax-calculator"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.help.taxCalculator")}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- About Goteo -->
+                    <div class="space-y-2">
+                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                            {t("footer.navigation.aboutGoteo.title")}
+                        </h4>
+                        <ul class="space-y-1 text-sm leading-6">
+                            <li>
+                                <a
+                                    href="/about"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.aboutGoteo.whoWeAre")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/benefits"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.aboutGoteo.goteoBenefits")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/impact"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.aboutGoteo.foundationImpact")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/platoniq"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.aboutGoteo.platoniqFoundation")}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- For Users -->
+                    <div class="space-y-2">
+                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                            {t("footer.navigation.forUsers.title")}
+                        </h4>
+                        <ul class="space-y-1 text-sm leading-6">
+                            <li>
+                                <a
+                                    href="/wallet"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.forUsers.rechargeWallet")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/certificate"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.forUsers.downloadCertificate")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/funds"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.forUsers.accessComplementaryFunds")}
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="/program"
+                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                >
+                                    {t("footer.navigation.forUsers.designFundingProgram")}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Logo -->
+                <div class="flex flex-1 shrink-0 justify-end">
+                    <div class="h-10 w-[131px]">
+                        <img src="/imgs/goteo-white-logo.svg" alt="Goteo" class="h-full w-full" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="bg-tertiary pb-10">
+        <div class="wrapper">
+            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <!-- Legal Links -->
+                <div class="flex flex-wrap gap-8">
+                    <a
+                        href="/terms"
+                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                    >
+                        {t("footer.legal.termsOfUse")}
+                    </a>
+                    <a
+                        href="/privacy"
+                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                    >
+                        {t("footer.legal.privacyPolicy")}
+                    </a>
+                    <a
+                        href="/licenses"
+                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                    >
+                        {t("footer.legal.licenses")}
+                    </a>
+                    <a
+                        href="/stats"
+                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                    >
+                        {t("footer.legal.stats")}
+                    </a>
+                </div>
+
+                <!-- Social Media and Platoniq -->
+                <div class="flex flex-col gap-6 md:flex-row md:items-center">
+                    <!-- Social Media Icons -->
+                    <div class="flex items-center gap-2">
+                        <a
+                            href="mailto:info@goteo.org"
+                            class="transition-opacity hover:opacity-80"
+                            aria-label="Email"
+                        >
+                            <FooterGmailIcon />
+                        </a>
+                        <a
+                            href="https://instagram.com/goteo"
+                            class="transition-opacity hover:opacity-80"
+                            aria-label="Instagram"
+                        >
+                            <FooterInstagramIcon />
+                        </a>
+                        <a
+                            href="https://facebook.com/goteo"
+                            class="transition-opacity hover:opacity-80"
+                            aria-label="Facebook"
+                        >
+                            <FooterFacebookIcon />
+                        </a>
+                        <a
+                            href="https://twitter.com/goteo"
+                            class="transition-opacity hover:opacity-80"
+                            aria-label="X (Twitter)"
+                        >
+                            <FooterXIcon />
+                        </a>
+                        <a
+                            href="https://linkedin.com/company/goteo"
+                            class="transition-opacity hover:opacity-80"
+                            aria-label="LinkedIn"
+                        >
+                            <FooterLinkedinIcon />
+                        </a>
+                    </div>
+
+                    <!-- Platoniq Foundation -->
+                    <div class="text-purple-tint">
+                        <div class="text-[21px] leading-normal font-bold">
+                            {t("footer.platoniq.name")}
+                        </div>
+                        <div class="text-[13px] leading-normal font-light">
+                            {t("footer.platoniq.foundation")}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

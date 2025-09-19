@@ -14,7 +14,11 @@ import Matchfunding from "../../components/home/Matchfunding.astro";
 const { t } = Astro.locals;
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout
+    title={t("metadata.title")}
+    description={t("metadata.description")}
+    class="mb-20 gap-[72px]"
+>
     <Hero />
     <RenovationBanner />
     <Campaigns />
