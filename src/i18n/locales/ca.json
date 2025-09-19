@@ -403,6 +403,21 @@
       "capitalRaised": "Capital recaptat",
       "promoterImage": "Foto de l'impulsor",
       "shareProfile": "Compartir perfil de {{name}}"
+    },
+    "resources": {
+      "title": "Recursos: Combustible per a Projectes Creatius",
+      "viewAll": "Veure més recursos",
+      "readMore": "Llegir més",
+      "articles": {
+        "firstCampaign": {
+          "title": "Com faig la meva primera campanya?",
+          "description": "El teu projecte mereix enlairar-se: Domina el crowdfunding social amb la nostra CAIXA D'EINES GRATUÏTA. Guia pràctica + plantilles descarregables per conquistar la teva audiència."
+        },
+        "testimonials": {
+          "title": "Testimonis dels nostres impulsors",
+          "description": "Qui et pot explicar millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
+        }
+      }
     }
   }
 }

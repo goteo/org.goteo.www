@@ -710,6 +710,21 @@
       "capitalRaised": "Capital recaudado",
       "promoterImage": "Foto del impulsor",
       "shareProfile": "Compartir perfil de {{name}}"
+    },
+    "resources": {
+      "title": "Recursos: Combustible para Proyectos Creativos",
+      "viewAll": "Ver más recursos",
+      "readMore": "Leer más",
+      "articles": {
+        "firstCampaign": {
+          "title": "¿Cómo hago mi primera campaña?",
+          "description": "Tu proyecto merece despegar: Domina el crowdfunding social con nuestra CAJA DE HERRAMIENTAS GRATUITA. Guía práctica + plantillas descargables para conquistar a tu audiencia."
+        },
+        "testimonials": {
+          "title": "Testimonios de nuestros impulsores",
+          "description": "¿Quién puede contarte mejor como es impulsar campañas exitosas? Nuestros impulsores nos cuentan de primera mano como es gestionar una campaña con Goteo."
+        }
+      }
     }
   }
 }

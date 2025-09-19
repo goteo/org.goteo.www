@@ -304,6 +304,21 @@
       "capitalRaised": "Capital raised",
       "promoterImage": "Promoter photo",
       "shareProfile": "Share {{name}}'s profile"
+    },
+    "resources": {
+      "title": "Resources: Fuel for Creative Projects",
+      "viewAll": "View more resources",
+      "readMore": "Read more",
+      "articles": {
+        "firstCampaign": {
+          "title": "How do I make my first campaign?",
+          "description": "Your project deserves to take off: Master social crowdfunding with our FREE TOOLKIT. Practical guide + downloadable templates to conquer your audience."
+        },
+        "testimonials": {
+          "title": "Testimonials from our promoters",
+          "description": "Who can tell you better what it's like to drive successful campaigns? Our promoters tell us first-hand what it's like to manage a campaign with Goteo."
+        }
+      }
     }
   }
 }
