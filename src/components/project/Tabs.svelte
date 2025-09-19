@@ -64,10 +64,10 @@
     });
 </script>
 
-<div class="wrapper relative">
+<div class="relative">
     <button
         onclick={() => scrollTabs("left")}
-        class="absolute top-1/2 left-0 z-10 h-full w-10 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class="absolute top-5 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollLeft}
         class:pointer-events-none={!canScrollLeft}
         aria-label="Scroll tabs left"
@@ -77,7 +77,7 @@
 
     <div
         bind:this={tabsContainer}
-        class="no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
+        class="wrapper no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
         role="tablist"
         aria-label="Project tabs"
         style="scrollbar-width: none;"
@@ -100,7 +100,7 @@
 
     <button
         onclick={() => scrollTabs("right")}
-        class="absolute top-1/2 right-0 z-10 h-full w-10 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class="absolute top-5 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollRight}
         class:pointer-events-none={!canScrollRight}
         aria-label="Scroll tabs right"
@@ -116,52 +116,57 @@
             scrollbar-width: none;
         }
     </style>
-</div>
 
-<div class="flex w-full justify-center bg-[#E6E5F7] py-10 lg:py-20">
-    <div class="wrapper flex items-center justify-center">
-        {#if activeTab === "rewards"}
-            <div
-                id="tab-rewards"
-                role="tabpanel"
-                aria-labelledby="tab-button-rewards"
-                class="w-full"
-            >
-                <ProjectRewards bind:lang {project} />
-            </div>
-        {:else if activeTab === "project"}
-            <div
-                id="tab-project"
-                role="tabpanel"
-                aria-labelledby="tab-button-project"
-                class="marked-content flex max-w-4xl flex-col gap-4"
-            >
-                {#await renderMarkdown(project.description) then content}
-                    {@html content}
-                {/await}
-            </div>
-        {:else if activeTab === "budget"}
-            <div id="tab-budget" role="tabpanel" aria-labelledby="tab-button-budget" class="w-full">
-                <ProjectBudget bind:lang {project} {accounting} />
-            </div>
-        {:else if activeTab === "updates"}
-            <div
-                id="tab-updates"
-                role="tabpanel"
-                aria-labelledby="tab-button-updates"
-                class="w-full"
-            >
-                <ProjectUpdate bind:lang {project} />
-            </div>
-        {:else if activeTab === "community"}
-            <div
-                id="tab-community"
-                role="tabpanel"
-                aria-labelledby="tab-button-community"
-                class="w-full"
-            >
-                <ProjectCommunity {project} {accounting} />
-            </div>
-        {/if}
+    <div class="flex w-full justify-center bg-[#E6E5F7] py-10 lg:py-20">
+        <div class="wrapper flex items-center justify-center">
+            {#if activeTab === "rewards"}
+                <div
+                    id="tab-rewards"
+                    role="tabpanel"
+                    aria-labelledby="tab-button-rewards"
+                    class="w-full"
+                >
+                    <ProjectRewards bind:lang {project} />
+                </div>
+            {:else if activeTab === "project"}
+                <div
+                    id="tab-project"
+                    role="tabpanel"
+                    aria-labelledby="tab-button-project"
+                    class="marked-content flex max-w-4xl flex-col gap-4"
+                >
+                    {#await renderMarkdown(project.description) then content}
+                        {@html content}
+                    {/await}
+                </div>
+            {:else if activeTab === "budget"}
+                <div
+                    id="tab-budget"
+                    role="tabpanel"
+                    aria-labelledby="tab-button-budget"
+                    class="w-full"
+                >
+                    <ProjectBudget bind:lang {project} {accounting} />
+                </div>
+            {:else if activeTab === "updates"}
+                <div
+                    id="tab-updates"
+                    role="tabpanel"
+                    aria-labelledby="tab-button-updates"
+                    class="w-full"
+                >
+                    <ProjectUpdate bind:lang {project} />
+                </div>
+            {:else if activeTab === "community"}
+                <div
+                    id="tab-community"
+                    role="tabpanel"
+                    aria-labelledby="tab-button-community"
+                    class="w-full"
+                >
+                    <ProjectCommunity {project} {accounting} />
+                </div>
+            {/if}
+        </div>
     </div>
 </div>

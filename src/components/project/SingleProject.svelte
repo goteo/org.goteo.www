@@ -95,7 +95,7 @@
                         class="mt-2 text-sm font-medium text-blue-600 hover:underline"
                         onclick={() => (showFull = !showFull)}
                     >
-                        {showFull ? "Ver menos" : "Ver más"}
+                        {showFull ? $t("project.actions.viewLess") : $t("project.actions.viewMore")}
                     </button>
                 {/if}
             </div>
