@@ -25,7 +25,9 @@ const { title, description, class: className } = Astro.props;
     </head>
     <body class="grid min-h-screen overflow-x-hidden">
         <Header />
-        <main class={`w-full max-w-screen flex-1 flex flex-col gap-16 ${className ? ` ${className}` : ''}`}>
+        <main
+            class={`w-full max-w-screen flex-1 flex flex-col gap-16 ${className ? ` ${className}` : ""}`}
+        >
             <slot />
         </main>
         <!-- TODO: Review ThemeToggle-->
