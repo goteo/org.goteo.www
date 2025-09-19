@@ -696,6 +696,12 @@
         },
         "button": "Quiero saber más"
       }
+    },
+    "stories": {
+      "title": "Goteo estrena nueva web!",
+      "subtitle": "Encantados de compartirlo contigo",
+      "description": "¡Goteo tiene una nueva cara! Navega por nuestra web renovada y descubre una experiencia de crowdfunding social más intuitiva y atractiva. Explora proyectos innovadores, conoce a los creadores detrás de ellos y únete a nuestra comunidad.\n¡Conviértete en donante y haz realidad tus ideas!",
+      "button": "Conviértete en donante"
     }
   }
 }

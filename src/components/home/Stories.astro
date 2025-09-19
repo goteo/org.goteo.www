@@ -1,0 +1,79 @@
+---
+const { t } = Astro.locals;
+---
+
+<section class="wrapper py-16">
+    <div class="flex flex-col gap-0 overflow-hidden rounded-3xl bg-white shadow-sm lg:flex-row">
+        <!-- Content Section -->
+        <div
+            class="bg-light-surface flex flex-col justify-between gap-6 rounded-l-3xl border border-r-0 border-[#faf9ff] p-6 md:gap-8 md:py-6 md:pr-10 md:pl-6 lg:min-h-[484px] lg:w-[692px]"
+        >
+            <!-- Text Content -->
+            <div class="flex min-h-[348px] max-w-[529px] flex-col gap-4">
+                <!-- Main Headline -->
+                <h2
+                    class="text-tertiary text-2xl leading-tight font-bold md:text-[40px] md:leading-[48px]"
+                >
+                    {t("home.stories.title")}
+                </h2>
+
+                <!-- Subtitle -->
+                <h3
+                    class="text-tertiary text-lg leading-8 font-bold md:text-[24px] md:leading-[32px]"
+                >
+                    {t("home.stories.subtitle")}
+                </h3>
+
+                <!-- Description -->
+                <div class="flex-1 text-sm leading-6 text-[#575757] md:text-base md:leading-6">
+                    {
+                        t("home.stories.description")
+                            .split("\n")
+                            .map((paragraph, index) => (
+                                <p key={index} class:list={[index > 0 && "mt-4"]}>
+                                    {paragraph}
+                                </p>
+                            ))
+                    }
+                </div>
+            </div>
+
+            <!-- Call to Action Button -->
+            <a
+                href="/donate"
+                class="bg-purple-tint text-tertiary hover:bg-tertiary flex w-fit items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:text-base"
+            >
+                {t("home.stories.button")}
+            </a>
+        </div>
+
+        <!-- Images Section -->
+        <div
+            class="bg-purple-tint relative min-h-[300px] flex-1 rounded-r-3xl lg:min-h-[484px] lg:w-[668px]"
+        >
+            <!-- Main central image -->
+            <div
+                class="absolute top-1/2 left-1/2 h-[200px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-cover bg-center bg-no-repeat shadow-lg md:h-[300px] md:w-[400px] lg:h-[436px] lg:w-[436px]"
+                style="background-image: url('/imgs/stories-main.png')"
+                aria-label="Goteo community members"
+            >
+            </div>
+
+            <!-- Top right smaller image -->
+            <div
+                class="absolute top-4 right-4 h-[80px] w-[120px] rounded-2xl bg-cover bg-center bg-no-repeat shadow-md md:h-[120px] md:w-[180px] lg:top-[calc(50%-115px)] lg:right-8 lg:h-[206px] lg:w-[299px]"
+                style="background-image: url('/imgs/stories-team-rebranding.png')"
+                aria-label="Team collaboration on rebranding"
+            >
+            </div>
+
+            <!-- Bottom right smaller image -->
+            <div
+                class="absolute right-4 bottom-4 h-[80px] w-[120px] rounded-2xl bg-cover bg-center bg-no-repeat shadow-md md:h-[120px] md:w-[180px] lg:top-[calc(50%+115px)] lg:right-8 lg:h-[206px] lg:w-[299px]"
+                style="background-image: url('/imgs/stories-office-workspace.png')"
+                aria-label="Creative workspace"
+            >
+            </div>
+        </div>
+    </div>
+</section>
