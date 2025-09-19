@@ -33,6 +33,15 @@
 
     let freeAmount = $state("");
 
+    let isAvailable = calcAvailability();
+    function calcAvailability(): boolean {
+        if (project.status !== "in_campaign") {
+            return false;
+        }
+
+        return true;
+    }
+
     async function handleFreeDonation() {
         const numericAmount = Number(freeAmount);
 
@@ -68,7 +77,9 @@
             {$t("rewards.title")}
         </h2>
         <ul class="grid gap-6 lg:grid-cols-3">
-            <div
+            <li
+                class:opacity-50={!isAvailable}
+                class:cursor-not-allowed={!isAvailable}
                 class="flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <div class="flex flex-col gap-6">
@@ -89,12 +100,15 @@
                     <button
                         type="button"
                         onclick={handleFreeDonation}
+                        disabled={!isAvailable}
+                        class:cursor-pointer={isAvailable}
+                        class:cursor-not-allowed={!isAvailable}
                         class="text-tertiary inline-block w-full cursor-pointer rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
                     >
                         {$t("rewards.donation-free.btn")}
                     </button>
                 </div>
-            </div>
+            </li>
             {#each rewards as reward}
                 <Reward {reward} {project} />
             {/each}
