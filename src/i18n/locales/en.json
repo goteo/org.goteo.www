@@ -254,6 +254,42 @@
         "viewCampaigns": "View campaign calls",
         "finished": "Finished {{date}}"
       }
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "From theory to action",
+        "subtitle": "The figures that reveal our real footprint",
+        "advisedOnline": {
+          "value": "155",
+          "label": "Advised Online"
+        },
+        "workshopParticipants": {
+          "value": "48",
+          "label": "Workshop participants"
+        },
+        "fundedProjects": {
+          "value": "77",
+          "label": "Funded projects"
+        },
+        "button": "View Goteo Stats"
+      },
+      "whyGoteo": {
+        "title": "Why Goteo?",
+        "subtitle": "We have values and the data backs us up.",
+        "successRate": {
+          "value": "80%",
+          "label": "Success rate"
+        },
+        "publishedProjects": {
+          "value": "2,800",
+          "label": "Published projects"
+        },
+        "totalRaised": {
+          "value": "800M",
+          "label": "Raised"
+        },
+        "button": "Learn more"
+      }
     }
   }
 }

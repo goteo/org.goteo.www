@@ -660,6 +660,42 @@
         "viewCampaigns": "Ver las campañas de la convocatoria",
         "finished": "Finalizada {{date}}"
       }
+    },
+    "stats": {
+      "theoryToAction": {
+        "title": "De la teoría a la acción",
+        "subtitle": "Las cifras que revelan nuestra huella real",
+        "advisedOnline": {
+          "value": "155",
+          "label": "Asesorados Online"
+        },
+        "workshopParticipants": {
+          "value": "48",
+          "label": "Participantes en talleres"
+        },
+        "fundedProjects": {
+          "value": "77",
+          "label": "Proyectos financiados"
+        },
+        "button": "Ver Stats de Goteo"
+      },
+      "whyGoteo": {
+        "title": "¿Por qué Goteo?",
+        "subtitle": "Tenemos valores y los datos nos avalan.",
+        "successRate": {
+          "value": "80%",
+          "label": "Porcentaje de éxito"
+        },
+        "publishedProjects": {
+          "value": "2.800",
+          "label": "Proyectos publicados"
+        },
+        "totalRaised": {
+          "value": "800 M",
+          "label": "Recaudado"
+        },
+        "button": "Quiero saber más"
+      }
     }
   }
 }

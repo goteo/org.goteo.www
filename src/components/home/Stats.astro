@@ -1,0 +1,125 @@
+---
+const { t } = Astro.locals;
+---
+
+<section class="wrapper py-16">
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <!-- First Card: De la teoría a la acción -->
+        <div class="bg-light-muted flex flex-col gap-6 rounded-3xl p-6 shadow-sm md:gap-10 md:p-10">
+            <div class="flex flex-col gap-6">
+                <!-- Header -->
+                <div class="flex flex-col gap-2">
+                    <h2
+                        class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                    >
+                        {t("home.stats.theoryToAction.title")}
+                    </h2>
+                    <p class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                        {t("home.stats.theoryToAction.subtitle")}
+                    </p>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.theoryToAction.advisedOnline.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.theoryToAction.advisedOnline.label")}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.theoryToAction.workshopParticipants.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.theoryToAction.workshopParticipants.label")}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.theoryToAction.fundedProjects.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.theoryToAction.fundedProjects.label")}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <a
+                href="/stats"
+                class="border-tertiary text-tertiary hover:bg-tertiary flex w-fit items-center justify-center gap-2 self-center rounded-3xl border px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:self-start md:text-base"
+            >
+                {t("home.stats.theoryToAction.button")}
+            </a>
+        </div>
+
+        <!-- Second Card: ¿Por qué Goteo? -->
+        <div class="bg-light-muted flex flex-col gap-6 rounded-3xl p-6 shadow-sm md:gap-10 md:p-10">
+            <div class="flex flex-col gap-6">
+                <!-- Header -->
+                <div class="flex flex-col gap-2">
+                    <h2
+                        class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                    >
+                        {t("home.stats.whyGoteo.title")}
+                    </h2>
+                    <p class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                        {t("home.stats.whyGoteo.subtitle")}
+                    </p>
+                </div>
+
+                <!-- Stats -->
+                <div class="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.whyGoteo.successRate.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.whyGoteo.successRate.label")}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.whyGoteo.publishedProjects.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.whyGoteo.publishedProjects.label")}
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-center text-center md:items-start md:text-left">
+                        <div
+                            class="text-tertiary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        >
+                            {t("home.stats.whyGoteo.totalRaised.value")}
+                        </div>
+                        <div class="text-tertiary text-sm leading-5 md:text-base md:leading-6">
+                            {t("home.stats.whyGoteo.totalRaised.label")}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Button -->
+            <a
+                href="/about"
+                class="border-tertiary text-tertiary hover:bg-tertiary flex w-fit items-center justify-center gap-2 self-center rounded-3xl border px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:self-start md:text-base"
+            >
+                {t("home.stats.whyGoteo.button")}
+            </a>
+        </div>
+    </div>
+</section>
