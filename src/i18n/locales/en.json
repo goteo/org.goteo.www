@@ -296,6 +296,14 @@
       "subtitle": "Delighted to share it with you",
       "description": "Goteo has a new face! Browse through our renewed website and discover a more intuitive and attractive social crowdfunding experience. Explore innovative projects, meet the creators behind them and join our community.\nBecome a donor and make your ideas come true!",
       "button": "Become a donor"
+    },
+    "featuredPromoters": {
+      "title": "Featured Promoters",
+      "viewAll": "View all",
+      "projectsPromoted": "Projects promoted",
+      "capitalRaised": "Capital raised",
+      "promoterImage": "Promoter photo",
+      "shareProfile": "Share {{name}}'s profile"
     }
   }
 }

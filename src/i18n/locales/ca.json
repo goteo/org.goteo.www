@@ -395,6 +395,14 @@
       "subtitle": "Encantats de compartir-ho amb tu",
       "description": "Goteo té una nova cara! Navega per la nostra web renovada i descobreix una experiència de crowdfunding social més intuïtiva i atractiva. Explora projectes innovadors, coneix els creadors que hi ha al darrere i uneix-te a la nostra comunitat.\nConverteix-te en donant i fes realitat les teves idees!",
       "button": "Converteix-te en donant"
+    },
+    "featuredPromoters": {
+      "title": "Impulsors destacats",
+      "viewAll": "Veure tots",
+      "projectsPromoted": "Projectes impulsats",
+      "capitalRaised": "Capital recaptat",
+      "promoterImage": "Foto de l'impulsor",
+      "shareProfile": "Compartir perfil de {{name}}"
     }
   }
 }

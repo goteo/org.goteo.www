@@ -1,0 +1,111 @@
+---
+import type { Promoter } from "../../types/promoter";
+import ShareIcon from "../../svgs/ShareIcon.svelte";
+
+export interface Props {
+    promoter: Promoter;
+}
+
+const { promoter } = Astro.props;
+const { t } = Astro.locals;
+---
+
+<div class="bg-light-surface relative overflow-hidden rounded-3xl shadow-lg">
+    <!-- Decorative background with gradient and shapes -->
+    <div class="bg-tertiary relative h-[389px] overflow-hidden rounded-t-3xl">
+        <!-- Gradient background -->
+        <div class="from-primary/30 to-tertiary absolute inset-0 bg-gradient-to-br"></div>
+
+        <!-- Decorative SVG elements -->
+        <div class="absolute top-[136px] -left-[75px] h-[351px] w-[351px] opacity-20">
+            <img
+                src="/imgs/promoter-decoration-2.svg"
+                alt=""
+                class="h-full w-full object-contain"
+                aria-hidden="true"
+            />
+        </div>
+        <div class="absolute -top-[167px] left-[173px] h-[377px] w-[377px] opacity-15">
+            <img
+                src="/imgs/promoter-decoration-3.svg"
+                alt=""
+                class="h-full w-full object-contain"
+                aria-hidden="true"
+            />
+        </div>
+        <div class="absolute top-[187px] left-[144px] h-[278px] w-[278px] opacity-10">
+            <img
+                src="/imgs/promoter-decoration-4.svg"
+                alt=""
+                class="h-full w-full object-contain"
+                aria-hidden="true"
+            />
+        </div>
+        <div class="absolute -top-[63px] -left-[105px] h-[278px] w-[278px] opacity-10">
+            <img
+                src="/imgs/promoter-decoration-4.svg"
+                alt=""
+                class="h-full w-full object-contain"
+                aria-hidden="true"
+            />
+        </div>
+
+        <!-- Main promoter image -->
+        <div
+            class="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={`background-image: url('${promoter.image}')`}
+            role="img"
+            aria-label={`${promoter.name} - ${t("home.featuredPromoters.promoterImage")}`}
+        >
+        </div>
+
+        <!-- Decorative path overlay -->
+        <div class="absolute -top-[112px] -right-[131px] h-[559px] w-[395px] opacity-30">
+            <img
+                src="/imgs/promoter-decoration-1.svg"
+                alt=""
+                class="h-full w-full object-contain"
+                aria-hidden="true"
+            />
+        </div>
+    </div>
+
+    <!-- Share button -->
+    <button
+        class="bg-light-surface border-neutral-light absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
+        aria-label={t("home.featuredPromoters.shareProfile", { name: promoter.name })}
+    >
+        <ShareIcon />
+    </button>
+
+    <!-- Content area -->
+    <div class="flex flex-col gap-6 p-6">
+        <!-- Name -->
+        <h3 class="text-tertiary text-2xl leading-8 font-bold">
+            {promoter.name}
+        </h3>
+
+        <!-- Stats -->
+        <div class="flex items-center justify-between">
+            <!-- Projects promoted -->
+            <div class="flex flex-col gap-1 text-left">
+                <span class="text-secondary text-base leading-6">
+                    {t("home.featuredPromoters.projectsPromoted")}
+                </span>
+                <span class="text-secondary text-2xl leading-8 font-bold">
+                    {promoter.projectsPromoted}
+                </span>
+            </div>
+
+            <!-- Capital raised -->
+            <div class="flex flex-col gap-1 text-right">
+                <span class="text-secondary text-base leading-6">
+                    {t("home.featuredPromoters.capitalRaised")}
+                </span>
+                <span class="text-secondary text-2xl leading-8 font-bold">
+                    {promoter.capitalRaised}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
