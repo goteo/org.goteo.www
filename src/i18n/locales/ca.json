@@ -44,7 +44,6 @@
       "remember": "Recordar",
       "viewAll": "Ver todas"
     },
-
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
@@ -354,20 +353,43 @@
       "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions...",
       "readMore": "Continuar llegint"
     },
+    "matchfunding": {
+      "title": "Matchfunding",
+      "description": "Matchfunding és un model on cada donació privada es multiplica per una entitat patrocinadora per maximitzar l’impacte social.",
+      "actions": {
+        "learnMore": "Obteniu més informació",
+        "viewCalls": "Consulteu les trucades actives"
+      },
+      "impact": {
+        "title": "Dades d’impacte",
+        "description": "Matchfunding converteix les micro-donacions en impactes macro mitjançant la validació de projectes amb el suport comunitari i l’optimització dels recursos públics/privats.",
+        "matchers": "Contribuït per Matchers:",
+        "successRate": "Projectes amb èxit:",
+        "community": "Comunitat d'usuaris:"
+      },
+      "cards": {
+        "grant": "Trucada de finançament",
+        "inscription": "Data d’inscripció",
+        "participants": "Projectes participants",
+        "apply": "Sol·liciteu la trucada",
+        "viewCampaigns": "Consulteu les trucades de la campanya",
+        "finished": "Acabat {{date}}"
+      }
+    },
     "stats": {
       "theoryToAction": {
         "title": "De la teoria a l'acció",
         "subtitle": "Les xifres que revelen la nostra petjada real",
         "advisedOnline": {
-          "value": "155",
+          "value": "+2.500",
           "label": "Assessorats Online"
         },
         "workshopParticipants": {
-          "value": "48",
-          "label": "Participants en tallers"
+          "value": "41",
+          "label": "Patrocinadors en tallers"
         },
         "fundedProjects": {
-          "value": "77",
+          "value": "+2.300",
           "label": "Projectes finançats"
         },
         "button": "Veure Stats de Goteo"
@@ -376,15 +398,15 @@
         "title": "Per què Goteo?",
         "subtitle": "Tenim valors i les dades ens avalen.",
         "successRate": {
-          "value": "80%",
+          "value": "+80%",
           "label": "Percentatge d'èxit"
         },
         "publishedProjects": {
-          "value": "2.800",
+          "value": "+2.800",
           "label": "Projectes publicats"
         },
         "totalRaised": {
-          "value": "800 M",
+          "value": "+23M €",
           "label": "Recaptat"
         },
         "button": "Vull saber més"

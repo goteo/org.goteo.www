@@ -260,15 +260,15 @@
         "title": "From theory to action",
         "subtitle": "The figures that reveal our real footprint",
         "advisedOnline": {
-          "value": "155",
+          "value": "+2.500",
           "label": "Advised Online"
         },
         "workshopParticipants": {
-          "value": "48",
-          "label": "Workshop participants"
+          "value": "41",
+          "label": "Workshop sponsors"
         },
         "fundedProjects": {
-          "value": "77",
+          "value": "+2.300",
           "label": "Funded projects"
         },
         "button": "View Goteo Stats"
@@ -277,15 +277,15 @@
         "title": "Why Goteo?",
         "subtitle": "We have values and the data backs us up.",
         "successRate": {
-          "value": "80%",
+          "value": "+80%",
           "label": "Success rate"
         },
         "publishedProjects": {
-          "value": "2,800",
+          "value": "+2.800",
           "label": "Published projects"
         },
         "totalRaised": {
-          "value": "800M",
+          "value": "+23M €",
           "label": "Raised"
         },
         "button": "Learn more"

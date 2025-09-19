@@ -550,7 +550,7 @@
           "10000..50000": "100€ - 500€",
           "50000..100000": "500€ - 1.000€",
           "100000..500000": "1.000€ - 5.000€",
-          "500000": "> 5.000€"
+          "500000": "+ 5.000€"
         }
       },
       "dateRange": {
@@ -655,15 +655,15 @@
         "title": "De la teoría a la acción",
         "subtitle": "Las cifras que revelan nuestra huella real",
         "advisedOnline": {
-          "value": "155",
+          "value": "+2.500",
           "label": "Asesorados Online"
         },
         "workshopParticipants": {
-          "value": "48",
-          "label": "Participantes en talleres"
+          "value": "41",
+          "label": "Patrocinadores en talleres"
         },
         "fundedProjects": {
-          "value": "77",
+          "value": "+2.300",
           "label": "Proyectos financiados"
         },
         "button": "Ver Stats de Goteo"
@@ -672,15 +672,15 @@
         "title": "¿Por qué Goteo?",
         "subtitle": "Tenemos valores y los datos nos avalan.",
         "successRate": {
-          "value": "80%",
+          "value": "+80%",
           "label": "Porcentaje de éxito"
         },
         "publishedProjects": {
-          "value": "2.800",
+          "value": "+2.800",
           "label": "Proyectos publicados"
         },
         "totalRaised": {
-          "value": "800 M",
+          "value": "+23M €",
           "label": "Recaudado"
         },
         "button": "Quiero saber más"
