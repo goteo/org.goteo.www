@@ -76,11 +76,8 @@ jobs:
 
             - name: Run Cypress tests
               run: |
-                  SPEC_FILES=(cypress/e2e/*.cy.ts)
-                  BATCH_SIZE=10
-                  TOTAL=${#SPEC_FILES[@]}
-                  for ((i=0;i<TOTAL;i+=BATCH_SIZE)); do
-                    pnpm cypress run --spec "${SPEC_FILES[@]:i:BATCH_SIZE}"
+                  for spec in cypress/e2e/*.cy.ts; do
+                    pnpm cypress run --spec "$spec" || exit 1
                   done
               env:
                   CI: true

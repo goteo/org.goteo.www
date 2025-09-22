@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdbalanceGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
+import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
@@ -21,7 +21,7 @@ if (!accessCookie) {
 }
 
 const { accountingId, token } = JSON.parse(accessCookie.value);
-const { data: accountingBalance } = await apiAccountingsIdbalanceGet({
+const { data: accounting } = await apiAccountingsIdGet({
     path: { id: accountingId },
     headers: {
         Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ try {
 
                                     <PaymentMethod
                                         {paymentGateways}
-                                        {accountingBalance}
+                                        {accounting}
                                         hasError={!!error}
                                     />
                                 </div>

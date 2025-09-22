@@ -2,7 +2,7 @@
     import { onDestroy, onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem, AccountingBalance } from "../../openapi/client/index";
+    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import ResumeBudget from "./ResumeBudget.svelte";
@@ -10,11 +10,11 @@
     let {
         lang = $bindable(),
         project,
-        accountingBalance,
+        accounting,
     }: {
         lang: string;
         project: Project;
-        accountingBalance: AccountingBalance;
+        accounting: Accounting;
     } = $props();
 
     const projectId = project.id!.toString();
@@ -71,7 +71,7 @@
 
 <div class="flex flex-col gap-10">
     <div>
-        <ResumeBudget {project} {accountingBalance} />
+        <ResumeBudget {project} {accounting} />
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">

@@ -1,0 +1,52 @@
+---
+export interface Props {
+    title: string;
+    description: string;
+    image: string;
+    href?: string;
+    linkText?: string;
+}
+
+const { title, description, image, href = "#", linkText = "Leer más" } = Astro.props;
+---
+
+<article class="bg-light-surface border-light-muted h-full rounded-3xl border p-6 shadow-sm">
+    <div class="flex h-full flex-col gap-6 md:flex-row">
+        <!-- Image -->
+        <div class="shrink-0">
+            <img
+                src={image}
+                alt=""
+                class="h-48 w-full rounded-2xl object-cover md:h-56 md:w-56"
+                loading="lazy"
+            />
+        </div>
+
+        <!-- Content -->
+        <div class="flex flex-1 flex-col gap-6 md:h-56">
+            <!-- Text content -->
+            <div class="flex flex-1 flex-col gap-2">
+                <h3
+                    class="text-tertiary line-clamp-2 text-xl leading-7 font-bold md:text-2xl md:leading-8"
+                >
+                    {title}
+                </h3>
+                <p
+                    class="line-clamp-3 text-sm leading-5 text-[#575757] md:line-clamp-4 md:text-base md:leading-6"
+                >
+                    {description}
+                </p>
+            </div>
+
+            <!-- Link -->
+            <div class="shrink-0">
+                <a
+                    href={href}
+                    class="text-tertiary text-sm leading-5 font-bold underline underline-offset-2 transition-opacity hover:opacity-80 md:text-base md:leading-6"
+                >
+                    {linkText}
+                </a>
+            </div>
+        </div>
+    </div>
+</article>

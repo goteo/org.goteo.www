@@ -1,7 +1,11 @@
+<script>
+    let { width = "32", height = "32", class: className = "" } = $props();
+</script>
+
 <svg
-    class="fill-(--color-tertiary)"
-    width="32"
-    height="32"
+    class={`fill-(--color-tertiary) ${className}`}
+    {width}
+    {height}
     viewBox="0 0 32 32"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"

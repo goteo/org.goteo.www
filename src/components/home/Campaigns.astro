@@ -1,0 +1,123 @@
+---
+import CampaignCard from "./CampaignCard.astro";
+import type { Campaign } from "../../types/campaign";
+import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+
+const { t } = Astro.locals;
+
+// Mock campaign data
+const mockCampaigns: Campaign[] = [
+    // Large featured campaign
+    {
+        id: "lanzamos-sonda-internacional-y-los-cinco-elementos",
+        title: "Lanzamos Sonda Internacional y los cinco elementos",
+        image: "https://www.goteo.org/img/700x0/01-julia-cusso-sonda-internacional.jpg",
+        daysRemaining: 120,
+        obtained: "28.159 €",
+        minimum: "28.159 €",
+        progressPercentage: 100,
+        hasMatchfunding: false,
+        size: "large" as const, // Mark this card as large
+    },
+    // Regular campaigns
+    {
+        id: "caja-de-resistencia-huelga-de-alquileres",
+        title: "Caja de Resistencia Huelga de Alquileres",
+        image: "https://www.goteo.org/img/780x478/suspensionalquileres-def-06.png",
+        daysRemaining: 120,
+        obtained: "43.023 €",
+        minimum: "30.000 €",
+        progressPercentage: 100,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "rebrotem",
+        title: "Rebrotem",
+        image: "https://www.goteo.org/img/700x700/7-20.png",
+        daysRemaining: 11,
+        obtained: "105.322 €",
+        minimum: "50.000 €",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "impulsa-la-cooperativa-de-informacion-climatica",
+        title: "Impulsa la cooperativa de información Climática",
+        image: "https://i.ytimg.com/vi/Dh0vzhAvjeg/maxresdefault.jpg",
+        daysRemaining: 16,
+        obtained: "132.258 €",
+        minimum: "122.000 €",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+    {
+        id: "baynana",
+        title: "Baynana, primer medio creado por periodistas refugiados en España",
+        image: "https://www.goteo.org/img/780x478/baynana-a02.png",
+        daysRemaining: 14,
+        obtained: "36.160 €",
+        minimum: "22.780 €",
+        progressPercentage: 20,
+        hasMatchfunding: false,
+        size: "small" as const,
+    },
+];
+
+// Smart grid layout logic:
+// - Max grid is 2 rows x 3 columns = 6 slots
+// - Large cards take 2 slots, small cards take 1 slot
+// - We need to calculate how many campaigns fit within 6 slots
+function selectCampaignsForGrid(campaigns: Campaign[], maxSlots: number = 6): Campaign[] {
+    const selectedCampaigns: Campaign[] = [];
+    let usedSlots = 0;
+
+    for (const campaign of campaigns) {
+        const slotsNeeded = campaign.size === "large" ? 2 : 1;
+
+        // Check if we can fit this campaign in the remaining slots
+        if (usedSlots + slotsNeeded <= maxSlots) {
+            selectedCampaigns.push(campaign);
+            usedSlots += slotsNeeded;
+        } else {
+            // Can't fit more campaigns
+            break;
+        }
+    }
+
+    return selectedCampaigns;
+}
+
+const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
+---
+
+<section class="wrapper">
+    <!-- Header Section -->
+    <div class="mb-6 flex items-center justify-between">
+        <h2 class="text-2xl font-bold text-black">
+            {t("home.campaigns.title")}
+        </h2>
+
+        <!-- "Ver todas" Button -->
+        <button
+            class="bg-purple-tint flex items-center gap-2 rounded-3xl px-6 py-4 transition-all duration-200 hover:opacity-90"
+        >
+            <!-- Arrow Icon -->
+            <ArrowRightIcon />
+            <span class="text-tertiary text-base font-bold">
+                {t("home.campaigns.viewAll")}
+            </span>
+        </button>
+    </div>
+
+    <!-- Campaigns Grid: 3 columns max, 2 rows, large cards take 2 columns -->
+    <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {
+            displayCampaigns.map((campaign) => (
+                <CampaignCard size={campaign.size} campaign={campaign} />
+            ))
+        }
+    </div>
+</section>

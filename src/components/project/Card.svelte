@@ -2,8 +2,8 @@
     import {
         type Project,
         type ApiAccountingBalancePointsGetCollectionData,
-        type AccountingBalance,
         type Money,
+        type Accounting,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
@@ -11,14 +11,14 @@
 
     export let project: Project;
     export let totalSupports: number = 0;
-    export let accountingBalance: AccountingBalance;
+    export let accounting: Accounting;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
 
     function hasReached(money?: Money) {
         return (
             money !== undefined &&
-            accountingBalance.balance?.amount !== undefined &&
-            Number(accountingBalance.balance.amount) - Number(money.amount) > 0
+            accounting.balance?.amount !== undefined &&
+            Number(accounting.balance.amount) - Number(money.amount) > 0
         );
     }
 
@@ -47,15 +47,15 @@
             </span>
         {/if}
     </div>
-    <ProgressChart balance={accountingBalance} {project} {balancePoints} />
+    <ProgressChart {accounting} {project} {balancePoints} />
     <div class="col-span-2 grid grid-cols-2 gap-6">
         <div class="flex flex-col gap-4">
             <div>
                 <p class="text-sm text-[#575757]">{$t(`campaignProgress.obtained`)}</p>
                 <p class="text-secondary text-3xl font-bold">
                     {formatCurrency(
-                        Number(accountingBalance.balance?.amount) || 0,
-                        accountingBalance.balance?.currency ?? undefined,
+                        Number(accounting.balance?.amount) || 0,
+                        accounting.balance?.currency ?? undefined,
                     )}
                 </p>
             </div>
