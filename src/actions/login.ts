@@ -1,7 +1,7 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { apiUserTokensPost, apiUsersIdGet } from "../openapi/client/index.ts";
+import { apiUserTokensPost, apiUsersIdGet, apiUsersIdpersonGet } from "../openapi/client/index.ts";
 import { extractId } from "../utils/extractId.ts";
 
 export const login = defineAction({
@@ -51,8 +51,17 @@ export const login = defineAction({
                 });
             }
 
+            const { data: personData } = await apiUsersIdpersonGet({
+                path: { id },
+                headers: {
+                    Authorization: `Bearer ${tokenData.token}`,
+                },
+            });
+
             const cookieValue: Record<string, unknown> = {
                 id: userData.id,
+                user: userData,
+                person: personData,
                 token: tokenData.token,
                 accountingId: extractId(userData.accounting),
             };

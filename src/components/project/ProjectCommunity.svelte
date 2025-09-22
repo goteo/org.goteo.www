@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import type { AccountingBalance, Project, ProjectSupport } from "../../openapi/client/index";
+    import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
     import { apiProjectSupportsGetCollection, apiUsersIdGet } from "../../openapi/client/index";
     import { extractId } from "../../utils/extractId";
     import Loader from "../../svgs/Loader.svelte";
@@ -13,10 +13,10 @@
 
     let {
         project,
-        balance,
+        accounting,
     }: {
         project: Project;
-        balance: AccountingBalance;
+        accounting: Accounting;
     } = $props();
 
     const projectId = project.id!.toString();
@@ -101,7 +101,7 @@
                         bind:selectedProjectSupport
                     />
                 {/each}
-                <ProjectCommunityAnonymous {project} currency={balance.balance?.currency!} />
+                <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
             </div>
 
             {#if groupedItems.default?.length}

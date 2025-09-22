@@ -2,7 +2,12 @@
 const { t } = Astro.locals;
 ---
 
-<button id="btn-logout" class="cursor-pointer border">{t("logout.label")}</button>
+<button
+    id="btn-logout"
+    class="bg-primary w-fit cursor-pointer rounded-xl px-4 py-2 font-bold text-[#462949]"
+>
+    {t("logout.label")}
+</button>
 
 <script>
     import { actions } from "astro:actions";
@@ -10,8 +15,9 @@ const { t } = Astro.locals;
     const button = document.querySelector("#btn-logout");
     button?.addEventListener("click", async () => {
         const { error } = await actions.logout();
+
         console.log("error", error);
-        const lang = location.pathname.split("/")[1];
-        window.location.href = `/${lang}`;
+
+        window.location.href = `/`;
     });
 </script>

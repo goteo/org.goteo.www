@@ -1,3 +1,11 @@
+import dotenv from "dotenv";
+
+let isDotenvLoaded = false;
+if (typeof process !== "undefined" && !isDotenvLoaded) {
+    dotenv.config();
+    isDotenvLoaded = true;
+}
+
 let runtimeEnv: Record<string, string>;
 
 if (typeof import.meta !== "undefined" && import.meta.env) {

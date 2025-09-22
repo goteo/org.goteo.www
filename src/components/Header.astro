@@ -3,20 +3,52 @@ import CartButton from "./CartButton.svelte";
 import MenuIcon from "../svgs/MenuIcon.astro";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
+import Logout from "./Logout.astro";
+import UiLanguages from "./UiLanguages.astro";
+
 const { t } = Astro.locals;
+
+let user;
+const accessToken = Astro.cookies.get("access-token");
+
+if (accessToken) {
+    user = JSON.parse(accessToken.value);
+}
 ---
 
-<header class="bg-primary w-full max-w-screen py-4 md:py-8">
-    <div class="wrapper flex items-center justify-between">
+<header class="sticky top-0 z-100 w-full max-w-screen px-3 py-4 md:px-6 md:py-8">
+    <div
+        class="mx-auto flex max-w-[1440px] items-center justify-between rounded-xl border-1 border-[#f3f3f3] bg-[#fbfbfb80] px-4 py-6 backdrop-blur-xl"
+    >
         <a href="/" class="flex-shrink-0"><Logo /></a>
         <nav>
             <ul class="flex items-center gap-2 md:gap-4">
+                {
+                    accessToken && (
+                        <li class="flex items-center">
+                            <CartButton client:load />
+                        </li>
+                    )
+                }
                 <li class="items-center gap-1 text-sm sm:flex md:text-base">
                     <UserIcon />
-                    <span class="hidden md:inline">{t("header.login")}</span>
+                    {
+                        accessToken && (
+                            <span class="hidden md:inline">
+                                {t("greeting")}, {user.person.firstName}
+                            </span>
+                        )
+                    }
+                    {
+                        !accessToken && (
+                            <a href="/login">
+                                <span class="hidden md:inline">{t("header.login")}</span>
+                            </a>
+                        )
+                    }
                 </li>
                 <li class="flex items-center">
-                    <CartButton client:load />
+                    <UiLanguages />
                 </li>
                 <li class="flex items-center md:hidden">
                     <button class="p-1" aria-label="Menu">

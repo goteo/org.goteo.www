@@ -14,12 +14,25 @@
     } = $props();
 
     let openModal = $state(false);
+
+    let isAvailable = calcAvailability();
+    function calcAvailability(): boolean {
+        if (project.status !== "in_campaign") {
+            return false;
+        }
+
+        if (reward.isFinite && reward.unitsAvailable! === 0) {
+            return false;
+        }
+
+        return true;
+    }
 </script>
 
 <li
     class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
-    class:opacity-50={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
-    class:cursor-not-allowed={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
+    class:opacity-50={!isAvailable}
+    class:cursor-not-allowed={!isAvailable}
 >
     <div class="flex flex-col gap-4">
         <h3 class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold">
@@ -38,9 +51,9 @@
     <button
         type="button"
         onclick={() => (openModal = true)}
-        disabled={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
-        class:cursor-not-allowed={reward.isFinite && (reward.unitsAvailable ?? 0) === 0}
-        class:cursor-pointer={!reward.isFinite || (reward.unitsAvailable ?? 0) > 0}
+        disabled={!isAvailable}
+        class:cursor-pointer={isAvailable}
+        class:cursor-not-allowed={!isAvailable}
         class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
     >
         {$t("reward.donate")}
