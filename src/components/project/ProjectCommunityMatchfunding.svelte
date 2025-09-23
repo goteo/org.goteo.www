@@ -6,19 +6,17 @@
 </script>
 
 <button
-    class="flex cursor-pointer flex-col gap-4 rounded-4xl bg-white p-6 transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="flex cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg"
     onclick={() => {
         selectedProjectSupport = item;
         openModal = true;
     }}
 >
-    <div class="flex flex-col items-start gap-4">
-        <div class="flex h-56 w-full items-center justify-center rounded-lg bg-red-500">😀</div>
-        <div class="flex flex-col items-start text-left">
-            <div class="text-secondary font-bold">
-                {$t("project.tabs.community.matchfunding.contribution")}
-            </div>
-            <div class="flex flex-col items-start text-2xl">
+    <div class="flex w-1/3 items-center justify-center bg-red-500">😀</div>
+    <div class="flex w-2/3 flex-col gap-4 p-6">
+        <div class="text-secondary flex flex-col items-end gap-2 font-bold">
+            <span>{$t("project.tabs.community.matchfunding.contribution")}</span>
+            <div class="flex flex-col items-end text-2xl">
                 <div class="flex items-center gap-2">
                     <span>{$t("project.tabs.community.matchfunding.aported")}</span>
                     <span>
@@ -36,11 +34,11 @@
                 </div>
             </div>
         </div>
+        <div class="text-secondary line-clamp-2 text-2xl font-bold">
+            {item.displayName}
+        </div>
+        <p class="line-clamp-2 text-sm text-[#575757]">
+            {item.message}
+        </p>
     </div>
-    <div class="text-secondary text-left text-2xl font-bold">
-        {item.displayName}
-    </div>
-    <p class="text-left text-sm text-[#575757]">
-        {item.message}
-    </p>
 </button>

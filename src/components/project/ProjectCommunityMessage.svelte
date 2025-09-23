@@ -12,9 +12,9 @@
         openModal = true;
     }}
 >
-    <div class="flex flex-col items-start gap-4">
-        <div class="flex h-56 w-full items-center justify-center rounded-lg">😀</div>
-        <div class="flex flex-col items-start text-left">
+    <div class="flex flex-row items-center justify-between gap-4">
+        <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
+        <div class="flex flex-col items-end">
             <div class="text-secondary font-bold">
                 {$t("project.tabs.community.contribution")}
             </div>
@@ -23,10 +23,10 @@
             </p>
         </div>
     </div>
-    <div class="text-secondary text-left text-2xl font-bold">
+    <div class="text-secondary self-start text-left text-2xl font-bold">
         {item.displayName}
     </div>
-    <div class="line-clamp-2 text-left text-sm text-[#575757]">
+    <div class="line-clamp-2 self-start text-left text-sm text-[#575757]">
         {#if item.message}
             {item.message}
         {:else}

@@ -23,15 +23,15 @@
 </script>
 
 <div
-    class="flex cursor-pointer flex-col gap-4 rounded-4xl bg-white p-6 transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="flex cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg flex-col md:flex-row"
 >
-    <div class="flex flex-col items-start gap-4">
-        <div class="flex h-56 w-full items-center justify-center rounded-lg bg-blue-500">😀</div>
-        <div class="flex flex-col items-start text-left">
-            <div class="text-secondary font-bold">
-                {$t("project.tabs.community.matchfunding.contribution")}
-            </div>
-            <div class="flex flex-col items-start text-2xl">
+    <div class="flex w-full md:w-1/3 items-center justify-center h-32 md:h-auto overflow-hidden">
+        <img src="/imgs/card-comunidad.png" alt="Community donation" class="w-full h-full object-cover" />
+    </div>
+    <div class="flex w-full md:w-2/3 flex-col gap-4 p-6">
+        <div class="text-secondary flex flex-col items-start md:items-end gap-2 font-bold">
+            <span>{$t("project.tabs.community.matchfunding.contribution")}</span>
+            <div class="flex flex-col items-start md:items-end text-2xl">
                 <div class="flex items-center gap-2 text-sm">
                     <span>
                         {length}
@@ -45,11 +45,11 @@
                 </div>
             </div>
         </div>
+        <div class="text-secondary line-clamp-2 text-2xl font-bold text-left md:text-right">
+            {$t("project.tabs.community.anonymous.title")}
+        </div>
+        <p class="line-clamp-2 text-sm text-[#575757] text-left md:text-right">
+            {$t("project.tabs.community.anonymous.description")}
+        </p>
     </div>
-    <div class="text-secondary text-left text-2xl font-bold">
-        {$t("project.tabs.community.anonymous.title")}
-    </div>
-    <p class="text-left text-sm text-[#575757]">
-        {$t("project.tabs.community.anonymous.description")}
-    </p>
 </div>
