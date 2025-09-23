@@ -1,0 +1,51 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import BaseCard from "../../../components/BaseCard.svelte";
+import { formatCurrency } from "../../../utils/currencies";
+
+const { t } = Astro.locals;
+
+const accessCookie = Astro.cookies.get("access-token");
+
+if (!accessCookie) {
+    return Astro.redirect("/");
+}
+---
+
+<Layout title={t("create.project.title")}>
+    <section class="wrapper md:flex md:flex-row">
+        <div class="flex flex-col gap-10 max-w-[668px]">
+            <div class="flex flex-col gap-4">
+                <h1 class="text-3xl font-bold text-[#3D3D3D] lg:text-4xl">
+                    {t("create.project.title")}
+                </h1>
+                <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+                    {t("create.project.subtitle")}
+                </p>
+            </div>
+            <div class="flex flex-col gap-4">
+                <h2 class="text-2xl font-bold text-[#3D3D3D]">
+                    {t("create.project.description.title")}
+                </h2>
+                <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+                    {t("create.project.description.subtitle")}
+                </p>
+                
+            </div>
+        </div>
+        <div class="ml-auto">
+            <BaseCard class="flex h-full max-h-[506px] flex-col">
+                <h1 class="text-tertiary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
+                    Nombre del proyecto
+                </h1>
+                <p class="text-sm text-[#3D3D3D]">Sin descripción</p>
+                <div class="mt-auto">
+                    <p class="text-sm text-[#3D3D3D]">{t("create.project.budgetPreview")}</p>
+                    <p class="text-secondary text-3xl font-bold">
+                        {formatCurrency(0)}
+                    </p>
+                </div>
+            </BaseCard>
+        </div>
+    </section>
+</Layout>

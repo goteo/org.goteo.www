@@ -416,7 +416,6 @@
       "amountToUse": "Cuánto vas a usar",
       "remainingBalance": "Saldo que te quedará"
     },
-
     "wallet": {
       "balanceLabel": "Saldo: "
     },
@@ -758,6 +757,17 @@
     "platoniq": {
       "foundation": "Fundación",
       "name": "Platoniq"
+    }
+  },
+  "create": {
+    "project": {
+      "title": "Propón una campaña",
+      "subtitle": "Describe brevemete el proyecto y la campaña de crowdfunding.",
+      "budgetPreview": "Dinero necesario",
+      "description": {
+        "title": "Describe brevemente tu propuesta",
+        "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación."
+      }
     }
   }
 }
