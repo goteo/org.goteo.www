@@ -766,7 +766,11 @@
       "budgetPreview": "Dinero necesario",
       "description": {
         "title": "Describe brevemente tu propuesta",
-        "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación."
+        "titlePrompt": "Indica el nombre de tu campaña",
+        "titlePlaceholder": "Nombre de campaña",
+        "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación.",
+        "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
+        "subtitlePlaceholder": "Sin descripción"
       }
     }
   }
