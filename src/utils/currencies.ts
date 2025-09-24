@@ -1,6 +1,52 @@
 import { getDefaultCurrency, getDefaultLanguage } from "./consts";
 import { currencySymbols } from "./currencyData";
 
+function getSeparators(currency: string) {
+    const locale = getDefaultLanguage();
+    const example = new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+        minimumFractionDigits: 2,
+    }).format(1234567.89);
+
+    const parts = example.match(/1(.+)234(.+)567(.+)89/);
+    if (!parts) throw new Error("Unable to detect separators from locale");
+
+    const groupSep = parts[1];
+    const decimalSep = parts[3];
+
+    return { groupSep, decimalSep };
+}
+
+/**
+ * Parse a currency-like numeric string into a number
+ * @param value {string}
+ */
+export function parseCurrency(value: string, currency?: string): number {
+    if (currency === undefined) currency = getDefaultCurrency();
+    const locale = getDefaultLanguage();
+
+    const { groupSep, decimalSep } = getSeparators(currency);
+    const { minimumFractionDigits: scale } = new Intl.NumberFormat(locale, {
+        style: "currency",
+        currency,
+    }).resolvedOptions();
+
+    let cleaned = value
+        .replace(new RegExp("\\" + groupSep, "g"), "")
+        .replace(new RegExp("\\" + decimalSep), ".")
+        .replace(/[^0-9.]/g, "");
+
+    let [intPart, decPart = ""] = cleaned.split(".");
+
+    decPart = decPart.padEnd(scale!, "0").slice(0, scale);
+
+    const result = intPart + decPart;
+
+    return parseInt(result, 10);
+}
+
+
 export function formatCurrency(
     amount?: number,
     currency?: string | null,
