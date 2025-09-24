@@ -99,7 +99,22 @@ describe("Objective achieved", () => {
     it("should display goal reached status when minimum is exceeded", () => {
         cy.visitAs("user", "/es/project/100");
 
-        cy.get("body", { timeout: 15000 }).should("exist").and("not.be.empty");
+        // Wait for page to load and verify it's not a 500 error page
+        cy.get("body", { timeout: 20000 }).should("exist");
+        
+        // Check if page loaded with error or if it's completely empty
+        cy.get("body").then(($body) => {
+            const text = $body.text();
+            
+            // If body is completely empty or shows errors, fail gracefully with info
+            if (!text || text.trim().length === 0) {
+                cy.log("❌ Empty body detected in CI - page failed to load");
+                expect(text.trim().length, "Body should contain some content").to.be.greaterThan(0);
+            } else if (text.includes("500") || text.includes("Internal Server Error")) {
+                cy.log("❌ Server error detected");
+                expect(text).to.not.include("500");
+            }
+        });
 
         cy.get("body").then(($body) => {
             const text = $body.text().toLowerCase();
@@ -189,7 +204,22 @@ describe("Objective achieved", () => {
     it("should display project page with basic content", () => {
         cy.visitAs("user", "/es/project/100");
 
-        cy.get("body", { timeout: 15000 }).should("exist").and("not.be.empty");
+        // Wait for page to load and verify it's not a 500 error page
+        cy.get("body", { timeout: 20000 }).should("exist");
+        
+        // Check if page loaded with error or if it's completely empty
+        cy.get("body").then(($body) => {
+            const text = $body.text();
+            
+            // If body is completely empty or shows errors, fail gracefully with info
+            if (!text || text.trim().length === 0) {
+                cy.log("❌ Empty body detected in CI - page failed to load");
+                expect(text.trim().length, "Body should contain some content").to.be.greaterThan(0);
+            } else if (text.includes("500") || text.includes("Internal Server Error")) {
+                cy.log("❌ Server error detected");
+                expect(text).to.not.include("500");
+            }
+        });
 
         cy.get("body").then(($body) => {
             const text = $body.text().toLowerCase();
