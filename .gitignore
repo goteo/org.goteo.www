@@ -15,9 +15,8 @@ pnpm-debug.log*
 openapi-ts*.log
 
 # environment variables
-.env
-.dev.vars
-.env.production
+.env*
+!env.example
 
 # macOS-specific files
 .DS_Store
