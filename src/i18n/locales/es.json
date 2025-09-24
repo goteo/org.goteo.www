@@ -771,6 +771,11 @@
       "category": {
         "title": "¿Qué categoría se ajusta a tu campaña?",
         "subtitle": "(Puedes elegir un máximo de 2)"
+      },
+      "budget": {
+        "title": "¿Cuánto dinero necesitas?",
+        "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto.",
+        "amountPrompt": "Indica la cantidad que necesitas"
       }
     }
   }

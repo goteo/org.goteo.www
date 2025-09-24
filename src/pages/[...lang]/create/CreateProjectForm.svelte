@@ -3,7 +3,7 @@
     import BaseCard from "../../../components/BaseCard.svelte";
     import { t } from "../../../i18n/store";
     import { categories } from "../../../utils/categories";
-    import { formatCurrency } from "../../../utils/currencies";
+    import { formatCurrency, parseCurrency } from "../../../utils/currencies";
     import TagSelect from "../../../components/TagSelect.svelte";
 
     let title: string = $state("");
@@ -14,7 +14,7 @@
         return { id: category.id, text: $t(category.translationKey) };
     });
 
-    $effect(() => console.log(categoriesSelected));
+    let budget: number = $state(0);
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -37,12 +37,12 @@
             <input
                 type="text"
                 placeholder={$t("create.project.description.titlePrompt")}
-                class="w-full rounded-md border border-[#855a96]"
+                class="w-full rounded-md border border-[#855a96] p-[16px]"
                 bind:value={title}
             />
             <textarea
                 placeholder={$t("create.project.description.subtitlePrompt")}
-                class="h-[240px] w-full resize-none rounded-md border border-[#855a96]"
+                class="h-[240px] w-full resize-none rounded-md border border-[#855a96] p-[16px]"
                 bind:value={description}
             ></textarea>
         </div>
@@ -59,6 +59,20 @@
                 onchange={(selected) => (categoriesSelected = selected.map((s) => s.id.toString()))}
             />
         </div>
+        <div class="flex flex-col gap-4">
+            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+                {$t("create.project.budget.title")}
+            </h2>
+            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+                {$t("create.project.budget.subtitle")}
+            </p>
+            <input
+                type="text"
+                placeholder={$t("create.project.budget.amountPrompt")}
+                class="w-full rounded-md border border-[#855a96] p-[16px]"
+                oninput={(e) => budget = parseCurrency(e.currentTarget.value)}
+            />
+        </div>
         <p></p>
     </div>
     <div class="ml-auto">
@@ -72,7 +86,7 @@
             <div class="mt-auto">
                 <p class="text-sm text-[#3D3D3D]">{$t("create.project.budgetPreview")}</p>
                 <p class="text-secondary text-3xl font-bold">
-                    {formatCurrency(0)}
+                    {formatCurrency(budget)}
                 </p>
             </div>
         </BaseCard>
