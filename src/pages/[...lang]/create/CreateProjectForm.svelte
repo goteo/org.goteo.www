@@ -1,6 +1,7 @@
 <!--- @runes -->
 <script lang="ts">
     import BaseCard from "../../../components/BaseCard.svelte";
+    import Tag from "../../../components/Tag.svelte";
     import { t } from "../../../i18n/store";
     import { formatCurrency } from "../../../utils/currencies";
 
@@ -37,6 +38,28 @@
                 bind:value={description}
             ></textarea>
         </div>
+        <div class="flex flex-col gap-4">
+            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+                {$t("create.project.category.title")}
+            </h2>
+            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+                {$t("create.project.category.subtitle")}
+            </p>
+            <div class="flex flex-wrap gap-[16px]">
+                <Tag>Solidario</Tag>
+                <Tag type="active">Generar empleo</Tag>
+                <Tag>Crea cultura</Tag>
+                <Tag>Periodismo independiente</Tag>
+                <Tag>Desde el diseño</Tag>
+                <Tag>Educativo</Tag>
+                <Tag>Ecológico</Tag>
+                <Tag>Salud y cuidados</Tag>
+                <Tag>Datos abiertos</Tag>
+                <Tag type="active">Igualdad de género</Tag>
+                <Tag>Valores democráticos y participación ciudadana</Tag>
+            </div>
+        </div>
+        <p></p>
     </div>
     <div class="ml-auto">
         <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">

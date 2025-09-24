@@ -771,6 +771,10 @@
         "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación.",
         "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
         "subtitlePlaceholder": "Sin descripción"
+      },
+      "category": {
+        "title": "¿Qué categoría se ajusta a tu campaña?",
+        "subtitle": "(Puedes elegir un máximo de 2)"
       }
     }
   }
