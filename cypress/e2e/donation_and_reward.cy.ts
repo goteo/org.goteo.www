@@ -106,14 +106,15 @@ describe("Project Page - Donation and Reward Verification", () => {
 
         cy.get("body").then(($body) => {
             if ($body.find("li.flex.flex-col.gap-2.rounded-4xl.border").length > 0) {
-                cy.get("li.flex.flex-col.gap-2.rounded-4xl.border", { timeout: 10000 }).within(() => {
-                    cy.get("h3", { timeout: 5000 }).should("be.visible");
+                cy.get("li.flex.flex-col.gap-2.rounded-4xl.border", { timeout: 10000 }).within(
+                    () => {
+                        cy.get("h3", { timeout: 5000 }).should("be.visible");
 
-                    cy.get("p", { timeout: 5000 }).should("be.visible");
+                        cy.get("p", { timeout: 5000 }).should("be.visible");
 
-                    cy.get('button[type="button"]', { timeout: 5000 })
-                        .should("be.visible");
-                });
+                        cy.get('button[type="button"]', { timeout: 5000 }).should("be.visible");
+                    },
+                );
             } else {
                 cy.log(
                     "Contenedor de recompensas específico no encontrado, verificando elementos alternativos",

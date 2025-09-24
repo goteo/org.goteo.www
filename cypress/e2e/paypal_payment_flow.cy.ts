@@ -113,7 +113,9 @@ describe("PayPal Payment Flow", () => {
 
         cy.get("body").then(($body) => {
             if ($body.find(".flex-col.gap-6 > .flex-row > .flex > .inline-block").length > 0) {
-                cy.get(".flex-col.gap-6 > .flex-row > .flex > .inline-block", { timeout: 10000 }).click();
+                cy.get(".flex-col.gap-6 > .flex-row > .flex > .inline-block", {
+                    timeout: 10000,
+                }).click();
 
                 cy.get("body").then(($body) => {
                     if ($body.find("button:contains('Dona')").length > 0) {
@@ -143,10 +145,12 @@ describe("PayPal Payment Flow", () => {
                         cy.get("form#payment", { timeout: 10000 }).should("exist");
 
                         if ($body.find("label[data-gateway='paypal']").length > 0) {
-                            cy.get("label[data-gateway='paypal']", { timeout: 5000 }).should("be.visible").click();
-                            cy.get("input[name='paymentMethod'][value='paypal']", { timeout: 5000 }).should(
-                                "be.checked",
-                            );
+                            cy.get("label[data-gateway='paypal']", { timeout: 5000 })
+                                .should("be.visible")
+                                .click();
+                            cy.get("input[name='paymentMethod'][value='paypal']", {
+                                timeout: 5000,
+                            }).should("be.checked");
                             cy.get("form#payment button[type='submit']", { timeout: 5000 })
                                 .should("be.visible")
                                 .and("be.enabled");

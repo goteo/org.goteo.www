@@ -80,11 +80,10 @@ describe("Error in progress display", () => {
 
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // Buscar indicadores de progreso o información del proyecto
+
             const progressIndicators = ["Obtenido", "Recaudado", "Mínimo", "Óptimo", "€", "EUR"];
             let foundIndicators = 0;
-            
+
             progressIndicators.forEach((indicator) => {
                 if (text.includes(indicator)) {
                     foundIndicators++;
@@ -93,15 +92,15 @@ describe("Error in progress display", () => {
 
             if (foundIndicators >= 2) {
                 cy.log(`✅ Encontrados ${foundIndicators} indicadores de progreso`);
-                
-                // Verificar que hay información monetaria
+
                 if (text.includes("€") || text.includes("EUR")) {
                     cy.get("body").should("contain.text", "€");
                 }
             } else {
-                cy.log("ℹ️ La página cargó correctamente aunque no se encontraron todos los indicadores esperados");
-                
-                // Verificar que la página básica funciona
+                cy.log(
+                    "ℹ️ La página cargó correctamente aunque no se encontraron todos los indicadores esperados",
+                );
+
                 cy.get("body").then(($body) => {
                     const title = Cypress.$("title").text();
                     if (title && title.trim().length > 0) {

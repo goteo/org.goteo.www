@@ -80,11 +80,10 @@ describe("Viewing without contributions", () => {
 
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // Buscar indicadores de progreso
+
             const progressTerms = ["Obtenido", "Recaudado", "Mínimo", "Óptimo", "€", "EUR", "0"];
             let foundTerms = 0;
-            
+
             progressTerms.forEach((term) => {
                 if (text.includes(term)) {
                     foundTerms++;
@@ -93,13 +92,11 @@ describe("Viewing without contributions", () => {
 
             if (foundTerms >= 3) {
                 cy.log(`✅ Encontrados ${foundTerms} términos de progreso`);
-                
-                // Verificar que hay información monetaria
+
                 if (text.includes("€") || text.includes("EUR")) {
                     cy.get("body").should("contain.text", "€");
                 }
-                
-                // Verificar términos específicos si existen
+
                 if (text.includes("Obtenido")) {
                     cy.contains("Obtenido", { timeout: 4000 }).should("be.visible");
                 }
@@ -110,9 +107,10 @@ describe("Viewing without contributions", () => {
                     cy.contains("Óptimo").should("be.visible");
                 }
             } else {
-                cy.log("ℹ️ La página cargó correctamente pero faltan algunos términos de progreso esperados");
-                
-                // Al menos verificar que no hay errores críticos y que hay contenido básico
+                cy.log(
+                    "ℹ️ La página cargó correctamente pero faltan algunos términos de progreso esperados",
+                );
+
                 expect(text).to.not.include("Error 500");
                 if (text.length > 0) {
                     expect(text.length > 0, "Page should have some content").to.be.true;
@@ -122,7 +120,6 @@ describe("Viewing without contributions", () => {
             }
         });
 
-        // Verificar título si existe
         cy.get("body").then(($body) => {
             const title = Cypress.$("title").text();
             if (title && title.trim().length > 0) {

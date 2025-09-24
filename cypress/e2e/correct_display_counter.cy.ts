@@ -98,7 +98,7 @@ describe("Correct Display of Total Fundraising Counter", () => {
         cy.get("body").then(($body) => {
             if ($body.find(`p:contains("${label}")`).length > 0) {
                 cy.contains("p", label, { timeout: 10000 }).should("be.visible");
-                
+
                 cy.contains("p", label)
                     .siblings("p")
                     .should("exist")
@@ -133,11 +133,11 @@ describe("Correct Display of Total Fundraising Counter", () => {
 
                 cy.get("body").then(($body) => {
                     if ($body.find('button:contains("Donar a esta campaña")').length > 0) {
-                        cy.contains("button", "Donar a esta campaña", { timeout: 10000 })
-                            .should("be.visible");
+                        cy.contains("button", "Donar a esta campaña", { timeout: 10000 }).should(
+                            "be.visible",
+                        );
                     } else if ($body.find('button:contains("Donar")').length > 0) {
-                        cy.contains("button", "Donar", { timeout: 10000 })
-                            .should("be.visible");
+                        cy.contains("button", "Donar", { timeout: 10000 }).should("be.visible");
                     } else {
                         cy.log("ℹ️ No donation button found on page");
                     }

@@ -8,18 +8,20 @@ describe("Login Page", () => {
 
     it("should display the login form elements correctly", () => {
         cy.wait(2000);
-        
+
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
+
             if (text.includes("Indícanos tus datos personales")) {
-                cy.contains("Indícanos tus datos personales", { timeout: 10000 }).should("be.visible");
+                cy.contains("Indícanos tus datos personales", { timeout: 10000 }).should(
+                    "be.visible",
+                );
             }
-            
+
             if (text.includes("Entra en tu cuenta")) {
                 cy.contains("Entra en tu cuenta", { timeout: 10000 }).should("be.visible");
             }
-            
+
             if (text.includes("Regístrate")) {
                 cy.contains("Regístrate", { timeout: 10000 }).should("be.visible");
             }
@@ -31,7 +33,7 @@ describe("Login Page", () => {
                     cy.get("input#identifier", { timeout: 5000 }).should("exist");
                     cy.get("input#password", { timeout: 5000 }).should("exist");
                 });
-                
+
                 cy.get('button[form="login"]', { timeout: 5000 }).should("be.visible");
             } else {
                 cy.log("ℹ️ Login form not found");
@@ -40,11 +42,11 @@ describe("Login Page", () => {
 
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
+
             if (text.includes("También puedes acceder")) {
                 cy.contains("También puedes acceder", { timeout: 5000 }).should("be.visible");
             }
-            
+
             if (text.includes("¿Olvidaste tu contraseña?")) {
                 cy.contains("¿Olvidaste tu contraseña?", { timeout: 5000 }).should("be.visible");
             }

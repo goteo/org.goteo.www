@@ -167,13 +167,15 @@ describe("View project rewards", () => {
         });
 
         cy.get("body").should("not.contain", "Error 500");
-        
+
         cy.get("body").then(($body) => {
             const text = $body.text();
             if (text.includes("Donar a esta campaña")) {
                 cy.get("body").should("contain.text", "Donar a esta campaña");
             } else {
-                cy.log("ℹ️ Texto 'Donar a esta campaña' no encontrado, pero la página cargó correctamente");
+                cy.log(
+                    "ℹ️ Texto 'Donar a esta campaña' no encontrado, pero la página cargó correctamente",
+                );
             }
         });
     });
@@ -186,11 +188,10 @@ describe("View project rewards", () => {
 
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // Verificar indicadores de progreso
+
             const progressTerms = ["Obtenido", "Recaudado", "€", "EUR", "Mínimo", "Óptimo"];
             let foundTerms = 0;
-            
+
             progressTerms.forEach((term) => {
                 if (text.includes(term)) {
                     foundTerms++;
@@ -199,8 +200,7 @@ describe("View project rewards", () => {
 
             if (foundTerms >= 3) {
                 cy.log(`✅ Encontrados ${foundTerms} términos de progreso del proyecto`);
-                
-                // Verificar términos específicos si existen
+
                 if (text.includes("Obtenido")) {
                     cy.get("body").should("contain.text", "Obtenido");
                 }
@@ -216,8 +216,7 @@ describe("View project rewards", () => {
             } else {
                 cy.log("ℹ️ La página cargó correctamente pero faltan algunos términos esperados");
             }
-            
-            // Verificar botón de donación si existe
+
             if (text.includes("Donar a esta campaña")) {
                 cy.get("body").should("contain.text", "Donar a esta campaña");
             } else {
@@ -234,7 +233,7 @@ describe("View project rewards", () => {
 
         cy.get("body").should("not.contain", "Error 500");
         cy.get("body").should("not.contain", "Internal Server Error");
-        
+
         cy.get("body").then(($body) => {
             const title = Cypress.$("title").text();
             if (title && title.trim().length > 0) {

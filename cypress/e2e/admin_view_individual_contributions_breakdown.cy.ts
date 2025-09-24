@@ -21,7 +21,16 @@ describe("View breakdown of each individual contribution", () => {
             }
 
             const text = $body.text();
-            const expectedElements = ["ID", "Id", "Título", "Title", "Importe", "Amount", "Estado", "Status"];
+            const expectedElements = [
+                "ID",
+                "Id",
+                "Título",
+                "Title",
+                "Importe",
+                "Amount",
+                "Estado",
+                "Status",
+            ];
             let foundElements = 0;
 
             expectedElements.forEach((element) => {

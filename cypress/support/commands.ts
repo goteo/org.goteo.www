@@ -316,7 +316,9 @@ Cypress.Commands.add("checkHeaderElements", () => {
         }
 
         if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-            cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).should("be.visible");
+            cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).should(
+                "be.visible",
+            );
         } else {
             cy.log("ℹ️ Cart button not found");
         }
@@ -337,11 +339,11 @@ Cypress.Commands.add("checkLoginFormValidation", () => {
     cy.get("body").then(($body) => {
         if ($body.find('button[form="login"]').length > 0) {
             cy.get('button[form="login"]', { timeout: 5000 }).click();
-            
+
             if ($body.find("input#identifier").length > 0) {
                 cy.get("input#identifier", { timeout: 5000 }).should("exist");
                 cy.get("input#identifier").type("test@example.com");
-                
+
                 if ($body.find("input#password").length > 0) {
                     cy.get("input#password", { timeout: 5000 }).should("exist");
                 }

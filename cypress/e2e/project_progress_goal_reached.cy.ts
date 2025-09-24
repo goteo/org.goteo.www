@@ -2,17 +2,6 @@
 
 describe("Objective achieved", () => {
     beforeEach(() => {
-        cy.intercept("GET", "**/api/auth/me", {
-            statusCode: 200,
-            body: {
-                id: 1,
-                email: "test@cypress.local",
-                name: "Cypress Test User",
-                accountingId: 123,
-                isAuthenticated: true,
-            },
-        }).as("authMe");
-
         cy.intercept("GET", "**/v4/projects/100*", {
             statusCode: 200,
             body: {
@@ -104,38 +93,13 @@ describe("Objective achieved", () => {
             },
         }).as("otherApiCalls");
 
-        cy.window().then((win) => {
-            win.localStorage.setItem(
-                "user",
-                JSON.stringify({
-                    id: 1,
-                    email: "test@cypress.local",
-                    name: "Cypress Test User",
-                    isAuthenticated: true,
-                    accountingId: 123,
-                }),
-            );
-        });
-
-        cy.setCookie(
-            "access-token",
-            JSON.stringify({
-                token: "mock-access-token-cypress-123",
-                accountingId: 123,
-                userId: 1,
-            }),
-        );
-
-        cy.mockLogin();
         cy.on("uncaught:exception", () => false);
     });
 
     it("should display goal reached status when minimum is exceeded", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
-        cy.get("body").should("exist");
-        cy.wait(2000);
+        cy.visitAs("user", "/es/project/100");
 
-        cy.get("body").should("not.be.empty");
+        cy.get("body", { timeout: 15000 }).should("exist").and("not.be.empty");
 
         cy.get("body").then(($body) => {
             const text = $body.text().toLowerCase();
@@ -191,7 +155,8 @@ describe("Objective achieved", () => {
                         /\d+/.test(textAgain);
 
                     if (hasContentNow) {
-                        expect(hasContentNow, "Should have some project content after waiting").to.be.true;
+                        expect(hasContentNow, "Should have some project content after waiting").to
+                            .be.true;
                     } else {
                         cy.log("ℹ️ Página cargada pero con contenido limitado");
                         expect(true, "Page loaded without critical errors").to.be.true;
@@ -222,20 +187,28 @@ describe("Objective achieved", () => {
     });
 
     it("should display project page with basic content", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
-        cy.get("body").should("exist").and("not.be.empty");
-        cy.wait(3000);
+        cy.visitAs("user", "/es/project/100");
+
+        cy.get("body", { timeout: 15000 }).should("exist").and("not.be.empty");
 
         cy.get("body").then(($body) => {
             const text = $body.text().toLowerCase();
-            
-            // Verificar diferentes indicadores de contenido del proyecto
+
             const contentIndicators = [
-                "proyecto", "project", "título", "title", 
-                "descripción", "description", "€", "eur",
-                "obtenido", "recaudado", "mínimo", "óptimo"
+                "proyecto",
+                "project",
+                "título",
+                "title",
+                "descripción",
+                "description",
+                "€",
+                "eur",
+                "obtenido",
+                "recaudado",
+                "mínimo",
+                "óptimo",
             ];
-            
+
             let foundContent = 0;
             contentIndicators.forEach((indicator) => {
                 if (text.includes(indicator)) {
@@ -244,12 +217,13 @@ describe("Objective achieved", () => {
             });
 
             if (foundContent >= 2 || text.length > 1000) {
-                cy.log(`✅ Encontrado contenido del proyecto (${foundContent} indicadores, ${text.length} chars)`);
+                cy.log(
+                    `✅ Encontrado contenido del proyecto (${foundContent} indicadores, ${text.length} chars)`,
+                );
                 expect(true, "Project content found").to.be.true;
             } else {
                 cy.log("ℹ️ Página básica cargada, verificando elementos mínimos");
-                
-                // Verificar que no hay errores críticos
+
                 expect(text).to.not.include("error 500");
                 expect(text).to.not.include("internal server error");
                 expect(true, "Page loaded successfully").to.be.true;

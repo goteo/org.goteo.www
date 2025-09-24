@@ -10,7 +10,7 @@ describe("Login with Incorrect Password", () => {
         cy.wait(2000);
 
         cy.get("body").should("exist");
-        
+
         cy.get("body").then(($body) => {
             if ($body.find("form#login").length > 0) {
                 cy.get("form#login").should("be.visible");
@@ -27,18 +27,20 @@ describe("Login with Incorrect Password", () => {
 
                 cy.wait(3000);
 
-                // Verificar si aparece el error o si el login fue rechazado
                 cy.get("body").then(($bodyAfter) => {
                     if ($bodyAfter.find("#login-error-content").length > 0) {
                         cy.get("#login-error-content").should("be.visible");
                         cy.log("✅ Error de login mostrado correctamente");
                     } else {
-                        cy.log("ℹ️ Error de login no encontrado en el DOM específico, verificando página");
-                        
-                        // Verificar que no se redirigió (login falló)
+                        cy.log(
+                            "ℹ️ Error de login no encontrado en el DOM específico, verificando página",
+                        );
+
                         cy.url().then((url) => {
                             if (url.includes("login")) {
-                                cy.log("✅ Permanece en página de login, indicando fallo de autenticación");
+                                cy.log(
+                                    "✅ Permanece en página de login, indicando fallo de autenticación",
+                                );
                             } else {
                                 cy.log("ℹ️ Navegación inesperada después del login incorrecto");
                             }

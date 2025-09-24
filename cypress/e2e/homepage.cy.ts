@@ -11,7 +11,7 @@ describe("Homepage", () => {
 
     it("should display the main content section", () => {
         cy.get("main", { timeout: 10000 }).should("exist");
-        
+
         cy.get("body").then(($body) => {
             if ($body.find("main h1").length > 0) {
                 cy.get("main h1", { timeout: 5000 }).should("be.visible");
@@ -25,7 +25,7 @@ describe("Homepage", () => {
                 cy.get("select#language-select", { timeout: 5000 })
                     .should("exist")
                     .and("have.value", "es");
-                    
+
                 cy.changeLanguage("en");
                 cy.url().should("include", "/en");
             } else {
@@ -71,7 +71,11 @@ describe("Homepage", () => {
             }
 
             if ($body.find("select#language-select").length > 0) {
-                cy.get("select#language-select", { timeout: 5000 }).should("have.attr", "id", "language-select");
+                cy.get("select#language-select", { timeout: 5000 }).should(
+                    "have.attr",
+                    "id",
+                    "language-select",
+                );
             } else {
                 cy.log("ℹ️ Language selector not found");
             }
@@ -85,10 +89,10 @@ describe("Homepage", () => {
             } else {
                 cy.viewport(viewport as any);
             }
-            
+
             cy.get("header", { timeout: 5000 }).should("be.visible");
             cy.get("main", { timeout: 5000 }).should("be.visible");
-            
+
             cy.get("body").then(($body) => {
                 if ($body.find("header .wrapper").length > 0) {
                     cy.get("header .wrapper").should("exist");
