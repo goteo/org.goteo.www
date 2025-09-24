@@ -75,7 +75,7 @@
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
-            <span class="text-tertiary text-2xl font-bold">
+            <span class="text-tertiary text-3xl font-bold">
                 {$t("project.tabs.budget.minimum")}:
                 {formatCurrency(
                     project.budget?.minimum?.money?.amount,
@@ -119,7 +119,7 @@
         </div>
         <div class="flex flex-col gap-6">
             <div></div>
-            <span class="text-tertiary text-2xl font-bold">
+            <span class="text-tertiary text-3xl font-bold">
                 {$t("project.tabs.budget.optimal")}:
 
                 {formatCurrency(
