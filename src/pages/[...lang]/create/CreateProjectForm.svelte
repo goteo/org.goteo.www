@@ -1,12 +1,20 @@
 <!--- @runes -->
 <script lang="ts">
     import BaseCard from "../../../components/BaseCard.svelte";
-    import Tag from "../../../components/Tag.svelte";
     import { t } from "../../../i18n/store";
+    import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
+    import TagSelect from "../../../components/TagSelect.svelte";
 
     let title: string = $state("");
     let description: string = $state("");
+
+    let categoriesSelected: string[] = $state([]);
+    const categoriesOptions = categories.map((category) => {
+        return { id: category.id, text: $t(category.translationKey) };
+    });
+
+    $effect(() => console.log(categoriesSelected));
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -45,19 +53,11 @@
             <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
                 {$t("create.project.category.subtitle")}
             </p>
-            <div class="flex flex-wrap gap-[16px]">
-                <Tag>Solidario</Tag>
-                <Tag type="active">Generar empleo</Tag>
-                <Tag>Crea cultura</Tag>
-                <Tag>Periodismo independiente</Tag>
-                <Tag>Desde el diseño</Tag>
-                <Tag>Educativo</Tag>
-                <Tag>Ecológico</Tag>
-                <Tag>Salud y cuidados</Tag>
-                <Tag>Datos abiertos</Tag>
-                <Tag type="active">Igualdad de género</Tag>
-                <Tag>Valores democráticos y participación ciudadana</Tag>
-            </div>
+            <TagSelect
+                max={2}
+                options={categoriesOptions}
+                onchange={(selected) => (categoriesSelected = selected.map((s) => s.id.toString()))}
+            />
         </div>
         <p></p>
     </div>
