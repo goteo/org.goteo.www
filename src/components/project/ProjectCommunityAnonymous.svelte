@@ -23,13 +23,19 @@
 </script>
 
 <div
-    class="flex cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="flex cursor-pointer flex-col overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
 >
-    <div class="flex w-1/3 items-center justify-center bg-blue-500">😀</div>
-    <div class="flex w-2/3 flex-col gap-4 p-6">
-        <div class="text-secondary flex flex-col items-end gap-2 font-bold">
+    <div class="flex h-32 w-full items-center justify-center overflow-hidden md:h-auto md:w-1/3">
+        <img
+            src="/imgs/card-comunidad.png"
+            alt="Community donation"
+            class="h-full w-full object-cover"
+        />
+    </div>
+    <div class="flex w-full flex-col gap-4 p-6 md:w-2/3">
+        <div class="text-secondary flex flex-col items-start gap-2 font-bold md:items-end">
             <span>{$t("project.tabs.community.matchfunding.contribution")}</span>
-            <div class="flex flex-col items-end text-2xl">
+            <div class="flex flex-col items-start text-2xl md:items-end">
                 <div class="flex items-center gap-2 text-sm">
                     <span>
                         {length}
@@ -43,10 +49,10 @@
                 </div>
             </div>
         </div>
-        <div class="text-secondary line-clamp-2 text-2xl font-bold">
+        <div class="text-secondary line-clamp-2 text-left text-2xl font-bold md:text-right">
             {$t("project.tabs.community.anonymous.title")}
         </div>
-        <p class="line-clamp-2 text-sm text-[#575757]">
+        <p class="line-clamp-2 text-left text-sm text-[#575757] md:text-right">
             {$t("project.tabs.community.anonymous.description")}
         </p>
     </div>

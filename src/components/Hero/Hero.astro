@@ -14,18 +14,12 @@ const { t } = Astro.locals;
                 </h1>
 
                 <div class="space-y-1 text-lg leading-relaxed text-neutral-500">
-                    <p>
-                        {t("hero.description.paragraph1")}
-                    </p>
-                    <p>
-                        {t("hero.description.paragraph2")}
-                    </p>
-                    <p>{t("hero.description.paragraph3")}</p>
+                    {t("hero.description", { allowHtml: true })}
                 </div>
 
                 <!-- CTA Buttons -->
                 <div class="flex flex-col gap-4 sm:flex-row">
-                    <button
+                    <!-- <button
                         class="text-tertiary bg-light-accent rounded-full border-0 px-8 py-4 font-semibold whitespace-nowrap transition-all duration-200 hover:opacity-90"
                     >
                         {t("hero.buttons.discover")}
@@ -34,7 +28,7 @@ const { t } = Astro.locals;
                         class="bg-primary text-tertiary rounded-full border-0 px-8 py-4 font-semibold whitespace-nowrap transition-all duration-200 hover:opacity-90"
                     >
                         {t("hero.buttons.impulse")}
-                    </button>
+                    </button> -->
                 </div>
             </div>
 
