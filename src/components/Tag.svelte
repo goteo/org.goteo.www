@@ -20,17 +20,23 @@
 
     let {
         type = "default",
+        disabled = false,
         class: className = "",
         onclick,
         children,
     }: {
         type?: keyof typeof styles;
+        disabled?: boolean;
         class?: ClassNameValue;
         onclick?: (event: MouseEvent) => void;
         children: Snippet;
     } = $props();
 </script>
 
-<button class={twMerge(baseStyle.join(" "), styles[type], className)} onclick={(e) => onclick?.(e)}>
+<button
+    {disabled}
+    class={twMerge(baseStyle.join(" "), styles[type], className)}
+    onclick={(e) => onclick?.(e)}
+>
     {@render children()}
 </button>
