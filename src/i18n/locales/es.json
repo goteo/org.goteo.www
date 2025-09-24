@@ -159,7 +159,7 @@
       "description": "Necesitamos saber quién eres antes de pagar.",
       "registerOr": "Regístrate o",
       "loginBtnLabel": "Entra con tu cuenta",
-      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar donaciones.",
       "otherAccessMethods": "También puedes acceder a través de:"
     },
     "form": {
@@ -218,7 +218,7 @@
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "welcome": {
         "title": "Bienvenid@ al nuevo Goteo.",
-        "subtitle": "Estamos trabajando en muchas cosas que todavía no te podemos mostrar. Pero si ya tenías una cuenta en Goteo puedes acceder con tu misma dirección de correo y contraseña y comenzar a navegar por nuestro archivo de proyectos."
+        "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
       }
     },
     "form": {
@@ -306,12 +306,8 @@
     "description": "Página de inicio"
   },
   "hero": {
-    "title": "Financia el cambio que el mundo necesita",
-    "description": {
-      "paragraph1": "Únete a una comunidad que transforma realidades. Cada donación impulsa proyectos sociales innovadores: desde educación inclusiva hasta sostenibilidad ambiental.",
-      "paragraph2": "Aquí, tu contribución no es solo un gesto; es la semilla de un impacto duradero.",
-      "paragraph3": "¡Sé parte de la solución!"
-    },
+    "title": "¡Estrenamos Goteo!",
+    "description": "Ya casi estamos. Goteo crecerá poco a poco, activando secciones y funciones conforme estén listas. Ya puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos.",
     "buttons": {
       "discover": "Descubre proyectos a los que apoyar",
       "impulse": "Impulsa tu proyecto con Goteo"
