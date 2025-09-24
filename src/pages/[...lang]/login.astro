@@ -24,7 +24,9 @@ itemCount.subscribe((count) => {
                             <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
                                 {t("login.page.title")}
                             </h2>
-                            <p class="text-[#575757]">{t("login.page.description")}</p>
+                            {hasCart && <p class="text-[#575757]">
+                                {t("login.page.description")}
+                            </p>}
                         </div>
                         <div>
                             <div class="flex flex-col gap-4">
