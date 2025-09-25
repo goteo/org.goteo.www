@@ -89,7 +89,7 @@
             <Loader />
         </div>
     {:else}
-        <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-[40px] leading-tight font-bold">
+        <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-3xl font-bold">
             {$t("project.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
