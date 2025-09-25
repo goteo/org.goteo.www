@@ -351,24 +351,24 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "Matchfunding és un model on cada donació privada es multiplica per una entitat patrocinadora per maximitzar l’impacte social.",
+      "description": "L'efecte matx només el veuràs a Goteo. Des del 2013 busquem organitzacions que vulguin multiplicar limpacte del crowdfunding. Per cada euro que una persona aporta a una campanya de Goteo, una institució col·laboradora (fundació, administració pública, empresa…) aporta la mateixa quantitat, o fins i tot més.",
       "actions": {
         "learnMore": "Obteniu més informació",
         "viewCalls": "Consulteu les trucades actives"
       },
       "impact": {
         "title": "Dades d’impacte",
-        "description": "Matchfunding converteix les micro-donacions en impactes macro mitjançant la validació de projectes amb el suport comunitari i l’optimització dels recursos públics/privats.",
-        "matchers": "Contribuït per Matchers:",
-        "successRate": "Projectes amb èxit:",
-        "community": "Comunitat d'usuaris:"
+        "description": "El Matchfunding no només multiplica recursos econòmics, sinó que genera un impacte social tangible. En essència, el matchfunding transforma microdonacions en impacte macro, validant projectes amb suport ciutadà i optimitzant recursos públics/privats.",
+        "matchers": "Contribuït a Matchfunding:",
+        "successfulProjects": "Projectes de beneficiaris:",
+        "successRate": "Percentatge d’èxit:"
       },
       "cards": {
         "grant": "Trucada de finançament",
         "inscription": "Data d’inscripció",
         "participants": "Projectes participants",
-        "apply": "Sol·liciteu la trucada",
-        "viewCampaigns": "Consulteu les trucades de la campanya",
+        "apply": "Inscriu-te a la convocatòria",
+        "viewCampaigns": "Consulta les campanyes de la convocatòria",
         "finished": "Acabat {{date}}"
       }
     },

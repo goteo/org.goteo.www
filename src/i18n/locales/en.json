@@ -229,24 +229,24 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "Matchfunding is a model where each private donation is multiplied by a sponsoring entity to maximize social impact.",
+      "description": "The matching donation feature is unique to Goteo. Since 2013, we have been looking for organizations that want to amplify the impact of crowdfunding. For every euro that an individual donates to a Goteo campaign, a partner institution (foundation, public administration, company, etc.) contributes the same amount, or even more.",
       "actions": {
-        "learnMore": "Learn more",
-        "viewCalls": "View active calls"
+        "learnMore": "I want to know more",
+        "viewCalls": "See active calls"
       },
       "impact": {
         "title": "Impact data",
-        "description": "Matchfunding turns micro-donations into macro impact by validating projects with community support and optimizing public/private resources.",
-        "matchers": "Contributed by Matchers:",
-        "successRate": "Successful projects:",
-        "community": "User community:"
+        "description": "Matchfunding not only multiplies financial resources, but also generates tangible social impact. Essentially, match funding transforms small donations into significant impact, validating projects with community support and optimizing public and private resources.",
+        "matchers": "Contributed in matchfunding:",
+        "successfulProjects": "Beneficiary projects:",
+        "successRate": "Success percentage:"
       },
       "cards": {
-        "grant": "Call funding",
+        "grant": "Call endowment",
         "inscription": "Registration date",
         "participants": "Participating projects",
-        "apply": "Apply to the call",
-        "viewCampaigns": "View campaign calls",
+        "apply": "Sign up in the call",
+        "viewCampaigns": "See the campaigns of the call",
         "finished": "Finished {{date}}"
       }
     },

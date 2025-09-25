@@ -621,7 +621,7 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "El matchfunding (o \"financiación combinada\") es un modelo de financiación colectiva en el que cada donación privada es multiplicada por una entidad patrocinadora (como una institución pública, una empresa o una fundación). Su objetivo es incentivar la participación ciudadana y maximizar el impacto de proyectos sociales, culturales, educativos o medioambientales.",
+      "description": "El efecto match sólo lo verás en Goteo. Desde el 2013 buscamos organizaciones que quieran multiplicar el impacto del crowdfunding. Por cada euro que una persona aporta a una campaña de Goteo, una institución colaboradora (fundación, administración pública, empresa…) aporta la misma cantidad, o incluso más.",
       "actions": {
         "learnMore": "Quiero saber más",
         "viewCalls": "Ver convocatorias activas"
@@ -629,9 +629,9 @@
       "impact": {
         "title": "Datos de impacto",
         "description": "El matchfunding no solo multiplica recursos económicos, sino que genera un impacto social tangible. En esencia, el matchfunding transforma microdonaciones en impacto macro, validando proyectos con apoyo ciudadano y optimizando recursos públicos/privados.",
-        "matchers": "Aportado por Matchers:",
-        "successRate": "Proyectos exitosos:",
-        "community": "Comunidad de usuarias:"
+        "matchers": "Aportado en Matchfunding:",
+        "successfulProjects": "Proyectos beneficiados:",
+        "successRate": "Porcentaje de éxito:"
       },
       "cards": {
         "grant": "Dotación convocatoria",
