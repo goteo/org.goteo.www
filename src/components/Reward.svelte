@@ -32,7 +32,7 @@
 </script>
 
 <li
-    class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="flex basis-1/3 flex-col items-center justify-between gap-8 md:gap-8 gap-4 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >
