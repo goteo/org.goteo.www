@@ -5,45 +5,38 @@ import type { Campaign } from "../../types/campaign";
 import ClockIcon from "../../svgs/ClockIcon.svelte";
 import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
 import FlashIcon from "../../svgs/FlashIcon.astro";
+import { apiProjectsGetCollection, type Accounting, type ApiAccountingsIdGetData, type ApiMoney } from "../../openapi/client";
+import { getLanguage } from "../../middleware/utils";
+import { client } from "../../openapi/client/client.gen";
 
 const { t } = Astro.locals;
 
 // Mock campaign data - using same campaigns as the main Campaigns component
-const mockCampaigns: Campaign[] = [
-    {
-        id: "la-benefica",
-        title: "La Benéfica de Piloña - Espaciu Cultural",
-        image: "https://www.goteo.org/img/700x700/pantalla-1.0.png",
-        daysRemaining: 11,
-        obtained: "136.415 €",
-        minimum: "94.185 €",
-        progressPercentage: 20,
-        hasMatchfunding: true,
-        size: "small" as const,
+const { data: projects } = await apiProjectsGetCollection({
+    query: {
+        "slug[]": [
+            "impulsa-la-cooperativa-de-informacion-climatica",
+            "fons-cooperatiu-front-l-emergencia-social-i-sanita",
+            "la-benefica"
+        ]
     },
-    {
-        id: "compra-del-castell-de-santa-pau",
-        title: "Salvem el Castell de Santa Pau",
-        image: "https://www.goteo.org/img/700x700/dji-0139.jpg",
-        daysRemaining: 16,
-        obtained: "231.618 €",
-        minimum: "100.000 €",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-    {
-        id: "sindicat-de-llogaters-i-llogateres",
-        title: "Sindicat de Llogaters i Llogateres",
-        image: "https://www.goteo.org/img/780x478/banner-goteo-17.jpg",
-        daysRemaining: 37, // hours -> display as "37 hrs"
-        obtained: "36.051 €",
-        minimum: "20.307 €",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-];
+    headers: {
+        "Accept-Language": getLanguage(Astro)
+    }
+});
+
+const mockCampaigns: Campaign[] = await Promise.all(projects!.map(async (project) => {
+    const { data: accounting } = await client.get({ url: client.buildUrl({ url: project.accounting! })}) as { data: Accounting};
+
+    return {
+        size: "small",
+        id: project.slug!,
+        title: project.title!,
+        image: project.video?.thumbnail!,
+        minimum: project.budget?.minimum?.money!,
+        obtained: accounting!.balance as ApiMoney
+    }
+}));
 
 // Get campaigns for the currently active tab
 const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
