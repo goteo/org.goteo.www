@@ -5,41 +5,54 @@ import type { Campaign } from "../../types/campaign";
 import ClockIcon from "../../svgs/ClockIcon.svelte";
 import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
 import FlashIcon from "../../svgs/FlashIcon.astro";
-import { apiProjectsGetCollection, type Accounting, type ApiAccountingsIdGetData, type ApiMoney } from "../../openapi/client";
+import {
+    apiProjectsGetCollection,
+    type Accounting,
+    type ApiAccountingsIdGetData,
+    type ApiMoney,
+} from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
 
 const { t } = Astro.locals;
+const chosenProjects = {
+    "impulsa-la-cooperativa-de-informacion-climatica": "",
+    "fons-cooperatiu-front-l-emergencia-social-i-sanita": "",
+    "la-benefica":
+        "https://i.vimeocdn.com/video/1286954665-1fc1ccfa1b381946d23072ca518e4f0094c566416243095e6_900x500?region=us",
+};
 
 // Mock campaign data - using same campaigns as the main Campaigns component
 const { data: projects } = await apiProjectsGetCollection({
     query: {
-        "slug[]": [
-            "impulsa-la-cooperativa-de-informacion-climatica",
-            "fons-cooperatiu-front-l-emergencia-social-i-sanita",
-            "la-benefica"
-        ]
+        "slug[]": Object.keys(chosenProjects),
     },
     headers: {
-        "Accept-Language": getLanguage(Astro)
-    }
+        "Accept-Language": getLanguage(Astro),
+    },
 });
 
-const mockCampaigns: Campaign[] = await Promise.all(projects!.map(async (project) => {
-    const { data: accounting } = await client.get({ url: client.buildUrl({ url: project.accounting! })}) as { data: Accounting};
+const campaigns: Campaign[] = await Promise.all(
+    projects!.map(async (project) => {
+        const { data: accounting } = (await client.get({
+            url: client.buildUrl({ url: project.accounting! }),
+        })) as { data: Accounting };
 
-    return {
-        size: "small",
-        id: project.slug!,
-        title: project.title!,
-        image: project.video?.thumbnail!,
-        minimum: project.budget?.minimum?.money!,
-        obtained: accounting!.balance as ApiMoney
-    }
-}));
+        return {
+            size: "small",
+            id: project.slug!,
+            title: project.title!,
+            image:
+                chosenProjects[project.slug! as keyof typeof chosenProjects] ||
+                project.video?.thumbnail!,
+            minimum: project.budget?.minimum?.money!,
+            obtained: accounting!.balance as ApiMoney,
+        };
+    }),
+);
 
 // Get campaigns for the currently active tab
-const displayCampaigns = mockCampaigns.slice(0, 4); // Show first 4 campaigns
+const displayCampaigns = campaigns.slice(0, 4); // Show first 4 campaigns
 ---
 
 <section class="wrapper flex flex-col gap-6">

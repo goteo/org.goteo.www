@@ -2,69 +2,47 @@
 import CampaignCard from "./CampaignCard.astro";
 import type { Campaign } from "../../types/campaign";
 import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+import { apiProjectsGetCollection, type Accounting, type ApiMoney } from "../../openapi/client";
+import { getLanguage } from "../../middleware/utils";
+import { client } from "../../openapi/client/client.gen";
 
 const { t } = Astro.locals;
 
-// Mock campaign data
-const mockCampaigns: Campaign[] = [
-    // Large featured campaign
-    {
-        id: "lanzamos-sonda-internacional-y-los-cinco-elementos",
-        title: "Lanzamos Sonda Internacional y los cinco elementos",
-        image: "https://www.goteo.org/img/700x0/01-julia-cusso-sonda-internacional.jpg",
-        daysRemaining: 120,
-        obtained: "28.159 €",
-        minimum: "28.159 €",
-        progressPercentage: 100,
-        hasMatchfunding: false,
-        size: "large" as const, // Mark this card as large
+const highlightedProjects = {
+    "todos-somos-gaza": "https://www.goteo.org/img/780x478/caratula-43.png",
+    "fons-comunitari-per-la-dana-resposta-collectiva-pe":
+        "https://www.goteo.org/img/780x478/1-1823.jpg",
+    "espana-en-llamas":
+        "https://www.goteo.org/img/700x0/captura-de-pantalla-20120813-a-las-1.35.23-am.png",
+    "menus-solidarios": "https://www.goteo.org/img/780x478/chefsforukraine-poland-6.jpeg",
+    "sindicat-de-llogaters-i-llogateres": "https://ca.goteo.org/img/780x478/banner-goteo-17.jpg",
+};
+
+const { data: projects } = await apiProjectsGetCollection({
+    headers: { "Accept-Language": getLanguage(Astro) },
+    query: {
+        "slug[]": Object.keys(highlightedProjects),
     },
-    // Regular campaigns
-    {
-        id: "caja-de-resistencia-huelga-de-alquileres",
-        title: "Caja de Resistencia Huelga de Alquileres",
-        image: "https://www.goteo.org/img/780x478/suspensionalquileres-def-06.png",
-        daysRemaining: 120,
-        obtained: "43.023 €",
-        minimum: "30.000 €",
-        progressPercentage: 100,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-    {
-        id: "rebrotem",
-        title: "Rebrotem",
-        image: "https://www.goteo.org/img/700x700/7-20.png",
-        daysRemaining: 11,
-        obtained: "105.322 €",
-        minimum: "50.000 €",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-    {
-        id: "impulsa-la-cooperativa-de-informacion-climatica",
-        title: "Impulsa la cooperativa de información Climática",
-        image: "https://i.ytimg.com/vi/Dh0vzhAvjeg/maxresdefault.jpg",
-        daysRemaining: 16,
-        obtained: "132.258 €",
-        minimum: "122.000 €",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-    {
-        id: "baynana",
-        title: "Baynana, primer medio creado por periodistas refugiados en España",
-        image: "https://www.goteo.org/img/780x478/baynana-a02.png",
-        daysRemaining: 14,
-        obtained: "36.160 €",
-        minimum: "22.780 €",
-        progressPercentage: 20,
-        hasMatchfunding: false,
-        size: "small" as const,
-    },
-];
+});
+
+const campaigns: Campaign[] = await Promise.all(
+    projects!.map(async (project, index) => {
+        const { data: accounting } = (await client.get({
+            url: client.buildUrl({ url: project.accounting! }),
+        })) as { data: Accounting };
+
+        return {
+            size: index < 1 ? "large" : "small",
+            id: project.slug!,
+            title: project.title!,
+            image:
+                highlightedProjects[project.slug! as keyof typeof highlightedProjects] ||
+                project.video?.thumbnail!,
+            minimum: project.budget?.minimum?.money!,
+            obtained: accounting!.balance as ApiMoney,
+        };
+    }),
+);
 
 // Smart grid layout logic:
 // - Max grid is 2 rows x 3 columns = 6 slots
@@ -90,7 +68,7 @@ function selectCampaignsForGrid(campaigns: Campaign[], maxSlots: number = 6): Ca
     return selectedCampaigns;
 }
 
-const displayCampaigns = selectCampaignsForGrid(mockCampaigns);
+const displayCampaigns = selectCampaignsForGrid(campaigns);
 ---
 
 <section class="wrapper">
