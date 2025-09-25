@@ -207,11 +207,7 @@
   },
   "hero": {
     "title": "Finança el canvi que el món necessita",
-    "description": {
-      "paragraph1": "Uneix-te a una comunitat que transforma realitats. Cada donació impulsa projectes socials innovadors: des d'educació inclusiva fins a sostenibilitat ambiental.",
-      "paragraph2": "Aquí, la teva contribució no és només un gest; és la llavor d'un impacte durador.",
-      "paragraph3": "Sigues part de la solució!"
-    },
+    "description": "Arranquem una nova etapa amb la mateixa brúixola que ens ha guiat des del principi: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!",
     "buttons": {
       "discover": "Descobreix projectes per donar suport",
       "impulse": "Impulsa el teu projecte amb Goteo"

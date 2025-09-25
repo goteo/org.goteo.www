@@ -306,12 +306,8 @@
     "description": "Página de inicio"
   },
   "hero": {
-    "title": "¡Estrenamos Goteo!",
-    "description": "Ya casi estamos. Goteo crecerá poco a poco, activando secciones y funciones conforme estén listas. Ya puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos.",
-    "buttons": {
-      "discover": "Descubre proyectos a los que apoyar",
-      "impulse": "Impulsa tu proyecto con Goteo"
-    }
+    "title": "Financia el cambio que el mundo necesita",
+    "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
   },
   "renovationBanner": {
     "title": "¡Renovamos Goteo!",

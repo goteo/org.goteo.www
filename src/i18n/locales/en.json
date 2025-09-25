@@ -168,11 +168,7 @@
   },
   "hero": {
     "title": "Finance the change the world needs",
-    "description": {
-      "paragraph1": "Join a community that transforms realities. Every donation drives innovative social projects: from inclusive education to environmental sustainability.",
-      "paragraph2": "Here, your contribution is not just a gesture; it's the seed of lasting impact.",
-      "paragraph3": "Be part of the solution!"
-    },
+    "description": "We are embarking on a new phase with the same guiding principles that have led us since the beginning: promoting projects that transform the world through social justice, democratic participation, and the defense of human rights and ecosystems. Join a community that makes a real difference. Be part of the solution!",
     "buttons": {
       "discover": "Discover projects to support",
       "impulse": "Boost your project with Goteo"
