@@ -167,7 +167,7 @@
                     {$t("project.tabs.updates.modal-title")}
                 </div>
             {/if}
-            <h3 class="text-3xl text-[#462949] font-bold">
+            <h3 class="text-3xl font-bold text-[#462949]">
                 {selected?.title}
             </h3>
             <div class="marked-content flex flex-col gap-4 text-gray-700">
