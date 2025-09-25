@@ -645,35 +645,35 @@
     "stats": {
       "theoryToAction": {
         "title": "De la teoría a la acción",
-        "subtitle": "Las cifras que revelan nuestra huella real",
-        "advisedOnline": {
-          "value": "+2.500",
-          "label": "Asesorados Online"
+        "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
+        "projectsReceived": {
+          "value": "10.281",
+          "label": "Proyectos recibidos"
         },
-        "workshopParticipants": {
-          "value": "41",
-          "label": "Patrocinadores en talleres"
+        "projectsPublished": {
+          "value": "2.813",
+          "label": "Proyectos publicados"
         },
-        "fundedProjects": {
-          "value": "+2.300",
-          "label": "Proyectos financiados"
+        "successRate": {
+          "value": "83%",
+          "label": "Tasa de éxito"
         },
         "button": "Ver Stats de Goteo"
       },
       "whyGoteo": {
         "title": "¿Por qué Goteo?",
-        "subtitle": "Tenemos valores y los datos nos avalan.",
-        "successRate": {
-          "value": "+80%",
-          "label": "Porcentaje de éxito"
+        "subtitle": "Tenemos valores y los datos nos avalan. Datos a fecha de diciembre de 2024.",
+        "community": {
+          "value": "384.341",
+          "label": "Comunidad"
         },
-        "publishedProjects": {
-          "value": "+2.800",
-          "label": "Proyectos publicados"
+        "averageDonors": {
+          "value": "152",
+          "label": "Media de donantes por proyecto"
         },
         "totalRaised": {
-          "value": "+23M €",
-          "label": "Recaudado"
+          "value": "23M €",
+          "label": "Recaudación total"
         },
         "button": "Quiero saber más"
       }

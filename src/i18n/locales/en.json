@@ -82,7 +82,6 @@
     "code": "share as code",
     "copied": "Link copied to clipboard!"
   },
-
   "register": {
     "page": {
       "title": "Tell us your personal information",
@@ -254,37 +253,37 @@
     "stats": {
       "theoryToAction": {
         "title": "From theory to action",
-        "subtitle": "The figures that reveal our real footprint",
-        "advisedOnline": {
-          "value": "+2.500",
-          "label": "Advised Online"
+        "subtitle": "The figures that reveal our real footprint. ",
+        "projectsReceived": {
+          "value": "10,281",
+          "label": "Projects received"
         },
-        "workshopParticipants": {
-          "value": "41",
-          "label": "Workshop sponsors"
+        "projectsPublished": {
+          "value": "2,813",
+          "label": "Published projects"
         },
-        "fundedProjects": {
-          "value": "+2.300",
-          "label": "Funded projects"
+        "successRate": {
+          "value": "83%",
+          "label": "Success rate"
         },
-        "button": "View Goteo Stats"
+        "button": "See Goteo stats"
       },
       "whyGoteo": {
         "title": "Why Goteo?",
-        "subtitle": "We have values and the data backs us up.",
-        "successRate": {
-          "value": "+80%",
-          "label": "Success rate"
+        "subtitle": "We have values ​​and the data support us. ",
+        "community": {
+          "value": "384,341",
+          "label": "Community"
         },
-        "publishedProjects": {
-          "value": "+2.800",
-          "label": "Published projects"
+        "averageDonors": {
+          "value": "152",
+          "label": "Average of donors per project"
         },
         "totalRaised": {
-          "value": "+23M €",
-          "label": "Raised"
+          "value": "€ 23m",
+          "label": "Total collection"
         },
-        "button": "Learn more"
+        "button": "I want to know more"
       }
     },
     "stories": {

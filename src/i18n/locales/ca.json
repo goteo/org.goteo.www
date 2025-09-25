@@ -374,38 +374,38 @@
     },
     "stats": {
       "theoryToAction": {
-        "title": "De la teoria a l'acció",
-        "subtitle": "Les xifres que revelen la nostra petjada real",
-        "advisedOnline": {
-          "value": "+2.500",
-          "label": "Assessorats Online"
+        "title": "De la teoria a l’acció",
+        "subtitle": "Les xifres que revelen la nostra empremta real. Dades a desembre de 2024.",
+        "projectsReceived": {
+          "value": "10.281",
+          "label": "Projectes rebuts"
         },
-        "workshopParticipants": {
-          "value": "41",
-          "label": "Patrocinadors en tallers"
+        "projectsPublished": {
+          "value": "2.813",
+          "label": "Projectes publicats"
         },
-        "fundedProjects": {
-          "value": "+2.300",
-          "label": "Projectes finançats"
+        "successRate": {
+          "value": "83%",
+          "label": "Taxa d’èxit"
         },
-        "button": "Veure Stats de Goteo"
+        "button": "Consulteu l'estat de Goteo"
       },
       "whyGoteo": {
         "title": "Per què Goteo?",
-        "subtitle": "Tenim valors i les dades ens avalen.",
-        "successRate": {
-          "value": "+80%",
-          "label": "Percentatge d'èxit"
+        "subtitle": "Tenim valors i les dades ens donen suport. Dades a desembre de 2024.",
+        "community": {
+          "value": "384.341",
+          "label": "Comunitat"
         },
-        "publishedProjects": {
-          "value": "+2.800",
-          "label": "Projectes publicats"
+        "averageDonors": {
+          "value": "152",
+          "label": "Mitjana de donants per projecte"
         },
         "totalRaised": {
-          "value": "+23M €",
-          "label": "Recaptat"
+          "value": "23 milions d'euros",
+          "label": "Recollida total"
         },
-        "button": "Vull saber més"
+        "button": "Vull saber -ne més"
       }
     },
     "stories": {
