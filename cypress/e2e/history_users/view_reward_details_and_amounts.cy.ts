@@ -298,7 +298,7 @@ describe("View project rewards", () => {
         cy.get("body").should("not.contain", "Error 500");
         cy.get("body").should("not.contain", "Internal Server Error");
 
-        cy.get("body").then(($body) => {
+        cy.get("body").then(() => {
             const title = Cypress.$("title").text();
             if (title && title.trim().length > 0) {
                 cy.title().should("not.be.empty");

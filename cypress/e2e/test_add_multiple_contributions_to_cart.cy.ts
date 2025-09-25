@@ -257,7 +257,7 @@ describe("Checkout Flow - Multiple Contributions", () => {
         cy.visit("/es/projects/20", { failOnStatusCode: false });
         cy.get("body").should("exist");
         cy.get("body").should("not.contain", "Error 500");
-        cy.get("body").then(($body) => {
+        cy.get("body").then(() => {
             const title = Cypress.$("title").text();
             if (title && title.trim().length > 0) {
                 cy.title().should("not.be.empty");

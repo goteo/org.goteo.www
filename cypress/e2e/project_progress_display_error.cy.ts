@@ -101,7 +101,7 @@ describe("Error in progress display", () => {
                     "ℹ️ La página cargó correctamente aunque no se encontraron todos los indicadores esperados",
                 );
 
-                cy.get("body").then(($body) => {
+                cy.get("body").then(() => {
                     const title = Cypress.$("title").text();
                     if (title && title.trim().length > 0) {
                         cy.title().should("not.be.empty");

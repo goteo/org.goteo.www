@@ -120,7 +120,7 @@ describe("Viewing without contributions", () => {
             }
         });
 
-        cy.get("body").then(($body) => {
+        cy.get("body").then(() => {
             const title = Cypress.$("title").text();
             if (title && title.trim().length > 0) {
                 cy.title().should("not.be.empty");
