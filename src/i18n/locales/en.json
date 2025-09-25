@@ -82,7 +82,6 @@
     "code": "share as code",
     "copied": "Link copied to clipboard!"
   },
-
   "register": {
     "page": {
       "title": "Tell us your personal information",
@@ -168,11 +167,7 @@
   },
   "hero": {
     "title": "Finance the change the world needs",
-    "description": {
-      "paragraph1": "Join a community that transforms realities. Every donation drives innovative social projects: from inclusive education to environmental sustainability.",
-      "paragraph2": "Here, your contribution is not just a gesture; it's the seed of lasting impact.",
-      "paragraph3": "Be part of the solution!"
-    },
+    "description": "We are embarking on a new phase with the same guiding principles that have led us since the beginning: promoting projects that transform the world through social justice, democratic participation, and the defense of human rights and ecosystems. Join a community that makes a real difference. Be part of the solution!",
     "buttons": {
       "discover": "Discover projects to support",
       "impulse": "Boost your project with Goteo"
@@ -234,61 +229,61 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "Matchfunding is a model where each private donation is multiplied by a sponsoring entity to maximize social impact.",
+      "description": "The matching donation feature is unique to Goteo. Since 2013, we have been looking for organizations that want to amplify the impact of crowdfunding. For every euro that an individual donates to a Goteo campaign, a partner institution (foundation, public administration, company, etc.) contributes the same amount, or even more.",
       "actions": {
-        "learnMore": "Learn more",
-        "viewCalls": "View active calls"
+        "learnMore": "I want to know more",
+        "viewCalls": "See active calls"
       },
       "impact": {
         "title": "Impact data",
-        "description": "Matchfunding turns micro-donations into macro impact by validating projects with community support and optimizing public/private resources.",
-        "matchers": "Contributed by Matchers:",
-        "successRate": "Successful projects:",
-        "community": "User community:"
+        "description": "Matchfunding not only multiplies financial resources, but also generates tangible social impact. Essentially, match funding transforms small donations into significant impact, validating projects with community support and optimizing public and private resources.",
+        "matchers": "Contributed in matchfunding:",
+        "successfulProjects": "Beneficiary projects:",
+        "successRate": "Success percentage:"
       },
       "cards": {
-        "grant": "Call funding",
+        "grant": "Call endowment",
         "inscription": "Registration date",
         "participants": "Participating projects",
-        "apply": "Apply to the call",
-        "viewCampaigns": "View campaign calls",
+        "apply": "Sign up in the call",
+        "viewCampaigns": "See the campaigns of the call",
         "finished": "Finished {{date}}"
       }
     },
     "stats": {
       "theoryToAction": {
         "title": "From theory to action",
-        "subtitle": "The figures that reveal our real footprint",
-        "advisedOnline": {
-          "value": "+2.500",
-          "label": "Advised Online"
+        "subtitle": "The figures that reveal our real footprint. ",
+        "projectsReceived": {
+          "value": "10,281",
+          "label": "Projects received"
         },
-        "workshopParticipants": {
-          "value": "41",
-          "label": "Workshop sponsors"
+        "projectsPublished": {
+          "value": "2,813",
+          "label": "Published projects"
         },
-        "fundedProjects": {
-          "value": "+2.300",
-          "label": "Funded projects"
+        "successRate": {
+          "value": "83%",
+          "label": "Success rate"
         },
-        "button": "View Goteo Stats"
+        "button": "See Goteo stats"
       },
       "whyGoteo": {
         "title": "Why Goteo?",
-        "subtitle": "We have values and the data backs us up.",
-        "successRate": {
-          "value": "+80%",
-          "label": "Success rate"
+        "subtitle": "We have values ​​and the data support us. ",
+        "community": {
+          "value": "384,341",
+          "label": "Community"
         },
-        "publishedProjects": {
-          "value": "+2.800",
-          "label": "Published projects"
+        "averageDonors": {
+          "value": "152",
+          "label": "Average of donors per project"
         },
         "totalRaised": {
-          "value": "+23M €",
-          "label": "Raised"
+          "value": "€ 23m",
+          "label": "Total collection"
         },
-        "button": "Learn more"
+        "button": "I want to know more"
       }
     },
     "stories": {

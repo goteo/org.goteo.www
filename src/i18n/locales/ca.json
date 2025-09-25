@@ -207,11 +207,7 @@
   },
   "hero": {
     "title": "Finança el canvi que el món necessita",
-    "description": {
-      "paragraph1": "Uneix-te a una comunitat que transforma realitats. Cada donació impulsa projectes socials innovadors: des d'educació inclusiva fins a sostenibilitat ambiental.",
-      "paragraph2": "Aquí, la teva contribució no és només un gest; és la llavor d'un impacte durador.",
-      "paragraph3": "Sigues part de la solució!"
-    },
+    "description": "Arranquem una nova etapa amb la mateixa brúixola que ens ha guiat des del principi: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!",
     "buttons": {
       "discover": "Descobreix projectes per donar suport",
       "impulse": "Impulsa el teu projecte amb Goteo"
@@ -234,8 +230,8 @@
       "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
     },
     "tipjar": {
-      "community": "Quiero contribuir con la fundación Platoniq",
-      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
+      "community": "Vull donar suport a la Fundació Platoniq",
+      "checkboxLabel": "Impulsar una societat més justa i solidària",
       "error": {
         "invalidAmount": "La cantidad mínima es de 1€"
       }
@@ -355,61 +351,61 @@
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "Matchfunding és un model on cada donació privada es multiplica per una entitat patrocinadora per maximitzar l’impacte social.",
+      "description": "L'efecte matx només el veuràs a Goteo. Des del 2013 busquem organitzacions que vulguin multiplicar limpacte del crowdfunding. Per cada euro que una persona aporta a una campanya de Goteo, una institució col·laboradora (fundació, administració pública, empresa…) aporta la mateixa quantitat, o fins i tot més.",
       "actions": {
         "learnMore": "Obteniu més informació",
         "viewCalls": "Consulteu les trucades actives"
       },
       "impact": {
         "title": "Dades d’impacte",
-        "description": "Matchfunding converteix les micro-donacions en impactes macro mitjançant la validació de projectes amb el suport comunitari i l’optimització dels recursos públics/privats.",
-        "matchers": "Contribuït per Matchers:",
-        "successRate": "Projectes amb èxit:",
-        "community": "Comunitat d'usuaris:"
+        "description": "El Matchfunding no només multiplica recursos econòmics, sinó que genera un impacte social tangible. En essència, el matchfunding transforma microdonacions en impacte macro, validant projectes amb suport ciutadà i optimitzant recursos públics/privats.",
+        "matchers": "Contribuït a Matchfunding:",
+        "successfulProjects": "Projectes de beneficiaris:",
+        "successRate": "Percentatge d’èxit:"
       },
       "cards": {
         "grant": "Trucada de finançament",
         "inscription": "Data d’inscripció",
         "participants": "Projectes participants",
-        "apply": "Sol·liciteu la trucada",
-        "viewCampaigns": "Consulteu les trucades de la campanya",
+        "apply": "Inscriu-te a la convocatòria",
+        "viewCampaigns": "Consulta les campanyes de la convocatòria",
         "finished": "Acabat {{date}}"
       }
     },
     "stats": {
       "theoryToAction": {
-        "title": "De la teoria a l'acció",
-        "subtitle": "Les xifres que revelen la nostra petjada real",
-        "advisedOnline": {
-          "value": "+2.500",
-          "label": "Assessorats Online"
+        "title": "De la teoria a l’acció",
+        "subtitle": "Les xifres que revelen la nostra empremta real. Dades a desembre de 2024.",
+        "projectsReceived": {
+          "value": "10.281",
+          "label": "Projectes rebuts"
         },
-        "workshopParticipants": {
-          "value": "41",
-          "label": "Patrocinadors en tallers"
+        "projectsPublished": {
+          "value": "2.813",
+          "label": "Projectes publicats"
         },
-        "fundedProjects": {
-          "value": "+2.300",
-          "label": "Projectes finançats"
+        "successRate": {
+          "value": "83%",
+          "label": "Taxa d’èxit"
         },
-        "button": "Veure Stats de Goteo"
+        "button": "Consulteu l'estat de Goteo"
       },
       "whyGoteo": {
         "title": "Per què Goteo?",
-        "subtitle": "Tenim valors i les dades ens avalen.",
-        "successRate": {
-          "value": "+80%",
-          "label": "Percentatge d'èxit"
+        "subtitle": "Tenim valors i les dades ens donen suport. Dades a desembre de 2024.",
+        "community": {
+          "value": "384.341",
+          "label": "Comunitat"
         },
-        "publishedProjects": {
-          "value": "+2.800",
-          "label": "Projectes publicats"
+        "averageDonors": {
+          "value": "152",
+          "label": "Mitjana de donants per projecte"
         },
         "totalRaised": {
-          "value": "+23M €",
-          "label": "Recaptat"
+          "value": "23 milions d'euros",
+          "label": "Recollida total"
         },
-        "button": "Vull saber més"
+        "button": "Vull saber -ne més"
       }
     },
     "stories": {
