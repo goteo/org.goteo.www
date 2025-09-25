@@ -100,7 +100,7 @@ jobs:
                   echo ""
                   echo "=== Server Status Check ==="
                   curl -v http://localhost:4321 || echo "Server not responding"
-                  
+
             - name: Prepare artifact directories if tests failed
               if: failure()
               run: |
