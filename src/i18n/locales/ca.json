@@ -230,8 +230,8 @@
       "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
     },
     "tipjar": {
-      "community": "Quiero contribuir con la fundación Platoniq",
-      "checkboxLabel": "Contribuir por una sociedad más ética y colaborativa",
+      "community": "Vull donar suport a la Fundació Platoniq",
+      "checkboxLabel": "Impulsar una societat més justa i solidària",
       "error": {
         "invalidAmount": "La cantidad mínima es de 1€"
       }
