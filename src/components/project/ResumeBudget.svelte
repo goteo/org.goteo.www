@@ -12,7 +12,7 @@
 </script>
 
 <div class="flex flex-col gap-6 lg:flex-row">
-    <div class="text-tertiary basis-1/3 text-[40px] leading-[1.1] font-bold">
+    <div class="text-tertiary basis-1/3 text-3xl font-bold">
         {$t("project.tabs.budget.chart-title")}
     </div>
 

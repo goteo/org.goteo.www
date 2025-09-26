@@ -103,7 +103,7 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-[40px] leading-tight font-bold">
+    <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-3xl font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
     <Carousel gap={16} showDots={true} {itemsPerGroup}>
@@ -167,7 +167,7 @@
                     {$t("project.tabs.updates.modal-title")}
                 </div>
             {/if}
-            <h3 class="text-[32px] text-[#462949]">
+            <h3 class="text-3xl font-bold text-[#462949]">
                 {selected?.title}
             </h3>
             <div class="marked-content flex flex-col gap-4 text-gray-700">
