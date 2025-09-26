@@ -1,5 +1,4 @@
 ---
-import { Image } from "astro:assets";
 import heroImage from "./hero.png";
 
 const { t } = Astro.locals;
@@ -36,8 +35,8 @@ const { t } = Astro.locals;
             <!-- Hero Illustration -->
             <div class="relative flex justify-center lg:justify-end">
                 <div class="relative w-full max-w-lg">
-                    <Image
-                        src={heroImage}
+                    <img
+                        src={heroImage.src}
                         alt="Hero Illustration"
                         class="h-auto w-full scale-120"
                         loading="eager"
