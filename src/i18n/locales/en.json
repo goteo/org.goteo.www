@@ -88,7 +88,6 @@
       "description": "We need to know who you are before payment.",
       "registerOr": "Register or",
       "loginButton": "Log in with your account",
-      "goteoUserInfo": "If you are already a Goteo user, log in. You can use your wallet to make these donations.",
       "otherAccessMethods": "You can also access through:"
     },
     "form": {

@@ -159,7 +159,7 @@
       "description": "Necesitamos saber quién eres antes de pagar.",
       "registerOr": "Regístrate o",
       "loginBtnLabel": "Entra con tu cuenta",
-      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar donaciones.",
+      "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
       "otherAccessMethods": "También puedes acceder a través de:"
     },
     "form": {
@@ -213,7 +213,6 @@
       "description": "Necesitamos saber quién eres antes de pagar.",
       "registerOr": "Entra en tu cuenta o",
       "registerBtnLabel": "Regístrate",
-      "goteoUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
       "otherAccessMethods": "También puedes acceder a través de:",
       "forgotPassword": "¿Olvidaste tu contraseña?",
       "welcome": {
