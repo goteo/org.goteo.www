@@ -185,10 +185,10 @@
       "lastName": "Apellidos",
       "email": "Correo electrónico",
       "password": "Contraseña",
-      "taxIdCheckbox": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+      "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
       "taxId": {
         "label": "DNI*",
-        "msgDeduction": "Deseo desgravar esta donación. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+        "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
       }
     },
     "organization": {
