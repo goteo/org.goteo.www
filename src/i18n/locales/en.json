@@ -132,6 +132,122 @@
     },
     "categories": "Categories"
   },
+  "search": {
+    "title": "Search campaigns - Goteo",
+    "description": "Explore our catalog of campaigns and find the one that inspires you most to make your donation",
+    "heading": "Find the campaign you're looking for",
+    "subtitle": "Explore our catalog of campaigns and choose the one that inspires you most to make your donation",
+    "topResults": "Most searched campaigns",
+    "showing_top_results": "Showing the top {{count}} popular campaigns",
+    "placeholder": "Search",
+    "label": "Search campaigns",
+    "searchButton": "Search",
+    "closeFilters": "Close filters",
+    "showFilters": "Show filters",
+    "hideFilters": "Hide filters",
+    "applyFilters": "Apply filters",
+    "categoryLabel": "Choose a category",
+    "selectCategory": "Select category",
+    "deselectCategory": "Deselect category",
+    "selectedCategories": "{{count}} categories selected",
+    "clearFilters": "Clear filters",
+    "loading": "Searching campaigns...",
+    "results": {
+      "count": "{{count}} results found",
+      "found": "{{count}} results found",
+      "noResults": "No results found",
+      "regionLabel": "Search results",
+      "empty": {
+        "title": "No results found",
+        "description": "No campaigns match your current search.",
+        "clearFilters": "Clear filters"
+      }
+    },
+    "initial": {
+      "title": "Find your ideal campaign",
+      "description": "Use the filters above to find campaigns that inspire you."
+    },
+    "filters": {
+      "clear": "Clear filters"
+    },
+    "errors": {
+      "searchFailed": "Could not perform search. Please try again."
+    },
+    "empty": {
+      "title": "No campaigns found",
+      "description": "No campaigns match your current search. Try different terms or filters.",
+      "suggestions": {
+        "title": "Suggestions to improve your search:",
+        "checkSpelling": "Check the spelling of your keywords",
+        "tryDifferentKeywords": "Try different keywords",
+        "removeFilters": "Remove some filters to broaden the search",
+        "broadenSearch": "Use more general terms"
+      }
+    },
+    "accessibility": {
+      "resultsFound": "Found {{count}} campaigns"
+    },
+    "loadMore": "Load more results",
+    "loadMoreNote": "Pagination functionality coming soon",
+    "pagination": {
+      "summary": "Page {{page}} of {{totalPages}} ({{totalCount}} results total)",
+      "ariaLabel": "Results pagination navigation",
+      "previous": "Previous",
+      "next": "Next",
+      "loading": "Loading...",
+      "loadMore": "Load more results",
+      "noMoreResults": "No more results"
+    },
+    "error": {
+      "title": "Search error",
+      "retry": "Try again",
+      "network": {
+        "title": "No internet connection",
+        "description": "Unable to connect to the server. Check your internet connection and try again."
+      },
+      "timeout": {
+        "title": "Search is taking too long",
+        "description": "The server is not responding. Try again or use local data."
+      },
+      "server": {
+        "title": "Server error",
+        "description": "There's a problem with the server. Try again later or use local data."
+      },
+      "unknown": {
+        "title": "Unexpected error",
+        "description": "An unexpected error occurred. Please try again."
+      },
+      "actions": {
+        "retry": "Retry",
+        "showHelp": "Show help"
+      },
+      "technicalDetails": "Technical details"
+    }
+  },
+  "filters": {
+    "selectOption": "Select option",
+    "timePeriod": "Time period",
+    "campaignStatus": "Campaign status",
+    "location": "Location",
+    "time": {
+      "all": "Any time",
+      "week": "Last week",
+      "month": "Last month",
+      "year": "Last year"
+    },
+    "status": {
+      "all": "All statuses",
+      "funding": "Funding",
+      "successful": "Successful",
+      "completed": "Completed"
+    },
+    "locationOptions": {
+      "all": "Any location",
+      "spain": "Spain",
+      "europe": "Europe",
+      "global": "Global"
+    }
+  },
   "categories": {
     "solidary": "Solidarity",
     "libre-software": "Free Software",

@@ -1,0 +1,79 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import SearchFilters from "../../components/search/SearchFilters.svelte";
+import SearchResultsClient from "../../components/search/SearchResultsClient.svelte";
+import { projectsService } from "../../services/projectsService";
+import type { SearchableCampaign } from "../../stores/searchStore";
+
+const { t, lang } = Astro.locals;
+
+// Get initial campaigns from API (for SSR)
+let allCampaigns: SearchableCampaign[] = [];
+const useApiMode = true; // Always use real API - no mock mode
+
+try {
+    // Get top 3 initial results from API for display
+    allCampaigns = await projectsService.getInitialProjects(lang, {
+        limit: 3, // Show top 3 results initially as per epic requirements
+    });
+} catch (error) {
+    // Use empty array on API failure - let the search interface handle empty state
+    allCampaigns = [];
+}
+
+// Parse URL search parameters for SSR
+const url = new URL(Astro.request.url);
+const initialFilters = {
+    query: url.searchParams.get("q") || "",
+    timeFilter: url.searchParams.get("time") || "",
+    statusFilter: url.searchParams.get("status") || "",
+    locationFilter: url.searchParams.get("location") || "",
+    categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
+};
+
+// Determine if we have initial search parameters
+const hasInitialSearch = !!(
+    initialFilters.query ||
+    initialFilters.timeFilter ||
+    initialFilters.statusFilter ||
+    initialFilters.locationFilter ||
+    initialFilters.categories.length > 0
+);
+---
+
+<Layout title={t("search.title")} description={t("search.description")}>
+    <section class="wrapper">
+        <!-- Page Header -->
+        <div class="mb-12 text-center">
+            <h1 class="text-tertiary mb-4 text-4xl font-bold">
+                {t("search.heading")}
+            </h1>
+            <p class="text-secondary text-lg">
+                {t("search.subtitle")}
+            </p>
+            {
+                allCampaigns.length > 0 && !hasInitialSearch && (
+                    <p class="text-tertiary/70 mt-2 text-sm">
+                        {t("search.showing_top_results", { count: allCampaigns.length })}
+                    </p>
+                )
+            }
+        </div>
+
+        <!-- Search Filters -->
+        <div class="mb-8">
+            <SearchFilters locale={lang} initialFilters={initialFilters} client:load />
+        </div>
+
+        <!-- Search Results - API Integrated -->
+        <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
+            <SearchResultsClient
+                allCampaigns={allCampaigns}
+                initialFilters={initialFilters}
+                useApiMode={useApiMode}
+                hasInitialSearch={hasInitialSearch}
+                client:load
+            />
+        </div>
+    </section>
+</Layout>

@@ -14,6 +14,7 @@ export type Accounting = {
      * IRI of the resource owning this Accounting.
      */
     owner?: string;
+    ownerObject?: string;
     /**
      * The preferred currency for monetary operations.\
      * 3-letter ISO 4217 currency code.
@@ -43,6 +44,7 @@ export type AccountingJsonld = {
      * IRI of the resource owning this Accounting.
      */
     owner?: string;
+    ownerObject?: string;
     /**
      * The preferred currency for monetary operations.\
      * 3-letter ISO 4217 currency code.
