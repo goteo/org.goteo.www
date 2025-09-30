@@ -4,7 +4,13 @@ import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
 import ProfileTabs from "../../../components/profile/ProfileTabs.svelte";
 import ProfileBio from "../../../components/profile/ProfileBio.astro";
-import { apiUsersIdGet, apiUsersIdpersonGet } from "../../../openapi/client";
+import {
+    apiUsersIdGet,
+    apiUsersIdpersonGet,
+    apiUsersIdorganizationGet,
+} from "../../../openapi/client";
+
+import type { User, Person, Organization } from "../../../openapi/client/types.gen";
 
 const { idOrHandle } = Astro.params;
 const { t } = Astro.locals;
@@ -14,9 +20,10 @@ if (!idOrHandle) {
 }
 
 // Fetch user data
-let user;
-let person;
-let errorMessage;
+let user: User | undefined;
+let person: Person | undefined;
+let organization: Organization | undefined;
+let errorMessage: string | undefined;
 
 try {
     const userResponse = await apiUsersIdGet({
@@ -29,8 +36,8 @@ try {
 
     user = userResponse.data;
 
-    // Fetch person details if available
-    if (user.person) {
+    // Fetch person details for individual users
+    if (user.type === "individual" && user.person) {
         const personId = user.person.split("/").pop();
         if (personId) {
             const personResponse = await apiUsersIdpersonGet({
@@ -41,21 +48,45 @@ try {
             }
         }
     }
+
+    // Fetch organization details for organization users
+    if (user.type === "organization" && user.organization) {
+        const orgId = user.organization.split("/").pop();
+        if (orgId) {
+            const orgResponse = await apiUsersIdorganizationGet({
+                path: { id: orgId },
+            });
+            if (!orgResponse.error) {
+                organization = orgResponse.data;
+            }
+        }
+    }
 } catch (error) {
     console.error("Error fetching user:", error);
     errorMessage = t("profile.notFound");
 }
 
-// Prepare profile data
-const displayName = user?.displayName || user?.handle || "User";
-const location = "Barcelona, Catalunya"; // This would come from user data (e.g., user.location)
+// Prepare profile data with proper fallbacks
+const displayName =
+    user?.displayName ||
+    (person ? `${person.firstName || ""} ${person.lastName || ""}`.trim() : "") ||
+    organization?.businessName ||
+    organization?.legalName ||
+    user?.handle ||
+    "User";
 
-// Sample bio text - in production this would come from user data
-const bio = displayName !== "User"
-    ? `${displayName}: Innovador Social y Arquitecto de Comunidades Sostenibles.
+// Location - would come from user profile data in production
+// API doesn't seem to have location field yet, using placeholder
+const location = "Barcelona, Catalunya";
 
-Con más de 15 años de trayectoria en el ecosistema sin ánimo de lucro, ${displayName} se ha consolidado como un referente en la creación de redes colaborativas y la movilización de recursos a través del crowdfunding. Su visión se centra en potenciar iniciativas de base que transforman realidades locales, combinando estrategias de financiación colectiva con un profundo compromiso por la justicia social y la participación ciudadana. Como pilar activo de Goteo Foundation, ${displayName} impulsa proyectos que priorizan la transparencia radical, la sostenibilidad ambiental y la equidad. Su metodología va más allá de la recaudación: fomenta ecosistemas resilientes donde emprendedores sociales, artistas y agentes de cambio acceden no solo a fondos, sino también a mentorías, redes de contactos y herramientas para escalar su impacto. Bajo su liderazgo, iniciativas en áreas como economía circular, cultura libre y tecnología cívica han florecido en España, Latinoamérica y Europa.`
-    : undefined;
+// Bio - would come from user profile description field in production
+// For now using sample text if user exists
+const bio =
+    user && displayName !== "User"
+        ? `${displayName}: ${user.type === "organization" ? t("profile.organizationIntro") : t("profile.userIntro")}
+
+${t("profile.bioSample", { name: displayName })}`
+        : undefined;
 
 const tabs = [
     { id: "about", label: t("profile.tabs.about") },
@@ -63,23 +94,27 @@ const tabs = [
     { id: "donorType", label: t("profile.tabs.donorType") },
 ];
 
-// Social links - these would come from user data (e.g., user.socialMedia)
-// For now using sample data to demonstrate functionality
-const socialLinks = {
-    twitter: "https://twitter.com/example",
-    instagram: "https://instagram.com/example",
-    facebook: "https://facebook.com/example",
-    linkedin: "https://linkedin.com/in/example",
-    email: "mailto:example@email.com",
-    medium: "https://medium.com/@example",
-};
+// Social links - would come from user.socialMedia or similar field
+// API doesn't seem to have social media fields yet, using sample data
+const socialLinks = user
+    ? {
+          twitter: `https://twitter.com/${user.handle}`,
+          instagram: `https://instagram.com/${user.handle}`,
+          facebook: undefined,
+          linkedin: undefined,
+          email: user.email ? `mailto:${user.email}` : undefined,
+          medium: undefined,
+      }
+    : {};
 
-// Use placehold.co for cover if no avatar exists
-const coverImage = user?.avatar
-    ? undefined // Use default cover
-    : undefined; // Will use ProfileHero's default
+// Images with fallbacks
+const coverImage = undefined; // API doesn't provide cover image, use default
+const avatarImage = user?.avatar || undefined; // Use user avatar or default placeholder
 
-const avatarImage = user?.avatar || undefined; // Will use ProfileHero's default
+// User stats
+const projectCount = user?.projects?.length || 0;
+const isVerified = user?.emailConfirmed || false;
+const isActive = user?.active || false;
 ---
 
 <Layout
