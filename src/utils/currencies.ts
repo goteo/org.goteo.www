@@ -32,20 +32,20 @@ export function parseCurrency(value: string, currency?: string): number {
         currency,
     }).resolvedOptions();
 
-    let cleaned = value
+    const cleaned = value
         .replace(new RegExp("\\" + groupSep, "g"), "")
         .replace(new RegExp("\\" + decimalSep), ".")
         .replace(/[^0-9.]/g, "");
 
-    let [intPart, decPart = ""] = cleaned.split(".");
+    const parts = cleaned.split(".");
 
-    decPart = decPart.padEnd(scale!, "0").slice(0, scale);
+    const intPart = parts[0];
+    const decPart = parts[1].padEnd(scale!, "0").slice(0, scale);
 
     const result = intPart + decPart;
 
     return parseInt(result, 10);
 }
-
 
 export function formatCurrency(
     amount?: number,
