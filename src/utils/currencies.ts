@@ -40,7 +40,7 @@ export function parseCurrency(value: string, currency?: string): number {
     const parts = cleaned.split(".");
 
     const intPart = parts[0];
-    const decPart = parts[1]?.padEnd(scale!, "0").slice(0, scale);
+    const decPart = (parts[1] || "").padEnd(scale!, "0").slice(0, scale);
 
     const result = intPart + decPart;
 
