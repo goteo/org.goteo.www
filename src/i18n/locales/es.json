@@ -771,7 +771,12 @@
         "title": "¿Cuánto dinero necesitas?",
         "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto.",
         "amountPrompt": "Indica la cantidad que necesitas"
-      }
+      },
+      "release": {
+        "title": "Fecha salida de campaña",
+        "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
+      },
+      "submit": "Proponer campaña"
     }
   }
 }

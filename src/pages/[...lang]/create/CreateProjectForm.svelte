@@ -5,6 +5,7 @@
     import { categories } from "../../../utils/categories";
     import { formatCurrency, parseCurrency } from "../../../utils/currencies";
     import TagSelect from "../../../components/TagSelect.svelte";
+    import Button from "../../../components/Button.svelte";
 
     let title: string = $state("");
     let description: string = $state("");
@@ -15,6 +16,8 @@
     });
 
     let budget: number = $state(0);
+
+    let release: Date = $state(new Date());
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -70,9 +73,27 @@
                 type="text"
                 placeholder={$t("create.project.budget.amountPrompt")}
                 class="w-full rounded-md border border-[#855a96] p-[16px]"
-                oninput={(e) => budget = parseCurrency(e.currentTarget.value)}
+                oninput={(e) => (budget = parseCurrency(e.currentTarget.value))}
             />
         </div>
+        <div class="flex flex-col gap-4">
+            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+                {$t("create.project.release.title")}
+            </h2>
+            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+                {$t("create.project.release.subtitle")}
+            </p>
+            <input
+                type="date"
+                class="w-full rounded-md border border-[#855a96] p-[16px]"
+                bind:value={release}
+            />
+        </div>
+        <p>
+            <Button size="md" onclick={(e) => console.log(release)}>
+                {$t("create.project.submit")}
+            </Button>
+        </p>
         <p></p>
     </div>
     <div class="ml-auto">
