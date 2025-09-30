@@ -1,4 +1,3 @@
-<!--- @runes -->
 <script lang="ts">
     import BaseCard from "../../../components/BaseCard.svelte";
     import { t } from "../../../i18n/store";
@@ -6,18 +5,11 @@
     import { formatCurrency, parseCurrency } from "../../../utils/currencies";
     import TagSelect from "../../../components/TagSelect.svelte";
     import Button from "../../../components/Button.svelte";
+    import { draft } from "./project-draft";
 
-    let title: string = $state("");
-    let description: string = $state("");
-
-    let categoriesSelected: string[] = $state([]);
-    const categoriesOptions = categories.map((category) => {
-        return { id: category.id, text: $t(category.translationKey) };
+    const categoriesOptions = categories.map((categories) => {
+        return { id: categories.id, text: $t(categories.translationKey) };
     });
-
-    let budget: number = $state(0);
-
-    let release: Date = $state(new Date());
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -41,25 +33,25 @@
                 type="text"
                 placeholder={$t("create.project.description.titlePrompt")}
                 class="w-full rounded-md border border-[#855a96] p-[16px]"
-                bind:value={title}
+                bind:value={$draft.title}
             />
             <textarea
                 placeholder={$t("create.project.description.subtitlePrompt")}
                 class="h-[240px] w-full resize-none rounded-md border border-[#855a96] p-[16px]"
-                bind:value={description}
+                bind:value={$draft.subtitle}
             ></textarea>
         </div>
         <div class="flex flex-col gap-4">
             <h2 class="text-2xl font-bold text-[#3D3D3D]">
-                {$t("create.project.category.title")}
+                {$t("create.project.categories.title")}
             </h2>
             <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
-                {$t("create.project.category.subtitle")}
+                {$t("create.project.categories.subtitle")}
             </p>
             <TagSelect
                 max={2}
                 options={categoriesOptions}
-                onchange={(selected) => (categoriesSelected = selected.map((s) => s.id.toString()))}
+                onchange={(selected) => ($draft.categories = selected.map((s) => s.id.toString()))}
             />
         </div>
         <div class="flex flex-col gap-4">
@@ -73,7 +65,7 @@
                 type="text"
                 placeholder={$t("create.project.budget.amountPrompt")}
                 class="w-full rounded-md border border-[#855a96] p-[16px]"
-                oninput={(e) => (budget = parseCurrency(e.currentTarget.value))}
+                oninput={(e) => ($draft.budget = parseCurrency(e.currentTarget.value))}
             />
         </div>
         <div class="flex flex-col gap-4">
@@ -86,11 +78,11 @@
             <input
                 type="date"
                 class="w-full rounded-md border border-[#855a96] p-[16px]"
-                bind:value={release}
+                bind:value={$draft.release}
             />
         </div>
         <p>
-            <Button size="md" onclick={(e) => console.log(release)}>
+            <Button size="md" onclick={(e) => console.log($draft.release)}>
                 {$t("create.project.submit")}
             </Button>
         </p>
@@ -99,15 +91,15 @@
     <div class="ml-auto">
         <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">
             <h1 class="text-tertiary overflow-hidden text-2xl leading-8 font-bold">
-                {title || $t("create.project.description.titlePlaceholder")}
+                {$draft.title || $t("create.project.description.titlePlaceholder")}
             </h1>
             <p class="text-sm text-[#3D3D3D]">
-                {description || $t("create.project.description.subtitlePlaceholder")}
+                {$draft.subtitle || $t("create.project.description.subtitlePlaceholder")}
             </p>
             <div class="mt-auto">
                 <p class="text-sm text-[#3D3D3D]">{$t("create.project.budgetPreview")}</p>
                 <p class="text-secondary text-3xl font-bold">
-                    {formatCurrency(budget)}
+                    {formatCurrency($draft.budget)}
                 </p>
             </div>
         </BaseCard>

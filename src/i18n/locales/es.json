@@ -763,7 +763,7 @@
         "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
         "subtitlePlaceholder": "Sin descripción"
       },
-      "category": {
+      "categories": {
         "title": "¿Qué categoría se ajusta a tu campaña?",
         "subtitle": "(Puedes elegir un máximo de 2)"
       },
