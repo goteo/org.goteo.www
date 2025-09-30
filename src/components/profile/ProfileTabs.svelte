@@ -1,0 +1,57 @@
+<script lang="ts">
+    interface Tab {
+        id: string;
+        label: string;
+        icon?: any;
+    }
+
+    interface Props {
+        tabs: Tab[];
+        activeTab?: string;
+        onTabChange?: (tabId: string) => void;
+    }
+
+    let { tabs, activeTab = tabs[0]?.id, onTabChange }: Props = $props();
+
+    let currentTab = $state(activeTab);
+
+    function handleTabClick(tabId: string) {
+        currentTab = tabId;
+        if (onTabChange) {
+            onTabChange(tabId);
+        }
+    }
+</script>
+
+<div class="flex w-full items-center justify-center">
+    <div class="flex cursor-pointer items-center">
+        {#each tabs as tab}
+            <button
+                class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 {currentTab ===
+                tab.id
+                    ? 'border-[#59e9d3] text-[#462949]'
+                    : 'border-[#e6e5f7] text-[#575757]'}"
+                onclick={() => handleTabClick(tab.id)}
+            >
+                {#if tab.icon}
+                    <div class="size-4 overflow-hidden">
+                        <svelte:component this={tab.icon} />
+                    </div>
+                {/if}
+                <span class="font-['Karla'] text-base font-bold leading-6">
+                    {tab.label}
+                </span>
+            </button>
+        {/each}
+    </div>
+</div>
+
+<style>
+    button {
+        transition: all 0.2s ease;
+    }
+
+    button:hover {
+        opacity: 0.8;
+    }
+</style>

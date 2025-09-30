@@ -358,5 +358,16 @@
       "foundation": "Foundation",
       "name": "Platoniq"
     }
+  },
+  "profile": {
+    "share": "Share",
+    "subscribe": "Subscribe",
+    "tabs": {
+      "about": "About profile",
+      "projects": "Backed projects",
+      "donorType": "Donor type"
+    },
+    "notFound": "User not found",
+    "location": "Location"
   }
 }

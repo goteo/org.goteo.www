@@ -750,5 +750,16 @@
       "foundation": "Fundación",
       "name": "Platoniq"
     }
+  },
+  "profile": {
+    "share": "Compartir",
+    "subscribe": "Subscríbete",
+    "tabs": {
+      "about": "Sobre el perfil",
+      "projects": "Proyectos impulsados",
+      "donorType": "Tipo de donante"
+    },
+    "notFound": "Usuario no encontrado",
+    "location": "Ubicación"
   }
 }
