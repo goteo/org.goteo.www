@@ -142,7 +142,10 @@ if (user?.accounting) {
 }
 
 // Fetch actual projects from the supports
-const projectIRIs = userSupports.slice(0, 10).map((support) => support.project).filter(Boolean);
+const projectIRIs = userSupports
+    .slice(0, 10)
+    .map((support) => support.project)
+    .filter(Boolean);
 let campaigns: Campaign[] = [];
 
 if (projectIRIs.length > 0) {
@@ -242,6 +245,7 @@ const isActive = user?.active || false;
 <Layout
     title={`${displayName} - ${t("metadata.title")}`}
     description={`${t("profile.tabs.about")} ${displayName}`}
+    class="mb-20"
 >
     {
         errorMessage ? (

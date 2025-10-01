@@ -36,7 +36,7 @@
             <!-- About/Bio Tab -->
             {#if bioHtml}
                 <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
-                    <div class="prose prose-base font-['Karla'] leading-6 text-[#575757]">
+                    <div class="prose prose-base text-secondary leading-6">
                         {@html bioHtml}
                     </div>
                 </div>
@@ -49,9 +49,7 @@
                 </div>
             {:else}
                 <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
-                    <p class="font-['Karla'] text-base text-[#575757]">
-                        No hay proyectos impulsados aún.
-                    </p>
+                    <p class="text-secondary text-base">No hay proyectos impulsados aún.</p>
                 </div>
             {/if}
         {:else if activeTab === "donorType"}

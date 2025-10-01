@@ -42,8 +42,8 @@
             <button
                 class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 {currentTab ===
                 tab.id
-                    ? 'border-[#59e9d3] text-[#462949]'
-                    : 'border-[#e6e5f7] text-[#575757]'}"
+                    ? 'border-primary text-tertiary'
+                    : 'border-purple-tint text-secondary'}"
                 onclick={() => handleTabClick(tab.id)}
             >
                 {#if tab.icon}
@@ -51,7 +51,7 @@
                         <svelte:component this={tab.icon} />
                     </div>
                 {/if}
-                <span class="font-['Karla'] text-base leading-6 font-bold">
+                <span class="text-base leading-6 font-bold">
                     {tab.label}
                 </span>
             </button>
