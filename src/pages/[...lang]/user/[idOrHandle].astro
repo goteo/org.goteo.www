@@ -11,8 +11,11 @@ import {
     apiUsersIdpersonGet,
     apiUsersIdorganizationGet,
     apiProjectsGetCollection,
+    apiProjectSupportsGetCollection,
+    apiProjectSupportsmoneyTotalGetCollection,
     type Accounting,
     type ApiMoney,
+    type ProjectSupport,
 } from "../../../openapi/client";
 import type { User, Person, Organization } from "../../../openapi/client/types.gen";
 import type { Campaign } from "../../../types/campaign";
@@ -82,12 +85,12 @@ const displayName =
     user?.handle ||
     "User";
 
-// Location - would come from user profile data in production
-// API doesn't seem to have location field yet, using placeholder
+// Location - API doesn't have location field yet, using placeholder
+// TODO: Add location field to Person/Organization in API
 const location = "Barcelona, Catalunya";
 
-// Bio - would come from user profile description field in production
-// For now using sample text if user exists
+// Bio - API doesn't have bio/description field yet, using generated sample
+// TODO: Add bio/description field to User in API
 const bio =
     user && displayName !== "User"
         ? `${displayName}: ${user.type === "organization" ? t("profile.organizationIntro") : t("profile.userIntro")}
@@ -101,40 +104,117 @@ const tabs = [
     { id: "donorType", label: t("profile.tabs.donorType") },
 ];
 
-// Fetch sample projects for the user
-// In production, this would filter by user's backed projects
-const chosenProjects = {
-    "impulsa-la-cooperativa-de-informacion-climatica": "",
-    "fons-cooperatiu-front-l-emergencia-social-i-sanita": "",
-};
+// Fetch user's backed/supported projects from API
+let userSupports: ProjectSupport[] = [];
+let totalDonated: { amount: number; currency: string } = { amount: 0, currency: "EUR" };
+let projectsDonatedCount = 0;
 
-const { data: projects } = await apiProjectsGetCollection({
-    query: {
-        "slug[]": Object.keys(chosenProjects),
-    },
-    headers: {
-        "Accept-Language": getLanguage(Astro),
-    },
-});
+if (user?.accounting) {
+    try {
+        // Get all project supports for this user
+        const { data: supports } = await apiProjectSupportsGetCollection({
+            query: {
+                origin: user.accounting,
+            },
+        });
 
-const campaigns: Campaign[] = await Promise.all(
-    (projects || []).map(async (project) => {
-        const { data: accounting } = (await client.get({
-            url: client.buildUrl({ url: project.accounting! }),
-        })) as { data: Accounting };
+        if (supports) {
+            userSupports = supports;
+            projectsDonatedCount = supports.length;
 
-        return {
-            size: "small",
-            id: project.slug!,
-            title: project.title!,
-            image:
-                chosenProjects[project.slug! as keyof typeof chosenProjects] ||
-                project.video?.thumbnail!,
-            minimum: project.budget?.minimum?.money!,
-            obtained: accounting!.balance as ApiMoney,
-        };
-    }),
-);
+            // Get total money donated
+            const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
+                query: {
+                    origin: user.accounting,
+                },
+            });
+
+            if (moneyTotal?.amount && moneyTotal?.currency) {
+                totalDonated = {
+                    amount: Number(moneyTotal.amount),
+                    currency: moneyTotal.currency,
+                };
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching user supports:", error);
+    }
+}
+
+// Fetch actual projects from the supports
+const projectIRIs = userSupports.slice(0, 10).map((support) => support.project).filter(Boolean);
+let campaigns: Campaign[] = [];
+
+if (projectIRIs.length > 0) {
+    campaigns = await Promise.all(
+        projectIRIs.map(async (projectIRI) => {
+            try {
+                // Fetch project data directly using IRI
+                const { data: project } = (await client.get({
+                    url: client.buildUrl({ url: projectIRI! }),
+                    headers: {
+                        "Accept-Language": getLanguage(Astro),
+                    },
+                })) as { data: any };
+
+                // Fetch accounting data
+                const { data: accounting } = (await client.get({
+                    url: client.buildUrl({ url: project.accounting! }),
+                })) as { data: Accounting };
+
+                return {
+                    size: "small",
+                    id: project.slug!,
+                    title: project.title!,
+                    image: project.video?.thumbnail!,
+                    minimum: project.budget?.minimum?.money!,
+                    obtained: accounting!.balance as ApiMoney,
+                };
+            } catch (error) {
+                console.error(`Error fetching project ${projectIRI}:`, error);
+                return null;
+            }
+        }),
+    ).then((results) => results.filter(Boolean) as Campaign[]);
+}
+
+// Fallback to sample projects if user has no supports (for demo purposes)
+if (campaigns.length === 0) {
+    const chosenProjects = {
+        "impulsa-la-cooperativa-de-informacion-climatica": "",
+        "fons-cooperatiu-front-l-emergencia-social-i-sanita": "",
+    };
+
+    const { data: fallbackProjects } = await apiProjectsGetCollection({
+        query: {
+            "slug[]": Object.keys(chosenProjects),
+        },
+        headers: {
+            "Accept-Language": getLanguage(Astro),
+        },
+    });
+
+    if (fallbackProjects) {
+        campaigns = await Promise.all(
+            fallbackProjects.map(async (project) => {
+                const { data: accounting } = (await client.get({
+                    url: client.buildUrl({ url: project.accounting! }),
+                })) as { data: Accounting };
+
+                return {
+                    size: "small",
+                    id: project.slug!,
+                    title: project.title!,
+                    image:
+                        chosenProjects[project.slug! as keyof typeof chosenProjects] ||
+                        project.video?.thumbnail!,
+                    minimum: project.budget?.minimum?.money!,
+                    obtained: accounting!.balance as ApiMoney,
+                };
+            }),
+        );
+    }
+}
 
 // Social links - would come from user.socialMedia or similar field
 // API doesn't seem to have social media fields yet, using sample data
@@ -215,7 +295,11 @@ const isActive = user?.active || false;
 
                 {/* Tab Content - Donor Type */}
                 <div data-tab-content="donorType" style="display: none;">
-                    <ProfileDonorType projectsDonated={1} moneyDonated="5,00€" client:load />
+                    <ProfileDonorType
+                        projectsDonated={projectsDonatedCount}
+                        moneyDonated={`${totalDonated.amount.toFixed(2).replace(".", ",")}€`}
+                        client:load
+                    />
                 </div>
             </div>
         )
