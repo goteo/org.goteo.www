@@ -46,30 +46,26 @@ Integrated with searchStore for state management and URL synchronization
         }
     });
 
-    // Dropdown options
+    // Dropdown options - use translation keys for labels
     const timeOptions = [
-        { value: "all", label: "Cualquier momento", translationKey: "filters.time.all" },
-        { value: "week", label: "Última semana", translationKey: "filters.time.week" },
-        { value: "month", label: "Último mes", translationKey: "filters.time.month" },
-        { value: "year", label: "Último año", translationKey: "filters.time.year" },
+        { value: "all", translationKey: "filters.time.all" },
+        { value: "week", translationKey: "filters.time.week" },
+        { value: "month", translationKey: "filters.time.month" },
+        { value: "year", translationKey: "filters.time.year" },
     ];
 
     const statusOptions = [
-        { value: "all", label: "Todos los estados", translationKey: "filters.status.all" },
-        { value: "funding", label: "En financiación", translationKey: "filters.status.funding" },
-        { value: "successful", label: "Exitosas", translationKey: "filters.status.successful" },
-        { value: "completed", label: "Completadas", translationKey: "filters.status.completed" },
+        { value: "all", translationKey: "filters.status.all" },
+        { value: "funding", translationKey: "filters.status.funding" },
+        { value: "successful", translationKey: "filters.status.successful" },
+        { value: "completed", translationKey: "filters.status.completed" },
     ];
 
     const locationOptions = [
-        {
-            value: "all",
-            label: "Cualquier ubicación",
-            translationKey: "filters.locationOptions.all",
-        },
-        { value: "spain", label: "España", translationKey: "filters.locationOptions.spain" },
-        { value: "europe", label: "Europa", translationKey: "filters.locationOptions.europe" },
-        { value: "global", label: "Global", translationKey: "filters.locationOptions.global" },
+        { value: "all", translationKey: "filters.locationOptions.all" },
+        { value: "spain", translationKey: "filters.locationOptions.spain" },
+        { value: "europe", translationKey: "filters.locationOptions.europe" },
+        { value: "global", translationKey: "filters.locationOptions.global" },
     ];
 
     // Handle filter updates using searchStore

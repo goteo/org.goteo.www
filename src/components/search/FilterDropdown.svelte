@@ -10,7 +10,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 
     interface DropdownOption {
         value: string;
-        label: string;
+        label?: string;
         translationKey?: string;
     }
 
@@ -84,7 +84,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         if (selectedOption) {
             return selectedOption.translationKey
                 ? $t(selectedOption.translationKey)
-                : selectedOption.label;
+                : selectedOption.label || selectedOption.value;
         }
         return placeholder || $t("filters.selectOption");
     }
@@ -131,7 +131,9 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
                         aria-selected={selectedOption?.value === option.value}
                         data-testid={`${props["data-testid"] || "filter"}-option-${option.value}`}
                     >
-                        {option.translationKey ? $t(option.translationKey) : option.label}
+                        {option.translationKey
+                            ? $t(option.translationKey)
+                            : option.label || option.value}
                     </button>
                 {/each}
             </div>
