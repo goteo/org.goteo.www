@@ -128,7 +128,9 @@
   },
   "navigation": {
     "search": {
-      "placeholder": "Cerca la teva campanya"
+      "placeholder": "Cerca la teva campanya",
+      "label": "Cercar campanyes",
+      "clearSearch": "Esborrar cerca"
     },
     "categories": "Categories"
   },

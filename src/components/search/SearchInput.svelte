@@ -48,36 +48,29 @@ Implements main search bar with floating label matching Figma design exactly
     }
 </script>
 
-<!-- Figma design: Find input with floating label -->
+<!-- Search input with floating label -->
 <div
     class="relative flex h-14 w-full items-center justify-between rounded-[24px] border border-[#462949] bg-[#fbfbfb] p-4"
 >
-    <!-- Input text content -->
-    <div class="flex-1 font-['Karla'] text-base text-[#575757]">
-        <input
-            type="search"
-            bind:value={searchQuery}
-            oninput={handleInput}
-            onkeydown={handleKeydown}
-            class="w-full border-none bg-transparent font-['Karla'] text-base text-[#575757] outline-none placeholder:text-[#575757]"
-            placeholder=""
-            aria-label={$t("search.label")}
-            data-testid={dataTestId}
-            {...props}
-        />
-        {#if !searchQuery}
-            <div class="pointer-events-none absolute inset-0 flex items-center px-4 text-[#575757]">
-                {placeholder || $t("search.placeholder")}
-            </div>
-        {/if}
-    </div>
+    <!-- Input field -->
+    <input
+        type="search"
+        bind:value={searchQuery}
+        oninput={handleInput}
+        onkeydown={handleKeydown}
+        class="flex-1 border-none bg-transparent font-['Karla'] text-base text-[#575757] outline-none placeholder:text-[#575757]"
+        placeholder={placeholder || $t("search.placeholder")}
+        aria-label={$t("search.label")}
+        data-testid={dataTestId}
+        {...props}
+    />
 
     <!-- Close icon -->
     {#if searchQuery}
         <button
             onclick={clearSearch}
-            class="flex h-8 w-8 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-gray-100"
-            aria-label="Clear search"
+            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-gray-100"
+            aria-label={$t("search.clearSearch")}
         >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
@@ -91,7 +84,7 @@ Implements main search bar with floating label matching Figma design exactly
     {/if}
 
     <!-- Floating label -->
-    <div class="absolute -top-[4.5px] left-3 bg-[#fbfbfb] px-1">
+    <div class="pointer-events-none absolute -top-[4.5px] left-3 bg-[#fbfbfb] px-1">
         <div class="font-['Karla'] text-xs leading-4 font-medium text-[#3d3d3d]">
             {$t("search.label")}
         </div>

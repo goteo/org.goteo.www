@@ -141,6 +141,7 @@
     "showing_top_results": "Mostrando las {{count}} campañas más populares",
     "placeholder": "Buscar",
     "label": "Buscar campañas",
+    "clearSearch": "Limpiar búsqueda",
     "searchButton": "Buscar",
     "closeFilters": "Cerrar filtros",
     "showFilters": "Mostrar filtros",
