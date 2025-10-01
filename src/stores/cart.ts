@@ -77,9 +77,11 @@ function createCartStore() {
 
                 if (existingIndex >= 0) {
                     if (item.quantity === 0) {
-                        return { items: updatedItems.filter((_, index) => index !== existingIndex) };
+                        return {
+                            items: updatedItems.filter((_, index) => index !== existingIndex),
+                        };
                     }
-                    
+
                     updatedItems[existingIndex] = {
                         ...updatedItems[existingIndex],
                         quantity: item.quantity ?? 1,
@@ -89,7 +91,7 @@ function createCartStore() {
                     if (item.quantity === 0) {
                         return { items: updatedItems };
                     }
-                    
+
                     const position = updatedItems.length;
                     const { key } = generateKey({
                         title: item.title,
