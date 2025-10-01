@@ -177,7 +177,7 @@ if (projectIRIs.length > 0) {
                 console.error(`Error fetching project ${projectIRI}:`, error);
                 return null;
             }
-        })
+        }),
     ).then((results) => results.filter(Boolean) as Campaign[]);
 }
 
@@ -214,7 +214,7 @@ if (campaigns.length === 0) {
                     minimum: project.budget?.minimum?.money!,
                     obtained: accounting!.balance as ApiMoney,
                 };
-            })
+            }),
         );
     }
 }
