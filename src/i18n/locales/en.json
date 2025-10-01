@@ -372,6 +372,7 @@
     "userIntro": "Active member of the Goteo community",
     "organizationIntro": "Organization committed to social change",
     "bioSample": "With a trajectory dedicated to the crowdfunding and collective financing ecosystem, {{name}} has established themselves as a reference in creating collaborative projects and mobilizing resources. Their vision focuses on empowering initiatives that transform local realities, combining innovative strategies with a deep commitment to citizen participation and social equity.",
+    "noProjects": "No backed projects yet.",
     "donorType": {
       "fan": {
         "title": "Fan",

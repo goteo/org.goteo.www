@@ -480,5 +480,32 @@
       "foundation": "Fundació",
       "name": "Platoniq"
     }
+  },
+  "profile": {
+    "share": "Compartir",
+    "subscribe": "Subscriu-te",
+    "tabs": {
+      "about": "Sobre el perfil",
+      "projects": "Projectes impulsats",
+      "donorType": "Tipus de donant"
+    },
+    "notFound": "Usuari no trobat",
+    "location": "Ubicació",
+    "userIntro": "Membre actiu de la comunitat Goteo",
+    "organizationIntro": "Organització compromesa amb el canvi social",
+    "bioSample": "Amb una trajectòria dedicada a l'ecosistema de crowdfunding i finançament col·lectiu, {{name}} s'ha consolidat com un referent en la creació de projectes col·laboratius i la mobilització de recursos. La seva visió se centra en potenciar iniciatives que transformen realitats locals, combinant estratègies innovadores amb un profund compromís per la participació ciutadana i l'equitat social.",
+    "noProjects": "No hi ha projectes impulsats encara.",
+    "donorType": {
+      "fan": {
+        "title": "Fan",
+        "description": "Aquest donant ha invertit més de 25€",
+        "projectsDonated": "Projectes donats",
+        "moneyDonated": "Diners donats"
+      },
+      "nextLevel": {
+        "title": "Proper nivell",
+        "description": "Continua donant per pujar de nivell"
+      }
+    }
   }
 }
