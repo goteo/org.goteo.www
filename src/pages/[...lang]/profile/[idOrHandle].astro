@@ -177,7 +177,7 @@ if (projectIRIs.length > 0) {
                 console.error(`Error fetching project ${projectIRI}:`, error);
                 return null;
             }
-        }),
+        })
     ).then((results) => results.filter(Boolean) as Campaign[]);
 }
 
@@ -214,7 +214,7 @@ if (campaigns.length === 0) {
                     minimum: project.budget?.minimum?.money!,
                     obtained: accounting!.balance as ApiMoney,
                 };
-            }),
+            })
         );
     }
 }
@@ -298,12 +298,15 @@ const isActive = user?.active || false;
                 </div>
 
                 {/* Tab Content - Donor Type */}
-                <div data-tab-content="donorType" style="display: none;">
-                    <ProfileDonorType
-                        projectsDonated={projectsDonatedCount}
-                        moneyDonated={`${totalDonated.amount.toFixed(2).replace(".", ",")}€`}
-                        client:load
-                    />
+                <div data-tab-content="donorType" class="w-full" style="display: none;">
+                    <div class="mx-auto w-full max-w-[1200px] px-4">
+                        <ProfileDonorType
+                            projectsDonated={projectsDonatedCount}
+                            moneyDonatedAmount={totalDonated.amount}
+                            moneyDonatedCurrency={totalDonated.currency}
+                            client:load
+                        />
+                    </div>
                 </div>
             </div>
         )
