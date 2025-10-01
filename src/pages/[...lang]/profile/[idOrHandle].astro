@@ -8,8 +8,6 @@ import ProfileDonorType from "../../../components/profile/ProfileDonorType.svelt
 import { renderMarkdown } from "../../../utils/renderMarkdown";
 import {
     apiUsersIdGet,
-    apiUsersIdpersonGet,
-    apiUsersIdorganizationGet,
     apiProjectsGetCollection,
     apiProjectSupportsGetCollection,
     apiProjectSupportsmoneyTotalGetCollection,
@@ -17,7 +15,7 @@ import {
     type ApiMoney,
     type ProjectSupport,
 } from "../../../openapi/client";
-import type { User, Person, Organization } from "../../../openapi/client/types.gen";
+import type { User } from "../../../openapi/client/types.gen";
 import type { Campaign } from "../../../types/campaign";
 import { getLanguage } from "../../../middleware/utils";
 import { client } from "../../../openapi/client/client.gen";
@@ -31,8 +29,6 @@ if (!idOrHandle) {
 
 // Fetch user data
 let user: User | undefined;
-let person: Person | undefined;
-let organization: Organization | undefined;
 let errorMessage: string | undefined;
 
 try {
@@ -45,45 +41,13 @@ try {
     }
 
     user = userResponse.data;
-
-    // Fetch person details for individual users
-    if (user.type === "individual" && user.person) {
-        const personId = user.person.split("/").pop();
-        if (personId) {
-            const personResponse = await apiUsersIdpersonGet({
-                path: { id: personId },
-            });
-            if (!personResponse.error) {
-                person = personResponse.data;
-            }
-        }
-    }
-
-    // Fetch organization details for organization users
-    if (user.type === "organization" && user.organization) {
-        const orgId = user.organization.split("/").pop();
-        if (orgId) {
-            const orgResponse = await apiUsersIdorganizationGet({
-                path: { id: orgId },
-            });
-            if (!orgResponse.error) {
-                organization = orgResponse.data;
-            }
-        }
-    }
 } catch (error) {
     console.error("Error fetching user:", error);
     errorMessage = t("profile.notFound");
 }
 
 // Prepare profile data with proper fallbacks
-const displayName =
-    user?.displayName ||
-    (person ? `${person.firstName || ""} ${person.lastName || ""}`.trim() : "") ||
-    organization?.businessName ||
-    organization?.legalName ||
-    user?.handle ||
-    "User";
+const displayName = user?.displayName || user?.handle || "User";
 
 // Location - API doesn't have location field yet, using placeholder
 // TODO: Add location field to Person/Organization in API
@@ -235,11 +199,6 @@ const socialLinks = user
 // Images with fallbacks
 const coverImage = undefined; // API doesn't provide cover image, use default
 const avatarImage = user?.avatar || undefined; // Use user avatar or default placeholder
-
-// User stats
-const projectCount = user?.projects?.length || 0;
-const isVerified = user?.emailConfirmed || false;
-const isActive = user?.active || false;
 ---
 
 <Layout
@@ -250,7 +209,7 @@ const isActive = user?.active || false;
     {
         errorMessage ? (
             <div class="flex min-h-screen items-center justify-center">
-                <p class="text-xl text-[#575757]">{errorMessage}</p>
+                <p class="text-secondary text-xl">{errorMessage}</p>
             </div>
         ) : (
             <div class="flex w-full flex-col items-center gap-10">
@@ -275,7 +234,7 @@ const isActive = user?.active || false;
                     {bio && (
                         <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
                             <div
-                                class="prose prose-base font-['Karla'] leading-6 text-[#575757]"
+                                class="prose prose-base text-secondary leading-6"
                                 set:html={renderMarkdown(bio)}
                             />
                         </div>
@@ -290,9 +249,7 @@ const isActive = user?.active || false;
                         </div>
                     ) : (
                         <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
-                            <p class="font-['Karla'] text-base text-[#575757]">
-                                No hay proyectos impulsados aún.
-                            </p>
+                            <p class="text-secondary text-base">{t("profile.noProjects")}</p>
                         </div>
                     )}
                 </div>
