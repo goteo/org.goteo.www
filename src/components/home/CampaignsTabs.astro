@@ -1,10 +1,8 @@
 ---
 import CampaignCard from "./CampaignCard.astro";
 import Carousel from "../Carousel.svelte";
+import CampaignsTabsNav from "./CampaignsTabsNav.svelte";
 import type { Campaign } from "../../types/campaign";
-import ClockIcon from "../../svgs/ClockIcon.svelte";
-import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
-import FlashIcon from "../../svgs/FlashIcon.astro";
 import {
     apiProjectsGetCollection,
     type Accounting,
@@ -61,42 +59,9 @@ const displayCampaigns = campaigns.slice(0, 4); // Show first 4 campaigns
         <h2 class="text-2xl font-bold text-black">{t("home.campaigns.tabsTitle")}</h2>
     </div>
 
-    <!-- Tab Navigation -->
-    <div class="mx-auto flex items-center justify-between">
-        <div class="flex items-center gap-0">
-            <!-- Active Tab: Acaban pronto -->
-            <button
-                class="border-primary flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
-                data-tab="ending-soon"
-            >
-                <FlashIcon width="16" height="16" class="h-4 w-4" />
-                <span class="text-tertiary text-base font-bold"
-                    >{t("home.campaigns.tabs.mostSuccessful")}</span
-                >
-            </button>
-
-            <!-- Inactive Tab: Más exitosas -->
-            <!-- <button
-                class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
-                data-tab="most-successful"
-            >
-                <FlashIcon width="16" height="16" class="h-4 w-4" />
-                <span class="text-secondary text-base font-bold"
-                    >{t("home.campaigns.tabs.mostSuccessful")}</span
-                >
-            </button> -->
-
-            <!-- Inactive Tab: Con Matchfunding -->
-            <!-- <button
-                class="border-purple-tint flex items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 transition-all duration-200"
-                data-tab="matchfunding"
-            >
-                <MatchFundingIcon width="16" height="16" class="h-4 w-4" />
-                <span class="text-secondary text-base font-bold">
-                    {t("home.campaigns.tabs.withMatchfunding")}
-                </span>
-            </button> -->
-        </div>
+    <!-- Tab Navigation using shared Tabs component -->
+    <div class="mx-auto">
+        <CampaignsTabsNav client:load />
     </div>
 
     <!-- Campaigns Carousel -->
@@ -106,32 +71,3 @@ const displayCampaigns = campaigns.slice(0, 4); // Show first 4 campaigns
         </Carousel>
     </div>
 </section>
-
-<script>
-    // Tab switching functionality
-    const tabs = document.querySelectorAll("[data-tab]") as NodeListOf<HTMLButtonElement>;
-
-    tabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-            // Remove active state from all tabs
-            tabs.forEach((t) => {
-                t.classList.remove("border-primary");
-                t.classList.add("border-purple-tint");
-                const span = t.querySelector("span");
-                if (span) span.classList.remove("text-tertiary");
-                if (span) span.classList.add("text-secondary");
-            });
-
-            // Add active state to clicked tab
-            tab.classList.add("border-primary");
-            tab.classList.remove("border-purple-tint");
-            const span = tab.querySelector("span");
-            if (span) span.classList.add("text-tertiary");
-            if (span) span.classList.remove("text-secondary");
-
-            // Here you would typically fetch/filter campaigns based on the selected tab
-            const tabType = tab.getAttribute("data-tab");
-            console.log("Selected tab:", tabType);
-        });
-    });
-</script>

@@ -2,7 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
-import ProfileTabs from "../../../components/profile/ProfileTabs.svelte";
+import Tabs from "../../../components/Tabs.svelte";
 import ProfileProjectsList from "../../../components/profile/ProfileProjectsList.astro";
 import ProfileDonorType from "../../../components/profile/ProfileDonorType.svelte";
 import { renderMarkdown } from "../../../utils/renderMarkdown";
@@ -267,7 +267,7 @@ const isActive = user?.active || false;
 
                 {/* Tabs Navigation */}
                 <div class="mt-8 w-full">
-                    <ProfileTabs tabs={tabs} client:load />
+                    <Tabs tabs={tabs} client:load />
                 </div>
 
                 {/* Tab Content - About */}

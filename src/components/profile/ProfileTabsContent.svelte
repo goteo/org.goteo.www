@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import ProfileTabs from "./ProfileTabs.svelte";
+    import Tabs from "../Tabs.svelte";
     import ProfileDonorType from "./ProfileDonorType.svelte";
 
     interface Tab {
@@ -28,7 +28,7 @@
 <div class="w-full">
     <!-- Tabs Navigation -->
     <div class="mt-8">
-        <ProfileTabs {tabs} {activeTab} onTabChange={handleTabChange} />
+        <Tabs {tabs} {activeTab} onTabChange={handleTabChange} />
     </div>
 
     <!-- Tab Content -->
