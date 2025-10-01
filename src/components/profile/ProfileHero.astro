@@ -18,25 +18,16 @@ const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font
 <div class="relative h-[400px] w-full">
     <!-- Cover Image -->
     <div class="absolute inset-0 overflow-hidden">
-        <img
-            src={coverImage || defaultCover}
-            alt="Profile cover"
-            class="size-full object-cover"
-        />
+        <img src={coverImage || defaultCover} alt="Profile cover" class="size-full object-cover" />
     </div>
 
     <!-- Action Buttons -->
-    <div class="absolute right-10 top-1/2 flex translate-y-[-50%] gap-3">
+    <div class="absolute top-1/2 right-10 flex translate-y-[-50%] gap-3">
         <!-- Share Button -->
         <button
             class="flex items-center gap-2 rounded-3xl bg-[#e6e5f7] px-6 py-4 font-['Karla'] font-bold text-[#462949] transition hover:bg-[#d5d4e6]"
         >
-            <svg
-                class="size-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-            >
+            <svg class="size-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -59,7 +50,7 @@ const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font
 
     <!-- Avatar (positioned to overlap) -->
     <div
-        class="absolute left-1/2 top-full flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+        class="absolute top-full left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
     >
         <div class="relative">
             <img
@@ -68,9 +59,7 @@ const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font
                 class="size-[204px] rounded-2xl object-cover shadow-lg"
             />
             <!-- Badge Overlay -->
-            <div
-                class="absolute left-1/2 top-full size-14 -translate-x-1/2 -translate-y-1/2"
-            >
+            <div class="absolute top-full left-1/2 size-14 -translate-x-1/2 -translate-y-1/2">
                 <VerifiedBadge />
             </div>
         </div>

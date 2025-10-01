@@ -3,14 +3,21 @@ import Layout from "../../../layouts/Layout.astro";
 import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
 import ProfileTabs from "../../../components/profile/ProfileTabs.svelte";
-import ProfileBio from "../../../components/profile/ProfileBio.astro";
+import ProfileProjectsList from "../../../components/profile/ProfileProjectsList.astro";
+import ProfileDonorType from "../../../components/profile/ProfileDonorType.svelte";
+import { renderMarkdown } from "../../../utils/renderMarkdown";
 import {
     apiUsersIdGet,
     apiUsersIdpersonGet,
     apiUsersIdorganizationGet,
+    apiProjectsGetCollection,
+    type Accounting,
+    type ApiMoney,
 } from "../../../openapi/client";
-
 import type { User, Person, Organization } from "../../../openapi/client/types.gen";
+import type { Campaign } from "../../../types/campaign";
+import { getLanguage } from "../../../middleware/utils";
+import { client } from "../../../openapi/client/client.gen";
 
 const { idOrHandle } = Astro.params;
 const { t } = Astro.locals;
@@ -94,6 +101,41 @@ const tabs = [
     { id: "donorType", label: t("profile.tabs.donorType") },
 ];
 
+// Fetch sample projects for the user
+// In production, this would filter by user's backed projects
+const chosenProjects = {
+    "impulsa-la-cooperativa-de-informacion-climatica": "",
+    "fons-cooperatiu-front-l-emergencia-social-i-sanita": "",
+};
+
+const { data: projects } = await apiProjectsGetCollection({
+    query: {
+        "slug[]": Object.keys(chosenProjects),
+    },
+    headers: {
+        "Accept-Language": getLanguage(Astro),
+    },
+});
+
+const campaigns: Campaign[] = await Promise.all(
+    (projects || []).map(async (project) => {
+        const { data: accounting } = (await client.get({
+            url: client.buildUrl({ url: project.accounting! }),
+        })) as { data: Accounting };
+
+        return {
+            size: "small",
+            id: project.slug!,
+            title: project.title!,
+            image:
+                chosenProjects[project.slug! as keyof typeof chosenProjects] ||
+                project.video?.thumbnail!,
+            minimum: project.budget?.minimum?.money!,
+            obtained: accounting!.balance as ApiMoney,
+        };
+    }),
+);
+
 // Social links - would come from user.socialMedia or similar field
 // API doesn't seem to have social media fields yet, using sample data
 const socialLinks = user
@@ -144,8 +186,37 @@ const isActive = user?.active || false;
                     <ProfileTabs tabs={tabs} client:load />
                 </div>
 
-                {/* Bio Section */}
-                <ProfileBio bio={bio} />
+                {/* Tab Content - About */}
+                <div data-tab-content="about">
+                    {bio && (
+                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
+                            <div
+                                class="prose prose-base font-['Karla'] leading-6 text-[#575757]"
+                                set:html={renderMarkdown(bio)}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {/* Tab Content - Projects */}
+                <div data-tab-content="projects" style="display: none;">
+                    {campaigns.length > 0 ? (
+                        <div class="mx-auto mt-10 w-full max-w-[1200px] px-4">
+                            <ProfileProjectsList campaigns={campaigns} />
+                        </div>
+                    ) : (
+                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
+                            <p class="font-['Karla'] text-base text-[#575757]">
+                                No hay proyectos impulsados aún.
+                            </p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Tab Content - Donor Type */}
+                <div data-tab-content="donorType" style="display: none;">
+                    <ProfileDonorType projectsDonated={1} moneyDonated="5,00€" client:load />
+                </div>
             </div>
         )
     }

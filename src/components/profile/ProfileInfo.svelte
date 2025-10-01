@@ -63,19 +63,14 @@
 
 <div class="mt-32 flex w-full flex-col items-center gap-4">
     <!-- Name -->
-    <h1 class="font-['Karla'] text-2xl font-bold leading-8 text-black">
+    <h1 class="font-['Karla'] text-2xl leading-8 font-bold text-black">
         {displayName}
     </h1>
 
     <!-- Location -->
     {#if location}
         <div class="flex items-center gap-1">
-            <svg
-                class="size-8 text-black"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 32 32"
-            >
+            <svg class="size-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 32 32">
                 <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -88,7 +83,8 @@
                     r="2.667"
                     stroke-linecap="round"
                     stroke-linejoin="round"
-                    stroke-width="2"></circle>
+                    stroke-width="2"
+                ></circle>
             </svg>
             <span class="font-['Karla'] text-base leading-6 text-black">
                 {location}

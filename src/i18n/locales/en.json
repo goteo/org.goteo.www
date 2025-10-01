@@ -371,6 +371,18 @@
     "location": "Location",
     "userIntro": "Active member of the Goteo community",
     "organizationIntro": "Organization committed to social change",
-    "bioSample": "With a trajectory dedicated to the crowdfunding and collective financing ecosystem, {{name}} has established themselves as a reference in creating collaborative projects and mobilizing resources. Their vision focuses on empowering initiatives that transform local realities, combining innovative strategies with a deep commitment to citizen participation and social equity."
+    "bioSample": "With a trajectory dedicated to the crowdfunding and collective financing ecosystem, {{name}} has established themselves as a reference in creating collaborative projects and mobilizing resources. Their vision focuses on empowering initiatives that transform local realities, combining innovative strategies with a deep commitment to citizen participation and social equity.",
+    "donorType": {
+      "fan": {
+        "title": "Fan",
+        "description": "This donor has invested more than 25€",
+        "projectsDonated": "Projects donated",
+        "moneyDonated": "Money donated"
+      },
+      "nextLevel": {
+        "title": "Next level",
+        "description": "Keep donating to level up"
+      }
+    }
   }
 }

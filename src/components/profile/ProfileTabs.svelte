@@ -17,6 +17,19 @@
 
     function handleTabClick(tabId: string) {
         currentTab = tabId;
+
+        // Hide all tab content
+        const allTabContent = document.querySelectorAll("[data-tab-content]");
+        allTabContent.forEach((content) => {
+            (content as HTMLElement).style.display = "none";
+        });
+
+        // Show selected tab content
+        const selectedContent = document.querySelector(`[data-tab-content="${tabId}"]`);
+        if (selectedContent) {
+            (selectedContent as HTMLElement).style.display = "block";
+        }
+
         if (onTabChange) {
             onTabChange(tabId);
         }
@@ -38,7 +51,7 @@
                         <svelte:component this={tab.icon} />
                     </div>
                 {/if}
-                <span class="font-['Karla'] text-base font-bold leading-6">
+                <span class="font-['Karla'] text-base leading-6 font-bold">
                     {tab.label}
                 </span>
             </button>
