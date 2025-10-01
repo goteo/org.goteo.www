@@ -72,7 +72,12 @@ jobs:
                   nohup pnpm preview:ci > preview.log 2>&1 &
 
             - name: Wait for server
-              run: pnpm wait-on http://localhost:4321
+              run: |
+                  pnpm wait-on http://localhost:4321
+                  # Additional wait to ensure server is fully ready
+                  sleep 5
+                  # Verify server is responding correctly
+                  curl -f http://localhost:4321 || (echo "Server health check failed" && cat preview.log && exit 1)
 
             - name: Run Cypress tests
               run: |
@@ -86,6 +91,15 @@ jobs:
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
+
+            - name: Debug server logs if tests failed
+              if: failure()
+              run: |
+                  echo "=== Preview Server Logs ==="
+                  cat preview.log || echo "No preview.log found"
+                  echo ""
+                  echo "=== Server Status Check ==="
+                  curl -v http://localhost:4321 || echo "Server not responding"
 
             - name: Prepare artifact directories if tests failed
               if: failure()
