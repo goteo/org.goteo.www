@@ -15,31 +15,24 @@
 
 <div class="px-6">
     <div class="relative">
-        <div
-            class="w-full rounded-full"
-            style="height: 16px; background: var(--Variant-1, #E6E5F7);"
-        ></div>
-        <div
-            class="absolute top-0 left-0 rounded-full transition-all duration-500"
-            style="width: {((step - 1) / 3) *
-                100}%; height: 16px; background: var(--Primary, #59E9D3);"
-        ></div>
+        <div class="w-full rounded-full h-4 bg-purple-tint"></div>
 
         <div
-            class="absolute top-1/2 flex w-full -translate-y-1/2 items-center justify-between px-1"
-        >
+            class="absolute top-0 left-0 rounded-full transition-all duration-500 h-4 bg-primary"
+            style="width: {((step - 1) / 3) * 100}%;"
+        ></div>
+
+        <div class="absolute top-1/2 flex w-full -translate-y-1/2 items-center justify-between px-1">
             {#each [1, 2, 3, 4] as i}
                 <div
-                    class="relative z-10 h-6 w-6 rounded-full border-2 bg-white transition-all duration-300"
-                    class:border-gray-300={i > step}
-                    style={i <= step
-                        ? "background: var(--Primary, #462949); border-color: var(--Primary, #462949);"
-                        : ""}
+                    class="relative z-10 h-4 w-4 rounded-full border-2 transition-all duration-300 flex items-center justify-center"
+                    class:bg-tertiary={i <= step}
+                    class:bg-purple-tint={i > step}
+                    class:border-primary={i <= step}
+                    class:border-black={i > step}
                 >
                     {#if i <= step}
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="h-2 w-2 rounded-full bg-white"></div>
-                        </div>
+                        <div class="h-1.5 w-1.5 rounded-full bg-tertiary"></div>
                     {/if}
                 </div>
             {/each}
@@ -53,12 +46,9 @@
                     step === index + 1 && hasError
                         ? "text-black"
                         : step >= index + 1
-                          ? ""
+                          ? "text-black"
                           : "text-gray-400"
                 }`}
-                style={step >= index + 1 && !(step === index + 1 && hasError)
-                    ? "color: black;"
-                    : ""}
             >
                 {#if step === index + 1 && hasError}
                     <WarningIcon className="w-4 h-4" />
