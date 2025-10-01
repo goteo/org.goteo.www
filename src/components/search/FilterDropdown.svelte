@@ -20,6 +20,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         selectedValue?: string;
         onSelect?: (value: string) => void;
         label?: string;
+        id?: string;
     }
 
     let {
@@ -28,6 +29,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         selectedValue = "",
         onSelect,
         label = "",
+        id: customId,
         class: className = "",
         ...props
     }: Props = $props();
@@ -43,7 +45,20 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
     });
 
     // Generate unique ID for accessibility
-    const dropdownId = Math.random().toString(36).substring(2, 15);
+    // Use custom ID if provided, otherwise hash the options set for collision-free ID
+    const dropdownId = customId || hashOptions(options);
+
+    function hashOptions(opts: DropdownOption[]): string {
+        // Create a stable hash from the options array
+        const optionsString = opts.map((opt) => `${opt.value}:${opt.label}`).join("|");
+        let hash = 0;
+        for (let i = 0; i < optionsString.length; i++) {
+            const char = optionsString.charCodeAt(i);
+            hash = (hash << 5) - hash + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return `dropdown-${Math.abs(hash).toString(36)}`;
+    }
 
     function toggleDropdown() {
         isOpen = !isOpen;
@@ -77,13 +92,13 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 
 <div class="relative w-full">
     {#if label}
-        <label for="dropdown-{dropdownId}" class="mb-2 block text-sm font-medium text-[#462949]">
+        <label for={dropdownId} class="mb-2 block text-sm font-medium text-[#462949]">
             {label}
         </label>
     {/if}
 
     <button
-        id="dropdown-{dropdownId}"
+        id={dropdownId}
         type="button"
         onclick={toggleDropdown}
         onkeydown={handleKeydown}
