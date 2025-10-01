@@ -172,7 +172,14 @@
       "clear": "Clear filters"
     },
     "errors": {
-      "searchFailed": "Could not perform search. Please try again."
+      "searchFailed": "Could not perform search. Please try again.",
+      "api": {
+        "invalidToken": "Authentication failed. Please check your credentials.",
+        "expiredToken": "Your session has expired. Please log in again.",
+        "missingToken": "Authentication required. Please log in.",
+        "networkError": "Connection error. Check your internet connection.",
+        "serverError": "Server error. Please try again later."
+      }
     },
     "empty": {
       "title": "No campaigns found",

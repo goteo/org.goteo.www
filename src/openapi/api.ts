@@ -13,13 +13,15 @@ export enum AuthErrorType {
 
 export interface AuthError {
     type: AuthErrorType;
-    message: string;
+    status?: number;
     originalError?: Error;
     shouldRetry?: boolean;
 }
 
 /**
- * Creates authentication error from various error sources
+ * Creates authentication error from various error sources.
+ * Note: This is an API-layer utility. Components should map the error type
+ * to user-facing translated messages using the i18n system.
  */
 export function createAuthError(error: unknown): AuthError {
     if (error instanceof Response) {
@@ -27,25 +29,25 @@ export function createAuthError(error: unknown): AuthError {
             case 401:
                 return {
                     type: AuthErrorType.INVALID_TOKEN,
-                    message: "Authentication failed. Please check your credentials.",
+                    status: error.status,
                     shouldRetry: false,
                 };
             case 403:
                 return {
                     type: AuthErrorType.EXPIRED_TOKEN,
-                    message: "Authentication token has expired. Please refresh your session.",
+                    status: error.status,
                     shouldRetry: true,
                 };
             case 0:
                 return {
                     type: AuthErrorType.NETWORK_ERROR,
-                    message: "Network connection failed. Please check your internet connection.",
+                    status: error.status,
                     shouldRetry: true,
                 };
             default:
                 return {
                     type: AuthErrorType.SERVER_ERROR,
-                    message: `Server error (${error.status}). Please try again later.`,
+                    status: error.status,
                     shouldRetry: true,
                 };
         }
@@ -55,7 +57,6 @@ export function createAuthError(error: unknown): AuthError {
         if (error.name === "AbortError") {
             return {
                 type: AuthErrorType.NETWORK_ERROR,
-                message: "Request was cancelled.",
                 originalError: error,
                 shouldRetry: false,
             };
@@ -64,7 +65,6 @@ export function createAuthError(error: unknown): AuthError {
         if (error.message.includes("fetch")) {
             return {
                 type: AuthErrorType.NETWORK_ERROR,
-                message: "Network connection failed. Please check your internet connection.",
                 originalError: error,
                 shouldRetry: true,
             };
@@ -73,10 +73,25 @@ export function createAuthError(error: unknown): AuthError {
 
     return {
         type: AuthErrorType.SERVER_ERROR,
-        message: "An unexpected error occurred. Please try again.",
         originalError: error instanceof Error ? error : new Error(String(error)),
         shouldRetry: true,
     };
+}
+
+/**
+ * Get translation key for error type.
+ * Components should use this with their i18n system to display user-facing messages.
+ * Example: const message = t(getErrorTranslationKey(error.type));
+ */
+export function getErrorTranslationKey(errorType: AuthErrorType): string {
+    const keyMap: Record<AuthErrorType, string> = {
+        [AuthErrorType.INVALID_TOKEN]: "errors.api.invalidToken",
+        [AuthErrorType.EXPIRED_TOKEN]: "errors.api.expiredToken",
+        [AuthErrorType.MISSING_TOKEN]: "errors.api.missingToken",
+        [AuthErrorType.NETWORK_ERROR]: "errors.api.networkError",
+        [AuthErrorType.SERVER_ERROR]: "errors.api.serverError",
+    };
+    return keyMap[errorType];
 }
 
 /**
