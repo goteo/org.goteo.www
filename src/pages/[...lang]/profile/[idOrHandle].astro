@@ -49,18 +49,13 @@ try {
 // Prepare profile data with proper fallbacks
 const displayName = user?.displayName || user?.handle || "User";
 
-// Location - API doesn't have location field yet, using placeholder
+// Location - API doesn't have location field yet
 // TODO: Add location field to Person/Organization in API
-const location = "Barcelona, Catalunya";
+const location = undefined;
 
-// Bio - API doesn't have bio/description field yet, using generated sample
+// Bio - API doesn't have bio/description field yet
 // TODO: Add bio/description field to User in API
-const bio =
-    user && displayName !== "User"
-        ? `${displayName}: ${user.type === "organization" ? t("profile.organizationIntro") : t("profile.userIntro")}
-
-${t("profile.bioSample", { name: displayName })}`
-        : undefined;
+const bio = undefined;
 
 const tabs = [
     { id: "about", label: t("profile.tabs.about") },
@@ -73,12 +68,13 @@ let userSupports: ProjectSupport[] = [];
 let totalDonated: { amount: number; currency: string } = { amount: 0, currency: "EUR" };
 let projectsDonatedCount = 0;
 
-if (user?.accounting) {
+// Users are guaranteed to have an accounting resource
+if (user) {
     try {
         // Get all project supports for this user
         const { data: supports } = await apiProjectSupportsGetCollection({
             query: {
-                origin: user.accounting,
+                origin: user.accounting!,
             },
         });
 
@@ -89,7 +85,7 @@ if (user?.accounting) {
             // Get total money donated
             const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
                 query: {
-                    origin: user.accounting,
+                    origin: user.accounting!,
                 },
             });
 
@@ -145,50 +141,13 @@ if (projectIRIs.length > 0) {
     ).then((results) => results.filter(Boolean) as Campaign[]);
 }
 
-// Fallback to sample projects if user has no supports (for demo purposes)
-if (campaigns.length === 0) {
-    const chosenProjects = {
-        "impulsa-la-cooperativa-de-informacion-climatica": "",
-        "fons-cooperatiu-front-l-emergencia-social-i-sanita": "",
-    };
-
-    const { data: fallbackProjects } = await apiProjectsGetCollection({
-        query: {
-            "slug[]": Object.keys(chosenProjects),
-        },
-        headers: {
-            "Accept-Language": getLanguage(Astro),
-        },
-    });
-
-    if (fallbackProjects) {
-        campaigns = await Promise.all(
-            fallbackProjects.map(async (project) => {
-                const { data: accounting } = (await client.get({
-                    url: client.buildUrl({ url: project.accounting! }),
-                })) as { data: Accounting };
-
-                return {
-                    size: "small",
-                    id: project.slug!,
-                    title: project.title!,
-                    image:
-                        chosenProjects[project.slug! as keyof typeof chosenProjects] ||
-                        project.video?.thumbnail!,
-                    minimum: project.budget?.minimum?.money!,
-                    obtained: accounting!.balance as ApiMoney,
-                };
-            }),
-        );
-    }
-}
-
 // Social links - would come from user.socialMedia or similar field
-// API doesn't seem to have social media fields yet, using sample data
+// API doesn't have social media fields yet
+// TODO: Add social media fields to User in API
 const socialLinks = user
     ? {
-          twitter: `https://twitter.com/${user.handle}`,
-          instagram: `https://instagram.com/${user.handle}`,
+          twitter: undefined,
+          instagram: undefined,
           facebook: undefined,
           linkedin: undefined,
           email: user.email ? `mailto:${user.email}` : undefined,
