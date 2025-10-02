@@ -1,0 +1,19 @@
+---
+const { t } = Astro.locals;
+---
+
+<button
+    onclick="history.back()"
+    class="group flex w-fit cursor-pointer items-center gap-2 text-[#575757] transition-colors duration-200 hover:text-[#3D3D3D]"
+>
+    <svg
+        class="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-1"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+    >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"
+        ></path>
+    </svg>
+    <span class="font-medium">{t("global.btn.back")}</span>
+</button>

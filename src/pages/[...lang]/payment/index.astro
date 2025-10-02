@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
+import BackButton from "../../../components/BackButton.astro";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
 import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
 
@@ -31,24 +32,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
     <main class="wrapper">
         <div class="flex flex-row gap-8 py-10">
             <div class="flex w-1/2 flex-col gap-10">
-                <button
-                    onclick="history.back()"
-                    class="group flex w-fit cursor-pointer items-center gap-2 text-[#575757] transition-colors duration-200 hover:text-[#3D3D3D]"
-                >
-                    <svg
-                        class="h-5 w-5 transition-transform duration-200 group-hover:-translate-x-1"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                    <span class="font-medium">{t("global.btn.back")}</span>
-                </button>
+                <BackButton />
 
                 <div class="flex flex-col gap-4">
                     <div class="flex flex-col gap-10">
