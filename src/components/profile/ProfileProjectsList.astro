@@ -1,0 +1,15 @@
+---
+import type { Campaign } from "../../types/campaign";
+import CampaignCard from "../home/CampaignCard.astro";
+
+export interface Props {
+    campaigns: Campaign[];
+}
+
+const { campaigns } = Astro.props;
+const { t } = Astro.locals;
+---
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+    {campaigns.map((campaign) => <CampaignCard size="small" campaign={campaign} />)}
+</div>
