@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
+import BackButton from "../../../components/BackButton.astro";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
 import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
 
@@ -31,6 +32,8 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
     <main class="wrapper">
         <div class="flex flex-row gap-8 py-10">
             <div class="flex w-1/2 flex-col gap-10">
+                <BackButton />
+
                 <div class="flex flex-col gap-4">
                     <div class="flex flex-col gap-10">
                         <div class="flex flex-col gap-4">
