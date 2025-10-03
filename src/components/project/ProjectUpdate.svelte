@@ -9,6 +9,7 @@
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import Button from "../library/Button.svelte";
 
     let {
         lang = $bindable(),
@@ -141,15 +142,15 @@
                     </div>
                 </div>
                 <div class="flex w-full items-center justify-end">
-                    <button
-                        class="text-tertiary border-tertiary flex w-full cursor-pointer justify-center truncate rounded-3xl border px-6 py-4 whitespace-nowrap lg:max-w-max"
+                    <Button
+                        kind="ghost"
                         onclick={() => {
                             selected = update;
                             openModal = true;
                         }}
                     >
                         {$t("project.tabs.updates.content.btn.read-more")}
-                    </button>
+                    </Button>
                 </div>
             </div>
         {/each}
@@ -177,12 +178,10 @@
             </div>
 
             <div class="flex w-full justify-end">
-                <button
-                    class="bg-primary flex cursor-pointer flex-row gap-2 rounded-3xl px-6 py-4 font-bold text-[#462949]"
-                >
+                <Button>
                     <ShareIcon />
                     {$t("project.tabs.updates.content.btn.share")}
-                </button>
+                </Button>
             </div>
         {/if}
     </Modal>
