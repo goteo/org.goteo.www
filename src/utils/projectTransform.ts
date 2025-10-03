@@ -1,55 +1,31 @@
+import type { ApiMoney } from "../openapi/client";
 import type { Project } from "../openapi/client/types.gen";
 import type { Campaign } from "../types/campaign";
 
 /**
- * Transform API Project to Campaign format for display components
+ * Transform API Project to Campaign format for search results
+ * Follows the same pattern as home page components
  */
 export function transformProjectToCampaign(project: Project): Campaign {
     // Use safe property access for extended project properties
     const projectAny = project as any;
 
-    // Get raised amount from accounting
-    const obtainedAmount = projectAny.accounting?.balance?.amount ?? 0;
-    const obtainedCurrency = projectAny.accounting?.balance?.currency ?? "EUR";
+    // Get image URL - simple fallback to video thumbnail
+    const image = projectAny.cover || project.video?.thumbnail || "";
 
     // Get minimum budget
-    const minimumAmount = project.budget?.minimum?.money?.amount ?? 0;
-    const minimumCurrency = project.budget?.minimum?.money?.currency ?? "EUR";
+    const minimum: ApiMoney = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
 
-    // Determine size based on budget (over 50,000€ = 5,000,000 cents)
-    const size = minimumAmount >= 5000000 ? "large" : "small";
-
-    // Check for matchfunding
-    const hasMatchfunding =
-        projectAny.matchCallSubmissions &&
-        Array.isArray(projectAny.matchCallSubmissions) &&
-        projectAny.matchCallSubmissions.some((s: any) => s?.status === "accepted");
-
-    // Get image URL
-    let image = "https://placehold.co/400x300/4A90E2/FFFFFF/png?text=Project";
-    if (projectAny.cover) {
-        image = projectAny.cover;
-    } else if (projectAny.video?.thumbnail) {
-        image = projectAny.video.thumbnail;
-    } else if (project.title) {
-        const encodedTitle = encodeURIComponent(project.title);
-        image = `https://placehold.co/400x300/4A90E2/FFFFFF/png?text=${encodedTitle}`;
-    }
+    // Get raised amount from accounting
+    const obtained: ApiMoney = projectAny.accounting?.balance || { amount: 0, currency: "EUR" };
 
     return {
         id: project.slug || String(project.id || "unknown"),
         title: project.title || "",
         image,
-        obtained: {
-            amount: obtainedAmount,
-            currency: obtainedCurrency,
-        },
-        minimum: {
-            amount: minimumAmount,
-            currency: minimumCurrency,
-        },
-        hasMatchfunding,
-        size,
+        obtained,
+        minimum,
+        size: "small",
     };
 }
 
