@@ -5,6 +5,7 @@ import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
 import Logout from "./Logout.astro";
 import UiLanguages from "./UiLanguages.astro";
+import HeaderButtons from "./HeaderButtons.svelte";
 
 const { t } = Astro.locals;
 
@@ -20,7 +21,10 @@ if (accessToken) {
     <div
         class="mx-auto flex max-w-[1440px] items-center justify-between rounded-xl border-1 border-[#f3f3f3] bg-[#fbfbfb80] px-4 py-6 backdrop-blur-xl"
     >
-        <a href="/" class="flex-shrink-0"><Logo /></a>
+        <div class="flex items-center gap-4">
+            <a href="/" class="flex-shrink-0"><Logo /></a>
+            <HeaderButtons client:load />
+        </div>
         <nav>
             <ul class="flex items-center gap-2 md:gap-4">
                 {
