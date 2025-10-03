@@ -2,37 +2,26 @@ import { writable, derived, get } from "svelte/store";
 
 import { projectsService } from "../services/projectsService";
 
-import type { Campaign } from "../types/campaign";
-
-// Extended Campaign interface for search functionality
-export interface SearchableCampaign extends Campaign {
-    description?: string;
-    location?: string;
-    status?: "active" | "funded" | "expired";
-    category?: string;
-    createdDate?: string;
-}
+import type { Project } from "../openapi/client/types.gen";
 
 export interface SearchFilters {
     query: string;
-    timeFilter: string;
     statusFilter: string;
-    locationFilter: string;
     categories: string[];
 }
 
 export interface SearchState {
     filters: SearchFilters;
-    results: SearchableCampaign[];
+    results: Project[];
     isLoading: boolean;
     hasError: boolean;
     errorMessage: string;
     totalCount: number;
     hasSearched: boolean;
     lastSearchTime: number;
-    // API-specific state
+    // Pagination state
     currentPage: number;
-    totalPages: number;
+    itemsPerPage: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
     currentAbortController?: AbortController;
@@ -46,9 +35,7 @@ function getInitialState(): SearchState {
     return {
         filters: {
             query: "",
-            timeFilter: "",
             statusFilter: "",
-            locationFilter: "",
             categories: [],
         },
         results: [],
@@ -58,9 +45,9 @@ function getInitialState(): SearchState {
         totalCount: 0,
         hasSearched: false,
         lastSearchTime: 0,
-        // API-specific state
+        // Pagination state
         currentPage: 1,
-        totalPages: 1,
+        itemsPerPage: 20,
         hasNextPage: false,
         hasPrevPage: false,
         currentAbortController: undefined,
@@ -76,9 +63,7 @@ function loadInitialState(): SearchState {
 
     // Initialize filters from URL parameters
     state.filters.query = urlParams.get("q") || "";
-    state.filters.timeFilter = urlParams.get("time") || "";
     state.filters.statusFilter = urlParams.get("status") || "";
-    state.filters.locationFilter = urlParams.get("location") || "";
 
     const categories = urlParams.get("categories");
     if (categories) {
@@ -87,11 +72,7 @@ function loadInitialState(): SearchState {
 
     // If we have URL parameters, mark as having searched
     const hasUrlFilters =
-        state.filters.query ||
-        state.filters.timeFilter ||
-        state.filters.statusFilter ||
-        state.filters.locationFilter ||
-        state.filters.categories.length > 0;
+        state.filters.query || state.filters.statusFilter || state.filters.categories.length > 0;
 
     if (hasUrlFilters) {
         state.hasSearched = true;
@@ -124,21 +105,27 @@ function createSearchStore() {
                 currentAbortController: abortController,
             }));
 
-            const response = await projectsService.searchProjects(filters, {
+            const projects = await projectsService.searchProjects(filters, {
                 page: currentState.currentPage,
-                limit: 20,
+                limit: currentState.itemsPerPage,
                 abortSignal: abortController.signal,
             });
 
             // Check if request wasn't cancelled
             if (!abortController.signal.aborted) {
+                // Infer pagination from results
+                const hasNextPage = projectsService.hasNextPage(
+                    projects,
+                    currentState.itemsPerPage,
+                );
+                const hasPrevPage = currentState.currentPage > 1;
+
                 update((state) => ({
                     ...state,
-                    results: response.data,
-                    totalCount: response.pagination.total,
-                    totalPages: response.pagination.totalPages,
-                    hasNextPage: response.pagination.hasNext,
-                    hasPrevPage: response.pagination.hasPrev,
+                    results: projects,
+                    totalCount: projects.length,
+                    hasNextPage,
+                    hasPrevPage,
                     isLoading: false,
                     hasSearched: true,
                     lastSearchTime: Date.now(),
@@ -179,7 +166,7 @@ function createSearchStore() {
         },
 
         // Set search results
-        setResults: (results: SearchableCampaign[], totalCount: number = results.length) =>
+        setResults: (results: Project[], totalCount: number = results.length) =>
             update((state) => ({
                 ...state,
                 results,
@@ -192,7 +179,7 @@ function createSearchStore() {
             })),
 
         // Set initial results without marking as searched (for SSR data)
-        setInitialResults: (results: SearchableCampaign[], totalCount: number = results.length) => {
+        setInitialResults: (results: Project[], totalCount: number = results.length) => {
             return update((state) => ({
                 ...state,
                 results,
@@ -240,9 +227,7 @@ function createSearchStore() {
                 ...state,
                 filters: {
                     query: "",
-                    timeFilter: "",
                     statusFilter: "",
-                    locationFilter: "",
                     categories: [],
                 },
             })),
@@ -260,14 +245,8 @@ function createSearchStore() {
             if (state.filters.query) {
                 urlParams.set("q", state.filters.query);
             }
-            if (state.filters.timeFilter) {
-                urlParams.set("time", state.filters.timeFilter);
-            }
             if (state.filters.statusFilter) {
                 urlParams.set("status", state.filters.statusFilter);
-            }
-            if (state.filters.locationFilter) {
-                urlParams.set("location", state.filters.locationFilter);
             }
             if (state.filters.categories.length > 0) {
                 urlParams.set("categories", state.filters.categories.join(","));
@@ -284,11 +263,10 @@ function createSearchStore() {
         // Initialize store with server-provided data
         initializeFromServer: (
             filters: SearchFilters,
-            results: SearchableCampaign[],
+            results: Project[],
             totalCount: number,
             pagination?: {
                 currentPage: number;
-                totalPages: number;
                 hasNext: boolean;
                 hasPrev: boolean;
             },
@@ -299,18 +277,11 @@ function createSearchStore() {
                 results,
                 totalCount,
                 currentPage: pagination?.currentPage || 1,
-                totalPages: pagination?.totalPages || 1,
                 hasNextPage: pagination?.hasNext || false,
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(
-                        filters.query ||
-                        filters.timeFilter ||
-                        filters.statusFilter ||
-                        filters.locationFilter ||
-                        filters.categories.length > 0
-                    ),
+                    !!(filters.query || filters.statusFilter || filters.categories.length > 0),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",
@@ -365,7 +336,7 @@ function createSearchStore() {
         // Go to specific page
         goToPage: async (page: number) => {
             const currentState = get(store);
-            if (page < 1 || page > currentState.totalPages || currentState.isLoading) return;
+            if (page < 1 || currentState.isLoading) return;
 
             update((state) => ({
                 ...state,
@@ -432,19 +403,11 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
     const { filters } = $searchStore;
-    return !!(
-        filters.query ||
-        filters.timeFilter ||
-        filters.statusFilter ||
-        filters.locationFilter ||
-        filters.categories.length > 0
-    );
+    return !!(filters.query || filters.statusFilter || filters.categories.length > 0);
 });
 
 // Pagination derived stores
 export const currentPage = derived(searchStore, ($searchStore) => $searchStore.currentPage);
-
-export const totalPages = derived(searchStore, ($searchStore) => $searchStore.totalPages);
 
 export const hasNextPage = derived(searchStore, ($searchStore) => $searchStore.hasNextPage);
 
@@ -453,7 +416,6 @@ export const hasPrevPage = derived(searchStore, ($searchStore) => $searchStore.h
 // Pagination info derived store
 export const paginationInfo = derived(searchStore, ($searchStore) => ({
     currentPage: $searchStore.currentPage,
-    totalPages: $searchStore.totalPages,
     totalCount: $searchStore.totalCount,
     hasNext: $searchStore.hasNextPage,
     hasPrev: $searchStore.hasPrevPage,

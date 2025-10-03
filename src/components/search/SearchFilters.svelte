@@ -18,9 +18,7 @@ Integrated with searchStore for state management and URL synchronization
         locale?: string;
         initialFilters?: {
             query?: string;
-            timeFilter?: string;
             statusFilter?: string;
-            locationFilter?: string;
             categories?: string[];
         };
     }
@@ -38,34 +36,19 @@ Integrated with searchStore for state management and URL synchronization
         if (initialFilters) {
             searchStore.initializeFilters({
                 query: initialFilters.query || "",
-                timeFilter: initialFilters.timeFilter || "",
                 statusFilter: initialFilters.statusFilter || "",
-                locationFilter: initialFilters.locationFilter || "",
                 categories: initialFilters.categories || [],
             });
         }
     });
 
     // Dropdown options - use translation keys for labels
-    const timeOptions = [
-        { value: "all", translationKey: "filters.time.all" },
-        { value: "week", translationKey: "filters.time.week" },
-        { value: "month", translationKey: "filters.time.month" },
-        { value: "year", translationKey: "filters.time.year" },
-    ];
-
     const statusOptions = [
         { value: "all", translationKey: "filters.status.all" },
-        { value: "funding", translationKey: "filters.status.funding" },
-        { value: "successful", translationKey: "filters.status.successful" },
-        { value: "completed", translationKey: "filters.status.completed" },
-    ];
-
-    const locationOptions = [
-        { value: "all", translationKey: "filters.locationOptions.all" },
-        { value: "spain", translationKey: "filters.locationOptions.spain" },
-        { value: "europe", translationKey: "filters.locationOptions.europe" },
-        { value: "global", translationKey: "filters.locationOptions.global" },
+        // API status values - pass directly to backend
+        { value: "in_campaign", translationKey: "filters.status.funding" }, // Actively raising funds
+        { value: "in_funding", translationKey: "filters.status.successful" }, // Successfully raised, receiving funds
+        { value: "funded", translationKey: "filters.status.completed" }, // Completed funding process
     ];
 
     // Handle filter updates using searchStore
@@ -131,30 +114,14 @@ Integrated with searchStore for state management and URL synchronization
 
     <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
-        <!-- Dropdown filters -->
-        <div class=" grid grid-cols-1 gap-4 md:grid-cols-3">
-            <FilterDropdown
-                options={timeOptions}
-                placeholder={$t("filters.timePeriod")}
-                selectedValue={$searchFilters.timeFilter}
-                onSelect={(value) => updateFilters({ timeFilter: value })}
-                data-testid="time-filter"
-            />
-
+        <!-- Status filter dropdown -->
+        <div class="max-w-sm">
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("filters.campaignStatus")}
                 selectedValue={$searchFilters.statusFilter}
                 onSelect={(value) => updateFilters({ statusFilter: value })}
                 data-testid="status-filter"
-            />
-
-            <FilterDropdown
-                options={locationOptions}
-                placeholder={$t("filters.location")}
-                selectedValue={$searchFilters.locationFilter}
-                onSelect={(value) => updateFilters({ locationFilter: value })}
-                data-testid="location-filter"
             />
         </div>
 

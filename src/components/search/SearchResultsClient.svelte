@@ -17,38 +17,39 @@ Manages real-time filtering of campaigns without page reloads
         hasInitialResults,
         isEmpty,
         resultCount,
-        type SearchableCampaign,
     } from "../../stores/searchStore";
+    import { transformProjectToCampaign } from "../../utils/projectTransform";
     import LoadingSpinner from "./LoadingSpinner.svelte";
     import SearchPagination from "./SearchPagination.svelte";
     import SearchErrorAlert from "./SearchErrorAlert.svelte";
     import CampaignCard from "../home/CampaignCard.svelte";
 
+    import type { Project } from "../../openapi/client/types.gen";
+
     interface Props {
-        allCampaigns: SearchableCampaign[];
+        initialProjects: Project[];
         ariaLiveRegion?: "polite" | "assertive" | "off";
         initialFilters?: {
             query?: string;
-            timeFilter?: string;
             statusFilter?: string;
-            locationFilter?: string;
             categories?: string[];
         };
-        useApiMode?: boolean;
         hasInitialSearch?: boolean;
     }
 
     let {
-        allCampaigns = [],
+        initialProjects = [],
         ariaLiveRegion = "polite",
         initialFilters,
-        useApiMode = true,
         hasInitialSearch = false,
     }: Props = $props();
 
     // Local state
     let isInitialized = false;
     let previousFiltersJson = "";
+
+    // Transform projects to campaigns for display
+    const campaigns = $derived($searchResults.map(transformProjectToCampaign));
 
     // Update URL without causing navigation
     function updateUrlWithoutNavigation() {
@@ -61,9 +62,7 @@ Manages real-time filtering of campaigns without page reloads
 
         // Add search parameters to URL
         if (filters.query) params.set("q", filters.query);
-        if (filters.timeFilter) params.set("time", filters.timeFilter);
         if (filters.statusFilter) params.set("status", filters.statusFilter);
-        if (filters.locationFilter) params.set("location", filters.locationFilter);
         if (filters.categories.length > 0) params.set("categories", filters.categories.join(","));
 
         // Update URL using History API to avoid navigation
@@ -83,9 +82,7 @@ Manages real-time filtering of campaigns without page reloads
     // Error handling functions
     function retrySearch() {
         // Retry the current search by manually triggering API search
-        if (useApiMode) {
-            searchStore.searchWithApi(false);
-        }
+        searchStore.searchWithApi(false);
     }
 
     // Initialize with URL parameters on mount
@@ -95,9 +92,7 @@ Manages real-time filtering of campaigns without page reloads
             // Initialize store with server-side filters first
             searchStore.initializeFilters({
                 query: initialFilters.query || "",
-                timeFilter: initialFilters.timeFilter || "",
                 statusFilter: initialFilters.statusFilter || "",
-                locationFilter: initialFilters.locationFilter || "",
                 categories: initialFilters.categories || [],
             });
 
@@ -105,9 +100,9 @@ Manages real-time filtering of campaigns without page reloads
             setTimeout(() => {
                 searchStore.searchWithApi(true);
             }, 100);
-        } else if (allCampaigns.length > 0) {
-            // Show initial campaigns without marking as searched
-            searchStore.setInitialResults(allCampaigns, allCampaigns.length);
+        } else if (initialProjects.length > 0) {
+            // Show initial projects without marking as searched
+            searchStore.setInitialResults(initialProjects, initialProjects.length);
         }
 
         // Store the initial filters state to detect actual changes
@@ -192,7 +187,7 @@ Manages real-time filtering of campaigns without page reloads
     <!-- Error Alert -->
     {#if $searchError}
         <div class="mb-6">
-            <SearchErrorAlert error={$searchError} onRetry={retrySearch} showRetry={useApiMode} />
+            <SearchErrorAlert error={$searchError} onRetry={retrySearch} showRetry={true} />
         </div>
     {/if}
 
@@ -203,13 +198,13 @@ Manages real-time filtering of campaigns without page reloads
             <div class="loading-spinner py-12 text-center" data-testid="loading-spinner">
                 <LoadingSpinner />
             </div>
-        {:else if $searchResults.length > 0}
+        {:else if campaigns.length > 0}
             <!-- Results Grid -->
             <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {#each $searchResults as campaign}
+                {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size="small" {campaign} />
+                        <CampaignCard size={campaign.size} {campaign} />
                     </div>
                 {/each}
             </div>
@@ -217,14 +212,9 @@ Manages real-time filtering of campaigns without page reloads
     </div>
 
     <!-- Pagination Controls -->
-    {#if $hasActualSearchResults && !$isSearching && useApiMode}
+    {#if $hasActualSearchResults && !$isSearching}
         <div class="mt-8">
-            <SearchPagination
-                mode="numbered"
-                maxVisiblePages={5}
-                showSummary={true}
-                class="search-pagination"
-            />
+            <SearchPagination showSummary={true} class="search-pagination" />
         </div>
     {/if}
 

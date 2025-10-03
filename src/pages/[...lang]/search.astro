@@ -3,40 +3,37 @@ import Layout from "../../layouts/Layout.astro";
 import SearchFilters from "../../components/search/SearchFilters.svelte";
 import SearchResultsClient from "../../components/search/SearchResultsClient.svelte";
 import { projectsService } from "../../services/projectsService";
-import type { SearchableCampaign } from "../../stores/searchStore";
+
+import type { Project } from "../../openapi/client/types.gen";
 
 const { t, lang } = Astro.locals;
 
-// Get initial campaigns from API (for SSR)
-let allCampaigns: SearchableCampaign[] = [];
-const useApiMode = true; // Always use real API - no mock mode
+// Get initial projects from API (for SSR)
+let initialProjects: Project[] = [];
 
 try {
-    // Get top 3 initial results from API for display
-    allCampaigns = await projectsService.getInitialProjects(lang, {
-        limit: 3, // Show top 3 results initially as per epic requirements
+    // Fetch initial projects from API
+    initialProjects = await projectsService.getInitialProjects(lang, {
+        limit: 12, // Standard page size
     });
 } catch (error) {
-    // Use empty array on API failure - let the search interface handle empty state
-    allCampaigns = [];
+    // Empty array on failure - component handles empty state
+    console.error("Failed to load initial projects:", error);
+    initialProjects = [];
 }
 
 // Parse URL search parameters for SSR
 const url = new URL(Astro.request.url);
 const initialFilters = {
     query: url.searchParams.get("q") || "",
-    timeFilter: url.searchParams.get("time") || "",
     statusFilter: url.searchParams.get("status") || "",
-    locationFilter: url.searchParams.get("location") || "",
     categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
 };
 
-// Determine if we have initial search parameters
+// Check if URL has search parameters
 const hasInitialSearch = !!(
     initialFilters.query ||
-    initialFilters.timeFilter ||
     initialFilters.statusFilter ||
-    initialFilters.locationFilter ||
     initialFilters.categories.length > 0
 );
 ---
@@ -51,13 +48,6 @@ const hasInitialSearch = !!(
             <p class="text-secondary text-lg">
                 {t("search.subtitle")}
             </p>
-            {
-                allCampaigns.length > 0 && !hasInitialSearch && (
-                    <p class="text-tertiary/70 mt-2 text-sm">
-                        {t("search.showing_top_results", { count: allCampaigns.length })}
-                    </p>
-                )
-            }
         </div>
 
         <!-- Search Filters -->
@@ -65,12 +55,11 @@ const hasInitialSearch = !!(
             <SearchFilters locale={lang} initialFilters={initialFilters} client:load />
         </div>
 
-        <!-- Search Results - API Integrated -->
+        <!-- Search Results -->
         <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
             <SearchResultsClient
-                allCampaigns={allCampaigns}
+                initialProjects={initialProjects}
                 initialFilters={initialFilters}
-                useApiMode={useApiMode}
                 hasInitialSearch={hasInitialSearch}
                 client:load
             />

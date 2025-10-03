@@ -130,9 +130,141 @@
     "search": {
       "placeholder": "Cerca la teva campanya",
       "label": "Cercar campanyes",
-      "clearSearch": "Esborrar cerca"
+      "clearSearch": "Esborrar cerca",
+      "pagination": {
+        "page": "Pàgina {{page}}",
+        "currentPage": "Pàgina {{page}}",
+        "previous": "Anterior",
+        "next": "Següent"
+      }
     },
     "categories": "Categories"
+  },
+  "search": {
+    "title": "Cercar campanyes - Goteo",
+    "description": "Explora el nostre catàleg de campanyes i troba la que més t'inspiri per fer la teva donació",
+    "heading": "Troba la campanya que busques",
+    "subtitle": "Explora el nostre catàleg de campanyes i tria la que més t'inspiri per fer la teva donació",
+    "topResults": "Campanyes més cercades",
+    "showing_top_results": "Mostrant les {{count}} campanyes més populars",
+    "placeholder": "Cercar",
+    "label": "Cercar campanyes",
+    "clearSearch": "Esborrar cerca",
+    "searchButton": "Cercar",
+    "closeFilters": "Tancar filtres",
+    "showFilters": "Mostrar filtres",
+    "hideFilters": "Amagar filtres",
+    "applyFilters": "Aplicar filtres",
+    "categoryLabel": "Tria una categoria",
+    "selectCategory": "Seleccionar categoria",
+    "deselectCategory": "Desseleccionar categoria",
+    "selectedCategories": "{{count}} categories seleccionades",
+    "clearFilters": "Esborrar filtres",
+    "loading": "Cercant campanyes...",
+    "results": {
+      "count": "{{count}} resultats trobats",
+      "found": "{{count}} resultats trobats",
+      "noResults": "No s'han trobat resultats",
+      "regionLabel": "Resultats de cerca",
+      "empty": {
+        "title": "No s'han trobat resultats",
+        "description": "No hi ha campanyes que coincideixin amb la teva cerca actual.",
+        "clearFilters": "Esborrar filtres"
+      }
+    },
+    "initial": {
+      "title": "Cerca la teva campanya ideal",
+      "description": "Utilitza els filtres de dalt per trobar campanyes que t'inspirin."
+    },
+    "filters": {
+      "clear": "Esborrar filtres"
+    },
+    "errors": {
+      "searchFailed": "No s'ha pogut realitzar la cerca. Torna-ho a provar.",
+      "api": {
+        "invalidToken": "Autenticació fallida. Si us plau, verifica les teves credencials.",
+        "expiredToken": "La teva sessió ha expirat. Si us plau, inicia sessió de nou.",
+        "missingToken": "Es requereix autenticació. Si us plau, inicia sessió.",
+        "networkError": "Error de connexió. Verifica la teva connexió a internet.",
+        "serverError": "Error del servidor. Si us plau, torna-ho a provar més tard."
+      }
+    },
+    "empty": {
+      "title": "No s'han trobat campanyes",
+      "description": "No hi ha campanyes que coincideixin amb la teva cerca actual. Verifica l'ortografia o prova amb paraules clau diferents o termes més generals.",
+      "suggestions": {
+        "title": "Suggeriments per millorar la teva cerca:",
+        "checkSpelling": "Verifica l'ortografia de les teves paraules clau",
+        "tryDifferentKeywords": "Prova amb paraules clau diferents",
+        "removeFilters": "Treu alguns filtres per ampliar la cerca",
+        "broadenSearch": "Usa termes més generals"
+      }
+    },
+    "accessibility": {
+      "resultsFound": "S'han trobat {{count}} campanyes"
+    },
+    "loadMore": "Carregar més resultats",
+    "loadMoreNote": "Funcionalitat de paginació properament",
+    "pagination": {
+      "summary": "Pàgina {{page}} de {{totalPages}} ({{totalCount}} resultats en total)",
+      "ariaLabel": "Navegació de pàgines de resultats",
+      "page": "Pàgina {{page}}",
+      "currentPage": "Pàgina {{page}}",
+      "previous": "Anterior",
+      "next": "Següent",
+      "loading": "Carregant...",
+      "loadMore": "Carregar més resultats",
+      "noMoreResults": "No hi ha més resultats"
+    },
+    "error": {
+      "title": "Error al cercar",
+      "retry": "Tornar a provar",
+      "network": {
+        "title": "Sense connexió a internet",
+        "description": "No es pot connectar amb el servidor. Verifica la teva connexió a internet i torna-ho a provar."
+      },
+      "timeout": {
+        "title": "La cerca està trigant massa",
+        "description": "El servidor no respon. Torna-ho a provar o utilitza les dades locals."
+      },
+      "server": {
+        "title": "Error del servidor",
+        "description": "Hi ha un problema amb el servidor. Torna-ho a provar més tard o utilitza les dades locals."
+      },
+      "unknown": {
+        "title": "Error inesperat",
+        "description": "Ha ocorregut un error inesperat. Torna-ho a provar."
+      },
+      "actions": {
+        "retry": "Reintentar",
+        "showHelp": "Mostrar ajuda"
+      },
+      "technicalDetails": "Detalls tècnics"
+    }
+  },
+  "filters": {
+    "selectOption": "Seleccionar opció",
+    "timePeriod": "Període de temps",
+    "campaignStatus": "Estat de la campanya",
+    "location": "Ubicació",
+    "time": {
+      "all": "Qualsevol moment",
+      "week": "Última setmana",
+      "month": "Últim mes",
+      "year": "Últim any"
+    },
+    "status": {
+      "all": "Tots els estats",
+      "funding": "En finançament",
+      "successful": "Exitoses",
+      "completed": "Completades"
+    },
+    "locationOptions": {
+      "all": "Qualsevol ubicació",
+      "spain": "Espanya",
+      "europe": "Europa",
+      "global": "Global"
+    }
   },
   "categories": {
     "solidary": "Solidari",
