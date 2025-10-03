@@ -8,6 +8,7 @@
     import { formatCurrency } from "../../utils/currencies";
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
+    import Button from "../library/Button.svelte";
 
     export let project: Project;
     export let totalSupports: number = 0;
@@ -87,10 +88,7 @@
             </div>
         </div>
     </div>
-    <button
-        class="bg-primary bold text-tertiary w-full cursor-pointer rounded-3xl px-6 py-4 font-bold"
-        on:click={scrollToRewards}
-    >
+    <Button class="w-full" onclick={scrollToRewards}>
         {$t("campaignProgress.donate")}
-    </button>
+    </Button>
 </div>

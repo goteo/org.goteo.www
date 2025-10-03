@@ -21,6 +21,7 @@
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
+    import Button from "../library/Button.svelte";
 
     let {
         lang = $bindable(),
@@ -137,11 +138,10 @@
         <Tags {project} {lang} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
-            <button
-                class="text-tertiary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
-            >
-                <RememberIcon /> {$t("project.actions.remember")}</button
-            >
+            <Button kind="invert" size="sm" class="px-0">
+                <RememberIcon />
+                {$t("project.actions.remember")}
+            </Button>
         </div>
     </div>
     <div class="flex flex-col gap-8">
@@ -149,18 +149,14 @@
             <h2 class="text-secondary text-2xl font-bold">
                 {$t("reward.trending")}
             </h2>
-            <button
-                class="text-tertiary hidden cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:flex"
-            >
+            <Button kind="secondary" class="hidden lg:flex">
                 <ArrowRightIcon />{$t("reward.showAll")}
-            </button>
+            </Button>
         </div>
         <TopRewards bind:lang {project} />
-        <button
-            class="text-tertiary flex cursor-pointer items-center justify-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:hidden"
-        >
+        <Button kind="secondary" class="lg:hidden">
             <ArrowRightIcon />{$t("reward.showAll")}
-        </button>
+        </Button>
     </div>
     <Banner {ownerName} />
 </section>
