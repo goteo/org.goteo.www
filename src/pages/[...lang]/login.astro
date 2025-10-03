@@ -4,6 +4,7 @@ import LoginForm from "../../components/LoginForm.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
 import Oauth from "../../components/Oauth.astro";
+import Button from "../../components/library/Button.svelte";
 import BackButton from "../../components/BackButton.astro";
 import { itemCount } from "../../stores/cart";
 
@@ -82,13 +83,9 @@ itemCount.subscribe((count) => {
                         )
                     }
 
-                    <button
-                        form="login"
-                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
-                        onclick="document.getElementById('login')?.requestSubmit(); return false;"
-                    >
+                    <Button type="submit" form="login" class="w-fit">
                         {t("global.btn.continue")}
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

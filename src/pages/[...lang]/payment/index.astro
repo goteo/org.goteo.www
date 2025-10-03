@@ -3,6 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
+import Button from "../../../components/library/Button.svelte";
 import BackButton from "../../../components/BackButton.astro";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
 import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
@@ -55,14 +56,12 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                 <Summary client:load {defaultCurrency} />
                 <Steps step={3} client:load />
                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                    <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
-                    <button
-                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
-                        form="payment"
-                        onclick="document.getElementById('payment')?.requestSubmit(); return false;"
-                    >
+                    <p class="text-sm text-[#575757]">
+                        {t("checkout.summary.deduct")}
+                    </p>
+                    <Button type="submit" form="payment" class="w-fit">
                         {t("global.btn.continue")}
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>
