@@ -1,10 +1,12 @@
 <!--
 Campaign Card Component (Svelte version)
 Displays campaign information in a card format with responsive sizing
+Converted from CampaignCard.astro to maintain exact functionality
 -->
 <script lang="ts">
     import type { Campaign, CampaignSize } from "../../types/campaign";
     import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
 
     interface Props {
@@ -24,7 +26,7 @@ Displays campaign information in a card format with responsive sizing
 </script>
 
 <div
-    class="campaign-card bg-light-surface border-light-muted min-w-sm rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] {containerClasses}"
+    class="bg-light-surface border-light-muted min-w-sm grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] {containerClasses}"
     data-testid="campaign-card"
 >
     <a href="/project/{campaign.id}">
@@ -78,7 +80,10 @@ Displays campaign information in a card format with responsive sizing
                                 {$t("home.campaigns.obtained")}
                             </span>
                             <span class="text-secondary text-2xl font-bold">
-                                {campaign.obtained}
+                                {formatCurrency(
+                                    campaign.obtained.amount,
+                                    campaign.obtained.currency,
+                                )}
                             </span>
                         </div>
                         <div class="flex flex-col gap-1 text-right">
@@ -86,7 +91,7 @@ Displays campaign information in a card format with responsive sizing
                                 {$t("home.campaigns.minimum")}
                             </span>
                             <span class="text-secondary text-2xl font-bold">
-                                {campaign.minimum}
+                                {formatCurrency(campaign.minimum.amount, campaign.minimum.currency)}
                             </span>
                         </div>
                     </div>
