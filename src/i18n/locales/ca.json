@@ -1,52 +1,127 @@
 {
   "greeting": "Hola",
-  "farewell": "Adiós",
+  "farewell": "Adéu",
   "campaignProgress": {
-    "minimumReached": "!Mínimo conseguido!",
-    "optimumReached": "!Óptimo conseguido!",
-    "obtained": "Obtenido",
-    "donations": "Donaciones realizadas",
-    "optimum": "Óptimo",
-    "minimum": "Mínimo",
-    "donate": "Donar a esta campaña"
+    "minimumReached": "¡Mínim assolit!",
+    "optimumReached": "¡Òptim aconseguit!",
+    "obtained": "Obtingut",
+    "supports": "Donants",
+    "optimum": "Òptim",
+    "minimum": "Mínim",
+    "donate": "Donar a aquesta campanya"
   },
   "reward": {
     "donate": "Dona",
-    "donors": "donates",
-    "units": "Quedan {{units}} unidades",
-    "noUnits": "No quedan unidades",
-    "trending": "Recompensas más populares",
-    "headline": "Selecciona tu recompensa",
-    "addAndContinue": "Añadir al carro y continuar"
+    "donors": "donants",
+    "units": "Queden {{units}} unitats",
+    "noUnits": "No queden unitats",
+    "trending": "Recompenses més populars",
+    "headline": "Selecciona la teva recompensa",
+    "addAndContinue": "Afegir al carro i continuar",
+    "input": "Indica el teu aportament Ex.20€",
+    "btnFreeDonation": "Donar",
+    "btnFreeDonationLabel": "Donació lliure",
+    "showAll": "Veure totes"
   },
   "budget": {
-    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
+    "headline": "Coneix les necessitats clau d’aquesta campanya i descobreix com el teu suport pot fer realitat aquest projecte.",
     "infrastructure": "Infraestructura",
     "material": "Material",
-    "task": "Tareas",
+    "task": "Tasques",
     "chart": {
-      "minimum": "Mínimo",
-      "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
+      "minimum": "Mínim",
+      "optimal": "Òptim",
+      "progress": "Estat de la campanya"
     }
   },
   "project": {
-    "owner": "Campaña de crowdfunding impulsada por ",
+    "owner": "Campanya de micromecenatge impulsada per ",
     "tabs": {
-      "project": "Información de campaña",
-      "budget": "Necesidades",
-      "rewards": "Recompensas",
-      "updates": "Actualizaciones",
-      "community": "Comunidad"
+      "project": "Informació de campanya",
+      "budget": {
+        "chart-title": "Aquest és el pressupost necessari per fer realitat aquesta campanya i descobreix com el teu suport ens pot portar a l’èxit.",
+        "title": "Pressupost",
+        "minimum": "Mínim",
+        "optimal": "Optimum",
+        "typeBudget": {
+          "infrastructure": "Infraestructura",
+          "material": "Material",
+          "task": "Tasques"
+        },
+        "campaingState": "Estat de la campanya"
+      },
+      "rewards": "Recompenses",
+      "updates": {
+        "title": "Actualitzacions",
+        "modal-title": "Nova actualització",
+        "content": {
+          "title": "No perdis detall dels avenços d’aquesta campanya",
+          "empty": "No existeixen més actualitzacions previstes.",
+          "btn": {
+            "read-more": "Seguir llegint",
+            "share": "Compartir"
+          }
+        }
+      },
+      "community": {
+        "title": "Comunitat",
+        "owner-anonymous": "Anònim",
+        "content": {
+          "title": "Donacions i missatges de suport de la comunitat"
+        },
+        "contribution": "Aportació",
+        "noComment": "Sense comentari.",
+        "matchfunding": {
+          "contribution": "Suma de les aportacions",
+          "aported": "Aportats",
+          "up_to": "fins a"
+        },
+        "anonymous": {
+          "length": "anònims",
+          "title": "Donacions anònimes",
+          "description": "No totes les persones heroïques porten capa ni tampoc senten la necessitat de mostrar la seva identitat."
+        }
+      }
     },
     "actions": {
       "share": "Compartir",
       "remember": "Recordar",
-      "viewAll": "Ver todas"
+      "viewAll": "Veure totes",
+      "viewMore": "Veure més",
+      "viewLess": "Veure menys"
     },
     "impact": {
-      "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-      "learnMore": "Saber más."
+      "description": "En col·laborar amb un projecte impulsat en Goteo pots sol·licitar un certificat de donació. Així, desgravis fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda.",
+      "learnMore": "Saber més."
+    },
+    "banner": {
+      "donator": {
+        "description": "Goteo pertany a la Fundació Platoniq. En col·laborar en una campanya els teus diners seran custodiats per Platoniq i donats a {{owner}} en cas d’arribar als objectius d’èxit marcats.",
+        "learnMore": "Saber més."
+      },
+      "certificate": {
+        "description": "En col·laborar amb un projecte impulsat en Goteo pots sol·licitar un certificat de donació. Així, desgravis fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda.",
+        "learnMore": "Saber més."
+      }
+    },
+    "share": {
+      "modal": {
+        "title": "Difon aquest projecte pel món",
+        "description": "Pots copiar l'enllaç per enviar-lo i també compartir-la a Facebook o X. Fins i tot copiar un fragment de codi, per inserir a una altra web un bàner de la campanya. ¡Fes que arribi més lluny!"
+      },
+      "iframe-modal": {
+        "title": "Així és com es veurà a la teva plataforma",
+        "description": "Copia aquest fragment de codi i enganxal a codi de la teva pàgina. Així aconseguiràs que la campanya arribi a més gent.",
+        "btnCopy": "Copiar codi",
+        "btnCopied": "Codi copiat!"
+      }
+    },
+    "video": {
+      "title": "Vídeo de la campanya",
+      "description": "Aquí pots veure el vídeo de presentació de la campanya. ¡Dale al play!",
+      "poster": "Imatge del vídeo",
+      "not-found": "Disculpa, aquesta campanya no té vídeo de presentació",
+      "not-supported": "No ha estat possible carregar el vídeo. Si us plau, revisa l’enllaç o contacta amb l’administrador de la campanya."
     }
   },
   "navigation": {
@@ -56,195 +131,223 @@
     "categories": "Categories"
   },
   "categories": {
-    "solidary": "Solidario",
-    "libre-software": "Software Libre",
-    "employment": "Generar empleo",
-    "design": "Desde el diseño",
-    "journalism": "Periodismo independiente",
-    "education": "Educativo",
-    "culture": "Crea cultura",
-    "ecology": "Ecológico",
-    "health-and-cares": "Salud y cuidados",
-    "open-data": "Datos abiertos",
-    "democracy": "Democracia y participación",
-    "equity": "Igualdad de género"
+    "solidary": "Solidari",
+    "libre-software": "Programari Lliure",
+    "employment": "Generar ocupació",
+    "design": "Des del disseny",
+    "journalism": "Periodisme independent",
+    "education": "Educatiu",
+    "culture": "Crear cultura",
+    "ecology": "Ecològic",
+    "health-and-cares": "Salut i cures",
+    "open-data": "Dades Obertes",
+    "democracy": "Democràcia i participació",
+    "equity": "Igualtat de gènere"
   },
   "ShareButton": {
-    "title": "Difunde este proyecto por el mundo",
-    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
+    "title": "Difon aquest projecte pel món",
+    "description": "Pots copiar l’enllaç per enviar-lo i també compartir-lo en Facebook o X. Inclús copiar un fragment de codi, per inserir en una altra web un banner de la campanya. ¡Fes que arribi més lluny!",
     "global": "compartir global",
-    "facebook": "compartir en facebook",
-    "twitter": "compartir en X",
-    "code": "compartir como código",
-    "copied": "¡Enlace copiado al portapapeles!"
+    "facebook": "compartir a Facebook",
+    "twitter": "compartir a X",
+    "code": "compartir com a codi",
+    "copied": "¡Enllaç copiat al portapapers!"
   },
   "register": {
     "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Regístrate o",
-      "loginBtnLabel": "Entra con tu cuenta",
-      "otherAccessMethods": "También puedes acceder a través de:"
+      "title": "Indica’ns les teves dades personals",
+      "description": "Necessitem saber qui ets abans de pagar.",
+      "registerOr": "Registra’t o",
+      "loginBtnLabel": "Entra amb el teu compte",
+      "goteoUserInfo": "Si ja ets usuari de Goteo no cal que et registris de nou.",
+      "otherAccessMethods": "També pots accedir a través de:"
     },
     "form": {
       "userType": {
         "individual": "Persona física",
-        "organization": "Persona jurídica (empresas)"
+        "organization": "Persona jurídica (empreses)"
       },
-      "btnSubmit": "Registrarse",
-      "termsCheckbox": "Acepto las condiciones legales",
-      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+      "btnSubmit": "Registrar-se",
+      "termsCheckbox": "Accepto les condicions legals",
+      "policiesCheckbox": "A l’registrar-me confirmo la meva acceptació dels vostres termes d’ús, política de privacitat i política de cookies.",
       "zod": {
-        "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
-        "legalName.custom": "La razón social es obligatoria para empresas"
+        "taxId.custom": "El NIF/DNI ha de tenir almenys 8 caràcters",
+        "legalName.custom": "La raó social és obligatòria per a empreses"
       },
       "validation": {
         "password": {
-          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+          "minLength": "*Requisits de la contrasenya: ha de tenir 8 caràcters"
         }
       }
     },
     "individual": {
-      "firstName": "Nombre",
-      "lastName": "Apellidos",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+      "firstName": "Nom",
+      "lastName": "Cognoms",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
+      "taxIdCheckbox": "Vull desgravar les meves donacions. Cal indicar el número de DNI per comunicar-ho a Hisenda.",
       "taxId": {
         "label": "DNI*",
-        "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+        "msgDeduction": "Vull desgravar les meves donacions. Cal indicar el número de DNI per comunicar-ho a Hisenda."
       }
     },
     "organization": {
-      "legalName": "Razón social",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
+      "legalName": "Raó social",
+      "email": "Correu electrònic",
+      "password": "Contrasenya",
       "taxId": "CIF*",
-      "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-      "representativeTitle": "Datos del representante de la empresa.",
-      "firstName": "Nombre",
-      "lastName": "Apellidos"
+      "taxIdDescription": "*Amb el CIF avisarem a l’agència tributària per la teva declaració de la renda.",
+      "representativeTitle": "Dades del representant de l’empresa.",
+      "firstName": "Nom",
+      "lastName": "Cognoms"
     },
     "error": {
-      "incompletePersonFields ": "Por favor, completa todos los campos obligatorios para persona física.",
-      "incompleteOrgFields ": "Por favor, completa todos los campos obligatorios para persona jurídica.",
-      "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
+      "incompletePersonFields ": "Si us plau, completa tots els camps obligatoris per a persona física.",
+      "incompleteOrgFields ": "Si us plau, completa tots els camps obligatoris per a persona jurídica.",
+      "unexpectedRegistration": "Error al registrar-se. Si us plau, intenta-ho de nou més tard."
     }
   },
   "login": {
     "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Entra en tu cuenta o",
-      "registerBtnLabel": "Regístrate",
-      "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
-      "otherAccessMethods": "También puedes acceder a través de:",
-      "forgotPassword": "¿Olvidaste tu contraseña?"
+      "title": "Indica’ns les teves dades personals",
+      "description": "Necessitem saber qui ets abans de pagar.",
+      "registerOr": "Entra al teu compte o",
+      "registerBtnLabel": "Registra’t",
+      "otherAccessMethods": "També pots accedir a través de:",
+      "forgotPassword": "Has oblidat la teva contrasenya?",
+      "welcome": {
+        "title": "Benvingut/da al nou Goteo.",
+        "subtitle": "Estem estrenant una nova etapa i volem compartir-ho amb tu des del principi. La plataforma anirà creixent a poc a poc: activarem seccions i funcionalitats a mesura que estiguin llestes i validades amb la nostra comunitat. De moment pots accedir amb el teu mateix correu i contrasenya i explorar l'arxiu de projectes. Gràcies per acompanyar-nos en aquest camí."
+      }
     },
     "form": {
-      "email": "Email o nombre de usuario",
-      "password": "Contraseña",
-      "btnSubmit": "Iniciar sesión"
+      "email": "Email o nom d’usuari",
+      "password": "Contrasenya",
+      "btnSubmit": "Iniciar sessió"
     },
     "error": {
-      "invalidCredentials": "Correo electrónico o contraseña inválidos.",
-      "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
-      "invalidEmail": "El correo electrónico no es válido.",
-      "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
+      "invalidCredentials": "Correu electrònic o contrasenya invàlids.",
+      "unexpectedLogin": "Error en iniciar sessió. Si us plau, intenta-ho de nou més tard.",
+      "invalidEmail": "El correu electrònic no és vàlid.",
+      "maxCharacters": "El correu electrònic no pot excedir els 255 caràcters."
     }
   },
   "logout": {
+    "label": "Tancar sessió",
     "error": {
-      "cookieNotFound": "No se ha encontrado la cookie de sesión.",
-      "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
-      "logoutSuccess": "Has cerrado sesión correctamente.",
-      "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
+      "cookieNotFound": "No s’ha trobat la cookie de sessió.",
+      "invalidToken": "La sessió no és vàlida. Si us plau, torna a iniciar sessió.",
+      "logoutSuccess": "Has tancat sessió correctament.",
+      "unexpectedLogout": "Error en tancar sessió. Si us plau, intenta-ho de nou més tard."
     }
   },
   "zod": {
-    "required": "Este campo es obligatorio",
-    "invalid_type": "Se esperaba {expected} pero se recibió {received}",
+    "required": "Aquest camp és obligatori",
+    "invalid_type": "S’esperava {expected} però es va rebre {received}",
     "string": {
-      "too_small": "Debe tener al menos {min} carácter(es)",
-      "too_big": "No debe exceder los {max} caracteres",
-      "invalid": "Formato de texto no válido"
+      "too_small": "Ha de tenir com a mínim {min} caràcter(s)",
+      "too_big": "No ha de superar els {max} caràcters",
+      "invalid": "Format de text no vàlid"
     },
     "number": {
-      "too_small": "Debe ser al menos {min}",
-      "too_big": "No debe exceder {max}"
+      "too_small": "Ha de ser com a mínim {min}",
+      "too_big": "No ha de superar {max}"
     },
-    "too_small": "Debe ser al menos {min}",
-    "too_big": "No debe exceder {max}",
+    "too_small": "Ha de ser com a mínim {min}",
+    "too_big": "No ha de superar {max}",
     "email": {
-      "invalid": "Correo electrónico no válido"
+      "invalid": "Correu electrònic invàlid"
     },
     "url": {
-      "invalid": "Formato de URL no válido"
+      "invalid": "Format de URL no vàlid"
     },
     "enum": {
-      "invalid": "Opción no válida. Las opciones válidas son: {options}"
+      "invalid": "Opció no vàlida. Les opcions vàlides són: {options}"
     },
-    "invalid": "Entrada no válida"
+    "invalid": "Entrada invàlida"
   },
   "countdown": {
-    "expired": "Campaña finalizada",
-    "remaining": "Quedan"
+    "expired": "Campanya finalitzada",
+    "remaining": "Queden",
+    "error": {
+      "not-found": "No s’ha trobat la data de finalització de la campanya."
+    }
   },
   "rewards": {
-    "unavailable": "No hay recompensas disponibles."
+    "title": "Seleccioneu les vostres recompenses",
+    "unavailable": "No hi ha recompenses disponibles.",
+    "donators": "{{donators}} donants",
+    "units-available": "Queden {{units}} unitats",
+    "donation-free": {
+      "title": "Renuncio a una recompensa individual, només vull ajudar el projecte",
+      "description": "En aquest espai pots donar la quantitat que consideris sense obtenir recompensa a canvi. Cada aportació, gran o petita, marca la diferència i ens acosta a la meta.",
+      "placeholder": "Indica el teu aportament Ex.20€",
+      "btn": "Donar"
+    },
+    "by-amount": "Per {{amount}}",
+    "by-amount-or-more": "Per {{amount}} o més",
+    "thanks-message": "Gràcies per cooperar",
+    "reward-iva-message": "¡Recorda que cada aportació té una desgravació fiscal d'entre el 35 i 80%! Calcula aquí: {{link}}",
+    "reward-donate-close": "Afegir al carro i continuar",
+    "error-invalid-amount": "Si us plau, ingressa una quantitat vàlida major o igual al l’import de la recompensa",
+    "error-amount": "Si us plau, ingressa un import vàlid",
+    "loading": "Carregant recompenses..."
   },
   "updates": {
-    "heading": "No pierdas detalle de los avances de esta campaña",
-    "empty": "No existen más actualizaciones previstas."
+    "heading": "No perdis detall dels avenços d’aquesta campanya",
+    "empty": "No existeixen més actualitzacions previstes."
   },
   "updateCard": {
-    "readMore": "Seguir leyendo"
+    "readMore": "Seguir llegint"
   },
   "metadata": {
-    "title": "Inicio",
-    "description": "Página de inicio"
+    "title": "Inici",
+    "description": "Pàgina inicial"
   },
   "hero": {
     "title": "Finança el canvi que el món necessita",
-    "description": "Arranquem una nova etapa amb la mateixa brúixola que ens ha guiat des del principi: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!",
-    "buttons": {
-      "discover": "Descobreix projectes per donar suport",
-      "impulse": "Impulsa el teu projecte amb Goteo"
-    }
+    "description": "Engeguem una nova etapa amb la mateixa brúixola que ens ha guiat des de l'inici: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!"
   },
   "renovationBanner": {
-    "title": "Renovem Goteo!",
-    "description": "Goteo ha construït una història única al món del micromecenatge. Vols seguir formant part d'ella?",
-    "ctaButton": "Suma't a la nostra història"
+    "title": "¡Renovem Goteo!",
+    "description": "Goteo ha construït una història única en el món del micromecenatge. ¿Vols seguir formant-ne part?",
+    "ctaButton": "Uneix-te a la nostra història"
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión"
+    "login": "Iniciar Sessió",
+    "btnCart": "Anar al checkout"
   },
   "checkout": {
-    "title": "Resumen de tus donaciones seleccionadas",
-    "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+    "title": "Resum de les teves donacions seleccionades",
+    "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
     "reward": {
-      "claimed": "personas ya han reclamado esta recompensa",
-      "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
+      "claimed": "persones ja han reclamat aquesta recompensa",
+      "unclaimed": "Encara ningú ha reclamat aquesta recompensa. ¡Fes-ho tu primer!"
     },
     "tipjar": {
       "community": "Vull donar suport a la Fundació Platoniq",
       "checkboxLabel": "Impulsar una societat més justa i solidària",
+      "input": "Si us plau, introdueix un import lliure",
       "error": {
-        "invalidAmount": "La cantidad mínima es de 1€"
+        "invalidAmount": "La quantitat mínima és d'1€"
       }
     },
-    "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
+    "changeAddressLabel": "Enviar aquesta recompensa a una adreça diferent a la meva.",
     "summary": {
       "total": {
         "title": "Total que vas a donar",
-        "description": "Descripción del total"
+        "description": "Descripció del total"
       },
-      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
+      "deduct": "Pots desgravar-te fins a 100€ en la teva declaració de la renda si realitzes aquesta donació.",
       "resume": {
-        "donationsPrefix": "de donaciones",
-        "foundationPrefix": "de aporte a la fundación"
+        "donationsPrefix": "de donacions",
+        "foundationPrefix": "d’aportació a la fundació"
+      }
+    },
+    "cart": {
+      "freeDonation": {
+        "title": "Donació lliure"
       }
     },
     "steps": {
@@ -252,10 +355,10 @@
         "title": "Recompensa"
       },
       "data": {
-        "title": "Tus datos"
+        "title": "Les teves dades"
       },
       "payment": {
-        "title": "Método de pago"
+        "title": "Mètode de pagament"
       },
       "confirmation": {
         "title": "Confirmar"
@@ -267,48 +370,231 @@
   },
   "payment": {
     "page": {
-      "title": "Indícanos tus datos de pago",
-      "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
-      "selectMethod": "Selecciona método de pago:"
+      "title": "Indica’ns les teves dades de pagament",
+      "description": "Ara necessitem que ens diguis com vols pagar.",
+      "selectMethod": "Selecciona mètode de pagament:"
     },
     "page-aproved": {
-      "title": "Tu medio de pago se ha procesado con un éxito apabullante",
-      "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
+      "title": "El teu mitjà de pagament s’ha processat amb un èxit apoteòsic",
+      "description": "¡Ben! Estàs a un pas d’acabar i de fer el món una mica millor.",
       "form-goal": {
-        "title": "Si la campaña no logra su objetivo",
+        "title": "Si la campanya no aconsegueix el seu objectiu",
         "options": {
-          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
-          "2": "Devolverlo a mi medio de pago Tarjeta"
+          "1": "Ingressar al meu moneder de Goteo per poder destinar-lo a altres projectes. Saber més",
+          "2": "Tornar-lo al meu mitjà de pagament Targeta"
         }
       },
       "form-review": {
-        "title": "Deja un mensaje en los proyectos a los que has apoyado",
-        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+        "title": "Deixa un missatge als projectes que has recolzat",
+        "description": "La teva donació es veurà reflectida en els projectes que has recolzat. Pots deixar un missatge o romandre en l’anonimat.",
         "labels": {
-          "name": "Label",
-          "anonymous": "Colaborar de forma anónima",
-          "leave-a-message": "Dejar un mensaje en la campaña"
+          "name": "Etiqueta",
+          "anonymous": "Deixar un missatge de forma anònima",
+          "leave-a-message": "Deixar un missatge de forma pública"
         }
       }
     },
     "page-error": {
-      "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
-      "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
-      "selectMethod": "Selecciona de nuevo un método de pago:",
-      "btnContinue": "Volver a intentarlo"
+      "title": "Alguna cosa ha fallat... Torna a intentar-ho per poder donar.",
+      "description": "Vaja, tal vegada sigui culpa nostra, del mitjà de pagament o simplement un malvat follet informàtic. Anem a provar de nou.",
+      "selectMethod": "Torna a seleccionar un mètode de pagament:",
+      "btnContinue": "Torna a intentar-ho"
+    },
+    "wallet-confirmation": {
+      "title": "El teu moneder virtual",
+      "description": "Ben, vas a pagar amb el saldo acumulat en el teu moneder. Recorda que si tens saldo i en dos anys no ho gastes, es transferirà a la fundació.",
+      "currentBalance": "Saldo actual",
+      "amountToUse": "Quant vas a usar",
+      "remainingBalance": "Saldo que et quedarà"
+    },
+    "wallet": {
+      "balanceLabel": "Saldo: "
     },
     "error": {
-      "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
-      "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
-      "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
-      "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
+      "unexpectedPayment": "Error en processar el pagament. Si us plau, intenta-ho de nou més tard.",
+      "paymentFailed": "El pagament ha fallat. Si us plau, revisa les dades introduïdes i torna a intentar-ho.",
+      "paymentCancelled": "El pagament ha estat cancel·lat. Si us plau, torna a intentar-ho.",
+      "missingAccountingId": "No s’han trobat totes les dades. Si us plau, torna a iniciar sessió."
     }
   },
   "global": {
     "btn": {
       "continue": "Continuar",
-      "send": "Enviar",
-      "back": "Atrás"
+      "back": "Enrere",
+      "send": "Enviar"
+    }
+  },
+  "contributions": {
+    "title": "Aportacions",
+    "description": "Aquí tens les últimes aportacions a campanyes, pots ordenar-les i filtrar-les com vulguis.",
+    "table": {
+      "headers": {
+        "target": "Destí",
+        "amount": "Import",
+        "origin": "Origen",
+        "paymentMethod": "Mètode",
+        "date": "Data",
+        "chargeStatus": "Estat de l’operació",
+        "refundToWallet": "A Moneder"
+      },
+      "rows": {
+        "payments": {
+          "tpv": "Targeta",
+          "paypal": "Paypal",
+          "stripe": "Stripe",
+          "wallet": "Moneder"
+        },
+        "status": {
+          "in_pending": "Pendent",
+          "charged": "Cobrat",
+          "to_refund": "Per reemborsar",
+          "refunded": "Reemborsat"
+        },
+        "refund": {
+          "to_wallet": "Sí",
+          "to_gateway": "No"
+        },
+        "noData": "No hi ha dades disponibles"
+      }
+    },
+    "grid": {
+      "details": {
+        "operationTime": "Hora de l'operació",
+        "trackingCodes": {
+          "title": "Codis de seguiment",
+          "headers": {
+            "title": "Títol",
+            "trackingCode": "Codi de seguiment"
+          }
+        },
+        "toWallet": "A moneder",
+        "platformLinks": {
+          "title": "Enllaç a la plataforma",
+          "headers": {
+            "type": "Tipus d'enllaç",
+            "rel": "Relació",
+            "href": "Url"
+          }
+        },
+        "estimatedFee": "Comissió estimada"
+      },
+      "actions": {
+        "refundToWallet": "Devolució a moneder",
+        "refundToUser": "Devolució a usuari",
+        "changeUser": "Canviar d'usuari",
+        "manageReward": "Gestionar recompensa"
+      },
+      "content-footer": {
+        "lastEdited": "Darrera modificació: {{date}} {{time}}",
+        "downloadDetails": "Descarrega detall",
+        "annotations": "{{annotations}} Anotacions"
+      }
+    },
+    "filters": {
+      "order": {
+        "title": "Ordenar per:",
+        "options": {
+          "date-desc": "Data (més recent primer)",
+          "date-asc": "Data (més antiga primer)",
+          "amount-desc": "Import (més gran a més petit)",
+          "amount-asc": "Import (més petit a més gran)",
+          "status-desc": "Estat (Z-A)",
+          "status-asc": "Estat (A-Z)"
+        }
+      },
+      "itemsPerPage": {
+        "title": "Línies per pàgina:",
+        "options": {
+          "10": "10",
+          "20": "20",
+          "30": "30",
+          "50": "50"
+        }
+      },
+      "search": {
+        "placeholder": "Cercar...",
+        "btnLabel": "Cercar",
+        "resultsFound": "{{totalItems}} resultats per a \"{{query}}\"",
+        "noResults": "No s'han trobat resultats",
+        "labels": {
+          "projects": "Projectes",
+          "users": "Usuaris",
+          "tipjars": "Bancs de propina",
+          "tipjar-id": "ID del banc de propina"
+        }
+      },
+      "paymentMethod": {
+        "title": "Mètode de pagament",
+        "options": {
+          "all": "Tots",
+          "paypal": "Paypal",
+          "stripe": "Stripe",
+          "wallet": "Moneder"
+        }
+      },
+      "rangeAmount": {
+        "title": "Selecciona import",
+        "options": {
+          "all": "Tots",
+          "000..10000": "0€ - 100€",
+          "10000..50000": "100€ - 500€",
+          "50000..100000": "500€ - 1.000€",
+          "100000..500000": "1.000 € - 5.000 €",
+          "500000": "+ 5.000 €"
+        }
+      },
+      "dateRange": {
+        "initDate": "Data d'inici",
+        "endDate": "Data final",
+        "from": "Des de",
+        "to": "Fins a",
+        "errors": {
+          "invalidDate": "Data no vàlida",
+          "invalidRange": "La data d'inici no pot ser superior a la data final."
+        }
+      },
+      "chargeStatus": {
+        "title": "Estat de l'aportació",
+        "options": {
+          "all": "Tots",
+          "in_pending": "Pendent",
+          "charged": "Cobrat",
+          "to_refund": "Per reemborsar",
+          "refunded": "Reemborsat"
+        }
+      },
+      "projectStatus": {
+        "title": "Estat de la campanya",
+        "options": {
+          "all": "Totes",
+          "active": "Actives",
+          "finished": "Finalitzades",
+          "cancelled": "Cancel·lades"
+        }
+      },
+      "btns": {
+        "openFilters": "Filtres",
+        "closeFilters": "Tancar filtres",
+        "reset": "Reiniciar filtres",
+        "apply": "Aplicar filtres"
+      }
+    },
+    "pagination": {
+      "showing": "Mostrant {{items}} de {{total}}",
+      "unloaded": "Mostrant...",
+      "noResults": "No hi ha resultats"
+    },
+    "tootip": {
+      "copied": "Copiat!"
+    },
+    "export": {
+      "csv": "Exportar CSV",
+      "exporting": "Exportant...",
+      "error": "Error en l'exportació del fitxer CSV. Si us plau, intenta-ho novament.",
+      "errorAuth": "Error d'autenticació. Si us plau, inicia sessió novament.",
+      "filename": "càrregues-passarel·la",
+      "itemsText": "elements",
+      "noData": "No s'han trobat dades per exportar"
     }
   },
   "home": {
@@ -324,57 +610,40 @@
       "obtained": "Obtingut",
       "minimum": "Mínim",
       "daysRemaining": "Queden {{days}} dies",
-      "matchfunding": "Matchfunding",
-      "featuredProject": {
-        "title": "TRÍPTIC DADÀ. Pòdcast de cultura i pensament."
-      },
-      "projects": {
-        "project1": {
-          "title": "Narrar per a no desaparèixer: tres documentals que il·luminen el que el món calla"
-        },
-        "project2": {
-          "title": "Som la resistència: fem créixer el CE Europa"
-        },
-        "project3": {
-          "title": "CLAUSURA FEST"
-        },
-        "project4": {
-          "title": "Ràdio Valdivielso necessita una nova llar"
-        }
-      }
+      "matchfunding": "Matchfunding"
     },
     "blog": {
-      "title": "S'apropen grans canvis... no et perdis res!",
-      "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions...",
-      "readMore": "Continuar llegint"
+      "title": "S'aveïnen grans canvis… ¡no et perdis res!",
+      "excerpt": "Un procés que implica una migració tècnica important de la plataforma actual, i per fer-ho amb totes les garanties de seguretat i sense pèrdua d'informació, necessitem dur a terme una transició ordenada, amb dates clau per a la publicació de campanyes i la realització de donacions…",
+      "readMore": "Seguir llegint"
     },
     "matchfunding": {
       "title": "Matchfunding",
-      "description": "L'efecte matx només el veuràs a Goteo. Des del 2013 busquem organitzacions que vulguin multiplicar limpacte del crowdfunding. Per cada euro que una persona aporta a una campanya de Goteo, una institució col·laboradora (fundació, administració pública, empresa…) aporta la mateixa quantitat, o fins i tot més.",
+      "description": "Només veuràs l'efecte match a Goteo. Des del 2013 cerquem organitzacions que vulguin multiplicar l'impacte del micromecenatge. Per cada euro que una persona aporta a una campanya de Goteo, una institució col·laboradora (fundació, administració pública, empresa...) aporta la mateixa quantitat, o fins i tot més.",
       "actions": {
-        "learnMore": "Obteniu més informació",
-        "viewCalls": "Consulteu les trucades actives"
+        "learnMore": "Vull saber més",
+        "viewCalls": "Veure crides actives"
       },
       "impact": {
-        "title": "Dades d’impacte",
-        "description": "El Matchfunding no només multiplica recursos econòmics, sinó que genera un impacte social tangible. En essència, el matchfunding transforma microdonacions en impacte macro, validant projectes amb suport ciutadà i optimitzant recursos públics/privats.",
-        "matchers": "Contribuït a Matchfunding:",
-        "successfulProjects": "Projectes de beneficiaris:",
-        "successRate": "Percentatge d’èxit:"
+        "title": "Dades d'impacte",
+        "description": "El matchfunding no només multiplica recursos econòmics, sinó que genera un impacte social tangible. En essència, el matchfunding transforma microdonacions en impacte macro, validant projectes amb suport ciutadà i optimitzant recursos públics/privats.",
+        "matchers": "Dotació Matchfunding:",
+        "successfulProjects": "Projectes beneficiats:",
+        "successRate": "Percentatge d'èxit:"
       },
       "cards": {
-        "grant": "Trucada de finançament",
-        "inscription": "Data d’inscripció",
+        "grant": "Dotació de la convocatòria",
+        "inscription": "Data d'inscripció",
         "participants": "Projectes participants",
         "apply": "Inscriu-te a la convocatòria",
-        "viewCampaigns": "Consulta les campanyes de la convocatòria",
-        "finished": "Acabat {{date}}"
+        "viewCampaigns": "Veure les campanyes de la convocatòria",
+        "finished": "Finalitzada {{date}}"
       }
     },
     "stats": {
       "theoryToAction": {
-        "title": "De la teoria a l’acció",
-        "subtitle": "Les xifres que revelen la nostra empremta real. Dades a desembre de 2024.",
+        "title": "De la teoria a l'acció",
+        "subtitle": "Les xifres que revelen la nostra empremta. Dades actualitzades del 2024.",
         "projectsReceived": {
           "value": "10.281",
           "label": "Projectes rebuts"
@@ -385,13 +654,13 @@
         },
         "successRate": {
           "value": "83%",
-          "label": "Taxa d’èxit"
+          "label": "Taxa d'èxit"
         },
-        "button": "Consulteu l'estat de Goteo"
+        "button": "Veure Stats de Goteo"
       },
       "whyGoteo": {
         "title": "Per què Goteo?",
-        "subtitle": "Tenim valors i les dades ens donen suport. Dades a desembre de 2024.",
+        "subtitle": "Tenim valors i les dades ens avalen. Dades actualitzades de 2024.",
         "community": {
           "value": "384.341",
           "label": "Comunitat"
@@ -402,22 +671,22 @@
         },
         "totalRaised": {
           "value": "23M €",
-          "label": "Recollida total"
+          "label": "Recaptació total"
         },
-        "button": "Vull saber -ne més"
+        "button": "Vull saber més"
       }
     },
     "stories": {
       "title": "Goteo estrena nova web!",
       "subtitle": "Encantats de compartir-ho amb tu",
-      "description": "Goteo té una nova cara! Navega per la nostra web renovada i descobreix una experiència de crowdfunding social més intuïtiva i atractiva. Explora projectes innovadors, coneix els creadors que hi ha al darrere i uneix-te a la nostra comunitat.\nConverteix-te en donant i fes realitat les teves idees!",
+      "description": "¡Goteo té una nova cara! Navega per la nostra web renovada i descobreix una experiència de crowdfunding social més intuïtiva i atractiva. Explora projectes innovadors, coneix els creadors darrere d'ells i uneix-te a la nostra comunitat.\n¡Converteix-te en donant i fes realitat les teves idees!",
       "button": "Converteix-te en donant"
     },
     "featuredPromoters": {
       "title": "Impulsors destacats",
       "viewAll": "Veure tots",
-      "projectsPromoted": "Projectes impulsats",
-      "capitalRaised": "Capital recaptat",
+      "projectsPromoted": "Projectes",
+      "capitalRaised": "Recaptació",
       "promoterImage": "Foto de l'impulsor",
       "shareProfile": "Compartir perfil de {{name}}"
     },
@@ -427,19 +696,19 @@
       "readMore": "Llegir més",
       "articles": {
         "firstCampaign": {
-          "title": "Com faig la meva primera campanya?",
-          "description": "El teu projecte mereix enlairar-se: Domina el crowdfunding social amb la nostra CAIXA D'EINES GRATUÏTA. Guia pràctica + plantilles descarregables per conquistar la teva audiència."
+          "title": "Com puc fer la meva primera campanya?",
+          "description": "El teu projecte mereix volar: Domina el crowdfunding social amb la nostra CAIXA D'EINES GRATUÏTA. Guia pràctica + plantilles descarregables per conquerir la teva audiència."
         },
         "testimonials": {
           "title": "Testimonis dels nostres impulsors",
-          "description": "Qui et pot explicar millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
+          "description": "Qui pot explicar-te millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
         }
       }
     }
   },
   "footer": {
     "funding": {
-      "title": "Finança:",
+      "title": "Finançat per:",
       "partOf": "Som part de:"
     },
     "navigation": {
@@ -451,7 +720,7 @@
       },
       "help": {
         "title": "Ajuda",
-        "faqs": "Preguntes freqüents",
+        "faqs": "FAQs",
         "contact": "Contacte",
         "taxCalculator": "Calculadora fiscal"
       },
@@ -463,8 +732,8 @@
         "platoniqFoundation": "Fundació Platoniq"
       },
       "forUsers": {
-        "title": "Per a usuàries",
-        "rechargeWallet": "Recarrega la teva cartera",
+        "title": "Per a usuaris",
+        "rechargeWallet": "Recarrega el teu moneder",
         "downloadCertificate": "Descarrega certificat",
         "accessComplementaryFunds": "Accedeix a fons complementaris",
         "designFundingProgram": "Dissenya un programa de finançament"
@@ -474,11 +743,38 @@
       "termsOfUse": "Condicions d'ús",
       "privacyPolicy": "Política de privacitat",
       "licenses": "Llicències",
-      "stats": "Estadístiques"
+      "stats": "Stats"
     },
     "platoniq": {
       "foundation": "Fundació",
       "name": "Platoniq"
+    }
+  },
+  "profile": {
+    "share": "Compartir",
+    "subscribe": "Subscriu-te",
+    "tabs": {
+      "about": "Sobre el perfil",
+      "projects": "Projectes impulsats",
+      "donorType": "Tipus de donant"
+    },
+    "notFound": "Usuari no trobat",
+    "location": "Ubicació",
+    "userIntro": "Membre actiu de la comunitat Goteo",
+    "organizationIntro": "Organització compromesa amb el canvi social",
+    "bioSample": "Amb una trajectòria dedicada a l'ecosistema de crowdfunding i finançament col·lectiu, {{name}} s'ha consolidat com un referent en la creació de projectes col·laboratius i la mobilització de recursos. La seva visió se centra en potenciar iniciatives que transformen realitats locals, combinant estratègies innovadores amb un profund compromís per la participació ciutadana i l'equitat social.",
+    "noProjects": "No hi ha projectes impulsats encara.",
+    "donorType": {
+      "fan": {
+        "title": "Fan",
+        "description": "Aquest donant ha invertit més de 25€",
+        "projectsDonated": "Projectes donats",
+        "moneyDonated": "Diners donats"
+      },
+      "nextLevel": {
+        "title": "Proper nivell",
+        "description": "Continua donant per pujar de nivell"
+      }
     }
   }
 }

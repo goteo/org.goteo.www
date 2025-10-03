@@ -420,7 +420,7 @@
   "global": {
     "btn": {
       "continue": "Continuar",
-      "back": "Atrás",
+      "back": "Volver",
       "send": "Enviar"
     }
   },
@@ -777,6 +777,33 @@
         "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
       },
       "submit": "Proponer campaña"
+    }
+  },
+  "profile": {
+    "share": "Compartir",
+    "subscribe": "Subscríbete",
+    "tabs": {
+      "about": "Sobre el perfil",
+      "projects": "Proyectos impulsados",
+      "donorType": "Tipo de donante"
+    },
+    "notFound": "Usuario no encontrado",
+    "location": "Ubicación",
+    "userIntro": "Miembro activo de la comunidad Goteo",
+    "organizationIntro": "Organización comprometida con el cambio social",
+    "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
+    "noProjects": "No hay proyectos impulsados aún.",
+    "donorType": {
+      "fan": {
+        "title": "Fan",
+        "description": "Este donante a invertido más de 25€",
+        "projectsDonated": "Proyectos donados",
+        "moneyDonated": "Dinero donado"
+      },
+      "nextLevel": {
+        "title": "Próximo nivel",
+        "description": "Sigue donando para subir de nivel"
+      }
     }
   }
 }

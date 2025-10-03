@@ -1,4 +1,21 @@
-<svg width="49" height="48" viewBox="0 0 49 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+<script lang="ts">
+    interface Props {
+        class?: string;
+        width?: string | number;
+        height?: string | number;
+    }
+
+    let { class: className = "", width = "49", height = "48" }: Props = $props();
+</script>
+
+<svg
+    {width}
+    {height}
+    viewBox="0 0 49 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class={className}
+>
     <g clip-path="url(#clip0_568_33965)">
         <mask
             id="mask0_568_33965"
