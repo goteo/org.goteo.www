@@ -40,10 +40,7 @@
     } = $props();
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
-    let showFull = $state(false);
 
-    let paragraphRef: HTMLParagraphElement;
-    let showToggle = $state(false);
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
 
     async function getProjectData(code?: string) {
@@ -58,13 +55,6 @@
 
         project = data!;
     }
-
-    onMount(() => {
-        const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
-        if (paragraphRef.scrollHeight > twoLinesHeight + 1) {
-            showToggle = true;
-        }
-    });
 </script>
 
 <section class="wrapper">
@@ -81,24 +71,9 @@
             </div>
 
             <div>
-                <p
-                    bind:this={paragraphRef}
-                    class="text-[#575757] transition-all duration-300 ease-in-out {showFull
-                        ? ''
-                        : 'line-clamp-2'}"
-                >
+                <p class="text-[#575757] transition-all duration-300 ease-in-out">
                     {project.subtitle}
                 </p>
-
-                {#if showToggle}
-                    <button
-                        type="button"
-                        class="mt-2 text-sm font-medium text-blue-600 hover:underline"
-                        onclick={() => (showFull = !showFull)}
-                    >
-                        {showFull ? $t("project.actions.viewLess") : $t("project.actions.viewMore")}
-                    </button>
-                {/if}
             </div>
         </div>
 
