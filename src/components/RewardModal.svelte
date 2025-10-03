@@ -9,6 +9,7 @@
     import { cart } from "../stores/cart";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import { onMount } from "svelte";
+    import Button from "./library/Button.svelte";
 
     let {
         open = $bindable(false),
@@ -150,20 +151,12 @@
             {/if}
         </div>
         <div class="flex flex-row gap-4">
-            <button
-                type="button"
-                onclick={() => updateAmount("close")}
-                class="text-tertiary border-tertiary inline-block w-full cursor-pointer rounded-3xl border bg-[#FFF] px-6 py-4 font-bold transition"
-            >
+            <Button kind="ghost" onclick={() => updateAmount("close")} class="w-full">
                 {$t("rewards.reward-donate-close")}
-            </button>
-            <button
-                type="button"
-                onclick={() => updateAmount("checkout")}
-                class="text-tertiary bg-primary bg inline-block w-full cursor-pointer rounded-3xl px-6 py-4 font-bold transition"
-            >
+            </Button>
+            <Button onclick={() => updateAmount("checkout")} class="w-full">
                 {$t("rewards.donation-free.btn")}
-            </button>
+            </Button>
         </div>
     </div>
 </Modal>

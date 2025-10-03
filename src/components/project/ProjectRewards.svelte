@@ -8,6 +8,7 @@
     import { cart } from "../../stores/cart";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import Button from "../library/Button.svelte";
     import Reward from "../Reward.svelte";
 
     let {
@@ -97,16 +98,14 @@
                         placeholder={$t("rewards.donation-free.placeholder")}
                         bind:value={freeAmount}
                     />
-                    <button
-                        type="button"
-                        onclick={handleFreeDonation}
+                    <Button
+                        kind="secondary"
+                        class="w-full"
                         disabled={!isAvailable}
-                        class:cursor-pointer={isAvailable}
-                        class:cursor-not-allowed={!isAvailable}
-                        class="text-tertiary inline-block w-full cursor-pointer rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+                        onclick={handleFreeDonation}
                     >
                         {$t("rewards.donation-free.btn")}
-                    </button>
+                    </Button>
                 </div>
             </li>
             {#each rewards as reward}

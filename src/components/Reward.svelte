@@ -5,6 +5,7 @@
     import UserIcon from "../svgs/UserIcon.svelte";
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
+    import Button from "./library/Button.svelte";
     import RewardModal from "./RewardModal.svelte";
 
     let {
@@ -84,16 +85,14 @@
         {/if}
     </div>
 
-    <button
-        type="button"
-        onclick={() => (openModal = true)}
+    <Button
+        kind="secondary"
+        class="w-full"
         disabled={!isAvailable}
-        class:cursor-pointer={isAvailable}
-        class:cursor-not-allowed={!isAvailable}
-        class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+        onclick={() => (openModal = true)}
     >
         {$t("reward.donate")}
         {formatCurrency(reward.money.amount, reward.money.currency)}
-    </button>
+    </Button>
 </li>
 <RewardModal {reward} {project} bind:open={openModal} />
