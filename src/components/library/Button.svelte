@@ -22,11 +22,12 @@
         primary: "bg-primary",
         secondary: "bg-purple-tint",
         ghost: "inset-ring-1 inset-ring-[#462949]",
-        invert: ""
+        invert: "",
     };
 
     let {
         children,
+        form = undefined,
         type = "button",
         disabled = false,
         class: className = "",
@@ -35,6 +36,7 @@
         onclick,
     }: {
         children: Snippet;
+        form?: string;
         type?: "button" | "submit";
         disabled?: boolean;
         size?: keyof typeof sizeStyles;
@@ -46,6 +48,7 @@
 
 <button
     {type}
+    {form}
     {disabled}
     {onclick}
     class={twMerge(baseStyle.join(" "), sizeStyles[size], kindStyles[kind], className)}
