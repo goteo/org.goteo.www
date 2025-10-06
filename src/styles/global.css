@@ -12,13 +12,14 @@
 @theme {
     /* Light Theme (default) */
     --color-primary: #59e9d3;
-    --color-secondary: #3d3d3d;
-    --color-tertiary: #462949;
+    --color-secondary: #462949;
+    --color-tertiary: #e94668;
     --color-background: #f8fafc;
     --color-body: #1e293b;
 
     /* Extended color tokens for components */
-    --color-white: #ffffff; /* Pure white */
+    --color-white: #fbfbfb;
+    --color-black: #3d3d3d
     --color-light-accent: #e6d9f3; /* Light purple accent for buttons */
     --color-light-surface: #fbfbfb; /* Light background surface */
     --color-light-muted: #f3f3ef; /* Muted light background */
