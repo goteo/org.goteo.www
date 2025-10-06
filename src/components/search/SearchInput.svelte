@@ -10,12 +10,14 @@ Implements main search bar with floating label matching Figma design exactly
         value?: string;
         onSearch?: (query: string) => void;
         onEnter?: () => void;
+        onClear?: () => void;
     }
 
     let {
         value = "",
         onSearch,
         onEnter,
+        onClear,
         placeholder = "",
         class: className = "",
         "data-testid": dataTestId,
@@ -45,6 +47,7 @@ Implements main search bar with floating label matching Figma design exactly
     function clearSearch() {
         searchQuery = "";
         onSearch?.("");
+        onClear?.();
     }
 </script>
 

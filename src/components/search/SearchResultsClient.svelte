@@ -107,6 +107,11 @@ Manages real-time filtering of campaigns without page reloads
 
         // Clear URL parameters
         window.history.replaceState({}, "", window.location.pathname);
+
+        // Trigger search to get default results
+        setTimeout(() => {
+            searchStore.searchWithApi(true);
+        }, 100);
     }
 
     // Error handling functions

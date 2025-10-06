@@ -68,6 +68,8 @@ Integrated with searchStore for state management and URL synchronization
     function handleClearFilters() {
         searchStore.clearFilters();
         searchStore.clearResults();
+        // Trigger search to get default results
+        searchStore.searchWithApi(true);
     }
 
     function toggleFilters() {
@@ -89,6 +91,7 @@ Integrated with searchStore for state management and URL synchronization
                     value={$searchFilters.query}
                     onSearch={(query) => updateFilters({ query })}
                     onEnter={handleSearch}
+                    onClear={handleSearch}
                     placeholder={$t("search.placeholder")}
                     data-testid="search-input"
                 />
