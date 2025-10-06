@@ -34,7 +34,7 @@ const { accounting } = Astro.props;
                 {
                     (paymentGateways ?? []).map((gateway) => (
                         <label
-                            class="flex cursor-pointer items-center justify-between gap-4 rounded-2xl border border-[#F3F3EF] px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            class="border-light-muted flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
                             data-gateway={gateway.name}
                         >
                             <div class="flex items-center gap-2">
@@ -47,7 +47,7 @@ const { accounting } = Astro.props;
                                         gateway.name !== "wallet" &&
                                         paymentGateways?.[0]?.name === gateway.name
                                     }
-                                    class="after:bg-primary relative h-6 w-6 appearance-none rounded-full border border-[#462949] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:border-[#462949] checked:bg-[#462949] checked:after:block"
+                                    class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
                                     <span class="font-semibold capitalize">{gateway.name}</span>
@@ -188,12 +188,12 @@ const { accounting } = Astro.props;
             input.addEventListener("change", () => {
                 labels.forEach((label) => {
                     label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
-                    label.classList.add("border-[#F3F3EF]");
+                    label.classList.add("border-light-muted");
                 });
 
                 const selectedLabel = input.closest("label");
                 if (selectedLabel) {
-                    selectedLabel.classList.remove("border-[#F3F3EF]");
+                    selectedLabel.classList.remove("border-light-muted");
                     selectedLabel.classList.add("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
                 }
             });

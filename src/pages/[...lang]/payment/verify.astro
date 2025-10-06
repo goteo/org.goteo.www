@@ -70,10 +70,10 @@ try {
                                 <div class="flex flex-col gap-10">
                                     <div class="flex flex-row items-center justify-between gap-6">
                                         <div class="flex w-2/3 flex-col gap-4">
-                                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                 {t("payment.page-error.title")}
                                             </h2>
-                                            <p class="text-[#575757]">
+                                            <p class="text-content">
                                                 {t("payment.page-error.description")}
                                             </p>
                                         </div>
@@ -92,8 +92,8 @@ try {
                             <Summary client:load hasError={!!error} {defaultCurrency} {amount} />
                             <Steps client:load step={4} hasError={!!error} />
                             <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
-                                <a class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]">
+                                <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                                <a class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold">
                                     {t("global.btn.continue")}
                                 </a>
                             </div>
@@ -109,10 +109,10 @@ try {
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
-                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                     {t("payment.page-aproved.title")}
                                                 </h2>
-                                                <p class="text-[#575757]">
+                                                <p class="text-content">
                                                     {t("payment.page-aproved.description")}
                                                 </p>
                                             </div>
@@ -128,10 +128,10 @@ try {
                                 <Summary client:load {defaultCurrency} {amount} />
                                 <Steps step={4} client:load />
                                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                    <p class="text-sm text-[#575757]">
+                                    <p class="text-content text-sm">
                                         {t("checkout.summary.deduct")}
                                     </p>
-                                    <a class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]">
+                                    <a class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold">
                                         {t("global.btn.continue")}
                                     </a>
                                 </div>

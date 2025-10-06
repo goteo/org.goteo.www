@@ -8,7 +8,7 @@
         <form id="feedback" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-secondary text-2xl font-bold">
+                    <h2 class="text-tertiary text-2xl font-bold">
                         {$t("payment.page-aproved.form-goal.title")}
                     </h2>
                 </div>
@@ -35,7 +35,7 @@
                             type="radio"
                             name="type"
                             value="organization"
-                            class="relative h-6 w-6 appearance-none rounded-full border border-[#855a96] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700"
@@ -46,11 +46,11 @@
 
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-secondary text-2xl font-bold">
+                    <h2 class="text-tertiary text-2xl font-bold">
                         {$t("payment.page-aproved.form-review.title")}
                     </h2>
                 </div>
-                <p class="text-[#575757]">{$t("payment.page-aproved.form-review.description")}</p>
+                <p class="text-content">{$t("payment.page-aproved.form-review.description")}</p>
             </div>
 
             <fieldset class="flex flex-col gap-6">
@@ -74,7 +74,7 @@
                             name="messageType"
                             value="public"
                             bind:group={messageType}
-                            class="relative h-6 w-6 appearance-none rounded-full border border-[#855a96] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700"> Dejar un mensaje de forma pública </span>
@@ -87,7 +87,7 @@
                 </label>
                 <textarea
                     id="review-message"
-                    class="w-full appearance-none rounded-md border border-[#855a96] bg-white p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    class="border-secondary focus:ring-secondary w-full appearance-none rounded-md border bg-white p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                     name="review"
                     placeholder="Escribe tu mensaje de apoyo al impulsor..."
                     rows="4"

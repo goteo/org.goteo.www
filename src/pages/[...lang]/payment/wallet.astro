@@ -30,10 +30,10 @@ const { data: accounting } = await apiAccountingsIdGet({
                 <div class="flex flex-col gap-4">
                     <div class="flex flex-col gap-10">
                         <div class="flex flex-col gap-4">
-                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                 {t("payment.wallet-confirmation.title")}
                             </h2>
-                            <p class="text-[#575757]">
+                            <p class="text-content">
                                 {t("payment.wallet-confirmation.description")}
                             </p>
                         </div>
@@ -48,9 +48,9 @@ const { data: accounting } = await apiAccountingsIdGet({
                 <Summary client:load {defaultCurrency} />
                 <Steps step={3} client:load />
                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                    <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
+                    <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
                     <a
-                        class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]"
+                        class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
                     >
                         {t("global.btn.continue")}
                     </a>

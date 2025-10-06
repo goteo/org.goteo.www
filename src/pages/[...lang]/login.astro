@@ -25,20 +25,20 @@ itemCount.subscribe((count) => {
                 <div class="flex flex-col gap-4">
                     <div class="flex flex-col gap-10">
                         <div class="flex flex-col gap-4">
-                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                 {t("login.page.title")}
                             </h2>
-                            {hasCart && <p class="text-[#575757]">{t("login.page.description")}</p>}
+                            {hasCart && <p class="text-content">{t("login.page.description")}</p>}
                         </div>
                         <div>
                             <div class="flex flex-col gap-4">
                                 <div class="flex flex-row items-center gap-2">
-                                    <h2 class="text-secondary text-2xl font-bold">
+                                    <h2 class="text-2xl font-bold text-black">
                                         {t("login.page.registerOr")}
                                     </h2>
                                     <a
                                         href="/register"
-                                        class="text-tertiary rounded-2xl bg-[#E6E5F7] px-4 py-2 font-bold"
+                                        class="text-secondary bg-purple-tint rounded-2xl px-4 py-2 font-bold"
                                     >
                                         {t("login.page.registerBtnLabel")}
                                     </a>
@@ -59,26 +59,22 @@ itemCount.subscribe((count) => {
                 {hasCart && <Summary client:load />}
                 {hasCart && <Steps step={2} client:load />}
                 <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                    {
-                        hasCart && (
-                            <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
-                        )
-                    }
+                    {hasCart && <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>}
 
                     {
                         !hasCart && (
                             <div class="flex flex-col gap-6 pt-6 pb-0">
                                 <div>
                                     <h2
-                                        class={`text-[56px] leading-tight font-semibold text-[#462949]`}
+                                        class={`text-secondary text-[56px] leading-tight font-semibold`}
                                     >
                                         {t("login.page.welcome.title")}
                                     </h2>
-                                    <p class="font-light text-[#575757]">
+                                    <p class="text-content font-light">
                                         {t("login.page.welcome.subtitle")}
                                     </p>
                                 </div>
-                                <hr class="bg-[#462949]" />
+                                <hr class="bg-secondary" />
                             </div>
                         )
                     }

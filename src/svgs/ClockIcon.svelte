@@ -3,7 +3,7 @@
 </script>
 
 <svg
-    class={`fill-(--color-tertiary) ${className}`}
+    class={`fill-(--color-secondary) ${className}`}
     {width}
     {height}
     viewBox="0 0 32 32"

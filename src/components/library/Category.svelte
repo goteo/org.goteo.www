@@ -8,13 +8,13 @@
         "px-[16px]",
         "py-[8px]",
         "font-[700]",
-        "hover:bg-[#e6e5f7]",
-        "hover:text-secondary",
+        "hover:bg-purple-tint",
+        "hover:text-tertiary",
     ];
 
     const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-[#462949] bg-[#fbfbfb]",
-        active: "bg-[#462949] text-primary",
+        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-light-surface",
+        active: "bg-secondary text-primary",
         ghost: "",
     };
 

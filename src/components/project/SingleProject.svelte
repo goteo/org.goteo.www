@@ -61,17 +61,17 @@
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
         <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
-                <h3 class="text-xl font-bold text-[#575757] lg:text-2xl">
+                <h3 class="text-content text-xl font-bold lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="text-tertiary font-bold underline"> {ownerName}</span>
+                    <span class="font-bold text-black underline"> {ownerName}</span>
                 </h3>
-                <h1 class="text-3xl font-bold text-[#575757] lg:text-4xl">
+                <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}
                 </h1>
             </div>
 
             <div>
-                <p class="text-[#575757] transition-all duration-300 ease-in-out">
+                <p class="text-content transition-all duration-300 ease-in-out">
                     {project.subtitle}
                 </p>
             </div>
@@ -121,7 +121,7 @@
     </div>
     <div class="flex flex-col gap-8">
         <div class="flex items-center justify-between">
-            <h2 class="text-secondary text-2xl font-bold">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("reward.trending")}
             </h2>
             <Button kind="secondary" class="hidden lg:flex">

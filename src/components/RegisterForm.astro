@@ -22,7 +22,7 @@ const { t } = Astro.locals;
                         type="radio"
                         name="type"
                         value="organization"
-                        class="relative h-6 w-6 appearance-none rounded-full border border-[#855a96] after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                        class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
                     <span class="text-gray-700">{t("register.form.userType.organization")}</span>
                 </label>
@@ -31,7 +31,7 @@ const { t } = Astro.locals;
             <div class="flex flex-row gap-4">
                 <div class="relative w-full">
                     <input
-                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                         required
                         type="text"
                         id="firstname"
@@ -49,7 +49,7 @@ const { t } = Astro.locals;
 
                 <div class="relative w-full">
                     <input
-                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                         required
                         type="text"
                         id="lastname"
@@ -72,7 +72,7 @@ const { t } = Astro.locals;
                     id="identifier"
                     name="identifier"
                     placeholder=""
-                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                     required
                 />
                 <label
@@ -85,7 +85,7 @@ const { t } = Astro.locals;
 
             <div class="relative w-full">
                 <input
-                    class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                    class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                     required
                     type="password"
                     id="password"
@@ -101,7 +101,7 @@ const { t } = Astro.locals;
                 </label>
             </div>
 
-            <div class="relative w-full text-xs font-medium text-[#575757]">
+            <div class="text-content relative w-full text-xs font-medium">
                 <span> {t("register.form.validation.password.minLength")}</span>
             </div>
 
@@ -111,7 +111,7 @@ const { t } = Astro.locals;
                         <input
                             type="checkbox"
                             id="toggle-dni"
-                            class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                            class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                         />
                         <span class="text-sm text-gray-700"
                             >{t("register.individual.taxId.msgDeduction")}</span
@@ -141,7 +141,7 @@ const { t } = Astro.locals;
                 <div class="relative w-full">
                     <input
                         id="fields-organization-razonSocial"
-                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                         type="text"
                         id="razonSocial"
                         name="razonSocial"
@@ -159,7 +159,7 @@ const { t } = Astro.locals;
                 <div class="relative w-full">
                     <input
                         id="fields-organization-cif"
-                        class="peer w-full rounded-md border border-[#855a96] px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:ring-[#855a96] focus:outline-none"
+                        class="peer border-secondary focus:ring-secondary w-full rounded-md border px-4 pt-6 pb-2 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                         type="text"
                         id="cif"
                         name="cif"
@@ -180,7 +180,7 @@ const { t } = Astro.locals;
                     <input
                         type="checkbox"
                         id="terms"
-                        class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                        class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                     />
                     <span class="text-sm text-gray-700">
                         {t("register.form.termsCheckbox")}
@@ -190,7 +190,7 @@ const { t } = Astro.locals;
                     <input
                         type="checkbox"
                         id="cookies"
-                        class="accent-primary mt-1 h-5 w-5 shrink-0 border border-gray-400 text-[#855a96] focus:ring-[#855a96]"
+                        class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                     />
                     <span class="text-sm text-gray-700">
                         {t("register.form.policiesCheckbox")}
@@ -291,7 +291,7 @@ const { t } = Astro.locals;
                     dniInput.classList.remove("border-[#e6e6e6]", "focus:ring-transparent");
 
                     if (isChecked) {
-                        dniInput.classList.add("border-[#855a96]", "focus:ring-[#855a96]");
+                        dniInput.classList.add("border-secondary", "focus:ring-secondary");
                         dniInput.classList.remove("cursor-not-allowed");
                         labelInput.classList.remove("cursor-not-allowed");
                     }

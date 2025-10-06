@@ -66,22 +66,22 @@
 <div class="relative h-[160px] w-full border">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-[#575757]">Cargando...</span>
+            <span class="text-content">Cargando...</span>
         </div>
     {/if}
 
     <div bind:this={mainCarousel} class="main-carousel h-full w-full">
         {#each slides as { title, subtitle, date, body, cover }}
             <div
-                class="carousel-cell mr-6 flex h-full w-[100%] flex-col items-start justify-center gap-4 rounded-xl border border-[red] bg-[#faf9ff] p-8 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="carousel-cell bg-soft-purple mr-6 flex h-full w-[100%] flex-col items-start justify-center gap-4 rounded-xl border border-[red] p-8 shadow-[0px_1px_3px_0px_#0000001A]"
             >
-                <span class="text-base font-semibold text-[#575757]">{date}</span>
+                <span class="text-content text-base font-semibold">{date}</span>
                 {#if cover}
                     <img src={cover} alt={title} class="mt-4 w-full rounded-lg object-cover" />
                 {/if}
-                <span class="text-base font-semibold text-[#575757]">{title}</span>
-                <span class="text-secondary text-3xl">{subtitle}</span>
-                <p class="text-sm text-[#575757]">{body}</p>
+                <span class="text-content text-base font-semibold">{title}</span>
+                <span class="text-tertiary text-3xl">{subtitle}</span>
+                <p class="text-content text-sm">{body}</p>
             </div>
         {/each}
     </div>

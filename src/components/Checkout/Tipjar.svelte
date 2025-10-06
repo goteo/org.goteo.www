@@ -85,7 +85,7 @@
 
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-2">
-        <h2 class="text-secondary text-2xl font-bold">
+        <h2 class="text-tertiary text-2xl font-bold">
             {$t("checkout.tipjar.community")}
         </h2>
 
@@ -122,7 +122,7 @@
                     toggleDonation(isChecked);
                 }}
             />
-            <label for="donation-checkbox" class="text-tertiary">
+            <label for="donation-checkbox" class="text-secondary">
                 {$t("checkout.tipjar.checkboxLabel")}
             </label>
         </div>

@@ -21,7 +21,7 @@
     const kindStyles = {
         primary: "bg-primary",
         secondary: "bg-purple-tint",
-        ghost: "inset-ring-1 inset-ring-[#462949]",
+        ghost: "inset-ring-1 inset-ring-secondary",
         invert: "",
     };
 

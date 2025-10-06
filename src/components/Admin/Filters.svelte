@@ -211,7 +211,7 @@
 </script>
 
 <div
-    class="relative flex flex-col gap-10 rounded-[40px] border border-[#E6E5F7] px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-purple-tint relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />
@@ -220,7 +220,7 @@
             <button
                 type="button"
                 onclick={() => (showFilters = !showFilters)}
-                class="border-secondary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+                class="border-secondary text-secondary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
             >
                 <span class="relative">
                     <FiltersIcon />
@@ -308,7 +308,7 @@
             <div class="col-span-3 flex justify-end">
                 <button
                     type="submit"
-                    class="bg-primary text-tertiary cursor-pointer rounded-3xl px-6 py-4 text-base font-bold"
+                    class="bg-primary text-secondary cursor-pointer rounded-3xl px-6 py-4 text-base font-bold"
                 >
                     {$t("contributions.filters.btns.apply")}
                 </button>
@@ -322,7 +322,7 @@
         type="button"
         onclick={handleExportCSV}
         disabled={isExporting}
-        class="relative inline-flex cursor-pointer items-center gap-2 rounded-2xl bg-[#E6E5F7] px-4 py-2 font-medium text-nowrap text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        class="bg-purple-tint relative inline-flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-2 font-medium text-nowrap text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
         {#if isExporting}
             <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">

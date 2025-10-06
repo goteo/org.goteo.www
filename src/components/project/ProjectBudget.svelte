@@ -75,7 +75,7 @@
     </div>
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
-            <span class="text-tertiary text-3xl font-bold">
+            <span class="text-secondary text-3xl font-bold">
                 {$t("project.tabs.budget.minimum")}:
                 {formatCurrency(
                     project.budget?.minimum?.money?.amount,
@@ -96,13 +96,13 @@
                         class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
                     >
                         <div class="flex flex-col gap-4">
-                            <h2 class="text-tertiary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="line-clamp-3 font-normal text-[#575757]">
+                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
+                            <p class="text-content line-clamp-3 font-normal">
                                 {item.description}
                             </p>
                         </div>
                         <div class="flex flex-row items-center justify-between">
-                            <p class="text-secondary text-2xl">
+                            <p class="text-2xl text-black">
                                 {formatCurrency(item.money.amount, item.money.currency)}
                             </p>
                             <div class="flex items-center gap-2">
@@ -119,7 +119,7 @@
         </div>
         <div class="flex flex-col gap-6">
             <div></div>
-            <span class="text-tertiary text-3xl font-bold">
+            <span class="text-secondary text-3xl font-bold">
                 {$t("project.tabs.budget.optimal")}:
 
                 {formatCurrency(
@@ -141,13 +141,13 @@
                         class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
                     >
                         <div class="flex flex-col gap-4">
-                            <h2 class="text-tertiary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="line-clamp-3 font-normal text-[#575757]">
+                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
+                            <p class="text-content line-clamp-3 font-normal">
                                 {item.description}
                             </p>
                         </div>
                         <div class="flex flex-row items-center justify-between">
-                            <p class="text-secondary text-2xl">
+                            <p class="text-2xl text-black">
                                 {formatCurrency(item.money.amount, item.money.currency)}
                             </p>
                             <div class="flex items-center gap-2">
