@@ -8,13 +8,11 @@ Manages real-time filtering of campaigns without page reloads
     import {
         searchStore,
         searchFilters,
-        hasActiveFilters,
         searchError,
         searchResults,
         isSearching,
         hasSearchResults,
         hasActualSearchResults,
-        hasInitialResults,
         isEmpty,
         resultCount,
     } from "../../stores/searchStore";
@@ -183,34 +181,6 @@ Manages real-time filtering of campaigns without page reloads
 
 <!-- Search Results Container -->
 <div class="search-results-container">
-    <!-- Results Count and Clear Button -->
-    {#if $hasActiveFilters}
-        <div class="mb-6 flex items-center justify-between">
-            <p class="text-secondary text-lg" data-testid="result-count">
-                {$hasActualSearchResults ? $t("search.results.found", { count: $resultCount }) : ""}
-            </p>
-            <button
-                onclick={clearAllFilters}
-                class="text-primary hover:text-tertiary clear-filters-main text-sm font-semibold transition-colors"
-                data-testid="clear-filters-btn"
-            >
-                {$t("search.filters.clear")}
-            </button>
-        </div>
-    {:else if $hasActualSearchResults}
-        <div class="mb-6">
-            <p class="text-secondary text-lg" data-testid="result-count">
-                {$t("search.results.found", { count: $resultCount })}
-            </p>
-        </div>
-    {:else if $hasInitialResults}
-        <div class="mb-6">
-            <p class="text-secondary text-lg" data-testid="initial-result-count">
-                {$t("search.showing_top_results", { count: $resultCount })}
-            </p>
-        </div>
-    {/if}
-
     <!-- Error Alert -->
     {#if $searchError}
         <div class="mb-6">
