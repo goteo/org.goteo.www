@@ -50,7 +50,7 @@ Implements main search bar with floating label matching Figma design exactly
 
 <!-- Search input with floating label -->
 <div
-    class="relative flex h-14 w-full items-center justify-between rounded-[24px] border border-[#462949] bg-[#fbfbfb] p-4"
+    class="relative flex h-14 w-full items-center justify-between rounded-[24px] border border-[#462949] bg-[#fbfbfb] p-4 transition-colors focus-within:border-[#855a96] {className}"
 >
     <!-- Input field -->
     <input
@@ -58,7 +58,7 @@ Implements main search bar with floating label matching Figma design exactly
         bind:value={searchQuery}
         oninput={handleInput}
         onkeydown={handleKeydown}
-        class="flex-1 border-none bg-transparent font-['Karla'] text-base text-[#575757] outline-none placeholder:text-[#575757]"
+        class="flex-1 border-none bg-transparent text-base text-[#575757] outline-none placeholder:text-[#575757] focus:ring-0 focus:outline-none focus-visible:outline-none"
         placeholder={placeholder || $t("search.placeholder")}
         aria-label={$t("search.label")}
         data-testid={dataTestId}
@@ -69,7 +69,7 @@ Implements main search bar with floating label matching Figma design exactly
     {#if searchQuery}
         <button
             onclick={clearSearch}
-            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-gray-100"
+            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-[#e6e6e6]"
             aria-label={$t("search.clearSearch")}
         >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -97,5 +97,13 @@ Implements main search bar with floating label matching Figma design exactly
     input[type="search"]::-webkit-search-decoration {
         -webkit-appearance: none;
         appearance: none;
+    }
+
+    /* Remove blue outline but keep accessibility */
+    input[type="search"]:focus,
+    input[type="search"]:focus-visible {
+        outline: none;
+        box-shadow: none;
+        border: none;
     }
 </style>
