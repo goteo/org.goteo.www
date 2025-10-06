@@ -44,7 +44,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1"
                         >
                             <MatchFundingIcon />
-                            <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                            <span class="text-secondary text-sm font-bold whitespace-nowrap">
                                 {$t("home.campaigns.matchfunding")}
                             </span>
                         </div>
@@ -56,7 +56,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             <div
                                 class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1"
                             >
-                                <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                                <span class="text-secondary text-sm font-bold whitespace-nowrap">
                                     {tag}
                                 </span>
                             </div>
@@ -67,7 +67,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
             <!-- Project Content -->
             <div class="flex flex-col gap-6 {size === 'large' ? 'flex-1' : ''}">
-                <h3 class="text-tertiary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
+                <h3 class="text-secondary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
                     {campaign.title}
                 </h3>
 
