@@ -46,12 +46,22 @@ Manages real-time filtering of campaigns without page reloads
     // Local state
     let isInitialized = false;
     let previousFiltersJson = "";
+    let previousResultsJson = "";
     let campaigns = $state<Campaign[]>([]);
     let isTransforming = $state(false);
 
     // Transform projects to campaigns asynchronously
+    // Only transform when results actually change (not on every keystroke)
     $effect(() => {
         const projects = $searchResults;
+        const currentResultsJson = JSON.stringify(projects.map((p) => p.id));
+
+        // Skip transformation if results haven't changed
+        if (currentResultsJson === previousResultsJson) {
+            return;
+        }
+
+        previousResultsJson = currentResultsJson;
 
         async function transformProjects() {
             isTransforming = true;
