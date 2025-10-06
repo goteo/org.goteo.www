@@ -12,7 +12,7 @@ const { t } = Astro.locals;
 
 <div class="bg-light-surface relative overflow-hidden rounded-3xl shadow-lg">
     <!-- Decorative background with gradient and shapes -->
-    <div class="bg-tertiary relative h-[389px] overflow-hidden rounded-t-3xl">
+    <div class="bg-secondary relative h-[389px] overflow-hidden rounded-t-3xl">
         <!-- Gradient background -->
         <div class="from-primary/30 to-tertiary absolute inset-0 bg-gradient-to-br"></div>
 
@@ -81,7 +81,7 @@ const { t } = Astro.locals;
     <!-- Content area -->
     <div class="flex flex-col gap-6 p-6">
         <!-- Name -->
-        <h3 class="text-tertiary text-2xl leading-8 font-bold">
+        <h3 class="text-secondary text-2xl leading-8 font-bold">
             {promoter.name}
         </h3>
 
@@ -89,20 +89,20 @@ const { t } = Astro.locals;
         <div class="flex items-center justify-between">
             <!-- Projects promoted -->
             <div class="flex flex-col gap-1 text-left">
-                <span class="text-secondary text-base leading-6">
+                <span class="text-content text-base leading-6">
                     {t("home.featuredPromoters.projectsPromoted")}
                 </span>
-                <span class="text-secondary text-2xl leading-8 font-bold">
+                <span class="text-content text-2xl leading-8 font-bold">
                     {promoter.projectsPromoted}
                 </span>
             </div>
 
             <!-- Capital raised -->
             <div class="flex flex-col gap-1 text-right">
-                <span class="text-secondary text-base leading-6">
+                <span class="text-content text-base leading-6">
                     {t("home.featuredPromoters.capitalRaised")}
                 </span>
-                <span class="text-secondary text-2xl leading-8 font-bold">
+                <span class="text-content text-2xl leading-8 font-bold">
                     {promoter.capitalRaised}
                 </span>
             </div>

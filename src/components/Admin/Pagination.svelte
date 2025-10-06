@@ -39,26 +39,26 @@
     <nav class="flex items-center gap-1">
         <button
             onclick={() => goToPage(1)}
-            class="w-[40px] rounded border border-[#5757573D] py-1 text-center disabled:opacity-40
+            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40
 "
             disabled={currentPage === 1}>«</button
         >
         <button
             onclick={() => goToPage(currentPage - 1)}
-            class="w-[40px] rounded border border-[#5757573D] py-1 text-center disabled:opacity-40"
+            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
             disabled={currentPage === 1}>‹</button
         >
 
         {#each getVisiblePages() as page}
             {#if page === "..."}
-                <span class="text-tertiary w-[40px] border-[#5757573D] text-center">…</span>
+                <span class="text-secondary border-content w-[40px] text-center">…</span>
             {:else}
                 <button
                     onclick={() => typeof page === "number" && goToPage(page)}
-                    class="w-[40px] rounded border border-[#5757573D] py-1 text-center text-sm font-medium"
-                    class:bg-tertiary={currentPage === page}
+                    class="border-content w-[40px] rounded border py-1 text-center text-sm font-medium"
+                    class:bg-secondary={currentPage === page}
                     class:text-primary={currentPage === page}
-                    class:text-tertiary={currentPage !== page}
+                    class:text-secondary={currentPage !== page}
                     class:hover:bg-gray-200={currentPage !== page}
                 >
                     {page}
@@ -68,26 +68,26 @@
 
         <button
             onclick={() => goToPage(currentPage + 1)}
-            class="w-[40px] rounded border border-[#5757573D] py-1 text-center disabled:opacity-40"
+            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
             disabled={currentPage === totalPages()}>›</button
         >
         <button
             onclick={() => goToPage(totalPages())}
-            class="w-[40px] rounded border border-[#5757573D] py-1 text-center disabled:opacity-40"
+            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
             disabled={currentPage === totalPages()}>»</button
         >
     </nav>
 
     {#if total > 0}
-        <span class="text-sm font-bold text-[#575757]">
+        <span class="text-content text-sm font-bold">
             {@html $t("contributions.pagination.showing", { items, total }, { allowHTML: true })}
         </span>
     {:else if total === 0 && !isLoading}
-        <span class="text-sm font-bold text-[#575757]">
+        <span class="text-content text-sm font-bold">
             {@html $t("contributions.pagination.noResults")}
         </span>
     {:else}
-        <span class="text-sm font-bold text-[#575757]">
+        <span class="text-content text-sm font-bold">
             {@html $t("contributions.pagination.unloaded")}
         </span>
     {/if}

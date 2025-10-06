@@ -18,7 +18,7 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.currentBalance")}</span
         >
-        <p class="text-[32px] font-bold text-[#462949]">
+        <p class="text-secondary text-[32px] font-bold">
             {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
         </p>
     </div>
@@ -36,7 +36,7 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.remainingBalance")}
         </span>
-        <p id="cart-difference" class="text-[32px] font-bold text-[#462949]">
+        <p id="cart-difference" class="text-secondary text-[32px] font-bold">
             {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}
         </p>
     </div>

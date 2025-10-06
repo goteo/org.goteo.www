@@ -8,6 +8,7 @@
     import { cart } from "../../stores/cart";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import Button from "../library/Button.svelte";
     import Reward from "../Reward.svelte";
 
     let {
@@ -73,17 +74,17 @@
 
 <section>
     <div class="flex flex-col gap-12">
-        <h2 class="text-tertiary text-3xl font-bold">
+        <h2 class="text-secondary text-3xl font-bold">
             {$t("rewards.title")}
         </h2>
         <ul class="grid gap-6 lg:grid-cols-3">
             <li
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
-                class="flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="border-light-muted flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <div class="flex flex-col gap-6">
-                    <h3 class="text-tertiary w-full text-left text-2xl font-semibold">
+                    <h3 class="text-secondary w-full text-left text-2xl font-semibold">
                         {$t("rewards.donation-free.title")}
                     </h3>
                     <p class="text-sm whitespace-pre-line text-gray-800">
@@ -97,16 +98,14 @@
                         placeholder={$t("rewards.donation-free.placeholder")}
                         bind:value={freeAmount}
                     />
-                    <button
-                        type="button"
-                        onclick={handleFreeDonation}
+                    <Button
+                        kind="secondary"
+                        class="w-full"
                         disabled={!isAvailable}
-                        class:cursor-pointer={isAvailable}
-                        class:cursor-not-allowed={!isAvailable}
-                        class="text-tertiary inline-block w-full cursor-pointer rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+                        onclick={handleFreeDonation}
                     >
                         {$t("rewards.donation-free.btn")}
-                    </button>
+                    </Button>
                 </div>
             </li>
             {#each rewards as reward}

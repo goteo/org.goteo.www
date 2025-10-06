@@ -3,6 +3,7 @@
     import type { Project, ProjectReward } from "../openapi/client";
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
+    import Button from "./library/Button.svelte";
     import RewardModal from "./RewardModal.svelte";
 
     let {
@@ -30,12 +31,12 @@
 </script>
 
 <li
-    class="flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border border-[#F3F3EF] bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-light-muted flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >
     <div class="flex flex-col gap-4">
-        <h3 class="text-tertiary line-clamp-2 w-full text-left text-2xl font-semibold">
+        <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-semibold">
             {reward.title}
         </h3>
 
@@ -48,16 +49,14 @@
         {/if}
     </div>
 
-    <button
-        type="button"
-        onclick={() => (openModal = true)}
+    <Button
+        kind="secondary"
+        class="w-full"
         disabled={!isAvailable}
-        class:cursor-pointer={isAvailable}
-        class:cursor-not-allowed={!isAvailable}
-        class="text-tertiary inline-block w-full rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition"
+        onclick={() => (openModal = true)}
     >
         {$t("reward.donate")}
         {formatCurrency(reward.money.amount, reward.money.currency)}
-    </button>
+    </Button>
 </li>
 <RewardModal {reward} {project} bind:open={openModal} />

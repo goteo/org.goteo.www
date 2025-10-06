@@ -9,13 +9,13 @@
 <section class="flex flex-col gap-6 py-10 lg:flex-row">
     <div class="flex flex-row items-center justify-center gap-4">
         <div><DonatorIcon /></div>
-        <div class="text-[#575757]">
+        <div class="text-content">
             {@html $t(
                 "project.banner.donator.description",
-                { owner: `<a href="#" class="font-bold  text-tertiary">${ownerName}</a>` },
+                { owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` },
                 { allowHTML: true },
             )}
-            <a href="#" class="text-tertiary font-bold"
+            <a href="#" class="text-secondary font-bold"
                 >{$t("project.banner.donator.learnMore")}
             </a>
         </div>
@@ -23,9 +23,9 @@
     <div class="flex flex-row items-center justify-center gap-4">
         <div><CertificateIcon /></div>
         <div>
-            <div class="text-[#575757]">
+            <div class="text-content">
                 {$t("project.banner.certificate.description")}
-                <a href="#" class="text-tertiary font-bold"
+                <a href="#" class="text-secondary font-bold"
                     >{$t("project.banner.certificate.learnMore")}
                 </a>
             </div>

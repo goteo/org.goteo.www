@@ -25,11 +25,11 @@
 </script>
 
 <div class="flex w-auto gap-2">
-    <div class="border-secondary flex items-center gap-2 rounded-sm border px-2 py-1">
+    <div class="flex items-center gap-2 rounded-sm border border-black px-2 py-1">
         <BookmarkIcon />
         {$t(`categories.${project.category}`)}
     </div>
-    <div class="border-secondary flex items-center gap-2 rounded-sm border px-2 py-1">
+    <div class="flex items-center gap-2 rounded-sm border border-black px-2 py-1">
         <MapIcon />{displayName(project.territory)}
     </div>
 </div>

@@ -28,13 +28,13 @@
             {#each [1, 2, 3, 4] as i}
                 <div
                     class="relative z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 transition-all duration-300"
-                    class:bg-tertiary={i <= step}
+                    class:bg-secondary={i <= step}
                     class:bg-purple-tint={i > step}
                     class:border-primary={i <= step}
                     class:border-black={i > step}
                 >
                     {#if i <= step}
-                        <div class="bg-tertiary h-1.5 w-1.5 rounded-full"></div>
+                        <div class="bg-secondary h-1.5 w-1.5 rounded-full"></div>
                     {/if}
                 </div>
             {/each}

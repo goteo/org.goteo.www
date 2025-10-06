@@ -15,18 +15,18 @@
     <div class="flex flex-row items-center justify-between gap-4">
         <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
         <div class="flex flex-col items-end">
-            <div class="text-secondary font-bold">
+            <div class="font-bold text-black">
                 {$t("project.tabs.community.contribution")}
             </div>
-            <p class="text-secondary text-2xl font-bold">
+            <p class="text-2xl font-bold text-black">
                 {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}
             </p>
         </div>
     </div>
-    <div class="text-secondary self-start text-left text-2xl font-bold">
+    <div class="self-start text-left text-2xl font-bold text-black">
         {item.displayName}
     </div>
-    <div class="line-clamp-2 self-start text-left text-sm text-[#575757]">
+    <div class="text-content line-clamp-2 self-start text-left text-sm">
         {#if item.message}
             {item.message}
         {:else}
