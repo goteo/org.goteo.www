@@ -25,6 +25,7 @@ Manages real-time filtering of campaigns without page reloads
     import CampaignCard from "../home/CampaignCard.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
+    import type { Campaign } from "../../types/campaign";
 
     interface Props {
         initialProjects: Project[];
@@ -47,9 +48,30 @@ Manages real-time filtering of campaigns without page reloads
     // Local state
     let isInitialized = false;
     let previousFiltersJson = "";
+    let campaigns = $state<Campaign[]>([]);
+    let isTransforming = $state(false);
 
-    // Transform projects to campaigns for display
-    const campaigns = $derived($searchResults.map(transformProjectToCampaign));
+    // Transform projects to campaigns asynchronously
+    $effect(() => {
+        const projects = $searchResults;
+
+        async function transformProjects() {
+            isTransforming = true;
+            try {
+                const transformed = await Promise.all(
+                    projects.map((project) => transformProjectToCampaign(project)),
+                );
+                campaigns = transformed;
+            } catch (error) {
+                console.error("Failed to transform projects:", error);
+                campaigns = [];
+            } finally {
+                isTransforming = false;
+            }
+        }
+
+        transformProjects();
+    });
 
     // Update URL without causing navigation
     function updateUrlWithoutNavigation() {
@@ -199,7 +221,7 @@ Manages real-time filtering of campaigns without page reloads
     <!-- Search Results Wrapper -->
     <div data-testid="search-results">
         <!-- Loading State -->
-        {#if $isSearching}
+        {#if $isSearching || isTransforming}
             <div class="loading-spinner py-12 text-center" data-testid="loading-spinner">
                 <LoadingSpinner />
             </div>
@@ -217,13 +239,13 @@ Manages real-time filtering of campaigns without page reloads
     </div>
 
     <!-- Pagination Controls -->
-    {#if $hasActualSearchResults && !$isSearching}
+    {#if $hasActualSearchResults && !$isSearching && !isTransforming}
         <div class="mt-8">
             <SearchPagination showSummary={true} class="search-pagination" />
         </div>
     {/if}
 
-    {#if $isEmpty && !$isSearching}
+    {#if $isEmpty && !$isSearching && !isTransforming}
         <!-- Empty State -->
         <div class="py-12 text-center" data-testid="search-empty">
             <div class="mb-4">
@@ -256,7 +278,7 @@ Manages real-time filtering of campaigns without page reloads
         </div>
     {/if}
 
-    {#if !$hasSearchResults && !$isEmpty && !$isSearching}
+    {#if !$hasSearchResults && !$isEmpty && !$isSearching && !isTransforming}
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
             <h3 class="mb-2 text-xl font-semibold text-gray-900">

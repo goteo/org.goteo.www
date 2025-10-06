@@ -83,29 +83,6 @@ export class ProjectsService {
     }
 
     /**
-     * Get projects by specific slugs
-     */
-    async getProjectsBySlugs(
-        slugs: string[],
-        options?: {
-            abortSignal?: AbortSignal;
-        },
-    ): Promise<Project[]> {
-        try {
-            const response = await apiProjectsGetCollection({
-                query: {
-                    "slug[]": slugs,
-                },
-                ...(options?.abortSignal && { signal: options.abortSignal }),
-            });
-
-            return response.data || [];
-        } catch {
-            return [];
-        }
-    }
-
-    /**
      * Helper: Check if there are more pages
      * API doesn't return pagination metadata, so we infer from results
      */
