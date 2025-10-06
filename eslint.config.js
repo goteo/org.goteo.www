@@ -21,6 +21,7 @@ export default [
             ".astro/**/*",
             "openapi/client/**",
             ".github/**",
+            "env.d.ts",
         ],
     },
     { files: ["**/*.{js,mjs,cjs,ts}"] },
