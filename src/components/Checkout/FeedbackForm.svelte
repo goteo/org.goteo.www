@@ -8,7 +8,7 @@
         <form id="feedback" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-tertiary text-2xl font-bold">
+                    <h2 class="text-black text-2xl font-bold">
                         {$t("payment.page-aproved.form-goal.title")}
                     </h2>
                 </div>
@@ -46,7 +46,7 @@
 
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-tertiary text-2xl font-bold">
+                    <h2 class="text-black text-2xl font-bold">
                         {$t("payment.page-aproved.form-review.title")}
                     </h2>
                 </div>

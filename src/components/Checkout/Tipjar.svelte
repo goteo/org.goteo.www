@@ -85,7 +85,7 @@
 
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-2">
-        <h2 class="text-tertiary text-2xl font-bold">
+        <h2 class="text-black text-2xl font-bold">
             {$t("checkout.tipjar.community")}
         </h2>
 
