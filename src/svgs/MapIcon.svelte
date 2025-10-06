@@ -1,4 +1,21 @@
-<svg width="16" height="20" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<script lang="ts">
+    interface Props {
+        class?: string;
+        width?: string | number;
+        height?: string | number;
+    }
+
+    let { class: className = "", width = "16", height = "20" }: Props = $props();
+</script>
+
+<svg
+    {width}
+    {height}
+    viewBox="0 0 16 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class={className}
+>
     <path
         fill-rule="evenodd"
         clip-rule="evenodd"

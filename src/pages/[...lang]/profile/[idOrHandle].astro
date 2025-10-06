@@ -1,0 +1,230 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ProfileHero from "../../../components/profile/ProfileHero.astro";
+import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
+import Tabs from "../../../components/Tabs.svelte";
+import ProfileProjectsList from "../../../components/profile/ProfileProjectsList.astro";
+import ProfileDonorType from "../../../components/profile/ProfileDonorType.svelte";
+import { renderMarkdown } from "../../../utils/renderMarkdown";
+import {
+    apiUsersIdGet,
+    apiProjectsGetCollection,
+    apiProjectSupportsGetCollection,
+    apiProjectSupportsmoneyTotalGetCollection,
+    type Accounting,
+    type ApiMoney,
+    type ProjectSupport,
+} from "../../../openapi/client";
+import type { User } from "../../../openapi/client/types.gen";
+import type { Campaign } from "../../../types/campaign";
+import { getLanguage } from "../../../middleware/utils";
+import { client } from "../../../openapi/client/client.gen";
+
+const { idOrHandle } = Astro.params;
+const { t } = Astro.locals;
+
+if (!idOrHandle) {
+    return Astro.redirect("/404");
+}
+
+// Fetch user data
+let user: User | undefined;
+let errorMessage: string | undefined;
+
+try {
+    const userResponse = await apiUsersIdGet({
+        path: { id: idOrHandle },
+    });
+
+    if (userResponse.error) {
+        throw new Error("User not found");
+    }
+
+    user = userResponse.data;
+} catch (error) {
+    console.error("Error fetching user:", error);
+    errorMessage = t("profile.notFound");
+}
+
+// Prepare profile data with proper fallbacks
+const displayName = user?.displayName || user?.handle || "User";
+
+// Location - API doesn't have location field yet
+// TODO: Add location field to Person/Organization in API
+const location = undefined;
+
+// Bio - API doesn't have bio/description field yet
+// TODO: Add bio/description field to User in API
+const bio = undefined;
+
+const tabs = [
+    { id: "about", label: t("profile.tabs.about") },
+    { id: "projects", label: t("profile.tabs.projects") },
+    { id: "donorType", label: t("profile.tabs.donorType") },
+];
+
+// Fetch user's backed/supported projects from API
+let userSupports: ProjectSupport[] = [];
+let totalDonated: { amount: number; currency: string } = { amount: 0, currency: "EUR" };
+let projectsDonatedCount = 0;
+
+// Users are guaranteed to have an accounting resource
+if (user) {
+    try {
+        // Get all project supports for this user
+        const { data: supports } = await apiProjectSupportsGetCollection({
+            query: {
+                origin: user.accounting!,
+            },
+        });
+
+        if (supports) {
+            userSupports = supports;
+            projectsDonatedCount = supports.length;
+
+            // Get total money donated
+            const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
+                query: {
+                    origin: user.accounting!,
+                },
+            });
+
+            if (moneyTotal?.amount && moneyTotal?.currency) {
+                totalDonated = {
+                    amount: Number(moneyTotal.amount),
+                    currency: moneyTotal.currency,
+                };
+            }
+        }
+    } catch (error) {
+        console.error("Error fetching user supports:", error);
+    }
+}
+
+// Fetch actual projects from the supports
+const projectIRIs = userSupports
+    .slice(0, 10)
+    .map((support) => support.project)
+    .filter(Boolean);
+let campaigns: Campaign[] = [];
+
+if (projectIRIs.length > 0) {
+    campaigns = await Promise.all(
+        projectIRIs.map(async (projectIRI) => {
+            try {
+                // Fetch project data directly using IRI
+                const { data: project } = (await client.get({
+                    url: client.buildUrl({ url: projectIRI! }),
+                    headers: {
+                        "Accept-Language": getLanguage(Astro),
+                    },
+                })) as { data: any };
+
+                // Fetch accounting data
+                const { data: accounting } = (await client.get({
+                    url: client.buildUrl({ url: project.accounting! }),
+                })) as { data: Accounting };
+
+                return {
+                    size: "small",
+                    id: project.slug!,
+                    title: project.title!,
+                    image: project.video?.thumbnail!,
+                    minimum: project.budget?.minimum?.money!,
+                    obtained: accounting!.balance as ApiMoney,
+                };
+            } catch (error) {
+                console.error(`Error fetching project ${projectIRI}:`, error);
+                return null;
+            }
+        }),
+    ).then((results) => results.filter(Boolean) as Campaign[]);
+}
+
+// Social links - would come from user.socialMedia or similar field
+// API doesn't have social media fields yet
+// TODO: Add social media fields to User in API
+const socialLinks = user
+    ? {
+          twitter: undefined,
+          instagram: undefined,
+          facebook: undefined,
+          linkedin: undefined,
+          email: user.email ? `mailto:${user.email}` : undefined,
+          medium: undefined,
+      }
+    : {};
+
+// Images with fallbacks
+const coverImage = undefined; // API doesn't provide cover image, use default
+const avatarImage = user?.avatar || undefined; // Use user avatar or default placeholder
+---
+
+<Layout
+    title={`${displayName} - ${t("metadata.title")}`}
+    description={`${t("profile.tabs.about")} ${displayName}`}
+    class="mb-20"
+>
+    {
+        errorMessage ? (
+            <div class="flex min-h-screen items-center justify-center">
+                <p class="text-secondary text-xl">{errorMessage}</p>
+            </div>
+        ) : (
+            <div class="flex w-full flex-col items-center gap-10">
+                {/* Hero Section with Cover and Avatar */}
+                <ProfileHero coverImage={coverImage} avatarImage={avatarImage} />
+
+                {/* User Info Section */}
+                <ProfileInfo
+                    displayName={displayName}
+                    location={location}
+                    socialLinks={socialLinks}
+                    client:load
+                />
+
+                {/* Tabs Navigation */}
+                <div class="mt-8 w-full">
+                    <Tabs tabs={tabs} client:load />
+                </div>
+
+                {/* Tab Content - About */}
+                <div data-tab-content="about">
+                    {bio && (
+                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
+                            <div
+                                class="prose prose-base text-secondary leading-6"
+                                set:html={renderMarkdown(bio)}
+                            />
+                        </div>
+                    )}
+                </div>
+
+                {/* Tab Content - Projects */}
+                <div data-tab-content="projects" style="display: none;">
+                    {campaigns.length > 0 ? (
+                        <div class="mx-auto mt-10 w-full max-w-[1200px] px-4">
+                            <ProfileProjectsList campaigns={campaigns} />
+                        </div>
+                    ) : (
+                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
+                            <p class="text-secondary text-base">{t("profile.noProjects")}</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Tab Content - Donor Type */}
+                <div data-tab-content="donorType" class="w-full" style="display: none;">
+                    <div class="mx-auto w-full max-w-[1200px] px-4">
+                        <ProfileDonorType
+                            projectsDonated={projectsDonatedCount}
+                            moneyDonatedAmount={totalDonated.amount}
+                            moneyDonatedCurrency={totalDonated.currency}
+                            client:load
+                        />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+</Layout>

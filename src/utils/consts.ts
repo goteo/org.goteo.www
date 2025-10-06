@@ -47,8 +47,5 @@ export function getDefaultCurrency(): string {
 }
 
 export function getDefaultLanguage(): string {
-    if (typeof navigator !== "undefined" && navigator.language) {
-        return navigator.language;
-    }
     return getEnvVar("PUBLIC_DEFAULT_LANGUAGE");
 }

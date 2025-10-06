@@ -1,0 +1,61 @@
+---
+import VerifiedBadge from "../../svgs/VerifiedBadge.svelte";
+import ShareIcon from "../../svgs/ShareIcon.svelte";
+
+export interface Props {
+    coverImage?: string;
+    avatarImage?: string;
+    onSubscribe?: boolean;
+}
+
+const { coverImage, avatarImage, onSubscribe = true } = Astro.props;
+const { t } = Astro.locals;
+
+// Default images from placehold.co if not provided
+const defaultCover = "https://placehold.co/1440x400/F4E5D3/8B7355?text=Profile+Cover&font=raleway";
+const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font=raleway";
+---
+
+<div class="relative h-[400px] w-full">
+    <!-- Cover Image -->
+    <div class="absolute inset-0 overflow-hidden">
+        <img src={coverImage || defaultCover} alt="Profile cover" class="size-full object-cover" />
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="absolute right-6 bottom-6 flex gap-3">
+        <!-- Share Button -->
+        <button
+            class="bg-purple-tint text-tertiary flex items-center gap-2 rounded-3xl px-6 py-4 font-bold transition hover:opacity-90"
+        >
+            <ShareIcon class="size-6" />
+            {t("profile.share")}
+        </button>
+
+        <!-- Subscribe Button -->
+        {
+            onSubscribe && (
+                <button class="bg-primary text-tertiary rounded-3xl px-6 py-4 font-bold transition hover:opacity-90">
+                    {t("profile.subscribe")}
+                </button>
+            )
+        }
+    </div>
+
+    <!-- Avatar (positioned to overlap) -->
+    <div
+        class="absolute top-full left-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center"
+    >
+        <div class="relative">
+            <img
+                src={avatarImage || defaultAvatar}
+                alt="Profile avatar"
+                class="size-[204px] rounded-2xl object-cover shadow-lg"
+            />
+            <!-- Badge Overlay -->
+            <div class="absolute top-full left-1/2 size-14 -translate-x-1/2 -translate-y-1/2">
+                <VerifiedBadge />
+            </div>
+        </div>
+    </div>
+</div>

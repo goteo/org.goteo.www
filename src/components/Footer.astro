@@ -20,18 +20,18 @@ const { t } = Astro.locals;
                         <!-- Funding Partner Logos -->
                         <div class="flex items-center gap-4">
                             <img
-                                src="/imgs/funding-partner-1.svg"
-                                alt="Funding Partner 1"
+                                src="/imgs/orgs/NGEU.png"
+                                alt="Funded by the European Union NextGeneration EU"
                                 class="h-10 w-auto"
                             />
                             <img
-                                src="/imgs/funding-partner-2.svg"
-                                alt="Funding Partner 2"
+                                src="/imgs/orgs/MTES.png"
+                                alt="Ministerio de Trabajo y Economía Social"
                                 class="h-10 w-auto"
                             />
                             <img
-                                src="/imgs/funding-partner-3.svg"
-                                alt="Funding Partner 3"
+                                src="/imgs/orgs/PRTR.png"
+                                alt="Plan de Recuperación, Transformación y Resiliencia"
                                 class="h-10 w-auto"
                             />
                         </div>
@@ -44,21 +44,34 @@ const { t } = Astro.locals;
                         {t("footer.funding.partOf")}
                     </h3>
                     <div class="flex items-center gap-3">
-                        <img
-                            src="/imgs/org-1.png"
-                            alt="Organization 1"
-                            class="h-14 w-14 rounded-lg object-cover"
-                        />
-                        <img
-                            src="/imgs/org-2.png"
-                            alt="Organization 2"
-                            class="h-14 w-14 rounded-lg object-cover"
-                        />
-                        <img
-                            src="/imgs/org-3.png"
-                            alt="Organization 3"
-                            class="h-14 w-auto rounded-lg object-cover"
-                        />
+                        <a href="https://xes.cat">
+                            <img
+                                src="/imgs/orgs/xes.png"
+                                alt="XES"
+                                class="h-14 rounded-lg object-cover"
+                            />
+                        </a>
+                        <a href="https://www.alda-europe.eu">
+                            <img
+                                src="/imgs/orgs/alda-europe.svg"
+                                alt="Alda Europe"
+                                class="h-14 rounded-lg bg-white object-cover p-2"
+                            />
+                        </a>
+                        <a href="https://alianzaporelclima.org">
+                            <img
+                                src="/imgs/orgs/alianza-por-el-clima.webp"
+                                alt="Alianza por el Clima"
+                                class="h-14 rounded-lg object-cover"
+                            />
+                        </a>
+                        <a href="https://ampliandodemocracia.org">
+                            <img
+                                src="/imgs/orgs/ampliando-democracia.jpg"
+                                alt="Ampliando Democracia"
+                                class="h-14 rounded-lg object-cover"
+                            />
+                        </a>
                     </div>
                 </div>
             </div>
@@ -305,9 +318,7 @@ const { t } = Astro.locals;
 
                     <!-- Platoniq Foundation -->
                     <div class="text-purple-tint">
-                        <div class="text-[21px] leading-normal font-bold">
-                            {t("footer.platoniq.name")}
-                        </div>
+                        <img src="/imgs/platoniq.png" alt="Platoniq" class="h-[21px]" />
                         <div class="text-[13px] leading-normal font-light">
                             {t("footer.platoniq.foundation")}
                         </div>

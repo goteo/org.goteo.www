@@ -3,6 +3,7 @@ import type { Campaign, CampaignSize } from "../../types/campaign";
 import ShareIcon from "../../svgs/ShareIcon.svelte";
 import ClockIcon from "../../svgs/ClockIcon.svelte";
 import MatchFundingIcon from "../../svgs/MatchFundingIcon.astro";
+import { formatCurrency } from "../../utils/currencies";
 
 export interface Props {
     size: CampaignSize;
@@ -21,7 +22,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 ---
 
 <div
-    class={`bg-light-surface rounded-[32px] min-w-sm border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
+    class={`bg-light-surface rounded-[32px] grow basis-0 min-w-sm border border-light-muted shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] p-6 ${containerClasses}`}
 >
     <a href=`/project/${campaign.id}`>
         <div class={`flex flex-col gap-6 ${size === "large" ? "h-full" : ""}`}>
@@ -97,19 +98,25 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                     <!-- Amount Information -->
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
-                            <span class="text-secondary text-base"
-                                >{t("home.campaigns.obtained")}</span
-                            >
-                            <span class="text-secondary text-2xl font-bold"
-                                >{campaign.obtained}</span
-                            >
+                            <span class="text-secondary text-base">
+                                {t("home.campaigns.obtained")}
+                            </span>
+                            <span class="text-secondary text-2xl font-bold">
+                                {
+                                    formatCurrency(
+                                        campaign.obtained.amount,
+                                        campaign.obtained.currency,
+                                    )
+                                }
+                            </span>
                         </div>
                         <div class="flex flex-col gap-1 text-right">
-                            <span class="text-secondary text-base"
-                                >{t("home.campaigns.minimum")}</span
-                            >
-                            <span class="text-secondary text-2xl font-bold">{campaign.minimum}</span
-                            >
+                            <span class="text-secondary text-base">
+                                {t("home.campaigns.minimum")}
+                            </span>
+                            <span class="text-secondary text-2xl font-bold">
+                                {formatCurrency(campaign.minimum.amount, campaign.minimum.currency)}
+                            </span>
                         </div>
                     </div>
                 </div>

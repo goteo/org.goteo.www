@@ -80,7 +80,7 @@
                     <img src={cover} alt={title} class="mt-4 w-full rounded-lg object-cover" />
                 {/if}
                 <span class="text-base font-semibold text-[#575757]">{title}</span>
-                <span class="text-secondary text-[40px]">{subtitle}</span>
+                <span class="text-secondary text-3xl">{subtitle}</span>
                 <p class="text-sm text-[#575757]">{body}</p>
             </div>
         {/each}
