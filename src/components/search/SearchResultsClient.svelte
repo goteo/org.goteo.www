@@ -103,6 +103,11 @@ Manages real-time filtering of campaigns without page reloads
         } else if (initialProjects.length > 0) {
             // Show initial projects without marking as searched
             searchStore.setInitialResults(initialProjects, initialProjects.length);
+        } else {
+            // No URL params and no initial projects - fetch default results client-side
+            setTimeout(() => {
+                searchStore.searchWithApi(true);
+            }, 100);
         }
 
         // Store the initial filters state to detect actual changes
