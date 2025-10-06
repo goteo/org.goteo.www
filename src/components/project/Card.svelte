@@ -39,11 +39,11 @@
 >
     <div class="flex w-full items-center justify-end">
         {#if hasReached(project.budget?.optimum?.money)}
-            <span class="border-tertiary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap">
+            <span class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap">
                 {$t("campaignProgress.optimumReached")}
             </span>
         {:else if hasReached(project.budget?.minimum?.money)}
-            <span class="border-tertiary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap">
+            <span class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap">
                 {$t("campaignProgress.minimumReached")}
             </span>
         {/if}

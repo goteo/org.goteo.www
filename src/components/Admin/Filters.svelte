@@ -220,7 +220,7 @@
             <button
                 type="button"
                 onclick={() => (showFilters = !showFilters)}
-                class="border-tertiary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+                class="border-secondary text-tertiary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
             >
                 <span class="relative">
                     <FiltersIcon />
@@ -243,7 +243,7 @@
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
             <div class="grid grid-cols-3 gap-4">
                 <select
-                    class="border-tertiary w-full rounded-lg border p-4"
+                    class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedPaymentMethod}
                 >
                     <option value="" disabled selected
@@ -255,7 +255,7 @@
                 </select>
 
                 <select
-                    class="border-tertiary w-full rounded-lg border p-4"
+                    class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedChargeStatus}
                 >
                     <option value="" disabled
@@ -267,7 +267,7 @@
                 </select>
 
                 <select
-                    class="border-tertiary w-full rounded-lg border p-4"
+                    class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedRangeAmount}
                 >
                     <option value="" disabled
@@ -287,7 +287,7 @@
                         type="date"
                         bind:value={dateFrom}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
-                        class="border-tertiary w-full rounded-lg border p-4 pt-4"
+                        class="border-secondary w-full rounded-lg border p-4 pt-4"
                     />
                 </div>
 
@@ -298,7 +298,7 @@
                     <input
                         id="dateTo"
                         type="date"
-                        class="border-tertiary w-full rounded-lg border p-4 pt-4"
+                        class="border-secondary w-full rounded-lg border p-4 pt-4"
                         bind:value={dateTo}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                     />

@@ -512,7 +512,7 @@
         </p>
         <select
             bind:value={selectedSort}
-            class="border-tertiary text-tertiary min-w-[200px] rounded-sm py-1"
+            class="border-secondary text-tertiary min-w-[200px] rounded-sm py-1"
             disabled={isLoading}
         >
             {#each sortOptions as option}
@@ -528,7 +528,7 @@
         <select
             name="itemsPerPage"
             id="itemsPerPage"
-            class="border-tertiary text-tertiary rounded-sm py-1"
+            class="border-secondary text-tertiary rounded-sm py-1"
             bind:value={itemsPerPage}
             disabled={isLoading}
         >
@@ -610,7 +610,7 @@
                     </TableBodyCell>
                     <TableBodyCell class="border-t border-b border-[#E6E5F7]">
                         <button
-                            class="border-secondary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
+                            class="border-tertiary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
                         >
                             {$t(`contributions.table.rows.status.${charge.status}`)}
                         </button>

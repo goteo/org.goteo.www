@@ -51,7 +51,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                 </div>
             </div>
             <div
-                class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+                class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
             >
                 <Summary client:load {defaultCurrency} />
                 <Steps step={3} client:load />

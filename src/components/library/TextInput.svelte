@@ -4,7 +4,7 @@
     const baseStyle = [
         "peer",
         "w-full p-4",
-        "bg-light-surface rounded-md border border-tertiary",
+        "bg-light-surface rounded-md border border-secondary",
         "text-base text-gray-700 placeholder-gray-400",
         "focus:ring-1 focus:ring-tertiary focus:outline-none",
     ];
