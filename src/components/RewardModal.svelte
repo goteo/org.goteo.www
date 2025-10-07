@@ -9,6 +9,7 @@
     import { cart } from "../stores/cart";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import { onMount } from "svelte";
+    import Button from "./library/Button.svelte";
 
     let {
         open = $bindable(false),
@@ -65,12 +66,12 @@
 
 <Modal
     bind:open
-    closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
     class="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     <div class="flex flex-col gap-6">
-        <div class="text-tertiary flex w-full flex-col gap-6 text-left text-[40px] font-semibold">
+        <div class="text-secondary flex w-full flex-col gap-6 text-left text-[40px] font-semibold">
             <h3>
                 {@html $t(
                     "rewards.by-amount-or-more",
@@ -124,7 +125,7 @@
             </div>
         </div>
         <div class="flex w-full gap-2">
-            <div class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold">
+            <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
                 <UserIcon />
                 <span>
                     {@html $t(
@@ -136,7 +137,7 @@
             </div>
             {#if reward.isFinite}
                 <div
-                    class="text-tertiary flex items-center justify-between gap-2 text-sm font-bold"
+                    class="text-secondary flex items-center justify-between gap-2 text-sm font-bold"
                 >
                     <UnitIcon />
                     <span>
@@ -150,20 +151,12 @@
             {/if}
         </div>
         <div class="flex flex-row gap-4">
-            <button
-                type="button"
-                onclick={() => updateAmount("close")}
-                class="text-tertiary border-tertiary inline-block w-full cursor-pointer rounded-3xl border bg-[#FFF] px-6 py-4 font-bold transition"
-            >
+            <Button kind="ghost" onclick={() => updateAmount("close")} class="w-full">
                 {$t("rewards.reward-donate-close")}
-            </button>
-            <button
-                type="button"
-                onclick={() => updateAmount("checkout")}
-                class="text-tertiary bg-primary bg inline-block w-full cursor-pointer rounded-3xl px-6 py-4 font-bold transition"
-            >
+            </Button>
+            <Button onclick={() => updateAmount("checkout")} class="w-full">
                 {$t("rewards.donation-free.btn")}
-            </button>
+            </Button>
         </div>
     </div>
 </Modal>

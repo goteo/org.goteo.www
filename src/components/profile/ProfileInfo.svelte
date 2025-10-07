@@ -96,7 +96,7 @@
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-purple-tint text-tertiary flex size-6 items-center justify-center rounded-[4.8px] p-1 transition hover:opacity-90"
+                    class="bg-purple-tint text-secondary flex size-6 items-center justify-center rounded-[4.8px] p-1 transition hover:opacity-90"
                     aria-label={link.label}
                 >
                     <link.icon class="size-full" />

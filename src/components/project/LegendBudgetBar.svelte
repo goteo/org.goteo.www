@@ -19,7 +19,7 @@
         </div>
     {/each}
     <div class="flex flex-row items-center gap-2">
-        <div class="bg-tertiary h-2 w-2 rounded-full"></div>
+        <div class="bg-secondary h-2 w-2 rounded-full"></div>
         <span class="text-sm">{$t("project.tabs.budget.campaingState")}</span>
     </div>
 </div>

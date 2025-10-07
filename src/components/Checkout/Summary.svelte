@@ -26,7 +26,7 @@
 <div class="flex flex-col gap-6 px-6 pt-6 pb-0">
     <div>
         <h2
-            class={`flex items-center gap-2 text-[32px] font-semibold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+            class={`flex items-center gap-2 text-[32px] font-semibold ${hasError ? "text-tertiary" : "text-secondary"}`}
         >
             {#if hasError}
                 <span class="h-6 w-6">
@@ -36,10 +36,10 @@
             {$t("checkout.summary.total.title")}
         </h2>
         <p
-            class={`text-[56px] leading-tight font-bold ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+            class={`text-[56px] leading-tight font-bold ${hasError ? "text-tertiary" : "text-secondary"}`}
         >
             {formatCurrency(amount ?? $total, currency)}
         </p>
     </div>
-    <hr class="bg-[#462949]" />
+    <hr class="bg-secondary" />
 </div>

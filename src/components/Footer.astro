@@ -8,14 +8,14 @@ import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.astro";
 const { t } = Astro.locals;
 ---
 
-<footer class="text-purple-tint bg-[#FAF9FF]">
+<footer class="text-purple-tint bg-soft-purple]">
     <!-- Funding Partners Section -->
-    <div class="text-secondary border-purple-tint rounded-t-3xl border-2 border-b-0 py-10">
+    <div class="text-tertiary border-purple-tint rounded-t-3xl border-2 border-b-0 py-10">
         <div class="wrapper">
             <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
                 <!-- Funding Partners -->
                 <div class="flex flex-col gap-6 md:flex-row md:items-center">
-                    <h3 class="text-tertiary text-base font-bold">{t("footer.funding.title")}</h3>
+                    <h3 class="text-secondary text-base font-bold">{t("footer.funding.title")}</h3>
                     <div class="flex items-center gap-6">
                         <!-- Funding Partner Logos -->
                         <div class="flex items-center gap-4">
@@ -40,7 +40,7 @@ const { t } = Astro.locals;
 
                 <!-- Part Of Section -->
                 <div class="flex flex-col gap-4 md:flex-row md:items-center">
-                    <h3 class="text-tertiary text-base font-medium">
+                    <h3 class="text-secondary text-base font-medium">
                         {t("footer.funding.partOf")}
                     </h3>
                     <div class="flex items-center gap-3">
@@ -79,21 +79,21 @@ const { t } = Astro.locals;
     </div>
 
     <!-- Main Footer Content -->
-    <div class="bg-tertiary rounded-t-3xl py-10">
+    <div class="bg-secondary rounded-t-3xl py-10">
         <div class="wrapper">
             <div class="flex flex-row justify-between gap-8">
                 <!-- Navigation Links -->
                 <div class="flex flex-row gap-10">
                     <!-- Collaborate -->
                     <div class="space-y-2">
-                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                        <h4 class="text-soft-purple text-base leading-6 font-bold">
                             {t("footer.navigation.collaborate.title")}
                         </h4>
                         <ul class="space-y-1 text-sm leading-6">
                             <li>
                                 <a
                                     href="/create-project"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.collaborate.createProject")}
                                 </a>
@@ -101,7 +101,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/matchfunding"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.collaborate.matchfunding")}
                                 </a>
@@ -109,7 +109,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/workshops"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.collaborate.workshops")}
                                 </a>
@@ -119,14 +119,14 @@ const { t } = Astro.locals;
 
                     <!-- Help -->
                     <div class="space-y-2">
-                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                        <h4 class="text-soft-purple text-base leading-6 font-bold">
                             {t("footer.navigation.help.title")}
                         </h4>
                         <ul class="space-y-1 text-sm leading-6">
                             <li>
                                 <a
                                     href="/faqs"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.help.faqs")}
                                 </a>
@@ -134,7 +134,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/contact"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.help.contact")}
                                 </a>
@@ -142,7 +142,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/tax-calculator"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.help.taxCalculator")}
                                 </a>
@@ -152,14 +152,14 @@ const { t } = Astro.locals;
 
                     <!-- About Goteo -->
                     <div class="space-y-2">
-                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                        <h4 class="text-soft-purple text-base leading-6 font-bold">
                             {t("footer.navigation.aboutGoteo.title")}
                         </h4>
                         <ul class="space-y-1 text-sm leading-6">
                             <li>
                                 <a
                                     href="/about"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.aboutGoteo.whoWeAre")}
                                 </a>
@@ -167,7 +167,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/benefits"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.aboutGoteo.goteoBenefits")}
                                 </a>
@@ -175,7 +175,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/impact"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.aboutGoteo.foundationImpact")}
                                 </a>
@@ -183,7 +183,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/platoniq"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.aboutGoteo.platoniqFoundation")}
                                 </a>
@@ -193,14 +193,14 @@ const { t } = Astro.locals;
 
                     <!-- For Users -->
                     <div class="space-y-2">
-                        <h4 class="text-base leading-6 font-bold text-[#faf9ff]">
+                        <h4 class="text-soft-purple text-base leading-6 font-bold">
                             {t("footer.navigation.forUsers.title")}
                         </h4>
                         <ul class="space-y-1 text-sm leading-6">
                             <li>
                                 <a
                                     href="/wallet"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.forUsers.rechargeWallet")}
                                 </a>
@@ -208,7 +208,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/certificate"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.forUsers.downloadCertificate")}
                                 </a>
@@ -216,7 +216,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/funds"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.forUsers.accessComplementaryFunds")}
                                 </a>
@@ -224,7 +224,7 @@ const { t } = Astro.locals;
                             <li>
                                 <a
                                     href="/program"
-                                    class="text-purple-tint transition-colors hover:text-[#faf9ff]"
+                                    class="text-purple-tint hover:text-soft-purple transition-colors"
                                 >
                                     {t("footer.navigation.forUsers.designFundingProgram")}
                                 </a>
@@ -244,32 +244,32 @@ const { t } = Astro.locals;
     </div>
 
     <!-- Bottom Footer -->
-    <div class="bg-tertiary pb-10">
+    <div class="bg-secondary pb-10">
         <div class="wrapper">
             <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
                 <!-- Legal Links -->
                 <div class="flex flex-wrap gap-8">
                     <a
                         href="/terms"
-                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
                     >
                         {t("footer.legal.termsOfUse")}
                     </a>
                     <a
                         href="/privacy"
-                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
                     >
                         {t("footer.legal.privacyPolicy")}
                     </a>
                     <a
                         href="/licenses"
-                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
                     >
                         {t("footer.legal.licenses")}
                     </a>
                     <a
                         href="/stats"
-                        class="text-purple-tint text-xs leading-4 font-medium transition-colors hover:text-[#faf9ff]"
+                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
                     >
                         {t("footer.legal.stats")}
                     </a>

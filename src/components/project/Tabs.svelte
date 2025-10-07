@@ -67,7 +67,7 @@
 <div class="relative">
     <button
         onclick={() => scrollTabs("left")}
-        class="absolute top-5 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-r-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class="bg-purple-tint absolute top-5 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-r-sm p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollLeft}
         class:pointer-events-none={!canScrollLeft}
         aria-label="Scroll tabs left"
@@ -89,8 +89,8 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-tertiary inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1 lg:border-[#E6E5F7]"
-                class:bg-[#E6E5F7]={activeTab === tab.id}
+                class="text-secondary lg:border-purple-tint inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
+                class:bg-purple-tint={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
                 {tab.label}
@@ -100,7 +100,7 @@
 
     <button
         onclick={() => scrollTabs("right")}
-        class="absolute top-5 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-l-sm bg-[#e6e5f7] p-2 shadow-md lg:hidden"
+        class="bg-purple-tint absolute top-5 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-l-sm p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollRight}
         class:pointer-events-none={!canScrollRight}
         aria-label="Scroll tabs right"
@@ -117,7 +117,7 @@
         }
     </style>
 
-    <div class="flex w-full justify-center bg-[#E6E5F7] py-10 lg:py-20">
+    <div class="bg-purple-tint flex w-full justify-center py-10 lg:py-20">
         <div class="wrapper flex items-center justify-center">
             {#if activeTab === "rewards"}
                 <div

@@ -47,7 +47,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                     class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1"
                 >
                     <ClockIcon />
-                    <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                    <span class="text-secondary text-sm font-bold whitespace-nowrap">
                         {t("home.campaigns.daysRemaining", { days: campaign.daysRemaining })}
                     </span>
                 </div> -->
@@ -57,7 +57,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                         campaign.hasMatchfunding && (
                             <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
                                 <MatchFundingIcon />
-                                <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                                <span class="text-secondary text-sm font-bold whitespace-nowrap">
                                     {t("home.campaigns.matchfunding")}
                                 </span>
                             </div>
@@ -68,7 +68,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                     {
                         campaign.tags?.map((tag) => (
                             <div class="bg-light-muted flex items-center gap-2 rounded border border-white px-2 py-1">
-                                <span class="text-tertiary text-sm font-bold whitespace-nowrap">
+                                <span class="text-secondary text-sm font-bold whitespace-nowrap">
                                     {tag}
                                 </span>
                             </div>
@@ -79,7 +79,7 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
 
             <!-- Project Content -->
             <div class={`flex flex-col gap-6 ${size === "large" ? "flex-1" : ""}`}>
-                <h3 class="text-tertiary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
+                <h3 class="text-secondary max-h-16 overflow-hidden text-2xl leading-8 font-bold">
                     {campaign.title}
                 </h3>
 
@@ -98,10 +98,10 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                     <!-- Amount Information -->
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
-                            <span class="text-secondary text-base">
+                            <span class="text-content text-base">
                                 {t("home.campaigns.obtained")}
                             </span>
-                            <span class="text-secondary text-2xl font-bold">
+                            <span class="text-content text-2xl font-bold">
                                 {
                                     formatCurrency(
                                         campaign.obtained.amount,
@@ -111,10 +111,10 @@ const imageHeight = "h-[389px]"; // Same height for both sizes
                             </span>
                         </div>
                         <div class="flex flex-col gap-1 text-right">
-                            <span class="text-secondary text-base">
+                            <span class="text-content text-base">
                                 {t("home.campaigns.minimum")}
                             </span>
-                            <span class="text-secondary text-2xl font-bold">
+                            <span class="text-content text-2xl font-bold">
                                 {formatCurrency(campaign.minimum.amount, campaign.minimum.currency)}
                             </span>
                         </div>

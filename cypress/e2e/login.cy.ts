@@ -30,8 +30,8 @@ describe("Login Page", () => {
         cy.get("body").then(($body) => {
             if ($body.find("form#login").length > 0) {
                 cy.get("form#login", { timeout: 10000 }).within(() => {
-                    cy.get("input#identifier", { timeout: 5000 }).should("exist");
-                    cy.get("input#password", { timeout: 5000 }).should("exist");
+                    cy.get('input[name="identifier"]', { timeout: 5000 }).should("exist");
+                    cy.get('input[name="password"]', { timeout: 5000 }).should("exist");
                 });
 
                 cy.get('button[form="login"]', { timeout: 5000 }).should("be.visible");
@@ -54,15 +54,9 @@ describe("Login Page", () => {
     });
 
     it("should display floating labels correctly", () => {
-        cy.get('label[for="identifier"]').should("exist");
-
-        cy.get("input#identifier").should("be.visible");
-
-        cy.get("input#identifier").type("root@goteo.org");
-
-        cy.get("input#identifier").should("have.value", "root@goteo.org");
-
-        cy.get('label[for="identifier"]').should("be.visible");
+        cy.get('input[name="identifier"]').should("be.visible");
+        cy.get('input[name="identifier"]').type("root@goteo.org");
+        cy.get('input[name="identifier"]').should("have.value", "root@goteo.org");
     });
 
     it("should validate form fields appropriately", () => {

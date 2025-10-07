@@ -64,7 +64,7 @@
         <div class="h-full w-full border-r border-dashed border-r-white"></div>
 
         <span
-            class="bg-tertiary absolute right-0 h-2 w-2 translate-x-1/2 rounded-full"
+            class="bg-secondary absolute right-0 h-2 w-2 translate-x-1/2 rounded-full"
             class:top-0={budgetAmount === "optimum"}
             class:bottom-0={budgetAmount !== "optimum"}
         ></span>

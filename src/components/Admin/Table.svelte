@@ -507,12 +507,12 @@
 
 <div class="flex justify-between">
     <div class="flex flex-row items-center gap-2">
-        <p class="font-bold text-[#575757]">
+        <p class="text-content font-bold">
             {$t("contributions.filters.order.title")}
         </p>
         <select
             bind:value={selectedSort}
-            class="border-tertiary text-tertiary min-w-[200px] rounded-sm py-1"
+            class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
             disabled={isLoading}
         >
             {#each sortOptions as option}
@@ -522,13 +522,13 @@
     </div>
 
     <div class="flex flex-row items-center gap-2">
-        <p class="font-bold text-[#575757]">
+        <p class="text-content font-bold">
             {$t("contributions.filters.itemsPerPage.title")}
         </p>
         <select
             name="itemsPerPage"
             id="itemsPerPage"
-            class="border-tertiary text-tertiary rounded-sm py-1"
+            class="border-secondary text-secondary rounded-sm py-1"
             bind:value={itemsPerPage}
             disabled={isLoading}
         >
@@ -540,10 +540,10 @@
 </div>
 
 <Table class="w-full border-separate border-spacing-y-2">
-    <TableHead class="bg-secondary">
+    <TableHead class="bg-tertiary">
         {#each tableHeaders as header}
             <TableHeadCell
-                class="py-4 text-base whitespace-nowrap text-[#FBFBFB] first:rounded-l-md last:rounded-r-md
+                class="text-light-surface py-4 text-base whitespace-nowrap first:rounded-l-md last:rounded-r-md
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
                 onclick={() => handleHeaderClick(header)}
             >
@@ -579,44 +579,46 @@
                 <TableBodyRow
                     onclick={() => toggleRow(i)}
                     class="{openRow === i
-                        ? 'bg-[#FAF9FF]'
-                        : 'bg-white'} border border-[#e6e5f7] transition-colors hover:bg-[#FAF9FF]"
+                        ? 'bg-soft-purple]'
+                        : 'bg-white'} border-purple-tint hover:bg-soft-purple] border transition-colors"
                 >
                     <TableBodyCell
-                        class="truncate rounded-l-md border-t border-b border-l border-[#E6E5F7] "
+                        class="border-purple-tint truncate rounded-l-md border-t border-b border-l "
                         >{charge.targetDisplayName}</TableBodyCell
                     >
                     {#if charge.money.amount && charge.money.currency}
-                        <TableBodyCell class="border-t border-b border-[#E6E5F7]">
+                        <TableBodyCell class="border-purple-tint border-t border-b">
                             {formatCurrency(charge.money.amount, charge.money.currency)}
                         </TableBodyCell>
                     {:else}
-                        <TableBodyCell class="border-t border-b border-[#E6E5F7]">—</TableBodyCell>
+                        <TableBodyCell class="border-purple-tint border-t border-b">—</TableBodyCell
+                        >
                     {/if}
-                    <TableBodyCell class="truncate border-t border-b border-[#E6E5F7]"
+                    <TableBodyCell class="border-purple-tint truncate border-t border-b"
                         >{charge.originDisplayName}</TableBodyCell
                     >
-                    <TableBodyCell class="border-t border-b border-[#E6E5F7]">
+                    <TableBodyCell class="border-purple-tint border-t border-b">
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
-                    <TableBodyCell class="border-t border-b border-[#E6E5F7]">
+                    <TableBodyCell class="border-purple-tint border-t border-b">
                         {getDate(charge.dateCreated).date}
                         <p
-                            class="text-tertiary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                            class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
                             title={charge.trackingCodes[0]?.value || "—"}
                         >
                             {charge.trackingCodes[0]?.value || "—"}
                         </p>
                     </TableBodyCell>
-                    <TableBodyCell class="border-t border-b border-[#E6E5F7]">
+                    <TableBodyCell class="border-purple-tint border-t border-b">
                         <button
-                            class="border-secondary text-secondary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
+                            class="border-tertiary text-tertiary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
                         >
                             {$t(`contributions.table.rows.status.${charge.status}`)}
                         </button>
                     </TableBodyCell>
 
-                    <TableBodyCell class="rounded-r-md border-t border-r border-b border-[#E6E5F7]"
+                    <TableBodyCell
+                        class="border-purple-tint rounded-r-md border-t border-r border-b"
                         >{charge.refundToWallet}</TableBodyCell
                     >
                 </TableBodyRow>
@@ -624,7 +626,7 @@
                     <TableBodyRow>
                         <TableBodyCell
                             colspan={tableHeaders.length}
-                            class="rounded-lg border border-[#E6E5F7] bg-[#FAF9FF] shadow-[0px_1px_3px_0px_#0000001A]"
+                            class="border-purple-tint bg-soft-purple] rounded-lg border shadow-[0px_1px_3px_0px_#0000001A]"
                         >
                             <DetailsRow
                                 platformLinks={charge.platformLinks}

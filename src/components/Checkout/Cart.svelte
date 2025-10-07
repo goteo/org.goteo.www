@@ -90,7 +90,7 @@
     <div class="flex flex-col gap-10">
         {#each Object.entries($groupedByOwner) as [target, items]}
             <div class="flex flex-col gap-6">
-                <h2 class="text-secondary text-2xl font-bold">
+                <h2 class="text-black text-2xl font-bold">
                     {$t("project.owner")}
                     {$displayNames[target] ?? ""}
                 </h2>

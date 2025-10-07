@@ -29,11 +29,11 @@
                     {/if}
                 </div>
                 <div class="flex flex-col gap-4">
-                    <p class="text-tertiary text-[32px] font-bold">
+                    <p class="text-secondary text-[32px] font-bold">
                         {formatCurrency(item.amount, item.currency)}
                     </p>
-                    <p class="text-tertiary font-bold">{item.title}</p>
-                    <p class="text-[#575757]">
+                    <p class="text-secondary font-bold">{item.title}</p>
+                    <p class="text-content">
                         {#if typeof item.claimed === "number"}
                             {#if item.claimed > 0}
                                 <span>{item.claimed} {$t("checkout.reward.claimed")} </span>
@@ -53,7 +53,7 @@
                         <MinusIcon />
                     </button>
                     <div class="relative flex w-4 items-center justify-center">
-                        <span class="text-tertiary absolute text-2xl font-bold"
+                        <span class="text-secondary absolute text-2xl font-bold"
                             >{item.quantity}</span
                         >
                     </div>
@@ -81,7 +81,7 @@
                 id={`reward-checkbox-${item.key}`}
                 class="accent-primary h-6 w-6 rounded"
             />
-            <label for="donation-checkbox" class=" text-[#575757]">
+            <label for="donation-checkbox" class=" text-content">
                 {$t("checkout.changeAddressLabel")}
             </label>
         </div> -->

@@ -89,7 +89,7 @@
             <Loader />
         </div>
     {:else}
-        <h2 class="text-tertiary line-clamp-2 flex max-w-2xl text-3xl font-bold">
+        <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-3xl font-bold">
             {$t("project.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
@@ -121,7 +121,7 @@
 
 <Modal
     bind:open={openModal}
-    closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949]  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent"
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
     class="fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
@@ -132,10 +132,10 @@
                     <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
                 </div>
                 <div class="flex flex-col items-end">
-                    <div class="text-secondary font-bold">
+                    <div class="font-bold text-black">
                         {$t("project.tabs.community.contribution")}
                     </div>
-                    <p class="text-secondary text-2xl font-bold">
+                    <p class="text-2xl font-bold text-black">
                         {formatCurrency(
                             selectedProjectSupport.money?.amount ?? 0,
                             selectedProjectSupport.money?.currency ?? "undefined",
@@ -143,10 +143,10 @@
                     </p>
                 </div>
             </div>
-            <div class="text-secondary text-2xl font-bold">
+            <div class="text-2xl font-bold text-black">
                 {selectedProjectSupport.displayName}
             </div>
-            <div class="text-sm text-[#575757]">
+            <div class="text-content text-sm">
                 {selectedProjectSupport.message}
             </div>
         </div>
