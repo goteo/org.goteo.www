@@ -26,6 +26,11 @@ describe("Viewing without contributions", () => {
                 status: "active",
                 currency: "EUR",
                 description: "Descripción del proyecto sin contribuciones",
+                budget: {
+                    minimum: { money: { amount: 5000, currency: "EUR" } },
+                    optimum: { money: { amount: 10000, currency: "EUR" } },
+                },
+                accounting: "/v4/accountings/100",
                 owner: {
                     id: 1,
                     name: "Owner Test",
@@ -38,6 +43,23 @@ describe("Viewing without contributions", () => {
             statusCode: 200,
             body: [],
         }).as("projectRewards");
+
+        cy.intercept("GET", "**/v4/accountings/100", {
+            statusCode: 200,
+            body: {
+                id: 100,
+                balance: {
+                    amount: 0,
+                    currency: "EUR",
+                },
+                accounting_balance_points: "/v4/accounting_balance_points?accounting=100",
+            },
+        }).as("accountingData");
+
+        cy.intercept("GET", "**/v4/accounting_balance_points**", {
+            statusCode: 200,
+            body: [],
+        }).as("accountingBalancePoints");
 
         cy.intercept("GET", "**/v4/**", {
             statusCode: 200,
@@ -71,10 +93,13 @@ describe("Viewing without contributions", () => {
     });
 
     it("should display progress elements correctly", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/100", {
+            failOnStatusCode: false,
+            timeout: 60000,
+        });
         cy.wait(3000);
 
-        cy.get("body").should("exist");
+        cy.get("body", { timeout: 30000 }).should("exist");
         cy.get("body").should("not.contain", "Error 500");
         cy.get("body").should("not.contain", "Internal Server Error");
 

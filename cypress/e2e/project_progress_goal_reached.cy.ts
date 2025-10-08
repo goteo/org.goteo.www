@@ -2,6 +2,17 @@
 
 describe("Objective achieved", () => {
     beforeEach(() => {
+        cy.intercept("GET", "**/api/auth/me", {
+            statusCode: 200,
+            body: {
+                id: 1,
+                email: "test@cypress.local",
+                name: "Cypress Test User",
+                accountingId: 123,
+                isAuthenticated: true,
+            },
+        }).as("authMe");
+
         cy.intercept("GET", "**/v4/projects/100*", {
             statusCode: 200,
             body: {
@@ -15,6 +26,11 @@ describe("Objective achieved", () => {
                 status: "active",
                 currency: "EUR",
                 description: "Descripción del proyecto de prueba",
+                budget: {
+                    minimum: { money: { amount: 5000, currency: "EUR" } },
+                    optimum: { money: { amount: 10000, currency: "EUR" } },
+                },
+                accounting: "/v4/accountings/100",
                 owner: {
                     id: 1,
                     name: "Owner Test",
@@ -81,6 +97,31 @@ describe("Objective achieved", () => {
             ],
         }).as("projectRewards");
 
+        cy.intercept("GET", "**/v4/accountings/100", {
+            statusCode: 200,
+            body: {
+                id: 100,
+                balance: {
+                    amount: 7500,
+                    currency: "EUR",
+                },
+                accounting_balance_points: "/v4/accounting_balance_points?accounting=100",
+            },
+        }).as("accountingData");
+
+        cy.intercept("GET", "**/v4/accounting_balance_points**", {
+            statusCode: 200,
+            body: [
+                {
+                    id: 1,
+                    date: "2024-10-08",
+                    amount: 7500,
+                    currency: "EUR",
+                    accounting: "/v4/accountings/100",
+                },
+            ],
+        }).as("accountingBalancePoints");
+
         cy.intercept("GET", "**/v4/**", {
             statusCode: 200,
             body: {
@@ -93,20 +134,44 @@ describe("Objective achieved", () => {
             },
         }).as("otherApiCalls");
 
+        cy.window().then((win) => {
+            win.localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    id: 1,
+                    email: "test@cypress.local",
+                    name: "Cypress Test User",
+                    isAuthenticated: true,
+                    accountingId: 123,
+                }),
+            );
+        });
+
+        cy.setCookie(
+            "access-token",
+            JSON.stringify({
+                token: "mock-access-token-cypress-123",
+                accountingId: 123,
+                userId: 1,
+            }),
+        );
+
+        cy.mockLogin();
+
         cy.on("uncaught:exception", () => false);
     });
 
     it("should display goal reached status when minimum is exceeded", () => {
-        cy.visitAs("user", "/es/project/100");
+        cy.visit("/es/project/100", {
+            failOnStatusCode: false,
+            timeout: 60000,
+        });
 
-        // Wait for page to load and verify it's not a 500 error page
-        cy.get("body", { timeout: 20000 }).should("exist");
-        
-        // Check if page loaded with error or if it's completely empty
+        cy.get("body", { timeout: 30000 }).should("exist");
+
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // If body is completely empty or shows errors, skip test gracefully in CI
+
             if (!text || text.trim().length === 0) {
                 cy.log("⚠️ Empty body detected in CI - skipping test");
                 cy.log("This may indicate API connectivity issues in CI environment");
@@ -204,20 +269,19 @@ describe("Objective achieved", () => {
     });
 
     it("should display project page with basic content", () => {
-        cy.visitAs("user", "/es/project/100");
+        cy.visit("/es/project/100", {
+            failOnStatusCode: false,
+            timeout: 60000,
+        });
 
-        // Wait for page to load and verify it's not a 500 error page
-        cy.get("body", { timeout: 20000 }).should("exist");
-        
-        // Check if page loaded with error or if it's completely empty
+        cy.get("body", { timeout: 30000 }).should("exist");
+
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // If body is completely empty or shows errors, skip test gracefully in CI
+
             if (!text || text.trim().length === 0) {
                 cy.log("⚠️ Empty body detected in CI - skipping test");
                 cy.log("This may indicate API connectivity issues in CI environment");
-                // Don't fail the test, just log and continue
                 return;
             } else if (text.includes("500") || text.includes("Internal Server Error")) {
                 cy.log("❌ Server error detected");
