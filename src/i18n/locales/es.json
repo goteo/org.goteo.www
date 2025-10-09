@@ -316,7 +316,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión",
-    "btnCart": "Ir al checkout"
+    "btnCart": "Ir al checkout",
+    "search": "Buscar",
+    "createProject": "Crea tu proyecto"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
