@@ -39,7 +39,7 @@ describe("Project Page - Donation and Reward Verification", () => {
             statusCode: 200,
             body: {
                 id: 100,
-                title: "Proyecto de Prueba",
+                title: "Test Project",
                 amount: 12500,
                 minimal: 5000,
                 optimal: 25000,
@@ -47,7 +47,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                 num_investors: 45,
                 status: "active",
                 currency: "EUR",
-                description: "Descripción del proyecto de prueba",
+                description: "Test project description",
                 owner: {
                     id: 1,
                     name: "Owner Test",
@@ -63,7 +63,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                     id: 3827,
                     project: "/v4/projects/100",
                     title: 'CD "Al Paso de los Caracoles" + 2 Camisetas',
-                    description: "CD físico del álbum junto con 2 camisetas oficiales",
+                    description: "Physical CD of the album with 2 official t-shirts",
                     money: { amount: 4000, currency: "EUR" },
                     isFinite: true,
                     unitsTotal: 5,
@@ -124,11 +124,11 @@ describe("Project Page - Donation and Reward Verification", () => {
                 );
             } else {
                 cy.log(
-                    "Contenedor de recompensas específico no encontrado, verificando elementos alternativos",
+                    "Specific rewards container not found, checking alternative elements",
                 );
 
                 cy.get("body").then(($body) => {
-                    const expectedTexts = ["CD", "Caracoles", "Camisetas", "Dona", "40"];
+                    const expectedTexts = ["CD", "Caracoles", "T-shirts", "Donate", "40"];
                     let foundTexts = 0;
 
                     expectedTexts.forEach((text) => {
@@ -139,11 +139,11 @@ describe("Project Page - Donation and Reward Verification", () => {
 
                     if (foundTexts >= 2) {
                         cy.log(
-                            `✅ Encontrados ${foundTexts} de ${expectedTexts.length} textos de recompensa esperados`,
+                            `✅ Found ${foundTexts} of ${expectedTexts.length} expected reward texts`,
                         );
 
-                        if ($body.find("button:contains('Dona')").length > 0) {
-                            cy.contains("button", "Dona").should("be.visible");
+                        if ($body.find("button:contains('Donate')").length > 0) {
+                            cy.contains("button", "Donate").should("be.visible");
                         }
 
                         if ($body.find("h3").length > 0) {
@@ -151,7 +151,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                         }
                     } else {
                         cy.log(
-                            "ℹ️  Elementos específicos de recompensa no encontrados, pero la página cargó",
+                            "ℹ️  Specific reward elements not found, but page loaded",
                         );
                         cy.get("body").should("not.contain", "Error 500");
                     }
@@ -169,13 +169,13 @@ describe("Project Page - Donation and Reward Verification", () => {
 
         cy.get("body").then(($body) => {
             if ($body.text().includes("CD") && $body.text().includes("Caracoles")) {
-                cy.log("✅ Datos de recompensa mock encontrados en la página");
+                cy.log("✅ Mock reward data found on page");
 
                 if ($body.find("button").length > 0) {
                     cy.get("button").should("have.length.greaterThan", 0);
                 }
             } else {
-                cy.log("ℹ️  Verificando que los datos mock son correctos");
+                cy.log("ℹ️  Verifying that mock data is correct");
                 const mockReward = {
                     title: 'CD "Al Paso de los Caracoles" + 2 Camisetas',
                     amount: 4000,
@@ -185,7 +185,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                 expect(mockReward.title).to.include("CD");
                 expect(mockReward.title).to.include("Caracoles");
                 expect(mockReward.amount).to.equal(4000);
-                cy.log("✅ Datos mock verificados correctamente");
+                cy.log("✅ Mock data verified correctly");
             }
         });
     });

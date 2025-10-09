@@ -60,7 +60,7 @@ describe("Login with Incorrect Password", () => {
                         ) {
                             errorElementFound = true;
                             cy.get(selector, { timeout: 10000 }).should("be.visible");
-                            cy.log("✅ Error de login mostrado correctamente");
+                            cy.log("✅ Login error displayed correctly");
                         }
                     });
 
@@ -68,19 +68,19 @@ describe("Login with Incorrect Password", () => {
                         cy.url().then((url) => {
                             if (url.includes("login")) {
                                 cy.log(
-                                    "✅ Permanece en página de login, indicando fallo de autenticación",
+                                    "✅ Remains on login page, indicating authentication failure",
                                 );
                                 expect(url).to.include("login");
                             } else {
                                 cy.log(
-                                    "ℹ️ Verificando contenido de error en el texto de la página",
+                                    "ℹ️ Checking error content in page text",
                                 );
                                 // Check for error text in page content
                                 const hasErrorText =
                                     textAfter.includes("error") ||
                                     textAfter.includes("incorrect") ||
                                     textAfter.includes("invalid") ||
-                                    textAfter.includes("incorrecto");
+                                    textAfter.includes("incorrect");
 
                                 if (hasErrorText) {
                                     cy.log("✅ Error text found in page content");
@@ -96,7 +96,7 @@ describe("Login with Incorrect Password", () => {
                     }
                 });
             } else {
-                cy.log("ℹ️ Formulario de login no encontrado, página cargada de forma diferente");
+                cy.log("ℹ️ Login form not found, page loaded differently");
                 cy.get("body").should("not.contain", "Error 500");
             }
         });

@@ -14,18 +14,18 @@ describe("Contribution with reward", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            if (text.includes("CD") || text.includes("Camiseta") || text.includes("físico")) {
-                cy.get("body").should("contain.text", text.includes("CD") ? "CD" : "Camiseta");
+            if (text.includes("CD") || text.includes("T-shirt") || text.includes("physical")) {
+                cy.get("body").should("contain.text", text.includes("CD") ? "CD" : "T-shirt");
             }
 
             if (
-                text.includes("Donar") ||
-                text.includes("contribuir") ||
-                text.includes("recompensa")
+                text.includes("Donate") ||
+                text.includes("contribute") ||
+                text.includes("reward")
             ) {
                 cy.get("body").should(
                     "contain.text",
-                    text.includes("Donar") ? "Donar" : "contribuir",
+                    text.includes("Donate") ? "Donate" : "contribute",
                 );
             }
 
@@ -37,10 +37,10 @@ describe("Contribution with reward", () => {
                 cy.get("button").should("exist");
             }
 
-            if (text.includes("proyecto") || text.includes("project")) {
+            if (text.includes("project") || text.includes("project")) {
                 cy.get("body").should(
                     "contain.text",
-                    text.includes("proyecto") ? "proyecto" : "project",
+                    text.includes("project") ? "project" : "project",
                 );
             }
         });

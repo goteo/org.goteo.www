@@ -8,7 +8,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-// ========== INTERFACES EXISTENTES ==========
+// ========== EXISTING INTERFACES ==========
 interface User {
     email: string;
     password: string;
@@ -19,12 +19,12 @@ interface Users {
     invalidUser: User;
 }
 
-// ========== COMANDOS ESCALABLES NUEVOS ==========
-// NOTA: Los tipos UserProfile y UserRole están definidos en index.d.ts
+// ========== NEW SCALABLE COMMANDS ==========
+// NOTE: UserProfile and UserRole types are defined in index.d.ts
 
 /**
- * Comando escalable para autenticación por rol
- * Configura automáticamente intercepts, localStorage y cookies
+ * Scalable command for role-based authentication
+ * Automatically configures intercepts, localStorage and cookies
  */
 Cypress.Commands.add("loginAs", (role: UserRole) => {
     cy.fixture("user-profiles").then((profiles) => {
@@ -34,14 +34,14 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             throw new Error(`Profile '${role}' not found in user-profiles.json`);
         }
 
-        // Si es guest, no configurar autenticación
+        // If it's guest, don't configure authentication
         if (role === "guest") {
             cy.clearCookies();
             cy.clearLocalStorage();
             return;
         }
 
-        // 1. Configurar intercept para obtener datos de usuario
+        // 1. Configure intercept to get user data
         cy.intercept("GET", `**/v4/users/${profile.id}`, {
             statusCode: 200,
             body: {
@@ -57,7 +57,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             },
         }).as("getUserData");
 
-        // 2. Configurar intercept para login
+        // 2. Configure intercept for login
         cy.intercept("POST", "**/v4/user_tokens", {
             statusCode: 201,
             body: {
@@ -67,7 +67,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             },
         }).as("loginRequest");
 
-        // 3. Configurar intercept para datos de persona
+        // 3. Configure intercept for person data
         cy.intercept("GET", `**/v4/users/${profile.id}/person`, {
             statusCode: 200,
             body: {
@@ -77,7 +77,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             },
         }).as("getPersonData");
 
-        // 4. Configurar cookie access-token
+        // 4. Configure access-token cookie
         cy.setCookie(
             "access-token",
             JSON.stringify({
@@ -104,7 +104,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             }),
         );
 
-        // 5. Configurar localStorage
+        // 5. Configure localStorage
         cy.window().then((win) => {
             win.localStorage.setItem(
                 "user",
@@ -119,16 +119,16 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             );
         });
 
-        // 6. Configurar intercepts adicionales comunes
+        // 6. Configure additional common intercepts
         cy.setupCommonIntercepts(profile);
 
-        // 7. Manejar excepciones no capturadas
+        // 7. Handle uncaught exceptions
         cy.on("uncaught:exception", () => false);
     });
 });
 
 /**
- * Configurar intercepts comunes basados en el perfil del usuario
+ * Configure common intercepts based on user profile
  */
 Cypress.Commands.add("setupCommonIntercepts", (profile: UserProfile) => {
     cy.intercept("GET", "**/v4/projects/**", {
@@ -196,7 +196,7 @@ Cypress.Commands.add("setupCommonIntercepts", (profile: UserProfile) => {
 });
 
 /**
- * Comando para verificar que el usuario tiene los roles correctos
+ * Command to verify that the user has the correct roles
  */
 Cypress.Commands.add("verifyUserRole", (expectedRole: UserRole) => {
     cy.fixture("user-profiles").then((profiles) => {
@@ -211,14 +211,14 @@ Cypress.Commands.add("verifyUserRole", (expectedRole: UserRole) => {
 });
 
 /**
- * Comando para visitar página con autenticación automática
+ * Command to visit page with automatic authentication
  */
 Cypress.Commands.add("visitAs", (role: UserRole, url: string) => {
     cy.loginAs(role);
     cy.visit(url, { failOnStatusCode: false });
 });
 
-// ========== COMANDOS EXISTENTES (MANTENER COMPATIBILIDAD) ==========
+// ========== EXISTING COMMANDS (MAINTAIN COMPATIBILITY) ==========
 
 Cypress.Commands.add(
     "login",
@@ -380,7 +380,7 @@ Cypress.Commands.add("checkHeaderElements", () => {
         }
 
         if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-            cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).should(
+            cy.get('header button[aria-label="Go to checkout"]', { timeout: 5000 }).should(
                 "be.visible",
             );
         } else {
