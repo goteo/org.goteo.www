@@ -62,8 +62,10 @@
                 {formatCurrency(amount ?? $total, currency)}
             </p>
         </div>
-        <button class="text-sm text-secondary underline lg:hidden" on:click={toggleCollapse}>
-            {isCollapsed ? $t("checkout.summary.show_details") : $t("checkout.summary.hide_details")}
+        <button class="text-secondary text-sm underline lg:hidden" on:click={toggleCollapse}>
+            {isCollapsed
+                ? $t("checkout.summary.show_details")
+                : $t("checkout.summary.hide_details")}
         </button>
     </div>
 
