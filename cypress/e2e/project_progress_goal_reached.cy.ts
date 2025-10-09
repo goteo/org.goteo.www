@@ -126,11 +126,13 @@ describe("Objective achieved", () => {
             statusCode: 200,
             body: [
                 {
-                    id: 1,
-                    date: "2024-10-08",
-                    amount: 7500,
-                    currency: "EUR",
-                    accounting: "/v4/accountings/100",
+                    start: "2024-10-01T00:00:00Z",
+                    end: "2024-10-08T23:59:59Z",
+                    balance: {
+                        amount: 7500,
+                        currency: "EUR",
+                    },
+                    length: 1,
                 },
             ],
         }).as("accountingBalancePoints");
