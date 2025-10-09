@@ -345,7 +345,11 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
-      }
+      },
+      "show_details": "Ver detalle",
+      "hide_details": "Ocultar desglose",
+      "donations": "Donaciones",
+      "foundation": "Fundación Platoniq"
     },
     "cart": {
       "freeDonation": {
