@@ -5,15 +5,29 @@ describe("View project rewards", () => {
         cy.loginAs("user");
         cy.on("uncaught:exception", () => false);
 
-        cy.intercept("GET", "**/api/auth/me", {
+        cy.intercept("GET", "**/v4/users/1", {
             statusCode: 200,
             body: {
                 id: 1,
                 email: "test@cypress.local",
-                name: "Cypress Test User",
-                accountingId: 123,
+                handle: "test",
+                displayName: "Cypress Test User",
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
             },
-        }).as("authMe");
+        }).as("getUserData");
+
+        cy.intercept("GET", "**/v4/users/1/person", {
+            statusCode: 200,
+            body: {
+                id: 1,
+                name: "Cypress Test User",
+                email: "test@cypress.local",
+            },
+        }).as("getPersonData");
 
         cy.intercept("GET", "**/v4/projects/100", {
             statusCode: 200,
@@ -114,8 +128,13 @@ describe("View project rewards", () => {
                 JSON.stringify({
                     id: 1,
                     email: "test@cypress.local",
-                    name: "Cypress Test User",
-                    accountingId: 123,
+                    handle: "test",
+                displayName: "Cypress Test User",
+                    roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
                 }),
             );
         });
@@ -124,7 +143,11 @@ describe("View project rewards", () => {
             "access-token",
             JSON.stringify({
                 token: "mock-access-token-cypress-123",
-                accountingId: 123,
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
                 userId: 1,
             }),
         );

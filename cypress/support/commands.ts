@@ -41,47 +41,70 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             return;
         }
 
-        // 1. Configurar intercept para /api/auth/me
-        cy.intercept("GET", "**/api/auth/me", {
+        // 1. Configurar intercept para obtener datos de usuario
+        cy.intercept("GET", `**/v4/users/${profile.id}`, {
             statusCode: 200,
             body: {
                 id: profile.id,
                 email: profile.email,
-                name: profile.name,
-                accountingId: profile.accountingId,
+                handle: profile.email.split('@')[0],
+                displayName: profile.name,
                 roles: profile.roles,
-                isAdmin: profile.isAdmin,
+                accounting: `/v4/accountings/${profile.accountingId}`,
+                person: `/v4/users/${profile.id}/person`,
+                emailConfirmed: true,
+                active: true,
             },
-        }).as("authMe");
+        }).as("getUserData");
 
-        // 2. Configurar intercept para login (opcional)
-        cy.intercept("POST", "**/api/auth/login", {
-            statusCode: 200,
+        // 2. Configurar intercept para login
+        cy.intercept("POST", "**/v4/user_tokens", {
+            statusCode: 201,
             body: {
-                access_token: profile.token,
-                refresh_token: `refresh-${profile.token}`,
-                user: {
-                    id: profile.id,
-                    email: profile.email,
-                    name: profile.name,
-                    accountingId: profile.accountingId,
-                    roles: profile.roles,
-                },
+                id: 1,
+                token: profile.token,
+                owner: `/v4/users/${profile.id}`,
             },
         }).as("loginRequest");
 
-        // 3. Configurar cookie access-token
+        // 3. Configurar intercept para datos de persona
+        cy.intercept("GET", `**/v4/users/${profile.id}/person`, {
+            statusCode: 200,
+            body: {
+                id: profile.id,
+                name: profile.name,
+                email: profile.email,
+            },
+        }).as("getPersonData");
+
+        // 4. Configurar cookie access-token
         cy.setCookie(
             "access-token",
             JSON.stringify({
                 id: profile.id,
+                user: {
+                    id: profile.id,
+                    email: profile.email,
+                    handle: profile.email.split('@')[0],
+                    displayName: profile.name,
+                    roles: profile.roles,
+                    accounting: `/v4/accountings/${profile.accountingId}`,
+                    person: `/v4/users/${profile.id}/person`,
+                    emailConfirmed: true,
+                    active: true,
+                },
+                person: {
+                    id: profile.id,
+                    name: profile.name,
+                    email: profile.email,
+                },
                 token: profile.token,
                 accountingId: profile.accountingId,
                 isAdmin: profile.isAdmin,
             }),
         );
 
-        // 4. Configurar localStorage
+        // 5. Configurar localStorage
         cy.window().then((win) => {
             win.localStorage.setItem(
                 "user",
@@ -96,10 +119,10 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             );
         });
 
-        // 5. Configurar intercepts adicionales comunes
+        // 6. Configurar intercepts adicionales comunes
         cy.setupCommonIntercepts(profile);
 
-        // 6. Manejar excepciones no capturadas
+        // 7. Manejar excepciones no capturadas
         cy.on("uncaught:exception", () => false);
     });
 });
@@ -228,36 +251,61 @@ Cypress.Commands.add(
 Cypress.Commands.add("mockLogin", () => {
     console.warn('⚠️  cy.mockLogin() is deprecated. Use cy.loginAs("admin") instead');
 
-    cy.intercept("POST", "**/api/auth/login", {
-        statusCode: 200,
+    cy.intercept("POST", "**/v4/user_tokens", {
+        statusCode: 201,
         body: {
-            access_token: "mock-access-token-cypress-123",
-            refresh_token: "mock-refresh-token-cypress-456",
-            user: {
-                id: 1,
-                email: "test@cypress.local",
-                name: "Cypress Test User",
-                accountingId: 123,
-            },
+            id: 1,
+            token: "mock-access-token-cypress-123",
+            owner: "/v4/users/1",
         },
     }).as("loginRequest");
 
-    cy.intercept("GET", "**/api/auth/me", {
+    cy.intercept("GET", "**/v4/users/1", {
         statusCode: 200,
         body: {
             id: 1,
             email: "test@cypress.local",
-            name: "Cypress Test User",
-            accountingId: 123,
+            handle: "test",
+            displayName: "Cypress Test User",
+            roles: ["ROLE_USER"],
+            accounting: "/v4/accountings/123",
+            person: "/v4/users/1/person",
+            emailConfirmed: true,
+            active: true,
         },
-    }).as("authMe");
+    }).as("getUserData");
+
+    cy.intercept("GET", "**/v4/users/1/person", {
+        statusCode: 200,
+        body: {
+            id: 1,
+            name: "Cypress Test User",
+            email: "test@cypress.local",
+        },
+    }).as("getPersonData");
 
     cy.setCookie(
         "access-token",
         JSON.stringify({
+            id: 1,
+            user: {
+                id: 1,
+                email: "test@cypress.local",
+                handle: "test",
+                displayName: "Cypress Test User",
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
+            },
+            person: {
+                id: 1,
+                name: "Cypress Test User",
+                email: "test@cypress.local",
+            },
             token: "mock-access-token-cypress-123",
             accountingId: 123,
-            userId: 1,
         }),
     );
 
@@ -280,9 +328,25 @@ Cypress.Commands.add("loginBypass", () => {
     cy.setCookie(
         "access-token",
         JSON.stringify({
+            id: 1,
+            user: {
+                id: 1,
+                email: "cypress@test.local",
+                handle: "cypress",
+                displayName: "Cypress Bypass User",
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/999",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
+            },
+            person: {
+                id: 1,
+                name: "Cypress Bypass User",
+                email: "cypress@test.local",
+            },
             token: "cypress-bypass-token",
             accountingId: 999,
-            userId: 1,
         }),
     );
 

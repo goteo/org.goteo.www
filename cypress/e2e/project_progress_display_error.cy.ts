@@ -2,16 +2,30 @@
 
 describe("Error in progress display", () => {
     beforeEach(() => {
-        cy.intercept("GET", "**/api/auth/me", {
+        cy.intercept("GET", "**/v4/users/1", {
             statusCode: 200,
             body: {
                 id: 1,
                 email: "test@cypress.local",
-                name: "Cypress Test User",
-                accountingId: 123,
+                handle: "test",
+                displayName: "Cypress Test User",
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
                 isAuthenticated: true,
             },
-        }).as("authMe");
+        }).as("getUserData");
+
+        cy.intercept("GET", "**/v4/users/1/person", {
+            statusCode: 200,
+            body: {
+                id: 1,
+                name: "Cypress Test User",
+                email: "test@cypress.local",
+            },
+        }).as("getPersonData");
 
         cy.intercept("GET", "**/v4/projects/100", {
             statusCode: 200,
@@ -41,7 +55,11 @@ describe("Error in progress display", () => {
 
         cy.intercept("GET", "**/v4/**", {
             statusCode: 200,
-            body: { accountingId: 123, id: 1 },
+            body: { roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true, id: 1 },
         }).as("otherApiCalls");
 
         cy.window().then((win) => {
@@ -50,9 +68,14 @@ describe("Error in progress display", () => {
                 JSON.stringify({
                     id: 1,
                     email: "test@cypress.local",
-                    name: "Cypress Test User",
+                    handle: "test",
+                displayName: "Cypress Test User",
                     isAuthenticated: true,
-                    accountingId: 123,
+                    roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
                 }),
             );
         });
@@ -61,7 +84,11 @@ describe("Error in progress display", () => {
             "access-token",
             JSON.stringify({
                 token: "mock-access-token-cypress-123",
-                accountingId: 123,
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
                 userId: 1,
             }),
         );

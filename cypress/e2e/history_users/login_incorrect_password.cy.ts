@@ -2,20 +2,15 @@
 
 describe("Login with Incorrect Password", () => {
     beforeEach(() => {
-        cy.intercept("POST", "**/api/auth/login", {
+        cy.intercept("POST", "**/v4/user_tokens", {
             statusCode: 401,
             body: {
-                error: "Invalid credentials",
-                message: "Email or password is incorrect",
+                "@context": "/v4/contexts/Error",
+                "@type": "hydra:Error",
+                "hydra:title": "An error occurred",
+                "hydra:description": "Invalid credentials",
             },
         }).as("loginFailure");
-
-        cy.intercept("GET", "**/api/auth/me", {
-            statusCode: 401,
-            body: {
-                isAuthenticated: false,
-            },
-        }).as("authMe");
 
         cy.on("uncaught:exception", () => false);
     });
