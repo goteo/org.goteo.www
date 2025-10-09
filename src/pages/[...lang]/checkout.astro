@@ -18,10 +18,10 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
                 <BackButton />
 
                 <div class="flex flex-col gap-4">
-                    <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                    <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                         {t("checkout.title")}
                     </h2>
-                    <p class="text-[#575757]">
+                    <p class="text-content">
                         {t("checkout.subtitle")}
                     </p>
                 </div>
@@ -35,7 +35,7 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
                 <div class="lg:block" id="checkout-details">
                     <Steps step={1} client:load />
                     <div class="flex flex-col gap-4 px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-6">
-                        <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
+                        <p class="text-sm text-content">{t("checkout.summary.deduct")}</p>
                     </div>
                 </div>
                 <div class="flex flex-col gap-4 px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-6">
