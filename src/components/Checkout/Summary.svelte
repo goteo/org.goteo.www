@@ -63,7 +63,7 @@
             </p>
         </div>
         <button class="text-sm text-secondary underline lg:hidden" on:click={toggleCollapse}>
-            {isCollapsed ? "Ver detalle" : "Ocultar desglose"}
+            {isCollapsed ? $t("checkout.summary.show_details") : $t("checkout.summary.hide_details")}
         </button>
     </div>
 
@@ -71,7 +71,7 @@
         {#if $donations > 0}
             <div class="flex flex-col gap-2">
                 <div class="flex justify-between text-sm">
-                    <span>Donaciones</span>
+                    <span>{$t("checkout.summary.donations")}</span>
                     <span>{formatCurrency($donations, currency)}</span>
                 </div>
             </div>
@@ -80,7 +80,7 @@
         {#if $foundation > 0}
             <div class="flex flex-col gap-2">
                 <div class="flex justify-between text-sm">
-                    <span>Fundación Platoniq</span>
+                    <span>{$t("checkout.summary.foundation")}</span>
                     <span>{formatCurrency($foundation, currency)}</span>
                 </div>
             </div>
