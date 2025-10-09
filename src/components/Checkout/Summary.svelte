@@ -47,7 +47,7 @@
     <div class="flex items-center justify-between">
         <div>
             <h2
-                class={`flex items-center gap-2 text-[20px] text-[32px] font-semibold lg:text-[32px] ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+                class={`flex items-center gap-2 text-[20px] text-[32px] font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -57,12 +57,12 @@
                 {$t("checkout.summary.total.title")}
             </h2>
             <p
-                class={`text-[32px] text-[56px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-[#E94668]" : "text-[#462949]"}`}
+                class={`text-[32px] text-[56px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {formatCurrency(amount ?? $total, currency)}
             </p>
         </div>
-        <button class="text-sm text-[#462949] underline lg:hidden" on:click={toggleCollapse}>
+        <button class="text-sm text-secondary underline lg:hidden" on:click={toggleCollapse}>
             {isCollapsed ? "Ver detalle" : "Ocultar desglose"}
         </button>
     </div>
