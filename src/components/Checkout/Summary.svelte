@@ -47,7 +47,7 @@
     <div class="flex items-center justify-between">
         <div>
             <h2
-                class={`flex items-center gap-2 text-[20px] text-[32px] font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {#if hasError}
                     <span class="h-6 w-6">
