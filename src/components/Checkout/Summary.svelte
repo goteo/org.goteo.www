@@ -1,5 +1,6 @@
 <script lang="ts">
     import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import Button from "../library/Button.svelte";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
@@ -72,6 +73,7 @@
                 {isCollapsed
                     ? $t("checkout.summary.show_details")
                     : $t("checkout.summary.hide_details")}
+                <ArrowRightIcon width="16" height="10" />
             </Button>
         </div>
     </div>
