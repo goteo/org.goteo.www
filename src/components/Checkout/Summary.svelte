@@ -57,7 +57,7 @@
                 {$t("checkout.summary.total.title")}
             </h2>
             <p
-                class={`text-[32px] text-[56px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {formatCurrency(amount ?? $total, currency)}
             </p>
