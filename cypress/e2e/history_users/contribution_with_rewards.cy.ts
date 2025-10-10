@@ -18,11 +18,7 @@ describe("Contribution with reward", () => {
                 cy.get("body").should("contain.text", text.includes("CD") ? "CD" : "T-shirt");
             }
 
-            if (
-                text.includes("Donate") ||
-                text.includes("contribute") ||
-                text.includes("reward")
-            ) {
+            if (text.includes("Donate") || text.includes("contribute") || text.includes("reward")) {
                 cy.get("body").should(
                     "contain.text",
                     text.includes("Donate") ? "Donate" : "contribute",

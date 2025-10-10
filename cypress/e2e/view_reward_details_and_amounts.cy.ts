@@ -129,12 +129,12 @@ describe("View project rewards", () => {
                     id: 1,
                     email: "test@cypress.local",
                     handle: "test",
-                displayName: "Cypress Test User",
+                    displayName: "Cypress Test User",
                     roles: ["ROLE_USER"],
-                accounting: "/v4/accountings/123",
-                person: "/v4/users/1/person",
-                emailConfirmed: true,
-                active: true,
+                    accounting: "/v4/accountings/123",
+                    person: "/v4/users/1/person",
+                    emailConfirmed: true,
+                    active: true,
                 }),
             );
         });

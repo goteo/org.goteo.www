@@ -123,9 +123,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                     },
                 );
             } else {
-                cy.log(
-                    "Specific rewards container not found, checking alternative elements",
-                );
+                cy.log("Specific rewards container not found, checking alternative elements");
 
                 cy.get("body").then(($body) => {
                     const expectedTexts = ["CD", "Caracoles", "T-shirts", "Donate", "40"];
@@ -150,9 +148,7 @@ describe("Project Page - Donation and Reward Verification", () => {
                             cy.get("h3").first().should("be.visible");
                         }
                     } else {
-                        cy.log(
-                            "ℹ️  Specific reward elements not found, but page loaded",
-                        );
+                        cy.log("ℹ️  Specific reward elements not found, but page loaded");
                         cy.get("body").should("not.contain", "Error 500");
                     }
                 });

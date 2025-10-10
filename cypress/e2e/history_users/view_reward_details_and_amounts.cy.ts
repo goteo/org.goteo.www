@@ -114,11 +114,14 @@ describe("View project rewards", () => {
 
         cy.intercept("GET", "**/v4/**", {
             statusCode: 200,
-            body: { roles: ["ROLE_USER"],
+            body: {
+                roles: ["ROLE_USER"],
                 accounting: "/v4/accountings/123",
                 person: "/v4/users/1/person",
                 emailConfirmed: true,
-                active: true, id: 1 },
+                active: true,
+                id: 1,
+            },
         }).as("otherApiCalls");
 
         cy.window().then((win) => {
@@ -128,12 +131,12 @@ describe("View project rewards", () => {
                     id: 1,
                     email: "test@cypress.local",
                     handle: "test",
-                displayName: "Cypress Test User",
+                    displayName: "Cypress Test User",
                     roles: ["ROLE_USER"],
-                accounting: "/v4/accountings/123",
-                person: "/v4/users/1/person",
-                emailConfirmed: true,
-                active: true,
+                    accounting: "/v4/accountings/123",
+                    person: "/v4/users/1/person",
+                    emailConfirmed: true,
+                    active: true,
                 }),
             );
         });

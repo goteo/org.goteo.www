@@ -13,9 +13,7 @@ describe("Login Page", () => {
             const text = $body.text();
 
             if (text.includes("Tell us your personal data")) {
-                cy.contains("Tell us your personal data", { timeout: 10000 }).should(
-                    "be.visible",
-                );
+                cy.contains("Tell us your personal data", { timeout: 10000 }).should("be.visible");
             }
 
             if (text.includes("Sign in to your account")) {

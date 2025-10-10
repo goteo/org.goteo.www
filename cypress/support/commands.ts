@@ -47,7 +47,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
             body: {
                 id: profile.id,
                 email: profile.email,
-                handle: profile.email.split('@')[0],
+                handle: profile.email.split("@")[0],
                 displayName: profile.name,
                 roles: profile.roles,
                 accounting: `/v4/accountings/${profile.accountingId}`,
@@ -85,7 +85,7 @@ Cypress.Commands.add("loginAs", (role: UserRole) => {
                 user: {
                     id: profile.id,
                     email: profile.email,
-                    handle: profile.email.split('@')[0],
+                    handle: profile.email.split("@")[0],
                     displayName: profile.name,
                     roles: profile.roles,
                     accounting: `/v4/accountings/${profile.accountingId}`,

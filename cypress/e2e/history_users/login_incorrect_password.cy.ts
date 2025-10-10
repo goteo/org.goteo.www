@@ -72,9 +72,7 @@ describe("Login with Incorrect Password", () => {
                                 );
                                 expect(url).to.include("login");
                             } else {
-                                cy.log(
-                                    "ℹ️ Checking error content in page text",
-                                );
+                                cy.log("ℹ️ Checking error content in page text");
                                 // Check for error text in page content
                                 const hasErrorText =
                                     textAfter.includes("error") ||
