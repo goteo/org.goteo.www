@@ -1,5 +1,6 @@
 <script lang="ts">
     import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import Button from "../library/Button.svelte";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
@@ -44,7 +45,7 @@
 </script>
 
 <div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
-    <div class="flex items-center justify-between">
+    <div class="flex items-start justify-between">
         <div>
             <h2
                 class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
@@ -62,11 +63,17 @@
                 {formatCurrency(amount ?? $total, currency)}
             </p>
         </div>
-        <button class="text-secondary text-sm underline lg:hidden" on:click={toggleCollapse}>
-            {isCollapsed
-                ? $t("checkout.summary.show_details")
-                : $t("checkout.summary.hide_details")}
-        </button>
+        <div class="lg:hidden">
+            <Button 
+                kind="invert" 
+                onclick={toggleCollapse} 
+                class="text-sm px-2 py-1"
+            >
+                {isCollapsed
+                    ? $t("checkout.summary.show_details")
+                    : $t("checkout.summary.hide_details")}
+            </Button>
+        </div>
     </div>
 
     {#if !isCollapsed}
