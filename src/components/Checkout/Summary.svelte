@@ -65,11 +65,7 @@
             </p>
         </div>
         <div class="lg:hidden">
-            <Button 
-                kind="invert" 
-                onclick={toggleCollapse} 
-                class="text-sm px-2 py-1"
-            >
+            <Button kind="invert" onclick={toggleCollapse} class="px-2 py-1 text-sm">
                 {isCollapsed
                     ? $t("checkout.summary.show_details")
                     : $t("checkout.summary.hide_details")}
