@@ -13,13 +13,13 @@
 </script>
 
 <div class="flex gap-2">
-    <Button onclick={openSearch} kind="secondary" size="sm" class="gap-2">
+    <Button onclick={openSearch} kind="secondary" size="sm">
         {#snippet children()}
             <SearchIcon width="16" height="16" />
             {$t("header.search")}
         {/snippet}
     </Button>
-    <Button onclick={goToCreateProject} kind="primary" size="sm" class="gap-2">
+    <Button onclick={goToCreateProject} kind="primary" size="sm">
         {#snippet children()}
             {$t("header.createProject")}
         {/snippet}
