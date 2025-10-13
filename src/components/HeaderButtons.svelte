@@ -1,7 +1,6 @@
 <script lang="ts">
     import SearchIcon from "../svgs/SearchIcon.svelte";
     import Button from "./library/Button.svelte";
-    import { t } from "../i18n/store";
 
     function openSearch() {
         window.location.href = "/search";
@@ -13,11 +12,9 @@
 </script>
 
 <div class="flex gap-2">
-    <Button onclick={openSearch} kind="secondary" size="sm">
+    <Button size="sm" kind="secondary" onclick={openSearch}>
         <SearchIcon width="16" height="16" />
-        {$t("header.search")}
+        Buscar
     </Button>
-    <Button onclick={goToCreateProject} kind="primary" size="sm">
-        {$t("header.createProject")}
-    </Button>
+    <Button size="sm" kind="primary" onclick={goToCreateProject}>Crea tu proyecto</Button>
 </div>
