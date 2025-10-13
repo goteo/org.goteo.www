@@ -17,6 +17,7 @@
         ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
 
     export let accounting: Accounting;
     export let project: Project;
@@ -33,7 +34,7 @@
     let optimal = formatAmount(project.budget?.optimum?.money?.amount);
 
     let canvas: HTMLCanvasElement | null = null;
-    const marginDays = 1;
+    const marginDays = 4;
 
     let data: { x: number; y: number }[] = [];
     let sortedBalancePoints: any[] = [];
@@ -79,7 +80,7 @@
     }
 
     const daysForMinimum = calcDaysForMinimum(project.calendar!);
-    const hasSecondRound = project.calendar?.optimum != null;
+    const hasSecondRound = project.deadline == "optimum";
 
     let secondRoundStartDay = -1;
     if (hasSecondRound && firstDateMs !== null) {
@@ -135,24 +136,20 @@
                     const badgeX = xPos - badgeWidth / 2;
 
                     ctx.fillStyle = color;
-                    ctx.strokeStyle = "#000";
-                    ctx.lineWidth = 1;
                     if (typeof ctx.roundRect === "function") {
                         ctx.beginPath();
                         ctx.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 6);
                         ctx.fill();
-                        ctx.stroke();
                     } else {
                         ctx.beginPath();
                         ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight);
-                        ctx.strokeRect(badgeX, badgeY, badgeWidth, badgeHeight);
                     }
 
                     ctx.font = "12px sans-serif";
                     ctx.fillStyle = "#fff";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText("2ª Ronda", xPos, badgeY + badgeHeight / 2);
+                    ctx.fillText($t("budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
 
                     const lineStartY = badgeY + badgeHeight + 4;
                     ctx.beginPath();
@@ -194,7 +191,6 @@
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                layout: { padding: 10 },
                 scales: {
                     x: {
                         type: "linear",
@@ -223,7 +219,7 @@
                                 const point = sortedBalancePoints[bpIndex];
                                 return point
                                     ? new Date(point.start).toLocaleDateString()
-                                    : "Inicio";
+                                    : $t("budget.chart.start");
                             },
                         },
                     },
