@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Mínim",
       "optimal": "Òptim",
-      "progress": "Estat de la campanya"
+      "progress": "Estat de la campanya",
+      "secondRound": "2a Ronda",
+      "start": "Inici"
     }
   },
   "project": {
