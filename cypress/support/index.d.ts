@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-// ========== TIPOS GLOBALES ==========
+// ========== GLOBAL TYPES ==========
 interface UserProfile {
     id: number | null;
     email: string | null;
@@ -13,14 +13,14 @@ interface UserProfile {
 
 type UserRole = "admin" | "user" | "userWithAdmin" | "moderator" | "guest";
 
-// ========== EXTENSIÓN DE CYPRESS ==========
+// ========== CYPRESS EXTENSION ==========
 declare namespace Cypress {
     interface Chainable<Subject = any> {
-        // ========== COMANDOS ESCALABLES NUEVOS ==========
+        // ========== NEW SCALABLE COMMANDS ==========
 
         /**
-         * 🚀 NUEVO: Autenticación escalable por rol
-         * Configura automáticamente intercepts, localStorage y cookies
+         * 🚀 NEW: Scalable role-based authentication
+         * Automatically configures intercepts, localStorage and cookies
          * @example cy.loginAs('admin')
          * @example cy.loginAs('user')
          * @example cy.loginAs('userWithAdmin')
@@ -30,28 +30,28 @@ declare namespace Cypress {
         loginAs(role: UserRole): Chainable<void>;
 
         /**
-         * 🚀 NUEVO: Visitar página con autenticación automática
+         * 🚀 NEW: Visit page with automatic authentication
          * @example cy.visitAs('admin', '/es/admin/charges')
          * @example cy.visitAs('user', '/es/project/123')
          */
         visitAs(role: UserRole, url: string): Chainable<void>;
 
         /**
-         * 🚀 NUEVO: Verificar que el usuario tiene los roles correctos
+         * 🚀 NEW: Verify that the user has the correct roles
          * @example cy.verifyUserRole('admin')
          */
         verifyUserRole(expectedRole: UserRole): Chainable<void>;
 
         /**
-         * 🚀 NUEVO: Configurar intercepts comunes automáticamente
+         * 🚀 NEW: Configure common intercepts automatically
          * @example cy.setupCommonIntercepts(profile)
          */
         setupCommonIntercepts(profile: UserProfile): Chainable<void>;
 
-        // ========== COMANDOS EXISTENTES ==========
+        // ========== EXISTING COMMANDS ==========
 
         /**
-         * ⚠️  DEPRECATED: Usar cy.loginAs('user') en su lugar
+         * ⚠️  DEPRECATED: Use cy.loginAs('user') instead
          * Custom command to log in to the application
          * @example cy.login()
          * @example cy.login('user@example.com', 'password123')
@@ -59,7 +59,7 @@ declare namespace Cypress {
         login(username?: string, password?: string): Chainable<void>;
 
         /**
-         * ⚠️  DEPRECATED: Usar cy.loginAs('admin') en su lugar
+         * ⚠️  DEPRECATED: Use cy.loginAs('admin') instead
          * Custom command to mock authentication (useful for CI)
          * @example cy.mockLogin()
          */
