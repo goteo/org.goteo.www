@@ -18,8 +18,9 @@ jobs:
 
             - name: Install pnpm
               run: npm install -g pnpm
-
             - run: pnpm install
+            - name: Clean build artifacts
+              run: rm -rf dist node_modules/.vite
             - run: pnpm run build
 
             - name: Deploy to Staging
@@ -30,6 +31,21 @@ jobs:
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                   command: deploy --env staging
 
+            - name: Verify Staging Deployment
+              if: github.ref_name == 'develop'
+              run: |
+                  echo "Waiting 10 seconds for deployment to propagate..."
+                  sleep 10
+                  echo "Checking staging.v4.goteo.org..."
+                  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://staging.v4.goteo.org/)
+                  echo "HTTP Status: $RESPONSE"
+                  if [ $RESPONSE -eq 200 ]; then
+                    echo "✅ Staging deployment successful!"
+                  else
+                    echo "❌ Staging deployment failed with status $RESPONSE"
+                    exit 1
+                  fi
+
             - name: Deploy to Production
               if: github.ref_name == 'main'
               uses: cloudflare/wrangler-action@v3
@@ -37,3 +53,18 @@ jobs:
                   apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
                   accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
                   command: deploy --env prod
+
+            - name: Verify Production Deployment
+              if: github.ref_name == 'main'
+              run: |
+                  echo "Waiting 10 seconds for deployment to propagate..."
+                  sleep 10
+                  echo "Checking v4.goteo.org..."
+                  RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" https://v4.goteo.org/)
+                  echo "HTTP Status: $RESPONSE"
+                  if [ $RESPONSE -eq 200 ]; then
+                    echo "✅ Production deployment successful!"
+                  else
+                    echo "❌ Production deployment failed with status $RESPONSE"
+                    exit 1
+                  fi
