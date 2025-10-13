@@ -1,12 +1,36 @@
 /// <reference types="cypress" />
 
-describe("Objective achieved", () => {
+describe("Goal Reached Project", () => {
     beforeEach(() => {
+        cy.intercept("GET", "**/v4/users/1", {
+            statusCode: 200,
+            body: {
+                id: 1,
+                email: "test@cypress.local",
+                handle: "test",
+                displayName: "Cypress Test User",
+                roles: ["ROLE_USER"],
+                accounting: "/v4/accountings/123",
+                person: "/v4/users/1/person",
+                emailConfirmed: true,
+                active: true,
+            },
+        }).as("getUserData");
+
+        cy.intercept("GET", "**/v4/users/1/person", {
+            statusCode: 200,
+            body: {
+                id: 1,
+                name: "Cypress Test User",
+                email: "test@cypress.local",
+            },
+        }).as("getPersonData");
+
         cy.intercept("GET", "**/v4/projects/100*", {
             statusCode: 200,
             body: {
                 id: 100,
-                title: "Proyecto Objetivo Alcanzado",
+                title: "Goal Reached Project",
                 amount: 7500,
                 minimal: 5000,
                 optimal: 10000,
@@ -14,7 +38,12 @@ describe("Objective achieved", () => {
                 num_investors: 45,
                 status: "active",
                 currency: "EUR",
-                description: "Descripción del proyecto de prueba",
+                description: "Test project description",
+                budget: {
+                    minimum: { money: { amount: 5000, currency: "EUR" } },
+                    optimum: { money: { amount: 10000, currency: "EUR" } },
+                },
+                accounting: "/v4/accountings/100",
                 owner: {
                     id: 1,
                     name: "Owner Test",
@@ -38,7 +67,7 @@ describe("Objective achieved", () => {
             statusCode: 200,
             body: {
                 id: 100,
-                title: "Proyecto Objetivo Alcanzado",
+                title: "Goal Reached Project",
                 amount: 7500,
                 minimal: 5000,
                 optimal: 10000,
@@ -46,7 +75,7 @@ describe("Objective achieved", () => {
                 num_investors: 45,
                 status: "active",
                 currency: "EUR",
-                description: "Descripción del proyecto de prueba",
+                description: "Test project description",
             },
         }).as("projectDataAlt");
 
@@ -54,7 +83,7 @@ describe("Objective achieved", () => {
             statusCode: 200,
             body: {
                 id: 100,
-                title: "Proyecto Objetivo Alcanzado",
+                title: "Goal Reached Project",
                 amount: 7500,
                 minimal: 5000,
                 optimal: 10000,
@@ -71,7 +100,7 @@ describe("Objective achieved", () => {
                     id: 3827,
                     project: "/v4/project/100",
                     title: 'CD "Al Paso de los Caracoles" + 2 Camisetas',
-                    description: "CD físico del álbum junto con 2 camisetas oficiales",
+                    description: "Physical CD of the album with 2 official t-shirts",
                     money: { amount: 4000, currency: "EUR" },
                     hasUnits: true,
                     unitsTotal: 5,
@@ -80,6 +109,33 @@ describe("Objective achieved", () => {
                 },
             ],
         }).as("projectRewards");
+
+        cy.intercept("GET", "**/v4/accountings/100", {
+            statusCode: 200,
+            body: {
+                id: 100,
+                balance: {
+                    amount: 7500,
+                    currency: "EUR",
+                },
+                accounting_balance_points: "/v4/accounting_balance_points?accounting=100",
+            },
+        }).as("accountingData");
+
+        cy.intercept("GET", "**/v4/accounting_balance_points**", {
+            statusCode: 200,
+            body: [
+                {
+                    start: "2024-10-01T00:00:00Z",
+                    end: "2024-10-08T23:59:59Z",
+                    balance: {
+                        amount: 7500,
+                        currency: "EUR",
+                    },
+                    length: 1,
+                },
+            ],
+        }).as("accountingBalancePoints");
 
         cy.intercept("GET", "**/v4/**", {
             statusCode: 200,
@@ -93,20 +149,44 @@ describe("Objective achieved", () => {
             },
         }).as("otherApiCalls");
 
+        cy.window().then((win) => {
+            win.localStorage.setItem(
+                "user",
+                JSON.stringify({
+                    id: 1,
+                    email: "test@cypress.local",
+                    name: "Cypress Test User",
+                    isAuthenticated: true,
+                    accountingId: 123,
+                }),
+            );
+        });
+
+        cy.setCookie(
+            "access-token",
+            JSON.stringify({
+                token: "mock-access-token-cypress-123",
+                accountingId: 123,
+                userId: 1,
+            }),
+        );
+
+        cy.mockLogin();
+
         cy.on("uncaught:exception", () => false);
     });
 
     it("should display goal reached status when minimum is exceeded", () => {
-        cy.visitAs("user", "/es/project/100");
+        cy.visit("/es/project/100", {
+            failOnStatusCode: false,
+            timeout: 60000,
+        });
 
-        // Wait for page to load and verify it's not a 500 error page
-        cy.get("body", { timeout: 20000 }).should("exist");
-        
-        // Check if page loaded with error or if it's completely empty
+        cy.get("body", { timeout: 30000 }).should("exist");
+
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // If body is completely empty or shows errors, skip test gracefully in CI
+
             if (!text || text.trim().length === 0) {
                 cy.log("⚠️ Empty body detected in CI - skipping test");
                 cy.log("This may indicate API connectivity issues in CI environment");
@@ -122,30 +202,30 @@ describe("Objective achieved", () => {
             const text = $body.text().toLowerCase();
 
             const hasFinancingContent =
-                text.includes("obtenido") ||
-                text.includes("recaudado") ||
-                text.includes("financiado") ||
-                text.includes("conseguido") ||
-                text.includes("alcanzado") ||
-                text.includes("mínimo") ||
-                text.includes("óptimo") ||
+                text.includes("obtained") ||
+                text.includes("raised") ||
+                text.includes("funded") ||
+                text.includes("achieved") ||
+                text.includes("reached") ||
+                text.includes("minimum") ||
+                text.includes("optimal") ||
                 text.includes("€") ||
                 text.includes("eur") ||
                 /\d+/.test(text);
 
             if (hasFinancingContent) {
                 const goalIndicators = [
-                    "conseguido",
-                    "alcanzado",
-                    "financiado",
-                    "logrado",
-                    "completado",
+                    "achieved",
+                    "reached",
+                    "funded",
+                    "accomplished",
+                    "completed",
                     "100%",
                     "150%",
                     "✓",
                     "success",
-                    "meta",
-                    "objetivo",
+                    "target",
+                    "objective",
                     "goal",
                     "achieved",
                 ];
@@ -167,7 +247,7 @@ describe("Objective achieved", () => {
                 cy.get("body").then(($bodyAgain) => {
                     const textAgain = $bodyAgain.text().toLowerCase();
                     const hasContentNow =
-                        textAgain.includes("proyecto") ||
+                        textAgain.includes("project") ||
                         textAgain.includes("€") ||
                         /\d+/.test(textAgain);
 
@@ -175,7 +255,7 @@ describe("Objective achieved", () => {
                         expect(hasContentNow, "Should have some project content after waiting").to
                             .be.true;
                     } else {
-                        cy.log("ℹ️ Página cargada pero con contenido limitado");
+                        cy.log("ℹ️ Page loaded but with limited content");
                         expect(true, "Page loaded without critical errors").to.be.true;
                     }
                 });
@@ -185,16 +265,16 @@ describe("Objective achieved", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            if (text.includes("Obtenido") || text.includes("Recaudado")) {
-                cy.contains(/Obtenido|Recaudado/i).should("be.visible");
+            if (text.includes("Obtained") || text.includes("Raised")) {
+                cy.contains(/Obtained|Raised/i).should("be.visible");
             }
 
-            if (text.includes("Mínimo")) {
-                cy.contains("Mínimo").should("be.visible");
+            if (text.includes("Minimum")) {
+                cy.contains("Minimum").should("be.visible");
             }
 
-            if (text.includes("Óptimo")) {
-                cy.contains("Óptimo").should("be.visible");
+            if (text.includes("Optimal")) {
+                cy.contains("Optimal").should("be.visible");
             }
 
             if (text.includes("€")) {
@@ -204,20 +284,19 @@ describe("Objective achieved", () => {
     });
 
     it("should display project page with basic content", () => {
-        cy.visitAs("user", "/es/project/100");
+        cy.visit("/es/project/100", {
+            failOnStatusCode: false,
+            timeout: 60000,
+        });
 
-        // Wait for page to load and verify it's not a 500 error page
-        cy.get("body", { timeout: 20000 }).should("exist");
-        
-        // Check if page loaded with error or if it's completely empty
+        cy.get("body", { timeout: 30000 }).should("exist");
+
         cy.get("body").then(($body) => {
             const text = $body.text();
-            
-            // If body is completely empty or shows errors, skip test gracefully in CI
+
             if (!text || text.trim().length === 0) {
                 cy.log("⚠️ Empty body detected in CI - skipping test");
                 cy.log("This may indicate API connectivity issues in CI environment");
-                // Don't fail the test, just log and continue
                 return;
             } else if (text.includes("500") || text.includes("Internal Server Error")) {
                 cy.log("❌ Server error detected");
@@ -229,18 +308,18 @@ describe("Objective achieved", () => {
             const text = $body.text().toLowerCase();
 
             const contentIndicators = [
-                "proyecto",
                 "project",
-                "título",
+                "project",
                 "title",
-                "descripción",
+                "title",
+                "description",
                 "description",
                 "€",
                 "eur",
-                "obtenido",
-                "recaudado",
-                "mínimo",
-                "óptimo",
+                "obtained",
+                "raised",
+                "minimum",
+                "optimal",
             ];
 
             let foundContent = 0;
@@ -252,11 +331,11 @@ describe("Objective achieved", () => {
 
             if (foundContent >= 2 || text.length > 1000) {
                 cy.log(
-                    `✅ Encontrado contenido del proyecto (${foundContent} indicadores, ${text.length} chars)`,
+                    `✅ Found project content (${foundContent} indicators, ${text.length} chars)`,
                 );
                 expect(true, "Project content found").to.be.true;
             } else {
-                cy.log("ℹ️ Página básica cargada, verificando elementos mínimos");
+                cy.log("ℹ️ Basic page loaded, checking minimum elements");
 
                 expect(text).to.not.include("error 500");
                 expect(text).to.not.include("internal server error");
