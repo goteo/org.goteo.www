@@ -17,6 +17,7 @@
         ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
 
     export let accounting: Accounting;
     export let project: Project;
@@ -33,26 +34,43 @@
     let optimal = formatAmount(project.budget?.optimum?.money?.amount);
 
     let canvas: HTMLCanvasElement | null = null;
-    let data = Array.isArray(balancePoints)
-        ? balancePoints.map((point, i) => {
-              return {
-                  x: i,
-                  y: formatAmount(point.balance.amount),
-              };
-          })
-        : [];
+    const marginDays = 4;
 
-    let maxValue = minimal;
+    let data: { x: number; y: number }[] = [];
+    let sortedBalancePoints: any[] = [];
+    let firstDateMs: number | null = null;
+    let lastDay = 0;
 
-    if (received > minimal) {
-        maxValue = optimal;
+    if (Array.isArray(balancePoints) && balancePoints.length > 0) {
+        sortedBalancePoints = [...balancePoints].sort(
+            (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+        );
+
+        firstDateMs = new Date(sortedBalancePoints[0].start).getTime();
+
+        data = sortedBalancePoints.map((point) => {
+            const pointMs = new Date(point.start).getTime();
+            const daysSinceFirst = Math.round((pointMs - firstDateMs!) / 86400000);
+            return { x: daysSinceFirst + marginDays, y: formatAmount(point.balance.amount) };
+        });
+
+        const lastDateMs = new Date(
+            sortedBalancePoints[sortedBalancePoints.length - 1].start,
+        ).getTime();
+        lastDay = Math.round((lastDateMs - firstDateMs) / 86400000) + marginDays;
+
+        for (let i = marginDays - 1; i >= 0; i--) {
+            data.unshift({ x: i, y: 0 });
+        }
+    } else {
+        for (let i = marginDays - 1; i >= 0; i--) {
+            data.unshift({ x: i, y: 0 });
+        }
+        firstDateMs = null;
+        lastDay = marginDays;
     }
 
-    if (received > optimal) {
-        maxValue = received;
-    }
-
-    maxValue = maxValue + maxValue / 20;
+    let maxValue = Math.max(minimal, optimal, received) * 1.05;
 
     function calcDaysForMinimum(calendar: ProjectCalendar): number {
         const release = new Date(calendar.release!).getTime();
@@ -62,6 +80,16 @@
     }
 
     const daysForMinimum = calcDaysForMinimum(project.calendar!);
+    const hasSecondRound = project.deadline == "optimum";
+
+    let secondRoundStartDay = -1;
+    if (hasSecondRound && firstDateMs !== null) {
+        const minimumDate = new Date(project.calendar!.minimum!).getTime();
+        const diffDays = Math.round((minimumDate - firstDateMs) / 86400000);
+        if (diffDays >= 0) {
+            secondRoundStartDay = diffDays + marginDays;
+        }
+    }
 
     onMount(() => {
         Chart.register(
@@ -75,58 +103,73 @@
         );
 
         Chart.register({
-            id: "twoSectionLines",
+            id: "guidelines",
             afterDatasetDraw(chart) {
                 const {
                     ctx,
-                    chartArea: { left, right },
-                    scales: { y },
+                    chartArea: { top, left, right, bottom },
+                    scales: { y, x },
                 } = chart;
                 ctx.save();
 
-                const drawLine = (value: number, color: string) => {
+                const drawHorizontal = (value: any) => {
                     const yPos = y.getPixelForValue(value);
                     ctx.beginPath();
                     ctx.moveTo(left, yPos);
                     ctx.lineTo(right, yPos);
                     ctx.lineWidth = 1;
-                    ctx.strokeStyle = color;
+                    ctx.strokeStyle = "#000";
                     ctx.setLineDash([2, 3]);
                     ctx.stroke();
                 };
 
-                drawLine(minimal, "text-black");
-                drawLine(optimal, "text-black");
+                drawHorizontal(minimal);
+                drawHorizontal(optimal);
+
+                if (hasSecondRound && secondRoundStartDay !== -1) {
+                    const xPos = x.getPixelForValue(secondRoundStartDay);
+                    const color = "#462949";
+
+                    const badgeWidth = 76;
+                    const badgeHeight = 26;
+                    const badgeY = top + 8;
+                    const badgeX = xPos - badgeWidth / 2;
+
+                    ctx.fillStyle = color;
+                    if (typeof ctx.roundRect === "function") {
+                        ctx.beginPath();
+                        ctx.roundRect(badgeX, badgeY, badgeWidth, badgeHeight, 6);
+                        ctx.fill();
+                    } else {
+                        ctx.beginPath();
+                        ctx.fillRect(badgeX, badgeY, badgeWidth, badgeHeight);
+                    }
+
+                    ctx.font = "12px sans-serif";
+                    ctx.fillStyle = "#fff";
+                    ctx.textAlign = "center";
+                    ctx.textBaseline = "middle";
+                    ctx.fillText($t("budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
+
+                    const lineStartY = badgeY + badgeHeight + 4;
+                    ctx.beginPath();
+                    ctx.moveTo(xPos, lineStartY);
+                    ctx.lineTo(xPos, bottom);
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = color;
+                    ctx.setLineDash([]);
+                    ctx.stroke();
+
+                    const pointY = lineStartY + 4;
+                    ctx.beginPath();
+                    ctx.arc(xPos, pointY, 4, 0, 2 * Math.PI);
+                    ctx.fillStyle = color;
+                    ctx.fill();
+                }
 
                 ctx.restore();
             },
         });
-
-        // Chart.register({
-        //     id: "deadlineLine",
-        //     afterDatasetDraw(chart) {
-        //         const {
-        //             ctx,
-        //             chartArea: { top, bottom },
-        //             scales: { x },
-        //         } = chart;
-
-        //         ctx.save();
-
-        //         const xPos = x.getPixelForValue(daysForMinimum);
-
-        //         // Draw vertical line
-        //         ctx.beginPath();
-        //         ctx.moveTo(xPos, top - 100);
-        //         ctx.lineTo(xPos, bottom + 100);
-        //         ctx.lineWidth = 2;
-        //         ctx.strokeStyle = "rgba(239, 68, 68, 0.5)";
-        //         ctx.setLineDash([]);
-        //         ctx.stroke();
-
-        //         ctx.restore();
-        //     },
-        // });
 
         if (!canvas) return;
 
@@ -136,12 +179,12 @@
                 datasets: [
                     {
                         data,
-                        borderColor: "rgba(94, 234, 212, 1)",
-                        backgroundColor: "rgba(94, 234, 212, 1)",
+                        borderColor: "#59E9D3",
+                        backgroundColor: "#59E9D3",
                         borderWidth: 1,
                         fill: "start",
                         tension: 0.25,
-                        pointRadius: 0.5,
+                        pointRadius: 0,
                     },
                 ],
             },
@@ -151,9 +194,13 @@
                 scales: {
                     x: {
                         type: "linear",
-                        display: true,
+                        display: false,
                         beginAtZero: true,
-                        max: data.length - 1,
+                        min: 0,
+                        max:
+                            hasSecondRound && secondRoundStartDay > lastDay
+                                ? secondRoundStartDay + 5
+                                : lastDay,
                         grid: { display: false },
                     },
                     y: {
@@ -167,10 +214,12 @@
                     tooltip: {
                         callbacks: {
                             title: (items) => {
-                                // @ts-ignore
-                                const point = balancePoints[items[0].dataIndex];
-
-                                return new Date(point.start).toLocaleDateString();
+                                const dataIndex = items[0].dataIndex;
+                                const bpIndex = dataIndex - marginDays;
+                                const point = sortedBalancePoints[bpIndex];
+                                return point
+                                    ? new Date(point.start).toLocaleDateString()
+                                    : $t("budget.chart.start");
                             },
                         },
                     },
@@ -180,6 +229,6 @@
     });
 </script>
 
-<div class="relative h-full w-full overflow-hidden rounded-lg bg-white">
-    <canvas bind:this={canvas}></canvas>
+<div class="relative h-full w-full overflow-hidden rounded-3xl border border-gray-100 bg-white">
+    <canvas bind:this={canvas} class="h-full w-full"></canvas>
 </div>
