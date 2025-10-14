@@ -13,7 +13,7 @@
     ];
 </script>
 
-<div class="px-6">
+<div class="lg:px-6">
     <div class="relative">
         <div class="bg-purple-tint h-4 w-full rounded-full"></div>
 
