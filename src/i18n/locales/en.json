@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Minimum",
       "optimal": "Optimum",
-      "progress": "Campaign"
+      "progress": "Campaign",
+      "secondRound": "2nd Round",
+      "start": "Start"
     }
   },
   "project": {

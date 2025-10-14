@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
+      "progress": "Estado de la campaña",
+      "secondRound": "2ª Ronda",
+      "start": "Inicio"
     }
   },
   "project": {
