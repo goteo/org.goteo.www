@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
+      "progress": "Estado de la campaña",
+      "secondRound": "2ª Ronda",
+      "start": "Inicio"
     }
   },
   "project": {
@@ -316,7 +318,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión",
-    "btnCart": "Ir al checkout"
+    "btnCart": "Ir al checkout",
+    "search": "Buscar",
+    "createProject": "Crea tu proyecto"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
@@ -343,7 +347,11 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
-      }
+      },
+      "show_details": "Ver detalle",
+      "hide_details": "Ocultar desglose",
+      "donations": "Donaciones",
+      "foundation": "Fundación Platoniq"
     },
     "cart": {
       "freeDonation": {

@@ -50,8 +50,8 @@ describe("Homepage", () => {
 
     it("should have a working cart button", () => {
         cy.get("body").then(($body) => {
-            if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-                cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).click();
+            if ($body.find('header button[aria-label="Go to checkout"]').length > 0) {
+                cy.get('header button[aria-label="Go to checkout"]', { timeout: 5000 }).click();
             } else {
                 cy.log("ℹ️ Cart button not found");
             }
@@ -60,11 +60,11 @@ describe("Homepage", () => {
 
     it("should have proper accessibility attributes", () => {
         cy.get("body").then(($body) => {
-            if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-                cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).should(
+            if ($body.find('header button[aria-label="Go to checkout"]').length > 0) {
+                cy.get('header button[aria-label="Go to checkout"]', { timeout: 5000 }).should(
                     "have.attr",
                     "aria-label",
-                    "Ir al checkout",
+                    "Go to checkout",
                 );
             } else {
                 cy.log("ℹ️ Checkout button not found");

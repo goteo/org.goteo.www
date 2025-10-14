@@ -12,18 +12,16 @@ describe("Login Page", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            if (text.includes("Indícanos tus datos personales")) {
-                cy.contains("Indícanos tus datos personales", { timeout: 10000 }).should(
-                    "be.visible",
-                );
+            if (text.includes("Tell us your personal data")) {
+                cy.contains("Tell us your personal data", { timeout: 10000 }).should("be.visible");
             }
 
-            if (text.includes("Entra en tu cuenta")) {
-                cy.contains("Entra en tu cuenta", { timeout: 10000 }).should("be.visible");
+            if (text.includes("Sign in to your account")) {
+                cy.contains("Sign in to your account", { timeout: 10000 }).should("be.visible");
             }
 
-            if (text.includes("Regístrate")) {
-                cy.contains("Regístrate", { timeout: 10000 }).should("be.visible");
+            if (text.includes("Sign up")) {
+                cy.contains("Sign up", { timeout: 10000 }).should("be.visible");
             }
         });
 
@@ -43,12 +41,12 @@ describe("Login Page", () => {
         cy.get("body").then(($body) => {
             const text = $body.text();
 
-            if (text.includes("También puedes acceder")) {
-                cy.contains("También puedes acceder", { timeout: 5000 }).should("be.visible");
+            if (text.includes("You can also access")) {
+                cy.contains("You can also access", { timeout: 5000 }).should("be.visible");
             }
 
-            if (text.includes("¿Olvidaste tu contraseña?")) {
-                cy.contains("¿Olvidaste tu contraseña?", { timeout: 5000 }).should("be.visible");
+            if (text.includes("Forgot your password?")) {
+                cy.contains("Forgot your password?", { timeout: 5000 }).should("be.visible");
             }
         });
     });
