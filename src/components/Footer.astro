@@ -6,111 +6,184 @@ import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.astro";
 import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.astro";
 
 const { t } = Astro.locals;
+
+const footerHeadingStyle = "text-soft-purple text-sm font-bold leading-6 sm:text-base";
+const footerLinkStyle =
+    "text-purple-tint hover:text-soft-purple transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-secondary rounded-sm";
+const sectionPadding = "py-6 sm:py-8 md:py-10";
+const partnerImageStyle =
+    "h-10 rounded-lg object-cover transition-opacity hover:opacity-90 sm:h-12 md:h-14";
+const socialIconStyle =
+    "transition-all duration-200 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-secondary rounded-sm";
+const focusRingStyle =
+    "focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-soft-purple rounded-lg";
 ---
 
-<footer class="text-purple-tint bg-soft-purple]">
+<footer class="bg-soft-purple text-purple-tint" role="contentinfo" aria-labelledby="footer-heading">
     <!-- Funding Partners Section -->
-    <div class="text-tertiary border-purple-tint rounded-t-3xl border-2 border-b-0 py-10">
+    <section
+        class={`text-tertiary border-purple-tint rounded-t-3xl border-2 border-b-0 ${sectionPadding}`}
+        aria-labelledby="funding-partners-heading"
+    >
         <div class="wrapper">
-            <div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <div
+                class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8"
+            >
                 <!-- Funding Partners -->
-                <div class="flex flex-col gap-6 md:flex-row md:items-center">
-                    <h3 class="text-secondary text-base font-bold">{t("footer.funding.title")}</h3>
-                    <div class="flex items-center gap-6">
+                <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
+                    <h3
+                        id="funding-partners-heading"
+                        class="text-secondary text-sm font-bold sm:text-base"
+                    >
+                        {t("footer.funding.title")}
+                    </h3>
+                    <div
+                        class="flex items-center gap-4"
+                        role="list"
+                        aria-label="Funding partner organizations"
+                    >
                         <!-- Funding Partner Logos -->
-                        <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-3 sm:gap-4">
                             <img
                                 src="/imgs/orgs/NGEU.png"
                                 alt="Funded by the European Union NextGeneration EU"
-                                class="h-10 w-auto"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                width="120"
+                                height="32"
+                                loading="lazy"
                             />
                             <img
                                 src="/imgs/orgs/MTES.png"
                                 alt="Ministerio de Trabajo y Economía Social"
-                                class="h-10 w-auto"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                width="120"
+                                height="32"
+                                loading="lazy"
                             />
                             <img
                                 src="/imgs/orgs/PRTR.png"
                                 alt="Plan de Recuperación, Transformación y Resiliencia"
-                                class="h-10 w-auto"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                width="120"
+                                height="32"
+                                loading="lazy"
                             />
                         </div>
                     </div>
                 </div>
 
                 <!-- Part Of Section -->
-                <div class="flex flex-col gap-4 md:flex-row md:items-center">
-                    <h3 class="text-secondary text-base font-medium">
+                <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
+                    <h3 class="text-secondary text-sm font-medium sm:text-base">
                         {t("footer.funding.partOf")}
                     </h3>
-                    <div class="flex items-center gap-3">
-                        <a href="https://xes.cat">
+                    <div
+                        class="flex items-center gap-2 sm:gap-3"
+                        role="list"
+                        aria-label="Partner organizations"
+                    >
+                        <a
+                            href="https://xes.cat"
+                            class={focusRingStyle}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit XES website"
+                        >
                             <img
                                 src="/imgs/orgs/xes.png"
-                                alt="XES"
-                                class="h-14 rounded-lg object-cover"
+                                alt="XES - Xarxa d'Economia Solidària"
+                                class={partnerImageStyle}
+                                width="80"
+                                height="40"
+                                loading="lazy"
                             />
                         </a>
-                        <a href="https://www.alda-europe.eu">
+                        <a
+                            href="https://www.alda-europe.eu"
+                            class={focusRingStyle}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit Alda Europe website"
+                        >
                             <img
                                 src="/imgs/orgs/alda-europe.svg"
-                                alt="Alda Europe"
-                                class="h-14 rounded-lg bg-white object-cover p-2"
+                                alt="Alda Europe - European Association for Local Democracy"
+                                class="h-10 rounded-lg bg-white object-cover p-1 transition-opacity hover:opacity-90 sm:h-12 sm:p-2 md:h-14"
+                                width="80"
+                                height="40"
+                                loading="lazy"
                             />
                         </a>
-                        <a href="https://alianzaporelclima.org">
+                        <a
+                            href="https://alianzaporelclima.org"
+                            class={focusRingStyle}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit Alianza por el Clima website"
+                        >
                             <img
                                 src="/imgs/orgs/alianza-por-el-clima.webp"
                                 alt="Alianza por el Clima"
-                                class="h-14 rounded-lg object-cover"
+                                class={partnerImageStyle}
+                                width="80"
+                                height="40"
+                                loading="lazy"
                             />
                         </a>
-                        <a href="https://ampliandodemocracia.org">
+                        <a
+                            href="https://ampliandodemocracia.org"
+                            class={focusRingStyle}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Visit Ampliando Democracia website"
+                        >
                             <img
                                 src="/imgs/orgs/ampliando-democracia.jpg"
                                 alt="Ampliando Democracia"
-                                class="h-14 rounded-lg object-cover"
+                                class={partnerImageStyle}
+                                width="80"
+                                height="40"
+                                loading="lazy"
                             />
                         </a>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Main Footer Content -->
-    <div class="bg-secondary rounded-t-3xl py-10">
+    <section
+        class={`bg-secondary rounded-t-3xl ${sectionPadding}`}
+        aria-labelledby="footer-navigation-heading"
+    >
         <div class="wrapper">
-            <div class="flex flex-row justify-between gap-8">
+            <div class="flex flex-col gap-8 lg:flex-row lg:justify-between lg:gap-8">
                 <!-- Navigation Links -->
-                <div class="flex flex-row gap-10">
+                <nav
+                    class="grid grid-cols-2 gap-6 sm:grid-cols-4 lg:flex lg:flex-row lg:gap-8 xl:gap-10"
+                    aria-label="Footer navigation"
+                >
+                    <h2 id="footer-navigation-heading" class="sr-only">Footer Navigation</h2>
+
                     <!-- Collaborate -->
                     <div class="space-y-2">
-                        <h4 class="text-soft-purple text-base leading-6 font-bold">
+                        <h4 class={footerHeadingStyle}>
                             {t("footer.navigation.collaborate.title")}
                         </h4>
-                        <ul class="space-y-1 text-sm leading-6">
+                        <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a
-                                    href="/create-project"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/create-project" class={footerLinkStyle}>
                                     {t("footer.navigation.collaborate.createProject")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/matchfunding"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/matchfunding" class={footerLinkStyle}>
                                     {t("footer.navigation.collaborate.matchfunding")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/workshops"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/workshops" class={footerLinkStyle}>
                                     {t("footer.navigation.collaborate.workshops")}
                                 </a>
                             </li>
@@ -119,31 +192,22 @@ const { t } = Astro.locals;
 
                     <!-- Help -->
                     <div class="space-y-2">
-                        <h4 class="text-soft-purple text-base leading-6 font-bold">
+                        <h4 class={footerHeadingStyle}>
                             {t("footer.navigation.help.title")}
                         </h4>
-                        <ul class="space-y-1 text-sm leading-6">
+                        <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a
-                                    href="/faqs"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/faqs" class={footerLinkStyle}>
                                     {t("footer.navigation.help.faqs")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/contact"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/contact" class={footerLinkStyle}>
                                     {t("footer.navigation.help.contact")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/tax-calculator"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/tax-calculator" class={footerLinkStyle}>
                                     {t("footer.navigation.help.taxCalculator")}
                                 </a>
                             </li>
@@ -152,39 +216,27 @@ const { t } = Astro.locals;
 
                     <!-- About Goteo -->
                     <div class="space-y-2">
-                        <h4 class="text-soft-purple text-base leading-6 font-bold">
+                        <h4 class={footerHeadingStyle}>
                             {t("footer.navigation.aboutGoteo.title")}
                         </h4>
-                        <ul class="space-y-1 text-sm leading-6">
+                        <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a
-                                    href="/about"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/about" class={footerLinkStyle}>
                                     {t("footer.navigation.aboutGoteo.whoWeAre")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/benefits"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/benefits" class={footerLinkStyle}>
                                     {t("footer.navigation.aboutGoteo.goteoBenefits")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/impact"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/impact" class={footerLinkStyle}>
                                     {t("footer.navigation.aboutGoteo.foundationImpact")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/platoniq"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/platoniq" class={footerLinkStyle}>
                                     {t("footer.navigation.aboutGoteo.platoniqFoundation")}
                                 </a>
                             </li>
@@ -193,138 +245,143 @@ const { t } = Astro.locals;
 
                     <!-- For Users -->
                     <div class="space-y-2">
-                        <h4 class="text-soft-purple text-base leading-6 font-bold">
+                        <h4 class={footerHeadingStyle}>
                             {t("footer.navigation.forUsers.title")}
                         </h4>
-                        <ul class="space-y-1 text-sm leading-6">
+                        <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a
-                                    href="/wallet"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/wallet" class={footerLinkStyle}>
                                     {t("footer.navigation.forUsers.rechargeWallet")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/certificate"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/certificate" class={footerLinkStyle}>
                                     {t("footer.navigation.forUsers.downloadCertificate")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/funds"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/funds" class={footerLinkStyle}>
                                     {t("footer.navigation.forUsers.accessComplementaryFunds")}
                                 </a>
                             </li>
                             <li>
-                                <a
-                                    href="/program"
-                                    class="text-purple-tint hover:text-soft-purple transition-colors"
-                                >
+                                <a href="/program" class={footerLinkStyle}>
                                     {t("footer.navigation.forUsers.designFundingProgram")}
                                 </a>
                             </li>
                         </ul>
                     </div>
-                </div>
+                </nav>
 
                 <!-- Logo -->
-                <div class="flex flex-1 shrink-0 justify-end">
-                    <div class="h-10 w-[131px]">
-                        <img src="/imgs/goteo-white-logo.svg" alt="Goteo" class="h-full w-full" />
+                <div class="flex justify-center lg:justify-end">
+                    <div class="h-8 w-28 sm:h-10 sm:w-36">
+                        <img
+                            src="/imgs/goteo-white-logo.svg"
+                            alt="Goteo logo"
+                            class="h-full w-full object-contain"
+                            width="131"
+                            height="40"
+                            loading="lazy"
+                        />
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
     <!-- Bottom Footer -->
-    <div class="bg-secondary pb-10">
+    <section class="bg-secondary pb-6 sm:pb-8 md:pb-10" aria-labelledby="footer-bottom-heading">
         <div class="wrapper">
-            <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+            <div
+                class="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between"
+            >
                 <!-- Legal Links -->
-                <div class="flex flex-wrap gap-8">
-                    <a
-                        href="/terms"
-                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
-                    >
+                <nav class="flex flex-wrap gap-4 sm:gap-6 lg:gap-8" aria-label="Legal navigation">
+                    <h3 id="footer-bottom-heading" class="sr-only">Legal and Social Links</h3>
+                    <a href="/terms" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
                         {t("footer.legal.termsOfUse")}
                     </a>
-                    <a
-                        href="/privacy"
-                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
-                    >
+                    <a href="/privacy" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
                         {t("footer.legal.privacyPolicy")}
                     </a>
-                    <a
-                        href="/licenses"
-                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
-                    >
+                    <a href="/licenses" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
                         {t("footer.legal.licenses")}
                     </a>
-                    <a
-                        href="/stats"
-                        class="text-purple-tint hover:text-soft-purple text-xs leading-4 font-medium transition-colors"
-                    >
+                    <a href="/stats" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
                         {t("footer.legal.stats")}
                     </a>
-                </div>
+                </nav>
 
                 <!-- Social Media and Platoniq -->
-                <div class="flex flex-col gap-6 md:flex-row md:items-center">
+                <div class="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-center">
                     <!-- Social Media Icons -->
-                    <div class="flex items-center gap-2">
+                    <div
+                        class="flex items-center justify-center gap-2 lg:justify-start"
+                        role="list"
+                        aria-label="Social media links"
+                    >
                         <a
                             href="mailto:info@goteo.org"
-                            class="transition-opacity hover:opacity-80"
-                            aria-label="Email"
+                            class={socialIconStyle}
+                            aria-label="Send email to info@goteo.org"
                         >
                             <FooterGmailIcon />
                         </a>
                         <a
                             href="https://instagram.com/goteofunding"
-                            class="transition-opacity hover:opacity-80"
-                            aria-label="Instagram"
+                            class={socialIconStyle}
+                            aria-label="Follow us on Instagram"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <FooterInstagramIcon />
                         </a>
                         <a
                             href="https://facebook.com/goteofunding"
-                            class="transition-opacity hover:opacity-80"
-                            aria-label="Facebook"
+                            class={socialIconStyle}
+                            aria-label="Follow us on Facebook"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <FooterFacebookIcon />
                         </a>
                         <a
                             href="https://twitter.com/goteofunding"
-                            class="transition-opacity hover:opacity-80"
-                            aria-label="X (Twitter)"
+                            class={socialIconStyle}
+                            aria-label="Follow us on X (formerly Twitter)"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <FooterXIcon />
                         </a>
                         <a
                             href="https://www.linkedin.com/company/platoniqlab"
-                            class="transition-opacity hover:opacity-80"
-                            aria-label="LinkedIn"
+                            class={socialIconStyle}
+                            aria-label="Connect with us on LinkedIn"
+                            target="_blank"
+                            rel="noopener noreferrer"
                         >
                             <FooterLinkedinIcon />
                         </a>
                     </div>
 
                     <!-- Platoniq Foundation -->
-                    <div class="text-purple-tint">
-                        <img src="/imgs/platoniq.png" alt="Platoniq" class="h-[21px]" />
-                        <div class="text-[13px] leading-normal font-light">
+                    <div class="text-purple-tint flex flex-col items-center lg:items-start">
+                        <img
+                            src="/imgs/platoniq.png"
+                            alt="Platoniq Foundation logo"
+                            class="h-4 sm:h-5"
+                            width="100"
+                            height="18"
+                            loading="lazy"
+                        />
+                        <div class="text-xs leading-normal font-light sm:text-sm">
                             {t("footer.platoniq.foundation")}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </footer>
