@@ -2,10 +2,11 @@
     import BaseCard from "../../../components/BaseCard.svelte";
     import { t } from "../../../i18n/store";
     import { categories } from "../../../utils/categories";
-    import { formatCurrency, parseCurrency } from "../../../utils/currencies";
-    import TagSelect from "../../../components/TagSelect.svelte";
-    import Button from "../../../components/Button.svelte";
+    import { formatCurrency } from "../../../utils/currencies";
+    import CategorySelect from "../../../components/library/CategorySelect.svelte";
+    import Button from "../../../components/library/Button.svelte";
     import { draft } from "./project-draft";
+    import TextInput from "../../../components/library/TextInput.svelte";
 
     const categoriesOptions = categories.map((categories) => {
         return { id: categories.id, text: $t(categories.translationKey) };
@@ -15,24 +16,22 @@
 <section class="wrapper md:flex md:flex-row">
     <div class="flex max-w-[668px] flex-col gap-10">
         <div class="flex flex-col gap-4">
-            <h1 class="text-3xl font-bold text-[#3D3D3D] lg:text-4xl">
+            <h1 class="text-3xl font-bold text-black lg:text-4xl">
                 {$t("create.project.title")}
             </h1>
-            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+            <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("create.project.subtitle")}
             </p>
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("create.project.description.title")}
             </h2>
-            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+            <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("create.project.description.subtitle")}
             </p>
-            <input
-                type="text"
+            <TextInput
                 placeholder={$t("create.project.description.titlePrompt")}
-                class="w-full rounded-md border border-[#855a96] p-[16px]"
                 bind:value={$draft.title}
             />
             <textarea
@@ -42,37 +41,23 @@
             ></textarea>
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("create.project.categories.title")}
             </h2>
-            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+            <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("create.project.categories.subtitle")}
             </p>
-            <TagSelect
+            <CategorySelect
                 max={2}
                 options={categoriesOptions}
                 onchange={(selected) => ($draft.categories = selected.map((s) => s.id.toString()))}
             />
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-[#3D3D3D]">
-                {$t("create.project.budget.title")}
-            </h2>
-            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
-                {$t("create.project.budget.subtitle")}
-            </p>
-            <input
-                type="text"
-                placeholder={$t("create.project.budget.amountPrompt")}
-                class="w-full rounded-md border border-[#855a96] p-[16px]"
-                oninput={(e) => ($draft.budget = parseCurrency(e.currentTarget.value))}
-            />
-        </div>
-        <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-[#3D3D3D]">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("create.project.release.title")}
             </h2>
-            <p class="text-[#3D3D3D] transition-all duration-300 ease-in-out">
+            <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("create.project.release.subtitle")}
             </p>
             <input
@@ -90,14 +75,14 @@
     </div>
     <div class="ml-auto">
         <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">
-            <h1 class="text-tertiary overflow-hidden text-2xl leading-8 font-bold">
+            <h1 class="text-secondary text-2xl leading-8 font-bold {$draft.title || 'opacity-50'}">
                 {$draft.title || $t("create.project.description.titlePlaceholder")}
             </h1>
-            <p class="text-sm text-[#3D3D3D]">
+            <p class="text-sm text-black">
                 {$draft.subtitle || $t("create.project.description.subtitlePlaceholder")}
             </p>
             <div class="mt-auto">
-                <p class="text-sm text-[#3D3D3D]">{$t("create.project.budgetPreview")}</p>
+                <p class="text-sm text-black">{$t("create.project.budgetPreview")}</p>
                 <p class="text-secondary text-3xl font-bold">
                     {formatCurrency($draft.budget)}
                 </p>

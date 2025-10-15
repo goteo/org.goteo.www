@@ -1,14 +1,6 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    const baseStyle = [
-        "peer",
-        "w-full p-4",
-        "bg-light-surface rounded-md border border-secondary",
-        "text-base text-gray-700 placeholder-gray-400",
-        "focus:ring-1 focus:ring-tertiary focus:outline-none",
-    ];
-
     let {
         value = $bindable(""),
         id = undefined,
@@ -25,7 +17,7 @@
         id?: string;
         name?: string;
         placeholder?: string;
-        type?: "text" | "email" | "password" | "tel" | "url";
+        type?: "text" | "email" | "password" | "tel" | "url" | "date";
         required?: boolean;
         disabled?: boolean;
         class?: ClassNameValue;
@@ -77,7 +69,11 @@
         {required}
         {disabled}
         {placeholder}
-        class={twMerge(baseStyle, disabled && "cursor-not-allowed", className)}
+        class={twMerge(
+            "peer bg-light-surface border-secondary focus:ring-tertiary w-full rounded-md border p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
+            disabled && "cursor-not-allowed",
+            className,
+        )}
     />
     {#if helperText}
         <span id={`helper-${finalId}`} class="ml-4 text-[12px]">

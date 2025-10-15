@@ -13,5 +13,5 @@ export const draft = writable<ProjectDraft>({
     subtitle: "",
     categories: [""],
     budget: 0,
-    release: new Date()
+    release: new Date(),
 });
