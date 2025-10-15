@@ -4,25 +4,16 @@ import FooterFacebookIcon from "../svgs/footer/FooterFacebookIcon.astro";
 import FooterLinkedinIcon from "../svgs/footer/FooterLinkedinIcon.astro";
 import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.astro";
 import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.astro";
+import FooterPartnerImage from "./FooterPartnerImage.svelte";
+import FooterLink from "./FooterLink.svelte";
 
 const { t } = Astro.locals;
-
-const footerHeadingStyle = "text-soft-purple text-sm font-bold leading-6 sm:text-base";
-const footerLinkStyle =
-    "text-purple-tint hover:text-soft-purple transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-secondary rounded-sm";
-const sectionPadding = "py-6 sm:py-8 md:py-10";
-const partnerImageStyle =
-    "h-10 rounded-lg object-cover transition-opacity hover:opacity-90 sm:h-12 md:h-14";
-const socialIconStyle =
-    "transition-all duration-200 hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-secondary rounded-sm";
-const focusRingStyle =
-    "focus:outline-none focus:ring-2 focus:ring-soft-purple focus:ring-offset-2 focus:ring-offset-soft-purple rounded-lg";
 ---
 
 <footer class="bg-soft-purple text-purple-tint" role="contentinfo" aria-labelledby="footer-heading">
     <!-- Funding Partners Section -->
     <section
-        class={`text-tertiary border-purple-tint rounded-t-3xl border-2 border-b-0 ${sectionPadding}`}
+        class="text-tertiary border-purple-tint rounded-t-3xl border-2 border-b-0 py-6 sm:py-8 md:py-10"
         aria-labelledby="funding-partners-heading"
     >
         <div class="wrapper">
@@ -44,29 +35,26 @@ const focusRingStyle =
                     >
                         <!-- Funding Partner Logos -->
                         <div class="flex items-center gap-3 sm:gap-4">
-                            <img
+                            <FooterPartnerImage
                                 src="/imgs/orgs/NGEU.png"
                                 alt="Funded by the European Union NextGeneration EU"
-                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
                                 width="120"
                                 height="32"
-                                loading="lazy"
                             />
-                            <img
+                            <FooterPartnerImage
                                 src="/imgs/orgs/MTES.png"
                                 alt="Ministerio de Trabajo y Economía Social"
-                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
                                 width="120"
                                 height="32"
-                                loading="lazy"
                             />
-                            <img
+                            <FooterPartnerImage
                                 src="/imgs/orgs/PRTR.png"
                                 alt="Plan de Recuperación, Transformación y Resiliencia"
-                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
                                 width="120"
                                 height="32"
-                                loading="lazy"
                             />
                         </div>
                     </div>
@@ -82,70 +70,31 @@ const focusRingStyle =
                         role="list"
                         aria-label="Partner organizations"
                     >
-                        <a
+                        <FooterPartnerImage
+                            src="/imgs/orgs/xes.png"
+                            alt="XES - Xarxa d'Economia Solidària"
                             href="https://xes.cat"
-                            class={focusRingStyle}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Visit XES website"
-                        >
-                            <img
-                                src="/imgs/orgs/xes.png"
-                                alt="XES - Xarxa d'Economia Solidària"
-                                class={partnerImageStyle}
-                                width="80"
-                                height="40"
-                                loading="lazy"
-                            />
-                        </a>
-                        <a
+                            ariaLabel="Visit XES website"
+                        />
+                        <FooterPartnerImage
+                            src="/imgs/orgs/alda-europe.svg"
+                            alt="Alda Europe - European Association for Local Democracy"
                             href="https://www.alda-europe.eu"
-                            class={focusRingStyle}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Visit Alda Europe website"
-                        >
-                            <img
-                                src="/imgs/orgs/alda-europe.svg"
-                                alt="Alda Europe - European Association for Local Democracy"
-                                class="h-10 rounded-lg bg-white object-cover p-1 transition-opacity hover:opacity-90 sm:h-12 sm:p-2 md:h-14"
-                                width="80"
-                                height="40"
-                                loading="lazy"
-                            />
-                        </a>
-                        <a
+                            ariaLabel="Visit Alda Europe website"
+                            special={true}
+                        />
+                        <FooterPartnerImage
+                            src="/imgs/orgs/alianza-por-el-clima.webp"
+                            alt="Alianza por el Clima"
                             href="https://alianzaporelclima.org"
-                            class={focusRingStyle}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Visit Alianza por el Clima website"
-                        >
-                            <img
-                                src="/imgs/orgs/alianza-por-el-clima.webp"
-                                alt="Alianza por el Clima"
-                                class={partnerImageStyle}
-                                width="80"
-                                height="40"
-                                loading="lazy"
-                            />
-                        </a>
-                        <a
+                            ariaLabel="Visit Alianza por el Clima website"
+                        />
+                        <FooterPartnerImage
+                            src="/imgs/orgs/ampliando-democracia.jpg"
+                            alt="Ampliando Democracia"
                             href="https://ampliandodemocracia.org"
-                            class={focusRingStyle}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="Visit Ampliando Democracia website"
-                        >
-                            <img
-                                src="/imgs/orgs/ampliando-democracia.jpg"
-                                alt="Ampliando Democracia"
-                                class={partnerImageStyle}
-                                width="80"
-                                height="40"
-                                loading="lazy"
-                            />
-                        </a>
+                            ariaLabel="Visit Ampliando Democracia website"
+                        />
                     </div>
                 </div>
             </div>
@@ -154,7 +103,7 @@ const focusRingStyle =
 
     <!-- Main Footer Content -->
     <section
-        class={`bg-secondary rounded-t-3xl ${sectionPadding}`}
+        class="bg-secondary rounded-t-3xl py-6 sm:py-8 md:py-10"
         aria-labelledby="footer-navigation-heading"
     >
         <div class="wrapper">
@@ -168,106 +117,106 @@ const focusRingStyle =
 
                     <!-- Collaborate -->
                     <div class="space-y-2">
-                        <h4 class={footerHeadingStyle}>
+                        <h4 class="text-soft-purple text-sm leading-6 font-bold sm:text-base">
                             {t("footer.navigation.collaborate.title")}
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a href="/create-project" class={footerLinkStyle}>
+                                <FooterLink href="/create-project">
                                     {t("footer.navigation.collaborate.createProject")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/matchfunding" class={footerLinkStyle}>
+                                <FooterLink href="/matchfunding">
                                     {t("footer.navigation.collaborate.matchfunding")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/workshops" class={footerLinkStyle}>
+                                <FooterLink href="/workshops">
                                     {t("footer.navigation.collaborate.workshops")}
-                                </a>
+                                </FooterLink>
                             </li>
                         </ul>
                     </div>
 
                     <!-- Help -->
                     <div class="space-y-2">
-                        <h4 class={footerHeadingStyle}>
+                        <h4 class="text-soft-purple text-sm leading-6 font-bold sm:text-base">
                             {t("footer.navigation.help.title")}
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a href="/faqs" class={footerLinkStyle}>
+                                <FooterLink href="/faqs">
                                     {t("footer.navigation.help.faqs")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/contact" class={footerLinkStyle}>
+                                <FooterLink href="/contact">
                                     {t("footer.navigation.help.contact")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/tax-calculator" class={footerLinkStyle}>
+                                <FooterLink href="/tax-calculator">
                                     {t("footer.navigation.help.taxCalculator")}
-                                </a>
+                                </FooterLink>
                             </li>
                         </ul>
                     </div>
 
                     <!-- About Goteo -->
                     <div class="space-y-2">
-                        <h4 class={footerHeadingStyle}>
+                        <h4 class="text-soft-purple text-sm leading-6 font-bold sm:text-base">
                             {t("footer.navigation.aboutGoteo.title")}
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a href="/about" class={footerLinkStyle}>
+                                <FooterLink href="/about">
                                     {t("footer.navigation.aboutGoteo.whoWeAre")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/benefits" class={footerLinkStyle}>
+                                <FooterLink href="/benefits">
                                     {t("footer.navigation.aboutGoteo.goteoBenefits")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/impact" class={footerLinkStyle}>
+                                <FooterLink href="/impact">
                                     {t("footer.navigation.aboutGoteo.foundationImpact")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/platoniq" class={footerLinkStyle}>
+                                <FooterLink href="/platoniq">
                                     {t("footer.navigation.aboutGoteo.platoniqFoundation")}
-                                </a>
+                                </FooterLink>
                             </li>
                         </ul>
                     </div>
 
                     <!-- For Users -->
                     <div class="space-y-2">
-                        <h4 class={footerHeadingStyle}>
+                        <h4 class="text-soft-purple text-sm leading-6 font-bold sm:text-base">
                             {t("footer.navigation.forUsers.title")}
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <a href="/wallet" class={footerLinkStyle}>
+                                <FooterLink href="/wallet">
                                     {t("footer.navigation.forUsers.rechargeWallet")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/certificate" class={footerLinkStyle}>
+                                <FooterLink href="/certificate">
                                     {t("footer.navigation.forUsers.downloadCertificate")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/funds" class={footerLinkStyle}>
+                                <FooterLink href="/funds">
                                     {t("footer.navigation.forUsers.accessComplementaryFunds")}
-                                </a>
+                                </FooterLink>
                             </li>
                             <li>
-                                <a href="/program" class={footerLinkStyle}>
+                                <FooterLink href="/program">
                                     {t("footer.navigation.forUsers.designFundingProgram")}
-                                </a>
+                                </FooterLink>
                             </li>
                         </ul>
                     </div>
@@ -299,18 +248,18 @@ const focusRingStyle =
                 <!-- Legal Links -->
                 <nav class="flex flex-wrap gap-4 sm:gap-6 lg:gap-8" aria-label="Legal navigation">
                     <h3 id="footer-bottom-heading" class="sr-only">Legal and Social Links</h3>
-                    <a href="/terms" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
+                    <FooterLink href="/terms" extraClasses="text-xs leading-4 font-medium">
                         {t("footer.legal.termsOfUse")}
-                    </a>
-                    <a href="/privacy" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
+                    </FooterLink>
+                    <FooterLink href="/privacy" extraClasses="text-xs leading-4 font-medium">
                         {t("footer.legal.privacyPolicy")}
-                    </a>
-                    <a href="/licenses" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
+                    </FooterLink>
+                    <FooterLink href="/licenses" extraClasses="text-xs leading-4 font-medium">
                         {t("footer.legal.licenses")}
-                    </a>
-                    <a href="/stats" class={`${footerLinkStyle} text-xs leading-4 font-medium`}>
+                    </FooterLink>
+                    <FooterLink href="/stats" extraClasses="text-xs leading-4 font-medium">
                         {t("footer.legal.stats")}
-                    </a>
+                    </FooterLink>
                 </nav>
 
                 <!-- Social Media and Platoniq -->
@@ -323,44 +272,36 @@ const focusRingStyle =
                     >
                         <a
                             href="mailto:info@goteo.org"
-                            class={socialIconStyle}
+                            class="focus:ring-soft-purple focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                             aria-label="Send email to info@goteo.org"
                         >
                             <FooterGmailIcon />
                         </a>
                         <a
                             href="https://instagram.com/goteofunding"
-                            class={socialIconStyle}
+                            class="focus:ring-soft-purple focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                             aria-label="Follow us on Instagram"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <FooterInstagramIcon />
                         </a>
                         <a
                             href="https://facebook.com/goteofunding"
-                            class={socialIconStyle}
+                            class="focus:ring-soft-purple focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                             aria-label="Follow us on Facebook"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <FooterFacebookIcon />
                         </a>
                         <a
                             href="https://twitter.com/goteofunding"
-                            class={socialIconStyle}
+                            class="focus:ring-soft-purple focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                             aria-label="Follow us on X (formerly Twitter)"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <FooterXIcon />
                         </a>
                         <a
                             href="https://www.linkedin.com/company/platoniqlab"
-                            class={socialIconStyle}
+                            class="focus:ring-soft-purple focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                             aria-label="Connect with us on LinkedIn"
-                            target="_blank"
-                            rel="noopener noreferrer"
                         >
                             <FooterLinkedinIcon />
                         </a>
