@@ -27,6 +27,8 @@
     --color-purple-tint: #e6e5f7; /* Light purple tint */
     --color-soft-purple: #faf9ff;
     --color-neutral-light: #e6e6e6; /* Light neutral border */
+    --color-variant: #99ffcc; /* Task budget color */
+    --color-divider: #f1efff; /* Budget bar divider color */
 
     --font-body: "Karla", sans-serif;
     --body-regular: 1rem;
