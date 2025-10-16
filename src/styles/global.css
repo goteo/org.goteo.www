@@ -29,6 +29,7 @@
     --color-neutral-light: #e6e6e6; /* Light neutral border */
     --color-variant: #99ffcc; /* Task budget color */
     --color-divider: #f1efff; /* Budget bar divider color */
+    --color-chart-background: #efeeff; /* Chart background color */
 
     --font-body: "Karla", sans-serif;
     --body-regular: 1rem;
