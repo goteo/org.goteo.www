@@ -158,6 +158,7 @@
       "found": "{{count}} resultados encontrados",
       "noResults": "No se encontraron resultados",
       "regionLabel": "Resultados de búsqueda",
+      "showing": "Mostrando {{count}} resultados",
       "empty": {
         "title": "No se encontraron resultados",
         "description": "No hay campañas que coincidan con tu búsqueda actual.",
@@ -195,8 +196,11 @@
     "accessibility": {
       "resultsFound": "Se encontraron {{count}} campañas"
     },
-    "loadMore": "Cargar más resultados",
-    "loadMoreNote": "Funcionalidad de paginación próximamente",
+    "loadMore": {
+      "button": "Cargar más",
+      "loading": "Cargando más resultados...",
+      "announcement": "Se cargaron {{count}} resultados más. Mostrando {{loaded}} resultados en total."
+    },
     "pagination": {
       "summary": "Página {{page}} de {{totalPages}} ({{totalCount}} resultados en total)",
       "ariaLabel": "Navegación de páginas de resultados",

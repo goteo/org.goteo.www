@@ -158,6 +158,7 @@
       "found": "{{count}} results found",
       "noResults": "No results found",
       "regionLabel": "Search results",
+      "showing": "Showing {{count}} results",
       "empty": {
         "title": "No results found",
         "description": "No campaigns match your current search.",
@@ -195,8 +196,11 @@
     "accessibility": {
       "resultsFound": "Found {{count}} campaigns"
     },
-    "loadMore": "Load more results",
-    "loadMoreNote": "Pagination functionality coming soon",
+    "loadMore": {
+      "button": "Load More",
+      "loading": "Loading more results...",
+      "announcement": "Loaded {{count}} more results. Showing {{loaded}} results total."
+    },
     "pagination": {
       "summary": "Page {{page}} of {{totalPages}} ({{totalCount}} results total)",
       "ariaLabel": "Results pagination navigation",

@@ -15,10 +15,11 @@ Manages real-time filtering of campaigns without page reloads
         hasActualSearchResults,
         isEmpty,
         resultCount,
+        hasNextPage,
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import LoadingSpinner from "./LoadingSpinner.svelte";
-    import SearchPagination from "./SearchPagination.svelte";
+    import LoadMoreButton from "./LoadMoreButton.svelte";
     import SearchErrorAlert from "./SearchErrorAlert.svelte";
     import CampaignCard from "../home/CampaignCard.svelte";
 
@@ -205,13 +206,15 @@ Manages real-time filtering of campaigns without page reloads
 
     <!-- Search Results Wrapper -->
     <div data-testid="search-results">
-        <!-- Loading State -->
-        {#if $isSearching || isTransforming}
+        <!-- Initial Loading State (only when no results exist yet) -->
+        {#if ($isSearching || isTransforming) && campaigns.length === 0}
             <div class="loading-spinner py-12 text-center" data-testid="loading-spinner">
                 <LoadingSpinner />
             </div>
-        {:else if campaigns.length > 0}
-            <!-- Results Grid -->
+        {/if}
+
+        <!-- Results Grid (keep visible during load more) -->
+        {#if campaigns.length > 0}
             <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
@@ -223,10 +226,15 @@ Manages real-time filtering of campaigns without page reloads
         {/if}
     </div>
 
-    <!-- Pagination Controls -->
-    {#if $hasActualSearchResults && !$isSearching && !isTransforming}
+    <!-- Load More Button (show even while loading, button handles loading state) -->
+    {#if $hasActualSearchResults && !isTransforming}
         <div class="mt-8">
-            <SearchPagination showSummary={true} class="search-pagination" />
+            <LoadMoreButton
+                onLoadMore={() => searchStore.loadMoreResults()}
+                isLoading={$isSearching}
+                hasMore={$hasNextPage}
+                loadedCount={$searchResults.length}
+            />
         </div>
     {/if}
 

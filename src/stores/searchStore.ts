@@ -105,7 +105,7 @@ function createSearchStore() {
                 currentAbortController: abortController,
             }));
 
-            const projects = await projectsService.searchProjects(filters, {
+            const response = await projectsService.searchProjects(filters, {
                 page: currentState.currentPage,
                 limit: currentState.itemsPerPage,
                 abortSignal: abortController.signal,
@@ -113,18 +113,13 @@ function createSearchStore() {
 
             // Check if request wasn't cancelled
             if (!abortController.signal.aborted) {
-                // Infer pagination from results
-                const hasNextPage = projectsService.hasNextPage(
-                    projects,
-                    currentState.itemsPerPage,
-                );
                 const hasPrevPage = currentState.currentPage > 1;
 
                 update((state) => ({
                     ...state,
-                    results: projects,
-                    totalCount: projects.length,
-                    hasNextPage,
+                    results: response.projects,
+                    totalCount: response.totalCount,
+                    hasNextPage: response.hasNextPage,
                     hasPrevPage,
                     isLoading: false,
                     hasSearched: true,
@@ -290,8 +285,6 @@ function createSearchStore() {
 
         // Search with API (manual trigger)
         searchWithApi: async (resetPage = true) => {
-            const currentState = get(store);
-
             if (resetPage) {
                 update((state) => ({
                     ...state,
@@ -299,6 +292,8 @@ function createSearchStore() {
                 }));
             }
 
+            // Get the updated state AFTER resetting the page
+            const currentState = get(store);
             await performSearch(currentState.filters);
         },
 
@@ -358,6 +353,77 @@ function createSearchStore() {
                     currentAbortController: undefined,
                 };
             });
+        },
+
+        // Load more results (accumulative pagination)
+        loadMoreResults: async () => {
+            const currentState = get(store);
+            if (!currentState.hasNextPage || currentState.isLoading) return;
+
+            try {
+                // Increment page before fetching
+                update((state) => ({
+                    ...state,
+                    currentPage: state.currentPage + 1,
+                }));
+
+                const nextPageState = get(store);
+
+                // Cancel previous request if exists
+                if (nextPageState.currentAbortController) {
+                    nextPageState.currentAbortController.abort();
+                }
+
+                // Create new abort controller
+                const abortController = new AbortController();
+
+                update((state) => ({
+                    ...state,
+                    isLoading: true,
+                    hasError: false,
+                    errorMessage: "",
+                    currentAbortController: abortController,
+                }));
+
+                const response = await projectsService.searchProjects(nextPageState.filters, {
+                    page: nextPageState.currentPage,
+                    limit: nextPageState.itemsPerPage,
+                    abortSignal: abortController.signal,
+                });
+
+                // Check if request wasn't cancelled
+                if (!abortController.signal.aborted) {
+                    const hasPrevPage = nextPageState.currentPage > 1;
+
+                    update((state) => ({
+                        ...state,
+                        // Append new results to existing results
+                        results: [...state.results, ...response.projects],
+                        totalCount: response.totalCount,
+                        hasNextPage: response.hasNextPage,
+                        hasPrevPage,
+                        isLoading: false,
+                        hasSearched: true,
+                        lastSearchTime: Date.now(),
+                        currentAbortController: undefined,
+                    }));
+                }
+            } catch (error) {
+                // Only set error if request wasn't cancelled
+                // Keep existing results on error
+                if (!(error instanceof Error) || error.name !== "AbortError") {
+                    update((state) => ({
+                        ...state,
+                        isLoading: false,
+                        hasError: true,
+                        errorMessage:
+                            error instanceof Error ? error.message : "Failed to load more results",
+                        currentAbortController: undefined,
+                        // Revert page increment on error
+                        currentPage: state.currentPage - 1,
+                    }));
+                }
+            }
         },
     };
 

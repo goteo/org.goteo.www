@@ -20,14 +20,18 @@ export class ProjectsService {
             limit?: number;
             abortSignal?: AbortSignal;
         },
-    ): Promise<Project[]> {
+    ): Promise<{
+        projects: Project[];
+        totalCount: number;
+        hasNextPage: boolean;
+    }> {
         try {
             const response = await apiProjectsGetCollection({
                 query: {
                     // Text search
                     ...(filters.query?.trim() && { title: filters.query.trim() }),
-                    // Categories (array filter for OR logic)
-                    ...(filters.categories?.length && { "category[]": filters.categories }),
+                    // Categories (array filter for OR logic) - Fixed: use "categories[]" not "category[]"
+                    ...(filters.categories?.length && { "categories[]": filters.categories }),
                     // Status filter
                     ...(filters.statusFilter &&
                         filters.statusFilter !== "all" && { status: filters.statusFilter }),
@@ -38,7 +42,24 @@ export class ProjectsService {
                 ...(options?.abortSignal && { signal: options.abortSignal }),
             });
 
-            return response.data || [];
+            // According to OpenAPI types, response.data is Array<Project>
+            const projects = (response.data as Project[]) || [];
+            const limit = options?.limit || 20;
+
+            // Infer hasNextPage: if we got exactly the requested amount, there might be more
+            const hasNextPage = projects.length === limit;
+
+            // Without Hydra metadata, we can only use the current page count
+            // Multiply by current page to give a rough estimate
+            const totalCount = hasNextPage
+                ? projects.length * (options?.page || 1) + 1 // At least one more page
+                : projects.length * (options?.page || 1);
+
+            return {
+                projects,
+                totalCount,
+                hasNextPage,
+            };
         } catch (error) {
             // Re-throw auth errors as-is for component handling
             if (error && typeof error === "object" && "type" in error) {

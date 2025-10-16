@@ -166,6 +166,7 @@
       "found": "{{count}} resultats trobats",
       "noResults": "No s'han trobat resultats",
       "regionLabel": "Resultats de cerca",
+      "showing": "Mostrant {{count}} resultats",
       "empty": {
         "title": "No s'han trobat resultats",
         "description": "No hi ha campanyes que coincideixin amb la teva cerca actual.",
@@ -203,8 +204,11 @@
     "accessibility": {
       "resultsFound": "S'han trobat {{count}} campanyes"
     },
-    "loadMore": "Carregar més resultats",
-    "loadMoreNote": "Funcionalitat de paginació properament",
+    "loadMore": {
+      "button": "Carregar més",
+      "loading": "Carregant més resultats...",
+      "announcement": "S'han carregat {{count}} resultats més. Mostrant {{loaded}} resultats en total."
+    },
     "pagination": {
       "summary": "Pàgina {{page}} de {{totalPages}} ({{totalCount}} resultats en total)",
       "ariaLabel": "Navegació de pàgines de resultats",
