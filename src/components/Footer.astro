@@ -38,23 +38,20 @@ const { t } = Astro.locals;
                             <FooterPartnerImage
                                 src="/imgs/orgs/NGEU.png"
                                 alt="Funded by the European Union NextGeneration EU"
-                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
-                                width="120"
-                                height="32"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                client:load
                             />
                             <FooterPartnerImage
                                 src="/imgs/orgs/MTES.png"
                                 alt="Ministerio de Trabajo y Economía Social"
-                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
-                                width="120"
-                                height="32"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                client:load
                             />
                             <FooterPartnerImage
                                 src="/imgs/orgs/PRTR.png"
                                 alt="Plan de Recuperación, Transformación y Resiliencia"
-                                customClass="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
-                                width="120"
-                                height="32"
+                                class="h-8 w-auto transition-opacity hover:opacity-90 sm:h-10"
+                                client:load
                             />
                         </div>
                     </div>
@@ -75,25 +72,29 @@ const { t } = Astro.locals;
                             alt="XES - Xarxa d'Economia Solidària"
                             href="https://xes.cat"
                             ariaLabel="Visit XES website"
+                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/alda-europe.svg"
                             alt="Alda Europe - European Association for Local Democracy"
                             href="https://www.alda-europe.eu"
                             ariaLabel="Visit Alda Europe website"
-                            special={true}
+                            class="bg-white p-1 sm:p-2"
+                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/alianza-por-el-clima.webp"
                             alt="Alianza por el Clima"
                             href="https://alianzaporelclima.org"
                             ariaLabel="Visit Alianza por el Clima website"
+                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/ampliando-democracia.jpg"
                             alt="Ampliando Democracia"
                             href="https://ampliandodemocracia.org"
                             ariaLabel="Visit Ampliando Democracia website"
+                            client:load
                         />
                     </div>
                 </div>
@@ -122,17 +123,17 @@ const { t } = Astro.locals;
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <FooterLink href="/create-project">
+                                <FooterLink href="/create-project" client:load>
                                     {t("footer.navigation.collaborate.createProject")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/matchfunding">
+                                <FooterLink href="/matchfunding" client:load>
                                     {t("footer.navigation.collaborate.matchfunding")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/workshops">
+                                <FooterLink href="/workshops" client:load>
                                     {t("footer.navigation.collaborate.workshops")}
                                 </FooterLink>
                             </li>
@@ -146,17 +147,17 @@ const { t } = Astro.locals;
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <FooterLink href="/faqs">
+                                <FooterLink href="/faqs" client:load>
                                     {t("footer.navigation.help.faqs")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/contact">
+                                <FooterLink href="/contact" client:load>
                                     {t("footer.navigation.help.contact")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/tax-calculator">
+                                <FooterLink href="/tax-calculator" client:load>
                                     {t("footer.navigation.help.taxCalculator")}
                                 </FooterLink>
                             </li>
@@ -170,22 +171,22 @@ const { t } = Astro.locals;
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <FooterLink href="/about">
+                                <FooterLink href="/about" client:load>
                                     {t("footer.navigation.aboutGoteo.whoWeAre")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/benefits">
+                                <FooterLink href="/benefits" client:load>
                                     {t("footer.navigation.aboutGoteo.goteoBenefits")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/impact">
+                                <FooterLink href="/impact" client:load>
                                     {t("footer.navigation.aboutGoteo.foundationImpact")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/platoniq">
+                                <FooterLink href="/platoniq" client:load>
                                     {t("footer.navigation.aboutGoteo.platoniqFoundation")}
                                 </FooterLink>
                             </li>
@@ -199,22 +200,22 @@ const { t } = Astro.locals;
                         </h4>
                         <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                             <li>
-                                <FooterLink href="/wallet">
+                                <FooterLink href="/wallet" client:load>
                                     {t("footer.navigation.forUsers.rechargeWallet")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/certificate">
+                                <FooterLink href="/certificate" client:load>
                                     {t("footer.navigation.forUsers.downloadCertificate")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/funds">
+                                <FooterLink href="/funds" client:load>
                                     {t("footer.navigation.forUsers.accessComplementaryFunds")}
                                 </FooterLink>
                             </li>
                             <li>
-                                <FooterLink href="/program">
+                                <FooterLink href="/program" client:load>
                                     {t("footer.navigation.forUsers.designFundingProgram")}
                                 </FooterLink>
                             </li>
@@ -229,8 +230,6 @@ const { t } = Astro.locals;
                             src="/imgs/goteo-white-logo.svg"
                             alt="Goteo logo"
                             class="h-full w-full object-contain"
-                            width="131"
-                            height="40"
                             loading="lazy"
                         />
                     </div>
@@ -248,16 +247,16 @@ const { t } = Astro.locals;
                 <!-- Legal Links -->
                 <nav class="flex flex-wrap gap-4 sm:gap-6 lg:gap-8" aria-label="Legal navigation">
                     <h3 id="footer-bottom-heading" class="sr-only">Legal and Social Links</h3>
-                    <FooterLink href="/terms" extraClasses="text-xs leading-4 font-medium">
+                    <FooterLink href="/terms" class="text-xs leading-4 font-medium" client:load>
                         {t("footer.legal.termsOfUse")}
                     </FooterLink>
-                    <FooterLink href="/privacy" extraClasses="text-xs leading-4 font-medium">
+                    <FooterLink href="/privacy" class="text-xs leading-4 font-medium" client:load>
                         {t("footer.legal.privacyPolicy")}
                     </FooterLink>
-                    <FooterLink href="/licenses" extraClasses="text-xs leading-4 font-medium">
+                    <FooterLink href="/licenses" class="text-xs leading-4 font-medium" client:load>
                         {t("footer.legal.licenses")}
                     </FooterLink>
-                    <FooterLink href="/stats" extraClasses="text-xs leading-4 font-medium">
+                    <FooterLink href="/stats" class="text-xs leading-4 font-medium" client:load>
                         {t("footer.legal.stats")}
                     </FooterLink>
                 </nav>
@@ -313,8 +312,6 @@ const { t } = Astro.locals;
                             src="/imgs/platoniq.png"
                             alt="Platoniq Foundation logo"
                             class="h-4 sm:h-5"
-                            width="100"
-                            height="18"
                             loading="lazy"
                         />
                         <div class="text-xs leading-normal font-light sm:text-sm">
