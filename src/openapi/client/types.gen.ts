@@ -20,7 +20,7 @@ export type Accounting = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: ApiMoney;
+    balance?: MoneyWithConversion;
 };
 
 /**
@@ -50,7 +50,7 @@ export type AccountingJsonld = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: ApiMoneyJsonld;
+    balance?: MoneyWithConversionJsonld;
 };
 
 /**
@@ -71,7 +71,7 @@ export type AccountingBalancePoint = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: ApiMoney;
+    balance?: MoneyWithConversion;
     /**
      * The number of items aggregated in this point.
      */
@@ -98,7 +98,7 @@ export type AccountingBalancePointJsonld = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: ApiMoneyJsonld;
+    balance?: MoneyWithConversionJsonld;
     /**
      * The number of items aggregated in this point.
      */
@@ -119,7 +119,7 @@ export type AccountingTransaction = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: ApiMoney;
+    money?: MoneyWithConversion;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -151,7 +151,7 @@ export type AccountingTransactionJsonld = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: ApiMoneyJsonld;
+    money?: MoneyWithConversionJsonld;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -160,45 +160,6 @@ export type AccountingTransactionJsonld = {
      * The Accounting where the Transaction goes to.
      */
     target?: string;
-};
-
-export type ApiMoney = {
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount: number;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency: string;
-    /**
-     * Conversion metadata.
-     */
-    conversion?: Conversion | null;
-};
-
-export type ApiMoneyJsonld = {
-    '@context'?: string | {
-        '@vocab': string;
-        hydra: 'http://www.w3.org/ns/hydra/core#';
-        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
-    };
-    readonly '@id'?: string;
-    readonly '@type'?: string;
-    /**
-     * An amount of currency.\
-     * Expressed as the minor unit, e.g: cents, pennies, etc.
-     */
-    amount: number;
-    /**
-     * 3-letter ISO 4217 currency code.
-     */
-    currency: string;
-    /**
-     * Conversion metadata.
-     */
-    conversion?: ConversionJsonld | null;
 };
 
 export type Budget = {
@@ -234,19 +195,19 @@ export type BudgetSummary = {
     /**
      * The total money by the included items.
      */
-    money?: ApiMoney;
+    money?: MoneyWithConversion;
     /**
      * The total money of type 'task'.
      */
-    task?: ApiMoney;
+    task?: MoneyWithConversion;
     /**
      * The total money of type 'material'.
      */
-    material?: ApiMoney;
+    material?: MoneyWithConversion;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: ApiMoney;
+    infra?: MoneyWithConversion;
 };
 
 export type BudgetSummaryJsonld = {
@@ -260,19 +221,34 @@ export type BudgetSummaryJsonld = {
     /**
      * The total money by the included items.
      */
-    money?: ApiMoneyJsonld;
+    money?: MoneyWithConversionJsonld;
     /**
      * The total money of type 'task'.
      */
-    task?: ApiMoneyJsonld;
+    task?: MoneyWithConversionJsonld;
     /**
      * The total money of type 'material'.
      */
-    material?: ApiMoneyJsonld;
+    material?: MoneyWithConversionJsonld;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: ApiMoneyJsonld;
+    infra?: MoneyWithConversionJsonld;
+};
+
+export type Category = {
+    id?: string;
+};
+
+export type CategoryJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    id?: string;
 };
 
 /**
@@ -468,7 +444,7 @@ export type GatewayCharge = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: ApiMoney;
+    money: MoneyWithConversion;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -531,7 +507,7 @@ export type GatewayChargeJsonld = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: ApiMoneyJsonld;
+    money: MoneyWithConversionJsonld;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -979,7 +955,7 @@ export type MatchStrategy = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiMoney;
+    limit: MoneyWithConversion;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1033,7 +1009,7 @@ export type MatchStrategyJsonld = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: ApiMoneyJsonld;
+    limit: MoneyWithConversionJsonld;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1063,6 +1039,45 @@ export type MoneyJsonld = {
     readonly '@type'?: string;
     amount?: number;
     currency?: string;
+    conversion?: ConversionJsonld | null;
+};
+
+export type MoneyWithConversion = {
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+    /**
+     * Conversion metadata.
+     */
+    conversion?: Conversion | null;
+};
+
+export type MoneyWithConversionJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+    /**
+     * Conversion metadata.
+     */
     conversion?: ConversionJsonld | null;
 };
 
@@ -1188,6 +1203,29 @@ export type PersonJsonld = {
     lastName?: string;
 };
 
+export type Ping = {
+    /**
+     * The req-res time difference in milliseconds.
+     */
+    time?: number;
+    message?: string;
+};
+
+export type PingJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The req-res time difference in milliseconds.
+     */
+    time?: number;
+    message?: string;
+};
+
 /**
  * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
  */
@@ -1224,9 +1262,9 @@ export type Project = {
      */
     calendar?: ProjectCalendar;
     /**
-     * One of the available categories.
+     * A list of the available categories most relevant to this Project.
      */
-    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    categories: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1259,10 +1297,13 @@ export type Project = {
      * A list of the ProjectUpdates this Project has.
      */
     readonly updates?: Array<string>;
+    readonly matchCallSubmissions?: Array<string>;
     /**
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -1280,25 +1321,13 @@ export type ProjectProjectCreationDto = {
     /**
      * One of the available categories.
      */
-    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    categories: Array<string>;
     /**
-     * ISO 3166 data about the Project's territory of interest.
+     * Desired date-time of release for the created Project.\
+     * By default 28 days from now, at minimum 14 days from now.
      */
-    territory: Territory;
-    /**
-     * Free-form rich text description for the Project.
-     */
-    description: string;
-    /**
-     * On `minimum`, Project will campaign until the minimum deadline.\
-     * On `optimum`, Project will campaing until the minimum deadline,
-     * and then until the optimum deadline if it did raise the minimum.
-     */
-    deadline?: 'minimum' | 'optimum';
-    /**
-     * A URL to a video showcasing the Project.
-     */
-    video?: string;
+    release?: string;
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1316,25 +1345,13 @@ export type ProjectProjectCreationDtoJsonld = {
     /**
      * One of the available categories.
      */
-    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    categories: Array<string>;
     /**
-     * ISO 3166 data about the Project's territory of interest.
+     * Desired date-time of release for the created Project.\
+     * By default 28 days from now, at minimum 14 days from now.
      */
-    territory: TerritoryJsonld;
-    /**
-     * Free-form rich text description for the Project.
-     */
-    description: string;
-    /**
-     * On `minimum`, Project will campaign until the minimum deadline.\
-     * On `optimum`, Project will campaing until the minimum deadline,
-     * and then until the optimum deadline if it did raise the minimum.
-     */
-    deadline?: 'minimum' | 'optimum';
-    /**
-     * A URL to a video showcasing the Project.
-     */
-    video?: string;
+    release?: string;
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1353,7 +1370,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * One of the available categories.
      */
-    category?: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    categories?: Array<Category>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1421,9 +1438,9 @@ export type ProjectJsonld = {
      */
     calendar?: ProjectCalendarJsonld;
     /**
-     * One of the available categories.
+     * A list of the available categories most relevant to this Project.
      */
-    category: 'solidary' | 'libre-software' | 'employment' | 'design' | 'journalism' | 'education' | 'culture' | 'ecology' | 'health-and-cares' | 'open-data' | 'democracy' | 'equity';
+    categories: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1456,10 +1473,13 @@ export type ProjectJsonld = {
      * A list of the ProjectUpdates this Project has.
      */
     readonly updates?: Array<string>;
+    readonly matchCallSubmissions?: Array<string>;
     /**
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -1485,7 +1505,7 @@ export type ProjectBudgetItem = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiMoney;
+    money: MoneyWithConversion;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1526,7 +1546,7 @@ export type ProjectBudgetItemJsonld = {
     /**
      * The amount of money required for this item.
      */
-    money: ApiMoneyJsonld;
+    money: MoneyWithConversionJsonld;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1587,6 +1607,71 @@ export type ProjectCalendarJsonld = {
 };
 
 /**
+ * ProjectCollaborations are used as requests for help on specific problems that the Project might face and cannot be budgeted-in.
+ */
+export type ProjectCollaboration = {
+    readonly id?: number;
+    /**
+     * The Project which requests this collaboration.
+     */
+    project: string;
+    /**
+     * A short, descriptive title for this collaboration.
+     */
+    title: string;
+    /**
+     * Information about this collaboration. More detailed than the title.
+     */
+    description: string;
+    /**
+     * Wether or not the collaboration's problem has been solved.
+     */
+    isFulfilled: boolean;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectCollaborations are used as requests for help on specific problems that the Project might face and cannot be budgeted-in.
+ */
+export type ProjectCollaborationJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    /**
+     * The Project which requests this collaboration.
+     */
+    project: string;
+    /**
+     * A short, descriptive title for this collaboration.
+     */
+    title: string;
+    /**
+     * Information about this collaboration. More detailed than the title.
+     */
+    description: string;
+    /**
+     * Wether or not the collaboration's problem has been solved.
+     */
+    isFulfilled: boolean;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
  * A ProjectReward is something the Project owner wishes to give in exchange for contributions to their Project.
  */
 export type ProjectReward = {
@@ -1606,7 +1691,7 @@ export type ProjectReward = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: ApiMoney;
+    money: MoneyWithConversion;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1628,6 +1713,8 @@ export type ProjectReward = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -1657,7 +1744,7 @@ export type ProjectRewardJsonld = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: ApiMoneyJsonld;
+    money: MoneyWithConversionJsonld;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1679,6 +1766,8 @@ export type ProjectRewardJsonld = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -1779,7 +1868,7 @@ export type ProjectSupport = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: ApiMoney;
+    money?: MoneyWithConversion;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -1848,7 +1937,7 @@ export type ProjectSupportJsonld = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: ApiMoneyJsonld;
+    money?: MoneyWithConversionJsonld;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -1896,6 +1985,8 @@ export type ProjectUpdate = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -1942,6 +2033,8 @@ export type ProjectUpdateJsonld = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 export type ProjectVideo = {
@@ -1966,7 +2059,7 @@ export type Territory = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country: string;
+    country?: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).
@@ -1991,7 +2084,7 @@ export type TerritoryJsonld = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country: string;
+    country?: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).
@@ -2575,6 +2668,61 @@ export type ApiAccountingTransactionsIdGetResponses = {
 
 export type ApiAccountingTransactionsIdGetResponse = ApiAccountingTransactionsIdGetResponses[keyof ApiAccountingTransactionsIdGetResponses];
 
+export type ApiCategoriesGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+    };
+    url: '/v4/categories';
+};
+
+export type ApiCategoriesGetCollectionResponses = {
+    /**
+     * Category collection
+     */
+    200: Array<Category>;
+};
+
+export type ApiCategoriesGetCollectionResponse = ApiCategoriesGetCollectionResponses[keyof ApiCategoriesGetCollectionResponses];
+
+export type ApiCategoriesIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiCategoriesIdGetError = ApiCategoriesIdGetErrors[keyof ApiCategoriesIdGetErrors];
+
+export type ApiCategoriesIdGetResponses = {
+    /**
+     * Category resource
+     */
+    200: Category;
+};
+
+export type ApiCategoriesIdGetResponse = ApiCategoriesIdGetResponses[keyof ApiCategoriesIdGetResponses];
+
 export type ApiGatewaysGetCollectionData = {
     body?: never;
     path?: never;
@@ -2904,6 +3052,16 @@ export type ApiMatchCallsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        title?: string;
+        description?: string;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
     };
     url: '/v4/match_calls';
 };
@@ -3062,6 +3220,12 @@ export type ApiMatchCallSubmissionsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        call?: string;
+        'call[]'?: Array<string>;
+        project?: string;
+        'project[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
     };
     url: '/v4/match_call_submissions';
 };
@@ -3619,6 +3783,31 @@ export type ApiUsersIdpersonPatchResponses = {
 
 export type ApiUsersIdpersonPatchResponse = ApiUsersIdpersonPatchResponses[keyof ApiUsersIdpersonPatchResponses];
 
+export type ApiPingGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/v4/ping';
+};
+
+export type ApiPingGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiPingGetError = ApiPingGetErrors[keyof ApiPingGetErrors];
+
+export type ApiPingGetResponses = {
+    /**
+     * Ping resource
+     */
+    200: Ping;
+};
+
+export type ApiPingGetResponse = ApiPingGetResponses[keyof ApiPingGetResponses];
+
 export type ApiProjectsGetCollectionData = {
     body?: never;
     path?: never;
@@ -3633,13 +3822,21 @@ export type ApiProjectsGetCollectionData = {
         itemsPerPage?: number;
         slug?: string;
         'slug[]'?: Array<string>;
+        owner?: string;
+        'owner[]'?: Array<string>;
         title?: string;
         subtitle?: string;
-        category?: string;
-        'category[]'?: Array<string>;
+        categories?: string;
+        'categories[]'?: Array<string>;
         description?: string;
         status?: string;
         'status[]'?: Array<string>;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
     };
     url: '/v4/projects';
 };
@@ -3958,6 +4155,173 @@ export type ApiProjectBudgetItemsIdPatchResponses = {
 
 export type ApiProjectBudgetItemsIdPatchResponse = ApiProjectBudgetItemsIdPatchResponses[keyof ApiProjectBudgetItemsIdPatchResponses];
 
+export type ApiProjectCollaborationsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        project?: string;
+        'project[]'?: Array<string>;
+        isFulfilled?: boolean;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/project_collaborations';
+};
+
+export type ApiProjectCollaborationsGetCollectionResponses = {
+    /**
+     * ProjectCollaboration collection
+     */
+    200: Array<ProjectCollaboration>;
+};
+
+export type ApiProjectCollaborationsGetCollectionResponse = ApiProjectCollaborationsGetCollectionResponses[keyof ApiProjectCollaborationsGetCollectionResponses];
+
+export type ApiProjectCollaborationsPostData = {
+    /**
+     * The new ProjectCollaboration resource
+     */
+    body: ProjectCollaboration;
+    path?: never;
+    query?: never;
+    url: '/v4/project_collaborations';
+};
+
+export type ApiProjectCollaborationsPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectCollaborationsPostError = ApiProjectCollaborationsPostErrors[keyof ApiProjectCollaborationsPostErrors];
+
+export type ApiProjectCollaborationsPostResponses = {
+    /**
+     * ProjectCollaboration resource created
+     */
+    201: ProjectCollaboration;
+};
+
+export type ApiProjectCollaborationsPostResponse = ApiProjectCollaborationsPostResponses[keyof ApiProjectCollaborationsPostResponses];
+
+export type ApiProjectCollaborationsIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectCollaboration identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaborations/{id}';
+};
+
+export type ApiProjectCollaborationsIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectCollaborationsIdDeleteError = ApiProjectCollaborationsIdDeleteErrors[keyof ApiProjectCollaborationsIdDeleteErrors];
+
+export type ApiProjectCollaborationsIdDeleteResponses = {
+    /**
+     * ProjectCollaboration resource deleted
+     */
+    204: void;
+};
+
+export type ApiProjectCollaborationsIdDeleteResponse = ApiProjectCollaborationsIdDeleteResponses[keyof ApiProjectCollaborationsIdDeleteResponses];
+
+export type ApiProjectCollaborationsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectCollaboration identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaborations/{id}';
+};
+
+export type ApiProjectCollaborationsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectCollaborationsIdGetError = ApiProjectCollaborationsIdGetErrors[keyof ApiProjectCollaborationsIdGetErrors];
+
+export type ApiProjectCollaborationsIdGetResponses = {
+    /**
+     * ProjectCollaboration resource
+     */
+    200: ProjectCollaboration;
+};
+
+export type ApiProjectCollaborationsIdGetResponse = ApiProjectCollaborationsIdGetResponses[keyof ApiProjectCollaborationsIdGetResponses];
+
+export type ApiProjectCollaborationsIdPatchData = {
+    /**
+     * The updated ProjectCollaboration resource
+     */
+    body: ProjectCollaboration;
+    path: {
+        /**
+         * ProjectCollaboration identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaborations/{id}';
+};
+
+export type ApiProjectCollaborationsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectCollaborationsIdPatchError = ApiProjectCollaborationsIdPatchErrors[keyof ApiProjectCollaborationsIdPatchErrors];
+
+export type ApiProjectCollaborationsIdPatchResponses = {
+    /**
+     * ProjectCollaboration resource updated
+     */
+    200: ProjectCollaboration;
+};
+
+export type ApiProjectCollaborationsIdPatchResponse = ApiProjectCollaborationsIdPatchResponses[keyof ApiProjectCollaborationsIdPatchResponses];
+
 export type ApiProjectRewardsGetCollectionData = {
     body?: never;
     path?: never;
@@ -3975,7 +4339,13 @@ export type ApiProjectRewardsGetCollectionData = {
         'order[money.amount]'?: 'asc' | 'desc';
         'order[unitsClaimed]'?: 'asc' | 'desc';
         'order[unitsAvailable]'?: 'asc' | 'desc';
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
         isFinite?: boolean;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
     };
     url: '/v4/project_rewards';
 };
@@ -4387,6 +4757,12 @@ export type ApiProjectUpdatesGetCollectionData = {
         project?: string;
         'project[]'?: Array<string>;
         'order[date]'?: 'asc' | 'desc';
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
     };
     url: '/v4/project_updates';
 };

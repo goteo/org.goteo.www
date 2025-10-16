@@ -12,6 +12,10 @@ export const apiAccountingTransactionsGetCollectionUrl = '/v4/accounting_transac
 
 export const apiAccountingTransactionsIdGetUrl = '/v4/accounting_transactions/{id}';
 
+export const apiCategoriesGetCollectionUrl = '/v4/categories';
+
+export const apiCategoriesIdGetUrl = '/v4/categories/{id}';
+
 export const apiGatewaysGetCollectionUrl = '/v4/gateways';
 
 export const apiGatewaysNameGetUrl = '/v4/gateways/{name}';
@@ -74,6 +78,8 @@ export const apiUsersIdpersonGetUrl = '/v4/users/{id}/person';
 
 export const apiUsersIdpersonPatchUrl = '/v4/users/{id}/person';
 
+export const apiPingGetUrl = '/v4/ping';
+
 export const apiProjectsGetCollectionUrl = '/v4/projects';
 
 export const apiProjectsPostUrl = '/v4/projects';
@@ -93,6 +99,16 @@ export const apiProjectBudgetItemsIdDeleteUrl = '/v4/project_budget_items/{id}';
 export const apiProjectBudgetItemsIdGetUrl = '/v4/project_budget_items/{id}';
 
 export const apiProjectBudgetItemsIdPatchUrl = '/v4/project_budget_items/{id}';
+
+export const apiProjectCollaborationsGetCollectionUrl = '/v4/project_collaborations';
+
+export const apiProjectCollaborationsPostUrl = '/v4/project_collaborations';
+
+export const apiProjectCollaborationsIdDeleteUrl = '/v4/project_collaborations/{id}';
+
+export const apiProjectCollaborationsIdGetUrl = '/v4/project_collaborations/{id}';
+
+export const apiProjectCollaborationsIdPatchUrl = '/v4/project_collaborations/{id}';
 
 export const apiProjectRewardsGetCollectionUrl = '/v4/project_rewards';
 
