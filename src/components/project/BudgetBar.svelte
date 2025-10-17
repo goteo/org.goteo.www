@@ -168,12 +168,12 @@
         </div>
     </div>
 
-    <div class="relative text-sm">
-        <div class="absolute left-0" style="width: {leftSectionWidth}%">
+    <div class="flex gap-6 text-sm">
+        <div class="flex-none">
             <span class="text-gray-600">{$t("project.tabs.budget.minimum")}:</span>
             <span class="text-base font-black">{formatAmount(minimumTotal)}€</span>
         </div>
-        <div class="absolute" style="left: {rightSectionStart}%; width: {rightSectionWidth}%">
+        <div class="flex-none">
             <span class="text-gray-600">{$t("project.tabs.budget.optimal")}:</span>
             <span class="text-base font-black">{formatAmount(optimumTotal)}€</span>
         </div>
