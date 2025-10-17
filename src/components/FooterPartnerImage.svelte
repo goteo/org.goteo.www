@@ -1,21 +1,46 @@
-<script>
+<script lang="ts">
+    import type { ClassNameValue } from "tailwind-merge";
     import { twMerge } from "tailwind-merge";
 
-    let { src, alt, href = null, ariaLabel = null, class: customClass = "" } = $props();
+    const sizeStyles = {
+        small: "h-8 sm:h-10 md:h-12",
+        medium: "h-10 sm:h-12 md:h-14",
+    };
 
-    const defaultImageClasses =
-        "h-10 w-auto rounded-lg transition-opacity hover:opacity-90 sm:h-12 md:h-14";
-    const defaultImageClassesWithoutLink = "h-8 w-auto transition-opacity hover:opacity-90 sm:h-10";
+    let {
+        src,
+        alt,
+        href,
+        hrefAriaLabel,
+        size = "small",
+        class: customClass = "",
+    }: {
+        src: string;
+        alt: string;
+        href?: string;
+        hrefAriaLabel?: string;
+        size: keyof typeof sizeStyles;
+        class: ClassNameValue;
+    } = $props();
 </script>
+
+{#snippet image()}
+    <img
+        {src}
+        {alt}
+        loading="lazy"
+        class={twMerge("w-auto transition-opacity hover:opacity-90", sizeStyles[size], customClass)}
+    />
+{/snippet}
 
 {#if href}
     <a
         {href}
         class="focus:ring-soft-purple focus:ring-offset-soft-purple rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
-        aria-label={ariaLabel || `Visit ${alt} website`}
+        aria-label={hrefAriaLabel || `Visit ${href}`}
     >
-        <img {src} {alt} loading="lazy" class={twMerge(defaultImageClasses, customClass)} />
+        {@render image()}
     </a>
 {:else}
-    <img {src} {alt} loading="lazy" class={twMerge(defaultImageClassesWithoutLink, customClass)} />
+    {@render image()}
 {/if}
