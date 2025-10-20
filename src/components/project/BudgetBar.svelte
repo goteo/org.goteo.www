@@ -2,6 +2,7 @@
     import type { Project, Accounting } from "../../openapi/client/index";
     import { onMount, tick } from "svelte";
     import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
 
     let {
         project,
@@ -32,10 +33,12 @@
 
     const dividerWidthPct = 1.5;
 
-    const leftSectionWidth =
-        totalBudget > 0 ? (minimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0;
-    const rightSectionWidth =
-        totalBudget > 0 ? (optimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0;
+    const leftSectionWidth = Math.round(
+        totalBudget > 0 ? (minimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0,
+    );
+    const rightSectionWidth = Math.round(
+        totalBudget > 0 ? (optimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0,
+    );
     const rightSectionStart = leftSectionWidth + dividerWidthPct;
 
     const minInfraPctLocal = minimumTotal > 0 ? (minInfra / minimumTotal) * 100 : 0;
@@ -72,14 +75,6 @@
             balance: balancePct,
         };
     });
-
-    const formatAmount = (amount: number) => {
-        return (amount / 100).toLocaleString("es-ES", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-            useGrouping: true,
-        });
-    };
 </script>
 
 <div class="space-y-3">
@@ -91,7 +86,7 @@
             <div class="ml-4 flex items-center gap-2 text-sm font-medium">
                 <span class="text-gray-600">
                     Vamos por <span class="text-base font-black"
-                        >{formatAmount(balanceAmount)}€</span
+                        >{formatCurrency(balanceAmount)}</span
                     >
                 </span>
             </div>
@@ -168,14 +163,14 @@
         </div>
     </div>
 
-    <div class="flex gap-6 text-sm">
-        <div class="flex-none">
+    <div class="flex gap-2">
+        <div class="min-w-fit" style="width: {leftSectionWidth}%">
             <span class="text-gray-600">{$t("project.tabs.budget.minimum")}:</span>
-            <span class="text-base font-black">{formatAmount(minimumTotal)}€</span>
+            <span class="text-base font-black">{formatCurrency(minimumTotal)}</span>
         </div>
         <div class="flex-none">
             <span class="text-gray-600">{$t("project.tabs.budget.optimal")}:</span>
-            <span class="text-base font-black">{formatAmount(optimumTotal)}€</span>
+            <span class="text-base font-black">{formatCurrency(optimumTotal)}</span>
         </div>
     </div>
 </div>
