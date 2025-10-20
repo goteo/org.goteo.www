@@ -46,6 +46,7 @@
         "minimum": "Mínimo",
         "optimal": "Óptimo",
         "raised": "Obtenido",
+        "total": "Total",
         "typeBudget": {
           "infrastructure": "Infraestructura",
           "material": "Material",

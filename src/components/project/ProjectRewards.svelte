@@ -74,7 +74,7 @@
 
 <section>
     <div class="flex flex-col gap-12">
-        <h2 class="text-secondary text-3xl font-bold">
+        <h2 class="text-secondary text-4xl font-bold">
             {$t("rewards.title")}
         </h2>
         <ul class="grid gap-6 lg:grid-cols-3">

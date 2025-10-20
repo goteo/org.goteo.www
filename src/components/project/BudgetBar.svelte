@@ -78,32 +78,30 @@
 </script>
 
 <div class="space-y-3">
-    <div class="relative h-16 w-full">
+    <div class="relative h-8 w-full">
         <div
             class="absolute transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%; top: 2rem;"
+            style="left: {animValues.balance}%;"
         >
-            <div class="ml-4 flex items-center gap-2 text-sm font-medium">
-                <span class="text-gray-600">
-                    {$t("project.tabs.budget.raised")}:
-                    <span class="text-base font-black">{formatCurrency(balanceAmount)}</span>
-                </span>
+            <div class="ml-4 flex items-center gap-2">
+                <span class="text-gray-600">{$t("project.tabs.budget.raised")}:</span>
+                <span class="text-base font-black">{formatCurrency(balanceAmount)}</span>
             </div>
         </div>
 
         <div
             class="absolute z-50 transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%; transform: translateX(-50%); top: 3rem;"
+            style="left: {animValues.balance}%; transform: translateX(-50%); top: 1rem;"
         >
             <div class="bg-secondary border-secondary h-7 border-r-2 border-solid"></div>
-            <div class="h-16 border-r-2 border-solid border-white bg-white"></div>
+            <div class="h-12 border-r-2 border-solid border-white"></div>
             <div
                 class="bg-secondary absolute top-0 right-0 h-3 w-3 translate-x-1/2 -translate-y-1/2 rounded-full"
             ></div>
         </div>
     </div>
 
-    <div class="relative h-16 w-full">
+    <div class="relative h-12 w-full">
         <div
             class="absolute top-0 left-0 h-full overflow-hidden rounded-xl"
             style="width: {leftSectionWidth}%;"

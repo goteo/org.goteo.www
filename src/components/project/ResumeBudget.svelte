@@ -11,12 +11,12 @@
 </script>
 
 <div class="flex flex-col gap-6 lg:flex-row">
-    <div class="text-secondary basis-1/3 text-3xl font-bold">
+    <div class="text-secondary basis-5/12 text-4xl font-bold">
         {$t("project.tabs.budget.chart-title")}
     </div>
 
     <div
-        class="bg-chart-background flex basis-2/3 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
+        class="bg-chart-background flex basis-7/12 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
     >
         <BudgetBar {project} {accounting} />
         <LegendBudgetBar {project} />

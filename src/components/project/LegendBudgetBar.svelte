@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { ProjectBudgetItem, Project } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
 
     let { project } = $props<{
         project: Project;
@@ -14,23 +15,15 @@
 
     const legendEntries = Object.entries(typeBudget) as [ProjectBudgetItem["type"], string][];
 
-    const formatAmount = (amount: number) => {
-        return (amount / 100).toLocaleString("es-ES", {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-            useGrouping: true,
-        });
-    };
-
     const minimumTotal = project.budget?.minimum?.money?.amount ?? 0;
     const optimumTotal = project.budget?.optimum?.money?.amount ?? 0;
     const totalBudget = minimumTotal + optimumTotal;
 </script>
 
-<div class="flex flex-row flex-wrap items-center justify-between gap-6 pt-10">
+<div class="flex flex-row flex-wrap items-center justify-between gap-6">
     <div class="text-sm">
-        <span class="text-gray-600">Total: </span>
-        <span class="text-base font-black">{formatAmount(totalBudget)}€</span>
+        <span class="text-gray-600">{$t("project.tabs.budget.total")}:</span>
+        <span class="text-base font-black">{formatCurrency(totalBudget)}</span>
     </div>
 
     <div class="flex flex-row flex-wrap gap-6">
