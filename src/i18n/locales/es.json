@@ -650,6 +650,7 @@
       }
     },
     "stats": {
+      "title": "Estadísticas de Goteo",
       "theoryToAction": {
         "title": "De la teoría a la acción",
         "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
