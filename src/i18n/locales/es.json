@@ -41,10 +41,11 @@
     "tabs": {
       "project": "Información de campaña",
       "budget": {
-        "chart-title": "Este es el presupuesto necesario para hacer realidad esta campaña y descubre cómo tu apoyo puede llevarnos al éxito.",
+        "chart-title": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
         "title": "Presupuesto",
         "minimum": "Mínimo",
         "optimal": "Óptimo",
+        "raised": "Obtenido",
         "typeBudget": {
           "infrastructure": "Infraestructura",
           "material": "Material",

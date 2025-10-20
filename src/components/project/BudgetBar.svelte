@@ -85,9 +85,8 @@
         >
             <div class="ml-4 flex items-center gap-2 text-sm font-medium">
                 <span class="text-gray-600">
-                    Vamos por <span class="text-base font-black"
-                        >{formatCurrency(balanceAmount)}</span
-                    >
+                    {$t("project.tabs.budget.raised")}:
+                    <span class="text-base font-black">{formatCurrency(balanceAmount)}</span>
                 </span>
             </div>
         </div>
