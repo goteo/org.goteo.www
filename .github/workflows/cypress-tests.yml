@@ -2,11 +2,13 @@ name: Cypress E2E Tests
 
 on:
     push:
+        branches-ignore:
+            - develop
+            - main
 
 jobs:
     cypress-run:
         runs-on: ubuntu-latest
-        environment: ${{ github.ref_name }}
 
         steps:
             - name: Checkout code
