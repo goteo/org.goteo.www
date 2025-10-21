@@ -1,0 +1,87 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ActivitySection from "../../components/profile/ActivitySection.svelte";
+import PeriodDropdown from "../../components/profile/PeriodDropdown.svelte";
+import CTACard from "../../components/profile/CTACard.svelte";
+import DonatedProjectsSection from "../../components/profile/DonatedProjectsSection.svelte";
+import OwnedProjectsSection from "../../components/profile/OwnedProjectsSection.svelte";
+
+const { lang, t } = Astro.locals;
+const accessToken = Astro.cookies.get("access-token");
+
+let user;
+if (accessToken) {
+    user = JSON.parse(accessToken.value);
+}
+
+// Redirect to login if not authenticated
+if (!user) {
+    return Astro.redirect("/login");
+}
+
+// Get period from URL or default to current year
+const period = Astro.url.searchParams.get("period") || new Date().getFullYear().toString();
+---
+
+<Layout title={t("me.page.title")} class="mb-20">
+    <div
+        class="wrapper flex flex-col gap-[40px] px-[16px] pt-[24px] pb-[40px] md:px-[40px] md:pt-[40px] md:pb-[40px]"
+    >
+        <!-- Header with title and period dropdown -->
+        <div class="flex flex-col items-start justify-between gap-[24px] lg:flex-row">
+            <div class="flex flex-col gap-[16px]">
+                <h1 class="font-['Karla'] text-[40px] leading-[48px] font-bold text-black">
+                    {t("me.page.title")}
+                </h1>
+                <p class="font-['Karla'] text-[16px] leading-[24px] text-content">
+                    {t("me.page.subtitle")}
+                </p>
+            </div>
+            <PeriodDropdown selectedPeriod={period} client:load />
+        </div>
+
+        <!-- Activity cards grid (client-side data fetching) -->
+        <ActivitySection {lang} {period} {user} client:load />
+
+        <!-- Owned Projects Section (client-side data fetching) -->
+        <OwnedProjectsSection {lang} {user} client:load />
+
+        <!-- Donated Projects Section (client-side data fetching) -->
+        <DonatedProjectsSection {lang} {user} client:load />
+
+        <!-- CTA cards -->
+        <div class="grid grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-[446px_1fr]">
+            <CTACard
+                variant="dark"
+                title={t("me.cta.discover.title")}
+                description={t("me.cta.discover.description")}
+                buttons={[
+                    {
+                        label: t("me.cta.discover.button"),
+                        href: lang === "es" ? "/projects" : `/${lang}/projects`,
+                        variant: "primary",
+                    },
+                ]}
+                client:load
+            />
+            <CTACard
+                variant="light"
+                title={t("me.cta.matchfunding.title")}
+                description={t("me.cta.matchfunding.description")}
+                buttons={[
+                    {
+                        label: t("me.cta.matchfunding.learnMore"),
+                        href: lang === "es" ? "/matchfunding" : `/${lang}/matchfunding`,
+                        variant: "secondary",
+                    },
+                    {
+                        label: t("me.cta.matchfunding.becomeMatcher"),
+                        href: lang === "es" ? "/matcher" : `/${lang}/matcher`,
+                        variant: "primary",
+                    },
+                ]}
+                client:load
+            />
+        </div>
+    </div>
+</Layout>
