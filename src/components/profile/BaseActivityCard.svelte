@@ -222,15 +222,15 @@
         >
             <a
                 href={primaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] border border-[#462949] bg-transparent px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:bg-[#46294910] md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] overflow-hidden rounded-[24px] border border-[#462949] bg-transparent px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:bg-[#46294910] md:py-[16px] md:text-[16px] md:leading-[24px]"
             >
-                {$t(primaryActionLabel)}
+                <span class="truncate whitespace-nowrap">{$t(primaryActionLabel)}</span>
             </a>
             <a
                 href={secondaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] bg-[#e6e5f7] px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90 md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] overflow-hidden rounded-[24px] bg-[#e6e5f7] px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90 md:py-[16px] md:text-[16px] md:leading-[24px]"
             >
-                {$t(secondaryActionLabel)}
+                <span class="truncate whitespace-nowrap">{$t(secondaryActionLabel)}</span>
             </a>
         </div>
     </div>
