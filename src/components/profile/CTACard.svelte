@@ -57,29 +57,29 @@
 </script>
 
 <div
-    class="flex flex-col justify-between gap-[40px] rounded-[32px] border p-[24px] transition-shadow duration-200 {isDark
+    class="flex flex-col justify-between gap-10 rounded-[32px] border p-6 transition-shadow duration-200 {isDark
         ? 'border-light-muted bg-secondary text-light-surface'
         : 'border-purple-tint bg-soft-purple text-content'}"
 >
     <!-- Content -->
-    <div class="flex flex-col gap-[16px]">
+    <div class="flex flex-col gap-4">
         <h2
-            class="text-[32px] leading-[40px] font-bold md:text-[32px] md:leading-[40px]"
+            class="text-3xl font-bold leading-tight md:text-4xl"
             style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;"
         >
             {title}
         </h2>
-        <p class="text-[14px] leading-[20px] md:text-[16px] md:leading-[24px]">
+        <p class="text-sm leading-tight md:text-base md:leading-normal">
             {description}
         </p>
     </div>
 
     <!-- Actions -->
-    <div class="flex flex-col flex-wrap gap-[16px] md:flex-row">
+    <div class="flex flex-col flex-wrap gap-4 md:flex-row">
         {#each buttons as button}
             <a
                 href={button.href}
-                class="inline-flex w-full items-center justify-center rounded-[24px] px-[24px] py-[16px] text-[16px] leading-[24px] font-bold no-underline transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-auto {button.variant ===
+                class="inline-flex w-full items-center justify-center rounded-3xl px-6 py-4 text-base font-bold leading-normal no-underline transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-auto {button.variant ===
                 'primary'
                     ? 'bg-light-accent text-secondary hover:opacity-90 focus-visible:ring-secondary'
                     : isDark

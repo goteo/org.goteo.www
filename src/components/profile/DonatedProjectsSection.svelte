@@ -172,7 +172,7 @@
 
 {#if !loading && donatedCampaigns.length > 0}
     <div class="flex flex-col gap-6">
-        <h2 class="font-['Karla'] text-[32px] leading-[40px] font-bold text-[#3d3d3d]">
+        <h2 class="text-3xl font-bold text-black md:text-4xl">
             {$t("me.donatedProjects.title")}
         </h2>
         <Carousel itemsPerGroup={3} gap={24} showDots={false}>

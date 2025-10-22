@@ -426,40 +426,40 @@
     });
 </script>
 
-<div class="grid grid-cols-1 gap-[24px] lg:grid-cols-{matchfundingData ? '3' : '2'}">
+<div class="grid grid-cols-1 gap-6 lg:grid-cols-{matchfundingData ? '3' : '2'}">
     {#if loading}
         <!-- Loading state -->
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
     {:else if error}
         <!-- Error state -->
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
-            <p class="text-red-600">{error}</p>
+            <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
-            <p class="text-red-600">{error}</p>
+            <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
-            <p class="text-red-600">{error}</p>
+            <p class="text-tertiary font-semibold">{error}</p>
         </div>
     {:else}
         <!-- Activity cards -->

@@ -107,11 +107,11 @@
 {#if isEmpty}
     <!-- Empty State -->
     <div
-        class="relative box-border flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border border-[#f3f3ef] bg-[#fbfbfb] p-[24px]"
+        class="bg-light-surface border-light-muted relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border p-6"
     >
         <!-- Decorative illustration - positioned exactly as in Figma -->
         <div
-            class="absolute top-[calc(50%+48.5px)] left-[calc(50%-126px)] h-[389px] w-[389px] -translate-x-1/2 -translate-y-1/2 opacity-[0.04]"
+            class="absolute top-[calc(50%+48.5px)] left-[calc(50%-126px)] size-[389px] -translate-x-1/2 -translate-y-1/2 opacity-[0.04]"
             style="color: #462949;"
             aria-hidden="true"
         >
@@ -125,17 +125,13 @@
 
         <!-- Content - centered and takes up available space -->
         <div
-            class="relative z-10 flex min-h-px min-w-px grow basis-0 flex-col items-center justify-center gap-[4px] text-center"
+            class="relative z-10 flex grow flex-col items-center justify-center gap-1 text-center"
         >
-            <h2
-                class="w-full shrink-0 font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]"
-            >
+            <h2 class="text-2xl font-bold text-black">
                 {$t(titleKey)}
             </h2>
             {#if emptyMessageKey}
-                <p
-                    class="w-full shrink-0 font-['Karla'] text-[16px] leading-[24px] font-normal text-[#575757]"
-                >
+                <p class="text-base text-content">
                     {$t(emptyMessageKey)}
                 </p>
             {/if}
@@ -143,10 +139,10 @@
 
         <!-- Actions -->
         {#if emptyCtaLabel && emptyCtaLink}
-            <div class="relative z-10 flex w-full shrink-0 gap-[16px]">
+            <div class="relative z-10 flex w-full gap-4">
                 <a
                     href={emptyCtaLink}
-                    class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] bg-[#e6e5f7] px-[24px] py-[16px] font-['Karla'] text-[16px] leading-[24px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90"
+                    class="bg-purple-tint text-secondary flex grow items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none"
                 >
                     {$t(emptyCtaLabel)}
                 </a>
@@ -156,47 +152,39 @@
 {:else}
     <!-- Filled State -->
     <div
-        class="relative box-border flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border border-[#f3f3ef] bg-[#fbfbfb] p-[24px]"
+        class="bg-light-surface border-light-muted relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border p-6"
     >
         <div class="flex gap-4">
             <div class="flex flex-1 flex-col">
                 <!-- Header with title -->
-                <div class="relative z-10 mb-[16px]">
-                    <h2 class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]">
+                <div class="relative z-10 mb-4">
+                    <h2 class="text-2xl font-bold text-black">
                         {$t(titleKey)}
                     </h2>
                 </div>
 
                 <!-- Stats section -->
-                <div class="relative z-10 mb-[16px] flex items-start gap-[16px]">
-                    <div class="flex flex-1 flex-col gap-[4px]">
-                        <p
-                            class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]"
-                        >
+                <div class="relative z-10 mb-4 flex items-start gap-4">
+                    <div class="flex flex-1 flex-col gap-1">
+                        <p class="text-xs font-medium text-content">
                             {$t(leftStatLabel)}
                         </p>
-                        <p
-                            class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]"
-                        >
+                        <p class="text-2xl font-bold text-black">
                             {leftStatValue}
                         </p>
                     </div>
-                    <div class="flex flex-1 flex-col gap-[4px]">
-                        <p
-                            class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]"
-                        >
+                    <div class="flex flex-1 flex-col gap-1">
+                        <p class="text-xs font-medium text-content">
                             {$t(rightStatLabel)}
                         </p>
-                        <p
-                            class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]"
-                        >
+                        <p class="text-2xl font-bold text-black">
                             {rightStatValue}
                         </p>
                     </div>
                 </div>
             </div>
             <!-- Decorative illustration - top right corner -->
-            <div class=" z-0 h-[88px] w-[88px] opacity-100">
+            <div class="z-0 size-[88px]">
                 <img
                     src={illustrationPath}
                     alt=""
@@ -207,28 +195,26 @@
         </div>
 
         <!-- Recent items list -->
-        <div class="relative z-10 mb-[16px] flex min-h-[120px] flex-grow flex-col gap-[12px]">
-            <h3 class="font-['Karla'] text-[16px] leading-[24px] font-bold text-[#3d3d3d]">
+        <div class="relative z-10 mb-4 flex min-h-[120px] flex-grow flex-col gap-3">
+            <h3 class="text-base font-bold text-black">
                 {$t(recentTitleKey)}
             </h3>
-            <ul class="flex flex-col gap-[8px]">
+            <ul class="flex flex-col gap-2">
                 {@render children?.()}
             </ul>
         </div>
 
         <!-- Actions -->
-        <div
-            class="relative z-10 flex w-full shrink-0 flex-col gap-[12px] md:flex-row md:gap-[16px]"
-        >
+        <div class="relative z-10 flex w-full flex-col gap-3 md:flex-row md:gap-4">
             <a
                 href={primaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] overflow-hidden rounded-[24px] border border-[#462949] bg-transparent px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:bg-[#46294910] md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="border-secondary bg-transparent text-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl border px-6 py-3 text-sm font-bold no-underline transition-colors hover:bg-secondary/10 focus:ring-2 focus:ring-secondary focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(primaryActionLabel)}</span>
             </a>
             <a
                 href={secondaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] overflow-hidden rounded-[24px] bg-[#e6e5f7] px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90 md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="bg-purple-tint text-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(secondaryActionLabel)}</span>
             </a>

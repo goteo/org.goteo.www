@@ -43,24 +43,18 @@
     >
         {#if data?.recentCalls}
             {#each data.recentCalls.slice(0, 2) as call}
-                <li class="flex flex-wrap items-center gap-[8px]">
-                    <span
-                        class="font-['Karla'] text-[14px] leading-[20px] font-semibold text-[#3d3d3d]"
-                    >
+                <li class="flex flex-wrap items-center gap-2">
+                    <span class="text-sm font-semibold text-black">
                         {formatAmountWithSymbol(
                             call.donationAmount.amount,
                             call.donationAmount.currency,
                             lang,
                         )}
                     </span>
-                    <span
-                        class="font-['Karla'] text-[14px] leading-[20px] font-semibold text-[#3d3d3d]"
-                    >
+                    <span class="text-sm font-semibold text-black">
                         -
                     </span>
-                    <span
-                        class="font-['Karla'] text-[14px] leading-[20px] font-normal text-[#575757]"
-                    >
+                    <span class="text-sm text-content">
                         {call.title}
                     </span>
                 </li>

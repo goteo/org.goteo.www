@@ -26,10 +26,10 @@
     }
 </script>
 
-<div class="relative h-[56px] w-[207px] md:w-[207px]">
+<div class="relative h-14 w-52">
     <select
         id="period-select"
-        class="h-full w-full cursor-pointer rounded-lg border border-[#462949] bg-white pr-12 pl-4 font-['Karla'] text-[16px] leading-[24px] text-[#3d3d3d] focus:border-transparent focus:ring-2 focus:ring-[#462949] focus:outline-none"
+        class="border-secondary text-black h-full w-full cursor-pointer rounded-lg border bg-white pr-12 pl-4 text-base leading-normal focus:border-transparent focus:ring-2 focus:ring-secondary focus:outline-none"
         style="appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: none;"
         value={selectedPeriod}
         onchange={handleChange}
@@ -44,7 +44,7 @@
 
     <label
         for="period-select"
-        class="pointer-events-none absolute -top-[4.75px] left-[11.5px] bg-white px-1 font-['Karla'] text-[12px] leading-[16px] font-medium text-[#3d3d3d]"
+        class="text-black pointer-events-none absolute -top-[5px] left-3 bg-white px-1 text-xs font-medium leading-none"
     >
         {$t("me.period.label")}
     </label>

@@ -74,7 +74,7 @@
 
 <div class="mt-32 flex w-full flex-col items-center gap-4">
     <!-- Name -->
-    <h1 class="text-body text-2xl leading-8 font-bold">
+    <h1 class="text-body text-2xl font-bold leading-tight">
         {displayName}
     </h1>
 
@@ -82,7 +82,7 @@
     {#if location}
         <div class="flex items-center gap-1">
             <MapIcon class="text-body size-8" />
-            <span class="text-body text-base leading-6">
+            <span class="text-body text-base leading-normal">
                 {location}
             </span>
         </div>
@@ -96,7 +96,7 @@
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-purple-tint text-secondary flex size-6 items-center justify-center rounded-[4.8px] p-1 transition hover:opacity-90"
+                    class="bg-purple-tint text-secondary flex size-6 items-center justify-center rounded p-1 transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none"
                     aria-label={link.label}
                 >
                     <link.icon class="size-full" />

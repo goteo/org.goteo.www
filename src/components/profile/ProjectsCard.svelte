@@ -55,12 +55,12 @@
 >
     {#if projectsData?.recentProjects}
         {#each projectsData.recentProjects.slice(0, 2) as project}
-            <li class="flex items-start gap-[8px]">
+            <li class="flex items-start gap-2">
                 <a
                     href={lang === "es"
                         ? `/projects/${project.slug}`
                         : `/${lang}/projects/${project.slug}`}
-                    class="font-['Karla'] text-[14px] leading-[20px] font-normal text-[#575757] no-underline hover:text-[#462949]"
+                    class="text-content text-sm no-underline hover:text-secondary focus:text-secondary focus:outline-none"
                 >
                     {project.title}
                 </a>

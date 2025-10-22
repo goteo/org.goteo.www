@@ -53,22 +53,18 @@
 >
     {#if donationsData?.recentDonations}
         {#each donationsData.recentDonations.slice(0, 2) as donation}
-            <li class="flex flex-wrap items-center gap-[8px]">
-                <span
-                    class="font-['Karla'] text-[14px] leading-[20px] font-semibold text-[#3d3d3d]"
-                >
+            <li class="flex flex-wrap items-center gap-2">
+                <span class="text-sm font-semibold text-black">
                     {formatAmountWithSymbol(donation.amount.amount, donation.amount.currency, lang)}
                 </span>
-                <span
-                    class="font-['Karla'] text-[14px] leading-[20px] font-semibold text-[#3d3d3d]"
-                >
+                <span class="text-sm font-semibold text-black">
                     -
                 </span>
                 <a
                     href={lang === "es"
                         ? `/projects/${donation.projectSlug}`
                         : `/${lang}/projects/${donation.projectSlug}`}
-                    class="font-['Karla'] text-[14px] leading-[20px] font-normal text-[#462949] no-underline hover:underline"
+                    class="text-secondary text-sm no-underline hover:underline focus:underline focus:outline-none"
                 >
                     {donation.projectTitle || fallbackProjectTitle}
                 </a>
