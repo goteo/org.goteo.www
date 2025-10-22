@@ -971,6 +971,28 @@
         "learnMore": "Discover how matchfunding works",
         "becomeMatcher": "Become a Matcher"
       }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Calls",
+        "donated": "Donated",
+        "recent": "Recent calls",
+        "viewAll": "View calls",
+        "create": "Create call"
+      },
+      "section": {
+        "title": "Your Active Matchfunding Calls",
+        "empty": "You don't have active calls",
+        "error": "Error loading calls"
+      },
+      "callCard": {
+        "donationCall": "Call allocation",
+        "participatingProjects": "Participating projects",
+        "successfulProjects": "Successfully accepted projects",
+        "projects": "projects",
+        "viewCall": "Go to call"
+      }
     }
   }
 }

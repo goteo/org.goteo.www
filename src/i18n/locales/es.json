@@ -980,6 +980,28 @@
         "learnMore": "Descubre cómo funciona el matchfunding",
         "becomeMatcher": "Hazte Matcher"
       }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatorias",
+        "donated": "Donado",
+        "recent": "Últimas convocatorias",
+        "viewAll": "Ver convocatorias",
+        "create": "Crear convocatoria"
+      },
+      "section": {
+        "title": "Tus convocatorias de Matchfunding activas",
+        "empty": "No tienes convocatorias activas",
+        "error": "Error al cargar las convocatorias"
+      },
+      "callCard": {
+        "donationCall": "Dotación convocatoria",
+        "participatingProjects": "Proyectos participantes",
+        "successfulProjects": "Proyectos acogidos con éxito",
+        "projects": "proyectos",
+        "viewCall": "Ir a la convocatoria"
+      }
     }
   }
 }

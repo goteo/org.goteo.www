@@ -209,6 +209,58 @@ export function getUnit(currency?: string): number {
     return Math.pow(10, decimals);
 }
 
+/**
+ * Extracts the currency symbol from a locale and currency code.
+ * Uses Intl.NumberFormat to derive the symbol, falling back to the currency code if extraction fails.
+ *
+ * @param locale - The locale string (e.g., "es", "en")
+ * @param currency - The ISO 4217 currency code (e.g., "EUR", "USD")
+ * @returns The currency symbol (e.g., "€", "$") or the currency code as fallback
+ */
+export function getCurrencySymbol(locale: string, currency: string): string {
+    try {
+        const parts = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).formatToParts(0);
+        const currencyPart = parts.find((part) => part.type === "currency");
+        return currencyPart?.value ?? currency;
+    } catch (error) {
+        console.warn("Failed to derive currency symbol", error);
+        return currency;
+    }
+}
+
+/**
+ * Formats an amount with its currency symbol.
+ * Handles unit conversion (e.g., cents to dollars) and decimal precision automatically.
+ *
+ * @param amount - The amount in the smallest currency unit (e.g., cents for EUR/USD)
+ * @param currency - The ISO 4217 currency code (defaults to "EUR")
+ * @param locale - The locale for number formatting (e.g., "es", "en")
+ * @returns Formatted string with amount and symbol (e.g., "1,234.56€")
+ */
+export function formatAmountWithSymbol(
+    amount: number | undefined,
+    currency: string | null | undefined,
+    locale: string,
+): string {
+    if (amount === undefined) return "";
+    const normalizedCurrency = currency ?? "EUR";
+    const unit = getUnit(normalizedCurrency) || 1;
+    const value = amount / unit;
+    const needsDecimals = Math.abs(value % 1) > Number.EPSILON;
+    const digits = needsDecimals ? 2 : 0;
+    const formattedNumber = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: 2,
+    }).format(value);
+    const symbol = getCurrencySymbol(locale, normalizedCurrency);
+    return `${formattedNumber}${symbol}`;
+}
+
 export function defaultCurrency(): string {
     const defaultCurrency = getDefaultCurrency();
     return defaultCurrency;

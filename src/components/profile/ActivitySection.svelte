@@ -1,21 +1,22 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import ActivityCard from "./ActivityCard.svelte";
-    import type { ActivityData } from "../../types/me-page";
+    import DonationsCard from "./DonationsCard.svelte";
+    import ProjectsCard from "./ProjectsCard.svelte";
+    import MatchfundingCard from "./MatchfundingCard.svelte";
+    import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
         apiProjectSupportsmoneyTotalGetCollection,
         apiProjectsGetCollection,
         apiProjectsIdOrSlugGet,
+        apiMatchCallsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
-    import {
-        apiAccountingsIdGetUrl,
-        apiUsersIdGetUrl,
-    } from "../../openapi/client/paths.gen.ts";
+    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
     import { createClient } from "@hey-api/client-fetch";
+    import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import type { ProjectSupport, Project } from "../../openapi/client/types.gen.ts";
+    import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
 
     interface Props {
         lang: string;
@@ -30,6 +31,7 @@
     let { lang, period = new Date().getFullYear().toString(), user }: Props = $props();
 
     let activityData = $state<ActivityData | undefined>(undefined);
+    let matchfundingData = $state<MatchfundingCardData | undefined>(undefined);
     let loading = $state(true);
     let error = $state<string | null>(null);
 
@@ -43,36 +45,8 @@
     function buildUrl(template: string, params: Record<string, string | number>): string {
         return Object.entries(params).reduce(
             (url, [key, value]) => url.replace(`{${key}}`, String(value)),
-            template
+            template,
         );
-    }
-
-    // Note: This extracts the ID from the project IRI, not the slug.
-    // The API uses numeric IDs in IRIs, but both ID and slug work as idOrSlug.
-    function extractIdOrSlugFromProjectReference(projectRef: ProjectSupport["project"]): string | null {
-        if (!projectRef) {
-            return null;
-        }
-
-        if (typeof projectRef !== "string") {
-            return null;
-        }
-
-        const segments = projectRef.split("/");
-        const idOrSlug = segments[segments.length - 1];
-
-        return idOrSlug || null;
-    }
-
-    function extractIdFromIri(iri?: string | null): string | null {
-        if (!iri) {
-            return null;
-        }
-
-        const segments = iri.split("/");
-        const id = segments[segments.length - 1];
-
-        return id || null;
     }
 
     async function fetchActivityData() {
@@ -170,12 +144,18 @@
             const supportProjectIdOrSlugs = Array.from(
                 new Set(
                     contributions
-                        .map((support) => extractIdOrSlugFromProjectReference(support.project))
+                        .map((support) =>
+                            extractId(
+                                typeof support.project === "string" ? support.project : undefined,
+                            ),
+                        )
                         .filter((idOrSlug): idOrSlug is string => Boolean(idOrSlug)),
                 ),
             );
 
-            const slugsToFetch = supportProjectIdOrSlugs.filter((slug) => !projectDetailMap.has(slug));
+            const slugsToFetch = supportProjectIdOrSlugs.filter(
+                (slug) => !projectDetailMap.has(slug),
+            );
 
             if (slugsToFetch.length > 0) {
                 const projectDetailResults = await Promise.all(
@@ -216,7 +196,7 @@
             const accountingIds = Array.from(
                 new Set(
                     projects
-                        .map((project) => extractIdFromIri(project.accounting))
+                        .map((project) => extractId(project.accounting))
                         .filter((id): id is string => Boolean(id)),
                 ),
             );
@@ -302,7 +282,9 @@
             });
 
             const recentDonations = sortedContributions.slice(0, 3).map((support) => {
-                const idOrSlug = extractIdOrSlugFromProjectReference(support.project);
+                const idOrSlug = extractId(
+                    typeof support.project === "string" ? support.project : undefined,
+                );
                 const project = idOrSlug ? projectDetailMap.get(idOrSlug) : undefined;
 
                 return {
@@ -343,6 +325,87 @@
                           recentProjects,
                       },
             };
+
+            // Fetch matchfunding data
+            try {
+                const { data: callsData, error: callsError } = await apiMatchCallsGetCollection({
+                    client: relayClient,
+                    query: {
+                        itemsPerPage: 100,
+                    },
+                    headers,
+                });
+
+                if (!callsError && callsData) {
+                    const calls = toCollectionItems<MatchCall>(callsData);
+
+                    // Filter calls where user is a manager
+                    const userCalls = calls.filter((call) => {
+                        if (!call.managers || call.managers.length === 0) return false;
+                        // managers is Array<string> containing IRI paths like "/v4/users/123"
+                        return call.managers.some((managerIri) =>
+                            managerIri.includes(String(user.id)),
+                        );
+                    });
+
+                    if (userCalls.length > 0) {
+                        // Fetch accounting data for each call to get donation amounts
+                        const callAccountings = await Promise.all(
+                            userCalls.map(async (call) => {
+                                const accountingId = extractId(call.accounting);
+                                if (!accountingId)
+                                    return { callId: call.id, amount: 0, currency: "EUR" };
+
+                                try {
+                                    const { data: accounting } = await apiAccountingsIdGet({
+                                        client: relayClient,
+                                        path: { id: accountingId },
+                                        headers,
+                                    });
+
+                                    return {
+                                        callId: call.id,
+                                        amount: accounting?.balance?.amount || 0,
+                                        currency: accounting?.balance?.currency || "EUR",
+                                    };
+                                } catch {
+                                    return { callId: call.id, amount: 0, currency: "EUR" };
+                                }
+                            }),
+                        );
+
+                        // Calculate total donated across all calls
+                        const totalDonated = callAccountings.reduce(
+                            (sum, acc) => sum + acc.amount,
+                            0,
+                        );
+                        const currency = callAccountings[0]?.currency || "EUR";
+
+                        // Get recent calls (up to 3)
+                        const recentCalls = userCalls.slice(0, 3).map((call, index) => ({
+                            id: call.id || 0,
+                            title: call.title || "",
+                            donationAmount: {
+                                amount: callAccountings[index]?.amount || 0,
+                                currency: callAccountings[index]?.currency || "EUR",
+                            },
+                        }));
+
+                        matchfundingData = {
+                            totalCalls: userCalls.length,
+                            totalDonated: {
+                                amount: totalDonated,
+                                currency,
+                            },
+                            recentCalls,
+                        };
+                    }
+                }
+            } catch (matchfundingError) {
+                console.warn("Failed to fetch matchfunding data:", matchfundingError);
+                // Don't fail the whole page if matchfunding fails
+                matchfundingData = undefined;
+            }
         } catch (err) {
             console.error("Error fetching activity data:", err);
             error = "Failed to load activity data";
@@ -363,34 +426,47 @@
     });
 </script>
 
-<div class="grid grid-cols-1 gap-[24px] md:grid-cols-2">
+<div class="grid grid-cols-1 gap-[24px] lg:grid-cols-{matchfundingData ? '3' : '2'}">
     {#if loading}
         <!-- Loading state -->
         <div
-            class="flex min-h-[384px] items-center justify-center rounded-[32px] border border-light-muted bg-light-surface"
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="flex min-h-[384px] items-center justify-center rounded-[32px] border border-light-muted bg-light-surface"
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+        >
+            <p class="text-content">Loading...</p>
+        </div>
+        <div
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
     {:else if error}
         <!-- Error state -->
         <div
-            class="flex min-h-[384px] items-center justify-center rounded-[32px] border border-light-muted bg-light-surface"
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-red-600">{error}</p>
         </div>
         <div
-            class="flex min-h-[384px] items-center justify-center rounded-[32px] border border-light-muted bg-light-surface"
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
+        >
+            <p class="text-red-600">{error}</p>
+        </div>
+        <div
+            class="border-light-muted bg-light-surface flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-red-600">{error}</p>
         </div>
     {:else}
         <!-- Activity cards -->
-        <ActivityCard type="donations" {lang} data={activityData} />
-        <ActivityCard type="projects" {lang} data={activityData} />
+        <DonationsCard {lang} data={activityData} />
+        <ProjectsCard {lang} data={activityData} />
+        {#if matchfundingData}
+            <MatchfundingCard {lang} data={matchfundingData} />
+        {/if}
     {/if}
 </div>

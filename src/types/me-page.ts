@@ -24,6 +24,10 @@ export interface ActivityData {
      * User's promoted projects statistics and recent projects
      */
     projects?: ProjectsSummary;
+    /**
+     * User's matchfunding calls statistics (if user manages matchfunding calls)
+     */
+    matchfunding?: MatchfundingActivity;
 }
 
 /**
@@ -315,4 +319,99 @@ export interface PeriodOption {
      * Localized label for display (e.g., "Año 2025")
      */
     label: string;
+}
+
+/**
+ * Matchfunding Activity
+ *
+ * Contains user's matchfunding call management data.
+ * Only present if user manages one or more matchfunding calls.
+ */
+export interface MatchfundingActivity {
+    /**
+     * Total number of matchfunding calls managed by the user
+     */
+    totalCalls: number;
+    /**
+     * Total amount donated across all matchfunding calls (minor units)
+     */
+    totalDonated: Money;
+    /**
+     * Active matchfunding calls managed by the user
+     */
+    activeCalls: MatchfundingCall[];
+}
+
+/**
+ * Matchfunding Call
+ *
+ * Represents a single matchfunding call with metrics.
+ */
+export interface MatchfundingCall {
+    /**
+     * Unique matchfunding call identifier
+     */
+    id: number;
+    /**
+     * Matchfunding call title
+     */
+    title: string;
+    /**
+     * Matchfunding call description
+     */
+    description: string;
+    /**
+     * Matchfunding call slug for URL construction
+     */
+    slug: string;
+    /**
+     * Background image URL for the call card (optional)
+     */
+    imageUrl?: string;
+    /**
+     * Total donation amount allocated to this call (minor units)
+     */
+    donationAmount: Money;
+    /**
+     * Number of projects that have received funding from this call
+     * (obtained via ProjectSupport API filtering by call's accounting)
+     */
+    participatingProjects: number;
+    /**
+     * Number of projects that have been accepted into this call
+     * (obtained via MatchCallSubmission API filtering by status=accepted)
+     */
+    successfulProjects: number;
+    /**
+     * Call status (e.g., "active", "closed")
+     */
+    status: string;
+    /**
+     * Territory/region code for the call (optional)
+     */
+    territory?: string;
+}
+
+/**
+ * Matchfunding Card Data
+ *
+ * Summary data for the matchfunding activity card.
+ */
+export interface MatchfundingCardData {
+    /**
+     * Total number of matchfunding calls managed
+     */
+    totalCalls: number;
+    /**
+     * Total amount donated across all calls (minor units)
+     */
+    totalDonated: Money;
+    /**
+     * Recent calls for preview (typically limited to 2-3 calls)
+     */
+    recentCalls: Array<{
+        id: number;
+        title: string;
+        donationAmount: Money;
+    }>;
 }

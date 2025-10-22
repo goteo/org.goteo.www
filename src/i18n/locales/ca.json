@@ -979,6 +979,28 @@
         "learnMore": "Descobreix com funciona el matchfunding",
         "becomeMatcher": "Fes-te Matcher"
       }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatòries",
+        "donated": "Donat",
+        "recent": "Últimes convocatòries",
+        "viewAll": "Veure convocatòries",
+        "create": "Crear convocatòria"
+      },
+      "section": {
+        "title": "Les Teves Convocatòries de Matchfunding Actives",
+        "empty": "No tens convocatòries actives",
+        "error": "Error en carregar les convocatòries"
+      },
+      "callCard": {
+        "donationCall": "Dotació convocatòria",
+        "participatingProjects": "Projectes participants",
+        "successfulProjects": "Projectes acollits amb èxit",
+        "projects": "projectes",
+        "viewCall": "Anar a la convocatòria"
+      }
     }
   }
 }
