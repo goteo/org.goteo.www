@@ -158,40 +158,51 @@
     <div
         class="relative box-border flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border border-[#f3f3ef] bg-[#fbfbfb] p-[24px]"
     >
-        <!-- Decorative illustration - top right corner -->
-        <div class="absolute top-[24px] right-[24px] z-0 h-[120px] w-[120px] opacity-100">
-            <img
-                src={illustrationPath}
-                alt=""
-                class="size-full object-contain"
-                aria-hidden="true"
-            />
-        </div>
+        <div class="flex gap-4">
+            <div class="flex flex-1 flex-col">
+                <!-- Header with title -->
+                <div class="relative z-10 mb-[16px]">
+                    <h2 class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]">
+                        {$t(titleKey)}
+                    </h2>
+                </div>
 
-        <!-- Header with title -->
-        <div class="relative z-10 mb-[16px]">
-            <h2 class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]">
-                {$t(titleKey)}
-            </h2>
-        </div>
-
-        <!-- Stats section -->
-        <div class="relative z-10 mb-[16px] flex items-start justify-between gap-[16px]">
-            <div class="flex flex-col gap-[4px]">
-                <p class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]">
-                    {$t(leftStatLabel)}
-                </p>
-                <p class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]">
-                    {leftStatValue}
-                </p>
+                <!-- Stats section -->
+                <div class="relative z-10 mb-[16px] flex items-start gap-[16px]">
+                    <div class="flex flex-1 flex-col gap-[4px]">
+                        <p
+                            class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]"
+                        >
+                            {$t(leftStatLabel)}
+                        </p>
+                        <p
+                            class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]"
+                        >
+                            {leftStatValue}
+                        </p>
+                    </div>
+                    <div class="flex flex-1 flex-col gap-[4px]">
+                        <p
+                            class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]"
+                        >
+                            {$t(rightStatLabel)}
+                        </p>
+                        <p
+                            class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]"
+                        >
+                            {rightStatValue}
+                        </p>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col gap-[4px] text-right">
-                <p class="font-['Karla'] text-[12px] leading-[16px] font-medium text-[#575757]">
-                    {$t(rightStatLabel)}
-                </p>
-                <p class="font-['Karla'] text-[24px] leading-[32px] font-bold text-[#3d3d3d]">
-                    {rightStatValue}
-                </p>
+            <!-- Decorative illustration - top right corner -->
+            <div class=" z-0 h-[88px] w-[88px] opacity-100">
+                <img
+                    src={illustrationPath}
+                    alt=""
+                    class="size-full object-contain"
+                    aria-hidden="true"
+                />
             </div>
         </div>
 
@@ -211,13 +222,13 @@
         >
             <a
                 href={primaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] bg-[#e6e5f7] px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90 md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] border border-[#462949] bg-transparent px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:bg-[#46294910] md:py-[16px] md:text-[16px] md:leading-[24px]"
             >
                 {$t(primaryActionLabel)}
             </a>
             <a
                 href={secondaryActionHref}
-                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] border border-[#462949] bg-transparent px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:bg-[#46294910] md:py-[16px] md:text-[16px] md:leading-[24px]"
+                class="box-border flex min-h-px min-w-px grow basis-0 items-center justify-center gap-[8px] rounded-[24px] bg-[#e6e5f7] px-[24px] py-[12px] font-['Karla'] text-[14px] leading-[20px] font-bold text-[#462949] no-underline transition-all duration-200 hover:opacity-90 md:py-[16px] md:text-[16px] md:leading-[24px]"
             >
                 {$t(secondaryActionLabel)}
             </a>
