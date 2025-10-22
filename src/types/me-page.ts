@@ -369,6 +369,10 @@ export interface MatchfundingCall {
      */
     imageUrl?: string;
     /**
+     * Logo image URL for the call card (optional)
+     */
+    logo?: string;
+    /**
      * Total donation amount allocated to this call (minor units)
      */
     donationAmount: Money;
