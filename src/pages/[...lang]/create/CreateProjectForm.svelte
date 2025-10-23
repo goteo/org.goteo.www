@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onDestroy } from "svelte";
     import BaseCard from "../../../components/BaseCard.svelte";
     import { t } from "../../../i18n/store";
     import { categories } from "../../../utils/categories";
@@ -14,6 +15,7 @@
         validateForm,
         markFieldAsTouched,
     } from "./project-draft";
+    import type { ProjectDraft } from "./project-draft";
     import TextInput from "../../../components/library/TextInput.svelte";
 
     const categoriesOptions = categories.map((categories) => {
@@ -26,14 +28,18 @@
     // Debounce timer for real-time validation
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-    function handleFieldBlur(fieldName: keyof typeof $draft) {
+    function handleFieldBlur(fieldName: keyof ProjectDraft) {
         markFieldAsTouched(fieldName);
         validateField(fieldName, $draft[fieldName]);
     }
 
-    function handleFieldChange(fieldName: keyof typeof $draft, value: unknown) {
-        // Update the draft value
-        $draft[fieldName] = value as never;
+    /**
+     * Handles field value changes with type-safe updates.
+     * Uses generic typing to ensure type safety without bypassing TypeScript checks.
+     */
+    function handleFieldChange<K extends keyof ProjectDraft>(fieldName: K, value: ProjectDraft[K]) {
+        // Update the draft value with proper typing
+        $draft[fieldName] = value;
 
         // Only validate on change if field has been touched
         if ($touchedFields.has(fieldName) || submitted) {
@@ -44,6 +50,14 @@
             }, 300);
         }
     }
+
+    // Cleanup debounce timer on component unmount to prevent memory leaks
+    onDestroy(() => {
+        if (debounceTimer) {
+            clearTimeout(debounceTimer);
+            debounceTimer = null;
+        }
+    });
 
     function handleCategoryChange(selected: { id: number | string; text: string }[]) {
         const categoryIds = selected.map((s) => s.id.toString());
@@ -70,7 +84,9 @@
 
         // TODO: Submit to API
         // const { data, error } = await apiProjectsPost({ body: $draft });
-        console.log("Form is valid, submitting:", $draft);
+        if (import.meta.env.DEV) {
+            console.log("Form is valid, submitting:", $draft);
+        }
     }
 
     // Helper to check if field should show error
@@ -78,8 +94,8 @@
         return (submitted || $touchedFields.has(fieldName)) && !!$validationErrors[fieldName];
     }
 
-    // Debug: Log form validity state
-    $: {
+    // Debug logging only in development
+    $: if (import.meta.env.DEV) {
         console.log("Form validity debug:", {
             isFormValid: $isFormValid,
             draft: $draft,
@@ -94,6 +110,13 @@
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
+    }
+
+    // Calculate minimum date (14 days from now) for date input
+    function getMinDateString(): string {
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() + 14);
+        return dateToString(minDate);
     }
 
     // Local variable for date input (HTML date inputs use strings)
@@ -142,6 +165,7 @@
             />
             <div class="relative">
                 <textarea
+                    id="subtitle"
                     name="subtitle"
                     placeholder={$t("create.project.description.subtitlePrompt")}
                     class="h-[240px] w-full resize-none rounded-md border p-[16px] {shouldShowError(
@@ -152,9 +176,10 @@
                     bind:value={$draft.subtitle}
                     onblur={() => handleFieldBlur("subtitle")}
                     aria-invalid={shouldShowError("subtitle")}
+                    aria-describedby={shouldShowError("subtitle") ? "subtitle-error" : undefined}
                 ></textarea>
                 {#if shouldShowError("subtitle")}
-                    <p class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+                    <p id="subtitle-error" class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
                         {$t($validationErrors.subtitle)}
                     </p>
                 {/if}
@@ -184,17 +209,20 @@
             <div class="relative">
                 <input
                     type="date"
+                    id="release"
                     name="release"
                     class="w-full rounded-md border p-[16px] {shouldShowError('release')
                         ? 'border-red-500'
                         : 'border-[#855a96]'}"
                     value={releaseDateString}
+                    min={getMinDateString()}
                     oninput={(e) => handleDateChange(e.currentTarget.value)}
                     onblur={() => handleFieldBlur("release")}
                     aria-invalid={shouldShowError("release")}
+                    aria-describedby={shouldShowError("release") ? "release-error" : undefined}
                 />
                 {#if shouldShowError("release")}
-                    <p class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+                    <p id="release-error" class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
                         {$t($validationErrors.release)}
                     </p>
                 {/if}
@@ -205,7 +233,6 @@
                 {$t("create.project.submit")}
             </Button>
         </p>
-        <p></p>
     </div>
     <div class="ml-auto">
         <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">

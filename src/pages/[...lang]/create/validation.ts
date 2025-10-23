@@ -45,11 +45,16 @@ export const projectCreationSchema = z.object({
         })
         .refine(
             (date) => {
+                // Create minimum date (14 days from now at start of day)
                 const minDate = new Date();
                 minDate.setDate(minDate.getDate() + 14);
-                minDate.setHours(0, 0, 0, 0); // Reset time to start of day
-                date.setHours(0, 0, 0, 0); // Reset time to start of day
-                return date >= minDate;
+                minDate.setHours(0, 0, 0, 0);
+
+                // Create a copy of the input date to avoid mutation
+                const normalizedDate = new Date(date);
+                normalizedDate.setHours(0, 0, 0, 0);
+
+                return normalizedDate >= minDate;
             },
             { message: "validation.project.release.min" },
         )

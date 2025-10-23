@@ -1,8 +1,9 @@
-import { derived, writable } from "svelte/store";
+import { derived, writable, get } from "svelte/store";
+import { z } from "zod";
 
 import { projectCreationSchema } from "./validation";
 
-interface ProjectDraft {
+export interface ProjectDraft {
     title: string;
     subtitle: string;
     categories: string[];
@@ -39,37 +40,46 @@ export const touchedFields = writable<Set<string>>(new Set());
 
 /**
  * Derived store that indicates if the form is valid.
- * Returns true only when all fields pass validation and there are no errors.
+ * Returns true only when:
+ * 1. All required fields have values
+ * 2. There are no validation errors
  */
 export const isFormValid = derived([draft, validationErrors], ([$draft, $errors]) => {
-    const result = projectCreationSchema.safeParse($draft);
-    return result.success && Object.keys($errors).length === 0;
+    // Check if there are any validation errors
+    if (Object.keys($errors).length > 0) {
+        return false;
+    }
+
+    // Check that required fields have values
+    const hasTitle = $draft.title.trim().length > 0;
+    const hasSubtitle = $draft.subtitle.trim().length > 0;
+    const hasCategories = $draft.categories.length > 0;
+
+    return hasTitle && hasSubtitle && hasCategories;
 });
 
 /**
  * Validates a single field and updates the validation errors store.
+ * Uses Zod's type system properly to avoid unsafe type assertions.
  * @param fieldName - The name of the field to validate
  * @param value - The current value of the field
  */
 export function validateField(fieldName: keyof ProjectDraft, value: unknown) {
-    // Check if this field has a validation schema (budget doesn't)
-    const fieldSchema = (projectCreationSchema.shape as Record<string, unknown>)[fieldName];
+    // Get the field schema from the Zod schema
+    // Type assertion needed because budget exists in ProjectDraft but not in schema
+    const fieldSchema =
+        projectCreationSchema.shape[fieldName as keyof typeof projectCreationSchema.shape];
 
-    if (!fieldSchema || typeof fieldSchema !== "object" || !("safeParse" in fieldSchema)) {
+    if (!fieldSchema) {
+        // Budget field has no validation schema, silently skip
         return;
     }
 
-    const result = (
-        fieldSchema as {
-            safeParse: (val: unknown) => {
-                success: boolean;
-                error?: { issues: Array<{ message: string }> };
-            };
-        }
-    ).safeParse(value);
+    // Use Zod's ZodTypeAny for proper type handling
+    const result = (fieldSchema as z.ZodTypeAny).safeParse(value);
 
     validationErrors.update((errors) => {
-        if (!result.success && result.error) {
+        if (!result.success) {
             // Extract the first error message
             const errorMessage = result.error.issues[0]?.message || "";
             return { ...errors, [fieldName]: errorMessage };
@@ -84,17 +94,11 @@ export function validateField(fieldName: keyof ProjectDraft, value: unknown) {
 
 /**
  * Validates the entire form and updates the validation errors store.
+ * Uses get() helper to avoid manual subscription management.
  * Returns true if the form is valid, false otherwise.
  */
 export function validateForm(): boolean {
-    let currentDraft: ProjectDraft | undefined;
-    const unsubscribe = draft.subscribe((value) => (currentDraft = value));
-    unsubscribe();
-
-    if (!currentDraft) {
-        return false;
-    }
-
+    const currentDraft = get(draft);
     const result = projectCreationSchema.safeParse(currentDraft);
 
     if (!result.success) {
