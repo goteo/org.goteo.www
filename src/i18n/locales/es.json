@@ -509,6 +509,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "¡Enhorabuena! Gracias por tu donación",
+      "emailSent": "Te hemos enviado un resumen a:",
+      "certificate": {
+        "title": "¿Cómo solicito mi certificado?",
+        "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
+      },
+      "donatedProjects": {
+        "title": "Has donado a los siguientes proyectos",
+        "empty": "No se encontraron proyectos donados"
+      },
+      "suggestedProjects": {
+        "title": "Otros proyectos que requieren de tu ayuda",
+        "empty": "No hay proyectos disponibles en este momento"
+      }
+    },
     "page": {
       "title": "Indícanos tus datos de pago",
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",

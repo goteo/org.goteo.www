@@ -501,6 +501,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Congratulations! Thank you for your donation",
+      "emailSent": "We have sent you a summary to:",
+      "certificate": {
+        "title": "How do I request my certificate?",
+        "description": "The certificate is automatically generated at the end of the fiscal year (December). We will send you an email once we have submitted the documentation to the Tax Agency. If we encounter any problems, we will contact you by email."
+      },
+      "donatedProjects": {
+        "title": "You have donated to the following projects",
+        "empty": "No donated projects found"
+      },
+      "suggestedProjects": {
+        "title": "Other projects that need your help",
+        "empty": "No projects available at this time"
+      }
+    },
     "page": {
       "title": "Tell us your payment data",
       "description": "Now we need to tell us how you want to pay.",

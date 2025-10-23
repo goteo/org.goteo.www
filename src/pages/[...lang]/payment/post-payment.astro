@@ -1,0 +1,215 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Carousel from "../../../components/Carousel.svelte";
+import CampaignCard from "../../../components/home/CampaignCard.svelte";
+import { apiProjectSupportsGetCollection, apiProjectsGetCollection } from "../../../openapi/client";
+import { client } from "../../../openapi/client/client.gen";
+import type { Project } from "../../../openapi/client";
+import { twMerge } from "tailwind-merge";
+
+const { t } = Astro.locals;
+
+let donatedProjects: any[] = [];
+let suggestedProjects: any[] = [];
+let userEmail = "";
+
+const accessCookie = Astro.cookies.get("access-token");
+if (accessCookie) {
+    try {
+        const { accountingId, token } = JSON.parse(accessCookie.value);
+        const accountingUrl = `/v4/accountings/${accountingId}`;
+
+        try {
+            const userResponse = await client.get({
+                url: `/v4/users/me`,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            const userData = userResponse.data as any;
+            if (userData?.email) {
+                userEmail = userData.email;
+            }
+        } catch (e) {}
+
+        const { data: supports } = await apiProjectSupportsGetCollection({
+            query: {
+                origin: accountingUrl,
+            },
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (supports && supports.length > 0) {
+            const projectUrls = [...new Set(supports.map((s) => s.project).filter(Boolean))];
+
+            const projectPromises = projectUrls.slice(0, 20).map(async (projectUrl) => {
+                try {
+                    const response = await client.get({
+                        url: projectUrl!,
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    });
+                    return response.data as Project;
+                } catch (error) {
+                    return null;
+                }
+            });
+
+            const projects = (await Promise.all(projectPromises)).filter(Boolean) as Project[];
+
+            donatedProjects = projects.map((p) => ({
+                id: p.slug,
+                title: p.title,
+                image: p.video?.thumbnail || "/images/placeholder-project.jpg",
+                obtained: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+                minimum: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+            }));
+        }
+    } catch (error) {
+        donatedProjects = [];
+    }
+}
+
+try {
+    const { data: projects } = await apiProjectsGetCollection({
+        query: {
+            status: "in_campaign",
+            itemsPerPage: 20,
+        },
+    });
+
+    if (projects) {
+        suggestedProjects = projects.map((p) => ({
+            id: p.slug,
+            title: p.title,
+            image: p.video?.thumbnail || "/images/placeholder-project.jpg",
+            obtained: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+            minimum: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+        }));
+    }
+} catch (error) {
+    suggestedProjects = [];
+}
+---
+
+<Layout
+    title={t("payment.postPayment.title")}
+    description={t("payment.postPayment.certificate.description")}
+>
+    <section
+        class={twMerge("wrapper", "flex flex-col items-start gap-6 md:gap-10", "pb-16 md:pb-20")}
+    >
+        <div class="flex w-full items-start self-stretch">
+            <div class="flex flex-1 flex-col items-start gap-4 self-stretch">
+                <h2
+                    class={twMerge(
+                        "text-black font-bold self-stretch",
+                        "text-2xl md:text-3xl lg:text-[40px]",
+                        "leading-8 md:leading-10 lg:leading-[48px]",
+                    )}
+                >
+                    {t("payment.postPayment.title")}
+                </h2>
+                <p
+                    class={twMerge(
+                        "text-content self-stretch",
+                        "text-sm md:text-base",
+                        "leading-6 font-normal",
+                        "font-feature-settings-['case'_on] ordinal",
+                    )}
+                >
+                    {t("payment.postPayment.emailSent")}
+                    {userEmail}
+                </p>
+            </div>
+        </div>
+
+        <div class="flex w-full flex-col items-start gap-12 md:gap-[72px]">
+            <div
+                class="flex flex-col items-start gap-6 self-stretch rounded-[32px] bg-white p-6 md:flex-row md:items-center md:gap-10 md:p-8"
+            >
+                <div class="h-16 w-16 flex-shrink-0 md:h-20 md:w-20">
+                    <img
+                        src="/post-payment.svg"
+                        alt="Post payment"
+                        class="h-full w-full object-contain"
+                    />
+                </div>
+
+                <div class="flex flex-1 flex-col items-start gap-4 md:gap-6">
+                    <h2
+                        class={twMerge(
+                            "text-secondary font-bold self-stretch",
+                            "text-xl md:text-2xl lg:text-[32px]",
+                            "leading-7 md:leading-9 lg:leading-10",
+                        )}
+                    >
+                        {t("payment.postPayment.certificate.title")}
+                    </h2>
+                    <p
+                        class="text-secondary font-feature-settings-['case'_on] text-base leading-6 font-normal ordinal"
+                    >
+                        {t("payment.postPayment.certificate.description")}
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                <p
+                    class={twMerge(
+                        "text-black font-bold",
+                        "text-lg md:text-xl lg:text-2xl",
+                        "leading-7 md:leading-8 lg:leading-8",
+                    )}
+                >
+                    {t("payment.postPayment.donatedProjects.title")} ({donatedProjects.length})
+                </p>
+                <div class="-mx-4 w-full px-4 md:mx-0 md:px-0">
+                    {
+                        donatedProjects.length > 0 ? (
+                            <Carousel client:load itemsPerGroup={2} gap={24} showDots={true}>
+                                {donatedProjects.map((project) => (
+                                    <CampaignCard size="small" campaign={project} />
+                                ))}
+                            </Carousel>
+                        ) : (
+                            <p class="text-content text-base">
+                                {t("payment.postPayment.donatedProjects.empty")}
+                            </p>
+                        )
+                    }
+                </div>
+            </div>
+
+            <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                <p
+                    class={twMerge(
+                        "text-black font-bold",
+                        "text-lg md:text-xl lg:text-2xl",
+                        "leading-7 md:leading-8 lg:leading-8",
+                    )}
+                >
+                    {t("payment.postPayment.suggestedProjects.title")}
+                </p>
+                <div class="-mx-4 mb-10 w-full px-4 md:mx-0 md:px-0">
+                    {
+                        suggestedProjects.length > 0 ? (
+                            <Carousel client:load itemsPerGroup={2} gap={24} showDots={true}>
+                                {suggestedProjects.map((project) => (
+                                    <CampaignCard size="small" campaign={project} />
+                                ))}
+                            </Carousel>
+                        ) : (
+                            <p class="text-content text-base">
+                                {t("payment.postPayment.suggestedProjects.empty")}
+                            </p>
+                        )
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+</Layout>
