@@ -12,6 +12,8 @@
         class: className = "",
         labelText = undefined,
         helperText = undefined,
+        error = undefined,
+        onBlur = undefined,
     }: {
         value?: string;
         id?: string;
@@ -23,6 +25,8 @@
         class?: ClassNameValue;
         labelText?: string;
         helperText?: string;
+        error?: string;
+        onBlur?: () => void;
     } = $props();
 
     const finalId = id ? id : getIdForInput();
@@ -69,15 +73,24 @@
         {required}
         {disabled}
         {placeholder}
+        onblur={onBlur}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${finalId}-error` : helperText ? `helper-${finalId}` : undefined}
         class={twMerge(
             "peer bg-light-surface border-secondary focus:ring-tertiary w-full rounded-md border p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
             disabled && "cursor-not-allowed",
+            error && "border-red-500 focus:ring-red-500",
             className,
         )}
     />
-    {#if helperText}
-        <span id={`helper-${finalId}`} class="ml-4 text-[12px]">
+    {#if helperText && !error}
+        <span id={`helper-${finalId}`} class="ml-4 text-[12px] text-gray-500">
             {helperText}
         </span>
+    {/if}
+    {#if error}
+        <p id={`${finalId}-error`} class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+            {error}
+        </p>
     {/if}
 </div>
