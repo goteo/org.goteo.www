@@ -2,70 +2,103 @@
 import Layout from "../../../layouts/Layout.astro";
 import Carousel from "../../../components/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
-import { apiProjectSupportsGetCollection, apiProjectsGetCollection } from "../../../openapi/client";
-import { client } from "../../../openapi/client/client.gen";
+import {
+    apiProjectsGetCollection,
+    apiGatewayCheckoutsIdGet,
+    apiAccountingsIdGet,
+    apiProjectsIdOrSlugGet,
+} from "../../../openapi/client";
 import type { Project } from "../../../openapi/client";
+
+type MappedProject = {
+    id: string;
+    title: string;
+    image: string;
+    obtained: { amount: number; currency: string };
+    minimum: { amount: number; currency: string };
+};
 
 const { t } = Astro.locals;
 
-let donatedProjects: any[] = [];
-let suggestedProjects: any[] = [];
+const mapProjectToCard = (project: Project): MappedProject => ({
+    id: project.slug || '',
+    title: project.title || '',
+    image: project.video?.thumbnail || "/images/placeholder-project.jpg",
+    obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+});
+
+const extractIdFromUrl = (url: string): string | null => {
+    const id = url.split("/").pop();
+    return id || null;
+};
+
+let donatedProjects: MappedProject[] = [];
+let suggestedProjects: MappedProject[] = [];
 let userEmail = "";
 
 const accessCookie = Astro.cookies.get("access-token");
-if (accessCookie) {
+const checkoutId = Astro.url.searchParams.get("checkoutId");
+
+if (accessCookie && checkoutId) {
     try {
-        const { accountingId, token } = JSON.parse(accessCookie.value);
-        const accountingUrl = `/v4/accountings/${accountingId}`;
+        const cookieData = JSON.parse(accessCookie.value);
+        const { token, user } = cookieData;
 
-        try {
-            const userResponse = await client.get({
-                url: `/v4/users/me`,
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            const userData = userResponse.data as any;
-            if (userData?.email) {
-                userEmail = userData.email;
-            }
-        } catch (e) {}
+        if (user?.email) {
+            userEmail = user.email;
+        }
 
-        const { data: supports } = await apiProjectSupportsGetCollection({
-            query: {
-                origin: accountingUrl,
-            },
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+        const { data: checkout } = await apiGatewayCheckoutsIdGet({
+            path: { id: checkoutId },
+            headers: { Authorization: `Bearer ${token}` },
         });
 
-        if (supports && supports.length > 0) {
-            const projectUrls = [...new Set(supports.map((s) => s.project).filter(Boolean))];
+        if (checkout?.charges) {
+            const targetAccountingUrls = checkout.charges
+                .map((charge: any) => charge.target)
+                .filter(Boolean);
 
-            const projectPromises = projectUrls.slice(0, 20).map(async (projectUrl) => {
+            const projectPromises = targetAccountingUrls.map(async (accountingUrl: string) => {
                 try {
-                    const response = await client.get({
-                        url: projectUrl!,
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
+                    const accountingId = extractIdFromUrl(accountingUrl);
+                    if (!accountingId) return null;
+
+                    const { data: accounting } = await apiAccountingsIdGet({
+                        path: { id: accountingId },
+                        headers: { Authorization: `Bearer ${token}` },
                     });
-                    return response.data as Project;
+
+                    if (!accounting) return null;
+
+                    if (accounting.owner?.includes("/v4/projects/")) {
+                        return extractIdFromUrl(accounting.owner);
+                    }
+
+                    return null;
                 } catch (error) {
                     return null;
                 }
             });
 
-            const projects = (await Promise.all(projectPromises)).filter(Boolean) as Project[];
+            const projectIds = (await Promise.all(projectPromises)).filter(Boolean) as string[];
 
-            donatedProjects = projects.map((p) => ({
-                id: p.slug,
-                title: p.title,
-                image: p.video?.thumbnail || "/images/placeholder-project.jpg",
-                obtained: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-                minimum: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-            }));
+            const projectDataPromises = projectIds.map(async (projectId) => {
+                try {
+                    const { data: project } = await apiProjectsIdOrSlugGet({
+                        path: { idOrSlug: projectId },
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    return project || null;
+                } catch (error) {
+                    console.error("Error fetching project:", error);
+                    return null;
+                }
+            });
+
+            const projects = (await Promise.all(projectDataPromises)).filter(Boolean) as Project[];
+            donatedProjects = projects.map(mapProjectToCard);
         }
     } catch (error) {
         donatedProjects = [];
@@ -81,13 +114,7 @@ try {
     });
 
     if (projects) {
-        suggestedProjects = projects.map((p) => ({
-            id: p.slug,
-            title: p.title,
-            image: p.video?.thumbnail || "/images/placeholder-project.jpg",
-            obtained: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-            minimum: p.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-        }));
+        suggestedProjects = projects.map(mapProjectToCard);
     }
 } catch (error) {
     suggestedProjects = [];
