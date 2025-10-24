@@ -21,8 +21,8 @@ type MappedProject = {
 const { t } = Astro.locals;
 
 const mapProjectToCard = (project: Project): MappedProject => ({
-    id: project.slug || '',
-    title: project.title || '',
+    id: project.slug || "",
+    title: project.title || "",
     image: project.video?.thumbnail || "/images/placeholder-project.jpg",
     obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
