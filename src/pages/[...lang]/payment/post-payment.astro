@@ -5,7 +5,6 @@ import CampaignCard from "../../../components/home/CampaignCard.svelte";
 import { apiProjectSupportsGetCollection, apiProjectsGetCollection } from "../../../openapi/client";
 import { client } from "../../../openapi/client/client.gen";
 import type { Project } from "../../../openapi/client";
-import { twMerge } from "tailwind-merge";
 
 const { t } = Astro.locals;
 
@@ -99,27 +98,16 @@ try {
     title={t("payment.postPayment.title")}
     description={t("payment.postPayment.certificate.description")}
 >
-    <section
-        class={twMerge("wrapper", "flex flex-col items-start gap-6 md:gap-10", "pb-16 md:pb-20")}
-    >
+    <section class="wrapper flex flex-col items-start gap-6 pb-16 md:gap-10 md:pb-20">
         <div class="flex w-full items-start self-stretch">
             <div class="flex flex-1 flex-col items-start gap-4 self-stretch">
                 <h2
-                    class={twMerge(
-                        "text-black font-bold self-stretch",
-                        "text-2xl md:text-3xl lg:text-[40px]",
-                        "leading-8 md:leading-10 lg:leading-[48px]",
-                    )}
+                    class="self-stretch text-2xl leading-8 font-bold text-black md:text-3xl md:leading-10 lg:text-[40px] lg:leading-[48px]"
                 >
                     {t("payment.postPayment.title")}
                 </h2>
                 <p
-                    class={twMerge(
-                        "text-content self-stretch",
-                        "text-sm md:text-base",
-                        "leading-6 font-normal",
-                        "font-feature-settings-['case'_on] ordinal",
-                    )}
+                    class="text-content font-feature-settings-['case'_on] self-stretch text-sm leading-6 font-normal ordinal md:text-base"
                 >
                     {t("payment.postPayment.emailSent")}
                     {userEmail}
@@ -141,11 +129,7 @@ try {
 
                 <div class="flex flex-1 flex-col items-start gap-4 md:gap-6">
                     <h2
-                        class={twMerge(
-                            "text-secondary font-bold self-stretch",
-                            "text-xl md:text-2xl lg:text-[32px]",
-                            "leading-7 md:leading-9 lg:leading-10",
-                        )}
+                        class="text-secondary self-stretch text-xl leading-7 font-bold md:text-2xl md:leading-9 lg:text-[32px] lg:leading-10"
                     >
                         {t("payment.postPayment.certificate.title")}
                     </h2>
@@ -159,11 +143,7 @@ try {
 
             <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
                 <p
-                    class={twMerge(
-                        "text-black font-bold",
-                        "text-lg md:text-xl lg:text-2xl",
-                        "leading-7 md:leading-8 lg:leading-8",
-                    )}
+                    class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
                 >
                     {t("payment.postPayment.donatedProjects.title")} ({donatedProjects.length})
                 </p>
@@ -186,11 +166,7 @@ try {
 
             <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
                 <p
-                    class={twMerge(
-                        "text-black font-bold",
-                        "text-lg md:text-xl lg:text-2xl",
-                        "leading-7 md:leading-8 lg:leading-8",
-                    )}
+                    class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
                 >
                     {t("payment.postPayment.suggestedProjects.title")}
                 </p>
