@@ -17,6 +17,7 @@
     } from "./project-draft";
     import type { ProjectDraft } from "./project-draft";
     import TextInput from "../../../components/library/TextInput.svelte";
+    import DateInput from "../../../components/library/DateInput.svelte";
 
     const categoriesOptions = categories.map((categories) => {
         return { id: categories.id, text: $t(categories.translationKey) };
@@ -104,38 +105,11 @@
         });
     }
 
-    // Convert Date to YYYY-MM-DD string for date input
-    function dateToString(date: Date): string {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    }
-
     // Calculate minimum date (14 days from now) for date input
-    function getMinDateString(): string {
+    function getMinDate(): Date {
         const minDate = new Date();
         minDate.setDate(minDate.getDate() + 14);
-        return dateToString(minDate);
-    }
-
-    // Local variable for date input (HTML date inputs use strings)
-    let releaseDateString = dateToString($draft.release);
-
-    // Update draft when date string changes
-    function handleDateChange(dateString: string) {
-        releaseDateString = dateString;
-        // Convert string to Date before updating draft
-        const dateValue = new Date(dateString);
-        $draft.release = dateValue;
-
-        // Validate the field if it's been touched or form submitted
-        if ($touchedFields.has("release") || submitted) {
-            if (debounceTimer) clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                validateField("release", dateValue);
-            }, 300);
-        }
+        return minDate;
     }
 </script>
 
@@ -206,27 +180,14 @@
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("create.project.release.subtitle")}
             </p>
-            <div class="relative">
-                <input
-                    type="date"
-                    id="release"
-                    name="release"
-                    class="w-full rounded-md border p-[16px] {shouldShowError('release')
-                        ? 'border-red-500'
-                        : 'border-[#855a96]'}"
-                    value={releaseDateString}
-                    min={getMinDateString()}
-                    oninput={(e) => handleDateChange(e.currentTarget.value)}
-                    onblur={() => handleFieldBlur("release")}
-                    aria-invalid={shouldShowError("release")}
-                    aria-describedby={shouldShowError("release") ? "release-error" : undefined}
-                />
-                {#if shouldShowError("release")}
-                    <p id="release-error" class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
-                        {$t($validationErrors.release)}
-                    </p>
-                {/if}
-            </div>
+            <DateInput
+                name="release"
+                bind:value={$draft.release}
+                min={getMinDate()}
+                error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
+                onBlur={() => handleFieldBlur("release")}
+                onInput={(date) => handleFieldChange("release", date)}
+            />
         </div>
         <p>
             <Button size="md" disabled={!$isFormValid} onclick={handleSubmit}>
