@@ -773,6 +773,7 @@
       }
     },
     "stats": {
+      "title": "Goteo Statistics",
       "theoryToAction": {
         "title": "From theory to action",
         "subtitle": "The numbers that reveal our footprint. Updated data for 2024.",
