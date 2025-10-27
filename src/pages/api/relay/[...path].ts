@@ -69,17 +69,39 @@ export const ALL: APIRoute = async ({ request, cookies, params }) => {
         // Get the response body
         const responseText = await response.text();
 
+        // Whitelist of safe response headers to forward to the client
+        // These headers are important for caching, content negotiation, and proper HTTP semantics
+        const SAFE_RESPONSE_HEADERS = [
+            "content-type",
+            "content-language",
+            "content-length",
+            "cache-control",
+            "etag",
+            "last-modified",
+            "expires",
+            "vary",
+            "link", // For pagination
+            "x-total-count", // Common in REST APIs for total item count
+        ];
+
+        // Build response headers by copying whitelisted headers from the API response
+        const responseHeaders = new Headers();
+        response.headers.forEach((value, key) => {
+            if (SAFE_RESPONSE_HEADERS.includes(key.toLowerCase())) {
+                responseHeaders.set(key, value);
+            }
+        });
+
+        // Ensure Content-Type is always set (fallback to application/json)
+        if (!responseHeaders.has("content-type")) {
+            responseHeaders.set("content-type", "application/json");
+        }
+
         // Return the response back to the client
         return new Response(responseText, {
             status: response.status,
             statusText: response.statusText,
-            headers: {
-                "Content-Type": response.headers.get("Content-Type") || "application/json",
-                // Copy other relevant headers
-                ...(response.headers.get("Content-Language") && {
-                    "Content-Language": response.headers.get("Content-Language")!,
-                }),
-            },
+            headers: responseHeaders,
         });
     } catch (error) {
         console.error("API Relay Error:", error);
