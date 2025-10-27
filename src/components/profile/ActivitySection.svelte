@@ -17,6 +17,7 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
     import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
+    import { projectCache } from "../../stores/projectCache";
 
     interface Props {
         lang: string;
@@ -54,6 +55,11 @@
         error = null;
 
         try {
+            // Project details are cached in a session-level store (projectCache)
+            // This cache persists across component mounts and page navigations,
+            // reducing redundant API calls and improving performance.
+            // Projects are indexed by ID, slug, and original IRI segment.
+
             // Only send Accept-Language header; auth is handled by the relay
             const headers = {
                 "Accept-Language": lang,
@@ -134,19 +140,9 @@
                 ? projectsResponse.length
                 : projects.length;
 
-            // Map to cache project details by both ID and slug for reliable lookups
-            // The API can return either IDs or slugs in IRIs, so we need to handle both
-            const projectDetailMap = new Map<string, Project>();
-            projects.forEach((project) => {
-                // Add by slug (preferred)
-                if (project.slug) {
-                    projectDetailMap.set(project.slug, project);
-                }
-                // Also add by ID for cases where the API returns IDs in IRIs
-                if (project.id) {
-                    projectDetailMap.set(project.id.toString(), project);
-                }
-            });
+            // Use session-level cache for project details (persists across component mounts)
+            // Add owned projects to the cache first
+            projectCache.addMany(projects);
 
             const supportProjectIdOrSlugs = Array.from(
                 new Set(
@@ -160,8 +156,9 @@
                 ),
             );
 
+            // Check which projects are not in the cache and need to be fetched
             const slugsToFetch = supportProjectIdOrSlugs.filter(
-                (slug) => !projectDetailMap.has(slug),
+                (idOrSlug) => !projectCache.has(idOrSlug),
             );
 
             if (slugsToFetch.length > 0) {
@@ -193,26 +190,12 @@
                     }),
                 );
 
-                // Add fetched projects to the map using multiple keys for reliable lookups
+                // Add fetched projects to the cache using multiple keys for reliable lookups
                 projectDetailResults.forEach(({ idOrSlug, project: projectDetail }) => {
                     if (!projectDetail) return;
 
-                    // Always add using the original idOrSlug that was used to fetch it
-                    projectDetailMap.set(idOrSlug, projectDetail);
-
-                    // Also add by slug if available (for canonical lookups)
-                    if (projectDetail.slug && projectDetail.slug !== idOrSlug) {
-                        projectDetailMap.set(projectDetail.slug, projectDetail);
-                    }
-
-                    // Also add by ID if available and different from what we already stored
-                    if (
-                        projectDetail.id &&
-                        projectDetail.id.toString() !== idOrSlug &&
-                        projectDetail.id.toString() !== projectDetail.slug
-                    ) {
-                        projectDetailMap.set(projectDetail.id.toString(), projectDetail);
-                    }
+                    // Add to the persistent cache with all keys
+                    projectCache.add(projectDetail, idOrSlug);
                 });
             }
 
@@ -308,7 +291,8 @@
                 const idOrSlug = extractId(
                     typeof support.project === "string" ? support.project : undefined,
                 );
-                const project = idOrSlug ? projectDetailMap.get(idOrSlug) : undefined;
+                // Get project from the persistent cache
+                const project = idOrSlug ? projectCache.get(idOrSlug) : undefined;
 
                 // Validate that we have a proper slug, not just an ID
                 const hasValidSlug = project?.slug && isNaN(Number(project.slug));
@@ -316,10 +300,12 @@
                 // Ensure we always use the slug for URLs, never the ID
                 // If project is not found or slug is invalid, log an error
                 if (!project && idOrSlug) {
-                    console.error("Project not found in detail map", {
+                    const cacheStats = projectCache.getStats();
+                    console.error("Project not found in cache", {
                         idOrSlug,
                         supportId: support.id,
-                        availableKeys: Array.from(projectDetailMap.keys()).slice(0, 10),
+                        cacheSize: cacheStats.size,
+                        sampleKeys: cacheStats.sampleKeys,
                     });
                 } else if (project && !hasValidSlug) {
                     console.error("Project found but has invalid slug (numeric or missing)", {
