@@ -104,7 +104,7 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-3xl font-bold">
+    <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
     <Carousel gap={16} showDots={true} {itemsPerGroup}>

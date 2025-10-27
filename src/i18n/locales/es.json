@@ -41,10 +41,12 @@
     "tabs": {
       "project": "Información de campaña",
       "budget": {
-        "chart-title": "Este es el presupuesto necesario para hacer realidad esta campaña y descubre cómo tu apoyo puede llevarnos al éxito.",
+        "chart-title": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
         "title": "Presupuesto",
         "minimum": "Mínimo",
         "optimal": "Óptimo",
+        "raised": "Obtenido",
+        "total": "Total",
         "typeBudget": {
           "infrastructure": "Infraestructura",
           "material": "Material",
@@ -131,6 +133,136 @@
       "placeholder": "Busca tu campaña"
     },
     "categories": "Categorías"
+  },
+  "search": {
+    "title": "Buscar campañas - Goteo",
+    "description": "Explora nuestro catálogo de campañas y encuentra la que más te inspire para hacer tu donación",
+    "heading": "Encuentra la campaña que buscas",
+    "subtitle": "Explora nuestro catálogo de campañas y elige la que más te inspire para hacer tu donación",
+    "topResults": "Campañas más buscadas",
+    "showing_top_results": "Mostrando las {{count}} campañas más populares",
+    "placeholder": "Buscar",
+    "label": "Buscar campañas",
+    "clearSearch": "Limpiar búsqueda",
+    "searchButton": "Buscar",
+    "closeFilters": "Cerrar filtros",
+    "showFilters": "Mostrar filtros",
+    "hideFilters": "Ocultar filtros",
+    "applyFilters": "Aplicar filtros",
+    "categoryLabel": "Elige una categoría",
+    "selectCategory": "Seleccionar categoría",
+    "deselectCategory": "Deseleccionar categoría",
+    "selectedCategories": "{{count}} categorías seleccionadas",
+    "clearFilters": "Limpiar filtros",
+    "loading": "Buscando campañas...",
+    "results": {
+      "count": "{{count}} resultados encontrados",
+      "found": "{{count}} resultados encontrados",
+      "noResults": "No se encontraron resultados",
+      "regionLabel": "Resultados de búsqueda",
+      "showing": "Mostrando {{count}} resultados",
+      "empty": {
+        "title": "No se encontraron resultados",
+        "description": "No hay campañas que coincidan con tu búsqueda actual.",
+        "clearFilters": "Limpiar filtros"
+      }
+    },
+    "initial": {
+      "title": "Busca tu campaña ideal",
+      "description": "Utiliza los filtros de arriba para encontrar campañas que te inspiren."
+    },
+    "filters": {
+      "clear": "Limpiar filtros"
+    },
+    "errors": {
+      "searchFailed": "No se pudo realizar la búsqueda. Intenta de nuevo.",
+      "api": {
+        "invalidToken": "Autenticación fallida. Por favor, verifica tus credenciales.",
+        "expiredToken": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+        "missingToken": "Se requiere autenticación. Por favor, inicia sesión.",
+        "networkError": "Error de conexión. Verifica tu conexión a internet.",
+        "serverError": "Error del servidor. Por favor, inténtalo de nuevo más tarde."
+      }
+    },
+    "empty": {
+      "title": "No se encontraron campañas",
+      "description": "No hay campañas que coincidan con tu búsqueda actual. Verifica la ortografía o prueba con palabras clave diferentes o términos más generales.",
+      "suggestions": {
+        "title": "Sugerencias para mejorar tu búsqueda:",
+        "checkSpelling": "Verifica la ortografía de tus palabras clave",
+        "tryDifferentKeywords": "Prueba con palabras clave diferentes",
+        "removeFilters": "Quita algunos filtros para ampliar la búsqueda",
+        "broadenSearch": "Usa términos más generales"
+      }
+    },
+    "accessibility": {
+      "resultsFound": "Se encontraron {{count}} campañas"
+    },
+    "loadMore": {
+      "button": "Cargar más",
+      "loading": "Cargando más resultados...",
+      "announcement": "Se cargaron {{count}} resultados más. Mostrando {{loaded}} resultados en total."
+    },
+    "pagination": {
+      "summary": "Página {{page}} de {{totalPages}} ({{totalCount}} resultados en total)",
+      "ariaLabel": "Navegación de páginas de resultados",
+      "page": "Página {{page}}",
+      "currentPage": "Página {{page}}",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "loading": "Cargando...",
+      "loadMore": "Cargar más resultados",
+      "noMoreResults": "No hay más resultados"
+    },
+    "error": {
+      "title": "Error al buscar",
+      "retry": "Intentar de nuevo",
+      "network": {
+        "title": "Sin conexión a internet",
+        "description": "No se puede conectar con el servidor. Verifica tu conexión a internet e inténtalo de nuevo."
+      },
+      "timeout": {
+        "title": "La búsqueda está tardando demasiado",
+        "description": "El servidor no responde. Inténtalo de nuevo o usa los datos locales."
+      },
+      "server": {
+        "title": "Error del servidor",
+        "description": "Hay un problema con el servidor. Inténtalo más tarde o usa los datos locales."
+      },
+      "unknown": {
+        "title": "Error inesperado",
+        "description": "Ha ocurrido un error inesperado. Inténtalo de nuevo."
+      },
+      "actions": {
+        "retry": "Reintentar",
+        "showHelp": "Mostrar ayuda"
+      },
+      "technicalDetails": "Detalles técnicos"
+    }
+  },
+  "filters": {
+    "selectOption": "Seleccionar opción",
+    "timePeriod": "Periodo de tiempo",
+    "campaignStatus": "Estado de la campaña",
+    "location": "Ubicación",
+    "time": {
+      "all": "Cualquier momento",
+      "week": "Última semana",
+      "month": "Último mes",
+      "year": "Último año"
+    },
+    "status": {
+      "all": "Todos los estados",
+      "funding": "En financiación",
+      "successful": "Exitosas",
+      "completed": "Completadas"
+    },
+    "locationOptions": {
+      "all": "Cualquier ubicación",
+      "spain": "España",
+      "europe": "Europa",
+      "global": "Global"
+    }
   },
   "categories": {
     "solidary": "Solidario",
@@ -649,6 +781,7 @@
       }
     },
     "stats": {
+      "title": "Estadísticas de Goteo",
       "theoryToAction": {
         "title": "De la teoría a la acción",
         "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
