@@ -134,10 +134,17 @@
                 ? projectsResponse.length
                 : projects.length;
 
+            // Map to cache project details by both ID and slug for reliable lookups
+            // The API can return either IDs or slugs in IRIs, so we need to handle both
             const projectDetailMap = new Map<string, Project>();
             projects.forEach((project) => {
+                // Add by slug (preferred)
                 if (project.slug) {
                     projectDetailMap.set(project.slug, project);
+                }
+                // Also add by ID for cases where the API returns IDs in IRIs
+                if (project.id) {
+                    projectDetailMap.set(project.id.toString(), project);
                 }
             });
 
@@ -159,36 +166,52 @@
 
             if (slugsToFetch.length > 0) {
                 const projectDetailResults = await Promise.all(
-                    slugsToFetch.map(async (slug) => {
+                    slugsToFetch.map(async (idOrSlug) => {
                         try {
                             const { data, error } = await apiProjectsIdOrSlugGet({
                                 client: relayClient,
-                                path: { idOrSlug: slug },
+                                path: { idOrSlug },
                                 headers,
                             });
 
                             if (error) {
                                 console.warn("Failed to fetch project detail for support", {
-                                    slug,
+                                    idOrSlug,
                                     error,
                                 });
-                                return null;
+                                return { idOrSlug, project: null };
                             }
 
-                            return data ?? null;
+                            return { idOrSlug, project: data ?? null };
                         } catch (fetchError) {
                             console.warn("Error fetching project detail for support", {
-                                slug,
+                                idOrSlug,
                                 fetchError,
                             });
-                            return null;
+                            return { idOrSlug, project: null };
                         }
                     }),
                 );
 
-                projectDetailResults.forEach((projectDetail) => {
-                    if (projectDetail?.slug) {
+                // Add fetched projects to the map using multiple keys for reliable lookups
+                projectDetailResults.forEach(({ idOrSlug, project: projectDetail }) => {
+                    if (!projectDetail) return;
+
+                    // Always add using the original idOrSlug that was used to fetch it
+                    projectDetailMap.set(idOrSlug, projectDetail);
+
+                    // Also add by slug if available (for canonical lookups)
+                    if (projectDetail.slug && projectDetail.slug !== idOrSlug) {
                         projectDetailMap.set(projectDetail.slug, projectDetail);
+                    }
+
+                    // Also add by ID if available and different from what we already stored
+                    if (
+                        projectDetail.id &&
+                        projectDetail.id.toString() !== idOrSlug &&
+                        projectDetail.id.toString() !== projectDetail.slug
+                    ) {
+                        projectDetailMap.set(projectDetail.id.toString(), projectDetail);
                     }
                 });
             }
@@ -287,10 +310,22 @@
                 );
                 const project = idOrSlug ? projectDetailMap.get(idOrSlug) : undefined;
 
+                // Ensure we always use the slug for URLs, not the ID
+                // If project is not found, use idOrSlug as fallback (but log a warning)
+                if (!project && idOrSlug) {
+                    console.warn("Project not found in detail map", {
+                        idOrSlug,
+                        supportId: support.id,
+                    });
+                }
+
                 return {
                     id: support.id?.toString() || idOrSlug || "",
                     amount: support.money || { amount: 0, currency: "EUR" },
-                    projectTitle: project?.title || idOrSlug || "",
+                    // Use project title if available, otherwise use a placeholder
+                    projectTitle: project?.title || `Project ${idOrSlug || "Unknown"}`,
+                    // IMPORTANT: Always use slug for URLs. If project is not found,
+                    // we use idOrSlug which might be an ID - this will be caught by the warning above
                     projectSlug: project?.slug || idOrSlug || "",
                     date: resolveSupportDate(support),
                 };
