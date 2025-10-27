@@ -310,11 +310,21 @@
                 );
                 const project = idOrSlug ? projectDetailMap.get(idOrSlug) : undefined;
 
-                // Ensure we always use the slug for URLs, not the ID
-                // If project is not found, use idOrSlug as fallback (but log a warning)
+                // Validate that we have a proper slug, not just an ID
+                const hasValidSlug = project?.slug && isNaN(Number(project.slug));
+
+                // Ensure we always use the slug for URLs, never the ID
+                // If project is not found or slug is invalid, log an error
                 if (!project && idOrSlug) {
-                    console.warn("Project not found in detail map", {
+                    console.error("Project not found in detail map", {
                         idOrSlug,
+                        supportId: support.id,
+                        availableKeys: Array.from(projectDetailMap.keys()).slice(0, 10),
+                    });
+                } else if (project && !hasValidSlug) {
+                    console.error("Project found but has invalid slug (numeric or missing)", {
+                        projectId: project.id,
+                        projectSlug: project.slug,
                         supportId: support.id,
                     });
                 }
@@ -324,21 +334,35 @@
                     amount: support.money || { amount: 0, currency: "EUR" },
                     // Use project title if available, otherwise use a placeholder
                     projectTitle: project?.title || `Project ${idOrSlug || "Unknown"}`,
-                    // IMPORTANT: Always use slug for URLs. If project is not found,
-                    // we use idOrSlug which might be an ID - this will be caught by the warning above
-                    projectSlug: project?.slug || idOrSlug || "",
+                    // CRITICAL: Only use slug if it's valid (not a number). Never fall back to ID.
+                    // Empty string will prevent broken links - UI should handle gracefully
+                    projectSlug: hasValidSlug ? project.slug : "",
                     date: resolveSupportDate(support),
                 };
             });
 
             // Map projects to recent projects
-            const recentProjects = projects.slice(0, 3).map((project) => ({
-                id: project.id?.toString() || "",
-                title: project.title || "",
-                slug: project.slug || "",
-                status: (project.status as any) || "in_draft",
-                createdAt: project.dateCreated || new Date().toISOString(),
-            }));
+            const recentProjects = projects.slice(0, 3).map((project) => {
+                // Validate that slug is not numeric (should never happen for owned projects, but be defensive)
+                const hasValidSlug = project.slug && isNaN(Number(project.slug));
+
+                if (!hasValidSlug) {
+                    console.error("Owned project has invalid or missing slug", {
+                        projectId: project.id,
+                        projectSlug: project.slug,
+                        projectTitle: project.title,
+                    });
+                }
+
+                return {
+                    id: project.id?.toString() || "",
+                    title: project.title || "",
+                    // Only use slug if it's valid (not numeric or empty)
+                    slug: hasValidSlug ? project.slug : "",
+                    status: (project.status as any) || "in_draft",
+                    createdAt: project.dateCreated || new Date().toISOString(),
+                };
+            });
 
             activityData = {
                 donations: {

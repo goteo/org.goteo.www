@@ -58,14 +58,20 @@
                     {formatAmountWithSymbol(donation.amount.amount, donation.amount.currency, lang)}
                 </span>
                 <span class="text-sm font-semibold text-black"> - </span>
-                <a
-                    href={lang === "es"
-                        ? `/project/${donation.projectSlug}`
-                        : `/${lang}/project/${donation.projectSlug}`}
-                    class="text-secondary text-sm no-underline hover:underline focus:underline focus:outline-none"
-                >
-                    {donation.projectTitle || fallbackProjectTitle}
-                </a>
+                {#if donation.projectSlug}
+                    <a
+                        href={lang === "es"
+                            ? `/project/${donation.projectSlug}`
+                            : `/${lang}/project/${donation.projectSlug}`}
+                        class="text-secondary text-sm no-underline hover:underline focus:underline focus:outline-none"
+                    >
+                        {donation.projectTitle || fallbackProjectTitle}
+                    </a>
+                {:else}
+                    <span class="text-tertiary text-sm italic">
+                        {donation.projectTitle || fallbackProjectTitle}
+                    </span>
+                {/if}
             </li>
         {/each}
     {/if}

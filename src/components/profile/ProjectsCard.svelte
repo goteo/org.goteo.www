@@ -56,14 +56,20 @@
     {#if projectsData?.recentProjects}
         {#each projectsData.recentProjects.slice(0, 2) as project}
             <li class="flex items-start gap-2">
-                <a
-                    href={lang === "es"
-                        ? `/project/${project.slug}`
-                        : `/${lang}/project/${project.slug}`}
-                    class="text-content hover:text-secondary focus:text-secondary text-sm no-underline focus:outline-none"
-                >
-                    {project.title}
-                </a>
+                {#if project.slug}
+                    <a
+                        href={lang === "es"
+                            ? `/project/${project.slug}`
+                            : `/${lang}/project/${project.slug}`}
+                        class="text-content hover:text-secondary focus:text-secondary text-sm no-underline focus:outline-none"
+                    >
+                        {project.title}
+                    </a>
+                {:else}
+                    <span class="text-tertiary text-sm italic">
+                        {project.title}
+                    </span>
+                {/if}
             </li>
         {/each}
     {/if}
