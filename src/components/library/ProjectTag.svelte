@@ -19,12 +19,12 @@
         "py-1",
         "text-sm",
         "font-bold",
-        "whitespace-nowrap"
+        "whitespace-nowrap",
     ];
 
     const variantStyles = {
         default: "bg-light-muted border border-white text-secondary",
-        transparent: "bg-white/90 border border-white/50 text-black"
+        transparent: "bg-white/90 border border-white/50 text-black",
     };
 </script>
 

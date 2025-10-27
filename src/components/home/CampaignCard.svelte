@@ -27,7 +27,7 @@ Converted from CampaignCard.astro to maintain exact functionality
         campaign,
         showUserDonations = false,
         showOwnerActions = false,
-        class: className = ""
+        class: className = "",
     }: Props = $props();
 
     // Define responsive classes based on size
@@ -82,7 +82,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     class={twMerge(
         "bg-light-surface border-light-muted min-w-sm grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
-        className
+        className,
     )}
     data-testid="campaign-card"
 >
@@ -135,7 +135,9 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <div class="flex items-center gap-2">
                             <ClockIcon />
                             <span class="text-sm text-black">
-                                {$t("home.campaigns.daysRemaining", { days: campaign.daysRemaining })}
+                                {$t("home.campaigns.daysRemaining", {
+                                    days: campaign.daysRemaining,
+                                })}
                             </span>
                         </div>
                     {/if}
@@ -161,7 +163,9 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Obtained Amount -->
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
-                            <span class="text-secondary text-base">{$t("home.campaigns.obtained")}</span>
+                            <span class="text-secondary text-base"
+                                >{$t("home.campaigns.obtained")}</span
+                            >
                             <span class="text-secondary text-2xl font-bold">
                                 {formatCurrency(
                                     campaign.obtained.amount,
@@ -187,9 +191,11 @@ Converted from CampaignCard.astro to maintain exact functionality
                 <!-- User Donations Footer -->
                 {#if showUserDonations && campaign.userDonations}
                     <div
-                        class="flex items-center justify-between rounded-b-3xl bg-primary px-6 py-4 -mb-6 -mx-6"
+                        class="bg-primary -mx-6 -mb-6 flex items-center justify-between rounded-b-3xl px-6 py-4"
                     >
-                        <span class="text-base font-normal text-black">{$t("home.campaigns.userDonations")}</span>
+                        <span class="text-base font-normal text-black"
+                            >{$t("home.campaigns.userDonations")}</span
+                        >
                         <span class="text-2xl font-bold text-black">
                             {formatCurrency(
                                 campaign.userDonations.amount,
@@ -203,12 +209,12 @@ Converted from CampaignCard.astro to maintain exact functionality
                 {#if showOwnerActions}
                     <div class="flex w-full gap-4">
                         <button
-                            class="flex-1 rounded-3xl border border-secondary px-4 py-4 text-base font-bold text-secondary transition-colors hover:bg-secondary hover:text-white"
+                            class="border-secondary text-secondary hover:bg-secondary flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors hover:text-white"
                         >
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
-                            class="flex-1 rounded-3xl bg-purple-tint px-4 py-4 text-base font-bold text-secondary transition-colors hover:bg-light-accent"
+                            class="bg-purple-tint text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.uploadNewsButton")}
                         </button>

@@ -64,7 +64,7 @@
     <!-- Content -->
     <div class="flex flex-col gap-4">
         <h2
-            class="text-3xl font-bold leading-tight md:text-4xl"
+            class="text-3xl leading-tight font-bold md:text-4xl"
             style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;"
         >
             {title}
@@ -79,12 +79,12 @@
         {#each buttons as button}
             <a
                 href={button.href}
-                class="inline-flex w-full items-center justify-center rounded-3xl px-6 py-4 text-base font-bold leading-normal no-underline transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-auto {button.variant ===
+                class="inline-flex w-full items-center justify-center rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-auto {button.variant ===
                 'primary'
-                    ? 'bg-light-accent text-secondary hover:opacity-90 focus-visible:ring-secondary'
+                    ? 'bg-light-accent text-secondary focus-visible:ring-secondary hover:opacity-90'
                     : isDark
-                      ? 'border border-white bg-transparent text-white hover:bg-white hover:text-secondary focus-visible:ring-white focus-visible:ring-offset-secondary'
-                      : 'border border-secondary bg-transparent text-secondary hover:bg-secondary hover:text-white focus-visible:ring-secondary'}"
+                      ? 'hover:text-secondary focus-visible:ring-offset-secondary border border-white bg-transparent text-white hover:bg-white focus-visible:ring-white'
+                      : 'border-secondary text-secondary hover:bg-secondary focus-visible:ring-secondary border bg-transparent hover:text-white'}"
             >
                 {button.label}
             </a>

@@ -27,7 +27,7 @@
         <div class="flex flex-col gap-10">
             <div class="flex items-center justify-between">
                 <div class="text-secondary flex flex-col gap-2">
-                    <p class="text-4xl font-bold leading-tight">
+                    <p class="text-4xl leading-tight font-bold">
                         {$t("profile.donorType.fan.title")}
                     </p>
                     <p class="text-base leading-normal">
@@ -43,7 +43,7 @@
                     <p class="text-base leading-normal">
                         {$t("profile.donorType.fan.projectsDonated")}
                     </p>
-                    <p class="text-3xl font-bold leading-tight">
+                    <p class="text-3xl leading-tight font-bold">
                         {projectsDonated.toString().padStart(2, "0")}
                     </p>
                 </div>
@@ -51,7 +51,7 @@
                     <p class="text-base leading-normal">
                         {$t("profile.donorType.fan.moneyDonated")}
                     </p>
-                    <p class="text-3xl font-bold leading-tight">
+                    <p class="text-3xl leading-tight font-bold">
                         {formattedMoney}
                     </p>
                 </div>
@@ -64,7 +64,7 @@
         class="bg-light-surface border-light-muted flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6"
     >
         <div class="flex flex-col gap-2">
-            <p class="text-secondary text-4xl font-bold leading-tight">
+            <p class="text-secondary text-4xl leading-tight font-bold">
                 {$t("profile.donorType.nextLevel.title")}
             </p>
             <p class="text-tertiary text-base leading-normal">

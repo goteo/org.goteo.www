@@ -74,7 +74,7 @@
 
 <div class="mt-32 flex w-full flex-col items-center gap-4">
     <!-- Name -->
-    <h1 class="text-body text-2xl font-bold leading-tight">
+    <h1 class="text-body text-2xl leading-tight font-bold">
         {displayName}
     </h1>
 
@@ -96,7 +96,7 @@
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="bg-purple-tint text-secondary flex size-6 items-center justify-center rounded p-1 transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none"
+                    class="bg-purple-tint text-secondary focus:ring-secondary flex size-6 items-center justify-center rounded p-1 transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none"
                     aria-label={link.label}
                 >
                     <link.icon class="size-full" />

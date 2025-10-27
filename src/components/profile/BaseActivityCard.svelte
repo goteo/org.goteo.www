@@ -124,14 +124,12 @@
         </div>
 
         <!-- Content - centered and takes up available space -->
-        <div
-            class="relative z-10 flex grow flex-col items-center justify-center gap-1 text-center"
-        >
+        <div class="relative z-10 flex grow flex-col items-center justify-center gap-1 text-center">
             <h2 class="text-2xl font-bold text-black">
                 {$t(titleKey)}
             </h2>
             {#if emptyMessageKey}
-                <p class="text-base text-content">
+                <p class="text-content text-base">
                     {$t(emptyMessageKey)}
                 </p>
             {/if}
@@ -142,7 +140,7 @@
             <div class="relative z-10 flex w-full gap-4">
                 <a
                     href={emptyCtaLink}
-                    class="bg-purple-tint text-secondary flex grow items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none"
+                    class="bg-purple-tint text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none"
                 >
                     {$t(emptyCtaLabel)}
                 </a>
@@ -166,7 +164,7 @@
                 <!-- Stats section -->
                 <div class="relative z-10 mb-4 flex items-start gap-4">
                     <div class="flex flex-1 flex-col gap-1">
-                        <p class="text-xs font-medium text-content">
+                        <p class="text-content text-xs font-medium">
                             {$t(leftStatLabel)}
                         </p>
                         <p class="text-2xl font-bold text-black">
@@ -174,7 +172,7 @@
                         </p>
                     </div>
                     <div class="flex flex-1 flex-col gap-1">
-                        <p class="text-xs font-medium text-content">
+                        <p class="text-content text-xs font-medium">
                             {$t(rightStatLabel)}
                         </p>
                         <p class="text-2xl font-bold text-black">
@@ -208,13 +206,13 @@
         <div class="relative z-10 flex w-full flex-col gap-3 md:flex-row md:gap-4">
             <a
                 href={primaryActionHref}
-                class="border-secondary bg-transparent text-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl border px-6 py-3 text-sm font-bold no-underline transition-colors hover:bg-secondary/10 focus:ring-2 focus:ring-secondary focus:outline-none md:py-4 md:text-base"
+                class="border-secondary text-secondary hover:bg-secondary/10 focus:ring-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl border bg-transparent px-6 py-3 text-sm font-bold no-underline transition-colors focus:ring-2 focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(primaryActionLabel)}</span>
             </a>
             <a
                 href={secondaryActionHref}
-                class="bg-purple-tint text-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:ring-secondary focus:outline-none md:py-4 md:text-base"
+                class="bg-purple-tint text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(secondaryActionLabel)}</span>
             </a>

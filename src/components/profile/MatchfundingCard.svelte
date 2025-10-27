@@ -51,10 +51,8 @@
                             lang,
                         )}
                     </span>
-                    <span class="text-sm font-semibold text-black">
-                        -
-                    </span>
-                    <span class="text-sm text-content">
+                    <span class="text-sm font-semibold text-black"> - </span>
+                    <span class="text-content text-sm">
                         {call.title}
                     </span>
                 </li>

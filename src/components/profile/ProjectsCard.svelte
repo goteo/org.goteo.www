@@ -60,7 +60,7 @@
                     href={lang === "es"
                         ? `/projects/${project.slug}`
                         : `/${lang}/projects/${project.slug}`}
-                    class="text-content text-sm no-underline hover:text-secondary focus:text-secondary focus:outline-none"
+                    class="text-content hover:text-secondary focus:text-secondary text-sm no-underline focus:outline-none"
                 >
                     {project.title}
                 </a>

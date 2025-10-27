@@ -57,9 +57,7 @@
                 <span class="text-sm font-semibold text-black">
                     {formatAmountWithSymbol(donation.amount.amount, donation.amount.currency, lang)}
                 </span>
-                <span class="text-sm font-semibold text-black">
-                    -
-                </span>
+                <span class="text-sm font-semibold text-black"> - </span>
                 <a
                     href={lang === "es"
                         ? `/projects/${donation.projectSlug}`

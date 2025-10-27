@@ -17,7 +17,7 @@
         "text-sm",
         "font-bold",
         "whitespace-nowrap",
-        "text-black"
+        "text-black",
     ];
 </script>
 
