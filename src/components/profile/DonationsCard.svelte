@@ -60,8 +60,8 @@
                 <span class="text-sm font-semibold text-black"> - </span>
                 <a
                     href={lang === "es"
-                        ? `/projects/${donation.projectSlug}`
-                        : `/${lang}/projects/${donation.projectSlug}`}
+                        ? `/project/${donation.projectSlug}`
+                        : `/${lang}/project/${donation.projectSlug}`}
                     class="text-secondary text-sm no-underline hover:underline focus:underline focus:outline-none"
                 >
                     {donation.projectTitle || fallbackProjectTitle}

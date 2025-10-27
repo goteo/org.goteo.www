@@ -58,8 +58,8 @@
             <li class="flex items-start gap-2">
                 <a
                     href={lang === "es"
-                        ? `/projects/${project.slug}`
-                        : `/${lang}/projects/${project.slug}`}
+                        ? `/project/${project.slug}`
+                        : `/${lang}/project/${project.slug}`}
                     class="text-content hover:text-secondary focus:text-secondary text-sm no-underline focus:outline-none"
                 >
                     {project.title}
