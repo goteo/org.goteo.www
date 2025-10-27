@@ -174,7 +174,7 @@ const currencySymbols: Record<string, CurrencyData> = {
 export function formatCurrency(
     amount?: number,
     currency?: string | null,
-    options: { asLocaleString: boolean } = { asLocaleString: true },
+    options: { asLocaleString?: boolean; locale?: string } = {},
 ): string {
     if (amount === undefined) return "";
     if (currency === undefined || currency === null) currency = getDefaultCurrency();
@@ -187,9 +187,11 @@ export function formatCurrency(
     const hasDecimals = rawAmount % 1 !== 0;
     const formattedAmount = hasDecimals ? rawAmount.toFixed(decimals) : rawAmount.toFixed(0);
 
-    const asLocaleString = options.asLocaleString;
+    // Default to true for backward compatibility
+    const asLocaleString = options.asLocaleString ?? true;
 
-    const locale = getDefaultLanguage();
+    // Use provided locale or fall back to default language
+    const locale = options.locale ?? getDefaultLanguage();
     const formatter = new Intl.NumberFormat(locale, {
         currency,
         style: "currency",
@@ -234,31 +236,22 @@ export function getCurrencySymbol(locale: string, currency: string): string {
 }
 
 /**
- * Formats an amount with its currency symbol.
+ * Formats an amount with its currency symbol using locale-aware formatting.
+ * This is a convenience wrapper around formatCurrency that accepts a locale parameter.
  * Handles unit conversion (e.g., cents to dollars) and decimal precision automatically.
  *
  * @param amount - The amount in the smallest currency unit (e.g., cents for EUR/USD)
  * @param currency - The ISO 4217 currency code (defaults to "EUR")
  * @param locale - The locale for number formatting (e.g., "es", "en")
- * @returns Formatted string with amount and symbol (e.g., "1,234.56€")
+ * @returns Formatted string with amount and symbol (e.g., "1.234,56 €" for es-ES)
  */
 export function formatAmountWithSymbol(
     amount: number | undefined,
     currency: string | null | undefined,
     locale: string,
 ): string {
-    if (amount === undefined) return "";
-    const normalizedCurrency = currency ?? "EUR";
-    const unit = getUnit(normalizedCurrency) || 1;
-    const value = amount / unit;
-    const needsDecimals = Math.abs(value % 1) > Number.EPSILON;
-    const digits = needsDecimals ? 2 : 0;
-    const formattedNumber = new Intl.NumberFormat(locale, {
-        minimumFractionDigits: digits,
-        maximumFractionDigits: 2,
-    }).format(value);
-    const symbol = getCurrencySymbol(locale, normalizedCurrency);
-    return `${formattedNumber}${symbol}`;
+    // Simply delegate to formatCurrency with the locale parameter
+    return formatCurrency(amount, currency, { asLocaleString: true, locale });
 }
 
 export function defaultCurrency(): string {
