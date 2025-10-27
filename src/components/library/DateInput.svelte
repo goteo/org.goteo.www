@@ -71,8 +71,10 @@
         const dateValue = new Date(dateString);
 
         // Validate that the date is valid
-        if (isNaN(dateValue.getTime())) {
-            console.warn("Invalid date value:", dateString);
+        if (!dateValue || isNaN(dateValue.getTime())) {
+            if (import.meta.env.DEV) {
+                console.warn("Invalid date value:", dateString);
+            }
             return;
         }
 

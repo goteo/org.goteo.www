@@ -63,6 +63,12 @@ export const projectCreationSchema = z.object({
             defaultDate.setDate(defaultDate.getDate() + 28);
             return defaultDate;
         }),
+
+    /**
+     * Project budget - optional field for display purposes.
+     * Not required for form submission but included for type consistency.
+     */
+    budget: z.number().nonnegative().optional().default(0),
 });
 
 /**

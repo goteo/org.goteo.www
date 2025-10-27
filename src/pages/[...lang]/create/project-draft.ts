@@ -60,20 +60,21 @@ export const isFormValid = derived([draft, validationErrors], ([$draft, $errors]
 
 /**
  * Validates a single field and updates the validation errors store.
- * Uses Zod's type system properly to avoid unsafe type assertions.
+ * Uses Zod's type system with proper type guards to avoid unsafe type assertions.
  * @param fieldName - The name of the field to validate
  * @param value - The current value of the field
  */
 export function validateField(fieldName: keyof ProjectDraft, value: unknown) {
-    // Get the field schema from the Zod schema
-    // Type assertion needed because budget exists in ProjectDraft but not in schema
-    const fieldSchema =
-        projectCreationSchema.shape[fieldName as keyof typeof projectCreationSchema.shape];
+    // Type guard to check if field exists in schema
+    type SchemaFields = keyof typeof projectCreationSchema.shape;
 
-    if (!fieldSchema) {
-        // Budget field has no validation schema, silently skip
+    if (!(fieldName in projectCreationSchema.shape)) {
+        // Field not in schema, skip validation
         return;
     }
+
+    // Now we know fieldName exists in the schema
+    const fieldSchema = projectCreationSchema.shape[fieldName as SchemaFields];
 
     // Use Zod's ZodTypeAny for proper type handling
     const result = (fieldSchema as z.ZodTypeAny).safeParse(value);

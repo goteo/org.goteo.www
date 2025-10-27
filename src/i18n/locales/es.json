@@ -815,6 +815,11 @@
     }
   },
   "validation": {
+    "errors": {
+      "summary": {
+        "title": "Por favor, corrige los siguientes errores:"
+      }
+    },
     "project": {
       "title": {
         "required": "El título es obligatorio",

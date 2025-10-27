@@ -780,6 +780,11 @@
     }
   },
   "validation": {
+    "errors": {
+      "summary": {
+        "title": "Si us plau, corregeix els següents errors:"
+      }
+    },
     "project": {
       "title": {
         "required": "El títol és obligatori",

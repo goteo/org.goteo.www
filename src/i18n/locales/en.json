@@ -780,6 +780,11 @@
     }
   },
   "validation": {
+    "errors": {
+      "summary": {
+        "title": "Please fix the following errors:"
+      }
+    },
     "project": {
       "title": {
         "required": "Title is required",
