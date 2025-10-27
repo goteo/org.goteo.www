@@ -1,18 +1,14 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import {
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
-    import Tags from "../Tags.svelte";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Sharebutton from "./Sharebutton.svelte";
-
     import Tabs from "./Tabs.svelte";
-
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
@@ -22,6 +18,7 @@
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
     import Button from "../library/Button.svelte";
+    import ProjectTags from "../ProjectTags.svelte";
 
     let {
         lang = $bindable(),
@@ -110,7 +107,7 @@
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {project} {lang} />
+        <ProjectTags {project} {lang} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <Button kind="invert" size="sm" class="px-0">
