@@ -111,6 +111,7 @@ export const register = defineAction({
                     id: authData.id,
                     token: authData.token,
                     accountingId,
+                    timestamp: Date.now(), // Add timestamp for client-side expiration checking
                 },
                 {
                     path: "/",
