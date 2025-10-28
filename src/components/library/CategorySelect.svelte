@@ -12,12 +12,14 @@
         selectedIds = $bindable([]),
         max,
         onchange,
+        error = undefined,
     }: {
         options: Option[];
         selected?: Option[];
         selectedIds?: (number | string)[];
         max?: number;
         onchange?: (selected: Option[], option: Option) => void;
+        error?: string;
     } = $props();
 
     function isSelected(option: Option): boolean {
@@ -53,14 +55,21 @@
     }
 </script>
 
-<div class="flex flex-wrap gap-[16px]">
-    {#each options as option}
-        <Category
-            type={calcTagType(option)}
-            disabled={calcTagDisabled(option)}
-            onclick={(e) => handleClick(option)}
-        >
-            {option.text}
-        </Category>
-    {/each}
+<div>
+    <div class="flex flex-wrap gap-[16px]" role="group" aria-invalid={!!error}>
+        {#each options as option}
+            <Category
+                type={calcTagType(option)}
+                disabled={calcTagDisabled(option)}
+                onclick={(e) => handleClick(option)}
+            >
+                {option.text}
+            </Category>
+        {/each}
+    </div>
+    {#if error}
+        <p class="mt-2 ml-4 text-[12px] text-red-600" role="alert">
+            {error}
+        </p>
+    {/if}
 </div>

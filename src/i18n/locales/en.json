@@ -909,5 +909,31 @@
         "description": "Keep donating to level up"
       }
     }
+  },
+  "validation": {
+    "errors": {
+      "summary": {
+        "title": "Please fix the following errors:"
+      }
+    },
+    "project": {
+      "title": {
+        "required": "Title is required",
+        "pattern": "Title must contain at least one letter"
+      },
+      "subtitle": {
+        "required": "Subtitle is required"
+      },
+      "categories": {
+        "min": "You must select at least one category",
+        "max": "You can select a maximum of 2 categories"
+      },
+      "release": {
+        "min": "Release date must be at least 14 days from today"
+      },
+      "budget": {
+        "positive": "Budget must be a positive value"
+      }
+    }
   }
 }

@@ -917,5 +917,31 @@
         "description": "Continua donant per pujar de nivell"
       }
     }
+  },
+  "validation": {
+    "errors": {
+      "summary": {
+        "title": "Si us plau, corregeix els següents errors:"
+      }
+    },
+    "project": {
+      "title": {
+        "required": "El títol és obligatori",
+        "pattern": "El títol ha de contenir almenys una lletra"
+      },
+      "subtitle": {
+        "required": "El subtítol és obligatori"
+      },
+      "categories": {
+        "min": "Has de seleccionar almenys una categoria",
+        "max": "Pots seleccionar un màxim de 2 categories"
+      },
+      "release": {
+        "min": "La data de llançament ha de ser almenys 14 dies des d'avui"
+      },
+      "budget": {
+        "positive": "El pressupost ha de ser un valor positiu"
+      }
+    }
   }
 }

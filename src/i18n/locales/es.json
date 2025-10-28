@@ -946,5 +946,31 @@
         "description": "Sigue donando para subir de nivel"
       }
     }
+  },
+  "validation": {
+    "errors": {
+      "summary": {
+        "title": "Por favor, corrige los siguientes errores:"
+      }
+    },
+    "project": {
+      "title": {
+        "required": "El título es obligatorio",
+        "pattern": "El título debe contener al menos una letra"
+      },
+      "subtitle": {
+        "required": "El subtítulo es obligatorio"
+      },
+      "categories": {
+        "min": "Debes seleccionar al menos una categoría",
+        "max": "Puedes seleccionar un máximo de 2 categorías"
+      },
+      "release": {
+        "min": "La fecha de lanzamiento debe ser al menos 14 días desde hoy"
+      },
+      "budget": {
+        "positive": "El presupuesto debe ser un valor positivo"
+      }
+    }
   }
 }
