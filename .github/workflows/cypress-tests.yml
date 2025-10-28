@@ -55,6 +55,17 @@ jobs:
                   echo "🌐 API URL: ${{ vars.PUBLIC_API_URL }}"
                   echo "📝 Branch: ${{ github.ref_name }}"
 
+            - name: Create .env file
+              run: |
+                  echo "CLOUDFLARE_INCLUDE_PROCESS_ENV='${{ vars.CLOUDFLARE_INCLUDE_PROCESS_ENV }}'" >> .env
+                  echo "PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }}" >> .env
+                  echo "PUBLIC_API_VERSION='${{ vars.PUBLIC_API_VERSION }}'" >> .env
+                  echo "PUBLIC_DEFAULT_CURRENCY='${{ vars.PUBLIC_DEFAULT_CURRENCY }}'" >> .env
+                  echo "PUBLIC_DEFAULT_LANGUAGE='${{ vars.PUBLIC_DEFAULT_LANGUAGE }}'" >> .env
+                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='${{ vars.PUBLIC_PLATONIQ_ACCOUNTING_ID }}'" >> .env
+                  echo "PUBLIC_FACEBOOK_APP_ID='${{ vars.PUBLIC_FACEBOOK_APP_ID }}'" >> .env
+                  echo "✅ .env file created"
+
             - name: Start server
               run: |
                   pnpm build
