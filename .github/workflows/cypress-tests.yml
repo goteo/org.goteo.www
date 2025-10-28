@@ -8,12 +8,12 @@ jobs:
         runs-on: ubuntu-latest
         environment: ${{ github.ref_name == 'main' && 'main' || github.ref_name == 'develop' && 'develop' || 'working-branch' }}
         env:
-          CI: true
-          NODE_ENV: test
-          NODE_TLS_REJECT_UNAUTHORIZED: 0
-          CYPRESS_CONFIG_FILE: cypress.github.js
-          CYPRESS_MOCK_AUTH: true
-          CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+            CI: true
+            NODE_ENV: test
+            NODE_TLS_REJECT_UNAUTHORIZED: 0
+            CYPRESS_CONFIG_FILE: cypress.github.js
+            CYPRESS_MOCK_AUTH: true
+            CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
 
         steps:
             - name: Checkout code
