@@ -6,6 +6,14 @@ on:
 jobs:
     cypress-run:
         runs-on: ubuntu-latest
+        environment: ${{ github.ref_name == 'main' && 'main' || github.ref_name == 'develop' && 'develop' || 'working-branch' }}
+        env:
+          CI: true
+          NODE_ENV: test
+          NODE_TLS_REJECT_UNAUTHORIZED: 0
+          CYPRESS_CONFIG_FILE: cypress.github.js
+          CYPRESS_MOCK_AUTH: true
+          CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
 
         steps:
             - name: Checkout code
@@ -41,30 +49,6 @@ jobs:
             - name: Verify Cypress installation
               run: pnpm exec cypress verify
 
-            - name: Set API URL based on branch
-              id: api-url
-              run: |
-                  if [[ "${{ github.ref_name }}" == "main" ]]; then
-                    echo "API_URL=https://api.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=production" >> $GITHUB_OUTPUT
-                  elif [[ "${{ github.ref_name }}" == "develop" ]]; then
-                    echo "API_URL=https://api-staging.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=staging" >> $GITHUB_OUTPUT
-                  else
-                    echo "API_URL=https://api-testing01.v4.goteo.org" >> $GITHUB_OUTPUT
-                    echo "ENVIRONMENT=development" >> $GITHUB_OUTPUT
-                  fi
-
-            - name: Set env vars
-              run: |
-                  echo "CLOUDFLARE_INCLUDE_PROCESS_ENV='true'" >> .env
-                  echo "PUBLIC_API_URL=${{ steps.api-url.outputs.API_URL }}" >> .env
-                  echo "PUBLIC_API_VERSION='v4'" >> .env
-                  echo "PUBLIC_DEFAULT_CURRENCY='EUR'" >> .env
-                  echo "PUBLIC_DEFAULT_LANGUAGE='es'" >> .env
-                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='375592'" >> .env
-                  echo "PUBLIC_FACEBOOK_APP_ID=''" >> .env
-
             - name: Start server
               run: |
                   pnpm build
@@ -83,13 +67,6 @@ jobs:
                   for spec in cypress/e2e/*.cy.ts; do
                     pnpm cypress run --spec "$spec" || exit 1
                   done
-              env:
-                  CI: true
-                  NODE_ENV: test
-                  NODE_TLS_REJECT_UNAUTHORIZED: 0
-                  CYPRESS_CONFIG_FILE: cypress.github.js
-                  CYPRESS_MOCK_AUTH: true
-                  CYPRESS_ENVIRONMENT: ${{ steps.api-url.outputs.ENVIRONMENT }}
 
             - name: Debug server logs if tests failed
               if: failure()
@@ -114,7 +91,7 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/screenshots/**/*') != ''
               with:
-                  name: cypress-screenshots-${{ steps.api-url.outputs.ENVIRONMENT }}
+                  name: cypress-screenshots-${{ vars.ENVIRONMENT }}
                   path: cypress/screenshots
                   retention-days: 7
 
@@ -122,6 +99,6 @@ jobs:
               uses: actions/upload-artifact@v4
               if: failure() && hashFiles('cypress/videos/**/*') != ''
               with:
-                  name: cypress-videos-${{ steps.api-url.outputs.ENVIRONMENT }}
+                  name: cypress-videos-${{ vars.ENVIRONMENT }}
                   path: cypress/videos
                   retention-days: 7
