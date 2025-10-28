@@ -49,6 +49,12 @@ jobs:
             - name: Verify Cypress installation
               run: pnpm exec cypress verify
 
+            - name: Debug environment variables
+              run: |
+                  echo "🔧 Environment: ${{ vars.ENVIRONMENT }}"
+                  echo "🌐 API URL: ${{ vars.PUBLIC_API_URL }}"
+                  echo "📝 Branch: ${{ github.ref_name }}"
+
             - name: Start server
               run: |
                   pnpm build
