@@ -58,15 +58,31 @@ jobs:
             - name: Start server
               run: |
                   pnpm build
+                  echo "Starting server..."
                   nohup pnpm preview:ci > preview.log 2>&1 &
+                  echo "Server PID: $!"
+                  sleep 2
+                  echo "📋 Current processes:"
+                  ps aux | grep -E "(wrangler|node)" || true
 
             - name: Wait for server
               run: |
-                  pnpm wait-on http://localhost:4321
+                  echo "⏳ Waiting for server to be ready..."
+                  # Wait with timeout of 120 seconds
+                  timeout 120 pnpm wait-on http://localhost:4321 --timeout 120000 || {
+                    echo "❌ Server failed to start within timeout"
+                    echo "📋 Server log:"
+                    cat preview.log
+                    echo "📋 Active processes:"
+                    ps aux | grep -E "(wrangler|node)" || true
+                    exit 1
+                  }
+                  echo "✅ Server is responding"
                   # Additional wait to ensure server is fully ready
                   sleep 5
                   # Verify server is responding correctly
-                  curl -f http://localhost:4321 || (echo "Server health check failed" && cat preview.log && exit 1)
+                  curl -f http://localhost:4321 || (echo "❌ Server health check failed" && cat preview.log && exit 1)
+                  echo "✅ Server health check passed"
 
             - name: Run Cypress tests
               run: |
