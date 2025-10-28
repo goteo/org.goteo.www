@@ -9,32 +9,22 @@ import {
     apiProjectsIdOrSlugGet,
 } from "../../../openapi/client";
 import type { Project } from "../../../openapi/client";
-
-type MappedProject = {
-    id: string;
-    title: string;
-    image: string;
-    obtained: { amount: number; currency: string };
-    minimum: { amount: number; currency: string };
-};
+import { extractId } from "../../../utils/extractId";
+import type { Campaign } from "../../../types/campaign";
 
 const { t } = Astro.locals;
 
-const mapProjectToCard = (project: Project): MappedProject => ({
+const mapProjectToCard = (project: Project): Campaign => ({
     id: project.slug || "",
     title: project.title || "",
     image: project.video?.thumbnail || "/images/placeholder-project.jpg",
     obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    size: "small",
 });
 
-const extractIdFromUrl = (url: string): string | null => {
-    const id = url.split("/").pop();
-    return id || null;
-};
-
-let donatedProjects: MappedProject[] = [];
-let suggestedProjects: MappedProject[] = [];
+let donatedProjects: Campaign[] = [];
+let suggestedProjects: Campaign[] = [];
 let userEmail = "";
 
 const accessCookie = Astro.cookies.get("access-token");
@@ -61,7 +51,7 @@ if (accessCookie && checkoutId) {
 
             const projectPromises = targetAccountingUrls.map(async (accountingUrl: string) => {
                 try {
-                    const accountingId = extractIdFromUrl(accountingUrl);
+                    const accountingId = extractId(accountingUrl);
                     if (!accountingId) return null;
 
                     const { data: accounting } = await apiAccountingsIdGet({
@@ -72,11 +62,12 @@ if (accessCookie && checkoutId) {
                     if (!accounting) return null;
 
                     if (accounting.owner?.includes("/v4/projects/")) {
-                        return extractIdFromUrl(accounting.owner);
+                        return extractId(accounting.owner);
                     }
 
                     return null;
                 } catch (error) {
+                    console.error("Error fetching accounting or extracting project ID:", error);
                     return null;
                 }
             });
@@ -92,7 +83,7 @@ if (accessCookie && checkoutId) {
 
                     return project || null;
                 } catch (error) {
-                    console.error("Error fetching project:", error);
+                    console.error("Error fetching project data:", error);
                     return null;
                 }
             });
@@ -101,6 +92,7 @@ if (accessCookie && checkoutId) {
             donatedProjects = projects.map(mapProjectToCard);
         }
     } catch (error) {
+        console.error("Error loading donated projects:", error);
         donatedProjects = [];
     }
 }
@@ -117,6 +109,7 @@ try {
         suggestedProjects = projects.map(mapProjectToCard);
     }
 } catch (error) {
+    console.error("Error loading suggested projects:", error);
     suggestedProjects = [];
 }
 ---
