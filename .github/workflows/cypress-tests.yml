@@ -6,14 +6,8 @@ on:
 jobs:
     cypress-run:
         runs-on: ubuntu-latest
-        environment: ${{ github.ref_name == 'main' && 'main' || github.ref_name == 'develop' && 'develop' || 'working-branch' }}
-        env:
-            CI: true
-            NODE_ENV: test
-            NODE_TLS_REJECT_UNAUTHORIZED: 0
-            CYPRESS_CONFIG_FILE: cypress.github.js
-            CYPRESS_MOCK_AUTH: true
-            CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
+        environment:
+            name: ${{ github.ref_name == 'main' && 'main' || github.ref_name == 'develop' && 'develop' || 'working-branch' }}
 
         steps:
             - name: Checkout code
@@ -49,13 +43,7 @@ jobs:
             - name: Verify Cypress installation
               run: pnpm exec cypress verify
 
-            - name: Debug environment variables
-              run: |
-                  echo "🔧 Environment: ${{ vars.ENVIRONMENT }}"
-                  echo "🌐 API URL: ${{ vars.PUBLIC_API_URL }}"
-                  echo "📝 Branch: ${{ github.ref_name }}"
-
-            - name: Create .env file
+            - name: Set env vars
               run: |
                   echo "CLOUDFLARE_INCLUDE_PROCESS_ENV='${{ vars.CLOUDFLARE_INCLUDE_PROCESS_ENV }}'" >> .env
                   echo "PUBLIC_API_URL=${{ vars.PUBLIC_API_URL }}" >> .env
@@ -64,42 +52,32 @@ jobs:
                   echo "PUBLIC_DEFAULT_LANGUAGE='${{ vars.PUBLIC_DEFAULT_LANGUAGE }}'" >> .env
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='${{ vars.PUBLIC_PLATONIQ_ACCOUNTING_ID }}'" >> .env
                   echo "PUBLIC_FACEBOOK_APP_ID='${{ vars.PUBLIC_FACEBOOK_APP_ID }}'" >> .env
-                  echo "✅ .env file created"
 
             - name: Start server
               run: |
                   pnpm build
-                  echo "Starting server..."
                   nohup pnpm preview:ci > preview.log 2>&1 &
-                  echo "Server PID: $!"
-                  sleep 2
-                  echo "📋 Current processes:"
-                  ps aux | grep -E "(wrangler|node)" || true
 
             - name: Wait for server
               run: |
-                  echo "⏳ Waiting for server to be ready..."
-                  # Wait with timeout of 120 seconds
-                  timeout 120 pnpm wait-on http://localhost:4321 --timeout 120000 || {
-                    echo "❌ Server failed to start within timeout"
-                    echo "📋 Server log:"
-                    cat preview.log
-                    echo "📋 Active processes:"
-                    ps aux | grep -E "(wrangler|node)" || true
-                    exit 1
-                  }
-                  echo "✅ Server is responding"
+                  pnpm wait-on http://localhost:4321
                   # Additional wait to ensure server is fully ready
                   sleep 5
                   # Verify server is responding correctly
-                  curl -f http://localhost:4321 || (echo "❌ Server health check failed" && cat preview.log && exit 1)
-                  echo "✅ Server health check passed"
+                  curl -f http://localhost:4321 || (echo "Server health check failed" && cat preview.log && exit 1)
 
             - name: Run Cypress tests
               run: |
                   for spec in cypress/e2e/*.cy.ts; do
                     pnpm cypress run --spec "$spec" || exit 1
                   done
+              env:
+                  CI: true
+                  NODE_ENV: test
+                  NODE_TLS_REJECT_UNAUTHORIZED: 0
+                  CYPRESS_CONFIG_FILE: cypress.github.js
+                  CYPRESS_MOCK_AUTH: true
+                  CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
 
             - name: Debug server logs if tests failed
               if: failure()
