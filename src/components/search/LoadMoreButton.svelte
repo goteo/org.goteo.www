@@ -5,6 +5,7 @@ Allows accumulative pagination for search results
 <script lang="ts">
     import { t } from "../../i18n/store";
     import LoadingSpinner from "./LoadingSpinner.svelte";
+    import Button from "../library/Button.svelte";
 
     interface Props {
         onLoadMore: () => void | Promise<void>;
@@ -48,13 +49,12 @@ Allows accumulative pagination for search results
 <!-- Load More Button -->
 {#if hasMore}
     <div class="flex flex-col items-center gap-4">
-        <button
+        <Button
             onclick={handleClick}
             disabled={isLoading || disabled}
-            aria-busy={isLoading}
-            aria-label={isLoading ? $t("search.loadMore.loading") : $t("search.loadMore.button")}
-            class="bg-primary text-tertiary rounded-full px-8 py-3 font-semibold transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
-            data-testid="load-more-button"
+            kind="primary"
+            size="md"
+            class="data-[testid='load-more-button']"
         >
             {#if isLoading}
                 <span class="flex items-center gap-2">
@@ -64,7 +64,7 @@ Allows accumulative pagination for search results
             {:else}
                 <span>{$t("search.loadMore.button")}</span>
             {/if}
-        </button>
+        </Button>
 
         <!-- Results count indicator -->
         <p class="text-secondary text-sm">
