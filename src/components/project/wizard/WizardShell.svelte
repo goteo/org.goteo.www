@@ -18,6 +18,9 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import Button from "../../library/Button.svelte";
+    import EditIcon from "../../../svgs/EditIcon.svelte";
+    import EyeIcon from "../../../svgs/EyeIcon.svelte";
+    import { t } from "../../../i18n/store";
     import {
         wizardState,
         navigateToStep,
@@ -41,7 +44,6 @@
         onSubtitleChange,
         onSave,
         onPublish,
-        lang = "es",
     }: {
         title?: string;
         subtitle?: string;
@@ -50,18 +52,21 @@
         onSubtitleChange?: (value: string) => void;
         onSave?: () => void;
         onPublish?: () => void;
-        lang?: string;
     } = $props();
 
-    // Define the six wizard steps
-    const steps: WizardStep[] = [
-        { id: 1, label: "Configuración", labelKey: "wizard.steps.configuration" },
-        { id: 2, label: "Información de campaña", labelKey: "wizard.steps.campaign_info" },
-        { id: 3, label: "Recompensas", labelKey: "wizard.steps.rewards" },
-        { id: 4, label: "Colaboraciones", labelKey: "wizard.steps.collaborations" },
-        { id: 5, label: "Presupuesto", labelKey: "wizard.steps.budget" },
-        { id: 6, label: "Sobre ti", labelKey: "wizard.steps.about_you" },
-    ];
+    // Define the six wizard steps (reactive to language changes)
+    const steps = $derived([
+        { id: 1, label: $t("wizard.steps.configuration"), labelKey: "wizard.steps.configuration" },
+        { id: 2, label: $t("wizard.steps.campaign_info"), labelKey: "wizard.steps.campaign_info" },
+        { id: 3, label: $t("wizard.steps.rewards"), labelKey: "wizard.steps.rewards" },
+        {
+            id: 4,
+            label: $t("wizard.steps.collaborations"),
+            labelKey: "wizard.steps.collaborations",
+        },
+        { id: 5, label: $t("wizard.steps.budget"), labelKey: "wizard.steps.budget" },
+        { id: 6, label: $t("wizard.steps.about_you"), labelKey: "wizard.steps.about_you" },
+    ]);
 
     // Reactive values from store
     const currentStep = $derived($wizardState.currentStep);
@@ -172,14 +177,14 @@
                     />
                 </svg>
                 <div class="flex-1">
-                    <h3 class="text-secondary text-sm font-semibold">Error al guardar</h3>
+                    <h3 class="text-secondary text-sm font-semibold">
+                        {$t("wizard.errors.storage.title")}
+                    </h3>
                     <p class="text-tertiary mt-1 text-sm">
                         {#if $persistenceError === "storage_quota_exceeded"}
-                            El almacenamiento local está lleno. Por favor, libera espacio o utiliza
-                            el navegador en modo privado.
+                            {$t("wizard.errors.storage.quota_exceeded")}
                         {:else}
-                            No se pudo guardar el borrador automáticamente. Tus cambios pueden
-                            perderse.
+                            {$t("wizard.errors.storage.save_failed")}
                         {/if}
                     </p>
                 </div>
@@ -187,7 +192,7 @@
                     type="button"
                     class="text-tertiary hover:text-secondary flex-shrink-0"
                     onclick={() => persistenceError.set(null)}
-                    aria-label="Cerrar alerta"
+                    aria-label={$t("wizard.errors.storage.close")}
                 >
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path
@@ -202,40 +207,60 @@
     {/if}
 
     <!-- Header with title and action buttons -->
-    <div class="mb-6 flex items-start justify-between gap-4">
-        <div class="flex-1">
-            <input
-                type="text"
-                value={title}
-                oninput={(e) => onTitleChange?.(e.currentTarget.value)}
-                placeholder="Título de campaña"
-                class="text-primary mb-2 w-full border-0 bg-transparent text-3xl font-bold focus:ring-0 focus:outline-none"
-            />
-            <input
-                type="text"
-                value={subtitle}
-                oninput={(e) => onSubtitleChange?.(e.currentTarget.value)}
-                placeholder="Subtítulo"
-                class="text-tertiary w-full border-0 bg-transparent text-lg focus:ring-0 focus:outline-none"
-            />
+    <div
+        class="bg-soft-purple border-purple-tint mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-1"
+    >
+        <!-- Left section: Icon + Title/Subtitle -->
+        <div class="flex flex-1 items-center gap-2">
+            <!-- Edit icon (rotated 180°) -->
+            <div class="flex shrink-0 items-center justify-center">
+                <div class="rotate-180">
+                    <EditIcon width="24" height="24" />
+                </div>
+            </div>
+
+            <!-- Title and subtitle column -->
+            <div class="flex min-w-0 flex-1 flex-col justify-center">
+                <input
+                    type="text"
+                    value={title}
+                    oninput={(e) => onTitleChange?.(e.currentTarget.value)}
+                    placeholder={$t("wizard.header.titlePlaceholder")}
+                    class="w-full pb-0 border-0 bg-transparent text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
+                />
+                <input
+                    type="text"
+                    value={subtitle}
+                    oninput={(e) => onSubtitleChange?.(e.currentTarget.value)}
+                    placeholder={$t("wizard.header.subtitlePlaceholder")}
+                    class="w-full pt-0 border-0 bg-transparent text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
+                />
+            </div>
         </div>
 
-        <!-- Action Buttons -->
-        <div class="flex gap-3">
-            <Button kind="ghost" size="sm" disabled={true} data-testid="wizard-preview-btn">
-                Previsualizar
+        <!-- Right section: Action Buttons -->
+        <div class="flex shrink-0 items-center gap-[16px]">
+            <Button kind="ghost" size="md" disabled={true} data-testid="wizard-preview-btn">
+                {#snippet children()}
+                    <EyeIcon width="20" height="20" />
+                    {$t("wizard.buttons.preview")}
+                {/snippet}
             </Button>
-            <Button kind="secondary" size="sm" onclick={handleSave} data-testid="wizard-save-btn">
-                Guardar
+            <Button kind="secondary" size="md" onclick={handleSave} data-testid="wizard-save-btn">
+                {#snippet children()}
+                    {$t("wizard.buttons.save")}
+                {/snippet}
             </Button>
             <Button
                 kind="primary"
-                size="sm"
+                size="md"
                 disabled={!allStepsCompleted}
                 onclick={handlePublish}
                 data-testid="wizard-publish-btn"
             >
-                Publicar
+                {#snippet children()}
+                    {$t("wizard.buttons.publish")}
+                {/snippet}
             </Button>
         </div>
     </div>

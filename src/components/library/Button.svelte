@@ -24,6 +24,7 @@
         size = "md",
         kind = "primary",
         onclick,
+        ...rest
     }: {
         children: Snippet;
         form?: string;
@@ -33,6 +34,7 @@
         kind?: keyof typeof kindStyles;
         class?: ClassNameValue;
         onclick?: MouseEventHandler<HTMLButtonElement>;
+        [key: string]: any;
     } = $props();
 </script>
 
@@ -41,6 +43,7 @@
     {form}
     {disabled}
     {onclick}
+    {...rest}
     class={twMerge(
         "text-secondary disabled:bg-light-muted flex w-auto items-center justify-center gap-2 font-[700] transition hover:cursor-pointer",
         sizeStyles[size],

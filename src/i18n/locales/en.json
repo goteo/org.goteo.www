@@ -935,5 +935,32 @@
         "positive": "Budget must be a positive value"
       }
     }
+  },
+  "wizard": {
+    "header": {
+      "titlePlaceholder": "Campaign title",
+      "subtitlePlaceholder": "Brief description of the campaign, the current one; subtitle of the gods."
+    },
+    "buttons": {
+      "preview": "Preview",
+      "save": "Save",
+      "publish": "Publish"
+    },
+    "steps": {
+      "configuration": "Configuration",
+      "campaign_info": "Campaign information",
+      "rewards": "Rewards",
+      "collaborations": "Collaborations",
+      "budget": "Budget",
+      "about_you": "About you"
+    },
+    "errors": {
+      "storage": {
+        "title": "Error saving",
+        "quota_exceeded": "Local storage is full. Please free up space or use the browser in private mode.",
+        "save_failed": "Could not automatically save draft. Your changes may be lost.",
+        "close": "Close alert"
+      }
+    }
   }
 }

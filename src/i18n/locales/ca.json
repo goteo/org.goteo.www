@@ -943,5 +943,32 @@
         "positive": "El pressupost ha de ser un valor positiu"
       }
     }
+  },
+  "wizard": {
+    "header": {
+      "titlePlaceholder": "Títol de campanya",
+      "subtitlePlaceholder": "Descripció breu de la campanya, l'actual; subtítol de déus."
+    },
+    "buttons": {
+      "preview": "Previsualitzar",
+      "save": "Guardar",
+      "publish": "Publicar"
+    },
+    "steps": {
+      "configuration": "Configuració",
+      "campaign_info": "Informació de campanya",
+      "rewards": "Recompenses",
+      "collaborations": "Col·laboracions",
+      "budget": "Pressupost",
+      "about_you": "Sobre tu"
+    },
+    "errors": {
+      "storage": {
+        "title": "Error en guardar",
+        "quota_exceeded": "L'emmagatzematge local està ple. Si us plau, allibera espai o utilitza el navegador en mode privat.",
+        "save_failed": "No s'ha pogut guardar l'esborrany automàticament. Els teus canvis poden perdre's.",
+        "close": "Tancar alerta"
+      }
+    }
   }
 }

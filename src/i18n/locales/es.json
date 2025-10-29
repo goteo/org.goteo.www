@@ -972,5 +972,32 @@
         "positive": "El presupuesto debe ser un valor positivo"
       }
     }
+  },
+  "wizard": {
+    "header": {
+      "titlePlaceholder": "Título de campaña",
+      "subtitlePlaceholder": "Descripción breve de la campaña, el actual; subtítulo de dios."
+    },
+    "buttons": {
+      "preview": "Previsualizar",
+      "save": "Guardar",
+      "publish": "Publicar"
+    },
+    "steps": {
+      "configuration": "Configuración",
+      "campaign_info": "Información de campaña",
+      "rewards": "Recompensas",
+      "collaborations": "Colaboraciones",
+      "budget": "Presupuesto",
+      "about_you": "Sobre ti"
+    },
+    "errors": {
+      "storage": {
+        "title": "Error al guardar",
+        "quota_exceeded": "El almacenamiento local está lleno. Por favor, libera espacio o utiliza el navegador en modo privado.",
+        "save_failed": "No se pudo guardar el borrador automáticamente. Tus cambios pueden perderse.",
+        "close": "Cerrar alerta"
+      }
+    }
   }
 }

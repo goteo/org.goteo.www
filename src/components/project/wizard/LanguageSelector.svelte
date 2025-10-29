@@ -16,7 +16,11 @@
 -->
 <script lang="ts">
     import ValidationError from "../../library/ValidationError.svelte";
-    import { validationErrors, touchedFields, markFieldAsTouched } from "../../../stores/wizard-state";
+    import {
+        validationErrors,
+        touchedFields,
+        markFieldAsTouched,
+    } from "../../../stores/wizard-state";
 
     interface LanguageOption {
         code: string;
