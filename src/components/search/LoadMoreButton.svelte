@@ -52,9 +52,10 @@ Allows accumulative pagination for search results
         <Button
             onclick={handleClick}
             disabled={isLoading || disabled}
+            aria-busy={isLoading}
+            aria-label={isLoading ? $t("search.loadMore.loading") : $t("search.loadMore.button")}
             kind="primary"
             size="md"
-            class="data-[testid='load-more-button']"
         >
             {#if isLoading}
                 <span class="flex items-center gap-2">
