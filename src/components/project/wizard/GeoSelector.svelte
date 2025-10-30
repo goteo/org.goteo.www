@@ -9,11 +9,12 @@
     - Validation on blur
 
     Design System:
-    - Standard select and input styling
+    - Uses Select component from library
     - Error states with red border and message
 -->
 <script lang="ts">
-    import ValidationError from "../../library/ValidationError.svelte";
+    import Select from "../../library/Select.svelte";
+    import TextInput from "../../library/TextInput.svelte";
     import {
         validationErrors,
         touchedFields,
@@ -38,18 +39,9 @@
     /**
      * Handle scope change
      */
-    function handleScopeChange(event: Event) {
-        const target = event.target as HTMLSelectElement;
-        const newScope = target.value as "local" | "estatal" | "internacional";
+    function handleScopeChange(value: string) {
+        const newScope = value as "local" | "estatal" | "internacional";
         onScopeChange(newScope);
-    }
-
-    /**
-     * Handle localities input change
-     */
-    function handleLocalitiesChange(event: Event) {
-        const target = event.target as HTMLInputElement;
-        onLocalitiesChange(target.value);
     }
 
     /**
@@ -62,58 +54,45 @@
     function handleLocalitiesBlur() {
         markFieldAsTouched("localities");
     }
+
+    /**
+     * Watch localities changes and propagate to parent
+     */
+    $effect(() => {
+        if (localities !== undefined) {
+            onLocalitiesChange(localities);
+        }
+    });
 </script>
 
 <div class="space-y-4">
     <!-- Geographic Scope Dropdown -->
-    <div>
-        <label for="geographic-scope" class="text-secondary mb-2 block text-sm font-medium">
-            Alcance geográfico *
-        </label>
-        <select
-            id="geographic-scope"
-            value={scope || ""}
-            onchange={handleScopeChange}
-            onblur={handleScopeBlur}
-            data-testid="geo-scope-select"
-            class="border-light-muted focus:border-primary w-full rounded-lg border px-4 py-2 {showScopeError
-                ? 'border-red-500'
-                : ''}"
-        >
-            <option value="">Selecciona el alcance</option>
-            <option value="local">Local</option>
-            <option value="estatal">Estatal</option>
-            <option value="internacional">Internacional</option>
-        </select>
-
-        {#if showScopeError}
-            <ValidationError message={errors.geographicScope} />
-        {/if}
-    </div>
+    <Select
+        bind:value={scope}
+        name="geographic-scope"
+        labelText="Alcance geográfico"
+        required={true}
+        error={showScopeError ? errors.geographicScope : undefined}
+        onBlur={handleScopeBlur}
+        onChange={handleScopeChange}
+    >
+        <option value="">Selecciona el alcance</option>
+        <option value="local">Local</option>
+        <option value="estatal">Estatal</option>
+        <option value="internacional">Internacional</option>
+    </Select>
 
     <!-- Conditional Localities Input -->
     {#if scope === "local"}
-        <div>
-            <label for="localities" class="text-secondary mb-2 block text-sm font-medium">
-                Indica localidades *
-            </label>
-            <input
-                type="text"
-                id="localities"
-                value={localities || ""}
-                oninput={handleLocalitiesChange}
-                onblur={handleLocalitiesBlur}
-                data-testid="geo-localities-input"
-                placeholder="Ej: Barcelona, Madrid, Valencia"
-                class="border-light-muted focus:border-primary w-full rounded-lg border px-4 py-2 {showLocalitiesError
-                    ? 'border-red-500'
-                    : ''}"
-            />
-            <p class="text-tertiary mt-1 text-sm">Separa las localidades con comas.</p>
-
-            {#if showLocalitiesError}
-                <ValidationError message={errors.localities} />
-            {/if}
-        </div>
+        <TextInput
+            bind:value={localities}
+            name="localities"
+            labelText="Indica localidades"
+            placeholder="Ej: Barcelona, Madrid, Valencia"
+            required={true}
+            error={showLocalitiesError ? errors.localities : undefined}
+            helperText={!showLocalitiesError ? "Separa las localidades con comas." : undefined}
+            onBlur={handleLocalitiesBlur}
+        />
     {/if}
 </div>

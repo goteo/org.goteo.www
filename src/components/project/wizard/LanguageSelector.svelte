@@ -11,11 +11,11 @@
     - Validation on blur
 
     Design System:
-    - Uses standard select styling
+    - Uses Select component from library
     - Error states with red border and message
 -->
 <script lang="ts">
-    import ValidationError from "../../library/ValidationError.svelte";
+    import Select from "../../library/Select.svelte";
     import {
         validationErrors,
         touchedFields,
@@ -57,18 +57,16 @@
     /**
      * Handle primary language change
      */
-    function handlePrimaryChange(event: Event) {
-        const target = event.target as HTMLSelectElement;
-        primaryLanguage = target.value;
+    function handlePrimaryChange(value: string) {
+        primaryLanguage = value;
         updateLanguages();
     }
 
     /**
      * Handle secondary language change
      */
-    function handleSecondaryChange(index: number, event: Event) {
-        const target = event.target as HTMLSelectElement;
-        secondaryLanguages[index] = target.value;
+    function handleSecondaryChange(index: number, value: string) {
+        secondaryLanguages[index] = value;
         updateLanguages();
     }
 
@@ -119,59 +117,58 @@
 
 <div class="space-y-4">
     <!-- Primary Language -->
-    <div>
-        <label for="primary-language" class="text-secondary mb-2 block text-sm font-medium">
-            Idioma principal de la campaña *
-        </label>
-        <select
-            id="primary-language"
-            value={primaryLanguage}
-            onchange={handlePrimaryChange}
-            onblur={handleBlur}
-            data-testid="language-primary-select"
-            class="border-light-muted focus:border-primary w-full rounded-lg border px-4 py-2 {showError
-                ? 'border-red-500'
-                : ''}"
-        >
-            <option value="">Selecciona un idioma</option>
-            {#each getAvailableForDropdown(primaryLanguage) as lang}
-                <option value={lang.code}>{lang.name}</option>
-            {/each}
-        </select>
-    </div>
+    <Select
+        bind:value={primaryLanguage}
+        name="primary-language"
+        labelText="Idioma principal de la campaña"
+        required={true}
+        error={showError ? errors.languages : undefined}
+        onBlur={handleBlur}
+        onChange={handlePrimaryChange}
+    >
+        <option value="">Selecciona un idioma</option>
+        {#each getAvailableForDropdown(primaryLanguage) as lang}
+            <option value={lang.code}>{lang.name}</option>
+        {/each}
+    </Select>
 
     <!-- Secondary Languages -->
     {#each secondaryLanguages as secondary, index}
         <div class="flex gap-2">
             <div class="flex-1">
-                <label
-                    for="secondary-language-{index}"
-                    class="text-secondary mb-2 block text-sm font-medium"
-                >
-                    Idioma secundario {index + 1}
-                </label>
-                <select
-                    id="secondary-language-{index}"
-                    value={secondary}
-                    onchange={(e) => handleSecondaryChange(index, e)}
-                    data-testid="language-secondary-select-{index}"
-                    class="border-light-muted focus:border-primary w-full rounded-lg border px-4 py-2"
+                <Select
+                    bind:value={secondaryLanguages[index]}
+                    name="secondary-language-{index}"
+                    labelText="Idioma secundario {index + 1}"
+                    onChange={(value) => handleSecondaryChange(index, value)}
                 >
                     <option value="">Selecciona un idioma</option>
                     {#each getAvailableForDropdown(secondary) as lang}
                         <option value={lang.code}>{lang.name}</option>
                     {/each}
-                </select>
+                </Select>
             </div>
             <div class="flex items-end pb-2">
                 <button
                     type="button"
                     onclick={() => removeSecondaryLanguage(index)}
                     data-testid="language-remove-btn-{index}"
-                    class="text-tertiary hover:text-secondary rounded-lg p-2 transition"
+                    class="hover:bg-light-muted text-secondary hover:text-tertiary rounded-lg p-2 transition-colors"
                     aria-label="Eliminar idioma"
                 >
-                    ✕
+                    <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -182,13 +179,12 @@
         type="button"
         onclick={addSecondaryLanguage}
         data-testid="language-add-btn"
-        class="text-primary hover:text-secondary text-sm font-medium transition"
+        class="text-secondary hover:text-tertiary flex items-center gap-1 text-sm font-medium transition-colors"
     >
-        + Añadir otro idioma
+        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
+        </svg>
+        Añadir otro
     </button>
-
-    <!-- Validation Error -->
-    {#if showError}
-        <ValidationError message={errors.languages} />
-    {/if}
 </div>

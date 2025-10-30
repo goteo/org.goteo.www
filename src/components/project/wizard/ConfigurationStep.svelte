@@ -15,7 +15,6 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import BaseCard from "../../BaseCard.svelte";
     import Button from "../../library/Button.svelte";
     import LanguageSelector from "./LanguageSelector.svelte";
     import GeoSelector from "./GeoSelector.svelte";
@@ -88,37 +87,54 @@
     }
 </script>
 
-<div class="space-y-6">
+<div class="space-y-8">
+    <!-- Page Header -->
+    <div>
+        <h1 class="text-secondary mb-2 text-[32px] leading-tight font-bold">Configuración</h1>
+        <p class="text-secondary text-base">Configura los datos básicos de tu campaña</p>
+    </div>
+
     <!-- Languages Section -->
-    <BaseCard>
-        <h2 class="text-secondary mb-4 text-xl font-bold">Idiomas de la campaña</h2>
-        <p class="text-tertiary mb-4 text-sm">
-            Selecciona el idioma principal y añade idiomas secundarios si tu campaña es multilingüe.
-        </p>
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-secondary mb-2 text-xl font-bold">Idiomas de la campaña</h2>
+            <p class="text-secondary text-sm">
+                Cuáles son los idiomas en los que publicarás la información de campaña.
+            </p>
+        </div>
         <LanguageSelector languages={configuration.languages} onChange={handleLanguagesChange} />
-    </BaseCard>
+    </div>
 
     <!-- Geographic Scope Section -->
-    <BaseCard>
-        <h2 class="text-secondary mb-4 text-xl font-bold">Alcance geográfico</h2>
-        <p class="text-tertiary mb-4 text-sm">Indica el alcance geográfico de tu campaña.</p>
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-secondary mb-2 text-xl font-bold">Indica el alcance geográfico</h2>
+            <p class="text-secondary text-sm">Describe a quién va dirigido tu proyecto</p>
+        </div>
         <GeoSelector
             scope={configuration.geographicScope}
             localities={configuration.localities}
             onScopeChange={handleScopeChange}
             onLocalitiesChange={handleLocalitiesChange}
         />
-    </BaseCard>
+    </div>
 
     <!-- Funding Rounds Section -->
-    <BaseCard>
-        <h2 class="text-secondary mb-4 text-xl font-bold">Rondas de financiación</h2>
-        <p class="text-tertiary mb-4 text-sm">Elige las rondas que tendrá tu campaña.</p>
+    <div class="space-y-4">
+        <div>
+            <h2 class="text-secondary mb-2 text-xl font-bold">
+                Elige las rondas que tendrá tu campaña
+            </h2>
+            <p class="text-secondary text-sm">
+                La configuración predeterminada son 40 días cada ronda, puedes solicitar
+                modificaciones a tu asesor si tu proyecto es seleccionado
+            </p>
+        </div>
         <RoundSelector rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
-    </BaseCard>
+    </div>
 
     <!-- Continue Button -->
-    <div class="flex justify-end">
+    <div class="flex justify-start pt-4">
         <Button
             kind="primary"
             size="md"

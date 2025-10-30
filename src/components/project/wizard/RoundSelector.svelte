@@ -4,13 +4,13 @@
     Allows users to choose between 1 or 2 funding rounds for their campaign.
 
     Features:
-    - Radio button selection (1 or 2 rounds)
+    - Simple horizontal radio button layout
     - Defaults to 1 round
-    - Informational text about round duration
+    - Minimal design matching Figma specifications
 
     Design System:
-    - Custom radio button styling with primary color
-    - Hover states and transitions
+    - Primary color for selected state
+    - Clean, compact layout without card wrappers
 -->
 <script lang="ts">
     interface RoundSelectorProps {
@@ -28,59 +28,32 @@
     }
 </script>
 
-<div class="space-y-4">
-    <!-- Radio Button Options -->
-    <div class="space-y-3">
-        <!-- 1 Round Option -->
-        <label
-            class="border-light-muted hover:border-primary flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition {rounds ===
-            1
-                ? 'border-primary bg-purple-tint/10'
-                : ''}"
-        >
-            <input
-                type="radio"
-                name="funding-rounds"
-                value="1"
-                checked={rounds === 1}
-                onchange={() => handleChange(1)}
-                data-testid="round-1-radio"
-                class="text-primary focus:ring-primary size-5"
-            />
-            <div class="flex-1">
-                <div class="text-secondary font-medium">1 Ronda</div>
-                <div class="text-tertiary text-sm">40 días de campaña</div>
-            </div>
-        </label>
+<div class="flex gap-6">
+    <!-- 1 Round Option -->
+    <label class="text-secondary flex cursor-pointer items-center gap-2 font-medium">
+        <input
+            type="radio"
+            name="funding-rounds"
+            value="1"
+            checked={rounds === 1}
+            onchange={() => handleChange(1)}
+            data-testid="round-1-radio"
+            class="text-primary focus:ring-primary size-5"
+        />
+        <span>1 Ronda</span>
+    </label>
 
-        <!-- 2 Rounds Option -->
-        <label
-            class="border-light-muted hover:border-primary flex cursor-pointer items-center gap-3 rounded-lg border p-4 transition {rounds ===
-            2
-                ? 'border-primary bg-purple-tint/10'
-                : ''}"
-        >
-            <input
-                type="radio"
-                name="funding-rounds"
-                value="2"
-                checked={rounds === 2}
-                onchange={() => handleChange(2)}
-                data-testid="round-2-radio"
-                class="text-primary focus:ring-primary size-5"
-            />
-            <div class="flex-1">
-                <div class="text-secondary font-medium">2 Rondas</div>
-                <div class="text-tertiary text-sm">40 días por ronda (80 días en total)</div>
-            </div>
-        </label>
-    </div>
-
-    <!-- Informational Text -->
-    <div class="bg-purple-tint/10 rounded-lg p-4">
-        <p class="text-tertiary text-sm">
-            ℹ️ La configuración predeterminada son 40 días cada ronda, puedes solicitar
-            modificaciones a tu asesor si tu proyecto es seleccionado.
-        </p>
-    </div>
+    <!-- 2 Rounds Option -->
+    <label class="text-secondary flex cursor-pointer items-center gap-2 font-medium">
+        <input
+            type="radio"
+            name="funding-rounds"
+            value="2"
+            checked={rounds === 2}
+            onchange={() => handleChange(2)}
+            data-testid="round-2-radio"
+            class="text-primary focus:ring-primary size-5"
+        />
+        <span>2 Rondas</span>
+    </label>
 </div>

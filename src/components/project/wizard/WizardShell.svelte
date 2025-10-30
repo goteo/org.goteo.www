@@ -226,14 +226,14 @@
                     value={title}
                     oninput={(e) => onTitleChange?.(e.currentTarget.value)}
                     placeholder={$t("wizard.header.titlePlaceholder")}
-                    class="w-full pb-0 border-0 bg-transparent text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
+                    class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                 />
                 <input
                     type="text"
                     value={subtitle}
                     oninput={(e) => onSubtitleChange?.(e.currentTarget.value)}
                     placeholder={$t("wizard.header.subtitlePlaceholder")}
-                    class="w-full pt-0 border-0 bg-transparent text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
+                    class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
                 />
             </div>
         </div>
