@@ -26,7 +26,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 </script>
 
 <div
-    class="bg-light-surface border-light-muted min-w-sm grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] {containerClasses}"
+    class="bg-light-surface border-light-muted min-w-0 grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] {containerClasses}"
     data-testid="campaign-card"
 >
     <a href="/project/{campaign.id}">
