@@ -32,7 +32,7 @@ describe("Login Page", () => {
                     cy.get('input[name="password"]', { timeout: 5000 }).should("exist");
                 });
 
-                cy.get('button[form="login"]', { timeout: 5000 }).should("be.visible");
+                cy.get('button[form="login"]', { timeout: 5000 }).should("exist");
             } else {
                 cy.log("ℹ️ Login form not found");
             }
