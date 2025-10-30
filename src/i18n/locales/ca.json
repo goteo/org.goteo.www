@@ -952,7 +952,8 @@
     "buttons": {
       "preview": "Previsualitzar",
       "save": "Guardar",
-      "publish": "Publicar"
+      "publish": "Publicar",
+      "continue": "Continuar amb info de campanya"
     },
     "steps": {
       "configuration": "Configuració",
@@ -961,6 +962,61 @@
       "collaborations": "Col·laboracions",
       "budget": "Pressupost",
       "about_you": "Sobre tu"
+    },
+    "configuration": {
+      "title": "Configuració",
+      "subtitle": "Configura les dades bàsiques de la teva campanya",
+      "languages": {
+        "title": "Idiomes de la campanya",
+        "description": "Quins són els idiomes en què publicaràs la informació de campanya.",
+        "primaryLabel": "Idioma principal de la campanya",
+        "secondaryLabel": "Idioma secundari {{index}}",
+        "selectPlaceholder": "Selecciona un idioma",
+        "addButton": "Afegir un altre",
+        "removeButton": "Eliminar idioma",
+        "options": {
+          "es": "Español",
+          "en": "English",
+          "ca": "Català",
+          "fr": "Français",
+          "de": "Deutsch",
+          "it": "Italiano",
+          "pt": "Português"
+        }
+      },
+      "geography": {
+        "title": "Indica l'abast geogràfic",
+        "description": "Descriu a qui va dirigit el teu projecte",
+        "scopeLabel": "Abast geogràfic",
+        "scopePlaceholder": "Selecciona l'abast",
+        "localitiesLabel": "Indica localitats",
+        "localitiesPlaceholder": "Ex: Barcelona, Madrid, València",
+        "localitiesHelper": "Separa les localitats amb comes.",
+        "options": {
+          "local": "Local",
+          "estatal": "Estatal",
+          "internacional": "Internacional"
+        }
+      },
+      "rounds": {
+        "title": "Tria les rondes que tindrà la teva campanya",
+        "description": "La configuració predeterminada són 40 dies cada ronda, pots sol·licitar modificacions al teu assessor si el teu projecte és seleccionat",
+        "option1": "1 Ronda",
+        "option2": "2 Rondes"
+      }
+    },
+    "placeholders": {
+      "configurationStep": "Aquest pas s'implementarà aviat.",
+      "campaignInfoStep": "Informació de campanya - Aquest pas s'implementarà a la Fase 2.",
+      "rewardsStep": "Recompenses - Aquest pas s'implementarà a la Fase 3.",
+      "collaborationsStep": "Col·laboracions - Aquest pas s'implementarà a la Fase 4.",
+      "budgetStep": "Pressupost - Aquest pas s'implementarà a la Fase 5.",
+      "aboutYouStep": "Sobre tu - Aquest pas s'implementarà a la Fase 6."
+    },
+    "validation": {
+      "languages": "Has de seleccionar almenys un idioma",
+      "geographicScope": "Has de seleccionar un abast geogràfic",
+      "localities": "Has d'indicar les localitats per a l'abast local"
     },
     "errors": {
       "storage": {

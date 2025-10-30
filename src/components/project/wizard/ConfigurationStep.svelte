@@ -15,6 +15,7 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
+    import { t } from "../../../i18n/store";
     import Button from "../../library/Button.svelte";
     import LanguageSelector from "./LanguageSelector.svelte";
     import GeoSelector from "./GeoSelector.svelte";
@@ -90,16 +91,20 @@
 <div class="space-y-8">
     <!-- Page Header -->
     <div>
-        <h1 class="text-secondary mb-2 text-[32px] leading-tight font-bold">Configuración</h1>
-        <p class="text-secondary text-base">Configura los datos básicos de tu campaña</p>
+        <h1 class="text-secondary mb-2 text-[32px] leading-tight font-bold">
+            {$t("wizard.configuration.title")}
+        </h1>
+        <p class="text-secondary text-base">{$t("wizard.configuration.subtitle")}</p>
     </div>
 
     <!-- Languages Section -->
     <div class="space-y-4">
         <div>
-            <h2 class="text-secondary mb-2 text-xl font-bold">Idiomas de la campaña</h2>
+            <h2 class="text-secondary mb-2 text-xl font-bold">
+                {$t("wizard.configuration.languages.title")}
+            </h2>
             <p class="text-secondary text-sm">
-                Cuáles son los idiomas en los que publicarás la información de campaña.
+                {$t("wizard.configuration.languages.description")}
             </p>
         </div>
         <LanguageSelector languages={configuration.languages} onChange={handleLanguagesChange} />
@@ -108,8 +113,10 @@
     <!-- Geographic Scope Section -->
     <div class="space-y-4">
         <div>
-            <h2 class="text-secondary mb-2 text-xl font-bold">Indica el alcance geográfico</h2>
-            <p class="text-secondary text-sm">Describe a quién va dirigido tu proyecto</p>
+            <h2 class="text-secondary mb-2 text-xl font-bold">
+                {$t("wizard.configuration.geography.title")}
+            </h2>
+            <p class="text-secondary text-sm">{$t("wizard.configuration.geography.description")}</p>
         </div>
         <GeoSelector
             scope={configuration.geographicScope}
@@ -123,11 +130,10 @@
     <div class="space-y-4">
         <div>
             <h2 class="text-secondary mb-2 text-xl font-bold">
-                Elige las rondas que tendrá tu campaña
+                {$t("wizard.configuration.rounds.title")}
             </h2>
             <p class="text-secondary text-sm">
-                La configuración predeterminada son 40 días cada ronda, puedes solicitar
-                modificaciones a tu asesor si tu proyecto es seleccionado
+                {$t("wizard.configuration.rounds.description")}
             </p>
         </div>
         <RoundSelector rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
@@ -142,7 +148,7 @@
             onclick={handleContinue}
             data-testid="config-continue-btn"
         >
-            Continuar con info de campaña
+            {$t("wizard.buttons.continue")}
         </Button>
     </div>
 </div>

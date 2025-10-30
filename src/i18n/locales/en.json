@@ -944,7 +944,8 @@
     "buttons": {
       "preview": "Preview",
       "save": "Save",
-      "publish": "Publish"
+      "publish": "Publish",
+      "continue": "Continue with campaign info"
     },
     "steps": {
       "configuration": "Configuration",
@@ -953,6 +954,61 @@
       "collaborations": "Collaborations",
       "budget": "Budget",
       "about_you": "About you"
+    },
+    "configuration": {
+      "title": "Configuration",
+      "subtitle": "Configure the basic data of your campaign",
+      "languages": {
+        "title": "Campaign languages",
+        "description": "Which languages will you publish the campaign information in.",
+        "primaryLabel": "Primary campaign language",
+        "secondaryLabel": "Secondary language {{index}}",
+        "selectPlaceholder": "Select a language",
+        "addButton": "Add another",
+        "removeButton": "Remove language",
+        "options": {
+          "es": "Español",
+          "en": "English",
+          "ca": "Català",
+          "fr": "Français",
+          "de": "Deutsch",
+          "it": "Italiano",
+          "pt": "Português"
+        }
+      },
+      "geography": {
+        "title": "Indicate the geographic reach",
+        "description": "Describe who your project is aimed at",
+        "scopeLabel": "Geographic scope",
+        "scopePlaceholder": "Select scope",
+        "localitiesLabel": "Indicate localities",
+        "localitiesPlaceholder": "E.g: Barcelona, Madrid, Valencia",
+        "localitiesHelper": "Separate localities with commas.",
+        "options": {
+          "local": "Local",
+          "estatal": "State",
+          "internacional": "International"
+        }
+      },
+      "rounds": {
+        "title": "Choose the rounds your campaign will have",
+        "description": "The default configuration is 40 days per round, you can request modifications from your advisor if your project is selected",
+        "option1": "1 Round",
+        "option2": "2 Rounds"
+      }
+    },
+    "placeholders": {
+      "configurationStep": "This step will be implemented soon.",
+      "campaignInfoStep": "Campaign information - This step will be implemented in Phase 2.",
+      "rewardsStep": "Rewards - This step will be implemented in Phase 3.",
+      "collaborationsStep": "Collaborations - This step will be implemented in Phase 4.",
+      "budgetStep": "Budget - This step will be implemented in Phase 5.",
+      "aboutYouStep": "About you - This step will be implemented in Phase 6."
+    },
+    "validation": {
+      "languages": "You must select at least one language",
+      "geographicScope": "You must select a geographic scope",
+      "localities": "You must indicate localities for local scope"
     },
     "errors": {
       "storage": {

@@ -5,7 +5,7 @@
 
     Features:
     - Primary language dropdown (required)
-    - Add secondary languages with "Añadir otro" button
+    - Add secondary languages with "Añadir outro" button
     - Remove secondary languages
     - Excludes already-selected languages from dropdowns
     - Validation on blur
@@ -15,6 +15,7 @@
     - Error states with red border and message
 -->
 <script lang="ts">
+    import { t } from "../../../i18n/store";
     import Select from "../../library/Select.svelte";
     import {
         validationErrors,
@@ -34,16 +35,16 @@
 
     let { languages = [], onChange }: LanguageSelectorProps = $props();
 
-    // Available languages
-    const availableLanguages: LanguageOption[] = [
-        { code: "es", name: "Español" },
-        { code: "en", name: "English" },
-        { code: "ca", name: "Català" },
-        { code: "fr", name: "Français" },
-        { code: "de", name: "Deutsch" },
-        { code: "it", name: "Italiano" },
-        { code: "pt", name: "Português" },
-    ];
+    // Available languages - using translations
+    const availableLanguages = $derived<LanguageOption[]>([
+        { code: "es", name: $t("wizard.configuration.languages.options.es") },
+        { code: "en", name: $t("wizard.configuration.languages.options.en") },
+        { code: "ca", name: $t("wizard.configuration.languages.options.ca") },
+        { code: "fr", name: $t("wizard.configuration.languages.options.fr") },
+        { code: "de", name: $t("wizard.configuration.languages.options.de") },
+        { code: "it", name: $t("wizard.configuration.languages.options.it") },
+        { code: "pt", name: $t("wizard.configuration.languages.options.pt") },
+    ]);
 
     // Local state for language selection
     let primaryLanguage = $state(languages[0] || "");
@@ -120,13 +121,13 @@
     <Select
         bind:value={primaryLanguage}
         name="primary-language"
-        labelText="Idioma principal de la campaña"
+        labelText={$t("wizard.configuration.languages.primaryLabel")}
         required={true}
         error={showError ? errors.languages : undefined}
         onBlur={handleBlur}
         onChange={handlePrimaryChange}
     >
-        <option value="">Selecciona un idioma</option>
+        <option value="">{$t("wizard.configuration.languages.selectPlaceholder")}</option>
         {#each getAvailableForDropdown(primaryLanguage) as lang}
             <option value={lang.code}>{lang.name}</option>
         {/each}
@@ -139,10 +140,14 @@
                 <Select
                     bind:value={secondaryLanguages[index]}
                     name="secondary-language-{index}"
-                    labelText="Idioma secundario {index + 1}"
+                    labelText={$t("wizard.configuration.languages.secondaryLabel", {
+                        index: index + 1,
+                    })}
                     onChange={(value) => handleSecondaryChange(index, value)}
                 >
-                    <option value="">Selecciona un idioma</option>
+                    <option value=""
+                        >{$t("wizard.configuration.languages.selectPlaceholder")}</option
+                    >
                     {#each getAvailableForDropdown(secondary) as lang}
                         <option value={lang.code}>{lang.name}</option>
                     {/each}
@@ -154,7 +159,7 @@
                     onclick={() => removeSecondaryLanguage(index)}
                     data-testid="language-remove-btn-{index}"
                     class="hover:bg-light-muted text-secondary hover:text-tertiary rounded-lg p-2 transition-colors"
-                    aria-label="Eliminar idioma"
+                    aria-label={$t("wizard.configuration.languages.removeButton")}
                 >
                     <svg
                         class="h-5 w-5"
@@ -185,6 +190,6 @@
             <circle cx="12" cy="12" r="10" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
         </svg>
-        Añadir otro
+        {$t("wizard.configuration.languages.addButton")}
     </button>
 </div>

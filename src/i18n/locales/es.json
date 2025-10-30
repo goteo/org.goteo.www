@@ -981,7 +981,8 @@
     "buttons": {
       "preview": "Previsualizar",
       "save": "Guardar",
-      "publish": "Publicar"
+      "publish": "Publicar",
+      "continue": "Continuar con info de campaña"
     },
     "steps": {
       "configuration": "Configuración",
@@ -990,6 +991,61 @@
       "collaborations": "Colaboraciones",
       "budget": "Presupuesto",
       "about_you": "Sobre ti"
+    },
+    "configuration": {
+      "title": "Configuración",
+      "subtitle": "Configura los datos básicos de tu campaña",
+      "languages": {
+        "title": "Idiomas de la campaña",
+        "description": "Cuáles son los idiomas en los que publicarás la información de campaña.",
+        "primaryLabel": "Idioma principal de la campaña",
+        "secondaryLabel": "Idioma secundario {{index}}",
+        "selectPlaceholder": "Selecciona un idioma",
+        "addButton": "Añadir otro",
+        "removeButton": "Eliminar idioma",
+        "options": {
+          "es": "Español",
+          "en": "English",
+          "ca": "Català",
+          "fr": "Français",
+          "de": "Deutsch",
+          "it": "Italiano",
+          "pt": "Português"
+        }
+      },
+      "geography": {
+        "title": "Indica el alcance geográfico",
+        "description": "Describe a quién va dirigido tu proyecto",
+        "scopeLabel": "Alcance geográfico",
+        "scopePlaceholder": "Selecciona el alcance",
+        "localitiesLabel": "Indica localidades",
+        "localitiesPlaceholder": "Ej: Barcelona, Madrid, Valencia",
+        "localitiesHelper": "Separa las localidades con comas.",
+        "options": {
+          "local": "Local",
+          "estatal": "Estatal",
+          "internacional": "Internacional"
+        }
+      },
+      "rounds": {
+        "title": "Elige las rondas que tendrá tu campaña",
+        "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
+        "option1": "1 Ronda",
+        "option2": "2 Rondas"
+      }
+    },
+    "placeholders": {
+      "configurationStep": "Este paso será implementado próximamente.",
+      "campaignInfoStep": "Información de campaña - Este paso será implementado en la Fase 2.",
+      "rewardsStep": "Recompensas - Este paso será implementado en la Fase 3.",
+      "collaborationsStep": "Colaboraciones - Este paso será implementado en la Fase 4.",
+      "budgetStep": "Presupuesto - Este paso será implementado en la Fase 5.",
+      "aboutYouStep": "Sobre ti - Este paso será implementado en la Fase 6."
+    },
+    "validation": {
+      "languages": "Debes seleccionar al menos un idioma",
+      "geographicScope": "Debes seleccionar un alcance geográfico",
+      "localities": "Debes indicar las localidades para el alcance local"
     },
     "errors": {
       "storage": {

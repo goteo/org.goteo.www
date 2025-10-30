@@ -13,6 +13,8 @@
     - Clean, compact layout without card wrappers
 -->
 <script lang="ts">
+    import { t } from "../../../i18n/store";
+
     interface RoundSelectorProps {
         rounds: 1 | 2;
         onChange: (rounds: 1 | 2) => void;
@@ -40,7 +42,7 @@
             data-testid="round-1-radio"
             class="text-primary focus:ring-primary size-5"
         />
-        <span>1 Ronda</span>
+        <span>{$t("wizard.configuration.rounds.option1")}</span>
     </label>
 
     <!-- 2 Rounds Option -->
@@ -54,6 +56,6 @@
             data-testid="round-2-radio"
             class="text-primary focus:ring-primary size-5"
         />
-        <span>2 Rondas</span>
+        <span>{$t("wizard.configuration.rounds.option2")}</span>
     </label>
 </div>

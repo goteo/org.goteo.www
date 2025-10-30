@@ -13,6 +13,7 @@
     - Error states with red border and message
 -->
 <script lang="ts">
+    import { t } from "../../../i18n/store";
     import Select from "../../library/Select.svelte";
     import TextInput from "../../library/TextInput.svelte";
     import {
@@ -70,16 +71,18 @@
     <Select
         bind:value={scope}
         name="geographic-scope"
-        labelText="Alcance geográfico"
+        labelText={$t("wizard.configuration.geography.scopeLabel")}
         required={true}
         error={showScopeError ? errors.geographicScope : undefined}
         onBlur={handleScopeBlur}
         onChange={handleScopeChange}
     >
-        <option value="">Selecciona el alcance</option>
-        <option value="local">Local</option>
-        <option value="estatal">Estatal</option>
-        <option value="internacional">Internacional</option>
+        <option value="">{$t("wizard.configuration.geography.scopePlaceholder")}</option>
+        <option value="local">{$t("wizard.configuration.geography.options.local")}</option>
+        <option value="estatal">{$t("wizard.configuration.geography.options.estatal")}</option>
+        <option value="internacional"
+            >{$t("wizard.configuration.geography.options.internacional")}</option
+        >
     </Select>
 
     <!-- Conditional Localities Input -->
@@ -87,11 +90,13 @@
         <TextInput
             bind:value={localities}
             name="localities"
-            labelText="Indica localidades"
-            placeholder="Ej: Barcelona, Madrid, Valencia"
+            labelText={$t("wizard.configuration.geography.localitiesLabel")}
+            placeholder={$t("wizard.configuration.geography.localitiesPlaceholder")}
             required={true}
             error={showLocalitiesError ? errors.localities : undefined}
-            helperText={!showLocalitiesError ? "Separa las localidades con comas." : undefined}
+            helperText={!showLocalitiesError
+                ? $t("wizard.configuration.geography.localitiesHelper")
+                : undefined}
             onBlur={handleLocalitiesBlur}
         />
     {/if}
