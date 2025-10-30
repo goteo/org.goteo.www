@@ -28,7 +28,6 @@
         areAllStepsCompleted,
         persistenceError,
     } from "../../../stores/wizard-state";
-    import { logger } from "../../../utils/logger";
 
     interface WizardStep {
         id: number;
@@ -82,7 +81,7 @@
 
         if (!success) {
             // Navigation blocked - could show a toast message here
-            logger.warn(
+            console.warn(
                 "[Wizard]",
                 `Navigation to step ${stepId} blocked - complete previous steps first`,
             );
@@ -120,7 +119,6 @@
             onSave();
         }
         // Could show success toast here
-        logger.info("[Wizard]", "Draft saved to localStorage");
     }
 
     /**

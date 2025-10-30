@@ -64,7 +64,6 @@ export const login = defineAction({
                 person: personData,
                 token: tokenData.token,
                 accountingId: extractId(userData.accounting),
-                timestamp: Date.now(), // Add timestamp for client-side expiration checking
             };
 
             if (userData.roles?.includes("ROLE_ADMIN")) {

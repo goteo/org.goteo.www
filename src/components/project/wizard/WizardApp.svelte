@@ -11,7 +11,6 @@
     import WizardShell from "./WizardShell.svelte";
     import ConfigurationStep from "./ConfigurationStep.svelte";
     import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
-    import { logger } from "../../../utils/logger";
     import type { Project } from "../../../openapi/client";
 
     let {
@@ -60,7 +59,6 @@
     function handleSave() {
         // In Phase 1, save to localStorage only
         // Phase 7 will add PATCH to backend
-        logger.info("[Wizard]", "Draft saved to localStorage");
         // Could show success toast here
     }
 
@@ -70,14 +68,13 @@
     function handlePublish() {
         // In Phase 1, this is disabled until all steps are complete
         // Phase 7 will add publish workflow
-        logger.info("[Wizard]", "Publish clicked - would navigate to publish confirmation");
     }
 
     /**
      * Handle step continue
      */
     function handleContinue() {
-        logger.info("[Wizard]", "Navigated to step", $wizardState.currentStep);
+        // Step navigation handled by wizard state
     }
 </script>
 

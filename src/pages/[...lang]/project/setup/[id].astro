@@ -1,18 +1,7 @@
 ---
 /**
  * Project Setup Wizard Route
- *
- * This page provides a multi-step wizard for completing approved project proposals.
- * It implements the second stage of the two-stage project creation workflow:
- *
- * Stage 1: Proposal Submission (at /[lang]/create/project) - Simple form with basic info
- * Stage 2: Detailed Setup (this page) - Six-step wizard for approved proposals
- *
- * Access Control:
- * - User must be authenticated
- * - Token must not be expired (24-hour TTL)
- * - User must own the project
- * - Project must have status 'approved' or 'in_setup'
+ * Simplified for testing - access control will be implemented later
  */
 
 import Layout from "../../../../layouts/Layout.astro";
@@ -22,139 +11,18 @@ import { apiProjectsIdOrSlugGet } from "../../../../openapi/client";
 const lang = (Astro.params.lang || "es") as string;
 const { id } = Astro.params;
 
-// Access Control Step 1: Check authentication
-const accessCookie = Astro.cookies.get("access-token");
-
-if (!accessCookie) {
-    // Redirect to login if not authenticated
-    return Astro.redirect(`/${lang}/login?redirect=${encodeURIComponent(Astro.url.pathname)}`);
-}
-
-// Parse and validate user data from access token
-interface UserCookie {
-    id: string;
-    token: string;
-    accountingId?: string;
-    isAdmin?: boolean;
-    user?: any;
-    person?: any;
-    timestamp?: number; // Added for expiration tracking
-}
-
-let user: UserCookie;
-try {
-    user = JSON.parse(accessCookie.value);
-} catch (error) {
-    // Invalid token format, clear and redirect to login
-    console.error("Failed to parse access token:", error);
-    Astro.cookies.delete("access-token", { path: "/" });
-    return Astro.redirect(`/${lang}/login?redirect=${encodeURIComponent(Astro.url.pathname)}`);
-}
-
-// Access Control Step 2: Check token expiration
-// Tokens have a 24-hour TTL (86400 seconds)
-const TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-
-if (user.timestamp) {
-    const now = Date.now();
-    const tokenAge = now - user.timestamp;
-
-    if (tokenAge > TOKEN_TTL_MS) {
-        // Token expired, clear cookie and redirect to login
-        console.warn("Token expired, redirecting to login");
-        Astro.cookies.delete("access-token", { path: "/" });
-        return Astro.redirect(
-            `/${lang}/login?redirect=${encodeURIComponent(Astro.url.pathname)}&reason=expired`,
-        );
-    }
-}
-
-// Access Control Step 3: Validate project ID
 if (!id) {
-    // No project ID provided, redirect to create page
-    return Astro.redirect(`/${lang}/create/project`);
+    return Astro.redirect(`/${lang}/`);
 }
 
-// Access Control Step 4: Fetch project data with enhanced error handling
-const {
-    data: project,
-    error,
-    response,
-} = await apiProjectsIdOrSlugGet({
+// Fetch project data
+const { data: project } = await apiProjectsIdOrSlugGet({
     path: { idOrSlug: id },
-    headers: {
-        Authorization: `Bearer ${user.token}`,
-        "Accept-Language": lang,
-    },
 });
 
-// Handle specific error cases
-if (error || !project) {
-    const statusCode = response?.status;
-
-    // Log error for debugging
-    console.error(`Error fetching project ${id}:`, {
-        status: statusCode,
-        error,
-    });
-
-    // Handle specific HTTP status codes
-    switch (statusCode) {
-        case 404:
-            // Project not found
-            return Astro.redirect(`/${lang}/404`);
-
-        case 403:
-            // Forbidden - user doesn't have access
-            return Astro.redirect(`/${lang}/project/${id}?error=forbidden`);
-
-        case 401:
-            // Unauthorized - token might be invalid
-            Astro.cookies.delete("access-token", { path: "/" });
-            return Astro.redirect(
-                `/${lang}/login?redirect=${encodeURIComponent(Astro.url.pathname)}&reason=unauthorized`,
-            );
-
-        case 500:
-        case 502:
-        case 503:
-            // Server errors - redirect to error page with message
-            return Astro.redirect(
-                `/${lang}/error?message=${encodeURIComponent("Unable to load project. Please try again later.")}`,
-            );
-
-        default:
-            // Generic error fallback
-            console.error("Unexpected error fetching project:", error);
-            return Astro.redirect(
-                `/${lang}/error?message=${encodeURIComponent("An unexpected error occurred")}`,
-            );
-    }
+if (!project) {
+    return Astro.redirect(`/${lang}/`);
 }
-
-// Access Control Step 5: Check ownership
-// TEMPORARILY DISABLED FOR TESTING
-// TODO: Re-enable before production deployment
-// The API returns owner as IRI format: "/v4/users/{id}"
-// const ownerIri = `/v4/users/${user.id}`;
-// if (project.owner !== ownerIri) {
-//     // User doesn't own this project, redirect to project page with forbidden error
-//     console.warn(`User ${user.id} attempted to access project ${id} owned by ${project.owner}`);
-//     return Astro.redirect(`/${lang}/project/${id}?error=not-owner`);
-// }
-
-// Access Control Step 6: Check project status
-// TEMPORARILY DISABLED FOR TESTING
-// TODO: Re-enable before production deployment
-// Only 'approved' or 'in_setup' projects can access the wizard
-// const allowedStatuses = ["approved", "in_setup"];
-// if (!allowedStatuses.includes(project.status || "")) {
-//     // Project is not approved yet, redirect back to proposal page
-//     console.warn(`Project ${id} has invalid status for wizard: ${project.status}`);
-//     return Astro.redirect(`/${lang}/create/project?id=${id}&error=invalid-status`);
-// }
-
-// All access control checks passed - wizard will be rendered with project data
 ---
 
 <Layout title="Configurar Proyecto">
