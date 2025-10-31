@@ -18,59 +18,70 @@ itemCount.subscribe((count) => {
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
-        <div class="flex flex-row gap-8 py-10">
-            <div class="flex w-1/2 flex-col gap-10">
+        <div class="flex flex-row gap-4 py-6 md:gap-6 md:py-8 lg:gap-8 lg:py-10">
+            <div class="flex w-1/2 flex-col gap-6 md:gap-8 lg:gap-10">
                 <BackButton />
 
                 <div class="flex flex-col gap-4">
-                    <div class="flex flex-col gap-10">
+                    <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">
                         <div class="flex flex-col gap-4">
-                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                            <h2
+                                class="text-2xl font-bold tracking-[0%] text-black md:text-3xl md:leading-tight lg:text-[40px] lg:leading-[48px]"
+                            >
                                 {t("login.page.title")}
                             </h2>
-                            {hasCart && <p class="text-content">{t("login.page.description")}</p>}
+                            {
+                                hasCart && (
+                                    <p class="text-content text-sm md:text-base">
+                                        {t("login.page.description")}
+                                    </p>
+                                )
+                            }
                         </div>
                         <div>
                             <div class="flex flex-col gap-4">
-                                <div class="flex flex-row items-center gap-2">
-                                    <h2 class="text-2xl font-bold text-black">
+                                <div
+                                    class="flex flex-col flex-wrap items-start gap-2 sm:flex-row sm:items-center"
+                                >
+                                    <h2 class="text-lg font-bold text-black md:text-xl lg:text-2xl">
                                         {t("login.page.registerOr")}
                                     </h2>
                                     <a
                                         href="/register"
-                                        class="text-secondary bg-purple-tint rounded-2xl px-4 py-2 font-bold"
+                                        class="text-secondary bg-purple-tint inline-block rounded-xl px-3 py-1.5 text-sm font-bold whitespace-nowrap md:rounded-2xl md:px-4 md:py-2 md:text-base"
                                     >
                                         {t("login.page.registerBtnLabel")}
                                     </a>
                                 </div>
                             </div>
                             <LoginForm />
-                            <!-- <div>
-                                <p>{t("login.page.otherAccessMethods")}</p>
-                                <Oauth />
-                            </div> -->
                         </div>
                     </div>
                 </div>
             </div>
+
             <div
-                class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
+                class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-4 rounded-3xl border bg-white md:gap-6 md:rounded-[40px]"
             >
                 {hasCart && <Summary client:load />}
                 {hasCart && <Steps step={2} client:load />}
-                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                    {hasCart && <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>}
+                <div class="flex flex-col gap-4 px-4 pt-0 pb-4 md:px-6 md:pb-6">
+                    {
+                        hasCart && (
+                            <p class="text-content text-xs md:text-sm">
+                                {t("checkout.summary.deduct")}
+                            </p>
+                        )
+                    }
 
                     {
                         !hasCart && (
-                            <div class="flex flex-col gap-6 pt-6 pb-0">
+                            <div class="flex flex-col gap-4 pt-4 pb-0 md:gap-6 md:pt-6">
                                 <div>
-                                    <h2
-                                        class={`text-secondary text-[56px] leading-tight font-semibold`}
-                                    >
+                                    <h2 class="text-secondary text-2xl leading-tight font-semibold md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-[56px]">
                                         {t("login.page.welcome.title")}
                                     </h2>
-                                    <p class="text-content font-light">
+                                    <p class="text-content text-sm font-light md:text-base">
                                         {t("login.page.welcome.subtitle")}
                                     </p>
                                 </div>
