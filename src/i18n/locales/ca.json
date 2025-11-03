@@ -456,7 +456,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sessió",
-    "btnCart": "Anar al checkout"
+    "btnCart": "Anar al checkout",
+    "search": "Cercar",
+    "createProject": "Crea la teva campanya"
   },
   "checkout": {
     "title": "Resum de les teves donacions seleccionades",
