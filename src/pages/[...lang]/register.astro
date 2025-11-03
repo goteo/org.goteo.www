@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import RegisterForm from "../../components/RegisterForm.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
+import AuthSummary from "../../components/AuthSummary.svelte";
 import Oauth from "../../components/Oauth.astro";
 import Button from "../../components/library/Button.svelte";
 import BackButton from "../../components/BackButton.astro";
@@ -18,8 +19,8 @@ itemCount.subscribe((count) => {
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <main class="wrapper">
-        <div class="flex flex-row gap-4 py-6 md:gap-6 md:py-8 lg:gap-8 lg:py-10">
-            <div class="flex w-1/2 flex-col gap-6 md:gap-8 lg:gap-10">
+        <div class="flex flex-col gap-8 py-10 lg:flex-row">
+            <div class="flex w-full flex-col gap-10 lg:w-1/2">
                 <BackButton />
 
                 <div class="flex flex-col gap-4">
@@ -61,35 +62,35 @@ itemCount.subscribe((count) => {
             </div>
 
             <div
-                class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-4 rounded-3xl border bg-white md:gap-6 md:rounded-[40px]"
+                class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
             >
+                <AuthSummary client:load />
                 {hasCart && <Summary client:load />}
-                {hasCart && <Steps step={2} client:load />}
-                <div class="flex flex-col gap-4 px-4 pt-0 pb-4 md:px-6 md:pb-6">
-                    {
-                        hasCart && (
-                            <p class="text-content text-xs md:text-sm">
-                                {t("checkout.summary.deduct")}
-                            </p>
-                        )
-                    }
 
-                    {
-                        !hasCart && (
-                            <div class="flex flex-col gap-4 pt-4 pb-0 md:gap-6 md:pt-6">
-                                <div>
-                                    <h2 class="text-secondary text-2xl leading-tight font-semibold md:text-3xl lg:text-4xl xl:text-5xl 2xl:text-[56px]">
-                                        {t("login.page.welcome.title")}
-                                    </h2>
-                                    <p class="text-content text-sm font-light md:text-base">
-                                        {t("login.page.welcome.subtitle")}
-                                    </p>
+                <div class="lg:block" id="auth-details">
+                    {hasCart && <Steps step={2} client:load />}
+                    <div class="flex flex-col px-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                        {
+                            hasCart && (
+                                <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                            )
+                        }
+                        {
+                            !hasCart && (
+                                <div class="flex flex-col gap-4 pt-4 pb-0 md:gap-6 md:pt-6 lg:hidden">
+                                    <div>
+                                        <p class="text-content text-sm font-light">
+                                            {t("login.page.welcome.subtitle")}
+                                        </p>
+                                    </div>
+                                    <hr class="bg-secondary" />
                                 </div>
-                                <hr class="bg-secondary" />
-                            </div>
-                        )
-                    }
+                            )
+                        }
+                    </div>
+                </div>
 
+                <div class="mt-4 flex flex-col items-end px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
                     <Button type="submit" form="register" class="w-fit">
                         {t("register.form.btnSubmit")}
                     </Button>
