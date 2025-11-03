@@ -10,8 +10,10 @@
 <script lang="ts">
     import WizardShell from "./WizardShell.svelte";
     import ConfigurationStep from "./ConfigurationStep.svelte";
+    import CampaignInfoStep from "./CampaignInfoStep.svelte";
     import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
     import type { Project } from "../../../openapi/client";
+    import { t } from "../../../i18n/store";
 
     let {
         project,
@@ -21,9 +23,54 @@
         lang?: string;
     } = $props();
 
-    // Initialize wizard state from project
+    // Initialize wizard state from project and set up URL sync
     $effect(() => {
+        // Read URL parameter first (before initializing)
+        let initialStep = 1;
+        if (typeof window !== "undefined") {
+            const url = new URL(window.location.href);
+            const stepParam = url.searchParams.get("step");
+            if (stepParam) {
+                const step = parseInt(stepParam, 10);
+                if (!isNaN(step) && step >= 1 && step <= 6) {
+                    initialStep = step;
+                }
+            }
+        }
+
+        // Initialize from project
         initializeFromProject(project);
+
+        // Set the step from URL parameter if present
+        if (initialStep !== 1) {
+            wizardState.update((state) => ({
+                ...state,
+                currentStep: initialStep,
+            }));
+        }
+
+        // Listen for browser back/forward navigation (client-side only)
+        if (typeof window !== "undefined") {
+            const handlePopState = () => {
+                const url = new URL(window.location.href);
+                const stepParam = url.searchParams.get("step");
+                if (stepParam) {
+                    const step = parseInt(stepParam, 10);
+                    if (!isNaN(step) && step >= 1 && step <= 6) {
+                        wizardState.update((state) => ({
+                            ...state,
+                            currentStep: step,
+                        }));
+                    }
+                }
+            };
+
+            window.addEventListener("popstate", handlePopState);
+
+            return () => {
+                window.removeEventListener("popstate", handlePopState);
+            };
+        }
     });
 
     // Reactive current step
@@ -81,7 +128,6 @@
 <WizardShell
     {title}
     {subtitle}
-    {lang}
     onTitleChange={handleTitleChange}
     onSubtitleChange={handleSubtitleChange}
     onSave={handleSave}
@@ -91,29 +137,30 @@
         {#if currentStep === 1}
             <ConfigurationStep onContinue={handleContinue} />
         {:else if currentStep === 2}
-            <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">Información de campaña</h2>
-                <p class="text-tertiary">Este paso será implementado en la Fase 2.</p>
-            </div>
+            <CampaignInfoStep onContinue={handleContinue} />
         {:else if currentStep === 3}
             <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">Recompensas</h2>
-                <p class="text-tertiary">Este paso será implementado en la Fase 3.</p>
+                <h2 class="text-secondary mb-4 text-2xl font-bold">{$t("wizard.steps.rewards")}</h2>
+                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
             </div>
         {:else if currentStep === 4}
             <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">Colaboraciones</h2>
-                <p class="text-tertiary">Este paso será implementado en la Fase 4.</p>
+                <h2 class="text-secondary mb-4 text-2xl font-bold">
+                    {$t("wizard.steps.collaborations")}
+                </h2>
+                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
             </div>
         {:else if currentStep === 5}
             <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">Presupuesto</h2>
-                <p class="text-tertiary">Este paso será implementado en la Fase 5.</p>
+                <h2 class="text-secondary mb-4 text-2xl font-bold">{$t("wizard.steps.budget")}</h2>
+                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
             </div>
         {:else if currentStep === 6}
             <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">Sobre ti</h2>
-                <p class="text-tertiary">Este paso será implementado en la Fase 6.</p>
+                <h2 class="text-secondary mb-4 text-2xl font-bold">
+                    {$t("wizard.steps.about_you")}
+                </h2>
+                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
             </div>
         {/if}
     {/snippet}

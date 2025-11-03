@@ -20,13 +20,7 @@
     import LanguageSelector from "./LanguageSelector.svelte";
     import GeoSelector from "./GeoSelector.svelte";
     import RoundSelector from "./RoundSelector.svelte";
-    import {
-        wizardState,
-        updateConfiguration,
-        validateConfiguration,
-        completeCurrentStep,
-        isConfigurationValid,
-    } from "../../../stores/wizard-state";
+    import { wizardState, updateConfiguration, navigateToStep } from "../../../stores/wizard-state";
 
     interface ConfigurationStepProps {
         onContinue?: () => void;
@@ -36,22 +30,15 @@
 
     // Reactive values from store
     const configuration = $derived($wizardState.configuration);
-    const isValid = $derived($isConfigurationValid);
 
     /**
      * Handle Continue button
-     * Validates current step and navigates to next
+     * Simple navigation to next step - validation happens on save/submit
      */
     function handleContinue() {
-        const isStepValid = validateConfiguration();
-
-        if (isStepValid) {
-            completeCurrentStep();
-            if (onContinue) {
-                onContinue();
-            }
-        } else {
-            console.warn("Configuration step validation failed");
+        navigateToStep(2);
+        if (onContinue) {
+            onContinue();
         }
     }
 
@@ -91,7 +78,7 @@
 <div class="space-y-8">
     <!-- Page Header -->
     <div>
-        <h1 class="text-secondary mb-2 text-[32px] leading-tight font-bold">
+        <h1 class="text-secondary mb-2 text-3xl leading-tight font-bold lg:text-4xl">
             {$t("wizard.configuration.title")}
         </h1>
         <p class="text-secondary text-base">{$t("wizard.configuration.subtitle")}</p>
@@ -141,14 +128,10 @@
 
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
-        <Button
-            kind="primary"
-            size="md"
-            disabled={!isValid}
-            onclick={handleContinue}
-            data-testid="config-continue-btn"
-        >
-            {$t("wizard.buttons.continue")}
+        <Button kind="primary" size="md" onclick={handleContinue} data-testid="config-continue-btn">
+            {#snippet children()}
+                {$t("wizard.buttons.continue")}
+            {/snippet}
         </Button>
     </div>
 </div>

@@ -18,6 +18,7 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
     import Button from "../../library/Button.svelte";
+    import TabNavigation, { type Tab } from "../../library/TabNavigation.svelte";
     import EditIcon from "../../../svgs/EditIcon.svelte";
     import EyeIcon from "../../../svgs/EyeIcon.svelte";
     import { t } from "../../../i18n/store";
@@ -25,15 +26,8 @@
         wizardState,
         navigateToStep,
         saveToLocalStorage,
-        areAllStepsCompleted,
         persistenceError,
     } from "../../../stores/wizard-state";
-
-    interface WizardStep {
-        id: number;
-        label: string;
-        labelKey: string; // i18n translation key
-    }
 
     let {
         title = "",
@@ -54,60 +48,25 @@
     } = $props();
 
     // Define the six wizard steps (reactive to language changes)
-    const steps = $derived([
-        { id: 1, label: $t("wizard.steps.configuration"), labelKey: "wizard.steps.configuration" },
-        { id: 2, label: $t("wizard.steps.campaign_info"), labelKey: "wizard.steps.campaign_info" },
-        { id: 3, label: $t("wizard.steps.rewards"), labelKey: "wizard.steps.rewards" },
-        {
-            id: 4,
-            label: $t("wizard.steps.collaborations"),
-            labelKey: "wizard.steps.collaborations",
-        },
-        { id: 5, label: $t("wizard.steps.budget"), labelKey: "wizard.steps.budget" },
-        { id: 6, label: $t("wizard.steps.about_you"), labelKey: "wizard.steps.about_you" },
+    const steps = $derived<Tab[]>([
+        { id: 1, label: $t("wizard.steps.configuration") },
+        { id: 2, label: $t("wizard.steps.campaign_info") },
+        { id: 3, label: $t("wizard.steps.rewards") },
+        { id: 4, label: $t("wizard.steps.collaborations") },
+        { id: 5, label: $t("wizard.steps.budget") },
+        { id: 6, label: $t("wizard.steps.about_you") },
     ]);
 
     // Reactive values from store
     const currentStep = $derived($wizardState.currentStep);
-    const completedSteps = $derived($wizardState.completedSteps);
-    const allStepsCompleted = $derived($areAllStepsCompleted);
 
     /**
      * Handle tab click
-     * Validates current step before allowing navigation
+     * Free navigation - no validation
      */
-    function handleTabClick(stepId: number) {
-        const success = navigateToStep(stepId);
-
-        if (!success) {
-            // Navigation blocked - could show a toast message here
-            console.warn(
-                "[Wizard]",
-                `Navigation to step ${stepId} blocked - complete previous steps first`,
-            );
-        }
-
-        // Update URL query parameter
-        if (success) {
-            const url = new URL(window.location.href);
-            url.searchParams.set("step", String(stepId));
-            window.history.pushState({}, "", url);
-        }
-    }
-
-    /**
-     * Handle keyboard navigation for tabs
-     * Supports Enter and Space keys
-     */
-    function handleTabKeydown(stepId: number, event: KeyboardEvent) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            const isDisabled =
-                stepId > 1 && !completedSteps.has(stepId - 1) && stepId !== currentStep;
-            if (!isDisabled) {
-                handleTabClick(stepId);
-            }
-        }
+    function handleTabClick(stepId: number | string) {
+        const numericStepId = typeof stepId === "number" ? stepId : Number(stepId);
+        navigateToStep(numericStepId);
     }
 
     /**
@@ -125,30 +84,8 @@
      * Handle Publish button
      */
     function handlePublish() {
-        if (allStepsCompleted) {
-            if (onPublish) {
-                onPublish();
-            }
-        }
-    }
-
-    /**
-     * Determine tab state classes
-     */
-    function getTabClasses(step: WizardStep): string {
-        const isActive = step.id === currentStep;
-        const isCompleted = completedSteps.has(step.id);
-        const isDisabled =
-            step.id > 1 && !completedSteps.has(step.id - 1) && step.id !== currentStep;
-
-        if (isActive) {
-            return "border-primary text-secondary cursor-pointer";
-        } else if (isCompleted) {
-            return "border-primary text-tertiary cursor-pointer hover:text-secondary";
-        } else if (isDisabled) {
-            return "border-light-muted text-light-muted cursor-not-allowed opacity-50";
-        } else {
-            return "border-purple-tint text-tertiary cursor-pointer hover:text-secondary";
+        if (onPublish) {
+            onPublish();
         }
     }
 </script>
@@ -252,7 +189,6 @@
             <Button
                 kind="primary"
                 size="md"
-                disabled={!allStepsCompleted}
                 onclick={handlePublish}
                 data-testid="wizard-publish-btn"
             >
@@ -264,33 +200,8 @@
     </div>
 
     <!-- Tab Navigation -->
-    <div class="mb-8 overflow-x-auto">
-        <div class="flex min-w-max items-center gap-0">
-            {#each steps as step}
-                {@const isDisabled =
-                    step.id > 1 && !completedSteps.has(step.id - 1) && step.id !== currentStep}
-                <button
-                    class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-3 whitespace-nowrap transition-all duration-200 {getTabClasses(
-                        step,
-                    )}"
-                    onclick={() => !isDisabled && handleTabClick(step.id)}
-                    onkeydown={(e) => handleTabKeydown(step.id, e)}
-                    disabled={isDisabled}
-                    tabindex={isDisabled ? -1 : 0}
-                    aria-label={step.label}
-                    aria-selected={step.id === currentStep}
-                    aria-disabled={isDisabled}
-                    data-testid="wizard-tab-{step.id}"
-                    data-tab-active={step.id === currentStep}
-                    role="tab"
-                >
-                    <span class="font-medium">{step.label}</span>
-                    {#if completedSteps.has(step.id)}
-                        <span class="text-primary">✓</span>
-                    {/if}
-                </button>
-            {/each}
-        </div>
+    <div class="mb-8">
+        <TabNavigation tabs={steps} currentTab={currentStep} onTabClick={handleTabClick} />
     </div>
 
     <!-- Step Content -->
@@ -298,12 +209,3 @@
         {@render currentStepContent()}
     </div>
 </div>
-
-<style>
-    /* Ensure proper scrolling on mobile */
-    @media (max-width: 768px) {
-        .overflow-x-auto {
-            -webkit-overflow-scrolling: touch;
-        }
-    }
-</style>

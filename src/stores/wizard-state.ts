@@ -29,6 +29,45 @@ export interface WizardConfiguration {
 }
 
 /**
+ * Media image data
+ */
+export interface MediaImage {
+    id: string;
+    url: string; // Base64 data URL or API URL
+    file?: File; // Original file reference
+    size: number; // File size in bytes
+    name: string; // Original filename
+}
+
+/**
+ * Video embed data
+ */
+export interface VideoEmbed {
+    type: "youtube" | "vimeo" | "direct";
+    url: string;
+    embedId?: string; // Extracted video ID
+}
+
+/**
+ * Campaign Information data (Step 2)
+ */
+export interface WizardCampaignInfo {
+    // Media
+    images: MediaImage[];
+    video: VideoEmbed | null;
+
+    // Rich text content (stored as HTML)
+    objectives: string;
+    legacy: string;
+    targetAudience: string;
+    team: string;
+
+    // Validation tracking
+    touched: Set<string>;
+    errors: Record<string, string>;
+}
+
+/**
  * Complete wizard state
  */
 export interface WizardState {
@@ -44,13 +83,14 @@ export interface WizardState {
 
     // Step navigation
     currentStep: number;
-    completedSteps: Set<number>;
 
     // Step 1: Configuration
     configuration: WizardConfiguration;
 
-    // Future steps (Phase 2-6) - placeholders
-    // campaignInfo: WizardCampaignInfo;
+    // Step 2: Campaign Information
+    campaignInfo: WizardCampaignInfo;
+
+    // Future steps (Phase 3-6) - placeholders
     // rewards: WizardReward[];
     // collaborations: WizardCollaboration[];
     // detailedBudget: WizardBudgetItem[];
@@ -68,12 +108,21 @@ const getDefaultState = (): WizardState => ({
     budget: 0,
     releaseDate: null,
     currentStep: 1,
-    completedSteps: new Set(),
     configuration: {
         languages: [],
         geographicScope: undefined,
         localities: undefined,
         fundingRounds: 1, // Default to 1 round
+    },
+    campaignInfo: {
+        images: [],
+        video: null,
+        objectives: "",
+        legacy: "",
+        targetAudience: "",
+        team: "",
+        touched: new Set(),
+        errors: {},
     },
 });
 
@@ -135,12 +184,21 @@ export function initializeFromProject(project: Project) {
         budget: project.budget?.minimum?.money?.amount || 0,
         releaseDate: project.deadline || null,
         currentStep: 1,
-        completedSteps: new Set(),
         configuration: {
             languages: [],
             geographicScope: undefined,
             localities: undefined,
             fundingRounds: 1,
+        },
+        campaignInfo: {
+            images: [],
+            video: null,
+            objectives: "",
+            legacy: "",
+            targetAudience: "",
+            team: "",
+            touched: new Set(),
+            errors: {},
         },
     });
 
@@ -173,7 +231,10 @@ export function saveToLocalStorage() {
         // Convert Set to Array for JSON serialization
         const serializable = {
             ...state,
-            completedSteps: Array.from(state.completedSteps),
+            campaignInfo: {
+                ...state.campaignInfo,
+                touched: Array.from(state.campaignInfo.touched),
+            },
         };
 
         try {
@@ -199,7 +260,7 @@ export function saveToLocalStorage() {
 /**
  * Restore wizard state from localStorage
  *
- * Only restores wizard-specific fields (currentStep, completedSteps, configuration).
+ * Only restores wizard-specific fields (currentStep, completedSteps, configuration, campaignInfo).
  * Does not overwrite pre-filled proposal data (title, subtitle, etc.).
  *
  * @returns true if restoration was successful, false otherwise
@@ -219,17 +280,17 @@ export function restoreFromLocalStorage(): boolean {
 
         const parsed = JSON.parse(stored);
 
-        // Convert Array back to Set
-        if (parsed.completedSteps) {
-            parsed.completedSteps = new Set(parsed.completedSteps);
+        // Convert Arrays back to Sets
+        if (parsed.campaignInfo?.touched) {
+            parsed.campaignInfo.touched = new Set(parsed.campaignInfo.touched);
         }
 
         // Only restore wizard-specific fields (not pre-filled proposal data)
         wizardState.update((state) => ({
             ...state,
             currentStep: parsed.currentStep || 1,
-            completedSteps: parsed.completedSteps || new Set(),
             configuration: parsed.configuration || getDefaultState().configuration,
+            campaignInfo: parsed.campaignInfo || getDefaultState().campaignInfo,
         }));
 
         return true;
@@ -282,45 +343,18 @@ export function navigateToStep(targetStep: number): boolean {
     const state = get(wizardState);
     const currentStep = state.currentStep;
 
-    // Case 1: Navigation to current step (no-op)
+    // No validation - free navigation
     if (targetStep === currentStep) {
         console.log(`[wizard-state] Already on step ${targetStep}`);
         return true;
     }
 
-    // Case 2: Backward navigation - allow to any previous step
-    if (targetStep < currentStep) {
-        console.log(`[wizard-state] Navigating backward: ${currentStep} → ${targetStep}`);
-        wizardState.update((s) => ({ ...s, currentStep: targetStep }));
-        hasUnsavedChanges.set(true);
-        saveToLocalStorage();
-        updateUrl(targetStep);
-        return true;
-    }
-
-    // Case 3: Forward navigation - require all previous steps completed
-    if (targetStep > currentStep) {
-        // Check that all steps from 1 to (targetStep - 1) are completed
-        const requiredSteps = Array.from({ length: targetStep - 1 }, (_, i) => i + 1);
-        const allPreviousCompleted = requiredSteps.every((step) => state.completedSteps.has(step));
-
-        if (!allPreviousCompleted) {
-            const missingSteps = requiredSteps.filter((step) => !state.completedSteps.has(step));
-            console.warn(
-                `[wizard-state] Cannot navigate to step ${targetStep}: incomplete steps [${missingSteps.join(", ")}]`,
-            );
-            return false;
-        }
-
-        console.log(`[wizard-state] Navigating forward: ${currentStep} → ${targetStep}`);
-        wizardState.update((s) => ({ ...s, currentStep: targetStep }));
-        hasUnsavedChanges.set(true);
-        saveToLocalStorage();
-        updateUrl(targetStep);
-        return true;
-    }
-
-    return false;
+    console.log(`[wizard-state] Navigating: ${currentStep} → ${targetStep}`);
+    wizardState.update((s) => ({ ...s, currentStep: targetStep }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+    updateUrl(targetStep);
+    return true;
 }
 
 /**
@@ -340,63 +374,6 @@ function updateUrl(step: number) {
     } catch (error) {
         console.error("[wizard-state] Failed to update URL:", error);
     }
-}
-
-/**
- * Mark current step as completed and navigate to next step
- *
- * Automatically advances to the next step after marking current as complete.
- * Triggers auto-save to localStorage.
- *
- * @example
- * // After user completes configuration step
- * if (validateConfiguration()) {
- *   completeCurrentStep();
- * }
- */
-export function completeCurrentStep() {
-    wizardState.update((state) => {
-        const newCompletedSteps = new Set(state.completedSteps);
-        newCompletedSteps.add(state.currentStep);
-
-        return {
-            ...state,
-            completedSteps: newCompletedSteps,
-            currentStep: state.currentStep + 1,
-        };
-    });
-
-    hasUnsavedChanges.set(true);
-    saveToLocalStorage();
-    updateUrl(get(wizardState).currentStep);
-}
-
-/**
- * Update configuration data (Step 1)
- *
- * Merges partial configuration updates with existing data.
- * Triggers auto-save to localStorage.
- *
- * @param config - Partial configuration object to merge
- *
- * @example
- * // Update languages selection
- * updateConfiguration({ languages: ['es', 'en'] });
- *
- * // Update geographic scope
- * updateConfiguration({ geographicScope: 'local', localities: 'Barcelona' });
- */
-export function updateConfiguration(config: Partial<WizardConfiguration>) {
-    wizardState.update((state) => ({
-        ...state,
-        configuration: {
-            ...state.configuration,
-            ...config,
-        },
-    }));
-
-    hasUnsavedChanges.set(true);
-    saveToLocalStorage();
 }
 
 /**
@@ -454,6 +431,34 @@ export const configurationSchema = z.object({
     localities: z.string().optional(),
     fundingRounds: z.union([z.literal(1), z.literal(2)]),
 });
+
+/**
+ * Update configuration data (Step 1)
+ *
+ * Merges partial configuration updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param config - Partial configuration object to merge
+ *
+ * @example
+ * // Update languages
+ * updateConfiguration({ languages: ['es', 'en'] });
+ *
+ * // Update geographic scope
+ * updateConfiguration({ geographicScope: 'local', localities: 'Barcelona' });
+ */
+export function updateConfiguration(config: Partial<WizardConfiguration>) {
+    wizardState.update((state) => ({
+        ...state,
+        configuration: {
+            ...state.configuration,
+            ...config,
+        },
+    }));
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
 
 /**
  * Validate Configuration step (Step 1)
@@ -523,11 +528,145 @@ export const isConfigurationValid = derived(
     },
 );
 
+// ============================================
+// Campaign Info State Management (Step 2)
+// ============================================
+
 /**
- * Derived store: are all steps completed?
+ * Update campaign info data (Step 2)
+ *
+ * Merges partial campaign info updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param info - Partial campaign info object to merge
+ *
+ * @example
+ * // Update objectives
+ * updateCampaignInfo({ objectives: '<p>My objectives...</p>' );
+ *
+ * // Add an image
+ * updateCampaignInfo({
+ *   images: [...currentImages, newImage]
+ * );
  */
-export const areAllStepsCompleted = derived(wizardState, ($state) => {
-    // For Phase 1, only check step 1
-    // In future phases, check all 6 steps
-    return $state.completedSteps.has(1);
+export function updateCampaignInfo(info: Partial<WizardCampaignInfo>) {
+    wizardState.update((state) => ({
+        ...state,
+        campaignInfo: {
+            ...state.campaignInfo,
+            ...info,
+        },
+    }));
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+/**
+ * Strip HTML tags from a string to get plain text
+ * Used for validating rich text field lengths
+ *
+ * @param html - HTML string to strip
+ * @returns Plain text without HTML tags
+ */
+export function stripHtml(html: string): string {
+    if (typeof document === "undefined") {
+        // SSR fallback: simple regex-based stripping
+        return html.replace(/<[^>]*>/g, "").trim();
+    }
+    const div = document.createElement("div");
+    div.innerHTML = html;
+    return div.textContent || div.innerText || "";
+}
+
+/**
+ * Validate Campaign Info step (Step 2)
+ *
+ * Validates all campaign info fields according to requirements:
+ * - At least 1 image OR 1 video required
+ * - Objectives: min 50, max 5000 characters (plain text)
+ * - Legacy: min 50, max 5000 characters
+ * - Target audience: min 30, max 5000 characters
+ * - Team: min 50, max 5000 characters
+ *
+ * @returns Record of field errors (empty if valid)
+ *
+ * @example
+ * // Validate before completing step
+ * function handleContinue() {
+ *   const errors = validateCampaignInfo();
+ *   if (Object.keys(errors).length === 0) {
+ *     completeCurrentStep();
+ *   }
+ * }
+ */
+export function validateCampaignInfo(): Record<string, string> {
+    const state = get(wizardState);
+    const data = state.campaignInfo;
+    const errors: Record<string, string> = {};
+
+    // Media validation
+    if (data.images.length === 0 && !data.video) {
+        errors.media = "wizard.validation.campaign_info.media.required";
+    }
+
+    // Objectives validation
+    const objectivesPlainText = stripHtml(data.objectives).trim();
+    if (objectivesPlainText.length === 0) {
+        errors.objectives = "wizard.validation.campaign_info.objectives.required";
+    } else if (objectivesPlainText.length < 50) {
+        errors.objectives = "wizard.validation.campaign_info.objectives.min_length";
+    } else if (objectivesPlainText.length > 5000) {
+        errors.objectives = "wizard.validation.campaign_info.objectives.max_length";
+    }
+
+    // Legacy validation
+    const legacyPlainText = stripHtml(data.legacy).trim();
+    if (legacyPlainText.length === 0) {
+        errors.legacy = "wizard.validation.campaign_info.legacy.required";
+    } else if (legacyPlainText.length < 50) {
+        errors.legacy = "wizard.validation.campaign_info.legacy.min_length";
+    } else if (legacyPlainText.length > 5000) {
+        errors.legacy = "wizard.validation.campaign_info.legacy.max_length";
+    }
+
+    // Target audience validation
+    const targetPlainText = stripHtml(data.targetAudience).trim();
+    if (targetPlainText.length === 0) {
+        errors.targetAudience = "wizard.validation.campaign_info.target.required";
+    } else if (targetPlainText.length < 30) {
+        errors.targetAudience = "wizard.validation.campaign_info.target.min_length";
+    } else if (targetPlainText.length > 5000) {
+        errors.targetAudience = "wizard.validation.campaign_info.target.max_length";
+    }
+
+    // Team validation
+    const teamPlainText = stripHtml(data.team).trim();
+    if (teamPlainText.length === 0) {
+        errors.team = "wizard.validation.campaign_info.team.required";
+    } else if (teamPlainText.length < 50) {
+        errors.team = "wizard.validation.campaign_info.team.min_length";
+    } else if (teamPlainText.length > 5000) {
+        errors.team = "wizard.validation.campaign_info.team.max_length";
+    }
+
+    return errors;
+}
+
+/**
+ * Check if Campaign Info step is valid
+ *
+ * @returns true if campaign info is valid, false otherwise
+ */
+export function isCampaignInfoValid(): boolean {
+    const errors = validateCampaignInfo();
+    return Object.keys(errors).length === 0;
+}
+
+/**
+ * Derived store: is Campaign Info step valid?
+ */
+export const isCampaignInfoValidStore = derived(wizardState, () => {
+    const errors = validateCampaignInfo();
+    return Object.keys(errors).length === 0;
 });

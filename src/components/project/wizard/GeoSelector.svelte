@@ -29,7 +29,7 @@
         onLocalitiesChange: (localities: string) => void;
     }
 
-    let { scope, localities, onScopeChange, onLocalitiesChange }: GeoSelectorProps = $props();
+    let { scope, localities = "", onScopeChange, onLocalitiesChange }: GeoSelectorProps = $props();
 
     // Reactive validation errors
     const errors = $derived($validationErrors);
@@ -60,9 +60,7 @@
      * Watch localities changes and propagate to parent
      */
     $effect(() => {
-        if (localities !== undefined) {
-            onLocalitiesChange(localities);
-        }
+        onLocalitiesChange(localities);
     });
 </script>
 

@@ -1005,13 +1005,24 @@
         "option2": "2 Rondes"
       }
     },
+    "campaignInfo": {
+      "media": {
+        "addImage": "Afegir imatge",
+        "addVideo": "Afegir vídeo",
+        "videoPlaceholder": "Enganxa l'URL del vídeo de YouTube o Vimeo",
+        "confirmDelete": "Eliminar {{name}}?",
+        "maxImagesReached": "Màxim {{max}} imatges assolit",
+        "removeVideo": "Eliminar vídeo"
+      }
+    },
     "placeholders": {
       "configurationStep": "Aquest pas s'implementarà aviat.",
       "campaignInfoStep": "Informació de campanya - Aquest pas s'implementarà a la Fase 2.",
       "rewardsStep": "Recompenses - Aquest pas s'implementarà a la Fase 3.",
       "collaborationsStep": "Col·laboracions - Aquest pas s'implementarà a la Fase 4.",
       "budgetStep": "Pressupost - Aquest pas s'implementarà a la Fase 5.",
-      "aboutYouStep": "Sobre tu - Aquest pas s'implementarà a la Fase 6."
+      "aboutYouStep": "Sobre tu - Aquest pas s'implementarà a la Fase 6.",
+      "step_not_implemented": "Aquest pas s'implementarà properament."
     },
     "validation": {
       "languages": "Has de seleccionar almenys un idioma",

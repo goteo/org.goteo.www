@@ -997,18 +997,87 @@
         "option2": "2 Rounds"
       }
     },
+    "campaignInfo": {
+      "title": "Campaign Information",
+      "subtitle": "Complete the necessary information for your campaign",
+      "media": {
+        "title": "Presentation Image and Video",
+        "label": "Presentation Image and Video",
+        "help": "Add an image or video representing your project. This will be the first thing potential donors see",
+        "addImage": "Add image",
+        "addVideo": "Add video",
+        "required": "You must add at least one image or video",
+        "videoPlaceholder": "https://www.youtube.com/watch?v=... or https://vimeo.com/...",
+        "confirmDelete": "Delete {{name}}?",
+        "maxImagesReached": "Maximum {{max}} images reached",
+        "removeVideo": "Remove video"
+      },
+      "objectives": {
+        "label": "Campaign Objectives and Purpose",
+        "help": "State your project's objectives and purpose. Answer what, how, and why",
+        "placeholder": "Write here about your project objectives..."
+      },
+      "legacy": {
+        "label": "What will be your project's legacy?",
+        "help": "When the campaign ends, what will remain? Tell us the legacy your project will leave",
+        "placeholder": "Write here about your project's legacy..."
+      },
+      "target": {
+        "label": "Who is it directed to?",
+        "help": "Describe who your project is directed to",
+        "placeholder": "Write here about your target audience..."
+      },
+      "team": {
+        "label": "What team do you have?",
+        "help": "Describe your team and whether you have had previous experience on similar projects",
+        "placeholder": "Write here about your team..."
+      },
+      "continue": "Continue to rewards"
+    },
     "placeholders": {
       "configurationStep": "This step will be implemented soon.",
       "campaignInfoStep": "Campaign information - This step will be implemented in Phase 2.",
       "rewardsStep": "Rewards - This step will be implemented in Phase 3.",
       "collaborationsStep": "Collaborations - This step will be implemented in Phase 4.",
       "budgetStep": "Budget - This step will be implemented in Phase 5.",
-      "aboutYouStep": "About you - This step will be implemented in Phase 6."
+      "aboutYouStep": "About you - This step will be implemented in Phase 6.",
+      "step_not_implemented": "This step will be implemented soon."
     },
     "validation": {
       "languages": "You must select at least one language",
       "geographicScope": "You must select a geographic scope",
-      "localities": "You must indicate localities for local scope"
+      "localities": "You must indicate localities for local scope",
+      "campaign_info": {
+        "media": {
+          "required": "You must add at least one image or video",
+          "image_too_large": "Image is too large. Maximum size: 500 KB",
+          "invalid_image": "Invalid image format",
+          "max_images": "Maximum 3 images allowed"
+        },
+        "video": {
+          "invalid_url": "Invalid video URL. Use YouTube or Vimeo"
+        },
+        "objectives": {
+          "required": "This field is required",
+          "min_length": "Describe the objectives in more detail (minimum 50 characters)",
+          "max_length": "Text is too long (maximum 5000 characters)"
+        },
+        "legacy": {
+          "required": "This field is required",
+          "min_length": "Describe the legacy in more detail (minimum 50 characters)",
+          "max_length": "Text is too long (maximum 5000 characters)"
+        },
+        "target": {
+          "required": "This field is required",
+          "min_length": "Describe the target audience in more detail (minimum 30 characters)",
+          "max_length": "Text is too long (maximum 5000 characters)"
+        },
+        "team": {
+          "required": "This field is required",
+          "min_length": "Describe your team in more detail (minimum 50 characters)",
+          "max_length": "Text is too long (maximum 5000 characters)"
+        }
+      }
     },
     "errors": {
       "storage": {

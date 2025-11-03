@@ -1034,18 +1034,87 @@
         "option2": "2 Rondas"
       }
     },
+    "campaignInfo": {
+      "title": "Información de campaña",
+      "subtitle": "Completa la información necesaria para tu campaña",
+      "media": {
+        "title": "Imagen y vídeo de presentación",
+        "label": "Imagen y vídeo de presentación",
+        "help": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
+        "addImage": "Añadir imagen",
+        "addVideo": "Añadir vídeo",
+        "required": "Debes añadir al menos una imagen o un vídeo",
+        "videoPlaceholder": "https://www.youtube.com/watch?v=... o https://vimeo.com/...",
+        "confirmDelete": "¿Eliminar {{name}}?",
+        "maxImagesReached": "Máximo {{max}} imágenes alcanzado",
+        "removeVideo": "Eliminar vídeo"
+      },
+      "objectives": {
+        "label": "Objetivos y propósito de tu campaña",
+        "help": "Indíca los objetivos y el propósito de tu proyecto. Respondé al qué, cómo y por qué",
+        "placeholder": "Escribe aquí los objetivos de tu proyecto..."
+      },
+      "legacy": {
+        "label": "¿Cuál será el legado de tu proyecto?",
+        "help": "Cuando termine la campaña, ¿qué quedará? Cuéntanos cual será el legado que deje tu proyecto",
+        "placeholder": "Escribe aquí sobre el legado de tu proyecto..."
+      },
+      "target": {
+        "label": "¿A quién va dirigido?",
+        "help": "Describe a quién va dirigido tu proyecto",
+        "placeholder": "Escribe aquí sobre tu público objetivo..."
+      },
+      "team": {
+        "label": "Con qué equipo cuentas",
+        "help": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este",
+        "placeholder": "Escribe aquí sobre tu equipo..."
+      },
+      "continue": "Continuar con recompensas"
+    },
     "placeholders": {
       "configurationStep": "Este paso será implementado próximamente.",
       "campaignInfoStep": "Información de campaña - Este paso será implementado en la Fase 2.",
       "rewardsStep": "Recompensas - Este paso será implementado en la Fase 3.",
       "collaborationsStep": "Colaboraciones - Este paso será implementado en la Fase 4.",
       "budgetStep": "Presupuesto - Este paso será implementado en la Fase 5.",
-      "aboutYouStep": "Sobre ti - Este paso será implementado en la Fase 6."
+      "aboutYouStep": "Sobre ti - Este paso será implementado en la Fase 6.",
+      "step_not_implemented": "Este paso será implementado próximamente."
     },
     "validation": {
       "languages": "Debes seleccionar al menos un idioma",
       "geographicScope": "Debes seleccionar un alcance geográfico",
-      "localities": "Debes indicar las localidades para el alcance local"
+      "localities": "Debes indicar las localidades para el alcance local",
+      "campaign_info": {
+        "media": {
+          "required": "Debes añadir al menos una imagen o un vídeo",
+          "image_too_large": "La imagen es demasiado grande. Tamaño máximo: 500 KB",
+          "invalid_image": "Formato de imagen no válido",
+          "max_images": "Máximo 3 imágenes permitidas"
+        },
+        "video": {
+          "invalid_url": "URL de vídeo no válida. Usa YouTube o Vimeo"
+        },
+        "objectives": {
+          "required": "Este campo es obligatorio",
+          "min_length": "Describe los objetivos con más detalle (mínimo 50 caracteres)",
+          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
+        },
+        "legacy": {
+          "required": "Este campo es obligatorio",
+          "min_length": "Describe el legado con más detalle (mínimo 50 caracteres)",
+          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
+        },
+        "target": {
+          "required": "Este campo es obligatorio",
+          "min_length": "Describe el público objetivo con más detalle (mínimo 30 caracteres)",
+          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
+        },
+        "team": {
+          "required": "Este campo es obligatorio",
+          "min_length": "Describe tu equipo con más detalle (mínimo 50 caracteres)",
+          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
+        }
+      }
     },
     "errors": {
       "storage": {
