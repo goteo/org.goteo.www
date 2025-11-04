@@ -47,12 +47,12 @@ if (accessToken) {
                         <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
                             {
                                 accessToken ? (
-                                    <>
+                                    <a href="/me" class="flex w-full items-center gap-1">
                                         <UserIcon />
                                         <span class="hidden sm:inline">
                                             {t("greeting")}, {user.person.firstName}
                                         </span>
-                                    </>
+                                    </a>
                                 ) : (
                                     <a href="/login" class="flex w-full items-center gap-1">
                                         <UserIcon />
