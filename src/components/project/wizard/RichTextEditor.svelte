@@ -1,14 +1,57 @@
 <!--
     Rich Text Editor Component
 
-    Reusable rich text editor using Tiptap.
+    Reusable rich text editor using Tiptap with design system components.
 
     Features:
-    - Basic formatting (bold, italic, lists, headings)
-    - Character/word count
+    - Basic formatting (bold, italic, text alignment)
+    - Font size selection
     - Validation state display
     - Placeholder support
     - Keyboard shortcuts
+    - Full keyboard accessibility
+
+    Design System Compliance:
+    - Colors: bg-light-surface for toolbar, border-secondary for inputs
+    - Border radius: rounded-md for select, rounded-lg for editor
+    - Spacing: gap-2 for toolbar items
+    - Typography: text-sm for select
+    - Components: Uses Button (kind="ghost", size="sm") and Select from library
+    - Uses tailwind-merge for class composition
+    - Active state: bg-primary with text-secondary
+    - Hover state: hover:bg-purple-tint
+
+    Props:
+    - id: string - Component identifier
+    - value: string - HTML content value
+    - onChange: (html: string) => void - Callback when content changes
+    - placeholder?: string - Placeholder text for empty editor
+    - error?: string - Validation error message
+    - ariaDescribedBy?: string - ARIA describedby attribute
+    - class?: ClassNameValue - Additional Tailwind classes
+
+    Usage:
+    ```svelte
+    <RichTextEditor
+        id="description"
+        bind:value={description}
+        onChange={(html) => updateDescription(html)}
+        placeholder="Enter your description..."
+        error={descriptionError}
+        class="mt-4"
+    />
+    ```
+
+    Accessibility:
+    - ARIA labels for all toolbar buttons
+    - aria-pressed for toggle button states
+    - role="toolbar" for button group
+    - role="textbox" for editor content
+    - aria-multiline for editor
+    - aria-invalid for validation errors
+    - aria-describedby for error association
+    - Keyboard navigation support
+    - Screen reader friendly messages
 -->
 <script lang="ts">
     import { onMount, onDestroy } from "svelte";
@@ -16,36 +59,52 @@
     import StarterKit from "@tiptap/starter-kit";
     import Placeholder from "@tiptap/extension-placeholder";
     import TextAlign from "@tiptap/extension-text-align";
+    import { TextStyle, FontSize } from "@tiptap/extension-text-style";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import Button from "../../../components/library/Button.svelte";
+    import Select from "../../../components/library/Select.svelte";
 
     interface RichTextEditorProps {
         id: string;
         value: string;
         onChange: (html: string) => void;
         placeholder?: string;
-        minLength?: number;
-        maxLength?: number;
         error?: string;
         ariaDescribedBy?: string;
+        class?: ClassNameValue;
     }
 
     let {
         value,
         onChange,
         placeholder = "",
-        minLength,
-        maxLength = 5000,
         error,
         ariaDescribedBy,
+        class: className = "",
     }: RichTextEditorProps = $props();
 
     let editorElement: HTMLDivElement;
     let editor: Editor | null = $state(null);
     let selectedFontSize = $state("16px");
 
-    const charCount = $derived(editor ? (editor.state as any).doc.textContent.length : 0);
-    const wordCount = $derived(
-        editor ? (editor.state as any).doc.textContent.split(/\s+/).filter(Boolean).length : 0,
-    );
+    // Active states - tracked as state variables
+    let isBoldActive = $state(false);
+    let isItalicActive = $state(false);
+    let isLeftAligned = $state(false);
+    let isCenterAligned = $state(false);
+    let isRightAligned = $state(false);
+
+    /**
+     * Updates active states from editor
+     */
+    function updateActiveStates() {
+        if (!editor) return;
+        isBoldActive = editor.isActive("bold");
+        isItalicActive = editor.isActive("italic");
+        isLeftAligned = editor.isActive({ textAlign: "left" });
+        isCenterAligned = editor.isActive({ textAlign: "center" });
+        isRightAligned = editor.isActive({ textAlign: "right" });
+    }
 
     onMount(() => {
         if (!editorElement) return;
@@ -71,11 +130,19 @@
                 Placeholder.configure({
                     placeholder: placeholder,
                 }),
+                TextStyle,
+                FontSize.configure({
+                    types: ["textStyle"],
+                }),
             ],
             content: value,
             onUpdate: ({ editor }) => {
                 const html = editor.getHTML();
                 onChange(html);
+                updateActiveStates();
+            },
+            onSelectionUpdate: () => {
+                updateActiveStates();
             },
             editorProps: {
                 attributes: {
@@ -83,6 +150,9 @@
                 },
             },
         });
+
+        // Initial update
+        updateActiveStates();
     });
 
     onDestroy(() => {
@@ -103,229 +173,177 @@
         editor?.chain().focus().setTextAlign(alignment).run();
     }
 
-    function handleFontSizeChange(e: Event) {
-        const select = e.target as HTMLSelectElement;
-        selectedFontSize = select.value;
-        // Note: Font size styling would require additional extension or inline styles
+    function handleFontSizeChange(value: string) {
+        selectedFontSize = value;
+        editor?.chain().focus().setFontSize(value).run();
     }
-
-    const isBoldActive = $derived(editor ? (editor as any).isActive("bold") : false);
-    const isItalicActive = $derived(editor ? (editor as any).isActive("italic") : false);
-    const isLeftAligned = $derived(
-        editor ? (editor as any).isActive({ textAlign: "left" }) : false,
-    );
-    const isCenterAligned = $derived(
-        editor ? (editor as any).isActive({ textAlign: "center" }) : false,
-    );
-    const isRightAligned = $derived(
-        editor ? (editor as any).isActive({ textAlign: "right" }) : false,
-    );
 </script>
 
-<div class="rich-text-editor">
+<div class={twMerge("rich-text-editor", className)}>
     <!-- Toolbar -->
     <div
-        class="editor-toolbar border-light-muted bg-light flex items-center gap-2 border-b p-2"
+        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between border-b p-2"
         role="toolbar"
         aria-label="Text formatting toolbar"
     >
-        <!-- Font Size Dropdown -->
-        <select
-            value={selectedFontSize}
-            onchange={handleFontSizeChange}
-            class="border-light-muted focus:ring-primary/20 rounded-md border px-2 py-1 text-sm focus:ring-2 focus:outline-none"
-            aria-label="Font Size"
-        >
-            <option value="12px">12px</option>
-            <option value="14px">14px</option>
-            <option value="16px">16px</option>
-            <option value="18px">18px</option>
-            <option value="20px">20px</option>
-            <option value="24px">24px</option>
-        </select>
-
-        <!-- Bold Button -->
-        <button
-            type="button"
-            onclick={toggleBold}
-            class="toolbar-button {isBoldActive ? 'active' : ''}"
-            aria-label="Bold"
-            title="Bold (Ctrl+B)"
-            aria-pressed={isBoldActive}
-        >
-            <span class="font-bold">B</span>
-        </button>
-
-        <!-- Italic Button -->
-        <button
-            type="button"
-            onclick={toggleItalic}
-            class="toolbar-button {isItalicActive ? 'active' : ''}"
-            aria-label="Italic"
-            title="Italic (Ctrl+I)"
-            aria-pressed={isItalicActive}
-        >
-            <span class="font-serif italic">I</span>
-        </button>
-
-        <!-- Left Align Button -->
-        <button
-            type="button"
-            onclick={() => setTextAlign("left")}
-            class="toolbar-button {isLeftAligned ? 'active' : ''}"
-            aria-label="Align left"
-            aria-pressed={isLeftAligned}
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+        <!-- Left Group: Font Size, Bold, Italic -->
+        <div class="flex items-center gap-2">
+            <!-- Font Size Dropdown -->
+            <Select
+                bind:value={selectedFontSize}
+                onChange={handleFontSizeChange}
+                labelText="Font Size"
+                class="w-auto min-w-[120px] px-2 py-1 text-sm"
             >
-                <line x1="17" y1="10" x2="3" y2="10"></line>
-                <line x1="21" y1="6" x2="3" y2="6"></line>
-                <line x1="21" y1="14" x2="3" y2="14"></line>
-                <line x1="17" y1="18" x2="3" y2="18"></line>
-            </svg>
-        </button>
+                {#snippet children()}
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                    <option value="24px">24px</option>
+                {/snippet}
+            </Select>
 
-        <!-- Center Align Button -->
-        <button
-            type="button"
-            onclick={() => setTextAlign("center")}
-            class="toolbar-button {isCenterAligned ? 'active' : ''}"
-            aria-label="Align center"
-            aria-pressed={isCenterAligned}
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+            <!-- Bold Button -->
+            <Button
+                type="button"
+                kind="ghost"
+                size="sm"
+                onclick={toggleBold}
+                class={twMerge("rounded-lg", isBoldActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                aria-label="Bold"
+                title="Bold (Ctrl+B)"
+                aria-pressed={isBoldActive}
             >
-                <line x1="18" y1="10" x2="6" y2="10"></line>
-                <line x1="21" y1="6" x2="3" y2="6"></line>
-                <line x1="21" y1="14" x2="3" y2="14"></line>
-                <line x1="18" y1="18" x2="6" y2="18"></line>
-            </svg>
-        </button>
+                {#snippet children()}
+                    <span class="font-bold">B</span>
+                {/snippet}
+            </Button>
 
-        <!-- Right Align Button -->
-        <button
-            type="button"
-            onclick={() => setTextAlign("right")}
-            class="toolbar-button {isRightAligned ? 'active' : ''}"
-            aria-label="Align right"
-            aria-pressed={isRightAligned}
-        >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+            <!-- Italic Button -->
+            <Button
+                type="button"
+                kind="ghost"
+                size="sm"
+                onclick={toggleItalic}
+                class={twMerge("rounded-lg", isItalicActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                aria-label="Italic"
+                title="Italic (Ctrl+I)"
+                aria-pressed={isItalicActive}
             >
-                <line x1="21" y1="10" x2="7" y2="10"></line>
-                <line x1="21" y1="6" x2="3" y2="6"></line>
-                <line x1="21" y1="14" x2="3" y2="14"></line>
-                <line x1="21" y1="18" x2="7" y2="18"></line>
-            </svg>
-        </button>
+                {#snippet children()}
+                    <span class="font-serif italic">I</span>
+                {/snippet}
+            </Button>
+        </div>
+
+        <!-- Right Group: Alignment Buttons -->
+        <div class="flex items-center gap-2">
+            <!-- Left Align Button -->
+            <Button
+                type="button"
+                kind="ghost"
+                size="sm"
+                onclick={() => setTextAlign("left")}
+                class={twMerge("rounded-lg", isLeftAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                aria-label="Align left"
+                aria-pressed={isLeftAligned}
+            >
+                {#snippet children()}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="17" y1="10" x2="3" y2="10"></line>
+                        <line x1="21" y1="6" x2="3" y2="6"></line>
+                        <line x1="21" y1="14" x2="3" y2="14"></line>
+                        <line x1="17" y1="18" x2="3" y2="18"></line>
+                    </svg>
+                {/snippet}
+            </Button>
+
+            <!-- Center Align Button -->
+            <Button
+                type="button"
+                kind="ghost"
+                size="sm"
+                onclick={() => setTextAlign("center")}
+                class={twMerge("rounded-lg", isCenterAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                aria-label="Align center"
+                aria-pressed={isCenterAligned}
+            >
+                {#snippet children()}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="18" y1="10" x2="6" y2="10"></line>
+                        <line x1="21" y1="6" x2="3" y2="6"></line>
+                        <line x1="21" y1="14" x2="3" y2="14"></line>
+                        <line x1="18" y1="18" x2="6" y2="18"></line>
+                    </svg>
+                {/snippet}
+            </Button>
+
+            <!-- Right Align Button -->
+            <Button
+                type="button"
+                kind="ghost"
+                size="sm"
+                onclick={() => setTextAlign("right")}
+                class={twMerge("rounded-lg", isRightAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                aria-label="Align right"
+                aria-pressed={isRightAligned}
+            >
+                {#snippet children()}
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="20"
+                        height="20"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <line x1="21" y1="10" x2="7" y2="10"></line>
+                        <line x1="21" y1="6" x2="3" y2="6"></line>
+                        <line x1="21" y1="14" x2="3" y2="14"></line>
+                        <line x1="21" y1="18" x2="7" y2="18"></line>
+                    </svg>
+                {/snippet}
+            </Button>
+        </div>
     </div>
 
     <!-- Editor Content -->
     <div
         bind:this={editorElement}
-        class="editor-content border-light-muted rounded-b-md border {error
-            ? 'border-red-500'
-            : ''}"
+        class="editor-content rounded-xl border {error ? 'border-red-500' : ''}"
         role="textbox"
         aria-multiline="true"
-        aria-required={minLength ? "true" : "false"}
         aria-invalid={!!error}
         aria-describedby={ariaDescribedBy}
     ></div>
 
-    <!-- Footer -->
-    <div class="editor-footer mt-2 flex items-center justify-between text-sm">
-        <span class="text-secondary">
-            {charCount} / {maxLength} caracteres ({wordCount} palabras)
-        </span>
-        {#if error}
-            <p role="alert" class="text-red-500">{error}</p>
-        {/if}
-    </div>
+    <!-- Error Message -->
+    {#if error}
+        <p role="alert" class="mt-2 text-sm text-red-500">{error}</p>
+    {/if}
 </div>
-
-<style>
-    .toolbar-button {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.5rem;
-        border-radius: 0.25rem;
-        transition: background-color 0.2s;
-    }
-
-    .toolbar-button:hover {
-        background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .toolbar-button.active {
-        background-color: var(--color-primary, #3b82f6);
-        color: white;
-    }
-
-    .toolbar-button:focus-visible {
-        outline: 2px solid var(--color-primary, #3b82f6);
-        outline-offset: 2px;
-    }
-
-    :global(.ProseMirror) {
-        outline: none;
-    }
-
-    :global(.ProseMirror p) {
-        margin-bottom: 1rem;
-    }
-
-    :global(.ProseMirror h2) {
-        font-size: 1.5rem;
-        font-weight: 600;
-        margin-bottom: 0.75rem;
-    }
-
-    :global(.ProseMirror h3) {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-    }
-
-    :global(.ProseMirror ul),
-    :global(.ProseMirror ol) {
-        padding-left: 1.5rem;
-        margin-bottom: 1rem;
-    }
-
-    :global(.ProseMirror p.is-editor-empty:first-child::before) {
-        color: #adb5bd;
-        content: attr(data-placeholder);
-        float: left;
-        height: 0;
-        pointer-events: none;
-    }
-</style>
