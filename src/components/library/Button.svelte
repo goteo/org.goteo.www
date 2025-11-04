@@ -34,6 +34,10 @@
         size = "md",
         kind = "primary",
         onclick,
+        "aria-label": ariaLabel = undefined,
+        "aria-busy": ariaBusy = undefined,
+        "aria-pressed": ariaPressed = undefined,
+        "aria-expanded": ariaExpanded = undefined,
     }: {
         children: Snippet;
         form?: string;
@@ -43,6 +47,10 @@
         kind?: keyof typeof kindStyles;
         class?: ClassNameValue;
         onclick?: MouseEventHandler<HTMLButtonElement>;
+        "aria-label"?: string;
+        "aria-busy"?: boolean;
+        "aria-pressed"?: boolean;
+        "aria-expanded"?: boolean;
     } = $props();
 </script>
 
@@ -52,6 +60,10 @@
     {disabled}
     {onclick}
     class={twMerge(baseStyle.join(" "), sizeStyles[size], kindStyles[kind], className)}
+    aria-label={ariaLabel}
+    aria-busy={ariaBusy}
+    aria-pressed={ariaPressed}
+    aria-expanded={ariaExpanded}
 >
     {@render children()}
 </button>
