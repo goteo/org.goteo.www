@@ -751,7 +751,16 @@
       "obtained": "Obtenido",
       "minimum": "Mínimo",
       "daysRemaining": "Quedan {{days}} días",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "goForMinimum": "¡A por el mínimo!"
+      },
+      "remaining": {
+        "toOptimum": "Falta para óptimo",
+        "toMinimum": "Falta para mínimo"
+      },
+      "userDonations": "Tus donaciones:"
     },
     "blog": {
       "title": "Se avecinan grandes cambios… ¡no te pierdas nada!",
@@ -916,6 +925,83 @@
       "nextLevel": {
         "title": "Próximo nivel",
         "description": "Sigue donando para subir de nivel"
+      }
+    }
+  },
+  "me": {
+    "page": {
+      "title": "Actividad",
+      "subtitle": "Consulta tu actividad en Goteo"
+    },
+    "period": {
+      "label": "Periodo",
+      "year": "Año {{year}}"
+    },
+    "donations": {
+      "title": "Mis donaciones",
+      "empty": "Aún no has donado a ningún proyecto",
+      "explore": "Explora proyectos",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/projects",
+      "count": "Donaciones",
+      "total": "Total donado",
+      "recent": "Últimas donaciones",
+      "viewAll": "Ver todas",
+      "certificate": "Solicitar certificado"
+    },
+    "projects": {
+      "title": "Proyectos impulsados",
+      "empty": "Aún no has impulsado ningún proyecto",
+      "create": "Impulsa tu proyecto",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/projects/new",
+      "count": "Proyectos",
+      "raised": "Recaudado",
+      "recent": "Últimos proyectos impulsados",
+      "viewAll": "Ver todos",
+      "createNew": "Crear un proyecto"
+    },
+    "ownedProjects": {
+      "title": "Tus Proyectos Activos",
+      "messageToDonatorsButton": "Mensaje a donantes",
+      "uploadNewsButton": "Subir novedad"
+    },
+    "donatedProjects": {
+      "title": "Proyectos activos donde donaste"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descubre, conecta y dona",
+        "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
+        "button": "Dona a un proyecto"
+      },
+      "matchfunding": {
+        "title": "Donaciones que brillan. Proyectos que inspiran.",
+        "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
+        "learnMore": "Descubre cómo funciona el matchfunding",
+        "becomeMatcher": "Hazte Matcher"
+      }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatorias",
+        "donated": "Donado",
+        "recent": "Últimas convocatorias",
+        "viewAll": "Ver convocatorias",
+        "create": "Crear convocatoria"
+      },
+      "section": {
+        "title": "Tus convocatorias de Matchfunding activas",
+        "empty": "No tienes convocatorias activas",
+        "error": "Error al cargar las convocatorias"
+      },
+      "callCard": {
+        "donationCall": "Dotación convocatoria",
+        "participatingProjects": "Proyectos participantes",
+        "successfulProjects": "Proyectos acogidos con éxito",
+        "projects": "proyectos",
+        "viewCall": "Ir a la convocatoria"
       }
     }
   }
