@@ -1010,7 +1010,12 @@
         "videoPlaceholder": "https://www.youtube.com/watch?v=... or https://vimeo.com/...",
         "confirmDelete": "Delete {{name}}?",
         "maxImagesReached": "Maximum {{max}} images reached",
-        "removeVideo": "Remove video"
+        "removeVideo": "Remove video",
+        "uploading": "Uploading...",
+        "processing": "Processing {{name}}...",
+        "fileInputLabel": "Select image to upload",
+        "uploadedImages": "Uploaded images",
+        "removeImage": "Remove image: {{name}}"
       },
       "objectives": {
         "label": "Campaign Objectives and Purpose",
@@ -1052,7 +1057,8 @@
           "required": "You must add at least one image or video",
           "image_too_large": "Image is too large. Maximum size: 500 KB",
           "invalid_image": "Invalid image format",
-          "max_images": "Maximum 3 images allowed"
+          "max_images": "Maximum 3 images allowed",
+          "upload_failed": "Failed to upload image. Please try again"
         },
         "video": {
           "invalid_url": "Invalid video URL. Use YouTube or Vimeo"

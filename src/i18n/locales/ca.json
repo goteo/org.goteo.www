@@ -1012,7 +1012,12 @@
         "videoPlaceholder": "Enganxa l'URL del vídeo de YouTube o Vimeo",
         "confirmDelete": "Eliminar {{name}}?",
         "maxImagesReached": "Màxim {{max}} imatges assolit",
-        "removeVideo": "Eliminar vídeo"
+        "removeVideo": "Eliminar vídeo",
+        "uploading": "Pujant...",
+        "processing": "Processant {{name}}...",
+        "fileInputLabel": "Seleccionar imatge per pujar",
+        "uploadedImages": "Imatges pujades",
+        "removeImage": "Eliminar imatge: {{name}}"
       }
     },
     "placeholders": {
@@ -1027,7 +1032,16 @@
     "validation": {
       "languages": "Has de seleccionar almenys un idioma",
       "geographicScope": "Has de seleccionar un abast geogràfic",
-      "localities": "Has d'indicar les localitats per a l'abast local"
+      "localities": "Has d'indicar les localitats per a l'abast local",
+      "campaign_info": {
+        "media": {
+          "required": "Has d'afegir almenys una imatge o un vídeo",
+          "image_too_large": "La imatge és massa gran. Mida màxima: 500 KB",
+          "invalid_image": "Format d'imatge no vàlid",
+          "max_images": "Màxim 3 imatges permeses",
+          "upload_failed": "Error en pujar la imatge. Si us plau, torna-ho a intentar"
+        }
+      }
     },
     "errors": {
       "storage": {

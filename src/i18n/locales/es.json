@@ -1047,7 +1047,12 @@
         "videoPlaceholder": "https://www.youtube.com/watch?v=... o https://vimeo.com/...",
         "confirmDelete": "¿Eliminar {{name}}?",
         "maxImagesReached": "Máximo {{max}} imágenes alcanzado",
-        "removeVideo": "Eliminar vídeo"
+        "removeVideo": "Eliminar vídeo",
+        "uploading": "Subiendo...",
+        "processing": "Procesando {{name}}...",
+        "fileInputLabel": "Seleccionar imagen para subir",
+        "uploadedImages": "Imágenes subidas",
+        "removeImage": "Eliminar imagen: {{name}}"
       },
       "objectives": {
         "label": "Objetivos y propósito de tu campaña",
@@ -1089,7 +1094,8 @@
           "required": "Debes añadir al menos una imagen o un vídeo",
           "image_too_large": "La imagen es demasiado grande. Tamaño máximo: 500 KB",
           "invalid_image": "Formato de imagen no válido",
-          "max_images": "Máximo 3 imágenes permitidas"
+          "max_images": "Máximo 3 imágenes permitidas",
+          "upload_failed": "Error al subir la imagen. Por favor, inténtalo de nuevo"
         },
         "video": {
           "invalid_url": "URL de vídeo no válida. Usa YouTube o Vimeo"
