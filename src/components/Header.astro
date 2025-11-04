@@ -15,6 +15,7 @@ let user;
 const accessToken = Astro.cookies.get("access-token");
 
 if (accessToken) {
+    // {"id":8,"token":"pat_XYZ","accountingId":"395711"}
     user = JSON.parse(accessToken.value);
 }
 ---
