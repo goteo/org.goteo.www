@@ -5,7 +5,7 @@ import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
 import Logout from "./Logout.astro";
-import UiLanguages from "./UiLanguages.astro";
+import UiLanguages from "./UiLanguages.svelte";
 import HeaderButtons from "./HeaderButtons.svelte";
 import SearchIcon from "../svgs/SearchIcon.svelte";
 
@@ -62,7 +62,7 @@ if (accessToken) {
                             }
                         </li>
                         <li class="hidden items-center pr-2 md:flex">
-                            <UiLanguages />
+                            <UiLanguages client:load />
                         </li>
                         <li class="flex items-center md:hidden">
                             <button id="mobile-menu-button" class="p-1">
@@ -105,7 +105,7 @@ if (accessToken) {
                         </div>
 
                         <div class="flex flex-col gap-2 pt-1">
-                            <UiLanguages />
+                            <UiLanguages client:load />
                         </div>
                     </div>
                 </div>
