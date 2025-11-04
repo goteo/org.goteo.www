@@ -32,6 +32,7 @@
 </script>
 
 <select
+    id="language-select"
     class="bg-light-surface rounded-lg border-none font-bold shadow-sm"
     on:change={handleSelect}
 >
