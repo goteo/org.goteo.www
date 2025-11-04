@@ -68,25 +68,15 @@ itemCount.subscribe((count) => {
                 {hasCart && <Summary client:load />}
 
                 <div class="lg:block" id="auth-details">
-                    {hasCart && <Steps step={2} client:load />}
                     <div class="flex flex-col px-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
-                        {
-                            hasCart && (
-                                <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
-                            )
-                        }
-                        {
-                            !hasCart && (
-                                <div class="flex flex-col gap-4 pt-4 pb-0 md:gap-6 md:pt-6 lg:hidden">
-                                    <div>
-                                        <p class="text-content text-sm font-light">
-                                            {t("login.page.welcome.subtitle")}
-                                        </p>
-                                    </div>
-                                    <hr class="bg-secondary" />
-                                </div>
-                            )
-                        }
+                        <div class="flex flex-col gap-4 pt-4 pb-0 md:gap-6 md:pt-6 lg:hidden">
+                            <div>
+                                <p class="text-content text-sm font-light">
+                                    {t("login.page.welcome.subtitle")}
+                                </p>
+                            </div>
+                            <hr class="bg-secondary" />
+                        </div>
                     </div>
                 </div>
 
