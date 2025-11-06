@@ -132,7 +132,7 @@ if (projectIRIs.length > 0) {
                     image: project.video?.thumbnail!,
                     minimum: project.budget?.minimum?.money!,
                     obtained: accounting!.balance as Money,
-                    optimum: project.budget?.optimum?.money
+                    optimum: project.budget?.optimum?.money,
                 };
             } catch (error) {
                 console.error(`Error fetching project ${projectIRI}:`, error);
