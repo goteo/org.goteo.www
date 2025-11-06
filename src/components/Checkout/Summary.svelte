@@ -33,7 +33,7 @@
         buttonTextShow={$t("checkout.summary.show_details")}
         buttonTextHide={$t("checkout.summary.hide_details")}
     >
-        <svelte:fragment slot="header">
+        {#snippet header()}
             <h2
                 class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
@@ -49,9 +49,9 @@
             >
                 {formatCurrency(amount ?? $total, currency)}
             </p>
-        </svelte:fragment>
+        {/snippet}
 
-        <svelte:fragment slot="content">
+        {#snippet content()}
             {#if $donations > 0}
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-sm">
@@ -69,6 +69,6 @@
                     </div>
                 </div>
             {/if}
-        </svelte:fragment>
+        {/snippet}
     </CollapsibleBox>
 </div>

@@ -10,11 +10,11 @@
         buttonTextShow={$t("checkout.summary.show_more")}
         buttonTextHide={$t("checkout.summary.hide")}
     >
-        <svelte:fragment slot="header">
+        {#snippet header()}
             <h2 class="text-secondary flex items-center gap-2 text-base font-semibold">
                 {$t("login.page.welcome.title")}
             </h2>
-        </svelte:fragment>
+        {/snippet}
     </CollapsibleBox>
 </div>
 

@@ -1,16 +1,31 @@
 <script lang="ts">
     import { onMount } from "svelte";
+    import type { Snippet } from "svelte";
     import LineIcon from "../svgs/LineIcon.svelte";
     import Button from "./library/Button.svelte";
     import { t } from "../i18n/store.ts";
 
-    export let detailsId: string;
-    export let isInitiallyCollapsed: boolean = false;
-    export let showToggleButton: boolean = true;
-    export let buttonTextShow: string = $t("checkout.summary.show_details");
-    export let buttonTextHide: string = $t("checkout.summary.hide_details");
+    interface Props {
+        detailsId: string;
+        isInitiallyCollapsed?: boolean;
+        showToggleButton?: boolean;
+        buttonTextShow?: string;
+        buttonTextHide?: string;
+        header: Snippet;
+        content?: Snippet;
+    }
 
-    let isCollapsed = isInitiallyCollapsed;
+    let {
+        detailsId,
+        isInitiallyCollapsed = false,
+        showToggleButton = true,
+        buttonTextShow = $t("checkout.summary.show_details"),
+        buttonTextHide = $t("checkout.summary.hide_details"),
+        header,
+        content,
+    }: Props = $props();
+
+    let isCollapsed = $state(isInitiallyCollapsed);
 
     function toggleCollapse() {
         isCollapsed = !isCollapsed;
@@ -56,12 +71,12 @@
     });
 </script>
 
-<div class="flex items-start justify-between">
-    <div>
-        <slot name="header" />
+<div class="flex w-full items-start justify-between">
+    <div class="flex-1">
+        {@render header()}
     </div>
     {#if showToggleButton}
-        <div class="lg:hidden">
+        <div class="self-start lg:hidden">
             <Button kind="invert" onclick={toggleCollapse} class="px-2 py-1 text-sm">
                 {isCollapsed ? buttonTextShow : buttonTextHide}
                 <LineIcon rotate={isCollapsed} />
@@ -70,6 +85,6 @@
     {/if}
 </div>
 
-{#if !isCollapsed}
-    <slot name="content" />
+{#if !isCollapsed && content}
+    {@render content()}
 {/if}
