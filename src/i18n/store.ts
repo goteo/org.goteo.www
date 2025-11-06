@@ -28,10 +28,18 @@ const initialLocale = detectLocale();
 
 export const locale = writable<Locale>(initialLocale);
 
+if (typeof window !== "undefined") {
+    window.localeStore = locale;
+}
+
 export const t = derived(locale, ($locale) => useTranslations($locale));
 
 export function setLocale(newLang: string) {
     if (isSupportedLocale(newLang)) {
         locale.set(newLang as Locale);
+
+        if (typeof window !== "undefined") {
+            window.localeStore = locale;
+        }
     }
 }

@@ -26,6 +26,34 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
 
         const languages = JSON.parse(selectElement.getAttribute("data-languages") || "[]");
 
+        let isChangingProgrammatically = false;
+
+        function syncLanguageSwitch() {
+            if (isChangingProgrammatically) return;
+
+            const currentPath = window.location.pathname.split("/").filter(Boolean);
+            const langFromPath = languages.includes(currentPath[0]) ? currentPath[0] : "es";
+
+            if (selectElement.value !== langFromPath) {
+                selectElement.value = langFromPath;
+            }
+        }
+
+        function subscribeToStore() {
+            if (window.localeStore) {
+                window.localeStore.subscribe((newLang) => {
+                    if (!isChangingProgrammatically && selectElement.value !== newLang) {
+                        selectElement.value = newLang;
+                    }
+                });
+            } else {
+                setTimeout(subscribeToStore, 100);
+            }
+        }
+        subscribeToStore();
+
+        window.addEventListener("popstate", syncLanguageSwitch);
+
         selectElement.addEventListener("change", (event) => {
             const target = event.target;
             if (!target) return;
@@ -36,6 +64,8 @@ const languagesJSON = JSON.stringify(Object.keys(languagesList));
                 console.error("Idioma no permitido:", selectedLang);
                 return;
             }
+
+            isChangingProgrammatically = true;
 
             document.cookie = `preferred-lang=${encodeURIComponent(selectedLang)}; Path=/; Max-Age=31536000; SameSite=Strict`;
 

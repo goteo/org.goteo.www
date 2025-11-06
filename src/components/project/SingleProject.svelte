@@ -17,6 +17,7 @@
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
     import { setLocale, t } from "../../i18n/store";
+    import { isSupportedLocale, languagesList } from "../../i18n/locales/index";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
@@ -44,9 +45,51 @@
     const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
 
     async function getProjectData(code?: string) {
-        lang = code ? code : getDefaultLanguage();
+        const newLang = code ? code : getDefaultLanguage();
 
+        if (code && isSupportedLocale(code) && typeof window !== "undefined") {
+            const currentPath = window.location.pathname.split("/").filter(Boolean);
+            const supportedLocales = Object.keys(languagesList);
+            const currentLangFromPath = supportedLocales.includes(currentPath[0])
+                ? currentPath[0]
+                : "es";
+
+            if (currentLangFromPath === code) {
+                lang = newLang;
+                setLocale(lang);
+
+                const { data } = await apiProjectsIdOrSlugGet({
+                    path: { idOrSlug: project?.id!.toString() },
+                    headers: { "Accept-Language": lang },
+                });
+
+                project = data!;
+                return;
+            }
+
+            document.cookie = `preferred-lang=${encodeURIComponent(code)}; Path=/; Max-Age=31536000; SameSite=Strict`;
+
+            let pathParts = window.location.pathname.split("/").filter(Boolean);
+
+            if (supportedLocales.includes(pathParts[0])) {
+                pathParts.shift();
+            }
+
+            if (code !== "es") {
+                pathParts.unshift(code);
+            }
+
+            const newPath = `/${pathParts.join("/")}`;
+            window.location.href = newPath;
+            return;
+        }
+
+        lang = newLang;
         setLocale(lang);
+
+        if (typeof document !== "undefined") {
+            document.cookie = `preferred-lang=${encodeURIComponent(lang)}; Path=/; Max-Age=31536000; SameSite=Strict`;
+        }
 
         const { data } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
