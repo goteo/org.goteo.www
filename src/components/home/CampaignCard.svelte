@@ -175,15 +175,27 @@ Converted from CampaignCard.astro to maintain exact functionality
                         </div>
                         <!-- Remaining to Goal -->
                         <div class="flex flex-col gap-1 text-right">
-                            <span class="text-secondary text-base">
-                                {remainingToGoal().label}
-                            </span>
-                            <span class="text-secondary text-2xl font-bold">
-                                {formatCurrency(
-                                    remainingToGoal().amount,
-                                    remainingToGoal().currency,
-                                )}
-                            </span>
+                            {#if campaign.optimum && campaign.obtained.amount >= campaign.minimum.amount}
+                                <span class="text-secondary text-base">
+                                    {$t("home.campaigns.optimum")}
+                                </span>
+                                <span class="text-secondary text-2xl font-bold">
+                                    {formatCurrency(
+                                        campaign.optimum.amount,
+                                        campaign.optimum.currency,
+                                    )}
+                                </span>
+                            {:else}
+                                <span class="text-secondary text-base">
+                                    {$t("home.campaigns.minimum")}
+                                </span>
+                                <span class="text-secondary text-2xl font-bold">
+                                    {formatCurrency(
+                                        campaign.minimum.amount,
+                                        campaign.minimum.currency,
+                                    )}
+                                </span>
+                            {/if}
                         </div>
                     </div>
                 </div>
