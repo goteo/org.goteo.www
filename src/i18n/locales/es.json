@@ -766,6 +766,7 @@
       "viewAll": "Ver todas",
       "obtained": "Obtenido",
       "minimum": "Mínimo",
+      "optimum": "Óptimo",
       "daysRemaining": "Quedan {{days}} días",
       "matchfunding": "Matchfunding",
       "status": {

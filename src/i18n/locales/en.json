@@ -757,6 +757,7 @@
       "viewAll": "See all",
       "obtained": "Obtained",
       "minimum": "Minimum",
+      "optimum": "Optimum",
       "daysRemaining": "{{days}} days left",
       "matchfunding": "Matchfunding",
       "status": {
