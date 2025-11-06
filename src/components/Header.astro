@@ -23,7 +23,7 @@ if (accessToken) {
 <header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:py-8">
     <div class="mx-auto max-w-[1440px] px-2">
         <div
-            class="flex flex-col rounded-xl border-1 border-[#f3f3f3] bg-[#fbfbfb80] backdrop-blur-xl transition-all duration-300"
+            class="border-gray-light flex flex-col rounded-xl border-1 bg-white/50 backdrop-blur-xl transition-all duration-300"
             id="header-container"
         >
             <div
@@ -86,12 +86,12 @@ if (accessToken) {
                 id="mobile-menu"
                 class="hidden translate-y-[-20px] transform overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:hidden"
             >
-                <div class="border-t-1 border-[#f3f3f3]">
+                <div class="border-gray-light border-t-1">
                     <div class="flex flex-col gap-4 p-4">
                         <div class="flex gap-2">
                             <a
                                 href="/search"
-                                class="w-auto font-karla font-bold text-base leading-6 text-secondary transition flex justify-center items-center gap-2 hover:cursor-pointer disabled:bg-light-muted px-4 py-2 rounded-[16px] bg-purple-tint"
+                                class="font-karla text-secondary disabled:bg-light-muted bg-purple-tint flex w-auto items-center justify-center gap-2 rounded-[16px] px-4 py-2 text-base leading-6 font-bold transition hover:cursor-pointer"
                             >
                                 <SearchIcon width="16" height="16" />
                                 {t("header.search")}
@@ -99,7 +99,7 @@ if (accessToken) {
 
                             <a
                                 href="/create/project"
-                                class="flex-1 font-karla font-bold text-base leading-6 rounded-lg bg-[#59e9d3] px-3 py-2 text-center text-[#462949] hover:bg-[#4dd0b8]"
+                                class="font-karla bg-primary text-secondary hover:bg-primary-hover flex-1 rounded-lg px-3 py-2 text-center text-base leading-6 font-bold"
                             >
                                 {t("header.createProject")}
                             </a>
