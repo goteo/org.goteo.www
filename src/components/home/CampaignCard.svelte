@@ -11,7 +11,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import ClockIcon from "../../svgs/ClockIcon.svelte";
     import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import ProjectTag from "../library/ProjectTag.svelte";
+    import Tag from "../library/Tag.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
 
     interface Props {
@@ -98,22 +98,18 @@ Converted from CampaignCard.astro to maintain exact functionality
                 <div class="absolute top-4 left-4 flex gap-2">
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
-                        <ProjectTag>
-                            {#snippet children()}
-                                <MatchFundingIcon />
-                                <span>{$t("home.campaigns.matchfunding")}</span>
-                            {/snippet}
-                        </ProjectTag>
+                        <Tag>
+                            <MatchFundingIcon />
+                            <span>{$t("home.campaigns.matchfunding")}</span>
+                        </Tag>
                     {/if}
 
                     <!-- Additional Tags -->
                     {#if campaign.tags}
                         {#each campaign.tags as tag}
-                            <ProjectTag>
-                                {#snippet children()}
-                                    {tag}
-                                {/snippet}
-                            </ProjectTag>
+                            <Tag>
+                                {tag}
+                            </Tag>
                         {/each}
                     {/if}
                 </div>
