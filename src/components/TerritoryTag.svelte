@@ -28,7 +28,13 @@
 
         const iso = iso3166.subdivision(tag!);
 
-        return `${iso?.name}, ${country}`;
+        if (!iso) {
+            return country;
+        }
+
+        const subdivision = iso.name.split(',')[0];
+
+        return `${subdivision}, ${country}`;
     }
 </script>
 
