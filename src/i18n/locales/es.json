@@ -265,18 +265,15 @@
     }
   },
   "categories": {
-    "solidary": "Solidario",
-    "libre-software": "Software Libre",
-    "employment": "Generar empleo",
-    "design": "Desde el diseño",
+    "culture": "Cultura",
+    "rights": "Derechos",
+    "education": "Educación",
     "journalism": "Periodismo independiente",
-    "education": "Educativo",
-    "culture": "Crea cultura",
-    "ecology": "Ecológico",
-    "health-and-cares": "Salud y cuidados",
-    "open-data": "Datos abiertos",
-    "democracy": "Democracia y participación",
-    "equity": "Igualdad de género"
+    "health": "Salud",
+    "ecological_transition": "Transición ecológica",
+    "social_economy": "Economía social",
+    "rural": "Rural",
+    "science": "Ciencia"
   },
   "ShareButton": {
     "title": "Difunde este proyecto por el mundo",
