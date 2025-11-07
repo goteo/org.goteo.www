@@ -12,7 +12,9 @@
 
     const variantStyles = {
         default: "bg-white border border-black text-secondary",
-        transparent: "bg-white/90 border border-white/50 text-black",
+        success: "bg-variant2",
+        warning: "bg-variant4",
+        error: "bg-tertiary",
     };
 </script>
 
