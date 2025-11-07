@@ -18,7 +18,7 @@
 
 <div
     class={twMerge(
-        "flex items-center content-center gap-2 rounded-[4px] px-2 py-1 whitespace-nowrap text-black",
+        "flex content-center items-center gap-2 rounded-[4px] px-2 py-1 whitespace-nowrap text-black",
         variantStyles[variant],
         classes,
     )}

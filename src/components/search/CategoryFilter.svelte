@@ -64,7 +64,7 @@ Implements active/inactive pill states matching Figma design
                 class:border={!isSelected}
                 class:text-[#462949]={!isSelected}
                 class:bg-[#fbfbfb]={!isSelected}
-                class:hover:bg-[#e6e5f7]={!isSelected}
+                class:hover:bg-variant1={!isSelected}
                 onclick={() => toggleCategory(category.id)}
                 onkeydown={(e) => handleKeydown(e, category.id)}
                 aria-pressed={isSelected}

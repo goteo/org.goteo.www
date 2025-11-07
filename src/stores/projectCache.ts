@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+
 import type { Project } from "../openapi/client/types.gen";
 
 /**
@@ -136,7 +137,7 @@ function createProjectCache() {
          * @returns Object containing cache size and sample keys
          */
         getStats: () => {
-            let stats = { size: 0, sampleKeys: [] as string[] };
+            const stats = { size: 0, sampleKeys: [] as string[] };
             update((state) => {
                 stats.size = state.projects.size;
                 stats.sampleKeys = Array.from(state.projects.keys()).slice(0, 10);

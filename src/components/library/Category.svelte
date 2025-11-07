@@ -8,7 +8,7 @@
         "px-[16px]",
         "py-[8px]",
         "font-[700]",
-        "hover:bg-purple-tint",
+        "hover:bg-variant1",
         "hover:text-tertiary",
     ];
 

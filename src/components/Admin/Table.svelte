@@ -580,27 +580,26 @@
                     onclick={() => toggleRow(i)}
                     class="{openRow === i
                         ? 'bg-soft-purple]'
-                        : 'bg-white'} border-purple-tint hover:bg-soft-purple] border transition-colors"
+                        : 'bg-white'} border-variant1 hover:bg-soft-purple] border transition-colors"
                 >
                     <TableBodyCell
-                        class="border-purple-tint truncate rounded-l-md border-t border-b border-l "
+                        class="border-variant1 truncate rounded-l-md border-t border-b border-l "
                         >{charge.targetDisplayName}</TableBodyCell
                     >
                     {#if charge.money.amount && charge.money.currency}
-                        <TableBodyCell class="border-purple-tint border-t border-b">
+                        <TableBodyCell class="border-variant1 border-t border-b">
                             {formatCurrency(charge.money.amount, charge.money.currency)}
                         </TableBodyCell>
                     {:else}
-                        <TableBodyCell class="border-purple-tint border-t border-b">—</TableBodyCell
-                        >
+                        <TableBodyCell class="border-variant1 border-t border-b">—</TableBodyCell>
                     {/if}
-                    <TableBodyCell class="border-purple-tint truncate border-t border-b"
+                    <TableBodyCell class="border-variant1 truncate border-t border-b"
                         >{charge.originDisplayName}</TableBodyCell
                     >
-                    <TableBodyCell class="border-purple-tint border-t border-b">
+                    <TableBodyCell class="border-variant1 border-t border-b">
                         {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                     </TableBodyCell>
-                    <TableBodyCell class="border-purple-tint border-t border-b">
+                    <TableBodyCell class="border-variant1 border-t border-b">
                         {getDate(charge.dateCreated).date}
                         <p
                             class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
@@ -609,7 +608,7 @@
                             {charge.trackingCodes[0]?.value || "—"}
                         </p>
                     </TableBodyCell>
-                    <TableBodyCell class="border-purple-tint border-t border-b">
+                    <TableBodyCell class="border-variant1 border-t border-b">
                         <button
                             class="border-tertiary text-tertiary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
                         >
@@ -617,8 +616,7 @@
                         </button>
                     </TableBodyCell>
 
-                    <TableBodyCell
-                        class="border-purple-tint rounded-r-md border-t border-r border-b"
+                    <TableBodyCell class="border-variant1 rounded-r-md border-t border-r border-b"
                         >{charge.refundToWallet}</TableBodyCell
                     >
                 </TableBodyRow>
@@ -626,7 +624,7 @@
                     <TableBodyRow>
                         <TableBodyCell
                             colspan={tableHeaders.length}
-                            class="border-purple-tint bg-soft-purple] rounded-lg border shadow-[0px_1px_3px_0px_#0000001A]"
+                            class="border-variant1 bg-soft-purple] rounded-lg border shadow-[0px_1px_3px_0px_#0000001A]"
                         >
                             <DetailsRow
                                 platformLinks={charge.platformLinks}

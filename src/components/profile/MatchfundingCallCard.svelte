@@ -103,7 +103,7 @@
             <!-- Call to Action Button -->
             <a
                 href={callUrl}
-                class="bg-purple-tint text-secondary focus:ring-primary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 hover:opacity-90 focus:ring-2 focus:outline-none"
+                class="bg-variant1 text-secondary focus:ring-primary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 hover:opacity-90 focus:ring-2 focus:outline-none"
             >
                 {$t("me.matchfunding.callCard.viewCall")}
             </a>
