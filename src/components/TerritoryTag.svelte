@@ -32,7 +32,7 @@
             return country;
         }
 
-        const subdivision = iso.name.split(',')[0];
+        const subdivision = iso.name.split(",")[0];
 
         return `${subdivision}, ${country}`;
     }
