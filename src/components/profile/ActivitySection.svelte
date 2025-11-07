@@ -475,34 +475,34 @@
     {#if loading}
         <!-- Loading state -->
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-content">Loading...</p>
         </div>
     {:else if error}
         <!-- Error state -->
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="bg-light-surface border-light-muted flex min-h-[384px] items-center justify-center rounded-[32px] border"
+            class="bg-light-surface border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>

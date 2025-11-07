@@ -21,9 +21,9 @@
     /* Extended color tokens for components */
     --color-white: #fbfbfb;
     --color-black: #3d3d3d;
+    --color-grey: #f3f3ef;
     --color-light-accent: #e6d9f3; /* Light purple accent for buttons */
     --color-light-surface: #fbfbfb; /* Light background surface */
-    --color-light-muted: #f3f3ef; /* Muted light background */
     --color-soft-purple: #faf9ff;
     --color-neutral-light: #e6e6e6; /* Light neutral border */
     --color-divider: #f1efff; /* Budget bar divider color */
@@ -49,7 +49,7 @@
         /* Dark theme variants for extended tokens */
         --color-light-accent: #4a3c5e; /* Darker purple for dark theme */
         --color-light-surface: #1f1f1f; /* Dark surface */
-        --color-light-muted: #2a2a2a; /* Dark muted background */
+        --color-grey: #2a2a2a; /* Dark muted background */
         --color-variant1: #3a3551; /* Dark purple tint */
         --color-neutral-light: #404040; /* Dark neutral border */
         --color-white: #f8f9fa; /* Off-white for dark theme */

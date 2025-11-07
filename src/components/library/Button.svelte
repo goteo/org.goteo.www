@@ -10,7 +10,7 @@
         "transition",
         "flex justify-center items-center gap-2",
         "hover:cursor-pointer",
-        "disabled:bg-light-muted",
+        "disabled:bg-grey",
     ];
 
     const sizeStyles = {
