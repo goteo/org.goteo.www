@@ -448,7 +448,9 @@
   "title": "Hello!",
   "header": {
     "login": "Login",
-    "btnCart": "Go to checkout"
+    "btnCart": "Go to checkout",
+    "search": "Search",
+    "createProject": "Create your campaign"
   },
   "checkout": {
     "title": "Summary of your selected donations",
