@@ -456,7 +456,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sessió",
-    "btnCart": "Anar al checkout"
+    "btnCart": "Anar al checkout",
+    "search": "Cercar",
+    "createProject": "Crea la teva campanya"
   },
   "checkout": {
     "title": "Resum de les teves donacions seleccionades",
@@ -765,6 +767,7 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
+      "optimum": "Òptim",
       "daysRemaining": "Queden {{days}} dies",
       "matchfunding": "Matchfunding",
       "status": {

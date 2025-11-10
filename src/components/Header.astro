@@ -1,11 +1,13 @@
 ---
 import CartButton from "./CartButton.svelte";
 import MenuIcon from "../svgs/MenuIcon.astro";
+import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
 import Logo from "../svgs/Logo.astro";
 import UserIcon from "../svgs/UserIcon.astro";
 import Logout from "./Logout.astro";
-import UiLanguages from "./UiLanguages.astro";
+import UiLanguages from "./UiLanguages.svelte";
 import HeaderButtons from "./HeaderButtons.svelte";
+import SearchIcon from "../svgs/SearchIcon.svelte";
 
 const { t } = Astro.locals;
 
@@ -18,51 +20,150 @@ if (accessToken) {
 }
 ---
 
-<header class="sticky top-0 z-100 w-full max-w-screen px-3 py-4 md:px-6 md:py-8">
-    <div
-        class="mx-auto flex max-w-[1440px] items-center justify-between rounded-xl border-1 border-[#f3f3f3] bg-[#fbfbfb80] px-4 py-6 backdrop-blur-xl"
-    >
-        <div class="flex items-center gap-4">
-            <a href="/" class="flex-shrink-0"><Logo /></a>
-            <HeaderButtons client:load />
-        </div>
-        <nav>
-            <ul class="flex items-center gap-2 md:gap-4">
-                {
-                    accessToken && (
-                        <li class="flex items-center">
-                            <CartButton client:load />
+<header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:py-8">
+    <div class="mx-auto max-w-[1440px] px-2">
+        <div
+            class="border-gray-light flex flex-col rounded-xl border-1 bg-white/50 backdrop-blur-xl transition-all duration-300"
+            id="header-container"
+        >
+            <div
+                class="flex items-center justify-between px-2 py-3 md:px-4 md:py-6"
+                id="header-main"
+            >
+                <div class="flex items-center gap-2 md:gap-4">
+                    <a href="/" class="flex-shrink-0"><Logo /></a>
+                    <div class="hidden sm:block">
+                        <HeaderButtons client:load />
+                    </div>
+                </div>
+                <nav>
+                    <ul class="flex items-center gap-1 md:gap-4">
+                        {
+                            accessToken && (
+                                <li class="flex items-center pr-2">
+                                    <CartButton client:load />
+                                </li>
+                            )
+                        }
+                        <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
+                            {
+                                accessToken ? (
+                                    <a href="/me" class="flex w-full items-center gap-1">
+                                        <UserIcon />
+                                        <span class="hidden sm:inline">
+                                            {t("greeting")}, {user.person.firstName}
+                                        </span>
+                                    </a>
+                                ) : (
+                                    <a href="/login" class="flex w-full items-center gap-1">
+                                        <UserIcon />
+                                        <span class="hidden sm:inline">{t("header.login")}</span>
+                                    </a>
+                                )
+                            }
                         </li>
-                    )
-                }
-                <li class="items-center gap-1 text-sm sm:flex md:text-base">
-                    <UserIcon />
-                    {
-                        accessToken && (
-                            <span class="hidden md:inline">
-                                {t("greeting")},{" "}
-                                {user.person?.firstName || user.displayName || "Usuario"}
-                            </span>
-                        )
-                    }
-                    {
-                        !accessToken && (
-                            <a href="/login">
-                                <span class="hidden md:inline">{t("header.login")}</span>
+                        <li class="hidden items-center pr-2 md:flex">
+                            <UiLanguages client:load />
+                        </li>
+                        <li class="flex items-center md:hidden">
+                            <button id="mobile-menu-button" class="p-1">
+                                <div id="menu-icon">
+                                    <MenuIcon />
+                                </div>
+                                <div id="close-icon" class="hidden">
+                                    <CloseIconMenu client:load />
+                                </div>
+                            </button>
+                        </li>
+                        <li class="hidden items-center md:flex">
+                            <MenuIcon />
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <div
+                id="mobile-menu"
+                class="hidden translate-y-[-20px] transform overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:hidden"
+            >
+                <div class="border-gray-light border-t-1">
+                    <div class="flex flex-col gap-4 p-4">
+                        <div class="flex gap-2">
+                            <a
+                                href="/search"
+                                class="font-karla text-secondary disabled:bg-light-muted bg-purple-tint flex w-auto items-center justify-center gap-2 rounded-[16px] px-4 py-2 text-base leading-6 font-bold transition hover:cursor-pointer"
+                            >
+                                <SearchIcon width="16" height="16" />
+                                {t("header.search")}
                             </a>
-                        )
-                    }
-                </li>
-                <li class="flex items-center">
-                    <UiLanguages />
-                </li>
-                <li class="flex items-center md:hidden">
-                    <MenuIcon />
-                </li>
-                <li class="hidden items-center md:flex">
-                    <MenuIcon />
-                </li>
-            </ul>
-        </nav>
+
+                            <a
+                                href="/create/project"
+                                class="font-karla bg-primary text-secondary hover:bg-primary-hover flex-1 rounded-lg px-3 py-2 text-center text-base leading-6 font-bold"
+                            >
+                                {t("header.createProject")}
+                            </a>
+                        </div>
+
+                        <div class="flex flex-col gap-2 pt-1">
+                            <UiLanguages client:load />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </header>
+
+<script>
+    function initMobileMenu() {
+        const menuButton = document.getElementById("mobile-menu-button");
+        const mobileMenu = document.getElementById("mobile-menu");
+        const menuIcon = document.getElementById("menu-icon");
+        const closeIcon = document.getElementById("close-icon");
+
+        if (!menuButton || !mobileMenu || !menuIcon || !closeIcon) return;
+
+        function toggleMenu() {
+            const isOpen = !mobileMenu!.classList.contains("hidden");
+
+            if (isOpen) {
+                mobileMenu!.classList.add("translate-y-[-20px]", "opacity-0");
+                setTimeout(() => {
+                    mobileMenu!.classList.add("hidden");
+                }, 200);
+
+                closeIcon!.classList.add("hidden");
+                menuIcon!.classList.remove("hidden");
+            } else {
+                mobileMenu!.classList.remove("hidden");
+                setTimeout(() => {
+                    mobileMenu!.classList.remove("translate-y-[-20px]", "opacity-0");
+                }, 10);
+
+                menuIcon!.classList.add("hidden");
+                closeIcon!.classList.remove("hidden");
+            }
+        }
+
+        menuButton.addEventListener("click", toggleMenu);
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "Escape" && !mobileMenu.classList.contains("hidden")) {
+                mobileMenu.classList.add("translate-y-[-20px]", "opacity-0");
+                setTimeout(() => {
+                    mobileMenu.classList.add("hidden");
+                }, 200);
+
+                closeIcon.classList.add("hidden");
+                menuIcon.classList.remove("hidden");
+            }
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initMobileMenu);
+    } else {
+        initMobileMenu();
+    }
+</script>

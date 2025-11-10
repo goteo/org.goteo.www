@@ -72,22 +72,31 @@
             </div>
         </div>
         <div class="flex flex-col gap-4">
+            {#if project.budget?.optimum && hasReached(project.budget?.minimum?.money)}
+                <div>
+                    <p class="text-content text-sm">{$t(`campaignProgress.optimum`)}</p>
+                    <p class="text-3xl font-bold text-black">
+                        {formatCurrency(
+                            project.budget?.optimum?.money?.amount ?? 0,
+                            project.budget?.optimum?.money?.currency ?? undefined,
+                        )}
+                    </p>
+                </div>
+            {:else}
+                <div>
+                    <p class="text-content text-sm">{$t(`campaignProgress.minimum`)}</p>
+                    <p class="text-3xl font-bold text-black">
+                        {formatCurrency(
+                            project.budget?.minimum?.money?.amount ?? 0,
+                            project.budget?.minimum?.money?.currency ?? undefined,
+                        )}
+                    </p>
+                </div>
+            {/if}
             <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.optimum`)}</p>
-                <p class="text-3xl font-bold text-black">
-                    {formatCurrency(
-                        project.budget?.optimum?.money?.amount ?? 0,
-                        project.budget?.optimum?.money?.currency ?? undefined,
-                    )}
-                </p>
-            </div>
-            <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.minimum`)}</p>
+                <p class="text-content text-sm">{$t(`campaignProgress.supports`)}</p>
                 <p class="text-2xl font-bold text-black">
-                    {formatCurrency(
-                        project.budget?.minimum?.money?.amount ?? 0,
-                        project.budget?.minimum?.money?.currency ?? undefined,
-                    )}
+                    {totalSupports}
                 </p>
             </div>
         </div>
