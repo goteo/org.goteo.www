@@ -477,7 +477,9 @@
       "resume": {
         "donationsPrefix": "of donations",
         "foundationPrefix": "of contribution to the foundation"
-      }
+      },
+      "show_more": "Show more",
+      "hide": "Hide"
     },
     "cart": {
       "freeDonation": {

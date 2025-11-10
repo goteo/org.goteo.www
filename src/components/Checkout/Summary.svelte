@@ -1,21 +1,17 @@
 <script lang="ts">
     import WarningIcon from "../../svgs/WarningIcon.svelte";
-    import LineIcon from "../../svgs/LineIcon.svelte";
-    import Button from "../library/Button.svelte";
+    import CollapsibleBox from "../CollapsibleBox.svelte";
     import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
-    import { createEventDispatcher } from "svelte";
 
     export let hasError: boolean;
     export let amount: number | undefined;
     export let currency: string;
     export let accountingIdPlatoniq: number;
 
-    let isCollapsed = false;
     let summaryRef;
-    const dispatch = createEventDispatcher();
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -28,26 +24,16 @@
     );
 
     const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
-
-    function toggleCollapse() {
-        isCollapsed = !isCollapsed;
-
-        if (typeof window !== "undefined" && window.innerWidth < 1024) {
-            const detailsElement = document.getElementById("checkout-details");
-            if (detailsElement) {
-                if (isCollapsed) {
-                    detailsElement.style.display = "none";
-                } else {
-                    detailsElement.style.display = "block";
-                }
-            }
-        }
-    }
 </script>
 
 <div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
-    <div class="flex items-start justify-between">
-        <div>
+    <CollapsibleBox
+        detailsId="checkout-details"
+        isInitiallyCollapsed={false}
+        buttonTextShow={$t("checkout.summary.show_details")}
+        buttonTextHide={$t("checkout.summary.hide_details")}
+    >
+        {#snippet header()}
             <h2
                 class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
@@ -63,34 +49,26 @@
             >
                 {formatCurrency(amount ?? $total, currency)}
             </p>
-        </div>
-        <div class="lg:hidden">
-            <Button kind="invert" onclick={toggleCollapse} class="px-2 py-1 text-sm">
-                {isCollapsed
-                    ? $t("checkout.summary.show_details")
-                    : $t("checkout.summary.hide_details")}
-                <LineIcon rotate={isCollapsed} />
-            </Button>
-        </div>
-    </div>
+        {/snippet}
 
-    {#if !isCollapsed}
-        {#if $donations > 0}
-            <div class="flex flex-col gap-2">
-                <div class="flex justify-between text-sm">
-                    <span>{$t("checkout.summary.donations")}</span>
-                    <span>{formatCurrency($donations, currency)}</span>
+        {#snippet content()}
+            {#if $donations > 0}
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between text-sm">
+                        <span>{$t("checkout.summary.donations")}</span>
+                        <span>{formatCurrency($donations, currency)}</span>
+                    </div>
                 </div>
-            </div>
-        {/if}
+            {/if}
 
-        {#if $foundation > 0}
-            <div class="flex flex-col gap-2">
-                <div class="flex justify-between text-sm">
-                    <span>{$t("checkout.summary.foundation")}</span>
-                    <span>{formatCurrency($foundation, currency)}</span>
+            {#if $foundation > 0}
+                <div class="flex flex-col gap-2">
+                    <div class="flex justify-between text-sm">
+                        <span>{$t("checkout.summary.foundation")}</span>
+                        <span>{formatCurrency($foundation, currency)}</span>
+                    </div>
                 </div>
-            </div>
-        {/if}
-    {/if}
+            {/if}
+        {/snippet}
+    </CollapsibleBox>
 </div>

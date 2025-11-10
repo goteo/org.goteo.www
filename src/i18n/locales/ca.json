@@ -485,7 +485,9 @@
       "resume": {
         "donationsPrefix": "de donacions",
         "foundationPrefix": "d’aportació a la fundació"
-      }
+      },
+      "show_more": "Mostra'n més",
+      "hide": "Amagar"
     },
     "cart": {
       "freeDonation": {
