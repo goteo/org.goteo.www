@@ -7,6 +7,27 @@ const { t } = Astro.locals;
     <div
         class="bg-secondary relative mx-auto overflow-hidden rounded-3xl p-4 text-white sm:p-6 md:p-8"
     >
+        <!-- Detail Images Container -->
+        <div class="pointer-events-none absolute inset-0 -z-0">
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute -top-[23%] right-[388px] h-[226px] w-[244px]"
+                style="transform: translateY(-25%) rotate(4deg);"
+            />
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute top-[54%] right-[214px] h-[226px] w-[244px]"
+                style="transform: translateY(-37%) rotate(-2deg);"
+            />
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute top-[24%] right-0 h-[226px] w-[244px]"
+                style="transform: translateY(-60%) rotate(2deg);"
+            />
+        </div>
         <!-- Close Button - Mobile (Top Right) -->
         <button
             class="renovation-banner-close absolute top-4 right-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10 md:hidden"
