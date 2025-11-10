@@ -12,7 +12,7 @@ import {
     apiProjectSupportsGetCollection,
     apiProjectSupportsmoneyTotalGetCollection,
     type Accounting,
-    type ApiMoney,
+    type Money,
     type ProjectSupport,
 } from "../../../openapi/client";
 import type { User } from "../../../openapi/client/types.gen";
@@ -131,7 +131,8 @@ if (projectIRIs.length > 0) {
                     title: project.title!,
                     image: project.video?.thumbnail!,
                     minimum: project.budget?.minimum?.money!,
-                    obtained: accounting!.balance as ApiMoney,
+                    obtained: accounting!.balance as Money,
+                    optimum: project.budget?.optimum?.money,
                 };
             } catch (error) {
                 console.error(`Error fetching project ${projectIRI}:`, error);

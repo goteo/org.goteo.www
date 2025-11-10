@@ -2,7 +2,7 @@
 import CampaignCard from "./CampaignCard.svelte";
 import type { Campaign } from "../../types/campaign";
 import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
-import { apiProjectsGetCollection, type Accounting, type ApiMoney } from "../../openapi/client";
+import { apiProjectsGetCollection, type Accounting, type Money } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
 
@@ -39,7 +39,8 @@ const campaigns: Campaign[] = await Promise.all(
                 highlightedProjects[project.slug! as keyof typeof highlightedProjects] ||
                 project.video?.thumbnail!,
             minimum: project.budget?.minimum?.money!,
-            obtained: accounting!.balance as ApiMoney,
+            obtained: accounting!.balance as Money,
+            optimum: project.budget?.optimum?.money,
         };
     }),
 );

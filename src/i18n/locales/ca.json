@@ -456,7 +456,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sessió",
-    "btnCart": "Anar al checkout"
+    "btnCart": "Anar al checkout",
+    "search": "Cercar",
+    "createProject": "Crea la teva campanya"
   },
   "checkout": {
     "title": "Resum de les teves donacions seleccionades",
@@ -511,6 +513,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Enhorabona! Gràcies per la teva donació",
+      "emailSent": "T'hem enviat un resum a:",
+      "certificate": {
+        "title": "Com sol·licito el meu certificat?",
+        "description": "El certificat es genera de forma automàtica al final de l'any fiscal (desembre). T'enviarem un correu una vegada hàgim presentat la documentació a Hisenda. En cas que trobem algun problema et contactarem per correu."
+      },
+      "donatedProjects": {
+        "title": "Has donat als següents projectes",
+        "empty": "No s'han trobat projectes donats"
+      },
+      "suggestedProjects": {
+        "title": "Altres projectes que necessiten la teva ajuda",
+        "empty": "No hi ha projectes disponibles en aquest moment"
+      }
+    },
     "page": {
       "title": "Indica’ns les teves dades de pagament",
       "description": "Ara necessitem que ens diguis com vols pagar.",
@@ -751,8 +769,18 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
+      "optimum": "Òptim",
       "daysRemaining": "Queden {{days}} dies",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "Mínim aconseguit!",
+        "goForMinimum": "A pel mínim!"
+      },
+      "remaining": {
+        "toOptimum": "Falta per òptim",
+        "toMinimum": "Falta pel mínim"
+      },
+      "userDonations": "Les teves donacions:"
     },
     "blog": {
       "title": "S'aveïnen grans canvis… ¡no et perdis res!",
@@ -917,6 +945,83 @@
       "nextLevel": {
         "title": "Proper nivell",
         "description": "Continua donant per pujar de nivell"
+      }
+    }
+  },
+  "me": {
+    "page": {
+      "title": "Activitat",
+      "subtitle": "Consulta la teva activitat a Goteo"
+    },
+    "period": {
+      "label": "Període",
+      "year": "Any {{year}}"
+    },
+    "donations": {
+      "title": "Les meves donacions",
+      "empty": "Encara no has donat a cap projecte",
+      "explore": "Explora projectes",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/ca/projects",
+      "count": "Donacions",
+      "total": "Total donat",
+      "recent": "Últimes donacions",
+      "viewAll": "Veure totes",
+      "certificate": "Sol·licitar certificat"
+    },
+    "projects": {
+      "title": "Projectes impulsats",
+      "empty": "Encara no has impulsat cap projecte",
+      "create": "Impulsa el teu projecte",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/ca/projects/new",
+      "count": "Projectes",
+      "raised": "Recaptat",
+      "recent": "Últims projectes impulsats",
+      "viewAll": "Veure tots",
+      "createNew": "Crear un projecte"
+    },
+    "ownedProjects": {
+      "title": "Els Teus Projectes Actius",
+      "messageToDonatorsButton": "Missatge a donants",
+      "uploadNewsButton": "Pujar novetat"
+    },
+    "donatedProjects": {
+      "title": "Projectes actius on has donat"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descobreix, connecta i dona",
+        "description": "Imagina un lloc on centenars de projectes socials esperen el teu suport. A la nostra plataforma, explorar és fàcil: navega per causes comunitàries, ambientals o educatives. Perquè aquí, tu decideixes quines històries s'escriuen.",
+        "button": "Dona a un projecte"
+      },
+      "matchfunding": {
+        "title": "Donacions que brillen. Projectes que inspiren.",
+        "description": "Goteo és pionera en matchfunding. Tant si ets un donant que busca potenciar la teva contribució a projectes, un impulsor que vol augmentar el seu pressupost o una entitat que busca donar suport a projectes i impulsors a través de reforços en el donatiu... el nostre programa de matchfunding et permet multiplicar l'impuls pel canvi",
+        "learnMore": "Descobreix com funciona el matchfunding",
+        "becomeMatcher": "Fes-te Matcher"
+      }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatòries",
+        "donated": "Donat",
+        "recent": "Últimes convocatòries",
+        "viewAll": "Veure convocatòries",
+        "create": "Crear convocatòria"
+      },
+      "section": {
+        "title": "Les Teves Convocatòries de Matchfunding Actives",
+        "empty": "No tens convocatòries actives",
+        "error": "Error en carregar les convocatòries"
+      },
+      "callCard": {
+        "donationCall": "Dotació convocatòria",
+        "participatingProjects": "Projectes participants",
+        "successfulProjects": "Projectes acollits amb èxit",
+        "projects": "projectes",
+        "viewCall": "Anar a la convocatòria"
       }
     }
   }

@@ -7,7 +7,7 @@ import {
     apiProjectsGetCollection,
     type Accounting,
     type ApiAccountingsIdGetData,
-    type ApiMoney,
+    type Money,
 } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
@@ -44,7 +44,8 @@ const campaigns: Campaign[] = await Promise.all(
                 chosenProjects[project.slug! as keyof typeof chosenProjects] ||
                 project.video?.thumbnail!,
             minimum: project.budget?.minimum?.money!,
-            obtained: accounting!.balance as ApiMoney,
+            optimum: project.budget?.optimum?.money,
+            obtained: accounting!.balance as Money,
         };
     }),
 );

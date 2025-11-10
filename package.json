@@ -22,6 +22,7 @@
     "dev:worker": "npx astro build && npx wrangler dev --port 4321 --ip 0.0.0.0"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.4",
     "@astrojs/cloudflare": "^12.6.0",
     "@astrojs/node": "^9.2.2",
     "@astrojs/svelte": "^7.1.0",

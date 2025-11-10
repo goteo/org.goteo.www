@@ -448,7 +448,9 @@
   "title": "Hello!",
   "header": {
     "login": "Login",
-    "btnCart": "Go to checkout"
+    "btnCart": "Go to checkout",
+    "search": "Search",
+    "createProject": "Create your campaign"
   },
   "checkout": {
     "title": "Summary of your selected donations",
@@ -503,6 +505,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Congratulations! Thank you for your donation",
+      "emailSent": "We have sent you a summary to:",
+      "certificate": {
+        "title": "How do I request my certificate?",
+        "description": "The certificate is automatically generated at the end of the fiscal year (December). We will send you an email once we have submitted the documentation to the Tax Agency. If we encounter any problems, we will contact you by email."
+      },
+      "donatedProjects": {
+        "title": "You have donated to the following projects",
+        "empty": "No donated projects found"
+      },
+      "suggestedProjects": {
+        "title": "Other projects that need your help",
+        "empty": "No projects available at this time"
+      }
+    },
     "page": {
       "title": "Tell us your payment data",
       "description": "Now we need to tell us how you want to pay.",
@@ -743,8 +761,18 @@
       "viewAll": "See all",
       "obtained": "Obtained",
       "minimum": "Minimum",
+      "optimum": "Optimum",
       "daysRemaining": "{{days}} days left",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "Minimum reached!",
+        "goForMinimum": "Go for minimum!"
+      },
+      "remaining": {
+        "toOptimum": "To optimum",
+        "toMinimum": "To minimum"
+      },
+      "userDonations": "Your donations:"
     },
     "blog": {
       "title": "Big changes are coming… don't miss anything!",
@@ -909,6 +937,83 @@
       "nextLevel": {
         "title": "Next level",
         "description": "Keep donating to level up"
+      }
+    }
+  },
+  "me": {
+    "page": {
+      "title": "Activity",
+      "subtitle": "Check your activity on Goteo"
+    },
+    "period": {
+      "label": "Period",
+      "year": "Year {{year}}"
+    },
+    "donations": {
+      "title": "My donations",
+      "empty": "You haven't donated to any project yet",
+      "explore": "Explore projects",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/en/projects",
+      "count": "Donations",
+      "total": "Total donated",
+      "recent": "Recent donations",
+      "viewAll": "View all",
+      "certificate": "Request certificate"
+    },
+    "projects": {
+      "title": "Promoted projects",
+      "empty": "You haven't promoted any projects yet",
+      "create": "Promote your project",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/en/projects/new",
+      "count": "Projects",
+      "raised": "Raised",
+      "recent": "Recent promoted projects",
+      "viewAll": "View all",
+      "createNew": "Create a project"
+    },
+    "ownedProjects": {
+      "title": "Your Active Projects",
+      "messageToDonatorsButton": "Message donors",
+      "uploadNewsButton": "Post update"
+    },
+    "donatedProjects": {
+      "title": "Active projects you donated to"
+    },
+    "cta": {
+      "discover": {
+        "title": "Discover, connect and donate",
+        "description": "Imagine a place where hundreds of social projects await your support. On our platform, exploring is easy: browse through community, environmental, or educational causes. Because here, you decide which stories get written.",
+        "button": "Donate to a project"
+      },
+      "matchfunding": {
+        "title": "Donations that shine. Projects that inspire.",
+        "description": "Goteo is a pioneer in matchfunding. Whether you're a donor looking to boost your contribution to projects, a promoter wanting to increase your budget, or an entity seeking to support projects and promoters through donation reinforcements... our matchfunding program allows you to multiply the momentum for change",
+        "learnMore": "Discover how matchfunding works",
+        "becomeMatcher": "Become a Matcher"
+      }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Calls",
+        "donated": "Donated",
+        "recent": "Recent calls",
+        "viewAll": "View calls",
+        "create": "Create call"
+      },
+      "section": {
+        "title": "Your Active Matchfunding Calls",
+        "empty": "You don't have active calls",
+        "error": "Error loading calls"
+      },
+      "callCard": {
+        "donationCall": "Call allocation",
+        "participatingProjects": "Participating projects",
+        "successfulProjects": "Successfully accepted projects",
+        "projects": "projects",
+        "viewCall": "Go to call"
       }
     }
   }

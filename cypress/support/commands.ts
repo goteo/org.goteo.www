@@ -392,7 +392,7 @@ Cypress.Commands.add("checkHeaderElements", () => {
 Cypress.Commands.add("changeLanguage", (language: string) => {
     cy.get("body").then(($body) => {
         if ($body.find("select#language-select").length > 0) {
-            cy.get("select#language-select", { timeout: 5000 }).select(language);
+            cy.get("select#language-select", { timeout: 5000 }).first().select(language);
         } else {
             cy.log("ℹ️ Language selector not found");
         }
