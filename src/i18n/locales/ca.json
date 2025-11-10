@@ -765,6 +765,7 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
+      "optimum": "Òptim",
       "daysRemaining": "Queden {{days}} dies",
       "matchfunding": "Matchfunding",
       "status": {

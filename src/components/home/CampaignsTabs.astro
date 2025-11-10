@@ -44,6 +44,7 @@ const campaigns: Campaign[] = await Promise.all(
                 chosenProjects[project.slug! as keyof typeof chosenProjects] ||
                 project.video?.thumbnail!,
             minimum: project.budget?.minimum?.money!,
+            optimum: project.budget?.optimum?.money,
             obtained: accounting!.balance as Money,
         };
     }),

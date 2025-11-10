@@ -40,6 +40,7 @@ const campaigns: Campaign[] = await Promise.all(
                 project.video?.thumbnail!,
             minimum: project.budget?.minimum?.money!,
             obtained: accounting!.balance as Money,
+            optimum: project.budget?.optimum?.money,
         };
     }),
 );
