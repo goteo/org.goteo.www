@@ -70,11 +70,14 @@ const { t } = Astro.locals;
             }
 
             if (!error) {
-                if (hasCart) {
+                const urlParams = new URLSearchParams(window.location.search);
+                const isFromCheckout = urlParams.get('checkout') === 'true';
+                
+                if (hasCart || isFromCheckout) {
                     window.location.href = `/payment`;
+                } else {
+                    window.location.href = `/`;
                 }
-
-                window.location.href = `/`;
             }
         });
     }
