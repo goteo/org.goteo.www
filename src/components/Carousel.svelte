@@ -44,7 +44,9 @@
             for (const el of Array.from(container.children) as HTMLElement[]) {
                 el.style.minWidth = `${childWidth}px`;
                 el.style.maxWidth = `${childWidth}px`;
+                el.style.width = `${childWidth}px`;
                 el.style.flex = "0 0 auto";
+                el.style.overflow = "hidden";
             }
             updateNavForShort();
         } catch (error) {
