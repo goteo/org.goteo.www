@@ -31,14 +31,6 @@ const { t } = Astro.locals;
 
 <script>
     import { actions, isInputError } from "astro:actions";
-    import { itemCount } from "../stores/cart";
-
-    let hasCart = false;
-    itemCount.subscribe((count) => {
-        hasCart = count > 1;
-        console.log(count);
-        console.log(hasCart);
-    });
 
     const form = document.getElementById("login");
     const errorContent = document.getElementById("login-error-content");
@@ -73,7 +65,7 @@ const { t } = Astro.locals;
                 const urlParams = new URLSearchParams(window.location.search);
                 const isFromCheckout = urlParams.get("checkout") === "true";
 
-                if (hasCart || isFromCheckout) {
+                if (isFromCheckout) {
                     window.location.href = `/payment`;
                 } else {
                     window.location.href = `/`;
