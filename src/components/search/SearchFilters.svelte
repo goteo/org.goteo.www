@@ -77,16 +77,15 @@ Integrated with searchStore for state management and URL synchronization
     }
 </script>
 
-<!-- Main search filters container - Figma design layout -->
 <div
-    class="flex flex-col gap-10 rounded-[32px] border border-[#f3f3ef] bg-[#fbfbfb] px-8 py-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]"
+    class="flex flex-col gap-6 rounded-[24px] border border-[#f3f3ef] bg-[#fbfbfb] px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] lg:gap-10 lg:rounded-[32px] lg:px-8 lg:py-6"
     data-testid="search-filters"
 >
-    <div class="flex items-center gap-16">
+    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-16">
         <!-- Search section with input and button -->
-        <div class="flex flex-1 items-center gap-4">
+        <div class="flex flex-1 flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
             <!-- Search input -->
-            <div class="flex-1">
+            <div class="min-w-0 flex-1">
                 <SearchInput
                     value={$searchFilters.query}
                     onSearch={(query) => updateFilters({ query })}
@@ -97,18 +96,23 @@ Integrated with searchStore for state management and URL synchronization
                 />
             </div>
 
-            <!-- Search button -->
-            <SearchButton variant="secondary" onclick={handleSearch} data-testid="search-btn">
+            <SearchButton
+                variant="secondary"
+                onclick={handleSearch}
+                data-testid="search-btn"
+                class="w-full shrink-0 sm:w-auto"
+            >
                 {$t("search.searchButton")}
             </SearchButton>
         </div>
 
-        <!-- Filter toggle button -->
+        <!-- Filter toggle button - full width on mobile, auto on desktop -->
         <SearchButton
             variant="ghost"
             onclick={toggleFilters}
             data-testid="toggle-filters"
             aria-expanded={filtersOpen}
+            class="w-full justify-center lg:w-auto"
         >
             <FilterIcon width="16" height="16" class="mr-2" />
             {$t("search.showFilters")}
@@ -118,7 +122,7 @@ Integrated with searchStore for state management and URL synchronization
     <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
-        <div class="max-w-sm">
+        <div class="w-full lg:max-w-sm">
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("filters.campaignStatus")}
@@ -129,7 +133,7 @@ Integrated with searchStore for state management and URL synchronization
         </div>
 
         <!-- Category filters -->
-        <div class="">
+        <div class="w-full">
             <CategoryFilter
                 selectedCategories={$searchFilters.categories}
                 onCategoryChange={(categories) => updateFilters({ categories })}
@@ -137,25 +141,28 @@ Integrated with searchStore for state management and URL synchronization
             />
         </div>
 
-        <!-- Apply filters and clear buttons -->
-        <div class="flex items-center justify-between">
+        <div
+            class="flex flex-col-reverse items-stretch justify-between gap-3 sm:flex-row sm:items-center"
+        >
             <!-- Clear filters button (only show if filters are active) -->
             {#if $hasActiveFilters}
                 <SearchButton
                     variant="ghost"
                     onclick={handleClearFilters}
                     data-testid="clear-filters-btn"
+                    class="w-full sm:w-auto"
                 >
                     {$t("search.clearFilters")}
                 </SearchButton>
             {:else}
-                <div></div>
+                <div class="hidden sm:block"></div>
             {/if}
 
             <SearchButton
                 variant="primary"
                 onclick={handleApplyFilters}
                 data-testid="apply-filters-btn"
+                class="w-full sm:w-auto"
             >
                 {$t("search.applyFilters")}
             </SearchButton>
