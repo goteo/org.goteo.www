@@ -1,29 +1,28 @@
 <script lang="ts">
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import { onMount, tick } from "svelte";
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
 
     let {
         itemsPerGroup = 1,
-        gap = 16,
+        gap = 24,
         showDots = true,
         class: className = "",
-        itemsToShow = undefined,
+        itemsToShow = 3,
         children = null,
     }: {
         itemsPerGroup: number;
         gap: number;
         showDots: boolean;
-        class?: string;
+        class?: ClassNameValue;
         itemsToShow?: number;
         children?: any;
     } = $props();
 
-    // Merge classes for the main wrapper
-    const wrapperClasses = $derived(twMerge("relative w-full", className));
+    const wrapperClasses = twMerge("relative w-full", className);
 
     let container: HTMLDivElement;
 
@@ -48,7 +47,7 @@
             const paddingRight = parseFloat(styles.paddingRight);
             const available = container.clientWidth - paddingLeft - paddingRight;
 
-            const visibleItems = itemsToShow ?? itemsPerGroup;
+            const visibleItems = itemsToShow ?? 3;
             const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
 
             for (const el of Array.from(container.children) as HTMLElement[]) {
