@@ -1,26 +1,14 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
         variant?: "default" | "transparent";
-        class?: string;
+        class?: ClassNameValue;
         children: Snippet;
     }
 
-    let { variant = "default", class: className = "", children }: Props = $props();
-
-    const baseStyle = [
-        "flex",
-        "items-center",
-        "gap-2",
-        "rounded",
-        "px-2",
-        "py-1",
-        "text-sm",
-        "font-bold",
-        "whitespace-nowrap",
-    ];
+    let { variant = "default", class: classes = "", children }: Props = $props();
 
     const variantStyles = {
         default: "bg-light-muted border border-white text-secondary",
@@ -28,6 +16,12 @@
     };
 </script>
 
-<div class={twMerge(baseStyle.join(" "), variantStyles[variant], className)}>
+<div
+    class={twMerge(
+        "flex items-center gap-2 rounded px-2 py-1 text-sm font-bold whitespace-nowrap",
+        variantStyles[variant],
+        classes,
+    )}
+>
     {@render children()}
 </div>
