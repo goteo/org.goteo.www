@@ -161,22 +161,28 @@ try {
                 </div>
             </div>
 
-            <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
-                <p
-                    class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
-                >
-                    {t("payment.postPayment.donatedProjects.title")} ({donatedProjects.length})
-                </p>
-                <div class="w-full overflow-hidden">
-                    <Carousel client:load itemsPerGroup={1} gap={24} showDots={true}>
-                        {
-                            donatedProjects.map((project) => (
+            {
+                donatedProjects.length > 0 && (
+                    <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                        <p class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8">
+                            {t("payment.postPayment.donatedProjects.title")} (
+                            {donatedProjects.length})
+                        </p>
+                        <Carousel
+                            client:load
+                            itemsPerGroup={1}
+                            itemsToShow={3}
+                            gap={24}
+                            showDots={true}
+                            class="w-full overflow-hidden"
+                        >
+                            {donatedProjects.map((project) => (
                                 <CampaignCard size="small" campaign={project} />
-                            ))
-                        }
-                    </Carousel>
-                </div>
-            </div>
+                            ))}
+                        </Carousel>
+                    </div>
+                )
+            }
 
             <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
                 <p
@@ -184,21 +190,25 @@ try {
                 >
                     {t("payment.postPayment.suggestedProjects.title")}
                 </p>
-                <div class="w-full overflow-hidden">
-                    {
-                        suggestedProjects.length > 0 ? (
-                            <Carousel client:load itemsPerGroup={2} gap={24} showDots={true}>
-                                {suggestedProjects.map((project) => (
-                                    <CampaignCard size="small" campaign={project} />
-                                ))}
-                            </Carousel>
-                        ) : (
-                            <p class="text-content text-base">
-                                {t("payment.postPayment.suggestedProjects.empty")}
-                            </p>
-                        )
-                    }
-                </div>
+                {
+                    suggestedProjects.length > 0 ? (
+                        <Carousel
+                            client:load
+                            itemsPerGroup={2}
+                            gap={24}
+                            showDots={true}
+                            class="w-full overflow-hidden"
+                        >
+                            {suggestedProjects.map((project) => (
+                                <CampaignCard size="small" campaign={project} />
+                            ))}
+                        </Carousel>
+                    ) : (
+                        <p class="text-content text-base">
+                            {t("payment.postPayment.suggestedProjects.empty")}
+                        </p>
+                    )
+                }
             </div>
         </div>
     </section>

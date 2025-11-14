@@ -1,6 +1,7 @@
 <script lang="ts">
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import { onMount, tick } from "svelte";
+    import { twMerge } from "tailwind-merge";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -9,13 +10,20 @@
         itemsPerGroup = 1,
         gap = 16,
         showDots = true,
+        class: className = "",
+        itemsToShow = undefined,
         children = null,
     }: {
         itemsPerGroup: number;
         gap: number;
         showDots: boolean;
+        class?: string;
+        itemsToShow?: number;
         children?: any;
     } = $props();
+
+    // Merge classes for the main wrapper
+    const wrapperClasses = $derived(twMerge("relative w-full", className));
 
     let container: HTMLDivElement;
 
@@ -39,7 +47,9 @@
             const paddingLeft = parseFloat(styles.paddingLeft);
             const paddingRight = parseFloat(styles.paddingRight);
             const available = container.clientWidth - paddingLeft - paddingRight;
-            const childWidth = (available - gap * (itemsPerGroup - 1)) / itemsPerGroup;
+
+            const visibleItems = itemsToShow ?? itemsPerGroup;
+            const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
 
             for (const el of Array.from(container.children) as HTMLElement[]) {
                 el.style.minWidth = `${childWidth}px`;
@@ -198,7 +208,7 @@
     });
 </script>
 
-<div class="relative w-full">
+<div class={wrapperClasses}>
     <button
         onclick={() => scroll("left")}
         class="bg-purple-tint absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
