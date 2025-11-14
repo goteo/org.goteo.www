@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
         variant?: keyof typeof variantStyles;
-        class?: string;
+        class?: ClassNameValue;
         children: Snippet;
     }
 
