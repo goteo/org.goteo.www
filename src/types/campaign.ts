@@ -40,8 +40,6 @@ export interface Campaign extends Project {
     size?: CampaignSize;
     /** User's total donations to this project */
     userDonations?: Money;
-    /** Campaign status: in_campaign, funded, unfunded, in_draft */
-    status?: "in_campaign" | "funded" | "unfunded" | "in_draft";
     /** Project category: solidary, ecology, democracy, culture, etc. */
     category?: string;
     /** Days remaining until campaign ends */
