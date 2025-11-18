@@ -150,8 +150,6 @@
             value={campaignInfo.objectives}
             onChange={handleObjectivesChange}
             placeholder={$t("wizard.campaignInfo.objectives.placeholder")}
-            minLength={50}
-            maxLength={5000}
             ariaDescribedBy="objectives-help"
         />
     </section>
@@ -173,8 +171,6 @@
             value={campaignInfo.legacy}
             onChange={handleLegacyChange}
             placeholder={$t("wizard.campaignInfo.legacy.placeholder")}
-            minLength={50}
-            maxLength={5000}
             ariaDescribedBy="legacy-help"
         />
     </section>
@@ -196,8 +192,6 @@
             value={campaignInfo.targetAudience}
             onChange={handleTargetAudienceChange}
             placeholder={$t("wizard.campaignInfo.target.placeholder")}
-            minLength={30}
-            maxLength={5000}
             ariaDescribedBy="target-help"
         />
     </section>
@@ -219,8 +213,6 @@
             value={campaignInfo.team}
             onChange={handleTeamChange}
             placeholder={$t("wizard.campaignInfo.team.placeholder")}
-            minLength={50}
-            maxLength={5000}
             ariaDescribedBy="team-help"
         />
     </section>
