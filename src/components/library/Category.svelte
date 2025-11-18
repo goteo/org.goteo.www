@@ -11,7 +11,7 @@
     let {
         type = "default",
         disabled = false,
-        class: className = "",
+        class: classes = "",
         onclick,
         children,
     }: {
@@ -28,7 +28,7 @@
     class={twMerge(
         "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
         styles[type],
-        className,
+        classes,
     )}
     onclick={(e) => onclick?.(e)}
 >
