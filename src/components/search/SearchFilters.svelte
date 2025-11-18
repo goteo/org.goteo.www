@@ -95,28 +95,77 @@ Integrated with searchStore for state management and URL synchronization
                     data-testid="search-input"
                 />
             </div>
-
-            <SearchButton
-                variant="secondary"
-                onclick={handleSearch}
-                data-testid="search-btn"
-                class="w-full shrink-0 sm:w-auto"
-            >
-                {$t("search.searchButton")}
-            </SearchButton>
         </div>
 
         <!-- Filter toggle button - full width on mobile, auto on desktop -->
+        {#if !filtersOpen}
+            <SearchButton
+                variant="ghost"
+                onclick={toggleFilters}
+                data-testid="toggle-filters"
+                aria-expanded={filtersOpen}
+                class="w-full justify-center lg:w-auto"
+            >
+                <FilterIcon width="16" height="16" class="mr-2" />
+                {$t("search.showFilters")}
+            </SearchButton>
+        {/if}
+
         <SearchButton
-            variant="ghost"
-            onclick={toggleFilters}
-            data-testid="toggle-filters"
-            aria-expanded={filtersOpen}
-            class="w-full justify-center lg:w-auto"
+            variant="secondary"
+            onclick={handleSearch}
+            data-testid="search-btn"
+            class="w-full shrink-0 sm:w-auto"
         >
-            <FilterIcon width="16" height="16" class="mr-2" />
-            {$t("search.showFilters")}
+            {$t("search.searchButton")}
         </SearchButton>
+
+        <!-- Expanded filters section (collapsed by default) -->
+        {#if filtersOpen}
+            <!-- Status filter dropdown -->
+            <div class="w-full lg:max-w-sm">
+                <FilterDropdown
+                    options={statusOptions}
+                    placeholder={$t("filters.campaignStatus")}
+                    selectedValue={$searchFilters.statusFilter}
+                    onSelect={(value) => updateFilters({ statusFilter: value })}
+                    data-testid="status-filter"
+                />
+            </div>
+
+            <!-- Category filters -->
+            <div class="w-full">
+                <CategoryFilter
+                    selectedCategories={$searchFilters.categories}
+                    onCategoryChange={(categories) => updateFilters({ categories })}
+                    data-testid="category-filter"
+                />
+            </div>
+
+            <div class="flex justify-center">
+                <SearchButton
+                    variant="primary"
+                    onclick={handleApplyFilters}
+                    data-testid="apply-filters-btn"
+                    class="w-full sm:w-auto"
+                >
+                    {$t("search.applyFilters")}
+                </SearchButton>
+            </div>
+
+            <!-- Close filters button -->
+            <div class="flex justify-center">
+                <SearchButton
+                    variant="ghost"
+                    onclick={toggleFilters}
+                    data-testid="close-filters-btn"
+                    class="w-full sm:w-auto"
+                >
+                    <FilterIcon width="16" height="16" class="mr-2" />
+                    {$t("search.closeFilters")}
+                </SearchButton>
+            </div>
+        {/if}
     </div>
 
     <!-- Expanded filters section (collapsed by default) -->
