@@ -79,7 +79,7 @@ Integrated with searchStore for state management and URL synchronization
 
 <!-- Main search filters container - Figma design layout -->
 <div
-    class="flex flex-col gap-10 rounded-[32px] border border-[#f3f3ef] bg-[#fbfbfb] px-8 py-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]"
+    class="border-grey flex flex-col gap-10 rounded-[32px] border bg-[#fbfbfb] px-8 py-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]"
     data-testid="search-filters"
 >
     <div class="flex items-center gap-16">

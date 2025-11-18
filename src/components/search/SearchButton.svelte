@@ -37,8 +37,8 @@ Supports: primary (Aplicar filtros), secondary (Buscar), ghost (Cerrar filtros)
     // Variant classes matching Figma design exactly
     const variantClasses = {
         primary: "bg-[#59e9d3] text-[#462949] hover:bg-[#4dd4bd] focus:ring-[#59e9d3]",
-        secondary: "bg-[#e6e5f7] text-[#462949] hover:bg-[#d4d2f0] focus:ring-[#462949]",
-        ghost: "bg-transparent text-[#462949] border border-[#462949] hover:bg-[#e6e5f7] focus:ring-[#462949]",
+        secondary: "bg-variant1 text-[#462949] hover:bg-[#d4d2f0] focus:ring-[#462949]",
+        ghost: "bg-transparent text-[#462949] border border-[#462949] hover:bg-variant1 focus:ring-[#462949]",
     };
 
     // Width classes

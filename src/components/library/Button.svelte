@@ -10,7 +10,7 @@
 
     const kindStyles = {
         primary: "bg-primary",
-        secondary: "bg-purple-tint",
+        secondary: "bg-variant1",
         ghost: "inset-ring-1 inset-ring-secondary",
         invert: "",
     };

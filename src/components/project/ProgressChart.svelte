@@ -14,7 +14,6 @@
         Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
-        ProjectCalendar,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
@@ -72,14 +71,6 @@
 
     let maxValue = Math.max(minimal, optimal, received) * 1.05;
 
-    function calcDaysForMinimum(calendar: ProjectCalendar): number {
-        const release = new Date(calendar.release!).getTime();
-        const minimum = new Date(calendar.minimum!).getTime();
-
-        return Math.round(Math.abs((release - minimum) / 86400000));
-    }
-
-    const daysForMinimum = calcDaysForMinimum(project.calendar!);
     const hasSecondRound = project.deadline == "optimum";
 
     let secondRoundStartDay = -1;

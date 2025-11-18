@@ -4,7 +4,7 @@
 
     const styles = {
         default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-light-surface",
-        active: "bg-secondary text-primary",
+        active: "bg-secondary text-primary hover:text-secondary",
         ghost: "",
     };
 
@@ -26,7 +26,7 @@
 <button
     {disabled}
     class={twMerge(
-        "hover:bg-purple-tint hover:text-tertiary w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
+        "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
         styles[type],
         classes,
     )}

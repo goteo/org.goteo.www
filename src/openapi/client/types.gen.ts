@@ -1280,7 +1280,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1321,13 +1321,13 @@ export type ProjectProjectCreationDto = {
     /**
      * One of the available categories.
      */
-    categories: Array<string>;
+    categories: Array<Category>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1345,13 +1345,13 @@ export type ProjectProjectCreationDtoJsonld = {
     /**
      * One of the available categories.
      */
-    categories: Array<string>;
+    categories: Array<CategoryJsonld>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1392,7 +1392,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1456,7 +1456,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
