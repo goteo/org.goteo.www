@@ -11,14 +11,16 @@
         gap = 24,
         showDots = true,
         class: className = "",
-        itemsToShow = 3,
+        mobileItemsToShow = 1,
+        desktopItemsToShow = 3,
         children = null,
     }: {
         itemsPerGroup: number;
         gap: number;
         showDots: boolean;
         class?: ClassNameValue;
-        itemsToShow?: number;
+        mobileItemsToShow?: number;
+        desktopItemsToShow?: number;
         children?: any;
     } = $props();
 
@@ -38,24 +40,54 @@
 
     const observerMap = new Map<number, HTMLElement>();
 
+    function getCurrentItemsToShow(): number {
+        if (!browser) return desktopItemsToShow;
+        return window.innerWidth >= 1024 ? desktopItemsToShow : mobileItemsToShow;
+    }
+
     function updateItemWidths() {
         if (!browser || !container || !mounted) return;
 
         try {
+            const containerWidth = container.offsetWidth;
+
+            if (containerWidth === 0) {
+                setTimeout(updateItemWidths, 50);
+                return;
+            }
+
             const styles = getComputedStyle(container);
             const paddingLeft = parseFloat(styles.paddingLeft);
             const paddingRight = parseFloat(styles.paddingRight);
-            const available = container.clientWidth - paddingLeft - paddingRight;
+            const available = containerWidth - paddingLeft - paddingRight;
 
-            const visibleItems = itemsToShow ?? 3;
+            const visibleItems = getCurrentItemsToShow();
             const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
 
-            for (const el of Array.from(container.children) as HTMLElement[]) {
-                el.style.minWidth = `${childWidth}px`;
-                el.style.maxWidth = `${childWidth}px`;
-                el.style.width = `${childWidth}px`;
-                el.style.flex = "0 0 auto";
-                el.style.overflow = "hidden";
+            const directChildren = Array.from(container.children) as HTMLElement[];
+
+            for (const el of directChildren) {
+                if (el.tagName.toLowerCase() === "astro-slot") {
+                    const slotChildren = Array.from(el.children) as HTMLElement[];
+                    slotChildren.forEach((child) => {
+                        child.style.minWidth = `${childWidth}px`;
+                        child.style.maxWidth = `${childWidth}px`;
+                        child.style.width = `${childWidth}px`;
+                        child.style.flex = "0 0 auto";
+                        child.style.overflow = "hidden";
+                    });
+                    el.style.minWidth = "";
+                    el.style.maxWidth = "";
+                    el.style.width = "";
+                    el.style.flex = "";
+                    el.style.display = "contents";
+                } else {
+                    el.style.minWidth = `${childWidth}px`;
+                    el.style.maxWidth = `${childWidth}px`;
+                    el.style.width = `${childWidth}px`;
+                    el.style.flex = "0 0 auto";
+                    el.style.overflow = "hidden";
+                }
             }
             updateNavForShort();
         } catch (error) {
@@ -67,15 +99,26 @@
         if (!browser || !container || !intersectionObs || !mounted) return;
 
         try {
-            const children = Array.from(container.children) as HTMLElement[];
+            let actualChildren: HTMLElement[] = [];
+            const directChildren = Array.from(container.children) as HTMLElement[];
+
+            for (const child of directChildren) {
+                if (child.tagName.toLowerCase() === "astro-slot") {
+                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
+                } else {
+                    actualChildren.push(child);
+                }
+            }
+
             intersectionObs.disconnect();
             observerMap.clear();
-            children.forEach((el, idx) => {
+
+            actualChildren.forEach((el, idx) => {
                 observerMap.set(idx, el);
                 intersectionObs?.observe(el);
             });
 
-            totalGroups = Math.ceil(children.length / itemsPerGroup);
+            totalGroups = Math.ceil(actualChildren.length / itemsPerGroup);
             updateNavForShort();
         } catch (error) {
             console.warn("Carousel: Error observing visibility:", error);
@@ -104,8 +147,18 @@
         if (!browser || !container || !mounted) return;
 
         try {
-            const kids = Array.from(container.children) as HTMLElement[];
-            const target = kids[i * itemsPerGroup];
+            let actualChildren: HTMLElement[] = [];
+            const directChildren = Array.from(container.children) as HTMLElement[];
+
+            for (const child of directChildren) {
+                if (child.tagName.toLowerCase() === "astro-slot") {
+                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
+                } else {
+                    actualChildren.push(child);
+                }
+            }
+
+            const target = actualChildren[i * itemsPerGroup];
             target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
         } catch (error) {
             console.warn("Carousel: Error scrolling to group:", error);
@@ -162,9 +215,14 @@
                         if (!mounted) return;
                         for (const e of entries) {
                             if (e.isIntersecting && container) {
-                                const idx = Array.from(container.children).indexOf(
-                                    e.target as HTMLElement,
-                                );
+                                let idx = -1;
+                                for (const [index, element] of observerMap.entries()) {
+                                    if (element === e.target) {
+                                        idx = index;
+                                        break;
+                                    }
+                                }
+
                                 if (idx !== -1) {
                                     const group = Math.floor(idx / itemsPerGroup);
                                     if (group !== activeGroup) updateNavState(group);
@@ -191,6 +249,8 @@
                     }
                 });
                 mutationObs.observe(container, { childList: true });
+
+                window.addEventListener("resize", updateItemWidths);
             } catch (error) {
                 console.warn("Carousel: Error initializing observers:", error);
             }
@@ -203,6 +263,9 @@
             if (intersectionObs) intersectionObs.disconnect();
             if (resizeObs) resizeObs.disconnect();
             if (mutationObs) mutationObs.disconnect();
+            if (browser) {
+                window.removeEventListener("resize", updateItemWidths);
+            }
         };
     });
 </script>
@@ -222,7 +285,7 @@
         bind:this={container}
         role="region"
         aria-label="Carousel"
-        class="hide-scrollbar flex overflow-x-auto scroll-smooth select-none"
+        class="hide-scrollbar flex w-full overflow-x-auto scroll-smooth select-none"
         class:cursor-grab={isScrollable && !isDragging}
         class:cursor-default={!isScrollable}
         class:cursor-grabbing={isDragging && isScrollable}

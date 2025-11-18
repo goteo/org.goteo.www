@@ -171,10 +171,11 @@ try {
                         <Carousel
                             client:load
                             itemsPerGroup={1}
-                            itemsToShow={3}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
                             gap={24}
                             showDots={true}
-                            class="w-full overflow-hidden"
+                            class="w-full"
                         >
                             {donatedProjects.map((project) => (
                                 <CampaignCard size="small" campaign={project} />
@@ -194,11 +195,12 @@ try {
                     suggestedProjects.length > 0 ? (
                         <Carousel
                             client:load
-                            itemsPerGroup={2}
-                            itemsToShow={3}
+                            itemsPerGroup={1}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
                             gap={24}
                             showDots={true}
-                            class="w-full overflow-hidden"
+                            class="w-full"
                         >
                             {suggestedProjects.map((project) => (
                                 <CampaignCard size="small" campaign={project} />
