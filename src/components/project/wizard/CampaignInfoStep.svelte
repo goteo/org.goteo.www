@@ -41,19 +41,9 @@
      * Simple navigation to next step - validation happens on save/submit
      */
     function handleContinue() {
-        const errors = validateCampaignInfo();
-
-        if (Object.keys(errors).length === 0) {
-            navigateToStep(3);
-            if (onContinue) {
-                onContinue();
-            }
-        } else {
-            const firstErrorField = Object.keys(errors)[0];
-            const element = document.querySelector(`[data-field="${firstErrorField}"]`);
-            element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-
-            console.warn('Validation errors:', errors);
+        navigateToStep(3);
+        if (onContinue) {
+            onContinue();
         }
     }
 
