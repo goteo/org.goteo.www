@@ -75,7 +75,7 @@
     }
 
     let {
-        value,
+        value = $bindable(""),
         onChange,
         placeholder = "",
         error,
@@ -158,6 +158,12 @@
     onDestroy(() => {
         if (editor) {
             editor.destroy();
+        }
+    });
+
+    $effect(() => {
+        if (editor && value !== editor.getHTML()) {
+            editor.commands.setContent(value);
         }
     });
 
