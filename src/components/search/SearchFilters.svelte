@@ -65,13 +65,6 @@ Integrated with searchStore for state management and URL synchronization
         filtersOpen = false;
     }
 
-    function handleClearFilters() {
-        searchStore.clearFilters();
-        searchStore.clearResults();
-        // Trigger search to get default results
-        searchStore.searchWithApi(true);
-    }
-
     function toggleFilters() {
         filtersOpen = !filtersOpen;
     }
@@ -95,6 +88,16 @@ Integrated with searchStore for state management and URL synchronization
                     data-testid="search-input"
                 />
             </div>
+
+            <!-- Search button -->
+            <SearchButton
+                variant="secondary"
+                onclick={handleSearch}
+                data-testid="search-btn"
+                class="w-full shrink-0 sm:w-auto"
+            >
+                {$t("search.searchButton")}
+            </SearchButton>
         </div>
 
         <!-- Filter toggle button - full width on mobile, auto on desktop -->
@@ -110,65 +113,9 @@ Integrated with searchStore for state management and URL synchronization
                 {$t("search.showFilters")}
             </SearchButton>
         {/if}
-
-        <SearchButton
-            variant="secondary"
-            onclick={handleSearch}
-            data-testid="search-btn"
-            class="w-full shrink-0 sm:w-auto"
-        >
-            {$t("search.searchButton")}
-        </SearchButton>
-
-        <!-- Expanded filters section (collapsed by default) -->
-        {#if filtersOpen}
-            <!-- Status filter dropdown -->
-            <div class="w-full lg:max-w-sm">
-                <FilterDropdown
-                    options={statusOptions}
-                    placeholder={$t("filters.campaignStatus")}
-                    selectedValue={$searchFilters.statusFilter}
-                    onSelect={(value) => updateFilters({ statusFilter: value })}
-                    data-testid="status-filter"
-                />
-            </div>
-
-            <!-- Category filters -->
-            <div class="w-full">
-                <CategoryFilter
-                    selectedCategories={$searchFilters.categories}
-                    onCategoryChange={(categories) => updateFilters({ categories })}
-                    data-testid="category-filter"
-                />
-            </div>
-
-            <div class="flex justify-center">
-                <SearchButton
-                    variant="primary"
-                    onclick={handleApplyFilters}
-                    data-testid="apply-filters-btn"
-                    class="w-full sm:w-auto"
-                >
-                    {$t("search.applyFilters")}
-                </SearchButton>
-            </div>
-
-            <!-- Close filters button -->
-            <div class="flex justify-center">
-                <SearchButton
-                    variant="ghost"
-                    onclick={toggleFilters}
-                    data-testid="close-filters-btn"
-                    class="w-full sm:w-auto"
-                >
-                    <FilterIcon width="16" height="16" class="mr-2" />
-                    {$t("search.closeFilters")}
-                </SearchButton>
-            </div>
-        {/if}
     </div>
 
-    <!-- Expanded filters section (collapsed by default) -->
+    <!-- Expanded filters section -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
         <div class="w-full lg:max-w-sm">
@@ -190,23 +137,7 @@ Integrated with searchStore for state management and URL synchronization
             />
         </div>
 
-        <div
-            class="flex flex-col-reverse items-stretch justify-between gap-3 sm:flex-row sm:items-center"
-        >
-            <!-- Clear filters button (only show if filters are active) -->
-            {#if $hasActiveFilters}
-                <SearchButton
-                    variant="ghost"
-                    onclick={handleClearFilters}
-                    data-testid="clear-filters-btn"
-                    class="w-full sm:w-auto"
-                >
-                    {$t("search.clearFilters")}
-                </SearchButton>
-            {:else}
-                <div class="hidden sm:block"></div>
-            {/if}
-
+        <div class="flex justify-center">
             <SearchButton
                 variant="primary"
                 onclick={handleApplyFilters}
@@ -214,6 +145,19 @@ Integrated with searchStore for state management and URL synchronization
                 class="w-full sm:w-auto"
             >
                 {$t("search.applyFilters")}
+            </SearchButton>
+        </div>
+
+        <!-- Close filters button -->
+        <div class="flex justify-center">
+            <SearchButton
+                variant="ghost"
+                onclick={toggleFilters}
+                data-testid="close-filters-btn"
+                class="w-full sm:w-auto"
+            >
+                <FilterIcon width="16" height="16" class="mr-2" />
+                {$t("search.closeFilters")}
             </SearchButton>
         </div>
     {/if}
