@@ -211,7 +211,10 @@
                 kind="ghost"
                 size="sm"
                 onclick={toggleBold}
-                class={twMerge("rounded-lg", isBoldActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                class={twMerge(
+                    "rounded-lg",
+                    isBoldActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                )}
                 aria-label="Bold"
                 title="Bold (Ctrl+B)"
                 aria-pressed={isBoldActive}
@@ -227,7 +230,10 @@
                 kind="ghost"
                 size="sm"
                 onclick={toggleItalic}
-                class={twMerge("rounded-lg", isItalicActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                class={twMerge(
+                    "rounded-lg",
+                    isItalicActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                )}
                 aria-label="Italic"
                 title="Italic (Ctrl+I)"
                 aria-pressed={isItalicActive}
@@ -246,12 +252,16 @@
                 kind="ghost"
                 size="sm"
                 onclick={() => setTextAlign("left")}
-                class={twMerge("rounded-lg", isLeftAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                class={twMerge(
+                    "rounded-lg",
+                    isLeftAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                )}
                 aria-label="Align left"
                 aria-pressed={isLeftAligned}
             >
                 {#snippet children()}
                     <svg
+                        aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
                         height="20"
@@ -276,12 +286,16 @@
                 kind="ghost"
                 size="sm"
                 onclick={() => setTextAlign("center")}
-                class={twMerge("rounded-lg", isCenterAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                class={twMerge(
+                    "rounded-lg",
+                    isCenterAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                )}
                 aria-label="Align center"
                 aria-pressed={isCenterAligned}
             >
                 {#snippet children()}
                     <svg
+                        aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
                         height="20"
@@ -306,12 +320,16 @@
                 kind="ghost"
                 size="sm"
                 onclick={() => setTextAlign("right")}
-                class={twMerge("rounded-lg", isRightAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint")}
+                class={twMerge(
+                    "rounded-lg",
+                    isRightAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                )}
                 aria-label="Align right"
                 aria-pressed={isRightAligned}
             >
                 {#snippet children()}
                     <svg
+                        aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
                         width="20"
                         height="20"
