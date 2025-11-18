@@ -71,10 +71,12 @@ Integrated with searchStore for state management and URL synchronization
 </script>
 
 <div
-    class="flex flex-col gap-6 rounded-[24px] border border-[#f3f3ef] bg-[#fbfbfb] px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] lg:gap-10 lg:rounded-[32px] lg:px-8 lg:py-6"
+    class="mx-auto flex w-80 flex-col gap-6 rounded-[24px] border border-[#f3f3ef] bg-[#fbfbfb] px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-[32px] lg:px-8 lg:py-6"
     data-testid="search-filters"
 >
-    <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-16">
+    <div
+        class="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:items-center min-[500px]:gap-16"
+    >
         <!-- Search section with input and button -->
         <div class="flex flex-1 flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
             <!-- Search input -->
@@ -107,7 +109,7 @@ Integrated with searchStore for state management and URL synchronization
                 onclick={toggleFilters}
                 data-testid="toggle-filters"
                 aria-expanded={filtersOpen}
-                class="w-full justify-center lg:w-auto"
+                class="w-full justify-center min-[500px]:w-auto"
             >
                 <FilterIcon width="16" height="16" class="mr-2" />
                 {$t("search.showFilters")}
@@ -115,7 +117,7 @@ Integrated with searchStore for state management and URL synchronization
         {/if}
     </div>
 
-    <!-- Expanded filters section -->
+    <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
         <div class="w-full lg:max-w-sm">
@@ -137,24 +139,26 @@ Integrated with searchStore for state management and URL synchronization
             />
         </div>
 
-        <div class="flex justify-center">
+        <!-- Action buttons -->
+        <div
+            class="flex flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:items-center min-[500px]:justify-end"
+        >
+            <!-- Apply filters button -->
             <SearchButton
                 variant="primary"
                 onclick={handleApplyFilters}
                 data-testid="apply-filters-btn"
-                class="w-full sm:w-auto"
+                class="w-full min-[500px]:w-auto"
             >
                 {$t("search.applyFilters")}
             </SearchButton>
-        </div>
 
-        <!-- Close filters button -->
-        <div class="flex justify-center">
+            <!-- Close filters button -->
             <SearchButton
                 variant="ghost"
                 onclick={toggleFilters}
                 data-testid="close-filters-btn"
-                class="w-full sm:w-auto"
+                class="w-full min-[500px]:w-auto"
             >
                 <FilterIcon width="16" height="16" class="mr-2" />
                 {$t("search.closeFilters")}
