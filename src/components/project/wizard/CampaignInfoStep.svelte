@@ -23,6 +23,7 @@
         wizardState,
         updateCampaignInfo,
         navigateToStep,
+        validateCampaignInfo,
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
