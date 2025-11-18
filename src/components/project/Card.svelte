@@ -35,7 +35,7 @@
 </script>
 
 <div
-    class=" border-light-muted flex h-full flex-col gap-6 rounded-[32px] border bg-[#fff] p-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
+    class=" border-grey flex h-full flex-col gap-6 rounded-[32px] border bg-[#fff] p-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
 >
     <div class="flex w-full items-center justify-end">
         {#if hasReached(project.budget?.optimum?.money)}

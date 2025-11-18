@@ -34,7 +34,7 @@ const { accounting } = Astro.props;
                 {
                     (paymentGateways ?? []).map((gateway) => (
                         <label
-                            class="border-light-muted flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
                             data-gateway={gateway.name}
                         >
                             <div class="flex items-center gap-2">
@@ -188,12 +188,12 @@ const { accounting } = Astro.props;
             input.addEventListener("change", () => {
                 labels.forEach((label) => {
                     label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
-                    label.classList.add("border-light-muted");
+                    label.classList.add("border-grey");
                 });
 
                 const selectedLabel = input.closest("label");
                 if (selectedLabel) {
-                    selectedLabel.classList.remove("border-light-muted");
+                    selectedLabel.classList.remove("border-grey");
                     selectedLabel.classList.add("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
                 }
             });

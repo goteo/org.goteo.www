@@ -124,8 +124,8 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
                 {#each options as option}
                     <button
                         type="button"
-                        class="w-full px-4 py-3 text-left font-['Karla'] text-[#3d3d3d] hover:bg-[#e6e5f7] focus:bg-[#e6e5f7] focus:outline-none"
-                        class:bg-[#e6e5f7]={selectedOption?.value === option.value}
+                        class="hover:bg-variant1 focus:bg-variant1 w-full px-4 py-3 text-left font-['Karla'] text-[#3d3d3d] focus:outline-none"
+                        class:bg-variant1={selectedOption?.value === option.value}
                         onclick={() => selectOption(option)}
                         role="option"
                         aria-selected={selectedOption?.value === option.value}

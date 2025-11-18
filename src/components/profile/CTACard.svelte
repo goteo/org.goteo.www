@@ -58,8 +58,8 @@
 
 <div
     class="flex flex-col justify-between gap-10 rounded-[32px] border p-6 transition-shadow duration-200 {isDark
-        ? 'border-light-muted bg-secondary text-light-surface'
-        : 'border-purple-tint bg-soft-purple text-content'}"
+        ? 'border-grey bg-secondary text-light-surface'
+        : 'border-variant1 bg-soft-purple text-content'}"
 >
     <!-- Content -->
     <div class="flex flex-col gap-4">

@@ -10,7 +10,7 @@
         "transition",
         "flex justify-center items-center gap-2",
         "hover:cursor-pointer",
-        "disabled:bg-light-muted",
+        "disabled:bg-grey",
     ];
 
     const sizeStyles = {
@@ -20,7 +20,7 @@
 
     const kindStyles = {
         primary: "bg-primary",
-        secondary: "bg-purple-tint",
+        secondary: "bg-variant1",
         ghost: "inset-ring-1 inset-ring-secondary",
         invert: "",
     };

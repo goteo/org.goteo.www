@@ -81,7 +81,7 @@
             <li
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
-                class="border-light-muted flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="border-grey flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <div class="flex flex-col gap-6">
                     <h3 class="text-secondary w-full text-left text-2xl font-semibold">
