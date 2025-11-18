@@ -217,8 +217,15 @@ const { t } = Astro.locals;
             const { error } = await actions.register(formData);
 
             if (!error) {
-                const lang = location.pathname.split("/")[1];
-                window.location.href = `/${lang}/`;
+                const urlParams = new URLSearchParams(window.location.search);
+                const isFromCheckout = urlParams.get("checkout") === "true";
+
+                if (isFromCheckout) {
+                    window.location.href = `/payment`;
+                } else {
+                    const lang = location.pathname.split("/")[1];
+                    window.location.href = `/${lang}/`;
+                }
             }
 
             if (error && errorContent instanceof HTMLElement) {
