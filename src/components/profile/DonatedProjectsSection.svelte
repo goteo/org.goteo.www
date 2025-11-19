@@ -120,15 +120,20 @@
                                     return null;
                                 }
 
-                                // Calculate days remaining
+                                // Calculate days remaining and check if campaign is active
                                 let daysRemaining: number | undefined;
+                                let isActive = false;
 
                                 if (project.calendar?.minimum) {
                                     const endDate = new Date(project.calendar.minimum);
                                     const today = new Date();
                                     const diffTime = endDate.getTime() - today.getTime();
                                     daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                    isActive = endDate.getTime() > today.getTime();
                                 }
+
+                                if (project.status !== "in_campaign") return null;
+                                if (!isActive) return null;
 
                                 return {
                                     id: project.slug!,
