@@ -19,14 +19,14 @@
         accounting: Accounting;
     }>();
 
-    let activeTab = $state("rewards");
+    let activeTab = $state("project");
     let tabsContainer: HTMLDivElement;
     let canScrollLeft = $state(false);
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "project", label: $t("project.tabs.project") },
+        { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "budget", label: $t("project.tabs.budget.title") },
         { id: "updates", label: $t("project.tabs.updates.title") },
         { id: "community", label: $t("project.tabs.community.title") },
@@ -34,6 +34,10 @@
 
     function selectTab(tabId: string) {
         activeTab = tabId;
+    }
+
+    export function activateRewardsTab() {
+        activeTab = "rewards";
     }
 
     function updateScrollButtons() {
