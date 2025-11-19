@@ -52,6 +52,8 @@
 
             if (chargesError) {
                 console.error("Failed to fetch gateway charges:", chargesError);
+                donatedCampaigns = [];
+                loading = false;
                 return;
             }
 
@@ -120,6 +122,7 @@
 
                                 // Calculate days remaining
                                 let daysRemaining: number | undefined;
+
                                 if (project.calendar?.minimum) {
                                     const endDate = new Date(project.calendar.minimum);
                                     const today = new Date();
