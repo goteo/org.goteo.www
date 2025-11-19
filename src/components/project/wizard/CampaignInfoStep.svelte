@@ -52,9 +52,9 @@
         } else {
             const firstErrorField = Object.keys(errors)[0];
             const element = document.querySelector(`[data-field="${firstErrorField}"]`);
-            element?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            element?.scrollIntoView({ behavior: "smooth", block: "center" });
 
-            console.warn('Validation errors:', errors);
+            console.warn("Validation errors:", errors);
         }
     }
 
