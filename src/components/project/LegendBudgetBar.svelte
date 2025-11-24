@@ -21,16 +21,16 @@
 </script>
 
 <div class="flex flex-row flex-wrap items-center justify-between gap-6">
-    <div class="text-sm">
-        <span class="text-gray-600">{$t("project.tabs.budget.total")}:</span>
-        <span class="text-base font-black">{formatCurrency(totalBudget)}</span>
+    <div class="text-secondary text-base">
+        <span>{$t("project.tabs.budget.total")}:</span>
+        <span class="font-bold">{formatCurrency(totalBudget)}</span>
     </div>
 
     <div class="flex flex-row flex-wrap gap-6">
         {#each legendEntries as [key, color]}
             <div class="flex flex-row items-center gap-2">
                 <div class="h-4 w-6 rounded-sm" style="background-color: {color};"></div>
-                <span class="text-sm capitalize">{$t(`project.tabs.budget.typeBudget.${key}`)}</span
+                <span class="text-base text-black capitalize">{$t(`project.tabs.budget.typeBudget.${key}`)}</span
                 >
             </div>
         {/each}
