@@ -10,7 +10,7 @@
     const typeBudget = {
         infrastructure: "var(--color-secondary)",
         material: "var(--color-tertiary)",
-        task: "var(--color-variant)",
+        task: "var(--color-variant2)",
     } as const satisfies Record<ProjectBudgetItem["type"], string>;
 
     const legendEntries = Object.entries(typeBudget) as [ProjectBudgetItem["type"], string][];

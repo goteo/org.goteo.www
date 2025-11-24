@@ -13,7 +13,7 @@
     } = $props();
 
     const typeBudget = {
-        task: "var(--color-variant)",
+        task: "var(--color-variant2)",
         infrastructure: "var(--color-secondary)",
         material: "var(--color-tertiary)",
     } as const;
