@@ -21,7 +21,7 @@
                             name="type"
                             value="individual"
                             checked
-                            class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="custom-radio relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700">
@@ -35,7 +35,7 @@
                             type="radio"
                             name="type"
                             value="organization"
-                            class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700"
@@ -44,7 +44,7 @@
                 </label>
             </fieldset>
 
-            <div class="flex flex-col gap-4">
+            <div class="mt-6 flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-2xl font-bold text-black">
                         {$t("payment.page-aproved.form-review.title")}
@@ -61,7 +61,7 @@
                             name="messageType"
                             value="anonymous"
                             bind:group={messageType}
-                            class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="custom-radio relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700"> Dejar un mensaje de forma anónima </span>
@@ -74,7 +74,7 @@
                             name="messageType"
                             value="public"
                             bind:group={messageType}
-                            class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700"> Dejar un mensaje de forma pública </span>
