@@ -7,6 +7,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
     import type { HTMLButtonAttributes } from "svelte/elements";
     import { t } from "../../i18n/store";
     import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import { cyrb53 } from "../../utils/cyrb53";
 
     interface DropdownOption {
         value: string;
@@ -39,25 +40,18 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         options.find((opt) => opt.value === selectedValue) || null,
     );
 
-    // Keep local state in sync with prop changes (important for SSR hydration)
     $effect(() => {
         selectedOption = options.find((opt) => opt.value === selectedValue) || null;
     });
 
-    // Generate unique ID for accessibility
-    // Use custom ID if provided, otherwise hash the options set for collision-free ID
-    const dropdownId = customId || hashOptions(options);
+    const dropdownId = customId || getElementId();
 
-    function hashOptions(opts: DropdownOption[]): string {
-        // Create a stable hash from the options array
-        const optionsString = opts.map((opt) => `${opt.value}:${opt.label}`).join("|");
-        let hash = 0;
-        for (let i = 0; i < optionsString.length; i++) {
-            const char = optionsString.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return `dropdown-${Math.abs(hash).toString(36)}`;
+    function getElementId(): string {
+        const optionsHash = cyrb53(
+            placeholder + label + options.map((opt) => opt.value + opt.label).join(),
+        );
+
+        return `dropdown-${optionsHash}`;
     }
 
     function toggleDropdown() {
