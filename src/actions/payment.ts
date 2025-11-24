@@ -1,35 +1,12 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { apiGatewayCheckoutsPost, apiGatewaysGetCollection } from "../openapi/client/index.ts";
+import { apiGatewayCheckoutsPost } from "../openapi/client/index.ts";
 import { getDefaultCurrency } from "../utils/consts.ts";
 
-import type { GatewayCharge, ApiGatewaysNameGetResponse } from "../openapi/client/index.ts";
+import type { GatewayCharge } from "../openapi/client/index.ts";
 
 const defaultCurrency = getDefaultCurrency();
-async function getPaymentGateways(): Promise<ApiGatewaysNameGetResponse[]> {
-    if (import.meta.env.NODE_ENV === "test" || process.env.NODE_ENV === "test") {
-        return [{ name: "test-gateway" }] as ApiGatewaysNameGetResponse[];
-    }
-
-    try {
-        const response = await apiGatewaysGetCollection();
-        const paymentGateways: ApiGatewaysNameGetResponse[] | undefined = response.data;
-
-        if (!paymentGateways) {
-            throw new Error("Payment gateways not found");
-        }
-
-        return paymentGateways;
-    } catch (error) {
-        console.error("Error fetching payment gateways:", error);
-        // En caso de error, devolver un gateway por defecto o re-lanzar según necesites
-        throw error;
-    }
-}
-
-let cachedPaymentGateways: ApiGatewaysNameGetResponse[] | null = null;
-let cachedPaymentGatewayNames: string[] | null = null;
 
 export const payment = defineAction({
     accept: "form",
@@ -61,23 +38,6 @@ export const payment = defineAction({
         const { t } = context.locals;
 
         try {
-            if (!cachedPaymentGateways) {
-                cachedPaymentGateways = await getPaymentGateways();
-                cachedPaymentGatewayNames = cachedPaymentGateways
-                    .map((gateway) => gateway.name)
-                    .filter((name): name is string => name !== undefined);
-            }
-
-            if (
-                cachedPaymentGatewayNames === null ||
-                !cachedPaymentGatewayNames.includes(input.paymentMethod)
-            ) {
-                throw new ActionError({
-                    code: "BAD_REQUEST",
-                    message: t("payment.error.invalidPaymentMethod"),
-                });
-            }
-
             const cart = input.cartData;
             const charges: GatewayCharge[] = cart.items.map((item) => ({
                 type: "single",
@@ -114,8 +74,6 @@ export const payment = defineAction({
                     returnUrl,
                 },
             });
-
-            console.log({ response });
 
             return { success: true, checkout: response.data };
         } catch (err) {

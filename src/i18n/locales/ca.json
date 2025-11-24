@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Mínim",
       "optimal": "Òptim",
-      "progress": "Estat de la campanya"
+      "progress": "Estat de la campanya",
+      "secondRound": "2a Ronda",
+      "start": "Inici"
     }
   },
   "project": {
@@ -126,9 +128,147 @@
   },
   "navigation": {
     "search": {
-      "placeholder": "Cerca la teva campanya"
+      "placeholder": "Cerca la teva campanya",
+      "label": "Cercar campanyes",
+      "clearSearch": "Esborrar cerca",
+      "pagination": {
+        "page": "Pàgina {{page}}",
+        "currentPage": "Pàgina {{page}}",
+        "previous": "Anterior",
+        "next": "Següent"
+      }
     },
     "categories": "Categories"
+  },
+  "search": {
+    "title": "Cercar campanyes - Goteo",
+    "description": "Explora el nostre catàleg de campanyes i troba la que més t'inspiri per fer la teva donació",
+    "heading": "Troba la campanya que busques",
+    "subtitle": "Explora el nostre catàleg de campanyes i tria la que més t'inspiri per fer la teva donació",
+    "topResults": "Campanyes més cercades",
+    "showing_top_results": "Mostrant les {{count}} campanyes més populars",
+    "placeholder": "Cercar",
+    "label": "Cercar campanyes",
+    "clearSearch": "Esborrar cerca",
+    "searchButton": "Cercar",
+    "closeFilters": "Tancar filtres",
+    "showFilters": "Mostrar filtres",
+    "hideFilters": "Amagar filtres",
+    "applyFilters": "Aplicar filtres",
+    "categoryLabel": "Tria una categoria",
+    "selectCategory": "Seleccionar categoria",
+    "deselectCategory": "Desseleccionar categoria",
+    "selectedCategories": "{{count}} categories seleccionades",
+    "clearFilters": "Esborrar filtres",
+    "loading": "Cercant campanyes...",
+    "results": {
+      "count": "{{count}} resultats trobats",
+      "found": "{{count}} resultats trobats",
+      "noResults": "No s'han trobat resultats",
+      "regionLabel": "Resultats de cerca",
+      "showing": "Mostrant {{count}} resultats",
+      "empty": {
+        "title": "No s'han trobat resultats",
+        "description": "No hi ha campanyes que coincideixin amb la teva cerca actual.",
+        "clearFilters": "Esborrar filtres"
+      }
+    },
+    "initial": {
+      "title": "Cerca la teva campanya ideal",
+      "description": "Utilitza els filtres de dalt per trobar campanyes que t'inspirin."
+    },
+    "filters": {
+      "clear": "Esborrar filtres"
+    },
+    "errors": {
+      "searchFailed": "No s'ha pogut realitzar la cerca. Torna-ho a provar.",
+      "api": {
+        "invalidToken": "Autenticació fallida. Si us plau, verifica les teves credencials.",
+        "expiredToken": "La teva sessió ha expirat. Si us plau, inicia sessió de nou.",
+        "missingToken": "Es requereix autenticació. Si us plau, inicia sessió.",
+        "networkError": "Error de connexió. Verifica la teva connexió a internet.",
+        "serverError": "Error del servidor. Si us plau, torna-ho a provar més tard."
+      }
+    },
+    "empty": {
+      "title": "No s'han trobat campanyes",
+      "description": "No hi ha campanyes que coincideixin amb la teva cerca actual. Verifica l'ortografia o prova amb paraules clau diferents o termes més generals.",
+      "suggestions": {
+        "title": "Suggeriments per millorar la teva cerca:",
+        "checkSpelling": "Verifica l'ortografia de les teves paraules clau",
+        "tryDifferentKeywords": "Prova amb paraules clau diferents",
+        "removeFilters": "Treu alguns filtres per ampliar la cerca",
+        "broadenSearch": "Usa termes més generals"
+      }
+    },
+    "accessibility": {
+      "resultsFound": "S'han trobat {{count}} campanyes"
+    },
+    "loadMore": {
+      "button": "Carregar més",
+      "loading": "Carregant més resultats...",
+      "announcement": "S'han carregat {{count}} resultats més. Mostrant {{loaded}} resultats en total."
+    },
+    "pagination": {
+      "summary": "Pàgina {{page}} de {{totalPages}} ({{totalCount}} resultats en total)",
+      "ariaLabel": "Navegació de pàgines de resultats",
+      "page": "Pàgina {{page}}",
+      "currentPage": "Pàgina {{page}}",
+      "previous": "Anterior",
+      "next": "Següent",
+      "loading": "Carregant...",
+      "loadMore": "Carregar més resultats",
+      "noMoreResults": "No hi ha més resultats"
+    },
+    "error": {
+      "title": "Error al cercar",
+      "retry": "Tornar a provar",
+      "network": {
+        "title": "Sense connexió a internet",
+        "description": "No es pot connectar amb el servidor. Verifica la teva connexió a internet i torna-ho a provar."
+      },
+      "timeout": {
+        "title": "La cerca està trigant massa",
+        "description": "El servidor no respon. Torna-ho a provar o utilitza les dades locals."
+      },
+      "server": {
+        "title": "Error del servidor",
+        "description": "Hi ha un problema amb el servidor. Torna-ho a provar més tard o utilitza les dades locals."
+      },
+      "unknown": {
+        "title": "Error inesperat",
+        "description": "Ha ocorregut un error inesperat. Torna-ho a provar."
+      },
+      "actions": {
+        "retry": "Reintentar",
+        "showHelp": "Mostrar ajuda"
+      },
+      "technicalDetails": "Detalls tècnics"
+    }
+  },
+  "filters": {
+    "selectOption": "Seleccionar opció",
+    "timePeriod": "Període de temps",
+    "campaignStatus": "Estat de la campanya",
+    "location": "Ubicació",
+    "time": {
+      "all": "Qualsevol moment",
+      "week": "Última setmana",
+      "month": "Últim mes",
+      "year": "Últim any"
+    },
+    "status": {
+      "all": "Tots els estats",
+      "funding": "En finançament",
+      "successful": "Exitoses",
+      "completed": "Completades"
+    },
+    "locationOptions": {
+      "all": "Qualsevol ubicació",
+      "spain": "Espanya",
+      "europe": "Europa",
+      "global": "Global"
+    }
   },
   "categories": {
     "solidary": "Solidari",
@@ -316,7 +456,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sessió",
-    "btnCart": "Anar al checkout"
+    "btnCart": "Anar al checkout",
+    "search": "Cercar",
+    "createProject": "Crea la teva campanya"
   },
   "checkout": {
     "title": "Resum de les teves donacions seleccionades",
@@ -343,7 +485,9 @@
       "resume": {
         "donationsPrefix": "de donacions",
         "foundationPrefix": "d’aportació a la fundació"
-      }
+      },
+      "show_more": "Mostra'n més",
+      "hide": "Amagar"
     },
     "cart": {
       "freeDonation": {
@@ -369,6 +513,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Enhorabona! Gràcies per la teva donació",
+      "emailSent": "T'hem enviat un resum a:",
+      "certificate": {
+        "title": "Com sol·licito el meu certificat?",
+        "description": "El certificat es genera de forma automàtica al final de l'any fiscal (desembre). T'enviarem un correu una vegada hàgim presentat la documentació a Hisenda. En cas que trobem algun problema et contactarem per correu."
+      },
+      "donatedProjects": {
+        "title": "Has donat als següents projectes",
+        "empty": "No s'han trobat projectes donats"
+      },
+      "suggestedProjects": {
+        "title": "Altres projectes que necessiten la teva ajuda",
+        "empty": "No hi ha projectes disponibles en aquest moment"
+      }
+    },
     "page": {
       "title": "Indica’ns les teves dades de pagament",
       "description": "Ara necessitem que ens diguis com vols pagar.",
@@ -609,8 +769,18 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
+      "optimum": "Òptim",
       "daysRemaining": "Queden {{days}} dies",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "Mínim aconseguit!",
+        "goForMinimum": "A pel mínim!"
+      },
+      "remaining": {
+        "toOptimum": "Falta per òptim",
+        "toMinimum": "Falta pel mínim"
+      },
+      "userDonations": "Les teves donacions:"
     },
     "blog": {
       "title": "S'aveïnen grans canvis… ¡no et perdis res!",
@@ -641,6 +811,7 @@
       }
     },
     "stats": {
+      "title": "Estadístiques de Goteo",
       "theoryToAction": {
         "title": "De la teoria a l'acció",
         "subtitle": "Les xifres que revelen la nostra empremta. Dades actualitzades del 2024.",
@@ -774,6 +945,83 @@
       "nextLevel": {
         "title": "Proper nivell",
         "description": "Continua donant per pujar de nivell"
+      }
+    }
+  },
+  "me": {
+    "page": {
+      "title": "Activitat",
+      "subtitle": "Consulta la teva activitat a Goteo"
+    },
+    "period": {
+      "label": "Període",
+      "year": "Any {{year}}"
+    },
+    "donations": {
+      "title": "Les meves donacions",
+      "empty": "Encara no has donat a cap projecte",
+      "explore": "Explora projectes",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/ca/projects",
+      "count": "Donacions",
+      "total": "Total donat",
+      "recent": "Últimes donacions",
+      "viewAll": "Veure totes",
+      "certificate": "Sol·licitar certificat"
+    },
+    "projects": {
+      "title": "Projectes impulsats",
+      "empty": "Encara no has impulsat cap projecte",
+      "create": "Impulsa el teu projecte",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/ca/projects/new",
+      "count": "Projectes",
+      "raised": "Recaptat",
+      "recent": "Últims projectes impulsats",
+      "viewAll": "Veure tots",
+      "createNew": "Crear un projecte"
+    },
+    "ownedProjects": {
+      "title": "Els Teus Projectes Actius",
+      "messageToDonatorsButton": "Missatge a donants",
+      "uploadNewsButton": "Pujar novetat"
+    },
+    "donatedProjects": {
+      "title": "Projectes actius on has donat"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descobreix, connecta i dona",
+        "description": "Imagina un lloc on centenars de projectes socials esperen el teu suport. A la nostra plataforma, explorar és fàcil: navega per causes comunitàries, ambientals o educatives. Perquè aquí, tu decideixes quines històries s'escriuen.",
+        "button": "Dona a un projecte"
+      },
+      "matchfunding": {
+        "title": "Donacions que brillen. Projectes que inspiren.",
+        "description": "Goteo és pionera en matchfunding. Tant si ets un donant que busca potenciar la teva contribució a projectes, un impulsor que vol augmentar el seu pressupost o una entitat que busca donar suport a projectes i impulsors a través de reforços en el donatiu... el nostre programa de matchfunding et permet multiplicar l'impuls pel canvi",
+        "learnMore": "Descobreix com funciona el matchfunding",
+        "becomeMatcher": "Fes-te Matcher"
+      }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatòries",
+        "donated": "Donat",
+        "recent": "Últimes convocatòries",
+        "viewAll": "Veure convocatòries",
+        "create": "Crear convocatòria"
+      },
+      "section": {
+        "title": "Les Teves Convocatòries de Matchfunding Actives",
+        "empty": "No tens convocatòries actives",
+        "error": "Error en carregar les convocatòries"
+      },
+      "callCard": {
+        "donationCall": "Dotació convocatòria",
+        "participatingProjects": "Projectes participants",
+        "successfulProjects": "Projectes acollits amb èxit",
+        "projects": "projectes",
+        "viewCall": "Anar a la convocatòria"
       }
     }
   }

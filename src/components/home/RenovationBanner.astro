@@ -5,49 +5,98 @@ const { t } = Astro.locals;
 <section data-renovation-banner class="wrapper renovation-banner">
     <!-- Content -->
     <div
-        class="bg-tertiary relative mx-auto flex items-center justify-between gap-6 overflow-hidden rounded-3xl p-8 text-white"
+        class="bg-secondary relative mx-auto overflow-hidden rounded-3xl p-4 text-white sm:p-6 md:p-8"
     >
-        <!-- Main Content -->
-        <div class="flex-1 space-y-3 pr-0 md:pr-6">
-            <h2 class="text-3xl font-bold tracking-tight md:text-4xl">
-                {t("renovationBanner.title")}
-            </h2>
-            <p class="max-w-3xl text-base leading-relaxed text-purple-100/90 md:text-lg">
-                {t("renovationBanner.description")}
-            </p>
+        <!-- Detail Images Container -->
+        <div class="pointer-events-none absolute inset-0 -z-0">
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute -top-[23%] right-[388px] h-[226px] w-[244px]"
+                style="transform: translateY(-25%) rotate(4deg);"
+            />
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute top-[54%] right-[214px] h-[226px] w-[244px]"
+                style="transform: translateY(-37%) rotate(-2deg);"
+            />
+            <img
+                src="/imgs/banner-home.svg"
+                alt="Renovation detail"
+                class="absolute top-[24%] right-0 h-[226px] w-[244px]"
+                style="transform: translateY(-60%) rotate(2deg);"
+            />
         </div>
-
-        <!-- CTA Button -->
-        <div class="flex items-center gap-3 md:gap-4">
-            <a
-                href="#"
-                class="text-tertiary bg-light-accent rounded-full px-8 py-4 font-semibold whitespace-nowrap shadow-md transition-colors duration-200 hover:bg-white"
-                aria-label={t("renovationBanner.ctaButton")}
+        <!-- Close Button - Mobile (Top Right) -->
+        <button
+            class="renovation-banner-close absolute top-4 right-4 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10 md:hidden"
+            aria-label={t("renovationBanner.closeAriaLabel") || "Close banner"}
+            data-close-renovation-banner
+        >
+            <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
             >
-                {t("renovationBanner.ctaButton")}
-            </a>
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+            <span class="sr-only">{t("renovationBanner.close") || "Close"}</span>
+        </button>
 
-            <!-- Close Button -->
-            <button
-                class="renovation-banner-close flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full"
-                aria-label="Close banner"
-                data-close-renovation-banner
-            >
-                <svg
-                    class="h-10 w-10"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
+        <!-- Content Container -->
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between md:gap-6">
+            <!-- Main Content -->
+            <div class="flex-1 space-y-3 pr-0 md:pr-6">
+                <h2 class="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
+                    {t("renovationBanner.title")}
+                </h2>
+                <p
+                    class="text-variant1 max-w-3xl text-sm leading-relaxed opacity-90 sm:text-base md:text-lg"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                <span class="sr-only">Close</span>
-            </button>
+                    {t("renovationBanner.description")}
+                </p>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="flex items-center gap-3 md:gap-4">
+                <a
+                    href={t("renovationBanner.ctaLink") || "/renovation"}
+                    class="text-secondary bg-light-accent focus:ring-offset-secondary rounded-full px-6 py-3 text-center font-semibold whitespace-nowrap shadow-md transition-colors duration-200 hover:bg-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:outline-none sm:px-8 sm:py-4"
+                    aria-label={t("renovationBanner.ctaAriaLabel") ||
+                        t("renovationBanner.ctaButton")}
+                >
+                    {t("renovationBanner.ctaButton")}
+                </a>
+
+                <!-- Close Button - Desktop -->
+                <button
+                    class="renovation-banner-close hidden h-9 w-9 flex-shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10 md:flex"
+                    aria-label={t("renovationBanner.closeAriaLabel") || "Close banner"}
+                    data-close-renovation-banner
+                >
+                    <svg
+                        class="h-10 w-10"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                        aria-hidden="true"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    <span class="sr-only">{t("renovationBanner.close") || "Close"}</span>
+                </button>
+            </div>
         </div>
     </div>
 </section>
@@ -59,25 +108,30 @@ const { t } = Astro.locals;
         if (typeof window === "undefined") return;
 
         const banner = document.querySelector("[data-renovation-banner]");
-        const closeButton = document.querySelector("[data-close-renovation-banner]");
+        const closeButtons = document.querySelectorAll("[data-close-renovation-banner]");
 
-        const storageKey = "renovationBannerClosed";
+        const STORAGE_KEY = "renovationBannerClosed";
 
-        const hide = () => {
+        const hideBanner = () => {
             if (!banner) return;
             banner.setAttribute("hidden", "");
+            banner.setAttribute("aria-hidden", "true");
         };
 
-        if (window.localStorage.getItem(storageKey) === "true") {
-            hide();
+        if (window.localStorage.getItem(STORAGE_KEY) === "true") {
+            hideBanner();
         }
 
-        if (closeButton && banner) {
-            closeButton.addEventListener("click", () => {
-                hide();
-                try {
-                    window.localStorage.setItem(storageKey, "true");
-                } catch (_) {}
+        if (banner && closeButtons.length > 0) {
+            closeButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    hideBanner();
+                    try {
+                        window.localStorage.setItem(STORAGE_KEY, "true");
+                    } catch (error) {
+                        console.warn("Could not save banner state to localStorage:", error);
+                    }
+                });
             });
         }
     });

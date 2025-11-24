@@ -100,7 +100,7 @@
                 oninput={(e) =>
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
                 placeholder={$t("contributions.filters.search.placeholder")}
-                class="border-tertiary w-full rounded-3xl border p-4"
+                class="border-secondary w-full rounded-3xl border p-4"
                 minlength="4"
             />
             {#if query}

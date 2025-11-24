@@ -16,8 +16,8 @@
     - useDataAttributes: Whether to toggle [data-tab-content] elements (default: true)
     
     Design System:
-    - Active: border-primary, text-tertiary
-    - Inactive: border-purple-tint, text-secondary
+    - Active: border-primary, text-secondary
+    - Inactive: border-variant1, text-tertiary
     - Hover: opacity-80
     - Transition: 200ms ease
 -->
@@ -85,8 +85,8 @@
             <button
                 class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 transition-all duration-200 {currentTab ===
                 tab.id
-                    ? 'border-primary text-tertiary'
-                    : 'border-purple-tint text-secondary'}"
+                    ? 'border-primary text-secondary'
+                    : 'border-variant1 text-tertiary'}"
                 onclick={() => handleTabClick(tab.id)}
                 data-tab={tab.id}
             >

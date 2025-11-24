@@ -2,7 +2,6 @@
     import BudgetBar from "./BudgetBar.svelte";
     import LegendBudgetBar from "./LegendBudgetBar.svelte";
     import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
     import type { Project, Accounting } from "../../openapi/client/index";
 
     let { project, accounting } = $props<{
@@ -12,40 +11,14 @@
 </script>
 
 <div class="flex flex-col gap-6 lg:flex-row">
-    <div class="text-tertiary basis-1/3 text-3xl font-bold">
+    <div class="text-secondary basis-5/12 text-4xl font-bold">
         {$t("project.tabs.budget.chart-title")}
     </div>
 
-    <div class="flex basis-2/3 flex-col gap-8 rounded-xl bg-[#f1efff] p-6">
-        <div class="text-tertiary flex flex-col gap-4">
-            <div class="flex flex-row gap-2">
-                {$t("project.tabs.budget.minimum")}:
-                <span>
-                    <p class="font-bold">
-                        {formatCurrency(
-                            project.budget.minimum.money.amount,
-                            project.budget.minimum.money.currency,
-                        )}
-                    </p>
-                </span>
-            </div>
-            <BudgetBar {project} {accounting} budgetAmount={"minimum"} />
-        </div>
-
-        <div class="text-tertiary flex flex-col gap-4">
-            <div class="flex flex-row gap-2">
-                {$t("project.tabs.budget.optimal")}:
-                <span>
-                    <p class="font-bold">
-                        {formatCurrency(
-                            project.budget.optimum.money.amount,
-                            project.budget.optimum.money.currency,
-                        )}
-                    </p>
-                </span>
-            </div>
-            <BudgetBar {project} {accounting} budgetAmount={"optimum"} />
-        </div>
-        <LegendBudgetBar />
+    <div
+        class="bg-chart-background flex basis-7/12 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
+    >
+        <BudgetBar {project} {accounting} />
+        <LegendBudgetBar {project} />
     </div>
 </div>

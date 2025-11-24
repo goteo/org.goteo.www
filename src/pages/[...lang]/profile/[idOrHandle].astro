@@ -12,7 +12,7 @@ import {
     apiProjectSupportsGetCollection,
     apiProjectSupportsmoneyTotalGetCollection,
     type Accounting,
-    type ApiMoney,
+    type Money,
     type ProjectSupport,
 } from "../../../openapi/client";
 import type { User } from "../../../openapi/client/types.gen";
@@ -131,7 +131,8 @@ if (projectIRIs.length > 0) {
                     title: project.title!,
                     image: project.video?.thumbnail!,
                     minimum: project.budget?.minimum?.money!,
-                    obtained: accounting!.balance as ApiMoney,
+                    obtained: accounting!.balance as Money,
+                    optimum: project.budget?.optimum?.money,
                 };
             } catch (error) {
                 console.error(`Error fetching project ${projectIRI}:`, error);
@@ -168,7 +169,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
     {
         errorMessage ? (
             <div class="flex min-h-screen items-center justify-center">
-                <p class="text-secondary text-xl">{errorMessage}</p>
+                <p class="text-tertiary text-xl">{errorMessage}</p>
             </div>
         ) : (
             <div class="flex w-full flex-col items-center gap-10">
@@ -193,7 +194,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
                     {bio && (
                         <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
                             <div
-                                class="prose prose-base text-secondary leading-6"
+                                class="prose prose-base text-tertiary leading-6"
                                 set:html={renderMarkdown(bio)}
                             />
                         </div>
@@ -208,7 +209,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
                         </div>
                     ) : (
                         <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
-                            <p class="text-secondary text-base">{t("profile.noProjects")}</p>
+                            <p class="text-tertiary text-base">{t("profile.noProjects")}</p>
                         </div>
                     )}
                 </div>

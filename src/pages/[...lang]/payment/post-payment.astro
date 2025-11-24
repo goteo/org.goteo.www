@@ -1,0 +1,218 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Carousel from "../../../components/Carousel.svelte";
+import CampaignCard from "../../../components/home/CampaignCard.svelte";
+import {
+    apiProjectsGetCollection,
+    apiGatewayCheckoutsIdGet,
+    apiAccountingsIdGet,
+    apiProjectsIdOrSlugGet,
+} from "../../../openapi/client";
+import type { Project } from "../../../openapi/client";
+import { extractId } from "../../../utils/extractId";
+import type { Campaign } from "../../../types/campaign";
+
+const { t } = Astro.locals;
+
+const mapProjectToCard = (project: Project): Campaign => ({
+    id: project.slug || "",
+    title: project.title || "",
+    image: project.video?.thumbnail || "/images/placeholder-project.jpg",
+    obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    size: "small",
+});
+
+let donatedProjects: Campaign[] = [];
+let suggestedProjects: Campaign[] = [];
+let userEmail = "";
+
+const accessCookie = Astro.cookies.get("access-token");
+const checkoutId = Astro.url.searchParams.get("checkoutId");
+
+if (accessCookie && checkoutId) {
+    try {
+        const cookieData = JSON.parse(accessCookie.value);
+        const { token, user } = cookieData;
+
+        if (user?.email) {
+            userEmail = user.email;
+        }
+
+        const { data: checkout } = await apiGatewayCheckoutsIdGet({
+            path: { id: checkoutId },
+            headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (checkout?.charges) {
+            const targetAccountingUrls = checkout.charges
+                .map((charge: any) => charge.target)
+                .filter(Boolean);
+
+            const projectPromises = targetAccountingUrls.map(async (accountingUrl: string) => {
+                try {
+                    const accountingId = extractId(accountingUrl);
+                    if (!accountingId) return null;
+
+                    const { data: accounting } = await apiAccountingsIdGet({
+                        path: { id: accountingId },
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    if (!accounting) return null;
+
+                    if (accounting.owner?.includes("/v4/projects/")) {
+                        return extractId(accounting.owner);
+                    }
+
+                    return null;
+                } catch (error) {
+                    console.error("Error fetching accounting or extracting project ID:", error);
+                    return null;
+                }
+            });
+
+            const projectIds = (await Promise.all(projectPromises)).filter(Boolean) as string[];
+
+            const projectDataPromises = projectIds.map(async (projectId) => {
+                try {
+                    const { data: project } = await apiProjectsIdOrSlugGet({
+                        path: { idOrSlug: projectId },
+                        headers: { Authorization: `Bearer ${token}` },
+                    });
+
+                    return project || null;
+                } catch (error) {
+                    console.error("Error fetching project data:", error);
+                    return null;
+                }
+            });
+
+            const projects = (await Promise.all(projectDataPromises)).filter(Boolean) as Project[];
+            donatedProjects = projects.map(mapProjectToCard);
+        }
+    } catch (error) {
+        console.error("Error loading donated projects:", error);
+        donatedProjects = [];
+    }
+}
+
+try {
+    const { data: projects } = await apiProjectsGetCollection({
+        query: {
+            status: "in_campaign",
+            itemsPerPage: 20,
+        },
+    });
+
+    if (projects) {
+        suggestedProjects = projects.map(mapProjectToCard);
+    }
+} catch (error) {
+    console.error("Error loading suggested projects:", error);
+    suggestedProjects = [];
+}
+---
+
+<Layout
+    title={t("payment.postPayment.title")}
+    description={t("payment.postPayment.certificate.description")}
+>
+    <section class="wrapper flex flex-col items-start gap-6 pb-16 md:gap-10 md:pb-20">
+        <div class="flex w-full items-start self-stretch">
+            <div class="flex flex-1 flex-col items-start gap-4 self-stretch">
+                <h2
+                    class="self-stretch text-2xl leading-8 font-bold text-black md:text-3xl md:leading-10 lg:text-[40px] lg:leading-[48px]"
+                >
+                    {t("payment.postPayment.title")}
+                </h2>
+                <p
+                    class="text-content font-feature-settings-['case'_on] self-stretch text-sm leading-6 font-normal ordinal md:text-base"
+                >
+                    {t("payment.postPayment.emailSent")}
+                    {userEmail}
+                </p>
+            </div>
+        </div>
+
+        <div class="flex w-full flex-col items-start gap-12 pb-20 md:gap-[72px]">
+            <div
+                class="flex flex-col items-start gap-6 self-stretch rounded-[32px] bg-white md:flex-row md:items-center md:gap-10"
+            >
+                <div class="h-16 w-16 flex-shrink-0 md:h-20 md:w-20">
+                    <img
+                        src="/post-payment.svg"
+                        alt="Post payment"
+                        class="h-full w-full object-contain"
+                    />
+                </div>
+
+                <div class="flex flex-1 flex-col items-start gap-4 md:gap-6">
+                    <h2
+                        class="text-secondary self-stretch text-xl leading-7 font-bold md:text-2xl md:leading-9 lg:text-[32px] lg:leading-10"
+                    >
+                        {t("payment.postPayment.certificate.title")}
+                    </h2>
+                    <p
+                        class="text-secondary font-feature-settings-['case'_on] text-base leading-6 font-normal ordinal"
+                    >
+                        {t("payment.postPayment.certificate.description")}
+                    </p>
+                </div>
+            </div>
+
+            {
+                donatedProjects.length > 0 && (
+                    <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                        <p class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8">
+                            {t("payment.postPayment.donatedProjects.title")} (
+                            {donatedProjects.length})
+                        </p>
+                        <Carousel
+                            client:load
+                            itemsPerGroup={1}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
+                            gap={24}
+                            showDots={true}
+                            class="w-full"
+                        >
+                            {donatedProjects.map((project) => (
+                                <CampaignCard size="small" campaign={project} />
+                            ))}
+                        </Carousel>
+                    </div>
+                )
+            }
+
+            <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                <p
+                    class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
+                >
+                    {t("payment.postPayment.suggestedProjects.title")}
+                </p>
+                {
+                    suggestedProjects.length > 0 ? (
+                        <Carousel
+                            client:load
+                            itemsPerGroup={1}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
+                            gap={24}
+                            showDots={true}
+                            class="w-full"
+                        >
+                            {suggestedProjects.map((project) => (
+                                <CampaignCard size="small" campaign={project} />
+                            ))}
+                        </Carousel>
+                    ) : (
+                        <p class="text-content text-base">
+                            {t("payment.postPayment.suggestedProjects.empty")}
+                        </p>
+                    )
+                }
+            </div>
+        </div>
+    </section>
+</Layout>

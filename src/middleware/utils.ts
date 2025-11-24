@@ -70,7 +70,7 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
         return isLangInPath ? `/${currentLang}/payment` : `/payment`;
     }
 
-    const protectedRoutes = ["payment", "admin"];
+    const protectedRoutes = ["me", "payment", "admin"];
     const isProtected = protectedRoutes.includes(nextSegment);
 
     if (!accessToken && isProtected) {

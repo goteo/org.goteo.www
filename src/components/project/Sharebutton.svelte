@@ -59,7 +59,7 @@
 
 <button
     onclick={() => (openModal = true)}
-    class="text-tertiary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
+    class="text-secondary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
 >
     <ShareIcon />
     {$t("project.actions.share")}
@@ -67,17 +67,17 @@
 
 <Modal
     bind:open={openModal}
-    closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent cursor-pointer"
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent cursor-pointer"
     class="fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     title={$t("project.share.modal.title")}
-    headerClass="py-2 text-tertiary text-2xl"
+    headerClass="py-2 text-secondary text-2xl"
 >
     <p>{$t("project.share.modal.description")}</p>
 
     <div class="flex flex-row items-center justify-center gap-6">
         <Tooltip
             text={$t("contributions.tootip.copied")}
-            tooltipClass="bg-[#462949] -translate-x-[50%]"
+            tooltipClass="bg-secondary -translate-x-[50%]"
             className="cursor-copy shrink-0 w-auto h-auto"
         >
             <button
@@ -115,10 +115,10 @@
 
 <Modal
     bind:open={iframeModal}
-    closeBtnClass="top-7 end-7 bg-transparent text-[#462949] hover:bg-transparent hover:text-[#462949] hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-[#462949] dark:hover:text-[#462949] dark:hover:bg-transparent cursor-pointer"
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent cursor-pointer"
     class="!left-1/2 max-w-[600px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     title={$t("project.share.iframe-modal.title")}
-    headerClass="py-2 text-tertiary text-2xl"
+    headerClass="py-2 text-secondary text-2xl"
 >
     <p>{$t("project.share.iframe-modal.description")}</p>
 
@@ -149,9 +149,9 @@
     </div>
 
     <button
-        class="bg-primary text-tertiary h-auto w-full cursor-pointer rounded-3xl px-6 py-4 font-bold"
+        class="bg-primary text-secondary h-auto w-full cursor-pointer rounded-3xl px-6 py-4 font-bold"
         class:bg-primary={!copied}
-        class:bg-[#E6E5F7]={copied}
+        class:bg-variant1={copied}
         onclick={() => {
             navigator.clipboard.writeText(iframeCode);
             copied = true;

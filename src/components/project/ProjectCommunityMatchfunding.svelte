@@ -14,7 +14,7 @@
 >
     <div class="flex w-1/3 items-center justify-center bg-red-500">😀</div>
     <div class="flex w-2/3 flex-col gap-4 p-6">
-        <div class="text-secondary flex flex-col items-end gap-2 font-bold">
+        <div class="text-tertiary flex flex-col items-end gap-2 font-bold">
             <span>{$t("project.tabs.community.matchfunding.contribution")}</span>
             <div class="flex flex-col items-end text-2xl">
                 <div class="flex items-center gap-2">
@@ -26,7 +26,7 @@
                         )}
                     </span>
                 </div>
-                <div class="flex items-center gap-2 text-[#5757577A]">
+                <div class="text-content flex items-center gap-2">
                     <span>{$t("project.tabs.community.matchfunding.up_to")}</span>
                     <span class="font-bold">
                         {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}
@@ -34,10 +34,10 @@
                 </div>
             </div>
         </div>
-        <div class="text-secondary line-clamp-2 text-2xl font-bold">
+        <div class="text-tertiary line-clamp-2 text-2xl font-bold">
             {item.displayName}
         </div>
-        <p class="line-clamp-2 text-sm text-[#575757]">
+        <p class="text-content line-clamp-2 text-sm">
             {item.message}
         </p>
     </div>

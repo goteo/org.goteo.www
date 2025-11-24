@@ -57,6 +57,11 @@ try {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";
 }
+
+const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
+const postPaymentUrl = checkoutId
+    ? `/payment/post-payment?checkoutId=${checkoutId}`
+    : "/payment/post-payment";
 ---
 
 <Layout title="Estado del pago">
@@ -70,10 +75,10 @@ try {
                                 <div class="flex flex-col gap-10">
                                     <div class="flex flex-row items-center justify-between gap-6">
                                         <div class="flex w-2/3 flex-col gap-4">
-                                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                 {t("payment.page-error.title")}
                                             </h2>
-                                            <p class="text-[#575757]">
+                                            <p class="text-content">
                                                 {t("payment.page-error.description")}
                                             </p>
                                         </div>
@@ -88,12 +93,13 @@ try {
                                 </div>
                             </div>
                         </div>
-                        <div class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                            <Summary client:load hasError={!!error} {defaultCurrency} {amount} />
-                            <Steps client:load step={4} hasError={!!error} />
-                            <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                <p class="text-sm text-[#575757]">{t("checkout.summary.deduct")}</p>
-                                <a class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]">
+                        <div class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
+                            <div class="flex flex-col gap-4 px-6 pt-6 pb-6">
+                                <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                                <a
+                                    href={postPaymentUrl}
+                                    class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
+                                >
                                     {t("global.btn.continue")}
                                 </a>
                             </div>
@@ -109,10 +115,10 @@ try {
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
-                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-[#3D3D3D]">
+                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                     {t("payment.page-aproved.title")}
                                                 </h2>
-                                                <p class="text-[#575757]">
+                                                <p class="text-content">
                                                     {t("payment.page-aproved.description")}
                                                 </p>
                                             </div>
@@ -124,14 +130,15 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <div class="border-tertiary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                                <Summary client:load {defaultCurrency} {amount} />
-                                <Steps step={4} client:load />
-                                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                    <p class="text-sm text-[#575757]">
+                            <div class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
+                                <div class="flex flex-col gap-4 px-6 pt-6 pb-6">
+                                    <p class="text-content text-sm">
                                         {t("checkout.summary.deduct")}
                                     </p>
-                                    <a class="bg-primary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold text-[#462949]">
+                                    <a
+                                        href={postPaymentUrl}
+                                        class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
+                                    >
                                         {t("global.btn.continue")}
                                     </a>
                                 </div>

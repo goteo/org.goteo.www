@@ -3,6 +3,7 @@ import importPlugin from "eslint-plugin-import";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 import cypressPlugin from "eslint-plugin-cypress";
+import unusedImportsPlugin from "eslint-plugin-unused-imports";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -19,6 +20,8 @@ export default [
             ".astro/**",
             ".astro/**/*",
             "openapi/client/**",
+            ".github/**",
+            "env.d.ts",
         ],
     },
     { files: ["**/*.{js,mjs,cjs,ts}"] },
@@ -28,6 +31,7 @@ export default [
     {
         plugins: {
             import: importPlugin,
+            "unused-imports": unusedImportsPlugin,
         },
         rules: {
             "import/order": [
@@ -48,6 +52,7 @@ export default [
                 },
             ],
             "@typescript-eslint/no-explicit-any": "off",
+            "unused-imports/no-unused-imports": "error",
         },
     },
     // Cypress configuration

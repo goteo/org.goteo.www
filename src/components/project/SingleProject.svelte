@@ -21,6 +21,7 @@
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
+    import Button from "../library/Button.svelte";
 
     let {
         lang = $bindable(),
@@ -39,11 +40,8 @@
     } = $props();
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
-    let showFull = $state(false);
 
-    let paragraphRef: HTMLParagraphElement;
-    let showToggle = $state(false);
-    const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
+    const countdownEnd = getCurrentDeadline(project);
 
     async function getProjectData(code?: string) {
         lang = code ? code : getDefaultLanguage();
@@ -58,46 +56,61 @@
         project = data!;
     }
 
-    onMount(() => {
-        const twoLinesHeight = parseFloat(getComputedStyle(paragraphRef).lineHeight) * 2;
-        if (paragraphRef.scrollHeight > twoLinesHeight + 1) {
-            showToggle = true;
+    let tabsComponent: any;
+
+    function scrollToRewards() {
+        if (tabsComponent?.activateRewardsTab) {
+            tabsComponent.activateRewardsTab();
         }
-    });
+        setTimeout(() => {
+            const rewardsElement = document.getElementById("tab-rewards");
+            if (rewardsElement) {
+                rewardsElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        }, 100);
+    }
+
+    function getCurrentDeadline(project: Project): Date | undefined {
+        const now = new Date();
+
+        const minimum = new Date(project.calendar?.minimum!);
+        if (now < minimum) {
+            return minimum;
+        }
+
+        if (!project.calendar?.optimum) {
+            return undefined;
+        }
+
+        const optimum = new Date(project.calendar?.optimum);
+        if (now < optimum) {
+            return optimum;
+        }
+
+        return undefined;
+    }
 </script>
 
 <section class="wrapper">
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
         <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
-                <h3 class="text-xl font-bold text-[#575757] lg:text-2xl">
+                <h3 class="text-content text-xl font-bold lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="text-tertiary font-bold underline"> {ownerName}</span>
+                    <span class="font-bold text-black underline"> {ownerName}</span>
                 </h3>
-                <h1 class="text-3xl font-bold text-[#575757] lg:text-4xl">
+                <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}
                 </h1>
             </div>
 
             <div>
-                <p
-                    bind:this={paragraphRef}
-                    class="text-[#575757] transition-all duration-300 ease-in-out {showFull
-                        ? ''
-                        : 'line-clamp-2'}"
-                >
+                <p class="text-content transition-all duration-300 ease-in-out">
                     {project.subtitle}
                 </p>
-
-                {#if showToggle}
-                    <button
-                        type="button"
-                        class="mt-2 text-sm font-medium text-blue-600 hover:underline"
-                        onclick={() => (showFull = !showFull)}
-                    >
-                        {showFull ? $t("project.actions.viewLess") : $t("project.actions.viewMore")}
-                    </button>
-                {/if}
             </div>
         </div>
 
@@ -129,39 +142,40 @@
             <div class="lg:hidden">
                 <Countdown {countdownEnd} />
             </div>
-            <Card {project} {accounting} {balancePoints} {totalSupports} />
+            <Card
+                {project}
+                {accounting}
+                {balancePoints}
+                {totalSupports}
+                onScrollToRewards={scrollToRewards}
+            />
         </div>
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {project} {lang} />
+        <Tags {project} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
-            <button
-                class="text-tertiary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
-            >
-                <RememberIcon /> {$t("project.actions.remember")}</button
-            >
+            <Button kind="invert" size="sm" class="px-0">
+                <RememberIcon />
+                {$t("project.actions.remember")}
+            </Button>
         </div>
     </div>
     <div class="flex flex-col gap-8">
         <div class="flex items-center justify-between">
-            <h2 class="text-secondary text-2xl font-bold">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("reward.trending")}
             </h2>
-            <button
-                class="text-tertiary hidden cursor-pointer items-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:flex"
-            >
+            <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
                 <ArrowRightIcon />{$t("reward.showAll")}
-            </button>
+            </Button>
         </div>
         <TopRewards bind:lang {project} />
-        <button
-            class="text-tertiary flex cursor-pointer items-center justify-center gap-4 rounded-3xl bg-[#E6E5F7] px-6 py-4 font-bold transition lg:hidden"
-        >
+        <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
             <ArrowRightIcon />{$t("reward.showAll")}
-        </button>
+        </Button>
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs bind:lang bind:project {accounting} />
+<Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />

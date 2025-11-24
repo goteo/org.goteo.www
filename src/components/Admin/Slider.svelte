@@ -44,17 +44,17 @@
 <div class="relative h-[160px]">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-[#575757]">Cargando...</span>
+            <span class="text-content">Cargando...</span>
         </div>
     {/if}
 
     <div bind:this={mainCarousel} class="main-carousel h-full opacity-{isLoaded ? 100 : 0}">
         {#each slides as { title, amount }}
             <div
-                class="carousel-cell mr-6 flex h-full w-[22.5%] flex-col items-start justify-center gap-4 rounded-xl border border-[#e6e5f7] bg-[#faf9ff] p-8 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="carousel-cell border-variant1 bg-soft-purple mr-6 flex h-full w-[22.5%] flex-col items-start justify-center gap-4 rounded-xl border p-8 shadow-[0px_1px_3px_0px_#0000001A]"
             >
-                <span class="text-base font-semibold text-[#575757]">{title}</span>
-                <span class="text-secondary text-[40px]">{amount}</span>
+                <span class="text-content text-base font-semibold">{title}</span>
+                <span class="text-tertiary text-[40px]">{amount}</span>
             </div>
         {/each}
     </div>

@@ -1,8 +1,8 @@
 ---
-import CampaignCard from "./CampaignCard.astro";
+import CampaignCard from "./CampaignCard.svelte";
 import type { Campaign } from "../../types/campaign";
 import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
-import { apiProjectsGetCollection, type Accounting, type ApiMoney } from "../../openapi/client";
+import { apiProjectsGetCollection, type Accounting, type Money } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
 
@@ -39,7 +39,8 @@ const campaigns: Campaign[] = await Promise.all(
                 highlightedProjects[project.slug! as keyof typeof highlightedProjects] ||
                 project.video?.thumbnail!,
             minimum: project.budget?.minimum?.money!,
-            obtained: accounting!.balance as ApiMoney,
+            obtained: accounting!.balance as Money,
+            optimum: project.budget?.optimum?.money,
         };
     }),
 );
@@ -80,11 +81,11 @@ const displayCampaigns = selectCampaignsForGrid(campaigns);
 
         <!-- "Ver todas" Button -->
         <button
-            class="bg-purple-tint flex items-center gap-2 rounded-3xl px-6 py-4 transition-all duration-200 hover:opacity-90"
+            class="bg-variant1 flex items-center gap-2 rounded-3xl px-6 py-4 transition-all duration-200 hover:opacity-90"
         >
             <!-- Arrow Icon -->
             <ArrowRightIcon />
-            <span class="text-tertiary text-base font-bold">
+            <span class="text-secondary text-base font-bold">
                 {t("home.campaigns.viewAll")}
             </span>
         </button>

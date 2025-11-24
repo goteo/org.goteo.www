@@ -31,7 +31,9 @@
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
+      "progress": "Estado de la campaña",
+      "secondRound": "2ª Ronda",
+      "start": "Inicio"
     }
   },
   "project": {
@@ -39,10 +41,12 @@
     "tabs": {
       "project": "Información de campaña",
       "budget": {
-        "chart-title": "Este es el presupuesto necesario para hacer realidad esta campaña y descubre cómo tu apoyo puede llevarnos al éxito.",
+        "chart-title": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
         "title": "Presupuesto",
         "minimum": "Mínimo",
         "optimal": "Óptimo",
+        "raised": "Obtenido",
+        "total": "Total",
         "typeBudget": {
           "infrastructure": "Infraestructura",
           "material": "Material",
@@ -130,19 +134,146 @@
     },
     "categories": "Categorías"
   },
+  "search": {
+    "title": "Buscar campañas - Goteo",
+    "description": "Explora nuestro catálogo de campañas y encuentra la que más te inspire para hacer tu donación",
+    "heading": "Encuentra la campaña que buscas",
+    "subtitle": "Explora nuestro catálogo de campañas y elige la que más te inspire para hacer tu donación",
+    "topResults": "Campañas más buscadas",
+    "showing_top_results": "Mostrando las {{count}} campañas más populares",
+    "placeholder": "Buscar",
+    "label": "Buscar campañas",
+    "clearSearch": "Limpiar búsqueda",
+    "searchButton": "Buscar",
+    "closeFilters": "Cerrar filtros",
+    "showFilters": "Mostrar filtros",
+    "hideFilters": "Ocultar filtros",
+    "applyFilters": "Aplicar filtros",
+    "categoryLabel": "Elige una categoría",
+    "selectCategory": "Seleccionar categoría",
+    "deselectCategory": "Deseleccionar categoría",
+    "selectedCategories": "{{count}} categorías seleccionadas",
+    "clearFilters": "Limpiar filtros",
+    "loading": "Buscando campañas...",
+    "results": {
+      "count": "{{count}} resultados encontrados",
+      "found": "{{count}} resultados encontrados",
+      "noResults": "No se encontraron resultados",
+      "regionLabel": "Resultados de búsqueda",
+      "showing": "Mostrando {{count}} resultados",
+      "empty": {
+        "title": "No se encontraron resultados",
+        "description": "No hay campañas que coincidan con tu búsqueda actual.",
+        "clearFilters": "Limpiar filtros"
+      }
+    },
+    "initial": {
+      "title": "Busca tu campaña ideal",
+      "description": "Utiliza los filtros de arriba para encontrar campañas que te inspiren."
+    },
+    "filters": {
+      "clear": "Limpiar filtros"
+    },
+    "errors": {
+      "searchFailed": "No se pudo realizar la búsqueda. Intenta de nuevo.",
+      "api": {
+        "invalidToken": "Autenticación fallida. Por favor, verifica tus credenciales.",
+        "expiredToken": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
+        "missingToken": "Se requiere autenticación. Por favor, inicia sesión.",
+        "networkError": "Error de conexión. Verifica tu conexión a internet.",
+        "serverError": "Error del servidor. Por favor, inténtalo de nuevo más tarde."
+      }
+    },
+    "empty": {
+      "title": "No se encontraron campañas",
+      "description": "No hay campañas que coincidan con tu búsqueda actual. Verifica la ortografía o prueba con palabras clave diferentes o términos más generales.",
+      "suggestions": {
+        "title": "Sugerencias para mejorar tu búsqueda:",
+        "checkSpelling": "Verifica la ortografía de tus palabras clave",
+        "tryDifferentKeywords": "Prueba con palabras clave diferentes",
+        "removeFilters": "Quita algunos filtros para ampliar la búsqueda",
+        "broadenSearch": "Usa términos más generales"
+      }
+    },
+    "accessibility": {
+      "resultsFound": "Se encontraron {{count}} campañas"
+    },
+    "loadMore": {
+      "button": "Cargar más",
+      "loading": "Cargando más resultados...",
+      "announcement": "Se cargaron {{count}} resultados más. Mostrando {{loaded}} resultados en total."
+    },
+    "pagination": {
+      "summary": "Página {{page}} de {{totalPages}} ({{totalCount}} resultados en total)",
+      "ariaLabel": "Navegación de páginas de resultados",
+      "page": "Página {{page}}",
+      "currentPage": "Página {{page}}",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "loading": "Cargando...",
+      "loadMore": "Cargar más resultados",
+      "noMoreResults": "No hay más resultados"
+    },
+    "error": {
+      "title": "Error al buscar",
+      "retry": "Intentar de nuevo",
+      "network": {
+        "title": "Sin conexión a internet",
+        "description": "No se puede conectar con el servidor. Verifica tu conexión a internet e inténtalo de nuevo."
+      },
+      "timeout": {
+        "title": "La búsqueda está tardando demasiado",
+        "description": "El servidor no responde. Inténtalo de nuevo o usa los datos locales."
+      },
+      "server": {
+        "title": "Error del servidor",
+        "description": "Hay un problema con el servidor. Inténtalo más tarde o usa los datos locales."
+      },
+      "unknown": {
+        "title": "Error inesperado",
+        "description": "Ha ocurrido un error inesperado. Inténtalo de nuevo."
+      },
+      "actions": {
+        "retry": "Reintentar",
+        "showHelp": "Mostrar ayuda"
+      },
+      "technicalDetails": "Detalles técnicos"
+    }
+  },
+  "filters": {
+    "selectOption": "Seleccionar opción",
+    "timePeriod": "Periodo de tiempo",
+    "campaignStatus": "Estado de la campaña",
+    "location": "Ubicación",
+    "time": {
+      "all": "Cualquier momento",
+      "week": "Última semana",
+      "month": "Último mes",
+      "year": "Último año"
+    },
+    "status": {
+      "all": "Todos los estados",
+      "funding": "En financiación",
+      "successful": "Exitosas",
+      "completed": "Completadas"
+    },
+    "locationOptions": {
+      "all": "Cualquier ubicación",
+      "spain": "España",
+      "europe": "Europa",
+      "global": "Global"
+    }
+  },
   "categories": {
-    "solidary": "Solidario",
-    "libre-software": "Software Libre",
-    "employment": "Generar empleo",
-    "design": "Desde el diseño",
+    "culture": "Cultura",
+    "rights": "Derechos",
+    "education": "Educación",
     "journalism": "Periodismo independiente",
-    "education": "Educativo",
-    "culture": "Crea cultura",
-    "ecology": "Ecológico",
-    "health-and-cares": "Salud y cuidados",
-    "open-data": "Datos abiertos",
-    "democracy": "Democracia y participación",
-    "equity": "Igualdad de género"
+    "health": "Salud",
+    "ecological_transition": "Transición ecológica",
+    "social_economy": "Economía social",
+    "rural": "Rural",
+    "science": "Ciencia"
   },
   "ShareButton": {
     "title": "Difunde este proyecto por el mundo",
@@ -316,7 +447,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sesión",
-    "btnCart": "Ir al checkout"
+    "btnCart": "Ir al checkout",
+    "search": "Buscar",
+    "createProject": "Crea tu proyecto"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
@@ -343,7 +476,13 @@
       "resume": {
         "donationsPrefix": "de donaciones",
         "foundationPrefix": "de aporte a la fundación"
-      }
+      },
+      "show_details": "Ver detalle",
+      "hide_details": "Ocultar desglose",
+      "show_more": "Ver más",
+      "hide": "Ocultar",
+      "donations": "Donaciones",
+      "foundation": "Fundación Platoniq"
     },
     "cart": {
       "freeDonation": {
@@ -369,6 +508,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "¡Enhorabuena! Gracias por tu donación",
+      "emailSent": "Te hemos enviado un resumen a:",
+      "certificate": {
+        "title": "¿Cómo solicito mi certificado?",
+        "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
+      },
+      "donatedProjects": {
+        "title": "Has donado a los siguientes proyectos",
+        "empty": "No se encontraron proyectos donados"
+      },
+      "suggestedProjects": {
+        "title": "Otros proyectos que requieren de tu ayuda",
+        "empty": "No hay proyectos disponibles en este momento"
+      }
+    },
     "page": {
       "title": "Indícanos tus datos de pago",
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
@@ -610,8 +765,18 @@
       "viewAll": "Ver todas",
       "obtained": "Obtenido",
       "minimum": "Mínimo",
+      "optimum": "Óptimo",
       "daysRemaining": "Quedan {{days}} días",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "goForMinimum": "¡A por el mínimo!"
+      },
+      "remaining": {
+        "toOptimum": "Falta para óptimo",
+        "toMinimum": "Falta para mínimo"
+      },
+      "userDonations": "Tus donaciones:"
     },
     "blog": {
       "title": "Se avecinan grandes cambios… ¡no te pierdas nada!",
@@ -642,6 +807,7 @@
       }
     },
     "stats": {
+      "title": "Estadísticas de Goteo",
       "theoryToAction": {
         "title": "De la teoría a la acción",
         "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
@@ -775,6 +941,83 @@
       "nextLevel": {
         "title": "Próximo nivel",
         "description": "Sigue donando para subir de nivel"
+      }
+    }
+  },
+  "me": {
+    "page": {
+      "title": "Actividad",
+      "subtitle": "Consulta tu actividad en Goteo"
+    },
+    "period": {
+      "label": "Periodo",
+      "year": "Año {{year}}"
+    },
+    "donations": {
+      "title": "Mis donaciones",
+      "empty": "Aún no has donado a ningún proyecto",
+      "explore": "Explora proyectos",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/projects",
+      "count": "Donaciones",
+      "total": "Total donado",
+      "recent": "Últimas donaciones",
+      "viewAll": "Ver todas",
+      "certificate": "Solicitar certificado"
+    },
+    "projects": {
+      "title": "Proyectos impulsados",
+      "empty": "Aún no has impulsado ningún proyecto",
+      "create": "Impulsa tu proyecto",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/projects/new",
+      "count": "Proyectos",
+      "raised": "Recaudado",
+      "recent": "Últimos proyectos impulsados",
+      "viewAll": "Ver todos",
+      "createNew": "Crear un proyecto"
+    },
+    "ownedProjects": {
+      "title": "Tus Proyectos Activos",
+      "messageToDonatorsButton": "Mensaje a donantes",
+      "uploadNewsButton": "Subir novedad"
+    },
+    "donatedProjects": {
+      "title": "Proyectos activos donde donaste"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descubre, conecta y dona",
+        "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
+        "button": "Dona a un proyecto"
+      },
+      "matchfunding": {
+        "title": "Donaciones que brillan. Proyectos que inspiran.",
+        "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
+        "learnMore": "Descubre cómo funciona el matchfunding",
+        "becomeMatcher": "Hazte Matcher"
+      }
+    },
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatorias",
+        "donated": "Donado",
+        "recent": "Últimas convocatorias",
+        "viewAll": "Ver convocatorias",
+        "create": "Crear convocatoria"
+      },
+      "section": {
+        "title": "Tus convocatorias de Matchfunding activas",
+        "empty": "No tienes convocatorias activas",
+        "error": "Error al cargar las convocatorias"
+      },
+      "callCard": {
+        "donationCall": "Dotación convocatoria",
+        "participatingProjects": "Proyectos participantes",
+        "successfulProjects": "Proyectos acogidos con éxito",
+        "projects": "proyectos",
+        "viewCall": "Ir a la convocatoria"
       }
     }
   }

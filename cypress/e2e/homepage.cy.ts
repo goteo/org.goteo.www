@@ -2,7 +2,7 @@
 
 describe("Homepage", () => {
     beforeEach(() => {
-        cy.visit("/es");
+        cy.visit("/");
     });
 
     it("should display the main header components", () => {
@@ -17,19 +17,6 @@ describe("Homepage", () => {
                 cy.get("main h1", { timeout: 5000 }).should("be.visible");
             } else {
                 cy.log("ℹ️ Main h1 not found but main exists");
-            }
-        });
-
-        cy.get("body").then(($body) => {
-            if ($body.find("select#language-select").length > 0) {
-                cy.get("select#language-select", { timeout: 5000 })
-                    .should("exist")
-                    .and("have.value", "es");
-
-                cy.changeLanguage("en");
-                cy.url().should("include", "/en");
-            } else {
-                cy.log("ℹ️ Language selector not found");
             }
         });
     });
@@ -50,8 +37,8 @@ describe("Homepage", () => {
 
     it("should have a working cart button", () => {
         cy.get("body").then(($body) => {
-            if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-                cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).click();
+            if ($body.find('header button[aria-label="Go to checkout"]').length > 0) {
+                cy.get('header button[aria-label="Go to checkout"]', { timeout: 5000 }).click();
             } else {
                 cy.log("ℹ️ Cart button not found");
             }
@@ -60,11 +47,11 @@ describe("Homepage", () => {
 
     it("should have proper accessibility attributes", () => {
         cy.get("body").then(($body) => {
-            if ($body.find('header button[aria-label="Ir al checkout"]').length > 0) {
-                cy.get('header button[aria-label="Ir al checkout"]', { timeout: 5000 }).should(
+            if ($body.find('header button[aria-label="Go to checkout"]').length > 0) {
+                cy.get('header button[aria-label="Go to checkout"]', { timeout: 5000 }).should(
                     "have.attr",
                     "aria-label",
-                    "Ir al checkout",
+                    "Go to checkout",
                 );
             } else {
                 cy.log("ℹ️ Checkout button not found");

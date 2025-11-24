@@ -13,9 +13,9 @@
     ];
 </script>
 
-<div class="px-6">
+<div class="lg:px-6">
     <div class="relative">
-        <div class="bg-purple-tint h-4 w-full rounded-full"></div>
+        <div class="bg-variant1 h-4 w-full rounded-full"></div>
 
         <div
             class="bg-primary absolute top-0 left-0 h-4 rounded-full transition-all duration-500"
@@ -28,13 +28,13 @@
             {#each [1, 2, 3, 4] as i}
                 <div
                     class="relative z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 transition-all duration-300"
-                    class:bg-tertiary={i <= step}
-                    class:bg-purple-tint={i > step}
+                    class:bg-secondary={i <= step}
+                    class:bg-variant1={i > step}
                     class:border-primary={i <= step}
                     class:border-black={i > step}
                 >
                     {#if i <= step}
-                        <div class="bg-tertiary h-1.5 w-1.5 rounded-full"></div>
+                        <div class="bg-secondary h-1.5 w-1.5 rounded-full"></div>
                     {/if}
                 </div>
             {/each}

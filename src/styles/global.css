@@ -12,18 +12,29 @@
 @theme {
     /* Light Theme (default) */
     --color-primary: #59e9d3;
-    --color-secondary: #3d3d3d;
-    --color-tertiary: #462949;
-    --color-background: #f8fafc;
+    --color-primary-hover: #4dd0b8;
+    --color-secondary: #462949;
+    --color-tertiary: #e94668;
+    --color-background: #fbfbfb;
+    --color-content: #575757;
     --color-body: #1e293b;
 
     /* Extended color tokens for components */
+    --color-white: #fbfbfb;
+    --color-black: #3d3d3d;
+    --color-grey: #f3f3ef;
+    --color-gray-light: #f3f3f3; /* Light gray for borders */
     --color-light-accent: #e6d9f3; /* Light purple accent for buttons */
     --color-light-surface: #fbfbfb; /* Light background surface */
-    --color-light-muted: #f3f3ef; /* Muted light background */
-    --color-purple-tint: #e6e5f7; /* Light purple tint */
+    --color-soft-purple: #faf9ff;
     --color-neutral-light: #e6e6e6; /* Light neutral border */
-    --color-white: #ffffff; /* Pure white */
+    --color-divider: #f1efff; /* Budget bar divider color */
+    --color-chart-background: #efeeff; /* Chart background color */
+
+    --color-variant1: #e6e5f7;
+    --color-variant2: #99ffcc;
+    --color-variant3: #72d8ff;
+    --color-variant4: #ffff99;
 
     --font-body: "Karla", sans-serif;
     --body-regular: 1rem;
@@ -40,8 +51,8 @@
         /* Dark theme variants for extended tokens */
         --color-light-accent: #4a3c5e; /* Darker purple for dark theme */
         --color-light-surface: #1f1f1f; /* Dark surface */
-        --color-light-muted: #2a2a2a; /* Dark muted background */
-        --color-purple-tint: #3a3551; /* Dark purple tint */
+        --color-grey: #2a2a2a; /* Dark muted background */
+        --color-variant1: #3a3551; /* Dark purple tint */
         --color-neutral-light: #404040; /* Dark neutral border */
         --color-white: #f8f9fa; /* Off-white for dark theme */
     }
