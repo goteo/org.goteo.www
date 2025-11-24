@@ -20,12 +20,10 @@
     --color-body: #1e293b;
 
     /* Extended color tokens for components */
-    --color-white: #fbfbfb;
     --color-black: #3d3d3d;
     --color-grey: #f3f3ef;
     --color-gray-light: #f3f3f3; /* Light gray for borders */
     --color-light-accent: #e6d9f3; /* Light purple accent for buttons */
-    --color-light-surface: #fbfbfb; /* Light background surface */
     --color-soft-purple: #faf9ff;
     --color-neutral-light: #e6e6e6; /* Light neutral border */
     --color-divider: #f1efff; /* Budget bar divider color */
@@ -54,7 +52,7 @@
         --color-grey: #2a2a2a; /* Dark muted background */
         --color-variant1: #3a3551; /* Dark purple tint */
         --color-neutral-light: #404040; /* Dark neutral border */
-        --color-white: #f8f9fa; /* Off-white for dark theme */
+        --color-white: #f8f9fa; /* Off-background for dark theme */
     }
 }
 

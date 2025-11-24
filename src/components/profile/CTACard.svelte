@@ -58,7 +58,7 @@
 
 <div
     class="flex flex-col justify-between gap-10 rounded-[32px] border p-6 transition-shadow duration-200 {isDark
-        ? 'border-grey bg-secondary text-light-surface'
+        ? 'border-grey bg-secondary text-background'
         : 'border-variant1 bg-soft-purple text-content'}"
 >
     <!-- Content -->
@@ -83,7 +83,7 @@
                 'primary'
                     ? 'bg-light-accent text-secondary focus-visible:ring-secondary hover:opacity-90'
                     : isDark
-                      ? 'hover:text-secondary focus-visible:ring-offset-secondary border border-white bg-transparent text-white hover:bg-white focus-visible:ring-white'
+                      ? 'hover:text-secondary focus-visible:ring-offset-secondary border-background text-background hover:bg-background border bg-transparent focus-visible:ring-white'
                       : 'border-secondary text-secondary hover:bg-secondary focus-visible:ring-secondary border bg-transparent hover:text-white'}"
             >
                 {button.label}

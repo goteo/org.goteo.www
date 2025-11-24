@@ -11,7 +11,7 @@
 
 <div
     class={twMerge(
-        "rounded-full bg-white px-4 py-2 text-sm font-bold whitespace-nowrap text-black shadow-md",
+        "bg-background rounded-full px-4 py-2 text-sm font-bold whitespace-nowrap text-black shadow-md",
         classes,
     )}
 >

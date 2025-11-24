@@ -107,7 +107,7 @@
 {#if isEmpty}
     <!-- Empty State -->
     <div
-        class="bg-light-surface border-grey relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border p-6"
+        class="bg-background border-grey relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border p-6"
     >
         <!-- Decorative illustration - positioned exactly as in Figma -->
         <div
@@ -150,7 +150,7 @@
 {:else}
     <!-- Filled State -->
     <div
-        class="bg-light-surface border-grey relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border p-6"
+        class="bg-background border-grey relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border p-6"
     >
         <div class="flex gap-4">
             <div class="flex flex-1 flex-col">

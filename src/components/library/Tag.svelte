@@ -11,7 +11,7 @@
     let { variant = "default", class: classes = "", children }: Props = $props();
 
     const variantStyles = {
-        default: "bg-white border border-black text-secondary",
+        default: "bg-background border border-black text-secondary",
         success: "bg-variant2",
         warning: "bg-variant4",
         error: "bg-tertiary",

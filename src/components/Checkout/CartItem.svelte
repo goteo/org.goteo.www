@@ -21,7 +21,7 @@
 {#if item.amount > 0}
     <div class="flex w-full flex-col gap-4">
         <div
-            class="flex flex-col gap-4 rounded-2xl bg-white p-4 shadow-md md:flex-row md:items-center md:justify-between"
+            class="bg-background flex flex-col gap-4 rounded-2xl p-4 shadow-md md:flex-row md:items-center md:justify-between"
         >
             <div class="flex items-center gap-6">
                 <div

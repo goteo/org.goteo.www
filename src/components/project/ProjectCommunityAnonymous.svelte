@@ -23,7 +23,7 @@
 </script>
 
 <div
-    class="flex cursor-pointer flex-col overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
+    class="bg-background flex cursor-pointer flex-col overflow-hidden rounded-4xl transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
 >
     <div class="flex h-32 w-full items-center justify-center overflow-hidden md:h-auto md:w-1/3">
         <img

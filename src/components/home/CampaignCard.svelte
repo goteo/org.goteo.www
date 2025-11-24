@@ -80,7 +80,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
 <div
     class={twMerge(
-        "bg-light-surface border-grey grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "bg-background border-grey grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
         className,
     )}
@@ -217,7 +217,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                 {#if showOwnerActions}
                     <div class="flex w-full gap-4">
                         <button
-                            class="border-secondary text-secondary hover:bg-secondary flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors hover:text-white"
+                            class="border-secondary text-secondary hover:bg-secondary hover:text-background flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>

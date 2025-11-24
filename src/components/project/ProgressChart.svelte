@@ -220,6 +220,8 @@
     });
 </script>
 
-<div class="relative h-full w-full overflow-hidden rounded-3xl border border-gray-100 bg-white">
+<div
+    class="bg-background relative h-full w-full overflow-hidden rounded-3xl border border-gray-100"
+>
     <canvas bind:this={canvas} class="h-full w-full"></canvas>
 </div>

@@ -543,7 +543,7 @@
     <TableHead class="bg-tertiary">
         {#each tableHeaders as header}
             <TableHeadCell
-                class="text-light-surface py-4 text-base whitespace-nowrap first:rounded-l-md last:rounded-r-md
+                class="text-background py-4 text-base whitespace-nowrap first:rounded-l-md last:rounded-r-md
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
                 onclick={() => handleHeaderClick(header)}
             >
