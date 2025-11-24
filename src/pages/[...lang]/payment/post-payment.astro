@@ -135,9 +135,9 @@ try {
             </div>
         </div>
 
-        <div class="flex w-full flex-col items-start gap-12 md:gap-[72px]">
+        <div class="flex w-full flex-col items-start gap-12 pb-20 md:gap-[72px]">
             <div
-                class="flex flex-col items-start gap-6 self-stretch rounded-[32px] bg-white pt-6 pr-6 pb-6 md:flex-row md:items-center md:gap-10 md:pt-8 md:pr-8 md:pb-8"
+                class="flex flex-col items-start gap-6 self-stretch rounded-[32px] bg-white md:flex-row md:items-center md:gap-10"
             >
                 <div class="h-16 w-16 flex-shrink-0 md:h-20 md:w-20">
                     <img
@@ -161,28 +161,29 @@ try {
                 </div>
             </div>
 
-            <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
-                <p
-                    class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
-                >
-                    {t("payment.postPayment.donatedProjects.title")} ({donatedProjects.length})
-                </p>
-                <div class="-mx-4 w-full px-4 md:mx-0 md:px-0">
-                    {
-                        donatedProjects.length > 0 ? (
-                            <Carousel client:load itemsPerGroup={2} gap={24} showDots={true}>
-                                {donatedProjects.map((project) => (
-                                    <CampaignCard size="small" campaign={project} />
-                                ))}
-                            </Carousel>
-                        ) : (
-                            <p class="text-content text-base">
-                                {t("payment.postPayment.donatedProjects.empty")}
-                            </p>
-                        )
-                    }
-                </div>
-            </div>
+            {
+                donatedProjects.length > 0 && (
+                    <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
+                        <p class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8">
+                            {t("payment.postPayment.donatedProjects.title")} (
+                            {donatedProjects.length})
+                        </p>
+                        <Carousel
+                            client:load
+                            itemsPerGroup={1}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
+                            gap={24}
+                            showDots={true}
+                            class="w-full"
+                        >
+                            {donatedProjects.map((project) => (
+                                <CampaignCard size="small" campaign={project} />
+                            ))}
+                        </Carousel>
+                    </div>
+                )
+            }
 
             <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
                 <p
@@ -190,21 +191,27 @@ try {
                 >
                     {t("payment.postPayment.suggestedProjects.title")}
                 </p>
-                <div class="-mx-4 mb-10 w-full px-4 md:mx-0 md:px-0">
-                    {
-                        suggestedProjects.length > 0 ? (
-                            <Carousel client:load itemsPerGroup={2} gap={24} showDots={true}>
-                                {suggestedProjects.map((project) => (
-                                    <CampaignCard size="small" campaign={project} />
-                                ))}
-                            </Carousel>
-                        ) : (
-                            <p class="text-content text-base">
-                                {t("payment.postPayment.suggestedProjects.empty")}
-                            </p>
-                        )
-                    }
-                </div>
+                {
+                    suggestedProjects.length > 0 ? (
+                        <Carousel
+                            client:load
+                            itemsPerGroup={1}
+                            mobileItemsToShow={1}
+                            desktopItemsToShow={3}
+                            gap={24}
+                            showDots={true}
+                            class="w-full"
+                        >
+                            {suggestedProjects.map((project) => (
+                                <CampaignCard size="small" campaign={project} />
+                            ))}
+                        </Carousel>
+                    ) : (
+                        <p class="text-content text-base">
+                            {t("payment.postPayment.suggestedProjects.empty")}
+                        </p>
+                    )
+                }
             </div>
         </div>
     </section>
