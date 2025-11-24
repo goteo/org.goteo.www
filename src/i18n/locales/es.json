@@ -536,7 +536,7 @@
         "title": "Si la campaña no logra su objetivo",
         "options": {
           "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
-          "2": "Devolverlo a mi medio de pago Tarjeta"
+          "2": "Devolverlo a mi medio de pago"
         }
       },
       "form-review": {

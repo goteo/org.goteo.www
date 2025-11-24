@@ -32,6 +32,7 @@ const { t } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
+let selectedGateway: string | undefined = undefined;
 
 try {
     const url = new URL(Astro.request.url);
@@ -50,6 +51,12 @@ try {
 
     if (!response.data) {
         throw new Error("Data not found");
+    }
+
+    selectedGateway = response.data.gateway.split("/").pop();
+
+    if (response.data.status !== "charged") {
+        throw new Error("Payment not completed");
     }
 
     amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
@@ -125,7 +132,7 @@ const postPaymentUrl = checkoutId
                                             <ApprovedIcon />
                                         </div>
                                         <div>
-                                            <FeedbackForm client:load />
+                                            <FeedbackForm client:load paymentMethod={selectedGateway} />
                                         </div>
                                     </div>
                                 </div>

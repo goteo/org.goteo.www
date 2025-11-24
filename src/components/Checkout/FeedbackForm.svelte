@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    export let paymentMethod: string | undefined = undefined;
     let messageType = "anonymous"; // 'anonymous' o 'public'
 </script>
 
@@ -19,28 +20,27 @@
                         <input
                             type="radio"
                             name="type"
-                            value="individual"
+                            value="organization"
                             checked
+                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
+                        />
+                    </div>
+                    <span class="text-gray-700"
+                    >{$t("payment.page-aproved.form-goal.options.2")} <span class="capitalize">{paymentMethod}</span></span
+                    >
+                </label>
+                <label class="flex cursor-pointer items-center gap-2">
+                    <div class="w-6">
+                        <input
+                            type="radio"
+                            name="type"
+                            value="individual"
                             class="custom-radio relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
                         />
                     </div>
                     <span class="text-gray-700">
                         {$t("payment.page-aproved.form-goal.options.1")}
                     </span>
-                </label>
-
-                <label class="flex cursor-pointer items-center gap-2">
-                    <div class="w-6">
-                        <input
-                            type="radio"
-                            name="type"
-                            value="organization"
-                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
-                        />
-                    </div>
-                    <span class="text-gray-700"
-                        >{$t("payment.page-aproved.form-goal.options.2")}</span
-                    >
                 </label>
             </fieldset>
 
