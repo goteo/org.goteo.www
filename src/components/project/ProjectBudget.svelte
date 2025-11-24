@@ -110,7 +110,8 @@
                                     class="inline-block h-[10px] w-5 rounded-lg"
                                     style={`background-color: ${typeBudget[item.type]}`}
                                 ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span>
+                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
+                                >
                             </div>
                         </div>
                     </div>
@@ -155,7 +156,8 @@
                                     class="inline-block h-[10px] w-5 rounded-lg"
                                     style={`background-color: ${typeBudget[item.type]}`}
                                 ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span>
+                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
+                                >
                             </div>
                         </div>
                     </div>
