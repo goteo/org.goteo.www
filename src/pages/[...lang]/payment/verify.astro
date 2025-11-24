@@ -132,7 +132,10 @@ const postPaymentUrl = checkoutId
                                             <ApprovedIcon />
                                         </div>
                                         <div>
-                                            <FeedbackForm client:load paymentMethod={selectedGateway} />
+                                            <FeedbackForm
+                                                client:load
+                                                paymentMethod={selectedGateway}
+                                            />
                                         </div>
                                     </div>
                                 </div>

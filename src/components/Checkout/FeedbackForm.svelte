@@ -26,7 +26,8 @@
                         />
                     </div>
                     <span class="text-gray-700"
-                    >{$t("payment.page-aproved.form-goal.options.2")} <span class="capitalize">{paymentMethod}</span></span
+                        >{$t("payment.page-aproved.form-goal.options.2")}
+                        <span class="capitalize">{paymentMethod}</span></span
                     >
                 </label>
                 <label class="flex cursor-pointer items-center gap-2">
