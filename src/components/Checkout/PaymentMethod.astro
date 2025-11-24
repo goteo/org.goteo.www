@@ -30,7 +30,7 @@ const { accounting } = Astro.props;
             class="flex flex-col gap-4"
             data-balance={accounting.balance.amount}
         >
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {
                     (paymentGateways ?? []).map((gateway) => (
                         <label
