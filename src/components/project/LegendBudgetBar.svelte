@@ -30,8 +30,9 @@
         {#each legendEntries as [key, color]}
             <div class="flex flex-row items-center gap-2">
                 <div class="h-4 w-6 rounded-sm" style="background-color: {color};"></div>
-                <span class="text-base text-black capitalize">{$t(`project.tabs.budget.typeBudget.${key}`)}</span
-                >
+                <span class="text-base text-black capitalize">
+                    {$t(`project.tabs.budget.typeBudget.${key}`)}
+                </span>
             </div>
         {/each}
     </div>
