@@ -14,6 +14,7 @@
     export let totalSupports: number = 0;
     export let accounting: Accounting;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    export let onScrollToRewards: () => void;
 
     function hasReached(money?: Money) {
         return (
@@ -21,16 +22,6 @@
             accounting.balance?.amount !== undefined &&
             Number(accounting.balance.amount) - Number(money.amount) > 0
         );
-    }
-
-    function scrollToRewards() {
-        const rewardsElement = document.getElementById("tab-rewards");
-        if (rewardsElement) {
-            rewardsElement.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
-            });
-        }
     }
 </script>
 
@@ -92,7 +83,7 @@
             </div>
         </div>
     </div>
-    <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={scrollToRewards}>
+    <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={onScrollToRewards}>
         {$t("campaignProgress.donate")}
     </Button>
 </div>
