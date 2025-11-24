@@ -31,7 +31,7 @@
 </script>
 
 <li
-    class="border-light-muted flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >

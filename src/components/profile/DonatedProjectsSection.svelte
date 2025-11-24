@@ -52,6 +52,8 @@
 
             if (chargesError) {
                 console.error("Failed to fetch gateway charges:", chargesError);
+                donatedCampaigns = [];
+                loading = false;
                 return;
             }
 
@@ -118,6 +120,9 @@
                                     return null;
                                 }
 
+                                // Only show projects that are in campaign
+                                if (project.status !== "in_campaign") return null;
+
                                 // Calculate days remaining
                                 let daysRemaining: number | undefined;
                                 if (project.calendar?.minimum) {
@@ -126,7 +131,6 @@
                                     const diffTime = endDate.getTime() - today.getTime();
                                     daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                                 }
-
                                 return {
                                     id: project.slug!,
                                     title: project.title!,

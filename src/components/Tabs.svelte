@@ -17,7 +17,7 @@
     
     Design System:
     - Active: border-primary, text-secondary
-    - Inactive: border-purple-tint, text-tertiary
+    - Inactive: border-variant1, text-tertiary
     - Hover: opacity-80
     - Transition: 200ms ease
 -->
@@ -86,7 +86,7 @@
                 class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 transition-all duration-200 {currentTab ===
                 tab.id
                     ? 'border-primary text-secondary'
-                    : 'border-purple-tint text-tertiary'}"
+                    : 'border-variant1 text-tertiary'}"
                 onclick={() => handleTabClick(tab.id)}
                 data-tab={tab.id}
             >

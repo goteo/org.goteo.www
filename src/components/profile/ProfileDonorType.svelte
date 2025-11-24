@@ -22,7 +22,7 @@
 <div class="mx-auto mt-10 flex w-full gap-6 px-10">
     <!-- Fan Card -->
     <div
-        class="bg-light-muted border-light-muted flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6 shadow-sm"
+        class="bg-grey border-grey flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6 shadow-sm"
     >
         <div class="flex flex-col gap-10">
             <div class="flex items-center justify-between">
@@ -61,7 +61,7 @@
 
     <!-- Next Level Card -->
     <div
-        class="bg-light-surface border-light-muted flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6"
+        class="bg-light-surface border-grey flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6"
     >
         <div class="flex flex-col gap-2">
             <p class="text-secondary text-4xl leading-tight font-bold">
@@ -77,10 +77,10 @@
 
             <!-- Progress Bar -->
             <div
-                class="bg-light-surface border-light-muted flex h-4 w-full grow rounded-lg border p-[2px] shadow-lg"
+                class="bg-light-surface border-grey flex h-4 w-full grow rounded-lg border p-[2px] shadow-lg"
             >
                 <div
-                    class="from-light-muted h-3 w-[86px] rounded-lg bg-gradient-to-r to-[#c2eeff] shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
+                    class="from-grey h-3 w-[86px] rounded-lg bg-gradient-to-r to-[#c2eeff] shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
                 ></div>
             </div>
 

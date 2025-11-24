@@ -103,7 +103,7 @@
             <!-- Call to Action Button -->
             <a
                 href={callUrl}
-                class="bg-purple-tint text-secondary focus:ring-primary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 hover:opacity-90 focus:ring-2 focus:outline-none"
+                class="bg-variant1 text-secondary focus:ring-primary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 hover:opacity-90 focus:ring-2 focus:outline-none"
             >
                 {$t("me.matchfunding.callCard.viewCall")}
             </a>
@@ -112,7 +112,7 @@
         <!-- Right: Logo Card -->
         {#if call.logo}
             <div
-                class="border-light-muted flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-[32px] border border-solid bg-white p-8 md:size-56 lg:size-64"
+                class="border-grey flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-[32px] border border-solid bg-white p-8 md:size-56 lg:size-64"
             >
                 <div class="relative aspect-[250/124] w-full shrink-0">
                     <img

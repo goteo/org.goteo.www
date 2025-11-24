@@ -5,7 +5,8 @@ Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import { categories } from "../../utils/categories";
+    import { apiCategoriesGetCollection, type Category } from "../../openapi/client";
+    import CategorySelect, { type Option } from "../library/CategorySelect.svelte";
 
     interface Props {
         selectedCategories?: string[];
@@ -16,32 +17,28 @@ Implements active/inactive pill states matching Figma design
 
     let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
 
-    let selectedCats = $state([...selectedCategories]);
+    let categories = getAvailableCategories();
+    let selected = $state(
+        selectedCategories.map((s) => {
+            return { id: s, text: $t("categories." + s) };
+        }),
+    );
 
-    // Keep local state in sync with prop changes (important for SSR hydration)
-    $effect(() => {
-        selectedCats = [...selectedCategories];
-    });
+    async function getAvailableCategories(): Promise<Category[]> {
+        const { data } = await apiCategoriesGetCollection();
 
-    function toggleCategory(categoryId: string) {
-        const index = selectedCats.indexOf(categoryId);
-
-        if (index === -1) {
-            // Add category
-            selectedCats = [...selectedCats, categoryId];
-        } else {
-            // Remove category
-            selectedCats = selectedCats.filter((id) => id !== categoryId);
+        if (!data) {
+            return [];
         }
 
-        onCategoryChange?.(selectedCats);
+        return data;
     }
 
-    function handleKeydown(event: KeyboardEvent, categoryId: string) {
-        if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-            toggleCategory(categoryId);
-        }
+    function mapCategoryToOption(category: Category): Option {
+        return {
+            id: category.id!,
+            text: $t("categories." + category.id!),
+        };
     }
 </script>
 
@@ -52,33 +49,18 @@ Implements active/inactive pill states matching Figma design
         </h3>
     {/if}
 
-    <div class="flex flex-wrap gap-4">
-        {#each categories as category}
-            {@const isSelected = selectedCats.includes(category.id)}
-            <button
-                type="button"
-                class="inline-flex items-center rounded-full px-4 py-2 font-['Karla'] text-base font-bold transition-all duration-200 focus:ring-2 focus:ring-[#59e9d3] focus:ring-offset-2 focus:outline-none"
-                class:bg-[#462949]={isSelected}
-                class:text-[#59e9d3]={isSelected}
-                class:border-[#462949]={!isSelected}
-                class:border={!isSelected}
-                class:text-[#462949]={!isSelected}
-                class:bg-[#fbfbfb]={!isSelected}
-                class:hover:bg-[#e6e5f7]={!isSelected}
-                onclick={() => toggleCategory(category.id)}
-                onkeydown={(e) => handleKeydown(e, category.id)}
-                aria-pressed={isSelected}
-                aria-label={`${isSelected ? $t("search.deselectCategory") : $t("search.selectCategory")} ${$t(category.translationKey)}`}
-                data-testid={`category-${category.id}`}
-            >
-                {$t(category.translationKey)}
-            </button>
-        {/each}
-    </div>
+    {#await categories then categories}
+        <CategorySelect
+            bind:selected
+            selectedIds={selected.map((s) => s.id)}
+            options={categories.map((c) => mapCategoryToOption(c))}
+            onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
+        />
+    {/await}
 
-    {#if selectedCats.length > 0}
+    {#if selected.length > 0}
         <div class="mt-4 text-sm text-[#3d3d3d] opacity-70">
-            {$t("search.selectedCategories", { count: selectedCats.length })}
+            {$t("search.selectedCategories", { count: selected.length })}
         </div>
     {/if}
 </div>
