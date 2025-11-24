@@ -943,5 +943,113 @@
         "positive": "El pressupost ha de ser un valor positiu"
       }
     }
+  },
+  "wizard": {
+    "header": {
+      "titlePlaceholder": "Títol de campanya",
+      "subtitlePlaceholder": "Descripció breu de la campanya, l'actual; subtítol de déus."
+    },
+    "buttons": {
+      "preview": "Previsualitzar",
+      "save": "Guardar",
+      "publish": "Publicar",
+      "continue": "Continuar amb info de campanya"
+    },
+    "steps": {
+      "configuration": "Configuració",
+      "campaign_info": "Informació de campanya",
+      "rewards": "Recompenses",
+      "collaborations": "Col·laboracions",
+      "budget": "Pressupost",
+      "about_you": "Sobre tu"
+    },
+    "configuration": {
+      "title": "Configuració",
+      "subtitle": "Configura les dades bàsiques de la teva campanya",
+      "languages": {
+        "title": "Idiomes de la campanya",
+        "description": "Quins són els idiomes en què publicaràs la informació de campanya.",
+        "primaryLabel": "Idioma principal de la campanya",
+        "secondaryLabel": "Idioma secundari {{index}}",
+        "selectPlaceholder": "Selecciona un idioma",
+        "addButton": "Afegir un altre",
+        "removeButton": "Eliminar idioma",
+        "options": {
+          "es": "Español",
+          "en": "English",
+          "ca": "Català",
+          "fr": "Français",
+          "de": "Deutsch",
+          "it": "Italiano",
+          "pt": "Português"
+        }
+      },
+      "geography": {
+        "title": "Indica l'abast geogràfic",
+        "description": "Descriu a qui va dirigit el teu projecte",
+        "scopeLabel": "Abast geogràfic",
+        "scopePlaceholder": "Selecciona l'abast",
+        "localitiesLabel": "Indica localitats",
+        "localitiesPlaceholder": "Ex: Barcelona, Madrid, València",
+        "localitiesHelper": "Separa les localitats amb comes.",
+        "options": {
+          "local": "Local",
+          "estatal": "Estatal",
+          "internacional": "Internacional"
+        }
+      },
+      "rounds": {
+        "title": "Tria les rondes que tindrà la teva campanya",
+        "description": "La configuració predeterminada són 40 dies cada ronda, pots sol·licitar modificacions al teu assessor si el teu projecte és seleccionat",
+        "option1": "1 Ronda",
+        "option2": "2 Rondes"
+      }
+    },
+    "campaignInfo": {
+      "media": {
+        "addImage": "Afegir imatge",
+        "addVideo": "Afegir vídeo",
+        "videoPlaceholder": "Enganxa l'URL del vídeo de YouTube o Vimeo",
+        "confirmDelete": "Eliminar {{name}}?",
+        "maxImagesReached": "Màxim {{max}} imatges assolit",
+        "removeVideo": "Eliminar vídeo",
+        "uploading": "Pujant...",
+        "processing": "Processant {{name}}...",
+        "fileInputLabel": "Seleccionar imatge per pujar",
+        "uploadedImages": "Imatges pujades",
+        "removeImage": "Eliminar imatge: {{name}}"
+      }
+    },
+    "placeholders": {
+      "configurationStep": "Aquest pas s'implementarà aviat.",
+      "campaignInfoStep": "Informació de campanya - Aquest pas s'implementarà a la Fase 2.",
+      "rewardsStep": "Recompenses - Aquest pas s'implementarà a la Fase 3.",
+      "collaborationsStep": "Col·laboracions - Aquest pas s'implementarà a la Fase 4.",
+      "budgetStep": "Pressupost - Aquest pas s'implementarà a la Fase 5.",
+      "aboutYouStep": "Sobre tu - Aquest pas s'implementarà a la Fase 6.",
+      "step_not_implemented": "Aquest pas s'implementarà properament."
+    },
+    "validation": {
+      "languages": "Has de seleccionar almenys un idioma",
+      "geographicScope": "Has de seleccionar un abast geogràfic",
+      "localities": "Has d'indicar les localitats per a l'abast local",
+      "campaign_info": {
+        "media": {
+          "required": "Has d'afegir almenys una imatge o un vídeo",
+          "image_too_large": "La imatge és massa gran. Mida màxima: 500 KB",
+          "invalid_image": "Format d'imatge no vàlid",
+          "max_images": "Màxim 3 imatges permeses",
+          "upload_failed": "Error en pujar la imatge. Si us plau, torna-ho a intentar"
+        }
+      }
+    },
+    "errors": {
+      "storage": {
+        "title": "Error en guardar",
+        "quota_exceeded": "L'emmagatzematge local està ple. Si us plau, allibera espai o utilitza el navegador en mode privat.",
+        "save_failed": "No s'ha pogut guardar l'esborrany automàticament. Els teus canvis poden perdre's.",
+        "close": "Tancar alerta"
+      }
+    }
   }
 }

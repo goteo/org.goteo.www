@@ -1,11 +1,11 @@
-import type { ApiMoney } from "../openapi/client";
+import type { Money } from "../openapi/client";
 
 export interface Campaign {
     id: string;
     title: string;
     image: string;
-    obtained: ApiMoney;
-    minimum: ApiMoney;
+    obtained: Money;
+    minimum: Money;
     hasMatchfunding?: boolean;
     tags?: string[];
     size: CampaignSize; // Add size to the campaign data
