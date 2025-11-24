@@ -151,7 +151,7 @@
     <button
         class="bg-primary text-secondary h-auto w-full cursor-pointer rounded-3xl px-6 py-4 font-bold"
         class:bg-primary={!copied}
-        class:bg-purple-tint={copied}
+        class:bg-variant1={copied}
         onclick={() => {
             navigator.clipboard.writeText(iframeCode);
             copied = true;

@@ -273,7 +273,7 @@
 <div class={wrapperClasses}>
     <button
         onclick={() => scroll("left")}
-        class="bg-purple-tint absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class="bg-variant1 absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
         disabled={isAtStart}
         aria-label="Scroll left"
     >
@@ -305,7 +305,7 @@
 
     <button
         onclick={() => scroll("right")}
-        class="bg-purple-tint absolute top-1/2 -right-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class="bg-variant1 absolute top-1/2 -right-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
         disabled={isAtEnd}
         aria-label="Scroll right"
     >

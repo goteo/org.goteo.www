@@ -1,18 +1,18 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
         text: string;
-        class?: string;
+        class?: ClassNameValue;
     }
 
-    let { text, class: className = "" }: Props = $props();
+    let { text, class: classes = "" }: Props = $props();
 </script>
 
 <div
     class={twMerge(
         "rounded-full bg-white px-4 py-2 text-sm font-bold whitespace-nowrap text-black shadow-md",
-        className,
+        classes,
     )}
 >
     {text}

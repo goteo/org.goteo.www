@@ -107,7 +107,7 @@
 {#if isEmpty}
     <!-- Empty State -->
     <div
-        class="bg-light-surface border-light-muted relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border p-6"
+        class="bg-light-surface border-grey relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border p-6"
     >
         <!-- Decorative illustration - positioned exactly as in Figma -->
         <div
@@ -140,7 +140,7 @@
             <div class="relative z-10 flex w-full gap-4">
                 <a
                     href={emptyCtaLink}
-                    class="bg-purple-tint text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none"
+                    class="bg-variant1 text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none"
                 >
                     {$t(emptyCtaLabel)}
                 </a>
@@ -150,7 +150,7 @@
 {:else}
     <!-- Filled State -->
     <div
-        class="bg-light-surface border-light-muted relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border p-6"
+        class="bg-light-surface border-grey relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border p-6"
     >
         <div class="flex gap-4">
             <div class="flex flex-1 flex-col">
@@ -212,7 +212,7 @@
             </a>
             <a
                 href={secondaryActionHref}
-                class="bg-purple-tint text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none md:py-4 md:text-base"
+                class="bg-variant1 text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(secondaryActionLabel)}</span>
             </a>

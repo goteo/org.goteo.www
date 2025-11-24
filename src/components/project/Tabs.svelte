@@ -19,14 +19,14 @@
         accounting: Accounting;
     }>();
 
-    let activeTab = $state("rewards");
+    let activeTab = $state("project");
     let tabsContainer: HTMLDivElement;
     let canScrollLeft = $state(false);
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "project", label: $t("project.tabs.project") },
+        { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "budget", label: $t("project.tabs.budget.title") },
         { id: "updates", label: $t("project.tabs.updates.title") },
         { id: "community", label: $t("project.tabs.community.title") },
@@ -34,6 +34,10 @@
 
     function selectTab(tabId: string) {
         activeTab = tabId;
+    }
+
+    export function activateRewardsTab() {
+        activeTab = "rewards";
     }
 
     function updateScrollButtons() {
@@ -67,7 +71,7 @@
 <div class="relative">
     <button
         onclick={() => scrollTabs("left")}
-        class="bg-purple-tint absolute top-5 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-r-sm p-2 shadow-md lg:hidden"
+        class="bg-variant1 absolute top-5 left-0 z-10 h-8 w-8 -translate-y-1/2 rounded-r-sm p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollLeft}
         class:pointer-events-none={!canScrollLeft}
         aria-label="Scroll tabs left"
@@ -89,8 +93,8 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-secondary lg:border-purple-tint inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
-                class:bg-purple-tint={activeTab === tab.id}
+                class="text-secondary lg:border-variant1 inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
+                class:bg-variant1={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
                 {tab.label}
@@ -100,7 +104,7 @@
 
     <button
         onclick={() => scrollTabs("right")}
-        class="bg-purple-tint absolute top-5 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-l-sm p-2 shadow-md lg:hidden"
+        class="bg-variant1 absolute top-5 right-0 z-10 h-8 w-8 -translate-y-1/2 rounded-l-sm p-2 shadow-md lg:hidden"
         class:opacity-50={!canScrollRight}
         class:pointer-events-none={!canScrollRight}
         aria-label="Scroll tabs right"
@@ -117,7 +121,7 @@
         }
     </style>
 
-    <div class="bg-purple-tint flex w-full justify-center py-10 lg:py-20">
+    <div class="bg-variant1 flex w-full justify-center py-10 lg:py-20">
         <div class="wrapper flex items-center justify-center">
             {#if activeTab === "rewards"}
                 <div

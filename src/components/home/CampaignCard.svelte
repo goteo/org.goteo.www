@@ -11,7 +11,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import ClockIcon from "../../svgs/ClockIcon.svelte";
     import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import ProjectTag from "../library/ProjectTag.svelte";
+    import Tag from "../library/Tag.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
 
     interface Props {
@@ -80,7 +80,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
 <div
     class={twMerge(
-        "bg-light-surface border-light-muted rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "bg-light-surface border-grey grow basis-0 rounded-[32px] border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
         className,
     )}
@@ -98,22 +98,18 @@ Converted from CampaignCard.astro to maintain exact functionality
                 <div class="absolute top-4 left-4 flex gap-2">
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
-                        <ProjectTag>
-                            {#snippet children()}
-                                <MatchFundingIcon />
-                                <span>{$t("home.campaigns.matchfunding")}</span>
-                            {/snippet}
-                        </ProjectTag>
+                        <Tag>
+                            <MatchFundingIcon />
+                            <span>{$t("home.campaigns.matchfunding")}</span>
+                        </Tag>
                     {/if}
 
                     <!-- Additional Tags -->
                     {#if campaign.tags}
                         {#each campaign.tags as tag}
-                            <ProjectTag>
-                                {#snippet children()}
-                                    {tag}
-                                {/snippet}
-                            </ProjectTag>
+                            <Tag>
+                                {tag}
+                            </Tag>
                         {/each}
                     {/if}
                 </div>
@@ -226,7 +222,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
-                            class="bg-purple-tint text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
+                            class="bg-variant1 text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.uploadNewsButton")}
                         </button>

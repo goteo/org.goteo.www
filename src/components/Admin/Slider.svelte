@@ -51,7 +51,7 @@
     <div bind:this={mainCarousel} class="main-carousel h-full opacity-{isLoaded ? 100 : 0}">
         {#each slides as { title, amount }}
             <div
-                class="carousel-cell border-purple-tint bg-soft-purple mr-6 flex h-full w-[22.5%] flex-col items-start justify-center gap-4 rounded-xl border p-8 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="carousel-cell border-variant1 bg-soft-purple mr-6 flex h-full w-[22.5%] flex-col items-start justify-center gap-4 rounded-xl border p-8 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <span class="text-content text-base font-semibold">{title}</span>
                 <span class="text-tertiary text-[40px]">{amount}</span>
