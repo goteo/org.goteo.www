@@ -78,9 +78,7 @@
     </button>
 
     {#if open}
-        <div
-            class="bg-white absolute z-10 mt-1 w-full rounded-md border border-gray-200 shadow-md"
-        >
+        <div class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-md">
             {#each languages as lang (lang)}
                 <button
                     type="button"

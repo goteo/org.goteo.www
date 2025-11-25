@@ -147,7 +147,7 @@
                             {#each results.filter((r) => r.type === "project") as item}
                                 <button
                                     type="button"
-                                    class="bg-white w-full cursor-pointer rounded-lg border p-4 text-left shadow transition hover:shadow-md"
+                                    class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
                                         onSelectTarget(item.data.accounting);
                                         query = "";
@@ -183,7 +183,7 @@
                             {#each results.filter((r) => r.type === "tipjar") as item}
                                 <button
                                     type="button"
-                                    class="bg-white w-full cursor-pointer rounded-lg border p-4 text-left shadow transition hover:shadow-md"
+                                    class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
                                         onSelectTarget(item.data.accounting);
                                         query = "";
@@ -217,7 +217,7 @@
                             {#each results.filter((r) => r.type === "user") as item}
                                 <button
                                     type="button"
-                                    class="bg-white w-full cursor-pointer rounded-lg border p-4 text-left shadow transition hover:shadow-md"
+                                    class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
                                         onSelectTarget(item.data.accounting);
                                         query = "";

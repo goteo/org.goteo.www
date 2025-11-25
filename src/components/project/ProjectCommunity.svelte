@@ -122,11 +122,11 @@
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="bg-white fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     {#if selectedProjectSupport}
-        <div class="bg-white flex cursor-pointer flex-col gap-4 p-4 px-6 py-4">
+        <div class="flex cursor-pointer flex-col gap-4 bg-white p-4 px-6 py-4">
             <div class="flex flex-row items-center justify-between gap-4">
                 <div>
                     <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>

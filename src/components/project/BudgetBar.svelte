@@ -94,7 +94,7 @@
             style="left: {animValues.balance}%; transform: translateX(-50%); top: 1rem;"
         >
             <div class="bg-secondary border-secondary h-7 border-r-2 border-solid"></div>
-            <div class="border-white h-12 border-r-2 border-solid"></div>
+            <div class="h-12 border-r-2 border-solid border-white"></div>
             <div
                 class="bg-secondary absolute top-0 right-0 h-3 w-3 translate-x-1/2 -translate-y-1/2 rounded-full"
             ></div>

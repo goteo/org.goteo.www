@@ -87,7 +87,7 @@
                 </label>
                 <textarea
                     id="review-message"
-                    class="border-secondary focus:ring-secondary bg-white w-full appearance-none rounded-md border p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
+                    class="border-secondary focus:ring-secondary w-full appearance-none rounded-md border bg-white p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                     name="review"
                     placeholder="Escribe tu mensaje de apoyo al impulsor..."
                     rows="4"

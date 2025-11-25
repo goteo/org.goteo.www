@@ -58,7 +58,7 @@
                 <!-- Title -->
                 <div class="flex w-full flex-col gap-2">
                     <h3
-                        class="text-white min-w-full text-3xl leading-tight font-bold md:text-4xl lg:text-5xl"
+                        class="min-w-full text-3xl leading-tight font-bold text-white md:text-4xl lg:text-5xl"
                     >
                         {call.title}
                     </h3>
@@ -67,7 +67,7 @@
                 <!-- Stats Row (Horizontal on desktop, vertical on mobile) -->
                 <div class="flex w-full flex-col items-start gap-4 md:h-16 md:flex-row md:gap-6">
                     <!-- Donation Amount -->
-                    <div class="text-white flex flex-col items-start">
+                    <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
                             {$t("me.matchfunding.callCard.donationCall")}
                         </p>
@@ -77,7 +77,7 @@
                     </div>
 
                     <!-- Participating Projects -->
-                    <div class="text-white flex flex-col items-start">
+                    <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
                             {$t("me.matchfunding.callCard.participatingProjects")}
                         </p>
@@ -88,7 +88,7 @@
                     </div>
 
                     <!-- Successful Projects -->
-                    <div class="text-white flex flex-col items-start">
+                    <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
                             {$t("me.matchfunding.callCard.successfulProjects")}
                         </p>
@@ -112,7 +112,7 @@
         <!-- Right: Logo Card -->
         {#if call.logo}
             <div
-                class="border-grey bg-white flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-[32px] border border-solid p-8 md:size-56 lg:size-64"
+                class="border-grey flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-[32px] border border-solid bg-white p-8 md:size-56 lg:size-64"
             >
                 <div class="relative aspect-[250/124] w-full shrink-0">
                     <img

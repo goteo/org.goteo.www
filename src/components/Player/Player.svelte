@@ -111,7 +111,7 @@
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="text-white h-16 w-16 opacity-90"
+                        class="h-16 w-16 text-white opacity-90"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                     >
@@ -151,7 +151,7 @@
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="text-white h-16 w-16 opacity-90"
+                        class="h-16 w-16 text-white opacity-90"
                         fill="currentColor"
                         viewBox="0 0 24 24"
                     >

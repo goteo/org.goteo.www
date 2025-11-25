@@ -93,7 +93,7 @@
 
                 {#each minimumItems as item}
                     <div
-                        class="bg-white flex w-full flex-col justify-between gap-6 rounded-4xl p-6 font-bold"
+                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
                     >
                         <div class="flex flex-col gap-4">
                             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
@@ -138,7 +138,7 @@
 
                 {#each optimumItems as item}
                     <div
-                        class="bg-white flex w-full flex-col justify-between gap-6 rounded-4xl p-6 font-bold"
+                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
                     >
                         <div class="flex flex-col gap-4">
                             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>

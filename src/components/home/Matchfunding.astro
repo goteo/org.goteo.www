@@ -56,7 +56,7 @@ const calls: CallCard[] = [
 ];
 ---
 
-<section class="bg-secondary text-white w-full">
+<section class="bg-secondary w-full text-white">
     <div class="wrapper relative !my-[-32px]">
         <!-- Two top info panels -->
         <div class="flex flex-col gap-6">
@@ -69,14 +69,14 @@ const calls: CallCard[] = [
                         <h2 class="text-light-accent text-4xl font-bold">
                             {t("home.matchfunding.title")}
                         </h2>
-                        <p class="text-white text-base leading-6">
+                        <p class="text-base leading-6 text-white">
                             {t("home.matchfunding.description")}
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-4">
                         <a
                             href="/matchfunding"
-                            class="group text-white relative flex items-center gap-2 rounded-3xl border border-white/40 bg-white/20 px-6 py-4 text-sm font-bold backdrop-blur-md transition hover:bg-white/30"
+                            class="group relative flex items-center gap-2 rounded-3xl border border-white/40 bg-white/20 px-6 py-4 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/30"
                         >
                             {t("home.matchfunding.actions.learnMore")}
                         </a>
@@ -96,7 +96,7 @@ const calls: CallCard[] = [
                         <h3 class="text-light-accent text-4xl font-bold">
                             {t("home.matchfunding.impact.title")}
                         </h3>
-                        <p class="text-white text-base leading-6">
+                        <p class="text-base leading-6 text-white">
                             {t("home.matchfunding.impact.description")}
                         </p>
                     </div>
@@ -104,7 +104,7 @@ const calls: CallCard[] = [
                         {
                             impact.map((item) => (
                                 <div class="flex flex-col gap-2" data-label={item.label}>
-                                    <span class="text-white text-sm">{item.label}</span>
+                                    <span class="text-sm text-white">{item.label}</span>
                                     <span class="text-4xl font-bold tracking-tight">
                                         {item.value}
                                     </span>
@@ -120,7 +120,7 @@ const calls: CallCard[] = [
                 {
                     calls.map((card) => (
                         <div
-                            class="text-white relative flex w-full flex-col justify-between overflow-hidden rounded-3xl bg-cover bg-center lg:w-1/2"
+                            class="relative flex w-full flex-col justify-between overflow-hidden rounded-3xl bg-cover bg-center text-white lg:w-1/2"
                             style={`background-image:url(${card.background});`}
                         >
                             <div class="relative z-10 flex flex-col gap-10 p-10">
@@ -129,9 +129,7 @@ const calls: CallCard[] = [
                                     <div class="flex gap-6">
                                         {card.stats.map((s) => (
                                             <div class="flex flex-col">
-                                                <span class="text-white text-sm">
-                                                    {s.label}
-                                                </span>
+                                                <span class="text-sm text-white">{s.label}</span>
                                                 <span class="text-2xl font-bold">{s.value}</span>
                                             </div>
                                         ))}
@@ -145,7 +143,7 @@ const calls: CallCard[] = [
                                 </a>
                             </div>
                             {card.tag && (
-                                <div class="bg-tertiary text-white absolute top-6 right-6 z-20 rounded px-2 py-1 text-xs font-medium">
+                                <div class="bg-tertiary absolute top-6 right-6 z-20 rounded px-2 py-1 text-xs font-medium text-white">
                                     {card.tag}
                                 </div>
                             )}

@@ -33,7 +33,7 @@
 
 <select
     id="language-select"
-    class="bg-white rounded-lg border-none font-bold shadow-sm"
+    class="rounded-lg border-none bg-white font-bold shadow-sm"
     on:change={handleSelect}
 >
     {#each languages as lang}
