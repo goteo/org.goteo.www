@@ -60,9 +60,7 @@
     </div>
 
     <!-- Next Level Card -->
-    <div
-        class="bg-light-surface border-grey flex max-h-64 grow flex-col gap-6 rounded-3xl border p-6"
-    >
+    <div class="border-grey flex max-h-64 grow flex-col gap-6 rounded-3xl border bg-white p-6">
         <div class="flex flex-col gap-2">
             <p class="text-secondary text-4xl leading-tight font-bold">
                 {$t("profile.donorType.nextLevel.title")}
@@ -77,7 +75,7 @@
 
             <!-- Progress Bar -->
             <div
-                class="bg-light-surface border-grey flex h-4 w-full grow rounded-lg border p-[2px] shadow-lg"
+                class="border-grey flex h-4 w-full grow rounded-lg border bg-white p-[2px] shadow-lg"
             >
                 <div
                     class="from-grey h-3 w-[86px] rounded-lg bg-gradient-to-r to-[#c2eeff] shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"

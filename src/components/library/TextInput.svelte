@@ -70,7 +70,7 @@
         {disabled}
         {placeholder}
         class={twMerge(
-            "peer bg-light-surface border-secondary focus:ring-tertiary w-full rounded-md border p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
+            "peer border-secondary focus:ring-tertiary w-full rounded-md border bg-white p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
             disabled && "cursor-not-allowed",
             classes,
         )}

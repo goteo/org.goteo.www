@@ -98,7 +98,7 @@
                     </TableHead>
                     <TableBody class="text-base">
                         {#each trackingCodes as item}
-                            <TableBodyRow class=" bg-light-surface">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
                                     class="border-variant1  rounded-l-md border-t border-b border-l"
                                     >{item.title}</TableBodyCell
@@ -190,7 +190,7 @@
                     </TableHead>
                     <TableBody class="text-base">
                         {#each platformLinks as item}
-                            <TableBodyRow class=" bg-light-surface">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
                                     class="border-variant1  rounded-l-md border-t border-b border-l"
                                 >

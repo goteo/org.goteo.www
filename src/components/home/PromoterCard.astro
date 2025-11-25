@@ -10,7 +10,7 @@ const { promoter } = Astro.props;
 const { t } = Astro.locals;
 ---
 
-<div class="bg-light-surface relative overflow-hidden rounded-3xl shadow-lg">
+<div class="relative overflow-hidden rounded-3xl bg-white shadow-lg">
     <!-- Decorative background with gradient and shapes -->
     <div class="bg-secondary relative h-[389px] overflow-hidden rounded-t-3xl">
         <!-- Gradient background -->
@@ -72,7 +72,7 @@ const { t } = Astro.locals;
 
     <!-- Share button -->
     <!-- <button
-        class="bg-light-surface border-neutral-light absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
+        class="bg-white border-neutral-light absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
         aria-label={t("home.featuredPromoters.shareProfile", { name: promoter.name })}
     >
         <ShareIcon />

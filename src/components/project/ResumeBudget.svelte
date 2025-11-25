@@ -16,7 +16,7 @@
     </div>
 
     <div
-        class="bg-chart-background flex basis-7/12 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
+        class="bg-chart-white flex basis-7/12 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
     >
         <BudgetBar {project} {accounting} />
         <LegendBudgetBar {project} />
