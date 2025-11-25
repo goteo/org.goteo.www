@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
     import { t } from "../../i18n/store";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import AlertIcon from "../../svgs/AlertIcon.svelte";
     import ShareIcon from "../../svgs/ShareIcon.svelte";
     import { Modal } from "flowbite-svelte";
@@ -10,6 +9,7 @@
     import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/Button.svelte";
+    import ProjectUpdateCard from "./ ProjectUpdateCard.svelte";
 
     let {
         lang = $bindable(),
@@ -54,16 +54,6 @@
         const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
 
         itemsPerGroup = isMobile ? 1 : 2;
-    }
-
-    function formatDate(date: string, locale?: string): string {
-        const options: Intl.DateTimeFormatOptions = {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        };
-
-        return new Date(date).toLocaleDateString(locale, options);
     }
 
     function cleanCloseButton() {
@@ -117,42 +107,13 @@
         {/if}
 
         {#each projectsUpdates as update}
-            <div
-                class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
-            >
-                <div class="flex flex-col gap-4">
-                    <div class="text-secondary flex flex-row items-center gap-2">
-                        {formatDate(update.date ?? "")}
-                        <ActiveFilterIcon />
-                    </div>
-                    {#if update.cover}
-                        <img
-                            src={update.cover}
-                            alt={update.title}
-                            class="no-select rounded-3xl"
-                            draggable="false"
-                        />
-                    {/if}
-                </div>
-                <div class="flex flex-col gap-4">
-                    <h2 class="text-secondary text-lg font-semibold">{update.title}</h2>
-                    <div class="flex flex-col gap-2">
-                        <p class="text-tertiary text-sm">{update.subtitle}</p>
-                        <p class="text-content line-clamp-2 text-sm">{update.body}</p>
-                    </div>
-                </div>
-                <div class="flex w-full items-center justify-end">
-                    <Button
-                        kind="ghost"
-                        onclick={() => {
-                            selected = update;
-                            openModal = true;
-                        }}
-                    >
-                        {$t("project.tabs.updates.content.btn.read-more")}
-                    </Button>
-                </div>
-            </div>
+            <ProjectUpdateCard
+                {update}
+                onClick={(): void => {
+                    selected = update;
+                    openModal = true;
+                }}
+            />
         {/each}
     </Carousel>
 
