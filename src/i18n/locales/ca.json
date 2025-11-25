@@ -560,6 +560,48 @@
       "selectMethod": "Torna a seleccionar un mètode de pagament:",
       "btnContinue": "Torna a intentar-ho"
     },
+    "verify": {
+      "title": "Estat del pagament",
+      "comment-modal": {
+        "error": {
+          "no-support": "No s'ha trobat el suport del projecte.",
+          "empty-message": "El missatge no pot estar buit.",
+          "update-failed": "Error en actualitzar el comentari."
+        },
+        "backdrop-label": "Tancar modal",
+        "title": {
+          "edit": "Editar comentari",
+          "add": "Afegir comentari"
+        },
+        "close": "Tancar",
+        "placeholder": "Escriu el teu missatge de suport aquí...",
+        "textarea-label": "Missatge de suport",
+        "label": "El teu missatge",
+        "button": {
+          "submitting": "Guardant...",
+          "update": "Actualitzar comentari",
+          "add": "Afegir comentari"
+        }
+      },
+      "project-card": {
+        "error": {
+          "support-not-found": "No s'ha trobat informació de la teva aportació.",
+          "load-failed": "Error en carregar la informació."
+        },
+        "donated-to": "Has donat a",
+        "button": {
+          "edit-aria": "Editar comentari per a aquest projecte",
+          "add-aria": "Afegir comentari per a aquest projecte",
+          "loading": "Carregant...",
+          "edit": "Editar missatge",
+          "add": "Deixar missatge"
+        }
+      },
+      "comments": {
+        "title": "Comentaris",
+        "description": "Pots deixar un missatge d'ànim als projectes que has recolzat."
+      }
+    },
     "wallet-confirmation": {
       "title": "El teu moneder virtual",
       "description": "Ben, vas a pagar amb el saldo acumulat en el teu moneder. Recorda que si tens saldo i en dos anys no ho gastes, es transferirà a la fundació.",

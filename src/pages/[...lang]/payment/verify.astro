@@ -1,14 +1,19 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
-import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
-import Steps from "../../../components/Checkout/Steps.svelte";
-import Summary from "../../../components/Checkout/Summary.svelte";
+import {
+    apiAccountingsIdGet,
+    apiGatewayCheckoutsIdGet,
+    apiProjectsIdOrSlugGet,
+} from "../../../openapi/client";
 import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
 import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
+import { extractId } from "../../../utils/extractId";
+import type { Campaign } from "../../../types/campaign";
+import SupportedProjectCard from "../../../components/Checkout/SupportedProjectCard.svelte";
+import GoalFeedbackForm from "../../../components/Checkout/GoalFeedbackForm.svelte";
 
 const defaultCurrency = getDefaultCurrency();
 
@@ -32,10 +37,12 @@ const { t } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
+let projects: Campaign[] = [];
+let checkoutId: string | null = null;
 
 try {
     const url = new URL(Astro.request.url);
-    const checkoutId = url.searchParams.get("checkoutId");
+    checkoutId = url.searchParams.get("checkoutId");
 
     if (!checkoutId) {
         throw new Error("Checkout ID not found");
@@ -53,18 +60,94 @@ try {
     }
 
     amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
+
+    if (response.data.charges?.length) {
+        // Fetch unique projects from all charges
+        const projectIds = new Set<string>();
+
+        for (const charge of response.data.charges) {
+            const targetAccountingIri = charge.target;
+            const targetAccountingId = extractId(targetAccountingIri);
+
+            if (targetAccountingId) {
+                const { data: projAccounting } = await apiAccountingsIdGet({
+                    path: { id: targetAccountingId },
+                });
+
+                if (projAccounting?.owner) {
+                    const projectIri = projAccounting.owner;
+                    const projectId = extractId(projectIri);
+                    if (projectId) {
+                        projectIds.add(projectId);
+                    }
+                }
+            }
+        }
+
+        for (const projectId of projectIds) {
+            const { data: projectData } = await apiProjectsIdOrSlugGet({
+                path: { idOrSlug: projectId },
+            });
+
+            if (projectData) {
+                const accountingId = extractId(projectData.accounting);
+                let balance = { amount: 0, currency: defaultCurrency };
+
+                if (accountingId) {
+                    const { data: acc } = await apiAccountingsIdGet({
+                        path: { id: accountingId },
+                    });
+                    if (acc?.balance) {
+                        balance = acc.balance;
+                    }
+                }
+
+                const now = new Date();
+                let endDateStr = projectData.calendar?.minimum;
+                if (projectData.deadline === "optimum") {
+                    endDateStr = projectData.calendar?.optimum;
+                }
+                let daysRemaining = 0;
+                if (endDateStr) {
+                    const endDate = new Date(endDateStr);
+                    const diffTime = endDate.getTime() - now.getTime();
+                    daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                }
+
+                const defaultMoney = { amount: 0, currency: defaultCurrency };
+
+                projects.push({
+                    ...projectData,
+                    slug: projectData.slug || "",
+                    title: projectData.title,
+                    image:
+                        (projectData as any).image ||
+                        (projectData as any).imageUrl ||
+                        (projectData as any).cover ||
+                        "",
+                    obtained: balance || defaultMoney,
+                    minimum: projectData.budget?.minimum?.money || defaultMoney,
+                    optimum: projectData.budget?.optimum?.money || defaultMoney,
+                    daysRemaining: daysRemaining > 0 ? daysRemaining : 0,
+                    category: projectData.categories?.[0] || "general",
+                    tags: [],
+                    hasMatchfunding: false,
+                    projectSupport: undefined,
+                });
+            }
+        }
+    }
 } catch (err) {
-    console.error("Error trying to get payment status", err);
+    console.error("Error trying to get payment status:", err);
     error = err instanceof Error ? err.message : "Unknown error";
 }
 
-const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
 const postPaymentUrl = checkoutId
     ? `/payment/post-payment?checkoutId=${checkoutId}`
     : "/payment/post-payment";
 ---
 
-<Layout title="Estado del pago">
+<Layout title={t("payment.verify.title") || "Payment Status"}>
     <main class="wrapper py-10">
         {
             error ? (
@@ -75,9 +158,9 @@ const postPaymentUrl = checkoutId
                                 <div class="flex flex-col gap-10">
                                     <div class="flex flex-row items-center justify-between gap-6">
                                         <div class="flex w-2/3 flex-col gap-4">
-                                            <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                                            <h1 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                 {t("payment.page-error.title")}
-                                            </h2>
+                                            </h1>
                                             <p class="text-content">
                                                 {t("payment.page-error.description")}
                                             </p>
@@ -115,9 +198,9 @@ const postPaymentUrl = checkoutId
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
-                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                                                <h1 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                                                     {t("payment.page-aproved.title")}
-                                                </h2>
+                                                </h1>
                                                 <p class="text-content">
                                                     {t("payment.page-aproved.description")}
                                                 </p>
@@ -125,7 +208,29 @@ const postPaymentUrl = checkoutId
                                             <ApprovedIcon />
                                         </div>
                                         <div>
-                                            <FeedbackForm client:load />
+                                            <GoalFeedbackForm client:load />
+                                        </div>
+
+                                        <div class="mt-10 inline-flex flex-col items-start justify-start gap-6">
+                                            <div class="flex w-96 flex-col items-start justify-start gap-10">
+                                                <div class="flex flex-col items-start justify-start gap-4 self-stretch">
+                                                    <div class="justify-start self-stretch font-['Karla'] text-2xl leading-8 font-bold text-neutral-700">
+                                                        {t("payment.verify.comments.title")}
+                                                    </div>
+                                                    <div class="justify-start self-stretch font-['Karla'] text-base leading-6 font-normal text-zinc-600">
+                                                        {t("payment.verify.comments.description")}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex w-full flex-col items-start justify-start gap-4">
+                                                {projects.map((project) => (
+                                                    <SupportedProjectCard
+                                                        project={project}
+                                                        token={token}
+                                                        client:load
+                                                    />
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

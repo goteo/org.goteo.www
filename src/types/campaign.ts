@@ -1,5 +1,4 @@
-import type { Project } from "../openapi/client";
-import type { Money } from "../openapi/client";
+import type { Project, Money, ProjectSupport } from "../openapi/client";
 
 /**
  * CampaignSize type for display sizing of campaign cards.
@@ -48,4 +47,6 @@ export interface Campaign extends Project {
     hasMatchfunding?: boolean;
     /** Custom display tags */
     tags?: string[];
+    /** The support object for the current user/session if available */
+    projectSupport?: ProjectSupport;
 }

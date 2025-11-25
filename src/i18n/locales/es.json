@@ -555,6 +555,48 @@
       "selectMethod": "Selecciona de nuevo un método de pago:",
       "btnContinue": "Volver a intentarlo"
     },
+    "verify": {
+      "title": "Estado del pago",
+      "comment-modal": {
+        "error": {
+          "no-support": "No se encontró el soporte del proyecto.",
+          "empty-message": "El mensaje no puede estar vacío.",
+          "update-failed": "Error al actualizar el comentario."
+        },
+        "backdrop-label": "Cerrar modal",
+        "title": {
+          "edit": "Añade un comentario",
+          "add": "Añadir comentario"
+        },
+        "close": "Cerrar",
+        "placeholder": "Escribe tu mensaje de apoyo aquí...",
+        "textarea-label": "Mensaje de apoyo",
+        "label": "Escribe aquí tu comentario",
+        "button": {
+          "submitting": "Guardando...",
+          "update": "Actualizar comentario",
+          "add": "Añadir comentario"
+        }
+      },
+      "project-card": {
+        "error": {
+          "support-not-found": "No se encontró información de tu aportación.",
+          "load-failed": "Error al cargar la información."
+        },
+        "donated-to": "Has donado a",
+        "button": {
+          "edit-aria": "Editar comentario para este proyecto",
+          "add-aria": "Añadir comentario para este proyecto",
+          "loading": "Cargando...",
+          "edit": "Editar comentario",
+          "add": "Quiero dejar comentario"
+        }
+      },
+      "comments": {
+        "title": "Comentarios",
+        "description": "Puedes dejar un mensaje de ánimo a los proyectos que has apoyado."
+      }
+    },
     "wallet-confirmation": {
       "title": "Tu monedero virtual",
       "description": "Bien, vas a pagar con el saldo acumulado en tu monedero. Recuerda que si tienes saldo y en dos años no lo gastas, se transferirá a la fundación.",
