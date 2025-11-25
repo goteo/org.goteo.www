@@ -10,9 +10,11 @@ const { t } = Astro.locals;
 const {
     hasError,
     paymentGateways,
+    selectedGateway,
 }: {
     hasError?: boolean;
     paymentGateways?: ApiGatewaysNameGetResponse[];
+    selectedGateway?: string;
 } = Astro.props;
 
 const { accounting } = Astro.props;
@@ -44,8 +46,10 @@ const { accounting } = Astro.props;
                                     value={gateway.name}
                                     disabled={gateway.name === "wallet"}
                                     checked={
-                                        gateway.name !== "wallet" &&
-                                        paymentGateways?.[0]?.name === gateway.name
+                                        selectedGateway
+                                            ? gateway.name === selectedGateway
+                                            : gateway.name !== "wallet" &&
+                                              paymentGateways?.[0]?.name === gateway.name
                                     }
                                     class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
