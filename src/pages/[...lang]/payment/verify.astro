@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet, apiProjectsIdOrSlugGet } from "../../../openapi/client";
+import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet, apiProjectsIdOrSlugGet, apiProjectSupportsGetCollection } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
@@ -108,7 +108,28 @@ try {
 
                 // Ensure we have valid money objects with defaults
                 const defaultMoney = { amount: 0, currency: defaultCurrency };
-                
+
+                let projectSupport = null;
+                if (response.data.origin) {
+                    try {
+                        const projectIri = projectData['@id'] || `/v4/projects/${projectData.id}`;
+                        const { data: supports } = await apiProjectSupportsGetCollection({
+                            query: {
+                                project: projectIri,
+                                origin: response.data.origin
+                            },
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            }
+                        });
+                        if (supports && supports.length > 0) {
+                            projectSupport = supports[0];
+                        }
+                    } catch (e) {
+                        console.error("Error fetching project support", e);
+                    }
+                }
+
                 projects.push({
                     ...projectData,
                     slug: projectData.slug || "",
@@ -120,7 +141,8 @@ try {
                     daysRemaining: daysRemaining > 0 ? daysRemaining : 0,
                     category: projectData.categories?.[0] || "general",
                     tags: [],
-                    hasMatchfunding: false
+                    hasMatchfunding: false,
+                    projectSupport: projectSupport
                 });
             }
         }
@@ -214,7 +236,7 @@ const postPaymentUrl = checkoutId
                                             </div>
                                             <div class="flex flex-col justify-start items-start gap-4 w-full">
                                                 {projects.map(project => (
-                                                    <SupportedProjectCard project={project} client:load />
+                                                    <SupportedProjectCard project={project} token={token} client:load />
                                                 ))}
                                             </div>
                                         </div>

@@ -1,22 +1,47 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import type { Campaign } from "../../types/campaign";
+    import type { ProjectSupport } from "../../openapi/client";
+    import { apiProjectSupportsIdPatch } from "../../openapi/client";
     import CloseIcon from "../../svgs/CloseIcon.svelte";
 
     interface Props {
         open: boolean;
         project: Campaign | null;
+        token: string;
+        projectSupport?: ProjectSupport;
         onClose: () => void;
     }
 
-    let { open = $bindable(), project, onClose }: Props = $props();
+    let { open = $bindable(), project, token, projectSupport, onClose }: Props = $props();
 
     let message = $state("");
+    let isSubmitting = $state(false);
 
-    function handleSubmit() {
-        // TODO: Implement submit logic
-        console.log("Submitting comment for project:", project?.title, message);
-        onClose();
+    $effect(() => {
+        if (projectSupport?.message) {
+            message = projectSupport.message;
+        }
+    });
+
+    async function handleSubmit() {
+        if (!projectSupport?.id) return;
+
+        isSubmitting = true;
+        try {
+            await apiProjectSupportsIdPatch({
+                path: { id: projectSupport.id.toString() },
+                body: { message },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+            onClose();
+        } catch (e) {
+            console.error("Error updating comment", e);
+        } finally {
+            isSubmitting = false;
+        }
     }
 
     function handleBackdropClick(e: MouseEvent) {
@@ -70,10 +95,11 @@
                 <div class="self-stretch inline-flex justify-end items-end">
                     <button
                         onclick={handleSubmit}
-                        class="px-6 py-4 bg-teal-300 rounded-3xl flex justify-center items-center gap-2 hover:bg-teal-400 transition-colors cursor-pointer"
+                        disabled={isSubmitting}
+                        class="px-6 py-4 bg-teal-300 rounded-3xl flex justify-center items-center gap-2 hover:bg-teal-400 transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                         <div class="justify-start text-zinc-700 text-base font-bold font-['Karla'] leading-6 line-clamp-1">
-                            Añadir comentario
+                            {isSubmitting ? "Guardando..." : "Añadir comentario"}
                         </div>
                     </button>
                 </div>
