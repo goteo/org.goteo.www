@@ -1,6 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
+import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet, apiProjectsIdOrSlugGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
@@ -9,6 +9,10 @@ import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
+import { extractId } from "../../../utils/extractId";
+import type { Campaign } from "../../../types/campaign";
+import SupportedProjectCard from "../../../components/Checkout/SupportedProjectCard.svelte";
+import GoalFeedbackForm from "../../../components/Checkout/GoalFeedbackForm.svelte";
 
 const defaultCurrency = getDefaultCurrency();
 
@@ -32,6 +36,7 @@ const { t } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
+let projects: Campaign[] = [];
 
 try {
     const url = new URL(Astro.request.url);
@@ -53,6 +58,74 @@ try {
     }
 
     amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
+
+    if (response.data.charges?.length) {
+        // Fetch unique projects from all charges
+        const projectIds = new Set<string>();
+        
+        for (const charge of response.data.charges) {
+            const targetAccountingIri = charge.target;
+            const targetAccountingId = extractId(targetAccountingIri);
+            
+            if (targetAccountingId) {
+                 const { data: projAccounting } = await apiAccountingsIdGet({ path: { id: targetAccountingId } });
+                 const projectIri = projAccounting.owner;
+                 const projectId = extractId(projectIri);
+                 if (projectId) {
+                     projectIds.add(projectId);
+                 }
+            }
+        }
+
+        for (const projectId of projectIds) {
+             const { data: projectData } = await apiProjectsIdOrSlugGet({ path: { idOrSlug: projectId } });
+
+            if (projectData) {
+                // We need the accounting balance for "obtained" amount
+                // Since we might have multiple charges for the same project, or different projects
+                // we need to find the accounting for this project again. 
+                // Optimization: We could cache accountings above, but for now this is safe.
+                // Actually, the projectData has 'accounting' IRI.
+                const accountingId = extractId(projectData.accounting);
+                let balance = { amount: 0, currency: defaultCurrency };
+                
+                if (accountingId) {
+                     const { data: acc } = await apiAccountingsIdGet({ path: { id: accountingId } });
+                     if (acc.balance) balance = acc.balance;
+                }
+
+                const now = new Date();
+                let endDateStr = projectData.calendar?.minimum;
+                if (projectData.deadline === 'optimum') {
+                    endDateStr = projectData.calendar?.optimum;
+                }
+                let daysRemaining = 0;
+                if (endDateStr) {
+                    const endDate = new Date(endDateStr);
+                    const diffTime = endDate.getTime() - now.getTime();
+                    daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                }
+
+                // Ensure we have valid money objects with defaults
+                const defaultMoney = { amount: 0, currency: defaultCurrency };
+                
+                projects.push({
+                    ...projectData,
+                    slug: projectData.slug || "",
+                    title: projectData.title,
+                    image: (projectData as any).image || (projectData as any).imageUrl || (projectData as any).cover || "",
+                    obtained: balance || defaultMoney,
+                    minimum: projectData.budget?.minimum?.money || defaultMoney,
+                    optimum: projectData.budget?.optimum?.money || defaultMoney,
+                    daysRemaining: daysRemaining > 0 ? daysRemaining : 0,
+                    category: projectData.categories?.[0] || "general",
+                    tags: [],
+                    hasMatchfunding: false
+                });
+            }
+        }
+    }
+
 } catch (err) {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";
@@ -125,7 +198,25 @@ const postPaymentUrl = checkoutId
                                             <ApprovedIcon />
                                         </div>
                                         <div>
-                                            <FeedbackForm client:load />
+                                            <GoalFeedbackForm client:load />
+                                        </div>
+                                        
+                                        <div class="inline-flex flex-col justify-start items-start gap-6 mt-10">
+                                            <div class="w-96 flex flex-col justify-start items-start gap-10">
+                                                <div class="self-stretch flex flex-col justify-start items-start gap-4">
+                                                    <div class="self-stretch justify-start text-neutral-700 text-2xl font-bold font-['Karla'] leading-8">
+                                                        Deja un mensaje en los proyectos a los que has apoyado
+                                                    </div>
+                                                    <div class="self-stretch justify-start text-zinc-600 text-base font-normal font-['Karla'] leading-6">
+                                                        Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-col justify-start items-start gap-4 w-full">
+                                                {projects.map(project => (
+                                                    <SupportedProjectCard project={project} client:load />
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
