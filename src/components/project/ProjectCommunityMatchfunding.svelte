@@ -6,7 +6,7 @@
 </script>
 
 <button
-    class="bg-background flex cursor-pointer overflow-hidden rounded-4xl transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="bg-white flex cursor-pointer overflow-hidden rounded-4xl transition-shadow duration-200 ease-in-out hover:shadow-lg"
     onclick={() => {
         selectedProjectSupport = item;
         openModal = true;

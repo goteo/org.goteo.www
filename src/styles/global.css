@@ -15,11 +15,11 @@
     --color-primary-hover: #4dd0b8;
     --color-secondary: #462949;
     --color-tertiary: #e94668;
-    --color-background: #fbfbfb;
     --color-content: #575757;
     --color-body: #1e293b;
 
     /* Extended color tokens for components */
+    --color-white: #fbfbfb;
     --color-black: #3d3d3d;
     --color-grey: #f3f3ef;
     --color-gray-light: #f3f3f3; /* Light gray for borders */
@@ -52,7 +52,7 @@
         --color-grey: #2a2a2a; /* Dark muted background */
         --color-variant1: #3a3551; /* Dark purple tint */
         --color-neutral-light: #404040; /* Dark neutral border */
-        --color-white: #f8f9fa; /* Off-background for dark theme */
+        --color-white: #f8f9fa; /* Off-white for dark theme */
     }
 }
 

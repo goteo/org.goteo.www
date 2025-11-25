@@ -86,19 +86,19 @@
                 <Table class="w-full table-fixed border-separate border-spacing-y-2">
                     <TableHead>
                         <TableHeadCell
-                            class="bg-tertiary text-background rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap"
+                            class="bg-tertiary text-white rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap"
                         >
                             {$t("contributions.grid.details.trackingCodes.headers.title")}
                         </TableHeadCell>
                         <TableHeadCell
-                            class="bg-tertiary text-background rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap"
+                            class="bg-tertiary text-white rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap"
                         >
                             {$t("contributions.grid.details.trackingCodes.headers.trackingCode")}
                         </TableHeadCell>
                     </TableHead>
                     <TableBody class="text-base">
                         {#each trackingCodes as item}
-                            <TableBodyRow class=" bg-background">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
                                     class="border-variant1  rounded-l-md border-t border-b border-l"
                                     >{item.title}</TableBodyCell
@@ -173,24 +173,24 @@
                 <Table class="w-full table-fixed border-separate border-spacing-y-2">
                     <TableHead>
                         <TableHeadCell
-                            class="bg-tertiary text-background rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap"
+                            class="bg-tertiary text-white rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap"
                         >
                             {$t("contributions.grid.details.platformLinks.headers.type")}
                         </TableHeadCell>
                         <TableHeadCell
-                            class="bg-tertiary border-t-lg border-b-lg text-background py-4 text-base whitespace-nowrap"
+                            class="bg-tertiary border-t-lg border-b-lg text-white py-4 text-base whitespace-nowrap"
                         >
                             {$t("contributions.grid.details.platformLinks.headers.rel")}
                         </TableHeadCell>
                         <TableHeadCell
-                            class="bg-tertiary text-background rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap"
+                            class="bg-tertiary text-white rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap"
                         >
                             {$t("contributions.grid.details.platformLinks.headers.href")}
                         </TableHeadCell>
                     </TableHead>
                     <TableBody class="text-base">
                         {#each platformLinks as item}
-                            <TableBodyRow class=" bg-background">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
                                     class="border-variant1  rounded-l-md border-t border-b border-l"
                                 >

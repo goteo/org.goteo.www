@@ -83,7 +83,7 @@
                 'primary'
                     ? 'bg-light-accent text-secondary focus-visible:ring-secondary hover:opacity-90'
                     : isDark
-                      ? 'hover:text-secondary focus-visible:ring-offset-secondary border-background text-background hover:bg-background border bg-transparent focus-visible:ring-white'
+                      ? 'hover:text-secondary focus-visible:ring-offset-secondary border-white text-white hover:bg-white border bg-transparent focus-visible:ring-white'
                       : 'border-secondary text-secondary hover:bg-secondary focus-visible:ring-secondary border bg-transparent hover:text-white'}"
             >
                 {button.label}

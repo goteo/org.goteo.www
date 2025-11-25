@@ -38,7 +38,7 @@ Previous/Next navigation for search results
             <button
                 onclick={goToPrevious}
                 disabled={!$hasPrevPage}
-                class="bg-background inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                class="bg-white inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Previous page"
             >
                 <svg class="mr-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -63,7 +63,7 @@ Previous/Next navigation for search results
             <button
                 onclick={goToNext}
                 disabled={!$hasNextPage}
-                class="bg-background inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+                class="bg-white inline-flex items-center rounded-md border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Next page"
             >
                 {$t("search.pagination.next")}

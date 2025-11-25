@@ -3,7 +3,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-background",
+        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white",
         active: "bg-secondary text-primary hover:text-secondary",
         ghost: "",
     };

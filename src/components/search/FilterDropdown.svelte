@@ -117,7 +117,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 
     {#if isOpen}
         <div
-            class="bg-background absolute top-full right-0 left-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-[8px] border border-[#462949] shadow-lg"
+            class="bg-white absolute top-full right-0 left-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-[8px] border border-[#462949] shadow-lg"
             data-testid={`${props["data-testid"] || "filter"}-dropdown`}
         >
             <div class="py-1" role="listbox">

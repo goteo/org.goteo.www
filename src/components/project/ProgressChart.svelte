@@ -221,7 +221,7 @@
 </script>
 
 <div
-    class="bg-background relative h-full w-full overflow-hidden rounded-3xl border border-gray-100"
+    class="bg-white relative h-full w-full overflow-hidden rounded-3xl border border-gray-100"
 >
     <canvas bind:this={canvas} class="h-full w-full"></canvas>
 </div>

@@ -55,7 +55,7 @@ Displays basic error messages with retry functionality
                     <button
                         type="button"
                         onclick={handleRetry}
-                        class="text-background mt-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold transition-colors hover:bg-red-500"
+                        class="text-white mt-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold transition-colors hover:bg-red-500"
                         data-testid="error-retry-btn"
                     >
                         <svg
