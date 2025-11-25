@@ -1,7 +1,15 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    export let paymentMethod: string | undefined = undefined;
-    let messageType = "anonymous"; // 'anonymous' o 'public'
+    import RadioButton from "../../library/components/RadioButton.svelte";
+
+    interface Props {
+        paymentMethod?: string;
+    }
+
+    let { paymentMethod = undefined }: Props = $props();
+
+    let messageType = $state("anonymous"); // 'anonymous' o 'public'
+    let type = $state("organization");
 </script>
 
 <div>
@@ -15,34 +23,14 @@
                 </div>
             </div>
             <fieldset class="flex flex-col gap-6">
-                <label class="flex cursor-pointer items-center gap-2">
-                    <div class="w-6">
-                        <input
-                            type="radio"
-                            name="type"
-                            value="organization"
-                            checked
-                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
-                        />
-                    </div>
-                    <span class="text-gray-700"
-                        >{$t("payment.page-aproved.form-goal.options.2")}
-                        <span class="capitalize">{paymentMethod}</span></span
-                    >
-                </label>
-                <label class="flex cursor-pointer items-center gap-2">
-                    <div class="w-6">
-                        <input
-                            type="radio"
-                            name="type"
-                            value="individual"
-                            class="custom-radio relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
-                        />
-                    </div>
-                    <span class="text-gray-700">
-                        {$t("payment.page-aproved.form-goal.options.1")}
-                    </span>
-                </label>
+                <RadioButton name="type" value="organization" bind:group={type}>
+                    {$t("payment.page-aproved.form-goal.options.2")}
+                    <span class="capitalize">{paymentMethod}</span>
+                </RadioButton>
+
+                <RadioButton name="type" value="individual" bind:group={type}>
+                    {$t("payment.page-aproved.form-goal.options.1")}
+                </RadioButton>
             </fieldset>
 
             <div class="mt-6 flex flex-col gap-4">
@@ -55,31 +43,19 @@
             </div>
 
             <fieldset class="flex flex-col gap-6">
-                <label class="flex cursor-pointer items-center gap-2">
-                    <div class="w-6">
-                        <input
-                            type="radio"
-                            name="messageType"
-                            value="anonymous"
-                            bind:group={messageType}
-                            class="custom-radio relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
-                        />
-                    </div>
-                    <span class="text-gray-700"> Dejar un mensaje de forma anónima </span>
-                </label>
+                <RadioButton
+                    name="messageType"
+                    value="anonymous"
+                    bind:group={messageType}
+                    label="Dejar un mensaje de forma anónima"
+                />
 
-                <label class="flex cursor-pointer items-center gap-2">
-                    <div class="w-6">
-                        <input
-                            type="radio"
-                            name="messageType"
-                            value="public"
-                            bind:group={messageType}
-                            class="custom-radio border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:after:block"
-                        />
-                    </div>
-                    <span class="text-gray-700"> Dejar un mensaje de forma pública </span>
-                </label>
+                <RadioButton
+                    name="messageType"
+                    value="public"
+                    bind:group={messageType}
+                    label="Dejar un mensaje de forma pública"
+                />
             </fieldset>
 
             <div class="flex w-full flex-col gap-2">

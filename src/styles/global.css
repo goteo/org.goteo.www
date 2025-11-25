@@ -56,17 +56,6 @@
         --color-neutral-light: #404040; /* Dark neutral border */
         --color-white: #f8f9fa; /* Off-white for dark theme */
     }
-
-    input[type="radio"].custom-radio:checked {
-        background-color: var(--color-primary) !important;
-        border-color: var(--color-primary) !important;
-        color: var(--color-primary) !important;
-    }
-
-    input[type="radio"].custom-radio:focus {
-        outline: none !important;
-        box-shadow: none !important;
-    }
 }
 
 html {
