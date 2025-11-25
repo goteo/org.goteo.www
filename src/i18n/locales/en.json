@@ -552,6 +552,48 @@
       "selectMethod": "Select a payment method again:",
       "btnContinue": "Try again"
     },
+    "verify": {
+      "title": "Payment Status",
+      "comment-modal": {
+        "error": {
+          "no-support": "Project support not found.",
+          "empty-message": "Message cannot be empty.",
+          "update-failed": "Failed to update comment."
+        },
+        "backdrop-label": "Close modal",
+        "title": {
+          "edit": "Edit comment",
+          "add": "Add comment"
+        },
+        "close": "Close",
+        "placeholder": "Write your support message here...",
+        "textarea-label": "Support message",
+        "label": "Your message",
+        "button": {
+          "submitting": "Saving...",
+          "update": "Update comment",
+          "add": "Add comment"
+        }
+      },
+      "project-card": {
+        "error": {
+          "support-not-found": "Contribution info not found.",
+          "load-failed": "Failed to load info."
+        },
+        "donated-to": "You donated to",
+        "button": {
+          "edit-aria": "Edit comment for this project",
+          "add-aria": "Add comment for this project",
+          "loading": "Loading...",
+          "edit": "Edit message",
+          "add": "Leave message"
+        }
+      },
+      "comments": {
+        "title": "Comments",
+        "description": "You can leave a message of encouragement to the projects you supported."
+      }
+    },
     "wallet-confirmation": {
       "title": "Your virtual purse",
       "description": "Well, you will pay with the accumulated balance in your purse. ",

@@ -13,6 +13,7 @@
                 </div>
             </div>
             <fieldset class="flex flex-col gap-6">
+                <legend class="sr-only">{$t("payment.page-aproved.form-goal.title")}</legend>
                 <label class="flex cursor-pointer items-center gap-2">
                     <div class="w-6">
                         <input
@@ -20,10 +21,10 @@
                             name="type"
                             value="individual"
                             checked
-                            class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="border-secondary after:bg-secondary checked:border-primary checked:bg-primary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                         />
                     </div>
-                    <span class="text-gray-700">
+                    <span class="text-content">
                         {$t("payment.page-aproved.form-goal.options.1")}
                     </span>
                 </label>
@@ -34,10 +35,10 @@
                             type="radio"
                             name="type"
                             value="organization"
-                            class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
+                            class="border-secondary after:bg-secondary checked:border-primary checked:bg-primary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                         />
                     </div>
-                    <span class="text-gray-700"
+                    <span class="text-content"
                         >{$t("payment.page-aproved.form-goal.options.2")}</span
                     >
                 </label>
