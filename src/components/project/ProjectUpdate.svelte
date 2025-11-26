@@ -36,6 +36,7 @@
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
     let author: string = "";
+    let cardType: "small" | "large" = $state("small");
 
     $effect(() => {
         if (openModal) cleanCloseButton();
@@ -80,8 +81,8 @@
 
         return diffHours <= 72;
     }
-     
-    function getAuthor(update: ProjectUpdate): string { 
+
+    function getAuthor(update: ProjectUpdate): string {
         // author = update.author; // Pending API update to add author
         return author;
     }
@@ -103,7 +104,7 @@
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
-    <Carousel gap={16} showDots={true} {itemsPerGroup}>
+    <Carousel gap={24} showDots={true} {itemsPerGroup}>
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
@@ -116,6 +117,7 @@
             <ProjectUpdateCard
                 {update}
                 author={getAuthor(update)}
+                type={cardType}
                 onClick={(): void => {
                     selected = update;
                     openModal = true;
@@ -139,7 +141,7 @@
             <h3 class="text-secondary text-3xl font-bold">
                 {selected?.title}
             </h3>
-            <div class="marked-content flex flex-col gap-4 text-gray-700">
+            <div class="marked-content text-content flex flex-col gap-4">
                 {#await renderMarkdown(selected.body) then content}
                     {@html content}
                 {/await}

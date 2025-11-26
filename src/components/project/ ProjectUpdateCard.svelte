@@ -10,11 +10,12 @@
     interface Props {
         update: ProjectUpdate;
         author?: string; // Pending API update to add author in every update
+        type?: "small" | "large";
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         class?: ClassNameValue;
     }
 
-    let { update, author = "", onClick, class: classes = "" }: Props = $props();
+    let { update, author, type, onClick, class: classes }: Props = $props();
 
     function formatDate(date: string, locale?: string): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -27,8 +28,13 @@
     }
 </script>
 
-{#if author === "platform"}
-    <div class="flex min-h-[395px] w-full flex-col gap-6 rounded-4xl bg-white p-6 opacity-50">
+{#if type === "small"}
+    <div
+        class={twMerge(
+            "flex w-[34.625rem] flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
+            classes,
+        )}
+    >
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
                 {formatDate(update.date ?? "")}
@@ -38,13 +44,15 @@
             </div>
         </div>
         <div
-            class="bg-light-pink relative flex min-h-[350px] flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5 leading-12"
+            class="bg-light-pink relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
         >
-            <h2 class="text-3xl font-bold text-ellipsis text-white">{update.title}</h2>
+            <h2 class="font-body text-[2.5rem] leading-12 font-bold text-ellipsis text-white">
+                {update.title}
+            </h2>
             <svg
-                class="absolute -top-64 left-24 object-cover"
-                width="407"
-                height="533"
+                class="absolute -top-[19.25rem] left-[6.1875rem]"
+                width="681"
+                height="964.575"
                 viewBox="0 0 407 533"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -57,8 +65,13 @@
             </svg>
         </div>
     </div>
-{:else}
-    <div class="flex w-full max-w-3xl flex-col gap-6 rounded-4xl bg-white p-6 font-bold">
+{:else if type === "large"}
+    <div
+        class={twMerge(
+            "bg-soft-purple border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
+            classes,
+        )}
+    >
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
                 {formatDate(update.date ?? "")}
@@ -70,26 +83,25 @@
                 <img
                     src={update.cover}
                     alt={update.title}
-                    class="no-select rounded-3xl"
+                    class="no-select h-[16.8rem] shrink-0 self-stretch rounded-3xl"
                     draggable="false"
                 />
             {/if}
         </div>
-        <div class="flex h-full flex-col">
+        <div class="flex h-full flex-col justify-between">
             <div class="flex flex-col gap-4">
-                <h2 class="text-secondary text-4xl leading-10 font-bold">{update.title}</h2>
-                {#if update.subtitle && update.body}
-                    <div class="flex flex-col gap-2">
-                        <p class="font-bold text-black">{update.subtitle}</p>
-                        <p class="text-content line-clamp-2">
+                <h2 class="text-secondary text-[2rem] leading-10 font-bold">{update.title}</h2>
+                {#if update.subtitle || update.body}
+                    <div class="flex flex-col gap-2 leading-6">
+                        <p class="text-base font-bold text-black">{update.subtitle}</p>
+                        <p
+                            class="text-content line-clamp-2 text-base font-normal text-ellipsis ordinal"
+                        >
                             {#await renderMarkdown(update.body) then content}
                                 {@html content}
                             {/await}
                         </p>
                     </div>
-                {/if}
-                {#if update.subtitle && !update.body}
-                    <p class="font-bold text-black">{update.subtitle}</p>
                 {/if}
             </div>
             <div class="flex w-full items-end justify-between">
