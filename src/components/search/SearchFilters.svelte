@@ -13,6 +13,7 @@ Integrated with searchStore for state management and URL synchronization
     import CategoryFilter from "./CategoryFilter.svelte";
     import SearchButton from "./SearchButton.svelte";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
+    import Dropdown from "../library/Dropdown.svelte";
 
     interface Props {
         locale?: string;
@@ -44,11 +45,10 @@ Integrated with searchStore for state management and URL synchronization
 
     // Dropdown options - use translation keys for labels
     const statusOptions = [
-        { value: "all", translationKey: "filters.status.all" },
-        // API status values - pass directly to backend
-        { value: "in_campaign", translationKey: "filters.status.funding" }, // Actively raising funds
-        { value: "in_funding", translationKey: "filters.status.successful" }, // Successfully raised, receiving funds
-        { value: "funded", translationKey: "filters.status.completed" }, // Completed funding process
+        { value: "all", text: $t("filters.status.all") },
+        { value: "in_campaign", text: $t("filters.status.funding") },
+        { value: "in_funding", text: $t("filters.status.successful") },
+        { value: "funded", text: $t("filters.status.completed") },
     ];
 
     // Handle filter updates using searchStore
@@ -121,13 +121,7 @@ Integrated with searchStore for state management and URL synchronization
     {#if filtersOpen}
         <!-- Status filter dropdown -->
         <div class="w-full lg:max-w-sm">
-            <FilterDropdown
-                options={statusOptions}
-                placeholder={$t("filters.campaignStatus")}
-                selectedValue={$searchFilters.statusFilter}
-                onSelect={(value) => updateFilters({ statusFilter: value })}
-                data-testid="status-filter"
-            />
+            <Dropdown options={statusOptions} />
         </div>
 
         <!-- Category filters -->
