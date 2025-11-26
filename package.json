@@ -39,6 +39,7 @@
     "marked": "^15.0.12",
     "media-icons": "^1.1.5",
     "svelte": "^5.33.13",
+    "svelte-outside": "^0.0.5",
     "tailwind-merge": "^3.3.1",
     "tailwindcss": "^4.1.8",
     "typescript": "^5.8.3"

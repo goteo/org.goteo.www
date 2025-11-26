@@ -59,6 +59,9 @@ importers:
       svelte:
         specifier: ^5.33.13
         version: 5.33.13
+      svelte-outside:
+        specifier: ^0.0.5
+        version: 0.0.5
       tailwind-merge:
         specifier: ^3.3.1
         version: 3.3.1
@@ -3580,6 +3583,9 @@ packages:
   supports-preserve-symlinks-flag@1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}
     engines: {node: '>= 0.4'}
+
+  svelte-outside@0.0.5:
+    resolution: {integrity: sha512-xakJm61i1EdrwMhY4JqXV9rxFGrbdVgofmJ4RST0xfyb/FKcwz+Qa5SUlfiQSO3uCrB0lcATIVB2nF2o98Aigw==}
 
   svelte-toolbelt@0.9.1:
     resolution: {integrity: sha512-wBX6MtYw/kpht80j5zLpxJyR9soLizXPIAIWEVd9llAi17SR44ZdG291bldjB7r/K5duC0opDFcuhk2cA1hb8g==}
@@ -8254,6 +8260,8 @@ snapshots:
       has-flag: 4.0.0
 
   supports-preserve-symlinks-flag@1.0.0: {}
+
+  svelte-outside@0.0.5: {}
 
   svelte-toolbelt@0.9.1(svelte@5.33.13):
     dependencies:
