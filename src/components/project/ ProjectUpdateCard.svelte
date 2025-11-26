@@ -78,7 +78,7 @@
         <div class="flex h-full flex-col">
             <div class="flex flex-col gap-4">
                 <h2 class="text-secondary text-4xl leading-10 font-bold">{update.title}</h2>
-                {#if update.subtitle || update.body || (update.subtitle && update.body)}
+                {#if update.subtitle && update.body}
                     <div class="flex flex-col gap-2">
                         <p class="font-bold text-black">{update.subtitle}</p>
                         <p class="text-content line-clamp-2">
@@ -87,6 +87,9 @@
                             {/await}
                         </p>
                     </div>
+                {/if}
+                {#if update.subtitle && !update.body}
+                    <p class="font-bold text-black">{update.subtitle}</p>
                 {/if}
             </div>
             <div class="flex w-full items-end justify-between">
