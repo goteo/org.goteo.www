@@ -28,7 +28,7 @@
 </script>
 
 {#if author === "platform"}
-    <div class="flex w-full min-h-[395px] flex-col gap-6 rounded-4xl bg-white p-6 opacity-50">
+    <div class="flex min-h-[395px] w-full flex-col gap-6 rounded-4xl bg-white p-6 opacity-50">
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
                 {formatDate(update.date ?? "")}
@@ -37,8 +37,10 @@
                 </div>
             </div>
         </div>
-        <div class="bg-light-pink bg-cover relative overflow-hidden flex flex-col gap-4 rounded-3xl p-5 leading-12 min-h-[350px]">
-            <h2 class="text-3xl font-bold text-white text-ellipsis">{update.title}</h2>
+        <div
+            class="bg-light-pink relative flex min-h-[350px] flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5 leading-12"
+        >
+            <h2 class="text-3xl font-bold text-ellipsis text-white">{update.title}</h2>
             <svg
                 class="absolute -top-64 left-24 object-cover"
                 width="407"
@@ -90,9 +92,7 @@
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
                     {$t("project.tabs.updates.by")}
-                    <strong class="font-bold text-black">
-                        {author}
-                    </strong>
+                    <strong class="font-bold text-black"> {author}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
                     {$t("project.tabs.updates.content.btn.read-more")}
