@@ -3,18 +3,18 @@
     import Button from "../library/Button.svelte";
     import { t } from "../../i18n/store";
     import type { ProjectUpdate } from "../../openapi/client/index";
-    import type { Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
     import type { MouseEventHandler } from "svelte/elements";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
 
     interface Props {
         update: ProjectUpdate;
+        author?: string; // Pending API update to add author in every update
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         class?: ClassNameValue;
-        children?: Snippet;
     }
 
-    let { update, onClick, class: classes = "", children }: Props = $props();
+    let { update, author = "", onClick, class: classes = "" }: Props = $props();
 
     function formatDate(date: string, locale?: string): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -27,41 +27,8 @@
     }
 </script>
 
-{#if update.body}
-    <div class="flex w-full flex-col gap-6 rounded-4xl bg-white p-6 font-bold">
-        <div class="flex flex-col gap-4">
-            <div class="text-secondary flex flex-row items-center gap-2">
-                {formatDate(update.date ?? "")}
-                <ActiveFilterIcon />
-            </div>
-            {#if update.cover}
-                <img
-                    src={update.cover}
-                    alt={update.title}
-                    class="no-select rounded-3xl"
-                    draggable="false"
-                />
-            {/if}
-        </div>
-
-        <div class="flex flex-col gap-4">
-            <h2 class="text-secondary text-lg font-semibold">{update.title}</h2>
-            <div class="flex flex-col gap-2">
-                <p class="text-tertiary text-sm">{update.subtitle}</p>
-                <p class="text-content line-clamp-2 text-sm">{update.body}</p>
-            </div>
-        </div>
-        <div class="flex w-full items-center justify-end">
-            <Button
-                kind="ghost"
-                onclick={onClick}
-            >
-                {$t("project.tabs.updates.content.btn.read-more")}
-            </Button>
-        </div>
-    </div>
-{:else}
-    <div class="flex w-full flex-col gap-6 rounded-4xl bg-white p-6 opacity-50">
+{#if author === "platform"}
+    <div class="flex w-full min-h-[395px] flex-col gap-6 rounded-4xl bg-white p-6 opacity-50">
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
                 {formatDate(update.date ?? "")}
@@ -70,10 +37,10 @@
                 </div>
             </div>
         </div>
-        <div class="bg-light-pink relative flex h-full flex-col gap-4 rounded-3xl p-6 leading-12">
-            <h2 class="text-4xl font-bold text-white">{update.title}</h2>
+        <div class="bg-light-pink bg-cover relative overflow-hidden flex flex-col gap-4 rounded-3xl p-5 leading-12 min-h-[350px]">
+            <h2 class="text-3xl font-bold text-white text-ellipsis">{update.title}</h2>
             <svg
-                class="h- absolute -top-8 overflow-ellipsis"
+                class="absolute -top-64 left-24 object-cover"
                 width="407"
                 height="533"
                 viewBox="0 0 407 533"
@@ -86,6 +53,51 @@
                     fill="#3D3D3D"
                 />
             </svg>
+        </div>
+    </div>
+{:else}
+    <div class="flex w-full max-w-3xl flex-col gap-6 rounded-4xl bg-white p-6 font-bold">
+        <div class="flex flex-col gap-4">
+            <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
+                {formatDate(update.date ?? "")}
+                <div class="pt-1">
+                    <ActiveFilterIcon />
+                </div>
+            </div>
+            {#if update.cover}
+                <img
+                    src={update.cover}
+                    alt={update.title}
+                    class="no-select rounded-3xl"
+                    draggable="false"
+                />
+            {/if}
+        </div>
+        <div class="flex h-full flex-col">
+            <div class="flex flex-col gap-4">
+                <h2 class="text-secondary text-4xl leading-10 font-bold">{update.title}</h2>
+                {#if update.subtitle || update.body || (update.subtitle && update.body)}
+                    <div class="flex flex-col gap-2">
+                        <p class="font-bold text-black">{update.subtitle}</p>
+                        <p class="text-content line-clamp-2">
+                            {#await renderMarkdown(update.body) then content}
+                                {@html content}
+                            {/await}
+                        </p>
+                    </div>
+                {/if}
+            </div>
+            <div class="flex w-full items-end justify-between">
+                <span class="text-content flex text-sm font-medium">
+                    {$t("project.tabs.updates.by")}
+                    <strong class="font-bold text-black">
+                        {author}
+                    </strong>
+                </span>
+                <Button kind="ghost" onclick={onClick}>
+                    {$t("project.tabs.updates.content.btn.read-more")}
+                </Button>
+            </div>
         </div>
     </div>
 {/if}

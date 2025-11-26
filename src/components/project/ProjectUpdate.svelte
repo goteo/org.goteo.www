@@ -35,6 +35,7 @@
     let itemsPerGroup = $state(2);
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
+    let author: string = "";
 
     $effect(() => {
         if (openModal) cleanCloseButton();
@@ -79,6 +80,11 @@
 
         return diffHours <= 72;
     }
+     
+    function getAuthor(update: ProjectUpdate): string { 
+        // author = update.author; // Pending API update to add author
+        return author;
+    }
 
     onMount(async () => {
         updateItemsPerGroup();
@@ -109,6 +115,7 @@
         {#each projectsUpdates as update}
             <ProjectUpdateCard
                 {update}
+                author={getAuthor(update)}
                 onClick={(): void => {
                     selected = update;
                     openModal = true;
