@@ -56,6 +56,7 @@
       "updates": {
         "title": "Actualitzacions",
         "modal-title": "Nova actualització",
+        "by": "Per:",
         "content": {
           "title": "No perdis detall dels avenços d’aquesta campanya",
           "empty": "No existeixen més actualitzacions previstes.",
