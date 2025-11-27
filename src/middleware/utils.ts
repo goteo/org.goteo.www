@@ -1,5 +1,4 @@
 import { languagesList } from "../i18n/locales/index";
-import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
 
@@ -16,41 +15,34 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
  * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
  * Always ensures the preferred-lang cookie is synchronized.
  */
-export function getUserLangPreferences(context: APIContext): string[] {
-    const preferredFromPath = parsePathLang(context.url.pathname);
-    if (preferredFromPath) return [preferredFromPath];
+export function getLanguage(context: APIContext): string {
+    const validLangs = Object.keys(languagesList);
+
+    const langFromPath = parsePathLang(context.url.pathname);
+    if (langFromPath && validLangs.includes(langFromPath)) {
+        context.cookies.set("preferred-lang", langFromPath, {
+            path: "/",
+            httpOnly: false,
+            maxAge: 60 * 60 * 24 * 365,
+        });
+        return langFromPath;
+    }
 
     const cookieLang = context.cookies.get("preferred-lang")?.value;
-    if (cookieLang) return [cookieLang];
-
-    const acceptLangHeader = context.request.headers.get("accept-language") || "";
-    const preferredFromHeader = parseAcceptLanguageHeader(acceptLangHeader);
-    if (preferredFromHeader?.length > 0) {
-        return preferredFromHeader.map((lang) => lang.code);
+    if (cookieLang && validLangs.includes(cookieLang)) {
+        return cookieLang;
     }
 
-    return [];
-}
+    const detectedLang = context.preferredLocale || "es";
+    const finalLang = validLangs.includes(detectedLang) ? detectedLang : "es";
 
-export function getLanguage(context: APIContext): string {
-    const defaultLang = getDefaultLanguage();
-    const userPreferredLangs = getUserLangPreferences(context);
-    if (!userPreferredLangs) return defaultLang;
+    context.cookies.set("preferred-lang", finalLang, {
+        path: "/",
+        httpOnly: false,
+        maxAge: 60 * 60 * 24 * 365,
+    });
 
-    const validLangs = Object.keys(languagesList);
-    for (const lang of userPreferredLangs) {
-        if (validLangs.includes(lang)) {
-            context.cookies.set("preferred-lang", lang, {
-                path: "/",
-                httpOnly: false,
-                maxAge: 60 * 60 * 24 * 365,
-            });
-
-            return lang;
-        }
-    }
-
-    return defaultLang;
+    return finalLang;
 }
 
 export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
