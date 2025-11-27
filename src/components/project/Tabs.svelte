@@ -6,25 +6,33 @@
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
     import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import type { Project, Accounting } from "../../openapi/client/index";
+    import { activeTab } from "../../stores/projectTabs";
+    import type { Tabs } from "../../stores/projectTabs";
 
     let {
         lang = $bindable(),
         project = $bindable(),
         accounting,
+        onScroll,
     } = $props<{
         lang: string;
         project: Project;
         accounting: Accounting;
+        onScroll: void;
     }>();
 
-    let activeTab = $state("project");
     let tabsContainer: HTMLDivElement;
     let canScrollLeft = $state(false);
     let canScrollRight = $state(true);
 
-    const tabs = [
+    type TabsArray = {
+        id: Tabs;
+        label: string;
+    }[];
+
+    const tabs: TabsArray = [
         { id: "project", label: $t("project.tabs.project") },
         { id: "rewards", label: $t("project.tabs.rewards") },
         { id: "budget", label: $t("project.tabs.budget.title") },
@@ -32,12 +40,12 @@
         { id: "community", label: $t("project.tabs.community.title") },
     ];
 
-    function selectTab(tabId: string) {
-        activeTab = tabId;
+    function selectTab(tabId: Tabs) {
+        activeTab.set(tabId);
     }
 
     export function activateRewardsTab() {
-        activeTab = "rewards";
+        activeTab.set("rewards");
     }
 
     function updateScrollButtons() {
@@ -90,11 +98,11 @@
         {#each tabs as tab}
             <button
                 role="tab"
-                aria-selected={activeTab === tab.id}
+                aria-selected={$activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
                 class="text-secondary lg:border-variant1 inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
-                class:bg-variant1={activeTab === tab.id}
+                class:bg-variant1={$activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >
                 {tab.label}
@@ -123,7 +131,7 @@
 
     <div class="bg-variant1 flex w-full justify-center py-10 lg:py-20">
         <div class="wrapper flex items-center justify-center">
-            {#if activeTab === "rewards"}
+            {#if $activeTab === "rewards"}
                 <div
                     id="tab-rewards"
                     role="tabpanel"
@@ -132,7 +140,7 @@
                 >
                     <ProjectRewards bind:lang {project} />
                 </div>
-            {:else if activeTab === "project"}
+            {:else if $activeTab === "project"}
                 <div
                     id="tab-project"
                     role="tabpanel"
@@ -143,7 +151,7 @@
                         {@html content}
                     {/await}
                 </div>
-            {:else if activeTab === "budget"}
+            {:else if $activeTab === "budget"}
                 <div
                     id="tab-budget"
                     role="tabpanel"
@@ -152,7 +160,7 @@
                 >
                     <ProjectBudget bind:lang {project} {accounting} />
                 </div>
-            {:else if activeTab === "updates"}
+            {:else if $activeTab === "updates"}
                 <div
                     id="tab-updates"
                     role="tabpanel"
@@ -161,7 +169,7 @@
                 >
                     <ProjectUpdate bind:lang {project} />
                 </div>
-            {:else if activeTab === "community"}
+            {:else if $activeTab === "community"}
                 <div
                     id="tab-community"
                     role="tabpanel"
