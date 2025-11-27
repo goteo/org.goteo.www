@@ -12,10 +12,13 @@
         author?: string; // Pending API update to add author in every update
         type?: "small" | "large";
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
+        isActive?: boolean;
         class?: ClassNameValue;
     }
 
     let { update, author, type, onClick, class: classes }: Props = $props();
+
+    let cardClasses = $state("")
 
     function formatDate(date: string, locale?: string): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -26,6 +29,10 @@
 
         return new Date(date).toLocaleDateString(locale, options);
     }
+
+    $effect(() => {
+
+    });
 </script>
 
 {#if type === "small"}
