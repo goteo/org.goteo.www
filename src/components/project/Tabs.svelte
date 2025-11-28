@@ -8,19 +8,16 @@
     import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
     import { onDestroy, onMount } from "svelte";
     import type { Project, Accounting } from "../../openapi/client/index";
-    import { activeTab } from "../../stores/projectTabs";
-    import type { TabsType } from "../../stores/projectTabs";
+    import { activeTab, type TabsType } from "../../stores/projectTabs";
 
     let {
         lang = $bindable(),
         project = $bindable(),
         accounting,
-        scrollTo,
     } = $props<{
         lang: string;
         project: Project;
         accounting: Accounting;
-        scrollTo: (tabName: TabsType) => void;
     }>();
 
     let tabsContainer: HTMLDivElement;
@@ -41,10 +38,12 @@
     ];
 
     function selectTab(tabId: TabsType) {
+        if (typeof sessionStorage !== "undefined") sessionStorage.setItem("activeTab", tabId);
         activeTab.set(tabId);
     }
 
     export function activateRewardsTab() {
+        if (typeof sessionStorage !== "undefined") sessionStorage.setItem("activeTab", "rewards");
         activeTab.set("rewards");
     }
 
@@ -73,6 +72,10 @@
         const handleScroll = () => updateScrollButtons();
         tabsContainer?.addEventListener("scroll", handleScroll);
         return () => tabsContainer?.removeEventListener("scroll", handleScroll);
+    });
+
+    $effect(() => {
+        console.log("Tab rendered:", $activeTab);
     });
 </script>
 

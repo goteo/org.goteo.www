@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import {
         type Project,
         type Accounting,
@@ -22,10 +22,8 @@
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
     import Button from "../library/Button.svelte";
-    import type { TabsType } from "../../stores/projectTabs";
+    import { activeTab, resetActiveTab, type TabsType } from "../../stores/projectTabs";
 
-    // implementar locale (mañana 28/11 por la mañana)
-    
     let {
         lang = $bindable(),
         project,
@@ -44,6 +42,8 @@
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
 
+    let previousLocale: string | null = null;
+
     const countdownEnd = getCurrentDeadline(project);
 
     async function getProjectData(code?: string) {
@@ -61,12 +61,9 @@
 
     let tabsComponent: any;
 
-    function scrollTo(tabName: TabsType): void {
+    function scrollToTab(tabName: TabsType): void {
         if (typeof document === "undefined") return; // SSR guard
 
-        if (tabsComponent?.activateRewardsTab) {
-            tabsComponent.activateRewardsTab();
-        }
         setTimeout(() => {
             const tabElement = document.getElementById(`tab-${tabName}`);
             if (tabElement) {
@@ -97,6 +94,31 @@
 
         return undefined;
     }
+
+    function handleLocaleChange(tabName: TabsType) {
+        queueMicrotask(() => {
+            const el = document.getElementById(`tab-${tabName}`);
+            if (el) {
+                scrollToTab(tabName);
+            }
+        });
+    }
+
+    onMount(() => {
+        const unsubscribe = locale.subscribe((value) => {
+            if (previousLocale === null) {
+                previousLocale = value;
+                return;
+            }
+
+            if (value !== previousLocale && $activeTab !== null) {
+                handleLocaleChange($activeTab);
+                previousLocale = value;
+            }
+        });
+
+        return unsubscribe;
+    });
 </script>
 
 <section class="wrapper">
@@ -152,7 +174,7 @@
                 {accounting}
                 {balancePoints}
                 {totalSupports}
-                onScrollToRewards={scrollTo("rewards")}
+                onScrollToRewards={scrollToTab("rewards")}
             />
         </div>
     </div>
@@ -172,15 +194,27 @@
             <h2 class="text-2xl font-bold text-black">
                 {$t("reward.trending")}
             </h2>
-            <Button kind="secondary" class="hidden lg:flex" onclick={() => {scrollTo("rewards")}}>
+            <Button
+                kind="secondary"
+                class="hidden lg:flex"
+                onclick={() => {
+                    scrollToTab("rewards");
+                }}
+            >
                 <ArrowRightIcon />{$t("reward.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang {project} />
-        <Button kind="secondary" class="lg:hidden" onclick={() => {scrollTo("rewards")}}>
+        <Button
+            kind="secondary"
+            class="lg:hidden"
+            onclick={() => {
+                scrollToTab("rewards");
+            }}
+        >
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs {scrollTo} bind:this={tabsComponent} bind:lang bind:project {accounting} />
+<Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />
