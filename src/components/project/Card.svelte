@@ -14,7 +14,7 @@
     export let totalSupports: number = 0;
     export let accounting: Accounting;
     export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
-    export let onScrollToRewards: () => void;
+    export let onScrollToRewards: void;
 
     function hasReached(money?: Money) {
         return (
@@ -83,7 +83,7 @@
             </div>
         </div>
     </div>
-    <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={onScrollToRewards}>
+    <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={() => {onScrollToRewards}}>
         {$t("campaignProgress.donate")}
     </Button>
 </div>
