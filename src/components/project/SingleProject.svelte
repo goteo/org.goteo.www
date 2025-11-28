@@ -22,6 +22,7 @@
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
     import Button from "../library/Button.svelte";
+    import type { TabsType } from "../../stores/projectTabs";
 
     // implementar locale (mañana 28/11 por la mañana)
     
@@ -60,7 +61,9 @@
 
     let tabsComponent: any;
 
-    function scrollTo(tabName: string): void {
+    function scrollTo(tabName: TabsType): void {
+        if (typeof document === "undefined") return; // SSR guard
+
         if (tabsComponent?.activateRewardsTab) {
             tabsComponent.activateRewardsTab();
         }

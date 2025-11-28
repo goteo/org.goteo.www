@@ -9,18 +9,18 @@
     import { onDestroy, onMount } from "svelte";
     import type { Project, Accounting } from "../../openapi/client/index";
     import { activeTab } from "../../stores/projectTabs";
-    import type { Tabs } from "../../stores/projectTabs";
+    import type { TabsType } from "../../stores/projectTabs";
 
     let {
         lang = $bindable(),
         project = $bindable(),
         accounting,
-        onScroll,
+        scrollTo,
     } = $props<{
         lang: string;
         project: Project;
         accounting: Accounting;
-        onScroll: void;
+        scrollTo: (tabName: TabsType) => void;
     }>();
 
     let tabsContainer: HTMLDivElement;
@@ -28,7 +28,7 @@
     let canScrollRight = $state(true);
 
     type TabsArray = {
-        id: Tabs;
+        id: TabsType;
         label: string;
     }[];
 
@@ -40,7 +40,7 @@
         { id: "community", label: $t("project.tabs.community.title") },
     ];
 
-    function selectTab(tabId: Tabs) {
+    function selectTab(tabId: TabsType) {
         activeTab.set(tabId);
     }
 
