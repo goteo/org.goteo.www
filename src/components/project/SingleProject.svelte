@@ -16,13 +16,15 @@
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
-    import { setLocale, t } from "../../i18n/store";
+    import { locale, setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
     import Button from "../library/Button.svelte";
 
+    // implementar locale (mañana 28/11 por la mañana)
+    
     let {
         lang = $bindable(),
         project,
@@ -58,14 +60,14 @@
 
     let tabsComponent: any;
 
-    function scrollToRewards() {
+    function scrollTo(tabName: string): void {
         if (tabsComponent?.activateRewardsTab) {
             tabsComponent.activateRewardsTab();
         }
         setTimeout(() => {
-            const rewardsElement = document.getElementById("tab-rewards");
-            if (rewardsElement) {
-                rewardsElement.scrollIntoView({
+            const tabElement = document.getElementById(`tab-${tabName}`);
+            if (tabElement) {
+                tabElement.scrollIntoView({
                     behavior: "smooth",
                     block: "start",
                 });
@@ -147,7 +149,7 @@
                 {accounting}
                 {balancePoints}
                 {totalSupports}
-                onScrollToRewards={scrollToRewards}
+                onScrollToRewards={scrollTo("rewards")}
             />
         </div>
     </div>
@@ -167,15 +169,15 @@
             <h2 class="text-2xl font-bold text-black">
                 {$t("reward.trending")}
             </h2>
-            <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
+            <Button kind="secondary" class="hidden lg:flex" onclick={() => {scrollTo("rewards")}}>
                 <ArrowRightIcon />{$t("reward.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang {project} />
-        <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
+        <Button kind="secondary" class="lg:hidden" onclick={() => {scrollTo("rewards")}}>
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />
+<Tabs {scrollTo} bind:this={tabsComponent} bind:lang bind:project {accounting} />
