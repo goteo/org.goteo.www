@@ -37,16 +37,6 @@
         { id: "community", label: $t("project.tabs.community.title") },
     ];
 
-    function selectTab(tabId: TabsType) {
-        sessionStorage.setItem("activeTab", tabId);
-        activeTab.set(tabId);
-    }
-
-    export function activateRewardsTab() {
-        sessionStorage.setItem("activeTab", "rewards");
-        activeTab.set("rewards");
-    }
-
     function updateScrollButtons() {
         if (!tabsContainer) return;
 
@@ -102,7 +92,7 @@
                 id={`tab-button-${tab.id}`}
                 class="text-secondary lg:border-variant1 inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
                 class:bg-variant1={$activeTab === tab.id}
-                onclick={() => selectTab(tab.id)}
+                onclick={() => $activeTab = tab.id}
             >
                 {tab.label}
             </button>

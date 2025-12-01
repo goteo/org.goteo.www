@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
 
-export type TabsType = "project" | "rewards" | "budget" | "updates" | "community";
+export type TabsType = "project" | "rewards" | "budget" | "updates" | "community" | undefined;
 
 const initialActiveTab = "project";
 

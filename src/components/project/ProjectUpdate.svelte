@@ -9,7 +9,7 @@
     import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/Button.svelte";
-    import ProjectUpdateCard from "./ ProjectUpdateCard.svelte";
+    import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
 
     let {
         lang = $bindable(),
