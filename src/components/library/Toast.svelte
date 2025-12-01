@@ -7,9 +7,13 @@
 
     let {
         variant = "error",
+        button,
+        link,
         children,
     }: {
         variant?: keyof typeof variantStyles;
+        button?: () => any;
+        link?: () => any;
         children: any;
     } = $props();
 
@@ -20,13 +24,6 @@
         success: "border-primary bg-semantic-success",
         notification: "border-variant3 bg-semantic-notification",
         warning: "border-variant4 bg-semantic-warning",
-    };
-
-    const variantIcons = {
-        error: "/icons/error-icon.svg",
-        success: "/icons/success-icon.svg",
-        notification: "/icons/notification-icon.svg",
-        warning: "/icons/warning-icon.svg",
     };
 </script>
 
