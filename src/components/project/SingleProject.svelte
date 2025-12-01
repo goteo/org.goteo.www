@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
     import {
         type Project,
         type Accounting,
@@ -43,11 +42,14 @@
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
 
     let previousLocale: string | null = null;
+    let pendingScroll: boolean = false;
 
     const countdownEnd = getCurrentDeadline(project);
 
     async function getProjectData(code?: string) {
         lang = code ? code : getDefaultLanguage();
+
+        if (typeof window !== "undefined") sessionStorage.setItem("scrollAfterLocaleChange", "1");
 
         setLocale(lang);
 
@@ -61,8 +63,9 @@
 
     let tabsComponent: any;
 
-    function scrollToTab(tabName: TabsType): void {
+    function scrollToTab(tabName: TabsType | null): void {
         if (typeof document === "undefined") return; // SSR guard
+        if (!tabName) return;
 
         setTimeout(() => {
             const tabElement = document.getElementById(`tab-${tabName}`);
@@ -95,29 +98,28 @@
         return undefined;
     }
 
-    function handleLocaleChange(tabName: TabsType) {
-        queueMicrotask(() => {
-            const el = document.getElementById(`tab-${tabName}`);
-            if (el) {
-                scrollToTab(tabName);
-            }
-        });
-    }
+    $effect(() => {
+        const current = $locale;
 
-    onMount(() => {
-        const unsubscribe = locale.subscribe((value) => {
-            if (previousLocale === null) {
-                previousLocale = value;
-                return;
-            }
+        if (previousLocale === null) {
+            previousLocale = current;
+            return;
+        }
 
-            if (value !== previousLocale && $activeTab !== null) {
-                handleLocaleChange($activeTab);
-                previousLocale = value;
-            }
-        });
+        if (current !== previousLocale) {
+            pendingScroll = true;
+            previousLocale = current;
+        }
+    });
 
-        return unsubscribe;
+    $effect(() => {
+        if (pendingScroll && project) {
+            queueMicrotask(() => {
+                const active = sessionStorage.getItem("activeTab") as TabsType | null;
+                scrollToTab(active);
+            });
+            pendingScroll = false;
+        }
     });
 </script>
 

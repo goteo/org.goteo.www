@@ -38,12 +38,12 @@
     ];
 
     function selectTab(tabId: TabsType) {
-        if (typeof sessionStorage !== "undefined") sessionStorage.setItem("activeTab", tabId);
+        sessionStorage.setItem("activeTab", tabId);
         activeTab.set(tabId);
     }
 
     export function activateRewardsTab() {
-        if (typeof sessionStorage !== "undefined") sessionStorage.setItem("activeTab", "rewards");
+        sessionStorage.setItem("activeTab", "rewards");
         activeTab.set("rewards");
     }
 
@@ -72,10 +72,6 @@
         const handleScroll = () => updateScrollButtons();
         tabsContainer?.addEventListener("scroll", handleScroll);
         return () => tabsContainer?.removeEventListener("scroll", handleScroll);
-    });
-
-    $effect(() => {
-        console.log("Tab rendered:", $activeTab);
     });
 </script>
 
