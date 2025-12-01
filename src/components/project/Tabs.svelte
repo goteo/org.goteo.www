@@ -137,7 +137,8 @@
                     id="tab-project"
                     role="tabpanel"
                     aria-labelledby="tab-button-project"
-                    class="marked-content flex max-w-4xl flex-col gap-4"
+                    class="marked-content flex w-full max-w-4xl flex-col gap-6 overflow-hidden"
+                    style="overflow-wrap: break-word; word-wrap: break-word; word-break: break-word;"
                 >
                     {#await renderMarkdown(project.description) then content}
                         {@html content}
