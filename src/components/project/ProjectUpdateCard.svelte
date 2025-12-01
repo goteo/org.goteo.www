@@ -13,10 +13,9 @@
         type?: "small" | "large";
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         isActive?: boolean;
-        class?: ClassNameValue;
     }
 
-    let { update, author, type, onClick, class: classes }: Props = $props();
+    let { update, author, type, onClick, isActive }: Props = $props();
 
     let cardClasses = $state("")
 
@@ -31,7 +30,9 @@
     }
 
     $effect(() => {
-
+        isActive;
+        cardClasses = isActive ? "opacity-100" : "";
+        type = author ? "large" : "small";
     });
 </script>
 
@@ -39,7 +40,7 @@
     <div
         class={twMerge(
             "flex w-[34.625rem] flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
-            classes,
+            cardClasses,
         )}
     >
         <div class="flex flex-col gap-4">
@@ -76,7 +77,7 @@
     <div
         class={twMerge(
             "bg-soft-purple border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
-            classes,
+            cardClasses,
         )}
     >
         <div class="flex flex-col gap-4">

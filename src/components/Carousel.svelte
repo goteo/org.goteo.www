@@ -1,7 +1,8 @@
 <script lang="ts">
     import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
-    import { onMount, tick } from "svelte";
+    import { onMount, tick, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import ProjectUpdate from "./project/ProjectUpdate.svelte";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -14,6 +15,9 @@
         mobileItemsToShow = 1,
         desktopItemsToShow = 3,
         children = null,
+        onSelect = null,
+        activeCard = $bindable(0),
+        active
     }: {
         itemsPerGroup: number;
         gap: number;
@@ -22,6 +26,9 @@
         mobileItemsToShow?: number;
         desktopItemsToShow?: number;
         children?: any;
+        onSelect?: ((card: ProjectUpdate) => void) | null;
+        activeCard?: number;
+        active?: Snippet; 
     } = $props();
 
     const wrapperClasses = twMerge("relative w-full", className);
@@ -126,7 +133,7 @@
     }
 
     function updateNavState(group: number) {
-        activeGroup = group;
+        activeCard = group;
         isAtStart = group === 0;
         isAtEnd = group === totalGroups - 1;
     }
@@ -168,8 +175,8 @@
     function scroll(dir: "left" | "right") {
         const next =
             dir === "right"
-                ? Math.min(activeGroup + 1, totalGroups - 1)
-                : Math.max(activeGroup - 1, 0);
+                ? Math.min(activeCard + 1, totalGroups - 1)
+                : Math.max(activeCard - 1, 0);
         scrollToGroup(next);
     }
 
@@ -225,7 +232,7 @@
 
                                 if (idx !== -1) {
                                     const group = Math.floor(idx / itemsPerGroup);
-                                    if (group !== activeGroup) updateNavState(group);
+                                    if (group !== activeCard) updateNavState(group);
                                 }
                             }
                         }
@@ -300,6 +307,7 @@
     >
         {#if children}
             {@render children()}
+            {@render active?.()}
         {/if}
     </div>
 
@@ -318,8 +326,8 @@
                 <button
                     onclick={() => scrollToGroup(i)}
                     class="h-2 w-2 rounded-full transition-all"
-                    class:bg-indigo-500={i === activeGroup}
-                    class:bg-gray-300={i !== activeGroup}
+                    class:bg-indigo-500={i === activeCard}
+                    class:bg-gray-300={i !== activeCard}
                     aria-label={`Go to group ${i + 1}`}
                 ></button>
             {/each}

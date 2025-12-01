@@ -9,7 +9,7 @@
     import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/Button.svelte";
-    import ProjectUpdateCard from "./ ProjectUpdateCard.svelte";
+    import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
 
     let {
         lang = $bindable(),
@@ -36,6 +36,7 @@
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
     let author: string = "";
+    let activeCard: number = $state(0);
     let cardType: "small" | "large" = $state("small");
 
     $effect(() => {
@@ -104,7 +105,7 @@
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
-    <Carousel gap={24} showDots={true} {itemsPerGroup}>
+    <Carousel bind:activeCard={activeCard} gap={24} showDots={true} {itemsPerGroup}>
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
@@ -113,11 +114,16 @@
             </div>
         {/if}
 
-        {#each projectsUpdates as update}
+        <!-- {#snippet onActiveChange(group: number)}
+            {(activeGroup = group)}
+        {/snippet} -->
+
+        {#each projectsUpdates as update, i}
             <ProjectUpdateCard
                 {update}
                 author={getAuthor(update)}
                 type={cardType}
+                isActive={i === activeCard}
                 onClick={(): void => {
                     selected = update;
                     openModal = true;
