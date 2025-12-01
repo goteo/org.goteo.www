@@ -1280,7 +1280,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1327,7 +1327,7 @@ export type ProjectProjectCreationDto = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1351,7 +1351,7 @@ export type ProjectProjectCreationDtoJsonld = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1392,7 +1392,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
 };
 
 /**
@@ -1456,7 +1456,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1982,6 +1982,11 @@ export type ProjectUpdate = {
      */
     cover?: string;
     /**
+     * Author is automatically detected from the request's User.\
+     * Non-authored updates are system-generated.
+     */
+    readonly author?: string | null;
+    /**
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
@@ -2029,6 +2034,11 @@ export type ProjectUpdateJsonld = {
      * URL to an image resource to be displayed as header.
      */
     cover?: string;
+    /**
+     * Author is automatically detected from the request's User.\
+     * Non-authored updates are system-generated.
+     */
+    readonly author?: string | null;
     /**
      * List of the available content locales.
      */
@@ -3052,6 +3062,8 @@ export type ApiMatchCallsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        accounting?: string;
+        'accounting[]'?: Array<string>;
         title?: string;
         description?: string;
         'territory.country'?: string;
@@ -3822,6 +3834,8 @@ export type ApiProjectsGetCollectionData = {
         itemsPerPage?: number;
         slug?: string;
         'slug[]'?: Array<string>;
+        accounting?: string;
+        'accounting[]'?: Array<string>;
         owner?: string;
         'owner[]'?: Array<string>;
         title?: string;
@@ -4756,6 +4770,8 @@ export type ApiProjectUpdatesGetCollectionData = {
         itemsPerPage?: number;
         project?: string;
         'project[]'?: Array<string>;
+        author?: string;
+        'author[]'?: Array<string>;
         'order[date]'?: 'asc' | 'desc';
         'order[dateCreated]'?: 'asc' | 'desc';
         'order[dateUpdated]'?: 'asc' | 'desc';
@@ -4921,6 +4937,8 @@ export type ApiTipjarsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        accounting?: string;
+        'accounting[]'?: Array<string>;
         name?: string;
     };
     url: '/v4/tipjars';
@@ -5085,6 +5103,8 @@ export type ApiUsersGetCollectionData = {
          */
         query?: string;
         handle?: string;
+        accounting?: string;
+        'accounting[]'?: Array<string>;
     };
     url: '/v4/users';
 };
