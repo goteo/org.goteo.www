@@ -37,6 +37,11 @@
     --color-variant3: #72d8ff;
     --color-variant4: #ffff99;
 
+    --color-semantic-error: #e9b1bd;
+    --color-semantic-success: #b1e9e1;
+    --color-semantic-notification: #c2eeff;
+    --color-semantic-warning: #ffffc2;
+
     --font-body: "Karla", sans-serif;
     --body-regular: 1rem;
     --body-small: 0.875rem;
