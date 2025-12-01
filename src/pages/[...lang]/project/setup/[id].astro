@@ -1,0 +1,30 @@
+---
+/**
+ * Project Setup Wizard Route
+ * Simplified for testing - access control will be implemented later
+ */
+
+import Layout from "../../../../layouts/Layout.astro";
+import WizardApp from "../../../../components/project/wizard/WizardApp.svelte";
+import { apiProjectsIdOrSlugGet } from "../../../../openapi/client";
+
+const lang = (Astro.params.lang || "es") as string;
+const { id } = Astro.params;
+
+if (!id) {
+    return Astro.redirect(`/${lang}/`);
+}
+
+// Fetch project data
+const { data: project } = await apiProjectsIdOrSlugGet({
+    path: { idOrSlug: id },
+});
+
+if (!project) {
+    return Astro.redirect(`/${lang}/`);
+}
+---
+
+<Layout title="Configurar Proyecto">
+    <WizardApp project={project} lang={lang} client:load />
+</Layout>
