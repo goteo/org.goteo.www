@@ -57,6 +57,11 @@ try {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";
 }
+
+const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
+const postPaymentUrl = checkoutId
+    ? `/payment/post-payment?checkoutId=${checkoutId}`
+    : "/payment/post-payment";
 ---
 
 <Layout title="Estado del pago">
@@ -64,8 +69,8 @@ try {
         {
             error ? (
                 <main class="wrapper">
-                    <div class="flex flex-row gap-8 py-10">
-                        <div class="flex w-1/2 flex-col gap-10">
+                    <div class="flex flex-col gap-8 py-10 lg:flex-row">
+                        <div class="flex w-full flex-col gap-10 lg:w-1/2">
                             <div class="flex flex-col gap-4">
                                 <div class="flex flex-col gap-10">
                                     <div class="flex flex-row items-center justify-between gap-6">
@@ -88,12 +93,20 @@ try {
                                 </div>
                             </div>
                         </div>
-                        <div class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                            <Summary client:load hasError={!!error} {defaultCurrency} {amount} />
-                            <Steps client:load step={4} hasError={!!error} />
-                            <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
-                                <a class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold">
+                        <div class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col gap-6 rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6">
+                            <Summary client:load {defaultCurrency} {amount} hasError={!!error} />
+                            <div class="lg:block" id="checkout-details">
+                                <div class="flex flex-col gap-4 px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                                    <p class="text-content text-sm">
+                                        {t("checkout.summary.deduct")}
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                                <a
+                                    href={postPaymentUrl}
+                                    class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
+                                >
                                     {t("global.btn.continue")}
                                 </a>
                             </div>
@@ -103,8 +116,8 @@ try {
             ) : (
                 <>
                     <main class="wrapper">
-                        <div class="flex flex-row gap-8 py-10">
-                            <div class="flex w-1/2 flex-col gap-10">
+                        <div class="flex flex-col gap-8 py-10 lg:flex-row">
+                            <div class="flex w-full flex-col gap-10 lg:w-1/2">
                                 <div class="flex flex-col gap-4">
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
@@ -124,14 +137,25 @@ try {
                                     </div>
                                 </div>
                             </div>
-                            <div class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white">
-                                <Summary client:load {defaultCurrency} {amount} />
-                                <Steps step={4} client:load />
-                                <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
-                                    <p class="text-content text-sm">
-                                        {t("checkout.summary.deduct")}
-                                    </p>
-                                    <a class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold">
+                            <div class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col gap-6 rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6">
+                                <Summary
+                                    client:load
+                                    {defaultCurrency}
+                                    {amount}
+                                    hasError={!!error}
+                                />
+                                <div class="lg:block" id="checkout-details">
+                                    <div class="flex flex-col gap-4 px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                                        <p class="text-content text-sm">
+                                            {t("checkout.summary.deduct")}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-end px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                                    <a
+                                        href={postPaymentUrl}
+                                        class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
+                                    >
                                         {t("global.btn.continue")}
                                     </a>
                                 </div>

@@ -456,7 +456,9 @@
   "title": "Hola!",
   "header": {
     "login": "Iniciar Sessió",
-    "btnCart": "Anar al checkout"
+    "btnCart": "Anar al checkout",
+    "search": "Cercar",
+    "createProject": "Crea la teva campanya"
   },
   "checkout": {
     "title": "Resum de les teves donacions seleccionades",
@@ -483,7 +485,9 @@
       "resume": {
         "donationsPrefix": "de donacions",
         "foundationPrefix": "d’aportació a la fundació"
-      }
+      },
+      "show_more": "Mostra'n més",
+      "hide": "Amagar"
     },
     "cart": {
       "freeDonation": {
@@ -509,6 +513,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Enhorabona! Gràcies per la teva donació",
+      "emailSent": "T'hem enviat un resum a:",
+      "certificate": {
+        "title": "Com sol·licito el meu certificat?",
+        "description": "El certificat es genera de forma automàtica al final de l'any fiscal (desembre). T'enviarem un correu una vegada hàgim presentat la documentació a Hisenda. En cas que trobem algun problema et contactarem per correu."
+      },
+      "donatedProjects": {
+        "title": "Has donat als següents projectes",
+        "empty": "No s'han trobat projectes donats"
+      },
+      "suggestedProjects": {
+        "title": "Altres projectes que necessiten la teva ajuda",
+        "empty": "No hi ha projectes disponibles en aquest moment"
+      }
+    },
     "page": {
       "title": "Indica’ns les teves dades de pagament",
       "description": "Ara necessitem que ens diguis com vols pagar.",
@@ -749,8 +769,18 @@
       "viewAll": "Veure totes",
       "obtained": "Obtingut",
       "minimum": "Mínim",
+      "optimum": "Òptim",
       "daysRemaining": "Queden {{days}} dies",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "Mínim aconseguit!",
+        "goForMinimum": "A pel mínim!"
+      },
+      "remaining": {
+        "toOptimum": "Falta per òptim",
+        "toMinimum": "Falta pel mínim"
+      },
+      "userDonations": "Les teves donacions:"
     },
     "blog": {
       "title": "S'aveïnen grans canvis… ¡no et perdis res!",
@@ -918,137 +948,80 @@
       }
     }
   },
-  "validation": {
-    "errors": {
-      "summary": {
-        "title": "Si us plau, corregeix els següents errors:"
+  "me": {
+    "page": {
+      "title": "Activitat",
+      "subtitle": "Consulta la teva activitat a Goteo"
+    },
+    "period": {
+      "label": "Període",
+      "year": "Any {{year}}"
+    },
+    "donations": {
+      "title": "Les meves donacions",
+      "empty": "Encara no has donat a cap projecte",
+      "explore": "Explora projectes",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/ca/projects",
+      "count": "Donacions",
+      "total": "Total donat",
+      "recent": "Últimes donacions",
+      "viewAll": "Veure totes",
+      "certificate": "Sol·licitar certificat"
+    },
+    "projects": {
+      "title": "Projectes impulsats",
+      "empty": "Encara no has impulsat cap projecte",
+      "create": "Impulsa el teu projecte",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/ca/projects/new",
+      "count": "Projectes",
+      "raised": "Recaptat",
+      "recent": "Últims projectes impulsats",
+      "viewAll": "Veure tots",
+      "createNew": "Crear un projecte"
+    },
+    "ownedProjects": {
+      "title": "Els Teus Projectes Actius",
+      "messageToDonatorsButton": "Missatge a donants",
+      "uploadNewsButton": "Pujar novetat"
+    },
+    "donatedProjects": {
+      "title": "Projectes actius on has donat"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descobreix, connecta i dona",
+        "description": "Imagina un lloc on centenars de projectes socials esperen el teu suport. A la nostra plataforma, explorar és fàcil: navega per causes comunitàries, ambientals o educatives. Perquè aquí, tu decideixes quines històries s'escriuen.",
+        "button": "Dona a un projecte"
+      },
+      "matchfunding": {
+        "title": "Donacions que brillen. Projectes que inspiren.",
+        "description": "Goteo és pionera en matchfunding. Tant si ets un donant que busca potenciar la teva contribució a projectes, un impulsor que vol augmentar el seu pressupost o una entitat que busca donar suport a projectes i impulsors a través de reforços en el donatiu... el nostre programa de matchfunding et permet multiplicar l'impuls pel canvi",
+        "learnMore": "Descobreix com funciona el matchfunding",
+        "becomeMatcher": "Fes-te Matcher"
       }
     },
-    "project": {
-      "title": {
-        "required": "El títol és obligatori",
-        "pattern": "El títol ha de contenir almenys una lletra"
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatòries",
+        "donated": "Donat",
+        "recent": "Últimes convocatòries",
+        "viewAll": "Veure convocatòries",
+        "create": "Crear convocatòria"
       },
-      "subtitle": {
-        "required": "El subtítol és obligatori"
+      "section": {
+        "title": "Les Teves Convocatòries de Matchfunding Actives",
+        "empty": "No tens convocatòries actives",
+        "error": "Error en carregar les convocatòries"
       },
-      "categories": {
-        "min": "Has de seleccionar almenys una categoria",
-        "max": "Pots seleccionar un màxim de 2 categories"
-      },
-      "release": {
-        "min": "La data de llançament ha de ser almenys 14 dies des d'avui"
-      },
-      "budget": {
-        "positive": "El pressupost ha de ser un valor positiu"
-      }
-    }
-  },
-  "wizard": {
-    "header": {
-      "titlePlaceholder": "Títol de campanya",
-      "subtitlePlaceholder": "Descripció breu de la campanya, l'actual; subtítol de déus."
-    },
-    "buttons": {
-      "preview": "Previsualitzar",
-      "save": "Guardar",
-      "publish": "Publicar",
-      "continue": "Continuar amb info de campanya"
-    },
-    "steps": {
-      "configuration": "Configuració",
-      "campaign_info": "Informació de campanya",
-      "rewards": "Recompenses",
-      "collaborations": "Col·laboracions",
-      "budget": "Pressupost",
-      "about_you": "Sobre tu"
-    },
-    "configuration": {
-      "title": "Configuració",
-      "subtitle": "Configura les dades bàsiques de la teva campanya",
-      "languages": {
-        "title": "Idiomes de la campanya",
-        "description": "Quins són els idiomes en què publicaràs la informació de campanya.",
-        "primaryLabel": "Idioma principal de la campanya",
-        "secondaryLabel": "Idioma secundari {{index}}",
-        "selectPlaceholder": "Selecciona un idioma",
-        "addButton": "Afegir un altre",
-        "removeButton": "Eliminar idioma",
-        "options": {
-          "es": "Español",
-          "en": "English",
-          "ca": "Català",
-          "fr": "Français",
-          "de": "Deutsch",
-          "it": "Italiano",
-          "pt": "Português"
-        }
-      },
-      "geography": {
-        "title": "Indica l'abast geogràfic",
-        "description": "Descriu a qui va dirigit el teu projecte",
-        "scopeLabel": "Abast geogràfic",
-        "scopePlaceholder": "Selecciona l'abast",
-        "localitiesLabel": "Indica localitats",
-        "localitiesPlaceholder": "Ex: Barcelona, Madrid, València",
-        "localitiesHelper": "Separa les localitats amb comes.",
-        "options": {
-          "local": "Local",
-          "estatal": "Estatal",
-          "internacional": "Internacional"
-        }
-      },
-      "rounds": {
-        "title": "Tria les rondes que tindrà la teva campanya",
-        "description": "La configuració predeterminada són 40 dies cada ronda, pots sol·licitar modificacions al teu assessor si el teu projecte és seleccionat",
-        "option1": "1 Ronda",
-        "option2": "2 Rondes"
-      }
-    },
-    "campaignInfo": {
-      "media": {
-        "addImage": "Afegir imatge",
-        "addVideo": "Afegir vídeo",
-        "videoPlaceholder": "Enganxa l'URL del vídeo de YouTube o Vimeo",
-        "confirmDelete": "Eliminar {{name}}?",
-        "maxImagesReached": "Màxim {{max}} imatges assolit",
-        "removeVideo": "Eliminar vídeo",
-        "uploading": "Pujant...",
-        "processing": "Processant {{name}}...",
-        "fileInputLabel": "Seleccionar imatge per pujar",
-        "uploadedImages": "Imatges pujades",
-        "removeImage": "Eliminar imatge: {{name}}"
-      }
-    },
-    "placeholders": {
-      "configurationStep": "Aquest pas s'implementarà aviat.",
-      "campaignInfoStep": "Informació de campanya - Aquest pas s'implementarà a la Fase 2.",
-      "rewardsStep": "Recompenses - Aquest pas s'implementarà a la Fase 3.",
-      "collaborationsStep": "Col·laboracions - Aquest pas s'implementarà a la Fase 4.",
-      "budgetStep": "Pressupost - Aquest pas s'implementarà a la Fase 5.",
-      "aboutYouStep": "Sobre tu - Aquest pas s'implementarà a la Fase 6.",
-      "step_not_implemented": "Aquest pas s'implementarà properament."
-    },
-    "validation": {
-      "languages": "Has de seleccionar almenys un idioma",
-      "geographicScope": "Has de seleccionar un abast geogràfic",
-      "localities": "Has d'indicar les localitats per a l'abast local",
-      "campaign_info": {
-        "media": {
-          "required": "Has d'afegir almenys una imatge o un vídeo",
-          "image_too_large": "La imatge és massa gran. Mida màxima: 500 KB",
-          "invalid_image": "Format d'imatge no vàlid",
-          "max_images": "Màxim 3 imatges permeses",
-          "upload_failed": "Error en pujar la imatge. Si us plau, torna-ho a intentar"
-        }
-      }
-    },
-    "errors": {
-      "storage": {
-        "title": "Error en guardar",
-        "quota_exceeded": "L'emmagatzematge local està ple. Si us plau, allibera espai o utilitza el navegador en mode privat.",
-        "save_failed": "No s'ha pogut guardar l'esborrany automàticament. Els teus canvis poden perdre's.",
-        "close": "Tancar alerta"
+      "callCard": {
+        "donationCall": "Dotació convocatòria",
+        "participatingProjects": "Projectes participants",
+        "successfulProjects": "Projectes acollits amb èxit",
+        "projects": "projectes",
+        "viewCall": "Anar a la convocatòria"
       }
     }
   }

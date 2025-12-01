@@ -38,7 +38,7 @@
 
     let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
 
-    const countdownEnd = project.calendar?.optimum ? new Date(project.calendar.optimum) : undefined;
+    const countdownEnd = getCurrentDeadline(project);
 
     async function getProjectData(code?: string) {
         lang = code ? code : getDefaultLanguage();
@@ -51,6 +51,43 @@
         });
 
         project = data!;
+    }
+
+    let tabsComponent: any;
+
+    function scrollToRewards() {
+        if (tabsComponent?.activateRewardsTab) {
+            tabsComponent.activateRewardsTab();
+        }
+        setTimeout(() => {
+            const rewardsElement = document.getElementById("tab-rewards");
+            if (rewardsElement) {
+                rewardsElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                });
+            }
+        }, 100);
+    }
+
+    function getCurrentDeadline(project: Project): Date | undefined {
+        const now = new Date();
+
+        const minimum = new Date(project.calendar?.minimum!);
+        if (now < minimum) {
+            return minimum;
+        }
+
+        if (!project.calendar?.optimum) {
+            return undefined;
+        }
+
+        const optimum = new Date(project.calendar?.optimum);
+        if (now < optimum) {
+            return optimum;
+        }
+
+        return undefined;
     }
 </script>
 
@@ -102,12 +139,18 @@
             <div class="lg:hidden">
                 <Countdown {countdownEnd} />
             </div>
-            <Card {project} {accounting} {balancePoints} {totalSupports} />
+            <Card
+                {project}
+                {accounting}
+                {balancePoints}
+                {totalSupports}
+                onScrollToRewards={scrollToRewards}
+            />
         </div>
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <ProjectTags {project} {lang} />
+        <ProjectTags {project} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <Button kind="invert" size="sm" class="px-0">
@@ -121,15 +164,15 @@
             <h2 class="text-2xl font-bold text-black">
                 {$t("reward.trending")}
             </h2>
-            <Button kind="secondary" class="hidden lg:flex">
+            <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
                 <ArrowRightIcon />{$t("reward.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang {project} />
-        <Button kind="secondary" class="lg:hidden">
+        <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner {ownerName} />
 </section>
-<Tabs bind:lang bind:project {accounting} />
+<Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />

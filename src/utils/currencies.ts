@@ -50,7 +50,7 @@ export function parseCurrency(value: string, currency?: string): number {
 export function formatCurrency(
     amount?: number,
     currency?: string | null,
-    options: { asLocaleString: boolean } = { asLocaleString: true },
+    options: { asLocaleString?: boolean; locale?: string } = {},
 ): string {
     if (amount === undefined) return "";
     if (currency === undefined || currency === null) currency = getDefaultCurrency();
@@ -63,9 +63,11 @@ export function formatCurrency(
     const hasDecimals = rawAmount % 1 !== 0;
     const formattedAmount = hasDecimals ? rawAmount.toFixed(decimals) : rawAmount.toFixed(0);
 
-    const asLocaleString = options.asLocaleString;
+    // Default to true for backward compatibility
+    const asLocaleString = options.asLocaleString ?? true;
 
-    const locale = getDefaultLanguage();
+    // Use provided locale or fall back to default language
+    const locale = options.locale ?? getDefaultLanguage();
     const formatter = new Intl.NumberFormat(locale, {
         currency,
         style: "currency",
@@ -83,6 +85,49 @@ export function getUnit(currency?: string): number {
     const { decimals } = currencyData;
 
     return Math.pow(10, decimals);
+}
+
+/**
+ * Extracts the currency symbol from a locale and currency code.
+ * Uses Intl.NumberFormat to derive the symbol, falling back to the currency code if extraction fails.
+ *
+ * @param locale - The locale string (e.g., "es", "en")
+ * @param currency - The ISO 4217 currency code (e.g., "EUR", "USD")
+ * @returns The currency symbol (e.g., "€", "$") or the currency code as fallback
+ */
+export function getCurrencySymbol(locale: string, currency: string): string {
+    try {
+        const parts = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        }).formatToParts(0);
+        const currencyPart = parts.find((part) => part.type === "currency");
+        return currencyPart?.value ?? currency;
+    } catch (error) {
+        console.warn("Failed to derive currency symbol", error);
+        return currency;
+    }
+}
+
+/**
+ * Formats an amount with its currency symbol using locale-aware formatting.
+ * This is a convenience wrapper around formatCurrency that accepts a locale parameter.
+ * Handles unit conversion (e.g., cents to dollars) and decimal precision automatically.
+ *
+ * @param amount - The amount in the smallest currency unit (e.g., cents for EUR/USD)
+ * @param currency - The ISO 4217 currency code (defaults to "EUR")
+ * @param locale - The locale for number formatting (e.g., "es", "en")
+ * @returns Formatted string with amount and symbol (e.g., "1.234,56 €" for es-ES)
+ */
+export function formatAmountWithSymbol(
+    amount: number | undefined,
+    currency: string | null | undefined,
+    locale: string,
+): string {
+    // Simply delegate to formatCurrency with the locale parameter
+    return formatCurrency(amount, currency, { asLocaleString: true, locale });
 }
 
 export function defaultCurrency(): string {

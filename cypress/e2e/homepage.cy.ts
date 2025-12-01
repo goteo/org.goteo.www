@@ -2,7 +2,7 @@
 
 describe("Homepage", () => {
     beforeEach(() => {
-        cy.visit("/es");
+        cy.visit("/");
     });
 
     it("should display the main header components", () => {
@@ -17,19 +17,6 @@ describe("Homepage", () => {
                 cy.get("main h1", { timeout: 5000 }).should("be.visible");
             } else {
                 cy.log("ℹ️ Main h1 not found but main exists");
-            }
-        });
-
-        cy.get("body").then(($body) => {
-            if ($body.find("select#language-select").length > 0) {
-                cy.get("select#language-select", { timeout: 5000 })
-                    .should("exist")
-                    .and("have.value", "es");
-
-                cy.changeLanguage("en");
-                cy.url().should("include", "/en");
-            } else {
-                cy.log("ℹ️ Language selector not found");
             }
         });
     });

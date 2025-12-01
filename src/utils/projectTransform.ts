@@ -25,6 +25,9 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     // Get minimum budget
     const minimum: Money = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
 
+    // Get optimum budget
+    const optimum: ApiMoney | undefined = project.budget?.optimum?.money;
+
     // Get raised amount from fetched accounting data
     const obtained: Money = accounting?.balance || { amount: 0, currency: "EUR" };
 
@@ -34,6 +37,7 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
         image,
         obtained,
         minimum,
+        optimum,
         size: "small",
     };
 }

@@ -10,7 +10,7 @@
 
     const kindStyles = {
         primary: "bg-primary",
-        secondary: "bg-purple-tint",
+        secondary: "bg-variant1",
         ghost: "inset-ring-1 inset-ring-secondary",
         invert: "",
     };
@@ -20,11 +20,14 @@
         form = undefined,
         type = "button",
         disabled = false,
-        class: className = "",
+        class: classes = "",
         size = "md",
         kind = "primary",
         onclick,
-        ...rest
+        "aria-label": ariaLabel = undefined,
+        "aria-busy": ariaBusy = undefined,
+        "aria-pressed": ariaPressed = undefined,
+        "aria-expanded": ariaExpanded = undefined,
     }: {
         children: Snippet;
         form?: string;
@@ -34,7 +37,10 @@
         kind?: keyof typeof kindStyles;
         class?: ClassNameValue;
         onclick?: MouseEventHandler<HTMLButtonElement>;
-        [key: string]: any;
+        "aria-label"?: string;
+        "aria-busy"?: boolean;
+        "aria-pressed"?: boolean;
+        "aria-expanded"?: boolean;
     } = $props();
 </script>
 
@@ -43,13 +49,16 @@
     {form}
     {disabled}
     {onclick}
-    {...rest}
     class={twMerge(
-        "text-secondary disabled:bg-light-muted flex w-auto items-center justify-center gap-2 font-[700] transition hover:cursor-pointer",
+        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-[700] transition hover:cursor-pointer",
         sizeStyles[size],
         kindStyles[kind],
-        className,
+        classes,
     )}
+    aria-label={ariaLabel}
+    aria-busy={ariaBusy}
+    aria-pressed={ariaPressed}
+    aria-expanded={ariaExpanded}
 >
     {@render children()}
 </button>

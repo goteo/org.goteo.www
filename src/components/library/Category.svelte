@@ -3,15 +3,15 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-light-surface",
-        active: "bg-secondary text-primary",
+        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white",
+        active: "bg-secondary text-primary hover:text-secondary",
         ghost: "",
     };
 
     let {
         type = "default",
         disabled = false,
-        class: className = "",
+        class: classes = "",
         onclick,
         children,
     }: {
@@ -26,9 +26,9 @@
 <button
     {disabled}
     class={twMerge(
-        "hover:bg-purple-tint hover:text-secondary w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
+        "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
         styles[type],
-        className,
+        classes,
     )}
     onclick={(e) => onclick?.(e)}
 >

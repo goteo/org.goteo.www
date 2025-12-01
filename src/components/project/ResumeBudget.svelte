@@ -15,9 +15,7 @@
         {$t("project.tabs.budget.chart-title")}
     </div>
 
-    <div
-        class="bg-chart-background flex basis-7/12 flex-col gap-10 rounded-3xl px-6 pt-10 pb-6 shadow-sm"
-    >
+    <div class="flex basis-7/12 flex-col gap-10 rounded-3xl bg-[#efeeff] px-6 pt-10 pb-6 shadow-sm">
         <BudgetBar {project} {accounting} />
         <LegendBudgetBar {project} />
     </div>

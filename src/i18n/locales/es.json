@@ -265,18 +265,15 @@
     }
   },
   "categories": {
-    "solidary": "Solidario",
-    "libre-software": "Software Libre",
-    "employment": "Generar empleo",
-    "design": "Desde el diseño",
+    "culture": "Cultura",
+    "rights": "Derechos",
+    "education": "Educación",
     "journalism": "Periodismo independiente",
-    "education": "Educativo",
-    "culture": "Crea cultura",
-    "ecology": "Ecológico",
-    "health-and-cares": "Salud y cuidados",
-    "open-data": "Datos abiertos",
-    "democracy": "Democracia y participación",
-    "equity": "Igualdad de género"
+    "health": "Salud",
+    "ecological_transition": "Transición ecológica",
+    "social_economy": "Economía social",
+    "rural": "Rural",
+    "science": "Ciencia"
   },
   "ShareButton": {
     "title": "Difunde este proyecto por el mundo",
@@ -482,6 +479,8 @@
       },
       "show_details": "Ver detalle",
       "hide_details": "Ocultar desglose",
+      "show_more": "Ver más",
+      "hide": "Ocultar",
       "donations": "Donaciones",
       "foundation": "Fundación Platoniq"
     },
@@ -509,6 +508,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "¡Enhorabuena! Gracias por tu donación",
+      "emailSent": "Te hemos enviado un resumen a:",
+      "certificate": {
+        "title": "¿Cómo solicito mi certificado?",
+        "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
+      },
+      "donatedProjects": {
+        "title": "Has donado a los siguientes proyectos",
+        "empty": "No se encontraron proyectos donados"
+      },
+      "suggestedProjects": {
+        "title": "Otros proyectos que requieren de tu ayuda",
+        "empty": "No hay proyectos disponibles en este momento"
+      }
+    },
     "page": {
       "title": "Indícanos tus datos de pago",
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
@@ -749,8 +764,18 @@
       "viewAll": "Ver todas",
       "obtained": "Obtenido",
       "minimum": "Mínimo",
+      "optimum": "Óptimo",
       "daysRemaining": "Quedan {{days}} días",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "goForMinimum": "¡A por el mínimo!"
+      },
+      "remaining": {
+        "toOptimum": "Falta para óptimo",
+        "toMinimum": "Falta para mínimo"
+      },
+      "userDonations": "Tus donaciones:"
     },
     "blog": {
       "title": "Se avecinan grandes cambios… ¡no te pierdas nada!",
@@ -947,187 +972,80 @@
       }
     }
   },
-  "validation": {
-    "errors": {
-      "summary": {
-        "title": "Por favor, corrige los siguientes errores:"
+  "me": {
+    "page": {
+      "title": "Actividad",
+      "subtitle": "Consulta tu actividad en Goteo"
+    },
+    "period": {
+      "label": "Periodo",
+      "year": "Año {{year}}"
+    },
+    "donations": {
+      "title": "Mis donaciones",
+      "empty": "Aún no has donado a ningún proyecto",
+      "explore": "Explora proyectos",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/projects",
+      "count": "Donaciones",
+      "total": "Total donado",
+      "recent": "Últimas donaciones",
+      "viewAll": "Ver todas",
+      "certificate": "Solicitar certificado"
+    },
+    "projects": {
+      "title": "Proyectos impulsados",
+      "empty": "Aún no has impulsado ningún proyecto",
+      "create": "Impulsa tu proyecto",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/projects/new",
+      "count": "Proyectos",
+      "raised": "Recaudado",
+      "recent": "Últimos proyectos impulsados",
+      "viewAll": "Ver todos",
+      "createNew": "Crear un proyecto"
+    },
+    "ownedProjects": {
+      "title": "Tus Proyectos Activos",
+      "messageToDonatorsButton": "Mensaje a donantes",
+      "uploadNewsButton": "Subir novedad"
+    },
+    "donatedProjects": {
+      "title": "Proyectos activos donde donaste"
+    },
+    "cta": {
+      "discover": {
+        "title": "Descubre, conecta y dona",
+        "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
+        "button": "Dona a un proyecto"
+      },
+      "matchfunding": {
+        "title": "Donaciones que brillan. Proyectos que inspiran.",
+        "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
+        "learnMore": "Descubre cómo funciona el matchfunding",
+        "becomeMatcher": "Hazte Matcher"
       }
     },
-    "project": {
-      "title": {
-        "required": "El título es obligatorio",
-        "pattern": "El título debe contener al menos una letra"
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Convocatorias",
+        "donated": "Donado",
+        "recent": "Últimas convocatorias",
+        "viewAll": "Ver convocatorias",
+        "create": "Crear convocatoria"
       },
-      "subtitle": {
-        "required": "El subtítulo es obligatorio"
+      "section": {
+        "title": "Tus convocatorias de Matchfunding activas",
+        "empty": "No tienes convocatorias activas",
+        "error": "Error al cargar las convocatorias"
       },
-      "categories": {
-        "min": "Debes seleccionar al menos una categoría",
-        "max": "Puedes seleccionar un máximo de 2 categorías"
-      },
-      "release": {
-        "min": "La fecha de lanzamiento debe ser al menos 14 días desde hoy"
-      },
-      "budget": {
-        "positive": "El presupuesto debe ser un valor positivo"
-      }
-    }
-  },
-  "wizard": {
-    "header": {
-      "titlePlaceholder": "Título de campaña",
-      "subtitlePlaceholder": "Descripción breve de la campaña, el actual; subtítulo de dios."
-    },
-    "buttons": {
-      "preview": "Previsualizar",
-      "save": "Guardar",
-      "publish": "Publicar",
-      "continue": "Continuar con info de campaña"
-    },
-    "steps": {
-      "configuration": "Configuración",
-      "campaign_info": "Información de campaña",
-      "rewards": "Recompensas",
-      "collaborations": "Colaboraciones",
-      "budget": "Presupuesto",
-      "about_you": "Sobre ti"
-    },
-    "configuration": {
-      "title": "Configuración",
-      "subtitle": "Configura los datos básicos de tu campaña",
-      "languages": {
-        "title": "Idiomas de la campaña",
-        "description": "Cuáles son los idiomas en los que publicarás la información de campaña.",
-        "primaryLabel": "Idioma principal de la campaña",
-        "secondaryLabel": "Idioma secundario {{index}}",
-        "selectPlaceholder": "Selecciona un idioma",
-        "addButton": "Añadir otro",
-        "removeButton": "Eliminar idioma",
-        "options": {
-          "es": "Español",
-          "en": "English",
-          "ca": "Català",
-          "fr": "Français",
-          "de": "Deutsch",
-          "it": "Italiano",
-          "pt": "Português"
-        }
-      },
-      "geography": {
-        "title": "Indica el alcance geográfico",
-        "description": "Describe a quién va dirigido tu proyecto",
-        "scopeLabel": "Alcance geográfico",
-        "scopePlaceholder": "Selecciona el alcance",
-        "localitiesLabel": "Indica localidades",
-        "localitiesPlaceholder": "Ej: Barcelona, Madrid, Valencia",
-        "localitiesHelper": "Separa las localidades con comas.",
-        "options": {
-          "local": "Local",
-          "estatal": "Estatal",
-          "internacional": "Internacional"
-        }
-      },
-      "rounds": {
-        "title": "Elige las rondas que tendrá tu campaña",
-        "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
-        "option1": "1 Ronda",
-        "option2": "2 Rondas"
-      }
-    },
-    "campaignInfo": {
-      "title": "Información de campaña",
-      "subtitle": "Completa la información necesaria para tu campaña",
-      "media": {
-        "title": "Imagen y vídeo de presentación",
-        "label": "Imagen y vídeo de presentación",
-        "help": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
-        "addImage": "Añadir imagen",
-        "addVideo": "Añadir vídeo",
-        "required": "Debes añadir al menos una imagen o un vídeo",
-        "videoPlaceholder": "https://www.youtube.com/watch?v=... o https://vimeo.com/...",
-        "confirmDelete": "¿Eliminar {{name}}?",
-        "maxImagesReached": "Máximo {{max}} imágenes alcanzado",
-        "removeVideo": "Eliminar vídeo",
-        "uploading": "Subiendo...",
-        "processing": "Procesando {{name}}...",
-        "fileInputLabel": "Seleccionar imagen para subir",
-        "uploadedImages": "Imágenes subidas",
-        "removeImage": "Eliminar imagen: {{name}}"
-      },
-      "objectives": {
-        "label": "Objetivos y propósito de tu campaña",
-        "help": "Indíca los objetivos y el propósito de tu proyecto. Respondé al qué, cómo y por qué",
-        "placeholder": "Escribe aquí los objetivos de tu proyecto..."
-      },
-      "legacy": {
-        "label": "¿Cuál será el legado de tu proyecto?",
-        "help": "Cuando termine la campaña, ¿qué quedará? Cuéntanos cual será el legado que deje tu proyecto",
-        "placeholder": "Escribe aquí sobre el legado de tu proyecto..."
-      },
-      "target": {
-        "label": "¿A quién va dirigido?",
-        "help": "Describe a quién va dirigido tu proyecto",
-        "placeholder": "Escribe aquí sobre tu público objetivo..."
-      },
-      "team": {
-        "label": "Con qué equipo cuentas",
-        "help": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este",
-        "placeholder": "Escribe aquí sobre tu equipo..."
-      },
-      "continue": "Continuar con recompensas"
-    },
-    "placeholders": {
-      "configurationStep": "Este paso será implementado próximamente.",
-      "campaignInfoStep": "Información de campaña - Este paso será implementado en la Fase 2.",
-      "rewardsStep": "Recompensas - Este paso será implementado en la Fase 3.",
-      "collaborationsStep": "Colaboraciones - Este paso será implementado en la Fase 4.",
-      "budgetStep": "Presupuesto - Este paso será implementado en la Fase 5.",
-      "aboutYouStep": "Sobre ti - Este paso será implementado en la Fase 6.",
-      "step_not_implemented": "Este paso será implementado próximamente."
-    },
-    "validation": {
-      "languages": "Debes seleccionar al menos un idioma",
-      "geographicScope": "Debes seleccionar un alcance geográfico",
-      "localities": "Debes indicar las localidades para el alcance local",
-      "campaign_info": {
-        "media": {
-          "required": "Debes añadir al menos una imagen o un vídeo",
-          "image_too_large": "La imagen es demasiado grande. Tamaño máximo: 500 KB",
-          "invalid_image": "Formato de imagen no válido",
-          "max_images": "Máximo 3 imágenes permitidas",
-          "upload_failed": "Error al subir la imagen. Por favor, inténtalo de nuevo"
-        },
-        "video": {
-          "invalid_url": "URL de vídeo no válida. Usa YouTube o Vimeo"
-        },
-        "objectives": {
-          "required": "Este campo es obligatorio",
-          "min_length": "Describe los objetivos con más detalle (mínimo 50 caracteres)",
-          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
-        },
-        "legacy": {
-          "required": "Este campo es obligatorio",
-          "min_length": "Describe el legado con más detalle (mínimo 50 caracteres)",
-          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
-        },
-        "target": {
-          "required": "Este campo es obligatorio",
-          "min_length": "Describe el público objetivo con más detalle (mínimo 30 caracteres)",
-          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
-        },
-        "team": {
-          "required": "Este campo es obligatorio",
-          "min_length": "Describe tu equipo con más detalle (mínimo 50 caracteres)",
-          "max_length": "El texto es demasiado largo (máximo 5000 caracteres)"
-        }
-      }
-    },
-    "errors": {
-      "storage": {
-        "title": "Error al guardar",
-        "quota_exceeded": "El almacenamiento local está lleno. Por favor, libera espacio o utiliza el navegador en modo privado.",
-        "save_failed": "No se pudo guardar el borrador automáticamente. Tus cambios pueden perderse.",
-        "close": "Cerrar alerta"
+      "callCard": {
+        "donationCall": "Dotación convocatoria",
+        "participatingProjects": "Proyectos participantes",
+        "successfulProjects": "Proyectos acogidos con éxito",
+        "projects": "proyectos",
+        "viewCall": "Ir a la convocatoria"
       }
     }
   }

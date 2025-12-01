@@ -5,7 +5,7 @@ const { t } = Astro.locals;
 ---
 
 <div>
-    <div class="mt-8 sm:w-full sm:max-w-md">
+    <div class="mt-8 w-full max-w-md">
         <form id="login" method="POST" class="flex flex-col gap-6">
             <TextInput
                 name="identifier"
@@ -31,14 +31,6 @@ const { t } = Astro.locals;
 
 <script>
     import { actions, isInputError } from "astro:actions";
-    import { itemCount } from "../stores/cart";
-
-    let hasCart = false;
-    itemCount.subscribe((count) => {
-        hasCart = count > 1;
-        console.log(count);
-        console.log(hasCart);
-    });
 
     const form = document.getElementById("login");
     const errorContent = document.getElementById("login-error-content");
@@ -70,11 +62,14 @@ const { t } = Astro.locals;
             }
 
             if (!error) {
-                if (hasCart) {
-                    window.location.href = `/payment`;
-                }
+                const urlParams = new URLSearchParams(window.location.search);
+                const isFromCheckout = urlParams.get("checkout") === "true";
 
-                window.location.href = `/`;
+                if (isFromCheckout) {
+                    window.location.href = `/payment`;
+                } else {
+                    window.location.href = `/`;
+                }
             }
         });
     }

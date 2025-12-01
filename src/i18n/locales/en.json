@@ -448,7 +448,9 @@
   "title": "Hello!",
   "header": {
     "login": "Login",
-    "btnCart": "Go to checkout"
+    "btnCart": "Go to checkout",
+    "search": "Search",
+    "createProject": "Create your campaign"
   },
   "checkout": {
     "title": "Summary of your selected donations",
@@ -475,7 +477,9 @@
       "resume": {
         "donationsPrefix": "of donations",
         "foundationPrefix": "of contribution to the foundation"
-      }
+      },
+      "show_more": "Show more",
+      "hide": "Hide"
     },
     "cart": {
       "freeDonation": {
@@ -501,6 +505,22 @@
     }
   },
   "payment": {
+    "postPayment": {
+      "title": "Congratulations! Thank you for your donation",
+      "emailSent": "We have sent you a summary to:",
+      "certificate": {
+        "title": "How do I request my certificate?",
+        "description": "The certificate is automatically generated at the end of the fiscal year (December). We will send you an email once we have submitted the documentation to the Tax Agency. If we encounter any problems, we will contact you by email."
+      },
+      "donatedProjects": {
+        "title": "You have donated to the following projects",
+        "empty": "No donated projects found"
+      },
+      "suggestedProjects": {
+        "title": "Other projects that need your help",
+        "empty": "No projects available at this time"
+      }
+    },
     "page": {
       "title": "Tell us your payment data",
       "description": "Now we need to tell us how you want to pay.",
@@ -741,8 +761,18 @@
       "viewAll": "See all",
       "obtained": "Obtained",
       "minimum": "Minimum",
+      "optimum": "Optimum",
       "daysRemaining": "{{days}} days left",
-      "matchfunding": "Matchfunding"
+      "matchfunding": "Matchfunding",
+      "status": {
+        "minimumReached": "Minimum reached!",
+        "goForMinimum": "Go for minimum!"
+      },
+      "remaining": {
+        "toOptimum": "To optimum",
+        "toMinimum": "To minimum"
+      },
+      "userDonations": "Your donations:"
     },
     "blog": {
       "title": "Big changes are coming… don't miss anything!",
@@ -910,187 +940,80 @@
       }
     }
   },
-  "validation": {
-    "errors": {
-      "summary": {
-        "title": "Please fix the following errors:"
+  "me": {
+    "page": {
+      "title": "Activity",
+      "subtitle": "Check your activity on Goteo"
+    },
+    "period": {
+      "label": "Period",
+      "year": "Year {{year}}"
+    },
+    "donations": {
+      "title": "My donations",
+      "empty": "You haven't donated to any project yet",
+      "explore": "Explore projects",
+      "illustration": "/images/profile/ilustration-donations.png",
+      "ctaLink": "/en/projects",
+      "count": "Donations",
+      "total": "Total donated",
+      "recent": "Recent donations",
+      "viewAll": "View all",
+      "certificate": "Request certificate"
+    },
+    "projects": {
+      "title": "Promoted projects",
+      "empty": "You haven't promoted any projects yet",
+      "create": "Promote your project",
+      "illustration": "/images/profile/ilustration-project.png",
+      "ctaLink": "/en/projects/new",
+      "count": "Projects",
+      "raised": "Raised",
+      "recent": "Recent promoted projects",
+      "viewAll": "View all",
+      "createNew": "Create a project"
+    },
+    "ownedProjects": {
+      "title": "Your Active Projects",
+      "messageToDonatorsButton": "Message donors",
+      "uploadNewsButton": "Post update"
+    },
+    "donatedProjects": {
+      "title": "Active projects you donated to"
+    },
+    "cta": {
+      "discover": {
+        "title": "Discover, connect and donate",
+        "description": "Imagine a place where hundreds of social projects await your support. On our platform, exploring is easy: browse through community, environmental, or educational causes. Because here, you decide which stories get written.",
+        "button": "Donate to a project"
+      },
+      "matchfunding": {
+        "title": "Donations that shine. Projects that inspire.",
+        "description": "Goteo is a pioneer in matchfunding. Whether you're a donor looking to boost your contribution to projects, a promoter wanting to increase your budget, or an entity seeking to support projects and promoters through donation reinforcements... our matchfunding program allows you to multiply the momentum for change",
+        "learnMore": "Discover how matchfunding works",
+        "becomeMatcher": "Become a Matcher"
       }
     },
-    "project": {
-      "title": {
-        "required": "Title is required",
-        "pattern": "Title must contain at least one letter"
+    "matchfunding": {
+      "card": {
+        "title": "Matchfunding",
+        "calls": "Calls",
+        "donated": "Donated",
+        "recent": "Recent calls",
+        "viewAll": "View calls",
+        "create": "Create call"
       },
-      "subtitle": {
-        "required": "Subtitle is required"
+      "section": {
+        "title": "Your Active Matchfunding Calls",
+        "empty": "You don't have active calls",
+        "error": "Error loading calls"
       },
-      "categories": {
-        "min": "You must select at least one category",
-        "max": "You can select a maximum of 2 categories"
-      },
-      "release": {
-        "min": "Release date must be at least 14 days from today"
-      },
-      "budget": {
-        "positive": "Budget must be a positive value"
-      }
-    }
-  },
-  "wizard": {
-    "header": {
-      "titlePlaceholder": "Campaign title",
-      "subtitlePlaceholder": "Brief description of the campaign, the current one; subtitle of the gods."
-    },
-    "buttons": {
-      "preview": "Preview",
-      "save": "Save",
-      "publish": "Publish",
-      "continue": "Continue with campaign info"
-    },
-    "steps": {
-      "configuration": "Configuration",
-      "campaign_info": "Campaign information",
-      "rewards": "Rewards",
-      "collaborations": "Collaborations",
-      "budget": "Budget",
-      "about_you": "About you"
-    },
-    "configuration": {
-      "title": "Configuration",
-      "subtitle": "Configure the basic data of your campaign",
-      "languages": {
-        "title": "Campaign languages",
-        "description": "Which languages will you publish the campaign information in.",
-        "primaryLabel": "Primary campaign language",
-        "secondaryLabel": "Secondary language {{index}}",
-        "selectPlaceholder": "Select a language",
-        "addButton": "Add another",
-        "removeButton": "Remove language",
-        "options": {
-          "es": "Español",
-          "en": "English",
-          "ca": "Català",
-          "fr": "Français",
-          "de": "Deutsch",
-          "it": "Italiano",
-          "pt": "Português"
-        }
-      },
-      "geography": {
-        "title": "Indicate the geographic reach",
-        "description": "Describe who your project is aimed at",
-        "scopeLabel": "Geographic scope",
-        "scopePlaceholder": "Select scope",
-        "localitiesLabel": "Indicate localities",
-        "localitiesPlaceholder": "E.g: Barcelona, Madrid, Valencia",
-        "localitiesHelper": "Separate localities with commas.",
-        "options": {
-          "local": "Local",
-          "estatal": "State",
-          "internacional": "International"
-        }
-      },
-      "rounds": {
-        "title": "Choose the rounds your campaign will have",
-        "description": "The default configuration is 40 days per round, you can request modifications from your advisor if your project is selected",
-        "option1": "1 Round",
-        "option2": "2 Rounds"
-      }
-    },
-    "campaignInfo": {
-      "title": "Campaign Information",
-      "subtitle": "Complete the necessary information for your campaign",
-      "media": {
-        "title": "Presentation Image and Video",
-        "label": "Presentation Image and Video",
-        "help": "Add an image or video representing your project. This will be the first thing potential donors see",
-        "addImage": "Add image",
-        "addVideo": "Add video",
-        "required": "You must add at least one image or video",
-        "videoPlaceholder": "https://www.youtube.com/watch?v=... or https://vimeo.com/...",
-        "confirmDelete": "Delete {{name}}?",
-        "maxImagesReached": "Maximum {{max}} images reached",
-        "removeVideo": "Remove video",
-        "uploading": "Uploading...",
-        "processing": "Processing {{name}}...",
-        "fileInputLabel": "Select image to upload",
-        "uploadedImages": "Uploaded images",
-        "removeImage": "Remove image: {{name}}"
-      },
-      "objectives": {
-        "label": "Campaign Objectives and Purpose",
-        "help": "State your project's objectives and purpose. Answer what, how, and why",
-        "placeholder": "Write here about your project objectives..."
-      },
-      "legacy": {
-        "label": "What will be your project's legacy?",
-        "help": "When the campaign ends, what will remain? Tell us the legacy your project will leave",
-        "placeholder": "Write here about your project's legacy..."
-      },
-      "target": {
-        "label": "Who is it directed to?",
-        "help": "Describe who your project is directed to",
-        "placeholder": "Write here about your target audience..."
-      },
-      "team": {
-        "label": "What team do you have?",
-        "help": "Describe your team and whether you have had previous experience on similar projects",
-        "placeholder": "Write here about your team..."
-      },
-      "continue": "Continue to rewards"
-    },
-    "placeholders": {
-      "configurationStep": "This step will be implemented soon.",
-      "campaignInfoStep": "Campaign information - This step will be implemented in Phase 2.",
-      "rewardsStep": "Rewards - This step will be implemented in Phase 3.",
-      "collaborationsStep": "Collaborations - This step will be implemented in Phase 4.",
-      "budgetStep": "Budget - This step will be implemented in Phase 5.",
-      "aboutYouStep": "About you - This step will be implemented in Phase 6.",
-      "step_not_implemented": "This step will be implemented soon."
-    },
-    "validation": {
-      "languages": "You must select at least one language",
-      "geographicScope": "You must select a geographic scope",
-      "localities": "You must indicate localities for local scope",
-      "campaign_info": {
-        "media": {
-          "required": "You must add at least one image or video",
-          "image_too_large": "Image is too large. Maximum size: 500 KB",
-          "invalid_image": "Invalid image format",
-          "max_images": "Maximum 3 images allowed",
-          "upload_failed": "Failed to upload image. Please try again"
-        },
-        "video": {
-          "invalid_url": "Invalid video URL. Use YouTube or Vimeo"
-        },
-        "objectives": {
-          "required": "This field is required",
-          "min_length": "Describe the objectives in more detail (minimum 50 characters)",
-          "max_length": "Text is too long (maximum 5000 characters)"
-        },
-        "legacy": {
-          "required": "This field is required",
-          "min_length": "Describe the legacy in more detail (minimum 50 characters)",
-          "max_length": "Text is too long (maximum 5000 characters)"
-        },
-        "target": {
-          "required": "This field is required",
-          "min_length": "Describe the target audience in more detail (minimum 30 characters)",
-          "max_length": "Text is too long (maximum 5000 characters)"
-        },
-        "team": {
-          "required": "This field is required",
-          "min_length": "Describe your team in more detail (minimum 50 characters)",
-          "max_length": "Text is too long (maximum 5000 characters)"
-        }
-      }
-    },
-    "errors": {
-      "storage": {
-        "title": "Error saving",
-        "quota_exceeded": "Local storage is full. Please free up space or use the browser in private mode.",
-        "save_failed": "Could not automatically save draft. Your changes may be lost.",
-        "close": "Close alert"
+      "callCard": {
+        "donationCall": "Call allocation",
+        "participatingProjects": "Participating projects",
+        "successfulProjects": "Successfully accepted projects",
+        "projects": "projects",
+        "viewCall": "Go to call"
       }
     }
   }

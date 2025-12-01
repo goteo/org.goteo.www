@@ -98,13 +98,13 @@
                     </TableHead>
                     <TableBody class="text-base">
                         {#each trackingCodes as item}
-                            <TableBodyRow class=" bg-light-surface">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
-                                    class="border-purple-tint  rounded-l-md border-t border-b border-l"
+                                    class="border-variant1  rounded-l-md border-t border-b border-l"
                                     >{item.title}</TableBodyCell
                                 >
                                 <TableBodyCell
-                                    class="border-purple-tint rounded-r-md border-t border-r border-b align-top"
+                                    class="border-variant1 rounded-r-md border-t border-r border-b align-top"
                                 >
                                     <div class="flex w-full items-center gap-4">
                                         <div
@@ -190,19 +190,19 @@
                     </TableHead>
                     <TableBody class="text-base">
                         {#each platformLinks as item}
-                            <TableBodyRow class=" bg-light-surface">
+                            <TableBodyRow class=" bg-white">
                                 <TableBodyCell
-                                    class="border-purple-tint  rounded-l-md border-t border-b border-l"
+                                    class="border-variant1  rounded-l-md border-t border-b border-l"
                                 >
                                     {item.type}
                                 </TableBodyCell>
                                 <TableBodyCell
-                                    class="border-purple-tint  rounded-l-md border-t  border-b"
+                                    class="border-variant1  rounded-l-md border-t  border-b"
                                 >
                                     {item.rel}
                                 </TableBodyCell>
                                 <TableBodyCell
-                                    class="border-purple-tint rounded-r-md border-t border-r border-b align-top"
+                                    class="border-variant1 rounded-r-md border-t border-r border-b align-top"
                                 >
                                     <div class="flex w-full items-center gap-4">
                                         <div

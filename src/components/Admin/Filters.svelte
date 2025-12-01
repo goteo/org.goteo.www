@@ -211,7 +211,7 @@
 </script>
 
 <div
-    class="border-purple-tint relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-variant1 relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />
@@ -322,7 +322,7 @@
         type="button"
         onclick={handleExportCSV}
         disabled={isExporting}
-        class="bg-purple-tint relative inline-flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-2 font-medium text-nowrap text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+        class="bg-variant1 relative inline-flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-2 font-medium text-nowrap text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
         {#if isExporting}
             <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">

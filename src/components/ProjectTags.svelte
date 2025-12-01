@@ -1,37 +1,18 @@
 <script lang="ts">
-    import BookmarkIcon from "../svgs/BookmarkIcon.svelte";
-    import MapIcon from "../svgs/MapIcon.svelte";
-    import type { Project, Territory } from "../openapi/client";
-    import iso3166 from "iso-3166-2";
-    import { getTerritoryTag } from "../utils/getTerritoryTag";
-    import Tag from "./library/Tag.svelte";
+    import type { Project } from "../openapi/client";
+    import TerritoryTag from "./TerritoryTag.svelte";
+    import CategoryTag from "./CategoryTag.svelte";
 
-    export let lang: string;
     export let project: Project;
 
-    function displayName(territory: Territory) {
-        const countryNames = new Intl.DisplayNames(lang, { type: "region" });
-        const country = countryNames.of(territory.country!);
-
-        const tag = getTerritoryTag(territory);
-        if (!tag || tag === territory.country) {
-            return country;
-        }
-
-        const iso = iso3166.subdivision(tag!);
-
-        return iso?.name;
+    function parseCategoryIri(category: string) {
+        return category.split("/")[3];
     }
 </script>
 
 <div class="flex w-auto gap-2">
     {#each project.categories as category}
-        <Tag>
-            <BookmarkIcon />
-            {category}
-        </Tag>
+        <CategoryTag category={parseCategoryIri(category)} />
     {/each}
-    <Tag>
-        <MapIcon />{displayName(project.territory)}
-    </Tag>
+    <TerritoryTag territory={project.territory} />
 </div>
