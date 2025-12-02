@@ -3,7 +3,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
-        variant?: keyof typeof variantStyles | undefined;
+        variant?: keyof typeof variantStyles;
         class?: ClassNameValue;
         children: Snippet;
     }
