@@ -29,12 +29,12 @@
 
 <div
     class={twMerge(
-        "flex items-center justify-between border",
+        "flex items-center justify-between border p-6 rounded-lg",
         variantStyles[variant],
         showToast ? "opacity-100" : "hidden opacity-0",
     )}
 >
-    <div class="flex max-w-md min-w-[20rem] gap-4 rounded-lg py-6 text-white shadow-lg">
+    <div class="flex items-center gap-4">
         {#if variantStyles[variant] === variantStyles.error}
             <ErrorIcon class="size-6" />
         {:else if variantStyles[variant] === variantStyles.success}
@@ -44,9 +44,13 @@
         {:else if variantStyles[variant] === variantStyles.warning}
             <WarningIcon className="size-6" />
         {/if}
-        {@render children()}
+        {#if children}
+            <div class="text-center">
+                {@render children()}
+            </div>
+        {/if}
     </div>
-    <div>
+    <div class="flex items-center gap-4">
         {@render button?.()}
         {@render link?.()}
         <button onclick={() => (showToast = false)} aria-label="Close Toast" class="p-1">
