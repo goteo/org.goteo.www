@@ -19,7 +19,7 @@ export default [
             "eslint.config.js",
             ".astro/**",
             ".astro/**/*",
-            "openapi/client/**",
+            "src/openapi/client/**",
             ".github/**",
             "env.d.ts",
         ],
