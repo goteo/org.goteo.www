@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
     import ErrorIcon from "../../svgs/ErrorIcon.svelte";
     import SuccessIcon from "../../svgs/SuccessIcon.svelte";
     import NotificationIcon from "../../svgs/NotificationIcon.svelte";
@@ -9,11 +9,13 @@
         variant = "error",
         button,
         link,
+        class: classes = "",
         children,
     }: {
         variant?: keyof typeof variantStyles;
         button?: () => any;
         link?: () => any;
+        class?: ClassNameValue;
         children: any;
     } = $props();
 
@@ -29,12 +31,13 @@
 
 <div
     class={twMerge(
-        "flex items-center justify-between border p-6 rounded-lg",
+        `flex items-center justify-between rounded-lg border p-6`,
+        classes,
         variantStyles[variant],
         showToast ? "opacity-100" : "hidden opacity-0",
     )}
 >
-    <div class="flex items-center gap-4">
+    <div class="flex items-center justify-center gap-4">
         {#if variantStyles[variant] === variantStyles.error}
             <ErrorIcon class="size-6" />
         {:else if variantStyles[variant] === variantStyles.success}
