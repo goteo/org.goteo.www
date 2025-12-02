@@ -32,7 +32,7 @@
 {#if showToast}
     <div
         class={twMerge(
-            `flex min-w-[327px] max-w-[1360px] self-center items-start sm:items-center gap-4 rounded-lg border p-6 sm:justify-between`,
+            "flex min-w-[327px] max-w-[1360px] self-center items-start sm:items-center gap-4 rounded-lg border p-6 sm:justify-between",
             classes,
             variantStyles[variant],
         )}
@@ -53,14 +53,14 @@
                 </div>
             {/if}
         </div>
-        <div class="">
+        <div class="flex items-start sm:items-center gap-4">
             {#if button || link}
                 <div class="hidden sm:flex">
                     {@render button?.()}
                     {@render link?.()}
                 </div>
             {/if}
-            <button onclick={() => (showToast = false)} aria-label="Close toast" class="size-6 shrink-0 flex items-center justify-center">
+            <button onclick={() => (console.log("Close toast"))} aria-label="Close toast" class="flex items-center justify-center w-10 h-10 cursor-pointer">
                 <svg
                     width="15"
                     height="15"
