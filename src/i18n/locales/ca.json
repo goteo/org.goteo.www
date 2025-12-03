@@ -877,6 +877,16 @@
       }
     }
   },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Campanyes seleccionades:",
+        "totalEarned": "Total aconseguit:",
+        "totalPaid": "Total pagat:",
+        "totalUnpaid": "Falta per pagar:"
+      }
+    }
+  },
   "footer": {
     "funding": {
       "title": "Finançat per:",
