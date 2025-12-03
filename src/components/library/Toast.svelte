@@ -32,35 +32,39 @@
 {#if showToast}
     <div
         class={twMerge(
-            "flex min-w-[327px] max-w-[1360px] self-center items-start sm:items-center gap-4 rounded-lg border p-6 sm:justify-between",
+            "flex max-w-[1360px] min-w-[327px] items-start gap-4 self-center rounded-lg border p-6 sm:items-center sm:justify-between",
             classes,
             variantStyles[variant],
         )}
     >
-        <div class="flex items-start sm:items-center justify-center gap-4">
+        <div class="flex items-start justify-center gap-4 sm:items-center">
             {#if variant === "error"}
-                <ErrorIcon class="size-5 sm:size-6 shrink-0" />
+                <ErrorIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "success"}
-                <SuccessIcon class="size-5 sm:size-6 shrink-0" />
+                <SuccessIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "notification"}
-                <NotificationIcon class="size-5 sm:size-6 shrink-0" />
+                <NotificationIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "warning"}
                 <WarningIcon className="size-5 sm:size-6 shrink-0" />
             {/if}
             {#if children}
-                <div class="text-sm leading-6 text-[#000]">
+                <p class="text-sm leading-6 text-[#000] font-normal">
                     {@render children()}
-                </div>
+                </p>
             {/if}
         </div>
-        <div class="flex items-start sm:items-center gap-4">
+        <div class="flex items-start gap-4 sm:items-center">
             {#if button || link}
                 <div class="hidden sm:flex">
                     {@render button?.()}
                     {@render link?.()}
                 </div>
             {/if}
-            <button onclick={() => (console.log("Close toast"))} aria-label="Close toast" class="flex items-center justify-center w-10 h-10 cursor-pointer">
+            <button
+                onclick={() => (showToast = false)}
+                aria-label="Close toast"
+                class="flex h-6 w-6 cursor-pointer items-center justify-center"
+            >
                 <svg
                     width="15"
                     height="15"
