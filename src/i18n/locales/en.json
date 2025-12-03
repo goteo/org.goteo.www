@@ -869,6 +869,16 @@
       }
     }
   },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Selected campaigns:",
+        "totalEarned": "Total earned:",
+        "totalPaid": "Total paid:",
+        "totalUnpaid": "Total unpaid:"
+      }
+    }
+  },
   "footer": {
     "funding": {
       "title": "Funded by:",
