@@ -24,20 +24,21 @@
         }}
     />
     <TotalizerCard
-        i18n={{ 
-            title: $t("admin.projects.totalizers.totalEarned"), 
-            value: totalEarned 
+        i18n={{
+            title: $t("admin.projects.totalizers.totalEarned"),
+            value: totalEarned,
         }}
     />
-    <TotalizerCard i18n={{ 
-            title: $t("admin.projects.totalizers.totalPaid"), 
-            value: totalPaid
-        }} 
+    <TotalizerCard
+        i18n={{
+            title: $t("admin.projects.totalizers.totalPaid"),
+            value: totalPaid,
+        }}
     />
     <TotalizerCard
-        i18n={{ 
-            title: $t("admin.projects.totalizers.totalUnpaid"), 
-            value: totalUnpaid 
+        i18n={{
+            title: $t("admin.projects.totalizers.totalUnpaid"),
+            value: totalUnpaid,
         }}
     />
 </div>
