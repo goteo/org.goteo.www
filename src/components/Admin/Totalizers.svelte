@@ -16,17 +16,28 @@
     } = $props();
 </script>
 
-<div class="grid self-center w-full max-w-[1360px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+<div class="grid w-full max-w-[1360px] grid-cols-1 gap-6 self-center md:grid-cols-2 lg:grid-cols-4">
     <TotalizerCard
-        i18n={{ title: $t("admin.totalizers.selectedCampaigns.title"), value: selectedCampaigns }}
+        i18n={{
+            title: $t("admin.projects.totalizers.selectedCampaigns"),
+            value: selectedCampaigns,
+        }}
     />
-    <TotalizerCard 
-        i18n={{ title: $t("admin.totalizers.totalEarned.title"), value: totalEarned }} 
+    <TotalizerCard
+        i18n={{ 
+            title: $t("admin.projects.totalizers.totalEarned"), 
+            value: totalEarned 
+        }}
     />
-    <TotalizerCard 
-        i18n={{ title: $t("admin.totalizers.totalPaid.title"), value: totalPaid }} 
+    <TotalizerCard i18n={{ 
+            title: $t("admin.projects.totalizers.totalPaid"), 
+            value: totalPaid
+        }} 
     />
-    <TotalizerCard 
-        i18n={{ title: $t("admin.totalizers.totalUnpaid.title"), value: totalUnpaid }} 
+    <TotalizerCard
+        i18n={{ 
+            title: $t("admin.projects.totalizers.totalUnpaid"), 
+            value: totalUnpaid 
+        }}
     />
 </div>
