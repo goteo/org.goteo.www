@@ -17,7 +17,7 @@
 
     let { update, author, type, onClick, isActive }: Props = $props();
 
-    let cardClasses = $state("")
+    let cardClasses = $state("");
 
     function formatDate(date: string, locale?: string): string {
         const options: Intl.DateTimeFormatOptions = {

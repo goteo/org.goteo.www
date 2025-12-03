@@ -105,7 +105,7 @@
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("project.tabs.updates.content.title")}
     </h2>
-    <Carousel bind:activeCard={activeCard} gap={24} showDots={true} {itemsPerGroup}>
+    <Carousel bind:activeCard gap={24} showDots={true} {itemsPerGroup}>
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"

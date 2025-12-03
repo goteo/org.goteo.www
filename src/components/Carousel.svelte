@@ -17,7 +17,7 @@
         children = null,
         onSelect = null,
         activeCard = $bindable(0),
-        active
+        active,
     }: {
         itemsPerGroup: number;
         gap: number;
@@ -28,7 +28,7 @@
         children?: any;
         onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
-        active?: Snippet; 
+        active?: Snippet;
     } = $props();
 
     const wrapperClasses = twMerge("relative w-full", className);
