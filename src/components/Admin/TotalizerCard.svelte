@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
-        i18n,
+        title,
+        value,
         class: classes = "",
     }: {
-        i18n: { title: string; value: string };
-        class?: string;
+        title: string;
+        value: string;
+        class?: ClassNameValue;
     } = $props();
 </script>
 
@@ -17,9 +19,9 @@
     )}
 >
     <span class="text-content text-base leading-6 font-bold">
-        {i18n.title}
+        {title}
     </span>
     <span class="text-[2.5rem] leading-12 font-medium text-black">
-        {i18n.value}
+        {value}
     </span>
 </div>
