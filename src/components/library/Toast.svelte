@@ -48,7 +48,7 @@
                 <WarningIcon className="size-5 sm:size-6 shrink-0" />
             {/if}
             {#if children}
-                <p class="text-sm leading-6 text-[#000] font-normal">
+                <p class="text-sm leading-6 font-normal text-[#000]">
                     {@render children()}
                 </p>
             {/if}
