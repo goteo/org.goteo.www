@@ -83,8 +83,8 @@
         return diffHours <= 72;
     }
 
-    function getAuthor(update: ProjectUpdate): string {
-        // author = update.author; // Pending API update to add author
+    function getAuthor(update: ProjectUpdate ): string {
+        author = update.author || "";
         return author;
     }
 
