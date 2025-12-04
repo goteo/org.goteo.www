@@ -90,7 +90,7 @@
         if (!authorId) return undefined;
 
         apiUsersIdGet({
-            path: { id: authorId }
+            path: { id: authorId },
         }).then((data) => {
             author = data.data!;
         });
