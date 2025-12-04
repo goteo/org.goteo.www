@@ -1,10 +1,12 @@
 <script lang="ts">
     import type { HTMLInputAttributes } from "svelte/elements";
+    import { twMerge } from "tailwind-merge";
 
     interface Props extends HTMLInputAttributes {
         group?: any;
         value?: any;
         label?: string;
+        class?: string;
         children?: any;
     }
 
@@ -18,7 +20,7 @@
     }: Props = $props();
 </script>
 
-<label class="flex cursor-pointer items-center gap-2 {className}">
+<label class={twMerge("flex cursor-pointer items-center gap-2", className)}>
     <div class="w-6">
         <input
             type="radio"
