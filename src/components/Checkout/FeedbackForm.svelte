@@ -18,28 +18,28 @@
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-2xl font-bold text-black">
-                        {$t("payment.page-aproved.form-goal.title")}
+                        {$t("payment.page-approved.form-goal.title")}
                     </h2>
                 </div>
             </div>
             <fieldset class="flex flex-col gap-6">
                 <RadioButton name="type" value="organization" bind:group={type}>
-                    {$t("payment.page-aproved.form-goal.options.2")}
+                    {$t("payment.page-approved.form-goal.options.2")}
                     <span class="capitalize">{paymentMethod}</span>
                 </RadioButton>
 
                 <RadioButton name="type" value="individual" bind:group={type}>
-                    {$t("payment.page-aproved.form-goal.options.1")}
+                    {$t("payment.page-approved.form-goal.options.1")}
                 </RadioButton>
             </fieldset>
 
             <div class="mt-6 flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-2xl font-bold text-black">
-                        {$t("payment.page-aproved.form-review.title")}
+                        {$t("payment.page-approved.form-review.title")}
                     </h2>
                 </div>
-                <p class="text-content">{$t("payment.page-aproved.form-review.description")}</p>
+                <p class="text-content">{$t("payment.page-approved.form-review.description")}</p>
             </div>
 
             <fieldset class="flex flex-col gap-6">

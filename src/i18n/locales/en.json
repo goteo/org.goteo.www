@@ -526,7 +526,7 @@
       "description": "Now we need to tell us how you want to pay.",
       "selectMethod": "Select payment method:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Your means of payment has been processed with an overwhelming success",
       "description": "Good! ",
       "form-goal": {

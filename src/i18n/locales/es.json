@@ -529,7 +529,7 @@
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
       "selectMethod": "Selecciona método de pago:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Tu medio de pago se ha procesado con un éxito apabullante",
       "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
       "form-goal": {
