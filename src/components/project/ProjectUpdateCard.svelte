@@ -6,10 +6,12 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
     import type { MouseEventHandler } from "svelte/elements";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import { onMount } from "svelte";
+    import type { User } from "../../openapi/client/types.gen.ts";
 
     interface Props {
         update: ProjectUpdate;
-        author?: string; // Pending API update to add author in every update
+        author?: User | undefined;
         type?: "small" | "large";
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         isActive?: boolean;
@@ -29,10 +31,13 @@
         return new Date(date).toLocaleDateString(locale, options);
     }
 
+    onMount(() => {
+        type = author ? "large" : "small";
+    });
+
     $effect(() => {
         isActive;
         cardClasses = isActive ? "opacity-100" : "";
-        type = author ? "large" : "small";
     });
 </script>
 
@@ -115,7 +120,7 @@
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
                     {$t("project.tabs.updates.by")}
-                    <strong class="font-bold text-black"> {author}</strong>
+                    <strong class="font-bold text-black"> {author?.displayName}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
                     {$t("project.tabs.updates.content.btn.read-more")}

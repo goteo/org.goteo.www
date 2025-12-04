@@ -5,11 +5,13 @@
     import ShareIcon from "../../svgs/ShareIcon.svelte";
     import { Modal } from "flowbite-svelte";
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
-    import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
+    import { apiProjectUpdatesGetCollection, apiUsersIdGet } from "../../openapi/client/index";
     import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/Button.svelte";
     import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
+    import { extractId } from "../../utils/extractId";
+    import type { User } from "../../openapi/client/types.gen.ts";
 
     let {
         lang = $bindable(),
@@ -35,7 +37,7 @@
     let itemsPerGroup = $state(2);
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
-    let author: string = "";
+    let author: User | undefined = $state(undefined);
     let activeCard: number = $state(0);
     let cardType: "small" | "large" = $state("small");
 
@@ -83,8 +85,16 @@
         return diffHours <= 72;
     }
 
-    function getAuthor(update: ProjectUpdate ): string {
-        author = update.author || "";
+    function getAuthor(update: ProjectUpdate): User | undefined {
+        const authorId: string | null = extractId(update.author);
+        if (!authorId) return undefined;
+
+        apiUsersIdGet({
+            path: { id: authorId }
+        }).then((data) => {
+            author = data.data!;
+        });
+
         return author;
     }
 
