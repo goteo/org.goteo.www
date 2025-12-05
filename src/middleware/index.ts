@@ -54,7 +54,7 @@ export const onRequest = defineMiddleware(async (context: APIContext, next) => {
     }
 
     try {
-        const lang = getLanguage(context) as Locale;
+        const lang = getLanguage(context.url.pathname, context.request, context.cookies) as Locale;
 
         //throw new Error(lang);
         context.locals.lang = lang;
