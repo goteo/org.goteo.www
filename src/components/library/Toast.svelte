@@ -8,16 +8,18 @@
 
     let {
         variant = "error",
+        "aria-label": ariaLabel = undefined,
         button,
         link,
         class: classes = "",
         children,
     }: {
         variant?: keyof typeof variantStyles;
-        button?: () => Snippet;
-        link?: () => Snippet;
+        "aria-label"?: string;
+        button?: Snippet;
+        link?: Snippet;
         class?: ClassNameValue;
-        children: any;
+        children: Snippet;
     } = $props();
 
     let showToast = $state(true);
@@ -46,7 +48,7 @@
             {:else if variant === "notification"}
                 <NotificationIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "warning"}
-                <WarningIcon className="size-5 sm:size-6 shrink-0" />
+                <WarningIcon className="size-5 shrink-0 sm:size-6" />
             {/if}
             {#if children}
                 <p class="text-sm leading-6 font-normal text-[#000]">
@@ -63,7 +65,7 @@
             {/if}
             <button
                 onclick={() => (showToast = false)}
-                aria-label="Close toast"
+                aria-label={ariaLabel}
                 class="flex h-6 w-6 cursor-pointer items-center justify-center"
             >
                 <svg
