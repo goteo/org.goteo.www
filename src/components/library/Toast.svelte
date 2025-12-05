@@ -4,6 +4,7 @@
     import SuccessIcon from "../../svgs/SuccessIcon.svelte";
     import NotificationIcon from "../../svgs/NotificationIcon.svelte";
     import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import type { Snippet } from "svelte";
 
     let {
         variant = "error",
@@ -13,8 +14,8 @@
         children,
     }: {
         variant?: keyof typeof variantStyles;
-        button?: () => any;
-        link?: () => any;
+        button?: () => Snippet;
+        link?: () => Snippet;
         class?: ClassNameValue;
         children: any;
     } = $props();
