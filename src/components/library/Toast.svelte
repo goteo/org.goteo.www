@@ -34,8 +34,8 @@
     <div
         class={twMerge(
             "flex max-w-[1360px] min-w-[327px] items-start gap-4 self-center rounded-lg border p-6 sm:items-center sm:justify-between",
-            classes,
             variantStyles[variant],
+            classes,
         )}
     >
         <div class="flex items-start justify-center gap-4 sm:items-center">
