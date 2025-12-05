@@ -2,6 +2,7 @@ import { writable, derived } from "svelte/store";
 
 import { isSupportedLocale, type Locale } from "./locales/index";
 import { useTranslations } from "./utils";
+import { getDefaultLanguage } from "../utils/consts";
 
 function detectLocale(): Locale {
     if (typeof window !== "undefined") {
@@ -27,7 +28,7 @@ function detectLocale(): Locale {
         }
     }
 
-    return "es" as Locale;
+    return getDefaultLanguage() as Locale;
 }
 
 const initialLocale = detectLocale();
