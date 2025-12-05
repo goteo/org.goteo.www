@@ -53,7 +53,7 @@
                 }`}
             >
                 {#if step === index + 1 && hasError}
-                    <WarningIcon className="w-4 h-4" />
+                    <WarningIcon className="w-4 h-4" iconColor="#E94668" />
                 {/if}
                 <span class="text-xs leading-tight">{label}</span>
             </div>

@@ -1973,6 +1973,10 @@ export type ProjectUpdate = {
      */
     body: string;
     /**
+     * Author of this update.
+     */
+    author?: string;
+    /**
      * Public display date for this update,
      * not necessarily related to the actual dates of resource creation or update.
      */
