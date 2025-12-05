@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
     import { twMerge } from "tailwind-merge";
 
@@ -6,10 +7,10 @@
         group?: any;
         label?: string;
         class?: string;
-        children?: any;
+        children?: Snippet;
     }
 
-    let { group = $bindable(), label, class: classes, children = null, ...rest }: Props = $props();
+    let { group = $bindable(), label, class: classes, children, ...rest }: Props = $props();
 </script>
 
 <label class="flex cursor-pointer items-center gap-2">
@@ -29,5 +30,5 @@
             {label}
         </span>
     {/if}
-    {@render children()}
+    {@render children?.()}
 </label>
