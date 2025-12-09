@@ -7,7 +7,7 @@ const { t } = Astro.locals;
 const accessCookie = Astro.cookies.get("access-token");
 
 if (!accessCookie) {
-    return Astro.redirect("/");
+    return Astro.redirect("/login");
 }
 ---
 
