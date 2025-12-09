@@ -49,7 +49,7 @@
 
     onMount(async () => {
         author = await getAuthor(update);
-        type = author === undefined ? "large" : "small";
+        type = author === undefined ? "small" : "large";
     });
 
     $effect(() => {
