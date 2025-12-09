@@ -32,22 +32,24 @@
         return new Date(date).toLocaleDateString(locale, options);
     }
 
-    async function getAuthorName(update: ProjectUpdate): Promise<string | undefined> {
+    async function getAuthor(update: ProjectUpdate): Promise<User | undefined> {
         const authorId: string | null = extractId(update.author);
         if (!authorId) return undefined;
 
-        await apiUsersIdGet({
+        const { data: user, error: err } = await apiUsersIdGet({
             path: { id: authorId },
-        }).then((data) => {
-            author = data.data!;
-        });
+        })
 
-        return author?.displayName;
+        if (err) {
+            throw new Error(err.description!)
+        }
+
+        return user;
     }
 
     onMount(async () => {
-        const authorName: Promise<string | undefined> = getAuthorName(update);
-        type = authorName === undefined ? "large" : "small";
+        author = await getAuthor(update);
+        type = author === undefined ? "large" : "small";
     });
 
     $effect(() => {
@@ -86,9 +88,9 @@
                 xmlns="http://www.w3.org/2000/svg"
             >
                 <path
+                    class="fill-black"
                     opacity="0.08"
                     d="M339.41 -307.908C341.812 -308.41 342.063 -306.776 342.23 -305.059C382.622 -179.016 441.101 -96.5034 517.041 -10.932C589.701 70.9316 673.723 148.459 680.594 291.679C685.983 404.231 636.839 495.227 584.73 551.849C526.585 615.069 432.183 658.578 333.771 656.504C232.603 654.346 149.792 609.602 91.271 543.386C32.9799 477.443 -7.07829 393.966 1.04613 280.346C12.9717 113.351 138.075 31.8013 218.171 -73.1467C270.238 -141.436 306.579 -212.072 339.41 -307.908ZM130.744 314.323C131.747 390.552 172.849 460.14 229.449 495.332C309.294 544.957 420.362 532.242 486.047 467.011C520.717 432.615 544.254 384.603 550.896 314.323C463.219 314.323 443.211 313.024 341.332 313.024C341.332 243.247 342.251 169.114 342.251 99.3786C220.426 99.0644 129.262 199.781 130.744 314.323Z"
-                    fill="#3D3D3D"
                 />
             </svg>
         </div>
@@ -135,7 +137,7 @@
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
                     {$t("project.tabs.updates.by")}
-                    <strong class="font-bold text-black"> {getAuthorName(update)}</strong>
+                    <strong class="font-bold text-black"> {author?.displayName}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
                     {$t("project.tabs.updates.content.btn.read-more")}
