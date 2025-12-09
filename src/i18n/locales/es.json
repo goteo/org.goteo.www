@@ -530,14 +530,14 @@
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
       "selectMethod": "Selecciona método de pago:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Tu medio de pago se ha procesado con un éxito apabullante",
       "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
       "form-goal": {
         "title": "Si la campaña no logra su objetivo",
         "options": {
           "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
-          "2": "Devolverlo a mi medio de pago Tarjeta"
+          "2": "Devolverlo a mi medio de pago"
         }
       },
       "form-review": {

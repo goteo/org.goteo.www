@@ -535,7 +535,7 @@
       "description": "Ara necessitem que ens diguis com vols pagar.",
       "selectMethod": "Selecciona mètode de pagament:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "El teu mitjà de pagament s’ha processat amb un èxit apoteòsic",
       "description": "¡Ben! Estàs a un pas d’acabar i de fer el món una mica millor.",
       "form-goal": {
