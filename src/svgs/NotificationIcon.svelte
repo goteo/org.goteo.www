@@ -8,9 +8,7 @@
 
     let { class: classes, iconColor }: Props = $props();
 
-    const variantColor = iconColor ?
-        `stroke-[${iconColor}]` :
-        "stroke-secondary";
+    const variantColor = iconColor ? `stroke-[${iconColor}]` : "stroke-secondary";
 </script>
 
 <svg
