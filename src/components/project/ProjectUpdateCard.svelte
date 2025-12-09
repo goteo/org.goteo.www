@@ -38,10 +38,10 @@
 
         const { data: user, error: err } = await apiUsersIdGet({
             path: { id: authorId },
-        })
+        });
 
         if (err) {
-            throw new Error(err.description!)
+            throw new Error(err.description!);
         }
 
         return user;
