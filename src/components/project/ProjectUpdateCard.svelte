@@ -2,7 +2,7 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Button from "../library/Button.svelte";
     import { t } from "../../i18n/store";
-    import {apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
+    import { apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
     import { twMerge } from "tailwind-merge";
     import type { MouseEventHandler } from "svelte/elements";
     import { renderMarkdown } from "../../utils/renderMarkdown";
@@ -46,7 +46,8 @@
     }
 
     onMount(async () => {
-        type = author ? "large" : "small";
+        const authorName: Promise<string | undefined> = getAuthorName(update);
+        type = authorName === undefined ? "large" : "small";
     });
 
     $effect(() => {
