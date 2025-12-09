@@ -2,24 +2,25 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Button from "../library/Button.svelte";
     import { t } from "../../i18n/store";
-    import type { ProjectUpdate } from "../../openapi/client/index";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import {apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
+    import { twMerge } from "tailwind-merge";
     import type { MouseEventHandler } from "svelte/elements";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import { onMount } from "svelte";
     import type { User } from "../../openapi/client/types.gen.ts";
+    import { extractId } from "../../utils/extractId.ts";
 
     interface Props {
         update: ProjectUpdate;
-        author?: User | undefined;
         type?: "small" | "large";
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         isActive?: boolean;
     }
 
-    let { update, author, type, onClick, isActive }: Props = $props();
+    let { update, type, onClick, isActive }: Props = $props();
 
     let cardClasses = $state("");
+    let author: User | undefined = $state(undefined);
 
     function formatDate(date: string, locale?: string): string {
         const options: Intl.DateTimeFormatOptions = {
@@ -31,7 +32,20 @@
         return new Date(date).toLocaleDateString(locale, options);
     }
 
-    onMount(() => {
+    async function getAuthorName(update: ProjectUpdate): Promise<string | undefined> {
+        const authorId: string | null = extractId(update.author);
+        if (!authorId) return undefined;
+
+        await apiUsersIdGet({
+            path: { id: authorId },
+        }).then((data) => {
+            author = data.data!;
+        });
+
+        return author?.displayName;
+    }
+
+    onMount(async () => {
         type = author ? "large" : "small";
     });
 
@@ -120,7 +134,7 @@
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
                     {$t("project.tabs.updates.by")}
-                    <strong class="font-bold text-black"> {author?.displayName}</strong>
+                    <strong class="font-bold text-black"> {getAuthorName(update)}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
                     {$t("project.tabs.updates.content.btn.read-more")}
