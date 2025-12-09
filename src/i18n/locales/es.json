@@ -873,6 +873,16 @@
       }
     }
   },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Campañas seleccionadas:",
+        "totalEarned": "Total conseguido:",
+        "totalPaid": "Total pagado:",
+        "totalUnpaid": "Falta por pagar:"
+      }
+    }
+  },
   "footer": {
     "funding": {
       "title": "Financia:",
