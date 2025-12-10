@@ -48,8 +48,6 @@ export function getLanguage(
     const validLangs = Object.keys(languagesList);
     for (const lang of userPreferredLangs) {
         if (validLangs.includes(lang)) {
-            cookies.set("preferred-lang", lang);
-
             return lang;
         }
     }
