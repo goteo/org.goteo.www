@@ -372,7 +372,7 @@
                     stroke-linejoin="round"
                 />
             </svg>
-            Exportar .csv
+            {$t("contributions.export.csv")}
         {/if}
     </button>
 </div>
