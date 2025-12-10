@@ -26,11 +26,9 @@
     <div class="self-start text-left text-2xl font-bold text-black">
         {item.displayName}
     </div>
-    <div class="text-content line-clamp-2 self-start text-left text-sm">
-        {#if item.message}
+    {#if item.message}
+        <div class="text-content line-clamp-2 self-start text-left text-sm">
             {item.message}
-        {:else}
-            {$t("project.tabs.community.noComment")}
-        {/if}
-    </div>
+        </div>
+    {/if}
 </button>
