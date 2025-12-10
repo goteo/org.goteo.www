@@ -32,6 +32,7 @@ const { t } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
+let selectedGateway: string | undefined = undefined;
 
 try {
     const url = new URL(Astro.request.url);
@@ -50,6 +51,12 @@ try {
 
     if (!response.data) {
         throw new Error("Data not found");
+    }
+
+    selectedGateway = response.data.gateway.split("/").pop();
+
+    if (response.data.status !== "charged") {
+        throw new Error("Payment not completed");
     }
 
     amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
@@ -119,20 +126,23 @@ const postPaymentUrl = checkoutId
                         <div class="flex flex-col gap-8 py-10 lg:flex-row">
                             <div class="flex w-full flex-col gap-10 lg:w-1/2">
                                 <div class="flex flex-col gap-4">
-                                    <div class="flex flex-col gap-10">
+                                    <div class="flex flex-col gap-9">
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
                                                 <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
-                                                    {t("payment.page-aproved.title")}
+                                                    {t("payment.page-approved.title")}
                                                 </h2>
                                                 <p class="text-content">
-                                                    {t("payment.page-aproved.description")}
+                                                    {t("payment.page-approved.description")}
                                                 </p>
                                             </div>
                                             <ApprovedIcon />
                                         </div>
                                         <div>
-                                            <FeedbackForm client:load />
+                                            <FeedbackForm
+                                                client:load
+                                                paymentMethod={selectedGateway}
+                                            />
                                         </div>
                                     </div>
                                 </div>

@@ -56,6 +56,7 @@
       "updates": {
         "title": "Actualitzacions",
         "modal-title": "Nova actualització",
+        "by": "Per:",
         "content": {
           "title": "No perdis detall dels avenços d’aquesta campanya",
           "empty": "No existeixen més actualitzacions previstes.",
@@ -534,7 +535,7 @@
       "description": "Ara necessitem que ens diguis com vols pagar.",
       "selectMethod": "Selecciona mètode de pagament:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "El teu mitjà de pagament s’ha processat amb un èxit apoteòsic",
       "description": "¡Ben! Estàs a un pas d’acabar i de fer el món una mica millor.",
       "form-goal": {
@@ -874,6 +875,16 @@
           "title": "Testimonis dels nostres impulsors",
           "description": "Qui pot explicar-te millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
         }
+      }
+    }
+  },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Campanyes seleccionades:",
+        "totalEarned": "Total aconseguit:",
+        "totalPaid": "Total pagat:",
+        "totalUnpaid": "Falta per pagar:"
       }
     }
   },
