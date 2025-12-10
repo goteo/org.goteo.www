@@ -19,7 +19,7 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
 export function getUserLangPreferences(
     pathName: string,
     request: Request,
-    cookies: Map<string, any> | AstroCookies
+    cookies: Map<string, any> | AstroCookies,
 ): string[] {
     const preferredFromPath = parsePathLang(pathName);
     if (preferredFromPath) return [preferredFromPath];
@@ -39,7 +39,7 @@ export function getUserLangPreferences(
 export function getLanguage(
     pathName: string,
     request: Request,
-    cookies: Map<string, any> | AstroCookies
+    cookies: Map<string, any> | AstroCookies,
 ): string {
     const defaultLang = getDefaultLanguage();
     const userPreferredLangs = getUserLangPreferences(pathName, request, cookies);

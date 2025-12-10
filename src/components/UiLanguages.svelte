@@ -32,11 +32,9 @@
     }
 
     onMount(() => {
-        const cookies = Object.fromEntries(
-			document.cookie.split("; ").map(c => c.split("="))
-		);
+        const cookies = Object.fromEntries(document.cookie.split("; ").map((c) => c.split("=")));
 
-		const currentLang = decodeURIComponent(cookies["preferred-lang"] || "");
+        const currentLang = decodeURIComponent(cookies["preferred-lang"] || "");
         setLocale(currentLang);
     });
 </script>
