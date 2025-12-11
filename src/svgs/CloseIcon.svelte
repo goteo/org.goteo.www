@@ -1,4 +1,14 @@
-<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+<script lang="ts">
+    import type { ClassNameValue } from "tailwind-merge";
+
+    interface Props {
+        class?: ClassNameValue;
+    }
+
+    let { class: classes }: Props = $props(); 
+</script>
+
+<svg class={classes ? classes : ""} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
     ><g id="SVGRepo_bgCarrier" stroke-width="0"></g>
     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"> </g>
     <g id="SVGRepo_iconCarrier">
