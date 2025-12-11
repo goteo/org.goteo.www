@@ -2,22 +2,30 @@
     import CloseIcon from "../../svgs/CloseIcon.svelte";
     import Tag from "../library/Tag.svelte";
 
-    let { title, tags } = $props<{
+    let { title, filters } = $props<{
         title: string;
-        tags?: any;
+        filters?: any;
     }>();
+
+    let tags: { title: string; value: string }[] | undefined = $state(undefined);
+
+    $effect(() => {
+        tags = Object.keys(filters).map((filter: string) => {
+            return { title: filter, value: filters[filter] };
+        });
+    });
 </script>
 
 <div class="flex gap-4">
-    <h1 class="text-2xl/8 text-black font-bold">
+    <h1 class="text-2xl/8 font-bold text-black">
         {title}
     </h1>
-    <div class="flex gap-2">
+    {#if tags}
         {#each tags as tag}
             <Tag variant={"bold"}>
                 {tag}
                 <CloseIcon class="size-[15px]" />
             </Tag>
         {/each}
-    </div>
+    {/if}
 </div>

@@ -33,7 +33,7 @@
     <Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
     <div>
         <div>
-            <FiltersTags title={$t("admin.charges.lastContributions")} tags={filters} />
+            <FiltersTags title={$t("admin.charges.lastContributions")} {filters} />
             <ExportCsv /> <!-- TODO: Move "Export .csv" button to this component -->
         </div>
         <Categories /> <!-- TODO: Implement Categories component -->
