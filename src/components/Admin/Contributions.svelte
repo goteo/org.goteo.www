@@ -2,6 +2,10 @@
     import Slider from "./Slider.svelte";
     import Filters from "./Filters.svelte";
     import Table from "./Table.svelte";
+    import Categories from "./Categories.svelte";
+    import FiltersTags from "./FiltersTags.svelte";
+    import { t } from "../../i18n/store";
+    import ExportCsv from "./ExportCsv.svelte";
 
     /* TODO: Add data to slider and set locales */
     const slides = [
@@ -25,7 +29,15 @@
         filters = { ...filters, ...newFilters };
     }
 </script>
-
-<Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
-<Slider {slides} />
+<div>
+    <Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
+    <div>
+        <div>
+            <FiltersTags title={$t("admin.charges.lastContributions")} tags={filters} />
+            <ExportCsv /> <!-- TODO: Move "Export .csv" button to this component -->
+        </div>
+        <Categories /> <!-- TODO: Implement Categories component -->
+        <Slider {slides} />
+    </div>
+</div>
 <Table {filters} />
