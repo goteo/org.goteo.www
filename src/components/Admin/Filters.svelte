@@ -58,12 +58,14 @@
             paymentMethod: selectedPaymentMethod,
             chargeStatus: selectedChargeStatus,
             rangeAmount: selectedRangeAmount,
-            from: dateFrom
-                ? new Date(new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000).toISOString()
-                : undefined,
-            to: dateTo
-                ? new Date(new Date(dateTo).getTime() + 24 * 60 * 60 * 1000).toISOString()
-                : undefined,
+            date: {
+                from: dateFrom
+                    ? new Date(new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000).toISOString()
+                    : undefined,
+                to: dateTo
+                    ? new Date(new Date(dateTo).getTime() + 24 * 60 * 60 * 1000).toISOString()
+                    : undefined,
+            },
         });
     }
 

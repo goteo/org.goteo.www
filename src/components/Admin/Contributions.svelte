@@ -20,8 +20,7 @@
         paymentMethod: "",
         chargeStatus: "",
         rangeAmount: "",
-        from: undefined,
-        to: undefined,
+        date: { from: undefined, to: undefined },
         target: undefined,
     });
 
@@ -29,14 +28,17 @@
         filters = { ...filters, ...newFilters };
     }
 </script>
+
 <div>
     <Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
     <div>
         <div>
             <FiltersTags title={$t("admin.charges.lastContributions")} {filters} />
-            <ExportCsv /> <!-- TODO: Move "Export .csv" button to this component -->
+            <!-- TODO: Move "Export .csv" button to this component -->
+            <ExportCsv />
         </div>
-        <Categories /> <!-- TODO: Implement Categories component -->
+        <!-- TODO: Implement Categories component -->
+        <Categories />
         <Slider {slides} />
     </div>
 </div>

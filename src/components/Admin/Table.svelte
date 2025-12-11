@@ -209,8 +209,7 @@
     async function loadCharges(filters: {
         chargeStatus: string;
         rangeAmount: string;
-        from?: string;
-        to?: string;
+        date?: { from?: string, to?: string };
         paymentMethod: string;
         target?: string;
     }) {
@@ -272,8 +271,8 @@
                     (filters.rangeAmount.includes("..")
                         ? { "money.amount[between]": filters.rangeAmount }
                         : { "money.amount[gte]": filters.rangeAmount })),
-                ...(filters.from && { "dateCreated[strictly_after]": filters.from }),
-                ...(filters.to && { "dateCreated[strictly_before]": filters.to }),
+                ...(filters.date?.from && { "dateCreated[strictly_after]": filters.date?.from }),
+                ...(filters.date?.to && { "dateCreated[strictly_before]": filters.date?.to }),
                 ...(filters.paymentMethod &&
                     filters.paymentMethod !== "all" && {
                         "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
@@ -499,9 +498,9 @@
     }>();
 
     $effect(() => {
-        const { chargeStatus, rangeAmount, from, to, paymentMethod, target } = filters;
+        const { chargeStatus, rangeAmount, date, paymentMethod, target } = filters;
         charges = [];
-        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod, target });
+        loadCharges({ chargeStatus, rangeAmount, date, paymentMethod, target });
     });
 </script>
 
