@@ -882,6 +882,9 @@
         "totalPaid": "Total pagado:",
         "totalUnpaid": "Falta por pagar:"
       }
+    },
+    "charges": {
+      "lastContributions": "Últimos aportes:"
     }
   },
   "footer": {
