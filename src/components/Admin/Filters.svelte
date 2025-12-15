@@ -54,18 +54,41 @@
             alert($t("contributions.filters.dateRange.errors.invalidRange"));
             return;
         }
+
+        const queryParams: Record<string, string> = {};
+
+        if (selectedChargeStatus && selectedChargeStatus !== "all") {
+            queryParams.status = selectedChargeStatus;
+        }
+
+        if (selectedRangeAmount && selectedRangeAmount !== "all") {
+            if (selectedRangeAmount.includes("..")) {
+                queryParams["money.amount[between]"] = selectedRangeAmount;
+            } else {
+                queryParams["money.amount[gte]"] = selectedRangeAmount;
+            }
+        }
+
+        if (dateFrom) {
+            const fromDate = new Date(new Date(dateFrom).getTime()).toISOString();
+            queryParams["dateCreated[strictly_after]"] = fromDate;
+        }
+
+        if (dateTo) {
+            const toDate = new Date(new Date(dateTo).getTime()).toISOString();
+            queryParams["dateCreated[strictly_before]"] = toDate;
+        }
+
+        if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
+            queryParams["checkout.gateway"] = `/v4/gateways/${selectedPaymentMethod}`;
+        }
+
+        if (currentTarget) {
+            queryParams.target = currentTarget;
+        }
+
         onApplyFilters({
-            paymentMethod: selectedPaymentMethod,
-            chargeStatus: selectedChargeStatus,
-            rangeAmount: selectedRangeAmount,
-            date: {
-                from: dateFrom
-                    ? new Date(new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000).toISOString()
-                    : undefined,
-                to: dateTo
-                    ? new Date(new Date(dateTo).getTime() + 24 * 60 * 60 * 1000).toISOString()
-                    : undefined,
-            },
+            ...queryParams
         });
     }
 
@@ -96,17 +119,13 @@
             }
 
             if (dateFrom) {
-                const fromDate = new Date(
-                    new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000,
-                ).toISOString();
+                const fromDate = new Date(new Date(dateFrom).getTime()).toISOString();
                 queryParams["dateCreated[strictly_after]"] = fromDate;
                 filenameParams.from = dateFrom;
             }
 
             if (dateTo) {
-                const toDate = new Date(
-                    new Date(dateTo).getTime() + 24 * 60 * 60 * 1000,
-                ).toISOString();
+                const toDate = new Date(new Date(dateTo).getTime()).toISOString();
                 queryParams["dateCreated[strictly_before]"] = toDate;
                 filenameParams.to = dateTo;
             }
@@ -129,8 +148,8 @@
             while (hasMoreData) {
                 const pageQueryParams = {
                     ...queryParams,
-                    itemsPerPage: "50",
-                    page: currentPage.toString(),
+                    itemsPerPage: 50,
+                    page: currentPage,
                 };
 
                 const pageResponse = await apiGatewayChargesGetCollection({
