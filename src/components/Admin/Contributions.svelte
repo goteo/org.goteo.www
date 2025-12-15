@@ -25,7 +25,7 @@
 </script>
 
 <div>
-    <Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
+    <Filters onApplyFilters={handleApplyFilters} currentTarget={filters?.target} />
     <div>
         <div>
             <FiltersTags onCloseFilter={handleApplyFilters} title={$t("admin.charges.lastContributions")} {filters} />
