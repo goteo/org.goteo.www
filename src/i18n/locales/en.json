@@ -710,8 +710,6 @@
         "title": "Charge status",
         "options": {
           "all": "All",
-          "in_pending": "Pending",
-          "charged": "Charged",
           "to_refund": "To be refunded",
           "refunded": "Refunded"
         }
