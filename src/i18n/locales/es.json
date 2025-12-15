@@ -714,10 +714,12 @@
         "title": "Estado de Aporte",
         "options": {
           "all": "Todos",
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrando",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         }
       },
       "projectStatus": {
