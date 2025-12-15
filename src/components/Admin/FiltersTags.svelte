@@ -5,18 +5,21 @@
     import type { Locale } from "../../i18n/locales";
     import { t } from "../../i18n/store";
     import { apiGatewayChargesGetCollection } from "../../openapi/client";
-    import type { GatewayCharge } from "../../openapi/client";
 
-    let { title, filters } = $props<{
+    let { title, filters, onCloseFilter } = $props<{
         title: string;
         filters?: any;
+        onCloseFilter: (filters: any) => void;
     }>();
 
     type FilterTags = { title: string; value?: string; values?: { from: string; to: string } }[];
 
     let tags: FilterTags | undefined = $state(undefined);
 
-    function closeTag() {}
+    function closeTag(filter: any, index: number) {
+        filter.value = "";
+        onCloseFilter(filter);
+    }
 
     function formatTags(tags: FilterTags, locale?: Locale) {
         if (tags === undefined) return;
@@ -37,24 +40,22 @@
         return tags;
     }
 
-    $effect(async (): Promise<void> => {
-        const { data: charges, error: chargesError } = await apiGatewayChargesGetCollection({
+    $effect(() => {
+        const { data: charges, error: chargesError } = apiGatewayChargesGetCollection({
             query: {
-                
+                ...filters,
             },
         });
 
         tags = formatTags(
             Object.keys(filters)
                 .map((filter: string) => {
-                    
                     if (filter === "date") return { title: filter, values: { ...filters[filter] } };
                     else return { title: filter, value: filters[filter] };
                 })
                 .filter((filter) => {
-                    if (filter.values)
-                        return filter.values.from !== undefined || filter.values.to !== undefined;
-                    else if (filter.title === "target") return filter.value !== undefined;
+                    if (filter.value === undefined || filter.values)
+                        return filter.value !== undefined;
                     else return filter.value !== "";
                 }),
             $locale,
@@ -67,14 +68,14 @@
         {title}
     </h1>
 
-    {#each tags as tag}
+    {#each tags as tag, i}
         <Tag variant={"bold"}>
             {#if tag.values}
                 {`${tag.values.from} - ${tag.values.to}`}
             {:else}
                 {tag.value}
             {/if}
-            <button onclick={closeTag} class="size-auto">
+            <button onclick={() => closeTag(tag.title, i)} class="size-auto">
                 <CloseIcon class="size-[15px]" />
             </button>
         </Tag>
