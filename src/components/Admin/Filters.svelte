@@ -55,40 +55,12 @@
             return;
         }
 
-        const queryParams: Record<string, string> = {};
-
-        if (selectedChargeStatus && selectedChargeStatus !== "all") {
-            queryParams.status = selectedChargeStatus;
-        }
-
-        if (selectedRangeAmount && selectedRangeAmount !== "all") {
-            if (selectedRangeAmount.includes("..")) {
-                queryParams["money.amount[between]"] = selectedRangeAmount;
-            } else {
-                queryParams["money.amount[gte]"] = selectedRangeAmount;
-            }
-        }
-
-        if (dateFrom) {
-            const fromDate = new Date(new Date(dateFrom).getTime()).toISOString();
-            queryParams["dateCreated[strictly_after]"] = fromDate;
-        }
-
-        if (dateTo) {
-            const toDate = new Date(new Date(dateTo).getTime()).toISOString();
-            queryParams["dateCreated[strictly_before]"] = toDate;
-        }
-
-        if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
-            queryParams["checkout.gateway"] = `/v4/gateways/${selectedPaymentMethod}`;
-        }
-
-        if (currentTarget) {
-            queryParams.target = currentTarget;
-        }
-
         onApplyFilters({
-            ...queryParams
+            "checkout.gateway": selectedPaymentMethod,
+            status: selectedChargeStatus,
+            'money.amount[gte]': selectedRangeAmount,
+            'dateCreated[after]': dateFrom ? new Date(new Date(dateFrom).getTime()).toISOString() : undefined,
+            'dateCreated[before]': dateTo ? new Date(new Date(dateTo).getTime()).toISOString() : undefined,
         });
     }
 

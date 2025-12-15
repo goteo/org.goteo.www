@@ -26,8 +26,7 @@
     function formatTags(tags: FilterTags, locale?: Locale) {
         if (tags === undefined) return;
         tags.forEach((tag) => {
-            if (tag.title === "rangeAmount") {
-            } else if (tag.values?.from && tag.values?.to) {
+            if (tag.values?.from && tag.values?.to) {
                 const options: Intl.DateTimeFormatOptions = {
                     day: "2-digit",
                     month: "short",
@@ -43,26 +42,26 @@
     }
 
     $effect(() => {
-        if (filters["dateCreated[after]"] || filters["dateCreated[before]"]) {
-            let date = { from: filters["dateCreated[after]"], to: filters["dateCreated[before]"] };
-            let indexDateFrom = filters.indexOf("dateCreated[after]");
-            let indexDateTo = filters.indexOf("dateCreated[before]");
-
-            filters.push(date);
-            filters.splice(indexDateFrom, 1);
-            filters.splice(indexDateTo, 1);
-        }
-
         tags = formatTags(
             Object.keys(filters)
-                .map((filter) => {
-                    let filterType: keyof ApiGatewayChargesGetCollectionData[`query`];
-                    if (typeof filterType) {
+            .map((filter) => {
+                    if (filters["dateCreated[after]"] && filters["dateCreated[before]"]) {
+                        let filtersArr: (string | { from: string; to: string })[] = Object.keys(filters);
+                        let date = { from: filters["dateCreated[after]"], to: filters["dateCreated[before]"] };
+            
+                        let indexDateFrom = filtersArr.indexOf("dateCreated[after]");
+                        let indexDateTo = filtersArr.indexOf("dateCreated[before]");
+            
+                        filtersArr.push(date);
+                        filtersArr.splice(indexDateFrom, 1);
+                        filtersArr.splice(indexDateTo, 1);
+
                         return { title: filter, values: { ...filters[filter] } };
                     } else return { title: filter, value: filters[filter] };
                 })
                 .filter((filter) => {
-                    if (filter.value === undefined || filter.values)
+                    if (filter.values.from && filter.values.to) return filter.values.from !== undefined || filter.values.to !== undefined;
+                    if (filter.value === undefined)
                         return filter.value !== undefined;
                     else return filter.value !== "";
                 }),
