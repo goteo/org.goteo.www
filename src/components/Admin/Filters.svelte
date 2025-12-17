@@ -3,11 +3,12 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
-    import { apiGatewayChargesGetCollection } from "../../openapi/client/index";
+    import { apiGatewayChargesGetCollection, type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
 
-    let { onApplyFilters, currentTarget } = $props<{
+    let { filters, onApplyFilters, currentTarget } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
         onApplyFilters: (filters: any) => void;
         currentTarget?: string;
     }>();
@@ -56,11 +57,16 @@
         }
 
         onApplyFilters({
-            "checkout.gateway": selectedPaymentMethod,
-            status: selectedChargeStatus,
-            'money.amount[gte]': selectedRangeAmount,
-            'dateCreated[after]': dateFrom ? new Date(new Date(dateFrom).getTime()).toISOString() : undefined,
-            'dateCreated[before]': dateTo ? new Date(new Date(dateTo).getTime()).toISOString() : undefined,
+            ...filters,
+            "checkout.gateway": selectedPaymentMethod || undefined,
+            status: selectedChargeStatus || undefined,
+            "money.amount[gte]": selectedRangeAmount || undefined,
+            "dateCreated[after]": dateFrom
+                ? new Date(new Date(dateFrom).getTime()).toISOString()
+                : undefined,
+            "dateCreated[before]": dateTo
+                ? new Date(new Date(dateTo).getTime()).toISOString()
+                : undefined,
         });
     }
 
@@ -201,6 +207,16 @@
             isExporting = false;
         }
     }
+
+    $effect(() => {
+        selectedPaymentMethod = filters["checkout.gateway"] ?? "";
+        selectedChargeStatus = filters.status ?? "";
+        selectedRangeAmount = filters["money.amount[gte]"] ?? "";
+
+        dateFrom = filters["dateCreated[after]"] ? filters["dateCreated[after]"] : "";
+
+        dateTo = filters["dateCreated[before]"] ? filters["dateCreated[before]"] : "";
+    });
 </script>
 
 <div
@@ -217,7 +233,7 @@
             >
                 <span class="relative">
                     <FiltersIcon />
-                    {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
+                    {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
                         <span class="absolute -top-1 -right-1">
                             <ActiveFilterIcon />
                         </span>
