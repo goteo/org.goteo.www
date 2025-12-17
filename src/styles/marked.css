@@ -15,6 +15,26 @@
     margin-bottom: var(--text-xl);
 
     border-radius: var(--radius-2xl);
+    max-width: 100%;
+    height: auto;
+}
+
+.marked-content iframe,
+.marked-content video {
+    max-width: 100%;
+    border-radius: var(--radius-2xl);
+}
+
+.marked-content pre {
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 100%;
+}
+
+.marked-content a {
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
 
 .marked-content ul,

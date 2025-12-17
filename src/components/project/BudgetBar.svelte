@@ -13,7 +13,7 @@
     } = $props();
 
     const typeBudget = {
-        task: "var(--color-variant)",
+        task: "var(--color-variant2)",
         infrastructure: "var(--color-secondary)",
         material: "var(--color-tertiary)",
     } as const;
@@ -83,9 +83,9 @@
             class="absolute transition-all duration-700 ease-out"
             style="left: {animValues.balance}%;"
         >
-            <div class="ml-4 flex items-center gap-2">
-                <span class="text-gray-600">{$t("project.tabs.budget.raised")}:</span>
-                <span class="text-base font-black">{formatCurrency(balanceAmount)}</span>
+            <div class="text-secondary ml-4 flex items-center gap-2 text-base">
+                <span>{$t("project.tabs.budget.raised")}:</span>
+                <span class="font-bold">{formatCurrency(balanceAmount)}</span>
             </div>
         </div>
 
@@ -161,13 +161,13 @@
     </div>
 
     <div class="flex gap-2">
-        <div class="min-w-fit" style="width: {leftSectionWidth}%">
-            <span class="text-gray-600">{$t("project.tabs.budget.minimum")}:</span>
-            <span class="text-base font-black">{formatCurrency(minimumTotal)}</span>
+        <div class="text-secondary min-w-fit text-base" style="width: {leftSectionWidth}%">
+            <span>{$t("project.tabs.budget.minimum")}:</span>
+            <span class="font-bold">{formatCurrency(minimumTotal)}</span>
         </div>
-        <div class="flex-none">
-            <span class="text-gray-600">{$t("project.tabs.budget.optimal")}:</span>
-            <span class="text-base font-black">{formatCurrency(optimumTotal)}</span>
+        <div class="text-secondary flex-none text-base">
+            <span>{$t("project.tabs.budget.optimal")}:</span>
+            <span class="font-bold">{formatCurrency(optimumTotal)}</span>
         </div>
     </div>
 </div>

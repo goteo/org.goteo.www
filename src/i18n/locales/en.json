@@ -56,6 +56,7 @@
       "updates": {
         "title": "Updates",
         "modal-title": "New update",
+        "by": "By:",
         "content": {
           "title": "Do not lose detail of the advances of this campaign",
           "empty": "There are no more planned updates.",
@@ -72,7 +73,6 @@
           "title": "Community support donations and messages"
         },
         "contribution": "Input",
-        "noComment": "No comment.",
         "matchfunding": {
           "contribution": "Sum of contributions",
           "aported": "Provided",
@@ -526,7 +526,7 @@
       "description": "Now we need to tell us how you want to pay.",
       "selectMethod": "Select payment method:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Your means of payment has been processed with an overwhelming success",
       "description": "Good! ",
       "form-goal": {
