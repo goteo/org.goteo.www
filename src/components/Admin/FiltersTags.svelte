@@ -12,20 +12,33 @@
         onCloseFilter: (filters: ApiGatewayChargesGetCollectionData["query"]) => void;
     }>();
 
-    type FilterTags = { title: string; value?: string; values?: { from?: string; to?: string } }[];
+    type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
+    type FilterTags = FilterTag[];
 
     let tags: FilterTags | undefined = $state(undefined);
-    let isVisible = $state(true);
+    let dateTag: FilterTag | undefined = $state(undefined);
 
-    function closeTag(filter: any, index: number) {
-        filter.value = "";
-        onCloseFilter(filter);
-        isVisible = false;
+    function closeTag(tag: FilterTag) {
+        if (tag.values?.from && tag.values?.to) {
+            onCloseFilter({
+                ...filters,
+                ["dateCreated[after]"]: undefined,
+                ["dateCreated[before]"]: undefined,
+            });
+
+            dateTag = undefined;
+        } else {
+            onCloseFilter({
+                ...filters,
+                [tag.title]: undefined,
+            });
+        }
     }
 
     function formatTags(tags: FilterTags, locale?: Locale) {
         if (tags === undefined) return;
-        tags.forEach((tag) => {
+
+        tags.map((tag) => {
             if (tag.values?.from && tag.values?.to) {
                 const options: Intl.DateTimeFormatOptions = {
                     day: "2-digit",
@@ -35,38 +48,58 @@
 
                 tag.values.from = new Date(tag.values.from).toLocaleDateString(locale, options);
                 tag.values.to = new Date(tag.values.to).toLocaleDateString(locale, options);
-            } else tag.value = $t(`contributions.filters.${tag.title}.options.${tag.value}`);
+            }
+
+            if (tag.title === "checkout.gateway") {
+                tag.value = $t(`contributions.filters.paymentMethod.options.${tag.value}`);
+            }
+
+            if (tag.title === "status") {
+                tag.value = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
+            }
+
+            if (tag.title === "money.amount[between]") {
+            }
+
+            if (tag.title === "money.amount[gte]")
+                tag.value = $t(`contributions.filters.rangeAmount.options.${tag.value}`);
         });
 
         return tags;
     }
 
     $effect(() => {
-        tags = formatTags(
-            Object.keys(filters)
-            .map((filter) => {
-                    if (filters["dateCreated[after]"] && filters["dateCreated[before]"]) {
-                        let filtersArr: (string | { from: string; to: string })[] = Object.keys(filters);
-                        let date = { from: filters["dateCreated[after]"], to: filters["dateCreated[before]"] };
-            
-                        let indexDateFrom = filtersArr.indexOf("dateCreated[after]");
-                        let indexDateTo = filtersArr.indexOf("dateCreated[before]");
-            
-                        filtersArr.push(date);
-                        filtersArr.splice(indexDateFrom, 1);
-                        filtersArr.splice(indexDateTo, 1);
+        if (filters !== undefined) {
+            let dateFrom = "dateCreated[after]";
+            let dateTo = "dateCreated[before]";
 
-                        return { title: filter, values: { ...filters[filter] } };
-                    } else return { title: filter, value: filters[filter] };
+            let normalTags: FilterTags | undefined = Object.keys(filters)
+                .map((filter) => {
+                    if (filter === dateFrom || filter === dateTo) return { title: filter };
+                    else return { title: filter, value: filters[filter] };
                 })
                 .filter((filter) => {
-                    if (filter.values.from && filter.values.to) return filter.values.from !== undefined || filter.values.to !== undefined;
-                    if (filter.value === undefined)
-                        return filter.value !== undefined;
+                    if (filter.title === dateFrom || filter.title === dateTo) return false;
+                    if (filter.value === undefined) return filter.value !== undefined;
+                    if (filter.value === "all") return false;
                     else return filter.value !== "";
-                }),
-            $locale,
-        );
+                });
+
+            if (filters[dateFrom] !== "" && filters[dateTo] !== "" && typeof filters[dateFrom] !== "undefined" && typeof filters[dateTo] !== "undefined") {
+                dateTag = {
+                    title: "date",
+                    values: {
+                        from: filters[dateFrom],
+                        to: filters[dateTo],
+                    },
+                };
+
+                normalTags = [...normalTags, dateTag];
+            }
+
+            console.log(normalTags);
+            tags = formatTags([...normalTags], $locale);
+        }
     });
 </script>
 
@@ -75,14 +108,14 @@
         {title}
     </h1>
 
-    {#each tags as tag, i}
+    {#each tags as tag}
         <Tag variant={"bold"}>
             {#if tag.values}
                 {`${tag.values.from} - ${tag.values.to}`}
             {:else}
                 {tag.value}
             {/if}
-            <button onclick={() => closeTag(tag.title, i)} class="size-auto">
+            <button onclick={() => closeTag(tag)} class="size-auto">
                 <CloseIcon class="size-[15px]" />
             </button>
         </Tag>
