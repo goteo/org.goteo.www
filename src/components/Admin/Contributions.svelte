@@ -28,7 +28,11 @@
     <Filters {filters} onApplyFilters={handleApplyFilters} currentTarget={filters?.target} />
     <div>
         <div>
-            <FiltersTags onCloseFilter={handleApplyFilters} title={$t("admin.charges.lastContributions")} {filters} />
+            <FiltersTags
+                onCloseFilter={handleApplyFilters}
+                title={$t("admin.charges.lastContributions")}
+                {filters}
+            />
             <!-- TODO: Move "Export .csv" button to this component (from Filters.svelte) -->
             <ExportCsv />
         </div>

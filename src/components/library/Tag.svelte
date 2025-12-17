@@ -20,7 +20,7 @@
 
 <div
     class={twMerge(
-        "flex justify-center items-center gap-2 rounded-sm border border-black bg-white px-2 py-1 whitespace-nowrap text-black text-[14px]",
+        "flex items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
         variant ? variantStyles[variant] : "",
         classes,
     )}

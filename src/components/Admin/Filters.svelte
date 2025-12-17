@@ -3,7 +3,10 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
-    import { apiGatewayChargesGetCollection, type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import {
+        apiGatewayChargesGetCollection,
+        type ApiGatewayChargesGetCollectionData,
+    } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
 

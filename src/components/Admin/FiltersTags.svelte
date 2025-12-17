@@ -85,7 +85,12 @@
                     else return filter.value !== "";
                 });
 
-            if (filters[dateFrom] !== "" && filters[dateTo] !== "" && typeof filters[dateFrom] !== "undefined" && typeof filters[dateTo] !== "undefined") {
+            if (
+                filters[dateFrom] !== "" &&
+                filters[dateTo] !== "" &&
+                typeof filters[dateFrom] !== "undefined" &&
+                typeof filters[dateTo] !== "undefined"
+            ) {
                 dateTag = {
                     title: "date",
                     values: {
