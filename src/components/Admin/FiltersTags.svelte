@@ -5,6 +5,7 @@
     import type { Locale } from "../../i18n/locales";
     import { t } from "../../i18n/store";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
+    import { formatDate } from "../../utils/dates";
 
     let { title, filters, onCloseFilter } = $props<{
         title: string;
@@ -35,19 +36,13 @@
         }
     }
 
-    function formatTags(tags: FilterTags, locale?: Locale) {
+    function formatTags(tags: FilterTags, locale: Locale) {
         if (tags === undefined) return;
 
         tags.map((tag) => {
             if (tag.values?.from && tag.values?.to) {
-                const options: Intl.DateTimeFormatOptions = {
-                    day: "2-digit",
-                    month: "short",
-                    year: "numeric",
-                };
-
-                tag.values.from = new Date(tag.values.from).toLocaleDateString(locale, options);
-                tag.values.to = new Date(tag.values.to).toLocaleDateString(locale, options);
+                tag.values.from = formatDate(new Date(tag.values.from), locale);
+                tag.values.to = formatDate(new Date(tag.values.to), locale);
             }
 
             if (tag.title === "checkout.gateway") {
