@@ -208,6 +208,73 @@
         return "↕️";
     }
 
+    const getCached = async (iri: string, resolver: CallableFunction): Promise<any | null> => {
+        const resCache = await caches.open("loadCharges");
+        const cachedRes = await resCache.match(iri);
+
+        if (cachedRes) return await cachedRes.json();
+
+        const { data } = await resolver();
+
+        resCache.add(iri);
+
+        return data;
+    };
+
+    const getCachedAccounting = async (
+        id: string | null,
+        headers: Record<string, unknown>,
+    ): Promise<Accounting | null> => {
+        if (!id) return null;
+
+        const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
+            path: { id: id },
+            baseUrl: getBaseUrl(),
+            url: apiAccountingsIdGetUrl,
+        });
+
+        return await getCached(accountingIri, () => apiAccountingsIdGet({ path: { id }, headers }));
+    };
+
+    const getCachedProject = async (id: string | null, headers: Record<string, unknown>) => {
+        if (!id) return null;
+
+        const projectIri = client.buildUrl<ApiProjectsIdOrSlugGetData>({
+            path: { idOrSlug: id },
+            baseUrl: getBaseUrl(),
+            url: apiProjectsIdOrSlugGetUrl,
+        });
+
+        return await getCached(projectIri, () =>
+            apiProjectsIdOrSlugGet({
+                path: { idOrSlug: id },
+                headers,
+            }),
+        );
+    };
+
+    const getCachedUser = async (id: string | null, headers: Record<string, unknown>) => {
+        if (!id) return null;
+
+        const userIri = client.buildUrl<ApiUsersIdGetData>({
+            path: { id: id },
+            baseUrl: getBaseUrl(),
+            url: apiUsersIdGetUrl,
+        });
+
+        return await getCached(userIri, () => apiUsersIdGet({ path: { id }, headers }));
+    };
+
+    const getCachedCheckout = async (id: string | null, headers: Record<string, unknown>) => {
+        const checkoutCache = new Map<string, any>();
+
+        if (!id) return null;
+        if (checkoutCache.has(id)) return checkoutCache.get(id);
+        const { data } = await apiGatewayCheckoutsIdGet({ path: { id }, headers });
+        checkoutCache.set(id, data);
+        return data;
+    };
+
     async function loadCharges(filters: {
         paymentMethod: string;
         chargeStatus: string;
@@ -302,74 +369,6 @@
             const loadedCharges = chargesResult.member ?? [];
             totalItems = chargesResult.totalItems ?? 0;
 
-            const getCached = async (
-                iri: string,
-                resolver: CallableFunction,
-            ): Promise<any | null> => {
-                const resCache = await caches.open("loadCharges");
-                const cachedRes = await resCache.match(iri);
-
-                if (cachedRes) return await cachedRes.json();
-
-                const { data } = await resolver();
-
-                resCache.add(iri);
-
-                return data;
-            };
-
-            const getCachedAccounting = async (id: string | null): Promise<Accounting | null> => {
-                if (!id) return null;
-
-                const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
-                    path: { id: id },
-                    baseUrl: getBaseUrl(),
-                    url: apiAccountingsIdGetUrl,
-                });
-
-                return await getCached(accountingIri, () =>
-                    apiAccountingsIdGet({ path: { id }, headers }),
-                );
-            };
-
-            const getCachedProject = async (id: string | null) => {
-                if (!id) return null;
-
-                const projectIri = client.buildUrl<ApiProjectsIdOrSlugGetData>({
-                    path: { idOrSlug: id },
-                    baseUrl: getBaseUrl(),
-                    url: apiProjectsIdOrSlugGetUrl,
-                });
-
-                return await getCached(projectIri, () =>
-                    apiProjectsIdOrSlugGet({
-                        path: { idOrSlug: id },
-                        headers,
-                    }),
-                );
-            };
-
-            const getCachedUser = async (id: string | null) => {
-                if (!id) return null;
-
-                const userIri = client.buildUrl<ApiUsersIdGetData>({
-                    path: { id: id },
-                    baseUrl: getBaseUrl(),
-                    url: apiUsersIdGetUrl,
-                });
-
-                return await getCached(userIri, () => apiUsersIdGet({ path: { id }, headers }));
-            };
-
-            const checkoutCache = new Map<string, any>();
-            const getCachedCheckout = async (id: string | null) => {
-                if (!id) return null;
-                if (checkoutCache.has(id)) return checkoutCache.get(id);
-                const { data } = await apiGatewayCheckoutsIdGet({ path: { id }, headers });
-                checkoutCache.set(id, data);
-                return data;
-            };
-
             charges = await Promise.all(
                 loadedCharges.map(async (charge): Promise<ExtendedCharge> => {
                     try {
@@ -377,19 +376,34 @@
                         const checkoutId = extractId(charge.checkout);
 
                         const [accounting, checkout] = await Promise.all([
-                            getCachedAccounting(targetId),
-                            getCachedCheckout(checkoutId),
+                            getCachedAccounting(targetId, headers),
+                            getCachedCheckout(checkoutId, headers),
                         ]);
 
                         const projectId = extractId(accounting?.owner);
-                        const project = projectId ? await getCachedProject(projectId) : null;
+                        const project = projectId
+                            ? await getCachedProject(projectId, headers)
+                            : null;
 
                         const originAccountingId = extractId(checkout?.origin);
-                        const originAccounting = await getCachedAccounting(originAccountingId);
+                        const originAccounting = await getCachedAccounting(
+                            originAccountingId,
+                            headers,
+                        );
 
                         const [targetDisplayName, originDisplayName] = await Promise.all([
-                            getUserDisplayName(accounting, getCachedUser, getCachedProject),
-                            getUserDisplayName(originAccounting, getCachedUser, getCachedProject),
+                            getUserDisplayName(
+                                accounting,
+                                headers,
+                                getCachedUser,
+                                getCachedProject,
+                            ),
+                            getUserDisplayName(
+                                originAccounting,
+                                headers,
+                                getCachedUser,
+                                getCachedProject,
+                            ),
                         ]);
 
                         return {
@@ -442,21 +456,22 @@
 
     async function getUserDisplayName(
         resource: any,
-        getCachedUser: (id: string | null) => Promise<any>,
-        getCachedProject: (id: string | null) => Promise<any>,
+        headers: Record<string, unknown>,
+        getCachedUser: (id: string | null, headers: Record<string, unknown>) => Promise<any>,
+        getCachedProject: (id: string | null, headers: Record<string, unknown>) => Promise<any>,
     ): Promise<string> {
         if (!resource?.owner) return "—";
 
         const ownerId = extractId(resource.owner);
 
         if (resource.owner.startsWith("/v4/projects/")) {
-            const project = await getCachedProject(ownerId);
+            const project = await getCachedProject(ownerId, headers);
 
             return project.title;
         }
 
         if (resource.owner.startsWith("/v4/users/")) {
-            return (await getCachedUser(ownerId))?.displayName ?? "—";
+            return (await getCachedUser(ownerId, headers))?.displayName ?? "—";
         }
 
         return "—";
