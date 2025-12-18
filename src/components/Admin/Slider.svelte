@@ -41,7 +41,7 @@
     });
 </script>
 
-<div class="relative h-[160px]">
+<div class="relative h-40 mt-6">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
             <span class="text-content">Cargando...</span>

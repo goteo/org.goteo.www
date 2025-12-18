@@ -24,17 +24,16 @@
     }
 </script>
 
-<div>
-    <Filters {filters} onApplyFilters={handleApplyFilters} currentTarget={filters?.target} />
-    <div>
-        <div>
+<div class="flex flex-col gap-10">
+    <Filters {filters} onApplyFilters={handleApplyFilters} />
+    <div class="flex flex-col">
+        <div class="flex justify-between mb-8">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
                 title={$t("admin.charges.lastContributions")}
                 {filters}
             />
-            <!-- TODO: Move "Export .csv" button to this component (from Filters.svelte) -->
-            <ExportCsv />
+            <ExportCsv currentTarget={filters?.target} />
         </div>
         <!-- TODO: Implement Categories component -->
         <Categories />
