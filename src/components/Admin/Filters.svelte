@@ -212,13 +212,13 @@
     }
 
     $effect(() => {
-        selectedPaymentMethod = filters["checkout.gateway"] ?? "";
-        selectedChargeStatus = filters.status ?? "";
-        selectedRangeAmount = filters["money.amount[gte]"] ?? "";
+        if (typeof filters["checkout.gateway"] === "undefined") selectedPaymentMethod = "";
+        if (typeof filters.status === "undefined") selectedChargeStatus = "";
+        if (typeof filters["money.amount[gte]"] === "undefined") selectedRangeAmount = "";
+        if (typeof filters["money.amount[between]"] === "undefined") selectedRangeAmount = "";
 
-        dateFrom = filters["dateCreated[after]"] ? filters["dateCreated[after]"] : "";
-
-        dateTo = filters["dateCreated[before]"] ? filters["dateCreated[before]"] : "";
+        if (typeof filters["dateCreated[after]"] === "undefined") dateFrom = "";
+        if (typeof filters["dateCreated[before]"] === "undefined") dateTo = "";
     });
 </script>
 

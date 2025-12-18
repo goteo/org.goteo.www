@@ -17,7 +17,6 @@
     type FilterTags = FilterTag[];
 
     let tags: FilterTags | undefined = $state(undefined);
-    let dateTag: FilterTag | undefined = $state(undefined);
 
     function closeTag(tag: FilterTag) {
         if (tag.values?.from && tag.values?.to) {
@@ -26,8 +25,6 @@
                 ["dateCreated[after]"]: undefined,
                 ["dateCreated[before]"]: undefined,
             });
-
-            dateTag = undefined;
         } else {
             onCloseFilter({
                 ...filters,
@@ -86,18 +83,18 @@
                 typeof filters[dateFrom] !== "undefined" &&
                 typeof filters[dateTo] !== "undefined"
             ) {
-                dateTag = {
-                    title: "date",
-                    values: {
-                        from: filters[dateFrom],
-                        to: filters[dateTo],
+                normalTags = [
+                    ...normalTags,
+                    {
+                        title: "date",
+                        values: {
+                            from: filters[dateFrom],
+                            to: filters[dateTo],
+                        },
                     },
-                };
-
-                normalTags = [...normalTags, dateTag];
+                ];
             }
 
-            console.log(normalTags);
             tags = formatTags([...normalTags], $locale);
         }
     });
@@ -115,7 +112,7 @@
             {:else}
                 {tag.value}
             {/if}
-            <button onclick={() => closeTag(tag)} class="size-auto">
+            <button onclick={() => closeTag(tag)} class="size-auto cursor-pointer">
                 <CloseIcon class="size-[15px]" />
             </button>
         </Tag>
