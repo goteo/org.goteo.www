@@ -49,9 +49,9 @@
         </div>
     {/if}
 
-    <div bind:this={mainCarousel} class="main-carousel h-full opacity-{isLoaded ? 100 : 0}">
+    <div bind:this={mainCarousel} class="main-carousel gap-6 h-full opacity-{isLoaded ? 100 : 0}">
         {#each slides as { title, amount }}
-            <TotalizerCard {title} value={amount} />
+            <TotalizerCard class="w-[322px] h-[160px]" {title} value={amount} />
         {/each}
     </div>
 </div>
