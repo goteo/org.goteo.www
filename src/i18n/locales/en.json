@@ -597,8 +597,7 @@
           "wallet": "Wallet"
         },
         "status": {
-          "in_pending": "Pending",
-          "charged": "Charged",
+          "in_charge": "Charged",
           "to_refund": "To refund",
           "refunded": "Refunded"
         },
