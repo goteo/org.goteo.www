@@ -43,16 +43,19 @@
     });
 </script>
 
-<div class="relative h-40 mt-6">
+<div class="relative mt-6 h-40">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
             <span class="text-content">{$t("search.pagination.loading")}</span>
         </div>
     {/if}
 
-    <div bind:this={mainCarousel} class="main-carousel first:ml-0 h-full opacity-{isLoaded ? 100 : 0}">
+    <div
+        bind:this={mainCarousel}
+        class="main-carousel h-full first:ml-0 opacity-{isLoaded ? 100 : 0}"
+    >
         {#each slides as { title, amount }}
-            <TotalizerCard class="w-[322px] h-[162px] ml-6" {title} value={amount} />
+            <TotalizerCard class="ml-6 h-[162px] w-[322px]" {title} value={amount} />
         {/each}
     </div>
 </div>

@@ -18,8 +18,11 @@
 
 <div class="flex flex-wrap gap-[8px]">
     {#each categories as category}
-        <Category class="text-secondary hover:bg-white hover:inset-ring-1 hover:inset-ring-secondary">
-            {category.title} {formatCurrency(Number(category.value), "USD")}
+        <Category
+            class="text-secondary hover:inset-ring-secondary hover:bg-white hover:inset-ring-1"
+        >
+            {category.title}
+            {formatCurrency(Number(category.value), "USD")}
         </Category>
     {/each}
 </div>

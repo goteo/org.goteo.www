@@ -538,11 +538,16 @@
             <TableHead>
                 {#each tableHeaders as header}
                     <TableHeadCell
-                        class="p-4 text-base whitespace-nowrap text-white bg-black first:rounded-l-lg last:rounded-r-lg
+                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
                         onclick={() => handleHeaderClick(header)}
                     >
-                        <div class="flex items-center justify-between {header.name === "contributions.table.headers.chargeStatus" ? "justify-center" : ""}">
+                        <div
+                            class="flex items-center justify-between {header.name ===
+                            'contributions.table.headers.chargeStatus'
+                                ? 'justify-center'
+                                : ''}"
+                        >
                             <span class="normal-case">{$t(header.name)}</span>
                             {#if header.sortable}
                                 <span class="ml-2 text-sm opacity-70">
@@ -575,28 +580,28 @@
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
                                 ? 'bg-soft-purple]'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple] border transition-colors text-content"
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple] text-content border transition-colors"
                         >
                             <TableBodyCell
-                                class="border-variant1 p-4 truncate rounded-l-md border-t border-b border-l"
+                                class="border-variant1 truncate rounded-l-md border-t border-b border-l p-4"
                                 >{charge.targetDisplayName}</TableBodyCell
                             >
                             {#if charge.money.amount && charge.money.currency}
-                                <TableBodyCell class="border-variant1 p-4 border-t border-b">
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
                                     {formatCurrency(charge.money.amount, charge.money.currency)}
                                 </TableBodyCell>
                             {:else}
-                                <TableBodyCell class="border-variant1 p-4 border-t border-b"
+                                <TableBodyCell class="border-variant1 border-t border-b p-4"
                                     >—</TableBodyCell
                                 >
                             {/if}
-                            <TableBodyCell class="border-variant1 p-4 truncate border-t border-b"
+                            <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
                                 >{charge.originDisplayName}</TableBodyCell
                             >
-                            <TableBodyCell class="border-variant1 p-4 border-t border-b">
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
-                            <TableBodyCell class="border-variant1 p-4 border-t border-b">
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {getDate(charge.dateCreated).date}
                                 <p
                                     class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
@@ -605,7 +610,7 @@
                                     {charge.trackingCodes[0]?.value || "—"}
                                 </p>
                             </TableBodyCell>
-                            <TableBodyCell class="border-variant1 p-4 border-t border-b">
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 <div class="flex justify-center">
                                     <button
                                         class="flex items-center gap-1 rounded border border-black px-3 py-1 text-base font-medium text-black"
@@ -615,13 +620,15 @@
                                 </div>
                             </TableBodyCell>
 
-                            <TableBodyCell class="border-variant1 p-4 border-t border-b"
+                            <TableBodyCell class="border-variant1 border-t border-b p-4"
                                 >{charge.refundToWallet}</TableBodyCell
                             >
                             <TableBodyCell
-                                class="border-variant1 p-4 rounded-r-md border-t border-r border-b"
+                                class="border-variant1 rounded-r-md border-t border-r border-b p-4"
                                 ><svg
-                                    class={openRow === i ? "transform rotate-180 transition-transform" : "transition-transform"}
+                                    class={openRow === i
+                                        ? "rotate-180 transform transition-transform"
+                                        : "transition-transform"}
                                     width="24"
                                     height="24"
                                     viewBox="0 0 24 24"
@@ -642,7 +649,7 @@
                             <TableBodyRow>
                                 <TableBodyCell
                                     colspan={tableHeaders.length}
-                                    class="border-variant1 bg-soft-purple py-10 rounded-lg border shadow-[0px_1px_3px_0px_#0000001A]"
+                                    class="border-variant1 bg-soft-purple rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
                                 >
                                     <DetailsRow
                                         platformLinks={charge.platformLinks}

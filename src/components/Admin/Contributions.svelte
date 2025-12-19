@@ -27,7 +27,7 @@
 <div class="flex flex-col gap-10">
     <Filters {filters} onApplyFilters={handleApplyFilters} />
     <div class="flex flex-col">
-        <div class="flex justify-between mb-8">
+        <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
                 title={$t("admin.charges.lastContributions")}
