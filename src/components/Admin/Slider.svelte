@@ -4,6 +4,7 @@
     import type Flickity from "flickity";
     import type { Options } from "flickity";
     import TotalizerCard from "./TotalizerCard.svelte";
+    import { t } from "../../i18n/store";
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;
@@ -45,7 +46,7 @@
 <div class="relative h-40 mt-6">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">Cargando...</span>
+            <span class="text-content">{$t("search.pagination.loading")}</span>
         </div>
     {/if}
 
