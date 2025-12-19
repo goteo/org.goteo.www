@@ -601,10 +601,12 @@
           "wallet": "Monedero"
         },
         "status": {
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         },
         "refund": {
           "to_wallet": "Sí",
@@ -714,7 +716,7 @@
         "options": {
           "all": "Todos",
           "to_charge": "Por cobrar",
-          "in_charge": "Cobrando",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
           "refunded": "Reembolsado",
           "to_wallet": "Por reembolsar a monedero",
