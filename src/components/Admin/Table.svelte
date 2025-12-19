@@ -538,11 +538,11 @@
             <TableHead>
                 {#each tableHeaders as header}
                     <TableHeadCell
-                        class="py-4 text-base whitespace-nowrap text-white bg-black first:rounded-l-lg last:rounded-r-lg
+                        class="p-4 text-base whitespace-nowrap text-white bg-black first:rounded-l-lg last:rounded-r-lg
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
                         onclick={() => handleHeaderClick(header)}
                     >
-                        <div class="flex items-center justify-between">
+                        <div class="flex items-center justify-between {header.name === "contributions.table.headers.chargeStatus" ? "justify-center" : ""}">
                             <span class="normal-case">{$t(header.name)}</span>
                             {#if header.sortable}
                                 <span class="ml-2 text-sm opacity-70">
@@ -575,7 +575,7 @@
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
                                 ? 'bg-soft-purple]'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple] border transition-colors"
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple] border transition-colors text-content"
                         >
                             <TableBodyCell
                                 class="border-variant1 p-4 truncate rounded-l-md border-t border-b border-l"
