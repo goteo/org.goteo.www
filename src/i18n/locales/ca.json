@@ -605,8 +605,7 @@
           "wallet": "Moneder"
         },
         "status": {
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         },
@@ -717,8 +716,7 @@
         "title": "Estat de l'aportació",
         "options": {
           "all": "Tots",
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         }

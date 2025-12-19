@@ -14,13 +14,13 @@
         success: "bg-variant2",
         warning: "bg-variant4",
         error: "bg-tertiary",
-        bold: "bg-grey border-grey text-secondary font-bold",
+        bold: "bg-grey border-grey text-secondary font-bold border-soft-purple",
     };
 </script>
 
 <div
     class={twMerge(
-        "flex content-center items-center gap-2 rounded-[4px] border border-black bg-white px-2 py-1 whitespace-nowrap text-black",
+        "flex items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
         variant ? variantStyles[variant] : "",
         classes,
     )}

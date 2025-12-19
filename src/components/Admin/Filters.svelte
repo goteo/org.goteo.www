@@ -3,11 +3,15 @@
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
     import { apiGatewaysGetCollection } from "../../openapi/client/index";
-    import { apiGatewayChargesGetCollection } from "../../openapi/client/index";
+    import {
+        apiGatewayChargesGetCollection,
+        type ApiGatewayChargesGetCollectionData,
+    } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { onMount } from "svelte";
 
-    let { onApplyFilters, currentTarget } = $props<{
+    let { filters, onApplyFilters, currentTarget } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
         onApplyFilters: (filters: any) => void;
         currentTarget?: string;
     }>();
@@ -54,15 +58,17 @@
             alert($t("contributions.filters.dateRange.errors.invalidRange"));
             return;
         }
+
         onApplyFilters({
-            paymentMethod: selectedPaymentMethod,
-            chargeStatus: selectedChargeStatus,
-            rangeAmount: selectedRangeAmount,
-            from: dateFrom
-                ? new Date(new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000).toISOString()
+            ...filters,
+            "checkout.gateway": selectedPaymentMethod || undefined,
+            status: selectedChargeStatus || undefined,
+            "money.amount[gte]": selectedRangeAmount || undefined,
+            "dateCreated[after]": dateFrom
+                ? new Date(new Date(dateFrom).getTime()).toISOString()
                 : undefined,
-            to: dateTo
-                ? new Date(new Date(dateTo).getTime() + 24 * 60 * 60 * 1000).toISOString()
+            "dateCreated[before]": dateTo
+                ? new Date(new Date(dateTo).getTime()).toISOString()
                 : undefined,
         });
     }
@@ -94,17 +100,13 @@
             }
 
             if (dateFrom) {
-                const fromDate = new Date(
-                    new Date(dateFrom).getTime() - 24 * 60 * 60 * 1000,
-                ).toISOString();
+                const fromDate = new Date(new Date(dateFrom).getTime()).toISOString();
                 queryParams["dateCreated[strictly_after]"] = fromDate;
                 filenameParams.from = dateFrom;
             }
 
             if (dateTo) {
-                const toDate = new Date(
-                    new Date(dateTo).getTime() + 24 * 60 * 60 * 1000,
-                ).toISOString();
+                const toDate = new Date(new Date(dateTo).getTime()).toISOString();
                 queryParams["dateCreated[strictly_before]"] = toDate;
                 filenameParams.to = dateTo;
             }
@@ -127,8 +129,8 @@
             while (hasMoreData) {
                 const pageQueryParams = {
                     ...queryParams,
-                    itemsPerPage: "50",
-                    page: currentPage.toString(),
+                    itemsPerPage: 50,
+                    page: currentPage,
                 };
 
                 const pageResponse = await apiGatewayChargesGetCollection({
@@ -208,6 +210,16 @@
             isExporting = false;
         }
     }
+
+    $effect(() => {
+        if (typeof filters["checkout.gateway"] === "undefined") selectedPaymentMethod = "";
+        if (typeof filters.status === "undefined") selectedChargeStatus = "";
+        if (typeof filters["money.amount[gte]"] === "undefined") selectedRangeAmount = "";
+        if (typeof filters["money.amount[between]"] === "undefined") selectedRangeAmount = "";
+
+        if (typeof filters["dateCreated[after]"] === "undefined") dateFrom = "";
+        if (typeof filters["dateCreated[before]"] === "undefined") dateTo = "";
+    });
 </script>
 
 <div
@@ -224,7 +236,7 @@
             >
                 <span class="relative">
                     <FiltersIcon />
-                    {#if selectedPaymentMethod || selectedChargeStatus || selectedRangeAmount || dateFrom || dateTo}
+                    {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
                         <span class="absolute -top-1 -right-1">
                             <ActiveFilterIcon />
                         </span>
