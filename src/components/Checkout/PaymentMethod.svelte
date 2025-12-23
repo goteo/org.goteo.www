@@ -1,87 +1,23 @@
----
-import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
-import CreditCardIcon from "../../svgs/CreditCardIcon.astro";
-import PaypalIcon from "../../svgs/PaypalIcon.astro";
-import StripeIcon from "../../svgs/StripeIcon.astro";
-import { formatCurrency } from "../../utils/currencies";
+<script lang="ts">
+    import type { Accounting, ApiGatewaysNameGetResponse } from "../../openapi/client/index";
+    import CreditCardIcon from "../../svgs/CreditCardIcon.svelte";
+    import PaypalIcon from "../../svgs/PaypalIcon.svelte";
+    import StripeIcon from "../../svgs/StripeIcon.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
 
-const { t } = Astro.locals;
+    const {
+        hasError,
+        paymentGateways,
+        selectedGateway,
+        accounting,
+    }: {
+        hasError?: boolean;
+        paymentGateways?: ApiGatewaysNameGetResponse[];
+        selectedGateway?: string;
+        accounting: Accounting;
+    } = $props();
 
-const {
-    hasError,
-    paymentGateways,
-    selectedGateway,
-}: {
-    hasError?: boolean;
-    paymentGateways?: ApiGatewaysNameGetResponse[];
-    selectedGateway?: string;
-} = Astro.props;
-
-const { accounting } = Astro.props;
----
-
-<section>
-    <div class="flex flex-col gap-6 sm:w-full sm:max-w-md">
-        <p class="text-2xl font-bold">
-            {hasError ? t("payment.page-error.selectMethod") : t("payment.page.selectMethod")}
-        </p>
-
-        <form
-            id="payment"
-            method="POST"
-            class="flex flex-col gap-4"
-            data-balance={accounting.balance.amount}
-        >
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {
-                    (paymentGateways ?? []).map((gateway) => (
-                        <label
-                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
-                            data-gateway={gateway.name}
-                        >
-                            <div class="flex items-center gap-2">
-                                <input
-                                    type="radio"
-                                    name="paymentMethod"
-                                    value={gateway.name}
-                                    disabled={gateway.name === "wallet"}
-                                    checked={
-                                        selectedGateway
-                                            ? gateway.name === selectedGateway
-                                            : gateway.name !== "wallet" &&
-                                              paymentGateways?.[0]?.name === gateway.name
-                                    }
-                                    class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
-                                />
-                                <div class="flex flex-col leading-tight">
-                                    <span class="font-semibold capitalize">{gateway.name}</span>
-                                    {gateway.name === "wallet" && (
-                                        <span class="text-sm font-normal">
-                                            {t("payment.wallet.balanceLabel")}
-                                            {formatCurrency(accounting.amount, accounting.currency)}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
-                            <div>
-                                {gateway.name === "paypal" ? (
-                                    <PaypalIcon />
-                                ) : gateway.name === "stripe" ? (
-                                    <StripeIcon />
-                                ) : gateway.name === "wallet" ? (
-                                    <CreditCardIcon />
-                                ) : null}
-                            </div>
-                        </label>
-                    ))
-                }
-            </div>
-            <input type="hidden" name="cartData" id="cart-data-input" />
-        </form>
-        <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
-    </div>
-</section>
-<script>
     import { actions, isInputError } from "astro:actions";
 
     const form = document.getElementById("payment");
@@ -204,3 +140,63 @@ const { accounting } = Astro.props;
         });
     });
 </script>
+
+<section>
+    <div class="flex flex-col gap-6 sm:w-full sm:max-w-md">
+        <p class="text-2xl font-bold">
+            {hasError ? $t("payment.page-error.selectMethod") : $t("payment.page.selectMethod")}
+        </p>
+
+        <form
+            id="payment"
+            method="POST"
+            class="flex flex-col gap-4"
+            data-balance={accounting.balance?.amount}
+        >
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {#if paymentGateways}
+                    {#each paymentGateways as gateway}
+                        <label
+                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            data-gateway={gateway.name}
+                        >
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value={gateway.name}
+                                    disabled={gateway.name === "wallet"}
+                                    checked={selectedGateway
+                                        ? gateway.name === selectedGateway
+                                        : gateway.name !== "wallet" &&
+                                          paymentGateways?.[0]?.name === gateway.name}
+                                    class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
+                                />
+                                <div class="flex flex-col leading-tight">
+                                    <span class="font-semibold capitalize">{gateway.name}</span>
+                                    {#if gateway.name === "wallet"}
+                                        <span class="text-sm font-normal">
+                                            {$t("payment.wallet.balanceLabel")}
+                                            {formatCurrency(accounting.balance?.amount, accounting.currency)}
+                                        </span>
+                                    {/if}
+                                </div>
+                            </div>
+                            <div>
+                                {#if gateway.name === "paypal"}
+                                    <PaypalIcon />
+                                {:else if gateway.name === "stripe"}
+                                    <StripeIcon />
+                                {:else if gateway.name === "wallet"}
+                                    <CreditCardIcon />
+                                {/if}
+                            </div>
+                        </label>
+                    {/each}
+                {/if}
+            </div>
+            <input type="hidden" name="cartData" id="cart-data-input" />
+        </form>
+        <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
+    </div>
+</section>
