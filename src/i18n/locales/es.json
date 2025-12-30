@@ -542,6 +542,7 @@
       "form-review": {
         "title": "Deja un mensaje en los proyectos a los que has apoyado",
         "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+        "placeholder": "Escribe tu mensaje de apoyo al impulsor...",
         "labels": {
           "name": "Label",
           "anonymous": "Dejar un mensaje de forma anónima",

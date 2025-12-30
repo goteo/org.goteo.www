@@ -47,14 +47,14 @@
                     name="messageType"
                     value="anonymous"
                     bind:group={messageType}
-                    label="Dejar un mensaje de forma anónima"
+                    label={$t("payment.page-approved.form-review.labels.anonymous")}
                 />
 
                 <RadioButton
                     name="messageType"
                     value="public"
                     bind:group={messageType}
-                    label="Dejar un mensaje de forma pública"
+                    label={$t("payment.page-approved.form-review.labels.leave-a-message")}
                 />
             </fieldset>
 
@@ -66,7 +66,7 @@
                     id="review-message"
                     class="border-secondary focus:ring-secondary w-full appearance-none rounded-md border bg-white p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
                     name="review"
-                    placeholder="Escribe tu mensaje de apoyo al impulsor..."
+                    placeholder={$t("payment.page-approved.form-review.placeholder")}
                     rows="4"
                 ></textarea>
             </div>
