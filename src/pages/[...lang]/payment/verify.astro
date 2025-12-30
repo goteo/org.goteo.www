@@ -93,6 +93,7 @@ const postPaymentUrl = checkoutId
                                     </div>
 
                                     <PaymentMethod
+                                        client:load
                                         {paymentGateways}
                                         {accounting}
                                         hasError={!!error}
