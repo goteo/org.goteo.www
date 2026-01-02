@@ -126,6 +126,10 @@
         openRow = openRow === i ? null : i;
     };
 
+    const accountingMap = new Map<string, Accounting>();
+    const userMap = new Map<string, ApiUsersIdGetData>();
+    const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
         if (!match) return null;
@@ -205,6 +209,50 @@
         }
 
         return "↕️";
+    }
+
+    async function resolveWithCache(id: string, cache: Map<string, any>, resolver: (id: string) => Promise<any>): Promise<any> {
+        if (cache.has(id)) return cache.get(id)!;
+        
+        const data = await resolver(id);
+        cache.set(id, data);
+        return data;
+    }
+
+    function resolveAccounting(id: string, headers: any) {
+        resolveWithCache(
+            id,
+            accountingMap,
+            async (id) => {
+                const { data } = await apiAccountingsIdGet({ path: { id }, headers });
+                return data;
+            }
+        );
+    }
+
+    function resolveUser(id: string, headers: any) {
+        resolveWithCache(
+            id,
+            userMap,
+            async (id) => {
+                const { data } = await apiUsersIdGet({ path: { id }, headers });
+                return data;
+            }
+        );
+    }
+
+    function resolveProject(id: string, headers: any) {
+        resolveWithCache(
+            id,
+            projectMap,
+            async (id) => {
+                const { data } = await apiProjectsIdOrSlugGet({ 
+                    path: { idOrSlug: id }, 
+                    headers,
+                });
+                return data;
+            }
+        );
     }
 
     const getCached = async (iri: string, resolver: CallableFunction): Promise<any | null> => {
