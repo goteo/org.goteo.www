@@ -10,10 +10,12 @@
 
     import Loader from "../../svgs/Loader.svelte";
     import Pagination from "./Pagination.svelte";
+    import DetailsRow from "./DetailsRow.svelte";
 
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+
     import {
         apiGatewayChargesGetCollection,
         apiAccountingsIdGet,
@@ -21,24 +23,16 @@
         apiGatewayCheckoutsIdGet,
         apiProjectsIdOrSlugGet,
     } from "../../../src/openapi/client/index.ts";
+
     import type {
         GatewayCharge,
         Tracking,
         Link,
-        ApiAccountingsIdGetData,
         Accounting,
         ApiProjectsIdOrSlugGetData,
         ApiUsersIdGetData,
         ApiGatewayChargesGetCollectionData,
     } from "../../../src/openapi/client/index.ts";
-    import DetailsRow from "./DetailsRow.svelte";
-    import { client } from "../../openapi/client/client.gen.ts";
-    import {
-        apiAccountingsIdGetUrl,
-        apiProjectsIdOrSlugGetUrl,
-        apiUsersIdGetUrl,
-    } from "../../openapi/client/paths.gen.ts";
-    import { getBaseUrl } from "../../utils/consts.ts";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -120,7 +114,6 @@
     let isLoading = $state(false);
     let isFirstLoad = $state(true);
     let totalItems = $state(0);
-    let lastItemsPerPage = $state(10);
     let lastItemsPerPageSnapshot = 10;
 
     const toggleRow = (i: number) => {
@@ -130,6 +123,7 @@
     const accountingMap = new Map<string, Accounting>();
     const userMap = new Map<string, ApiUsersIdGetData>();
     const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+    const checkoutMap = new Map<string, any>();
 
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
@@ -142,19 +136,6 @@
         } catch {
             return null;
         }
-    }
-
-    const chargesCache = new Map<string, ExtendedCharge[]>();
-    let largestLoaded = 0;
-
-    function getCurrentSortParams() {
-        const currentSortOption = sortOptions.find((option) => option.key === selectedSort);
-        if (!currentSortOption) return {};
-
-        const orderParam = `order[${currentSortOption.field}]`;
-        return {
-            [orderParam]: currentSortOption.direction,
-        };
     }
 
     function handleHeaderClick(header: any) {
@@ -212,317 +193,210 @@
         return "↕️";
     }
 
-    async function resolveWithCache(id: string, cache: Map<string, any>, resolver: (id: string) => Promise<any>): Promise<any> {
+    async function resolveWithCache(
+        id: string | null,
+        cache: Map<string, any>,
+        resolver: (id: string) => Promise<any>,
+    ): Promise<any> {
+        if (id === null) return null;
         if (cache.has(id)) return cache.get(id)!;
-        
+
         const data = await resolver(id);
         cache.set(id, data);
         return data;
     }
 
-    function resolveAccounting(id: string, headers: any) {
-        resolveWithCache(
-            id,
-            accountingMap,
-            async (id) => {
-                const { data } = await apiAccountingsIdGet({ path: { id }, headers });
-                return data;
-            }
-        );
-    }
-
-    function resolveUser(id: string, headers: any) {
-        resolveWithCache(
-            id,
-            userMap,
-            async (id) => {
-                const { data } = await apiUsersIdGet({ path: { id }, headers });
-                return data;
-            }
-        );
-    }
-
-    function resolveProject(id: string, headers: any) {
-        resolveWithCache(
-            id,
-            projectMap,
-            async (id) => {
-                const { data } = await apiProjectsIdOrSlugGet({ 
-                    path: { idOrSlug: id }, 
-                    headers,
-                });
-                return data;
-            }
-        );
-    }
-
-    const getCached = async (iri: string, resolver: CallableFunction): Promise<any | null> => {
-        const resCache = await caches.open("loadCharges");
-        const cachedRes = await resCache.match(iri);
-
-        if (cachedRes) return await cachedRes.json();
-
-        const { data } = await resolver();
-
-        resCache.add(iri);
-
-        return data;
-    };
-
-    const getCachedAccounting = async (
-        id: string | null,
-        headers: Record<string, unknown>,
-    ): Promise<Accounting | null> => {
-        if (!id) return null;
-
-        const accountingIri = client.buildUrl<ApiAccountingsIdGetData>({
-            path: { id: id },
-            baseUrl: getBaseUrl(),
-            url: apiAccountingsIdGetUrl,
+    function resolveAccounting(id: string | null, headers: any) {
+        return resolveWithCache(id, accountingMap, async (id) => {
+            const { data } = await apiAccountingsIdGet({ path: { id }, headers });
+            return data;
         });
+    }
 
-        return await getCached(accountingIri, () => apiAccountingsIdGet({ path: { id }, headers }));
-    };
-
-    const getCachedProject = async (id: string | null, headers: Record<string, unknown>) => {
-        if (!id) return null;
-
-        const projectIri = client.buildUrl<ApiProjectsIdOrSlugGetData>({
-            path: { idOrSlug: id },
-            baseUrl: getBaseUrl(),
-            url: apiProjectsIdOrSlugGetUrl,
+    function resolveUser(id: string | null, headers: any) {
+        return resolveWithCache(id, userMap, async (id) => {
+            const { data } = await apiUsersIdGet({ path: { id }, headers });
+            return data;
         });
+    }
 
-        return await getCached(projectIri, () =>
-            apiProjectsIdOrSlugGet({
+    function resolveProject(id: string | null, headers: any) {
+        return resolveWithCache(id, projectMap, async (id) => {
+            const { data } = await apiProjectsIdOrSlugGet({
                 path: { idOrSlug: id },
                 headers,
-            }),
-        );
-    };
-
-    const getCachedUser = async (id: string | null, headers: Record<string, unknown>) => {
-        if (!id) return null;
-
-        const userIri = client.buildUrl<ApiUsersIdGetData>({
-            path: { id: id },
-            baseUrl: getBaseUrl(),
-            url: apiUsersIdGetUrl,
+            });
+            return data;
         });
-
-        return await getCached(userIri, () => apiUsersIdGet({ path: { id }, headers }));
-    };
-
-    const getCachedCheckout = async (id: string | null, headers: Record<string, unknown>) => {
-        const checkoutCache = new Map<string, any>();
-
-        if (!id) return null;
-        if (checkoutCache.has(id)) return checkoutCache.get(id);
-        const { data } = await apiGatewayCheckoutsIdGet({ path: { id }, headers });
-        checkoutCache.set(id, data);
-        return data;
-    };
-
-    async function loadCharges(filters: {
-        paymentMethod: string;
-        chargeStatus: string;
-        rangeAmount?: string;
-        dateFrom?: string;
-        dateTo?: string;
-        target?: string;
-    }) {
-        const current = Number(itemsPerPage);
-        const isPageChange = current === lastItemsPerPageSnapshot;
-
-        isLoading = true;
-
-        if (isPageChange) {
-            charges = [];
-            openRow = null;
-        }
-
-        lastItemsPerPageSnapshot = current;
-
-        try {
-            const token = getAccessToken();
-            if (!token) {
-                console.error("Token not found in cookies");
-                return;
-            }
-
-            const headers = { Authorization: `Bearer ${token}` };
-            const currentCount = Number(itemsPerPage);
-
-            const sortParams = getCurrentSortParams();
-
-            const cacheKey = JSON.stringify({
-                page: currentPage,
-                itemsPerPage: currentCount,
-                filters,
-                sort: sortParams,
-            });
-            const baseKey = JSON.stringify({
-                page: 1,
-                itemsPerPage: largestLoaded,
-                sort: sortParams,
-            });
-
-            if (chargesCache.has(cacheKey)) {
-                charges = chargesCache.get(cacheKey)!;
-                return;
-            }
-
-            if (currentPage === 1 && currentCount < largestLoaded && chargesCache.has(baseKey)) {
-                charges = chargesCache.get(baseKey)!.slice(0, currentCount);
-                return;
-            }
-
-            const query: Record<string, any> = {
-                page: currentPage,
-                itemsPerPage: currentCount,
-                pagination: true,
-                ...sortParams,
-                ...(filters.chargeStatus &&
-                    filters.chargeStatus !== "all" && { status: filters.chargeStatus }),
-                ...(filters.rangeAmount &&
-                    filters.rangeAmount !== "all" &&
-                    (filters.rangeAmount.includes("..")
-                        ? { "money.amount[between]": filters.rangeAmount }
-                        : { "money.amount[gte]": filters.rangeAmount })),
-                ...(filters.dateFrom && { "dateCreated[strictly_after]": filters.dateFrom }),
-                ...(filters.dateTo && { "dateCreated[strictly_before]": filters.dateTo }),
-                ...(filters.paymentMethod &&
-                    filters.paymentMethod !== "all" && {
-                        "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
-                    }),
-                ...(filters.target && {
-                    target: filters.target,
-                }),
-            };
-
-            const { data } = await apiGatewayChargesGetCollection({
-                headers: {
-                    ...headers,
-                    Accept: "application/ld+json",
-                },
-                query,
-            });
-
-            if (!data) {
-                console.error("No data received from API");
-                return;
-            }
-
-            const chargesResult = data as unknown as GatewayChargesCollection<GatewayCharge>;
-            const loadedCharges = chargesResult.member ?? [];
-            totalItems = chargesResult.totalItems ?? 0;
-
-            charges = await Promise.all(
-                loadedCharges.map(async (charge): Promise<ExtendedCharge> => {
-                    try {
-                        const targetId = extractId(charge.target);
-                        const checkoutId = extractId(charge.checkout);
-
-                        const [accounting, checkout] = await Promise.all([
-                            getCachedAccounting(targetId, headers),
-                            getCachedCheckout(checkoutId, headers),
-                        ]);
-
-                        const projectId = extractId(accounting?.owner);
-                        const project = projectId
-                            ? await getCachedProject(projectId, headers)
-                            : null;
-
-                        const originAccountingId = extractId(checkout?.origin);
-                        const originAccounting = await getCachedAccounting(
-                            originAccountingId,
-                            headers,
-                        );
-
-                        const [targetDisplayName, originDisplayName] = await Promise.all([
-                            getUserDisplayName(
-                                accounting,
-                                headers,
-                                getCachedUser,
-                                getCachedProject,
-                            ),
-                            getUserDisplayName(
-                                originAccounting,
-                                headers,
-                                getCachedUser,
-                                getCachedProject,
-                            ),
-                        ]);
-
-                        return {
-                            ...charge,
-                            targetDisplayName,
-                            originDisplayName,
-                            paymentMethod: extractId(checkout?.gateway) ?? "—",
-                            refundToWallet: checkout?.refund
-                                ? $t(`contributions.table.rows.refund.${checkout.refund}`)
-                                : "—",
-                            platformLinks: checkout?.links ?? [
-                                { href: "-", rel: "—", method: "—" },
-                            ],
-                            trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
-                        };
-                    } catch (error) {
-                        console.warn("Error loading charge", error);
-                        return {
-                            ...charge,
-                            targetDisplayName: "—",
-                            originDisplayName: "—",
-                            paymentMethod: "—",
-                            refundToWallet: "—",
-                            platformLinks: [{ href: "-", rel: "—", method: "—" }],
-                            trackingCodes: [{ title: "—", value: "—" }],
-                        };
-                    }
-                }),
-            );
-
-            chargesCache.set(cacheKey, charges);
-
-            if (currentPage === 1 && currentCount > largestLoaded) {
-                largestLoaded = currentCount;
-                const newBaseKey = JSON.stringify({
-                    page: 1,
-                    itemsPerPage: currentCount,
-                    sort: sortParams,
-                });
-                chargesCache.set(newBaseKey, charges);
-            }
-        } catch (err) {
-            console.error("Error loading charges", err);
-        } finally {
-            lastItemsPerPage = Number(itemsPerPage);
-            isLoading = false;
-            if (isFirstLoad) isFirstLoad = false;
-        }
     }
 
-    async function getUserDisplayName(
-        resource: any,
-        headers: Record<string, unknown>,
-        getCachedUser: (id: string | null, headers: Record<string, unknown>) => Promise<any>,
-        getCachedProject: (id: string | null, headers: Record<string, unknown>) => Promise<any>,
-    ): Promise<string> {
-        if (!resource?.owner) return "—";
+    function resolveCheckout(id: string | null, headers: any) {
+        return resolveWithCache(id, checkoutMap, async (id) => {
+            const { data } = await apiGatewayCheckoutsIdGet({ path: { id }, headers });
+            return data;
+        });
+    }
 
-        const ownerId = extractId(resource.owner);
+    function getDisplayNameFromAccounting(accounting?: Accounting): string {
+        if (!accounting?.owner) return "—";
 
-        if (resource.owner.startsWith("/v4/projects/")) {
-            const project = await getCachedProject(ownerId, headers);
+        const ownerId = extractId(accounting?.owner);
+        if (!ownerId) return "—";
 
-            return project.title;
+        if (accounting.owner.startsWith("/v4/users/")) {
+            return userMap.get(ownerId)?.displayName ?? "—";
         }
 
-        if (resource.owner.startsWith("/v4/users/")) {
-            return (await getCachedUser(ownerId, headers))?.displayName ?? "—";
+        if (accounting.owner.startsWith("/v4/projects/")) {
+            return projectMap.get(ownerId)?.title ?? "—";
         }
 
         return "—";
+    }
+
+    const chargesPageCache = new Map<string, ExtendedCharge[]>();
+    let largestLoaded = 0;
+
+    async function loadCharges(filters: any) {
+        isLoading = true;
+
+        const currentCount = Number(itemsPerPage);
+
+        const pageCacheKey = JSON.stringify({
+            page: currentPage,
+            itemsPerPage: currentCount,
+            filters,
+        });
+
+        if (chargesPageCache.has(pageCacheKey)) {
+            charges = chargesPageCache.get(pageCacheKey)!;
+            lastItemsPerPageSnapshot = currentCount;
+            isLoading = false;
+            return;
+        }
+
+        if (currentPage === 1 && currentCount < largestLoaded) {
+            const baseKey = JSON.stringify({
+                page: 1,
+                itemsPerPage: largestLoaded,
+                filters,
+            });
+
+            if (chargesPageCache.has(baseKey)) {
+                charges = chargesPageCache.get(baseKey)!.slice(0, currentCount);
+                lastItemsPerPageSnapshot = currentCount;
+                isLoading = false;
+                return;
+            }
+        }
+
+        try {
+            const token = getAccessToken();
+            if (!token) return;
+
+            const headers = { Authorization: `Bearer ${token}` };
+
+            const { data } = await apiGatewayChargesGetCollection({
+                headers: { ...headers, Accept: "application/ld+json" },
+                query: {
+                    page: currentPage,
+                    itemsPerPage: Number(itemsPerPage),
+                },
+            });
+
+            let loadedCharges: GatewayCharge[] = [];
+            totalItems = 0;
+
+            if (Array.isArray(data)) {
+                loadedCharges = data;
+                totalItems = data.length;
+            } else if (data && typeof data === "object" && "member" in data && "totalItems" in data) {
+                loadedCharges = data.member ?? [];
+                totalItems = data.totalItems ?? 0;
+            }
+
+            const accountingIds = new Set<string>();
+            const checkoutIds = new Set<string>();
+
+            for (const charge of loadedCharges) {
+                const targetId = extractId(charge.target);
+                const checkoutId = extractId(charge.checkout);
+                if (targetId) accountingIds.add(targetId);
+                if (checkoutId) checkoutIds.add(checkoutId);
+            }
+
+            await Promise.all([...checkoutIds].map((id) => resolveCheckout(id, headers)));
+
+            for (const checkout of checkoutMap.values()) {
+                const originId = extractId(checkout?.origin);
+                if (originId) accountingIds.add(originId);
+            }
+
+            await Promise.all([...accountingIds].map((id) => resolveAccounting(id, headers)));
+
+            const userIds = new Set<string>();
+            const projectIds = new Set<string>();
+
+            for (const accounting of accountingMap.values()) {
+                const ownerId = extractId(accounting.owner);
+                if (!ownerId) continue;
+
+                if (accounting.owner?.startsWith("/v4/users/")) {
+                    userIds.add(ownerId);
+                }
+
+                if (accounting.owner?.startsWith("/v4/projects/")) {
+                    projectIds.add(ownerId);
+                }
+            }
+
+            await Promise.all([
+                ...[...userIds].map((id) => resolveUser(id, headers)),
+                ...[...projectIds].map((id) => resolveProject(id, headers)),
+            ]);
+
+            charges = loadedCharges.map((charge): ExtendedCharge => {
+                const checkoutId = extractId(charge.checkout);
+                const checkout = checkoutId ? checkoutMap.get(checkoutId) : undefined;
+
+                const targetId = extractId(charge.target);
+                const targetAcc = targetId ? accountingMap.get(targetId) : undefined;
+
+                const originId = extractId(checkout?.origin);
+                const originAcc = originId ? accountingMap.get(originId) : undefined;
+
+                return {
+                    ...charge,
+                    targetDisplayName: getDisplayNameFromAccounting(targetAcc),
+                    originDisplayName: getDisplayNameFromAccounting(originAcc),
+                    paymentMethod: extractId(checkout?.gateway) ?? "—",
+                    refundToWallet: checkout?.refund
+                        ? $t(`contributions.table.rows.refund.${checkout.refund}`)
+                        : "—",
+                    platformLinks: checkout?.links ?? [{ href: "-", rel: "—", method: "—" }],
+                    trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
+                };
+            });
+
+            chargesPageCache.set(pageCacheKey, charges);
+
+            if (currentPage === 1 && currentCount > largestLoaded) {
+                largestLoaded = currentCount;
+
+                const baseKey = JSON.stringify({
+                    page: 1,
+                    itemsPerPage: currentCount,
+                    filters,
+                });
+
+                chargesPageCache.set(baseKey, charges);
+            }
+
+            lastItemsPerPageSnapshot = currentCount;
+        } finally {
+            isLoading = false;
+            isFirstLoad = false;
+        }
     }
 
     function getDate(chargeDate: string | null | undefined): {
@@ -552,12 +426,11 @@
         };
     }
 
-    let { filters } = $props<ApiGatewayChargesGetCollectionData["query"]>();
+    let { filters } = $props<{ filters: any }>();
 
     $effect(() => {
-        const { paymentMethod, chargeStatus, rangeAmount, dateFrom, dateTo, target } = filters;
         charges = [];
-        loadCharges({ paymentMethod, chargeStatus, rangeAmount, dateFrom, dateTo, target });
+        loadCharges(filters);
     });
 </script>
 
