@@ -121,6 +121,10 @@
         openRow = openRow === i ? null : i;
     };
 
+    const accountingMap = new Map<string, Accounting>();
+    const userMap = new Map<string, ApiUsersIdGetData>();
+    const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
         if (!match) return null;
