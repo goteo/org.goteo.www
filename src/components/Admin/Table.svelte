@@ -124,6 +124,7 @@
     const accountingMap = new Map<string, Accounting>();
     const userMap = new Map<string, ApiUsersIdGetData>();
     const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+    const checkoutMap = new Map<string, any>();
 
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
