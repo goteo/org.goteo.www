@@ -302,16 +302,10 @@
                 },
             });
 
-            let loadedCharges: GatewayCharge[] = [];
-            totalItems = 0;
+            const collection = data as unknown as GatewayChargesCollection<GatewayCharge>;
 
-            if (Array.isArray(data)) {
-                loadedCharges = data;
-                totalItems = data.length;
-            } else if (data && typeof data === "object" && "member" in data && "totalItems" in data) {
-                loadedCharges = data.member ?? [];
-                totalItems = data.totalItems ?? 0;
-            }
+            const loadedCharges: GatewayCharge[] = collection.member ?? [];
+            totalItems = collection.totalItems ?? 0;
 
             const accountingIds = new Set<string>();
             const checkoutIds = new Set<string>();
