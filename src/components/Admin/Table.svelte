@@ -55,6 +55,16 @@
         label: string;
     };
 
+    type User = {
+        id: string;
+        displayName: string;
+    };
+
+    type Project = {
+        id: string;
+        title: string;
+    };
+
     const sortOptions: SortOption[] = [
         {
             key: "date-desc",
@@ -121,8 +131,8 @@
     };
 
     const accountingMap = new Map<string, Accounting>();
-    const userMap = new Map<string, ApiUsersIdGetData>();
-    const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+    const userMap = new Map<string, User>();
+    const projectMap = new Map<string, Project>();
     const checkoutMap = new Map<string, any>();
 
     function getAccessToken(): string | null {
@@ -213,14 +223,14 @@
         });
     }
 
-    function resolveUser(id: string | null, headers: any) {
+    function resolveUser(id: string | null, headers: any): Promise<User | undefined> {
         return resolveWithCache(id, userMap, async (id) => {
             const { data } = await apiUsersIdGet({ path: { id }, headers });
             return data;
         });
     }
 
-    function resolveProject(id: string | null, headers: any) {
+    function resolveProject(id: string | null, headers: any): Promise<Project | undefined> {
         return resolveWithCache(id, projectMap, async (id) => {
             const { data } = await apiProjectsIdOrSlugGet({
                 path: { idOrSlug: id },
@@ -244,10 +254,12 @@
         if (!ownerId) return "—";
 
         if (accounting.owner.startsWith("/v4/users/")) {
+            console.log("User map:", userMap.get(ownerId));
             return userMap.get(ownerId)?.displayName ?? "—";
         }
 
         if (accounting.owner.startsWith("/v4/projects/")) {
+            console.log("Project map:", projectMap.get(ownerId));
             return projectMap.get(ownerId)?.title ?? "—";
         }
 
