@@ -56,6 +56,16 @@
         label: string;
     };
 
+    type User = {
+        id: string;
+        displayName: string;
+    };
+
+    type Project = {
+        id: string;
+        title: string;
+    };
+
     const sortOptions: SortOption[] = [
         {
             key: "date-desc",
@@ -122,8 +132,8 @@
     };
 
     const accountingMap = new Map<string, Accounting>();
-    const userMap = new Map<string, ApiUsersIdGetData>();
-    const projectMap = new Map<string, ApiProjectsIdOrSlugGetData>();
+    const userMap = new Map<string, User>();
+    const projectMap = new Map<string, Project>();
     const checkoutMap = new Map<string, any>();
 
     function getAccessToken(): string | null {
