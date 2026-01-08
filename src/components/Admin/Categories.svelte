@@ -2,16 +2,17 @@
     import { onMount } from "svelte";
     import Category from "../library/Category.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import { locale } from "../../i18n/store";
 
     let categories: { title: string; value: string }[] = $state([]);
 
     onMount(async () => {
         // Fetch categories from an API or state management
         categories = [
-            { title: "Technology:", value: "42" },
-            { title: "Health:", value: "27" },
-            { title: "Science:", value: "15000000" },
-            { title: "Art:", value: "8" },
+            { title: "—:", value: "42" },
+            { title: "—:", value: "27" },
+            { title: "—:", value: "15000000" },
+            { title: "—:", value: "8" },
         ];
     });
 </script>
@@ -22,7 +23,7 @@
             class="text-secondary hover:inset-ring-secondary hover:bg-white hover:inset-ring-1"
         >
             {category.title}
-            {formatCurrency(Number(category.value), "USD")}
+            {formatCurrency(Number(category.value), $locale)}
         </Category>
     {/each}
 </div>
