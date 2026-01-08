@@ -4,14 +4,15 @@
         apiGatewayChargesGetCollection,
         type ApiGatewayChargesGetCollectionData,
     } from "../../openapi/client";
+    import Button from "../library/Button.svelte";
 
-    let { filters, currentTarget } = $props<{
+    let { filters } = $props<{
         filters?: ApiGatewayChargesGetCollectionData["query"];
-        currentTarget?: string;
     }>();
 
     let isExporting = $state(false);
 
+    let currentTarget = filters?.target || "";
     let selectedChargeStatus = "";
     let selectedRangeAmount = "";
     let selectedPaymentMethod = "";
@@ -163,11 +164,11 @@
     }
 </script>
 
-<button
-    type="button"
+<Button
+    size="sm"
+    kind="secondary"
     onclick={handleExportCSV}
     disabled={isExporting}
-    class="bg-variant1 relative inline-flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-2 font-medium text-nowrap text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
 >
     {#if isExporting}
         <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -203,4 +204,4 @@
             {$t("contributions.export.csv")}
         </span>
     {/if}
-</button>
+</Button>

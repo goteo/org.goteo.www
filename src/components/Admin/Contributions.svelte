@@ -33,7 +33,7 @@
                 title={$t("admin.charges.lastContributions")}
                 {filters}
             />
-            <ExportCsv currentTarget={filters?.target} />
+            <ExportCsv {filters} />
         </div>
         <!-- TODO: Implement Categories component -->
         <Categories />
