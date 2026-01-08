@@ -17,20 +17,21 @@
     import { extractId } from "../../utils/extractId";
 
     import {
-        apiGatewayChargesGetCollection,
-        apiAccountingsIdGet,
-        apiUsersIdGet,
-        apiGatewayCheckoutsIdGet,
-        apiProjectsIdOrSlugGet,
-    } from "../../../src/openapi/client/index.ts";
+        apiUsersIdGetUrl,
+        apiProjectsIdOrSlugGetUrl,
+        apiAccountingsIdGetUrl,
+        apiGatewayCheckoutsIdGetUrl,
+        apiGatewayChargesGetCollectionUrl,
+    } from "../../../src/openapi/client/paths.gen";
 
     import type {
         GatewayCharge,
         Tracking,
         Link,
         Accounting,
-        ApiProjectsIdOrSlugGetData,
-        ApiUsersIdGetData,
+        User,
+        Project,
+        GatewayCheckout,
     } from "../../../src/openapi/client/index.ts";
 
     type ExtendedCharge = GatewayCharge & {
@@ -52,16 +53,6 @@
         field: string;
         direction: "asc" | "desc";
         label: string;
-    };
-
-    type User = {
-        id: string;
-        displayName: string;
-    };
-
-    type Project = {
-        id: string;
-        title: string;
     };
 
     const sortOptions: SortOption[] = [
@@ -131,7 +122,7 @@
     const accountingMap = new Map<string, Accounting>();
     const userMap = new Map<string, User>();
     const projectMap = new Map<string, Project>();
-    const checkoutMap = new Map<string, any>();
+    const checkoutMap = new Map<string, GatewayCheckout>();
 
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
@@ -201,67 +192,93 @@
         return "↕️";
     }
 
-    async function resolveWithCache(
+    async function resolveEntity<T>(
+        map: Map<string, T>,
+        path: string,
         id: string | null,
-        cache: Map<string, any>,
-        resolver: (id: string) => Promise<any>,
-    ): Promise<any> {
-        if (id === null) return null;
-        if (cache.has(id)) return cache.get(id)!;
+        token: string,
+    ): Promise<void> {
+        if (!id || map.has(id)) return;
 
-        const data = await resolver(id);
-        cache.set(id, data);
-        return data;
+        const url = buildUrl(path, { id });
+        const data = await fetchWithPersistentCache<T>(url, token);
+        map.set(id, data);
     }
 
-    function resolveAccounting(id: string | null, headers: any) {
-        return resolveWithCache(id, accountingMap, async (id) => {
-            const { data } = await apiAccountingsIdGet({ path: { id }, headers });
-            return data;
-        });
+    function resolveAccounting(id: string | null, token: string) {
+        return resolveEntity<Accounting>(accountingMap, apiAccountingsIdGetUrl, id, token);
     }
 
-    function resolveUser(id: string | null, headers: any): Promise<User | undefined> {
-        return resolveWithCache(id, userMap, async (id) => {
-            const { data } = await apiUsersIdGet({ path: { id }, headers });
-            return data;
-        });
+    function resolveUser(id: string | null, token: string) {
+        return resolveEntity<User>(userMap, apiUsersIdGetUrl, id, token);
     }
 
-    function resolveProject(id: string | null, headers: any): Promise<Project | undefined> {
-        return resolveWithCache(id, projectMap, async (id) => {
-            const { data } = await apiProjectsIdOrSlugGet({
-                path: { idOrSlug: id },
-                headers,
-            });
-            return data;
-        });
+    function resolveProject(id: string | null, token: string) {
+        return resolveEntity<Project>(projectMap, apiProjectsIdOrSlugGetUrl, id, token);
     }
 
-    function resolveCheckout(id: string | null, headers: any) {
-        return resolveWithCache(id, checkoutMap, async (id) => {
-            const { data } = await apiGatewayCheckoutsIdGet({ path: { id }, headers });
-            return data;
-        });
+    function resolveCheckout(id: string | null, token: string) {
+        return resolveEntity<GatewayCheckout>(checkoutMap, apiGatewayCheckoutsIdGetUrl, id, token);
+    }
+
+    function getUserDisplayName(user: User | undefined): string {
+        if (!user) return "—";
+        return (user as any).displayName ?? "—";
+    }
+
+    function getProjectTitle(project: Project | undefined): string {
+        if (!project) return "—";
+        return (project as any).title ?? "—";
     }
 
     function getDisplayNameFromAccounting(accounting?: Accounting): string {
         if (!accounting?.owner) return "—";
 
-        const ownerId = extractId(accounting?.owner);
+        const ownerId = extractId(accounting.owner);
         if (!ownerId) return "—";
 
         if (accounting.owner.startsWith("/v4/users/")) {
-            console.log("User map:", userMap.get(ownerId));
-            return userMap.get(ownerId)?.displayName ?? "—";
+            return getUserDisplayName(userMap.get(ownerId));
         }
 
         if (accounting.owner.startsWith("/v4/projects/")) {
-            console.log("Project map:", projectMap.get(ownerId));
-            return projectMap.get(ownerId)?.title ?? "—";
+            return getProjectTitle(projectMap.get(ownerId));
         }
 
         return "—";
+    }
+
+    const API_CACHE_NAME = "charges-cache";
+
+    async function fetchWithPersistentCache<T>(url: string, token: string): Promise<T> {
+        const cache = await caches.open(API_CACHE_NAME);
+
+        const cached = await cache.match(url);
+        if (cached) return cached.json();
+
+        const response = await fetch(url, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/ld+json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        await cache.put(url, response.clone());
+        return response.json();
+    }
+
+    function buildUrl(path: string, params: Record<string, string | number>): string {
+        let url = path;
+
+        for (const [key, value] of Object.entries(params)) {
+            url = url.replace(`{${key}}`, encodeURIComponent(String(value)));
+        }
+
+        return url;
     }
 
     const chargesPageCache = new Map<string, ExtendedCharge[]>();
@@ -272,10 +289,12 @@
 
         const currentCount = Number(itemsPerPage);
 
+        const normalizedFilters = JSON.stringify(filters ?? {});
+
         const pageCacheKey = JSON.stringify({
             page: currentPage,
             itemsPerPage: currentCount,
-            filters,
+            filters: normalizedFilters,
         });
 
         if (chargesPageCache.has(pageCacheKey)) {
@@ -304,15 +323,18 @@
             const token = getAccessToken();
             if (!token) return;
 
-            const headers = { Authorization: `Bearer ${token}` };
+            const itemsPerPageNum = Number(itemsPerPage);
 
-            const { data } = await apiGatewayChargesGetCollection({
-                headers: { ...headers, Accept: "application/ld+json" },
-                query: {
-                    page: currentPage,
-                    itemsPerPage: Number(itemsPerPage),
-                },
+            const url = buildUrl(apiGatewayChargesGetCollectionUrl, {
+                page: currentPage,
+                itemsPerPage: itemsPerPageNum,
+                ...filters,
             });
+
+            const data = await fetchWithPersistentCache<GatewayChargesCollection<GatewayCharge>>(
+                url,
+                token,
+            );
 
             const collection = data as unknown as GatewayChargesCollection<GatewayCharge>;
 
@@ -329,14 +351,14 @@
                 if (checkoutId) checkoutIds.add(checkoutId);
             }
 
-            await Promise.all([...checkoutIds].map((id) => resolveCheckout(id, headers)));
+            await Promise.all([...checkoutIds].map((id) => resolveCheckout(id, token)));
 
             for (const checkout of checkoutMap.values()) {
                 const originId = extractId(checkout?.origin);
                 if (originId) accountingIds.add(originId);
             }
 
-            await Promise.all([...accountingIds].map((id) => resolveAccounting(id, headers)));
+            await Promise.all([...accountingIds].map((id) => resolveAccounting(id, token)));
 
             const userIds = new Set<string>();
             const projectIds = new Set<string>();
@@ -355,8 +377,8 @@
             }
 
             await Promise.all([
-                ...[...userIds].map((id) => resolveUser(id, headers)),
-                ...[...projectIds].map((id) => resolveProject(id, headers)),
+                ...[...userIds].map((id) => resolveUser(id, token)),
+                ...[...projectIds].map((id) => resolveProject(id, token)),
             ]);
 
             charges = loadedCharges.map((charge): ExtendedCharge => {
