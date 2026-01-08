@@ -164,7 +164,13 @@
     }
 </script>
 
-<Button size="sm" kind="secondary" onclick={handleExportCSV} disabled={isExporting} aria-label={$t("contributions.export.csv")}>
+<Button
+    size="sm"
+    kind="secondary"
+    onclick={handleExportCSV}
+    disabled={isExporting}
+    aria-label={$t("contributions.export.csv")}
+>
     {#if isExporting}
         <svg class="h-4 w-4 animate-spin" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"
