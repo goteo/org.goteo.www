@@ -35,7 +35,6 @@
             />
             <ExportCsv {filters} />
         </div>
-        <!-- TODO: Implement Categories component -->
         <Categories />
         <Slider {slides} />
     </div>
