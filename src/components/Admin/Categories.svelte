@@ -23,7 +23,7 @@
             class="text-secondary hover:inset-ring-secondary hover:bg-white hover:inset-ring-1"
         >
             {category.title}
-            {formatCurrency(Number(category.value), $locale)}
+            {formatCurrency(Number(category.value), undefined, { locale: $locale })}
         </Category>
     {/each}
 </div>
