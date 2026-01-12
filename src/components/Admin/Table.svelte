@@ -29,6 +29,7 @@
         Accounting,
         ApiProjectsIdOrSlugGetData,
         ApiUsersIdGetData,
+        ApiGatewayChargesGetCollectionData,
     } from "../../../src/openapi/client/index.ts";
     import DetailsRow from "./DetailsRow.svelte";
     import { client } from "../../openapi/client/client.gen.ts";
@@ -207,11 +208,11 @@
     }
 
     async function loadCharges(filters: {
-        chargeStatus: string;
-        rangeAmount: string;
-        from?: string;
-        to?: string;
         paymentMethod: string;
+        chargeStatus: string;
+        rangeAmount?: string;
+        dateFrom?: string;
+        dateTo?: string;
         target?: string;
     }) {
         const current = Number(itemsPerPage);
@@ -272,8 +273,8 @@
                     (filters.rangeAmount.includes("..")
                         ? { "money.amount[between]": filters.rangeAmount }
                         : { "money.amount[gte]": filters.rangeAmount })),
-                ...(filters.from && { "dateCreated[strictly_after]": filters.from }),
-                ...(filters.to && { "dateCreated[strictly_before]": filters.to }),
+                ...(filters.dateFrom && { "dateCreated[strictly_after]": filters.dateFrom }),
+                ...(filters.dateTo && { "dateCreated[strictly_before]": filters.dateTo }),
                 ...(filters.paymentMethod &&
                     filters.paymentMethod !== "all" && {
                         "checkout.gateway": `/v4/gateways/${filters.paymentMethod}`,
@@ -487,21 +488,12 @@
         };
     }
 
-    let { filters } = $props<{
-        filters: {
-            paymentMethod: string;
-            chargeStatus: string;
-            rangeAmount: string;
-            from?: string;
-            to?: string;
-            target?: string;
-        };
-    }>();
+    let { filters } = $props<ApiGatewayChargesGetCollectionData["query"]>();
 
     $effect(() => {
-        const { chargeStatus, rangeAmount, from, to, paymentMethod, target } = filters;
+        const { paymentMethod, chargeStatus, rangeAmount, dateFrom, dateTo, target } = filters;
         charges = [];
-        loadCharges({ chargeStatus, rangeAmount, from, to, paymentMethod, target });
+        loadCharges({ paymentMethod, chargeStatus, rangeAmount, dateFrom, dateTo, target });
     });
 </script>
 
