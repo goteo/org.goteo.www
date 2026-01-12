@@ -191,27 +191,38 @@
 
     async function fetchAccounting(id: string | null, token: string) {
         if (!id) return;
-        const url = buildUrl(apiAccountingsIdGetUrl, { id });
+        const url = client.buildUrl({
+            url: apiAccountingsIdGetUrl,
+            path: { id },
+        });
         return fetchWithPersistentCache<Accounting>(url, token);
     }
 
     async function fetchUser(id: string | null, token: string) {
         if (!id) return;
-        const url = buildUrl(apiUsersIdGetUrl, { id });
+        const url = client.buildUrl({
+            url: apiUsersIdGetUrl,
+            path: { id },
+        });
         return fetchWithPersistentCache<User>(url, token);
     }
 
-    async function fetchProject(id: string | null, token: string) {
-        if (!id) return;
-        const url = buildUrl(apiProjectsIdOrSlugGetUrl, { id });
+    async function fetchProject(idOrSlug: string | null, token: string) {
+        if (!idOrSlug) return;
+        const url = client.buildUrl({
+            url: apiProjectsIdOrSlugGetUrl,
+            path: { idOrSlug },
+        });
         return fetchWithPersistentCache<Project>(url, token);
     }
 
     async function fetchCheckout(id: string | null, token: string) {
-        return fetchWithPersistentCache<GatewayCheckout>(
-            apiGatewayCheckoutsIdGetUrl({ id }),
-            token,
-        );
+        if (!id) return;
+        const url = client.buildUrl({
+            url: apiGatewayCheckoutsIdGetUrl,
+            path: { id },
+        });
+        return fetchWithPersistentCache<GatewayCheckout>(url, token);
     }
 
     function getOwnerFromAccounting(
@@ -258,16 +269,6 @@
         return response.json();
     }
 
-    function buildUrl(path: string, params: Record<string, string | number>): string {
-        let url = path;
-
-        for (const [key, value] of Object.entries(params)) {
-            url = url.replace(`{${key}}`, encodeURIComponent(String(value)));
-        }
-
-        return url;
-    }
-
     const chargesPageCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
@@ -281,10 +282,13 @@
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
             >(
-                apiGatewayChargesGetCollectionUrl({
-                    page: currentPage,
-                    itemsPerPage: Number(itemsPerPage),
-                    ...filters,
+                client.buildUrl({
+                    url: apiGatewayChargesGetCollectionUrl,
+                    query: {
+                        page: currentPage,
+                        itemsPerPage: Number(itemsPerPage),
+                        ...filters,
+                    },
                 }),
                 token,
             );
@@ -336,8 +340,8 @@
                 const ownerId = extractId(acc?.owner);
                 if (!ownerId) continue;
 
-                if (acc.owner.startsWith("/v4/users/")) userIds.add(ownerId);
-                if (acc.owner.startsWith("/v4/projects/")) projectIds.add(ownerId);
+                if (acc?.owner?.startsWith("/v4/users/")) userIds.add(ownerId);
+                if (acc?.owner?.startsWith("/v4/projects/")) projectIds.add(ownerId);
             }
 
             const userIdList = [...userIds];
