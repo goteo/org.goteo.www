@@ -268,6 +268,38 @@
         return response.json();
     }
 
+    function buildChargesQuery(filters: any, page: number, itemsPerPage: number) {
+        const sort = sortOptions.find((option) => option.key === selectedSort);
+
+        const query: Record<string, any> = {
+            page: String(page),
+            itemsPerPage: String(itemsPerPage),
+            pagination: true,
+        };
+
+        if (sort) {
+            query.order = { [sort.field]: sort.direction };
+        }
+
+        if (filters.status && filters.status !== "all") {
+            query.status = filters.status;
+        }
+
+        if (filters["money.amount[gte]"] || filters["money.amount[between]"]) {
+            if (filters["money.amount[gte]"]) {
+                query["money.amount[gte]"] = filters["money.amount[gte]"];
+            }
+
+            if (filters["money.amount[between]"]) {
+                query["money.amount[between]"] = filters["money.amount[between]"];
+            }
+        }
+
+        if (filters.target) {
+            query.target = filters.target;
+        }
+    }
+
     const chargesPageCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
@@ -278,16 +310,18 @@
             const token = getAccessToken();
             if (!token) return;
 
+            const query: Record<string, string> = {
+                filters,
+                page: String(currentPage),
+                itemsPerPage: String(itemsPerPage),
+            };
+
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
             >(
                 client.buildUrl({
                     url: apiGatewayChargesGetCollectionUrl,
-                    query: {
-                        page: currentPage,
-                        itemsPerPage: Number(itemsPerPage),
-                        ...filters,
-                    },
+                    query,
                 }),
                 token,
             );
@@ -298,9 +332,9 @@
             const checkoutIds = new Set<string>();
             const accountingIds = new Set<string>();
 
-            for (const c of loadedCharges) {
-                const checkoutId = extractId(c.checkout);
-                const targetId = extractId(c.target);
+            for (const charge of loadedCharges) {
+                const checkoutId = extractId(charge.checkout);
+                const targetId = extractId(charge.target);
                 if (checkoutId) checkoutIds.add(checkoutId);
                 if (targetId) accountingIds.add(targetId);
             }
@@ -312,8 +346,8 @@
 
             const checkoutById = new Map<string, GatewayCheckout>();
             checkoutIdList.forEach((id, i) => {
-                const c = checkouts[i];
-                if (c) checkoutById.set(id, c);
+                const checkout = checkouts[i];
+                if (checkout) checkoutById.set(id, checkout);
             });
 
             for (const checkout of checkouts) {
@@ -353,14 +387,14 @@
 
             const userById = new Map<string, User>();
             userIdList.forEach((id, i) => {
-                const u = users[i];
-                if (u) userById.set(id, u);
+                const user = users[i];
+                if (user) userById.set(id, user);
             });
 
             const projectById = new Map<string, Project>();
             projectIdList.forEach((id, i) => {
-                const p = projects[i];
-                if (p) projectById.set(id, p);
+                const project = projects[i];
+                if (project) projectById.set(id, project);
             });
 
             charges = loadedCharges.map((charge): ExtendedCharge => {
