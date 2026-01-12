@@ -15,6 +15,7 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import { client } from "../../openapi/client/client.gen.ts";
 
     import {
         apiUsersIdGetUrl,
@@ -119,11 +120,6 @@
         openRow = openRow === i ? null : i;
     };
 
-    const accountingMap = new Map<string, Accounting>();
-    const userMap = new Map<string, User>();
-    const projectMap = new Map<string, Project>();
-    const checkoutMap = new Map<string, GatewayCheckout>();
-
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
         if (!match) return null;
@@ -192,57 +188,47 @@
         return "↕️";
     }
 
-    async function resolveEntity<T>(
-        map: Map<string, T>,
-        path: string,
-        id: string | null,
-        token: string,
-    ): Promise<void> {
-        if (!id || map.has(id)) return;
-
-        const url = buildUrl(path, { id });
-        const data = await fetchWithPersistentCache<T>(url, token);
-        map.set(id, data);
+    async function fetchAccounting(id: string | null, token: string) {
+        if (!id) return;
+        const url = buildUrl(apiAccountingsIdGetUrl, { id });
+        return fetchWithPersistentCache<Accounting>(url, token);
     }
 
-    function resolveAccounting(id: string | null, token: string) {
-        return resolveEntity<Accounting>(accountingMap, apiAccountingsIdGetUrl, id, token);
+    async function fetchUser(id: string | null, token: string) {
+        if (!id) return;
+        const url = buildUrl(apiUsersIdGetUrl, { id });
+        return fetchWithPersistentCache<User>(url, token);
     }
 
-    function resolveUser(id: string | null, token: string) {
-        return resolveEntity<User>(userMap, apiUsersIdGetUrl, id, token);
+    async function fetchProject(id: string | null, token: string) {
+        if (!id) return;
+        const url = buildUrl(apiProjectsIdOrSlugGetUrl, { id });
+        return fetchWithPersistentCache<Project>(url, token);
     }
 
-    function resolveProject(id: string | null, token: string) {
-        return resolveEntity<Project>(projectMap, apiProjectsIdOrSlugGetUrl, id, token);
+    async function fetchCheckout(id: string | null, token: string) {
+        return fetchWithPersistentCache<GatewayCheckout>(
+            apiGatewayCheckoutsIdGetUrl({ id }),
+            token,
+        );
     }
 
-    function resolveCheckout(id: string | null, token: string) {
-        return resolveEntity<GatewayCheckout>(checkoutMap, apiGatewayCheckoutsIdGetUrl, id, token);
-    }
-
-    function getUserDisplayName(user: User | undefined): string {
-        if (!user) return "—";
-        return (user as any).displayName ?? "—";
-    }
-
-    function getProjectTitle(project: Project | undefined): string {
-        if (!project) return "—";
-        return (project as any).title ?? "—";
-    }
-
-    function getDisplayNameFromAccounting(accounting?: Accounting): string {
+    function getOwnerFromAccounting(
+        accounting: Accounting | undefined,
+        users: Map<string, User>,
+        projects: Map<string, Project>,
+    ): string {
         if (!accounting?.owner) return "—";
 
-        const ownerId = extractId(accounting.owner);
-        if (!ownerId) return "—";
+        const id = extractId(accounting.owner);
+        if (!id) return "—";
 
         if (accounting.owner.startsWith("/v4/users/")) {
-            return getUserDisplayName(userMap.get(ownerId));
+            return users.get(id)?.displayName ?? "—";
         }
 
         if (accounting.owner.startsWith("/v4/projects/")) {
-            return getProjectTitle(projectMap.get(ownerId));
+            return projects.get(id)?.title ?? "—";
         }
 
         return "—";
@@ -287,138 +273,109 @@
     async function loadCharges(filters: any) {
         isLoading = true;
 
-        const currentCount = Number(itemsPerPage);
-
-        const normalizedFilters = JSON.stringify(filters ?? {});
-
-        const pageCacheKey = JSON.stringify({
-            page: currentPage,
-            itemsPerPage: currentCount,
-            filters: normalizedFilters,
-        });
-
-        if (chargesPageCache.has(pageCacheKey)) {
-            charges = chargesPageCache.get(pageCacheKey)!;
-            lastItemsPerPageSnapshot = currentCount;
-            isLoading = false;
-            return;
-        }
-
-        if (currentPage === 1 && currentCount < largestLoaded) {
-            const baseKey = JSON.stringify({
-                page: 1,
-                itemsPerPage: largestLoaded,
-                filters,
-            });
-
-            if (chargesPageCache.has(baseKey)) {
-                charges = chargesPageCache.get(baseKey)!.slice(0, currentCount);
-                lastItemsPerPageSnapshot = currentCount;
-                isLoading = false;
-                return;
-            }
-        }
-
         try {
             const token = getAccessToken();
             if (!token) return;
 
-            const itemsPerPageNum = Number(itemsPerPage);
-
-            const url = buildUrl(apiGatewayChargesGetCollectionUrl, {
-                page: currentPage,
-                itemsPerPage: itemsPerPageNum,
-                ...filters,
-            });
-
-            const data = await fetchWithPersistentCache<GatewayChargesCollection<GatewayCharge>>(
-                url,
+            const collection = await fetchWithPersistentCache<
+                GatewayChargesCollection<GatewayCharge>
+            >(
+                apiGatewayChargesGetCollectionUrl({
+                    page: currentPage,
+                    itemsPerPage: Number(itemsPerPage),
+                    ...filters,
+                }),
                 token,
             );
 
-            const collection = data as unknown as GatewayChargesCollection<GatewayCharge>;
-
-            const loadedCharges: GatewayCharge[] = collection.member ?? [];
+            const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
 
-            const accountingIds = new Set<string>();
             const checkoutIds = new Set<string>();
+            const accountingIds = new Set<string>();
 
-            for (const charge of loadedCharges) {
-                const targetId = extractId(charge.target);
-                const checkoutId = extractId(charge.checkout);
-                if (targetId) accountingIds.add(targetId);
+            for (const c of loadedCharges) {
+                const checkoutId = extractId(c.checkout);
+                const targetId = extractId(c.target);
                 if (checkoutId) checkoutIds.add(checkoutId);
+                if (targetId) accountingIds.add(targetId);
             }
 
-            await Promise.all([...checkoutIds].map((id) => resolveCheckout(id, token)));
+            const checkoutIdList = [...checkoutIds];
+            const checkouts = await Promise.all(
+                checkoutIdList.map((id) => fetchCheckout(id, token)),
+            );
 
-            for (const checkout of checkoutMap.values()) {
+            const checkoutById = new Map<string, GatewayCheckout>();
+            checkoutIdList.forEach((id, i) => {
+                const c = checkouts[i];
+                if (c) checkoutById.set(id, c);
+            });
+
+            for (const checkout of checkouts) {
                 const originId = extractId(checkout?.origin);
                 if (originId) accountingIds.add(originId);
             }
 
-            await Promise.all([...accountingIds].map((id) => resolveAccounting(id, token)));
+            const accountingIdList = [...accountingIds];
+            const accountings = await Promise.all(
+                accountingIdList.map((id) => fetchAccounting(id, token)),
+            );
+
+            const accountingById = new Map<string, Accounting>();
+            accountingIdList.forEach((id, i) => {
+                const acc = accountings[i];
+                if (acc) accountingById.set(id, acc);
+            });
 
             const userIds = new Set<string>();
             const projectIds = new Set<string>();
 
-            for (const accounting of accountingMap.values()) {
-                const ownerId = extractId(accounting.owner);
+            for (const acc of accountings) {
+                const ownerId = extractId(acc?.owner);
                 if (!ownerId) continue;
 
-                if (accounting.owner?.startsWith("/v4/users/")) {
-                    userIds.add(ownerId);
-                }
-
-                if (accounting.owner?.startsWith("/v4/projects/")) {
-                    projectIds.add(ownerId);
-                }
+                if (acc.owner.startsWith("/v4/users/")) userIds.add(ownerId);
+                if (acc.owner.startsWith("/v4/projects/")) projectIds.add(ownerId);
             }
 
-            await Promise.all([
-                ...[...userIds].map((id) => resolveUser(id, token)),
-                ...[...projectIds].map((id) => resolveProject(id, token)),
+            const userIdList = [...userIds];
+            const projectIdList = [...projectIds];
+
+            const [users, projects] = await Promise.all([
+                Promise.all(userIdList.map((id) => fetchUser(id, token))),
+                Promise.all(projectIdList.map((id) => fetchProject(id, token))),
             ]);
 
+            const userById = new Map<string, User>();
+            userIdList.forEach((id, i) => {
+                const u = users[i];
+                if (u) userById.set(id, u);
+            });
+
+            const projectById = new Map<string, Project>();
+            projectIdList.forEach((id, i) => {
+                const p = projects[i];
+                if (p) projectById.set(id, p);
+            });
+
             charges = loadedCharges.map((charge): ExtendedCharge => {
-                const checkoutId = extractId(charge.checkout);
-                const checkout = checkoutId ? checkoutMap.get(checkoutId) : undefined;
-
-                const targetId = extractId(charge.target);
-                const targetAcc = targetId ? accountingMap.get(targetId) : undefined;
-
-                const originId = extractId(checkout?.origin);
-                const originAcc = originId ? accountingMap.get(originId) : undefined;
+                const checkout = checkoutById.get(extractId(charge.checkout) ?? "");
+                const targetAcc = accountingById.get(extractId(charge.target) ?? "");
+                const originAcc = accountingById.get(extractId(checkout?.origin) ?? "");
 
                 return {
                     ...charge,
-                    targetDisplayName: getDisplayNameFromAccounting(targetAcc),
-                    originDisplayName: getDisplayNameFromAccounting(originAcc),
+                    targetDisplayName: getOwnerFromAccounting(targetAcc, userById, projectById),
+                    originDisplayName: getOwnerFromAccounting(originAcc, userById, projectById),
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
                         : "—",
-                    platformLinks: checkout?.links ?? [{ href: "-", rel: "—", method: "—" }],
-                    trackingCodes: checkout?.trackings ?? [{ title: "—", value: "—" }],
+                    platformLinks: checkout?.links ?? [],
+                    trackingCodes: checkout?.trackings ?? [],
                 };
             });
-
-            chargesPageCache.set(pageCacheKey, charges);
-
-            if (currentPage === 1 && currentCount > largestLoaded) {
-                largestLoaded = currentCount;
-
-                const baseKey = JSON.stringify({
-                    page: 1,
-                    itemsPerPage: currentCount,
-                    filters,
-                });
-
-                chargesPageCache.set(baseKey, charges);
-            }
-
-            lastItemsPerPageSnapshot = currentCount;
         } finally {
             isLoading = false;
             isFirstLoad = false;
