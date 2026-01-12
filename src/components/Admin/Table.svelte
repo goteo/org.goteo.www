@@ -33,6 +33,7 @@
         User,
         Project,
         GatewayCheckout,
+        ApiGatewayChargesGetCollectionData,
     } from "../../../src/openapi/client/index.ts";
 
     type ExtendedCharge = GatewayCharge & {
@@ -269,37 +270,41 @@
         return response.json();
     }
 
-    function buildChargesQuery(filters: any, page: number, itemsPerPage: number) {
-        const sort = sortOptions.find((option) => option.key === selectedSort);
+    // function buildChargesQuery(
+    //     filters: ApiGatewayChargesGetCollectionData["query"],
+    //     page: number,
+    //     itemsPerPage: number,
+    // ) {
+    //     if (!filters) return {};
+    //     const sort = sortOptions.find((option) => option.key === selectedSort);
 
-        const query: Record<string, any> = {
-            page: String(page),
-            itemsPerPage: String(itemsPerPage),
-            pagination: true,
-        };
+    //     const query: Record<string, any> = {
+    //         page: page,
+    //         itemsPerPage: itemsPerPage,
+    //         pagination: true,
+    //         ...filters,
+    //     };
 
-        if (sort) {
-            query.order = { [sort.field]: sort.direction };
-        }
+    //     if (sort) {
+    //         query.order = { [sort.field]: sort.direction };
+    //     }
 
-        if (filters.status && filters.status !== "all") {
-            query.status = filters.status;
-        }
+    //     if (filters.status && filters.status !== "all") {
+    //         query.status = filters.status;
+    //     }
 
-        if (filters["money.amount[gte]"] || filters["money.amount[between]"]) {
-            if (filters["money.amount[gte]"]) {
-                query["money.amount[gte]"] = filters["money.amount[gte]"];
-            }
+    //     if (filters["money.amount[gte]"]) {
+    //         query["money.amount[gte]"] = filters["money.amount[gte]"];
+    //     }
 
-            if (filters["money.amount[between]"]) {
-                query["money.amount[between]"] = filters["money.amount[between]"];
-            }
-        }
+    //     if (filters["money.amount[between]"]) {
+    //         query["money.amount[between]"] = filters["money.amount[between]"];
+    //     }
 
-        if (filters.target) {
-            query.target = filters.target;
-        }
-    }
+    //     if (filters.target) {
+    //         query.target = filters.target;
+    //     }
+    // }
 
     const chargesPageCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
@@ -326,6 +331,8 @@
                 }),
                 token,
             );
+
+            console.log("Fetched charges collection:", collection);
 
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
@@ -448,7 +455,7 @@
         };
     }
 
-    let { filters } = $props<{ filters: any }>();
+    let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
 
     $effect(() => {
         charges = [];
