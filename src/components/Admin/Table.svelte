@@ -36,6 +36,8 @@
         ApiGatewayChargesGetCollectionData,
     } from "../../../src/openapi/client/index.ts";
 
+    import { getBaseUrl } from "../../utils/consts.ts";
+
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
         originDisplayName: string;
@@ -247,6 +249,10 @@
         return "—";
     }
 
+    function joinUrl(base: string, path: string) {
+        return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
+    }
+
     const API_CACHE_NAME = "charges-cache";
 
     async function fetchWithPersistentCache<T>(url: string, token: string): Promise<T> {
@@ -255,7 +261,9 @@
         const cached = await cache.match(url);
         if (cached) return cached.json();
 
-        const response = await fetch(url, {
+        const baseUrl = getBaseUrl();
+
+        const response = await fetch(joinUrl(baseUrl, url), {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/ld+json",
@@ -270,57 +278,55 @@
         return response.json();
     }
 
-    // function buildChargesQuery(
-    //     filters: ApiGatewayChargesGetCollectionData["query"],
-    //     page: number,
-    //     itemsPerPage: number,
-    // ) {
-    //     if (!filters) return {};
-    //     const sort = sortOptions.find((option) => option.key === selectedSort);
+    function buildChargesQuery(
+        filters: ApiGatewayChargesGetCollectionData["query"],
+        page: number,
+        itemsPerPage: number,
+    ) {
+        if (!filters) return {};
+        const sort = sortOptions.find((option) => option.key === selectedSort);
 
-    //     const query: Record<string, any> = {
-    //         page: page,
-    //         itemsPerPage: itemsPerPage,
-    //         pagination: true,
-    //         ...filters,
-    //     };
+        const query: Record<string, any> = {
+            page: page,
+            itemsPerPage: itemsPerPage,
+            pagination: true,
+            ...filters,
+        };
 
-    //     if (sort) {
-    //         query.order = { [sort.field]: sort.direction };
-    //     }
+        if (sort) {
+            query.order = { [sort.field]: sort.direction };
+        }
 
-    //     if (filters.status && filters.status !== "all") {
-    //         query.status = filters.status;
-    //     }
+        if (filters.status && filters.status !== "all") {
+            query.status = filters.status;
+        }
 
-    //     if (filters["money.amount[gte]"]) {
-    //         query["money.amount[gte]"] = filters["money.amount[gte]"];
-    //     }
+        if (filters["money.amount[gte]"]) {
+            query["money.amount[gte]"] = filters["money.amount[gte]"];
+        }
 
-    //     if (filters["money.amount[between]"]) {
-    //         query["money.amount[between]"] = filters["money.amount[between]"];
-    //     }
+        if (filters["money.amount[between]"]) {
+            query["money.amount[between]"] = filters["money.amount[between]"];
+        }
 
-    //     if (filters.target) {
-    //         query.target = filters.target;
-    //     }
-    // }
+        if (filters.target) {
+            query.target = filters.target;
+        }
+
+        return query;
+    }
 
     const chargesPageCache = new Map<string, ExtendedCharge[]>();
     let largestLoaded = 0;
 
-    async function loadCharges(filters: any) {
+    async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
         isLoading = true;
 
         try {
             const token = getAccessToken();
             if (!token) return;
 
-            const query: Record<string, string> = {
-                filters,
-                page: String(currentPage),
-                itemsPerPage: String(itemsPerPage),
-            };
+            const query = buildChargesQuery(filters, currentPage, Number(itemsPerPage));
 
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
