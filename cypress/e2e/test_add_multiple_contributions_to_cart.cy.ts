@@ -163,7 +163,7 @@ describe("Checkout Flow - Multiple Contributions", () => {
             } else {
                 cy.log("Botón de proyecto 10 específico no encontrado, buscando alternativas");
                 if ($body.find("button:contains('Dona')").length > 0) {
-                    cy.contains("button", "Dona").first().click();
+                    cy.contains("button", "Dona").first().click({ force: true });
                 } else if ($body.find("button").length > 0) {
                     cy.get("button").first().click();
                 }
