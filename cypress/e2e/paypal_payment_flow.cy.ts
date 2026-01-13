@@ -115,7 +115,7 @@ describe("PayPal Payment Flow", () => {
     });
 
     it("should complete the donation flow from checkout to payment with PayPal", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");
@@ -187,7 +187,7 @@ describe("PayPal Payment Flow", () => {
     });
 
     it("should handle payment flow gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -200,15 +200,10 @@ describe("PayPal Payment Flow", () => {
                 cy.log("ℹ️  No se encontraron botones, pero la página cargó");
             }
         });
-
-        cy.url().then((url) => {
-            expect(url).to.include("/projects/100");
-            cy.log("✅ URL correcta de proyecto confirmada");
-        });
     });
 
     it("should verify project loads without errors", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);

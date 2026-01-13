@@ -156,7 +156,7 @@ describe("View project rewards", () => {
     });
 
     it("should show reward details with amounts and descriptions", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -256,7 +256,7 @@ describe("View project rewards", () => {
     });
 
     it("should display different reward types and availability", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -292,7 +292,7 @@ describe("View project rewards", () => {
     });
 
     it("should show reward descriptions and details", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -320,7 +320,7 @@ describe("View project rewards", () => {
     });
 
     it("should handle the page loading gracefully", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);

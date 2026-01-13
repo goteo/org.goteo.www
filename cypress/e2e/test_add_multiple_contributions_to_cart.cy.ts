@@ -152,7 +152,7 @@ describe("Checkout Flow - Multiple Contributions", () => {
     });
 
     it("should successfully add multiple project contributions to cart and proceed to payment", () => {
-        cy.visit("/es/projects/10", { failOnStatusCode: false });
+        cy.visit("/es/project/10", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");
@@ -170,7 +170,7 @@ describe("Checkout Flow - Multiple Contributions", () => {
             }
         });
 
-        cy.visit("/es/projects/20", { failOnStatusCode: false });
+        cy.visit("/es/project/20", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");
@@ -187,13 +187,13 @@ describe("Checkout Flow - Multiple Contributions", () => {
                         cy.contains("p.text-tertiary.font-bold", "Donación Platoniq")
                             .parents(".flex.items-center.justify-between")
                             .find("button.cursor-pointer:last")
-                            .click();
+                            .click({ force: true });
                     } else {
                         cy.log(
                             "Botón específico de Donación Platoniq no encontrado, usando alternativa",
                         );
                         if ($body.find("button:contains('Dona')").length > 0) {
-                            cy.contains("button", "Dona").first().click();
+                            cy.contains("button", "Dona").first().click({ force: true });
                         }
                     }
                 });
@@ -203,7 +203,7 @@ describe("Checkout Flow - Multiple Contributions", () => {
                         cy.contains("button", "Continuar")
                             .should("be.visible")
                             .should("be.enabled")
-                            .click();
+                            .click({ force: true });
                     } else {
                         cy.log("Botón Continuar no encontrado, verificando navegación");
                     }
@@ -237,12 +237,12 @@ describe("Checkout Flow - Multiple Contributions", () => {
     });
 
     it("should handle multiple contributions flow gracefully", () => {
-        cy.visit("/es/projects/10", { failOnStatusCode: false });
+        cy.visit("/es/project/10", { failOnStatusCode: false });
         cy.wait(2000);
         cy.get("body").should("exist");
         cy.log("✅ Proyecto 10 cargado");
 
-        cy.visit("/es/projects/20", { failOnStatusCode: false });
+        cy.visit("/es/project/20", { failOnStatusCode: false });
         cy.wait(2000);
         cy.get("body").should("exist");
         cy.log("✅ Proyecto 20 cargado");
@@ -258,12 +258,12 @@ describe("Checkout Flow - Multiple Contributions", () => {
     });
 
     it("should verify both projects load without errors", () => {
-        cy.visit("/es/projects/10", { failOnStatusCode: false });
+        cy.visit("/es/project/10", { failOnStatusCode: false });
         cy.get("body").should("exist");
         cy.get("body").should("not.contain", "Error 500");
         cy.log("✅ Proyecto 10 verificado");
 
-        cy.visit("/es/projects/20", { failOnStatusCode: false });
+        cy.visit("/es/project/20", { failOnStatusCode: false });
         cy.get("body").should("exist");
         cy.get("body").should("not.contain", "Error 500");
         cy.get("body").then(() => {

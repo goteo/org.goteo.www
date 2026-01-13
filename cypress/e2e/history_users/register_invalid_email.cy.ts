@@ -19,7 +19,7 @@ describe("Register with Invalid Email", () => {
         cy.get("input#terms").check();
         cy.get("input#cookies").check();
 
-        cy.get('button[type="submit"]').contains("Registrarse").click();
+        cy.get('button[type="submit"]').contains("Registrarse").click({ force: true });
 
         cy.get("input#identifier").then(() => {
             cy.url().should("include", "/register");

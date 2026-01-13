@@ -101,7 +101,7 @@ describe("Error in progress display", () => {
     });
 
     it("should handle gracefully when accounting data is incomplete", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");

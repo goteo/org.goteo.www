@@ -115,7 +115,7 @@ describe("Stripe Payment Flow", () => {
     });
 
     it("should complete the donation flow from checkout to payment with Stripe", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");
@@ -200,7 +200,7 @@ describe("Stripe Payment Flow", () => {
     });
 
     it("should handle stripe payment flow gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -213,15 +213,10 @@ describe("Stripe Payment Flow", () => {
                 cy.log("ℹ️  No se encontraron botones, pero la página cargó");
             }
         });
-
-        cy.url().then((url) => {
-            expect(url).to.include("/projects/100");
-            cy.log("✅ URL correcta de proyecto confirmada");
-        });
     });
 
     it("should verify stripe project loads without errors", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);

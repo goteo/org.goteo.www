@@ -139,7 +139,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should show error for amount below minimum required for reward", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -222,7 +222,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should handle different reward minimum amounts", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -249,7 +249,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should handle the page loading gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);
