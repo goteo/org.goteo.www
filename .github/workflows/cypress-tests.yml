@@ -64,9 +64,7 @@ jobs:
 
             - name: Run Cypress tests
               run: |
-                  for spec in cypress/e2e/*.cy.ts; do
-                    pnpm cypress run --spec "$spec" || exit 1
-                  done
+                  pnpm cypress run || exit 1
               env:
                   CI: true
                   NODE_ENV: test
