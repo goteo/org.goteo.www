@@ -283,34 +283,19 @@
         page: number,
         itemsPerPage: number,
     ) {
-        if (!filters) return {};
         const sort = sortOptions.find((option) => option.key === selectedSort);
 
         const query: Record<string, any> = {
-            page: page,
-            itemsPerPage: itemsPerPage,
+            page,
+            itemsPerPage,
             pagination: true,
             ...filters,
         };
 
         if (sort) {
-            query.order = { [sort.field]: sort.direction };
-        }
-
-        if (filters.status && filters.status !== "all") {
-            query.status = filters.status;
-        }
-
-        if (filters["money.amount[gte]"]) {
-            query["money.amount[gte]"] = filters["money.amount[gte]"];
-        }
-
-        if (filters["money.amount[between]"]) {
-            query["money.amount[between]"] = filters["money.amount[between]"];
-        }
-
-        if (filters.target) {
-            query.target = filters.target;
+            query.order = {
+                [sort.field]: sort.direction,
+            };
         }
 
         return query;
@@ -464,6 +449,7 @@
     let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
 
     $effect(() => {
+        currentPage = 1;
         charges = [];
         loadCharges(filters);
     });
