@@ -61,10 +61,6 @@ jobs:
             - name: Wait for server
               run: |
                   pnpm wait-on http://localhost:4321
-                  # Additional wait to ensure server is fully ready
-                  sleep 5
-                  # Verify server is responding correctly
-                  curl -f http://localhost:4321 || (echo "Server health check failed" && cat preview.log && exit 1)
 
             - name: Run Cypress tests
               run: |
