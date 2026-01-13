@@ -61,7 +61,7 @@ describe("Project Donation Button - Simple", () => {
     });
 
     it("should load the project page without errors", () => {
-        cy.visit("/es/projects/2", { failOnStatusCode: false });
+        cy.visit("/es/project/2", { failOnStatusCode: false });
 
         cy.get("body", { timeout: 10000 }).should("exist");
 
@@ -81,7 +81,7 @@ describe("Project Donation Button - Simple", () => {
     });
 
     it("should handle the project page gracefully", () => {
-        cy.visit("/es/projects/2", { failOnStatusCode: false });
+        cy.visit("/es/project/2", { failOnStatusCode: false });
 
         cy.get("html").should("exist");
         cy.get("head").should("exist");

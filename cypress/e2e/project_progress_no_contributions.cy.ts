@@ -106,7 +106,7 @@ describe("Viewing without contributions", () => {
     });
 
     it("should display progress elements correctly", () => {
-        cy.visit("/es/project/100", {
+        cy.visit("/es/project/goteo-pero-mejor", {
             failOnStatusCode: false,
             timeout: 60000,
         });

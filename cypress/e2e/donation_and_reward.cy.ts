@@ -105,7 +105,7 @@ describe("Project Page - Donation and Reward Verification", () => {
     });
 
     it("should display donation and reward elements", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -157,7 +157,7 @@ describe("Project Page - Donation and Reward Verification", () => {
     });
 
     it("should handle reward data correctly", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -187,7 +187,7 @@ describe("Project Page - Donation and Reward Verification", () => {
     });
 
     it("should handle the page loading gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);

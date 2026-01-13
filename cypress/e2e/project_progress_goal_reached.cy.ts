@@ -177,7 +177,7 @@ describe("Goal Reached Project", () => {
     });
 
     it("should display goal reached status when minimum is exceeded", () => {
-        cy.visit("/es/project/100", {
+        cy.visit("/es/project/goteo-pero-mejor", {
             failOnStatusCode: false,
             timeout: 60000,
         });
@@ -284,7 +284,7 @@ describe("Goal Reached Project", () => {
     });
 
     it("should display project page with basic content", () => {
-        cy.visit("/es/project/100", {
+        cy.visit("/es/project/goteo-pero-mejor", {
             failOnStatusCode: false,
             timeout: 60000,
         });

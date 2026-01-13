@@ -7,7 +7,7 @@
         class: classes = "",
     }: {
         title: string;
-        value: string;
+        value: string | number;
         class?: ClassNameValue;
     } = $props();
 </script>
