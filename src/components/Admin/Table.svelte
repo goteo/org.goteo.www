@@ -37,7 +37,6 @@
     } from "../../../src/openapi/client/index.ts";
 
     import { getBaseUrl } from "../../utils/consts.ts";
-    import { onMount } from "svelte";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -218,11 +217,11 @@
 
     async function fetchCheckout(iri: string | null, token: string) {
         if (!iri) return;
+
         const url = client.buildUrl({
             url: apiGatewayCheckoutsIdGetUrl,
             path: { id: extractId(iri) },
         });
-
         return fetchWithPersistentCache<GatewayCheckout>(url, token);
     }
 
@@ -328,88 +327,61 @@
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
 
-            const checkouts: Set<GatewayCheckout | undefined> = new Set();
-            const targetIds: Map<string, GatewayCharge> = new Map();
+            const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
+            const accountings = new Map<string, Accounting>();
+            const users: Map<string, User> = new Map();
+            const projects: Map<string, Project> = new Map();
 
             for (const charge of loadedCharges) {
-                const checkoutId = extractId(charge.checkout);
-                const targetId = extractId(charge.target);
+                const checkoutIri = charge.checkout;
+                const targetAccountingIri = charge.target;
 
-                if (checkoutId)
-                    checkouts.add(await Promise.resolve(fetchCheckout(checkoutId, token)));
-                if (targetId) targetIds.set(targetId, charge);
+                if (checkoutIri) {
+                    checkouts.set(
+                        checkoutIri,
+                        await Promise.resolve(fetchCheckout(checkoutIri, token)),
+                    );
+
+                    const originAccountingIri = checkouts.get(checkoutIri)?.origin;
+
+                    if (originAccountingIri && !accountings.has(originAccountingIri)) {
+                        const acc = await fetchAccounting(originAccountingIri, token);
+
+                        if (acc) accountings.set(originAccountingIri, acc);
+                    }
+                }
+
+                if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
+                    const acc = await fetchAccounting(targetAccountingIri, token);
+
+                    if (acc) {
+                        accountings.set(targetAccountingIri, acc);
+                        const ownerIri = acc.owner;
+                        if (ownerIri) {
+                            if (ownerIri.startsWith("/v4/users/") && !users.has(ownerIri)) {
+                                const user = await fetchUser(ownerIri, token);
+                                if (user) users.set(ownerIri, user);
+                            } else if (
+                                ownerIri.startsWith("/v4/projects/") &&
+                                !projects.has(ownerIri)
+                            ) {
+                                const project = await fetchProject(ownerIri, token);
+                                if (project) projects.set(ownerIri, project);
+                            }
+                        }
+                    }
+                }
             }
-
-            const checkoutById = new Map<string, GatewayCheckout>();
-            checkoutIdList.forEach((id, i) => {
-                const checkout = checkouts[i];
-                if (checkout) checkoutById.set(id, checkout);
-            });
-
-            for (const checkout of checkouts) {
-                const originId = extractId(checkout?.origin);
-                if (originId) accountingIds.add(originId);
-            }
-
-            const accountingIdList = [...accountingIds];
-            const accountings = await Promise.all(
-                accountingIdList.map((id) => fetchAccounting(id, token)),
-            );
-
-            const accountingById = new Map<string, Accounting>();
-            accountingIdList.forEach((id, i) => {
-                const acc = accountings[i];
-                if (acc) accountingById.set(id, acc);
-            });
-
-            const userIds = new Set<string>();
-            const projectIds = new Set<string>();
-
-            for (const acc of accountings) {
-                const ownerId = extractId(acc?.owner);
-                if (!ownerId) continue;
-
-                if (acc?.owner?.startsWith("/v4/users/")) userIds.add(ownerId);
-                if (acc?.owner?.startsWith("/v4/projects/")) projectIds.add(ownerId);
-            }
-
-            const userIdList = [...userIds];
-            const projectIdList = [...projectIds];
-
-            const [users, projects] = await Promise.all([
-                Promise.all(userIdList.map((id) => fetchUser(id, token))),
-                Promise.all(projectIdList.map((id) => fetchProject(id, token))),
-            ]);
-
-            const userByIri = new Map<string, User>();
-            userIdList.forEach((id, i) => {
-                const user = users[i];
-                if (user) userByIri.set(`/v4/users/${id}`, user);
-            });
-
-            const projectByIri = new Map<string, Project>();
-            projectIdList.forEach((id, i) => {
-                const project = projects[i];
-                if (project) projectByIri.set(`/v4/projects/${id}`, project);
-            });
 
             charges = loadedCharges.map((charge): ExtendedCharge => {
-                const checkout = checkoutById.get(extractId(charge.checkout) ?? "");
-                const targetAcc = accountingById.get(charge.target ?? "");
-                const originAcc = accountingById.get(checkout?.origin ?? "");
+                const checkout = checkouts.get(charge.checkout ?? "");
+                const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
+                const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
 
                 return {
                     ...charge,
-                    targetDisplayName: getDisplayNameFromAccounting(
-                        targetAcc,
-                        userByIri,
-                        projectByIri,
-                    ),
-                    originDisplayName: getDisplayNameFromAccounting(
-                        originAcc,
-                        userByIri,
-                        projectByIri,
-                    ),
+                    targetDisplayName: getDisplayNameFromAccounting(targetAcc, users, projects),
+                    originDisplayName: getDisplayNameFromAccounting(originAcc, users, projects),
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
@@ -461,7 +433,7 @@
     }));
 
     $effect(() => {
-        const { filters, currentPage, itemsPerPage, selectedSort } = reloadParams;
+        reloadParams();
 
         charges = [];
         loadCharges(filters);
