@@ -23,6 +23,10 @@
         apiAccountingsIdGetUrl,
         apiGatewayCheckoutsIdGetUrl,
         apiGatewayChargesGetCollectionUrl,
+        apiTipjarsGetCollectionUrl,
+        apiTipjarsIdGetUrl,
+        apiUsersGetCollectionUrl,
+        apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
 
     import type {
@@ -34,6 +38,7 @@
         Project,
         GatewayCheckout,
         ApiGatewayChargesGetCollectionData,
+        Tipjar,
     } from "../../../src/openapi/client/index.ts";
 
     import { getBaseUrl } from "../../utils/consts.ts";
@@ -225,6 +230,16 @@
         return fetchWithPersistentCache<GatewayCheckout>(url, token);
     }
 
+    async function fetchTipjar(iri: string | null, token: string) {
+        if (!iri) return;
+
+        const url = client.buildUrl({
+            url: apiTipjarsIdGetUrl,
+            path: { id: extractId(iri) },
+        });
+        return fetchWithPersistentCache<Tipjar>(url, token);
+    }
+
     function joinUrl(base: string, path: string) {
         return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
     }
@@ -278,33 +293,34 @@
 
     function getDisplayNameFromAccounting(
         accounting: Accounting | undefined,
-        users: Map<string, User>,
-        projects: Map<string, Project>,
-    ): string {
-        const owner = accounting?.owner;
-        if (!owner) return "—";
+        owners: Map<string, User | Project | Tipjar>,
+    ): string | undefined {
+        const ownerIri = accounting?.owner;
+        if (!ownerIri) return undefined;
 
-        if (owner.startsWith("/v4/tipjars/")) {
-            return "Tip Goteo";
+        const owner = owners.get(ownerIri);
+        if (!owner) return undefined;
+
+        switch (ownerIri.split("/").slice(0, -1).join("/")) {
+            case apiUsersGetCollectionUrl:
+                return (owner as User).displayName ?? undefined;
+                break;
+            case apiProjectsGetCollectionUrl:
+                return (owner as Project).title ?? undefined;
+                break;
+            case apiTipjarsGetCollectionUrl:
+                return (owner as Tipjar).name ?? undefined;
+                break;
         }
 
-        if (owner.startsWith("/v4/users/")) {
-            return users.get(owner)?.displayName ?? "—";
-        }
-
-        if (owner.startsWith("/v4/projects/")) {
-            return projects.get(owner)?.title ?? "—";
-        }
-
-        return "—";
+        return undefined;
     }
 
     async function preloadAccountingData(
         accountingIri: string | null,
         token: string,
         accountings: Map<string, Accounting>,
-        users: Map<string, User>,
-        projects: Map<string, Project>,
+        owners: Map<string, User | Project | Tipjar>,
     ) {
         if (!accountingIri || accountings.has(accountingIri)) return;
 
@@ -314,21 +330,24 @@
         accountings.set(accountingIri, accounting);
 
         const ownerIri = accounting.owner;
-        if (ownerIri) {
-            if (ownerIri.startsWith(apiUsersIdGetUrl.replace("{id}", "")) && !users.has(ownerIri)) {
-                const user = await fetchUser(ownerIri, token);
-                if (user) users.set(ownerIri, user);
-            } else if (
-                ownerIri.startsWith(apiProjectsIdOrSlugGetUrl.replace("{id}", "")) &&
-                !projects.has(ownerIri)
-            ) {
-                const project = await fetchProject(ownerIri, token);
-                if (project) projects.set(ownerIri, project);
-            }
+        if (!ownerIri) {
+            return;
+        }
+
+        if (ownerIri.startsWith(apiUsersGetCollectionUrl) && !owners.has(ownerIri)) {
+            const user = await fetchUser(ownerIri, token);
+            if (user) owners.set(ownerIri, user);
+        } else if (ownerIri.startsWith(apiProjectsGetCollectionUrl) && !owners.has(ownerIri)) {
+            const project = await fetchProject(ownerIri, token);
+            if (project) owners.set(ownerIri, project);
+        } else if (ownerIri.startsWith(apiTipjarsGetCollectionUrl) && !owners.has(ownerIri)) {
+            const tipjar = await fetchTipjar(ownerIri, token);
+            if (tipjar) owners.set(ownerIri, tipjar);
         }
     }
 
     async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
+        let chargesArr: ExtendedCharge[] = [];
         isLoading = true;
 
         try {
@@ -351,21 +370,18 @@
                 token,
             );
 
-            console.log("Fetched charges collection:", collection);
-
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
 
             const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
             const accountings: Map<string, Accounting> = new Map<string, Accounting>();
-            const users: Map<string, User> = new Map();
-            const projects: Map<string, Project> = new Map();
+            const owners: Map<string, User | Project | Tipjar> = new Map();
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
                 const targetAccountingIri = charge.target;
 
-                if (checkoutIri) {
+                if (checkoutIri && !checkouts.has(checkoutIri)) {
                     checkouts.set(
                         checkoutIri,
                         await Promise.resolve(fetchCheckout(checkoutIri, token)),
@@ -378,32 +394,28 @@
                             originAccountingIri,
                             token,
                             accountings,
-                            users,
-                            projects,
+                            owners,
                         );
                     }
                 }
 
                 if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(
-                        targetAccountingIri,
-                        token,
-                        accountings,
-                        users,
-                        projects,
-                    );
+                    await preloadAccountingData(targetAccountingIri, token, accountings, owners);
                 }
             }
 
-            charges = loadedCharges.map((charge): ExtendedCharge => {
+            chargesArr = loadedCharges.map((charge): ExtendedCharge => {
                 const checkout = checkouts.get(charge.checkout ?? "");
                 const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
                 const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
 
+                const targetName = getDisplayNameFromAccounting(targetAcc, owners);
+                const originName = getDisplayNameFromAccounting(originAcc, owners);
+
                 return {
                     ...charge,
-                    targetDisplayName: getDisplayNameFromAccounting(targetAcc, users, projects),
-                    originDisplayName: getDisplayNameFromAccounting(originAcc, users, projects),
+                    targetDisplayName: typeof targetName === "undefined" ? "—" : targetName,
+                    originDisplayName: typeof originName === "undefined" ? "—" : originName,
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
@@ -412,6 +424,7 @@
                     trackingCodes: checkout?.trackings ?? [],
                 };
             });
+            return chargesArr;
         } finally {
             isLoading = false;
             isFirstLoad = false;
@@ -454,11 +467,13 @@
         selectedSort,
     }));
 
+    const reloadCharges = (async () => {
+        charges = await loadCharges(filters)!;
+    });
+
     $effect(() => {
         reloadParams();
-
-        charges = [];
-        loadCharges(filters);
+        reloadCharges();
     });
 </script>
 
