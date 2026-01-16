@@ -16,24 +16,31 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    const { id, trackingCodes, dataTimeCreated, dataTimeUpdated, platformLinks, refundToWallet, concept } =
-        $props<{
-            id: string;
-            trackingCodes: Tracking[];
-            dataTimeCreated: {
-                date: string;
-                time: string;
-                fulltime: string;
-            };
-            dataTimeUpdated: {
-                date: string;
-                time: string;
-                fulltime: string;
-            };
-            platformLinks: Link[];
-            refundToWallet: string;
-            concept: string;
-        }>();
+    const {
+        id,
+        trackingCodes,
+        dataTimeCreated,
+        dataTimeUpdated,
+        platformLinks,
+        refundToWallet,
+        concept,
+    } = $props<{
+        id: string;
+        trackingCodes: Tracking[];
+        dataTimeCreated: {
+            date: string;
+            time: string;
+            fulltime: string;
+        };
+        dataTimeUpdated: {
+            date: string;
+            time: string;
+            fulltime: string;
+        };
+        platformLinks: Link[];
+        refundToWallet: string;
+        concept: string;
+    }>();
 
     let trackingModal = $state(false);
     let linksModal = $state(false);

@@ -411,12 +411,12 @@
                 const checkout = checkouts.get(charge.checkout ?? "");
                 const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
                 const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
-                
+
                 const targetName = getDisplayNameFromAccounting(targetAcc, owners);
                 const originName = getDisplayNameFromAccounting(originAcc, owners);
 
                 hasConcept = false;
-                
+
                 if (targetName === originName) hasConcept = true;
 
                 return {
@@ -475,10 +475,10 @@
         selectedSort,
     }));
 
-    const reloadCharges = (async () => {
+    const reloadCharges = async () => {
         charges = [];
         charges = await loadCharges(filters)!;
-    });
+    };
 
     $effect(() => {
         reloadParams();
