@@ -16,23 +16,31 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    const { id, trackingCodes, dataTimeCreated, dataTimeUpdated, platformLinks, refundToWallet } =
-        $props<{
-            id: string;
-            trackingCodes: Tracking[];
-            dataTimeCreated: {
-                date: string;
-                time: string;
-                fulltime: string;
-            };
-            dataTimeUpdated: {
-                date: string;
-                time: string;
-                fulltime: string;
-            };
-            platformLinks: Link[];
-            refundToWallet: string;
-        }>();
+    const {
+        id,
+        trackingCodes,
+        dataTimeCreated,
+        dataTimeUpdated,
+        platformLinks,
+        refundToWallet,
+        concept,
+    } = $props<{
+        id: string;
+        trackingCodes: Tracking[];
+        dataTimeCreated: {
+            date: string;
+            time: string;
+            fulltime: string;
+        };
+        dataTimeUpdated: {
+            date: string;
+            time: string;
+            fulltime: string;
+        };
+        platformLinks: Link[];
+        refundToWallet: string;
+        concept: string;
+    }>();
 
     let trackingModal = $state(false);
     let linksModal = $state(false);
@@ -241,15 +249,11 @@
 
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.estimatedFee")}</p>
-            <p>-</p>
+            <p>—</p>
         </div>
         <div class="flex flex-col gap-1">
-            <p class="font-semibold"></p>
-            <p></p>
-        </div>
-        <div class="flex flex-col gap-1">
-            <p class="font-semibold"></p>
-            <p></p>
+            <p class="font-semibold">{$t("contributions.grid.details.concept")}</p>
+            <p>{concept !== "" ? concept : "—"}</p>
         </div>
     </div>
     <ActionsBtn />

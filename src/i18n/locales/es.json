@@ -634,7 +634,8 @@
             "href": "Url"
           }
         },
-        "estimatedFee": "Comisión estimada"
+        "estimatedFee": "Comisión estimada",
+        "concept": "Concepto"
       },
       "actions": {
         "refundToWallet": "Devolución a monedero",

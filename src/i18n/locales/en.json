@@ -627,7 +627,8 @@
             "href": "URL"
           }
         },
-        "estimatedFee": "Estimated fee"
+        "estimatedFee": "Estimated fee",
+        "concept": "Concept"
       },
       "actions": {
         "refundToWallet": "Refund to wallet",
