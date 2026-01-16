@@ -299,6 +299,35 @@
         return "—";
     }
 
+    async function preloadAccountingData(
+        accountingIri: string | null,
+        token: string,
+        accountings: Map<string, Accounting>,
+        users: Map<string, User>,
+        projects: Map<string, Project>,
+    ) {
+        if (!accountingIri || accountings.has(accountingIri)) return;
+
+        const accounting = await fetchAccounting(accountingIri, token);
+        if (!accounting) return;
+
+        accountings.set(accountingIri, accounting);
+
+        const ownerIri = accounting.owner;
+        if (ownerIri) {
+            if (ownerIri.startsWith(apiUsersIdGetUrl.replace("{id}", "")) && !users.has(ownerIri)) {
+                const user = await fetchUser(ownerIri, token);
+                if (user) users.set(ownerIri, user);
+            } else if (
+                ownerIri.startsWith(apiProjectsIdOrSlugGetUrl.replace("{id}", "")) &&
+                !projects.has(ownerIri)
+            ) {
+                const project = await fetchProject(ownerIri, token);
+                if (project) projects.set(ownerIri, project);
+            }
+        }
+    }
+
     async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
         isLoading = true;
 
@@ -328,7 +357,7 @@
             totalItems = collection.totalItems ?? 0;
 
             const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
-            const accountings = new Map<string, Accounting>();
+            const accountings: Map<string, Accounting> = new Map<string, Accounting>();
             const users: Map<string, User> = new Map();
             const projects: Map<string, Project> = new Map();
 
@@ -345,31 +374,24 @@
                     const originAccountingIri = checkouts.get(checkoutIri)?.origin;
 
                     if (originAccountingIri && !accountings.has(originAccountingIri)) {
-                        const acc = await fetchAccounting(originAccountingIri, token);
-
-                        if (acc) accountings.set(originAccountingIri, acc);
+                        await preloadAccountingData(
+                            originAccountingIri,
+                            token,
+                            accountings,
+                            users,
+                            projects,
+                        );
                     }
                 }
 
                 if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    const acc = await fetchAccounting(targetAccountingIri, token);
-
-                    if (acc) {
-                        accountings.set(targetAccountingIri, acc);
-                        const ownerIri = acc.owner;
-                        if (ownerIri) {
-                            if (ownerIri.startsWith("/v4/users/") && !users.has(ownerIri)) {
-                                const user = await fetchUser(ownerIri, token);
-                                if (user) users.set(ownerIri, user);
-                            } else if (
-                                ownerIri.startsWith("/v4/projects/") &&
-                                !projects.has(ownerIri)
-                            ) {
-                                const project = await fetchProject(ownerIri, token);
-                                if (project) projects.set(ownerIri, project);
-                            }
-                        }
-                    }
+                    await preloadAccountingData(
+                        targetAccountingIri,
+                        token,
+                        accountings,
+                        users,
+                        projects,
+                    );
                 }
             }
 
