@@ -37,6 +37,7 @@
     } from "../../../src/openapi/client/index.ts";
 
     import { getBaseUrl } from "../../utils/consts.ts";
+    import { onMount } from "svelte";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -118,7 +119,6 @@
     let isLoading = $state(false);
     let isFirstLoad = $state(true);
     let totalItems = $state(0);
-    let lastItemsPerPageSnapshot = 10;
 
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
@@ -192,61 +192,38 @@
         return "↕️";
     }
 
-    async function fetchAccounting(id: string | null, token: string) {
-        if (!id) return;
-        const url = client.buildUrl({
-            url: apiAccountingsIdGetUrl,
-            path: { id },
-        });
+    async function fetchAccounting(iri: string | null, token: string) {
+        if (!iri) return;
+
+        const url = client.buildUrl({ url: apiAccountingsIdGetUrl, path: { id: extractId(iri) } });
         return fetchWithPersistentCache<Accounting>(url, token);
     }
 
-    async function fetchUser(id: string | null, token: string) {
-        if (!id) return;
-        const url = client.buildUrl({
-            url: apiUsersIdGetUrl,
-            path: { id },
-        });
+    async function fetchUser(iri: string | null, token: string) {
+        if (!iri) return;
+
+        const url = client.buildUrl({ url: apiUsersIdGetUrl, path: { id: extractId(iri) } });
         return fetchWithPersistentCache<User>(url, token);
     }
 
-    async function fetchProject(idOrSlug: string | null, token: string) {
-        if (!idOrSlug) return;
+    async function fetchProject(iri: string | null, token: string) {
+        if (!iri) return;
+
         const url = client.buildUrl({
             url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug },
+            path: { idOrSlug: extractId(iri) },
         });
         return fetchWithPersistentCache<Project>(url, token);
     }
 
-    async function fetchCheckout(id: string | null, token: string) {
-        if (!id) return;
+    async function fetchCheckout(iri: string | null, token: string) {
+        if (!iri) return;
         const url = client.buildUrl({
             url: apiGatewayCheckoutsIdGetUrl,
-            path: { id },
+            path: { id: extractId(iri) },
         });
+
         return fetchWithPersistentCache<GatewayCheckout>(url, token);
-    }
-
-    function getOwnerFromAccounting(
-        accounting: Accounting | undefined,
-        users: Map<string, User>,
-        projects: Map<string, Project>,
-    ): string {
-        if (!accounting?.owner) return "—";
-
-        const id = extractId(accounting.owner);
-        if (!id) return "—";
-
-        if (accounting.owner.startsWith("/v4/users/")) {
-            return users.get(id)?.displayName ?? "—";
-        }
-
-        if (accounting.owner.startsWith("/v4/projects/")) {
-            return projects.get(id)?.title ?? "—";
-        }
-
-        return "—";
     }
 
     function joinUrl(base: string, path: string) {
@@ -255,15 +232,16 @@
 
     const API_CACHE_NAME = "charges-cache";
 
-    async function fetchWithPersistentCache<T>(url: string, token: string): Promise<T> {
+    async function fetchWithPersistentCache<T>(iri: string, token: string): Promise<T> {
         const cache = await caches.open(API_CACHE_NAME);
 
-        const cached = await cache.match(url);
+        const cached = await cache.match(iri);
         if (cached) return cached.json();
 
         const baseUrl = getBaseUrl();
+        const fullUrl = joinUrl(baseUrl, iri);
 
-        const response = await fetch(joinUrl(baseUrl, url), {
+        const response = await fetch(fullUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/ld+json",
@@ -274,35 +252,53 @@
             throw new Error(`HTTP ${response.status}`);
         }
 
-        await cache.put(url, response.clone());
+        await cache.put(fullUrl, response.clone());
         return response.json();
     }
 
-    function buildChargesQuery(
-        filters: ApiGatewayChargesGetCollectionData["query"],
-        page: number,
-        itemsPerPage: number,
-    ) {
-        const sort = sortOptions.find((option) => option.key === selectedSort);
+    // function buildChargesQuery(
+    //     filters: ApiGatewayChargesGetCollectionData["query"],
+    //     page: number,
+    //     itemsPerPage: number,
+    // ) {
+    //     const sort = sortOptions.find((option) => option.key === selectedSort);
 
-        const query: Record<string, any> = {
-            page,
-            itemsPerPage,
-            pagination: true,
-            ...filters,
-        };
+    //     const query: Record<string, ApiGatewayChargesGetCollectionData["query"]> = {
+    //         page,
+    //         itemsPerPage,
+    //         pagination: true,
+    //         ...filters,
+    //     };
 
-        if (sort) {
-            query.order = {
-                [sort.field]: sort.direction,
-            };
+    //     if (sort) {
+    //         query[`${sort.field}`] = sort.direction;
+    //     }
+
+    //     return query;
+    // }
+
+    function getDisplayNameFromAccounting(
+        accounting: Accounting | undefined,
+        users: Map<string, User>,
+        projects: Map<string, Project>,
+    ): string {
+        const owner = accounting?.owner;
+        if (!owner) return "—";
+
+        if (owner.startsWith("/v4/tipjars/")) {
+            return "Tip Goteo";
         }
 
-        return query;
-    }
+        if (owner.startsWith("/v4/users/")) {
+            return users.get(owner)?.displayName ?? "—";
+        }
 
-    const chargesPageCache = new Map<string, ExtendedCharge[]>();
-    let largestLoaded = 0;
+        if (owner.startsWith("/v4/projects/")) {
+            return projects.get(owner)?.title ?? "—";
+        }
+
+        return "—";
+    }
 
     async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
         isLoading = true;
@@ -311,7 +307,11 @@
             const token = getAccessToken();
             if (!token) return;
 
-            const query = buildChargesQuery(filters, currentPage, Number(itemsPerPage));
+            const query = {
+                ...filters,
+                page: currentPage,
+                itemsPerPage: Number(itemsPerPage),
+            };
 
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
@@ -328,20 +328,17 @@
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
 
-            const checkoutIds = new Set<string>();
-            const accountingIds = new Set<string>();
+            const checkouts: Set<GatewayCheckout | undefined> = new Set();
+            const targetIds: Map<string, GatewayCharge> = new Map();
 
             for (const charge of loadedCharges) {
                 const checkoutId = extractId(charge.checkout);
                 const targetId = extractId(charge.target);
-                if (checkoutId) checkoutIds.add(checkoutId);
-                if (targetId) accountingIds.add(targetId);
-            }
 
-            const checkoutIdList = [...checkoutIds];
-            const checkouts = await Promise.all(
-                checkoutIdList.map((id) => fetchCheckout(id, token)),
-            );
+                if (checkoutId)
+                    checkouts.add(await Promise.resolve(fetchCheckout(checkoutId, token)));
+                if (targetId) targetIds.set(targetId, charge);
+            }
 
             const checkoutById = new Map<string, GatewayCheckout>();
             checkoutIdList.forEach((id, i) => {
@@ -384,27 +381,35 @@
                 Promise.all(projectIdList.map((id) => fetchProject(id, token))),
             ]);
 
-            const userById = new Map<string, User>();
+            const userByIri = new Map<string, User>();
             userIdList.forEach((id, i) => {
                 const user = users[i];
-                if (user) userById.set(id, user);
+                if (user) userByIri.set(`/v4/users/${id}`, user);
             });
 
-            const projectById = new Map<string, Project>();
+            const projectByIri = new Map<string, Project>();
             projectIdList.forEach((id, i) => {
                 const project = projects[i];
-                if (project) projectById.set(id, project);
+                if (project) projectByIri.set(`/v4/projects/${id}`, project);
             });
 
             charges = loadedCharges.map((charge): ExtendedCharge => {
                 const checkout = checkoutById.get(extractId(charge.checkout) ?? "");
-                const targetAcc = accountingById.get(extractId(charge.target) ?? "");
-                const originAcc = accountingById.get(extractId(checkout?.origin) ?? "");
+                const targetAcc = accountingById.get(charge.target ?? "");
+                const originAcc = accountingById.get(checkout?.origin ?? "");
 
                 return {
                     ...charge,
-                    targetDisplayName: getOwnerFromAccounting(targetAcc, userById, projectById),
-                    originDisplayName: getOwnerFromAccounting(originAcc, userById, projectById),
+                    targetDisplayName: getDisplayNameFromAccounting(
+                        targetAcc,
+                        userByIri,
+                        projectByIri,
+                    ),
+                    originDisplayName: getDisplayNameFromAccounting(
+                        originAcc,
+                        userByIri,
+                        projectByIri,
+                    ),
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
@@ -448,8 +453,16 @@
 
     let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
 
+    const reloadParams = $derived(() => ({
+        filters,
+        currentPage,
+        itemsPerPage,
+        selectedSort,
+    }));
+
     $effect(() => {
-        currentPage = 1;
+        const { filters, currentPage, itemsPerPage, selectedSort } = reloadParams;
+
         charges = [];
         loadCharges(filters);
     });
