@@ -36,6 +36,9 @@
         ApiGatewayChargesGetCollectionData,
     } from "../../../src/openapi/client/index.ts";
 
+    import { getBaseUrl } from "../../utils/consts.ts";
+    import { onMount } from "svelte";
+
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
         originDisplayName: string;
@@ -106,6 +109,7 @@
         { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
         { name: "contributions.table.headers.chargeStatus", sortable: true, sortKey: "status" },
         { name: "contributions.table.headers.refundToWallet", sortable: false },
+        { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
 
     let openRow = $state<number | null>(null);
@@ -115,7 +119,6 @@
     let isLoading = $state(false);
     let isFirstLoad = $state(true);
     let totalItems = $state(0);
-    let lastItemsPerPageSnapshot = 10;
 
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
@@ -189,72 +192,56 @@
         return "↕️";
     }
 
-    async function fetchAccounting(id: string | null, token: string) {
-        if (!id) return;
-        const url = client.buildUrl({
-            url: apiAccountingsIdGetUrl,
-            path: { id },
-        });
+    async function fetchAccounting(iri: string | null, token: string) {
+        if (!iri) return;
+
+        const url = client.buildUrl({ url: apiAccountingsIdGetUrl, path: { id: extractId(iri) } });
         return fetchWithPersistentCache<Accounting>(url, token);
     }
 
-    async function fetchUser(id: string | null, token: string) {
-        if (!id) return;
-        const url = client.buildUrl({
-            url: apiUsersIdGetUrl,
-            path: { id },
-        });
+    async function fetchUser(iri: string | null, token: string) {
+        if (!iri) return;
+
+        const url = client.buildUrl({ url: apiUsersIdGetUrl, path: { id: extractId(iri) } });
         return fetchWithPersistentCache<User>(url, token);
     }
 
-    async function fetchProject(idOrSlug: string | null, token: string) {
-        if (!idOrSlug) return;
+    async function fetchProject(iri: string | null, token: string) {
+        if (!iri) return;
+
         const url = client.buildUrl({
             url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug },
+            path: { idOrSlug: extractId(iri) },
         });
         return fetchWithPersistentCache<Project>(url, token);
     }
 
-    async function fetchCheckout(id: string | null, token: string) {
-        if (!id) return;
+    async function fetchCheckout(iri: string | null, token: string) {
+        if (!iri) return;
         const url = client.buildUrl({
             url: apiGatewayCheckoutsIdGetUrl,
-            path: { id },
+            path: { id: extractId(iri) },
         });
+
         return fetchWithPersistentCache<GatewayCheckout>(url, token);
     }
 
-    function getOwnerFromAccounting(
-        accounting: Accounting | undefined,
-        users: Map<string, User>,
-        projects: Map<string, Project>,
-    ): string {
-        if (!accounting?.owner) return "—";
-
-        const id = extractId(accounting.owner);
-        if (!id) return "—";
-
-        if (accounting.owner.startsWith("/v4/users/")) {
-            return users.get(id)?.displayName ?? "—";
-        }
-
-        if (accounting.owner.startsWith("/v4/projects/")) {
-            return projects.get(id)?.title ?? "—";
-        }
-
-        return "—";
+    function joinUrl(base: string, path: string) {
+        return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
     }
 
     const API_CACHE_NAME = "charges-cache";
 
-    async function fetchWithPersistentCache<T>(url: string, token: string): Promise<T> {
+    async function fetchWithPersistentCache<T>(iri: string, token: string): Promise<T> {
         const cache = await caches.open(API_CACHE_NAME);
 
-        const cached = await cache.match(url);
+        const cached = await cache.match(iri);
         if (cached) return cached.json();
 
-        const response = await fetch(url, {
+        const baseUrl = getBaseUrl();
+        const fullUrl = joinUrl(baseUrl, iri);
+
+        const response = await fetch(fullUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 Accept: "application/ld+json",
@@ -265,7 +252,7 @@
             throw new Error(`HTTP ${response.status}`);
         }
 
-        await cache.put(url, response.clone());
+        await cache.put(fullUrl, response.clone());
         return response.json();
     }
 
@@ -274,51 +261,56 @@
     //     page: number,
     //     itemsPerPage: number,
     // ) {
-    //     if (!filters) return {};
     //     const sort = sortOptions.find((option) => option.key === selectedSort);
 
-    //     const query: Record<string, any> = {
-    //         page: page,
-    //         itemsPerPage: itemsPerPage,
+    //     const query: Record<string, ApiGatewayChargesGetCollectionData["query"]> = {
+    //         page,
+    //         itemsPerPage,
     //         pagination: true,
     //         ...filters,
     //     };
 
     //     if (sort) {
-    //         query.order = { [sort.field]: sort.direction };
+    //         query[`${sort.field}`] = sort.direction;
     //     }
 
-    //     if (filters.status && filters.status !== "all") {
-    //         query.status = filters.status;
-    //     }
-
-    //     if (filters["money.amount[gte]"]) {
-    //         query["money.amount[gte]"] = filters["money.amount[gte]"];
-    //     }
-
-    //     if (filters["money.amount[between]"]) {
-    //         query["money.amount[between]"] = filters["money.amount[between]"];
-    //     }
-
-    //     if (filters.target) {
-    //         query.target = filters.target;
-    //     }
+    //     return query;
     // }
 
-    const chargesPageCache = new Map<string, ExtendedCharge[]>();
-    let largestLoaded = 0;
+    function getDisplayNameFromAccounting(
+        accounting: Accounting | undefined,
+        users: Map<string, User>,
+        projects: Map<string, Project>,
+    ): string {
+        const owner = accounting?.owner;
+        if (!owner) return "—";
 
-    async function loadCharges(filters: any) {
+        if (owner.startsWith("/v4/tipjars/")) {
+            return "Tip Goteo";
+        }
+
+        if (owner.startsWith("/v4/users/")) {
+            return users.get(owner)?.displayName ?? "—";
+        }
+
+        if (owner.startsWith("/v4/projects/")) {
+            return projects.get(owner)?.title ?? "—";
+        }
+
+        return "—";
+    }
+
+    async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
         isLoading = true;
 
         try {
             const token = getAccessToken();
             if (!token) return;
 
-            const query: Record<string, string> = {
-                filters,
-                page: String(currentPage),
-                itemsPerPage: String(itemsPerPage),
+            const query = {
+                ...filters,
+                page: currentPage,
+                itemsPerPage: Number(itemsPerPage),
             };
 
             const collection = await fetchWithPersistentCache<
@@ -336,20 +328,17 @@
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
 
-            const checkoutIds = new Set<string>();
-            const accountingIds = new Set<string>();
+            const checkouts: Set<GatewayCheckout | undefined> = new Set();
+            const targetIds: Map<string, GatewayCharge> = new Map();
 
             for (const charge of loadedCharges) {
                 const checkoutId = extractId(charge.checkout);
                 const targetId = extractId(charge.target);
-                if (checkoutId) checkoutIds.add(checkoutId);
-                if (targetId) accountingIds.add(targetId);
-            }
 
-            const checkoutIdList = [...checkoutIds];
-            const checkouts = await Promise.all(
-                checkoutIdList.map((id) => fetchCheckout(id, token)),
-            );
+                if (checkoutId)
+                    checkouts.add(await Promise.resolve(fetchCheckout(checkoutId, token)));
+                if (targetId) targetIds.set(targetId, charge);
+            }
 
             const checkoutById = new Map<string, GatewayCheckout>();
             checkoutIdList.forEach((id, i) => {
@@ -392,27 +381,35 @@
                 Promise.all(projectIdList.map((id) => fetchProject(id, token))),
             ]);
 
-            const userById = new Map<string, User>();
+            const userByIri = new Map<string, User>();
             userIdList.forEach((id, i) => {
                 const user = users[i];
-                if (user) userById.set(id, user);
+                if (user) userByIri.set(`/v4/users/${id}`, user);
             });
 
-            const projectById = new Map<string, Project>();
+            const projectByIri = new Map<string, Project>();
             projectIdList.forEach((id, i) => {
                 const project = projects[i];
-                if (project) projectById.set(id, project);
+                if (project) projectByIri.set(`/v4/projects/${id}`, project);
             });
 
             charges = loadedCharges.map((charge): ExtendedCharge => {
                 const checkout = checkoutById.get(extractId(charge.checkout) ?? "");
-                const targetAcc = accountingById.get(extractId(charge.target) ?? "");
-                const originAcc = accountingById.get(extractId(checkout?.origin) ?? "");
+                const targetAcc = accountingById.get(charge.target ?? "");
+                const originAcc = accountingById.get(checkout?.origin ?? "");
 
                 return {
                     ...charge,
-                    targetDisplayName: getOwnerFromAccounting(targetAcc, userById, projectById),
-                    originDisplayName: getOwnerFromAccounting(originAcc, userById, projectById),
+                    targetDisplayName: getDisplayNameFromAccounting(
+                        targetAcc,
+                        userByIri,
+                        projectByIri,
+                    ),
+                    originDisplayName: getDisplayNameFromAccounting(
+                        originAcc,
+                        userByIri,
+                        projectByIri,
+                    ),
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
@@ -456,157 +453,200 @@
 
     let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
 
+    const reloadParams = $derived(() => ({
+        filters,
+        currentPage,
+        itemsPerPage,
+        selectedSort,
+    }));
+
     $effect(() => {
+        const { filters, currentPage, itemsPerPage, selectedSort } = reloadParams;
+
         charges = [];
         loadCharges(filters);
     });
 </script>
 
-<div class="flex justify-between">
-    <div class="flex flex-row items-center gap-2">
-        <p class="text-content font-bold">
-            {$t("contributions.filters.order.title")}
-        </p>
-        <select
-            bind:value={selectedSort}
-            class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
-            disabled={isLoading}
-        >
-            {#each sortOptions as option}
-                <option value={option.key}>{$t(option.label)}</option>
-            {/each}
-        </select>
-    </div>
-
-    <div class="flex flex-row items-center gap-2">
-        <p class="text-content font-bold">
-            {$t("contributions.filters.itemsPerPage.title")}
-        </p>
-        <select
-            name="itemsPerPage"
-            id="itemsPerPage"
-            class="border-secondary text-secondary rounded-sm py-1"
-            bind:value={itemsPerPage}
-            disabled={isLoading}
-        >
-            {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
-                <option {value}>{label}</option>
-            {/each}
-        </select>
-    </div>
-</div>
-
-<Table class="w-full border-separate border-spacing-y-2">
-    <TableHead class="bg-tertiary">
-        {#each tableHeaders as header}
-            <TableHeadCell
-                class="py-4 text-base whitespace-nowrap text-white first:rounded-l-md last:rounded-r-md
-                       {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
-                onclick={() => handleHeaderClick(header)}
-            >
-                <div class="flex items-center justify-between">
-                    <span>{$t(header.name)}</span>
-                    {#if header.sortable}
-                        <span class="ml-2 text-sm opacity-70">
-                            {getSortIndicator(header)}
-                        </span>
-                    {/if}
-                </div>
-            </TableHeadCell>
-        {/each}
-    </TableHead>
-
-    <TableBody class="text-base">
-        {#if isFirstLoad}
-            <TableBodyRow>
-                <TableBodyCell colspan={tableHeaders.length}>
-                    <div class="flex justify-center py-6">
-                        <Loader />
-                    </div>
-                </TableBodyCell>
-            </TableBodyRow>
-        {:else if charges.length === 0 && !isLoading}
-            <TableBodyRow>
-                <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                    {$t("contributions.table.rows.noData")}
-                </TableBodyCell>
-            </TableBodyRow>
-        {:else}
-            {#each charges as charge, i}
-                <TableBodyRow
-                    onclick={() => toggleRow(i)}
-                    class="{openRow === i
-                        ? 'bg-soft-purple]'
-                        : 'bg-white'} border-variant1 hover:bg-soft-purple] border transition-colors"
+<div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-4">
+        <div class="flex justify-between">
+            <div class="flex flex-row items-center gap-2">
+                <p class="text-content font-bold">
+                    {$t("contributions.filters.order.title")}
+                </p>
+                <select
+                    bind:value={selectedSort}
+                    class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
+                    disabled={isLoading}
                 >
-                    <TableBodyCell
-                        class="border-variant1 truncate rounded-l-md border-t border-b border-l "
-                        >{charge.targetDisplayName}</TableBodyCell
-                    >
-                    {#if charge.money.amount && charge.money.currency}
-                        <TableBodyCell class="border-variant1 border-t border-b">
-                            {formatCurrency(charge.money.amount, charge.money.currency)}
-                        </TableBodyCell>
-                    {:else}
-                        <TableBodyCell class="border-variant1 border-t border-b">—</TableBodyCell>
-                    {/if}
-                    <TableBodyCell class="border-variant1 truncate border-t border-b"
-                        >{charge.originDisplayName}</TableBodyCell
-                    >
-                    <TableBodyCell class="border-variant1 border-t border-b">
-                        {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
-                    </TableBodyCell>
-                    <TableBodyCell class="border-variant1 border-t border-b">
-                        {getDate(charge.dateCreated).date}
-                        <p
-                            class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
-                            title={charge.trackingCodes[0]?.value || "—"}
-                        >
-                            {charge.trackingCodes[0]?.value || "—"}
-                        </p>
-                    </TableBodyCell>
-                    <TableBodyCell class="border-variant1 border-t border-b">
-                        <button
-                            class="border-tertiary text-tertiary flex items-center gap-1 rounded border px-3 py-1 text-base font-medium"
-                        >
-                            {$t(`contributions.table.rows.status.${charge.status}`)}
-                        </button>
-                    </TableBodyCell>
+                    {#each sortOptions as option}
+                        <option value={option.key}>{$t(option.label)}</option>
+                    {/each}
+                </select>
+            </div>
 
-                    <TableBodyCell class="border-variant1 rounded-r-md border-t border-r border-b"
-                        >{charge.refundToWallet}</TableBodyCell
+            <div class="flex flex-row items-center gap-2">
+                <p class="text-content font-bold">
+                    {$t("contributions.filters.itemsPerPage.title")}
+                </p>
+                <select
+                    name="itemsPerPage"
+                    id="itemsPerPage"
+                    class="border-secondary text-secondary rounded-sm py-1"
+                    bind:value={itemsPerPage}
+                    disabled={isLoading}
+                >
+                    {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
+                        <option {value}>{label}</option>
+                    {/each}
+                </select>
+            </div>
+        </div>
+
+        <Table class="w-full border-separate border-spacing-y-2">
+            <TableHead>
+                {#each tableHeaders as header}
+                    <TableHeadCell
+                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg
+                       {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
+                        onclick={() => handleHeaderClick(header)}
                     >
-                </TableBodyRow>
-                {#if openRow === i}
-                    <TableBodyRow>
-                        <TableBodyCell
-                            colspan={tableHeaders.length}
-                            class="border-variant1 bg-soft-purple] rounded-lg border shadow-[0px_1px_3px_0px_#0000001A]"
+                        <div
+                            class="flex items-center justify-between {header.name ===
+                            'contributions.table.headers.chargeStatus'
+                                ? 'justify-center'
+                                : ''}"
                         >
-                            <DetailsRow
-                                platformLinks={charge.platformLinks}
-                                trackingCodes={charge.trackingCodes}
-                                dataTimeCreated={getDate(charge.dateCreated)}
-                                dataTimeUpdated={getDate(charge.dateUpdated)}
-                                id={charge.id ? String(charge.id) : "-"}
-                                refundToWallet={charge.refundToWallet}
-                            />
+                            <span class="normal-case">{$t(header.name)}</span>
+                            {#if header.sortable}
+                                <span class="ml-2 text-sm opacity-70">
+                                    {getSortIndicator(header)}
+                                </span>
+                            {/if}
+                        </div>
+                    </TableHeadCell>
+                {/each}
+            </TableHead>
+
+            <TableBody class="text-base">
+                {#if isFirstLoad}
+                    <TableBodyRow>
+                        <TableBodyCell colspan={tableHeaders.length}>
+                            <div class="flex justify-center py-6">
+                                <Loader />
+                            </div>
                         </TableBodyCell>
                     </TableBodyRow>
+                {:else if charges.length === 0 && !isLoading}
+                    <TableBodyRow>
+                        <TableBodyCell colspan={tableHeaders.length} class="text-center">
+                            {$t("contributions.table.rows.noData")}
+                        </TableBodyCell>
+                    </TableBodyRow>
+                {:else}
+                    {#each charges as charge, i}
+                        <TableBodyRow
+                            onclick={() => toggleRow(i)}
+                            class="{openRow === i
+                                ? 'bg-soft-purple]'
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple] text-content border transition-colors"
+                        >
+                            <TableBodyCell
+                                class="border-variant1 truncate rounded-l-md border-t border-b border-l p-4"
+                                >{charge.targetDisplayName}</TableBodyCell
+                            >
+                            {#if charge.money.amount && charge.money.currency}
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    {formatCurrency(charge.money.amount, charge.money.currency)}
+                                </TableBodyCell>
+                            {:else}
+                                <TableBodyCell class="border-variant1 border-t border-b p-4"
+                                    >—</TableBodyCell
+                                >
+                            {/if}
+                            <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
+                                >{charge.originDisplayName}</TableBodyCell
+                            >
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
+                            </TableBodyCell>
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                {getDate(charge.dateCreated).date}
+                                <p
+                                    class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                                    title={charge.trackingCodes[0]?.value || "—"}
+                                >
+                                    {charge.trackingCodes[0]?.value || "—"}
+                                </p>
+                            </TableBodyCell>
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                <div class="flex justify-center">
+                                    <button
+                                        class="flex items-center gap-1 rounded border border-black px-3 py-1 text-base font-medium text-black"
+                                    >
+                                        {$t(`contributions.table.rows.status.${charge.status}`)}
+                                    </button>
+                                </div>
+                            </TableBodyCell>
+
+                            <TableBodyCell class="border-variant1 border-t border-b p-4"
+                                >{charge.refundToWallet}</TableBodyCell
+                            >
+                            <TableBodyCell
+                                class="border-variant1 rounded-r-md border-t border-r border-b p-4"
+                                ><svg
+                                    class={openRow === i
+                                        ? "rotate-180 transform transition-transform"
+                                        : "transition-transform"}
+                                    width="24"
+                                    height="24"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        d="M4.5 8.25L12 15.75L19.5 8.25"
+                                        stroke="#3D3D3D"
+                                        stroke-width="1.5"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                    />
+                                </svg></TableBodyCell
+                            >
+                        </TableBodyRow>
+                        {#if openRow === i}
+                            <TableBodyRow>
+                                <TableBodyCell
+                                    colspan={tableHeaders.length}
+                                    class="border-variant1 bg-soft-purple rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
+                                >
+                                    <DetailsRow
+                                        platformLinks={charge.platformLinks}
+                                        trackingCodes={charge.trackingCodes}
+                                        dataTimeCreated={getDate(charge.dateCreated)}
+                                        dataTimeUpdated={getDate(charge.dateUpdated)}
+                                        id={charge.id ? String(charge.id) : "-"}
+                                        refundToWallet={charge.refundToWallet}
+                                    />
+                                </TableBodyCell>
+                            </TableBodyRow>
+                        {/if}
+                    {/each}
+
+                    {#if isLoading}
+                        <TableBodyRow>
+                            <TableBodyCell colspan={tableHeaders.length}>
+                                <div class="flex justify-center py-4">
+                                    <Loader />
+                                </div>
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {/if}
                 {/if}
-            {/each}
+            </TableBody>
+        </Table>
+    </div>
 
-            {#if isLoading}
-                <TableBodyRow>
-                    <TableBodyCell colspan={tableHeaders.length}>
-                        <div class="flex justify-center py-4">
-                            <Loader />
-                        </div>
-                    </TableBodyCell>
-                </TableBodyRow>
-            {/if}
-        {/if}
-    </TableBody>
-</Table>
-
-<Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} {isLoading} />
+    <Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} {isLoading} />
+</div>
