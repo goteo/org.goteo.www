@@ -50,6 +50,7 @@
         refundToWallet: string;
         platformLinks: Link[];
         trackingCodes: Tracking[];
+        concept: string;
     };
 
     type GatewayChargesCollection<T> = {
@@ -404,13 +405,19 @@
                 }
             }
 
+            let hasConcept = false;
+
             chargesArr = loadedCharges.map((charge): ExtendedCharge => {
                 const checkout = checkouts.get(charge.checkout ?? "");
                 const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
                 const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
-
+                
                 const targetName = getDisplayNameFromAccounting(targetAcc, owners);
                 const originName = getDisplayNameFromAccounting(originAcc, owners);
+
+                hasConcept = false;
+                
+                if (targetName === originName) hasConcept = true;
 
                 return {
                     ...charge,
@@ -422,12 +429,13 @@
                         : "—",
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
+                    concept: hasConcept && charge.title ? charge.title : "",
                 };
             });
-            return chargesArr;
         } finally {
             isLoading = false;
             isFirstLoad = false;
+            return chargesArr;
         }
     }
 
@@ -468,6 +476,7 @@
     }));
 
     const reloadCharges = (async () => {
+        charges = [];
         charges = await loadCharges(filters)!;
     });
 
@@ -637,6 +646,7 @@
                                         dataTimeUpdated={getDate(charge.dateUpdated)}
                                         id={charge.id ? String(charge.id) : "-"}
                                         refundToWallet={charge.refundToWallet}
+                                        concept={charge.concept}
                                     />
                                 </TableBodyCell>
                             </TableBodyRow>
