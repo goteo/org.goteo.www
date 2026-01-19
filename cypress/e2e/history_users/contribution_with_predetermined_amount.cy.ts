@@ -7,7 +7,7 @@ describe("Contribution with predetermined amount", () => {
     });
 
     it("should handle the complete donation flow step by step", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("be.visible");
 

@@ -1,7 +1,12 @@
-<script>
+<script lang="ts">
     import Slider from "./Slider.svelte";
     import Filters from "./Filters.svelte";
     import Table from "./Table.svelte";
+    import Categories from "./Categories.svelte";
+    import FiltersTags from "./FiltersTags.svelte";
+    import { t } from "../../i18n/store";
+    import ExportCsv from "./ExportCsv.svelte";
+    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
 
     /* TODO: Add data to slider and set locales */
     const slides = [
@@ -12,20 +17,26 @@
         { title: "Slide 5", amount: "250,99€" },
     ];
 
-    let filters = $state({
-        paymentMethod: "",
-        chargeStatus: "",
-        rangeAmount: "",
-        from: undefined,
-        to: undefined,
-        target: undefined,
-    });
+    let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
 
-    function handleApplyFilters(newFilters) {
+    function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
         filters = { ...filters, ...newFilters };
     }
 </script>
 
-<Filters onApplyFilters={handleApplyFilters} currentTarget={filters.target} />
-<Slider {slides} />
+<div class="flex flex-col gap-10">
+    <Filters {filters} onApplyFilters={handleApplyFilters} />
+    <div class="flex flex-col">
+        <div class="mb-8 flex justify-between">
+            <FiltersTags
+                onCloseFilter={handleApplyFilters}
+                title={$t("admin.charges.lastContributions")}
+                {filters}
+            />
+            <ExportCsv {filters} />
+        </div>
+        <Categories />
+        <Slider {slides} />
+    </div>
+</div>
 <Table {filters} />

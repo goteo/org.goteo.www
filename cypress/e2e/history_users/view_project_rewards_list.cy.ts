@@ -33,7 +33,7 @@ describe("View project rewards", () => {
     });
 
     it("should display complete rewards list", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("be.visible");
 

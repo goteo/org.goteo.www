@@ -9,6 +9,8 @@
     import { onMount } from "svelte";
     import type { User } from "../../openapi/client/types.gen.ts";
     import { extractId } from "../../utils/extractId.ts";
+    import { locale } from "../../i18n/store";
+    import { formatDate } from "../../utils/dates.ts";
 
     interface Props {
         update: ProjectUpdate;
@@ -21,16 +23,6 @@
 
     let cardClasses = $state("");
     let author: User | undefined = $state(undefined);
-
-    function formatDate(date: string, locale?: string): string {
-        const options: Intl.DateTimeFormatOptions = {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        };
-
-        return new Date(date).toLocaleDateString(locale, options);
-    }
 
     async function getAuthor(update: ProjectUpdate): Promise<User | undefined> {
         const authorId: string | null = extractId(update.author);
@@ -61,13 +53,15 @@
 {#if type === "small"}
     <div
         class={twMerge(
-            "flex w-[34.625rem] flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
+            "flex w-138.5 flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
             cardClasses,
         )}
     >
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
-                {formatDate(update.date ?? "")}
+                {#if update.date}
+                    {formatDate(new Date(update.date), $locale)}
+                {/if}
                 <div class="pt-1">
                     <ActiveFilterIcon />
                 </div>
@@ -80,7 +74,7 @@
                 {update.title}
             </h2>
             <svg
-                class="absolute -top-[19.25rem] left-[6.1875rem]"
+                class="absolute -top-77 left-24.75"
                 width="681"
                 height="964.575"
                 viewBox="0 0 407 533"
@@ -104,7 +98,9 @@
     >
         <div class="flex flex-col gap-4">
             <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
-                {formatDate(update.date ?? "")}
+                {#if update.date}
+                    {formatDate(new Date(update.date), $locale)}
+                {/if}
                 <div class="pt-1">
                     <ActiveFilterIcon />
                 </div>

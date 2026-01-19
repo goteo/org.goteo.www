@@ -3,6 +3,8 @@
     import "flickity/css/flickity.css";
     import type Flickity from "flickity";
     import type { Options } from "flickity";
+    import TotalizerCard from "./TotalizerCard.svelte";
+    import { t } from "../../i18n/store";
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;
@@ -41,21 +43,19 @@
     });
 </script>
 
-<div class="relative h-[160px]">
+<div class="relative mt-6 h-40">
     {#if !isLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">Cargando...</span>
+            <span class="text-content">{$t("search.pagination.loading")}</span>
         </div>
     {/if}
 
-    <div bind:this={mainCarousel} class="main-carousel h-full opacity-{isLoaded ? 100 : 0}">
+    <div
+        bind:this={mainCarousel}
+        class="main-carousel h-full first:ml-0 opacity-{isLoaded ? 100 : 0}"
+    >
         {#each slides as { title, amount }}
-            <div
-                class="carousel-cell border-variant1 bg-soft-purple mr-6 flex h-full w-[22.5%] flex-col items-start justify-center gap-4 rounded-xl border p-8 shadow-[0px_1px_3px_0px_#0000001A]"
-            >
-                <span class="text-content text-base font-semibold">{title}</span>
-                <span class="text-tertiary text-[40px]">{amount}</span>
-            </div>
+            <TotalizerCard class="ml-6 h-[162px] w-[322px]" {title} value={amount} />
         {/each}
     </div>
 </div>
