@@ -18,13 +18,8 @@
     import { client } from "../../openapi/client/client.gen.ts";
 
     import {
-        apiUsersIdGetUrl,
-        apiProjectsIdOrSlugGetUrl,
-        apiAccountingsIdGetUrl,
-        apiGatewayCheckoutsIdGetUrl,
         apiGatewayChargesGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
-        apiTipjarsIdGetUrl,
         apiUsersGetCollectionUrl,
         apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
@@ -41,7 +36,14 @@
         Tipjar,
     } from "../../../src/openapi/client/index.ts";
 
-    import { getBaseUrl } from "../../utils/consts.ts";
+    import {
+        fetchWithPersistentCache,
+        fetchAccounting,
+        fetchCheckout,
+        fetchProject,
+        fetchTipjar,
+        fetchUser,
+    } from "../../utils/cachedFetch.ts";
 
     type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
@@ -125,6 +127,8 @@
     let isFirstLoad = $state(true);
     let totalItems = $state(0);
 
+    const API_CACHE_NAME = "charges-cache";
+
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
     };
@@ -197,80 +201,6 @@
         return "↕️";
     }
 
-    async function fetchAccounting(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({ url: apiAccountingsIdGetUrl, path: { id: extractId(iri) } });
-        return fetchWithPersistentCache<Accounting>(url, token);
-    }
-
-    async function fetchUser(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({ url: apiUsersIdGetUrl, path: { id: extractId(iri) } });
-        return fetchWithPersistentCache<User>(url, token);
-    }
-
-    async function fetchProject(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug: extractId(iri) },
-        });
-        return fetchWithPersistentCache<Project>(url, token);
-    }
-
-    async function fetchCheckout(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiGatewayCheckoutsIdGetUrl,
-            path: { id: extractId(iri) },
-        });
-        return fetchWithPersistentCache<GatewayCheckout>(url, token);
-    }
-
-    async function fetchTipjar(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiTipjarsIdGetUrl,
-            path: { id: extractId(iri) },
-        });
-        return fetchWithPersistentCache<Tipjar>(url, token);
-    }
-
-    function joinUrl(base: string, path: string) {
-        return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
-    }
-
-    const API_CACHE_NAME = "charges-cache";
-
-    async function fetchWithPersistentCache<T>(iri: string, token: string): Promise<T> {
-        const cache = await caches.open(API_CACHE_NAME);
-
-        const cached = await cache.match(iri);
-        if (cached) return cached.json();
-
-        const baseUrl = getBaseUrl();
-        const fullUrl = joinUrl(baseUrl, iri);
-
-        const response = await fetch(fullUrl, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/ld+json",
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        await cache.put(fullUrl, response.clone());
-        return response.json();
-    }
-
     // function buildChargesQuery(
     //     filters: ApiGatewayChargesGetCollectionData["query"],
     //     page: number,
@@ -325,7 +255,7 @@
     ) {
         if (!accountingIri || accountings.has(accountingIri)) return;
 
-        const accounting = await fetchAccounting(accountingIri, token);
+        const accounting = await fetchAccounting(accountingIri, token, API_CACHE_NAME);
         if (!accounting) return;
 
         accountings.set(accountingIri, accounting);
@@ -336,13 +266,13 @@
         }
 
         if (ownerIri.startsWith(apiUsersGetCollectionUrl) && !owners.has(ownerIri)) {
-            const user = await fetchUser(ownerIri, token);
+            const user = await fetchUser(ownerIri, token, API_CACHE_NAME);
             if (user) owners.set(ownerIri, user);
         } else if (ownerIri.startsWith(apiProjectsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const project = await fetchProject(ownerIri, token);
+            const project = await fetchProject(ownerIri, token, API_CACHE_NAME);
             if (project) owners.set(ownerIri, project);
         } else if (ownerIri.startsWith(apiTipjarsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const tipjar = await fetchTipjar(ownerIri, token);
+            const tipjar = await fetchTipjar(ownerIri, token, API_CACHE_NAME);
             if (tipjar) owners.set(ownerIri, tipjar);
         }
     }
@@ -369,6 +299,7 @@
                     query,
                 }),
                 token,
+                API_CACHE_NAME,
             );
 
             const loadedCharges = collection.member ?? [];
@@ -385,7 +316,7 @@
                 if (checkoutIri && !checkouts.has(checkoutIri)) {
                     checkouts.set(
                         checkoutIri,
-                        await Promise.resolve(fetchCheckout(checkoutIri, token)),
+                        await Promise.resolve(fetchCheckout(checkoutIri, token, API_CACHE_NAME)),
                     );
 
                     const originAccountingIri = checkouts.get(checkoutIri)?.origin;

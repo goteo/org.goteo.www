@@ -49,8 +49,6 @@
                 return parseMin(a) - parseMin(b);
             },
         );
-
-        console.log(paymentMethodOptions);
     });
 </script>
 
