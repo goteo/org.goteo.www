@@ -7,14 +7,19 @@
     import { t } from "../../i18n/store";
     import ExportCsv from "./ExportCsv.svelte";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
-
-    /* TODO: Add data to slider and set locales */
+    
     const slides = [
-        { title: "Total aportes:", amount: "250,95€" },
-        { title: "Total Tips:", amount: "250,96€" },
-        { title: "Total comisiones:", amount: "250,97€" },
-        { title: "Pasar a operativa:", amount: "250,98€" },
-        { title: "Slide 5", amount: "250,99€" },
+        { title: $t("admin.projects.totalizers.selectedCampaigns"), amount: "432" },
+        { title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" },
+        { title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" },
+        { title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" },
+    ];
+
+    const categories = [
+        { title: "Donaciones", amount: 125050 },
+        { title: "Recurrentes", amount: 98075 },
+        { title: "Tips", amount: 43020 },
+        { title: "Comisiones", amount: 15000 },
     ];
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
@@ -35,7 +40,7 @@
             />
             <ExportCsv {filters} />
         </div>
-        <Categories />
+        <Categories {categories} />
         <Slider {slides} />
     </div>
 </div>
