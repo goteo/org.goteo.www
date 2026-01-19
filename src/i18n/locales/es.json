@@ -887,7 +887,12 @@
       }
     },
     "charges": {
-      "lastContributions": "Últimos aportes:"
+      "lastContributions": "Últimos aportes:",
+      "totalizers": {
+        "totalCharges": "Total aportes:",
+        "totalTips": "Total propinas:",
+        "totalFees": "Comisiones totales:"
+      }
     }
   },
   "footer": {
