@@ -19,13 +19,6 @@
         { title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" },
     ];
 
-    const categories = [
-        { title: "Donaciones", amount: 125050 },
-        { title: "Recurrentes", amount: 98075 },
-        { title: "Tips", amount: 43020 },
-        { title: "Comisiones", amount: 15000 },
-    ];
-
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
     let paymentMethodOptions = $state<[string, string][]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
@@ -78,7 +71,7 @@
             />
             <ExportCsv {filters} />
         </div>
-        <Categories {categories} />
+        <Categories {paymentMethodOptions} />
         <Slider {slides} />
     </div>
 </div>
