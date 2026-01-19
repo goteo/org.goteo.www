@@ -14,38 +14,32 @@
 
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import { extractId } from "../../utils/extractId";
-    import { client } from "../../openapi/client/client.gen.ts";
 
     import {
-        apiGatewayChargesGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
         apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
 
     import type {
-        GatewayCharge,
-        Tracking,
-        Link,
         Accounting,
         User,
         Project,
-        GatewayCheckout,
         ApiGatewayChargesGetCollectionData,
         Tipjar,
+        GatewayCharge,
+        Link,
+        Tracking,
     } from "../../../src/openapi/client/index.ts";
 
     import {
-        fetchWithPersistentCache,
         fetchAccounting,
-        fetchCheckout,
         fetchProject,
         fetchTipjar,
         fetchUser,
     } from "../../utils/cachedFetch.ts";
 
-    type ExtendedCharge = GatewayCharge & {
+    export type ExtendedCharge = GatewayCharge & {
         targetDisplayName: string;
         originDisplayName: string;
         paymentMethod: string;
@@ -53,11 +47,6 @@
         platformLinks: Link[];
         trackingCodes: Tracking[];
         concept: string;
-    };
-
-    type GatewayChargesCollection<T> = {
-        member: T[];
-        totalItems: number;
     };
 
     type SortOption = {
@@ -120,31 +109,10 @@
     ];
 
     let openRow = $state<number | null>(null);
-    let charges = $state<ExtendedCharge[]>([]);
-    let itemsPerPage = $state("10");
-    let currentPage = $state(1);
-    let isLoading = $state(false);
-    let isFirstLoad = $state(true);
-    let totalItems = $state(0);
-
-    const API_CACHE_NAME = "charges-cache";
 
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
     };
-
-    function getAccessToken(): string | null {
-        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
-        if (!match) return null;
-
-        try {
-            const decoded = decodeURIComponent(match[1]);
-            const parsed = JSON.parse(decoded);
-            return parsed?.token ?? null;
-        } catch {
-            return null;
-        }
-    }
 
     function handleHeaderClick(header: any) {
         if (!header.sortable) return;
@@ -277,99 +245,6 @@
         }
     }
 
-    async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
-        let chargesArr: ExtendedCharge[] = [];
-        isLoading = true;
-
-        try {
-            const token = getAccessToken();
-            if (!token) return;
-
-            const query = {
-                ...filters,
-                page: currentPage,
-                itemsPerPage: Number(itemsPerPage),
-            };
-
-            const collection = await fetchWithPersistentCache<
-                GatewayChargesCollection<GatewayCharge>
-            >(
-                client.buildUrl({
-                    url: apiGatewayChargesGetCollectionUrl,
-                    query,
-                }),
-                token,
-                API_CACHE_NAME,
-            );
-
-            const loadedCharges = collection.member ?? [];
-            totalItems = collection.totalItems ?? 0;
-
-            const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
-            const accountings: Map<string, Accounting> = new Map<string, Accounting>();
-            const owners: Map<string, User | Project | Tipjar> = new Map();
-
-            for (const charge of loadedCharges) {
-                const checkoutIri = charge.checkout;
-                const targetAccountingIri = charge.target;
-
-                if (checkoutIri && !checkouts.has(checkoutIri)) {
-                    checkouts.set(
-                        checkoutIri,
-                        await Promise.resolve(fetchCheckout(checkoutIri, token, API_CACHE_NAME)),
-                    );
-
-                    const originAccountingIri = checkouts.get(checkoutIri)?.origin;
-
-                    if (originAccountingIri && !accountings.has(originAccountingIri)) {
-                        await preloadAccountingData(
-                            originAccountingIri,
-                            token,
-                            accountings,
-                            owners,
-                        );
-                    }
-                }
-
-                if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(targetAccountingIri, token, accountings, owners);
-                }
-            }
-
-            let hasConcept = false;
-
-            chargesArr = loadedCharges.map((charge): ExtendedCharge => {
-                const checkout = checkouts.get(charge.checkout ?? "");
-                const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
-                const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
-
-                const targetName = getDisplayNameFromAccounting(targetAcc, owners);
-                const originName = getDisplayNameFromAccounting(originAcc, owners);
-
-                hasConcept = false;
-
-                if (targetName === originName) hasConcept = true;
-
-                return {
-                    ...charge,
-                    targetDisplayName: typeof targetName === "undefined" ? "—" : targetName,
-                    originDisplayName: typeof originName === "undefined" ? "—" : originName,
-                    paymentMethod: extractId(checkout?.gateway) ?? "—",
-                    refundToWallet: checkout?.refund
-                        ? $t(`contributions.table.rows.refund.${checkout.refund}`)
-                        : "—",
-                    platformLinks: checkout?.links ?? [],
-                    trackingCodes: checkout?.trackings ?? [],
-                    concept: hasConcept && charge.title ? charge.title : "",
-                };
-            });
-        } finally {
-            isLoading = false;
-            isFirstLoad = false;
-            return chargesArr;
-        }
-    }
-
     function getDate(chargeDate: string | null | undefined): {
         date: string;
         time: string;
@@ -397,7 +272,25 @@
         };
     }
 
-    let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
+    let {
+        filters,
+        charges,
+        itemsPerPage,
+        currentPage,
+        isLoading,
+        isFirstLoad,
+        totalItems,
+        API_CACHE_NAME,
+    } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
+        charges: ExtendedCharge[];
+        itemsPerPage: number;
+        currentPage: number;
+        isLoading: boolean;
+        isFirstLoad: boolean;
+        totalItems: number;
+        API_CACHE_NAME: string;
+    }>();
 
     const reloadParams = $derived(() => ({
         filters,
@@ -406,14 +299,8 @@
         selectedSort,
     }));
 
-    const reloadCharges = async () => {
-        charges = [];
-        charges = await loadCharges(filters)!;
-    };
-
     $effect(() => {
         reloadParams();
-        reloadCharges();
     });
 </script>
 

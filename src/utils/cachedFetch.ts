@@ -9,7 +9,7 @@ import {
     apiUsersIdGetUrl,
 } from "../openapi/client/paths.gen";
 
-import type { Accounting, GatewayCheckout, Project, Tipjar } from "../openapi/client";
+import type { Accounting, GatewayCheckout, Project, Tipjar, User } from "../openapi/client";
 
 export async function fetchWithPersistentCache<T>(iri: string, token: string, API_CACHE_NAME: string): Promise<T> {
     const cache = await caches.open(API_CACHE_NAME);
