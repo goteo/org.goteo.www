@@ -190,6 +190,21 @@
     //     return query;
     // }
 
+    const OWNER_HANDLERS = [
+        {
+            prefix: apiUsersGetCollectionUrl,
+            fetcher: fetchUser,
+        },
+        {
+            prefix: apiProjectsGetCollectionUrl,
+            fetcher: fetchProject,
+        },
+        {
+            prefix: apiTipjarsGetCollectionUrl,
+            fetcher: fetchTipjar,
+        },
+    ];
+
     function getDisplayNameFromAccounting(
         accounting: Accounting | undefined,
         owners: Map<string, User | Project | Tipjar>,
@@ -215,6 +230,21 @@
         return undefined;
     }
 
+    async function resolveOwner(
+        ownerIri: string,
+        token: string,
+        owners: Map<string, User | Project | Tipjar>,
+    ) {
+        if (owners.has(ownerIri)) return;
+
+        const handler = OWNER_HANDLERS.find(({ prefix }) => ownerIri.startsWith(prefix));
+
+        if (!handler) return;
+
+        const entity = await handler.fetcher(ownerIri, token, API_CACHE_NAME);
+        if (entity) owners.set(ownerIri, entity);
+    }
+
     async function preloadAccountingData(
         accountingIri: string | null,
         token: string,
@@ -229,20 +259,9 @@
         accountings.set(accountingIri, accounting);
 
         const ownerIri = accounting.owner;
-        if (!ownerIri) {
-            return;
-        }
+        if (!ownerIri) return;
 
-        if (ownerIri.startsWith(apiUsersGetCollectionUrl) && !owners.has(ownerIri)) {
-            const user = await fetchUser(ownerIri, token, API_CACHE_NAME);
-            if (user) owners.set(ownerIri, user);
-        } else if (ownerIri.startsWith(apiProjectsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const project = await fetchProject(ownerIri, token, API_CACHE_NAME);
-            if (project) owners.set(ownerIri, project);
-        } else if (ownerIri.startsWith(apiTipjarsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const tipjar = await fetchTipjar(ownerIri, token, API_CACHE_NAME);
-            if (tipjar) owners.set(ownerIri, tipjar);
-        }
+        await resolveOwner(ownerIri, token, owners);
     }
 
     function getDate(chargeDate: string | null | undefined): {
@@ -283,7 +302,7 @@
         API_CACHE_NAME,
     } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
-        charges: ExtendedCharge[];
+        charges: ExtendedCharge[] | undefined;
         itemsPerPage: number;
         currentPage: number;
         isLoading: boolean;
