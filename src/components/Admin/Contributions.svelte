@@ -42,13 +42,6 @@
 
     const API_CACHE_NAME = "charges-cache";
 
-    const slides = [
-        { title: $t("admin.projects.totalizers.selectedCampaigns"), amount: "432" },
-        { title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" },
-        { title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" },
-        { title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" },
-    ];
-
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
 
     let paymentMethodOptions = $state<[string, string][]>([]);
@@ -267,7 +260,7 @@
             <ExportCsv {filters} />
         </div>
         <Categories {paymentMethodOptions} />
-        <Slider {slides} />
+        <Slider />
     </div>
 </div>
 <Table {filters} {charges} {accountingsMap} {ownersMap} {isFirstLoad} />
