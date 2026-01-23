@@ -360,32 +360,28 @@
                         <TableBodyRow
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
-                                ? 'bg-soft-purple]'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple] text-content border transition-colors"
+                                ? 'bg-soft-purple'
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple text-content border transition-colors"
                         >
                             <TableBodyCell
-                                class="border-variant1 truncate rounded-l-md border-t border-b border-l p-4"
+                                class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
                                 >{charge.targetDisplayName}</TableBodyCell
                             >
-                            {#if charge.money.amount && charge.money.currency}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                    {formatCurrency(charge.money.amount, charge.money.currency)}
-                                </TableBodyCell>
-                            {:else}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4"
-                                    >—</TableBodyCell
-                                >
-                            {/if}
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                {charge.money.amount && charge.money.currency
+                                    ? formatCurrency(charge.money.amount, charge.money.currency)
+                                    : "—"}
+                            </TableBodyCell>
                             <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                            <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                                    class="text-secondary decoration-secondary/64 max-w-[180px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
