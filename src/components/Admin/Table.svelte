@@ -165,27 +165,6 @@
         return "↕️";
     }
 
-    // function buildChargesQuery(
-    //     filters: ApiGatewayChargesGetCollectionData["query"],
-    //     page: number,
-    //     itemsPerPage: number,
-    // ) {
-    //     const sort = sortOptions.find((option) => option.key === selectedSort);
-
-    //     const query: Record<string, ApiGatewayChargesGetCollectionData["query"]> = {
-    //         page,
-    //         itemsPerPage,
-    //         pagination: true,
-    //         ...filters,
-    //     };
-
-    //     if (sort) {
-    //         query[`${sort.field}`] = sort.direction;
-    //     }
-
-    //     return query;
-    // }
-
     function getDisplayNameFromAccounting(
         accounting: Accounting | undefined,
         owners: Map<string, User | Project | Tipjar>,

@@ -33,7 +33,12 @@
         fetchWithPersistentCache,
     } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
-    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPagination";
+    import {
+        isLoading,
+        itemsPerPage,
+        totalItems,
+        currentPage,
+    } from "../../stores/chargesPagination";
 
     type GatewayChargesCollection<T> = {
         member: T[];
@@ -66,6 +71,26 @@
         }
     }
 
+    function buildChargesQuery(
+        filters: ApiGatewayChargesGetCollectionData["query"],
+        page: number,
+        itemsPerPage: number,
+    ) {
+        const sort = sortOptions.find((option) => option.key === selectedSort);
+
+        const query: Record<string, ApiGatewayChargesGetCollectionData["query"]> = {
+            page,
+            itemsPerPage,
+            ...filters,
+        };
+
+        if (sort) {
+            query[`order[${sort.field}]`] = sort.direction;
+        }
+
+        return query;
+    }
+
     async function loadCharges(
         filters: ApiGatewayChargesGetCollectionData["query"],
     ): Promise<
@@ -83,11 +108,14 @@
             const token = getAccessToken();
             if (!token) return;
 
-            const query = {
-                ...filters,
-                page: $currentPage,
-                itemsPerPage: Number($itemsPerPage),
-            };
+            let page = $currentPage;
+            let items = Number($itemsPerPage);
+
+            const query = buildChargesQuery(
+                filters,
+                page,
+                items,
+            );
 
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
