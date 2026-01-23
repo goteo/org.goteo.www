@@ -97,7 +97,7 @@
         { name: "contributions.table.headers.origin", sortable: false },
         { name: "contributions.table.headers.paymentMethod", sortable: false },
         { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
-        { name: "contributions.table.headers.chargeStatus", sortable: true, sortKey: "status" },
+        { name: "contributions.table.headers.chargeStatus", sortable: false, sortKey: "status" },
         { name: "contributions.table.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
@@ -396,7 +396,7 @@
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                                    class="text-secondary max-w-[100px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
