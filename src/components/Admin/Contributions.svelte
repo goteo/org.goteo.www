@@ -60,7 +60,7 @@
     let isLoading = $state(false);
     let isFirstLoad = $state(true);
     let currentPage = $state(1);
-    let itemsPerPage = $state(25);
+    let itemsPerPage = $state(10);
     let totalItems = $state(0);
 
     function getAccessToken(): string | null {
