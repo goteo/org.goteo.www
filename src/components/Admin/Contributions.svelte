@@ -17,15 +17,29 @@
     import FiltersTags from "./FiltersTags.svelte";
     import Slider from "./Slider.svelte";
     import Table, { type ExtendedCharge } from "./Table.svelte";
-    import { apiGatewayChargesGetCollectionUrl } from "../../openapi/client/paths.gen";
+    import {
+        apiGatewayChargesGetCollectionUrl,
+        apiProjectsGetCollectionUrl,
+        apiTipjarsGetCollectionUrl,
+        apiUsersGetCollectionUrl,
+    } from "../../openapi/client/paths.gen";
     import { client } from "../../openapi/client/client.gen";
-    import { fetchCheckout, fetchWithPersistentCache } from "../../utils/cachedFetch";
+    import {
+        fetchAccounting,
+        fetchCheckout,
+        fetchProject,
+        fetchTipjar,
+        fetchUser,
+        fetchWithPersistentCache,
+    } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
 
     type GatewayChargesCollection<T> = {
         member: T[];
         totalItems: number;
     };
+
+    const API_CACHE_NAME = "charges-cache";
 
     const slides = [
         { title: $t("admin.projects.totalizers.selectedCampaigns"), amount: "432" },
@@ -40,7 +54,9 @@
     let chargeStatusOptions = $state<[string, string][]>([]);
     let rangeAmountOptions = $state<[string, string][]>([]);
 
-    let charges = $state<ExtendedCharge[]>([]);
+    let charges = $state<ExtendedCharge[] | undefined>([]);
+    let accountingsMap = $state<Map<string, Accounting>>(new Map());
+    let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isLoading = $state(false);
     let isFirstLoad = $state(true);
     let currentPage = $state(1);
@@ -60,11 +76,18 @@
         }
     }
 
-    const API_CACHE_NAME = "charges-cache";
-
-    async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
-        let chargesArr: ExtendedCharge[] = [];
+    async function loadCharges(
+        filters: ApiGatewayChargesGetCollectionData["query"],
+    ): Promise<
+        | [ExtendedCharge[], Map<string, Accounting>, Map<string, User | Project | Tipjar>]
+        | undefined
+    > {
         isLoading = true;
+        let chargesArr: ExtendedCharge[] = [];
+
+        const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
+        const accountings: Map<string, Accounting> = new Map<string, Accounting>();
+        const owners: Map<string, User | Project | Tipjar> = new Map();
 
         try {
             const token = getAccessToken();
@@ -89,10 +112,6 @@
 
             const loadedCharges = collection.member ?? [];
             totalItems = collection.totalItems ?? 0;
-
-            const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
-            const accountings: Map<string, Accounting> = new Map<string, Accounting>();
-            const owners: Map<string, User | Project | Tipjar> = new Map();
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
@@ -121,52 +140,93 @@
                 }
             }
 
-            let hasConcept = false;
-
             chargesArr = loadedCharges.map((charge): ExtendedCharge => {
                 const checkout = checkouts.get(charge.checkout ?? "");
-                const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
-                const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
-
-                const targetName = getDisplayNameFromAccounting(targetAcc, owners);
-                const originName = getDisplayNameFromAccounting(originAcc, owners);
-
-                hasConcept = false;
-
-                if (targetName === originName) hasConcept = true;
 
                 return {
                     ...charge,
-                    targetDisplayName: typeof targetName === "undefined" ? "—" : targetName,
-                    originDisplayName: typeof originName === "undefined" ? "—" : originName,
+                    checkoutOrigin: checkout?.origin ?? "—",
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
                         ? $t(`contributions.table.rows.refund.${checkout.refund}`)
                         : "—",
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
-                    concept: hasConcept && charge.title ? charge.title : "",
                 };
             });
         } finally {
             isLoading = false;
             isFirstLoad = false;
-            return chargesArr;
+            return [chargesArr, accountings, owners];
         }
+    }
+
+    const OWNER_HANDLERS = [
+        {
+            prefix: apiUsersGetCollectionUrl,
+            fetcher: fetchUser,
+        },
+        {
+            prefix: apiProjectsGetCollectionUrl,
+            fetcher: fetchProject,
+        },
+        {
+            prefix: apiTipjarsGetCollectionUrl,
+            fetcher: fetchTipjar,
+        },
+    ];
+
+    async function resolveOwner(
+        ownerIri: string,
+        token: string,
+        owners: Map<string, User | Project | Tipjar>,
+    ) {
+        if (owners.has(ownerIri)) return;
+
+        const handler = OWNER_HANDLERS.find(({ prefix }) => ownerIri.startsWith(prefix));
+
+        if (!handler) return;
+
+        const entity = await handler.fetcher(ownerIri, token, API_CACHE_NAME);
+        if (entity) owners.set(ownerIri, entity);
+    }
+
+    async function preloadAccountingData(
+        accountingIri: string | null,
+        token: string,
+        accountings: Map<string, Accounting>,
+        owners: Map<string, User | Project | Tipjar>,
+    ) {
+        if (!accountingIri || accountings.has(accountingIri)) return;
+
+        const accounting = await fetchAccounting(accountingIri, token, API_CACHE_NAME);
+        if (!accounting) return;
+
+        accountings.set(accountingIri, accounting);
+
+        const ownerIri = accounting.owner;
+        if (!ownerIri) return;
+
+        await resolveOwner(ownerIri, token, owners);
+    }
+
+    function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
+        filters = { ...filters, ...newFilters };
     }
 
     const reloadCharges = async () => {
         charges = [];
-        charges = await loadCharges(filters)!;
+        const chargesData = await loadCharges(filters);
+        if (chargesData === undefined) return;
+
+        charges = chargesData[0] ? chargesData[0] : [];
+        accountingsMap = chargesData[1];
+        ownersMap = chargesData[2];
     };
 
     $effect(() => {
         reloadCharges();
     });
-
-    function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
-        filters = { ...filters, ...newFilters };
-    }
 
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
@@ -216,10 +276,11 @@
 <Table
     {filters}
     {charges}
+    {accountingsMap}
+    {ownersMap}
     {itemsPerPage}
     {currentPage}
     {isLoading}
     {isFirstLoad}
     {totalItems}
-    {API_CACHE_NAME}
 />

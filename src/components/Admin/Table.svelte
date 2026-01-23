@@ -32,21 +32,15 @@
         Tracking,
     } from "../../../src/openapi/client/index.ts";
 
-    import {
-        fetchAccounting,
-        fetchProject,
-        fetchTipjar,
-        fetchUser,
-    } from "../../utils/cachedFetch.ts";
-
     export type ExtendedCharge = GatewayCharge & {
-        targetDisplayName: string;
-        originDisplayName: string;
-        paymentMethod: string;
-        refundToWallet: string;
-        platformLinks: Link[];
-        trackingCodes: Tracking[];
-        concept: string;
+        targetDisplayName?: string;
+        originDisplayName?: string;
+        checkoutOrigin?: string;
+        paymentMethod?: string;
+        refundToWallet?: string;
+        platformLinks?: Link[];
+        trackingCodes?: Tracking[];
+        concept?: string;
     };
 
     type SortOption = {
@@ -190,21 +184,6 @@
     //     return query;
     // }
 
-    const OWNER_HANDLERS = [
-        {
-            prefix: apiUsersGetCollectionUrl,
-            fetcher: fetchUser,
-        },
-        {
-            prefix: apiProjectsGetCollectionUrl,
-            fetcher: fetchProject,
-        },
-        {
-            prefix: apiTipjarsGetCollectionUrl,
-            fetcher: fetchTipjar,
-        },
-    ];
-
     function getDisplayNameFromAccounting(
         accounting: Accounting | undefined,
         owners: Map<string, User | Project | Tipjar>,
@@ -230,38 +209,24 @@
         return undefined;
     }
 
-    async function resolveOwner(
-        ownerIri: string,
-        token: string,
-        owners: Map<string, User | Project | Tipjar>,
-    ) {
-        if (owners.has(ownerIri)) return;
+    function addChargesMetadata(charges: ExtendedCharge[]) {
+        let hasConcept = false;
 
-        const handler = OWNER_HANDLERS.find(({ prefix }) => ownerIri.startsWith(prefix));
+        for (const charge of charges) {
+            const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
+            const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as Accounting | undefined;
 
-        if (!handler) return;
+            const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
+            const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
 
-        const entity = await handler.fetcher(ownerIri, token, API_CACHE_NAME);
-        if (entity) owners.set(ownerIri, entity);
-    }
+            hasConcept = false;
 
-    async function preloadAccountingData(
-        accountingIri: string | null,
-        token: string,
-        accountings: Map<string, Accounting>,
-        owners: Map<string, User | Project | Tipjar>,
-    ) {
-        if (!accountingIri || accountings.has(accountingIri)) return;
+            if (targetName === originName) hasConcept = true;
 
-        const accounting = await fetchAccounting(accountingIri, token, API_CACHE_NAME);
-        if (!accounting) return;
-
-        accountings.set(accountingIri, accounting);
-
-        const ownerIri = accounting.owner;
-        if (!ownerIri) return;
-
-        await resolveOwner(ownerIri, token, owners);
+            charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
+            charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
+            charge.concept = hasConcept && charge.title ? charge.title : "";
+        }
     }
 
     function getDate(chargeDate: string | null | undefined): {
@@ -294,21 +259,23 @@
     let {
         filters,
         charges,
+        accountingsMap,
+        ownersMap,
         itemsPerPage,
         currentPage,
         isLoading,
         isFirstLoad,
         totalItems,
-        API_CACHE_NAME,
     } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
         charges: ExtendedCharge[] | undefined;
+        accountingsMap: Map<string, Accounting>;
+        ownersMap: Map<string, User | Project | Tipjar>;
         itemsPerPage: number;
         currentPage: number;
         isLoading: boolean;
         isFirstLoad: boolean;
         totalItems: number;
-        API_CACHE_NAME: string;
     }>();
 
     const reloadParams = $derived(() => ({
@@ -319,7 +286,7 @@
     }));
 
     $effect(() => {
-        reloadParams();
+        if (charges.length > 0) addChargesMetadata(charges);
     });
 </script>
 
