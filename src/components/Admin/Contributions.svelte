@@ -33,6 +33,7 @@
         fetchWithPersistentCache,
     } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
+    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPagination";
 
     type GatewayChargesCollection<T> = {
         member: T[];
@@ -57,11 +58,7 @@
     let charges = $state<ExtendedCharge[] | undefined>([]);
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
-    let isLoading = $state(false);
     let isFirstLoad = $state(true);
-    let currentPage = $state(1);
-    let itemsPerPage = $state(10);
-    let totalItems = $state(0);
 
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
@@ -82,7 +79,7 @@
         | [ExtendedCharge[], Map<string, Accounting>, Map<string, User | Project | Tipjar>]
         | undefined
     > {
-        isLoading = true;
+        $isLoading = true;
         let chargesArr: ExtendedCharge[] = [];
 
         const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
@@ -95,8 +92,8 @@
 
             const query = {
                 ...filters,
-                page: currentPage,
-                itemsPerPage: Number(itemsPerPage),
+                page: $currentPage,
+                itemsPerPage: Number($itemsPerPage),
             };
 
             const collection = await fetchWithPersistentCache<
@@ -111,7 +108,7 @@
             );
 
             const loadedCharges = collection.member ?? [];
-            totalItems = collection.totalItems ?? 0;
+            $totalItems = collection.totalItems ?? 0;
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
@@ -155,7 +152,7 @@
                 };
             });
         } finally {
-            isLoading = false;
+            $isLoading = false;
             isFirstLoad = false;
             return [chargesArr, accountings, owners];
         }
@@ -273,14 +270,4 @@
         <Slider {slides} />
     </div>
 </div>
-<Table
-    {filters}
-    {charges}
-    {accountingsMap}
-    {ownersMap}
-    {itemsPerPage}
-    {currentPage}
-    {isLoading}
-    {isFirstLoad}
-    {totalItems}
-/>
+<Table {filters} {charges} {accountingsMap} {ownersMap} {isFirstLoad} />
