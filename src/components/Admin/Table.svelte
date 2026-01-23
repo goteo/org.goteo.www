@@ -32,6 +32,8 @@
         Tracking,
     } from "../../../src/openapi/client/index.ts";
 
+    import { isLoading, itemsPerPage } from "../../stores/chargesPagination.ts";
+
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
         originDisplayName?: string;
@@ -214,7 +216,9 @@
 
         for (const charge of charges) {
             const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
-            const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as Accounting | undefined;
+            const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as
+                | Accounting
+                | undefined;
 
             const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
             const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
@@ -256,36 +260,21 @@
         };
     }
 
-    let {
-        filters,
-        charges,
-        accountingsMap,
-        ownersMap,
-        itemsPerPage,
-        currentPage,
-        isLoading,
-        isFirstLoad,
-        totalItems,
-    } = $props<{
+    let { filters, charges, accountingsMap, ownersMap, isFirstLoad } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
         charges: ExtendedCharge[] | undefined;
         accountingsMap: Map<string, Accounting>;
         ownersMap: Map<string, User | Project | Tipjar>;
-        itemsPerPage: number;
-        currentPage: number;
-        isLoading: boolean;
         isFirstLoad: boolean;
-        totalItems: number;
     }>();
 
     const reloadParams = $derived(() => ({
         filters,
-        currentPage,
-        itemsPerPage,
         selectedSort,
     }));
 
     $effect(() => {
+        reloadParams;
         if (charges.length > 0) addChargesMetadata(charges);
     });
 </script>
@@ -300,7 +289,7 @@
                 <select
                     bind:value={selectedSort}
                     class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
-                    disabled={isLoading}
+                    disabled={$isLoading}
                 >
                     {#each sortOptions as option}
                         <option value={option.key}>{$t(option.label)}</option>
@@ -316,11 +305,11 @@
                     name="itemsPerPage"
                     id="itemsPerPage"
                     class="border-secondary text-secondary rounded-sm py-1"
-                    bind:value={itemsPerPage}
-                    disabled={isLoading}
+                    bind:value={$itemsPerPage}
+                    disabled={$isLoading}
                 >
                     {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
-                        <option {value}>{label}</option>
+                        <option value={Number(value)}>{label}</option>
                     {/each}
                 </select>
             </div>
@@ -360,7 +349,7 @@
                             </div>
                         </TableBodyCell>
                     </TableBodyRow>
-                {:else if charges.length === 0 && !isLoading}
+                {:else if charges.length === 0 && !$isLoading}
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length} class="text-center">
                             {$t("contributions.table.rows.noData")}
@@ -371,32 +360,28 @@
                         <TableBodyRow
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
-                                ? 'bg-soft-purple]'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple] text-content border transition-colors"
+                                ? 'bg-soft-purple'
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple text-content border transition-colors"
                         >
                             <TableBodyCell
-                                class="border-variant1 truncate rounded-l-md border-t border-b border-l p-4"
+                                class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
                                 >{charge.targetDisplayName}</TableBodyCell
                             >
-                            {#if charge.money.amount && charge.money.currency}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                    {formatCurrency(charge.money.amount, charge.money.currency)}
-                                </TableBodyCell>
-                            {:else}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4"
-                                    >—</TableBodyCell
-                                >
-                            {/if}
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                {charge.money.amount && charge.money.currency
+                                    ? formatCurrency(charge.money.amount, charge.money.currency)
+                                    : "—"}
+                            </TableBodyCell>
                             <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                            <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary max-w-[100px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                                    class="text-secondary decoration-secondary/64 max-w-[180px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
@@ -457,7 +442,7 @@
                         {/if}
                     {/each}
 
-                    {#if isLoading}
+                    {#if $isLoading}
                         <TableBodyRow>
                             <TableBodyCell colspan={tableHeaders.length}>
                                 <div class="flex justify-center py-4">
@@ -471,5 +456,5 @@
         </Table>
     </div>
 
-    <Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} {isLoading} />
+    <Pagination />
 </div>
