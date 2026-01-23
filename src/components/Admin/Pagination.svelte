@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPagination";
+    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPaginationAndSort";
 
     const totalPages = $derived(() => Math.ceil($totalItems / $itemsPerPage));
 

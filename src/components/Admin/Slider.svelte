@@ -5,7 +5,7 @@
     import type { Options } from "flickity";
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
-    import { totalItems, isLoading } from "../../stores/chargesPagination";
+    import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;
