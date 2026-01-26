@@ -5,6 +5,8 @@
     import StripeIcon from "../../svgs/StripeIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { t } from "../../i18n/store";
+    import { onMount } from "svelte";
+    import { actions, isInputError } from "astro:actions";
 
     const {
         hasError,
@@ -18,126 +20,96 @@
         accounting: Accounting;
     } = $props();
 
-    import { actions, isInputError } from "astro:actions";
 
-    const form = document.getElementById("payment");
-    const errorContent = document.getElementById("payment-error-content");
-    const cartDataInput = document.getElementById("cart-data-input");
+    let formEl: HTMLFormElement | null = null;
 
-    if (form instanceof HTMLFormElement) {
-        form.addEventListener("submit", async (event) => {
-            event.preventDefault();
+    let paymentMethod = $state<string | null>(null);
+    let errorMessage = $state<string | null>(null);
+    let inputErrors = $state<string[]>([]);
 
-            const formData = new FormData(form);
-            const selectedMethod = formData.get("paymentMethod");
+    let cartData = $state<string | null>(null);
+    let walletDisabled = $state(false);
 
-            if (selectedMethod === "wallet") {
-                window.location.href = "/payment/wallet";
+    let balance = $state(0);
+
+    async function handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+        errorMessage = null;
+        inputErrors = [];
+
+        if (!formEl) return;
+
+        const formData = new FormData(formEl);
+        const selectedMethod = formData.get("paymentMethod");
+
+        if (selectedMethod === "wallet") {
+            window.location.href = "/payment/wallet";
+            return;
+        }
+
+        const { error, data } = await actions.payment(formData);
+
+        if (!error) {
+            const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
+
+            if (!checkoutLink) throw new Error("No payment link found in the response");
+
+            if (checkoutLink.method === "GET") {
+                window.location.href = checkoutLink.href!;
                 return;
             }
 
-            const { error, data } = await actions.payment(formData);
-
-            if (!error) {
-                const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
-
-                if (!checkoutLink) {
-                    throw new Error("No payment link found in the response");
-                }
-
-                if (checkoutLink.method === "GET") {
-                    window.location.href = checkoutLink.href!;
-                }
-
-                if (checkoutLink.method === "POST") {
-                    const form = document.createElement("form");
-
-                    form.method = "POST";
-                    form.action = checkoutLink.href!;
-
-                    if (checkoutLink.body) {
-                        Object.entries(checkoutLink.body).forEach(([key, value]) => {
-                            const input = document.createElement("input");
-                            input.type = "hidden";
-                            input.name = key;
-                            input.value = value as string;
-                            form.appendChild(input);
-                        });
-                    }
-
-                    document.body.appendChild(form);
-                    form.submit();
-                }
+            if (checkoutLink.method === "POST") {
+                submitPostRedirect(checkoutLink);
+                return;
             }
+        }
 
-            if (error && errorContent instanceof HTMLElement) {
-                errorContent.innerHTML = "";
-
-                if (isInputError(error)) {
-                    const ul = document.createElement("ul");
-                    error.issues.forEach((err) => {
-                        const li = document.createElement("li");
-                        li.innerText = err.message;
-                        ul.appendChild(li);
-                    });
-
-                    errorContent.appendChild(ul);
-                    return;
-                }
-                errorContent.innerText = error.message;
+        if (error) {
+            if (isInputError(error)) {
+                inputErrors = error.issues.map((i) => i.message);
+            } else {
+                errorMessage = error.message;
             }
-        });
+        }
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-        const labels = document.querySelectorAll("label[data-gateway]");
-        const inputs = document.querySelectorAll("input[name='paymentMethod']");
-        const walletInput = document.querySelector("input[value='wallet']");
-        const cartData = localStorage.getItem("cart");
+    function submitPostRedirect(link: { href?: string; body?: Record<string, string> }) {
+        const form = document.createElement("form");
+        form.method = "POST";
+        form.action = link.href!;
 
-        if (cartData && cartDataInput) {
-            (cartDataInput as HTMLInputElement).value = cartData;
-        }
-
-        if (cartData && walletInput) {
-            try {
-                const cart = JSON.parse(cartData);
-                const total = cart.items.reduce(
-                    (sum: number, item: { amount: number; quantity: number }) =>
-                        sum + item.amount * item.quantity,
-                    0,
-                );
-
-                const balanceAttr = form?.dataset.balance;
-                const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
-
-                const shouldDisable = balance < total;
-                (walletInput as HTMLInputElement).disabled = shouldDisable;
-
-                const walletLabel = walletInput.closest("label");
-                if (walletLabel) {
-                    walletLabel.classList.toggle("opacity-50", shouldDisable);
-                    walletLabel.classList.toggle("cursor-not-allowed", shouldDisable);
-                }
-            } catch (e) {
-                console.log("Error parsing cart data:", e);
-            }
-        }
-
-        inputs.forEach((input) => {
-            input.addEventListener("change", () => {
-                labels.forEach((label) => {
-                    label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
-                    label.classList.add("border-grey");
-                });
-
-                const selectedLabel = input.closest("label");
-                if (selectedLabel) {
-                    selectedLabel.classList.remove("border-grey");
-                    selectedLabel.classList.add("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
-                }
-            });
+        Object.entries(link.body ?? {}).forEach(([key, value]) => {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = key;
+            input.value = value;
+            form.appendChild(input);
         });
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    onMount(() => {
+        cartData = localStorage.getItem("cart");
+        if (!cartData) return;
+
+        try {
+            const cart = JSON.parse(cartData);
+            const total = cart.items.reduce(
+                (sum: number, item: { price: number; quantity: number }) =>
+                    sum + item.price * item.quantity,
+                0,
+            );
+
+            const balanceAttr = formEl?.dataset.balance;
+            balance = balanceAttr ? parseFloat(balanceAttr) : 0;
+
+            walletDisabled = balance < total;
+        } catch (e) {
+            console.error("Failed to parse cart data:", e);
+        }
     });
 </script>
 
@@ -148,10 +120,12 @@
         </p>
 
         <form
+            bind:this={formEl}
             id="payment"
             method="POST"
             class="flex flex-col gap-4"
             data-balance={accounting.balance?.amount}
+            onsubmit={handleSubmit}
         >
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {#if paymentGateways}
@@ -177,7 +151,10 @@
                                     {#if gateway.name === "wallet"}
                                         <span class="text-sm font-normal">
                                             {$t("payment.wallet.balanceLabel")}
-                                            {formatCurrency(accounting.balance?.amount, accounting.currency)}
+                                            {formatCurrency(
+                                                accounting.balance?.amount,
+                                                accounting.currency,
+                                            )}
                                         </span>
                                     {/if}
                                 </div>
