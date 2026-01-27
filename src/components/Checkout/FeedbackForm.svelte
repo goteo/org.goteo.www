@@ -1,15 +1,48 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { t } from "../../i18n/store";
+    import { apiProjectsGetCollection, apiProjectSupportsGetCollection, type GatewayCharge, type ProjectSupport } from "../../openapi/client";
     import RadioButton from "../library/RadioButton.svelte";
 
     interface Props {
         paymentMethod?: string;
+        charges: GatewayCharge[];
     }
 
-    let { paymentMethod = undefined }: Props = $props();
+    let { paymentMethod = undefined, charges }: Props = $props();
 
     let messageType = $state("anonymous"); // 'anonymous' o 'public'
     let type = $state("organization");
+    let targetsArr: any[] = [];
+    let projectsSupports: ProjectSupport[] = [];
+
+    async function getProjectsSupports(targets: any[]): Promise<ProjectSupport[] | undefined> {
+        const projectsResponse = await apiProjectsGetCollection({
+            query: { "accounting[]": targets },
+            headers: { Accept: "application/ld+json" },
+        });
+
+        if (projectsResponse.error) return;
+
+        const projects = projectsResponse.data;
+
+        const projectsSupportsResponse = await apiProjectSupportsGetCollection({
+            query: { "project[]": projects },
+            headers: { Accept: "application/ld+json" },
+        });
+
+        return projectsSupportsResponse.data;
+    }
+
+    onMount(async () => {
+        if (!charges) return;
+
+        charges.forEach((charge) => {
+            targetsArr.push(charge.target);
+        });
+
+        projectsSupports = await getProjectsSupports(targetsArr);
+    });
 </script>
 
 <div>
@@ -24,12 +57,19 @@
             </div>
             <fieldset class="flex flex-col gap-6">
                 <RadioButton name="type" value="organization" bind:group={type}>
-                    {$t("payment.page-approved.form-goal.options.2")}
-                    <span class="capitalize">{paymentMethod}</span>
+                    <div class="text-content text-base/6 font-normal">
+                        {$t("payment.page-approved.form-goal.options.2")}
+                        <span class="capitalize">{paymentMethod}</span>
+                    </div>
                 </RadioButton>
 
                 <RadioButton name="type" value="individual" bind:group={type}>
-                    {$t("payment.page-approved.form-goal.options.1")}
+                    <div class="text-content flex flex-col text-base/6 font-normal">
+                        {$t("payment.page-approved.form-goal.options.1")}
+                        <a href="/wallet" class="text-secondary font-bold underline"
+                            >{$t("payment.page-approved.form-goal.learnMore")}</a
+                        >
+                    </div>
                 </RadioButton>
             </fieldset>
 
@@ -42,7 +82,19 @@
                 <p class="text-content">{$t("payment.page-approved.form-review.description")}</p>
             </div>
 
-            <fieldset class="flex flex-col gap-6">
+            <div class="flex flex-col">
+                {#each charges as charge}
+                    {console.log(charge)}
+                    <article>
+                        <div>
+                            <img src="" alt="" />
+                            <div></div>
+                        </div>
+                    </article>
+                {/each}
+            </div>
+
+            <!-- <fieldset class="flex flex-col gap-6">
                 <RadioButton
                     name="messageType"
                     value="anonymous"
@@ -69,7 +121,7 @@
                     placeholder={$t("payment.page-approved.form-review.placeholder")}
                     rows="4"
                 ></textarea>
-            </div>
+            </div> -->
 
             <!-- TODO: Add Btn "Continuar" -->
         </form>

@@ -1,8 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
+import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet, type GatewayCharge } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
-import Steps from "../../../components/Checkout/Steps.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
 import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
@@ -33,6 +32,7 @@ const { t } = Astro.locals;
 let error = null;
 let amount: number | undefined = undefined;
 let selectedGateway: string | undefined = undefined;
+let charges: GatewayCharge[] = [];
 
 try {
     const url = new URL(Astro.request.url);
@@ -54,6 +54,7 @@ try {
     }
 
     selectedGateway = response.data.gateway.split("/").pop();
+    charges = response.data.charges;
 
     if (response.data.status !== "charged") {
         throw new Error("Payment not completed");
@@ -143,6 +144,7 @@ const postPaymentUrl = checkoutId
                                             <FeedbackForm
                                                 client:load
                                                 paymentMethod={selectedGateway}
+                                                {charges}
                                             />
                                         </div>
                                     </div>
