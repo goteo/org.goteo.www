@@ -20,10 +20,11 @@
         accounting: Accounting;
     } = $props();
 
-
     let formEl: HTMLFormElement | null = null;
 
-    let paymentMethod = $state<string | null>(null);
+    let paymentMethod = $state<string | null>(
+        selectedGateway ?? paymentGateways?.find((g) => g.name !== "wallet")?.name ?? null,
+    );
     let errorMessage = $state<string | null>(null);
     let inputErrors = $state<string[]>([]);
 
@@ -41,6 +42,8 @@
 
         const formData = new FormData(formEl);
         const selectedMethod = formData.get("paymentMethod");
+
+        if (!selectedMethod) return;
 
         if (selectedMethod === "wallet") {
             window.location.href = "/payment/wallet";
@@ -121,7 +124,6 @@
 
         <form
             bind:this={formEl}
-            id="payment"
             method="POST"
             class="flex flex-col gap-4"
             data-balance={accounting.balance?.amount}
@@ -131,7 +133,9 @@
                 {#if paymentGateways}
                     {#each paymentGateways as gateway}
                         <label
-                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md
+                            has-[input:checked]:border-teal-400 has-[input:checked]:bg-teal-300
+                            has-[input:checked]:text-[#2f1e2e] has-[input:disabled]:cursor-not-allowed has-[input:disabled]:opacity-50"
                             data-gateway={gateway.name}
                         >
                             <div class="flex items-center gap-2">
@@ -139,11 +143,8 @@
                                     type="radio"
                                     name="paymentMethod"
                                     value={gateway.name}
-                                    disabled={gateway.name === "wallet"}
-                                    checked={selectedGateway
-                                        ? gateway.name === selectedGateway
-                                        : gateway.name !== "wallet" &&
-                                          paymentGateways?.[0]?.name === gateway.name}
+                                    bind:group={paymentMethod}
+                                    disabled={gateway.name === "wallet" && walletDisabled}
                                     class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
@@ -172,8 +173,20 @@
                     {/each}
                 {/if}
             </div>
-            <input type="hidden" name="cartData" id="cart-data-input" />
+            <input type="hidden" name="cartData" value={cartData ?? ""} />
         </form>
-        <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
+        {#if inputErrors.length > 0}
+            <div class="mt-4 text-center text-sm text-red-700">
+                <ul class="list-disc space-y-1 pl-5">
+                    {#each inputErrors as err}
+                        <li>{err}</li>
+                    {/each}
+                </ul>
+            </div>
+        {:else if errorMessage}
+            <div class="mt-4 text-center text-sm text-red-700">
+                {errorMessage}
+            </div>
+        {/if}
     </div>
 </section>
