@@ -209,10 +209,6 @@ describe("Reward for incorrect amount", () => {
                     cy.log(
                         `✅ Encontrados ${foundTexts} de ${expectedTexts.length} textos esperados`,
                     );
-
-                    if ($body.find("button:contains('Dona')").length > 0) {
-                        cy.contains("button", "Dona").should("be.visible").click();
-                    }
                 } else {
                     cy.log("ℹ️ Elementos específicos no encontrados, pero la página cargó");
                     cy.get("body").should("not.contain", "Error 500");

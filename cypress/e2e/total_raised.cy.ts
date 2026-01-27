@@ -6,7 +6,7 @@ describe("View Total Raised by One-time Payments", () => {
     });
 
     it("should display total contributions amount", () => {
-        cy.visit("/es/admin/aportes", { failOnStatusCode: false });
+        cy.visit("/es/admin/charges", { failOnStatusCode: false });
         cy.wait(3000);
 
         cy.get("body").should("exist");
@@ -31,6 +31,6 @@ describe("View Total Raised by One-time Payments", () => {
             }
         });
 
-        cy.url().should("include", "/es/admin/aportes");
+        cy.url().should("include", "/es/admin/charges");
     });
 });

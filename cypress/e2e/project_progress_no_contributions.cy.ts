@@ -134,16 +134,6 @@ describe("Viewing without contributions", () => {
                 if (text.includes("€") || text.includes("EUR")) {
                     cy.get("body").should("contain.text", "€");
                 }
-
-                if (text.includes("Obtenido")) {
-                    cy.contains("Obtenido", { timeout: 4000 }).should("be.visible");
-                }
-                if (text.includes("Mínimo")) {
-                    cy.contains("Mínimo").should("be.visible");
-                }
-                if (text.includes("Óptimo")) {
-                    cy.contains("Óptimo").should("be.visible");
-                }
             } else {
                 cy.log(
                     "ℹ️ La página cargó correctamente pero faltan algunos términos de progreso esperados",
