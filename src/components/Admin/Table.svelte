@@ -14,48 +14,35 @@
 
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import { extractId } from "../../utils/extractId";
-    import { client } from "../../openapi/client/client.gen.ts";
 
     import {
-        apiUsersIdGetUrl,
-        apiProjectsIdOrSlugGetUrl,
-        apiAccountingsIdGetUrl,
-        apiGatewayCheckoutsIdGetUrl,
-        apiGatewayChargesGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
-        apiTipjarsIdGetUrl,
         apiUsersGetCollectionUrl,
         apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
 
     import type {
-        GatewayCharge,
-        Tracking,
-        Link,
         Accounting,
         User,
         Project,
-        GatewayCheckout,
         ApiGatewayChargesGetCollectionData,
         Tipjar,
+        GatewayCharge,
+        Link,
+        Tracking,
     } from "../../../src/openapi/client/index.ts";
 
-    import { getBaseUrl } from "../../utils/consts.ts";
+    import { isLoading, itemsPerPage } from "../../stores/chargesPagination.ts";
 
-    type ExtendedCharge = GatewayCharge & {
-        targetDisplayName: string;
-        originDisplayName: string;
-        paymentMethod: string;
-        refundToWallet: string;
-        platformLinks: Link[];
-        trackingCodes: Tracking[];
-        concept: string;
-    };
-
-    type GatewayChargesCollection<T> = {
-        member: T[];
-        totalItems: number;
+    export type ExtendedCharge = GatewayCharge & {
+        targetDisplayName?: string;
+        originDisplayName?: string;
+        checkoutOrigin?: string;
+        paymentMethod?: string;
+        refundToWallet?: string;
+        platformLinks?: Link[];
+        trackingCodes?: Tracking[];
+        concept?: string;
     };
 
     type SortOption = {
@@ -118,29 +105,10 @@
     ];
 
     let openRow = $state<number | null>(null);
-    let charges = $state<ExtendedCharge[]>([]);
-    let itemsPerPage = $state("10");
-    let currentPage = $state(1);
-    let isLoading = $state(false);
-    let isFirstLoad = $state(true);
-    let totalItems = $state(0);
 
     const toggleRow = (i: number) => {
         openRow = openRow === i ? null : i;
     };
-
-    function getAccessToken(): string | null {
-        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
-        if (!match) return null;
-
-        try {
-            const decoded = decodeURIComponent(match[1]);
-            const parsed = JSON.parse(decoded);
-            return parsed?.token ?? null;
-        } catch {
-            return null;
-        }
-    }
 
     function handleHeaderClick(header: any) {
         if (!header.sortable) return;
@@ -197,80 +165,6 @@
         return "↕️";
     }
 
-    async function fetchAccounting(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({ url: apiAccountingsIdGetUrl, path: { id: extractId(iri) } });
-        return fetchWithPersistentCache<Accounting>(url, token);
-    }
-
-    async function fetchUser(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({ url: apiUsersIdGetUrl, path: { id: extractId(iri) } });
-        return fetchWithPersistentCache<User>(url, token);
-    }
-
-    async function fetchProject(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug: extractId(iri) },
-        });
-        return fetchWithPersistentCache<Project>(url, token);
-    }
-
-    async function fetchCheckout(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiGatewayCheckoutsIdGetUrl,
-            path: { id: extractId(iri) },
-        });
-        return fetchWithPersistentCache<GatewayCheckout>(url, token);
-    }
-
-    async function fetchTipjar(iri: string | null, token: string) {
-        if (!iri) return;
-
-        const url = client.buildUrl({
-            url: apiTipjarsIdGetUrl,
-            path: { id: extractId(iri) },
-        });
-        return fetchWithPersistentCache<Tipjar>(url, token);
-    }
-
-    function joinUrl(base: string, path: string) {
-        return `${base.replace(/\/+$/, "")}/${path.replace(/^\/+/, "")}`;
-    }
-
-    const API_CACHE_NAME = "charges-cache";
-
-    async function fetchWithPersistentCache<T>(iri: string, token: string): Promise<T> {
-        const cache = await caches.open(API_CACHE_NAME);
-
-        const cached = await cache.match(iri);
-        if (cached) return cached.json();
-
-        const baseUrl = getBaseUrl();
-        const fullUrl = joinUrl(baseUrl, iri);
-
-        const response = await fetch(fullUrl, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-                Accept: "application/ld+json",
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-
-        await cache.put(fullUrl, response.clone());
-        return response.json();
-    }
-
     // function buildChargesQuery(
     //     filters: ApiGatewayChargesGetCollectionData["query"],
     //     page: number,
@@ -317,125 +211,25 @@
         return undefined;
     }
 
-    async function preloadAccountingData(
-        accountingIri: string | null,
-        token: string,
-        accountings: Map<string, Accounting>,
-        owners: Map<string, User | Project | Tipjar>,
-    ) {
-        if (!accountingIri || accountings.has(accountingIri)) return;
+    function addChargesMetadata(charges: ExtendedCharge[]) {
+        let hasConcept = false;
 
-        const accounting = await fetchAccounting(accountingIri, token);
-        if (!accounting) return;
+        for (const charge of charges) {
+            const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
+            const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as
+                | Accounting
+                | undefined;
 
-        accountings.set(accountingIri, accounting);
+            const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
+            const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
 
-        const ownerIri = accounting.owner;
-        if (!ownerIri) {
-            return;
-        }
+            hasConcept = false;
 
-        if (ownerIri.startsWith(apiUsersGetCollectionUrl) && !owners.has(ownerIri)) {
-            const user = await fetchUser(ownerIri, token);
-            if (user) owners.set(ownerIri, user);
-        } else if (ownerIri.startsWith(apiProjectsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const project = await fetchProject(ownerIri, token);
-            if (project) owners.set(ownerIri, project);
-        } else if (ownerIri.startsWith(apiTipjarsGetCollectionUrl) && !owners.has(ownerIri)) {
-            const tipjar = await fetchTipjar(ownerIri, token);
-            if (tipjar) owners.set(ownerIri, tipjar);
-        }
-    }
+            if (targetName === originName) hasConcept = true;
 
-    async function loadCharges(filters: ApiGatewayChargesGetCollectionData["query"]) {
-        let chargesArr: ExtendedCharge[] = [];
-        isLoading = true;
-
-        try {
-            const token = getAccessToken();
-            if (!token) return;
-
-            const query = {
-                ...filters,
-                page: currentPage,
-                itemsPerPage: Number(itemsPerPage),
-            };
-
-            const collection = await fetchWithPersistentCache<
-                GatewayChargesCollection<GatewayCharge>
-            >(
-                client.buildUrl({
-                    url: apiGatewayChargesGetCollectionUrl,
-                    query,
-                }),
-                token,
-            );
-
-            const loadedCharges = collection.member ?? [];
-            totalItems = collection.totalItems ?? 0;
-
-            const checkouts: Map<string, GatewayCheckout | undefined> = new Map();
-            const accountings: Map<string, Accounting> = new Map<string, Accounting>();
-            const owners: Map<string, User | Project | Tipjar> = new Map();
-
-            for (const charge of loadedCharges) {
-                const checkoutIri = charge.checkout;
-                const targetAccountingIri = charge.target;
-
-                if (checkoutIri && !checkouts.has(checkoutIri)) {
-                    checkouts.set(
-                        checkoutIri,
-                        await Promise.resolve(fetchCheckout(checkoutIri, token)),
-                    );
-
-                    const originAccountingIri = checkouts.get(checkoutIri)?.origin;
-
-                    if (originAccountingIri && !accountings.has(originAccountingIri)) {
-                        await preloadAccountingData(
-                            originAccountingIri,
-                            token,
-                            accountings,
-                            owners,
-                        );
-                    }
-                }
-
-                if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(targetAccountingIri, token, accountings, owners);
-                }
-            }
-
-            let hasConcept = false;
-
-            chargesArr = loadedCharges.map((charge): ExtendedCharge => {
-                const checkout = checkouts.get(charge.checkout ?? "");
-                const targetAcc = accountings.get(charge.target ?? "") as Accounting | undefined;
-                const originAcc = accountings.get(checkout?.origin ?? "") as Accounting | undefined;
-
-                const targetName = getDisplayNameFromAccounting(targetAcc, owners);
-                const originName = getDisplayNameFromAccounting(originAcc, owners);
-
-                hasConcept = false;
-
-                if (targetName === originName) hasConcept = true;
-
-                return {
-                    ...charge,
-                    targetDisplayName: typeof targetName === "undefined" ? "—" : targetName,
-                    originDisplayName: typeof originName === "undefined" ? "—" : originName,
-                    paymentMethod: extractId(checkout?.gateway) ?? "—",
-                    refundToWallet: checkout?.refund
-                        ? $t(`contributions.table.rows.refund.${checkout.refund}`)
-                        : "—",
-                    platformLinks: checkout?.links ?? [],
-                    trackingCodes: checkout?.trackings ?? [],
-                    concept: hasConcept && charge.title ? charge.title : "",
-                };
-            });
-        } finally {
-            isLoading = false;
-            isFirstLoad = false;
-            return chargesArr;
+            charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
+            charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
+            charge.concept = hasConcept && charge.title ? charge.title : "";
         }
     }
 
@@ -466,23 +260,22 @@
         };
     }
 
-    let { filters } = $props<{ filters: ApiGatewayChargesGetCollectionData["query"] }>();
+    let { filters, charges, accountingsMap, ownersMap, isFirstLoad } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
+        charges: ExtendedCharge[] | undefined;
+        accountingsMap: Map<string, Accounting>;
+        ownersMap: Map<string, User | Project | Tipjar>;
+        isFirstLoad: boolean;
+    }>();
 
     const reloadParams = $derived(() => ({
         filters,
-        currentPage,
-        itemsPerPage,
         selectedSort,
     }));
 
-    const reloadCharges = async () => {
-        charges = [];
-        charges = await loadCharges(filters)!;
-    };
-
     $effect(() => {
-        reloadParams();
-        reloadCharges();
+        reloadParams;
+        if (charges.length > 0) addChargesMetadata(charges);
     });
 </script>
 
@@ -496,7 +289,7 @@
                 <select
                     bind:value={selectedSort}
                     class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
-                    disabled={isLoading}
+                    disabled={$isLoading}
                 >
                     {#each sortOptions as option}
                         <option value={option.key}>{$t(option.label)}</option>
@@ -512,11 +305,11 @@
                     name="itemsPerPage"
                     id="itemsPerPage"
                     class="border-secondary text-secondary rounded-sm py-1"
-                    bind:value={itemsPerPage}
-                    disabled={isLoading}
+                    bind:value={$itemsPerPage}
+                    disabled={$isLoading}
                 >
                     {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
-                        <option {value}>{label}</option>
+                        <option value={Number(value)}>{label}</option>
                     {/each}
                 </select>
             </div>
@@ -556,7 +349,7 @@
                             </div>
                         </TableBodyCell>
                     </TableBodyRow>
-                {:else if charges.length === 0 && !isLoading}
+                {:else if charges.length === 0 && !$isLoading}
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length} class="text-center">
                             {$t("contributions.table.rows.noData")}
@@ -567,32 +360,28 @@
                         <TableBodyRow
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
-                                ? 'bg-soft-purple]'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple] text-content border transition-colors"
+                                ? 'bg-soft-purple'
+                                : 'bg-white'} border-variant1 hover:bg-soft-purple text-content border transition-colors"
                         >
                             <TableBodyCell
-                                class="border-variant1 truncate rounded-l-md border-t border-b border-l p-4"
+                                class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
                                 >{charge.targetDisplayName}</TableBodyCell
                             >
-                            {#if charge.money.amount && charge.money.currency}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                    {formatCurrency(charge.money.amount, charge.money.currency)}
-                                </TableBodyCell>
-                            {:else}
-                                <TableBodyCell class="border-variant1 border-t border-b p-4"
-                                    >—</TableBodyCell
-                                >
-                            {/if}
+                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                {charge.money.amount && charge.money.currency
+                                    ? formatCurrency(charge.money.amount, charge.money.currency)
+                                    : "—"}
+                            </TableBodyCell>
                             <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
+                            <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary max-w-[180px] cursor-pointer truncate text-[12px] whitespace-nowrap underline"
+                                    class="text-secondary decoration-secondary/64 max-w-[180px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
@@ -653,7 +442,7 @@
                         {/if}
                     {/each}
 
-                    {#if isLoading}
+                    {#if $isLoading}
                         <TableBodyRow>
                             <TableBodyCell colspan={tableHeaders.length}>
                                 <div class="flex justify-center py-4">
@@ -667,5 +456,5 @@
         </Table>
     </div>
 
-    <Pagination bind:currentPage items={Number(itemsPerPage)} total={totalItems} {isLoading} />
+    <Pagination />
 </div>

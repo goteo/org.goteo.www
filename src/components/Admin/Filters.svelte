@@ -2,15 +2,17 @@
     import FiltersIcon from "../../svgs/FiltersIcon.svelte";
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
-    import { apiGatewaysGetCollection } from "../../openapi/client/index";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
-    import { onMount } from "svelte";
 
-    let { filters, onApplyFilters } = $props<{
-        filters: ApiGatewayChargesGetCollectionData["query"];
-        onApplyFilters: (filters: any) => void;
-    }>();
+    let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
+        $props<{
+            filters: ApiGatewayChargesGetCollectionData["query"];
+            onApplyFilters: (filters: any) => void;
+            paymentMethodOptions: [string, string][];
+            chargeStatusOptions: [string, string][];
+            rangeAmountOptions: [string, string][];
+        }>();
 
     let showFilters = $state(false);
 
@@ -19,33 +21,6 @@
     let selectedRangeAmount = $state("");
     let dateFrom = $state("");
     let dateTo = $state("");
-
-    let paymentMethodOptions = $state<[string, string][]>([]);
-    let chargeStatusOptions = $state<[string, string][]>([]);
-    let rangeAmountOptions = $state<[string, string][]>([]);
-
-    onMount(async () => {
-        const { data: paymentGateways } = await apiGatewaysGetCollection();
-
-        paymentMethodOptions = [
-            ["all", $t("contributions.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.name!,
-                $t(`contributions.filters.paymentMethod.options.${g.name}`),
-            ]),
-        ];
-
-        chargeStatusOptions = Object.entries($t("contributions.filters.chargeStatus.options"));
-        rangeAmountOptions = Object.entries($t("contributions.filters.rangeAmount.options")).sort(
-            ([a], [b]) => {
-                const parseMin = (val: string) =>
-                    val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
-                if (a === "all") return -1;
-                if (b === "all") return 1;
-                return parseMin(a) - parseMin(b);
-            },
-        );
-    });
 
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
