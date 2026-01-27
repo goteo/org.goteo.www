@@ -265,7 +265,7 @@ describe("Goal Reached Project", () => {
         cy.get("body").then(() => {
             cy.get("body").should("contain.text", "Obtained");
             cy.get("body").should("contain.text", "Minimum");
-            cy.get("body").should("contain.text", "Optimal");
+            cy.get("body").should("contain.text", "Optimum");
         });
     });
 
