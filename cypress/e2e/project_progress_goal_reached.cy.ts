@@ -177,7 +177,7 @@ describe("Goal Reached Project", () => {
     });
 
     it("should display goal reached status when minimum is exceeded", () => {
-        cy.visit("/es/project/goteo-pero-mejor", {
+        cy.visit("/en/project/goteo-pero-mejor", {
             failOnStatusCode: false,
             timeout: 60000,
         });
@@ -262,24 +262,10 @@ describe("Goal Reached Project", () => {
             }
         });
 
-        cy.get("body").then(($body) => {
-            const text = $body.text();
-
-            if (text.includes("Obtained") || text.includes("Raised")) {
-                cy.contains(/Obtained|Raised/i).should("be.visible");
-            }
-
-            if (text.includes("Minimum")) {
-                cy.contains("Minimum").should("be.visible");
-            }
-
-            if (text.includes("Optimal")) {
-                cy.contains("Optimal").should("be.visible");
-            }
-
-            if (text.includes("€")) {
-                cy.get("body").should("contain.text", "€");
-            }
+        cy.get("body").then(() => {
+            cy.get("body").should("contain.text", "Obtained");
+            cy.get("body").should("contain.text", "Minimum");
+            cy.get("body").should("contain.text", "Optimal");
         });
     });
 
