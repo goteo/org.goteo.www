@@ -13,6 +13,6 @@ export default defineConfig({
         retries: {
             runMode: 1,
         },
-        experimentalFastVisibility: true
+        experimentalFastVisibility: true,
     },
 });
