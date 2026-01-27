@@ -36,17 +36,5 @@ export const sortOptions: SortOption[] = [
         field: "money.amount",
         direction: "asc",
         label: "contributions.filters.order.options.amount-asc",
-    },
-    {
-        key: "status-desc",
-        field: "status",
-        direction: "desc",
-        label: "contributions.filters.order.options.status-desc",
-    },
-    {
-        key: "status-asc",
-        field: "status",
-        direction: "asc",
-        label: "contributions.filters.order.options.status-asc",
-    },
+    }
 ];
