@@ -46,7 +46,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                             </p>
                         </div>
 
-                        <PaymentMethod {paymentGateways} {accounting} />
+                        <PaymentMethod client:load {paymentGateways} {accounting} />
                     </div>
                 </div>
             </div>

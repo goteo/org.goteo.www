@@ -55,7 +55,10 @@
         if (!error) {
             const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
 
-            if (!checkoutLink) throw new Error("No payment link found in the response");
+            if (!checkoutLink) {
+                errorMessage = $t("payment.error.paymentFailed");
+                throw new Error("No payment link found in the response");
+            }
 
             if (checkoutLink.method === "GET") {
                 window.location.href = checkoutLink.href!;
@@ -123,6 +126,7 @@
         </p>
 
         <form
+            id="payment"
             bind:this={formEl}
             method="POST"
             class="flex flex-col gap-4"
