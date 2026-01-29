@@ -1,61 +1,40 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { t } from "../../i18n/store";
-    import { apiProjectsGetCollection, apiProjectSupportsGetCollection, type GatewayCharge, type ProjectSupport } from "../../openapi/client";
+    import { type Project, type ProjectSupport } from "../../openapi/client";
     import RadioButton from "../library/RadioButton.svelte";
+    import CommentCard from "./CommentCard.svelte";
 
     interface Props {
         paymentMethod?: string;
-        charges: GatewayCharge[];
+        projects: Project[];
+        projectSupports: ProjectSupport[];
     }
 
-    let { paymentMethod = undefined, charges }: Props = $props();
+    let { paymentMethod = undefined, projects, projectSupports }: Props = $props();
 
-    let messageType = $state("anonymous"); // 'anonymous' o 'public'
-    let type = $state("organization");
-    let targetsArr: any[] = [];
-    let projectsSupports: ProjectSupport[] = [];
+    let type = $state<"organization" | "individual">("organization");
 
-    async function getProjectsSupports(targets: any[]): Promise<ProjectSupport[] | undefined> {
-        const projectsResponse = await apiProjectsGetCollection({
-            query: { "accounting[]": targets },
-            headers: { Accept: "application/ld+json" },
-        });
+    let feedbackItems = $derived(() =>
+        projects.map((project) => {
+            const iri = `/v4/projects/${project.id}`;
+            const support = projectSupports.find((ps) => ps.project === iri);
 
-        if (projectsResponse.error) return;
-
-        const projects = projectsResponse.data;
-
-        const projectsSupportsResponse = await apiProjectSupportsGetCollection({
-            query: { "project[]": projects },
-            headers: { Accept: "application/ld+json" },
-        });
-
-        return projectsSupportsResponse.data;
-    }
-
-    onMount(async () => {
-        if (!charges) return;
-
-        charges.forEach((charge) => {
-            targetsArr.push(charge.target);
-        });
-
-        projectsSupports = await getProjectsSupports(targetsArr);
-    });
+            return { project, support };
+        }),
+    );
 </script>
 
 <div>
-    <div class=" sm:w-full sm:max-w-md">
+    <div class=" md:w-full md:max-w-[668px]">
         <form id="feedback" method="POST" class="flex flex-col gap-4">
-            <div class="flex flex-col gap-4">
+            <div class="flex w-full max-w-md flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-2xl font-bold text-black">
                         {$t("payment.page-approved.form-goal.title")}
                     </h2>
                 </div>
             </div>
-            <fieldset class="flex flex-col gap-6">
+            <fieldset class="flex w-full max-w-md flex-col gap-6">
                 <RadioButton name="type" value="organization" bind:group={type}>
                     <div class="text-content text-base/6 font-normal">
                         {$t("payment.page-approved.form-goal.options.2")}
@@ -73,55 +52,22 @@
                 </RadioButton>
             </fieldset>
 
-            <div class="mt-6 flex flex-col gap-4">
-                <div class="flex flex-row items-center gap-2">
+            <div class="mt-6 flex w-full max-w-[668px] flex-col gap-6">
+                <div class="flex w-full max-w-md flex-col gap-4">
                     <h2 class="text-2xl font-bold text-black">
                         {$t("payment.page-approved.form-review.title")}
                     </h2>
+                    <p class="text-content">
+                        {$t("payment.page-approved.form-review.description")}
+                    </p>
                 </div>
-                <p class="text-content">{$t("payment.page-approved.form-review.description")}</p>
+
+                <div class="flex flex-col gap-2">
+                    {#each feedbackItems() as { project, support }}
+                        <CommentCard {project} {support} />
+                    {/each}
+                </div>
             </div>
-
-            <div class="flex flex-col">
-                {#each charges as charge}
-                    {console.log(charge)}
-                    <article>
-                        <div>
-                            <img src="" alt="" />
-                            <div></div>
-                        </div>
-                    </article>
-                {/each}
-            </div>
-
-            <!-- <fieldset class="flex flex-col gap-6">
-                <RadioButton
-                    name="messageType"
-                    value="anonymous"
-                    bind:group={messageType}
-                    label={$t("payment.page-approved.form-review.labels.anonymous")}
-                />
-
-                <RadioButton
-                    name="messageType"
-                    value="public"
-                    bind:group={messageType}
-                    label={$t("payment.page-approved.form-review.labels.leave-a-message")}
-                />
-            </fieldset>
-
-            <div class="flex w-full flex-col gap-2">
-                <label for="review-message" class="text-sm font-medium text-gray-700">
-                    Mensaje al impulsor (opcional):
-                </label>
-                <textarea
-                    id="review-message"
-                    class="border-secondary focus:ring-secondary w-full appearance-none rounded-md border bg-white p-3 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none"
-                    name="review"
-                    placeholder={$t("payment.page-approved.form-review.placeholder")}
-                    rows="4"
-                ></textarea>
-            </div> -->
 
             <!-- TODO: Add Btn "Continuar" -->
         </form>

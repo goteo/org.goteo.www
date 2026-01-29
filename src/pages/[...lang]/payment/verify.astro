@@ -1,6 +1,14 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet, type GatewayCharge } from "../../../openapi/client";
+import {
+    apiAccountingsIdGet,
+    apiGatewayCheckoutsIdGet,
+    apiProjectsGetCollection,
+    apiProjectSupportsGetCollection,
+    type GatewayCharge,
+    type Project,
+    type ProjectSupport,
+} from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
@@ -33,6 +41,9 @@ let error = null;
 let amount: number | undefined = undefined;
 let selectedGateway: string | undefined = undefined;
 let charges: GatewayCharge[] = [];
+let checkoutOrigin = "";
+let projects: Project[] = [];
+let projectSupports: ProjectSupport[] = [];
 
 try {
     const url = new URL(Astro.request.url);
@@ -55,6 +66,28 @@ try {
 
     selectedGateway = response.data.gateway.split("/").pop();
     charges = response.data.charges;
+    checkoutOrigin = response.data.origin;
+
+    const targets = charges.map((c) => c.target);
+
+    const projectsResponse = await apiProjectsGetCollection({
+        query: { "accounting[]": targets },
+        headers: { Accept: "application/json" },
+    });
+
+    projects = projectsResponse.data ?? [];
+
+    const projectIris = projects.map((p) => `/v4/projects/${p.id}`);
+
+    const projectSupportsResponse = await apiProjectSupportsGetCollection({
+        query: {
+            "project[]": projectIris,
+            origin: checkoutOrigin,
+        },
+        headers: { Accept: "application/json" },
+    });
+
+    projectSupports = projectSupportsResponse.data ?? [];
 
     if (response.data.status !== "charged") {
         throw new Error("Payment not completed");
@@ -144,7 +177,8 @@ const postPaymentUrl = checkoutId
                                             <FeedbackForm
                                                 client:load
                                                 paymentMethod={selectedGateway}
-                                                {charges}
+                                                {projects}
+                                                {projectSupports}
                                             />
                                         </div>
                                     </div>
