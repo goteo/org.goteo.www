@@ -12,7 +12,7 @@
     }
 </script>
 
-<article class="border-grey w-full items-center rounded-4xl border bg-white p-6">
+<article class="border-grey w-full items-center rounded-4xl border bg-white p-6 shadow/10">
     <div class="grid w-full grid-cols-2 gap-6">
         <div class="border-grey overflow-hidden rounded-3xl border">
             <img
