@@ -540,11 +540,14 @@
       "form-review": {
         "title": "Leave a message in the projects you have supported",
         "description": "Your donation will be reflected in the projects you have supported. You can leave a message or stay anonymous.",
-        "placeholder": "Write here your support message",
+        "donatedTo": "You donated to:",
+        "btnComment": {
+          "editComment": "Edit my comment",
+          "leaveComment": "Leave a comment"
+        },
         "labels": {
-          "name": "Label",
-          "anonymous": "Leave a message anonymously",
-          "leave-a-message": "Leave a message publicly"
+          "placeholder": "Write here your support message",
+          "name": "Label"
         }
       }
     },
