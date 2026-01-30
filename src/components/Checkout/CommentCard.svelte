@@ -8,8 +8,7 @@
     let { project, support } = $props();
 
     let open = $state(false);
-
-    function openModal() {}
+    let isAnonymous = $state(false);
 </script>
 
 <article class="border-grey w-full items-center rounded-4xl border bg-white p-6 shadow/10">
@@ -33,13 +32,14 @@
             <Button onclick={() => (open = true)} size={"md"} kind={"secondary"}>
                 {#if support?.message}
                     <EditIcon class="size-[15px]" />
-                    {$t("payment.page-approved.form-review.btnComment.editComment")}
+                    {$t("payment.page-approved.form-review.btn-comment.editComment")}
                 {:else}
                     <AnnotationIcon class="size-[16.5px]" />
-                    {$t("payment.page-approved.form-review.btnComment.leaveComment")}
+                    {$t("payment.page-approved.form-review.btn-comment.leaveComment")}
                 {/if}
             </Button>
         </div>
     </div>
 </article>
-<CommentModal bind:open />
+
+<CommentModal bind:open {isAnonymous} {support} />

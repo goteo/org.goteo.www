@@ -544,9 +544,14 @@
         "title": "Deja un mensaje en los proyectos a los que has apoyado",
         "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato.",
         "donatedTo": "Has donado a:",
-        "btnComment": {
+        "btn-comment": {
           "editComment": "Editar comentario",
           "leaveComment": "Quiero dejar comentario"
+        },
+        "comment-modal": {
+          "title": "Añade un comentario",
+          "label": "Escribe aquí tu comentario",
+          "btn": "Añadir comentario"
         },
         "labels": {
           "placeholder": "Escribe tu mensaje de apoyo al impulsor...",

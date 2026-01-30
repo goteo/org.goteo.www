@@ -541,9 +541,11 @@
         "title": "Leave a message in the projects you have supported",
         "description": "Your donation will be reflected in the projects you have supported. You can leave a message or stay anonymous.",
         "donatedTo": "You donated to:",
-        "btnComment": {
+        "btn-comment": {
           "editComment": "Edit my comment",
           "leaveComment": "Leave a comment"
+        },
+        "comment-modal": {
         },
         "labels": {
           "placeholder": "Write here your support message",
