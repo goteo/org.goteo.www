@@ -8,6 +8,8 @@
 <input
     type="checkbox"
     {id}
-    class="text-primary mt-1 size-5 shrink-0 border ring-0 border-secondary rounded-sm"
+    class="text-primary border-secondary mt-1 size-5 shrink-0 rounded-sm border ring-0"
 />
-<span class="text-sm text-gray-700">{label}</span>
+{#if label}
+    <span class="text-content text-base font-normal">{label}</span>
+{/if}
