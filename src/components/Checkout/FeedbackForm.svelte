@@ -62,7 +62,7 @@
                     </p>
                 </div>
 
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-4">
                     {#each feedbackItems() as { project, support }}
                         <CommentCard {project} {support} />
                     {/each}

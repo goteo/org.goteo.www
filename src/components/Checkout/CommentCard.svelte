@@ -1,5 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import AnnotationIcon from "../../svgs/AnnotationIcon.svelte";
+    import EditIcon from "../../svgs/EditIcon.svelte";
     import Button from "../library/Button.svelte";
     import CommentModal from "./CommentModal.svelte";
 
@@ -7,9 +9,7 @@
 
     let open = $state(false);
 
-    function openModal() {
-
-    }
+    function openModal() {}
 </script>
 
 <article class="border-grey w-full items-center rounded-4xl border bg-white p-6 shadow/10">
@@ -30,10 +30,12 @@
                     {project.title}
                 </h3>
             </div>
-            <Button onclick={() => open = true} size={"md"} kind={"secondary"}>
+            <Button onclick={() => (open = true)} size={"md"} kind={"secondary"}>
                 {#if support?.message}
+                    <EditIcon class="size-[15px]" />
                     {$t("payment.page-approved.form-review.btnComment.editComment")}
                 {:else}
+                    <AnnotationIcon class="size-[16.5px]" />
                     {$t("payment.page-approved.form-review.btnComment.leaveComment")}
                 {/if}
             </Button>
