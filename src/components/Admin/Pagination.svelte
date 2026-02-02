@@ -5,7 +5,7 @@
         itemsPerPage,
         totalItems,
         currentPage,
-    } from "../../stores/chargesPagination";
+    } from "../../stores/chargesPaginationAndSort";
 
     const totalPages = $derived(() => Math.ceil($totalItems / $itemsPerPage));
 

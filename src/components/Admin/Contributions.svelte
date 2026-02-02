@@ -38,7 +38,8 @@
         itemsPerPage,
         totalItems,
         currentPage,
-    } from "../../stores/chargesPagination";
+        sortOptions,
+    } from "../../stores/chargesPaginationAndSort.ts";
 
     type GatewayChargesCollection<T> = {
         member: T[];
@@ -57,6 +58,7 @@
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
+    let selectedSort = $state("date-desc");
 
     function getAccessToken(): string | null {
         const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
@@ -69,6 +71,26 @@
         } catch {
             return null;
         }
+    }
+
+    function buildChargesQuery(
+        filters: ApiGatewayChargesGetCollectionData["query"],
+        page: number,
+        itemsPerPage: number,
+    ) {
+        const sort = sortOptions.find((option) => option.key === selectedSort);
+
+        const query: Record<string, any> = {
+            page,
+            itemsPerPage,
+            ...filters,
+        };
+
+        if (sort) {
+            query[`order[${sort.field}]`] = sort.direction;
+        }
+
+        return query;
     }
 
     async function loadCharges(
@@ -88,11 +110,10 @@
             const token = getAccessToken();
             if (!token) return;
 
-            const query = {
-                ...filters,
-                page: $currentPage,
-                itemsPerPage: Number($itemsPerPage),
-            };
+            let page = $currentPage;
+            let items = Number($itemsPerPage);
+
+            const query = buildChargesQuery(filters, page, items);
 
             const collection = await fetchWithPersistentCache<
                 GatewayChargesCollection<GatewayCharge>
@@ -268,4 +289,12 @@
         <Slider />
     </div>
 </div>
-<Table {filters} {charges} {accountingsMap} {ownersMap} {isFirstLoad} />
+<Table
+    {filters}
+    {charges}
+    {accountingsMap}
+    {ownersMap}
+    {isFirstLoad}
+    bind:selectedSort
+    onSortChange={(value) => (selectedSort = value)}
+/>

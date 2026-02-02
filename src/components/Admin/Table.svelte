@@ -32,7 +32,7 @@
         Tracking,
     } from "../../../src/openapi/client/index.ts";
 
-    import { isLoading, itemsPerPage } from "../../stores/chargesPagination.ts";
+    import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
@@ -45,61 +45,13 @@
         concept?: string;
     };
 
-    type SortOption = {
-        key: string;
-        field: string;
-        direction: "asc" | "desc";
-        label: string;
-    };
-
-    const sortOptions: SortOption[] = [
-        {
-            key: "date-desc",
-            field: "dateCreated",
-            direction: "desc",
-            label: "contributions.filters.order.options.date-desc",
-        },
-        {
-            key: "date-asc",
-            field: "dateCreated",
-            direction: "asc",
-            label: "contributions.filters.order.options.date-asc",
-        },
-        {
-            key: "amount-desc",
-            field: "money.amount",
-            direction: "desc",
-            label: "contributions.filters.order.options.amount-desc",
-        },
-        {
-            key: "amount-asc",
-            field: "money.amount",
-            direction: "asc",
-            label: "contributions.filters.order.options.amount-asc",
-        },
-        {
-            key: "status-desc",
-            field: "status",
-            direction: "desc",
-            label: "contributions.filters.order.options.status-desc",
-        },
-        {
-            key: "status-asc",
-            field: "status",
-            direction: "asc",
-            label: "contributions.filters.order.options.status-asc",
-        },
-    ];
-
-    let selectedSort = $state("date-desc");
-
     const tableHeaders = [
         { name: "contributions.table.headers.target", sortable: false },
         { name: "contributions.table.headers.amount", sortable: true, sortKey: "amount" },
         { name: "contributions.table.headers.origin", sortable: false },
         { name: "contributions.table.headers.paymentMethod", sortable: false },
         { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
-        { name: "contributions.table.headers.chargeStatus", sortable: true, sortKey: "status" },
+        { name: "contributions.table.headers.chargeStatus", sortable: false, sortKey: "status" },
         { name: "contributions.table.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
@@ -164,27 +116,6 @@
 
         return "↕️";
     }
-
-    // function buildChargesQuery(
-    //     filters: ApiGatewayChargesGetCollectionData["query"],
-    //     page: number,
-    //     itemsPerPage: number,
-    // ) {
-    //     const sort = sortOptions.find((option) => option.key === selectedSort);
-
-    //     const query: Record<string, ApiGatewayChargesGetCollectionData["query"]> = {
-    //         page,
-    //         itemsPerPage,
-    //         pagination: true,
-    //         ...filters,
-    //     };
-
-    //     if (sort) {
-    //         query[`${sort.field}`] = sort.direction;
-    //     }
-
-    //     return query;
-    // }
 
     function getDisplayNameFromAccounting(
         accounting: Accounting | undefined,
@@ -260,12 +191,22 @@
         };
     }
 
-    let { filters, charges, accountingsMap, ownersMap, isFirstLoad } = $props<{
+    let {
+        filters,
+        charges,
+        accountingsMap,
+        ownersMap,
+        isFirstLoad,
+        selectedSort = $bindable("date-desc"),
+        onSortChange,
+    } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
         charges: ExtendedCharge[] | undefined;
         accountingsMap: Map<string, Accounting>;
         ownersMap: Map<string, User | Project | Tipjar>;
         isFirstLoad: boolean;
+        selectedSort: string;
+        onSortChange: (newSort: string) => void;
     }>();
 
     const reloadParams = $derived(() => ({
@@ -287,7 +228,8 @@
                     {$t("contributions.filters.order.title")}
                 </p>
                 <select
-                    bind:value={selectedSort}
+                    value={selectedSort}
+                    onchange={(e) => onSortChange(e.currentTarget.value)}
                     class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
                     disabled={$isLoading}
                 >
@@ -381,7 +323,7 @@
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary decoration-secondary/64 max-w-[180px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
+                                    class="text-secondary decoration-secondary/64 max-w-[100px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
