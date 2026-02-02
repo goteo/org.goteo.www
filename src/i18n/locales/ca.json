@@ -605,8 +605,7 @@
           "wallet": "Moneder"
         },
         "status": {
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         },
@@ -636,7 +635,8 @@
             "href": "Url"
           }
         },
-        "estimatedFee": "Comissió estimada"
+        "estimatedFee": "Comissió estimada",
+        "concept": "Concepte"
       },
       "actions": {
         "refundToWallet": "Devolució a moneder",
@@ -717,8 +717,7 @@
         "title": "Estat de l'aportació",
         "options": {
           "all": "Tots",
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         }
@@ -884,6 +883,14 @@
         "totalEarned": "Total aconseguit:",
         "totalPaid": "Total pagat:",
         "totalUnpaid": "Falta per pagar:"
+      }
+    },
+    "charges": {
+      "lastContributions": "Últimes aportacions",
+      "totalizers": {
+        "totalCharges": "Total aportacions:",
+        "totalTips": "Total propines:",
+        "totalFees": "Comissions totals:"
       }
     }
   },

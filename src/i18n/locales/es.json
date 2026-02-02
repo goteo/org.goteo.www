@@ -601,10 +601,12 @@
           "wallet": "Monedero"
         },
         "status": {
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         },
         "refund": {
           "to_wallet": "Sí",
@@ -632,7 +634,8 @@
             "href": "Url"
           }
         },
-        "estimatedFee": "Comisión estimada"
+        "estimatedFee": "Comisión estimada",
+        "concept": "Concepto"
       },
       "actions": {
         "refundToWallet": "Devolución a monedero",
@@ -713,10 +716,12 @@
         "title": "Estado de Aporte",
         "options": {
           "all": "Todos",
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         }
       },
       "projectStatus": {
@@ -880,6 +885,14 @@
         "totalEarned": "Total conseguido:",
         "totalPaid": "Total pagado:",
         "totalUnpaid": "Falta por pagar:"
+      }
+    },
+    "charges": {
+      "lastContributions": "Últimos aportes:",
+      "totalizers": {
+        "totalCharges": "Total aportes:",
+        "totalTips": "Total propinas:",
+        "totalFees": "Comisiones totales:"
       }
     }
   },

@@ -95,7 +95,7 @@ describe("View project rewards", () => {
             ],
         }).as("projectRewards");
 
-        cy.intercept("GET", "/es/project/100", (req) => {
+        cy.intercept("GET", "/es/project/goteo-pero-mejor", (req) => {
             req.reply((res) => {
                 let html = res.body.toString();
                 html = html.replace(
@@ -154,7 +154,7 @@ describe("View project rewards", () => {
     });
 
     it("should show suggested amounts for contribution", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -204,7 +204,7 @@ describe("View project rewards", () => {
     });
 
     it("should display project information correctly", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -249,7 +249,7 @@ describe("View project rewards", () => {
     });
 
     it("should load page without critical errors", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(3000);

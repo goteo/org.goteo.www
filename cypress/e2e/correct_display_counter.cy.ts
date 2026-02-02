@@ -123,7 +123,7 @@ describe("Correct Display of Total Fundraising Counter", () => {
     };
 
     it("should display fundraising counter with total raised and remaining amounts", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -175,7 +175,7 @@ describe("Correct Display of Total Fundraising Counter", () => {
     });
 
     it("should calculate and display remaining amount to reach funding goal", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -226,7 +226,7 @@ describe("Correct Display of Total Fundraising Counter", () => {
     });
 
     it("should handle the page loading gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);
