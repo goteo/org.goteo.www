@@ -32,7 +32,10 @@
         let slidesArr = [];
 
         // Example dynamic data, just for testing. Pending real data integration.
-        slidesArr.push({ title: $t("admin.projects.totalizers.selectedCampaigns"), amount: $totalItems });
+        slidesArr.push({
+            title: $t("admin.projects.totalizers.selectedCampaigns"),
+            amount: $totalItems,
+        });
         slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });
         slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" });
         slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" });

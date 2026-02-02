@@ -33,7 +33,12 @@
         fetchWithPersistentCache,
     } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
-    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPagination";
+    import {
+        isLoading,
+        itemsPerPage,
+        totalItems,
+        currentPage,
+    } from "../../stores/chargesPagination";
 
     type GatewayChargesCollection<T> = {
         member: T[];
