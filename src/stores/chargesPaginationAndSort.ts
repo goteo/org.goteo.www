@@ -36,5 +36,5 @@ export const sortOptions: SortOption[] = [
         field: "money.amount",
         direction: "asc",
         label: "contributions.filters.order.options.amount-asc",
-    }
+    },
 ];

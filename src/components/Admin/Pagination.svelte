@@ -1,6 +1,11 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import { isLoading, itemsPerPage, totalItems, currentPage } from "../../stores/chargesPaginationAndSort";
+    import {
+        isLoading,
+        itemsPerPage,
+        totalItems,
+        currentPage,
+    } from "../../stores/chargesPaginationAndSort";
 
     const totalPages = $derived(() => Math.ceil($totalItems / $itemsPerPage));
 
@@ -80,7 +85,11 @@
 
     {#if $totalItems > 0}
         <span class="text-content text-sm font-bold">
-            {@html $t("contributions.pagination.showing", { items: $itemsPerPage, total: $totalItems }, { allowHTML: true })}
+            {@html $t(
+                "contributions.pagination.showing",
+                { items: $itemsPerPage, total: $totalItems },
+                { allowHTML: true },
+            )}
         </span>
     {:else if $totalItems === 0 && !$isLoading}
         <span class="text-content text-sm font-bold">

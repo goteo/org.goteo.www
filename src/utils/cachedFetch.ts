@@ -11,7 +11,11 @@ import {
 
 import type { Accounting, GatewayCheckout, Project, Tipjar, User } from "../openapi/client";
 
-export async function fetchWithPersistentCache<T>(iri: string, token: string, API_CACHE_NAME: string): Promise<T> {
+export async function fetchWithPersistentCache<T>(
+    iri: string,
+    token: string,
+    API_CACHE_NAME: string,
+): Promise<T> {
     const cache = await caches.open(API_CACHE_NAME);
 
     const cached = await cache.match(iri);
