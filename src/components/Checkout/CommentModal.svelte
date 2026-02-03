@@ -7,22 +7,50 @@
     interface Props {
         open: boolean;
         isAnonymous: boolean;
-        support: ProjectSupport;
+        support: ProjectSupport | undefined;
+        token: string;
+        onSubmit?: (message: string, anonymous: boolean) => void;
     }
-    let { open = $bindable(false), isAnonymous = $bindable(), support }: Props = $props();
-    let textAreaEl: HTMLTextAreaElement;
+    let {
+        open = $bindable(false),
+        isAnonymous = $bindable(false),
+        support,
+        token,
+        onSubmit,
+    }: Props = $props();
+    let message = $state("");
 
     async function handleSubmit() {
-        const projectSupportPath = String(support.id ?? "");
+        const trimmed = message.trim();
+        if (!trimmed || trimmed === support?.message) return;
 
-        await apiProjectSupportsIdPatch({
-            path: { id: projectSupportPath },
-            body: {
-                anonymous: isAnonymous,
-                message: textAreaEl.value,
-            },
-        });
+        const projectSupportPath = String(support?.id ?? "");
+
+        try {
+            await apiProjectSupportsIdPatch({
+                path: { id: projectSupportPath },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/merge-patch+json",
+                },
+                body: {
+                    anonymous: isAnonymous,
+                    message: trimmed,
+                },
+            });
+        } catch (e) {
+            console.error("PATCH FAILED", e);
+        } finally {
+            onSubmit?.(trimmed, isAnonymous);
+            open = false;
+        }
     }
+
+    $effect(() => {
+        if (open) {
+            message = support?.message ?? "";
+        }
+    });
 </script>
 
 <Modal
@@ -39,10 +67,9 @@
             for="comment">{$t("payment.page-approved.form-review.comment-modal.label")}</label
         >
         <textarea
-            bind:this={textAreaEl}
             class="border-secondary text-content h-[120px] w-full resize-none rounded-lg border bg-white p-4 text-base/6 font-normal"
-            name="comment"
-            id=""
+            id="comment"
+            bind:value={message}
             placeholder={$t("payment.page-approved.form-review.comment-modal.label")}
         ></textarea>
     </div>

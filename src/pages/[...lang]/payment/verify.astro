@@ -72,7 +72,7 @@ try {
 
     const projectsResponse = await apiProjectsGetCollection({
         query: { "accounting[]": targets },
-        headers: { Accept: "application/json" },
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
     });
 
     projects = projectsResponse.data ?? [];
@@ -84,7 +84,7 @@ try {
             "project[]": projectIris,
             origin: checkoutOrigin,
         },
-        headers: { Accept: "application/json" },
+        headers: { Authorization: `Bearer ${token}`, Accept: "application/json" },
     });
 
     projectSupports = projectSupportsResponse.data ?? [];
@@ -179,6 +179,7 @@ const postPaymentUrl = checkoutId
                                                 paymentMethod={selectedGateway}
                                                 {projects}
                                                 {projectSupports}
+                                                {token}
                                             />
                                         </div>
                                     </div>

@@ -8,16 +8,19 @@
         paymentMethod?: string;
         projects: Project[];
         projectSupports: ProjectSupport[];
+        token: string;
     }
 
-    let { paymentMethod = undefined, projects, projectSupports }: Props = $props();
+    let { paymentMethod = undefined, projects, projectSupports, token }: Props = $props();
 
     let type = $state<"organization" | "individual">("organization");
+
+    let supports = $state<ProjectSupport[]>(projectSupports);
 
     let feedbackItems = $derived(() =>
         projects.map((project) => {
             const iri = `/v4/projects/${project.id}`;
-            const support = projectSupports.find((ps) => ps.project === iri);
+            const support = supports?.find((ps) => ps.project === iri);
 
             return { project, support };
         }),
@@ -62,14 +65,31 @@
                     </p>
                 </div>
 
-                <div class="flex flex-col gap-4">
-                    {#each feedbackItems() as { project, support }}
-                        <CommentCard {project} {support} />
+                <div class="flex flex-col gap-7">
+                    {#each feedbackItems() as { project, support }, index}
+                        <div class="flex flex-col gap-3">
+                            <h1 class="text-lg font-bold text-black">
+                                {$t("payment.page-approved.form-review.project")} <a
+                                    href={`/project/${project.slug}`}
+                                    class="text-secondary underline underline-offset-1"
+                                    >{project.title}</a
+                                >
+                            </h1>
+                            <CommentCard
+                                {project}
+                                {support}
+                                {index}
+                                {token}
+                                onUpdate={(updatedSupport) => {
+                                    supports = supports.map((s) =>
+                                        s.id === updatedSupport.id ? updatedSupport : s,
+                                    );
+                                }}
+                            />
+                        </div>
                     {/each}
                 </div>
             </div>
-
-            <!-- TODO: Add Btn "Continuar" -->
         </form>
         <div id="feedback-error-content" class="mt-4 text-center text-red-500"></div>
     </div>
