@@ -540,13 +540,18 @@
       "form-review": {
         "title": "Leave a message in the projects you have supported",
         "description": "Your donation will be reflected in the projects you have supported. You can leave a message or stay anonymous.",
-        "donatedTo": "You donated to:",
+        "project": "Crowdfunding campaign:",
+        "donated": "You donated:",
         "btn-comment": {
           "editComment": "Edit my comment",
           "leaveComment": "Leave a comment"
         },
         "comment-modal": {
+          "title": "Add a comment",
+          "label": "Write here your comment",
+          "btn": "Add comment"
         },
+        "anonymous": "I want my comment to be anonymous",
         "labels": {
           "placeholder": "Write here your support message",
           "name": "Label"
