@@ -11,7 +11,7 @@
     let { variant, class: classes = "", children }: Props = $props();
 
     const variantStyles = {
-        success: "bg-variant2",
+        success: "bg-variant2 border-0",
         warning: "bg-variant4",
         error: "bg-tertiary",
         bold: "bg-grey border-grey text-secondary font-bold border-soft-purple",
@@ -20,7 +20,7 @@
 
 <div
     class={twMerge(
-        "flex items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
+        "flex h-fit items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
         variant ? variantStyles[variant] : "",
         classes,
     )}
