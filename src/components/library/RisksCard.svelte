@@ -39,14 +39,14 @@
             <Tag variant={tagVariant}>{$t(`reviews.risks-cards.tags.${riskTier}`)}</Tag>
         </div>
         <p
-            class="text-content max-h-24 min-h-24 w-full overflow-hidden text-base overflow-ellipsis"
+            class="text-content line-clamp-4 w-full text-base"
         >
             {$t(`reviews.risks-cards.types.${riskType}.description.${riskTier}`)}
         </p>
     </div>
     <div class="flex justify-between">
         <!-- TODO: Add functionality to both buttons -->
-        <Button kind="ghost">{$t("reviews.btns.seeChat")}</Button>
-        <Button kind="secondary">{$t("reviews.btns.changeRisk")}</Button>
+        <Button kind="ghost">{$t("reviews.risks-cards.btns.seeChat")}</Button>
+        <Button kind="secondary">{$t("reviews.risks-cards.btns.changeRisk")}</Button>
     </div>
 </article>
