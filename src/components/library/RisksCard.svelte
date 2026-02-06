@@ -32,15 +32,24 @@
     <div class="flex flex-col gap-4">
         <div class="flex justify-between">
             <div class="flex flex-col gap-1">
-                <h2 class="text-secondary text-2xl font-bold">{$t(`reviews.risks-cards.types.${riskType}.title`)}</h2>
-                <!-- TODO: Messages reactivity functionality (new messages + future chatbox logic) -->
-                <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span>
+                <!-- TODO: Messages reactivity functionality (new messages styling and handling + future chatbox logic) -->
+                {#if newMessage}
+                    <h2 class="text-secondary text-2xl font-bold">
+                        {$t(`reviews.risks-cards.types.${riskType}.title`)}
+                    </h2>
+                    <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
+                    >
+                {:else}
+                    <h2 class="text-secondary text-2xl font-bold">
+                        {$t(`reviews.risks-cards.types.${riskType}.title`)}
+                    </h2>
+                    <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
+                    >
+                {/if}
             </div>
             <Tag variant={tagVariant}>{$t(`reviews.risks-cards.tags.${riskTier}`)}</Tag>
         </div>
-        <p
-            class="text-content line-clamp-4 w-full text-base"
-        >
+        <p class="text-content line-clamp-4 w-full text-base">
             {$t(`reviews.risks-cards.types.${riskType}.description.${riskTier}`)}
         </p>
     </div>
