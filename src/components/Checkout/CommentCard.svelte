@@ -55,7 +55,7 @@
     <Checkbox
         bind:checked={isAnonymous}
         id={`anonymous-toggle-${index}`}
-        label={"payment.page-approved.form-review.anonymous"}
+        label={$t("payment.page-approved.form-review.anonymous")}
     />
 </div>
 <CommentModal
