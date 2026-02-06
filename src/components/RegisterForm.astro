@@ -1,4 +1,6 @@
 ---
+import Checkbox from "./library/Checkbox.svelte";
+
 const { t } = Astro.locals;
 ---
 
@@ -108,14 +110,11 @@ const { t } = Astro.locals;
             <div class="relative flex w-full flex-col gap-4" id="fields-individual">
                 <div>
                     <label class="flex flex-row items-start gap-2">
-                        <input
-                            type="checkbox"
+                        <Checkbox
+                            client:load
                             id="toggle-dni"
-                            class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
+                            label={t("register.individual.taxId.msgDeduction")}
                         />
-                        <span class="text-sm text-gray-700"
-                            >{t("register.individual.taxId.msgDeduction")}</span
-                        >
                     </label>
                 </div>
 
@@ -177,24 +176,14 @@ const { t } = Astro.locals;
 
             <div class="space-y-2">
                 <label class="flex items-start gap-2">
-                    <input
-                        type="checkbox"
-                        id="terms"
-                        class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
-                    />
-                    <span class="text-sm text-gray-700">
-                        {t("register.form.termsCheckbox")}
-                    </span>
+                    <Checkbox client:load id="terms" label={t("register.form.termsCheckbox")} />
                 </label>
                 <label class="flex items-start gap-2">
-                    <input
-                        type="checkbox"
+                    <Checkbox
+                        client:load
                         id="cookies"
-                        class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
+                        label={t("register.form.policiesCheckbox")}
                     />
-                    <span class="text-sm text-gray-700">
-                        {t("register.form.policiesCheckbox")}
-                    </span>
                 </label>
             </div>
         </form>
