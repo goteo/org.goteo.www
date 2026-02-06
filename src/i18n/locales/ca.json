@@ -882,6 +882,14 @@
         "totalPaid": "Total pagat:",
         "totalUnpaid": "Falta per pagar:"
       }
+    },
+    "charges": {
+      "lastContributions": "Últimes aportacions",
+      "totalizers": {
+        "totalCharges": "Total aportacions:",
+        "totalTips": "Total propines:",
+        "totalFees": "Comissions totals:"
+      }
     }
   },
   "footer": {
