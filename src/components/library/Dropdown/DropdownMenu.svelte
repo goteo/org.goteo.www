@@ -1,7 +1,7 @@
 <script lang="ts">
     import SearchIcon from "../../../svgs/SearchIcon.svelte";
     import DropdownItem from "./DropdownItem.svelte";
-    import type { DropdownItemPosition, DropdownItemType, DropdownVariant } from "./dropdown.types";
+    import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
 
     let {
         variant,
@@ -15,9 +15,14 @@
         selectedIds?: string[];
     }>();
 
-    const renderedItems = $derived<DropdownItemType[]>(items);
+    const renderedItems = $derived(
+        items.map((item: DropdownItemType, index: number, arr: DropdownItemType[]) => ({
+            ...item,
+            position: getPosition(index, arr.length),
+        })),
+    );
 
-    function getPosition(index: number, length: number): DropdownItemPosition {
+    function getPosition(index: number, length: number): "start" | "middle" | "end" {
         if (index === 0 && !hasSearch) return "start";
         if (index === length - 1) return "end";
         return "middle";
@@ -41,12 +46,16 @@
             </div>
         </div>
     {/if}
-    {#each renderedItems as item, index}
+    {#each renderedItems as item}
         <DropdownItem
             {...item}
             {variant}
             bind:selectedIds
-            position={getPosition(index, renderedItems.length)}
+            class={item.position === "start"
+                ? "rounded-t-lg"
+                : item.position === "end"
+                  ? "rounded-b-lg"
+                  : ""}
         />
     {/each}
 </div>
