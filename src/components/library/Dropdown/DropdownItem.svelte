@@ -1,10 +1,7 @@
 <script lang="ts">
     // This component (Checkbox) is implemented in a parallel Pull Request, so it may not be available in the current branch
     // import Checkbox from "./Checkbox.svelte";
-    import type {
-        DropdownItemPosition,
-        DropdownVariant,
-    } from "./dropdown.types";
+    import type { DropdownItemPosition, DropdownVariant } from "./dropdown.types";
 
     let {
         id,
