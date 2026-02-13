@@ -25,7 +25,7 @@
 </script>
 
 <div
-    class="flex w-full max-w-[416px] flex-col self-center rounded-lg bg-transparent shadow-[0_35px_10px_0_rgba(0,0,0,0),0_22px_9px_0_rgba(0,0,0,0.01),0_13px_8px_0_rgba(0,0,0,0.05),0_6px_6px_0_rgba(0,0,0,0.09),0_1px_3px_0_rgba(0,0,0,0.1)]"
+    class="flex w-full flex-col rounded-lg bg-transparent shadow-[0_35px_10px_0_rgba(0,0,0,0),0_22px_9px_0_rgba(0,0,0,0.01),0_13px_8px_0_rgba(0,0,0,0.05),0_6px_6px_0_rgba(0,0,0,0.09),0_1px_3px_0_rgba(0,0,0,0.1)]"
 >
     {#if hasSearch}
         <div class="border-grey rounded-t-lg border bg-white p-4">
