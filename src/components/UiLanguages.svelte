@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { locale } from "../i18n/store";
+    import { locale, setLocale } from "../i18n/store";
     import { languagesList } from "../i18n/locales";
     import { getDefaultLanguage } from "../utils/consts";
+    import { onMount } from "svelte";
 
     const languages = Object.keys(languagesList);
 
@@ -29,6 +30,13 @@
 
         window.location.href = newPath;
     }
+
+    onMount(() => {
+        const cookies = Object.fromEntries(document.cookie.split("; ").map((c) => c.split("=")));
+
+        const currentLang = decodeURIComponent(cookies["preferred-lang"] || "");
+        setLocale(currentLang);
+    });
 </script>
 
 <select
