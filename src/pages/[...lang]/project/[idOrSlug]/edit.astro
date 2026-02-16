@@ -9,15 +9,15 @@ import WizardApp from "../../../../components/project/wizard/WizardApp.svelte";
 import { apiProjectsIdOrSlugGet } from "../../../../openapi/client";
 
 const lang = (Astro.params.lang || "es") as string;
-const { id } = Astro.params;
+const { idOrSlug } = Astro.params;
 
-if (!id) {
+if (!idOrSlug) {
     return Astro.redirect(`/${lang}/`);
 }
 
 // Fetch project data
 const { data: project } = await apiProjectsIdOrSlugGet({
-    path: { idOrSlug: id },
+    path: { idOrSlug },
 });
 
 if (!project) {
