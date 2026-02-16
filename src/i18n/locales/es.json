@@ -563,7 +563,6 @@
       "amountToUse": "Cuánto vas a usar",
       "remainingBalance": "Saldo que te quedará"
     },
-
     "wallet": {
       "balanceLabel": "Saldo: "
     },
@@ -897,6 +896,19 @@
       }
     }
   },
+  "reviews": {
+    "risks-cards": {
+      "tags": {
+        "low": "Riesgo bajo",
+        "medium": "Riesgo medio",
+        "high": "Riesgo alto"
+      },
+      "btns": {
+        "seeChat": "Ver conversación",
+        "changeRisk": "Cambiar riesgo"
+      }
+    }
+  },
   "footer": {
     "funding": {
       "title": "Financia:",
@@ -958,7 +970,7 @@
     "donorType": {
       "fan": {
         "title": "Fan",
-        "description": "Este donante a invertido más de 25€",
+        "description": "Este donante ha invertido más de 25€",
         "projectsDonated": "Proyectos donados",
         "moneyDonated": "Dinero donado"
       },
