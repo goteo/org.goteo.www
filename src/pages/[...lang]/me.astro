@@ -55,7 +55,7 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
         <DonatedProjectsSection {lang} {user} client:load />
 
         <!-- CTA cards -->
-        <Grid class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[446px_1fr]" client:load>
+        <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[446px_1fr]" client:load>
             <CTACard
                 variant="dark"
                 title={t("me.cta.discover.title")}
