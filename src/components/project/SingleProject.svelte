@@ -1,18 +1,15 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import {
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
+        type User,
     } from "../../openapi/client/index";
-    import Tags from "../Tags.svelte";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Sharebutton from "./Sharebutton.svelte";
-
     import Tabs from "./Tabs.svelte";
-
     import Card from "./Card.svelte";
     import Player from "../Player/Player.svelte";
     import Banner from "./Banner.svelte";
@@ -22,19 +19,20 @@
     import { getDefaultLanguage } from "../../utils/consts";
     import TopRewards from "./TopRewards.svelte";
     import Button from "../library/Button.svelte";
+    import ProjectTags from "../ProjectTags.svelte";
 
     let {
         lang = $bindable(),
         project,
         accounting,
-        ownerName,
+        owner,
         totalSupports,
         balancePoints,
     }: {
         lang: string;
         project: Project;
         accounting: Accounting;
-        ownerName: string;
+        owner: User;
         totalSupports: number;
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
@@ -100,7 +98,7 @@
             <div class="flex flex-col gap-2">
                 <h3 class="text-content text-xl font-bold lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="font-bold text-black underline"> {ownerName}</span>
+                    <span class="font-bold text-black underline"> {owner.displayName}</span>
                 </h3>
                 <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}
@@ -153,7 +151,7 @@
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {project} />
+        <ProjectTags {project} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <Button kind="invert" size="sm" class="px-0">
@@ -176,6 +174,6 @@
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
-    <Banner {ownerName} />
+    <Banner ownerName={owner.displayName || ""} />
 </section>
 <Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />

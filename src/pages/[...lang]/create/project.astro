@@ -1,0 +1,16 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import CreateProjectForm from "./CreateProjectForm.svelte";
+
+const { t } = Astro.locals;
+
+const accessCookie = Astro.cookies.get("access-token");
+
+if (!accessCookie) {
+    return Astro.redirect("/login");
+}
+---
+
+<Layout title={t("create.project.title")}>
+    <CreateProjectForm client:load />
+</Layout>
