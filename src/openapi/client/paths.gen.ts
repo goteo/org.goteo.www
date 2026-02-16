@@ -110,6 +110,34 @@ export const apiProjectCollaborationsIdGetUrl = '/v4/project_collaborations/{id}
 
 export const apiProjectCollaborationsIdPatchUrl = '/v4/project_collaborations/{id}';
 
+export const apiProjectReviewsGetCollectionUrl = '/v4/project_reviews';
+
+export const apiProjectReviewsIdDeleteUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewsIdGetUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewsIdPatchUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewAreasGetCollectionUrl = '/v4/project_review_areas';
+
+export const apiProjectReviewAreasPostUrl = '/v4/project_review_areas';
+
+export const apiProjectReviewAreasIdDeleteUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewAreasIdGetUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewAreasIdPatchUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewCommentsGetCollectionUrl = '/v4/project_review_comments';
+
+export const apiProjectReviewCommentsPostUrl = '/v4/project_review_comments';
+
+export const apiProjectReviewCommentsIdDeleteUrl = '/v4/project_review_comments/{id}';
+
+export const apiProjectReviewCommentsIdGetUrl = '/v4/project_review_comments/{id}';
+
+export const apiProjectReviewCommentsIdPatchUrl = '/v4/project_review_comments/{id}';
+
 export const apiProjectRewardsGetCollectionUrl = '/v4/project_rewards';
 
 export const apiProjectRewardsPostUrl = '/v4/project_rewards';
