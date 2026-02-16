@@ -905,56 +905,6 @@
       "btns": {
         "seeChat": "Ver conversación",
         "changeRisk": "Cambiar riesgo"
-      },
-      "types": {
-        "config": {
-          "title": "Configuración",
-          "description": {
-            "low": "La configuración de la campaña se ha completado de manera adecuada. Aunque los datos son limitados, satisfacen todos los requisitos necesarios para el lanzamiento de la campaña.",
-            "medium": "",
-            "high": ""
-          }
-        },
-        "info": {
-          "title": "Info. de campaña",
-          "description": {
-            "low": "",
-            "medium": "La información de la campaña está incompleta. Faltan datos sobre el público objetivo y la estrategia de contenido. Se recomienda revisar y completar estos campos para asegurar el éxito de la campaña.",
-            "high": ""
-          }
-        },
-        "rewards": {
-          "title": "Recompensas",
-          "description": {
-            "low": "Las recompensas están bien definidas y son atractivas para los participantes. Se recomienda mantener una comunicación clara sobre cómo se distribuirán las recompensas y asegurar que el proceso sea transparente.",
-            "medium": "",
-            "high": ""
-          }
-        },
-        "collabs": {
-          "title": "Colaboraciones",
-          "description": {
-            "low": "",
-            "medium": "",
-            "high": "No se han definido colaboraciones para esta campaña. Es crucial establecer acuerdos claros y detallados con los colaboradores para evitar conflictos y asegurar que todos los participantes estén alineados con los objetivos de la campaña."
-          }
-        },
-        "budget": {
-          "title": "Presupuesto",
-          "description": {
-            "low": "El presupuesto asignado a la campaña es adecuado y está bien distribuido entre las diferentes áreas. Se recomienda realizar un seguimiento constante del gasto para asegurar la eficiencia y el cumplimiento de los objetivos.",
-            "medium": "",
-            "high": ""
-          }
-        },
-        "about": {
-          "title": "Sobre ti",
-          "description": {
-            "low": "La información proporcionada en la sección 'Sobre ti' es completa y precisa. Esto ayuda a generar confianza y transparencia con los usuarios y colaboradores de la campaña.",
-            "medium": "",
-            "high": ""
-          }
-        }
       }
     }
   },
@@ -1019,7 +969,7 @@
     "donorType": {
       "fan": {
         "title": "Fan",
-        "description": "Este donante a invertido más de 25€",
+        "description": "Este donante ha invertido más de 25€",
         "projectsDonated": "Proyectos donados",
         "moneyDonated": "Dinero donado"
       },
