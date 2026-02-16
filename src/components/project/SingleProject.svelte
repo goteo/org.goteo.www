@@ -4,6 +4,7 @@
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
+        type User,
     } from "../../openapi/client/index";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
@@ -24,14 +25,14 @@
         lang = $bindable(),
         project,
         accounting,
-        ownerName,
+        owner,
         totalSupports,
         balancePoints,
     }: {
         lang: string;
         project: Project;
         accounting: Accounting;
-        ownerName: string;
+        owner: User;
         totalSupports: number;
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
@@ -97,7 +98,7 @@
             <div class="flex flex-col gap-2">
                 <h3 class="text-content text-xl font-bold lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="font-bold text-black underline"> {ownerName}</span>
+                    <span class="font-bold text-black underline"> {owner.displayName}</span>
                 </h3>
                 <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}
@@ -173,6 +174,6 @@
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
-    <Banner {ownerName} />
+    <Banner ownerName={owner.displayName || ""} />
 </section>
 <Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />
