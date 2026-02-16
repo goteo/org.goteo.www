@@ -27,6 +27,7 @@
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
+    import Grid from "../../library/Grid.svelte";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -133,7 +134,7 @@
             </p>
         </div>
 
-        <div class="grid gap-4 md:grid-cols-2">
+        <Grid class="gap-4 md:grid-cols-2">
             <MediaUploader
                 images={campaignInfo.images}
                 onUpload={handleImageUpload}
@@ -141,7 +142,7 @@
             />
 
             <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
-        </div>
+        </Grid>
     </section>
 
     <!-- Objectives Section -->

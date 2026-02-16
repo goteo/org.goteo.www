@@ -18,6 +18,7 @@
     import { toCollectionItems } from "../../utils/hydra.ts";
     import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
     import { projectCache } from "../../stores/projectCache";
+    import Grid from "../library/Grid.svelte";
 
     interface Props {
         lang: string;
@@ -471,38 +472,38 @@
     });
 </script>
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-{matchfundingData ? '3' : '2'}">
+<Grid class="grid-cols-1 gap-6 lg:grid-cols-{matchfundingData ? '3' : '2'}">
     {#if loading}
         <!-- Loading state -->
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
     {:else if error}
         <!-- Error state -->
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
@@ -514,4 +515,4 @@
             <MatchfundingCard {lang} data={matchfundingData} />
         {/if}
     {/if}
-</div>
+</Grid>

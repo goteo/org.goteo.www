@@ -32,7 +32,7 @@
     }
 </script>
 
-<li
+<div
     class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
@@ -94,5 +94,5 @@
         {$t("reward.donate")}
         {formatCurrency(reward.money.amount, reward.money.currency)}
     </Button>
-</li>
+</div>
 <RewardModal {reward} {project} bind:open={openModal} />
