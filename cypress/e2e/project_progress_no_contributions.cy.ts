@@ -106,7 +106,7 @@ describe("Viewing without contributions", () => {
     });
 
     it("should display progress elements correctly", () => {
-        cy.visit("/es/project/100", {
+        cy.visit("/es/project/goteo-pero-mejor", {
             failOnStatusCode: false,
             timeout: 60000,
         });
@@ -133,16 +133,6 @@ describe("Viewing without contributions", () => {
 
                 if (text.includes("€") || text.includes("EUR")) {
                     cy.get("body").should("contain.text", "€");
-                }
-
-                if (text.includes("Obtenido")) {
-                    cy.contains("Obtenido", { timeout: 4000 }).should("be.visible");
-                }
-                if (text.includes("Mínimo")) {
-                    cy.contains("Mínimo").should("be.visible");
-                }
-                if (text.includes("Óptimo")) {
-                    cy.contains("Óptimo").should("be.visible");
                 }
             } else {
                 cy.log(

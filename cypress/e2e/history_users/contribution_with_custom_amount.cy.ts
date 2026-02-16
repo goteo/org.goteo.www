@@ -7,7 +7,7 @@ describe("Contribution with custom amount", () => {
     });
 
     it("should handle donation with custom amount", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("be.visible");
 

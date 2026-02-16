@@ -1,12 +1,17 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import {
+        isLoading,
+        itemsPerPage,
+        totalItems,
+        currentPage,
+    } from "../../stores/chargesPaginationAndSort";
 
-    let { items, total, currentPage = $bindable(1), isLoading } = $props();
-    const totalPages = $derived(() => Math.ceil(total / items));
+    const totalPages = $derived(() => Math.ceil($totalItems / $itemsPerPage));
 
     function goToPage(page: number) {
         if (page < 1 || page > totalPages()) return;
-        currentPage = page;
+        $currentPage = page;
     }
 
     function getVisiblePages(): (number | string)[] {
@@ -20,17 +25,17 @@
 
         const result: (number | string)[] = [];
 
-        if (currentPage <= 4) {
+        if ($currentPage <= 4) {
             result.push(1, 2, 3, 4, "…", total - 1, total);
             return result.slice(0, 7);
         }
 
-        if (currentPage >= total - 3) {
+        if ($currentPage >= total - 3) {
             result.push(1, 2, "…", total - 3, total - 2, total - 1, total);
             return result.slice(-7);
         }
 
-        result.push(1, "…", currentPage - 1, currentPage, currentPage + 1, "…", total);
+        result.push(1, "…", $currentPage - 1, $currentPage, $currentPage + 1, "…", total);
         return result;
     }
 </script>
@@ -39,27 +44,27 @@
     <nav class="flex items-center gap-1">
         <button
             onclick={() => goToPage(1)}
-            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40
+            class="border-content w-10 rounded border py-1 text-center disabled:opacity-40
 "
-            disabled={currentPage === 1}>«</button
+            disabled={$currentPage === 1}>«</button
         >
         <button
-            onclick={() => goToPage(currentPage - 1)}
-            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
-            disabled={currentPage === 1}>‹</button
+            onclick={() => goToPage($currentPage - 1)}
+            class="border-content w-10 rounded border py-1 text-center disabled:opacity-40"
+            disabled={$currentPage === 1}>‹</button
         >
 
         {#each getVisiblePages() as page}
             {#if page === "..."}
-                <span class="text-secondary border-content w-[40px] text-center">…</span>
+                <span class="text-secondary border-content w-10 text-center">…</span>
             {:else}
                 <button
                     onclick={() => typeof page === "number" && goToPage(page)}
-                    class="border-content w-[40px] rounded border py-1 text-center text-sm font-medium"
-                    class:bg-secondary={currentPage === page}
-                    class:text-primary={currentPage === page}
-                    class:text-secondary={currentPage !== page}
-                    class:hover:bg-gray-200={currentPage !== page}
+                    class="border-content w-10 rounded border py-1 text-center text-sm font-medium"
+                    class:bg-secondary={$currentPage === page}
+                    class:text-primary={$currentPage === page}
+                    class:text-secondary={$currentPage !== page}
+                    class:hover:bg-gray-200={$currentPage !== page}
                 >
                     {page}
                 </button>
@@ -67,22 +72,26 @@
         {/each}
 
         <button
-            onclick={() => goToPage(currentPage + 1)}
-            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
-            disabled={currentPage === totalPages()}>›</button
+            onclick={() => goToPage($currentPage + 1)}
+            class="border-content w-10 rounded border py-1 text-center disabled:opacity-40"
+            disabled={$currentPage === totalPages()}>›</button
         >
         <button
             onclick={() => goToPage(totalPages())}
-            class="border-content w-[40px] rounded border py-1 text-center disabled:opacity-40"
-            disabled={currentPage === totalPages()}>»</button
+            class="border-content w-10 rounded border py-1 text-center disabled:opacity-40"
+            disabled={$currentPage === totalPages()}>»</button
         >
     </nav>
 
-    {#if total > 0}
+    {#if $totalItems > 0}
         <span class="text-content text-sm font-bold">
-            {@html $t("contributions.pagination.showing", { items, total }, { allowHTML: true })}
+            {@html $t(
+                "contributions.pagination.showing",
+                { items: $itemsPerPage, total: $totalItems },
+                { allowHTML: true },
+            )}
         </span>
-    {:else if total === 0 && !isLoading}
+    {:else if $totalItems === 0 && !$isLoading}
         <span class="text-content text-sm font-bold">
             {@html $t("contributions.pagination.noResults")}
         </span>

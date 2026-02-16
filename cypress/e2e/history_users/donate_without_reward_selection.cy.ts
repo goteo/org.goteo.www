@@ -5,7 +5,7 @@ describe("View project rewards", () => {
     });
 
     it("should show option to donate without reward", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("be.visible");
 

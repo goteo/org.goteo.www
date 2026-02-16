@@ -7,7 +7,7 @@ describe("Contribution with reward", () => {
     });
 
     it("should show reward description when contributing", () => {
-        cy.visit("/es/project/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("be.visible");
 

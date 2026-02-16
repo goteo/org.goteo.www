@@ -56,6 +56,7 @@
       "updates": {
         "title": "Actualitzacions",
         "modal-title": "Nova actualització",
+        "by": "Per:",
         "content": {
           "title": "No perdis detall dels avenços d’aquesta campanya",
           "empty": "No existeixen més actualitzacions previstes.",
@@ -72,7 +73,6 @@
           "title": "Donacions i missatges de suport de la comunitat"
         },
         "contribution": "Aportació",
-        "noComment": "Sense comentari.",
         "matchfunding": {
           "contribution": "Suma de les aportacions",
           "aported": "Aportats",
@@ -534,7 +534,7 @@
       "description": "Ara necessitem que ens diguis com vols pagar.",
       "selectMethod": "Selecciona mètode de pagament:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "El teu mitjà de pagament s’ha processat amb un èxit apoteòsic",
       "description": "¡Ben! Estàs a un pas d’acabar i de fer el món una mica millor.",
       "form-goal": {
@@ -605,8 +605,7 @@
           "wallet": "Moneder"
         },
         "status": {
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         },
@@ -636,7 +635,8 @@
             "href": "Url"
           }
         },
-        "estimatedFee": "Comissió estimada"
+        "estimatedFee": "Comissió estimada",
+        "concept": "Concepte"
       },
       "actions": {
         "refundToWallet": "Devolució a moneder",
@@ -717,8 +717,7 @@
         "title": "Estat de l'aportació",
         "options": {
           "all": "Tots",
-          "in_pending": "Pendent",
-          "charged": "Cobrat",
+          "in_charge": "Cobrat",
           "to_refund": "Per reemborsar",
           "refunded": "Reemborsat"
         }
@@ -874,6 +873,24 @@
           "title": "Testimonis dels nostres impulsors",
           "description": "Qui pot explicar-te millor com és impulsar campanyes exitoses? Els nostres impulsors ens expliquen de primera mà com és gestionar una campanya amb Goteo."
         }
+      }
+    }
+  },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Campanyes seleccionades:",
+        "totalEarned": "Total aconseguit:",
+        "totalPaid": "Total pagat:",
+        "totalUnpaid": "Falta per pagar:"
+      }
+    },
+    "charges": {
+      "lastContributions": "Últimes aportacions",
+      "totalizers": {
+        "totalCharges": "Total aportacions:",
+        "totalTips": "Total propines:",
+        "totalFees": "Comissions totals:"
       }
     }
   },

@@ -8,20 +8,20 @@
         children: Snippet;
     }
 
-    let { variant = "default", class: classes = "", children }: Props = $props();
+    let { variant, class: classes = "", children }: Props = $props();
 
     const variantStyles = {
-        default: "bg-white border border-black text-secondary",
         success: "bg-variant2",
         warning: "bg-variant4",
         error: "bg-tertiary",
+        bold: "bg-grey border-grey text-secondary font-bold border-soft-purple",
     };
 </script>
 
 <div
     class={twMerge(
-        "flex content-center items-center gap-2 rounded-[4px] px-2 py-1 whitespace-nowrap text-black",
-        variantStyles[variant],
+        "flex items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
+        variant ? variantStyles[variant] : "",
         classes,
     )}
 >

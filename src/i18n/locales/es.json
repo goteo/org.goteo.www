@@ -58,6 +58,7 @@
       "updates": {
         "title": "Actualizaciones",
         "modal-title": "Nueva actualización",
+        "by": "Por:",
         "content": {
           "title": "No pierdas detalle de los avances de esta campaña",
           "empty": "No existen más actualizaciones previstas.",
@@ -74,7 +75,6 @@
           "title": "Donaciones y mensajes de apoyo de la comunidad"
         },
         "contribution": "Aporte",
-        "noComment": "Sin comentario.",
         "matchfunding": {
           "contribution": "Suma de los aportes",
           "aported": "Aportados",
@@ -529,14 +529,14 @@
       "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
       "selectMethod": "Selecciona método de pago:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Tu medio de pago se ha procesado con un éxito apabullante",
       "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
       "form-goal": {
         "title": "Si la campaña no logra su objetivo",
         "options": {
           "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
-          "2": "Devolverlo a mi medio de pago Tarjeta"
+          "2": "Devolverlo a mi medio de pago"
         }
       },
       "form-review": {
@@ -600,10 +600,12 @@
           "wallet": "Monedero"
         },
         "status": {
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         },
         "refund": {
           "to_wallet": "Sí",
@@ -631,7 +633,8 @@
             "href": "Url"
           }
         },
-        "estimatedFee": "Comisión estimada"
+        "estimatedFee": "Comisión estimada",
+        "concept": "Concepto"
       },
       "actions": {
         "refundToWallet": "Devolución a monedero",
@@ -712,10 +715,12 @@
         "title": "Estado de Aporte",
         "options": {
           "all": "Todos",
-          "in_pending": "Pendiente",
-          "charged": "Cobrado",
+          "to_charge": "Por cobrar",
+          "in_charge": "Cobrado",
           "to_refund": "Por reembolsar",
-          "refunded": "Reembolsado"
+          "refunded": "Reembolsado",
+          "to_wallet": "Por reembolsar a monedero",
+          "walleted": "Reembolsado a monedero"
         }
       },
       "projectStatus": {
@@ -869,6 +874,24 @@
           "title": "Testimonios de nuestros impulsores",
           "description": "¿Quién puede contarte mejor como es impulsar campañas exitosas? Nuestros impulsores nos cuentan de primera mano como es gestionar una campaña con Goteo."
         }
+      }
+    }
+  },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Campañas seleccionadas:",
+        "totalEarned": "Total conseguido:",
+        "totalPaid": "Total pagado:",
+        "totalUnpaid": "Falta por pagar:"
+      }
+    },
+    "charges": {
+      "lastContributions": "Últimos aportes:",
+      "totalizers": {
+        "totalCharges": "Total aportes:",
+        "totalTips": "Total propinas:",
+        "totalFees": "Comisiones totales:"
       }
     }
   },

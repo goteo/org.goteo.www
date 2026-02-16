@@ -56,6 +56,7 @@
       "updates": {
         "title": "Updates",
         "modal-title": "New update",
+        "by": "By:",
         "content": {
           "title": "Do not lose detail of the advances of this campaign",
           "empty": "There are no more planned updates.",
@@ -72,7 +73,6 @@
           "title": "Community support donations and messages"
         },
         "contribution": "Input",
-        "noComment": "No comment.",
         "matchfunding": {
           "contribution": "Sum of contributions",
           "aported": "Provided",
@@ -526,7 +526,7 @@
       "description": "Now we need to tell us how you want to pay.",
       "selectMethod": "Select payment method:"
     },
-    "page-aproved": {
+    "page-approved": {
       "title": "Your means of payment has been processed with an overwhelming success",
       "description": "Good! ",
       "form-goal": {
@@ -597,8 +597,7 @@
           "wallet": "Wallet"
         },
         "status": {
-          "in_pending": "Pending",
-          "charged": "Charged",
+          "in_charge": "Charged",
           "to_refund": "To refund",
           "refunded": "Refunded"
         },
@@ -628,7 +627,8 @@
             "href": "URL"
           }
         },
-        "estimatedFee": "Estimated fee"
+        "estimatedFee": "Estimated fee",
+        "concept": "Concept"
       },
       "actions": {
         "refundToWallet": "Refund to wallet",
@@ -709,8 +709,6 @@
         "title": "Charge status",
         "options": {
           "all": "All",
-          "in_pending": "Pending",
-          "charged": "Charged",
           "to_refund": "To be refunded",
           "refunded": "Refunded"
         }
@@ -866,6 +864,24 @@
           "title": "Testimonials from our promoters",
           "description": "Who better to tell you what it's like to promote successful campaigns? Our promoters tell us firsthand what it's like to manage a campaign with Goteo."
         }
+      }
+    }
+  },
+  "admin": {
+    "projects": {
+      "totalizers": {
+        "selectedCampaigns": "Selected campaigns:",
+        "totalEarned": "Total earned:",
+        "totalPaid": "Total paid:",
+        "totalUnpaid": "Total unpaid:"
+      }
+    },
+    "charges": {
+      "lastContributions": "Last contributions",
+      "totalizers": {
+        "totalCharges": "Total charges:",
+        "totalTips": "Total tips:",
+        "totalFees": "Total fees:"
       }
     }
   },

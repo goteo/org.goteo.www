@@ -139,7 +139,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should show error for amount below minimum required for reward", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
 
@@ -209,10 +209,6 @@ describe("Reward for incorrect amount", () => {
                     cy.log(
                         `✅ Encontrados ${foundTexts} de ${expectedTexts.length} textos esperados`,
                     );
-
-                    if ($body.find("button:contains('Dona')").length > 0) {
-                        cy.contains("button", "Dona").should("be.visible").click();
-                    }
                 } else {
                     cy.log("ℹ️ Elementos específicos no encontrados, pero la página cargó");
                     cy.get("body").should("not.contain", "Error 500");
@@ -222,7 +218,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should handle different reward minimum amounts", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.wait(3000);
         cy.get("body").should("exist");
@@ -249,7 +245,7 @@ describe("Reward for incorrect amount", () => {
     });
 
     it("should handle the page loading gracefully", () => {
-        cy.visit("/es/projects/100", { failOnStatusCode: false });
+        cy.visit("/es/project/goteo-pero-mejor", { failOnStatusCode: false });
 
         cy.get("body").should("exist");
         cy.wait(2000);

@@ -25,6 +25,7 @@
     --color-gray-light: #f3f3f3; /* Light gray for borders */
     --color-light-accent: #e6d9f3; /* Light purple accent for buttons */
     --color-soft-purple: #faf9ff;
+    --color-light-pink: #ff56d5; /* Platform project update cards color */
     --color-neutral-light: #e6e6e6; /* Light neutral border */
     --color-divider: #f1efff; /* Budget bar divider color */
 
@@ -32,6 +33,11 @@
     --color-variant2: #99ffcc;
     --color-variant3: #72d8ff;
     --color-variant4: #ffff99;
+
+    --color-semantic-error: #e9b1bd;
+    --color-semantic-success: #b1e9e1;
+    --color-semantic-notification: #c2eeff;
+    --color-semantic-warning: #ffffc2;
 
     --font-body: "Karla", sans-serif;
     --body-regular: 1rem;
