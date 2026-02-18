@@ -34,9 +34,13 @@
 
     let freeAmount = $state("");
 
-    let isAvailable = calcAvailability();
-    function calcAvailability(): boolean {
+    let isAvailable = $state(calcAvailability());
+    function calcAvailability(reward?: ProjectReward): boolean {
         if (project.status !== "in_campaign") {
+            return false;
+        }
+
+        if (reward && reward.isFinite && reward.unitsAvailable === 0) {
             return false;
         }
 
@@ -109,7 +113,12 @@
                 </div>
             </li>
             {#each rewards as reward}
-                <Reward {reward} {project} />
+                <Reward
+                    {reward}
+                    {project}
+                    variant={"public"}
+                    isAvailable={calcAvailability(reward)}
+                />
             {/each}
         </ul>
     </div>
