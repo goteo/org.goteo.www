@@ -6,36 +6,28 @@
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
+    import WizardRewardModal from "./project/wizard/WizardRewardModal.svelte";
     import RewardModal from "./RewardModal.svelte";
 
     let {
         reward = $bindable(),
         project,
+        variant,
+        isAvailable = $bindable(),
     }: {
         reward: ProjectReward;
         project: Project;
+        variant: "public" | "admin";
+        isAvailable?: boolean;
     } = $props();
 
     let openModal = $state(false);
-
-    let isAvailable = calcAvailability();
-    function calcAvailability(): boolean {
-        if (project.status !== "in_campaign") {
-            return false;
-        }
-
-        if (reward.isFinite && reward.unitsAvailable! === 0) {
-            return false;
-        }
-
-        return true;
-    }
 </script>
 
-<li
-    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
-    class:opacity-50={!isAvailable}
-    class:cursor-not-allowed={!isAvailable}
+<div
+    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
+    class:opacity-50={variant === "public" && !isAvailable}
+    class:cursor-not-allowed={variant === "public" && !isAvailable}
 >
     <div class="flex flex-col gap-4">
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-semibold">
@@ -61,23 +53,24 @@
     </div>
 
     <div class="mt-auto flex w-full justify-between">
-        <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
-            <UserIcon />
-            <span>
-                {@html $t(
-                    "rewards.donators",
-                    { donators: reward.unitsClaimed! },
-                    { allowHTML: true },
-                )}
-            </span>
-        </div>
-        {#if reward.isFinite}
+        {#if reward.isFinite || variant === "admin"}
             <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
                 <UnitIcon />
                 <span>
                     {@html $t(
                         "rewards.units-available",
                         { units: `${reward.unitsAvailable}` },
+                        { allowHTML: true },
+                    )}
+                </span>
+            </div>
+        {:else}
+            <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
+                <UserIcon />
+                <span>
+                    {@html $t(
+                        "rewards.donators",
+                        { donators: reward.unitsClaimed! },
                         { allowHTML: true },
                     )}
                 </span>
@@ -91,8 +84,16 @@
         disabled={!isAvailable}
         onclick={() => (openModal = true)}
     >
-        {$t("reward.donate")}
-        {formatCurrency(reward.money.amount, reward.money.currency)}
+        {#if variant === "public"}
+            {$t("reward.donate")}
+            {formatCurrency(reward.money.amount, reward.money.currency)}
+        {:else}
+            {$t("reward.edit")}
+        {/if}
     </Button>
-</li>
-<RewardModal {reward} {project} bind:open={openModal} />
+</div>
+{#if variant === "public"}
+    <RewardModal {reward} {project} bind:open={openModal} />
+{:else if variant === "admin"}
+    <WizardRewardModal {reward} {project} bind:open={openModal} />
+{/if}
