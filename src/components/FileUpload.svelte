@@ -88,12 +88,12 @@
         />
 
         <label for="fileInput" class="flex h-32 cursor-pointer flex-col justify-center gap-2">
-            <UploadFileIcon width="40" height="40" class="self-center" />
+            <UploadFileIcon class="self-center size-10" />
             <p class="text-content overflow-hidden text-base font-normal text-ellipsis">
                 {$t("wizard.steps.rewards.modal.uploadFiles.dragAndDrop")}
                 <span class="text-secondary underline">
                     {$t("wizard.steps.rewards.modal.uploadFiles.clickHere")}
-                </span>.
+                </span>
             </p>
         </label>
     </div>
