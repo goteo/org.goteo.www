@@ -81,7 +81,7 @@
     <Button
         kind="secondary"
         class="w-full"
-        disabled={!isAvailable}
+        disabled={!isAvailable && variant === "public"}
         onclick={() => (openModal = true)}
     >
         {#if variant === "public"}
