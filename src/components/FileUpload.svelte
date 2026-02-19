@@ -23,12 +23,14 @@
         const validType = accept.includes(file.type);
 
         if (!validSize) {
-            error = `El archivo ${file.name} supera el tamaño máximo (${maxSizeMB}MB).`;
+            // For example: El archivo ${file.name} supera el tamaño máximo (${maxSizeMB}MB).
+            error = `${$t("wizard.steps.rewards.modal.filesError.size", { fileName: file.name, maxSize: maxSizeMB })}`;
             return false;
         }
 
         if (!validType) {
-            error = `Tipo de archivo no permitido: ${file.name}`;
+            // For example: Tipo de archivo no permitido: ${file.name}
+            error = `${$t("wizard.steps.rewards.modal.filesError.type", { fileName: file.name })}`;
             return false;
         }
 
