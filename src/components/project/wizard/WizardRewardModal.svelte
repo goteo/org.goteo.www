@@ -2,8 +2,6 @@
     import { Modal } from "flowbite-svelte";
     import type { Project, ProjectReward } from "../../../openapi/client";
     import { t } from "../../../i18n/store";
-    import { formatCurrency } from "../../../utils/currencies";
-    import { onMount } from "svelte";
     import Button from "../../library/Button.svelte";
     import FileUpload from "../../FileUpload.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
@@ -19,9 +17,6 @@
         project?: Project;
     } = $props();
 
-    let rawInput = $state("");
-    let customAmount = $state(0);
-
     let files = $state<File[]>([]);
     let rewardCount = $state(1);
     let unlimited = $state(false);
@@ -32,13 +27,6 @@
     function deleteReward(reward: ProjectReward | undefined) {}
 
     function updateReward(reward: ProjectReward | undefined) {}
-
-    onMount(() => {
-        rawInput = formatCurrency(reward?.money.amount, reward?.money.currency);
-        customAmount = +formatCurrency(reward?.money.amount, reward?.money.currency, {
-            asLocaleString: false,
-        });
-    });
 </script>
 
 <Modal
