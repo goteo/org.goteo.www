@@ -9,6 +9,7 @@
     import ProgressChart from "./ProgressChart.svelte";
     import { t } from "../../i18n/store";
     import Button from "../library/Button.svelte";
+    import Grid from "../library/Grid.svelte";
 
     export let project: Project;
     export let totalSupports: number = 0;
@@ -26,7 +27,7 @@
 </script>
 
 <div
-    class=" border-grey flex h-full flex-col gap-6 rounded-[32px] border bg-[#fff] p-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
+    class="border-grey flex h-full flex-col gap-6 rounded-4xl border bg-[#fff] p-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
 >
     <div class="flex w-full items-center justify-end">
         {#if hasReached(project.budget?.optimum?.money)}
@@ -44,7 +45,7 @@
         {/if}
     </div>
     <ProgressChart {accounting} {project} {balancePoints} />
-    <div class="col-span-2 grid grid-cols-2 gap-6">
+    <Grid class="col-span-2 grid-cols-2 gap-6">
         <div class="flex flex-col gap-4">
             <div>
                 <p class="text-content text-sm">{$t(`campaignProgress.obtained`)}</p>
@@ -82,7 +83,7 @@
                 </p>
             </div>
         </div>
-    </div>
+    </Grid>
     <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={onScrollToRewards}>
         {$t("campaignProgress.donate")}
     </Button>

@@ -12,17 +12,21 @@
         class: classes = "",
         labelText = undefined,
         helperText = undefined,
+        error = undefined,
+        onBlur = undefined,
     }: {
         value?: string;
         id?: string;
         name?: string;
         placeholder?: string;
-        type?: "text" | "email" | "password" | "tel" | "url";
+        type?: "text" | "email" | "password" | "tel" | "url" | "date";
         required?: boolean;
         disabled?: boolean;
         class?: ClassNameValue;
         labelText?: string;
         helperText?: string;
+        error?: string;
+        onBlur?: () => void;
     } = $props();
 
     const finalId = id ? id : getIdForInput();
@@ -75,9 +79,14 @@
             classes,
         )}
     />
-    {#if helperText}
-        <span id={`helper-${finalId}`} class="ml-4 text-[12px]">
+    {#if helperText && !error}
+        <span id={`helper-${finalId}`} class="ml-4 text-[12px] text-gray-500">
             {helperText}
         </span>
+    {/if}
+    {#if error}
+        <p id={`${finalId}-error`} class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+            {error}
+        </p>
     {/if}
 </div>
