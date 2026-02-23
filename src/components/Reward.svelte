@@ -6,27 +6,16 @@
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
-    import WizardRewardModal from "./project/wizard/WizardRewardModal.svelte";
     import RewardModal from "./RewardModal.svelte";
 
     let {
         reward = $bindable(),
         project,
-        variant,
-        onEdit,
-        onSave,
-        onDelete,
-        selectedReward,
         isAvailable = $bindable(),
     }: {
         reward: ProjectReward;
         project: Project;
-        variant: "public" | "admin";
-        onEdit?: () => void;
-        onSave?: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined) => Promise<void>;
-        selectedReward?: ProjectReward | null;
-        isAvailable?: boolean;
+        isAvailable: boolean;
     } = $props();
 
     let openModal = $state(false);
@@ -34,8 +23,8 @@
 
 <div
     class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
-    class:opacity-50={variant === "public" && !isAvailable}
-    class:cursor-not-allowed={variant === "public" && !isAvailable}
+    class:opacity-50={!isAvailable}
+    class:cursor-not-allowed={!isAvailable}
 >
     <div class="flex flex-col gap-4">
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-semibold">
@@ -61,7 +50,7 @@
     </div>
 
     <div class="mt-auto flex w-full justify-between">
-        {#if reward.isFinite || variant === "admin"}
+        {#if reward.isFinite}
             <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
                 <UnitIcon />
                 <span>
@@ -85,31 +74,14 @@
             </div>
         {/if}
     </div>
-
-    {#if variant === "public"}
-        <Button
-            kind="secondary"
-            class="w-full"
-            disabled={!isAvailable && variant === "public"}
-            onclick={() => (openModal = true)}
-        >
-            {$t("reward.donate")}
-            {formatCurrency(reward.money.amount, reward.money.currency)}
-        </Button>
-    {:else}
-        <Button kind="secondary" class="w-full" onclick={onEdit}>
-            {$t("reward.edit")}
-        </Button>
-    {/if}
+    <Button
+        kind="secondary"
+        class="w-full"
+        disabled={!isAvailable}
+        onclick={() => (openModal = true)}
+    >
+        {$t("reward.donate")}
+        {formatCurrency(reward.money.amount, reward.money.currency)}
+    </Button>
 </div>
-{#if variant === "public"}
-    <RewardModal {reward} {project} bind:open={openModal} />
-{:else if variant === "admin"}
-    <WizardRewardModal
-        bind:open={openModal}
-        reward={selectedReward!}
-        {project}
-        {onSave}
-        {onDelete}
-    />
-{/if}
+<RewardModal {reward} {project} bind:open={openModal} />

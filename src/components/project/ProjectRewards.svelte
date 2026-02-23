@@ -117,7 +117,6 @@
                 <Reward
                     {reward}
                     {project}
-                    variant={"public"}
                     isAvailable={calcAvailability(reward)}
                 />
             {/each}
