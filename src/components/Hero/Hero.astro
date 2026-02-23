@@ -1,12 +1,13 @@
 ---
 import heroImage from "./hero.png";
+import Grid from "../library/Grid.svelte";
 
 const { t } = Astro.locals;
 ---
 
 <section class="wrapper hero-section flex min-h-[60vh] items-center">
     <div class="container mx-auto">
-        <div class="grid items-center gap-12 lg:grid-cols-2">
+        <Grid class="items-center gap-12 lg:grid-cols-2" client:load>
             <!-- Hero Content -->
             <div class="space-y-8">
                 <h1 class="text-secondary text-4xl leading-tight font-bold lg:text-5xl xl:text-6xl">
@@ -44,6 +45,6 @@ const { t } = Astro.locals;
                     />
                 </div>
             </div>
-        </div>
+        </Grid>
     </div>
 </section>

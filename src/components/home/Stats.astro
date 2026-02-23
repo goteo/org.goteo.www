@@ -1,4 +1,6 @@
 ---
+import Grid from "../library/Grid.svelte";
+
 const { t } = Astro.locals;
 ---
 
@@ -6,14 +8,14 @@ const { t } = Astro.locals;
     <h2 class="mb-6 text-2xl font-bold text-black">
         {t("home.stats.title")}
     </h2>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+    <Grid class="grid-cols-1 gap-6 md:grid-cols-2" client:load>
         <!-- First Card: De la teoría a la acción -->
         <div class="bg-grey flex flex-col gap-6 rounded-3xl p-6 shadow-sm md:gap-10 md:p-10">
             <div class="flex flex-col gap-6">
                 <!-- Header -->
                 <div class="flex flex-col gap-2">
                     <h2
-                        class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                     >
                         {t("home.stats.theoryToAction.title")}
                     </h2>
@@ -26,7 +28,7 @@ const { t } = Astro.locals;
                 <div class="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.theoryToAction.projectsReceived.value")}
                         </div>
@@ -36,7 +38,7 @@ const { t } = Astro.locals;
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.theoryToAction.projectsPublished.value")}
                         </div>
@@ -46,7 +48,7 @@ const { t } = Astro.locals;
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.theoryToAction.successRate.value")}
                         </div>
@@ -72,7 +74,7 @@ const { t } = Astro.locals;
                 <!-- Header -->
                 <div class="flex flex-col gap-2">
                     <h2
-                        class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                        class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                     >
                         {t("home.stats.whyGoteo.title")}
                     </h2>
@@ -85,7 +87,7 @@ const { t } = Astro.locals;
                 <div class="flex flex-col items-center justify-between gap-4 md:flex-row md:gap-0">
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.whyGoteo.community.value")}
                         </div>
@@ -95,7 +97,7 @@ const { t } = Astro.locals;
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.whyGoteo.averageDonors.value")}
                         </div>
@@ -105,7 +107,7 @@ const { t } = Astro.locals;
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
-                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-[48px]"
+                            class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
                             {t("home.stats.whyGoteo.totalRaised.value")}
                         </div>
@@ -124,5 +126,5 @@ const { t } = Astro.locals;
                 {t("home.stats.whyGoteo.button")}
             </a>
         </div>
-    </div>
+    </Grid>
 </section>
