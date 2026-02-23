@@ -4,6 +4,7 @@
     import Search from "./Search.svelte";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
+    import Grid from "../library/Grid.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
         $props<{
@@ -89,7 +90,7 @@
 
     {#if showFilters}
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
-            <div class="grid grid-cols-3 gap-4">
+            <Grid class="grid-cols-3 gap-4">
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedPaymentMethod}
@@ -151,7 +152,7 @@
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                     />
                 </div>
-            </div>
+            </Grid>
 
             <div class="col-span-3 flex justify-end">
                 <button
