@@ -13,11 +13,19 @@
         reward = $bindable(),
         project,
         variant,
+        onEdit,
+        onSave,
+        onDelete,
+        selectedReward,
         isAvailable = $bindable(),
     }: {
         reward: ProjectReward;
         project: Project;
         variant: "public" | "admin";
+        onEdit?: () => void;
+        onSave?: (data: any) => Promise<void>;
+        onDelete?: (id: number | undefined) => Promise<void>;
+        selectedReward?: ProjectReward | null;
         isAvailable?: boolean;
     } = $props();
 
@@ -78,22 +86,30 @@
         {/if}
     </div>
 
-    <Button
-        kind="secondary"
-        class="w-full"
-        disabled={!isAvailable && variant === "public"}
-        onclick={() => (openModal = true)}
-    >
-        {#if variant === "public"}
+    {#if variant === "public"}
+        <Button
+            kind="secondary"
+            class="w-full"
+            disabled={!isAvailable && variant === "public"}
+            onclick={() => (openModal = true)}
+        >
             {$t("reward.donate")}
             {formatCurrency(reward.money.amount, reward.money.currency)}
-        {:else}
+        </Button>
+    {:else}
+        <Button kind="secondary" class="w-full" onclick={onEdit}>
             {$t("reward.edit")}
-        {/if}
-    </Button>
+        </Button>
+    {/if}
 </div>
 {#if variant === "public"}
     <RewardModal {reward} {project} bind:open={openModal} />
 {:else if variant === "admin"}
-    <WizardRewardModal {reward} {project} bind:open={openModal} />
+    <WizardRewardModal
+        bind:open={openModal}
+        reward={selectedReward!}
+        {project}
+        {onSave}
+        {onDelete}
+    />
 {/if}
