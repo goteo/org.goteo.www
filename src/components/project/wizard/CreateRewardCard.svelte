@@ -1,10 +1,22 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import type { Project, ProjectReward } from "../../../openapi/client";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
+    import WizardRewardModal from "./WizardRewardModal.svelte";
 
-    let { onclick } = $props<{
+    let {
+        onclick,
+        open = $bindable(false),
+        project,
+        reward,
+        onSave,
+    } = $props<{
         onclick: () => void;
+        open: boolean;
+        project: Project;
+        reward: ProjectReward | null;
+        onSave: (data: any) => Promise<void>;
     }>();
 </script>
 
@@ -24,13 +36,10 @@
             es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.
         </p>
     </div>
-    <Button
-        kind="secondary"
-        class="flex w-full items-center justify-center gap-2"
-        onclick={onclick}
-    >
+    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
         <PlusIcon class="p-[2.25px]" />
         <!-- {$t("wizard.steps.rewards.createCard.btn")} -->
         Añadir recompensa
     </Button>
 </div>
+<WizardRewardModal bind:open {project} {onSave} {reward} />

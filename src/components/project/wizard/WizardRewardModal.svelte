@@ -7,6 +7,7 @@
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import type { ClassNameValue } from "tailwind-merge";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { formatCurrency } from "../../../utils/currencies";
 
     let {
         open = $bindable(false),
@@ -24,10 +25,9 @@
 
     let title = $state(reward?.title ?? "");
     let description = $state(reward?.description ?? "");
-    let productionPrice = $state(reward?.money.amount ?? 0);
-    let shippingPrice = $state(0);
+    let moneyAmount = $state(reward?.money.amount ?? 0);
     let rewardCount = $state(reward?.unitsAvailable ?? 1);
-    let unlimited = $state(!reward?.isFinite);
+    let unlimited = $state(reward?.isFinite ?? false);
 
     let files = $state<File[]>([]);
 
@@ -39,7 +39,10 @@
             project: apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id),
             title,
             description,
-            money: productionPrice + shippingPrice,
+            money: {
+                amount: moneyAmount,
+                currency: reward?.money.currency || "EUR",
+            },
             isFinite: unlimited ? false : true,
             unitsTotal: unlimited ? null : rewardCount,
         };
@@ -74,25 +77,21 @@
             type="text"
             placeholder={$t("wizard.steps.rewards.modal.placeholders.title")}
             class={inputsClass}
+            value={reward === null ? "" : reward.title}
         />
         <textarea
-            name=""
-            id=""
             placeholder={$t("wizard.steps.rewards.modal.placeholders.description")}
             class={`h-32 resize-none ${inputsClass}`}
-        ></textarea>
-        <div class="grid grid-cols-2 items-center justify-between gap-4">
-            <input
-                type="text"
-                placeholder={$t("wizard.steps.rewards.modal.placeholders.productionPrice")}
-                class={inputsClass}
-            />
-            <input
-                type="text"
-                placeholder={$t("wizard.steps.rewards.modal.placeholders.shippingPrice")}
-                class={inputsClass}
-            />
-        </div>
+            >{reward === null ? "" : reward.description}</textarea
+        >
+        <input
+            type="text"
+            placeholder={$t("wizard.steps.rewards.modal.placeholders.moneyAmount")}
+            class={inputsClass}
+            value={reward === null
+                ? ""
+                : formatCurrency(reward.money.amount, reward.money.currency)}
+        />
         <div class="flex flex-col gap-6">
             <FileUpload bind:files />
             <RewardItemsSelector bind:value={rewardCount} bind:unlimited />
@@ -100,9 +99,11 @@
     </div>
 
     {#snippet footer()}
-        <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
-            {$t("wizard.steps.rewards.modal.btns.delete")}
-        </Button>
+        {#if reward !== null}
+            <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
+                {$t("wizard.steps.rewards.modal.btns.delete")}
+            </Button>
+        {/if}
         <Button onclick={() => handleContinue()} class="w-fit">
             {$t("wizard.steps.rewards.modal.btns.continue")}
         </Button>

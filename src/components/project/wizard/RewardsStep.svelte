@@ -8,9 +8,10 @@
         type ProjectReward,
     } from "../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import Reward from "../../Reward.svelte";
+    import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
     import CreateRewardCard from "./CreateRewardCard.svelte";
+    import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
 
     let { project } = $props<{
         project: Project;
@@ -109,23 +110,31 @@
     });
 </script>
 
-{#if loading}
-    <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
-{:else}
-    <!-- Use Grid component when merged to feat/project-submission branch -->
-    <div class="grid grid-cols-3 gap-6">
-        {#each rewards as reward}
-            <Reward
-                {project}
-                {reward}
-                variant="admin"
-                onEdit={() => openEdit(reward)}
-                onDelete={handleDelete}
-                onSave={handleSave}
-                {selectedReward}
-            />
-        {/each}
-
-        <CreateRewardCard onclick={openCreate} />
+<div class="flex w-full flex-col gap-10">
+    <div class="flex w-full flex-col gap-4">
+        <h2 class="text-[40px] leading-12 font-bold text-black">Recompensas</h2>
+        <p class="text-content text-base font-normal">
+            Añade recompensas atractivas para alcanzar tu meta
+        </p>
     </div>
-{/if}
+    {#if loading}
+        <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
+    {:else}
+        <Grid>
+            {#each rewards as reward}
+                <RewardsCollabsCard
+                    bind:open={openModal}
+                    {project}
+                    {reward}
+                    variant="reward"
+                    onEdit={() => openEdit(reward)}
+                    onDelete={handleDelete}
+                    onSave={handleSave}
+                    {selectedReward}
+                />
+            {/each}
+
+            <CreateRewardCard bind:open={openModal} {project} reward={selectedReward} onSave={handleSave} onclick={openCreate} />
+        </Grid>
+    {/if}
+</div>

@@ -11,6 +11,7 @@
 
     let {
         variant,
+        open = $bindable(false),
         project,
         reward = $bindable(),
         collab = $bindable(),
@@ -20,6 +21,7 @@
         selectedReward,
     }: {
         variant: "reward" | "collab";
+        open: boolean;
         project: Project;
         reward?: ProjectReward;
         collab?: ProjectCollaboration;
@@ -28,8 +30,6 @@
         onDelete?: (id: number | undefined) => Promise<void>;
         selectedReward?: ProjectReward | null;
     } = $props();
-
-    let openModal = $state(false);
 </script>
 
 <div
@@ -98,10 +98,10 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <WizardCollabModal bind:open={openModal} />
+    <WizardCollabModal bind:open />
 {:else if variant === "reward"}
     <WizardRewardModal
-        bind:open={openModal}
+        bind:open
         reward={selectedReward!}
         {project}
         {onSave}
