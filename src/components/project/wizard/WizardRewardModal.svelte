@@ -6,27 +6,51 @@
     import FileUpload from "../../FileUpload.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import type { ClassNameValue } from "tailwind-merge";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
 
     let {
         open = $bindable(false),
-        reward = $bindable(),
+        reward,
         project,
+        onSave,
+        onDelete,
     }: {
         open: boolean;
-        reward?: ProjectReward;
-        project?: Project;
+        reward: ProjectReward | null;
+        project: Project;
+        onSave?: (data: any) => Promise<void>;
+        onDelete?: (id: number | undefined) => Promise<void>;
     } = $props();
 
+    let title = $state(reward?.title ?? "");
+    let description = $state(reward?.description ?? "");
+    let productionPrice = $state(reward?.money.amount ?? 0);
+    let shippingPrice = $state(0);
+    let rewardCount = $state(reward?.unitsAvailable ?? 1);
+    let unlimited = $state(!reward?.isFinite);
+
     let files = $state<File[]>([]);
-    let rewardCount = $state(1);
-    let unlimited = $state(false);
 
     let inputsClass: ClassNameValue =
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
-    function deleteReward(reward: ProjectReward | undefined) {}
+    async function handleContinue() {
+        const payload = {
+            project: apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id),
+            title,
+            description,
+            money: productionPrice + shippingPrice,
+            isFinite: unlimited ? false : true,
+            unitsTotal: unlimited ? null : rewardCount,
+        };
 
-    function updateReward(reward: ProjectReward | undefined) {}
+        await onSave?.(payload);
+    }
+
+    async function handleDeleteClick() {
+        if (!reward) return;
+        await onDelete?.(reward.id);
+    }
 </script>
 
 <Modal
@@ -76,10 +100,10 @@
     </div>
 
     {#snippet footer()}
-        <Button kind="secondary" onclick={() => deleteReward(reward)} class="w-fit">
+        <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
             {$t("wizard.steps.rewards.modal.btns.delete")}
         </Button>
-        <Button onclick={() => updateReward(reward)} class="w-fit">
+        <Button onclick={() => handleContinue()} class="w-fit">
             {$t("wizard.steps.rewards.modal.btns.continue")}
         </Button>
     {/snippet}
