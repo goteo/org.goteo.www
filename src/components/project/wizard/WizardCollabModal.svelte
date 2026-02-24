@@ -1,9 +1,18 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
     import Button from "../../library/Button.svelte";
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
-    let { open = $bindable(false) } = $props<{
+    let {
+        project,
+        collab,
+        open = $bindable(false),
+        onSave,
+    } = $props<{
+        project: Project;
+        collab: ProjectCollaboration | null;
         open: boolean;
+        onSave: (data: any) => Promise<void>;
     }>();
 </script>
 
@@ -22,6 +31,6 @@
     <input type="text" />
     <textarea name="" id="" placeholder=""></textarea>
     {#snippet footer()}
-        <Button kind="primary">Añadir</Button>
+        <Button kind="primary" onclick={() => onSave({})}>Añadir</Button>
     {/snippet}
 </Modal>

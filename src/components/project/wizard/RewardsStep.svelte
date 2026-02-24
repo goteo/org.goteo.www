@@ -10,7 +10,7 @@
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-    import CreateRewardCard from "./CreateRewardCard.svelte";
+    import CreateCard from "./CreateCard.svelte";
     import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
 
     let { project } = $props<{
@@ -36,7 +36,7 @@
         } else if (data) rewards = data;
     }
 
-    async function handleSave(data: ProjectReward | null) {
+    async function handleSaveRewards(data: ProjectReward | null) {
         if (!data) return;
         loading = true;
 
@@ -72,7 +72,7 @@
         }
     }
 
-    async function handleDelete(rewardId: number | undefined) {
+    async function handleDeleteRewards(rewardId: number | undefined) {
         if (!rewardId) return;
         loading = true;
 
@@ -112,8 +112,12 @@
 
 <div class="flex w-full flex-col gap-10">
     <div class="flex w-full flex-col gap-4">
-        <h2 class="text-[40px] leading-12 font-bold text-black">Recompensas</h2>
+        <h2 class="text-[40px] leading-12 font-bold text-black">
+            <!-- {$t("wizard.steps.rewards.title")} -->
+            Recompensas
+        </h2>
         <p class="text-content text-base font-normal">
+            <!-- {$t("wizard.steps.rewards.description")} -->
             Añade recompensas atractivas para alcanzar tu meta
         </p>
     </div>
@@ -128,13 +132,22 @@
                     {reward}
                     variant="reward"
                     onEdit={() => openEdit(reward)}
-                    onDelete={handleDelete}
-                    onSave={handleSave}
+                    onDelete={handleDeleteRewards}
+                    onSave={handleSaveRewards}
                     {selectedReward}
                 />
             {/each}
 
-            <CreateRewardCard bind:open={openModal} {project} reward={selectedReward} onSave={handleSave} onclick={openCreate} />
+            <CreateCard
+                title={"¡No Lances Tu Campaña Sin Ellas! Las recompensas son tu superpoder"}
+                description={"Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito."}
+                variant="reward"
+                bind:open={openModal}
+                {project}
+                reward={selectedReward}
+                onSave={handleSaveRewards}
+                onclick={openCreate}
+            />
         </Grid>
     {/if}
 </div>

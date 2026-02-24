@@ -24,16 +24,16 @@
         open: boolean;
         project: Project;
         reward?: ProjectReward;
-        collab?: ProjectCollaboration;
+        collab?: ProjectCollaboration | null;
         onEdit?: () => void;
-        onSave?: (data: any) => Promise<void>;
+        onSave: (data: any) => Promise<void>;
         onDelete?: (id: number | undefined) => Promise<void>;
         selectedReward?: ProjectReward | null;
     } = $props();
 </script>
 
 <div
-    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
+    class="border-grey flex h-148.75 basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
 >
     <div class="flex flex-col gap-4">
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
@@ -98,13 +98,7 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <WizardCollabModal bind:open />
+    <WizardCollabModal bind:open {project} collab={collab!} {onSave} />
 {:else if variant === "reward"}
-    <WizardRewardModal
-        bind:open
-        reward={selectedReward!}
-        {project}
-        {onSave}
-        {onDelete}
-    />
+    <WizardRewardModal bind:open reward={selectedReward!} {project} {onSave} {onDelete} />
 {/if}
