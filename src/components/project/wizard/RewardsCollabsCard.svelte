@@ -6,8 +6,7 @@
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
-    import WizardCollabModal from "./WizardCollabModal.svelte";
-    import WizardRewardModal from "./WizardRewardModal.svelte";
+    import RewardCollabModal from "./RewardCollabModal.svelte";
 
     let {
         variant,
@@ -19,16 +18,18 @@
         onSave,
         onDelete,
         selectedReward,
+        selectedCollab,
     }: {
         variant: "reward" | "collab";
         open: boolean;
         project: Project;
         reward?: ProjectReward;
         collab?: ProjectCollaboration | null;
-        onEdit?: () => void;
+        onEdit: () => void;
         onSave: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined) => Promise<void>;
+        onDelete: (id: number | undefined) => Promise<void>;
         selectedReward?: ProjectReward | null;
+        selectedCollab?: ProjectCollaboration | null;
     } = $props();
 </script>
 
@@ -98,7 +99,7 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <WizardCollabModal bind:open {project} collab={collab!} {onSave} />
+    <RewardCollabModal bind:open collab={selectedCollab!} {project} {onSave} {onDelete} />
 {:else if variant === "reward"}
-    <WizardRewardModal bind:open reward={selectedReward!} {project} {onSave} {onDelete} />
+    <RewardCollabModal bind:open reward={selectedReward!} {project} {onSave} {onDelete} />
 {/if}

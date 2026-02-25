@@ -3,8 +3,7 @@
     import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
-    import WizardCollabModal from "./WizardCollabModal.svelte";
-    import WizardRewardModal from "./WizardRewardModal.svelte";
+    import RewardCollabModal from "./RewardCollabModal.svelte";
 
     let {
         title,
@@ -50,7 +49,7 @@
     </Button>
 </div>
 {#if variant === "reward"}
-    <WizardRewardModal bind:open {project} {onSave} {reward} />
+    <RewardCollabModal bind:open {project} {onSave} {reward} />
 {:else if variant === "collab"}
-    <WizardCollabModal bind:open {project} {onSave} {collab} />
+    <RewardCollabModal bind:open {project} {onSave} {collab} />
 {/if}
