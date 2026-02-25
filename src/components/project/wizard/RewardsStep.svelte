@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "../../../i18n/store";
     import {
         apiProjectRewardsGetCollection,
         apiProjectRewardsIdDelete,
@@ -13,8 +14,9 @@
     import CreateCard from "./CreateCard.svelte";
     import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
 
-    let { project } = $props<{
+    let { project, onContinue } = $props<{
         project: Project;
+        onContinue?: () => void;
     }>();
 
     let rewards = $state<ProjectReward[]>([]);
@@ -110,15 +112,13 @@
     });
 </script>
 
-<div class="flex w-full flex-col gap-10">
+<div class="w-full space-y-10">
     <div class="flex w-full flex-col gap-4">
         <h2 class="text-[40px] leading-12 font-bold text-black">
-            <!-- {$t("wizard.steps.rewards.title")} -->
-            Recompensas
+            {$t("wizard.steps.rewards.title")}
         </h2>
         <p class="text-content text-base font-normal">
-            <!-- {$t("wizard.steps.rewards.description")} -->
-            Añade recompensas atractivas para alcanzar tu meta
+            {$t("wizard.steps.rewards.subtitle")}
         </p>
     </div>
     {#if loading}
