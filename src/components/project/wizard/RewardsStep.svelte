@@ -28,7 +28,7 @@
         if (!project) return;
 
         const projectIri =
-            apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
+            apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
         const { data, error } = await apiProjectRewardsGetCollection({
             query: { project: projectIri },

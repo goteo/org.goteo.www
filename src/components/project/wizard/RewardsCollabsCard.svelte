@@ -54,9 +54,14 @@
             {/if}
         </h3>
 
-        {#if reward?.description}
+        {#if (reward?.description && !collab) || (collab?.description && !reward)}
+            {@const selectedDescription = reward
+                ? reward.description
+                : collab
+                  ? collab.description
+                  : ""}
             <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
-                {#await renderMarkdown(reward.description) then description}
+                {#await renderMarkdown(selectedDescription!) then description}
                     {@html description}
                 {/await}
             </div>
@@ -99,7 +104,7 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <RewardCollabModal bind:open collab={selectedCollab!} {project} {onSave} {onDelete} />
+    <RewardCollabModal bind:open collab={selectedCollab} {project} {onSave} {onDelete} />
 {:else if variant === "reward"}
-    <RewardCollabModal bind:open reward={selectedReward!} {project} {onSave} {onDelete} />
+    <RewardCollabModal bind:open reward={selectedReward} {project} {onSave} {onDelete} />
 {/if}

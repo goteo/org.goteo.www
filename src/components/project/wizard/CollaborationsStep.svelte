@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { onMount } from "svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectCollaborationsGetCollection,
@@ -28,14 +29,14 @@
         if (!project) return;
 
         const projectIri =
-            apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
+            apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
-        const { data, error } = await apiProjectCollaborationsGetCollection({
+        const { data: collaborations, error } = await apiProjectCollaborationsGetCollection({
             query: { project: projectIri },
         });
         if (error) {
             console.error("Error loading collaborations:", error);
-        } else if (data) collabs = data;
+        } else if (collaborations) collabs = collaborations;
     }
 
     async function handleSaveCollabs(data: ProjectCollaboration | null) {
@@ -105,9 +106,10 @@
         openModal = true;
     }
 
-    $effect(() => {
+    onMount(() => {
         if (project) {
             loadCollabs();
+            console.log(project, collabs);
         }
     });
 </script>
