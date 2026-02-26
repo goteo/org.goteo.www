@@ -548,9 +548,7 @@
         "title": "Deixa un missatge als projectes que has recolzat",
         "description": "La teva donació es veurà reflectida en els projectes que has recolzat. Pots deixar un missatge o romandre en l’anonimat.",
         "labels": {
-          "name": "Etiqueta",
-          "anonymous": "Deixar un missatge de forma anònima",
-          "leave-a-message": "Deixar un missatge de forma pública"
+          "name": "Etiqueta"
         }
       }
     },

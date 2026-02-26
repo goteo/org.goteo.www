@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import Summary from "../../../components/Checkout/Summary.svelte";
-import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
+import PaymentMethod from "../../../components/Checkout/PaymentMethod.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Button from "../../../components/library/Button.svelte";
 import BackButton from "../../../components/BackButton.astro";
@@ -46,7 +46,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                             </p>
                         </div>
 
-                        <PaymentMethod {paymentGateways} {accounting} />
+                        <PaymentMethod client:load {paymentGateways} {accounting} />
                     </div>
                 </div>
             </div>

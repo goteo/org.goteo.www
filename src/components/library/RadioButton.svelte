@@ -13,7 +13,7 @@
     let { group = $bindable(), label, class: classes, children, ...rest }: Props = $props();
 </script>
 
-<label class="flex cursor-pointer items-center gap-2">
+<label class="flex cursor-pointer items-start gap-2">
     <div class="w-6">
         <input
             type="radio"
@@ -26,7 +26,7 @@
         />
     </div>
     {#if label}
-        <span class="text-gray-700">
+        <span class="text-content">
             {label}
         </span>
     {/if}
