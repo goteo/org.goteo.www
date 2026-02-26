@@ -5,7 +5,7 @@
 
     let {
         value = $bindable(1),
-        unlimited = $bindable(false),
+        unlimited = $bindable(true),
         min = 1,
     } = $props<{
         value?: number;
