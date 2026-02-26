@@ -27,8 +27,7 @@
     async function loadRewards() {
         if (!project) return;
 
-        const projectIri =
-            apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
+        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
         const { data, error } = await apiProjectRewardsGetCollection({
             query: { project: projectIri },
@@ -139,8 +138,8 @@
             {/each}
 
             <CreateCard
-                title={"¡No Lances Tu Campaña Sin Ellas! Las recompensas son tu superpoder"}
-                description={"Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito."}
+                title={$t("wizard.steps.rewards.createCard.title")}
+                description={$t("wizard.steps.rewards.createCard.description")}
                 variant="reward"
                 bind:open={openModal}
                 {project}
