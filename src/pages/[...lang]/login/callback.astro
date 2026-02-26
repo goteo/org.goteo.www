@@ -1,0 +1,24 @@
+---
+const code = Astro.url.searchParams.get("code");
+
+if (code === null) {
+    throw new Error("Visited OAuth2 login callback without code param in query.");
+}
+
+const oauth2Token = new URL("/oauth/token", import.meta.env.PUBLIC_API_URL);
+const params = new URLSearchParams();
+
+params.set("grant_type", "authorization_code");
+params.set("code", code);
+params.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
+params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
+params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
+
+const accessToken = await fetch(oauth2Token, {
+    method: "POST",
+    body: params,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+}).then((res) => res.json());
+
+console.log(accessToken);
+---
