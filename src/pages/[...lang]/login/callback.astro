@@ -1,5 +1,6 @@
 ---
 import CSRF from "csrf";
+import LocalStorage from "../../../components/LocalStorage.svelte";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
@@ -37,6 +38,6 @@ const accessToken = await fetch(oauth2Token, {
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
 }).then((res) => res.json());
-
-console.log(accessToken);
 ---
+
+<LocalStorage set={{ oauth2: accessToken }} client:load />
