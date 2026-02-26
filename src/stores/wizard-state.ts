@@ -13,8 +13,8 @@
  * - Per-step validation tracking
  */
 
+import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
-import { z } from "zod";
 
 import type { Project } from "../openapi/client";
 
