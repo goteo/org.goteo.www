@@ -1,10 +1,18 @@
 ---
+import CSRF from "csrf";
+
 const oauth2Authorize = new URL("/oauth/authorize", import.meta.env.PUBLIC_API_URL);
 
 oauth2Authorize.searchParams.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
 oauth2Authorize.searchParams.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
 oauth2Authorize.searchParams.set("response_type", "code");
 oauth2Authorize.searchParams.set("scope", "email");
+
+const csrf = new CSRF();
+const csrfToken = csrf.create(import.meta.env.OAUTH2_CLIENT_SECRET);
+
+oauth2Authorize.searchParams.set("state", csrfToken);
+Astro.cookies.set("oauth2State", csrfToken);
 
 return Astro.redirect(oauth2Authorize);
 ---

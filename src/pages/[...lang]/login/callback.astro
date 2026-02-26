@@ -1,8 +1,26 @@
 ---
-const code = Astro.url.searchParams.get("code");
+import CSRF from "csrf";
 
+const code = Astro.url.searchParams.get("code");
 if (code === null) {
-    throw new Error("Visited OAuth2 login callback without code param in query.");
+    throw new Error("Visited OAuth2 login callback without code");
+}
+
+const csrfToken = Astro.url.searchParams.get("state");
+if (csrfToken === null) {
+    throw new Error("Visited OAuth2 login callback without CSRF token");
+}
+
+const oauth2State = Astro.cookies.get("oauth2State")?.value;
+if (csrfToken !== oauth2State) {
+    throw new Error(
+        `Mismatched value of "state" in query (${csrfToken}) and cookie (${oauth2State})`,
+    );
+}
+
+const csrf = new CSRF();
+if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
+    throw new Error(`Could not verify CSRF token: ${csrfToken}`);
 }
 
 const oauth2Token = new URL("/oauth/token", import.meta.env.PUBLIC_API_URL);
