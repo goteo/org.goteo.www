@@ -19,7 +19,7 @@ const highlightedProjects = {
 };
 
 const { data: projects } = await apiProjectsGetCollection({
-    headers: { "Accept-Language": getLanguage(Astro) },
+    headers: { "Accept-Language": getLanguage(Astro.url.pathname, Astro.request, Astro.cookies) },
     query: {
         "slug[]": Object.keys(highlightedProjects),
     },

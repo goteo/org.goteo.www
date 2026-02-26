@@ -116,7 +116,11 @@ if (projectIRIs.length > 0) {
                 const { data: project } = (await client.get({
                     url: client.buildUrl({ url: projectIRI! }),
                     headers: {
-                        "Accept-Language": getLanguage(Astro),
+                        "Accept-Language": getLanguage(
+                            Astro.url.pathname,
+                            Astro.request,
+                            Astro.cookies,
+                        ),
                     },
                 })) as { data: any };
 
