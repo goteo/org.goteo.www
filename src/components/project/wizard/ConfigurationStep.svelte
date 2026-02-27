@@ -4,21 +4,16 @@
     First step of the project setup wizard.
     Handles:
     - Campaign languages (primary + secondary)
-    - Geographic scope (local, estatal, internacional)
-    - Localities (if local scope selected)
     - Funding rounds (1 or 2)
 
     Validation:
     - At least one language required
-    - Geographic scope required
-    - Localities required if scope is local
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import Button from "../../library/Button.svelte";
     import LanguageSelector from "./LanguageSelector.svelte";
-    import GeoSelector from "./GeoSelector.svelte";
     import RoundSelector from "./RoundSelector.svelte";
     import { wizardState, updateConfiguration, navigateToStep } from "../../../stores/wizard-state";
 
@@ -47,24 +42,6 @@
      */
     function handleLanguagesChange(languages: string[]) {
         updateConfiguration({ languages });
-    }
-
-    /**
-     * Handle geographic scope changes
-     */
-    function handleScopeChange(scope: "local" | "estatal" | "internacional") {
-        updateConfiguration({
-            geographicScope: scope,
-            // Clear localities if scope is not local
-            localities: scope === "local" ? configuration.localities : undefined,
-        });
-    }
-
-    /**
-     * Handle localities change
-     */
-    function handleLocalitiesChange(localities: string) {
-        updateConfiguration({ localities });
     }
 
     /**
@@ -107,7 +84,7 @@
                 {$t("wizard.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
+        <RoundSelector bind:rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->

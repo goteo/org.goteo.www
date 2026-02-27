@@ -21,7 +21,7 @@
         onChange: (rounds: 1 | 2) => void;
     }
 
-    let { rounds = 1, onChange }: RoundSelectorProps = $props();
+    let { rounds = $bindable(1), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
@@ -38,7 +38,7 @@
         value={1}
         checked={rounds === 1}
         onchange={() => handleChange(1)}
-        data-testid={"round-1-radio"}
+        id={"round-1-radio"}
         label={$t("wizard.configuration.rounds.option1")}
     />
 
@@ -48,7 +48,7 @@
         value={2}
         checked={rounds === 2}
         onchange={() => handleChange(2)}
-        data-testid={"round-2-radio"}
+        id={"round-2-radio"}
         label={$t("wizard.configuration.rounds.option2")}
     />
 </div>
