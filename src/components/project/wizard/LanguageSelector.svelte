@@ -37,7 +37,7 @@
     let { languages = [], onChange }: LanguageSelectorProps = $props();
 
     // Available languages - using translations
-    const availableLanguages = $derived<LanguageOption[]>(getSupportedLocales());
+    const availableLanguages: LanguageOption[] = getSupportedLocales();
 
     // Local state for language selection
     let primaryLanguage = $state(languages[0] || "");
@@ -60,7 +60,7 @@
      * Handle secondary language change
      */
     function handleSecondaryChange(index: number, value: string) {
-        secondaryLanguages[index] = value;
+        secondaryLanguages = secondaryLanguages.map((lang, i) => (i === index ? value : lang));
         updateLanguages();
     }
 
@@ -98,14 +98,9 @@
         markFieldAsTouched("languages");
     }
 
-    /**
-     * Get available languages for a dropdown, excluding already-selected ones
-     */
-    function getAvailableForDropdown(currentValue: string): LanguageOption[] {
+    function isLanguageDisabled(code: string, currentValue: string): boolean {
         const selectedLanguages = [primaryLanguage, ...secondaryLanguages];
-        return availableLanguages.filter(
-            (lang) => !selectedLanguages.includes(lang.code) || lang.code === currentValue,
-        );
+        return selectedLanguages.includes(code) && code !== currentValue;
     }
 
     function getSupportedLocales(): LanguageOption[] {
@@ -137,7 +132,7 @@
     <!-- Primary Language -->
     <Select
         bind:value={primaryLanguage}
-        name="primary-language"
+        id="primary-language-{primaryLanguage}"
         labelText={$t("wizard.configuration.languages.primaryLabel")}
         required={true}
         error={showError ? errors.languages : undefined}
@@ -145,8 +140,10 @@
         onChange={handlePrimaryChange}
     >
         <option value="">{$t("wizard.configuration.languages.selectPlaceholder")}</option>
-        {#each getAvailableForDropdown(primaryLanguage) as lang}
-            <option value={lang.code}>{lang.name}</option>
+        {#each availableLanguages as lang}
+            <option value={lang.code} disabled={isLanguageDisabled(lang.code, primaryLanguage)}
+                >{lang.name}</option
+            >
         {/each}
     </Select>
 
@@ -156,17 +153,19 @@
             <div class="flex-1">
                 <Select
                     bind:value={secondaryLanguages[index]}
-                    name="secondary-language-{index}"
-                    labelText={$t("wizard.configuration.languages.secondaryLabel", {
-                        index: index + 1,
-                    })}
+                    id="secondary-language-{index}-{secondary}"
+                    labelText={$t("wizard.configuration.languages.secondaryLabel")}
                     onChange={(value) => handleSecondaryChange(index, value)}
                 >
                     <option value=""
                         >{$t("wizard.configuration.languages.selectPlaceholder")}</option
                     >
-                    {#each getAvailableForDropdown(secondary) as lang}
-                        <option value={lang.code}>{lang.name}</option>
+                    {#each availableLanguages as lang}
+                        <option
+                            value={lang.code}
+                            disabled={isLanguageDisabled(lang.code, secondaryLanguages[index])}
+                            >{lang.name}</option
+                        >
                     {/each}
                 </Select>
             </div>
