@@ -22,6 +22,7 @@
         touchedFields,
         markFieldAsTouched,
     } from "../../../stores/wizard-state";
+    import { getLanguageDisplayName } from "../../../utils/lang";
 
     interface LanguageOption {
         code: string;
@@ -36,15 +37,7 @@
     let { languages = [], onChange }: LanguageSelectorProps = $props();
 
     // Available languages - using translations
-    const availableLanguages = $derived<LanguageOption[]>([
-        { code: "es", name: $t("wizard.configuration.languages.options.es") },
-        { code: "en", name: $t("wizard.configuration.languages.options.en") },
-        { code: "ca", name: $t("wizard.configuration.languages.options.ca") },
-        { code: "fr", name: $t("wizard.configuration.languages.options.fr") },
-        { code: "de", name: $t("wizard.configuration.languages.options.de") },
-        { code: "it", name: $t("wizard.configuration.languages.options.it") },
-        { code: "pt", name: $t("wizard.configuration.languages.options.pt") },
-    ]);
+    const availableLanguages: LanguageOption[] = getSupportedLocales();
 
     // Local state for language selection
     let primaryLanguage = $state(languages[0] || "");
@@ -67,7 +60,7 @@
      * Handle secondary language change
      */
     function handleSecondaryChange(index: number, value: string) {
-        secondaryLanguages[index] = value;
+        secondaryLanguages = secondaryLanguages.map((lang, i) => (i === index ? value : lang));
         updateLanguages();
     }
 
@@ -105,14 +98,33 @@
         markFieldAsTouched("languages");
     }
 
-    /**
-     * Get available languages for a dropdown, excluding already-selected ones
-     */
-    function getAvailableForDropdown(currentValue: string): LanguageOption[] {
+    function isLanguageDisabled(code: string, currentValue: string): boolean {
         const selectedLanguages = [primaryLanguage, ...secondaryLanguages];
-        return availableLanguages.filter(
-            (lang) => !selectedLanguages.includes(lang.code) || lang.code === currentValue,
-        );
+        return selectedLanguages.includes(code) && code !== currentValue;
+    }
+
+    function getSupportedLocales(): LanguageOption[] {
+        const supportedLanguages = [];
+        const letters = "abcdefghijklmnopqrstuvwxyz";
+
+        function isLanguageCodeSupported(code: string) {
+            const locale = new Intl.Locale(code);
+            return locale.maximize().region !== undefined;
+        }
+
+        // ISO 639-1 (2-letter)
+        for (let i = 0; i < letters.length; i++) {
+            for (let j = 0; j < letters.length; j++) {
+                const code = letters[i] + letters[j];
+                if (isLanguageCodeSupported(code)) {
+                    const langDisplayName = getLanguageDisplayName(code);
+                    if (langDisplayName)
+                        supportedLanguages.push({ code: code, name: langDisplayName });
+                }
+            }
+        }
+
+        return supportedLanguages;
     }
 </script>
 
@@ -120,7 +132,7 @@
     <!-- Primary Language -->
     <Select
         bind:value={primaryLanguage}
-        name="primary-language"
+        id="primary-language-{primaryLanguage}"
         labelText={$t("wizard.configuration.languages.primaryLabel")}
         required={true}
         error={showError ? errors.languages : undefined}
@@ -128,8 +140,10 @@
         onChange={handlePrimaryChange}
     >
         <option value="">{$t("wizard.configuration.languages.selectPlaceholder")}</option>
-        {#each getAvailableForDropdown(primaryLanguage) as lang}
-            <option value={lang.code}>{lang.name}</option>
+        {#each availableLanguages as lang}
+            <option value={lang.code} disabled={isLanguageDisabled(lang.code, primaryLanguage)}
+                >{lang.name}</option
+            >
         {/each}
     </Select>
 
@@ -139,17 +153,19 @@
             <div class="flex-1">
                 <Select
                     bind:value={secondaryLanguages[index]}
-                    name="secondary-language-{index}"
-                    labelText={$t("wizard.configuration.languages.secondaryLabel", {
-                        index: index + 1,
-                    })}
+                    id="secondary-language-{index}-{secondary}"
+                    labelText={$t("wizard.configuration.languages.secondaryLabel")}
                     onChange={(value) => handleSecondaryChange(index, value)}
                 >
                     <option value=""
                         >{$t("wizard.configuration.languages.selectPlaceholder")}</option
                     >
-                    {#each getAvailableForDropdown(secondary) as lang}
-                        <option value={lang.code}>{lang.name}</option>
+                    {#each availableLanguages as lang}
+                        <option
+                            value={lang.code}
+                            disabled={isLanguageDisabled(lang.code, secondaryLanguages[index])}
+                            >{lang.name}</option
+                        >
                     {/each}
                 </Select>
             </div>
@@ -184,9 +200,9 @@
         type="button"
         onclick={addSecondaryLanguage}
         data-testid="language-add-btn"
-        class="text-secondary hover:text-tertiary flex items-center gap-1 text-sm font-medium transition-colors"
+        class="text-secondary hover:text-tertiary flex items-center gap-2 text-base font-bold transition-colors"
     >
-        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="10" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
         </svg>

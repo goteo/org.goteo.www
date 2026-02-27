@@ -14,13 +14,14 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import RadioButton from "../../library/RadioButton.svelte";
 
     interface RoundSelectorProps {
         rounds: 1 | 2;
         onChange: (rounds: 1 | 2) => void;
     }
 
-    let { rounds = 1, onChange }: RoundSelectorProps = $props();
+    let { rounds = $bindable(1), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
@@ -30,32 +31,24 @@
     }
 </script>
 
-<div class="flex gap-6">
+<div class="flex gap-4">
     <!-- 1 Round Option -->
-    <label class="text-secondary flex cursor-pointer items-center gap-2 font-medium">
-        <input
-            type="radio"
-            name="funding-rounds"
-            value="1"
-            checked={rounds === 1}
-            onchange={() => handleChange(1)}
-            data-testid="round-1-radio"
-            class="text-primary focus:ring-primary size-5"
-        />
-        <span>{$t("wizard.configuration.rounds.option1")}</span>
-    </label>
+    <RadioButton
+        name={"funding-rounds"}
+        value={1}
+        checked={rounds === 1}
+        onchange={() => handleChange(1)}
+        id={"round-1-radio"}
+        label={$t("wizard.configuration.rounds.option1")}
+    />
 
     <!-- 2 Rounds Option -->
-    <label class="text-secondary flex cursor-pointer items-center gap-2 font-medium">
-        <input
-            type="radio"
-            name="funding-rounds"
-            value="2"
-            checked={rounds === 2}
-            onchange={() => handleChange(2)}
-            data-testid="round-2-radio"
-            class="text-primary focus:ring-primary size-5"
-        />
-        <span>{$t("wizard.configuration.rounds.option2")}</span>
-    </label>
+    <RadioButton
+        name={"funding-rounds"}
+        value={2}
+        checked={rounds === 2}
+        onchange={() => handleChange(2)}
+        id={"round-2-radio"}
+        label={$t("wizard.configuration.rounds.option2")}
+    />
 </div>
