@@ -12,7 +12,6 @@ const csrf = new CSRF();
 const csrfToken = csrf.create(import.meta.env.OAUTH2_CLIENT_SECRET);
 
 oauth2Authorize.searchParams.set("state", csrfToken);
-Astro.cookies.set("oauth2State", csrfToken);
 
 return Astro.redirect(oauth2Authorize);
 ---

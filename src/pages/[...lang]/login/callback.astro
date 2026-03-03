@@ -1,6 +1,7 @@
 ---
 import CSRF from "csrf";
 import LocalStorage from "../../../components/LocalStorage.svelte";
+import Redirect from "../../../components/Redirect.svelte";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
@@ -10,13 +11,6 @@ if (code === null) {
 const csrfToken = Astro.url.searchParams.get("state");
 if (csrfToken === null) {
     throw new Error("Visited OAuth2 login callback without CSRF token");
-}
-
-const oauth2State = Astro.cookies.get("oauth2State")?.value;
-if (csrfToken !== oauth2State) {
-    throw new Error(
-        `Mismatched value of "state" in query (${csrfToken}) and cookie (${oauth2State})`,
-    );
 }
 
 const csrf = new CSRF();
@@ -41,3 +35,4 @@ const accessToken = await fetch(oauth2Token, {
 ---
 
 <LocalStorage set={{ oauth2: accessToken }} client:load />
+<Redirect location='/' client:load />
