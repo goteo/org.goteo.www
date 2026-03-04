@@ -5,17 +5,20 @@ import Redirect from "../../../components/Redirect.svelte";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
-    throw new Error("Visited OAuth2 login callback without code");
+    console.error("Visited OAuth2 login callback without code");
+    return Astro.redirect("/error");
 }
 
 const csrfToken = Astro.url.searchParams.get("state");
 if (csrfToken === null) {
-    throw new Error("Visited OAuth2 login callback without CSRF token");
+    console.error("Visited OAuth2 login callback without CSRF token");
+    return Astro.redirect("/error");
 }
 
 const csrf = new CSRF();
 if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
-    throw new Error(`Could not verify CSRF token: ${csrfToken}`);
+    console.error(`Could not verify CSRF token: ${csrfToken}`);
+    return Astro.redirect("/error");
 }
 
 const oauth2Token = new URL("/oauth/token", import.meta.env.PUBLIC_API_URL);
@@ -32,7 +35,12 @@ const accessToken = await fetch(oauth2Token, {
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
 }).then((res) => res.json());
+
+if (accessToken.error) {
+    console.error(accessToken);
+    return Astro.redirect("/error");
+}
 ---
 
 <LocalStorage set={{ oauth2: accessToken }} client:load />
-<Redirect location='/' client:load />
+<Redirect location="/success" client:load />
