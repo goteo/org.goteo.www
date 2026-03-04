@@ -1,6 +1,11 @@
 ---
 import CSRF from "csrf";
 
+const accessToken = Astro.cookies.get("access-token");
+if (accessToken) {
+    Astro.redirect("/");
+}
+
 const oauth2Authorize = new URL("/oauth/authorize", import.meta.env.PUBLIC_API_URL);
 
 oauth2Authorize.searchParams.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);

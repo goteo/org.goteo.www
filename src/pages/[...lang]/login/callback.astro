@@ -40,7 +40,9 @@ if (accessToken.error) {
     console.error(accessToken);
     return Astro.redirect("/error");
 }
+
+Astro.cookies.set("access-token", accessToken, { path: "/" });
 ---
 
-<LocalStorage set={{ oauth2: accessToken }} client:load />
+<LocalStorage set={{ "access-token": accessToken }} client:load />
 <Redirect location="/success" client:load />
