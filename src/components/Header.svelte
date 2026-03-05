@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../i18n/store";
+    import { auth } from "../stores/auth";
     import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
@@ -7,10 +8,7 @@
     import UserIcon from "../svgs/UserIcon.svelte";
     import CartButton from "./CartButton.svelte";
     import HeaderButtons from "./HeaderButtons.svelte";
-    import Logout from "./Logout.svelte";
     import UiLanguages from "./UiLanguages.svelte";
-
-    let auth: any = undefined;
 
     function initMobileMenu() {
         const menuButton = document.getElementById("mobile-menu-button");
@@ -92,13 +90,13 @@
                 </div>
                 <nav>
                     <ul class="flex items-center gap-1 md:gap-4">
-                        {#if auth}
+                        {#if $auth}
                             <li class="flex items-center pr-2">
                                 <CartButton />
                             </li>
                         {/if}
                         <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
-                            {#if auth}
+                            {#if $auth}
                                 <div class="relative inline-block w-full">
                                     <button
                                         id="dropdown-btn"
@@ -106,7 +104,7 @@
                                     >
                                         <UserIcon />
                                         <span class="hidden sm:inline">
-                                            {$t("greeting")}, {auth?.user.person.firstName}
+                                            {$t("greeting")}, {$auth.person?.firstName}
                                         </span>
                                     </button>
 
@@ -120,7 +118,12 @@
                                         >
                                             {$t("header.goToProfile")}
                                         </a>
-                                        <Logout />
+                                        <a
+                                            href="/logout"
+                                            class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold overflow-ellipsis"
+                                        >
+                                            {$t("logout.label")}
+                                        </a>
                                     </div>
                                 </div>
                             {:else}

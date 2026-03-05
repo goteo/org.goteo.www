@@ -2,6 +2,12 @@
 import CSRF from "csrf";
 import LocalStorage from "../../../components/LocalStorage.svelte";
 import Redirect from "../../../components/Redirect.svelte";
+import { LOCAL_STORAGE_KEY } from "../../../stores/auth";
+import {
+    apiUsersGetCollection,
+    apiUsersIdorganizationGet,
+    apiUsersIdpersonGet,
+} from "../../../openapi/client";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
@@ -41,8 +47,27 @@ if (accessToken.error) {
     return Astro.redirect("/error");
 }
 
+const { sub: handle } = JSON.parse(
+    Buffer.from(accessToken.access_token.split(".")[1], "base64").toString(),
+);
+const { data: users } = await apiUsersGetCollection({ query: { handle } });
+
+const user = users![0];
+
+const { data: person } = await apiUsersIdpersonGet({
+    path: { id: String(user.id) },
+    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+});
+const { data: organization } = await apiUsersIdorganizationGet({
+    path: { id: String(user.id) },
+    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+});
+
 Astro.cookies.set("access-token", accessToken, { path: "/" });
 ---
 
-<LocalStorage set={{ "access-token": accessToken }} client:load />
+<LocalStorage
+    set={{ [LOCAL_STORAGE_KEY]: { accessToken, user, person, organization } }}
+    client:load
+/>
 <Redirect location="/success" client:load />
