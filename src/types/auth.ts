@@ -3,17 +3,8 @@
  * Contains user authentication and profile information
  */
 export interface AccessToken {
-    id: number;
-    token: string;
-    accountingId: string;
-    isAdmin?: boolean;
-    user: {
-        id: number;
-        email: string;
-        name: string;
-    };
-    person: {
-        name: string;
-        avatar?: string;
-    };
+    token_type: string;
+    expires_in: number;
+    access_token: string;
+    refresh_token: string;
 }

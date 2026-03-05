@@ -1,0 +1,73 @@
+---
+import CSRF from "csrf";
+import LocalStorage from "../../../components/LocalStorage.svelte";
+import Redirect from "../../../components/Redirect.svelte";
+import { LOCAL_STORAGE_KEY } from "../../../stores/auth";
+import {
+    apiUsersGetCollection,
+    apiUsersIdorganizationGet,
+    apiUsersIdpersonGet,
+} from "../../../openapi/client";
+
+const code = Astro.url.searchParams.get("code");
+if (code === null) {
+    console.error("Visited OAuth2 login callback without code");
+    return Astro.redirect("/error");
+}
+
+const csrfToken = Astro.url.searchParams.get("state");
+if (csrfToken === null) {
+    console.error("Visited OAuth2 login callback without CSRF token");
+    return Astro.redirect("/error");
+}
+
+const csrf = new CSRF();
+if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
+    console.error(`Could not verify CSRF token: ${csrfToken}`);
+    return Astro.redirect("/error");
+}
+
+const oauth2Token = new URL("/oauth/token", import.meta.env.PUBLIC_API_URL);
+const params = new URLSearchParams();
+
+params.set("grant_type", "authorization_code");
+params.set("code", code);
+params.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
+params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
+params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
+
+const accessToken = await fetch(oauth2Token, {
+    method: "POST",
+    body: params,
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+}).then((res) => res.json());
+
+if (accessToken.error) {
+    console.error(accessToken);
+    return Astro.redirect("/error");
+}
+
+const { sub: handle } = JSON.parse(
+    Buffer.from(accessToken.access_token.split(".")[1], "base64").toString(),
+);
+const { data: users } = await apiUsersGetCollection({ query: { handle } });
+
+const user = users![0];
+
+const { data: person } = await apiUsersIdpersonGet({
+    path: { id: String(user.id) },
+    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+});
+const { data: organization } = await apiUsersIdorganizationGet({
+    path: { id: String(user.id) },
+    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+});
+
+Astro.cookies.set("access-token", accessToken, { path: "/" });
+---
+
+<LocalStorage
+    set={{ [LOCAL_STORAGE_KEY]: { accessToken, user, person, organization } }}
+    client:load
+/>
+<Redirect location="/success" client:load />
