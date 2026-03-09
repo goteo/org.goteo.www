@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { clickOutside } from "flowbite-svelte";
     import { t } from "../i18n/store";
     import { auth } from "../stores/auth";
     import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
@@ -10,65 +11,54 @@
     import HeaderButtons from "./HeaderButtons.svelte";
     import UiLanguages from "./UiLanguages.svelte";
 
-    function initMobileMenu() {
-        const menuButton = document.getElementById("mobile-menu-button");
-        const mobileMenu = document.getElementById("mobile-menu");
-        const menuIcon = document.getElementById("menu-icon");
-        const closeIcon = document.getElementById("close-icon");
-
-        if (!menuButton || !mobileMenu || !menuIcon || !closeIcon) return;
-
-        function toggleMenu() {
-            const isOpen = !mobileMenu!.classList.contains("hidden");
-
-            if (isOpen) {
-                mobileMenu!.classList.add("translate-y-[-20px]", "opacity-0");
-                setTimeout(() => {
-                    mobileMenu!.classList.add("hidden");
-                }, 200);
-
-                closeIcon!.classList.add("hidden");
-                menuIcon!.classList.remove("hidden");
-            } else {
-                mobileMenu!.classList.remove("hidden");
-                setTimeout(() => {
-                    mobileMenu!.classList.remove("translate-y-[-20px]", "opacity-0");
-                }, 10);
-
-                menuIcon!.classList.add("hidden");
-                closeIcon!.classList.remove("hidden");
-            }
-        }
-
-        menuButton.addEventListener("click", toggleMenu);
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape" && !mobileMenu.classList.contains("hidden")) {
-                mobileMenu.classList.add("translate-y-[-20px]", "opacity-0");
-                setTimeout(() => {
-                    mobileMenu.classList.add("hidden");
-                }, 200);
-
-                closeIcon.classList.add("hidden");
-                menuIcon.classList.remove("hidden");
-            }
-        });
+    function isHidden(element: HTMLElement): boolean {
+        return element.classList.contains("hidden");
     }
 
-    function initUserDropdown() {
-        const btn = document.getElementById("dropdown-btn");
-        const dropdown = document.getElementById("user-dropdown");
+    let mobileMenu: HTMLDivElement;
+    let menuIcon: HTMLDivElement;
+    let closeIcon: HTMLDivElement;
 
-        if (!btn || !dropdown) return;
+    function mobileMenuToggle() {
+        if (isHidden(mobileMenu)) {
+            mobileMenuOpen();
+        } else {
+            mobileMenuClose();
+        }
+    }
 
-        btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            dropdown.classList.toggle("hidden");
-        });
+    function mobileMenuOpen() {
+        mobileMenu!.classList.remove("hidden");
+        setTimeout(() => {
+            mobileMenu!.classList.remove("translate-y-[-20px]", "opacity-0");
+        }, 10);
 
-        document.addEventListener("click", () => {
-            dropdown.classList.add("hidden");
-        });
+        menuIcon.classList.add("hidden");
+        closeIcon.classList.remove("hidden");
+    }
+
+    function mobileMenuClose() {
+        mobileMenu.classList.add("translate-y-[-20px]", "opacity-0");
+        setTimeout(() => {
+            mobileMenu.classList.add("hidden");
+        }, 200);
+
+        closeIcon.classList.add("hidden");
+        menuIcon.classList.remove("hidden");
+    }
+
+    let userDropdown: HTMLDivElement;
+
+    function userDropdownToggle() {
+        if (isHidden(userDropdown)) {
+            userDropdown.classList.add("flex");
+        }
+
+        userDropdown.classList.toggle("hidden");
+    }
+
+    function userDropdownClose() {
+        userDropdown.classList.add("hidden");
     }
 </script>
 
@@ -99,7 +89,8 @@
                             {#if $auth}
                                 <div class="relative inline-block w-full">
                                     <button
-                                        id="dropdown-btn"
+                                        onclick={userDropdownToggle}
+                                        use:clickOutside={userDropdownClose}
                                         class="flex w-full cursor-pointer items-center gap-1"
                                     >
                                         <UserIcon />
@@ -109,8 +100,8 @@
                                     </button>
 
                                     <div
-                                        id="user-dropdown"
-                                        class="absolute top-full left-0 mt-2 flex hidden w-full min-w-[120px] flex-col rounded-lg bg-white p-2 shadow-lg"
+                                        bind:this={userDropdown}
+                                        class="absolute top-full left-0 mt-2 hidden w-full min-w-[120px] flex-col rounded-lg bg-white p-2 shadow-lg"
                                     >
                                         <a
                                             href="/me"
@@ -137,11 +128,11 @@
                             <UiLanguages />
                         </li>
                         <li class="flex items-center md:hidden">
-                            <button id="mobile-menu-button" class="p-1">
-                                <div id="menu-icon">
+                            <button class="p-1" onclick={mobileMenuToggle}>
+                                <div bind:this={menuIcon}>
                                     <MenuIcon />
                                 </div>
-                                <div id="close-icon" class="hidden">
+                                <div bind:this={closeIcon} class="hidden">
                                     <CloseIconMenu />
                                 </div>
                             </button>
@@ -154,8 +145,8 @@
             </div>
 
             <div
-                id="mobile-menu"
-                class="hidden -translate-y-5 transform overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:hidden"
+                bind:this={mobileMenu}
+                class="hidden transform overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:hidden"
             >
                 <div class="border-gray-light border-t">
                     <div class="flex flex-col gap-4 p-4">
