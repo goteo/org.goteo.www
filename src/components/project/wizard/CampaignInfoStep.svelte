@@ -238,8 +238,8 @@
     </section>
 
     <!-- Continue Button -->
-    <div class="flex justify-end pt-4">
-        <Button kind="primary" size="md" onclick={handleContinue} class="min-w-[200px]">
+    <div class="flex justify-start pt-4">
+        <Button kind="secondary" size="md" onclick={handleContinue}>
             {#snippet children()}
                 {$t("wizard.campaignInfo.continue")}
             {/snippet}

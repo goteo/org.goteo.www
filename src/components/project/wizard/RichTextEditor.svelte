@@ -194,7 +194,7 @@
 <div class={twMerge("rich-text-editor", className)}>
     <!-- Toolbar -->
     <div
-        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between border-b p-2"
+        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between p-2"
         role="toolbar"
         aria-label="Text formatting toolbar"
     >
@@ -205,7 +205,7 @@
                 bind:value={selectedFontSize}
                 onChange={handleFontSizeChange}
                 labelText="Font Size"
-                class="w-auto min-w-[120px] px-2 py-1 text-sm"
+                class="text-sm"
             >
                 {#snippet children()}
                     <option value="12px">12px</option>
@@ -218,147 +218,121 @@
             </Select>
 
             <!-- Bold Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={toggleBold}
                 class={twMerge(
-                    "rounded-lg",
-                    isBoldActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
+                    isBoldActive ? "border-secondary" : "border-grey",
                 )}
                 aria-label="Bold"
                 title="Bold (Ctrl+B)"
                 aria-pressed={isBoldActive}
             >
-                {#snippet children()}
-                    <span class="font-bold">B</span>
-                {/snippet}
-            </Button>
+                <span class="font-bold">B</span>
+            </button>
 
             <!-- Italic Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={toggleItalic}
                 class={twMerge(
-                    "rounded-lg",
-                    isItalicActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
+                    isItalicActive ? "border-secondary" : "border-grey",
                 )}
                 aria-label="Italic"
                 title="Italic (Ctrl+I)"
                 aria-pressed={isItalicActive}
             >
-                {#snippet children()}
-                    <span class="font-serif italic">I</span>
-                {/snippet}
-            </Button>
+                <span class="font-serif italic">I</span>
+            </button>
         </div>
 
         <!-- Right Group: Alignment Buttons -->
         <div class="flex items-center gap-2">
             <!-- Left Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("left")}
                 class={twMerge(
-                    "rounded-lg",
-                    isLeftAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
+                    isLeftAligned ? "border-secondary" : "border-grey",
                 )}
                 aria-label="Align left"
                 aria-pressed={isLeftAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M13.5 18H4.5M19.5 12H4.5M19.5 6H4.5"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="17" y1="10" x2="3" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="17" y1="18" x2="3" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
 
             <!-- Center Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("center")}
                 class={twMerge(
-                    "rounded-lg",
-                    isCenterAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
+                    isCenterAligned ? "border-secondary" : "border-grey",
                 )}
                 aria-label="Align center"
                 aria-pressed={isCenterAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M15 18H9M19.5 12H4.5M15 6H9"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="18" y1="10" x2="6" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="18" y1="18" x2="6" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
 
             <!-- Right Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("right")}
                 class={twMerge(
-                    "rounded-lg",
-                    isRightAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
+                    isRightAligned ? "border-secondary" : "border-grey",
                 )}
                 aria-label="Align right"
                 aria-pressed={isRightAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M10.5 18H19.5M4.5 12H19.5M4.5 6H19.5"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="21" y1="10" x2="7" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="21" y1="18" x2="7" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
         </div>
     </div>
 
