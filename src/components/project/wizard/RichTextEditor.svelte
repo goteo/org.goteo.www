@@ -63,8 +63,6 @@
     import TextAlign from "@tiptap/extension-text-align";
     import { TextStyle, FontSize } from "@tiptap/extension-text-style";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import Button from "../../../components/library/Button.svelte";
-    import Select from "../../../components/library/Select.svelte";
 
     interface RichTextEditorProps {
         id: string;
@@ -96,9 +94,12 @@
     // Active states - tracked as state variables
     let isBoldActive = $state(false);
     let isItalicActive = $state(false);
-    let isLeftAligned = $state(false);
+    let isLeftAligned = $state(true);
     let isCenterAligned = $state(false);
     let isRightAligned = $state(false);
+
+    const BUTTONS_CLASSES: ClassNameValue =
+        "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white shadow-sm";
 
     /**
      * Updates active states from editor
@@ -185,45 +186,46 @@
         editor?.chain().focus().setTextAlign(alignment).run();
     }
 
-    function handleFontSizeChange(value: string) {
-        selectedFontSize = value;
-        editor?.chain().focus().setFontSize(value).run();
+    function handleFontSizeChange(
+        event: Event & {
+            currentTarget: EventTarget & HTMLSelectElement;
+        },
+    ) {
+        selectedFontSize = event.currentTarget.value;
+        editor?.chain().focus().setFontSize(event.currentTarget.value).run();
     }
 </script>
 
-<div class={twMerge("rich-text-editor", className)}>
+<div class={twMerge("rich-text-editor space-y-4", className)}>
     <!-- Toolbar -->
     <div
-        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between p-2"
+        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between"
         role="toolbar"
         aria-label="Text formatting toolbar"
     >
         <!-- Left Group: Font Size, Bold, Italic -->
         <div class="flex items-center gap-2">
             <!-- Font Size Dropdown -->
-            <Select
+            <select
                 bind:value={selectedFontSize}
-                onChange={handleFontSizeChange}
-                labelText="Font Size"
-                class="text-sm"
+                onchange={handleFontSizeChange}
+                class={twMerge(BUTTONS_CLASSES, "border-grey px-2 py-1 text-sm w-[100px] text-secondary ring-0")}
             >
-                {#snippet children()}
-                    <option value="12px">12px</option>
-                    <option value="14px">14px</option>
-                    <option value="16px">16px</option>
-                    <option value="18px">18px</option>
-                    <option value="20px">20px</option>
-                    <option value="24px">24px</option>
-                {/snippet}
-            </Select>
+                <option value="12px">12px</option>
+                <option value="14px">14px</option>
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+                <option value="24px">24px</option>
+            </select>
 
             <!-- Bold Button -->
             <button
                 type="button"
                 onclick={toggleBold}
                 class={twMerge(
-                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
-                    isBoldActive ? "border-secondary" : "border-grey",
+                    BUTTONS_CLASSES,
+                    isBoldActive ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Bold"
                 title="Bold (Ctrl+B)"
@@ -237,8 +239,8 @@
                 type="button"
                 onclick={toggleItalic}
                 class={twMerge(
-                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
-                    isItalicActive ? "border-secondary" : "border-grey",
+                    BUTTONS_CLASSES,
+                    isItalicActive ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Italic"
                 title="Italic (Ctrl+I)"
@@ -255,8 +257,8 @@
                 type="button"
                 onclick={() => setTextAlign("left")}
                 class={twMerge(
-                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
-                    isLeftAligned ? "border-secondary" : "border-grey",
+                    BUTTONS_CLASSES,
+                    isLeftAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align left"
                 aria-pressed={isLeftAligned}
@@ -283,8 +285,8 @@
                 type="button"
                 onclick={() => setTextAlign("center")}
                 class={twMerge(
-                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
-                    isCenterAligned ? "border-secondary" : "border-grey",
+                    BUTTONS_CLASSES,
+                    isCenterAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align center"
                 aria-pressed={isCenterAligned}
@@ -311,8 +313,8 @@
                 type="button"
                 onclick={() => setTextAlign("right")}
                 class={twMerge(
-                    "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white p-2 shadow-sm",
-                    isRightAligned ? "border-secondary" : "border-grey",
+                    BUTTONS_CLASSES,
+                    isRightAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align right"
                 aria-pressed={isRightAligned}

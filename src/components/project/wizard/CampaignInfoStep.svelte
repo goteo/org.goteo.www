@@ -113,7 +113,7 @@
     }
 </script>
 
-<div class="space-y-8">
+<div class="space-y-10">
     <!-- Page Header -->
     <div>
         <h1 class="text-secondary mb-2 text-3xl leading-tight font-bold lg:text-4xl">
