@@ -94,7 +94,7 @@
     // Active states - tracked as state variables
     let isBoldActive = $state(false);
     let isItalicActive = $state(false);
-    let isLeftAligned = $state(true);
+    let isLeftAligned = $state(false);
     let isCenterAligned = $state(false);
     let isRightAligned = $state(false);
 
@@ -133,6 +133,7 @@
                 TextAlign.configure({
                     types: ["paragraph"],
                     alignments: ["left", "center", "right"],
+                    defaultAlignment: "left",
                 }),
                 Placeholder.configure({
                     placeholder: placeholder,
@@ -206,18 +207,38 @@
         <!-- Left Group: Font Size, Bold, Italic -->
         <div class="flex items-center gap-2">
             <!-- Font Size Dropdown -->
-            <select
-                bind:value={selectedFontSize}
-                onchange={handleFontSizeChange}
-                class={twMerge(BUTTONS_CLASSES, "border-grey px-2 py-1 text-sm w-[100px] text-secondary ring-0")}
-            >
-                <option value="12px">12px</option>
-                <option value="14px">14px</option>
-                <option value="16px">16px</option>
-                <option value="18px">18px</option>
-                <option value="20px">20px</option>
-                <option value="24px">24px</option>
-            </select>
+            <div class="relative flex gap-2">
+                <select
+                    bind:value={selectedFontSize}
+                    onchange={handleFontSizeChange}
+                    class={twMerge(
+                        BUTTONS_CLASSES,
+                        "border-grey text-secondary w-auto max-w-[110px] appearance-none bg-none px-2 py-1 pr-8 text-sm ring-0",
+                    )}
+                >
+                    <option value="12px">12px</option>
+                    <option value="14px">14px</option>
+                    <option value="16px">16px</option>
+                    <option value="18px">18px</option>
+                    <option value="20px">20px</option>
+                    <option value="24px">24px</option>
+                </select>
+                <svg
+                    class="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M3 5.5L8 10.5L13 5.5"
+                        stroke="#462949"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </div>
 
             <!-- Bold Button -->
             <button
@@ -341,7 +362,9 @@
     <!-- Editor Content -->
     <div
         bind:this={editorElement}
-        class="editor-content rounded-xl border {error ? 'border-red-500' : ''}"
+        class="editor-content h-60 rounded-lg border {error
+            ? 'border-red-500'
+            : 'border-secondary'}"
         role="textbox"
         aria-multiline="true"
         aria-invalid={!!error}
