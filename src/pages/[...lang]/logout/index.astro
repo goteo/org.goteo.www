@@ -3,7 +3,7 @@ import LocalStorage from "../../../components/LocalStorage.svelte";
 import Redirect from "../../../components/Redirect.svelte";
 import { LOCAL_STORAGE_KEY } from "../../../stores/auth";
 
-Astro.cookies.delete("access-token");
+Astro.cookies.delete("auth");
 ---
 
 <LocalStorage remove={[LOCAL_STORAGE_KEY]} client:load />

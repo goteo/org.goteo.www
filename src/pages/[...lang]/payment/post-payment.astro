@@ -27,12 +27,12 @@ let donatedProjects: Campaign[] = [];
 let suggestedProjects: Campaign[] = [];
 let userEmail = "";
 
-const accessCookie = Astro.cookies.get("access-token");
+const authCookie = Astro.cookies.get("auth");
 const checkoutId = Astro.url.searchParams.get("checkoutId");
 
-if (accessCookie && checkoutId) {
+if (authCookie && checkoutId) {
     try {
-        const cookieData = JSON.parse(accessCookie.value);
+        const cookieData = authCookie.json();
         const { token, user } = cookieData;
 
         if (user?.email) {

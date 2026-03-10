@@ -1,8 +1,8 @@
 ---
 import CSRF from "csrf";
 
-const accessToken = Astro.cookies.get("access-token");
-if (accessToken) {
+const authCookie = Astro.cookies.get("auth");
+if (authCookie) {
     Astro.redirect("/");
 }
 
