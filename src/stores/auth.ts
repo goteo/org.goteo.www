@@ -1,14 +1,14 @@
 import { writable, type Writable } from "svelte/store";
 
 import type { Organization, Person, User } from "../openapi/client";
-import type { AccessToken } from "../types/auth";
+import type { OAuthResponse } from "../types/auth";
 
-type AuthStore = {
-    accessToken: AccessToken;
+interface AuthStore {
+    token: OAuthResponse;
     user: User;
     person?: Person;
     organization?: Organization;
-};
+}
 
 export const LOCAL_STORAGE_KEY = "auth";
 
@@ -32,9 +32,6 @@ auth.subscribe((value: AuthStore | undefined) => {
     if (typeof localStorage === "undefined") {
         return;
     }
-
-    console.log("auth store update");
-    console.log(value);
 
     if (value === undefined) {
         return;

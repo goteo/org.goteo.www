@@ -3,6 +3,7 @@ import CSRF from "csrf";
 import LocalStorage from "../../../components/LocalStorage.svelte";
 import Redirect from "../../../components/Redirect.svelte";
 import { LOCAL_STORAGE_KEY } from "../../../stores/auth";
+import { type OAuthResponse } from "../../../types/auth";
 import {
     apiUsersGetCollection,
     apiUsersIdorganizationGet,
@@ -36,19 +37,19 @@ params.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
 params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
 params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
 
-const accessToken = await fetch(oauth2Token, {
+const oauth: OAuthResponse = await fetch(oauth2Token, {
     method: "POST",
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
 }).then((res) => res.json());
 
-if (accessToken.error) {
-    console.error(accessToken);
+if (oauth.error!) {
+    console.error(oauth);
     return Astro.redirect("/error");
 }
 
 const { sub: handle } = JSON.parse(
-    Buffer.from(accessToken.access_token.split(".")[1], "base64").toString(),
+    Buffer.from(oauth.access_token.split(".")[1], "base64").toString(),
 );
 const { data: users } = await apiUsersGetCollection({ query: { handle } });
 
@@ -56,18 +57,18 @@ const user = users![0];
 
 const { data: person } = await apiUsersIdpersonGet({
     path: { id: String(user.id) },
-    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+    headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
 });
 const { data: organization } = await apiUsersIdorganizationGet({
     path: { id: String(user.id) },
-    headers: { Authorization: `Bearer ${accessToken.access_token}` },
+    headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
 });
 
-Astro.cookies.set("access-token", accessToken, { path: "/" });
+Astro.cookies.set("access-token", oauth, { path: "/" });
 ---
 
 <LocalStorage
-    set={{ [LOCAL_STORAGE_KEY]: { accessToken, user, person, organization } }}
+    set={{ [LOCAL_STORAGE_KEY]: { token: oauth, user, person, organization } }}
     client:load
 />
 <Redirect location="/success" client:load />
