@@ -22,6 +22,7 @@ oauth2Authorize.searchParams.set("scope", "email");
 const csrf = new CSRF();
 const csrfToken = csrf.create(import.meta.env.OAUTH2_CLIENT_SECRET);
 
+Astro.cookies.set("oauth-csrf", csrfToken);
 oauth2Authorize.searchParams.set("state", csrfToken);
 
 return Astro.redirect(oauth2Authorize);

@@ -22,6 +22,14 @@ if (csrfToken === null) {
     return Astro.redirect("/error");
 }
 
+const csrfCookie = Astro.cookies.get("oauth-csrf");
+if (!csrfCookie || csrfToken !== csrfCookie.value) {
+    console.error("The OAuth2 CSRF cookie was not present or mismatched");
+    return Astro.redirect("/error");
+} else {
+    Astro.cookies.delete("oauth-csrf");
+}
+
 const csrf = new CSRF();
 if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
     console.error(`Could not verify CSRF token: ${csrfToken}`);
@@ -51,10 +59,8 @@ if (oauth.error!) {
 const { sub: handle } = JSON.parse(
     Buffer.from(oauth.access_token.split(".")[1], "base64").toString(),
 );
-const { data: users } = await apiUsersGetCollection({ query: { handle } });
 
-const user = users![0];
-
+const user = await apiUsersGetCollection({ query: { handle } }).then(({ data }) => data![0]);
 const { data: person } = await apiUsersIdpersonGet({
     path: { id: String(user.id) },
     headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
