@@ -211,6 +211,8 @@
                 <select
                     bind:value={selectedFontSize}
                     onchange={handleFontSizeChange}
+                    aria-label="Font size"
+                    title="Font size"
                     class={twMerge(
                         BUTTONS_CLASSES,
                         "border-grey text-secondary w-auto max-w-[110px] appearance-none bg-none px-2 py-1 pr-8 text-sm ring-0",
