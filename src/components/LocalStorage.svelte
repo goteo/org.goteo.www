@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { set = {}, remove = {} }: { set: any; remove: any } = $props();
+    let { set = {}, remove = [] }: { set: any; remove: string[] } = $props();
 
     $effect(() => {
         const toSet = Object.entries(set || {});
@@ -10,9 +10,9 @@
     });
 
     $effect(() => {
-        const toRemove = Object.entries(remove || {});
+        const toRemove = remove;
 
-        for (const [key] of toRemove) {
+        for (const key of toRemove) {
             localStorage.removeItem(key);
         }
     });
