@@ -66,11 +66,7 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
     const pathAfterLang = isLangInPath ? pathParts.slice(1) : pathParts;
     const nextSegment = pathAfterLang[0] ?? "";
 
-    if (authCookie && (nextSegment === "login" || nextSegment === "register")) {
-        return isLangInPath ? `/${currentLang}/payment` : `/payment`;
-    }
-
-    const protectedRoutes = ["me", "payment", "admin"];
+    const protectedRoutes = ["me", "admin"];
     const isProtected = protectedRoutes.includes(nextSegment);
 
     if (!authCookie && isProtected) {
