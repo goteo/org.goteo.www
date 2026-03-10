@@ -64,11 +64,10 @@ const { data: organization } = await apiUsersIdorganizationGet({
     headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
 });
 
-Astro.cookies.set("access-token", oauth, { path: "/" });
+const auth = { token: oauth, user, person, organization };
+
+Astro.cookies.set("auth", auth, { path: "/" });
 ---
 
-<LocalStorage
-    set={{ [LOCAL_STORAGE_KEY]: { token: oauth, user, person, organization } }}
-    client:load
-/>
-<Redirect location="/success" client:load />
+<LocalStorage set={{ [LOCAL_STORAGE_KEY]: auth }} client:load />
+<Redirect location="/" client:load />

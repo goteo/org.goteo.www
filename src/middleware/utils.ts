@@ -57,7 +57,7 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
     const pathname = context.url.pathname;
     if (pathname === "/favicon.ico") return null;
 
-    const accessToken = context.cookies.get("access-token")?.value;
+    const authCookie = context.cookies.get("auth")?.value;
     const pathParts = pathname.replace(/^\/+/, "").split("/");
 
     const langFromPath = parsePathLang(pathname);
@@ -66,22 +66,22 @@ export function handleProtectedRoutes(context: APIContext, lang: string): string
     const pathAfterLang = isLangInPath ? pathParts.slice(1) : pathParts;
     const nextSegment = pathAfterLang[0] ?? "";
 
-    if (accessToken && (nextSegment === "login" || nextSegment === "register")) {
+    if (authCookie && (nextSegment === "login" || nextSegment === "register")) {
         return isLangInPath ? `/${currentLang}/payment` : `/payment`;
     }
 
     const protectedRoutes = ["me", "payment", "admin"];
     const isProtected = protectedRoutes.includes(nextSegment);
 
-    if (!accessToken && isProtected) {
+    if (!authCookie && isProtected) {
         return isLangInPath ? `/${currentLang}/login` : `/login`;
     }
 
     if (nextSegment === "admin") {
         try {
-            const token = JSON.parse(accessToken || "{}");
+            const auth = JSON.parse(authCookie || "{}");
 
-            if (!token.isAdmin) {
+            if (!auth.user.roles.includes("ROLE_ADMIN")) {
                 return isLangInPath ? `/${currentLang}/login` : `/login`;
             }
         } catch {
