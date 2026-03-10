@@ -1,9 +1,15 @@
 ---
 import CSRF from "csrf";
 
+const wantsCallback = Astro.url.searchParams.get("callback");
+if (wantsCallback) {
+    Astro.cookies.delete("callback");
+    Astro.cookies.set("callback", wantsCallback, { path: "/" });
+}
+
 const authCookie = Astro.cookies.get("auth");
 if (authCookie) {
-    Astro.redirect("/");
+    return Astro.redirect(wantsCallback || "/");
 }
 
 const oauth2Authorize = new URL("/oauth/authorize", import.meta.env.PUBLIC_API_URL);

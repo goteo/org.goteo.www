@@ -15,11 +15,10 @@ const defaultCurrency = getDefaultCurrency();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    console.error("Authorization cookie not found");
-    return Astro.redirect("/");
+    return Astro.redirect("/login?callback=/payment");
 }
 
-const { token, user } = JSON.parse(authCookie.value);
+const { token, user } = authCookie.json();
 
 const { data: accounting } = await apiAccountingsIdGet({
     path: { id: extractId(user.accounting)! },

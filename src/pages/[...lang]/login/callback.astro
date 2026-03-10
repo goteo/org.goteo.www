@@ -67,7 +67,10 @@ const { data: organization } = await apiUsersIdorganizationGet({
 const auth = { token: oauth, user, person, organization };
 
 Astro.cookies.set("auth", auth, { path: "/" });
+
+const withCallback = Astro.cookies.get("callback");
+Astro.cookies.delete("callback");
 ---
 
 <LocalStorage set={{ [LOCAL_STORAGE_KEY]: auth }} client:load />
-<Redirect location="/" client:load />
+<Redirect location={withCallback?.value || "/"} client:load />
