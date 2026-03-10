@@ -1,7 +1,7 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
     import { t } from "../i18n/store";
-    import { auth } from "../stores/auth";
+    import { auth } from "../auth/store";
     import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";

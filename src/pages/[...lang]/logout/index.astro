@@ -1,7 +1,7 @@
 ---
 import LocalStorage from "../../../components/LocalStorage.svelte";
 import Redirect from "../../../components/Redirect.svelte";
-import { LOCAL_STORAGE_KEY } from "../../../stores/auth";
+import { LOCAL_STORAGE_KEY } from "../../../auth/store";
 
 Astro.cookies.delete("auth");
 ---

@@ -1,7 +1,7 @@
 import { writable, type Writable } from "svelte/store";
 
+import type { OAuthResponse } from "./types";
 import type { Organization, Person, User } from "../openapi/client";
-import type { OAuthResponse } from "../types/auth";
 
 interface AuthStore {
     token: OAuthResponse;
