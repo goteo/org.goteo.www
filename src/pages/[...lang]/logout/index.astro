@@ -1,10 +1,9 @@
 ---
-import LocalStorage from "../../../components/LocalStorage.svelte";
-import Redirect from "../../../components/Redirect.svelte";
-import { LOCAL_STORAGE_KEY } from "../../../auth/store";
+import { clearSession } from "../../../auth/session";
 
-Astro.cookies.delete("auth");
+clearSession(Astro.cookies);
+
+const withCallback = Astro.url.searchParams.get("callback");
+
+return Astro.redirect(withCallback || "/");
 ---
-
-<LocalStorage remove={[LOCAL_STORAGE_KEY]} client:load />
-<Redirect location="/" client:load />

@@ -36,7 +36,7 @@ export function setSession(cookies: AstroCookies, session: Session) {
         httpOnly: true,
         secure: true,
         sameSite: "lax",
-        expires: session.expires_at
+        expires: session.expires_at,
     });
 }
 
