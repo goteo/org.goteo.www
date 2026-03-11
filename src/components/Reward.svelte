@@ -11,29 +11,18 @@
     let {
         reward = $bindable(),
         project,
+        isAvailable = $bindable(),
     }: {
         reward: ProjectReward;
         project: Project;
+        isAvailable: boolean;
     } = $props();
 
     let openModal = $state(false);
-
-    let isAvailable = calcAvailability();
-    function calcAvailability(): boolean {
-        if (project.status !== "in_campaign") {
-            return false;
-        }
-
-        if (reward.isFinite && reward.unitsAvailable! === 0) {
-            return false;
-        }
-
-        return true;
-    }
 </script>
 
 <div
-    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
+    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >
@@ -61,16 +50,6 @@
     </div>
 
     <div class="mt-auto flex w-full justify-between">
-        <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
-            <UserIcon />
-            <span>
-                {@html $t(
-                    "rewards.donators",
-                    { donators: reward.unitsClaimed! },
-                    { allowHTML: true },
-                )}
-            </span>
-        </div>
         {#if reward.isFinite}
             <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
                 <UnitIcon />
@@ -82,9 +61,19 @@
                     )}
                 </span>
             </div>
+        {:else}
+            <div class="text-secondary flex items-center justify-between gap-2 text-sm font-bold">
+                <UserIcon />
+                <span>
+                    {@html $t(
+                        "rewards.donators",
+                        { donators: reward.unitsClaimed! },
+                        { allowHTML: true },
+                    )}
+                </span>
+            </div>
         {/if}
     </div>
-
     <Button
         kind="secondary"
         class="w-full"
