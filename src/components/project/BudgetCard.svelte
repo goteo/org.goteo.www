@@ -4,11 +4,15 @@
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/Button.svelte";
 
-    let { item, isEditable = false, onEdit } = $props<{
+    let {
+        item,
+        isEditable = false,
+        onEdit,
+    }: {
         item: ProjectBudgetItem;
         isEditable?: boolean;
         onEdit?: () => void;
-    }>();
+    } = $props();
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
@@ -17,7 +21,11 @@
     };
 </script>
 
-<div class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold">
+<div
+    class="border-grey flex w-full flex-col justify-between rounded-4xl border bg-white p-6 font-bold shadow-sm {isEditable
+        ? 'gap-4'
+        : 'gap-6'}"
+>
     <div class="flex flex-col gap-4">
         <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
         <p class="text-content line-clamp-3 font-normal">
@@ -42,5 +50,6 @@
                 {$t("wizard.budget.editBtn")}
             {/snippet}
         </Button>
+        <!-- TODO: Add Modal -->
     {/if}
 </div>
