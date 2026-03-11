@@ -1,0 +1,103 @@
+import { decodeJWT } from "./jwt";
+import {
+    apiAccountingsIdGet,
+    apiUsersIdorganizationGet,
+    apiUsersIdOrHandleGet,
+    apiUsersIdpersonGet,
+} from "../openapi/client";
+import { extractId } from "../utils/extractId";
+
+import type { OAuthToken, Session } from "./types";
+import type { AstroCookies } from "astro";
+
+const COOKIE_NAME = "auth";
+
+/**
+ * Retrieve the session data from storage
+ * @param cookies AstroCookies interface
+ * @returns The Session data
+ */
+export function getSession(cookies: AstroCookies): Session | undefined {
+    const auth = cookies.get(COOKIE_NAME);
+
+    if (!auth) return undefined;
+
+    return auth.json();
+}
+
+/**
+ * Store the session data into a secure, http-only cookie
+ * @param cookies AstroCookies interface
+ * @param session The Session data
+ */
+export function setSession(cookies: AstroCookies, session: Session) {
+    cookies.set(COOKIE_NAME, JSON.stringify(session), {
+        path: "/",
+        httpOnly: true,
+        secure: true,
+        sameSite: "lax",
+        expires: session.expires_at
+    });
+}
+
+/**
+ * Delete the session data from storage
+ * @param cookies AstroCookies interface
+ */
+export function clearSession(cookies: AstroCookies) {
+    cookies.delete(COOKIE_NAME, { path: "/" });
+}
+
+/**
+ * Obtain session data from a given OAuth token
+ * @param token An OAuth /token response
+ * @returns A storable Session object
+ */
+export async function buildSession(token: OAuthToken): Promise<Session> {
+    const jwt = decodeJWT(token.access_token);
+
+    const expiresAt = new Date(jwt.exp * 1000);
+
+    if (new Date() > expiresAt) {
+        throw new Error("Cannot build a Session from an expired token");
+    }
+
+    const headers = { Authorization: `${token.token_type} ${token.access_token}` };
+
+    const { data: user } = await apiUsersIdOrHandleGet({
+        path: { idOrHandle: jwt.sub },
+        headers,
+    });
+
+    if (!user) {
+        throw new Error("The User of the token does not exist");
+    }
+
+    const {
+        [0]: { data: accounting },
+        [1]: { data: person },
+        [2]: { data: organization },
+    } = await Promise.all([
+        apiAccountingsIdGet({
+            path: { id: extractId(user.accounting)! },
+            headers,
+        }),
+        apiUsersIdpersonGet({
+            path: { id: String(user.id) },
+            headers,
+        }),
+        apiUsersIdorganizationGet({
+            path: { id: String(user!.id) },
+            headers,
+        }),
+    ]);
+
+    return {
+        token,
+        user: user,
+        expires_at: expiresAt,
+        accounting: accounting!,
+        person: person!,
+        organization,
+    };
+}

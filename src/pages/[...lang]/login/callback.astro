@@ -1,14 +1,7 @@
 ---
 import CSRF from "csrf";
-import LocalStorage from "../../../components/LocalStorage.svelte";
-import Redirect from "../../../components/Redirect.svelte";
-import { LOCAL_STORAGE_KEY } from "../../../auth/store";
-import { type OAuthResponse } from "../../../auth/types";
-import {
-    apiUsersGetCollection,
-    apiUsersIdorganizationGet,
-    apiUsersIdpersonGet,
-} from "../../../openapi/client";
+import { buildSession, setSession } from "../../../auth/session";
+import type { OAuthToken } from "../../../auth/types";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
@@ -45,7 +38,7 @@ params.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
 params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
 params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
 
-const oauth: OAuthResponse = await fetch(oauth2Token, {
+const oauth: OAuthToken = await fetch(oauth2Token, {
     method: "POST",
     body: params,
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -56,27 +49,11 @@ if (oauth.error!) {
     return Astro.redirect("/error");
 }
 
-const { sub: handle } = JSON.parse(
-    Buffer.from(oauth.access_token.split(".")[1], "base64").toString(),
-);
-
-const user = await apiUsersGetCollection({ query: { handle } }).then(({ data }) => data![0]);
-const { data: person } = await apiUsersIdpersonGet({
-    path: { id: String(user.id) },
-    headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
-});
-const { data: organization } = await apiUsersIdorganizationGet({
-    path: { id: String(user.id) },
-    headers: { Authorization: `${oauth.token_type} ${oauth.access_token}` },
-});
-
-const auth = { token: oauth, user, person, organization };
-
-Astro.cookies.set("auth", auth, { path: "/" });
+const session = await buildSession(oauth);
+setSession(Astro.cookies, session);
 
 const withCallback = Astro.cookies.get("callback");
 Astro.cookies.delete("callback");
----
 
-<LocalStorage set={{ [LOCAL_STORAGE_KEY]: auth }} client:load />
-<Redirect location={withCallback?.value || "/"} client:load />
+return Astro.redirect(withCallback?.value || "/");
+---
