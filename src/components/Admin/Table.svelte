@@ -8,18 +8,17 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    import Loader from "../../svgs/Loader.svelte";
-    import Pagination from "./Pagination.svelte";
     import DetailsRow from "./DetailsRow.svelte";
-
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-
+    import Pagination from "./Pagination.svelte";
     import {
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
         apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
+    import { t } from "../../i18n/store";
+    import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
+    import Loader from "../../svgs/Loader.svelte";
+    import { formatCurrency } from "../../utils/currencies";
 
     import type {
         Accounting,
@@ -31,8 +30,6 @@
         Link,
         Tracking,
     } from "../../../src/openapi/client/index.ts";
-
-    import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
@@ -130,13 +127,10 @@
         switch (ownerIri.split("/").slice(0, -1).join("/")) {
             case apiUsersGetCollectionUrl:
                 return (owner as User).displayName ?? undefined;
-                break;
             case apiProjectsGetCollectionUrl:
                 return (owner as Project).title ?? undefined;
-                break;
             case apiTipjarsGetCollectionUrl:
                 return (owner as Tipjar).name ?? undefined;
-                break;
         }
 
         return undefined;

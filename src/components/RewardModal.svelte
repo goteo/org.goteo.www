@@ -1,15 +1,17 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import type { Project, ProjectReward } from "../openapi/client";
+    import { onMount } from "svelte";
+
     import { t } from "../i18n/store";
-    import { formatCurrency, getUnit } from "../utils/currencies";
+    import { cart } from "../stores/cart";
     import UnitIcon from "../svgs/UnitIcon.svelte";
     import UserIcon from "../svgs/UserIcon.svelte";
+    import { formatCurrency, getUnit } from "../utils/currencies";
     import { extractId } from "../utils/extractId";
-    import { cart } from "../stores/cart";
     import { renderMarkdown } from "../utils/renderMarkdown";
-    import { onMount } from "svelte";
     import Button from "./library/Button.svelte";
+
+    import type { Project, ProjectReward } from "../openapi/client";
 
     let {
         open = $bindable(false),

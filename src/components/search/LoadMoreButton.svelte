@@ -3,8 +3,8 @@ Load More Button Component
 Allows accumulative pagination for search results
 -->
 <script lang="ts">
-    import { t } from "../../i18n/store";
     import LoadingSpinner from "./LoadingSpinner.svelte";
+    import { t } from "../../i18n/store";
     import Button from "../library/Button.svelte";
 
     interface Props {

@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { apiVersionsIdGet } from "../../../src/openapi/client/index.ts";
     import { t } from "../../i18n/store";
     import AnnotationIcon from "../../svgs/AnnotationIcon.svelte";
-    import { apiVersionsIdGet } from "../../../src/openapi/client/index.ts";
 
     const { id } = $props<{ id: string }>();
 

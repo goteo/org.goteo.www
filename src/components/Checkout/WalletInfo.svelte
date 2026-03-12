@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { derived } from "svelte/store";
+
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
 
     const total = derived(cart, ($cart) => {

@@ -1,7 +1,7 @@
 <script lang="ts">
-    import DonatorIcon from "../../svgs/DonatorIcon.svelte";
-    import CertificateIcon from "../../svgs/CertificateIcon.svelte";
     import { t } from "../../i18n/store";
+    import CertificateIcon from "../../svgs/CertificateIcon.svelte";
+    import DonatorIcon from "../../svgs/DonatorIcon.svelte";
 
     export let ownerName: string;
 </script>

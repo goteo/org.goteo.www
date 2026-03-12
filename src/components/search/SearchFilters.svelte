@@ -6,12 +6,13 @@ Integrated with searchStore for state management and URL synchronization
 -->
 <script lang="ts">
     import { onMount } from "svelte";
-    import { t, setLocale } from "../../i18n/store";
-    import { searchStore, searchFilters, hasActiveFilters } from "../../stores/searchStore";
-    import SearchInput from "./SearchInput.svelte";
-    import FilterDropdown from "./FilterDropdown.svelte";
+
     import CategoryFilter from "./CategoryFilter.svelte";
+    import FilterDropdown from "./FilterDropdown.svelte";
     import SearchButton from "./SearchButton.svelte";
+    import SearchInput from "./SearchInput.svelte";
+    import { t, setLocale } from "../../i18n/store";
+    import { searchStore, searchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
 
     interface Props {
