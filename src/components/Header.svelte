@@ -1,7 +1,6 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
     import { t } from "../i18n/store";
-    import { auth } from "../auth/store";
     import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
@@ -10,6 +9,7 @@
     import CartButton from "./CartButton.svelte";
     import HeaderButtons from "./HeaderButtons.svelte";
     import UiLanguages from "./UiLanguages.svelte";
+    import { session } from "../auth/store";
 
     function isHidden(element: HTMLElement): boolean {
         return element.classList.contains("hidden");
@@ -80,13 +80,13 @@
                 </div>
                 <nav>
                     <ul class="flex items-center gap-1 md:gap-4">
-                        {#if $auth}
+                        {#if $session}
                             <li class="flex items-center pr-2">
                                 <CartButton />
                             </li>
                         {/if}
                         <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
-                            {#if $auth}
+                            {#if $session}
                                 <div class="relative inline-block w-full">
                                     <button
                                         onclick={userDropdownToggle}
@@ -95,7 +95,7 @@
                                     >
                                         <UserIcon />
                                         <span class="hidden sm:inline">
-                                            {$t("greeting")}, {$auth.person?.firstName}
+                                            {$t("greeting")}, {$session.person?.firstName}
                                         </span>
                                     </button>
 
