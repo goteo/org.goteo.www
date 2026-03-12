@@ -1,8 +1,9 @@
 <script lang="ts">
     import { session } from "../auth/store";
+    import { locale } from "../i18n/store";
+
     import type { Session } from "../auth/types";
     import type { Locale } from "../i18n/locales";
-    import { locale } from "../i18n/store";
 
     interface AppState {
         locale: Locale;

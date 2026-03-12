@@ -1,9 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import type { Snippet } from "svelte";
+
     import LineIcon from "../svgs/LineIcon.svelte";
     import Button from "./library/Button.svelte";
     import { t } from "../i18n/store.ts";
+
+    import type { Snippet } from "svelte";
 
     interface Props {
         detailsId: string;

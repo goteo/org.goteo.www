@@ -1,18 +1,20 @@
 <script lang="ts">
+    import { Modal } from "flowbite-svelte";
     import { onMount } from "svelte";
+
+    import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
+    import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
+    import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-    import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
     import {
         apiProjectSupportsGetCollection,
         apiUsersIdOrHandleGet,
     } from "../../openapi/client/index";
-    import { extractId } from "../../utils/extractId";
     import Loader from "../../svgs/Loader.svelte";
-    import { Modal } from "flowbite-svelte";
-    import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
-    import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
-    import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+    import { extractId } from "../../utils/extractId";
+
+    import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
     let {
         project,

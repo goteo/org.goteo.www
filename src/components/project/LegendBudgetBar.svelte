@@ -1,7 +1,8 @@
 <script lang="ts">
-    import type { ProjectBudgetItem, Project } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
+
+    import type { ProjectBudgetItem, Project } from "../../openapi/client/index";
 
     let { project } = $props<{
         project: Project;

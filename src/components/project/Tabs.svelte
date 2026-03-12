@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import { renderMarkdown } from "../../utils/renderMarkdown";
-    import ProjectRewards from "./ProjectRewards.svelte";
-    import ProjectUpdate from "./ProjectUpdate.svelte";
+    import { onMount } from "svelte";
+
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
+    import ProjectRewards from "./ProjectRewards.svelte";
+    import ProjectUpdate from "./ProjectUpdate.svelte";
+    import { t } from "../../i18n/store";
     import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
-    import { onMount } from "svelte";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+
     import type { Project, Accounting } from "../../openapi/client/index";
 
     let {

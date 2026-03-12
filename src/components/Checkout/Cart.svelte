@@ -1,13 +1,14 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+    import { derived, writable } from "svelte/store";
+    import { get } from "svelte/store";
+
     import CartItem from "./CartItem.svelte";
     import Tipjar from "./Tipjar.svelte";
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
-    import { derived, writable } from "svelte/store";
     import { apiProjectsIdOrSlugGet, apiUsersIdOrHandleGet } from "../../openapi/client";
+    import { cart } from "../../stores/cart";
     import { extractId } from "../../utils/extractId";
-    import { onMount } from "svelte";
-    import { get } from "svelte/store";
 
     export let defaultCurrency: string;
     export let accountingIdPlatoniq: number;

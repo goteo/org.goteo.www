@@ -4,9 +4,10 @@ Reusable dropdown for filter options matching Figma design
 Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 -->
 <script lang="ts">
-    import type { HTMLButtonAttributes } from "svelte/elements";
     import { t } from "../../i18n/store";
     import ChevronDown from "../../svgs/ChevronDown.svelte";
+
+    import type { HTMLButtonAttributes } from "svelte/elements";
 
     interface DropdownOption {
         value: string;

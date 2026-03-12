@@ -3,8 +3,8 @@ Simple Search Pagination Component
 Previous/Next navigation for search results
 -->
 <script lang="ts">
-    import { searchStore, currentPage, hasNextPage, hasPrevPage } from "../../stores/searchStore";
     import { t } from "../../i18n/store";
+    import { searchStore, currentPage, hasNextPage, hasPrevPage } from "../../stores/searchStore";
 
     interface Props {
         maxVisiblePages?: number;

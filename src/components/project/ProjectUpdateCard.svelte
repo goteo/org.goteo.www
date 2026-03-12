@@ -1,16 +1,18 @@
 <script lang="ts">
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
-    import Button from "../library/Button.svelte";
-    import { t } from "../../i18n/store";
-    import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
-    import { twMerge } from "tailwind-merge";
-    import type { MouseEventHandler } from "svelte/elements";
-    import { renderMarkdown } from "../../utils/renderMarkdown";
     import { onMount } from "svelte";
-    import type { User } from "../../openapi/client/types.gen.ts";
-    import { extractId } from "../../utils/extractId.ts";
+    import { twMerge } from "tailwind-merge";
+
+    import { t } from "../../i18n/store";
     import { locale } from "../../i18n/store";
+    import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
+    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import { formatDate } from "../../utils/dates.ts";
+    import { extractId } from "../../utils/extractId.ts";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+    import Button from "../library/Button.svelte";
+
+    import type { User } from "../../openapi/client/types.gen.ts";
+    import type { MouseEventHandler } from "svelte/elements";
 
     interface Props {
         update: ProjectUpdate;

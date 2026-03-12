@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { twMerge } from "tailwind-merge";
+
     import type { Snippet } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
-    import { twMerge } from "tailwind-merge";
 
     interface Props extends HTMLInputAttributes {
         group?: any;

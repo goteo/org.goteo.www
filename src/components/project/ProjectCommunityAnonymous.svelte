@@ -1,8 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
     import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
     import { apiProjectSupportsmoneyTotalGetCollection, type Project } from "../../openapi/client";
+    import { formatCurrency } from "../../utils/currencies";
 
     export let project: Project;
     export let currency: string;
