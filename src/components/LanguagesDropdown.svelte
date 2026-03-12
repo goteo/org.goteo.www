@@ -1,7 +1,8 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import LanguageIcon from "../svgs/LanguageIcon.svelte";
+
     import ChevronDown from "../svgs/ChevronDown.svelte";
+    import LanguageIcon from "../svgs/LanguageIcon.svelte";
 
     let { lang, languages, select } = $props();
 

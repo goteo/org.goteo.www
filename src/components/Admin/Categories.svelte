@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Category from "../library/Category.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import Category from "../library/Category.svelte";
 
     let categories = $state<
         {

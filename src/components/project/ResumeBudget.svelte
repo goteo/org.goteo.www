@@ -2,6 +2,7 @@
     import BudgetBar from "./BudgetBar.svelte";
     import LegendBudgetBar from "./LegendBudgetBar.svelte";
     import { t } from "../../i18n/store";
+
     import type { Project, Accounting } from "../../openapi/client/index";
 
     let { project, accounting } = $props<{

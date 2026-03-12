@@ -1,9 +1,9 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import Tabs from "../Tabs.svelte";
-    import FlashIcon from "../../svgs/FlashIcon.svelte";
     import ClockIcon from "../../svgs/ClockIcon.svelte";
+    import FlashIcon from "../../svgs/FlashIcon.svelte";
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
+    import Tabs from "../Tabs.svelte";
 
     interface Props {
         activeTab?: string;

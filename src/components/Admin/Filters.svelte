@@ -1,9 +1,9 @@
 <script lang="ts">
-    import FiltersIcon from "../../svgs/FiltersIcon.svelte";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
-    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import { t } from "../../i18n/store";
+    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
+    import FiltersIcon from "../../svgs/FiltersIcon.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
         $props<{

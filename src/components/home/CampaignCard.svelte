@@ -4,15 +4,17 @@ Displays campaign information in a card format with responsive sizing
 Converted from CampaignCard.astro to maintain exact functionality
 -->
 <script lang="ts">
-    import type { Campaign, CampaignSize } from "../../types/campaign";
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
     import { twMerge } from "tailwind-merge";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
+
+    import { t } from "../../i18n/store";
     import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import Tag from "../library/Tag.svelte";
+    import ClockIcon from "../../svgs/ClockIcon.svelte";
+    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
+    import { formatCurrency } from "../../utils/currencies";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
+    import Tag from "../library/Tag.svelte";
+
+    import type { Campaign, CampaignSize } from "../../types/campaign";
 
     interface Props {
         size: CampaignSize;
