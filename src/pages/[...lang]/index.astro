@@ -14,6 +14,8 @@ import Matchfunding from "../../components/home/Matchfunding.astro";
 import { getSession } from "../../auth/session";
 
 const { t } = Astro.locals;
+const locale = Astro.currentLocale;
+const session = await getSession(Astro.cookies);
 ---
 
 <Layout
@@ -21,7 +23,7 @@ const { t } = Astro.locals;
     description={t("metadata.description")}
     class="mb-20 gap-[72px]"
 >
-    <App client:load locale={Astro.currentLocale} session={getSession(Astro.cookies)} />
+    <App client:load locale={locale} session={session} />
     <Hero />
     <RenovationBanner />
     <Campaigns />

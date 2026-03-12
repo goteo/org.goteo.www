@@ -1,4 +1,5 @@
 import { decodeJWT } from "./jwt";
+import { refreshToken } from "./token";
 import {
     apiAccountingsIdGet,
     apiUsersIdorganizationGet,
@@ -17,12 +18,21 @@ const COOKIE_NAME = "auth";
  * @param cookies AstroCookies interface
  * @returns The Session data
  */
-export function getSession(cookies: AstroCookies): Session | undefined {
+export async function getSession(cookies: AstroCookies): Promise<Session | undefined> {
     const auth = cookies.get(COOKIE_NAME);
 
     if (!auth) return undefined;
 
-    return auth.json();
+    const session: Session = auth.json();
+    session.expires_at = new Date(session.expires_at);
+
+    if (!isExpired(session)) {
+        return session;
+    }
+
+    const token = await refreshToken(session.token);
+
+    return buildSession(token);
 }
 
 /**
@@ -36,7 +46,6 @@ export function setSession(cookies: AstroCookies, session: Session) {
         httpOnly: true,
         secure: true,
         sameSite: "lax",
-        expires: session.expires_at,
     });
 }
 
@@ -46,6 +55,10 @@ export function setSession(cookies: AstroCookies, session: Session) {
  */
 export function clearSession(cookies: AstroCookies) {
     cookies.delete(COOKIE_NAME, { path: "/" });
+}
+
+export function isExpired(session: Session): boolean {
+    return session.expires_at < new Date();
 }
 
 /**

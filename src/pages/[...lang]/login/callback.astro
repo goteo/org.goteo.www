@@ -1,7 +1,7 @@
 ---
 import CSRF from "csrf";
 import { buildSession, setSession } from "../../../auth/session";
-import type { OAuthToken } from "../../../auth/types";
+import { authorizationCode } from "../../../auth/token";
 
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
@@ -29,25 +29,10 @@ if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
     return Astro.redirect("/error");
 }
 
-const oauth2Token = new URL("/oauth/token", import.meta.env.PUBLIC_API_URL);
-const params = new URLSearchParams();
-
-params.set("grant_type", "authorization_code");
-params.set("code", code);
-params.set("redirect_uri", new URL("/login/callback", Astro.url).toString());
-params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
-params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
-
-const oauth: OAuthToken = await fetch(oauth2Token, {
-    method: "POST",
-    body: params,
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-}).then((res) => res.json());
-
-if (oauth.error!) {
-    console.error(oauth);
-    return Astro.redirect("/error");
-}
+const oauth = await authorizationCode({
+    code,
+    redirectUri: new URL("/login/callback", Astro.url).toString(),
+});
 
 const session = await buildSession(oauth);
 setSession(Astro.cookies, session);

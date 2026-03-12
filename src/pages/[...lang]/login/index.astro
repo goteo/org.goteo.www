@@ -1,6 +1,6 @@
 ---
 import CSRF from "csrf";
-import { getSession } from "../../../auth/session";
+import { getSession, isExpired } from "../../../auth/session";
 
 const wantsCallback = Astro.url.searchParams.get("callback");
 if (wantsCallback) {
@@ -8,8 +8,8 @@ if (wantsCallback) {
     Astro.cookies.set("callback", wantsCallback, { path: "/" });
 }
 
-const isLoggedIn = getSession(Astro.cookies);
-if (isLoggedIn) {
+const session = await getSession(Astro.cookies);
+if (session && !isExpired(session)) {
     return Astro.redirect(wantsCallback || "/");
 }
 
