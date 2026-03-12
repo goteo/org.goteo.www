@@ -7,8 +7,7 @@ import ProfileProjectsList from "../../../components/profile/ProfileProjectsList
 import ProfileDonorType from "../../../components/profile/ProfileDonorType.svelte";
 import { renderMarkdown } from "../../../utils/renderMarkdown";
 import {
-    apiUsersIdGet,
-    apiProjectsGetCollection,
+    apiUsersIdOrHandleGet,
     apiProjectSupportsGetCollection,
     apiProjectSupportsmoneyTotalGetCollection,
     type Accounting,
@@ -32,8 +31,8 @@ let user: User | undefined;
 let errorMessage: string | undefined;
 
 try {
-    const userResponse = await apiUsersIdGet({
-        path: { id: idOrHandle },
+    const userResponse = await apiUsersIdOrHandleGet({
+        path: { idOrHandle: idOrHandle },
     });
 
     if (userResponse.error) {

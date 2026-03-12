@@ -4,8 +4,7 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { derived, writable } from "svelte/store";
-    import { languagesList, type Locale } from "../../i18n/locales/index";
-    import { apiProjectsIdOrSlugGet, apiUsersIdGet } from "../../openapi/client";
+    import { apiProjectsIdOrSlugGet, apiUsersIdOrHandleGet } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import { onMount } from "svelte";
     import { get } from "svelte/store";
@@ -40,7 +39,7 @@
             });
             const ownerId = extractId(project.data?.owner);
             if (ownerId) {
-                const user = await apiUsersIdGet({ path: { id: ownerId } });
+                const user = await apiUsersIdOrHandleGet({ path: { idOrHandle: ownerId } });
                 return user.data?.displayName ?? "";
             }
         } catch (err) {

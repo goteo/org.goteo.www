@@ -3,7 +3,10 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
-    import { apiProjectSupportsGetCollection, apiUsersIdGet } from "../../openapi/client/index";
+    import {
+        apiProjectSupportsGetCollection,
+        apiUsersIdOrHandleGet,
+    } from "../../openapi/client/index";
     import { extractId } from "../../utils/extractId";
     import Loader from "../../svgs/Loader.svelte";
     import { Modal } from "flowbite-svelte";
@@ -67,7 +70,7 @@
             (publicSupports || []).map(async (support) => {
                 const id = extractId(support?.origin!);
 
-                const { data: user } = await apiUsersIdGet({ path: { id: id! } });
+                const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
                 const displayName = user?.displayName!;
 
                 return {

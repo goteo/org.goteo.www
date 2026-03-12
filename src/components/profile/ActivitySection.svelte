@@ -12,7 +12,10 @@
         apiProjectsIdOrSlugGet,
         apiMatchCallsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
-    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
+    import {
+        apiAccountingsIdGetUrl,
+        apiUsersIdOrHandleGetUrl,
+    } from "../../openapi/client/paths.gen.ts";
     import { createClient } from "@hey-api/client-fetch";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
@@ -106,7 +109,7 @@
             }
 
             // Fetch user's owned projects - using user IRI as owner
-            const userIri = buildUrl(apiUsersIdGetUrl, { id: user.id });
+            const userIri = buildUrl(apiUsersIdOrHandleGetUrl, { id: user.id });
             const { data: projectsResponse, error: projectsError } = await apiProjectsGetCollection(
                 {
                     client: relayClient,
