@@ -1,9 +1,11 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import ErrorIcon from "../../svgs/ErrorIcon.svelte";
-    import SuccessIcon from "../../svgs/SuccessIcon.svelte";
     import NotificationIcon from "../../svgs/NotificationIcon.svelte";
+    import SuccessIcon from "../../svgs/SuccessIcon.svelte";
     import WarningIcon from "../../svgs/WarningIcon.svelte";
+
     import type { Snippet } from "svelte";
 
     let {

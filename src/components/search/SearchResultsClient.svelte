@@ -4,6 +4,10 @@ Manages real-time filtering of campaigns without page reloads
 -->
 <script lang="ts">
     import { onMount } from "svelte";
+
+    import LoadingSpinner from "./LoadingSpinner.svelte";
+    import LoadMoreButton from "./LoadMoreButton.svelte";
+    import SearchErrorAlert from "./SearchErrorAlert.svelte";
     import { t } from "../../i18n/store";
     import {
         searchStore,
@@ -18,9 +22,6 @@ Manages real-time filtering of campaigns without page reloads
         hasNextPage,
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
-    import LoadingSpinner from "./LoadingSpinner.svelte";
-    import LoadMoreButton from "./LoadMoreButton.svelte";
-    import SearchErrorAlert from "./SearchErrorAlert.svelte";
     import CampaignCard from "../home/CampaignCard.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";

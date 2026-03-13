@@ -1,11 +1,12 @@
 <script lang="ts">
-    import CloseIcon from "../../svgs/CloseIcon.svelte";
-    import Tag from "../library/Tag.svelte";
     import { locale } from "../../i18n/store";
-    import type { Locale } from "../../i18n/locales";
     import { t } from "../../i18n/store";
-    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
+    import CloseIcon from "../../svgs/CloseIcon.svelte";
     import { formatDate } from "../../utils/dates";
+    import Tag from "../library/Tag.svelte";
+
+    import type { Locale } from "../../i18n/locales";
+    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
 
     let { title, filters, onCloseFilter } = $props<{
         title: string;
@@ -48,9 +49,6 @@
 
             if (tag.title === "status") {
                 tag.value = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
-            }
-
-            if (tag.title === "money.amount[between]") {
             }
 
             if (tag.title === "money.amount[gte]")
@@ -106,7 +104,7 @@
     </h1>
 
     {#each tags as tag}
-        <Tag variant={"bold"}>
+        <Tag variant="bold">
             {#if tag.values}
                 {`${tag.values.from} - ${tag.values.to}`}
             {:else}

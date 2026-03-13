@@ -1,8 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
     import { t } from "../../i18n/store";
-    import CampaignCard from "../home/CampaignCard.svelte";
-    import Carousel from "../Carousel.svelte";
     import {
         apiGatewayChargesGetCollection,
         apiAccountingsIdGet,
@@ -10,13 +9,11 @@
     } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import Carousel from "../Carousel.svelte";
+    import CampaignCard from "../home/CampaignCard.svelte";
+
+    import type { Money, GatewayCharge } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
-    import type {
-        Money,
-        GatewayCharge,
-        Accounting,
-        Project,
-    } from "../../openapi/client/types.gen.ts";
 
     interface Props {
         lang: string;

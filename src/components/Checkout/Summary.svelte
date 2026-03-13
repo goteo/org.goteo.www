@@ -1,10 +1,11 @@
 <script lang="ts">
-    import WarningIcon from "../../svgs/WarningIcon.svelte";
-    import CollapsibleBox from "../CollapsibleBox.svelte";
-    import { cart } from "../../stores/cart";
     import { derived } from "svelte/store";
-    import { formatCurrency } from "../../utils/currencies";
+
     import { t } from "../../i18n/store";
+    import { cart } from "../../stores/cart";
+    import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+    import CollapsibleBox from "../CollapsibleBox.svelte";
 
     export let hasError: boolean;
     export let amount: number | undefined;

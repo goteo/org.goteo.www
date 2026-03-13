@@ -1,9 +1,11 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { cart } from "../../stores/cart";
     import { get } from "svelte/store";
-    import { getUnit, formatCurrency } from "../../utils/currencies";
+
     import { t } from "../../i18n/store";
+    import { cart } from "../../stores/cart";
+    import { getUnit, formatCurrency } from "../../utils/currencies";
+
     import type { CartItem } from "../../stores/cart";
 
     export let defaultCurrency: string;

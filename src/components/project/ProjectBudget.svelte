@@ -1,11 +1,13 @@
 <script lang="ts">
     import { onDestroy, onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
-    import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
-    import Carousel from "../Carousel.svelte";
+
     import ResumeBudget from "./ResumeBudget.svelte";
+    import { t } from "../../i18n/store";
+    import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
+    import { formatCurrency } from "../../utils/currencies";
+    import Carousel from "../Carousel.svelte";
+
+    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
     import BudgetCard from "./BudgetCard.svelte";
 
     let {

@@ -1,7 +1,8 @@
 <script lang="ts">
-    import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import { onMount, tick, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import ProjectUpdate from "./project/ProjectUpdate.svelte";
 
     // Browser check for SSR compatibility

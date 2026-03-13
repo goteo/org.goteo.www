@@ -1,11 +1,4 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import ActionsBtn from "./ActionsBtn.svelte";
-    import CopyIcon from "../../svgs/CopyIcon.svelte";
-    import ContentFooter from "./ContentFooter.svelte";
-    import Tooltip from "./Tooltip.svelte";
-    import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
-
     import {
         Modal,
         Table,
@@ -16,6 +9,14 @@
         TableHeadCell,
     } from "flowbite-svelte";
     import Grid from "../library/Grid.svelte";
+
+    import ActionsBtn from "./ActionsBtn.svelte";
+    import ContentFooter from "./ContentFooter.svelte";
+    import Tooltip from "./Tooltip.svelte";
+    import { t } from "../../i18n/store";
+    import CopyIcon from "../../svgs/CopyIcon.svelte";
+
+    import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
 
     const {
         id,

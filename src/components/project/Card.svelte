@@ -1,4 +1,6 @@
 <script lang="ts">
+    import ProgressChart from "./ProgressChart.svelte";
+    import { t } from "../../i18n/store";
     import {
         type Project,
         type ApiAccountingBalancePointsGetCollectionData,
@@ -6,8 +8,6 @@
         type Accounting,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
-    import ProgressChart from "./ProgressChart.svelte";
-    import { t } from "../../i18n/store";
     import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
 
