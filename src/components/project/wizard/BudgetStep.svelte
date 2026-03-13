@@ -2,6 +2,9 @@
     import { t } from "../../../i18n/store";
     import {
         apiProjectBudgetItemsGetCollection,
+        apiProjectBudgetItemsIdDelete,
+        apiProjectBudgetItemsIdPatch,
+        apiProjectBudgetItemsPost,
         type Project,
         type ProjectBudgetItem,
     } from "../../../openapi/client";
@@ -10,18 +13,25 @@
     import Grid from "../../library/Grid.svelte";
     import BudgetCard from "../BudgetCard.svelte";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import CreateCard from "./CreateCard.svelte";
 
     let {
         project,
+        handleContinue
     }: {
         project: Project;
+        handleContinue?: () => void;
     } = $props();
 
     let minBudgetItems: ProjectBudgetItem[] = $state([]);
     let optBudgetItems: ProjectBudgetItem[] = $state([]);
+    let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
+    let openModal = $state(false);
+    let loading = $state(false);
 
     async function loadBudgetItems() {
         if (!project) return;
+        loading = true;
 
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
@@ -40,9 +50,86 @@
                 else if (item.deadline === "optimum") optBudgetItems.push(item);
             });
         }
+
+        loading = false;
     }
 
-    function handleEdit() {}
+    async function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
+        if (!data) return;
+        loading = true;
+
+        try {
+            if (selectedBudgetItem?.id) {
+                const { data: dataUpdated, error } = await apiProjectBudgetItemsIdPatch({
+                    path: { id: String(selectedBudgetItem.id) },
+                    body: {
+                        ...data,
+                    },
+                });
+                if (error) {
+                    console.error("Error updating budget item:", error);
+                } else if (dataUpdated.deadline === "minimum") {
+                    minBudgetItems = minBudgetItems.map((minItem) =>
+                        minItem.id === dataUpdated.id ? dataUpdated : minItem,
+                    );
+                } else if (dataUpdated.deadline === "optimum") {
+                    optBudgetItems = optBudgetItems.map((optItem) =>
+                        optItem.id === dataUpdated.id ? dataUpdated : optItem,
+                    );
+                }
+            } else {
+                const { data: dataCreated, error } = await apiProjectBudgetItemsPost({
+                    body: {
+                        ...data,
+                    },
+                });
+
+                if (error) {
+                    console.error("Error creating budget item:", error);
+                } else if (dataCreated.deadline === "minimum") {
+                    minBudgetItems = [...minBudgetItems, dataCreated];
+                } else if (dataCreated.deadline === "optimum") {
+                    optBudgetItems = [...optBudgetItems, dataCreated];
+                }
+            }
+        } finally {
+            loading = false;
+            openModal = false;
+            selectedBudgetItem = null;
+        }
+    }
+
+    async function handleDeleteBudgetItem(itemId: number | undefined) {
+        if (!itemId) return;
+        loading = true;
+
+        try {
+            const { error } = await apiProjectBudgetItemsIdDelete({
+                path: { id: String(itemId) },
+            });
+
+            if (error) {
+                console.error("Error deleting budget item:", error);
+            } else {
+                minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
+                optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
+            }
+        } finally {
+            loading = false;
+            openModal = false;
+            selectedBudgetItem = null;
+        }
+    }
+
+    function openCreate() {
+        selectedBudgetItem = null;
+        openModal = true;
+    }
+
+    function openEdit(item: ProjectBudgetItem) {
+        selectedBudgetItem = item;
+        openModal = true;
+    }
 
     $effect(() => {
         if (project) {
@@ -70,9 +157,27 @@
         <Grid>
             {#snippet children()}
                 {#each minBudgetItems as item}
-                    <BudgetCard {item} isEditable={true} onEdit={handleEdit} />
+                    <BudgetCard
+                        {item}
+                        isEditable={true}
+                        onEdit={() => openEdit(item)}
+                        bind:openModal
+                        onSave={handleSaveBudgetItem}
+                        onDelete={handleDeleteBudgetItem}
+                        {selectedBudgetItem}
+                    />
                 {/each}
-                <!-- TODO: Add CreateCard component and modify it to admit budget variant -->
+
+                <CreateCard
+                    title={$t("wizard.budget.createCard.minimum.title")}
+                    description={$t("wizard.budget.createCard.minimum.description")}
+                    variant="budget"
+                    bind:open={openModal}
+                    {project}
+                    budgetItem={selectedBudgetItem}
+                    onSave={handleSaveBudgetItem}
+                    onclick={openCreate}
+                />
             {/snippet}
         </Grid>
     </div>
@@ -87,16 +192,36 @@
         <Grid>
             {#snippet children()}
                 {#each optBudgetItems as item}
-                    <BudgetCard {item} isEditable={true} onEdit={handleEdit} />
+                    <BudgetCard
+                        {item}
+                        isEditable={true}
+                        onEdit={() => openEdit(item)}
+                        bind:openModal
+                        onSave={handleSaveBudgetItem}
+                        onDelete={handleDeleteBudgetItem}
+                        {selectedBudgetItem}
+                    />
                 {/each}
-                <!-- TODO: Add CreateCard component and modify it to admit budget variant -->
+
+                <CreateCard
+                    title={$t("wizard.budget.createCard.optimum.title")}
+                    description={$t("wizard.budget.createCard.optimum.description")}
+                    variant="budget"
+                    bind:open={openModal}
+                    {project}
+                    budgetItem={selectedBudgetItem}
+                    onSave={handleSaveBudgetItem}
+                    onclick={openCreate}
+                />
             {/snippet}
         </Grid>
     </div>
 </div>
 
-<Button kind="primary" size="md" onclick={handleContinue} class="min-w-[200px]">
-    {#snippet children()}
-        {$t("wizard.campaignInfo.continue")}
-    {/snippet}
-</Button>
+<div class="flex justify-end pt-4">
+    <Button kind="primary" size="md" onclick={handleContinue} class="min-w-[200px]">
+        {#snippet children()}
+            {$t("wizard.campaignInfo.continue")}
+        {/snippet}
+    </Button>
+</div>
