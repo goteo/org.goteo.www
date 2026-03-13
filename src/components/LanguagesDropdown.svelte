@@ -3,6 +3,7 @@
 
     import ChevronDown from "../svgs/ChevronDown.svelte";
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
+    import { getLanguageDisplayName } from "../utils/lang";
 
     let { languages, selected, select } = $props();
 
@@ -47,17 +48,6 @@
         } else {
             removeClickOutsideListener();
         }
-    }
-
-    function getLanguageDisplayName(lang: string): string {
-        const displayNames = new Intl.DisplayNames(lang, { type: "language" });
-        const displayName = displayNames.of(lang)!;
-
-        if (["es", "ca", "eu", "gl"].includes(lang)) {
-            return displayName.charAt(0).toUpperCase() + displayName.slice(1);
-        }
-
-        return displayName;
     }
 
     onDestroy(() => {
