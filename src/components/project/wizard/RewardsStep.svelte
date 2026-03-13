@@ -26,6 +26,7 @@
 
     async function loadRewards() {
         if (!project) return;
+        loading = true;
 
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
@@ -35,6 +36,8 @@
         if (error) {
             console.error("Error loading rewards:", error);
         } else if (data) rewards = data;
+
+        loading = false;
     }
 
     async function handleSaveRewards(data: ProjectReward | null) {

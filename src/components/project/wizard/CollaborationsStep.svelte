@@ -27,6 +27,7 @@
 
     async function loadCollabs() {
         if (!project) return;
+        loading = true;
 
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
@@ -36,6 +37,8 @@
         if (error) {
             console.error("Error loading collaborations:", error);
         } else if (collaborations) collabs = collaborations;
+
+        loading = false;
     }
 
     async function handleSaveCollabs(data: ProjectCollaboration | null) {
