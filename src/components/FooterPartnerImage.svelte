@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { ClassNameValue } from "tailwind-merge";
     import { twMerge } from "tailwind-merge";
+
+    import type { ClassNameValue } from "tailwind-merge";
 
     const sizeStyles = {
         small: "h-8 sm:h-10 md:h-12",

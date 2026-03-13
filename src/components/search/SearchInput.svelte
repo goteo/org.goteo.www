@@ -3,8 +3,9 @@ Search Input Component
 Implements main search bar with floating label matching Figma design exactly
 -->
 <script lang="ts">
-    import type { HTMLInputAttributes } from "svelte/elements";
     import { t } from "../../i18n/store";
+
+    import type { HTMLInputAttributes } from "svelte/elements";
 
     interface Props extends HTMLInputAttributes {
         value?: string;

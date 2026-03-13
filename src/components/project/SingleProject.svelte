@@ -1,4 +1,10 @@
 <script lang="ts">
+    import Banner from "./Banner.svelte";
+    import Card from "./Card.svelte";
+    import Sharebutton from "./Sharebutton.svelte";
+    import Tabs from "./Tabs.svelte";
+    import TopRewards from "./TopRewards.svelte";
+    import { locale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
@@ -6,30 +12,21 @@
         apiProjectsIdOrSlugGet,
         type User,
     } from "../../openapi/client/index";
-    import Countdown from "../Countdown.svelte";
-    import LanguagesDropdown from "../LanguagesDropdown.svelte";
-    import Sharebutton from "./Sharebutton.svelte";
-    import Tabs from "./Tabs.svelte";
-    import Card from "./Card.svelte";
-    import Player from "../Player/Player.svelte";
-    import Banner from "./Banner.svelte";
-    import { setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
-    import { getDefaultLanguage } from "../../utils/consts";
-    import TopRewards from "./TopRewards.svelte";
+    import Countdown from "../Countdown.svelte";
+    import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
 
     let {
-        lang = $bindable(),
         project,
         accounting,
         owner,
         totalSupports,
         balancePoints,
     }: {
-        lang: string;
         project: Project;
         accounting: Accounting;
         owner: User;
@@ -37,18 +34,14 @@
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
 
-    let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
-
-    const countdownEnd = getCurrentDeadline(project);
+    let lang = $derived(project.locales ? project.locales[0] : $locale);
+    let poster = $derived({ src: project.video?.thumbnail || "", alt: "Miniatura del video" });
+    let countdownEnd = $derived(getCurrentDeadline(project));
 
     async function getProjectData(code?: string) {
-        lang = code ? code : getDefaultLanguage();
-
-        setLocale(lang);
-
         const { data } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
-            headers: { "Accept-Language": lang },
+            headers: { "Accept-Language": $locale },
         });
 
         project = data!;
@@ -115,8 +108,8 @@
         <div class="flex w-full flex-col gap-4 lg:w-[30%] lg:justify-between">
             <div class="flex justify-end">
                 <LanguagesDropdown
-                    {lang}
                     languages={project.locales!}
+                    selected={lang}
                     select={(lang: string) => getProjectData(lang)}
                 />
             </div>

@@ -14,11 +14,10 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import MediaUploader from "./MediaUploader.svelte";
+    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
+    import { t } from "../../../i18n/store";
     import {
         wizardState,
         updateCampaignInfo,
@@ -27,6 +26,7 @@
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
 
     interface CampaignInfoStepProps {
@@ -135,7 +135,7 @@
                 </p>
             </div>
 
-            <Grid class="gap-4 grid-cols-[repeat(auto-fit,minmax(320px,1fr))]">
+            <Grid class="grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
                 <MediaUploader
                     images={campaignInfo.images}
                     onUpload={handleImageUpload}

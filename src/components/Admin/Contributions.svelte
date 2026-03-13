@@ -1,4 +1,14 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+
+    import Categories from "./Categories.svelte";
+    import ExportCsv from "./ExportCsv.svelte";
+    import Filters from "./Filters.svelte";
+    import FiltersTags from "./FiltersTags.svelte";
+    import Slider from "./Slider.svelte";
+    import Table, { type ExtendedCharge } from "./Table.svelte";
+    import { t } from "../../i18n/store";
+    import { client } from "../../openapi/client/client.gen";
     import {
         apiGatewaysGetCollection,
         type Accounting,
@@ -9,21 +19,19 @@
         type Tipjar,
         type User,
     } from "../../openapi/client/index.ts";
-    import { onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import Categories from "./Categories.svelte";
-    import ExportCsv from "./ExportCsv.svelte";
-    import Filters from "./Filters.svelte";
-    import FiltersTags from "./FiltersTags.svelte";
-    import Slider from "./Slider.svelte";
-    import Table, { type ExtendedCharge } from "./Table.svelte";
     import {
         apiGatewayChargesGetCollectionUrl,
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
-    import { client } from "../../openapi/client/client.gen";
+    import {
+        isLoading,
+        itemsPerPage,
+        totalItems,
+        currentPage,
+        sortOptions,
+    } from "../../stores/chargesPaginationAndSort.ts";
     import {
         fetchAccounting,
         fetchCheckout,
@@ -33,13 +41,6 @@
         fetchWithPersistentCache,
     } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
-    import {
-        isLoading,
-        itemsPerPage,
-        totalItems,
-        currentPage,
-        sortOptions,
-    } from "../../stores/chargesPaginationAndSort.ts";
 
     type GatewayChargesCollection<T> = {
         member: T[];

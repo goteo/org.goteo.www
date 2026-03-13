@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import type { Snippet } from "svelte";
 
     const styles = {
         default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white",

@@ -56,12 +56,12 @@
     - Screen reader friendly messages
 -->
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
     import { Editor } from "@tiptap/core";
-    import StarterKit from "@tiptap/starter-kit";
     import Placeholder from "@tiptap/extension-placeholder";
     import TextAlign from "@tiptap/extension-text-align";
     import { TextStyle, FontSize } from "@tiptap/extension-text-style";
+    import StarterKit from "@tiptap/starter-kit";
+    import { onMount, onDestroy } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface RichTextEditorProps {
