@@ -1,9 +1,10 @@
 <script lang="ts">
     import { onMount, tick, onDestroy } from "svelte";
+
     import "flickity/css/flickity.css";
+    import type { ProjectUpdate } from "../../openapi/client/index";
     import type Flickity from "flickity";
     import type { Options } from "flickity";
-    import type { ProjectUpdate } from "../../openapi/client/index";
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;

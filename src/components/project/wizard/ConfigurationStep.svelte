@@ -15,12 +15,12 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import LanguageSelector from "./LanguageSelector.svelte";
     import GeoSelector from "./GeoSelector.svelte";
+    import LanguageSelector from "./LanguageSelector.svelte";
     import RoundSelector from "./RoundSelector.svelte";
+    import { t } from "../../../i18n/store";
     import { wizardState, updateConfiguration, navigateToStep } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
 
     interface ConfigurationStepProps {
         onContinue?: () => void;

@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+
     import type { Snippet } from "svelte";
 
     interface Props {

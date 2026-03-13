@@ -1,9 +1,11 @@
 <script lang="ts">
+    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
+
     import DonationsCard from "./DonationsCard.svelte";
-    import ProjectsCard from "./ProjectsCard.svelte";
     import MatchfundingCard from "./MatchfundingCard.svelte";
-    import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
+    import ProjectsCard from "./ProjectsCard.svelte";
+    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
@@ -12,13 +14,13 @@
         apiProjectsIdOrSlugGet,
         apiMatchCallsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
-    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
-    import { createClient } from "@hey-api/client-fetch";
+    import { projectCache } from "../../stores/projectCache";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
-    import { projectCache } from "../../stores/projectCache";
     import Grid from "../library/Grid.svelte";
+
+    import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
+    import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
 
     interface Props {
         lang: string;

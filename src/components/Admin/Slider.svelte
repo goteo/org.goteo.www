@@ -1,11 +1,13 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
     import "flickity/css/flickity.css";
-    import type Flickity from "flickity";
-    import type { Options } from "flickity";
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
     import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
+
+    import type { Options } from "flickity";
+    import type Flickity from "flickity";
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;

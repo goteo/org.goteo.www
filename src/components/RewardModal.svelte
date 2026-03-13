@@ -1,15 +1,17 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import type { Project, ProjectReward } from "../openapi/client";
+    import { onMount } from "svelte";
+
     import { t } from "../i18n/store";
-    import { formatCurrency, getUnit } from "../utils/currencies";
+    import { cart } from "../stores/cart";
     import UnitIcon from "../svgs/UnitIcon.svelte";
     import UserIcon from "../svgs/UserIcon.svelte";
+    import { formatCurrency, getUnit } from "../utils/currencies";
     import { extractId } from "../utils/extractId";
-    import { cart } from "../stores/cart";
     import { renderMarkdown } from "../utils/renderMarkdown";
-    import { onMount } from "svelte";
     import Button from "./library/Button.svelte";
+
+    import type { Project, ProjectReward } from "../openapi/client";
 
     let {
         open = $bindable(false),
@@ -67,7 +69,7 @@
 <Modal
     bind:open
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-225 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     <div class="flex flex-col gap-6">

@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { t } from "../i18n/store";
     import { itemCount } from "../stores/cart";
     import BagIcon from "../svgs/BagIcon.svelte";
-    import { t } from "../i18n/store";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";

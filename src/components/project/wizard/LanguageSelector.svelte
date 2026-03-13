@@ -16,12 +16,12 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import Select from "../../library/Select.svelte";
     import {
         validationErrors,
         touchedFields,
         markFieldAsTouched,
     } from "../../../stores/wizard-state";
+    import Select from "../../library/Select.svelte";
 
     interface LanguageOption {
         code: string;

@@ -1,11 +1,13 @@
 <script lang="ts">
-    import MapIcon from "../svgs/MapIcon.svelte";
-    import type { Territory } from "../openapi/client";
     import iso3166 from "iso-3166-2";
+
+    import MapIcon from "../svgs/MapIcon.svelte";
     import { getTerritoryTag } from "../utils/getTerritoryTag";
     import Tag from "./library/Tag.svelte";
-    import type { Locale } from "../i18n/locales";
     import { locale } from "../i18n/store";
+
+    import type { Locale } from "../i18n/locales";
+    import type { Territory } from "../openapi/client";
 
     let {
         territory,
