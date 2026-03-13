@@ -1,4 +1,10 @@
 <script lang="ts">
+    import Banner from "./Banner.svelte";
+    import Card from "./Card.svelte";
+    import Sharebutton from "./Sharebutton.svelte";
+    import Tabs from "./Tabs.svelte";
+    import TopRewards from "./TopRewards.svelte";
+    import { setLocale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
@@ -6,19 +12,13 @@
         apiProjectsIdOrSlugGet,
         type User,
     } from "../../openapi/client/index";
-    import Countdown from "../Countdown.svelte";
-    import LanguagesDropdown from "../LanguagesDropdown.svelte";
-    import Sharebutton from "./Sharebutton.svelte";
-    import Tabs from "./Tabs.svelte";
-    import Card from "./Card.svelte";
-    import Player from "../Player/Player.svelte";
-    import Banner from "./Banner.svelte";
-    import { setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
-    import TopRewards from "./TopRewards.svelte";
+    import Countdown from "../Countdown.svelte";
+    import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
 
     let {

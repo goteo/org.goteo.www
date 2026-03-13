@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import { formatAmountWithSymbol } from "../../utils/currencies";
+
     import type { MatchfundingCall } from "../../types/me-page";
 
     interface Props {

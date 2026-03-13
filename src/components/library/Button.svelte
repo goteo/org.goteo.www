@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import type { Snippet } from "svelte";
     import type { MouseEventHandler } from "svelte/elements";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     const sizeStyles = {
         md: "px-8 py-4 rounded-[24px]",

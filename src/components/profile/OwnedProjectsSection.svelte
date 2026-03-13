@@ -1,14 +1,14 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import Carousel from "../Carousel.svelte";
-    import CampaignCard from "../home/CampaignCard.svelte";
-    import { apiProjectsGetCollection, apiAccountingsIdGet } from "../../openapi/client/sdk.gen.ts";
     import { t } from "../../i18n/store";
+    import { apiProjectsGetCollection, apiAccountingsIdGet } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import Carousel from "../Carousel.svelte";
+    import CampaignCard from "../home/CampaignCard.svelte";
 
-    import type { Money, Project, Accounting } from "../../openapi/client/types.gen.ts";
+    import type { Money, Project } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
 
     interface Props {

@@ -37,9 +37,11 @@
     ```
 -->
 <script lang="ts">
-    import type { Snippet } from "svelte";
     import { twMerge } from "tailwind-merge";
+
     import { cyrb53 } from "../../utils/hash";
+
+    import type { Snippet } from "svelte";
 
     interface SelectProps {
         children: Snippet; // Options as slot content

@@ -14,11 +14,10 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import MediaUploader from "./MediaUploader.svelte";
+    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
+    import { t } from "../../../i18n/store";
     import {
         wizardState,
         updateCampaignInfo,
@@ -27,6 +26,7 @@
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
 
     interface CampaignInfoStepProps {

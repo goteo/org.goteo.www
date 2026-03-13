@@ -1,6 +1,5 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import type { ProjectReward, Project, Accounting } from "../../openapi/client/index";
     import {
         apiAccountingsIdGet,
         apiProjectRewardsGetCollection,
@@ -11,6 +10,8 @@
     import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
     import Reward from "../Reward.svelte";
+
+    import type { ProjectReward, Project, Accounting } from "../../openapi/client/index";
 
     let {
         lang = $bindable(),

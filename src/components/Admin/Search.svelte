@@ -1,13 +1,14 @@
 <script lang="ts">
+    import { t } from "../../i18n/store";
     import {
         apiProjectsGetCollection,
         apiTipjarsGetCollection,
         apiUsersGetCollection,
     } from "../../openapi/client";
-    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import CloseIcon from "../../svgs/CloseIcon.svelte";
+    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { highlightMatch } from "../../utils/highlights";
-    import { t } from "../../i18n/store";
+
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
     type ResultItem =
