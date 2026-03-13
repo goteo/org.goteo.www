@@ -1,9 +1,11 @@
 <script lang="ts">
-    import { formatCurrency } from "../../utils/currencies";
+    import { t } from "../../i18n/store";
     import MinusIcon from "../../svgs/MinusIcon.svelte";
     import PlusIcon from "../../svgs/PlusIcon.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+
     import type { CartItem } from "../../stores/cart";
-    import { t } from "../../i18n/store";
+
     export let item: CartItem;
     export let onIncrement: (item: CartItem) => void;
     export let onDecrement: (item: CartItem) => void;

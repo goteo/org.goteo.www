@@ -449,7 +449,8 @@
     "login": "Iniciar Sesión",
     "btnCart": "Ir al checkout",
     "search": "Buscar",
-    "createProject": "Crea tu proyecto"
+    "createProject": "Crea tu proyecto",
+    "goToProfile": "Ir a Perfil"
   },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",

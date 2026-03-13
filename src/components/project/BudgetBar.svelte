@@ -1,8 +1,10 @@
 <script lang="ts">
-    import type { Project, Accounting } from "../../openapi/client/index";
     import { onMount, tick } from "svelte";
+
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
+
+    import type { Project, Accounting } from "../../openapi/client/index";
 
     let {
         project,

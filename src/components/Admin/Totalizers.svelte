@@ -1,6 +1,5 @@
 <script lang="ts">
     import TotalizerCard from "./TotalizerCard.svelte";
-
     import { t } from "../../i18n/store";
 
     let {

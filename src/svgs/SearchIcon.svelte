@@ -1,8 +1,25 @@
-<script>
-    let { width = "16", height = "16" } = $props();
+<script lang="ts">
+    import type { ClassNameValue } from "tailwind-merge";
+
+    let {
+        class: classes,
+        width = "16",
+        height = "16",
+    } = $props<{
+        class?: ClassNameValue;
+        width?: string;
+        height?: string;
+    }>();
 </script>
 
-<svg {width} {height} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg
+    class={classes}
+    {width}
+    {height}
+    viewBox="0 0 16 16"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+>
     <path
         d="M10 10L13 13"
         stroke="#462949"

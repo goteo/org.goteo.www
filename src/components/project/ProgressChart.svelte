@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import {
         Chart,
         LineController,
@@ -10,13 +9,16 @@
         Filler,
         Tooltip,
     } from "chart.js";
+    import { onMount } from "svelte";
+
+    import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
+
     import type {
         Accounting,
         ApiAccountingBalancePointsGetCollectionData,
         Project,
     } from "../../openapi/client/index";
-    import { formatCurrency } from "../../utils/currencies";
-    import { t } from "../../i18n/store";
 
     export let accounting: Accounting;
     export let project: Project;

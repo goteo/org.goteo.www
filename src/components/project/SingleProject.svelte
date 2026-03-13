@@ -1,27 +1,24 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import Banner from "./Banner.svelte";
+    import Card from "./Card.svelte";
+    import Sharebutton from "./Sharebutton.svelte";
+    import Tabs from "./Tabs.svelte";
+    import TopRewards from "./TopRewards.svelte";
+    import { setLocale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
-    import Tags from "../Tags.svelte";
-    import Countdown from "../Countdown.svelte";
-    import LanguagesDropdown from "../LanguagesDropdown.svelte";
-    import Sharebutton from "./Sharebutton.svelte";
-
-    import Tabs from "./Tabs.svelte";
-
-    import Card from "./Card.svelte";
-    import Player from "../Player/Player.svelte";
-    import Banner from "./Banner.svelte";
-    import { setLocale, t } from "../../i18n/store";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
-    import TopRewards from "./TopRewards.svelte";
+    import Countdown from "../Countdown.svelte";
+    import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Player from "../Player/Player.svelte";
+    import Tags from "../Tags.svelte";
 
     let {
         lang = $bindable(),
