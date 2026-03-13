@@ -43,7 +43,7 @@
             {item.description}
         </p>
     </div>
-    <div class="flex flex-row items-center justify-between">
+    <div class="flex flex-row items-center justify-between mt-auto">
         <p class="text-2xl text-black">
             {formatCurrency(item.money.amount, item.money.currency)}
         </p>

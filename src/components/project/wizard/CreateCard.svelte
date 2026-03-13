@@ -50,7 +50,7 @@
             {description}
         </p>
     </div>
-    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
+    <Button kind="secondary" class="flex w-full items-center justify-center gap-2 mt-auto" {onclick}>
         <PlusIcon class="p-[2.25px]" />
         {#if variant === "reward"}
             {$t("wizard.rewards.createCard.btn")}
