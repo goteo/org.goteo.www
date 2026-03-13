@@ -34,7 +34,7 @@
 </script>
 
 <div
-    class="border-grey flex min-h-148.75 basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
+    class="border-grey flex min-h-148.75 basis-1/3 flex-col items-center justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
 >
     <div class="flex flex-col">
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
