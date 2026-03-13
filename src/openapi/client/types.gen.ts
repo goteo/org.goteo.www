@@ -448,7 +448,7 @@ export type GatewayCharge = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -464,7 +464,7 @@ export type GatewayChargeChargeUpdationDto = {
     /**
      * To ask for a refund, set the status `to_refund`.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
 };
 
 /**
@@ -511,7 +511,7 @@ export type GatewayChargeJsonld = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -549,7 +549,7 @@ export type GatewayCheckout = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'in_pending' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -614,7 +614,7 @@ export type GatewayCheckoutJsonld = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'in_pending' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
@@ -1280,7 +1280,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1327,7 +1327,7 @@ export type ProjectProjectCreationDto = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1351,7 +1351,7 @@ export type ProjectProjectCreationDtoJsonld = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1392,7 +1392,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1456,7 +1456,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1667,6 +1667,125 @@ export type ProjectCollaborationJsonld = {
      * List of the available content locales.
      */
     readonly locales?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectReviews are launched as health-checks for Projects.\
+ * \
+ * The reviews are focused on certain aspects of a Project's lifecycle. The types `campaign` and `financial` reviews
+ * are to evaluate the fitness of a Project before being greenlit for campaigning or the legitimacy of their raised funds, respectively.\
+ * \
+ * ProjectReview resources cannot be manually created, they are created automatically when a Project moves into a "to review" status:
+ * - `to_campaign_review`: will launch a related ProjectReview of `campaign` type
+ * - `to_financial_review`: will launch a related ProjectReview of `financial` type.
+ */
+export type ProjectReview = {
+    readonly id?: number;
+    project?: string;
+    reviewer?: string;
+    type?: 'campaign' | 'financial';
+    areas?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectReviews are launched as health-checks for Projects.\
+ * \
+ * The reviews are focused on certain aspects of a Project's lifecycle. The types `campaign` and `financial` reviews
+ * are to evaluate the fitness of a Project before being greenlit for campaigning or the legitimacy of their raised funds, respectively.\
+ * \
+ * ProjectReview resources cannot be manually created, they are created automatically when a Project moves into a "to review" status:
+ * - `to_campaign_review`: will launch a related ProjectReview of `campaign` type
+ * - `to_financial_review`: will launch a related ProjectReview of `financial` type.
+ */
+export type ProjectReviewJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    project?: string;
+    reviewer?: string;
+    type?: 'campaign' | 'financial';
+    areas?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * A ProjectReviewArea represents one specific topic of evaluation for ProjectReviews.\
+ * \
+ * Conversations, feedback and evolution of the ProjectReview must happen around specific areas of review.\
+ * Each area holds an associated risk, which represents the trust the reviewer has for the reviewed Project's health in that area.
+ */
+export type ProjectReviewArea = {
+    readonly id?: number;
+    review?: string;
+    title?: string;
+    summary?: string;
+    risk?: 'low' | 'mid' | 'high';
+    comments?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * A ProjectReviewArea represents one specific topic of evaluation for ProjectReviews.\
+ * \
+ * Conversations, feedback and evolution of the ProjectReview must happen around specific areas of review.\
+ * Each area holds an associated risk, which represents the trust the reviewer has for the reviewed Project's health in that area.
+ */
+export type ProjectReviewAreaJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    review?: string;
+    title?: string;
+    summary?: string;
+    risk?: 'low' | 'mid' | 'high';
+    comments?: Array<string>;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectReviewComments hold the conversation between the reviewer and the reviewed Project owner.
+ */
+export type ProjectReviewComment = {
+    readonly id?: number;
+    area?: string;
+    author?: string;
+    body?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectReviewComments hold the conversation between the reviewer and the reviewed Project owner.
+ */
+export type ProjectReviewCommentJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    area?: string;
+    author?: string;
+    body?: string;
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -1973,10 +2092,6 @@ export type ProjectUpdate = {
      */
     body: string;
     /**
-     * Author of this update.
-     */
-    author?: string;
-    /**
      * Public display date for this update,
      * not necessarily related to the actual dates of resource creation or update.
      */
@@ -2053,6 +2168,7 @@ export type ProjectUpdateJsonld = {
 
 export type ProjectVideo = {
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2065,6 +2181,7 @@ export type ProjectVideoJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2829,6 +2946,8 @@ export type ApiGatewayChargesGetCollectionData = {
         'dateUpdated[strictly_before]'?: string;
         'dateUpdated[after]'?: string;
         'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
     };
     url: '/v4/gateway_charges';
 };
@@ -4340,6 +4459,478 @@ export type ApiProjectCollaborationsIdPatchResponses = {
 
 export type ApiProjectCollaborationsIdPatchResponse = ApiProjectCollaborationsIdPatchResponses[keyof ApiProjectCollaborationsIdPatchResponses];
 
+export type ApiProjectReviewsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        project?: string;
+        'project[]'?: Array<string>;
+        reviewer?: string;
+        'reviewer[]'?: Array<string>;
+        type?: string;
+        'type[]'?: Array<string>;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/project_reviews';
+};
+
+export type ApiProjectReviewsGetCollectionResponses = {
+    /**
+     * ProjectReview collection
+     */
+    200: Array<ProjectReview>;
+};
+
+export type ApiProjectReviewsGetCollectionResponse = ApiProjectReviewsGetCollectionResponses[keyof ApiProjectReviewsGetCollectionResponses];
+
+export type ApiProjectReviewsIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReview identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_reviews/{id}';
+};
+
+export type ApiProjectReviewsIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewsIdDeleteError = ApiProjectReviewsIdDeleteErrors[keyof ApiProjectReviewsIdDeleteErrors];
+
+export type ApiProjectReviewsIdDeleteResponses = {
+    /**
+     * ProjectReview resource deleted
+     */
+    204: void;
+};
+
+export type ApiProjectReviewsIdDeleteResponse = ApiProjectReviewsIdDeleteResponses[keyof ApiProjectReviewsIdDeleteResponses];
+
+export type ApiProjectReviewsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReview identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_reviews/{id}';
+};
+
+export type ApiProjectReviewsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewsIdGetError = ApiProjectReviewsIdGetErrors[keyof ApiProjectReviewsIdGetErrors];
+
+export type ApiProjectReviewsIdGetResponses = {
+    /**
+     * ProjectReview resource
+     */
+    200: ProjectReview;
+};
+
+export type ApiProjectReviewsIdGetResponse = ApiProjectReviewsIdGetResponses[keyof ApiProjectReviewsIdGetResponses];
+
+export type ApiProjectReviewsIdPatchData = {
+    /**
+     * The updated ProjectReview resource
+     */
+    body: ProjectReview;
+    path: {
+        /**
+         * ProjectReview identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_reviews/{id}';
+};
+
+export type ApiProjectReviewsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectReviewsIdPatchError = ApiProjectReviewsIdPatchErrors[keyof ApiProjectReviewsIdPatchErrors];
+
+export type ApiProjectReviewsIdPatchResponses = {
+    /**
+     * ProjectReview resource updated
+     */
+    200: ProjectReview;
+};
+
+export type ApiProjectReviewsIdPatchResponse = ApiProjectReviewsIdPatchResponses[keyof ApiProjectReviewsIdPatchResponses];
+
+export type ApiProjectReviewAreasGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        review?: string;
+        'review[]'?: Array<string>;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/project_review_areas';
+};
+
+export type ApiProjectReviewAreasGetCollectionResponses = {
+    /**
+     * ProjectReviewArea collection
+     */
+    200: Array<ProjectReviewArea>;
+};
+
+export type ApiProjectReviewAreasGetCollectionResponse = ApiProjectReviewAreasGetCollectionResponses[keyof ApiProjectReviewAreasGetCollectionResponses];
+
+export type ApiProjectReviewAreasPostData = {
+    /**
+     * The new ProjectReviewArea resource
+     */
+    body: ProjectReviewArea;
+    path?: never;
+    query?: never;
+    url: '/v4/project_review_areas';
+};
+
+export type ApiProjectReviewAreasPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectReviewAreasPostError = ApiProjectReviewAreasPostErrors[keyof ApiProjectReviewAreasPostErrors];
+
+export type ApiProjectReviewAreasPostResponses = {
+    /**
+     * ProjectReviewArea resource created
+     */
+    201: ProjectReviewArea;
+};
+
+export type ApiProjectReviewAreasPostResponse = ApiProjectReviewAreasPostResponses[keyof ApiProjectReviewAreasPostResponses];
+
+export type ApiProjectReviewAreasIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReviewArea identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_areas/{id}';
+};
+
+export type ApiProjectReviewAreasIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewAreasIdDeleteError = ApiProjectReviewAreasIdDeleteErrors[keyof ApiProjectReviewAreasIdDeleteErrors];
+
+export type ApiProjectReviewAreasIdDeleteResponses = {
+    /**
+     * ProjectReviewArea resource deleted
+     */
+    204: void;
+};
+
+export type ApiProjectReviewAreasIdDeleteResponse = ApiProjectReviewAreasIdDeleteResponses[keyof ApiProjectReviewAreasIdDeleteResponses];
+
+export type ApiProjectReviewAreasIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReviewArea identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_areas/{id}';
+};
+
+export type ApiProjectReviewAreasIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewAreasIdGetError = ApiProjectReviewAreasIdGetErrors[keyof ApiProjectReviewAreasIdGetErrors];
+
+export type ApiProjectReviewAreasIdGetResponses = {
+    /**
+     * ProjectReviewArea resource
+     */
+    200: ProjectReviewArea;
+};
+
+export type ApiProjectReviewAreasIdGetResponse = ApiProjectReviewAreasIdGetResponses[keyof ApiProjectReviewAreasIdGetResponses];
+
+export type ApiProjectReviewAreasIdPatchData = {
+    /**
+     * The updated ProjectReviewArea resource
+     */
+    body: ProjectReviewArea;
+    path: {
+        /**
+         * ProjectReviewArea identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_areas/{id}';
+};
+
+export type ApiProjectReviewAreasIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectReviewAreasIdPatchError = ApiProjectReviewAreasIdPatchErrors[keyof ApiProjectReviewAreasIdPatchErrors];
+
+export type ApiProjectReviewAreasIdPatchResponses = {
+    /**
+     * ProjectReviewArea resource updated
+     */
+    200: ProjectReviewArea;
+};
+
+export type ApiProjectReviewAreasIdPatchResponse = ApiProjectReviewAreasIdPatchResponses[keyof ApiProjectReviewAreasIdPatchResponses];
+
+export type ApiProjectReviewCommentsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        area?: string;
+        'area[]'?: Array<string>;
+        author?: string;
+        'author[]'?: Array<string>;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/project_review_comments';
+};
+
+export type ApiProjectReviewCommentsGetCollectionResponses = {
+    /**
+     * ProjectReviewComment collection
+     */
+    200: Array<ProjectReviewComment>;
+};
+
+export type ApiProjectReviewCommentsGetCollectionResponse = ApiProjectReviewCommentsGetCollectionResponses[keyof ApiProjectReviewCommentsGetCollectionResponses];
+
+export type ApiProjectReviewCommentsPostData = {
+    /**
+     * The new ProjectReviewComment resource
+     */
+    body: ProjectReviewComment;
+    path?: never;
+    query?: never;
+    url: '/v4/project_review_comments';
+};
+
+export type ApiProjectReviewCommentsPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectReviewCommentsPostError = ApiProjectReviewCommentsPostErrors[keyof ApiProjectReviewCommentsPostErrors];
+
+export type ApiProjectReviewCommentsPostResponses = {
+    /**
+     * ProjectReviewComment resource created
+     */
+    201: ProjectReviewComment;
+};
+
+export type ApiProjectReviewCommentsPostResponse = ApiProjectReviewCommentsPostResponses[keyof ApiProjectReviewCommentsPostResponses];
+
+export type ApiProjectReviewCommentsIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReviewComment identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_comments/{id}';
+};
+
+export type ApiProjectReviewCommentsIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewCommentsIdDeleteError = ApiProjectReviewCommentsIdDeleteErrors[keyof ApiProjectReviewCommentsIdDeleteErrors];
+
+export type ApiProjectReviewCommentsIdDeleteResponses = {
+    /**
+     * ProjectReviewComment resource deleted
+     */
+    204: void;
+};
+
+export type ApiProjectReviewCommentsIdDeleteResponse = ApiProjectReviewCommentsIdDeleteResponses[keyof ApiProjectReviewCommentsIdDeleteResponses];
+
+export type ApiProjectReviewCommentsIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectReviewComment identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_comments/{id}';
+};
+
+export type ApiProjectReviewCommentsIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectReviewCommentsIdGetError = ApiProjectReviewCommentsIdGetErrors[keyof ApiProjectReviewCommentsIdGetErrors];
+
+export type ApiProjectReviewCommentsIdGetResponses = {
+    /**
+     * ProjectReviewComment resource
+     */
+    200: ProjectReviewComment;
+};
+
+export type ApiProjectReviewCommentsIdGetResponse = ApiProjectReviewCommentsIdGetResponses[keyof ApiProjectReviewCommentsIdGetResponses];
+
+export type ApiProjectReviewCommentsIdPatchData = {
+    /**
+     * The updated ProjectReviewComment resource
+     */
+    body: ProjectReviewComment;
+    path: {
+        /**
+         * ProjectReviewComment identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_review_comments/{id}';
+};
+
+export type ApiProjectReviewCommentsIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectReviewCommentsIdPatchError = ApiProjectReviewCommentsIdPatchErrors[keyof ApiProjectReviewCommentsIdPatchErrors];
+
+export type ApiProjectReviewCommentsIdPatchResponses = {
+    /**
+     * ProjectReviewComment resource updated
+     */
+    200: ProjectReviewComment;
+};
+
+export type ApiProjectReviewCommentsIdPatchResponse = ApiProjectReviewCommentsIdPatchResponses[keyof ApiProjectReviewCommentsIdPatchResponses];
+
 export type ApiProjectRewardsGetCollectionData = {
     body?: never;
     path?: never;
@@ -5102,13 +5693,10 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Query Users by email or handle. Fuzzy.
-         */
-        query?: string;
-        handle?: string;
+        email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
+        handle?: string;
     };
     url: '/v4/users';
 };
@@ -5128,7 +5716,12 @@ export type ApiUsersPostData = {
      */
     body: UserUserSignupDto;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users';
 };
 
@@ -5162,7 +5755,12 @@ export type ApiUsersIdDeleteData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users/{id}';
 };
 
@@ -5192,7 +5790,12 @@ export type ApiUsersIdGetData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users/{id}';
 };
 
@@ -5225,7 +5828,12 @@ export type ApiUsersIdPatchData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users/{id}';
 };
 
@@ -5370,7 +5978,7 @@ export type ApiVersionsGetCollectionData = {
         /**
          * The name of the resource.
          */
-        resource: 'GatewayCharge' | 'GatewayCheckout' | 'User';
+        resource: 'GatewayCheckout' | 'GatewayCharge' | 'User';
         /**
          * The ID of the named resource.
          */
