@@ -36,22 +36,28 @@
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 basis-1/2 flex-col items-center justify-between rounded-4xl border p-6 shadow-sm"
+    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm"
 >
-    <div class="flex flex-col gap-4">
-        <h2 class="text-soft-purple self-stretch text-[40px] leading-12 font-bold">
+    <div class="flex flex-col gap-4 text-ellipsis">
+        <h2
+            class="text-soft-purple font-bold {variant === 'budget'
+                ? 'text-2xl leading-8'
+                : 'text-[40px] leading-12'}"
+        >
             {title}
         </h2>
-        <p class="text-variant1 self-stretch text-base font-normal">
+        <p class="text-variant1 text-base font-normal">
             {description}
         </p>
     </div>
     <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
         <PlusIcon class="p-[2.25px]" />
         {#if variant === "reward"}
-            {$t("wizard.steps.rewards.createCard.btn")}
+            {$t("wizard.rewards.createCard.btn")}
         {:else if variant === "collab"}
-            {$t("wizard.steps.collabs.createCard.btn")}
+            {$t("wizard.collabs.createCard.btn")}
+        {:else if variant === "budget"}
+            {$t("wizard.budget.createCard.btn")}
         {/if}
     </Button>
 </div>
