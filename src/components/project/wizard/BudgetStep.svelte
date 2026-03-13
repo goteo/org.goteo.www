@@ -154,7 +154,7 @@
                 project.budget?.minimum?.money?.currency,
             )}
         </span>
-        <Grid>
+        <Grid class="grid-cols-1 sm:grid-cols-2">
             {#snippet children()}
                 {#each minBudgetItems as item}
                     <BudgetCard
@@ -189,7 +189,7 @@
                 project.budget?.optimum?.money?.currency,
             )}
         </span>
-        <Grid>
+        <Grid class="grid-cols-1 sm:grid-cols-2">
             {#snippet children()}
                 {#each optBudgetItems as item}
                     <BudgetCard
@@ -218,8 +218,8 @@
     </div>
 </div>
 
-<div class="flex justify-end pt-4">
-    <Button kind="primary" size="md" onclick={handleContinue} class="min-w-[200px]">
+<div class="flex mt-10">
+    <Button kind="secondary" size="md" onclick={handleContinue} class="min-w-50">
         {#snippet children()}
             {$t("wizard.campaignInfo.continue")}
         {/snippet}
