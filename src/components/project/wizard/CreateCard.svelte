@@ -36,7 +36,7 @@
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm"
+    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm"
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
@@ -50,7 +50,11 @@
             {description}
         </p>
     </div>
-    <Button kind="secondary" class="flex w-full items-center justify-center gap-2 mt-auto" {onclick}>
+    <Button
+        kind="secondary"
+        class="mt-auto flex w-full items-center justify-center gap-2"
+        {onclick}
+    >
         <PlusIcon class="p-[2.25px]" />
         {#if variant === "reward"}
             {$t("wizard.rewards.createCard.btn")}
