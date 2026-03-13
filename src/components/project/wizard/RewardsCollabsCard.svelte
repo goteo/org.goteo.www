@@ -6,7 +6,7 @@
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
-    import RewardCollabModal from "./RewardCollabModal.svelte";
+    import WizardModal from "./WizardModal.svelte";
 
     let {
         variant,
@@ -104,7 +104,7 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <RewardCollabModal bind:open collab={selectedCollab} {project} {onSave} {onDelete} />
+    <WizardModal bind:open collab={selectedCollab} {project} {onSave} {onDelete} />
 {:else if variant === "reward"}
-    <RewardCollabModal bind:open reward={selectedReward} {project} {onSave} {onDelete} />
+    <WizardModal bind:open reward={selectedReward} {project} {onSave} {onDelete} />
 {/if}
