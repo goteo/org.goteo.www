@@ -1,15 +1,17 @@
 <script lang="ts">
+    import { Modal } from "flowbite-svelte";
+    import { onMount } from "svelte";
+
+    import { t } from "../../i18n/store";
+    import CodeIcon from "../../svgs/CodeIcon.svelte";
+    import FacebookIcon from "../../svgs/FacebookIcon.svelte";
+    import Loader from "../../svgs/Loader.svelte";
     import ShareIcon from "../../svgs/ShareIcon.svelte";
     import WebIcon from "../../svgs/WebIcon.svelte";
-    import FacebookIcon from "../../svgs/FacebookIcon.svelte";
     import XIcon from "../../svgs/XIcon.svelte";
-    import CodeIcon from "../../svgs/CodeIcon.svelte";
-    import { t } from "../../i18n/store";
-    import { Modal } from "flowbite-svelte";
     import Tooltip from "../Admin/Tooltip.svelte";
+
     import type { Project } from "../../openapi/client/index";
-    import { onMount } from "svelte";
-    import Loader from "../../svgs/Loader.svelte";
 
     const appId = "184483011630708";
 

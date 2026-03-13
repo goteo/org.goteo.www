@@ -1,9 +1,10 @@
 <script lang="ts">
+    import RewardCollabModal from "./RewardCollabModal.svelte";
     import { t } from "../../../i18n/store";
-    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
-    import RewardCollabModal from "./RewardCollabModal.svelte";
+
+    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
 
     let {
         title,
@@ -29,7 +30,7 @@
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 basis-1/2 flex-col justify-between items-center rounded-4xl border p-6 shadow-sm"
+    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 basis-1/2 flex-col items-center justify-between rounded-4xl border p-6 shadow-sm"
 >
     <div class="flex flex-col gap-4">
         <h2 class="text-soft-purple self-stretch text-[40px] leading-12 font-bold">

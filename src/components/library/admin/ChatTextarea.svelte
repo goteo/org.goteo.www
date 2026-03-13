@@ -1,5 +1,6 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import { t } from "../../../i18n/store";
     import SendIcon from "../../../svgs/SendIcon.svelte";
 

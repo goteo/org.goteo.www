@@ -1,12 +1,13 @@
 <script lang="ts">
+    import RewardCollabModal from "./RewardCollabModal.svelte";
     import { t } from "../../../i18n/store";
-    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
     import UnitIcon from "../../../svgs/UnitIcon.svelte";
     import UserIcon from "../../../svgs/UserIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
-    import RewardCollabModal from "./RewardCollabModal.svelte";
+
+    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
 
     let {
         variant,

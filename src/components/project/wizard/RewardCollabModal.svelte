@@ -1,13 +1,15 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import FileUpload from "../../FileUpload.svelte";
+
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
-    import type { ClassNameValue } from "tailwind-merge";
+    import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import { formatCurrency } from "../../../utils/currencies";
+    import FileUpload from "../../FileUpload.svelte";
+    import Button from "../../library/Button.svelte";
+
+    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
+    import type { ClassNameValue } from "tailwind-merge";
 
     type PayloadType = {
         project: string;

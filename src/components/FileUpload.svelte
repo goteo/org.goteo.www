@@ -88,7 +88,7 @@
         />
 
         <label for="fileInput" class="flex h-32 cursor-pointer flex-col justify-center gap-2">
-            <UploadFileIcon class="self-center size-10" />
+            <UploadFileIcon class="size-10 self-center" />
             <p class="text-content overflow-hidden text-base font-normal text-ellipsis">
                 {$t("wizard.steps.rewards.modal.uploadFiles.dragAndDrop")}
                 <span class="text-secondary underline">
@@ -100,7 +100,7 @@
 
     <div class="text-content flex justify-between text-sm/4 font-medium">
         <div class="flex items-center gap-2">
-            <WarningIcon width={"16"} height={"16"} />
+            <WarningIcon width="16" height="16" />
             <span>{$t("wizard.steps.rewards.modal.compatibleFiles")}</span>
         </div>
         <span>{$t("wizard.steps.rewards.modal.maxSize", { maxSizeMB })}</span>

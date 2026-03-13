@@ -1,6 +1,7 @@
 <script lang="ts">
-    import SearchIcon from "../../../svgs/SearchIcon.svelte";
     import DropdownItem from "./DropdownItem.svelte";
+    import SearchIcon from "../../../svgs/SearchIcon.svelte";
+
     import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
 
     let {
@@ -42,7 +43,7 @@
                     type="text"
                     placeholder="Search..."
                 />
-                <SearchIcon class="absolute right-4" width={"32"} height={"32"} />
+                <SearchIcon class="absolute right-4" width="32" height="32" />
             </div>
         </div>
     {/if}

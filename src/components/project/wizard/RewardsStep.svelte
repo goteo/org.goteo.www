@@ -1,4 +1,6 @@
 <script lang="ts">
+    import CreateCard from "./CreateCard.svelte";
+    import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectRewardsGetCollection,
@@ -11,8 +13,6 @@
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-    import CreateCard from "./CreateCard.svelte";
-    import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
 
     let { project, onContinue } = $props<{
         project: Project;

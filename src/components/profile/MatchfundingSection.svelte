@@ -1,17 +1,18 @@
 <script lang="ts">
+    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import { extractId } from "../../utils/extractId";
-    import { toCollectionItems } from "../../utils/hydra.ts";
+
     import MatchfundingCallCard from "./MatchfundingCallCard.svelte";
-    import Carousel from "../Carousel.svelte";
+    import { t } from "../../i18n/store";
     import {
         apiMatchCallsGetCollection,
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
         apiMatchCallSubmissionsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
-    import { createClient } from "@hey-api/client-fetch";
+    import { extractId } from "../../utils/extractId";
+    import { toCollectionItems } from "../../utils/hydra.ts";
+    import Carousel from "../Carousel.svelte";
 
     import type { MatchCall, MatchCallSubmission } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";

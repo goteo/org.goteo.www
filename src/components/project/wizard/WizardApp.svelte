@@ -8,13 +8,14 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import WizardShell from "./WizardShell.svelte";
-    import ConfigurationStep from "./ConfigurationStep.svelte";
     import CampaignInfoStep from "./CampaignInfoStep.svelte";
-    import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
-    import type { Project } from "../../../openapi/client";
-    import { t } from "../../../i18n/store";
+    import ConfigurationStep from "./ConfigurationStep.svelte";
     import RewardsStep from "./RewardsStep.svelte";
+    import WizardShell from "./WizardShell.svelte";
+    import { t } from "../../../i18n/store";
+    import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
+
+    import type { Project } from "../../../openapi/client";
 
     let {
         project,
