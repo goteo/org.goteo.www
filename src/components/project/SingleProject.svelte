@@ -4,50 +4,44 @@
     import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
-    import { setLocale, t } from "../../i18n/store";
+    import { locale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
+        type User,
     } from "../../openapi/client/index";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
-    import { getDefaultLanguage } from "../../utils/consts";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Player from "../Player/Player.svelte";
-    import Tags from "../Tags.svelte";
+    import ProjectTags from "../ProjectTags.svelte";
 
     let {
-        lang = $bindable(),
         project,
         accounting,
-        ownerName,
+        owner,
         totalSupports,
         balancePoints,
     }: {
-        lang: string;
         project: Project;
         accounting: Accounting;
-        ownerName: string;
+        owner: User;
         totalSupports: number;
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
 
-    let poster = { src: project.video?.thumbnail || "", alt: "Miniatura del video" };
-
-    const countdownEnd = getCurrentDeadline(project);
+    let lang = $derived(project.locales ? project.locales[0] : $locale);
+    let poster = $derived({ src: project.video?.thumbnail || "", alt: "Miniatura del video" });
+    let countdownEnd = $derived(getCurrentDeadline(project));
 
     async function getProjectData(code?: string) {
-        lang = code ? code : getDefaultLanguage();
-
-        setLocale(lang);
-
         const { data } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
-            headers: { "Accept-Language": lang },
+            headers: { "Accept-Language": $locale },
         });
 
         project = data!;
@@ -97,7 +91,7 @@
             <div class="flex flex-col gap-2">
                 <h3 class="text-content text-xl font-bold lg:text-2xl">
                     {$t("project.owner")}
-                    <span class="font-bold text-black underline"> {ownerName}</span>
+                    <span class="font-bold text-black underline"> {owner.displayName}</span>
                 </h3>
                 <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}
@@ -114,8 +108,8 @@
         <div class="flex w-full flex-col gap-4 lg:w-[30%] lg:justify-between">
             <div class="flex justify-end">
                 <LanguagesDropdown
-                    {lang}
                     languages={project.locales!}
+                    selected={lang}
                     select={(lang: string) => getProjectData(lang)}
                 />
             </div>
@@ -150,7 +144,7 @@
     </div>
 
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
-        <Tags {project} />
+        <ProjectTags {project} />
         <div class="flex flex-row justify-between gap-6">
             <Sharebutton {project} />
             <Button kind="invert" size="sm" class="px-0">
@@ -173,6 +167,6 @@
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
-    <Banner {ownerName} />
+    <Banner ownerName={owner.displayName || ""} />
 </section>
 <Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />

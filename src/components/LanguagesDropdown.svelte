@@ -3,18 +3,19 @@
 
     import ChevronDown from "../svgs/ChevronDown.svelte";
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
+    import { getLanguageDisplayName } from "../utils/lang";
 
-    let { lang, languages, select } = $props();
+    let { languages, selected, select } = $props();
 
     let open = $state(false);
     let dropdownRef: HTMLElement;
 
     function selectLanguage(code: string) {
-        lang = code;
         open = false;
         removeClickOutsideListener();
 
-        select(lang);
+        selected = code;
+        select(code);
     }
 
     function handleClickOutside(event: MouseEvent) {
@@ -49,17 +50,6 @@
         }
     }
 
-    function getLanguageDisplayName(lang: string): string {
-        const displayNames = new Intl.DisplayNames(lang, { type: "language" });
-        const displayName = displayNames.of(lang)!;
-
-        if (["es", "ca", "eu", "gl"].includes(lang)) {
-            return displayName.charAt(0).toUpperCase() + displayName.slice(1);
-        }
-
-        return displayName;
-    }
-
     onDestroy(() => {
         removeClickOutsideListener();
     });
@@ -74,7 +64,7 @@
         aria-expanded={open}
     >
         <LanguageIcon />
-        <span class="flex-1 text-left">{getLanguageDisplayName(lang)}</span>
+        <span class="flex-1 text-left">{getLanguageDisplayName(selected)}</span>
         <ChevronDown rotate={open} />
     </button>
 

@@ -6,6 +6,7 @@ import CTACard from "../../components/profile/CTACard.svelte";
 import DonatedProjectsSection from "../../components/profile/DonatedProjectsSection.svelte";
 import OwnedProjectsSection from "../../components/profile/OwnedProjectsSection.svelte";
 import MatchfundingSection from "../../components/profile/MatchfundingSection.svelte";
+import Grid from "../../components/library/Grid.svelte";
 
 const { lang, t } = Astro.locals;
 const accessToken = Astro.cookies.get("access-token");
@@ -54,7 +55,7 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
         <DonatedProjectsSection {lang} {user} client:load />
 
         <!-- CTA cards -->
-        <div class="grid grid-cols-1 gap-[24px] md:grid-cols-2 lg:grid-cols-[446px_1fr]">
+        <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[446px_1fr]" client:load>
             <CTACard
                 variant="dark"
                 title={t("me.cta.discover.title")}
@@ -86,6 +87,6 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
                 ]}
                 client:load
             />
-        </div>
+        </Grid>
     </div>
 </Layout>

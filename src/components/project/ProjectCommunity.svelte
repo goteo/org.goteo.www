@@ -10,6 +10,7 @@
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
@@ -95,7 +96,7 @@
             {$t("project.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Grid class="grid-cols-1 gap-6 md:grid-cols-2">
                 {#each groupedItems.matchfunding as item (item.id)}
                     <ProjectCommunityMatchfunding
                         {item}
@@ -104,10 +105,10 @@
                     />
                 {/each}
                 <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
-            </div>
+            </Grid>
 
             {#if groupedItems.default?.length}
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#each groupedItems.default as item (item.id)}
                         <ProjectCommunityMessage
                             {item}
@@ -115,7 +116,7 @@
                             bind:selectedProjectSupport
                         />
                     {/each}
-                </div>
+                </Grid>
             {/if}
         </div>
     {/if}
