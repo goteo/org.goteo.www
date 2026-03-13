@@ -12,6 +12,7 @@
   },
   "reward": {
     "donate": "Dona",
+    "edit": "Editar",
     "donors": "donates",
     "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",

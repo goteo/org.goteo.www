@@ -5,17 +5,17 @@
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
     import { getLanguageDisplayName } from "../utils/lang";
 
-    let { lang, languages, select } = $props();
+    let { languages, selected, select } = $props();
 
     let open = $state(false);
     let dropdownRef: HTMLElement;
 
     function selectLanguage(code: string) {
-        lang = code;
         open = false;
         removeClickOutsideListener();
 
-        select(lang);
+        selected = code;
+        select(code);
     }
 
     function handleClickOutside(event: MouseEvent) {
@@ -64,7 +64,7 @@
         aria-expanded={open}
     >
         <LanguageIcon />
-        <span class="flex-1 text-left">{getLanguageDisplayName(lang)}</span>
+        <span class="flex-1 text-left">{getLanguageDisplayName(selected)}</span>
         <ChevronDown rotate={open} />
     </button>
 

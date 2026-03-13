@@ -10,6 +10,7 @@
 <script lang="ts">
     import CampaignInfoStep from "./CampaignInfoStep.svelte";
     import ConfigurationStep from "./ConfigurationStep.svelte";
+    import RewardsStep from "./RewardsStep.svelte";
     import WizardShell from "./WizardShell.svelte";
     import { t } from "../../../i18n/store";
     import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
@@ -140,10 +141,7 @@
         {:else if currentStep === 2}
             <CampaignInfoStep onContinue={handleContinue} />
         {:else if currentStep === 3}
-            <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">{$t("wizard.steps.rewards")}</h2>
-                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
-            </div>
+            <RewardsStep onContinue={handleContinue} {project} />
         {:else if currentStep === 4}
             <div class="py-12 text-center">
                 <h2 class="text-secondary mb-4 text-2xl font-bold">
