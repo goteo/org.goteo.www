@@ -1,9 +1,14 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
+    import type {
+        Project,
+        ProjectBudgetItem,
+        ProjectCollaboration,
+        ProjectReward,
+    } from "../../../openapi/client";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
-    import RewardCollabModal from "./RewardCollabModal.svelte";
+    import WizardModal from "./WizardModal.svelte";
 
     let {
         title,
@@ -14,22 +19,24 @@
         project,
         reward,
         collab,
+        budgetItem,
         onSave,
     } = $props<{
         title: string;
         description: string;
         onclick: () => void;
-        variant: "reward" | "collab";
+        variant: "reward" | "collab" | "budget";
         open: boolean;
         project: Project;
         reward?: ProjectReward | null;
         collab?: ProjectCollaboration | null;
+        budgetItem?: ProjectBudgetItem | null;
         onSave: (data: any) => Promise<void>;
     }>();
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 basis-1/2 flex-col justify-between items-center rounded-4xl border p-6 shadow-sm"
+    class="bg-secondary border-variant1 flex h-full w-full max-w-109.25 basis-1/2 flex-col items-center justify-between rounded-4xl border p-6 shadow-sm"
 >
     <div class="flex flex-col gap-4">
         <h2 class="text-soft-purple self-stretch text-[40px] leading-12 font-bold">
@@ -49,7 +56,9 @@
     </Button>
 </div>
 {#if variant === "reward"}
-    <RewardCollabModal bind:open {project} {onSave} {reward} />
+    <WizardModal bind:open {project} {onSave} {reward} />
 {:else if variant === "collab"}
-    <RewardCollabModal bind:open {project} {onSave} {collab} />
+    <WizardModal bind:open {project} {onSave} {collab} />
+{:else if variant === "budget"}
+    <WizardModal bind:open {project} {onSave} {budgetItem} />
 {/if}
