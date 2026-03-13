@@ -1,17 +1,28 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import type { ProjectBudgetItem } from "../../openapi/client";
+    import type { Project, ProjectBudgetItem } from "../../openapi/client";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/Button.svelte";
+    import WizardModal from "./wizard/WizardModal.svelte";
 
     let {
         item,
+        project,
         isEditable = false,
+        onSave,
+        onDelete,
         onEdit,
+        selectedBudgetItem,
+        openModal = $bindable(false),
     }: {
         item: ProjectBudgetItem;
+        project?: Project;
         isEditable?: boolean;
+        onSave?: (data: ProjectBudgetItem | null) => Promise<void>;
+        onDelete?: (itemId: number | undefined) => Promise<void>;
         onEdit?: () => void;
+        selectedBudgetItem?: ProjectBudgetItem | null;
+        openModal?: boolean;
     } = $props();
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
@@ -50,6 +61,13 @@
                 {$t("wizard.budget.editBtn")}
             {/snippet}
         </Button>
-        <!-- TODO: Add Modal -->
+
+        <WizardModal
+            budgetItem={selectedBudgetItem}
+            bind:open={openModal!}
+            project={project!}
+            {onSave}
+            {onDelete}
+        />
     {/if}
 </div>
