@@ -14,10 +14,11 @@
     import BudgetCard from "../BudgetCard.svelte";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import CreateCard from "./CreateCard.svelte";
+    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {
         project,
-        handleContinue
+        handleContinue,
     }: {
         project: Project;
         handleContinue?: () => void;
@@ -154,32 +155,36 @@
                 project.budget?.minimum?.money?.currency,
             )}
         </span>
-        <Grid class="grid-cols-1 sm:grid-cols-2">
-            {#snippet children()}
-                {#each minBudgetItems as item}
-                    <BudgetCard
-                        {item}
-                        isEditable={true}
-                        onEdit={() => openEdit(item)}
-                        bind:openModal
-                        onSave={handleSaveBudgetItem}
-                        onDelete={handleDeleteBudgetItem}
-                        {selectedBudgetItem}
-                    />
-                {/each}
+        {#if loading}
+            <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
+        {:else}
+            <Grid class="grid-cols-1 sm:grid-cols-2">
+                {#snippet children()}
+                    {#each minBudgetItems as item}
+                        <BudgetCard
+                            {item}
+                            isEditable={true}
+                            onEdit={() => openEdit(item)}
+                            bind:openModal
+                            onSave={handleSaveBudgetItem}
+                            onDelete={handleDeleteBudgetItem}
+                            {selectedBudgetItem}
+                        />
+                    {/each}
 
-                <CreateCard
-                    title={$t("wizard.budget.createCard.minimum.title")}
-                    description={$t("wizard.budget.createCard.minimum.description")}
-                    variant="budget"
-                    bind:open={openModal}
-                    {project}
-                    budgetItem={selectedBudgetItem}
-                    onSave={handleSaveBudgetItem}
-                    onclick={openCreate}
-                />
-            {/snippet}
-        </Grid>
+                    <CreateCard
+                        title={$t("wizard.budget.createCard.minimum.title")}
+                        description={$t("wizard.budget.createCard.minimum.description")}
+                        variant="budget"
+                        bind:open={openModal}
+                        {project}
+                        budgetItem={selectedBudgetItem}
+                        onSave={handleSaveBudgetItem}
+                        onclick={openCreate}
+                    />
+                {/snippet}
+            </Grid>
+        {/if}
     </div>
     <div class="flex flex-col gap-6">
         <span class="text-secondary text-3xl font-bold">
@@ -189,36 +194,40 @@
                 project.budget?.optimum?.money?.currency,
             )}
         </span>
-        <Grid class="grid-cols-1 sm:grid-cols-2">
-            {#snippet children()}
-                {#each optBudgetItems as item}
-                    <BudgetCard
-                        {item}
-                        isEditable={true}
-                        onEdit={() => openEdit(item)}
-                        bind:openModal
-                        onSave={handleSaveBudgetItem}
-                        onDelete={handleDeleteBudgetItem}
-                        {selectedBudgetItem}
-                    />
-                {/each}
+        {#if loading}
+            <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
+        {:else}
+            <Grid class="grid-cols-1 sm:grid-cols-2">
+                {#snippet children()}
+                    {#each optBudgetItems as item}
+                        <BudgetCard
+                            {item}
+                            isEditable={true}
+                            onEdit={() => openEdit(item)}
+                            bind:openModal
+                            onSave={handleSaveBudgetItem}
+                            onDelete={handleDeleteBudgetItem}
+                            {selectedBudgetItem}
+                        />
+                    {/each}
 
-                <CreateCard
-                    title={$t("wizard.budget.createCard.optimum.title")}
-                    description={$t("wizard.budget.createCard.optimum.description")}
-                    variant="budget"
-                    bind:open={openModal}
-                    {project}
-                    budgetItem={selectedBudgetItem}
-                    onSave={handleSaveBudgetItem}
-                    onclick={openCreate}
-                />
-            {/snippet}
-        </Grid>
+                    <CreateCard
+                        title={$t("wizard.budget.createCard.optimum.title")}
+                        description={$t("wizard.budget.createCard.optimum.description")}
+                        variant="budget"
+                        bind:open={openModal}
+                        {project}
+                        budgetItem={selectedBudgetItem}
+                        onSave={handleSaveBudgetItem}
+                        onclick={openCreate}
+                    />
+                {/snippet}
+            </Grid>
+        {/if}
     </div>
 </div>
 
-<div class="flex mt-10">
+<div class="mt-10 flex">
     <Button kind="secondary" size="md" onclick={handleContinue} class="min-w-50">
         {#snippet children()}
             {$t("wizard.campaignInfo.continue")}
