@@ -7,6 +7,6 @@
     }>();
 </script>
 
-<div class={twMerge("grid gap-6 lg:grid-cols-3", classes)}>
+<div class={twMerge("grid grid-cols-2 gap-6 lg:grid-cols-3", classes)}>
     {@render children()}
 </div>
