@@ -419,7 +419,7 @@ export type GatewayCharge = {
     /**
      * The Checkout to which this Charge item belongs to.
      */
-    readonly checkout?: string;
+    checkout?: string;
     /**
      * How this item should be processed by the Gateway.\
      * \
@@ -448,7 +448,7 @@ export type GatewayCharge = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -464,7 +464,7 @@ export type GatewayChargeChargeUpdationDto = {
     /**
      * To ask for a refund, set the status `to_refund`.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
 };
 
 /**
@@ -482,7 +482,7 @@ export type GatewayChargeJsonld = {
     /**
      * The Checkout to which this Charge item belongs to.
      */
-    readonly checkout?: string;
+    checkout?: string;
     /**
      * How this item should be processed by the Gateway.\
      * \
@@ -511,7 +511,7 @@ export type GatewayChargeJsonld = {
     /**
      * The status of the charge item with the Gateway.
      */
-    status?: 'in_pending' | 'charged' | 'to_refund' | 'refunded';
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -549,11 +549,11 @@ export type GatewayCheckout = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'in_pending' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
-    readonly links?: Array<Link>;
+    readonly links?: Array<GatewayLink>;
     /**
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
@@ -614,11 +614,11 @@ export type GatewayCheckoutJsonld = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'in_pending' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
-    readonly links?: Array<LinkJsonld>;
+    readonly links?: Array<GatewayLinkJsonld>;
     /**
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
@@ -627,15 +627,7 @@ export type GatewayCheckoutJsonld = {
     readonly dateUpdated?: string;
 };
 
-export type Link = {
-    /**
-     * The complete target URL.
-     */
-    href?: string;
-    /**
-     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
-     */
-    rel?: string;
+export type GatewayLink = {
     /**
      * The HTTP method required to make the related call.
      */
@@ -646,6 +638,53 @@ export type Link = {
      * `payment` links are for end-users who must visit this link to complete the checkout.
      */
     type?: 'debug' | 'payment';
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
+};
+
+export type GatewayLinkJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The HTTP method required to make the related call.
+     */
+    method?: string;
+    /**
+     * The type of the link indicates who is the intended user of a link.\
+     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
+     * `payment` links are for end-users who must visit this link to complete the checkout.
+     */
+    type?: 'debug' | 'payment';
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
+};
+
+export type Link = {
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
 };
 
 export type LinkJsonld = {
@@ -659,21 +698,11 @@ export type LinkJsonld = {
     /**
      * The complete target URL.
      */
-    href?: string;
+    url?: string;
     /**
      * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
      */
-    rel?: string;
-    /**
-     * The HTTP method required to make the related call.
-     */
-    method?: string;
-    /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
-     */
-    type?: 'debug' | 'payment';
+    rel?: string | null;
 };
 
 /**
@@ -1280,7 +1309,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1298,6 +1327,11 @@ export type Project = {
      */
     readonly updates?: Array<string>;
     readonly matchCallSubmissions?: Array<string>;
+    /**
+     * A list of URLs related to the Project.\
+     * e.g: social profiles, project website.
+     */
+    readonly links?: Array<Link>;
     /**
      * List of the available content locales.
      */
@@ -1327,7 +1361,7 @@ export type ProjectProjectCreationDto = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1351,7 +1385,7 @@ export type ProjectProjectCreationDtoJsonld = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1392,7 +1426,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1456,7 +1490,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_review' | 'in_review' | 'in_editing' | 'rejected' | 'to_campaign' | 'in_campaign' | 'unfunded' | 'in_funding' | 'funded';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1474,6 +1508,11 @@ export type ProjectJsonld = {
      */
     readonly updates?: Array<string>;
     readonly matchCallSubmissions?: Array<string>;
+    /**
+     * A list of URLs related to the Project.\
+     * e.g: social profiles, project website.
+     */
+    readonly links?: Array<LinkJsonld>;
     /**
      * List of the available content locales.
      */
@@ -1973,10 +2012,6 @@ export type ProjectUpdate = {
      */
     body: string;
     /**
-     * Author of this update.
-     */
-    author?: string;
-    /**
      * Public display date for this update,
      * not necessarily related to the actual dates of resource creation or update.
      */
@@ -2053,6 +2088,7 @@ export type ProjectUpdateJsonld = {
 
 export type ProjectVideo = {
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2065,6 +2101,7 @@ export type ProjectVideoJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2223,6 +2260,11 @@ export type User = {
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
+    /**
+     * A list of URLs provided by the User.\
+     * e.g: social profiles, personal website.
+     */
+    readonly links?: Array<Link>;
 };
 
 /**
@@ -2318,83 +2360,11 @@ export type UserJsonld = {
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserToken = {
-    readonly id?: number;
     /**
-     * The User token itself.
+     * A list of URLs provided by the User.\
+     * e.g: social profiles, personal website.
      */
-    readonly token?: string;
-    /**
-     * The User who this token grants access as.
-     */
-    readonly owner?: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenUserTokenLoginDto = {
-    /**
-     * The identifier (email, handle) of the User to be authenticated.
-     */
-    identifier: string;
-    /**
-     * The password of the User to be authenticated.
-     */
-    password: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenUserTokenLoginDtoJsonld = {
-    /**
-     * The identifier (email, handle) of the User to be authenticated.
-     */
-    identifier: string;
-    /**
-     * The password of the User to be authenticated.
-     */
-    password: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenJsonld = {
-    '@context'?: string | {
-        '@vocab': string;
-        hydra: 'http://www.w3.org/ns/hydra/core#';
-        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
-    };
-    readonly '@id'?: string;
-    readonly '@type'?: string;
-    readonly id?: number;
-    /**
-     * The User token itself.
-     */
-    readonly token?: string;
-    /**
-     * The User who this token grants access as.
-     */
-    readonly owner?: string;
+    readonly links?: Array<LinkJsonld>;
 };
 
 /**
@@ -2829,6 +2799,8 @@ export type ApiGatewayChargesGetCollectionData = {
         'dateUpdated[strictly_before]'?: string;
         'dateUpdated[after]'?: string;
         'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
     };
     url: '/v4/gateway_charges';
 };
@@ -2928,15 +2900,6 @@ export type ApiGatewayCheckoutsGetCollectionData = {
     };
     url: '/v4/gateway_checkouts';
 };
-
-export type ApiGatewayCheckoutsGetCollectionErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-};
-
-export type ApiGatewayCheckoutsGetCollectionError = ApiGatewayCheckoutsGetCollectionErrors[keyof ApiGatewayCheckoutsGetCollectionErrors];
 
 export type ApiGatewayCheckoutsGetCollectionResponses = {
     /**
@@ -5102,13 +5065,10 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        /**
-         * Query Users by email or handle. Fuzzy.
-         */
-        query?: string;
-        handle?: string;
+        email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
+        handle?: string;
     };
     url: '/v4/users';
 };
@@ -5128,7 +5088,12 @@ export type ApiUsersPostData = {
      */
     body: UserUserSignupDto;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users';
 };
 
@@ -5154,6 +5119,41 @@ export type ApiUsersPostResponses = {
 
 export type ApiUsersPostResponse = ApiUsersPostResponses[keyof ApiUsersPostResponses];
 
+export type ApiUsersIdOrHandleGetData = {
+    body?: never;
+    path: {
+        /**
+         * User identifier or handle
+         */
+        idOrHandle: string;
+    };
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
+    url: '/v4/users/{idOrHandle}';
+};
+
+export type ApiUsersIdOrHandleGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiUsersIdOrHandleGetError = ApiUsersIdOrHandleGetErrors[keyof ApiUsersIdOrHandleGetErrors];
+
+export type ApiUsersIdOrHandleGetResponses = {
+    /**
+     * User resource
+     */
+    200: User;
+};
+
+export type ApiUsersIdOrHandleGetResponse = ApiUsersIdOrHandleGetResponses[keyof ApiUsersIdOrHandleGetResponses];
+
 export type ApiUsersIdDeleteData = {
     body?: never;
     path: {
@@ -5162,7 +5162,12 @@ export type ApiUsersIdDeleteData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users/{id}';
 };
 
@@ -5184,36 +5189,6 @@ export type ApiUsersIdDeleteResponses = {
 
 export type ApiUsersIdDeleteResponse = ApiUsersIdDeleteResponses[keyof ApiUsersIdDeleteResponses];
 
-export type ApiUsersIdGetData = {
-    body?: never;
-    path: {
-        /**
-         * User identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/users/{id}';
-};
-
-export type ApiUsersIdGetErrors = {
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUsersIdGetError = ApiUsersIdGetErrors[keyof ApiUsersIdGetErrors];
-
-export type ApiUsersIdGetResponses = {
-    /**
-     * User resource
-     */
-    200: User;
-};
-
-export type ApiUsersIdGetResponse = ApiUsersIdGetResponses[keyof ApiUsersIdGetResponses];
-
 export type ApiUsersIdPatchData = {
     /**
      * The updated User resource
@@ -5225,7 +5200,12 @@ export type ApiUsersIdPatchData = {
          */
         id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     url: '/v4/users/{id}';
 };
 
@@ -5254,106 +5234,6 @@ export type ApiUsersIdPatchResponses = {
 };
 
 export type ApiUsersIdPatchResponse = ApiUsersIdPatchResponses[keyof ApiUsersIdPatchResponses];
-
-export type ApiUserTokensPostData = {
-    /**
-     * The new UserToken resource
-     */
-    body: UserTokenUserTokenLoginDto;
-    path?: never;
-    query?: never;
-    url: '/v4/user_tokens';
-};
-
-export type ApiUserTokensPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: ErrorJsonld;
-    /**
-     * An error occurred
-     */
-    422: ConstraintViolationJsonldJsonld;
-};
-
-export type ApiUserTokensPostError = ApiUserTokensPostErrors[keyof ApiUserTokensPostErrors];
-
-export type ApiUserTokensPostResponses = {
-    /**
-     * UserToken resource created
-     */
-    201: UserToken;
-};
-
-export type ApiUserTokensPostResponse = ApiUserTokensPostResponses[keyof ApiUserTokensPostResponses];
-
-export type ApiUserTokensIdDeleteData = {
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/user_tokens/{id}';
-};
-
-export type ApiUserTokensIdDeleteErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUserTokensIdDeleteError = ApiUserTokensIdDeleteErrors[keyof ApiUserTokensIdDeleteErrors];
-
-export type ApiUserTokensIdDeleteResponses = {
-    /**
-     * UserToken resource deleted
-     */
-    204: void;
-};
-
-export type ApiUserTokensIdDeleteResponse = ApiUserTokensIdDeleteResponses[keyof ApiUserTokensIdDeleteResponses];
-
-export type ApiUserTokensIdGetData = {
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/user_tokens/{id}';
-};
-
-export type ApiUserTokensIdGetErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUserTokensIdGetError = ApiUserTokensIdGetErrors[keyof ApiUserTokensIdGetErrors];
-
-export type ApiUserTokensIdGetResponses = {
-    /**
-     * UserToken resource
-     */
-    200: UserToken;
-};
-
-export type ApiUserTokensIdGetResponse = ApiUserTokensIdGetResponses[keyof ApiUserTokensIdGetResponses];
 
 export type ApiVersionsGetCollectionData = {
     body?: never;

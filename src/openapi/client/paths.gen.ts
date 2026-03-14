@@ -160,17 +160,11 @@ export const apiUsersGetCollectionUrl = '/v4/users';
 
 export const apiUsersPostUrl = '/v4/users';
 
+export const apiUsersIdOrHandleGetUrl = '/v4/users/{idOrHandle}';
+
 export const apiUsersIdDeleteUrl = '/v4/users/{id}';
 
-export const apiUsersIdGetUrl = '/v4/users/{id}';
-
 export const apiUsersIdPatchUrl = '/v4/users/{id}';
-
-export const apiUserTokensPostUrl = '/v4/user_tokens';
-
-export const apiUserTokensIdDeleteUrl = '/v4/user_tokens/{id}';
-
-export const apiUserTokensIdGetUrl = '/v4/user_tokens/{id}';
 
 export const apiVersionsGetCollectionUrl = '/v4/versions';
 

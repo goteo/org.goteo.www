@@ -6,7 +6,7 @@
     import CartItem from "./CartItem.svelte";
     import Tipjar from "./Tipjar.svelte";
     import { t } from "../../i18n/store";
-    import { apiProjectsIdOrSlugGet, apiUsersIdGet } from "../../openapi/client";
+    import { apiProjectsIdOrSlugGet, apiUsersIdOrHandleGet } from "../../openapi/client";
     import { cart } from "../../stores/cart";
     import { extractId } from "../../utils/extractId";
 
@@ -40,7 +40,7 @@
             });
             const ownerId = extractId(project.data?.owner);
             if (ownerId) {
-                const user = await apiUsersIdGet({ path: { id: ownerId } });
+                const user = await apiUsersIdOrHandleGet({ path: { idOrHandle: ownerId } });
                 return user.data?.displayName ?? "";
             }
         } catch (err) {
