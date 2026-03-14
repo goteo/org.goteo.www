@@ -23,10 +23,10 @@ Manages real-time filtering of campaigns without page reloads
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import Grid from "../library/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
     import type { Campaign } from "../../types/campaign";
-    import Grid from "../library/Grid.svelte";
 
     interface Props {
         initialProjects: Project[];

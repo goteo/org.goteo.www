@@ -1,14 +1,15 @@
 <script lang="ts">
+    import WizardModal from "./WizardModal.svelte";
     import { t } from "../../../i18n/store";
+    import PlusIcon from "../../../svgs/PlusIcon.svelte";
+    import Button from "../../library/Button.svelte";
+
     import type {
         Project,
         ProjectBudgetItem,
         ProjectCollaboration,
         ProjectReward,
     } from "../../../openapi/client";
-    import PlusIcon from "../../../svgs/PlusIcon.svelte";
-    import Button from "../../library/Button.svelte";
-    import WizardModal from "./WizardModal.svelte";
 
     let {
         title,

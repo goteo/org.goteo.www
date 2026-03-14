@@ -17,10 +17,10 @@
     import { projectCache } from "../../stores/projectCache";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import Grid from "../library/Grid.svelte";
 
     import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
-    import Grid from "../library/Grid.svelte";
 
     interface Props {
         lang: string;

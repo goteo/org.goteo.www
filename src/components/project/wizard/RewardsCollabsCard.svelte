@@ -1,12 +1,13 @@
 <script lang="ts">
+    import WizardModal from "./WizardModal.svelte";
     import { t } from "../../../i18n/store";
-    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
     import UnitIcon from "../../../svgs/UnitIcon.svelte";
     import UserIcon from "../../../svgs/UserIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
-    import WizardModal from "./WizardModal.svelte";
+
+    import type { Project, ProjectCollaboration, ProjectReward } from "../../../openapi/client";
 
     let {
         variant,

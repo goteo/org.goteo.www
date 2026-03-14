@@ -10,9 +10,9 @@
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
-    import Grid from "../library/Grid.svelte";
 
     let {
         project,

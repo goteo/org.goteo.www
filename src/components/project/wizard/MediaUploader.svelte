@@ -61,13 +61,15 @@
 -->
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import { t } from "../../../i18n/store";
-    import { cyrb53 } from "../../../utils/hash";
-    import type { MediaImage } from "../../../stores/wizard-state";
+
     import Button from "../../../components/library/Button.svelte";
+    import { t } from "../../../i18n/store";
+    import CloseIcon from "../../../svgs/CloseIcon.svelte";
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
-    import CloseIcon from "../../../svgs/CloseIcon.svelte";
+    import { cyrb53 } from "../../../utils/hash";
+
+    import type { MediaImage } from "../../../stores/wizard-state";
 
     interface MediaUploaderProps {
         images: MediaImage[];

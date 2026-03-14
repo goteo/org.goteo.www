@@ -115,11 +115,7 @@
                 </div>
             </div>
             {#each rewards as reward}
-                <Reward
-                    {reward}
-                    {project}
-                    isAvailable={calcAvailability(reward)}
-                />
+                <Reward {reward} {project} isAvailable={calcAvailability(reward)} />
             {/each}
         </Grid>
     </div>

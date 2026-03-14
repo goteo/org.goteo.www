@@ -16,11 +16,6 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import type { Snippet } from "svelte";
-    import Button from "../../library/Button.svelte";
-    import TabNavigation, { type Tab } from "../../library/TabNavigation.svelte";
-    import EditIcon from "../../../svgs/EditIcon.svelte";
-    import EyeIcon from "../../../svgs/EyeIcon.svelte";
     import { t } from "../../../i18n/store";
     import {
         wizardState,
@@ -28,6 +23,12 @@
         saveToLocalStorage,
         persistenceError,
     } from "../../../stores/wizard-state";
+    import EditIcon from "../../../svgs/EditIcon.svelte";
+    import EyeIcon from "../../../svgs/EyeIcon.svelte";
+    import Button from "../../library/Button.svelte";
+    import TabNavigation, { type Tab } from "../../library/TabNavigation.svelte";
+
+    import type { Snippet } from "svelte";
 
     let {
         title = "",

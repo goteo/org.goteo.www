@@ -8,13 +8,13 @@
         TableHead,
         TableHeadCell,
     } from "flowbite-svelte";
-    import Grid from "../library/Grid.svelte";
 
     import ActionsBtn from "./ActionsBtn.svelte";
     import ContentFooter from "./ContentFooter.svelte";
     import Tooltip from "./Tooltip.svelte";
     import { t } from "../../i18n/store";
     import CopyIcon from "../../svgs/CopyIcon.svelte";
+    import Grid from "../library/Grid.svelte";
 
     import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
 
@@ -68,9 +68,7 @@
 </script>
 
 <section class="flex flex-col gap-10">
-    <Grid
-        class="text-content grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-[16px]"
-    >
+    <Grid class="text-content grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-[16px]">
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
             <span title={dataTimeCreated.fulltime}>{dataTimeCreated.time}</span>

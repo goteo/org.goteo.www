@@ -1,18 +1,20 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+
+    import RewardItemsSelector from "./RewardItemsSelector.svelte";
+    import { t } from "../../../i18n/store";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { formatCurrency } from "../../../utils/currencies";
+    import FileUpload from "../../FileUpload.svelte";
+    import Button from "../../library/Button.svelte";
+
     import type {
         Project,
         ProjectBudgetItem,
         ProjectCollaboration,
         ProjectReward,
     } from "../../../openapi/client";
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import FileUpload from "../../FileUpload.svelte";
-    import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import type { ClassNameValue } from "tailwind-merge";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { formatCurrency } from "../../../utils/currencies";
 
     type PayloadType = {
         project: string;
@@ -102,9 +104,9 @@
     function handleSelectedDeadline() {}
 
     $effect(() => {
-        if (!collab && !budgetItem && reward || reward === null) selectedStep = "rewards";
-        else if (!reward && !budgetItem && collab || collab === null) selectedStep = "collabs";
-        else if (!reward && !collab && budgetItem || budgetItem === null) {
+        if ((!collab && !budgetItem && reward) || reward === null) selectedStep = "rewards";
+        else if ((!reward && !budgetItem && collab) || collab === null) selectedStep = "collabs";
+        else if ((!reward && !collab && budgetItem) || budgetItem === null) {
             selectedStep = "budget";
             selectedBudgetDeadline = budgetItem?.deadline;
             selectedBudgetType = budgetItem?.type;

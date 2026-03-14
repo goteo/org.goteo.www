@@ -6,9 +6,9 @@
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import Carousel from "../Carousel.svelte";
+    import BudgetCard from "./BudgetCard.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
-    import BudgetCard from "./BudgetCard.svelte";
 
     let {
         lang = $bindable(),

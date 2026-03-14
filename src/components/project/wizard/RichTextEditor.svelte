@@ -56,15 +56,13 @@
     - Screen reader friendly messages
 -->
 <script lang="ts">
-    import { onMount, onDestroy } from "svelte";
     import { Editor } from "@tiptap/core";
-    import StarterKit from "@tiptap/starter-kit";
     import Placeholder from "@tiptap/extension-placeholder";
     import TextAlign from "@tiptap/extension-text-align";
     import { TextStyle, FontSize } from "@tiptap/extension-text-style";
+    import StarterKit from "@tiptap/starter-kit";
+    import { onMount, onDestroy } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import Button from "../../../components/library/Button.svelte";
-    import Select from "../../../components/library/Select.svelte";
 
     interface RichTextEditorProps {
         id: string;
@@ -100,6 +98,9 @@
     let isCenterAligned = $state(false);
     let isRightAligned = $state(false);
 
+    const BUTTONS_CLASSES: ClassNameValue =
+        "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white shadow-sm";
+
     /**
      * Updates active states from editor
      */
@@ -132,6 +133,7 @@
                 TextAlign.configure({
                     types: ["paragraph"],
                     alignments: ["left", "center", "right"],
+                    defaultAlignment: "left",
                 }),
                 Placeholder.configure({
                     placeholder: placeholder,
@@ -185,187 +187,186 @@
         editor?.chain().focus().setTextAlign(alignment).run();
     }
 
-    function handleFontSizeChange(value: string) {
-        selectedFontSize = value;
-        editor?.chain().focus().setFontSize(value).run();
+    function handleFontSizeChange(
+        event: Event & {
+            currentTarget: EventTarget & HTMLSelectElement;
+        },
+    ) {
+        selectedFontSize = event.currentTarget.value;
+        editor?.chain().focus().setFontSize(event.currentTarget.value).run();
     }
 </script>
 
-<div class={twMerge("rich-text-editor", className)}>
+<div class={twMerge("rich-text-editor space-y-4", className)}>
     <!-- Toolbar -->
     <div
-        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between border-b p-2"
+        class="editor-toolbar border-light-muted bg-light-surface flex items-center justify-between"
         role="toolbar"
         aria-label="Text formatting toolbar"
     >
         <!-- Left Group: Font Size, Bold, Italic -->
         <div class="flex items-center gap-2">
             <!-- Font Size Dropdown -->
-            <Select
-                bind:value={selectedFontSize}
-                onChange={handleFontSizeChange}
-                labelText="Font Size"
-                class="w-auto min-w-[120px] px-2 py-1 text-sm"
-            >
-                {#snippet children()}
+            <div class="relative flex gap-2">
+                <select
+                    bind:value={selectedFontSize}
+                    onchange={handleFontSizeChange}
+                    aria-label="Font size"
+                    title="Font size"
+                    class={twMerge(
+                        BUTTONS_CLASSES,
+                        "border-grey text-secondary w-auto max-w-[110px] appearance-none bg-none px-2 py-1 pr-8 text-sm ring-0",
+                    )}
+                >
                     <option value="12px">12px</option>
                     <option value="14px">14px</option>
                     <option value="16px">16px</option>
                     <option value="18px">18px</option>
                     <option value="20px">20px</option>
                     <option value="24px">24px</option>
-                {/snippet}
-            </Select>
+                </select>
+                <svg
+                    class="pointer-events-none absolute top-1/2 right-2 h-4 w-4 -translate-y-1/2"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M3 5.5L8 10.5L13 5.5"
+                        stroke="#462949"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+                </svg>
+            </div>
 
             <!-- Bold Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={toggleBold}
                 class={twMerge(
-                    "rounded-lg",
-                    isBoldActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    BUTTONS_CLASSES,
+                    isBoldActive ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Bold"
                 title="Bold (Ctrl+B)"
                 aria-pressed={isBoldActive}
             >
-                {#snippet children()}
-                    <span class="font-bold">B</span>
-                {/snippet}
-            </Button>
+                <span class="font-bold">B</span>
+            </button>
 
             <!-- Italic Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={toggleItalic}
                 class={twMerge(
-                    "rounded-lg",
-                    isItalicActive ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    BUTTONS_CLASSES,
+                    isItalicActive ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Italic"
                 title="Italic (Ctrl+I)"
                 aria-pressed={isItalicActive}
             >
-                {#snippet children()}
-                    <span class="font-serif italic">I</span>
-                {/snippet}
-            </Button>
+                <span class="font-serif italic">I</span>
+            </button>
         </div>
 
         <!-- Right Group: Alignment Buttons -->
         <div class="flex items-center gap-2">
             <!-- Left Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("left")}
                 class={twMerge(
-                    "rounded-lg",
-                    isLeftAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    BUTTONS_CLASSES,
+                    isLeftAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align left"
                 aria-pressed={isLeftAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M13.5 18H4.5M19.5 12H4.5M19.5 6H4.5"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="17" y1="10" x2="3" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="17" y1="18" x2="3" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
 
             <!-- Center Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("center")}
                 class={twMerge(
-                    "rounded-lg",
-                    isCenterAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    BUTTONS_CLASSES,
+                    isCenterAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align center"
                 aria-pressed={isCenterAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M15 18H9M19.5 12H4.5M15 6H9"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="18" y1="10" x2="6" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="18" y1="18" x2="6" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
 
             <!-- Right Align Button -->
-            <Button
+            <button
                 type="button"
-                kind="ghost"
-                size="sm"
                 onclick={() => setTextAlign("right")}
                 class={twMerge(
-                    "rounded-lg",
-                    isRightAligned ? "!bg-primary !text-secondary" : "hover:bg-purple-tint",
+                    BUTTONS_CLASSES,
+                    isRightAligned ? "border-secondary" : "border-grey p-2",
                 )}
                 aria-label="Align right"
                 aria-pressed={isRightAligned}
             >
-                {#snippet children()}
-                    <svg
-                        aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
+                <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+                    <path
+                        d="M10.5 18H19.5M4.5 12H19.5M4.5 6H19.5"
+                        stroke="#464646"
+                        stroke-width="1.5"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                    >
-                        <line x1="21" y1="10" x2="7" y2="10"></line>
-                        <line x1="21" y1="6" x2="3" y2="6"></line>
-                        <line x1="21" y1="14" x2="3" y2="14"></line>
-                        <line x1="21" y1="18" x2="7" y2="18"></line>
-                    </svg>
-                {/snippet}
-            </Button>
+                    />
+                </svg>
+            </button>
         </div>
     </div>
 
     <!-- Editor Content -->
     <div
         bind:this={editorElement}
-        class="editor-content rounded-xl border {error ? 'border-red-500' : ''}"
+        class="editor-content h-60 rounded-lg border {error
+            ? 'border-red-500'
+            : 'border-secondary'}"
         role="textbox"
         aria-multiline="true"
         aria-invalid={!!error}

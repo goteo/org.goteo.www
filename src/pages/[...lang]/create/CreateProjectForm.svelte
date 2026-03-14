@@ -1,11 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
-    import BaseCard from "../../../components/BaseCard.svelte";
-    import { t } from "../../../i18n/store";
-    import { categories } from "../../../utils/categories";
-    import { formatCurrency } from "../../../utils/currencies";
-    import CategorySelect from "../../../components/library/CategorySelect.svelte";
-    import Button from "../../../components/library/Button.svelte";
+
     import {
         draft,
         validationErrors,
@@ -15,9 +10,17 @@
         validateForm,
         markFieldAsTouched,
     } from "./project-draft";
-    import type { ProjectDraft } from "./project-draft";
-    import TextInput from "../../../components/library/TextInput.svelte";
+    import BaseCard from "../../../components/BaseCard.svelte";
+    import Button from "../../../components/library/Button.svelte";
+    import CategorySelect from "../../../components/library/CategorySelect.svelte";
     import DateInput from "../../../components/library/DateInput.svelte";
+    import TextInput from "../../../components/library/TextInput.svelte";
+    import { t } from "../../../i18n/store";
+    import { categories } from "../../../utils/categories";
+    import { formatCurrency } from "../../../utils/currencies";
+
+    import type { ProjectDraft } from "./project-draft";
+
     // import { apiProjectsPost } from "../../../openapi/client"; // TODO: Use when API integration is complete
 
     const categoriesOptions = categories.map((categories) => {

@@ -1,9 +1,10 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import type { Project, ProjectBudgetItem } from "../../openapi/client";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/Button.svelte";
     import WizardModal from "./wizard/WizardModal.svelte";
+
+    import type { Project, ProjectBudgetItem } from "../../openapi/client";
 
     let {
         item,
@@ -43,7 +44,7 @@
             {item.description}
         </p>
     </div>
-    <div class="flex flex-row items-center justify-between mt-auto">
+    <div class="mt-auto flex flex-row items-center justify-between">
         <p class="text-2xl text-black">
             {formatCurrency(item.money.amount, item.money.currency)}
         </p>

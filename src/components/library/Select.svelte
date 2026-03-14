@@ -37,9 +37,11 @@
     ```
 -->
 <script lang="ts">
-    import type { Snippet } from "svelte";
     import { twMerge } from "tailwind-merge";
+
     import { cyrb53 } from "../../utils/hash";
+
+    import type { Snippet } from "svelte";
 
     interface SelectProps {
         children: Snippet; // Options as slot content
@@ -98,7 +100,7 @@
     {#if labelText}
         <label
             for={selectId}
-            class="text-secondary bg-light-surface absolute top-[-8px] left-3 px-1 text-[12px] leading-[16px] font-medium transition-all duration-200"
+            class="text-secondary absolute top-[-8px] left-3 bg-white px-1 text-[12px] leading-[16px] font-medium transition-all duration-200"
         >
             {labelText}
             {#if required}
@@ -117,10 +119,8 @@
         onchange={handleChange}
         onblur={handleBlur}
         class={twMerge(
-            "w-full rounded-lg border px-4 py-4 text-[16px] leading-[24px] transition-colors focus:ring-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
-            error
-                ? "border-red-500 focus:ring-red-500"
-                : "border-secondary bg-light-surface focus:ring-tertiary",
+            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}
         aria-invalid={error ? "true" : "false"}

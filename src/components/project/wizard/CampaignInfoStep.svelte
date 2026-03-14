@@ -14,11 +14,10 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import MediaUploader from "./MediaUploader.svelte";
+    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
+    import { t } from "../../../i18n/store";
     import {
         wizardState,
         updateCampaignInfo,
@@ -27,6 +26,7 @@
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
 
     interface CampaignInfoStepProps {
@@ -113,133 +113,135 @@
     }
 </script>
 
-<div class="space-y-8">
+<div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
-    <div>
-        <h1 class="text-secondary mb-2 text-3xl leading-tight font-bold lg:text-4xl">
+    <div class="space-y-4">
+        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[40px]">
             {$t("wizard.campaignInfo.title")}
         </h1>
-        <p class="text-secondary text-base">{$t("wizard.campaignInfo.subtitle")}</p>
+        <p class="text-content text-base">{$t("wizard.campaignInfo.subtitle")}</p>
     </div>
 
-    <!-- Media Section -->
-    <section data-field="media" class="space-y-4">
-        <div>
-            <h2 class="text-secondary mb-1 text-xl font-semibold">
-                {$t("wizard.campaignInfo.media.title")}
-                <span class="text-secondary" aria-label="required">*</span>
-            </h2>
-            <p class="text-secondary text-sm">
-                {$t("wizard.campaignInfo.media.help")}
-            </p>
-        </div>
+    <div class="space-y-10">
+        <!-- Media Section -->
+        <section data-field="media" class="space-y-4">
+            <div>
+                <h2 class="mb-1 text-2xl font-bold text-black">
+                    {$t("wizard.campaignInfo.media.title")}
+                    <span aria-label="required">*</span>
+                </h2>
+                <p class="text-content text-base">
+                    {$t("wizard.campaignInfo.media.help")}
+                </p>
+            </div>
 
-        <Grid class="gap-4 md:grid-cols-2">
-            <MediaUploader
-                images={campaignInfo.images}
-                onUpload={handleImageUpload}
-                onRemove={handleImageRemove}
+            <Grid class="grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
+                <MediaUploader
+                    images={campaignInfo.images}
+                    onUpload={handleImageUpload}
+                    onRemove={handleImageRemove}
+                />
+
+                <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
+            </Grid>
+        </section>
+
+        <!-- Objectives Section -->
+        <section data-field="objectives" class="space-y-4">
+            <div>
+                <label for="objectives" class="mb-1 block text-2xl font-bold text-black">
+                    {$t("wizard.campaignInfo.objectives.label")}
+                    <span aria-label="required">*</span>
+                </label>
+                <p class="text-content text-base" id="objectives-help">
+                    {$t("wizard.campaignInfo.objectives.help")}
+                </p>
+            </div>
+
+            <RichTextEditor
+                id="objectives"
+                value={campaignInfo.objectives}
+                onChange={handleObjectivesChange}
+                placeholder={$t("wizard.campaignInfo.objectives.placeholder")}
+                minLength={50}
+                maxLength={5000}
+                ariaDescribedBy="objectives-help"
             />
+        </section>
 
-            <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
-        </Grid>
-    </section>
+        <!-- Legacy Section -->
+        <section data-field="legacy" class="space-y-4">
+            <div>
+                <label for="legacy" class="mb-1 block text-2xl font-bold text-black">
+                    {$t("wizard.campaignInfo.legacy.label")}
+                    <span aria-label="required">*</span>
+                </label>
+                <p class="text-content text-base" id="legacy-help">
+                    {$t("wizard.campaignInfo.legacy.help")}
+                </p>
+            </div>
 
-    <!-- Objectives Section -->
-    <section data-field="objectives" class="space-y-4">
-        <div>
-            <label for="objectives" class="text-secondary mb-1 block text-xl font-semibold">
-                {$t("wizard.campaignInfo.objectives.label")}
-                <span class="text-secondary" aria-label="required">*</span>
-            </label>
-            <p class="text-secondary text-sm" id="objectives-help">
-                {$t("wizard.campaignInfo.objectives.help")}
-            </p>
-        </div>
+            <RichTextEditor
+                id="legacy"
+                value={campaignInfo.legacy}
+                onChange={handleLegacyChange}
+                placeholder={$t("wizard.campaignInfo.legacy.placeholder")}
+                minLength={50}
+                maxLength={5000}
+                ariaDescribedBy="legacy-help"
+            />
+        </section>
 
-        <RichTextEditor
-            id="objectives"
-            value={campaignInfo.objectives}
-            onChange={handleObjectivesChange}
-            placeholder={$t("wizard.campaignInfo.objectives.placeholder")}
-            minLength={50}
-            maxLength={5000}
-            ariaDescribedBy="objectives-help"
-        />
-    </section>
+        <!-- Target Audience Section -->
+        <section data-field="targetAudience" class="space-y-4">
+            <div>
+                <label for="target-audience" class="mb-1 block text-2xl font-bold text-black">
+                    {$t("wizard.campaignInfo.target.label")}
+                    <span aria-label="required">*</span>
+                </label>
+                <p class="text-content text-base" id="target-help">
+                    {$t("wizard.campaignInfo.target.help")}
+                </p>
+            </div>
 
-    <!-- Legacy Section -->
-    <section data-field="legacy" class="space-y-4">
-        <div>
-            <label for="legacy" class="text-secondary mb-1 block text-xl font-semibold">
-                {$t("wizard.campaignInfo.legacy.label")}
-                <span class="text-secondary" aria-label="required">*</span>
-            </label>
-            <p class="text-secondary text-sm" id="legacy-help">
-                {$t("wizard.campaignInfo.legacy.help")}
-            </p>
-        </div>
+            <RichTextEditor
+                id="target-audience"
+                value={campaignInfo.targetAudience}
+                onChange={handleTargetAudienceChange}
+                placeholder={$t("wizard.campaignInfo.target.placeholder")}
+                minLength={30}
+                maxLength={5000}
+                ariaDescribedBy="target-help"
+            />
+        </section>
 
-        <RichTextEditor
-            id="legacy"
-            value={campaignInfo.legacy}
-            onChange={handleLegacyChange}
-            placeholder={$t("wizard.campaignInfo.legacy.placeholder")}
-            minLength={50}
-            maxLength={5000}
-            ariaDescribedBy="legacy-help"
-        />
-    </section>
+        <!-- Team Section -->
+        <section data-field="team" class="space-y-4">
+            <div>
+                <label for="team" class="mb-1 block text-2xl font-bold text-black">
+                    {$t("wizard.campaignInfo.team.label")}
+                    <span aria-label="required">*</span>
+                </label>
+                <p class="text-content text-base" id="team-help">
+                    {$t("wizard.campaignInfo.team.help")}
+                </p>
+            </div>
 
-    <!-- Target Audience Section -->
-    <section data-field="targetAudience" class="space-y-4">
-        <div>
-            <label for="target-audience" class="text-secondary mb-1 block text-xl font-semibold">
-                {$t("wizard.campaignInfo.target.label")}
-                <span class="text-secondary" aria-label="required">*</span>
-            </label>
-            <p class="text-secondary text-sm" id="target-help">
-                {$t("wizard.campaignInfo.target.help")}
-            </p>
-        </div>
-
-        <RichTextEditor
-            id="target-audience"
-            value={campaignInfo.targetAudience}
-            onChange={handleTargetAudienceChange}
-            placeholder={$t("wizard.campaignInfo.target.placeholder")}
-            minLength={30}
-            maxLength={5000}
-            ariaDescribedBy="target-help"
-        />
-    </section>
-
-    <!-- Team Section -->
-    <section data-field="team" class="space-y-4">
-        <div>
-            <label for="team" class="text-secondary mb-1 block text-xl font-semibold">
-                {$t("wizard.campaignInfo.team.label")}
-                <span class="text-secondary" aria-label="required">*</span>
-            </label>
-            <p class="text-secondary text-sm" id="team-help">
-                {$t("wizard.campaignInfo.team.help")}
-            </p>
-        </div>
-
-        <RichTextEditor
-            id="team"
-            value={campaignInfo.team}
-            onChange={handleTeamChange}
-            placeholder={$t("wizard.campaignInfo.team.placeholder")}
-            minLength={50}
-            maxLength={5000}
-            ariaDescribedBy="team-help"
-        />
-    </section>
+            <RichTextEditor
+                id="team"
+                value={campaignInfo.team}
+                onChange={handleTeamChange}
+                placeholder={$t("wizard.campaignInfo.team.placeholder")}
+                minLength={50}
+                maxLength={5000}
+                ariaDescribedBy="team-help"
+            />
+        </section>
+    </div>
 
     <!-- Continue Button -->
-    <div class="flex justify-end pt-4">
-        <Button kind="primary" size="md" onclick={handleContinue} class="min-w-[200px]">
+    <div class="flex justify-start pt-4">
+        <Button kind="secondary" size="md" onclick={handleContinue}>
             {#snippet children()}
                 {$t("wizard.campaignInfo.continue")}
             {/snippet}
