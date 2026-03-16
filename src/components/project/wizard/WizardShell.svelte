@@ -192,6 +192,7 @@
                 size="md"
                 onclick={handlePublish}
                 data-testid="wizard-publish-btn"
+                disabled={currentStep !== 7}
             >
                 {#snippet children()}
                     {$t("wizard.buttons.publish")}
