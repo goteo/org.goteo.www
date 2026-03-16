@@ -35,7 +35,7 @@
 
         // Example dynamic data, just for testing. Pending real data integration.
         slidesArr.push({
-            title: $t("admin.projects.totalizers.selectedCampaigns"),
+            title: $t("admin.projects.totalizers.selectedProjects"),
             amount: $totalItems,
         });
         slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });

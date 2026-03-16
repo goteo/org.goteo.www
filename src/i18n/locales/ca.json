@@ -879,7 +879,7 @@
   "admin": {
     "projects": {
       "totalizers": {
-        "selectedCampaigns": "Campanyes seleccionades:",
+        "selectedProjects": "Projectes seleccionats:",
         "totalEarned": "Total aconseguit:",
         "totalPaid": "Total pagat:",
         "totalUnpaid": "Falta per pagar:"

@@ -3,12 +3,12 @@
     import { t } from "../../i18n/store";
 
     let {
-        selectedCampaigns,
+        selectedProjects,
         totalEarned,
         totalPaid,
         totalUnpaid,
     }: {
-        selectedCampaigns: string;
+        selectedProjects: string;
         totalEarned: string;
         totalPaid: string;
         totalUnpaid: string;
@@ -17,8 +17,8 @@
 
 <div class="grid w-full max-w-[1360px] grid-cols-1 gap-6 self-center md:grid-cols-2 lg:grid-cols-4">
     <TotalizerCard
-        title={$t("admin.projects.totalizers.selectedCampaigns")}
-        value={selectedCampaigns}
+        title={$t("admin.projects.totalizers.selectedProjects")}
+        value={selectedProjects}
     />
     <TotalizerCard title={$t("admin.projects.totalizers.totalEarned")} value={totalEarned} />
     <TotalizerCard title={$t("admin.projects.totalizers.totalPaid")} value={totalPaid} />

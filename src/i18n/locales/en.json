@@ -870,7 +870,7 @@
   "admin": {
     "projects": {
       "totalizers": {
-        "selectedCampaigns": "Selected campaigns:",
+        "selectedProjects": "Selected projects:",
         "totalEarned": "Total earned:",
         "totalPaid": "Total paid:",
         "totalUnpaid": "Total unpaid:"
