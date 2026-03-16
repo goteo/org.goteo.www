@@ -1,5 +1,5 @@
 import { extractId } from "./extractId";
-import { apiAccountingsIdGet, type ApiMoney } from "../openapi/client";
+import { apiAccountingsIdGet, type Money } from "../openapi/client";
 
 import type { Project } from "../openapi/client/types.gen";
 import type { Campaign } from "../types/campaign";
@@ -23,13 +23,13 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     const image = (project as any).cover || project.video?.thumbnail || "";
 
     // Get minimum budget
-    const minimum: ApiMoney = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
+    const minimum: Money = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
 
     // Get optimum budget
     const optimum: ApiMoney | undefined = project.budget?.optimum?.money;
 
     // Get raised amount from fetched accounting data
-    const obtained: ApiMoney = accounting?.balance || { amount: 0, currency: "EUR" };
+    const obtained: Money = accounting?.balance || { amount: 0, currency: "EUR" };
 
     return {
         id: project.slug || String(project.id || "unknown"),
