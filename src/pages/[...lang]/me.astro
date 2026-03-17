@@ -9,19 +9,13 @@ import MatchfundingSection from "../../components/profile/MatchfundingSection.sv
 import Grid from "../../components/library/Grid.svelte";
 
 const { lang, t } = Astro.locals;
-const accessToken = Astro.cookies.get("access-token");
-
-let user;
-if (accessToken) {
-    user = JSON.parse(accessToken.value);
+const authCookie = Astro.cookies.get("auth");
+if (!authCookie) {
+    return Astro.redirect("/login?callback=/me");
 }
 
-// Redirect to login if not authenticated
-if (!user) {
-    return Astro.redirect("/login");
-}
+const { user } = authCookie.json();
 
-// Get period from URL or default to current year
 const period = Astro.url.searchParams.get("period") || new Date().getFullYear().toString();
 ---
 

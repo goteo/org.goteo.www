@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { t } from "../i18n/store";
     import SearchIcon from "../svgs/SearchIcon.svelte";
     import Button from "./library/Button.svelte";
 
@@ -14,7 +15,9 @@
 <div class="flex gap-2">
     <Button size="sm" kind="secondary" onclick={openSearch}>
         <SearchIcon width="16" height="16" />
-        Buscar
+        {$t("header.search")}
     </Button>
-    <Button size="sm" kind="primary" onclick={goToCreateProject}>Crea tu proyecto</Button>
+    <Button size="sm" kind="primary" onclick={goToCreateProject}>
+        {$t("header.createProject")}
+    </Button>
 </div>

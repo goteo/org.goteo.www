@@ -6,7 +6,7 @@ import {
     apiGatewayCheckoutsIdGetUrl,
     apiProjectsIdOrSlugGetUrl,
     apiTipjarsIdGetUrl,
-    apiUsersIdGetUrl,
+    apiUsersIdOrHandleGetUrl,
 } from "../openapi/client/paths.gen";
 
 import type { Accounting, GatewayCheckout, Project, Tipjar, User } from "../openapi/client";
@@ -49,7 +49,7 @@ export async function fetchAccounting(iri: string | null, token: string, API_CAC
 export async function fetchUser(iri: string | null, token: string, API_CACHE_NAME: string) {
     if (!iri) return;
 
-    const url = client.buildUrl({ url: apiUsersIdGetUrl, path: { id: extractId(iri) } });
+    const url = client.buildUrl({ url: apiUsersIdOrHandleGetUrl, path: { id: extractId(iri) } });
     return fetchWithPersistentCache<User>(url, token, API_CACHE_NAME);
 }
 
