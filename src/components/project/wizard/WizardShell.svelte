@@ -144,10 +144,10 @@
 
     <!-- Header with title and action buttons -->
     <div
-        class="bg-soft-purple border-purple-tint mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-1"
+        class="bg-soft-purple border-variant1 shadow-sm mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4"
     >
         <!-- Left section: Icon + Title/Subtitle -->
-        <div class="flex flex-1 items-center gap-2">
+        <div class="flex flex-1 items-center gap-4">
             <!-- Edit icon (rotated 180°) -->
             <div class="flex shrink-0 items-center justify-center">
                 <div class="rotate-180">
@@ -188,6 +188,7 @@
                 {/snippet}
             </Button>
             <Button
+                class="disabled:opacity-24 disabled:pointer-events-none"
                 kind="primary"
                 size="md"
                 onclick={handlePublish}
