@@ -53,6 +53,9 @@ jobs:
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='${{ vars.PUBLIC_PLATONIQ_ACCOUNTING_ID }}'" >> .env
                   echo "PUBLIC_FACEBOOK_APP_ID='${{ vars.PUBLIC_FACEBOOK_APP_ID }}'" >> .env
 
+            - name: Build app
+              run: pnpm build
+
             - name: Run E2E tests
               run: pnpm test:e2e:ci
               env:
