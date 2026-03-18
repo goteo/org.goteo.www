@@ -53,22 +53,11 @@ jobs:
                   echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='${{ vars.PUBLIC_PLATONIQ_ACCOUNTING_ID }}'" >> .env
                   echo "PUBLIC_FACEBOOK_APP_ID='${{ vars.PUBLIC_FACEBOOK_APP_ID }}'" >> .env
 
-            - name: Start server
-              run: |
-                  pnpm build
-                  nohup pnpm preview:ci > preview.log 2>&1 &
-
-            - name: Wait for server
-              run: |
-                  pnpm wait-on http://localhost:4321
-
-            - name: Run Cypress tests
-              run: |
-                  pnpm cypress run || exit 1
+            - name: Run E2E tests
+              run: pnpm test:e2e:ci
               env:
                   CI: true
                   NODE_ENV: test
-                  NODE_TLS_REJECT_UNAUTHORIZED: 0
                   CYPRESS_CONFIG_FILE: cypress.github.js
                   CYPRESS_MOCK_AUTH: true
                   CYPRESS_ENVIRONMENT: ${{ vars.ENVIRONMENT }}
