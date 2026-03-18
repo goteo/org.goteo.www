@@ -1,5 +1,5 @@
 <script lang="ts">
-    import RewardCollabModal from "./RewardCollabModal.svelte";
+    import WizardModal from "./WizardModal.svelte";
     import { t } from "../../../i18n/store";
     import UnitIcon from "../../../svgs/UnitIcon.svelte";
     import UserIcon from "../../../svgs/UserIcon.svelte";
@@ -35,9 +35,9 @@
 </script>
 
 <div
-    class="border-grey flex h-148.75 basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-8"
+    class="border-grey flex min-h-148.75 basis-1/3 flex-col items-center justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
 >
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col">
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
             {#if variant === "reward" && reward}
                 <div>
@@ -70,7 +70,7 @@
     </div>
 
     {#if variant === "reward" && reward}
-        <div class="mt-auto flex w-full justify-between">
+        <div class="flex w-full justify-between">
             {#if reward.isFinite}
                 <div
                     class="text-secondary flex items-center justify-between gap-2 text-sm font-bold"
@@ -105,7 +105,7 @@
     </Button>
 </div>
 {#if variant === "collab"}
-    <RewardCollabModal bind:open collab={selectedCollab} {project} {onSave} {onDelete} />
+    <WizardModal bind:open collab={selectedCollab} {project} {onSave} {onDelete} />
 {:else if variant === "reward"}
-    <RewardCollabModal bind:open reward={selectedReward} {project} {onSave} {onDelete} />
+    <WizardModal bind:open reward={selectedReward} {project} {onSave} {onDelete} />
 {/if}
