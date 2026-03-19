@@ -11,15 +11,15 @@
     let { class: classes = "", width = "16", height = "16", closed = false }: Props = $props();
 </script>
 
-{#if closed}
-    <svg
-        {width}
-        {height}
-        viewBox="0 0 16 16"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-        class={twMerge("text-secondary", classes)}
-    >
+<svg
+    {width}
+    {height}
+    viewBox="0 0 16 16"
+    fill="currentColor"
+    xmlns="http://www.w3.org/2000/svg"
+    class={twMerge("text-secondary", classes)}
+>
+    {#if closed}
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -33,16 +33,7 @@
             clip-rule="evenodd"
             d="M1.58399 3.72265C1.73717 3.49289 2.0476 3.4308 2.27737 3.58397L14.2774 11.584C14.5071 11.7372 14.5692 12.0476 14.416 12.2774C14.2629 12.5071 13.9524 12.5692 13.7227 12.416L1.72267 4.41603C1.4929 4.26285 1.43082 3.95241 1.58399 3.72265Z"
         />
-    </svg>
-{:else}
-    <svg
-        {width}
-        {height}
-        viewBox="0 0 16 16"
-        fill="currentColor"
-        xmlns="http://www.w3.org/2000/svg"
-        class={twMerge("text-secondary", classes)}
-    >
+    {:else}
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
@@ -51,5 +42,5 @@
         <path
             d="M10.5 8C10.5 9.38071 9.38067 10.5 7.99996 10.5C6.61925 10.5 5.49996 9.38071 5.49996 8C5.49996 6.61929 6.61925 5.5 7.99996 5.5C9.38067 5.5 10.5 6.61929 10.5 8Z"
         />
-    </svg>
-{/if}
+    {/if}
+</svg>
