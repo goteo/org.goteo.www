@@ -8,7 +8,7 @@
         name?: string;
         id?: string;
         label?: string;
-        onclick?: (val: string) => void;
+        onsubmit?: (value: string) => void;
     }
 
     let {
@@ -18,7 +18,7 @@
         name = "search",
         id = "search",
         label = undefined,
-        onclick,
+        onsubmit,
     }: Props = $props();
 </script>
 
@@ -43,8 +43,7 @@
     <button
         type="button"
         onclick={() => {
-            if (onclick) onclick(value ?? "");
-            document.dispatchEvent(new CustomEvent("search", { detail: value ?? "" }));
+            if (onsubmit) onsubmit(value);
         }}
         class="text-secondary cursor-pointer"
     >
