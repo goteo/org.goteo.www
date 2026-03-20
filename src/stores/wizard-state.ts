@@ -16,15 +16,13 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import type { Project } from "../openapi/client";
+import type { Project, ProjectBudgetItem } from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
  */
 export interface WizardConfiguration {
     languages: string[]; // Primary + secondary languages
-    geographicScope?: "local" | "estatal" | "internacional";
-    localities?: string; // Only for local scope
     fundingRounds: 1 | 2; // Default: 1
 }
 
@@ -68,6 +66,40 @@ export interface WizardCampaignInfo {
 }
 
 /**
+ * Wizard Rewards data (Step 3: Rewards)
+ */
+export interface WizardReward {
+    title: string; // Title displayed in reward card
+    description: string | null; // Description displayed in reward card
+
+    // The minimal monetary sum to be able to claim this reward
+    money: {
+        amount: number;
+        currency: string;
+    }
+
+    // isFinite sets if the reward has a limit of exchanges, and if not, unitsTotal sets the limit 
+    isFinite: boolean;
+    unitsTotal: number | null;
+}
+
+/**
+ * Wizard Collaborations data (Step 4: Collaborations)
+ */
+export interface WizardCollaboration {
+    title: string; // A short, descriptive title for this collaboration.
+    description: string | null; // Information about this collaboration. More detailed than the title.
+}
+
+/**
+ * Wizard Budget data (Step 5: Budget)
+ */
+export interface WizardBudgetItems {
+    minimum: ProjectBudgetItem[];
+    optimum: ProjectBudgetItem[];
+};
+
+/**
  * Complete wizard state
  */
 export interface WizardState {
@@ -90,10 +122,16 @@ export interface WizardState {
     // Step 2: Campaign Information
     campaignInfo: WizardCampaignInfo;
 
-    // Future steps (Phase 3-6) - placeholders
-    // rewards: WizardReward[];
-    // collaborations: WizardCollaboration[];
-    // detailedBudget: WizardBudgetItem[];
+    // Step 3: Rewards
+    rewards: WizardReward[];
+
+    // Step 4: Collaborations
+    collaborations: WizardCollaboration[];
+
+    // Step 5: Budget
+    budgetItems: WizardBudgetItems;
+
+    // Pending future step (Phase 6) - placeholders
     // aboutYou: WizardAboutYou;
 }
 
@@ -110,8 +148,6 @@ const getDefaultState = (): WizardState => ({
     currentStep: 1,
     configuration: {
         languages: [],
-        geographicScope: undefined,
-        localities: undefined,
         fundingRounds: 1, // Default to 1 round
     },
     campaignInfo: {
@@ -124,6 +160,11 @@ const getDefaultState = (): WizardState => ({
         touched: new Set(),
         errors: {},
     },
+    rewards: [
+        { title: "", description: null, money: { amount: 0, currency: "" }, isFinite: false, unitsTotal: null }
+    ],
+    collaborations: [],
+    budgetItems: { minimum: [], optimum: [] }
 });
 
 /**
@@ -186,8 +227,6 @@ export function initializeFromProject(project: Project) {
         currentStep: 1,
         configuration: {
             languages: [],
-            geographicScope: undefined,
-            localities: undefined,
             fundingRounds: 1,
         },
         campaignInfo: {
@@ -200,6 +239,9 @@ export function initializeFromProject(project: Project) {
             touched: new Set(),
             errors: {},
         },
+        rewards: [],
+        collaborations: [],
+        budgetItems: { minimum: [], optimum: [] }
     });
 
     // Try to restore additional wizard data from localStorage
@@ -291,6 +333,9 @@ export function restoreFromLocalStorage(): boolean {
             currentStep: parsed.currentStep || 1,
             configuration: parsed.configuration || getDefaultState().configuration,
             campaignInfo: parsed.campaignInfo || getDefaultState().campaignInfo,
+            rewards: parsed.rewards || getDefaultState().rewards,
+            collaborations: parsed.collaborations || getDefaultState().collaborations,
+            budgetItems: parsed.budgetItems || getDefaultState().budgetItems
         }));
 
         return true;
@@ -425,10 +470,6 @@ export function resetWizard() {
  */
 export const configurationSchema = z.object({
     languages: z.array(z.string()).min(1, "validation.wizard.languages.required"),
-    geographicScope: z
-        .enum(["local", "estatal", "internacional"])
-        .refine((val) => val !== undefined, "validation.wizard.geographic_scope.required"),
-    localities: z.string().optional(),
     fundingRounds: z.union([z.literal(1), z.literal(2)]),
 });
 
@@ -443,9 +484,6 @@ export const configurationSchema = z.object({
  * @example
  * // Update languages
  * updateConfiguration({ languages: ['es', 'en'] });
- *
- * // Update geographic scope
- * updateConfiguration({ geographicScope: 'local', localities: 'Barcelona' });
  */
 export function updateConfiguration(config: Partial<WizardConfiguration>) {
     wizardState.update((state) => ({
@@ -492,16 +530,6 @@ export function validateConfiguration(): boolean {
         return false;
     }
 
-    // Additional validation: if scope is local, localities must be provided
-    if (state.configuration.geographicScope === "local") {
-        if (!state.configuration.localities || state.configuration.localities.trim().length === 0) {
-            validationErrors.set({
-                localities: "validation.wizard.localities.required",
-            });
-            return false;
-        }
-    }
-
     validationErrors.set({});
     return true;
 }
@@ -520,11 +548,9 @@ export const isConfigurationValid = derived(
         // Check required fields
         const config = $state.configuration;
         const hasLanguages = config.languages.length > 0;
-        const hasScope = config.geographicScope !== undefined;
-        const hasLocalities =
-            config.geographicScope !== "local" || (config.localities?.trim().length || 0) > 0;
+        const roundsSelected = config.fundingRounds
 
-        return hasLanguages && hasScope && hasLocalities;
+        return hasLanguages && roundsSelected;
     },
 );
 
@@ -670,3 +696,188 @@ export const isCampaignInfoValidStore = derived(wizardState, () => {
     const errors = validateCampaignInfo();
     return Object.keys(errors).length === 0;
 });
+
+// ============================================
+// Rewards State Management (Step 3)
+// ============================================
+
+/**
+ * Update rewards data (Step 3)
+ *
+ * Merges rewards updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param index - Index of current reward
+ * @param reward - Reward object to merge
+ *
+ * @example
+ * // Update reward
+ * updateReward(updatedReward);
+ */
+export function updateReward(index: number, reward: WizardReward) {
+    wizardState.update((state) => {
+        const updated = [...state.rewards];
+        updated[index] = reward;
+        return { ...state, rewards: updated };
+    });
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function addReward(reward: WizardReward) {
+    wizardState.update((state) => ({
+        ...state,
+        rewards: [...state.rewards, reward],
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function deleteReward(index: number) {
+    wizardState.update((state) => ({
+        ...state,
+        rewards: state.rewards.filter((_, i) => i !== index),
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function validateRewards(): Record<string, string> {
+    const { rewards } = get(wizardState);
+    const errors: Record<string, string> = {};
+
+    if (!rewards.length) {
+        errors.rewards = "wizard.validation.rewards.required";
+        return errors;
+    }
+
+    rewards.forEach((r, i) => {
+        if (!r.title?.trim()) {
+            errors[`reward_${i}_title`] = "wizard.validation.rewards.title";
+        }
+
+        if (!r.money?.amount || r.money.amount <= 0) {
+            errors[`reward_${i}_amount`] = "wizard.validation.rewards.amount";
+        }
+
+        if (!r.money?.currency) {
+            errors[`reward_${i}_currency`] = "wizard.validation.rewards.currency";
+        }
+
+        if (r.isFinite && (!r.unitsTotal || r.unitsTotal <= 0)) {
+            errors[`reward_${i}_units`] = "wizard.validation.rewards.units";
+        }
+    });
+
+    return errors;
+}
+
+// ============================================
+// Collaborations State Management (Step 4)
+// ============================================
+
+/**
+ * Update Collaborations data (Step 4)
+ *
+ * Merges partial rewards updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param info - Partial rewards object to merge
+ *
+ * @example
+ * // Update unitsTotal
+ * updateRewards({ unitsTotal: newCount });
+ *
+ * // Update money
+ * updateRewards({
+ *      money: {
+ *          amount: newMoneyAmount,
+ *          currency: newCurrency
+ *      }
+ * });
+ */
+export function updateCollaboration(index: number, collab: WizardCollaboration) {
+    wizardState.update((state) => {
+        const updated = [...state.collaborations];
+        updated[index] = collab;
+        return { ...state, collaborations: updated };
+    });
+    saveToLocalStorage();
+}
+
+export function addCollaboration(collab: WizardCollaboration) {
+    wizardState.update((state) => ({
+        ...state,
+        collaborations: [...state.collaborations, collab],
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function deleteCollaboration(index: number) {
+    wizardState.update((state) => ({
+        ...state,
+        collaborations: state.collaborations.filter((_, i) => i !== index),
+    }));
+    saveToLocalStorage();
+}
+
+export function validateCollaborations(): Record<string, string> {
+    const { collaborations } = get(wizardState);
+    const errors: Record<string, string> = {};
+
+    collaborations.forEach((c, i) => {
+        if (!c.title?.trim()) {
+            errors[`collab_${i}_title`] = "wizard.validation.collaborations.title";
+        }
+    });
+
+    return errors;
+}
+
+// ============================================
+// BudgetItems State Management (Step 5)
+// ============================================
+
+/**
+ * Update budgetItems data (Step 5)
+ *
+ * Merges partial rewards updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param info - Partial rewards object to merge
+ *
+ * @example
+ * // Update unitsTotal
+ * updateRewards({ unitsTotal: newCount });
+ *
+ * // Update money
+ * updateRewards({
+ *      money: {
+ *          amount: newMoneyAmount,
+ *          currency: newCurrency
+ *      }
+ * });
+ */
+export function addBudgetItem(type: "minimum" | "optimum", item: ProjectBudgetItem) {
+    wizardState.update((state) => ({
+        ...state,
+        budgetItems: {
+            ...state.budgetItems,
+            [type]: [...state.budgetItems[type], item],
+        },
+    }));
+    saveToLocalStorage();
+}
+
+
+export function validateBudget(): Record<string, string> {
+    const { budgetItems } = get(wizardState);
+    const errors: Record<string, string> = {};
+
+    if (!budgetItems.minimum.length) {
+        errors.minimum = "wizard.validation.budget.minimum_required";
+    }
+
+    return errors;
+}
