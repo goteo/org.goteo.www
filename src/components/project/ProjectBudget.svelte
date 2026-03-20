@@ -6,7 +6,7 @@
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import Carousel from "../Carousel.svelte";
-    import BudgetCard from "./BudgetCard.svelte";
+    import PublicBudgetCard from "./PublicBudgetCard.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
 
@@ -89,7 +89,7 @@
                 {/if}
 
                 {#each minimumItems as item}
-                    <BudgetCard {item} />
+                    <PublicBudgetCard {item} />
                 {/each}
             </Carousel>
         </div>
@@ -113,7 +113,7 @@
                 {/if}
 
                 {#each optimumItems as item}
-                    <BudgetCard {item} />
+                    <PublicBudgetCard {item} />
                 {/each}
             </Carousel>
         </div>
