@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import SearchIcon from "../../svgs/SearchIcon.svelte";
 
     interface Props {
-        class?: string;
+        class?: ClassNameValue;
         value?: string;
         placeholder?: string;
         name?: string;
@@ -23,7 +25,10 @@
 </script>
 
 <div
-    class="border-secondary relative flex h-14 w-full max-w-[432px] items-center justify-between rounded-3xl border bg-white p-4 {classes}"
+    class={twMerge(
+        "border-secondary relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4",
+        classes,
+    )}
 >
     {#if label !== undefined}
         <label for={id} class="absolute -top-3 left-3 bg-white px-1 text-sm text-gray-700">
