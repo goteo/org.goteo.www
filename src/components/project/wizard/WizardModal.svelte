@@ -42,7 +42,7 @@
         budgetItem?: ProjectBudgetItem | null;
         project: Project;
         onSave?: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined) => Promise<void>;
+        onDelete?: (id: number | undefined, type?: "minimum" | "optimum") => Promise<void>;
     } = $props();
 
     let title = $state(reward?.title ?? collab?.title ?? budgetItem?.title ?? "");
@@ -64,7 +64,7 @@
     const INPUTS_CLASSES: ClassNameValue =
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
-    async function handleContinue() {
+    async function handleSaveOrCreate() {
         if (!reward && !collab && !budgetItem) return;
         let payload: PayloadType = {
             project: apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id),
@@ -96,7 +96,7 @@
     async function handleDeleteClick() {
         if (reward) await onDelete?.(reward.id);
         else if (collab) await onDelete?.(collab.id);
-        else if (budgetItem) await onDelete?.(budgetItem.id);
+        else if (budgetItem) await onDelete?.(budgetItem.id, budgetItem.deadline);
     }
 
     function handleSelectedType() {}
@@ -238,7 +238,7 @@
                 {$t(`wizard.${selectedStep}.modal.btns.delete`)}
             </Button>
         {/if}
-        <Button onclick={() => handleContinue()} class="w-fit">
+        <Button onclick={() => handleSaveOrCreate()} class="w-fit">
             {$t(`wizard.${selectedStep}.modal.btns.continue`)}
         </Button>
     {/snippet}

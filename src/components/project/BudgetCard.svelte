@@ -20,7 +20,10 @@
         project?: Project;
         isEditable?: boolean;
         onSave?: (data: ProjectBudgetItem | null) => Promise<void>;
-        onDelete?: (itemId: number | undefined) => Promise<void>;
+        onDelete?: (
+            itemId: number | undefined,
+            type: "minimum" | "optimum" | undefined,
+        ) => Promise<void>;
         onEdit?: () => void;
         selectedBudgetItem?: ProjectBudgetItem | null;
         openModal?: boolean;

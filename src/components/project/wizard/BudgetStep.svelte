@@ -2,20 +2,16 @@
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
     import {
-        apiProjectBudgetItemsGetCollection,
-        apiProjectBudgetItemsIdDelete,
-        apiProjectBudgetItemsIdPatch,
         apiProjectBudgetItemsPost,
         type Project,
         type ProjectBudgetItem,
     } from "../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
     import BudgetCard from "../BudgetCard.svelte";
-    import { navigateToStep } from "../../../stores/wizard-state";
+    import { navigateToStep, saveToLocalStorage, updateBudgetItem, validateBudgetItems, wizardState } from "../../../stores/wizard-state";
 
     let {
         project,
@@ -25,8 +21,8 @@
         onContinue: () => void;
     } = $props();
 
-    let minBudgetItems: ProjectBudgetItem[] = $state([]);
-    let optBudgetItems: ProjectBudgetItem[] = $state([]);
+    let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
+    let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
     let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
     let openModal = $state(false);
     let loading = $state(false);
@@ -36,6 +32,7 @@
      * Simple navigation to next step (6) - validation happens on save/submit
      */
     function handleContinue() {
+        saveToLocalStorage();
         navigateToStep(6);
         if (onContinue) {
             onContinue();
@@ -43,26 +40,20 @@
     }
 
     async function loadBudgetItems() {
-        if (!project) return;
         loading = true;
-
-        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
-
-        // Get all budget items in current project and store them in items var
-        const { data, error } = await apiProjectBudgetItemsGetCollection({
-            query: { project: projectIri },
-        });
 
         minBudgetItems = [];
         optBudgetItems = [];
 
-        if (error) console.error("Error loading budget items:", error);
-        else if (data) {
-            data.forEach((item) => {
-                if (item.deadline === "minimum") minBudgetItems.push(item);
-                else if (item.deadline === "optimum") optBudgetItems.push(item);
-            });
-        }
+        const minimumData = $wizardState.budgetItems.minimum;
+        const optimumData = $wizardState.budgetItems.optimum;
+
+        minimumData.forEach((item) => {
+            minBudgetItems.push(item);
+        });
+        optimumData.forEach((item) => {
+            optBudgetItems.push(item);
+        });
 
         loading = false;
     }
@@ -73,23 +64,7 @@
 
         try {
             if (selectedBudgetItem?.id) {
-                const { data: dataUpdated, error } = await apiProjectBudgetItemsIdPatch({
-                    path: { id: String(selectedBudgetItem.id) },
-                    body: {
-                        ...data,
-                    },
-                });
-                if (error) {
-                    console.error("Error updating budget item:", error);
-                } else if (dataUpdated.deadline === "minimum") {
-                    minBudgetItems = minBudgetItems.map((minItem) =>
-                        minItem.id === dataUpdated.id ? dataUpdated : minItem,
-                    );
-                } else if (dataUpdated.deadline === "optimum") {
-                    optBudgetItems = optBudgetItems.map((optItem) =>
-                        optItem.id === dataUpdated.id ? dataUpdated : optItem,
-                    );
-                }
+                updateBudgetItem();
             } else {
                 const { data: dataCreated, error } = await apiProjectBudgetItemsPost({
                     body: {
@@ -112,19 +87,20 @@
         }
     }
 
-    async function handleDeleteBudgetItem(itemId: number | undefined) {
-        if (!itemId) return;
+    async function handleDeleteBudgetItem(
+        itemId: number | undefined,
+        type: "minimum" | "optimum" | undefined,
+    ) {
+        if (!itemId || !type) return;
         loading = true;
 
         try {
-            const { error } = await apiProjectBudgetItemsIdDelete({
-                path: { id: String(itemId) },
-            });
-
-            if (error) {
-                console.error("Error deleting budget item:", error);
-            } else {
+            const { errors } = validateBudgetItems();
+            if (errors) {
+                console.error(errors);
+            } else if (type === "minimum") {
                 minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
+            } else if (type === "optimum") {
                 optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
             }
         } finally {
