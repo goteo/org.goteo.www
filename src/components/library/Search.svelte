@@ -1,6 +1,7 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import { t } from "../../i18n/store";
     import SearchIcon from "../../svgs/SearchIcon.svelte";
 
     interface Props {
@@ -16,7 +17,7 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = "Buscar...",
+        placeholder = $t("search.placeholder"),
         name = "search",
         id = "search",
         label = undefined,
