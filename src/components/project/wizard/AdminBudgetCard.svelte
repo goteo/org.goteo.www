@@ -5,26 +5,23 @@
     import WizardModal from "./WizardModal.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
+    import { validateBudgetItems } from "../../../stores/wizard-state";
+    import CreateCard from "./CreateCard.svelte";
 
     let {
         item,
         project,
-        onSave,
-        onDelete,
-        onEdit,
-        selectedBudgetItem,
+        minBudgetItems = $bindable([]),
+        loading = $bindable(false),
         openModal = $bindable(false),
+        isCreateCard = false,
     }: {
         item: ProjectBudgetItem;
         project: Project;
-        onSave: (data: ProjectBudgetItem | null) => Promise<void>;
-        onDelete: (
-            itemId: number | undefined,
-            type: "minimum" | "optimum" | undefined,
-        ) => Promise<void>;
-        onEdit: () => void;
-        selectedBudgetItem: ProjectBudgetItem | null;
+        minBudgetItems: ProjectBudgetItem[];
+        loading: boolean;
         openModal: boolean;
+        isCreateCard?: boolean;
     } = $props();
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
@@ -32,41 +29,117 @@
         infrastructure: "#462949",
         material: "#E94668",
     };
+
+    let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
+
+    async function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
+        if (!data) return;
+        loading = true;
+
+        try {
+            if (selectedBudgetItem?.id) {
+                updateBudgetItem();
+            } else {
+                const { data: dataCreated, error } = await apiProjectBudgetItemsPost({
+                    body: {
+                        ...data,
+                    },
+                });
+
+                if (error) {
+                    console.error("Error creating budget item:", error);
+                } else if (dataCreated.deadline === "minimum") {
+                    minBudgetItems = [...minBudgetItems, dataCreated];
+                } else if (dataCreated.deadline === "optimum") {
+                    optBudgetItems = [...optBudgetItems, dataCreated];
+                }
+            }
+        } finally {
+            loading = false;
+            openModal = false;
+            selectedBudgetItem = null;
+        }
+    }
+
+    async function handleDeleteBudgetItem(
+        itemId: number | undefined,
+        type: "minimum" | "optimum" | undefined,
+    ) {
+        if (!itemId || !type) return;
+        loading = true;
+
+        try {
+            const { errors } = validateBudgetItems();
+            if (errors) {
+                console.error(errors);
+            } else if (type === "minimum") {
+                minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
+            } else if (type === "optimum") {
+                optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
+            }
+        } finally {
+            loading = false;
+            openModal = false;
+            selectedBudgetItem = null;
+        }
+    }
+
+    function openCreate() {
+        selectedBudgetItem = null;
+        openModal = true;
+    }
+
+    function openEdit(item: ProjectBudgetItem) {
+        selectedBudgetItem = item;
+        openModal = true;
+    }
 </script>
 
-<div
-    class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
->
-    <div class="flex flex-col gap-4">
-        <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
-        <p class="text-content line-clamp-3 font-normal">
-            {item.description}
-        </p>
-    </div>
-    <div class="mt-auto flex flex-row items-center justify-between">
-        <p class="text-2xl text-black">
-            {formatCurrency(item.money.amount, item.money.currency)}
-        </p>
-        <div class="flex items-center gap-2">
-            <div
-                class="inline-block h-2.5 w-5 rounded-lg"
-                style={`background-color: ${typeBudget[item.type as ProjectBudgetItem["type"]]}`}
-            ></div>
-            <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span>
-        </div>
-    </div>
-
-    <Button kind="secondary" class="w-full" onclick={onEdit}>
-        {#snippet children()}
-            {$t("wizard.budget.editBtn")}
-        {/snippet}
-    </Button>
-
-    <WizardModal
-        budgetItem={selectedBudgetItem}
-        bind:open={openModal!}
-        project={project!}
-        {onSave}
-        {onDelete}
+{#if isCreateCard}
+    <CreateCard
+        title={$t("wizard.budget.createCard.optimum.title")}
+        description={$t("wizard.budget.createCard.optimum.description")}
+        variant="budget"
+        onSave={handleSaveBudgetItem}
+        onclick={openCreate}
+        bind:open={openModal}
+        {project}
     />
-</div>
+{:else}
+    <div
+        class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
+    >
+        <div class="flex flex-col gap-4">
+            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
+            <p class="text-content line-clamp-3 font-normal">
+                {item.description}
+            </p>
+        </div>
+        <div class="mt-auto flex flex-row items-center justify-between">
+            <p class="text-2xl text-black">
+                {formatCurrency(item.money.amount, item.money.currency)}
+            </p>
+            <div class="flex items-center gap-2">
+                <div
+                    class="inline-block h-2.5 w-5 rounded-lg"
+                    style={`background-color: ${typeBudget[item.type as ProjectBudgetItem["type"]]}`}
+                ></div>
+                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span>
+            </div>
+        </div>
+
+        <Button kind="secondary" class="w-full" onclick={() => openEdit}>
+            {#snippet children()}
+                {$t("wizard.budget.editBtn")}
+            {/snippet}
+        </Button>
+
+        <WizardModal
+            budgetItem={selectedBudgetItem}
+            bind:open={openModal!}
+            project={project!}
+            onSave={handleSaveBudgetItem}
+            onDelete={handleDeleteBudgetItem}
+        />
+    </div>
+{/if}

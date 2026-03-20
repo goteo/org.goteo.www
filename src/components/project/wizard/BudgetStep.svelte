@@ -1,17 +1,13 @@
 <script lang="ts">
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import {
-        apiProjectBudgetItemsPost,
-        type Project,
-        type ProjectBudgetItem,
-    } from "../../../openapi/client";
+    import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-    import BudgetCard from "../BudgetCard.svelte";
-    import { navigateToStep, saveToLocalStorage, updateBudgetItem, validateBudgetItems, wizardState } from "../../../stores/wizard-state";
+    import AdminBudgetCard from "./AdminBudgetCard.svelte";
+    import { navigateToStep, saveToLocalStorage, wizardState } from "../../../stores/wizard-state";
 
     let {
         project,
@@ -23,7 +19,6 @@
 
     let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
     let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
-    let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
     let openModal = $state(false);
     let loading = $state(false);
 
@@ -58,68 +53,6 @@
         loading = false;
     }
 
-    async function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
-        if (!data) return;
-        loading = true;
-
-        try {
-            if (selectedBudgetItem?.id) {
-                updateBudgetItem();
-            } else {
-                const { data: dataCreated, error } = await apiProjectBudgetItemsPost({
-                    body: {
-                        ...data,
-                    },
-                });
-
-                if (error) {
-                    console.error("Error creating budget item:", error);
-                } else if (dataCreated.deadline === "minimum") {
-                    minBudgetItems = [...minBudgetItems, dataCreated];
-                } else if (dataCreated.deadline === "optimum") {
-                    optBudgetItems = [...optBudgetItems, dataCreated];
-                }
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedBudgetItem = null;
-        }
-    }
-
-    async function handleDeleteBudgetItem(
-        itemId: number | undefined,
-        type: "minimum" | "optimum" | undefined,
-    ) {
-        if (!itemId || !type) return;
-        loading = true;
-
-        try {
-            const { errors } = validateBudgetItems();
-            if (errors) {
-                console.error(errors);
-            } else if (type === "minimum") {
-                minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
-            } else if (type === "optimum") {
-                optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedBudgetItem = null;
-        }
-    }
-
-    function openCreate() {
-        selectedBudgetItem = null;
-        openModal = true;
-    }
-
-    function openEdit(item: ProjectBudgetItem) {
-        selectedBudgetItem = item;
-        openModal = true;
-    }
-
     $effect(() => {
         if (project) {
             loadBudgetItems();
@@ -149,15 +82,7 @@
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#snippet children()}
                     {#each minBudgetItems as item}
-                        <BudgetCard
-                            {item}
-                            isEditable={true}
-                            onEdit={() => openEdit(item)}
-                            bind:openModal
-                            onSave={handleSaveBudgetItem}
-                            onDelete={handleDeleteBudgetItem}
-                            {selectedBudgetItem}
-                        />
+                        <AdminBudgetCard {project} {item} {loading} bind:openModal />
                     {/each}
 
                     <CreateCard
@@ -188,15 +113,7 @@
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#snippet children()}
                     {#each optBudgetItems as item}
-                        <BudgetCard
-                            {item}
-                            isEditable={true}
-                            onEdit={() => openEdit(item)}
-                            bind:openModal
-                            onSave={handleSaveBudgetItem}
-                            onDelete={handleDeleteBudgetItem}
-                            {selectedBudgetItem}
-                        />
+                        <AdminBudgetCard {project} {item} {loading} bind:openModal />
                     {/each}
 
                     <CreateCard
@@ -205,9 +122,6 @@
                         variant="budget"
                         bind:open={openModal}
                         {project}
-                        budgetItem={selectedBudgetItem}
-                        onSave={handleSaveBudgetItem}
-                        onclick={openCreate}
                     />
                 {/snippet}
             </Grid>
