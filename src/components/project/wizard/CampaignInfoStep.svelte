@@ -241,7 +241,12 @@
 
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
-        <Button kind="secondary" size="md" onclick={handleContinue}>
+        <Button
+            kind="secondary"
+            size="md"
+            onclick={handleContinue}
+            data-testid="campaign-info-continue-btn"
+        >
             {#snippet children()}
                 {$t("wizard.campaignInfo.continue")}
             {/snippet}

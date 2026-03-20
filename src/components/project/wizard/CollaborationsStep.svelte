@@ -15,6 +15,8 @@
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import { navigateToStep } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
 
     let { onContinue, project } = $props<{
         onContinue?: () => void;
@@ -25,6 +27,17 @@
     let selectedCollab = $state<ProjectCollaboration | null>(null);
     let openModal = $state(false);
     let loading = $state(false);
+
+    /**
+     * Handle Continue button
+     * Simple navigation to next step (5) - validation happens on save/submit
+     */
+    function handleContinue() {
+        navigateToStep(5);
+        if (onContinue) {
+            onContinue();
+        }
+    }
 
     async function loadCollabs() {
         if (!project) return;
@@ -156,4 +169,18 @@
             />
         </Grid>
     {/if}
+
+    <!-- Continue Button -->
+    <div class="flex justify-start">
+        <Button
+            kind="secondary"
+            size="md"
+            onclick={handleContinue}
+            data-testid="collaborations-continue-btn"
+        >
+            {#snippet children()}
+                {$t("wizard.collaborations.continue")}
+            {/snippet}
+        </Button>
+    </div>
 </div>

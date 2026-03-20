@@ -13,6 +13,8 @@
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import { navigateToStep } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
 
     let { project, onContinue } = $props<{
         project: Project;
@@ -23,6 +25,17 @@
     let selectedReward = $state<ProjectReward | null>(null);
     let openModal = $state(false);
     let loading = $state(false);
+
+    /**
+     * Handle Continue button
+     * Simple navigation to next step (4) - validation happens on save/submit
+     */
+    function handleContinue() {
+        navigateToStep(4);
+        if (onContinue) {
+            onContinue();
+        }
+    }
 
     async function loadRewards() {
         if (!project) return;
@@ -152,4 +165,18 @@
             />
         </Grid>
     {/if}
+
+    <!-- Continue Button -->
+    <div class="flex justify-start">
+        <Button
+            kind="secondary"
+            size="md"
+            onclick={handleContinue}
+            data-testid="rewards-continue-btn"
+        >
+            {#snippet children()}
+                {$t("wizard.rewards.continue")}
+            {/snippet}
+        </Button>
+    </div>
 </div>

@@ -15,6 +15,7 @@
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
     import BudgetCard from "../BudgetCard.svelte";
+    import { navigateToStep } from "../../../stores/wizard-state";
 
     let {
         project,
@@ -29,6 +30,17 @@
     let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
     let openModal = $state(false);
     let loading = $state(false);
+
+    /**
+     * Handle Continue button
+     * Simple navigation to next step (6) - validation happens on save/submit
+     */
+    function handleContinue() {
+        navigateToStep(6);
+        if (onContinue) {
+            onContinue();
+        }
+    }
 
     async function loadBudgetItems() {
         if (!project) return;
@@ -231,7 +243,7 @@
     <Button
         kind="secondary"
         size="md"
-        onclick={onContinue}
+        onclick={handleContinue}
         class="min-w-50"
         data-testid="budget-continue-btn"
     >

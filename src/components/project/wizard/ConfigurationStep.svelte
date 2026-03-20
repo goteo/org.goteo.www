@@ -28,7 +28,7 @@
 
     /**
      * Handle Continue button
-     * Simple navigation to next step - validation happens on save/submit
+     * Simple navigation to next step (2) - validation happens on save/submit
      */
     function handleContinue() {
         navigateToStep(2);
@@ -88,7 +88,7 @@
     </div>
 
     <!-- Continue Button -->
-    <div class="flex justify-start pt-4">
+    <div class="flex justify-start">
         <Button
             kind="secondary"
             size="md"
@@ -96,7 +96,7 @@
             data-testid="config-continue-btn"
         >
             {#snippet children()}
-                {$t("wizard.buttons.continue")}
+                {$t("wizard.configuration.continue")}
             {/snippet}
         </Button>
     </div>
