@@ -13,10 +13,16 @@
     import RewardsStep from "./RewardsStep.svelte";
     import WizardShell from "./WizardShell.svelte";
     import { t } from "../../../i18n/store";
-    import { wizardState, initializeFromProject } from "../../../stores/wizard-state";
+    import {
+        wizardState,
+        initializeFromProject,
+        clearLocalStorage,
+        saveToLocalStorage,
+    } from "../../../stores/wizard-state";
 
-    import type { Project } from "../../../openapi/client";
+    import { apiProjectsPost, type Project } from "../../../openapi/client";
     import CollaborationsStep from "./CollaborationsStep.svelte";
+    import BudgetStep from "./BudgetStep.svelte";
 
     let {
         project,
@@ -110,14 +116,20 @@
         // In Phase 1, save to localStorage only
         // Phase 7 will add PATCH to backend
         // Could show success toast here
+        saveToLocalStorage();
     }
 
     /**
      * Handle publish
      */
-    function handlePublish() {
+    async function handlePublish() {
         // In Phase 1, this is disabled until all steps are complete
         // Phase 7 will add publish workflow
+        try {
+        } catch (error) {
+        } finally {
+            clearLocalStorage();
+        }
     }
 
     /**
@@ -146,10 +158,7 @@
         {:else if currentStep === 4}
             <CollaborationsStep onContinue={handleContinue} {project} />
         {:else if currentStep === 5}
-            <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">{$t("wizard.steps.budget")}</h2>
-                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
-            </div>
+            <BudgetStep onContinue={handleContinue} {project} />
         {:else if currentStep === 6}
             <div class="py-12 text-center">
                 <h2 class="text-secondary mb-4 text-2xl font-bold">
