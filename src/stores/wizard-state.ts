@@ -712,7 +712,7 @@ export const isCampaignInfoValidStore = derived(wizardState, () => {
  *
  * @example
  * // Update reward
- * updateReward(updatedReward);
+ * updateReward(index: currentIndex, reward: updatedReward);
  */
 export function updateReward(index: number, reward: WizardReward) {
     wizardState.update((state) => {
@@ -760,10 +760,6 @@ export function validateRewards(): Record<string, string> {
             errors[`reward_${i}_amount`] = "wizard.validation.rewards.amount";
         }
 
-        if (!r.money?.currency) {
-            errors[`reward_${i}_currency`] = "wizard.validation.rewards.currency";
-        }
-
         if (r.isFinite && (!r.unitsTotal || r.unitsTotal <= 0)) {
             errors[`reward_${i}_units`] = "wizard.validation.rewards.units";
         }
@@ -779,22 +775,15 @@ export function validateRewards(): Record<string, string> {
 /**
  * Update Collaborations data (Step 4)
  *
- * Merges partial rewards updates with existing data.
+ * Merges collaborations updates with existing data.
  * Triggers auto-save to localStorage.
  *
- * @param info - Partial rewards object to merge
+ * @param index - Current collaboration's index
+ * @param collab - Collaboration object to merge
  *
  * @example
- * // Update unitsTotal
- * updateRewards({ unitsTotal: newCount });
- *
- * // Update money
- * updateRewards({
- *      money: {
- *          amount: newMoneyAmount,
- *          currency: newCurrency
- *      }
- * });
+ * // Update collaboration
+ * updateCollaboration(index: currentIndex, collab: updatedCollab);
  */
 export function updateCollaboration(index: number, collab: WizardCollaboration) {
     wizardState.update((state) => {
@@ -802,6 +791,7 @@ export function updateCollaboration(index: number, collab: WizardCollaboration) 
         updated[index] = collab;
         return { ...state, collaborations: updated };
     });
+    hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
@@ -819,6 +809,7 @@ export function deleteCollaboration(index: number) {
         ...state,
         collaborations: state.collaborations.filter((_, i) => i !== index),
     }));
+    hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
@@ -845,33 +836,55 @@ export function validateCollaborations(): Record<string, string> {
  * Merges partial rewards updates with existing data.
  * Triggers auto-save to localStorage.
  *
- * @param info - Partial rewards object to merge
+ * @param index - Current budget item index
+ * @param item - Budget item object to merge
  *
  * @example
  * // Update unitsTotal
  * updateRewards({ unitsTotal: newCount });
- *
- * // Update money
- * updateRewards({
- *      money: {
- *          amount: newMoneyAmount,
- *          currency: newCurrency
- *      }
- * });
  */
-export function addBudgetItem(type: "minimum" | "optimum", item: ProjectBudgetItem) {
+export function updateBudgetItem(index: number, item: ProjectBudgetItem) {
+    const budgetType = item.deadline;
+    wizardState.update((state) => {
+        const updated = { ...state.budgetItems }
+        updated[budgetType][index] = item;
+        return {
+            ...state,
+            budgetItems: {
+                ...updated,
+            }
+        }
+    });
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function addBudgetItem(item: ProjectBudgetItem) {
+    const budgetType = item.deadline;
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
             ...state.budgetItems,
-            [type]: [...state.budgetItems[type], item],
+            [budgetType]: [...state.budgetItems[budgetType], item],
         },
     }));
+    hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
+export function deleteBudgetItem(index: number, type: "minimum" | "optimum") {
+    wizardState.update((state) => ({
+        ...state,
+        budgetItems: {
+            ...state.budgetItems[type].filter((_, i) => i !== index),
+            ...state.budgetItems
+        }
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
 
-export function validateBudget(): Record<string, string> {
+export function validateBudgetItems(): Record<string, string> {
     const { budgetItems } = get(wizardState);
     const errors: Record<string, string> = {};
 
