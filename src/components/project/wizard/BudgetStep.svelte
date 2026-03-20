@@ -18,10 +18,10 @@
 
     let {
         project,
-        handleContinue,
+        onContinue,
     }: {
         project: Project;
-        handleContinue?: () => void;
+        onContinue: () => void;
     } = $props();
 
     let minBudgetItems: ProjectBudgetItem[] = $state([]);
@@ -228,7 +228,13 @@
 </div>
 
 <div class="mt-10 flex">
-    <Button kind="secondary" size="md" onclick={handleContinue} class="min-w-50">
+    <Button
+        kind="secondary"
+        size="md"
+        onclick={onContinue}
+        class="min-w-50"
+        data-testid="budget-continue-btn"
+    >
         {#snippet children()}
             {$t("wizard.campaignInfo.continue")}
         {/snippet}
