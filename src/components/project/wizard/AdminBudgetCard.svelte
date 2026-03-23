@@ -5,13 +5,14 @@
     import WizardModal from "./WizardModal.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
-    import { validateBudgetItems } from "../../../stores/wizard-state";
+    import { updateBudgetItem, validateBudgetItems } from "../../../stores/wizard-state";
     import CreateCard from "./CreateCard.svelte";
 
     let {
         item,
         project,
-        minBudgetItems = $bindable([]),
+        minBudgetItems = $bindable(),
+        optBudgetItems = $bindable(),
         loading = $bindable(false),
         openModal = $bindable(false),
         isCreateCard = false,
@@ -19,6 +20,7 @@
         item: ProjectBudgetItem;
         project: Project;
         minBudgetItems: ProjectBudgetItem[];
+        optBudgetItems: ProjectBudgetItem[];
         loading: boolean;
         openModal: boolean;
         isCreateCard?: boolean;

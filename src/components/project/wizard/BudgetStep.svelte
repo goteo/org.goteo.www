@@ -54,9 +54,7 @@
     }
 
     $effect(() => {
-        if (project) {
-            loadBudgetItems();
-        }
+        loadBudgetItems();
     });
 </script>
 
@@ -82,18 +80,23 @@
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#snippet children()}
                     {#each minBudgetItems as item}
-                        <AdminBudgetCard {project} {item} {loading} bind:openModal />
+                        <AdminBudgetCard
+                            {project}
+                            {item}
+                            {loading}
+                            bind:minBudgetItems
+                            bind:optBudgetItems
+                            bind:openModal
+                        />
                     {/each}
 
-                    <CreateCard
-                        title={$t("wizard.budget.createCard.minimum.title")}
-                        description={$t("wizard.budget.createCard.minimum.description")}
-                        variant="budget"
-                        bind:open={openModal}
+                    <AdminBudgetCard
+                        {isCreateCard}
                         {project}
-                        budgetItem={selectedBudgetItem}
-                        onSave={handleSaveBudgetItem}
-                        onclick={openCreate}
+                        {loading}
+                        bind:minBudgetItems
+                        bind:optBudgetItems
+                        bind:openModal
                     />
                 {/snippet}
             </Grid>
