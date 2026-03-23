@@ -8,21 +8,20 @@
     - URL query parameter sync
 -->
 <script lang="ts">
+    import BudgetStep from "./BudgetStep.svelte";
     import CampaignInfoStep from "./CampaignInfoStep.svelte";
+    import CollaborationsStep from "./CollaborationsStep.svelte";
     import ConfigurationStep from "./ConfigurationStep.svelte";
     import RewardsStep from "./RewardsStep.svelte";
     import WizardShell from "./WizardShell.svelte";
     import { t } from "../../../i18n/store";
+    import { type Project } from "../../../openapi/client";
     import {
         wizardState,
         initializeFromProject,
         clearLocalStorage,
         saveToLocalStorage,
     } from "../../../stores/wizard-state";
-
-    import { apiProjectsPost, type Project } from "../../../openapi/client";
-    import CollaborationsStep from "./CollaborationsStep.svelte";
-    import BudgetStep from "./BudgetStep.svelte";
 
     let {
         project,
@@ -125,11 +124,7 @@
     async function handlePublish() {
         // In Phase 1, this is disabled until all steps are complete
         // Phase 7 will add publish workflow
-        try {
-        } catch (error) {
-        } finally {
-            clearLocalStorage();
-        }
+        clearLocalStorage();
     }
 
     /**
@@ -137,6 +132,7 @@
      */
     function handleContinue() {
         // Step navigation handled by wizard state
+        saveToLocalStorage();
     }
 </script>
 
