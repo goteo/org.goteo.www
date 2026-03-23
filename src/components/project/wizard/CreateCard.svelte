@@ -1,5 +1,7 @@
 <script lang="ts">
-    import WizardModal from "./WizardModal.svelte";
+    import BudgetModal from "./BudgetModal.svelte";
+    import CollabsModal from "./CollabsModal.svelte";
+    import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
@@ -60,16 +62,16 @@
         {#if variant === "reward"}
             {$t("wizard.rewards.createCard.btn")}
         {:else if variant === "collab"}
-            {$t("wizard.collabs.createCard.btn")}
+            {$t("wizard.collaborations.createCard.btn")}
         {:else if variant === "budget"}
             {$t("wizard.budget.createCard.btn")}
         {/if}
     </Button>
 </div>
 {#if variant === "reward"}
-    <WizardModal bind:open {project} {onSave} {reward} />
+    <RewardsModal bind:open {project} {onSave} {reward} />
 {:else if variant === "collab"}
-    <WizardModal bind:open {project} {onSave} {collab} />
+    <CollabsModal bind:open {project} {onSave} {collab} />
 {:else if variant === "budget"}
-    <WizardModal bind:open {project} {onSave} {budgetItem} />
+    <BudgetModal bind:open {project} {onSave} {budgetItem} />
 {/if}
