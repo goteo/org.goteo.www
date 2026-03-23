@@ -40,8 +40,7 @@
 <div class={twMerge("flex w-full flex-col", classes)}>
     <div
         class={twMerge(
-            "relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4 transition-all",
-            "border-secondary",
+            "border-secondary relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4 transition-all",
             !isValid && "border-tertiary ring-tertiary ring-1",
         )}
     >
