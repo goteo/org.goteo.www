@@ -12,6 +12,8 @@
         id?: string;
         label?: string;
         errorMessage?: string;
+        isValid?: boolean;
+        validate?: boolean;
     }
 
     let {
@@ -22,11 +24,17 @@
         id = "email",
         label = undefined,
         errorMessage = $t("login.error.invalidEmail"),
+        isValid = $bindable(true),
+        validate = true,
     }: Props = $props();
 
     const emailRegex = /^[^@].*@.*\.[a-zA-Z]+$/;
 
-    const isValid = $derived(value === "" || emailRegex.test(value));
+    $effect(() => {
+        if (validate) {
+            isValid = value === "" || emailRegex.test(value);
+        }
+    });
 </script>
 
 <div class={twMerge("flex w-full flex-col", classes)}>
