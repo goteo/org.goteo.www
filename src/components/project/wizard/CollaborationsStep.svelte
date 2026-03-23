@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    import CollabsCard from "./CollabsCard.svelte";
     import CreateCard from "./CreateCard.svelte";
-    import RewardsCollabsCard from "./RewardsCollabsCard.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectCollaborationsGetCollection,
@@ -13,13 +13,13 @@
         type ProjectCollaboration,
     } from "../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import Grid from "../../library/Grid.svelte";
-    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
     import { navigateToStep } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
+    import Grid from "../../library/Grid.svelte";
+    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let { onContinue, project } = $props<{
-        onContinue?: () => void;
+        onContinue: () => void;
         project: Project;
     }>();
 
@@ -145,11 +145,10 @@
     {:else}
         <Grid>
             {#each collabs as collab}
-                <RewardsCollabsCard
+                <CollabsCard
                     bind:open={openModal}
                     {project}
                     {collab}
-                    variant="collab"
                     onEdit={() => openEdit(collab)}
                     onDelete={handleDeleteCollabs}
                     onSave={handleSaveCollabs}
@@ -178,9 +177,7 @@
             onclick={handleContinue}
             data-testid="collaborations-continue-btn"
         >
-            {#snippet children()}
-                {$t("wizard.collaborations.continue")}
-            {/snippet}
+            {$t("wizard.collaborations.continue")}
         </Button>
     </div>
 </div>
