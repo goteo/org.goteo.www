@@ -2,7 +2,6 @@
     import BudgetModal from "./BudgetModal.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import { updateBudgetItem, validateBudgetItems } from "../../../stores/wizard-state";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
 
@@ -10,6 +9,7 @@
 
     let {
         item,
+        index,
         project,
         minBudgetItems = $bindable(),
         optBudgetItems = $bindable(),
@@ -17,7 +17,8 @@
         openModal = $bindable(false),
         isCreateCard = false,
     }: {
-        item?: ProjectBudgetItem;
+        item: ProjectBudgetItem | null;
+        index?: number;
         project: Project;
         minBudgetItems: ProjectBudgetItem[];
         optBudgetItems: ProjectBudgetItem[];
@@ -32,34 +33,22 @@
         material: "#E94668",
     };
 
-    let selectedBudgetItem = $state<ProjectBudgetItem | null>(null);
-
     async function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
         loading = true;
 
         try {
-            if (selectedBudgetItem?.id) {
-                updateBudgetItem();
-            } else {
-                const { data: dataCreated, error } = await apiProjectBudgetItemsPost({
-                    body: {
-                        ...data,
-                    },
-                });
-
-                if (error) {
-                    console.error("Error creating budget item:", error);
-                } else if (dataCreated.deadline === "minimum") {
-                    minBudgetItems = [...minBudgetItems, dataCreated];
-                } else if (dataCreated.deadline === "optimum") {
-                    optBudgetItems = [...optBudgetItems, dataCreated];
-                }
+            if (item?.id && index) {
+                if (data.deadline === "minimum") minBudgetItems[index] = data;
+                else if (data.deadline === "optimum") optBudgetItems[index] = data;
+            } else if (data) {
+                if (data.deadline === "minimum") minBudgetItems = [...minBudgetItems, data];
+                else if (data.deadline === "optimum") optBudgetItems = [...optBudgetItems, data];
             }
         } finally {
             loading = false;
             openModal = false;
-            selectedBudgetItem = null;
+            item = null;
         }
     }
 
@@ -71,10 +60,7 @@
         loading = true;
 
         try {
-            const { errors } = validateBudgetItems();
-            if (errors) {
-                console.error(errors);
-            } else if (type === "minimum") {
+            if (type === "minimum") {
                 minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
             } else if (type === "optimum") {
                 optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
@@ -82,17 +68,17 @@
         } finally {
             loading = false;
             openModal = false;
-            selectedBudgetItem = null;
+            item = null;
         }
     }
 
     function openCreate() {
-        selectedBudgetItem = null;
+        item = null;
         openModal = true;
     }
 
-    function openEdit(item: ProjectBudgetItem) {
-        selectedBudgetItem = item;
+    function openEdit(budgetItem: ProjectBudgetItem) {
+        item = budgetItem;
         openModal = true;
     }
 </script>
@@ -135,7 +121,7 @@
         </Button>
 
         <BudgetModal
-            budgetItem={selectedBudgetItem}
+            budgetItem={item}
             bind:open={openModal}
             {project}
             onSave={handleSaveBudgetItem}

@@ -76,10 +76,11 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
-                {#each minBudgetItems as item}
+                {#each minBudgetItems as item, i}
                     <AdminBudgetCard
                         {project}
                         {item}
+                        index={i}
                         {loading}
                         bind:minBudgetItems
                         bind:optBudgetItems
@@ -90,6 +91,7 @@
                 <AdminBudgetCard
                     isCreateCard={true}
                     {project}
+                    item={null}
                     {loading}
                     bind:minBudgetItems
                     bind:optBudgetItems
@@ -110,10 +112,11 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
-                {#each optBudgetItems as item}
+                {#each optBudgetItems as item, i}
                     <AdminBudgetCard
                         {project}
                         {item}
+                        index={i}
                         {loading}
                         bind:minBudgetItems
                         bind:optBudgetItems
@@ -124,6 +127,7 @@
                 <AdminBudgetCard
                     isCreateCard={true}
                     {project}
+                    item={null}
                     {loading}
                     bind:minBudgetItems
                     bind:optBudgetItems
