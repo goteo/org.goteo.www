@@ -27,6 +27,7 @@
     import EyeIcon from "../../../svgs/EyeIcon.svelte";
     import Button from "../../library/Button.svelte";
     import TabNavigation, { type Tab } from "../../library/TabNavigation.svelte";
+    import Toast from "../../library/Toast.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -61,6 +62,8 @@
     // Reactive values from store
     const currentStep = $derived($wizardState.currentStep);
 
+    let showSuccessToast = $state(false);
+
     /**
      * Handle tab click
      * Free navigation - no validation
@@ -77,8 +80,8 @@
         saveToLocalStorage();
         if (onSave) {
             onSave();
+            showSuccessToast = true;
         }
-        // Could show success toast here
     }
 
     /**
@@ -144,7 +147,7 @@
 
     <!-- Header with title and action buttons -->
     <div
-        class="bg-soft-purple border-variant1 shadow-sm mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4"
+        class="bg-soft-purple border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
     >
         <!-- Left section: Icon + Title/Subtitle -->
         <div class="flex flex-1 items-center gap-4">
@@ -174,30 +177,31 @@
             </div>
         </div>
 
+        <!-- Save success Toast -->
+        {#if showSuccessToast}
+            <Toast variant="success" bind:showToast={showSuccessToast}
+                >{$t("wizard.successToast")}</Toast
+            >
+        {/if}
+
         <!-- Right section: Action Buttons -->
         <div class="flex shrink-0 items-center gap-[16px]">
             <Button kind="ghost" size="md" disabled={true} data-testid="wizard-preview-btn">
-                {#snippet children()}
-                    <EyeIcon width="20" height="20" />
-                    {$t("wizard.buttons.preview")}
-                {/snippet}
+                <EyeIcon width="20" height="20" />
+                {$t("wizard.buttons.preview")}
             </Button>
             <Button kind="secondary" size="md" onclick={handleSave} data-testid="wizard-save-btn">
-                {#snippet children()}
-                    {$t("wizard.buttons.save")}
-                {/snippet}
+                {$t("wizard.buttons.save")}
             </Button>
             <Button
-                class="disabled:opacity-24 disabled:pointer-events-none"
+                class="disabled:pointer-events-none disabled:opacity-24"
                 kind="primary"
                 size="md"
                 onclick={handlePublish}
                 data-testid="wizard-publish-btn"
                 disabled={currentStep !== 7}
             >
-                {#snippet children()}
-                    {$t("wizard.buttons.publish")}
-                {/snippet}
+                {$t("wizard.buttons.publish")}
             </Button>
         </div>
     </div>
@@ -208,7 +212,7 @@
     </div>
 
     <!-- Step Content -->
-    <div class="min-h-[400px]">
+    <div class="min-h-100">
         {@render currentStepContent()}
     </div>
 </div>
