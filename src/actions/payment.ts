@@ -51,17 +51,16 @@ export const payment = defineAction({
                 },
             }));
 
-            const accessToken = context.cookies.get("access-token")?.json();
-            const accountingId = accessToken?.accountingId ?? null;
+            const authCookie = context.cookies.get("auth");
+            const origin = authCookie?.json().user.accounting ?? null;
 
-            if (!accountingId) {
+            if (!origin) {
                 throw new ActionError({
                     code: "UNAUTHORIZED",
                     message: t("payment.error.missingAccountingId"),
                 });
             }
 
-            const origin = `/v4/accountings/${accountingId}`;
             const base = context.url.origin;
             const returnUrl = `${base}/payment/verify`;
             const gateway = `/v4/gateways/${input.paymentMethod}`;
