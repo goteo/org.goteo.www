@@ -1,13 +1,12 @@
 <script lang="ts">
-    import CreateCard from "./CreateCard.svelte";
+    import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
+    import { navigateToStep, wizardState } from "../../../stores/wizard-state";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-    import AdminBudgetCard from "./AdminBudgetCard.svelte";
-    import { navigateToStep, saveToLocalStorage, wizardState } from "../../../stores/wizard-state";
 
     let {
         project,
@@ -27,7 +26,6 @@
      * Simple navigation to next step (6) - validation happens on save/submit
      */
     function handleContinue() {
-        saveToLocalStorage();
         navigateToStep(6);
         if (onContinue) {
             onContinue();
@@ -78,27 +76,25 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
-                {#snippet children()}
-                    {#each minBudgetItems as item}
-                        <AdminBudgetCard
-                            {project}
-                            {item}
-                            {loading}
-                            bind:minBudgetItems
-                            bind:optBudgetItems
-                            bind:openModal
-                        />
-                    {/each}
-
+                {#each minBudgetItems as item}
                     <AdminBudgetCard
-                        {isCreateCard}
                         {project}
+                        {item}
                         {loading}
                         bind:minBudgetItems
                         bind:optBudgetItems
                         bind:openModal
                     />
-                {/snippet}
+                {/each}
+
+                <AdminBudgetCard
+                    isCreateCard={true}
+                    {project}
+                    {loading}
+                    bind:minBudgetItems
+                    bind:optBudgetItems
+                    bind:openModal
+                />
             </Grid>
         {/if}
     </div>
@@ -114,19 +110,25 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
-                {#snippet children()}
-                    {#each optBudgetItems as item}
-                        <AdminBudgetCard {project} {item} {loading} bind:openModal />
-                    {/each}
-
-                    <CreateCard
-                        title={$t("wizard.budget.createCard.optimum.title")}
-                        description={$t("wizard.budget.createCard.optimum.description")}
-                        variant="budget"
-                        bind:open={openModal}
+                {#each optBudgetItems as item}
+                    <AdminBudgetCard
                         {project}
+                        {item}
+                        {loading}
+                        bind:minBudgetItems
+                        bind:optBudgetItems
+                        bind:openModal
                     />
-                {/snippet}
+                {/each}
+
+                <AdminBudgetCard
+                    isCreateCard={true}
+                    {project}
+                    {loading}
+                    bind:minBudgetItems
+                    bind:optBudgetItems
+                    bind:openModal
+                />
             </Grid>
         {/if}
     </div>
@@ -140,8 +142,6 @@
         class="min-w-50"
         data-testid="budget-continue-btn"
     >
-        {#snippet children()}
-            {$t("wizard.campaignInfo.continue")}
-        {/snippet}
+        {$t("wizard.campaignInfo.continue")}
     </Button>
 </div>
