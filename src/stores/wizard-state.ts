@@ -16,7 +16,7 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import type { Project, ProjectBudgetItem } from "../openapi/client";
+import type { MoneyWithConversion, Project, ProjectBudgetItem, ProjectCalendar } from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
@@ -110,8 +110,8 @@ export interface WizardState {
     title: string;
     subtitle: string;
     categories: string[];
-    budget: number;
-    releaseDate: string | null;
+    budget: MoneyWithConversion;
+    calendar: ProjectCalendar;
 
     // Step navigation
     currentStep: number;
@@ -143,8 +143,11 @@ const getDefaultState = (): WizardState => ({
     title: "",
     subtitle: "",
     categories: [],
-    budget: 0,
-    releaseDate: null,
+    budget: {
+        amount: 0,
+        currency: "EUR"
+    },
+    calendar: {},
     currentStep: 1,
     configuration: {
         languages: [],
@@ -222,8 +225,8 @@ export function initializeFromProject(project: Project) {
         title: project.title || "",
         subtitle: project.subtitle || "",
         categories: project.categories || [],
-        budget: project.budget?.minimum?.money?.amount || 0,
-        releaseDate: project.deadline || null,
+        budget: { amount: project.budget?.minimum?.money?.amount || 0, currency: project.budget?.minimum?.money?.currency || "EUR" },
+        calendar: {},
         currentStep: 1,
         configuration: {
             languages: [],
