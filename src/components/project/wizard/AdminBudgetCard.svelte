@@ -1,12 +1,12 @@
 <script lang="ts">
+    import BudgetModal from "./BudgetModal.svelte";
+    import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
+    import { updateBudgetItem, validateBudgetItems } from "../../../stores/wizard-state";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
-    import WizardModal from "./WizardModal.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
-    import { updateBudgetItem, validateBudgetItems } from "../../../stores/wizard-state";
-    import CreateCard from "./CreateCard.svelte";
 
     let {
         item,
@@ -17,7 +17,7 @@
         openModal = $bindable(false),
         isCreateCard = false,
     }: {
-        item: ProjectBudgetItem;
+        item?: ProjectBudgetItem;
         project: Project;
         minBudgetItems: ProjectBudgetItem[];
         optBudgetItems: ProjectBudgetItem[];
@@ -107,7 +107,7 @@
         bind:open={openModal}
         {project}
     />
-{:else}
+{:else if item}
     <div
         class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
     >
@@ -131,15 +131,13 @@
         </div>
 
         <Button kind="secondary" class="w-full" onclick={() => openEdit}>
-            {#snippet children()}
-                {$t("wizard.budget.editBtn")}
-            {/snippet}
+            {$t("wizard.budget.editBtn")}
         </Button>
 
-        <WizardModal
+        <BudgetModal
             budgetItem={selectedBudgetItem}
-            bind:open={openModal!}
-            project={project!}
+            bind:open={openModal}
+            {project}
             onSave={handleSaveBudgetItem}
             onDelete={handleDeleteBudgetItem}
         />
