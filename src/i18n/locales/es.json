@@ -1044,5 +1044,6 @@
         "viewCall": "Ir a la convocatoria"
       }
     }
-  }
+  },
+  "loading": "Cargando..."
 }
