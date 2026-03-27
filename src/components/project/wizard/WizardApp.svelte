@@ -112,10 +112,11 @@
      * Handle save draft
      */
     function handleSave() {
-        // In Phase 1, save to localStorage only
-        // Phase 7 will add PATCH to backend
-        // Could show success toast here
         saveToLocalStorage();
+
+        // TO-DO: Show success Toast over here
+
+        // TO-DO: Add Publish enable button handling
     }
 
     /**
@@ -125,14 +126,6 @@
         // In Phase 1, this is disabled until all steps are complete
         // Phase 7 will add publish workflow
         clearLocalStorage();
-    }
-
-    /**
-     * Handle step continue
-     */
-    function handleContinue() {
-        // Step navigation handled by wizard state
-        saveToLocalStorage();
     }
 </script>
 
@@ -146,15 +139,15 @@
 >
     {#snippet currentStepContent()}
         {#if currentStep === 1}
-            <ConfigurationStep onContinue={handleContinue} />
+            <ConfigurationStep />
         {:else if currentStep === 2}
-            <CampaignInfoStep onContinue={handleContinue} />
+            <CampaignInfoStep />
         {:else if currentStep === 3}
-            <RewardsStep onContinue={handleContinue} {project} />
+            <RewardsStep {project} />
         {:else if currentStep === 4}
-            <CollaborationsStep onContinue={handleContinue} {project} />
+            <CollaborationsStep {project} />
         {:else if currentStep === 5}
-            <BudgetStep onContinue={handleContinue} {project} />
+            <BudgetStep {project} />
         {:else if currentStep === 6}
             <div class="py-12 text-center">
                 <h2 class="text-secondary mb-4 text-2xl font-bold">
