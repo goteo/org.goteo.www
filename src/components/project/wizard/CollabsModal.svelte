@@ -2,14 +2,11 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import Button from "../../library/Button.svelte";
-
-    import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
+    import type { WizardCollaboration } from "../../../stores/wizard-state";
 
     type CollabPayload = {
-        project: string;
         title: string;
         description: string;
     };
@@ -17,15 +14,13 @@
     let {
         open = $bindable(false),
         collab,
-        project,
         onSave,
         onDelete,
     }: {
         open: boolean;
-        collab: ProjectCollaboration | null;
-        project: Project;
-        onSave?: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined, type?: "minimum" | "optimum") => Promise<void>;
+        collab: WizardCollaboration | null;
+        onSave?: (data: any) => void;
+        onDelete?: () => void;
     } = $props();
 
     let title = $state(collab?.title ?? "");
@@ -37,7 +32,6 @@
     async function handleSaveOrCreate() {
         if (!collab) return;
         let payload: CollabPayload = {
-            project: apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id),
             title,
             description,
         };
@@ -46,7 +40,7 @@
     }
 
     async function handleDeleteClick() {
-        if (collab) await onDelete?.(collab.id);
+        if (collab) await onDelete?.();
     }
 </script>
 
@@ -70,12 +64,13 @@
         <input
             type="text"
             placeholder={$t("wizard.collaborations.modal.placeholders.title")}
+            bind:value={title}
             class={INPUTS_CLASSES}
-            value={collab?.title ?? ""}
         />
         <textarea
             placeholder={$t("wizard.collaborations.modal.placeholders.description")}
-            class={`h-32 resize-none ${INPUTS_CLASSES}`}>{collab?.description ?? ""}</textarea
+            bind:value={description}
+            class={`h-32 resize-none ${INPUTS_CLASSES}`}></textarea
         >
     </div>
 

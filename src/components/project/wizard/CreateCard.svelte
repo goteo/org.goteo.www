@@ -34,7 +34,7 @@
         reward?: ProjectReward | null;
         collab?: ProjectCollaboration | null;
         budgetItem?: ProjectBudgetItem | null;
-        onSave: (data: any) => Promise<void>;
+        onSave: (data: any) => void;
     }>();
 </script>
 

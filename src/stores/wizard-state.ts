@@ -87,9 +87,9 @@ export interface WizardReward {
  * Wizard Collaborations data (Step 4: Collaborations)
  */
 export interface WizardCollaboration {
-    title: string; // A short, descriptive title for this collaboration.
-    description: string | null; // Information about this collaboration. More detailed than the title.
-}
+    title: string;
+    description: string;
+};
 
 /**
  * Wizard Budget data (Step 5: Budget)
@@ -788,24 +788,50 @@ export function validateRewards(): Record<string, string> {
  * // Update collaboration
  * updateCollaboration(index: currentIndex, collab: updatedCollab);
  */
-export function updateCollaboration(index: number, collab: WizardCollaboration) {
+export function updateCollaboration(
+    index: number,
+    collab: WizardCollaboration
+): Record<string, string> {
+    const errors = validateCollaboration(collab, index);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => {
         const updated = [...state.collaborations];
         updated[index] = collab;
+
         return { ...state, collaborations: updated };
     });
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
+
+    return {};
 }
 
-export function addCollaboration(collab: WizardCollaboration) {
+
+export function addCollaboration(
+    collab: WizardCollaboration
+): Record<string, string> {
+    const errors = validateCollaboration(collab, 0);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => ({
         ...state,
         collaborations: [...state.collaborations, collab],
     }));
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
+
+    return {};
 }
+
 
 export function deleteCollaboration(index: number) {
     wizardState.update((state) => ({
@@ -816,17 +842,24 @@ export function deleteCollaboration(index: number) {
     saveToLocalStorage();
 }
 
-export function validateCollaborations(): Record<string, string> {
-    const { collaborations } = get(wizardState);
+export function validateCollaboration(collab: WizardCollaboration, index?: number): Record<string, string> {
     const errors: Record<string, string> = {};
 
-    collaborations.forEach((c, i) => {
-        if (!c.title?.trim()) {
-            errors[`collab_${i}_title`] = "wizard.validation.collaborations.title";
-        }
-    });
+    if (!collab.title?.trim()) {
+        errors[`collab_${index}_title`] =
+            "wizard.validation.collaborations.title";
+    }
+
+    if (collab.description && collab.description.length > 1000) {
+        errors[`collab_${index}_description`] =
+            "wizard.validation.collaborations.description_too_long";
+    }
 
     return errors;
+}
+
+export function isCollaborationValid(collab: WizardCollaboration, index: number): boolean {
+    return Object.keys(validateCollaboration(collab, index)).length === 0;
 }
 
 // ============================================
@@ -846,43 +879,56 @@ export function validateCollaborations(): Record<string, string> {
  * // Update unitsTotal
  * updateRewards({ unitsTotal: newCount });
  */
-export function updateBudgetItem(index: number, item: ProjectBudgetItem) {
-    const budgetType = item.deadline;
+export function updateBudgetItem(
+    index: number,
+    type: "minimum" | "optimum",
+    item: ProjectBudgetItem,
+) {
     wizardState.update((state) => {
-        const updated = { ...state.budgetItems }
-        updated[budgetType][index] = item;
+        const updated = [...state.budgetItems[type]];
+        updated[index] = item;
+
         return {
             ...state,
             budgetItems: {
-                ...updated,
-            }
-        }
+                ...state.budgetItems,
+                [type]: updated,
+            },
+        };
     });
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
-export function addBudgetItem(item: ProjectBudgetItem) {
-    const budgetType = item.deadline;
+export function addBudgetItem(
+    type: "minimum" | "optimum",
+    item: ProjectBudgetItem,
+) {
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
             ...state.budgetItems,
-            [budgetType]: [...state.budgetItems[budgetType], item],
+            [type]: [...state.budgetItems[type], item],
         },
     }));
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
-export function deleteBudgetItem(index: number, type: "minimum" | "optimum") {
+export function deleteBudgetItem(
+    index: number,
+    type: "minimum" | "optimum",
+) {
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
-            ...state.budgetItems[type].filter((_, i) => i !== index),
-            ...state.budgetItems
-        }
+            ...state.budgetItems,
+            [type]: state.budgetItems[type].filter((_, i) => i !== index),
+        },
     }));
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
@@ -891,9 +937,61 @@ export function validateBudgetItems(): Record<string, string> {
     const { budgetItems } = get(wizardState);
     const errors: Record<string, string> = {};
 
-    if (!budgetItems.minimum.length) {
+    const validateList = (
+        items: ProjectBudgetItem[],
+        type: "minimum" | "optimum"
+    ) => {
+        items.forEach((item, index) => {
+            if (!item.title?.trim()) {
+                errors[`${type}_${index}_title`] =
+                    "wizard.validation.budget.title_required";
+            }
+
+            if (!item.description?.trim()) {
+                errors[`${type}_${index}_description`] =
+                    "wizard.validation.budget.description_required";
+            }
+
+            if (!item.money?.amount || item.money.amount <= 0) {
+                errors[`${type}_${index}_amount`] =
+                    "wizard.validation.budget.amount_invalid";
+            }
+
+            if (!item.money?.currency) {
+                errors[`${type}_${index}_currency`] =
+                    "wizard.validation.budget.currency_required";
+            }
+
+            if (!item.type) {
+                errors[`${type}_${index}_type`] =
+                    "wizard.validation.budget.type_required";
+            }
+
+            if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
+                errors[`${type}_${index}_deadline`] =
+                    "wizard.validation.budget.deadline_invalid";
+            }
+        });
+    };
+
+    validateList(budgetItems.minimum, "minimum");
+    validateList(budgetItems.optimum, "optimum");
+
+    if (budgetItems.minimum.length === 0) {
         errors.minimum = "wizard.validation.budget.minimum_required";
     }
 
+    const minTotal = budgetItems.minimum.reduce((sum, i) => sum + i.money.amount, 0);
+    const optTotal = budgetItems.optimum.reduce((sum, i) => sum + i.money.amount, 0);
+
+    if (budgetItems.optimum.length && optTotal < minTotal) {
+        errors.optimum_total =
+            "wizard.validation.budget.optimum_less_than_minimum";
+    }
+
     return errors;
+}
+
+export function isBudgetValid(): boolean {
+    return Object.keys(validateBudgetItems()).length === 0;
 }

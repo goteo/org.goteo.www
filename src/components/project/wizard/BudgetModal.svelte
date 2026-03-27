@@ -27,17 +27,16 @@
         open: boolean;
         budgetItem: ProjectBudgetItem | null;
         project: Project;
-        onSave?: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined, type?: "minimum" | "optimum") => Promise<void>;
+        onSave?: (data: any) => void;
+        onDelete?: (deadline: "minimum" | "optimum") => void;
     } = $props();
 
-    let title = $state(budgetItem?.title ?? "");
-    let description = $state(budgetItem?.description ?? "");
-
-    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
+    let selectedBudgetTitle = $state(budgetItem?.title ?? "");
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         budgetItem?.type,
     );
+    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
+    let selectedBudgetDescription = $state(budgetItem?.description ?? "");
 
     const INPUTS_CLASSES: ClassNameValue =
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
@@ -46,8 +45,8 @@
         if (!budgetItem) return;
         let payload: BudgetItemPayload = {
             project: apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id),
-            title,
-            description,
+            title: selectedBudgetTitle,
+            description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline,
             type: selectedBudgetType,
         };
@@ -56,12 +55,8 @@
     }
 
     async function handleDeleteClick() {
-        if (budgetItem) await onDelete?.(budgetItem.id, budgetItem.deadline);
+        if (budgetItem) await onDelete?.(budgetItem.deadline);
     }
-
-    function handleSelectedType() {}
-
-    function handleSelectedDeadline() {}
 </script>
 
 <Modal
@@ -82,17 +77,17 @@
     {/snippet}
     <div class="flex flex-col gap-4">
         <input
+            bind:value={selectedBudgetTitle}
             type="text"
             placeholder={$t("wizard.budget.modal.placeholders.title")}
             class={INPUTS_CLASSES}
-            value={budgetItem?.title ?? ""}
         />
         <select
             bind:value={selectedBudgetType}
-            onchange={handleSelectedType}
             aria-label={$t("wizard.budget.modal.selectors.types.title")}
             title={$t("wizard.budget.modal.selectors.types.title")}
             class={`${INPUTS_CLASSES} `}
+            required
         >
             <option value="" selected={!budgetItem?.type ? true : false}
                 >{$t("wizard.budget.modal.selectors.types.placeholder")}</option
@@ -111,10 +106,10 @@
                 value={budgetItem?.money.amount && budgetItem?.money.currency
                     ? formatCurrency(budgetItem?.money.amount, budgetItem?.money.currency)
                     : ""}
+                required
             />
             <select
                 bind:value={selectedBudgetDeadline}
-                onchange={handleSelectedDeadline}
                 aria-label={$t("wizard.budget.modal.selectors.deadline.title")}
                 title={$t("wizard.budget.modal.selectors.deadline.title")}
                 class={`${INPUTS_CLASSES} w-[50%]`}
@@ -138,6 +133,7 @@
             </select>
         </div>
         <textarea
+            bind:value={selectedBudgetDescription}
             placeholder={$t("wizard.budget.modal.placeholders.description")}
             class={`${INPUTS_CLASSES} h-60 resize-none `}>{budgetItem?.description ?? ""}</textarea
         >

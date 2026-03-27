@@ -18,7 +18,6 @@
 
     let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
     let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
-    let openModal = $state(false);
     let loading = $state(false);
 
     /**
@@ -52,7 +51,7 @@
     }
 
     $effect(() => {
-        loadBudgetItems();
+        if ($wizardState) loadBudgetItems();
     });
 </script>
 
@@ -77,15 +76,7 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, i}
-                    <AdminBudgetCard
-                        {project}
-                        {item}
-                        index={i}
-                        {loading}
-                        bind:minBudgetItems
-                        bind:optBudgetItems
-                        bind:openModal
-                    />
+                    <AdminBudgetCard {project} {item} index={i} {loading} />
                 {/each}
 
                 <AdminBudgetCard
@@ -93,9 +84,6 @@
                     {project}
                     item={null}
                     {loading}
-                    bind:minBudgetItems
-                    bind:optBudgetItems
-                    bind:openModal
                 />
             </Grid>
         {/if}
@@ -113,15 +101,7 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard
-                        {project}
-                        {item}
-                        index={i}
-                        {loading}
-                        bind:minBudgetItems
-                        bind:optBudgetItems
-                        bind:openModal
-                    />
+                    <AdminBudgetCard {project} {item} index={i} {loading} />
                 {/each}
 
                 <AdminBudgetCard
@@ -129,9 +109,6 @@
                     {project}
                     item={null}
                     {loading}
-                    bind:minBudgetItems
-                    bind:optBudgetItems
-                    bind:openModal
                 />
             </Grid>
         {/if}

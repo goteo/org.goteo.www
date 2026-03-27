@@ -6,26 +6,27 @@
     import Button from "../../library/Button.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
+    import {
+        addBudgetItem,
+        deleteBudgetItem,
+        updateBudgetItem,
+    } from "../../../stores/wizard-state";
 
     let {
         item,
         index,
         project,
-        minBudgetItems = $bindable(),
-        optBudgetItems = $bindable(),
         loading = $bindable(false),
-        openModal = $bindable(false),
         isCreateCard = false,
     }: {
         item: ProjectBudgetItem | null;
         index?: number;
         project: Project;
-        minBudgetItems: ProjectBudgetItem[];
-        optBudgetItems: ProjectBudgetItem[];
         loading: boolean;
-        openModal: boolean;
         isCreateCard?: boolean;
     } = $props();
+
+    let openModal = $state(false);
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
@@ -33,53 +34,38 @@
         material: "#E94668",
     };
 
-    async function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
+    function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
         loading = true;
 
         try {
-            if (item?.id && index) {
-                if (data.deadline === "minimum") minBudgetItems[index] = data;
-                else if (data.deadline === "optimum") optBudgetItems[index] = data;
-            } else if (data) {
-                if (data.deadline === "minimum") minBudgetItems = [...minBudgetItems, data];
-                else if (data.deadline === "optimum") optBudgetItems = [...optBudgetItems, data];
+            const deadline = data.deadline as "minimum" | "optimum";
+
+            if (item && index !== undefined) {
+                // UPDATE
+                updateBudgetItem(index, deadline, data);
+            } else {
+                // CREATE
+                addBudgetItem(deadline, data);
             }
         } finally {
             loading = false;
             openModal = false;
-            item = null;
         }
     }
 
-    async function handleDeleteBudgetItem(
-        itemId: number | undefined,
-        type: "minimum" | "optimum" | undefined,
-    ) {
-        if (!itemId || !type) return;
+    function handleDeleteBudgetItem(deadline: "minimum" | "optimum" | undefined) {
+        if (!index || !deadline) return;
+
         loading = true;
 
         try {
-            if (type === "minimum") {
-                minBudgetItems = minBudgetItems.filter((minItem) => minItem.id !== itemId);
-            } else if (type === "optimum") {
-                optBudgetItems = optBudgetItems.filter((optItem) => optItem.id !== itemId);
-            }
+            deleteBudgetItem(index, deadline);
         } finally {
             loading = false;
             openModal = false;
             item = null;
         }
-    }
-
-    function openCreate() {
-        item = null;
-        openModal = true;
-    }
-
-    function openEdit(budgetItem: ProjectBudgetItem) {
-        item = budgetItem;
-        openModal = true;
     }
 </script>
 
@@ -89,7 +75,7 @@
         description={$t("wizard.budget.createCard.optimum.description")}
         variant="budget"
         onSave={handleSaveBudgetItem}
-        onclick={openCreate}
+        onclick={() => (openModal = true)}
         bind:open={openModal}
         {project}
     />
@@ -116,7 +102,7 @@
             </div>
         </div>
 
-        <Button kind="secondary" class="w-full" onclick={() => openEdit}>
+        <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
             {$t("wizard.budget.editBtn")}
         </Button>
 

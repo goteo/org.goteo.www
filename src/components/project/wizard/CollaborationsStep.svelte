@@ -1,19 +1,12 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
     import CollabsCard from "./CollabsCard.svelte";
-    import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
+    import { type Project } from "../../../openapi/client";
     import {
-        apiProjectCollaborationsGetCollection,
-        apiProjectCollaborationsIdDelete,
-        apiProjectCollaborationsIdPatch,
-        apiProjectCollaborationsPost,
-        type Project,
-        type ProjectCollaboration,
-    } from "../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { navigateToStep } from "../../../stores/wizard-state";
+        navigateToStep,
+        wizardState,
+        type WizardCollaboration,
+    } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
@@ -23,9 +16,7 @@
         project: Project;
     }>();
 
-    let collabs = $state<ProjectCollaboration[]>([]);
-    let selectedCollab = $state<ProjectCollaboration | null>(null);
-    let openModal = $state(false);
+    let collabs = $state<WizardCollaboration[]>($wizardState.collaborations);
     let loading = $state(false);
 
     /**
@@ -34,99 +25,20 @@
      */
     function handleContinue() {
         navigateToStep(5);
-        if (onContinue) {
-            onContinue();
-        }
+        onContinue();
     }
 
     async function loadCollabs() {
         if (!project) return;
         loading = true;
 
-        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
-
-        const { data: collaborations, error } = await apiProjectCollaborationsGetCollection({
-            query: { project: projectIri },
-        });
-        if (error) {
-            console.error("Error loading collaborations:", error);
-        } else if (collaborations) collabs = collaborations;
+        collabs = $wizardState.collaborations;
 
         loading = false;
     }
 
-    async function handleSaveCollabs(data: ProjectCollaboration | null) {
-        if (!data) return;
-        loading = true;
-
-        try {
-            if (selectedCollab?.id) {
-                const { data: dataUpdated, error } = await apiProjectCollaborationsIdPatch({
-                    path: { id: String(selectedCollab.id) },
-                    body: {
-                        ...data,
-                    },
-                });
-                if (error) {
-                    console.error("Error updating collaboration:", error);
-                } else if (dataUpdated)
-                    collabs = collabs.map((c) => (c.id === dataUpdated.id ? dataUpdated : c));
-            } else {
-                const { data: dataCreated, error } = await apiProjectCollaborationsPost({
-                    body: {
-                        ...data,
-                    },
-                });
-
-                if (error) {
-                    console.error("Error creating collaboration:", error);
-                } else if (dataCreated) {
-                    collabs = [...collabs, dataCreated];
-                }
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedCollab = null;
-        }
-    }
-
-    async function handleDeleteCollabs(collabId: number | undefined) {
-        if (!collabId) return;
-        loading = true;
-
-        try {
-            const { error } = await apiProjectCollaborationsIdDelete({
-                path: { id: String(collabId) },
-            });
-
-            if (error) {
-                console.error("Error deleting collaboration:", error);
-            } else {
-                collabs = collabs.filter((c) => c.id !== collabId);
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedCollab = null;
-        }
-    }
-
-    function openCreate() {
-        selectedCollab = null;
-        openModal = true;
-    }
-
-    function openEdit(collab: ProjectCollaboration) {
-        selectedCollab = collab;
-        openModal = true;
-    }
-
-    onMount(() => {
-        if (project) {
-            loadCollabs();
-            console.log(project, collabs);
-        }
+    $effect(() => {
+        if ($wizardState) loadCollabs();
     });
 </script>
 
@@ -144,28 +56,11 @@
         <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
     {:else}
         <Grid>
-            {#each collabs as collab}
-                <CollabsCard
-                    bind:open={openModal}
-                    {project}
-                    {collab}
-                    onEdit={() => openEdit(collab)}
-                    onDelete={handleDeleteCollabs}
-                    onSave={handleSaveCollabs}
-                    {selectedCollab}
-                />
+            {#each collabs as collab, index}
+                <CollabsCard {index} {project} {collab} bind:loading />
             {/each}
 
-            <CreateCard
-                title={$t("wizard.steps.collaborations.createCard.title")}
-                description={$t("wizard.steps.collaborations.createCard.description")}
-                variant="collab"
-                bind:open={openModal}
-                {project}
-                collab={selectedCollab}
-                onSave={handleSaveCollabs}
-                onclick={openCreate}
-            />
+            <CollabsCard isCreateCard={true} {project} collab={null} bind:loading />
         </Grid>
     {/if}
 
