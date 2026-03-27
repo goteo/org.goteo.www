@@ -4,11 +4,13 @@
 
     import ShareButton from "./Share/ShareButton.svelte";
 
+    const DATE_REGEX = /^\d{2}\/\d{2}\/\d{4}$/;
+
     interface BlogPost {
         title?: string;
         description?: string;
         cover?: string;
-        date?: string;
+        date: string;
         author?: { name: string; avatar: string };
         body?: string;
     }
@@ -19,6 +21,13 @@
     }
 
     let { post, class: className = "" }: Props = $props();
+
+    const validatedDate = $derived.by(() => {
+        if (!DATE_REGEX.test(post.date)) {
+            throw new Error(`Invalid date format: "${post.date}". Expected DD/MM/YYYY`);
+        }
+        return post.date;
+    });
 
     const containerClasses = $derived(twMerge("flex justify-center min-h-screen", className));
     const parsedBody = $derived(marked(post.body ?? ""));
@@ -40,7 +49,7 @@
                 <img src={post.author?.avatar} class="avatar" alt={post.author?.name} />
                 <div class="info">
                     <p class="author-name">{post.author?.name}</p>
-                    <p class="date">{post.date}</p>
+                    <p class="date">{validatedDate}</p>
                 </div>
             </div>
 
