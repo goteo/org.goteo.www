@@ -551,7 +551,7 @@ export const isConfigurationValid = derived(
         // Check required fields
         const config = $state.configuration;
         const hasLanguages = config.languages.length > 0;
-        const roundsSelected = config.fundingRounds
+        const roundsSelected = config.fundingRounds;
 
         return hasLanguages && roundsSelected;
     },
@@ -718,6 +718,12 @@ export const isCampaignInfoValidStore = derived(wizardState, () => {
  * updateReward(index: currentIndex, reward: updatedReward);
  */
 export function updateReward(index: number, reward: WizardReward) {
+    const errors = validateReward(reward, index);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => {
         const updated = [...state.rewards];
         updated[index] = reward;
@@ -728,6 +734,14 @@ export function updateReward(index: number, reward: WizardReward) {
 }
 
 export function addReward(reward: WizardReward) {
+    const { rewards } = get(wizardState);
+    const currentIndex = rewards.length;
+    const errors = validateReward(reward, currentIndex);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => ({
         ...state,
         rewards: [...state.rewards, reward],
@@ -745,28 +759,20 @@ export function deleteReward(index: number) {
     saveToLocalStorage();
 }
 
-export function validateRewards(): Record<string, string> {
-    const { rewards } = get(wizardState);
+export function validateReward(reward: WizardReward, index: number): Record<string, string> {
     const errors: Record<string, string> = {};
 
-    if (!rewards.length) {
-        errors.rewards = "wizard.validation.rewards.required";
-        return errors;
+    if (!reward.title?.trim()) {
+        errors[`reward_${index}_title`] = "wizard.validation.rewards.title";
     }
 
-    rewards.forEach((r, i) => {
-        if (!r.title?.trim()) {
-            errors[`reward_${i}_title`] = "wizard.validation.rewards.title";
-        }
+    if (!reward.money?.amount || reward.money.amount <= 0) {
+        errors[`reward_${index}_amount`] = "wizard.validation.rewards.amount";
+    }
 
-        if (!r.money?.amount || r.money.amount <= 0) {
-            errors[`reward_${i}_amount`] = "wizard.validation.rewards.amount";
-        }
-
-        if (r.isFinite && (!r.unitsTotal || r.unitsTotal <= 0)) {
-            errors[`reward_${i}_units`] = "wizard.validation.rewards.units";
-        }
-    });
+    if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
+        errors[`reward_${index}_units`] = "wizard.validation.rewards.units";
+    }
 
     return errors;
 }
@@ -815,7 +821,9 @@ export function updateCollaboration(
 export function addCollaboration(
     collab: WizardCollaboration
 ): Record<string, string> {
-    const errors = validateCollaboration(collab, 0);
+    const { collaborations } = get(wizardState);
+    const currentIndex = collaborations.length;
+    const errors = validateCollaboration(collab, currentIndex);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -842,7 +850,7 @@ export function deleteCollaboration(index: number) {
     saveToLocalStorage();
 }
 
-export function validateCollaboration(collab: WizardCollaboration, index?: number): Record<string, string> {
+export function validateCollaboration(collab: WizardCollaboration, index: number): Record<string, string> {
     const errors: Record<string, string> = {};
 
     if (!collab.title?.trim()) {
@@ -851,15 +859,16 @@ export function validateCollaboration(collab: WizardCollaboration, index?: numbe
     }
 
     if (collab.description && collab.description.length > 1000) {
-        errors[`collab_${index}_description`] =
+        errors[`collab_${index}_description_too_long`] =
             "wizard.validation.collaborations.description_too_long";
     }
 
-    return errors;
-}
+    if (!collab.description.trim()) {
+        errors[`collab_${index}_description`] =
+            "wizard.validation.collaborations.description";
+    }
 
-export function isCollaborationValid(collab: WizardCollaboration, index: number): boolean {
-    return Object.keys(validateCollaboration(collab, index)).length === 0;
+    return errors;
 }
 
 // ============================================
@@ -869,7 +878,7 @@ export function isCollaborationValid(collab: WizardCollaboration, index: number)
 /**
  * Update budgetItems data (Step 5)
  *
- * Merges partial rewards updates with existing data.
+ * Merges budget items updates with existing data.
  * Triggers auto-save to localStorage.
  *
  * @param index - Current budget item index
@@ -881,18 +890,23 @@ export function isCollaborationValid(collab: WizardCollaboration, index: number)
  */
 export function updateBudgetItem(
     index: number,
-    type: "minimum" | "optimum",
     item: ProjectBudgetItem,
 ) {
+    const errors = validateBudgetItem(item, index);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => {
-        const updated = [...state.budgetItems[type]];
+        const updated = [...state.budgetItems[item.deadline]];
         updated[index] = item;
 
         return {
             ...state,
             budgetItems: {
                 ...state.budgetItems,
-                [type]: updated,
+                [item.deadline]: updated,
             },
         };
     });
@@ -902,14 +916,21 @@ export function updateBudgetItem(
 }
 
 export function addBudgetItem(
-    type: "minimum" | "optimum",
     item: ProjectBudgetItem,
 ) {
+    const { budgetItems } = get(wizardState);
+    const currentIndex = budgetItems[item.deadline].length;
+    const errors = validateBudgetItem(item, currentIndex);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
             ...state.budgetItems,
-            [type]: [...state.budgetItems[type], item],
+            [item.deadline]: [...state.budgetItems[item.deadline], item],
         },
     }));
 
@@ -919,13 +940,13 @@ export function addBudgetItem(
 
 export function deleteBudgetItem(
     index: number,
-    type: "minimum" | "optimum",
+    deadline: "minimum" | "optimum",
 ) {
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
             ...state.budgetItems,
-            [type]: state.budgetItems[type].filter((_, i) => i !== index),
+            [deadline]: state.budgetItems[deadline].filter((_, i) => i !== index),
         },
     }));
 
@@ -933,49 +954,45 @@ export function deleteBudgetItem(
     saveToLocalStorage();
 }
 
-export function validateBudgetItems(): Record<string, string> {
-    const { budgetItems } = get(wizardState);
+export function validateBudgetItem(item: ProjectBudgetItem, index: number): Record<string, string> {
     const errors: Record<string, string> = {};
 
-    const validateList = (
-        items: ProjectBudgetItem[],
-        type: "minimum" | "optimum"
-    ) => {
-        items.forEach((item, index) => {
-            if (!item.title?.trim()) {
-                errors[`${type}_${index}_title`] =
-                    "wizard.validation.budget.title_required";
-            }
+    if (!item.title?.trim()) {
+        errors[`${item.deadline}_${index}_title`] =
+            "wizard.validation.budget.title_required";
+    }
 
-            if (!item.description?.trim()) {
-                errors[`${type}_${index}_description`] =
-                    "wizard.validation.budget.description_required";
-            }
+    if (!item.description?.trim()) {
+        errors[`${item.deadline}_${index}_description`] =
+            "wizard.validation.budget.description_required";
+    }
 
-            if (!item.money?.amount || item.money.amount <= 0) {
-                errors[`${type}_${index}_amount`] =
-                    "wizard.validation.budget.amount_invalid";
-            }
+    if (!item.money?.amount || item.money.amount <= 0) {
+        errors[`${item.deadline}_${index}_amount`] =
+            "wizard.validation.budget.amount_invalid";
+    }
 
-            if (!item.money?.currency) {
-                errors[`${type}_${index}_currency`] =
-                    "wizard.validation.budget.currency_required";
-            }
+    if (!item.money?.currency) {
+        errors[`${item.deadline}_${index}_currency`] =
+            "wizard.validation.budget.currency_required";
+    }
 
-            if (!item.type) {
-                errors[`${type}_${index}_type`] =
-                    "wizard.validation.budget.type_required";
-            }
+    if (!item.type) {
+        errors[`${item.deadline}_${index}_type`] =
+            "wizard.validation.budget.type_required";
+    }
 
-            if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-                errors[`${type}_${index}_deadline`] =
-                    "wizard.validation.budget.deadline_invalid";
-            }
-        });
-    };
+    if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
+        errors[`${item.deadline}_${index}_deadline`] =
+            "wizard.validation.budget.deadline_invalid";
+    }
 
-    validateList(budgetItems.minimum, "minimum");
-    validateList(budgetItems.optimum, "optimum");
+    return errors;
+}
+
+export function validateBudgetAmount() {
+    const { budgetItems } = get(wizardState);
+    const errors: Record<string, string> = {};
 
     if (budgetItems.minimum.length === 0) {
         errors.minimum = "wizard.validation.budget.minimum_required";
@@ -990,8 +1007,4 @@ export function validateBudgetItems(): Record<string, string> {
     }
 
     return errors;
-}
-
-export function isBudgetValid(): boolean {
-    return Object.keys(validateBudgetItems()).length === 0;
 }
