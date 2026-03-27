@@ -2,23 +2,23 @@
     import RangeSlider from "svelte-range-slider-pips";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import { formatCurrency } from "../../utils/currencies";
+
     interface Props {
         class?: ClassNameValue;
         min?: number;
         max?: number;
         values?: number[];
+        currency?: string;
     }
 
     let {
         class: classes = "",
         min = 0,
-        max = 50000,
-        values = $bindable([17000, 34000]),
+        max = 4294967295,
+        values = $bindable([0, 4294967295]),
+        currency = undefined,
     }: Props = $props();
-
-    const formatCurrency = (value: number) => {
-        return `${value.toLocaleString("es-ES")}€`;
-    };
 </script>
 
 <div class={twMerge("slider-custom-theme", classes)}>
@@ -32,7 +32,7 @@
         first="label"
         last="label"
         rest={false}
-        formatter={formatCurrency}
+        formatter={(value: number) => formatCurrency(value, currency)}
     />
 </div>
 
