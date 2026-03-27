@@ -3,6 +3,6 @@
   "include": [".astro/types.d.ts", "src/types", "**/*"],
   "exclude": ["dist"],
   "compilerOptions": {
-    "types": ["astro/client", "svelte"]
+    "allowArbitraryExtensions": true
   }
 }
