@@ -2,18 +2,22 @@
     import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
-    import { navigateToStep, wizardState } from "../../../stores/wizard-state";
+    import {
+        navigateToStep,
+        validateBudgetAmount,
+        validationErrors,
+        wizardState,
+    } from "../../../stores/wizard-state";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
+    import Toast from "../../library/Toast.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {
         project,
-        onContinue,
     }: {
         project: Project;
-        onContinue: () => void;
     } = $props();
 
     let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
@@ -25,10 +29,14 @@
      * Simple navigation to next step (6) - validation happens on save/submit
      */
     function handleContinue() {
-        navigateToStep(6);
-        if (onContinue) {
-            onContinue();
+        const errors = validateBudgetAmount();
+
+        if (Object.keys(errors).length > 0) {
+            validationErrors.set(errors);
+            return;
         }
+
+        navigateToStep(6);
     }
 
     async function loadBudgetItems() {
@@ -76,15 +84,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, i}
-                    <AdminBudgetCard {project} {item} index={i} {loading} />
+                    <AdminBudgetCard {item} index={i} {loading} />
                 {/each}
 
-                <AdminBudgetCard
-                    isCreateCard={true}
-                    {project}
-                    item={null}
-                    {loading}
-                />
+                <AdminBudgetCard isCreateCard={true} item={null} {loading} />
             </Grid>
         {/if}
     </div>
@@ -101,15 +104,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard {project} {item} index={i} {loading} />
+                    <AdminBudgetCard {item} index={i} {loading} />
                 {/each}
 
-                <AdminBudgetCard
-                    isCreateCard={true}
-                    {project}
-                    item={null}
-                    {loading}
-                />
+                <AdminBudgetCard isCreateCard={true} item={null} {loading} />
             </Grid>
         {/if}
     </div>
@@ -126,3 +124,8 @@
         {$t("wizard.campaignInfo.continue")}
     </Button>
 </div>
+{#if $validationErrors}
+    <Toast variant="error" showToast={true}>
+        {$validationErrors}
+    </Toast>
+{/if}

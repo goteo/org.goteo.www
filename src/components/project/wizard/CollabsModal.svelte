@@ -3,8 +3,9 @@
 
     import { t } from "../../../i18n/store";
     import Button from "../../library/Button.svelte";
-    import type { ClassNameValue } from "tailwind-merge";
+
     import type { WizardCollaboration } from "../../../stores/wizard-state";
+    import type { ClassNameValue } from "tailwind-merge";
 
     type CollabPayload = {
         title: string;
@@ -19,7 +20,7 @@
     }: {
         open: boolean;
         collab: WizardCollaboration | null;
-        onSave?: (data: any) => void;
+        onSave: (data: WizardCollaboration | null) => void;
         onDelete?: () => void;
     } = $props();
 
@@ -36,7 +37,7 @@
             description,
         };
 
-        await onSave?.(payload);
+        await onSave(payload);
     }
 
     async function handleDeleteClick() {
@@ -75,7 +76,7 @@
     </div>
 
     {#snippet footer()}
-        {#if collab !== null}
+        {#if collab !== null && onDelete}
             <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
                 {$t(`wizard.collaborations.modal.btns.delete`)}
             </Button>

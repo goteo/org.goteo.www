@@ -3,18 +3,18 @@
 
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { defaultCurrency } from "../../../utils/currencies";
     import FileUpload from "../../FileUpload.svelte";
     import Button from "../../library/Button.svelte";
 
-    import type { Project, ProjectReward } from "../../../openapi/client";
+    import type { MoneyWithConversion } from "../../../openapi/client";
+    import type { WizardReward } from "../../../stores/wizard-state";
     import type { ClassNameValue } from "tailwind-merge";
 
     type RewardsPayload = {
-        project: string;
         title: string;
         description: string;
-        money: { amount: number; currency: string };
+        money: MoneyWithConversion;
         isFinite: boolean;
         unitsTotal: number | null;
     };
@@ -22,22 +22,20 @@
     let {
         open = $bindable(false),
         reward,
-        project,
         onSave,
         onDelete,
     }: {
         open: boolean;
-        reward: ProjectReward | null;
-        project: Project;
-        onSave?: (data: any) => Promise<void>;
-        onDelete?: (id: number | undefined, type?: "minimum" | "optimum") => Promise<void>;
+        reward: WizardReward | null;
+        onSave: (data: WizardReward | null) => void;
+        onDelete?: () => void;
     } = $props();
 
     let title = $state(reward?.title ?? "");
     let description = $state(reward?.description ?? "");
 
     let moneyAmount = $state(reward?.money.amount ?? 0);
-    let rewardCount = $state(reward?.unitsAvailable ?? 1);
+    let rewardCount = $state(reward?.unitsTotal ?? 1);
     let unlimited = $state(reward?.isFinite ?? false);
     let files = $state<File[]>([]);
 
@@ -47,22 +45,21 @@
     async function handleSaveOrCreate() {
         if (!reward) return;
         let payload: RewardsPayload = {
-            project: apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id),
             title,
             description,
             money: {
                 amount: moneyAmount,
-                currency: reward?.money.currency || "EUR",
+                currency: defaultCurrency(),
             },
             isFinite: unlimited ? false : true,
             unitsTotal: unlimited ? null : rewardCount,
         };
 
-        await onSave?.(payload);
+        await onSave(payload);
     }
 
     async function handleDeleteClick() {
-        if (reward) await onDelete?.(reward.id);
+        if (reward) await onDelete?.();
     }
 </script>
 
@@ -95,7 +92,7 @@
         >
         <input
             bind:value={moneyAmount}
-            type="text"
+            type="number"
             placeholder={$t("wizard.rewards.modal.placeholders.moneyAmount")}
             class={INPUTS_CLASSES}
         />
@@ -106,7 +103,7 @@
     </div>
 
     {#snippet footer()}
-        {#if reward !== null}
+        {#if reward !== null && onDelete}
             <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
                 {$t(`wizard.rewards.modal.btns.delete`)}
             </Button>

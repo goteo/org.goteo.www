@@ -2,26 +2,25 @@
     import BudgetModal from "./BudgetModal.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-
-    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
     import {
         addBudgetItem,
         deleteBudgetItem,
         updateBudgetItem,
+        validationErrors,
     } from "../../../stores/wizard-state";
+    import { formatCurrency } from "../../../utils/currencies";
+    import Button from "../../library/Button.svelte";
+
+    import type { ProjectBudgetItem } from "../../../openapi/client";
 
     let {
         item,
         index,
-        project,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
         item: ProjectBudgetItem | null;
         index?: number;
-        project: Project;
         loading: boolean;
         isCreateCard?: boolean;
     } = $props();
@@ -36,36 +35,28 @@
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
-        loading = true;
+        let errors;
 
-        try {
-            const deadline = data.deadline as "minimum" | "optimum";
-
-            if (item && index !== undefined) {
-                // UPDATE
-                updateBudgetItem(index, deadline, data);
-            } else {
-                // CREATE
-                addBudgetItem(deadline, data);
-            }
-        } finally {
-            loading = false;
-            openModal = false;
+        if (index !== undefined) {
+            errors = updateBudgetItem(index, data);
+        } else {
+            errors = addBudgetItem(data);
         }
+
+        if (Object.keys(errors!).length > 0) {
+            validationErrors.set(errors!);
+            return;
+        }
+
+        validationErrors.set({});
+        openModal = false;
     }
 
     function handleDeleteBudgetItem(deadline: "minimum" | "optimum" | undefined) {
         if (!index || !deadline) return;
 
-        loading = true;
-
-        try {
-            deleteBudgetItem(index, deadline);
-        } finally {
-            loading = false;
-            openModal = false;
-            item = null;
-        }
+        deleteBudgetItem(index, deadline);
+        openModal = false;
     }
 </script>
 
@@ -77,7 +68,6 @@
         onSave={handleSaveBudgetItem}
         onclick={() => (openModal = true)}
         bind:open={openModal}
-        {project}
     />
 {:else if item}
     <div
@@ -109,7 +99,6 @@
         <BudgetModal
             budgetItem={item}
             bind:open={openModal}
-            {project}
             onSave={handleSaveBudgetItem}
             onDelete={handleDeleteBudgetItem}
         />

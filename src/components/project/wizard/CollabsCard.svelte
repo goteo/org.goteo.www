@@ -1,11 +1,7 @@
 <script lang="ts">
     import CollabsModal from "./CollabsModal.svelte";
-    import { t } from "../../../i18n/store";
-    import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
-
-    import type { Project } from "../../../openapi/client";
     import CreateCard from "./CreateCard.svelte";
+    import { t } from "../../../i18n/store";
     import {
         addCollaboration,
         deleteCollaboration,
@@ -13,17 +9,17 @@
         validationErrors,
         type WizardCollaboration,
     } from "../../../stores/wizard-state";
+    import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import Button from "../../library/Button.svelte";
 
     let {
         collab,
         index,
-        project,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
         collab: WizardCollaboration | null;
         index?: number;
-        project: Project;
         loading: boolean;
         isCreateCard?: boolean;
     } = $props();
@@ -32,7 +28,6 @@
 
     function handleSaveCollab(data: WizardCollaboration | null) {
         if (!data) return;
-
         let errors;
 
         if (index !== undefined) {
@@ -53,14 +48,8 @@
     function handleDeleteCollab() {
         if (!index) return;
 
-        loading = true;
-
-        try {
-            deleteCollaboration(index);
-        } finally {
-            loading = false;
-            openModal = false;
-        }
+        deleteCollaboration(index);
+        openModal = false;
     }
 </script>
 
@@ -72,7 +61,6 @@
         onSave={handleSaveCollab}
         onclick={() => (openModal = true)}
         bind:open={openModal}
-        {project}
     />
 {:else if collab}
     <div
@@ -95,12 +83,11 @@
         <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
             {$t("reward.edit")}
         </Button>
+        <CollabsModal
+            bind:open={openModal}
+            {collab}
+            onSave={handleSaveCollab}
+            onDelete={handleDeleteCollab}
+        />
     </div>
-
-    <CollabsModal
-        bind:open={openModal}
-        {collab}
-        onSave={handleSaveCollab}
-        onDelete={handleDeleteCollab}
-    />
 {/if}

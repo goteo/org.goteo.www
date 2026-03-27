@@ -7,7 +7,6 @@
     import Button from "../../library/Button.svelte";
 
     import type {
-        Project,
         ProjectBudgetItem,
         ProjectCollaboration,
         ProjectReward,
@@ -19,7 +18,6 @@
         onclick,
         variant,
         open = $bindable(false),
-        project,
         reward,
         collab,
         budgetItem,
@@ -30,7 +28,6 @@
         onclick: () => void;
         variant: "reward" | "collab" | "budget";
         open: boolean;
-        project: Project;
         reward?: ProjectReward | null;
         collab?: ProjectCollaboration | null;
         budgetItem?: ProjectBudgetItem | null;
@@ -69,9 +66,9 @@
     </Button>
 </div>
 {#if variant === "reward"}
-    <RewardsModal bind:open {project} {onSave} {reward} />
+    <RewardsModal bind:open {onSave} {reward} />
 {:else if variant === "collab"}
-    <CollabsModal bind:open {project} {onSave} {collab} />
+    <CollabsModal bind:open {onSave} {collab} />
 {:else if variant === "budget"}
-    <BudgetModal bind:open {project} {onSave} {budgetItem} />
+    <BudgetModal bind:open {onSave} {budgetItem} />
 {/if}

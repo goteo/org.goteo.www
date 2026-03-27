@@ -11,8 +11,7 @@
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
-    let { onContinue, project } = $props<{
-        onContinue: () => void;
+    let { project } = $props<{
         project: Project;
     }>();
 
@@ -25,7 +24,6 @@
      */
     function handleContinue() {
         navigateToStep(5);
-        onContinue();
     }
 
     async function loadCollabs() {
@@ -57,10 +55,10 @@
     {:else}
         <Grid>
             {#each collabs as collab, index}
-                <CollabsCard {index} {project} {collab} bind:loading />
+                <CollabsCard {index} {collab} bind:loading />
             {/each}
 
-            <CollabsCard isCreateCard={true} {project} collab={null} bind:loading />
+            <CollabsCard isCreateCard={true} collab={null} bind:loading />
         </Grid>
     {/if}
 

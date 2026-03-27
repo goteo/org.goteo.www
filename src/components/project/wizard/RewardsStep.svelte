@@ -1,29 +1,17 @@
 <script lang="ts">
-    import CreateCard from "./CreateCard.svelte";
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
-    import {
-        apiProjectRewardsGetCollection,
-        apiProjectRewardsIdDelete,
-        apiProjectRewardsIdPatch,
-        apiProjectRewardsPost,
-        type Project,
-        type ProjectReward,
-    } from "../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { navigateToStep } from "../../../stores/wizard-state";
+    import { type Project } from "../../../openapi/client";
+    import { navigateToStep, wizardState, type WizardReward } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
-    let { project, onContinue } = $props<{
+    let { project } = $props<{
         project: Project;
-        onContinue: () => void;
     }>();
 
-    let rewards = $state<ProjectReward[]>([]);
-    let selectedReward = $state<ProjectReward | null>(null);
-    let openModal = $state(false);
+    let rewards = $state<WizardReward[]>($wizardState.rewards);
     let loading = $state(false);
 
     /**
@@ -32,98 +20,19 @@
      */
     function handleContinue() {
         navigateToStep(4);
-        if (onContinue) {
-            onContinue();
-        }
     }
 
     async function loadRewards() {
         if (!project) return;
         loading = true;
 
-        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
-
-        const { data, error } = await apiProjectRewardsGetCollection({
-            query: { project: projectIri },
-        });
-        if (error) {
-            console.error("Error loading rewards:", error);
-        } else if (data) rewards = data;
+        rewards = $wizardState.rewards;
 
         loading = false;
     }
 
-    async function handleSaveRewards(data: ProjectReward | null) {
-        if (!data) return;
-        loading = true;
-
-        try {
-            if (selectedReward?.id) {
-                const { data: dataUpdated, error } = await apiProjectRewardsIdPatch({
-                    path: { id: String(selectedReward.id) },
-                    body: {
-                        ...data,
-                    },
-                });
-                if (error) {
-                    console.error("Error updating reward:", error);
-                } else if (dataUpdated)
-                    rewards = rewards.map((r) => (r.id === dataUpdated.id ? dataUpdated : r));
-            } else {
-                const { data: dataCreated, error } = await apiProjectRewardsPost({
-                    body: {
-                        ...data,
-                    },
-                });
-
-                if (error) {
-                    console.error("Error creating reward:", error);
-                } else if (dataCreated) {
-                    rewards = [...rewards, dataCreated];
-                }
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedReward = null;
-        }
-    }
-
-    async function handleDeleteRewards(rewardId: number | undefined) {
-        if (!rewardId) return;
-        loading = true;
-
-        try {
-            const { error } = await apiProjectRewardsIdDelete({
-                path: { id: String(rewardId) },
-            });
-
-            if (error) {
-                console.error("Error deleting reward:", error);
-            } else {
-                rewards = rewards.filter((r) => r.id !== rewardId);
-            }
-        } finally {
-            loading = false;
-            openModal = false;
-            selectedReward = null;
-        }
-    }
-
-    function openCreate() {
-        selectedReward = null;
-        openModal = true;
-    }
-
-    function openEdit(reward: ProjectReward) {
-        selectedReward = reward;
-        openModal = true;
-    }
-
     $effect(() => {
-        if (project) {
-            loadRewards();
-        }
+        if ($wizardState) loadRewards();
     });
 </script>
 
@@ -140,28 +49,11 @@
         <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
     {:else}
         <Grid>
-            {#each rewards as reward}
-                <RewardsCard
-                    bind:open={openModal}
-                    {project}
-                    {reward}
-                    onEdit={() => openEdit(reward)}
-                    onDelete={handleDeleteRewards}
-                    onSave={handleSaveRewards}
-                    {selectedReward}
-                />
+            {#each rewards as reward, index}
+                <RewardsCard {index} {reward} bind:loading />
             {/each}
 
-            <CreateCard
-                title={$t("wizard.steps.rewards.createCard.title")}
-                description={$t("wizard.steps.rewards.createCard.description")}
-                variant="reward"
-                bind:open={openModal}
-                {project}
-                reward={selectedReward}
-                onSave={handleSaveRewards}
-                onclick={openCreate}
-            />
+            <RewardsCard isCreateCard={true} reward={null} bind:loading />
         </Grid>
     {/if}
 

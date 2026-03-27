@@ -2,32 +2,29 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { formatCurrency } from "../../../utils/currencies";
+    import { getDefaultCurrency } from "../../../utils/consts";
     import Button from "../../library/Button.svelte";
 
-    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
+    import type { MoneyWithConversion, ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
 
     type BudgetItemPayload = {
-        project: string;
         title: string;
         description: string;
-        type: "infrastructure" | "material" | "task" | undefined;
-        deadline: "minimum" | "optimum" | undefined;
+        type: "infrastructure" | "material" | "task";
+        money: MoneyWithConversion;
+        deadline: "minimum" | "optimum";
     };
 
     let {
         open = $bindable(false),
         budgetItem,
-        project,
         onSave,
         onDelete,
     }: {
         open: boolean;
         budgetItem: ProjectBudgetItem | null;
-        project: Project;
-        onSave?: (data: any) => void;
+        onSave: (data: ProjectBudgetItem | null) => void;
         onDelete?: (deadline: "minimum" | "optimum") => void;
     } = $props();
 
@@ -35,6 +32,7 @@
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         budgetItem?.type,
     );
+    let amount = $state(budgetItem?.money.amount ?? 0);
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
     let selectedBudgetDescription = $state(budgetItem?.description ?? "");
 
@@ -44,14 +42,17 @@
     async function handleSaveOrCreate() {
         if (!budgetItem) return;
         let payload: BudgetItemPayload = {
-            project: apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id),
             title: selectedBudgetTitle,
             description: selectedBudgetDescription,
-            deadline: selectedBudgetDeadline,
-            type: selectedBudgetType,
+            deadline: selectedBudgetDeadline!,
+            money: {
+                amount,
+                currency: getDefaultCurrency(),
+            },
+            type: selectedBudgetType!,
         };
 
-        await onSave?.(payload);
+        await onSave(payload);
     }
 
     async function handleDeleteClick() {
@@ -100,20 +101,16 @@
         </select>
         <div class="flex gap-4">
             <input
-                type="text"
+                type="number"
                 placeholder={$t("wizard.budget.modal.placeholders.amount")}
                 class={`${INPUTS_CLASSES} w-[50%]`}
-                value={budgetItem?.money.amount && budgetItem?.money.currency
-                    ? formatCurrency(budgetItem?.money.amount, budgetItem?.money.currency)
-                    : ""}
-                required
+                bind:value={amount}
             />
             <select
                 bind:value={selectedBudgetDeadline}
                 aria-label={$t("wizard.budget.modal.selectors.deadline.title")}
                 title={$t("wizard.budget.modal.selectors.deadline.title")}
                 class={`${INPUTS_CLASSES} w-[50%]`}
-                required
             >
                 <option value="" selected={!budgetItem?.deadline ? true : false}
                     >{$t("wizard.budget.modal.selectors.deadline.placeholder")}</option
@@ -140,7 +137,7 @@
     </div>
 
     {#snippet footer()}
-        {#if budgetItem !== null}
+        {#if budgetItem !== null && onDelete}
             <Button kind="secondary" onclick={() => handleDeleteClick()} class="w-fit">
                 {$t(`wizard.budget.modal.btns.delete`)}
             </Button>
