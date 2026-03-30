@@ -14,17 +14,17 @@
         button,
         link,
         class: classes = "",
+        showToast = $bindable(false),
         children,
     }: {
-        variant?: keyof typeof variantStyles;
+        variant: keyof typeof variantStyles;
         "aria-label"?: string;
         button?: Snippet;
         link?: Snippet;
         class?: ClassNameValue;
+        showToast: boolean;
         children: Snippet;
     } = $props();
-
-    let showToast = $state(true);
 
     const variantStyles = {
         error: "border-tertiary bg-semantic-error",
