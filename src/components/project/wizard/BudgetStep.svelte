@@ -124,8 +124,10 @@
         {$t("wizard.campaignInfo.continue")}
     </Button>
 </div>
-{#if $validationErrors}
-    <Toast variant="error" showToast={true}>
-        {$validationErrors}
-    </Toast>
+{#if Object.keys($validationErrors).length > 0}
+    {#each Object.entries($validationErrors) as [key, message]}
+        <Toast aria-label={key} class={""} variant="error" showToast={true}>
+            {message}
+        </Toast>
+    {/each}
 {/if}
