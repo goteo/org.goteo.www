@@ -1,0 +1,32 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import ReturnHeader from "../../../components/library/ReturnHeader.svelte";
+import BodyText from "../../../components/library/BodyText.svelte";
+
+const { t } = Astro.locals;
+const { fileName } = Astro.params;
+
+const markdownFiles = import.meta.glob<{ default: any }>("../../../../static/*md");
+
+const fileKey = Object.keys(markdownFiles).find((path) => path.endsWith(`${fileName}.md`));
+
+if (!fileKey) {
+    return Astro.redirect("/404");
+}
+
+const file = await markdownFiles[fileKey]();
+
+const Content = file.default;
+---
+
+<Layout
+    title={t("metadata.title")}
+    description={t("metadata.description")}
+    class="mb-20 gap-[72px]"
+>
+    <ReturnHeader client:load />
+
+    <BodyText client:load>
+        <Content />
+    </BodyText>
+</Layout>
