@@ -2,27 +2,23 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
+    import { validationErrors } from "../../../stores/wizard-state";
     import { getDefaultCurrency } from "../../../utils/consts";
     import Button from "../../library/Button.svelte";
+    import Toast from "../../library/Toast.svelte";
 
-    import type { MoneyWithConversion, ProjectBudgetItem } from "../../../openapi/client";
+    import type { ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
-
-    type BudgetItemPayload = {
-        title: string;
-        description: string;
-        type: "infrastructure" | "material" | "task";
-        money: MoneyWithConversion;
-        deadline: "minimum" | "optimum";
-    };
 
     let {
         open = $bindable(false),
+        showToast = $bindable(false),
         budgetItem,
         onSave,
         onDelete,
     }: {
         open: boolean;
+        showToast: boolean;
         budgetItem: ProjectBudgetItem | null;
         onSave: (data: ProjectBudgetItem | null) => void;
         onDelete?: (deadline: "minimum" | "optimum") => void;
@@ -39,24 +35,21 @@
     const INPUTS_CLASSES: ClassNameValue =
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
-    async function handleSaveOrCreate() {
-        if (!budgetItem) return;
-        let payload: BudgetItemPayload = {
+    function handleSaveOrCreate() {
+        onSave({
             title: selectedBudgetTitle,
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,
             money: {
-                amount,
+                amount: amount * 100,
                 currency: getDefaultCurrency(),
             },
             type: selectedBudgetType!,
-        };
-
-        await onSave(payload);
+        });
     }
 
-    async function handleDeleteClick() {
-        if (budgetItem) await onDelete?.(budgetItem.deadline);
+    function handleDeleteClick() {
+        if (budgetItem) onDelete?.(budgetItem.deadline);
     }
 </script>
 
@@ -68,6 +61,16 @@
     bodyClass="md:p-0 p-0"
     footerClass="md:p-0 p-0 flex items-center justify-end gap-4"
 >
+    {#if Object.keys($validationErrors).length === 1}
+        {@const validationError = Object.values($validationErrors)}
+        <Toast class="absolute z-999 self-end" variant="error" bind:showToast>
+            {validationError}
+        </Toast>
+    {:else if Object.keys($validationErrors).length >= 2}
+        <Toast class="absolute z-999 self-end" variant="error" bind:showToast>
+            {$t("wizard.validation.budget.missing-requiered-fields")}
+        </Toast>
+    {/if}
     {#snippet header()}
         <h2 class="text-xl font-bold text-black">
             {$t(`wizard.budget.modal.title`)}

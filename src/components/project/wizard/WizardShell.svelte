@@ -22,6 +22,7 @@
         navigateToStep,
         saveToLocalStorage,
         persistenceError,
+        hasUnsavedChanges,
     } from "../../../stores/wizard-state";
     import EditIcon from "../../../svgs/EditIcon.svelte";
     import EyeIcon from "../../../svgs/EyeIcon.svelte";
@@ -190,7 +191,13 @@
                 <EyeIcon width="20" height="20" />
                 {$t("wizard.buttons.preview")}
             </Button>
-            <Button kind="secondary" size="md" onclick={handleSave} data-testid="wizard-save-btn">
+            <Button
+                kind="secondary"
+                size="md"
+                onclick={handleSave}
+                disabled={$hasUnsavedChanges ? false : true}
+                data-testid="wizard-save-btn"
+            >
                 {$t("wizard.buttons.save")}
             </Button>
             <Button

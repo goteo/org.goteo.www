@@ -26,6 +26,7 @@
     } = $props();
 
     let openModal = $state(false);
+    let showModalErrorToast = $state(false);
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
         task: "#99FFCC",
@@ -43,8 +44,13 @@
             errors = addBudgetItem(data);
         }
 
-        if (Object.keys(errors!).length > 0) {
+        if (errors === undefined) {
+            errors = {};
+        }
+
+        if (Object.keys(errors).length > 0) {
             validationErrors.set(errors!);
+            showModalErrorToast = true;
             return;
         }
 
@@ -98,6 +104,7 @@
 
         <BudgetModal
             budgetItem={item}
+            bind:showToast={showModalErrorToast}
             bind:open={openModal}
             onSave={handleSaveBudgetItem}
             onDelete={handleDeleteBudgetItem}

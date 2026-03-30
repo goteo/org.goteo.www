@@ -42,28 +42,36 @@
     async function loadBudgetItems() {
         loading = true;
 
-        minBudgetItems = [];
-        optBudgetItems = [];
-
-        const minimumData = $wizardState.budgetItems.minimum;
-        const optimumData = $wizardState.budgetItems.optimum;
-
-        minimumData.forEach((item) => {
-            minBudgetItems.push(item);
-        });
-        optimumData.forEach((item) => {
-            optBudgetItems.push(item);
-        });
+        minBudgetItems = $wizardState.budgetItems.minimum;
+        optBudgetItems = $wizardState.budgetItems.optimum;
 
         loading = false;
     }
 
     $effect(() => {
-        if ($wizardState) loadBudgetItems();
+        if (Object.keys($validationErrors).length > 0)
+            console.log("Errores de validación:", $validationErrors);
+        if ($wizardState) {
+            loadBudgetItems();
+        }
     });
 </script>
 
 <div class="flex flex-col gap-10">
+    {#if Object.keys($validationErrors).length > 0}
+        {#each Object.entries($validationErrors) as [key, message]}
+            {#if key === "minimum" || key === "optimum_total"}
+                <Toast
+                    aria-label={key}
+                    class="absolute z-999 self-end"
+                    variant="error"
+                    showToast={true}
+                >
+                    {message}
+                </Toast>
+            {/if}
+        {/each}
+    {/if}
     <div class="space-y-4">
         <h1 class="text-3xl leading-12 font-bold text-black lg:text-[40px]">
             {$t("wizard.budget.title")}
@@ -124,10 +132,3 @@
         {$t("wizard.campaignInfo.continue")}
     </Button>
 </div>
-{#if Object.keys($validationErrors).length > 0}
-    {#each Object.entries($validationErrors) as [key, message]}
-        <Toast aria-label={key} class={""} variant="error" showToast={true}>
-            {message}
-        </Toast>
-    {/each}
-{/if}

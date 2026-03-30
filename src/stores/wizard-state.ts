@@ -17,6 +17,7 @@ import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
 import type { MoneyWithConversion, Project, ProjectBudgetItem, ProjectCalendar } from "../openapi/client";
+import { cyrb53 } from "../utils/hash";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
@@ -892,7 +893,7 @@ export function updateBudgetItem(
     index: number,
     item: ProjectBudgetItem,
 ) {
-    const errors = validateBudgetItem(item, index);
+    const errors = validateBudgetItem(item);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -919,9 +920,8 @@ export function addBudgetItem(
     item: ProjectBudgetItem,
 ) {
     const { budgetItems } = get(wizardState);
-    const currentIndex = budgetItems[item.deadline].length;
-    const errors = validateBudgetItem(item, currentIndex);
-
+    console.log({ budgetItems, deadline: item.deadline, currentType: budgetItems[item.deadline], itemDeadline: item.deadline });
+    const errors = validateBudgetItem(item);
     if (Object.keys(errors).length > 0) {
         return errors;
     }
@@ -954,36 +954,39 @@ export function deleteBudgetItem(
     saveToLocalStorage();
 }
 
-export function validateBudgetItem(item: ProjectBudgetItem, index: number): Record<string, string> {
+export function validateBudgetItem(item: ProjectBudgetItem): Record<string, string> {
     const errors: Record<string, string> = {};
+    console.log(item);
 
-    if (!item.title?.trim()) {
-        errors[`${item.deadline}_${index}_title`] =
+    const hash = cyrb53(JSON.stringify(item));
+
+    if (!item.title.trim()) {
+        errors[`error_${hash}_title`] =
             "wizard.validation.budget.title_required";
     }
 
-    if (!item.description?.trim()) {
-        errors[`${item.deadline}_${index}_description`] =
+    if (!item.description.trim()) {
+        errors[`error_${hash}_description`] =
             "wizard.validation.budget.description_required";
     }
 
-    if (!item.money?.amount || item.money.amount <= 0) {
-        errors[`${item.deadline}_${index}_amount`] =
+    if (!item.money.amount || item.money.amount <= 0) {
+        errors[`error_${hash}_amount`] =
             "wizard.validation.budget.amount_invalid";
     }
 
-    if (!item.money?.currency) {
-        errors[`${item.deadline}_${index}_currency`] =
+    if (!item.money.currency) {
+        errors[`error_${hash}_currency`] =
             "wizard.validation.budget.currency_required";
     }
 
     if (!item.type) {
-        errors[`${item.deadline}_${index}_type`] =
+        errors[`error_${hash}_type`] =
             "wizard.validation.budget.type_required";
     }
 
     if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-        errors[`${item.deadline}_${index}_deadline`] =
+        errors[`error_${hash}_deadline`] =
             "wizard.validation.budget.deadline_invalid";
     }
 
@@ -994,7 +997,7 @@ export function validateBudgetAmount() {
     const { budgetItems } = get(wizardState);
     const errors: Record<string, string> = {};
 
-    if (budgetItems.minimum.length === 0) {
+    if (budgetItems.minimum.length <= 0) {
         errors.minimum = "wizard.validation.budget.minimum_required";
     }
 
