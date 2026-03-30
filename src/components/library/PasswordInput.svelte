@@ -1,7 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import Eye from "../../svgs/Eye.svelte";
+
     import { t } from "../../i18n/store";
+    import Eye from "../../svgs/Eye.svelte";
 
     interface Props {
         class?: ClassNameValue;
