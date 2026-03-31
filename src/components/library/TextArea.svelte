@@ -41,7 +41,6 @@
             disabled && "opacity-70",
         ),
     );
-    const helperClasses = "mt-1 ml-3 text-xs text-tertiary transition-all";
 </script>
 
 <div class="relative flex w-full flex-col gap-1 {disabled ? 'opacity-50' : ''}">
@@ -52,6 +51,6 @@
     ></textarea>
 
     {#if error && helper}
-        <span class={helperClasses}>{helper}</span>
+        <span class="text-tertiary mt-1 ml-3 text-xs transition-all">{helper}</span>
     {/if}
 </div>
