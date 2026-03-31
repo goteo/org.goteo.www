@@ -12,7 +12,6 @@
         class?: ClassNameValue;
         rows?: number;
     }
-
     let {
         id,
         label = "",
@@ -25,36 +24,30 @@
         rows = 4,
         ...rest
     }: Props = $props();
-
     let textareaClasses = $derived(
         twMerge(
-            "border-secondary flex w-full min-h-[120px] resize-none items-start gap-2 rounded-lg border bg-white p-3 text-sm text-content transition-all outline-none focus:ring-secondary",
-            "placeholder:text-gray-400",
+            "border-secondary flex w-full min-h-[120px] resize-none items-start gap-2 rounded-lg border bg-white p-3 text-sm text-content transition-all outline-none focus:ring-secondary placeholder:text-gray-400",
             error &&
                 "border-tertiary focus:ring-tertiary text-tertiary placeholder:text-tertiary/60 focus:ring-1",
             disabled && "border-transparent bg-gray-light cursor-not-allowed",
             className,
         ),
     );
-
     let labelClasses = $derived(
         twMerge(
-            "absolute -top-2.5 left-2.5 bg-white px-1 text-xs transition-colors font-medium",
-            "text-gray-400",
+            "absolute -top-2.5 left-2.5 bg-white px-1 text-xs transition-colors font-medium text-gray-400",
             error && "text-tertiary",
             value && !error && "text-content",
             disabled && "opacity-70",
         ),
     );
-
-    let helperClasses = $derived(twMerge("mt-1 ml-3 text-xs text-tertiary transition-all"));
+    const helperClasses = "mt-1 ml-3 text-xs text-tertiary transition-all";
 </script>
 
 <div class="relative flex w-full flex-col gap-1 {disabled ? 'opacity-50' : ''}">
     {#if label}
         <label for={id} class={labelClasses}>{label}</label>
     {/if}
-
     <textarea {id} {disabled} {placeholder} {rows} bind:value class={textareaClasses} {...rest}
     ></textarea>
 
