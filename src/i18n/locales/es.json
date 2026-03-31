@@ -882,7 +882,7 @@
   "admin": {
     "projects": {
       "totalizers": {
-        "selected": "Proyectos seleccionadas:",
+        "selected": "Proyectos seleccionados:",
         "totalEarned": "Total conseguido:",
         "totalPaid": "Total pagado:",
         "totalUnpaid": "Falta por pagar:"
