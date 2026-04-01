@@ -7,10 +7,10 @@ Converted from CampaignCard.astro to maintain exact functionality
     import { twMerge } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
-    import CategoryIcon from "../../svgs/CategoryIcon.svelte";
     import ClockIcon from "../../svgs/ClockIcon.svelte";
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import Clock from "../icons/Clock.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
     import Tag from "../library/Tag.svelte";
 
@@ -143,7 +143,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Category (display only first) -->
                     {#if firstCategory()}
                         <div class="flex items-center gap-2">
-                            <CategoryIcon />
+                            <Clock />
                             <span class="text-sm text-black">
                                 {$t(`categories.${firstCategory()}`)}
                             </span>
