@@ -719,7 +719,7 @@ export const isCampaignInfoValidStore = derived(wizardState, () => {
  * updateReward(index: currentIndex, reward: updatedReward);
  */
 export function updateReward(index: number, reward: WizardReward) {
-    const errors = validateReward(reward, index);
+    const errors = validateReward(reward);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -735,9 +735,7 @@ export function updateReward(index: number, reward: WizardReward) {
 }
 
 export function addReward(reward: WizardReward) {
-    const { rewards } = get(wizardState);
-    const currentIndex = rewards.length;
-    const errors = validateReward(reward, currentIndex);
+    const errors = validateReward(reward);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -760,19 +758,20 @@ export function deleteReward(index: number) {
     saveToLocalStorage();
 }
 
-export function validateReward(reward: WizardReward, index: number): Record<string, string> {
+export function validateReward(reward: WizardReward): Record<string, string> {
     const errors: Record<string, string> = {};
+    const hash = cyrb53(JSON.stringify(reward));
 
-    if (!reward.title?.trim()) {
-        errors[`reward_${index}_title`] = "wizard.validation.rewards.title";
+    if (!reward.title.trim()) {
+        errors[`reward_error_title_${hash}`] = "wizard.validation.rewards.title";
     }
 
-    if (!reward.money?.amount || reward.money.amount <= 0) {
-        errors[`reward_${index}_amount`] = "wizard.validation.rewards.amount";
+    if (!reward.money.amount || reward.money.amount <= 0) {
+        errors[`reward_error_amount_${hash}`] = "wizard.validation.rewards.amount";
     }
 
     if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
-        errors[`reward_${index}_units`] = "wizard.validation.rewards.units";
+        errors[`reward_error_units_${hash}`] = "wizard.validation.rewards.units";
     }
 
     return errors;
@@ -799,7 +798,7 @@ export function updateCollaboration(
     index: number,
     collab: WizardCollaboration
 ): Record<string, string> {
-    const errors = validateCollaboration(collab, index);
+    const errors = validateCollaboration(collab);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -818,13 +817,10 @@ export function updateCollaboration(
     return {};
 }
 
-
 export function addCollaboration(
     collab: WizardCollaboration
 ): Record<string, string> {
-    const { collaborations } = get(wizardState);
-    const currentIndex = collaborations.length;
-    const errors = validateCollaboration(collab, currentIndex);
+    const errors = validateCollaboration(collab);
 
     if (Object.keys(errors).length > 0) {
         return errors;
@@ -843,29 +839,34 @@ export function addCollaboration(
 
 
 export function deleteCollaboration(index: number) {
-    wizardState.update((state) => ({
-        ...state,
-        collaborations: state.collaborations.filter((_, i) => i !== index),
-    }));
+    wizardState.update((state) => {
+        const collaborations = state.collaborations.splice(index, 1); // Remove the collaboration from the array
+
+        return {
+            ...state,
+            collaborations: { ...collaborations },
+        }
+    });
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }
 
-export function validateCollaboration(collab: WizardCollaboration, index: number): Record<string, string> {
+export function validateCollaboration(collab: WizardCollaboration): Record<string, string> {
     const errors: Record<string, string> = {};
+    const hash = cyrb53(JSON.stringify(collab));
 
-    if (!collab.title?.trim()) {
-        errors[`collab_${index}_title`] =
+    if (!collab.title.trim()) {
+        errors[`collab_error_title_${hash}`] =
             "wizard.validation.collaborations.title";
     }
 
     if (collab.description && collab.description.length > 1000) {
-        errors[`collab_${index}_description_too_long`] =
+        errors[`collab_error_description_too_long_${hash}`] =
             "wizard.validation.collaborations.description_too_long";
     }
 
     if (!collab.description.trim()) {
-        errors[`collab_${index}_description`] =
+        errors[`collab_error_description_${hash}`] =
             "wizard.validation.collaborations.description";
     }
 
@@ -919,9 +920,8 @@ export function updateBudgetItem(
 export function addBudgetItem(
     item: ProjectBudgetItem,
 ) {
-    const { budgetItems } = get(wizardState);
-    console.log({ budgetItems, deadline: item.deadline, currentType: budgetItems[item.deadline], itemDeadline: item.deadline });
     const errors = validateBudgetItem(item);
+
     if (Object.keys(errors).length > 0) {
         return errors;
     }
@@ -956,37 +956,35 @@ export function deleteBudgetItem(
 
 export function validateBudgetItem(item: ProjectBudgetItem): Record<string, string> {
     const errors: Record<string, string> = {};
-    console.log(item);
-
     const hash = cyrb53(JSON.stringify(item));
 
     if (!item.title.trim()) {
-        errors[`error_${hash}_title`] =
+        errors[`budget_error_title_${hash}`] =
             "wizard.validation.budget.title_required";
     }
 
     if (!item.description.trim()) {
-        errors[`error_${hash}_description`] =
+        errors[`budget_error_description_${hash}`] =
             "wizard.validation.budget.description_required";
     }
 
     if (!item.money.amount || item.money.amount <= 0) {
-        errors[`error_${hash}_amount`] =
+        errors[`budget_error_amount_${hash}`] =
             "wizard.validation.budget.amount_invalid";
     }
 
     if (!item.money.currency) {
-        errors[`error_${hash}_currency`] =
+        errors[`budget_error_currency_${hash}`] =
             "wizard.validation.budget.currency_required";
     }
 
     if (!item.type) {
-        errors[`error_${hash}_type`] =
+        errors[`budget_error_type_${hash}`] =
             "wizard.validation.budget.type_required";
     }
 
     if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-        errors[`error_${hash}_deadline`] =
+        errors[`budget_error_deadline_${hash}`] =
             "wizard.validation.budget.deadline_invalid";
     }
 

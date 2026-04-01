@@ -23,6 +23,7 @@
     let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
     let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
     let loading = $state(false);
+    let showErrorToast = $state(false);
 
     /**
      * Handle Continue button
@@ -60,16 +61,14 @@
 <div class="flex flex-col gap-10">
     {#if Object.keys($validationErrors).length > 0}
         {#each Object.entries($validationErrors) as [key, message]}
-            {#if key === "minimum" || key === "optimum_total"}
                 <Toast
                     aria-label={key}
                     class="absolute z-999 self-end"
                     variant="error"
-                    showToast={true}
+                    bind:showToast={showErrorToast}
                 >
                     {message}
                 </Toast>
-            {/if}
         {/each}
     {/if}
     <div class="space-y-4">
@@ -91,11 +90,11 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
-                {#each minBudgetItems as item, i}
-                    <AdminBudgetCard {item} index={i} {loading} />
+                {#each minBudgetItems as item, index}
+                    <AdminBudgetCard {item} {index} bind:loading />
                 {/each}
 
-                <AdminBudgetCard isCreateCard={true} item={null} {loading} />
+                <AdminBudgetCard isCreateCard={true} item={null} bind:loading />
             </Grid>
         {/if}
     </div>

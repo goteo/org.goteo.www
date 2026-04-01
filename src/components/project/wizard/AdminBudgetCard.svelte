@@ -49,7 +49,7 @@
         }
 
         if (Object.keys(errors).length > 0) {
-            validationErrors.set(errors!);
+            validationErrors.set(errors);
             showModalErrorToast = true;
             return;
         }
@@ -59,10 +59,11 @@
     }
 
     function handleDeleteBudgetItem(deadline: "minimum" | "optimum" | undefined) {
-        if (!index || !deadline) return;
+        if (index === undefined || !deadline) return;
 
         deleteBudgetItem(index, deadline);
         openModal = false;
+        validationErrors.set({});
     }
 </script>
 
@@ -74,6 +75,7 @@
         onSave={handleSaveBudgetItem}
         onclick={() => (openModal = true)}
         bind:open={openModal}
+        bind:showToast={showModalErrorToast}
     />
 {:else if item}
     <div

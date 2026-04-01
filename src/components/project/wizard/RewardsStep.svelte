@@ -2,7 +2,7 @@
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project } from "../../../openapi/client";
-    import { navigateToStep, wizardState, type WizardReward } from "../../../stores/wizard-state";
+    import { navigateToStep, validationErrors, wizardState, type WizardReward } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
@@ -23,11 +23,8 @@
     }
 
     async function loadRewards() {
-        if (!project) return;
         loading = true;
-
         rewards = $wizardState.rewards;
-
         loading = false;
     }
 

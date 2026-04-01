@@ -11,9 +11,11 @@
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
-    let { project } = $props<{
+    let {
+        project,
+    }: {
         project: Project;
-    }>();
+    } = $props();
 
     let collabs = $state<WizardCollaboration[]>($wizardState.collaborations);
     let loading = $state(false);
@@ -27,7 +29,6 @@
     }
 
     async function loadCollabs() {
-        if (!project) return;
         loading = true;
 
         collabs = $wizardState.collaborations;

@@ -18,6 +18,7 @@
         onclick,
         variant,
         open = $bindable(false),
+        showToast = $bindable(false),
         reward,
         collab,
         budgetItem,
@@ -28,6 +29,7 @@
         onclick: () => void;
         variant: "reward" | "collab" | "budget";
         open: boolean;
+        showToast: boolean;
         reward?: ProjectReward | null;
         collab?: ProjectCollaboration | null;
         budgetItem?: ProjectBudgetItem | null;
@@ -66,9 +68,9 @@
     </Button>
 </div>
 {#if variant === "reward"}
-    <RewardsModal bind:open {onSave} {reward} />
+    <RewardsModal bind:open bind:showToast {onSave} {reward} />
 {:else if variant === "collab"}
-    <CollabsModal bind:open {onSave} {collab} />
+    <CollabsModal bind:open bind:showToast {onSave} {collab} />
 {:else if variant === "budget"}
-    <BudgetModal bind:open {onSave} {budgetItem} />
+    <BudgetModal bind:open bind:showToast {onSave} {budgetItem} />
 {/if}

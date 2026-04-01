@@ -27,6 +27,7 @@
     } = $props();
 
     let openModal = $state(false);
+    let showModalErrorToast = $state(false);
 
     function handleSaveReward(data: WizardReward | null) {
         if (!data) return;
@@ -38,8 +39,13 @@
             errors = addReward(data);
         }
 
-        if (Object.keys(errors!).length > 0) {
-            validationErrors.set(errors!);
+        if (errors === undefined) {
+            errors = {};
+        }
+
+        if (Object.keys(errors).length > 0) {
+            validationErrors.set(errors);
+            showModalErrorToast = true;
             return;
         }
 
@@ -48,10 +54,11 @@
     }
 
     function handleDeleteReward() {
-        if (!index) return;
+        if (index === undefined) return;
 
         deleteReward(index);
         openModal = false;
+        validationErrors.set({});
     }
 </script>
 
@@ -63,10 +70,11 @@
         onSave={handleSaveReward}
         onclick={() => (openModal = true)}
         bind:open={openModal}
+        bind:showToast={showModalErrorToast}
     />
 {:else if reward}
     <div
-        class="border-grey flex min-h-148.75 basis-1/3 flex-col items-center justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
+        class="border-grey flex basis-1/3 flex-col justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
     >
         <div class="flex flex-col">
             <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
@@ -99,7 +107,7 @@
                     <UnitIcon />
                     <span>
                         {@html $t(
-                            "rewards.units-available",
+                            "wizard.rewards.units",
                             { units: `${reward.unitsTotal}` },
                             { allowHTML: true },
                         )}
@@ -119,6 +127,7 @@
         </Button>
         <RewardsModal
             bind:open={openModal}
+            bind:showToast={showModalErrorToast}
             {reward}
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
