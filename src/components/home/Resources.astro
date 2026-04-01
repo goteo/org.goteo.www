@@ -1,6 +1,6 @@
 ---
 import ResourceCard from "./ResourceCard.astro";
-import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+import Arrow from "../../components/icons/Arrow.svelte";
 
 const { t } = Astro.locals;
 
@@ -56,7 +56,7 @@ const resources = [
                 href="/recursos"
                 class="bg-variant1 text-secondary hover:bg-secondary flex items-center gap-2 rounded-3xl px-4 py-3 text-sm leading-5 font-bold transition-all duration-200 hover:text-white md:px-6 md:py-4 md:text-base md:leading-6"
             >
-                <ArrowRightIcon />
+                <Arrow />
                 <span class="hidden sm:inline">{t("home.resources.viewAll")}</span>
                 <span class="sm:hidden">Ver más</span>
             </a>

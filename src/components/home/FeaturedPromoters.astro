@@ -1,7 +1,7 @@
 ---
 import PromoterCard from "./PromoterCard.astro";
 import type { Promoter } from "../../types/promoter";
-import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+import Arrow from "../../components/icons/Arrow.svelte";
 
 const { t } = Astro.locals;
 
@@ -45,7 +45,7 @@ const promoters: Promoter[] = [
                 href="/promoters"
                 class="bg-variant1 text-secondary hover:bg-secondary flex items-center gap-2 rounded-3xl px-6 py-4 text-base leading-6 font-bold transition-all duration-200 hover:text-white"
             >
-                <ArrowRightIcon />
+                <Arrow />
                 {t("home.featuredPromoters.viewAll")}
             </a>
         </div>

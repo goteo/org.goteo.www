@@ -11,7 +11,7 @@
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/index";
-    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+    import Arrow from "../icons/Arrow.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getDefaultLanguage } from "../../utils/consts";
     import Countdown from "../Countdown.svelte";
@@ -213,12 +213,12 @@
                 {$t("reward.trending")}
             </h2>
             <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
-                <ArrowRightIcon />{$t("reward.showAll")}
+                <Arrow />{$t("reward.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang={projectLang} {project} />
         <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
-            <ArrowRightIcon />{$t("reward.showAll")}
+            <Arrow />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner {ownerName} />
