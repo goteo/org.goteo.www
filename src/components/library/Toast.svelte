@@ -1,10 +1,10 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ErrorIcon from "../../svgs/ErrorIcon.svelte";
     import NotificationIcon from "../../svgs/NotificationIcon.svelte";
     import SuccessIcon from "../../svgs/SuccessIcon.svelte";
     import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import ErrorIcon from "../icons/Error.svelte";
 
     import type { Snippet } from "svelte";
 
