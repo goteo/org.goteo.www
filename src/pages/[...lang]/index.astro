@@ -1,4 +1,5 @@
 ---
+import App from "../../components/App.svelte";
 import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/Hero/Hero.astro";
 import RenovationBanner from "../../components/home/RenovationBanner.astro";
@@ -10,8 +11,12 @@ import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
+import { getSession } from "../../auth/session";
+import type { Locale } from "../../i18n/locales";
 
 const { t } = Astro.locals;
+const locale = Astro.currentLocale as Locale;
+const session = await getSession(Astro.cookies);
 ---
 
 <Layout
@@ -19,6 +24,7 @@ const { t } = Astro.locals;
     description={t("metadata.description")}
     class="mb-20 gap-[72px]"
 >
+    <App client:load locale={locale} session={session} />
     <Hero />
     <RenovationBanner />
     <Campaigns />

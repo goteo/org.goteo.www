@@ -5,7 +5,10 @@
     import DonationsCard from "./DonationsCard.svelte";
     import MatchfundingCard from "./MatchfundingCard.svelte";
     import ProjectsCard from "./ProjectsCard.svelte";
-    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
+    import {
+        apiAccountingsIdGetUrl,
+        apiUsersIdOrHandleGetUrl,
+    } from "../../openapi/client/paths.gen.ts";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
@@ -108,7 +111,7 @@
             }
 
             // Fetch user's owned projects - using user IRI as owner
-            const userIri = buildUrl(apiUsersIdGetUrl, { id: user.id });
+            const userIri = buildUrl(apiUsersIdOrHandleGetUrl, { id: user.id });
             const { data: projectsResponse, error: projectsError } = await apiProjectsGetCollection(
                 {
                     client: relayClient,
