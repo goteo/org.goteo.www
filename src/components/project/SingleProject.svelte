@@ -4,7 +4,8 @@
     import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
-    import { t } from "../../i18n/store";
+    import { languagesList } from "../../i18n/locales";
+    import { locale, setLocale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
@@ -59,10 +60,26 @@
         return undefined;
     }
 
-    let projectLanguage = $state(project.locales![0]);
+    let projectLanguage = $state(guessProjectLanguage(project.locales!));
+
+    function guessProjectLanguage(pLangs: string[]): string {
+        for (const navLang of navigator.languages) {
+            const uLang = navLang.split("-")[0].toLowerCase();
+
+            if (pLangs.includes(uLang)) {
+                return uLang;
+            }
+        }
+
+        return pLangs[0];
+    }
 
     async function changeProjectLanguage(lang: string) {
         projectLanguage = lang;
+
+        if (Object.keys(languagesList).includes(projectLanguage)) {
+            setLocale(projectLanguage);
+        }
 
         const { data, error } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
@@ -78,6 +95,15 @@
 
     let langMismatch = $state(false);
     let attemptedLang = $state("");
+
+    locale.subscribe((locale) => {
+        if (!project.locales?.includes(locale)) {
+            langMismatch = true;
+            attemptedLang = locale;
+        } else {
+            projectLanguage = locale;
+        }
+    });
 
     let tabsComponent: any;
 
