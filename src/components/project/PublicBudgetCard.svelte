@@ -1,7 +1,8 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import type { ProjectBudgetItem } from "../../openapi/client";
     import { formatCurrency } from "../../utils/currencies";
+
+    import type { ProjectBudgetItem } from "../../openapi/client";
 
     let {
         item,

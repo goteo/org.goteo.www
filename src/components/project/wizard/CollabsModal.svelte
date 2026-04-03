@@ -1,13 +1,13 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
 
-    import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-
-    import { validationErrors, type WizardCollaboration } from "../../../stores/wizard-state";
-    import type { ClassNameValue } from "tailwind-merge";
-    import Toast from "../../library/Toast.svelte";
     import DeleteModal from "./DeleteModal.svelte";
+    import { t } from "../../../i18n/store";
+    import { validationErrors, type WizardCollaboration } from "../../../stores/wizard-state";
+    import Button from "../../library/Button.svelte";
+    import Toast from "../../library/Toast.svelte";
+
+    import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),

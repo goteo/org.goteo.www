@@ -61,14 +61,14 @@
 <div class="flex flex-col gap-10">
     {#if Object.keys($validationErrors).length > 0}
         {#each Object.entries($validationErrors) as [key, message]}
-                <Toast
-                    aria-label={key}
-                    class="absolute z-999 self-end"
-                    variant="error"
-                    bind:showToast={showErrorToast}
-                >
-                    {message}
-                </Toast>
+            <Toast
+                aria-label={key}
+                class="absolute z-999 self-end"
+                variant="error"
+                bind:showToast={showErrorToast}
+            >
+                {message}
+            </Toast>
         {/each}
     {/if}
     <div class="space-y-4">

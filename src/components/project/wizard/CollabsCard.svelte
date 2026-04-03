@@ -53,7 +53,7 @@
 
     function handleDeleteCollab() {
         if (index === undefined) return;
-        
+
         deleteCollaboration(index);
         openModal = false;
         validationErrors.set({});

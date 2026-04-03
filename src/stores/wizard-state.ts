@@ -16,8 +16,14 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import type { MoneyWithConversion, Project, ProjectBudgetItem, ProjectCalendar } from "../openapi/client";
 import { cyrb53 } from "../utils/hash";
+
+import type {
+    MoneyWithConversion,
+    Project,
+    ProjectBudgetItem,
+    ProjectCalendar,
+} from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
@@ -77,9 +83,9 @@ export interface WizardReward {
     money: {
         amount: number;
         currency: string;
-    }
+    };
 
-    // isFinite sets if the reward has a limit of exchanges, and if not, unitsTotal sets the limit 
+    // isFinite sets if the reward has a limit of exchanges, and if not, unitsTotal sets the limit
     isFinite: boolean;
     unitsTotal: number | null;
 }
@@ -90,7 +96,7 @@ export interface WizardReward {
 export interface WizardCollaboration {
     title: string;
     description: string;
-};
+}
 
 /**
  * Wizard Budget data (Step 5: Budget)
@@ -98,7 +104,7 @@ export interface WizardCollaboration {
 export interface WizardBudgetItems {
     minimum: ProjectBudgetItem[];
     optimum: ProjectBudgetItem[];
-};
+}
 
 /**
  * Complete wizard state
@@ -146,7 +152,7 @@ const getDefaultState = (): WizardState => ({
     categories: [],
     budget: {
         amount: 0,
-        currency: "EUR"
+        currency: "EUR",
     },
     calendar: {},
     currentStep: 1,
@@ -165,10 +171,16 @@ const getDefaultState = (): WizardState => ({
         errors: {},
     },
     rewards: [
-        { title: "", description: null, money: { amount: 0, currency: "" }, isFinite: false, unitsTotal: null }
+        {
+            title: "",
+            description: null,
+            money: { amount: 0, currency: "" },
+            isFinite: false,
+            unitsTotal: null,
+        },
     ],
     collaborations: [],
-    budgetItems: { minimum: [], optimum: [] }
+    budgetItems: { minimum: [], optimum: [] },
 });
 
 /**
@@ -226,7 +238,10 @@ export function initializeFromProject(project: Project) {
         title: project.title || "",
         subtitle: project.subtitle || "",
         categories: project.categories || [],
-        budget: { amount: project.budget?.minimum?.money?.amount || 0, currency: project.budget?.minimum?.money?.currency || "EUR" },
+        budget: {
+            amount: project.budget?.minimum?.money?.amount || 0,
+            currency: project.budget?.minimum?.money?.currency || "EUR",
+        },
         calendar: {},
         currentStep: 1,
         configuration: {
@@ -245,7 +260,7 @@ export function initializeFromProject(project: Project) {
         },
         rewards: [],
         collaborations: [],
-        budgetItems: { minimum: [], optimum: [] }
+        budgetItems: { minimum: [], optimum: [] },
     });
 
     // Try to restore additional wizard data from localStorage
@@ -339,7 +354,7 @@ export function restoreFromLocalStorage(): boolean {
             campaignInfo: parsed.campaignInfo || getDefaultState().campaignInfo,
             rewards: parsed.rewards || getDefaultState().rewards,
             collaborations: parsed.collaborations || getDefaultState().collaborations,
-            budgetItems: parsed.budgetItems || getDefaultState().budgetItems
+            budgetItems: parsed.budgetItems || getDefaultState().budgetItems,
         }));
 
         return true;
@@ -796,7 +811,7 @@ export function validateReward(reward: WizardReward): Record<string, string> {
  */
 export function updateCollaboration(
     index: number,
-    collab: WizardCollaboration
+    collab: WizardCollaboration,
 ): Record<string, string> {
     const errors = validateCollaboration(collab);
 
@@ -817,9 +832,7 @@ export function updateCollaboration(
     return {};
 }
 
-export function addCollaboration(
-    collab: WizardCollaboration
-): Record<string, string> {
+export function addCollaboration(collab: WizardCollaboration): Record<string, string> {
     const errors = validateCollaboration(collab);
 
     if (Object.keys(errors).length > 0) {
@@ -837,7 +850,6 @@ export function addCollaboration(
     return {};
 }
 
-
 export function deleteCollaboration(index: number) {
     wizardState.update((state) => {
         const collaborations = state.collaborations.splice(index, 1); // Remove the collaboration from the array
@@ -845,7 +857,7 @@ export function deleteCollaboration(index: number) {
         return {
             ...state,
             collaborations: { ...collaborations },
-        }
+        };
     });
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
@@ -856,8 +868,7 @@ export function validateCollaboration(collab: WizardCollaboration): Record<strin
     const hash = cyrb53(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
-        errors[`collab_error_title_${hash}`] =
-            "wizard.validation.collaborations.title";
+        errors[`collab_error_title_${hash}`] = "wizard.validation.collaborations.title";
     }
 
     if (collab.description && collab.description.length > 1000) {
@@ -866,8 +877,7 @@ export function validateCollaboration(collab: WizardCollaboration): Record<strin
     }
 
     if (!collab.description.trim()) {
-        errors[`collab_error_description_${hash}`] =
-            "wizard.validation.collaborations.description";
+        errors[`collab_error_description_${hash}`] = "wizard.validation.collaborations.description";
     }
 
     return errors;
@@ -890,10 +900,7 @@ export function validateCollaboration(collab: WizardCollaboration): Record<strin
  * // Update unitsTotal
  * updateRewards({ unitsTotal: newCount });
  */
-export function updateBudgetItem(
-    index: number,
-    item: ProjectBudgetItem,
-) {
+export function updateBudgetItem(index: number, item: ProjectBudgetItem) {
     const errors = validateBudgetItem(item);
 
     if (Object.keys(errors).length > 0) {
@@ -917,9 +924,7 @@ export function updateBudgetItem(
     saveToLocalStorage();
 }
 
-export function addBudgetItem(
-    item: ProjectBudgetItem,
-) {
+export function addBudgetItem(item: ProjectBudgetItem) {
     const errors = validateBudgetItem(item);
 
     if (Object.keys(errors).length > 0) {
@@ -938,10 +943,7 @@ export function addBudgetItem(
     saveToLocalStorage();
 }
 
-export function deleteBudgetItem(
-    index: number,
-    deadline: "minimum" | "optimum",
-) {
+export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum") {
     wizardState.update((state) => ({
         ...state,
         budgetItems: {
@@ -959,8 +961,7 @@ export function validateBudgetItem(item: ProjectBudgetItem): Record<string, stri
     const hash = cyrb53(JSON.stringify(item));
 
     if (!item.title.trim()) {
-        errors[`budget_error_title_${hash}`] =
-            "wizard.validation.budget.title_required";
+        errors[`budget_error_title_${hash}`] = "wizard.validation.budget.title_required";
     }
 
     if (!item.description.trim()) {
@@ -969,23 +970,19 @@ export function validateBudgetItem(item: ProjectBudgetItem): Record<string, stri
     }
 
     if (!item.money.amount || item.money.amount <= 0) {
-        errors[`budget_error_amount_${hash}`] =
-            "wizard.validation.budget.amount_invalid";
+        errors[`budget_error_amount_${hash}`] = "wizard.validation.budget.amount_invalid";
     }
 
     if (!item.money.currency) {
-        errors[`budget_error_currency_${hash}`] =
-            "wizard.validation.budget.currency_required";
+        errors[`budget_error_currency_${hash}`] = "wizard.validation.budget.currency_required";
     }
 
     if (!item.type) {
-        errors[`budget_error_type_${hash}`] =
-            "wizard.validation.budget.type_required";
+        errors[`budget_error_type_${hash}`] = "wizard.validation.budget.type_required";
     }
 
     if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-        errors[`budget_error_deadline_${hash}`] =
-            "wizard.validation.budget.deadline_invalid";
+        errors[`budget_error_deadline_${hash}`] = "wizard.validation.budget.deadline_invalid";
     }
 
     return errors;
@@ -1003,8 +1000,7 @@ export function validateBudgetAmount() {
     const optTotal = budgetItems.optimum.reduce((sum, i) => sum + i.money.amount, 0);
 
     if (budgetItems.optimum.length && optTotal < minTotal) {
-        errors.optimum_total =
-            "wizard.validation.budget.optimum_less_than_minimum";
+        errors.optimum_total = "wizard.validation.budget.optimum_less_than_minimum";
     }
 
     return errors;

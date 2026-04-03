@@ -1,15 +1,15 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
 
+    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { validationErrors } from "../../../stores/wizard-state";
+    import { defaultCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
-    import { defaultCurrency } from "../../../utils/currencies";
-    import DeleteModal from "./DeleteModal.svelte";
 
     let {
         open = $bindable(false),
