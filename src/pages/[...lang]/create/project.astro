@@ -1,12 +1,11 @@
 ---
+import { getSession } from "../../../auth/session";
 import Layout from "../../../layouts/Layout.astro";
 import CreateProjectForm from "./CreateProjectForm.svelte";
 
 const { t } = Astro.locals;
 
-const accessCookie = Astro.cookies.get("access-token");
-
-if (!accessCookie) {
+if (!getSession(Astro.cookies)) {
     return Astro.redirect("/login");
 }
 ---
