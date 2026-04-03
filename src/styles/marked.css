@@ -1,3 +1,11 @@
+.marked-content h1 {
+    padding-bottom: var(--text-xl);
+    color: var(--color-secondary);
+    font-size: var(--text-5xl);
+    font-weight: var(--font-weight-black);
+    line-height: var(--text-xs--line-height);
+}
+
 .marked-content h2 {
     padding-top: var(--text-xl);
     padding-bottom: var(--text-xl);
