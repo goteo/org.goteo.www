@@ -4,25 +4,24 @@
     import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
-    import { locale, setLocale, t } from "../../i18n/store";
+    import { t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
         type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
         type User,
+        type ProjectCalendar,
     } from "../../openapi/client/index";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
-    import { getDefaultLanguage } from "../../utils/consts";
+    import { getLanguageDisplayName } from "../../utils/lang";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
-
-    import type { Locale } from "../../i18n/locales";
 
     let {
         project,
@@ -38,42 +37,47 @@
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
 
-    const countdownEnd = getCurrentDeadline(project);
+    const projectDeadline = $derived(getCurrentDeadline(project.calendar!));
 
-    let projectLang = $state($locale);
+    function getCurrentDeadline(calendar: ProjectCalendar) {
+        const now = new Date();
 
-    let langMismatchAlertVisible = $state(false);
-    let attemptedLang = $state("");
-
-    $effect(() => {
-        if (project?.locales) {
-            if (!project.locales.includes($locale)) {
-                attemptedLang = $locale;
-                langMismatchAlertVisible = true;
-
-                projectLang =
-                    project.locales.length > 0
-                        ? (project.locales[0] as Locale)
-                        : (getDefaultLanguage() as Locale);
-            } else {
-                langMismatchAlertVisible = false;
-                projectLang = $locale;
-            }
-
-            setLocale(projectLang);
+        const minimum = new Date(calendar.minimum!);
+        if (now < minimum) {
+            return minimum;
         }
 
-        loadProjectInLanguage(projectLang);
-    });
+        if (!calendar.optimum) {
+            return undefined;
+        }
 
-    async function loadProjectInLanguage(lang: Locale) {
-        const { data } = await apiProjectsIdOrSlugGet({
+        const optimum = new Date(calendar.optimum);
+        if (now < optimum) {
+            return optimum;
+        }
+
+        return undefined;
+    }
+
+    let projectLanguage = $state(project.locales![0]);
+
+    async function changeProjectLanguage(lang: string) {
+        projectLanguage = lang;
+
+        const { data, error } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
             headers: { "Accept-Language": lang },
         });
 
+        if (error || !data) {
+            console.error(error);
+        }
+
         project = data!;
     }
+
+    let langMismatch = $state(false);
+    let attemptedLang = $state("");
 
     let tabsComponent: any;
 
@@ -91,41 +95,11 @@
             }
         }, 100);
     }
-
-    function getCurrentDeadline(project: Project): Date | undefined {
-        const now = new Date();
-
-        const minimum = new Date(project.calendar?.minimum!);
-        if (now < minimum) {
-            return minimum;
-        }
-
-        if (!project.calendar?.optimum) {
-            return undefined;
-        }
-
-        const optimum = new Date(project.calendar?.optimum);
-        if (now < optimum) {
-            return optimum;
-        }
-
-        return undefined;
-    }
-    function getLanguageDisplayName(lang: string): string {
-        const displayNames = new Intl.DisplayNames(lang, { type: "language" });
-        const displayName = displayNames.of(lang)!;
-
-        if (["es", "ca", "eu", "gl"].includes(lang)) {
-            return displayName.charAt(0).toUpperCase() + displayName.slice(1);
-        }
-
-        return displayName;
-    }
 </script>
 
 <section class="wrapper">
-    <Toast variant="warning" bind:showToast={langMismatchAlertVisible} class="mb-6 w-full">
-        {$t("lang.error.notAvailable", { lang: getLanguageDisplayName(attemptedLang) })}
+    <Toast variant="warning" bind:showToast={langMismatch} class="mb-6 w-full">
+        {$t("lang.error.notAvailable", { lang: getLanguageDisplayName(attemptedLang)! })}
     </Toast>
 
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
@@ -151,13 +125,13 @@
             <div class="flex justify-end">
                 <LanguagesDropdown
                     languages={project.locales!}
-                    select={(lang: Locale) => loadProjectInLanguage(lang)}
-                    selected={projectLang}
+                    selected={projectLanguage}
+                    onSelect={changeProjectLanguage}
                 />
             </div>
 
             <div class="hidden lg:block">
-                <Countdown {countdownEnd} />
+                <Countdown deadline={projectDeadline} />
             </div>
         </div>
     </div>
@@ -173,7 +147,7 @@
         </div>
         <div class="flex h-auto w-full flex-col gap-4 lg:h-full lg:w-[30%]">
             <div class="lg:hidden">
-                <Countdown {countdownEnd} />
+                <Countdown deadline={projectDeadline} />
             </div>
             <Card
                 {project}
@@ -204,11 +178,11 @@
                 <ArrowRightIcon />{$t("reward.showAll")}
             </Button>
         </div>
-        <TopRewards bind:lang={projectLang} {project} />
+        <TopRewards bind:lang={projectLanguage} {project} />
         <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner ownerName={owner.displayName || ""} />
 </section>
-<Tabs bind:this={tabsComponent} bind:lang={projectLang} bind:project {accounting} />
+<Tabs bind:this={tabsComponent} bind:lang={projectLanguage} bind:project {accounting} />
