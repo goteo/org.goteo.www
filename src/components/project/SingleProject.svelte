@@ -14,13 +14,13 @@
     } from "../../openapi/client/index";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
+    import { getDefaultLanguage } from "../../utils/consts";
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
-    import { getDefaultLanguage } from "../../utils/consts";
 
     let {
         project,
