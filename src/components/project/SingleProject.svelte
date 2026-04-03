@@ -4,7 +4,7 @@
     import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
-    import { locale, t } from "../../i18n/store";
+    import { locale, setLocale, t } from "../../i18n/store";
     import {
         type Project,
         type Accounting,
@@ -17,8 +17,11 @@
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
+    import { getDefaultLanguage } from "../../utils/consts";
+    import type { Locale } from "../../i18n/locales";
 
     let {
         project,
@@ -34,14 +37,38 @@
         balancePoints: ApiAccountingBalancePointsGetCollectionData;
     } = $props();
 
-    let lang = $derived(project.locales ? project.locales[0] : $locale);
-    let poster = $derived({ src: project.video?.thumbnail || "", alt: "Miniatura del video" });
-    let countdownEnd = $derived(getCurrentDeadline(project));
+    const countdownEnd = getCurrentDeadline(project);
 
-    async function getProjectData(code?: string) {
+    let projectLang = $state($locale);
+
+    let langMismatchAlertVisible = $state(false);
+    let attemptedLang = $state("");
+
+    $effect(() => {
+        if (project?.locales) {
+            if (!project.locales.includes($locale)) {
+                attemptedLang = $locale;
+                langMismatchAlertVisible = true;
+
+                projectLang =
+                    project.locales.length > 0
+                        ? (project.locales[0] as Locale)
+                        : (getDefaultLanguage() as Locale);
+            } else {
+                langMismatchAlertVisible = false;
+                projectLang = $locale;
+            }
+
+            setLocale(projectLang);
+        }
+
+        loadProjectInLanguage(projectLang);
+    });
+
+    async function loadProjectInLanguage(lang: Locale) {
         const { data } = await apiProjectsIdOrSlugGet({
             path: { idOrSlug: project?.id!.toString() },
-            headers: { "Accept-Language": $locale },
+            headers: { "Accept-Language": lang },
         });
 
         project = data!;
@@ -83,9 +110,23 @@
 
         return undefined;
     }
+    function getLanguageDisplayName(lang: string): string {
+        const displayNames = new Intl.DisplayNames(lang, { type: "language" });
+        const displayName = displayNames.of(lang)!;
+
+        if (["es", "ca", "eu", "gl"].includes(lang)) {
+            return displayName.charAt(0).toUpperCase() + displayName.slice(1);
+        }
+
+        return displayName;
+    }
 </script>
 
 <section class="wrapper">
+    <Toast variant="warning" bind:showToast={langMismatchAlertVisible} class="mb-6 w-full">
+        {$t("lang.error.notAvailable", { lang: getLanguageDisplayName(attemptedLang) })}
+    </Toast>
+
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
         <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
@@ -109,8 +150,8 @@
             <div class="flex justify-end">
                 <LanguagesDropdown
                     languages={project.locales!}
-                    selected={lang}
-                    select={(lang: string) => getProjectData(lang)}
+                    select={(lang: Locale) => loadProjectInLanguage(lang)}
+                    selected={projectLang}
                 />
             </div>
 
@@ -126,7 +167,7 @@
                 src={project.video?.src || ""}
                 title={project.title || ""}
                 thumbnails={project.video?.thumbnail || ""}
-                {poster}
+                poster={{ src: project.video?.cover || "", alt: "" }}
             />
         </div>
         <div class="flex h-auto w-full flex-col gap-4 lg:h-full lg:w-[30%]">
@@ -162,11 +203,11 @@
                 <ArrowRightIcon />{$t("reward.showAll")}
             </Button>
         </div>
-        <TopRewards bind:lang {project} />
+        <TopRewards bind:lang={projectLang} {project} />
         <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
             <ArrowRightIcon />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner ownerName={owner.displayName || ""} />
 </section>
-<Tabs bind:this={tabsComponent} bind:lang bind:project {accounting} />
+<Tabs bind:this={tabsComponent} bind:lang={projectLang} bind:project {accounting} />
