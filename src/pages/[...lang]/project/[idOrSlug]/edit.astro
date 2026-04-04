@@ -1,30 +1,41 @@
 ---
-/**
- * Project Setup Wizard Route
- * Simplified for testing - access control will be implemented later
- */
-
 import Layout from "../../../../layouts/Layout.astro";
 import WizardApp from "../../../../components/project/wizard/WizardApp.svelte";
-import { apiProjectsIdOrSlugGet } from "../../../../openapi/client";
+import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../openapi/client";
+import { getSession } from "../../../../auth/session";
+import App from "../../../../components/App.svelte";
+import type { Locale } from "../../../../i18n/locales";
 
-const lang = (Astro.params.lang || "es") as string;
+const locale = Astro.currentLocale as Locale;
+
 const { idOrSlug } = Astro.params;
-
 if (!idOrSlug) {
-    return Astro.redirect(`/${lang}/`);
+    return Astro.redirect("/");
 }
 
-// Fetch project data
-const { data: project } = await apiProjectsIdOrSlugGet({
-    path: { idOrSlug },
+const session = await getSession(Astro.cookies);
+if (!session) {
+    return Astro.redirect("/");
+}
+
+const { data: project } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
+if (!project) {
+    return Astro.redirect("/");
+}
+
+const { error, request } = await apiProjectsIdPatch({
+    path: { id: String(project.id!) },
+    body: { id: project.id },
+    headers: session.token.asHttpHeaders,
 });
 
-if (!project) {
-    return Astro.redirect(`/${lang}/`);
+if (error) {
+    console.error({ error, request });
+    return Astro.redirect("/");
 }
 ---
 
 <Layout title="Configurar Proyecto">
-    <WizardApp project={project} lang={lang} client:load />
+    <App locale={locale} session={session} client:load />
+    <WizardApp project={project} lang={locale} client:load />
 </Layout>
