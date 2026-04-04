@@ -3,6 +3,7 @@
     "_": "Global UI translations (buttons, labels, etc.)",
     "greeting": "Hola",
     "farewell": "Adiós",
+    "donate": "Donar",
     "donateAmount": "Dona {{ amount }}"
   },
   "domain": {
@@ -44,7 +45,6 @@
     "headline": "Selecciona tu recompensa",
     "addAndContinue": "Añadir al carro y continuar",
     "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonation": "Donar",
     "btnFreeDonationLabel": "Donación libre",
     "showAll": "Ver todas"
   },
@@ -437,8 +437,7 @@
     "donation-free": {
       "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
       "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
-      "placeholder": "Seleccione el aporte  Ej.20€",
-      "btn": "Donar"
+      "placeholder": "Seleccione el aporte  Ej.20€"
     },
     "by-amount": "Por {{amount}}",
     "by-amount-or-more": "Por {{amount}} o más",

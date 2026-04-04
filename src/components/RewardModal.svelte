@@ -157,7 +157,7 @@
                 {$t("rewards.reward-donate-close")}
             </Button>
             <Button onclick={() => updateAmount("checkout")} class="w-full">
-                {$t("rewards.donation-free.btn")}
+                {$t("common.donate")}
             </Button>
         </div>
     </div>

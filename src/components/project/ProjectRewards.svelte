@@ -65,7 +65,7 @@
         const calculatedAmount = numericAmount * unit;
 
         cart.addItem({
-            title: $t("reward.btnFreeDonationLabel"),
+            title: $t("common.donate"),
             amount: calculatedAmount,
             quantity: 1,
             image: "",
@@ -110,7 +110,7 @@
                         disabled={!isAvailable}
                         onclick={handleFreeDonation}
                     >
-                        {$t("rewards.donation-free.btn")}
+                        {$t("common.donate")}
                     </Button>
                 </div>
             </div>
