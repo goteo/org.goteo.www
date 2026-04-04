@@ -89,7 +89,7 @@
         </div>
 
         <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-            {$t("reward.edit")}
+            {$t("pages.project.edit.collaborations.edit")}
         </Button>
 
         <CollabsModal

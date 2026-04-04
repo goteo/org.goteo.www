@@ -19,14 +19,23 @@
     }
   },
   "pages": {
-    "_": "Page-specific content (/home, /search, /project/[id], etc.)"
+    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "project": {
+      "edit": {
+        "rewards": {
+          "edit": "Editar"
+        },
+        "collarations": {
+          "edit": "Editar"
+        }
+      }
+    }
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)"
   },
   "reward": {
     "donate": "Dona",
-    "edit": "Editar",
     "donors": "donates",
     "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",

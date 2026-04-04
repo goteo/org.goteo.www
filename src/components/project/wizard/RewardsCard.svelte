@@ -123,7 +123,7 @@
             {/if}
         </div>
         <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-            {$t("reward.edit")}
+            {$t("pages.project.edit.rewards.edit")}
         </Button>
         <RewardsModal
             bind:open={openModal}
