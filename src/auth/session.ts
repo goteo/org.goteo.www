@@ -1,5 +1,5 @@
 import { decodeJWT } from "./jwt";
-import { refreshToken } from "./token";
+import { refreshToken } from "./grant";
 import {
     apiAccountingsIdGet,
     apiUsersIdorganizationGet,
