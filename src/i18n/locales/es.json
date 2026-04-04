@@ -2,7 +2,8 @@
   "common": {
     "_": "Global UI translations (buttons, labels, etc.)",
     "greeting": "Hola",
-    "farewell": "Adiós"
+    "farewell": "Adiós",
+    "donateAmount": "Dona {{ amount }}"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -28,14 +29,14 @@
         "collarations": {
           "edit": "Editar"
         }
-      }
+      },
+      "view": {}
     }
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)"
   },
   "reward": {
-    "donate": "Dona",
     "donors": "donates",
     "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",
