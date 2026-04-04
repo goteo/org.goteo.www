@@ -25,18 +25,18 @@
 >
     {#snippet header()}
         <h2 class="text-xl font-bold text-black">
-            {$t(`wizard.deleteModal.title.${variant}`)}
+            {$t(`pages.project.edit.${variant}.deleteModal.title`)}
         </h2>
     {/snippet}
     <p class="text-content text-base font-normal">
-        {$t(`wizard.deleteModal.description.${variant}`)}
+        {$t(`pages.project.edit.${variant}.deleteModal.description`)}
     </p>
     {#snippet footer()}
         <Button kind="ghost" onclick={() => (open = false)} class="w-fit"
-            >{$t("wizard.deleteModal.btns.cancel")}</Button
+            >{$t("common.cancel")}</Button
         >
         <Button kind="secondary" onclick={() => onclick()} class="w-fit"
-            >{$t("wizard.deleteModal.btns.delete")}</Button
+            >{$t("common.delete")}</Button
         >
     {/snippet}
 </Modal>

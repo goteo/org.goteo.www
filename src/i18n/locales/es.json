@@ -6,10 +6,14 @@
     "donate": "Donar",
     "donateAmount": "Dona {{ amount }}",
     "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "continue": "Continuar",
+    "cancel": "Cancelar",
     "publish": "Publicar",
     "preview": "Vista previa",
     "select": "Elige una opción",
-    "remove": "Quitar",
+    "remove": "Eliminar",
     "textPlaceholder": "Escribe aquí"
   },
   "domain": {
@@ -23,6 +27,11 @@
         "optimum": "Óptimo",
         "minimum": "Mínimo",
         "donate": "Donar a esta campaña"
+      },
+      "reward": {
+        "byAtLeast": "Por {{ amount }}",
+        "unitsTotal": "Hay {{ units }} unidades",
+        "isInfinite": "Sin límite de unidades"
       }
     }
   },
@@ -84,7 +93,34 @@
           "continue": "Continuar con recompensas"
         },
         "rewards": {
-          "edit": "Editar"
+          "title": "Recompensas",
+          "subtitle": "Añade recompensas atractivas para alcanzar tu meta",
+          "continue": "Continuar con colaboraciones",
+          "add": {
+            "title": "¡No Lances Tu Campaña Sin Ellas! Las recompensas son tu superpoder",
+            "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
+            "button": "Añadir recompensa"
+          },
+          "modal": {
+            "title": "Añade recompensas",
+            "description": "Describe la recompensa que ofreces",
+            "unitsExisting": "Número de unidades existentes",
+            "placeholders": {
+              "title": "Título de la recompensa",
+              "description": "Descripción de la recompensa",
+              "moneyAmount": "Precio",
+              "files": "Haz click o arrastra aquí tu archivo para subirlo"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta recompensa",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "amount": "El precio debe ser mayor que cero",
+            "units": "La cantidad de unidades debe ser mayor que cero si la recompensa es limitada"
+          }
         },
         "collarations": {
           "edit": "Editar"
@@ -96,7 +132,22 @@
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",
     "loading": "Cargando...",
-    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!"
+    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
+    "error": {
+      "file": {
+        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
+        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      }
+    },
+    "constraint": {
+      "file": {
+        "maxAllowedSize": "Tamaño máximo permitido 10MB",
+        "supportedTypes": "Archivos compatibles: .png, .jpg"
+      }
+    },
+    "validation": {
+      "missingRequiredFields": "Uno o más campos obligatorios están vacíos"
+    }
   },
   "reward": {
     "donors": "donates",
@@ -500,7 +551,6 @@
       "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
       "placeholder": "Seleccione el aporte  Ej.20€"
     },
-    "by-amount": "Por {{amount}}",
     "by-amount-or-more": "Por {{amount}} o más",
     "thanks-message": "Gracias por cooperar",
     "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",

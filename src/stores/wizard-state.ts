@@ -652,47 +652,53 @@ export function validateCampaignInfo(): Record<string, string> {
 
     // Media validation
     if (data.images.length === 0 && !data.video) {
-        errors.media = "wizard.validation.campaign_info.media.required";
+        errors.media = "pages.project.edit.rewards.validationn_info.reward.media.required";
     }
 
     // Objectives validation
     const objectivesPlainText = stripHtml(data.objectives).trim();
     if (objectivesPlainText.length === 0) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.required";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.min_length";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.min_length";
     } else if (objectivesPlainText.length > 5000) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.max_length";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.max_length";
     }
 
     // Legacy validation
     const legacyPlainText = stripHtml(data.legacy).trim();
     if (legacyPlainText.length === 0) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.required";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.required";
     } else if (legacyPlainText.length < 50) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.min_length";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.min_length";
     } else if (legacyPlainText.length > 5000) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.max_length";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.max_length";
     }
 
     // Target audience validation
     const targetPlainText = stripHtml(data.targetAudience).trim();
     if (targetPlainText.length === 0) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.required";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.required";
     } else if (targetPlainText.length < 30) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.min_length";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.min_length";
     } else if (targetPlainText.length > 5000) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.max_length";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.max_length";
     }
 
     // Team validation
     const teamPlainText = stripHtml(data.team).trim();
     if (teamPlainText.length === 0) {
-        errors.team = "wizard.validation.campaign_info.team.required";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.required";
     } else if (teamPlainText.length < 50) {
-        errors.team = "wizard.validation.campaign_info.team.min_length";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.min_length";
     } else if (teamPlainText.length > 5000) {
-        errors.team = "wizard.validation.campaign_info.team.max_length";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.max_length";
     }
 
     return errors;
@@ -778,15 +784,15 @@ export function validateReward(reward: WizardReward): Record<string, string> {
     const hash = cyrb53(JSON.stringify(reward));
 
     if (!reward.title.trim()) {
-        errors[`reward_error_title_${hash}`] = "wizard.validation.rewards.title";
+        errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
     }
 
     if (!reward.money.amount || reward.money.amount <= 0) {
-        errors[`reward_error_amount_${hash}`] = "wizard.validation.rewards.amount";
+        errors[`reward_error_amount_${hash}`] = "pages.project.edit.rewards.validation.amount";
     }
 
     if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
-        errors[`reward_error_units_${hash}`] = "wizard.validation.rewards.units";
+        errors[`reward_error_units_${hash}`] = "pages.project.edit.rewards.validation.units";
     }
 
     return errors;
@@ -868,16 +874,18 @@ export function validateCollaboration(collab: WizardCollaboration): Record<strin
     const hash = cyrb53(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
-        errors[`collab_error_title_${hash}`] = "wizard.validation.collaborations.title";
+        errors[`collab_error_title_${hash}`] =
+            "pages.project.edit.rewards.validationrations.reward.title";
     }
 
     if (collab.description && collab.description.length > 1000) {
         errors[`collab_error_description_too_long_${hash}`] =
-            "wizard.validation.collaborations.description_too_long";
+            "pages.project.edit.rewards.validationrations.reward.description_too_long";
     }
 
     if (!collab.description.trim()) {
-        errors[`collab_error_description_${hash}`] = "wizard.validation.collaborations.description";
+        errors[`collab_error_description_${hash}`] =
+            "pages.project.edit.rewards.validationrations.reward.description";
     }
 
     return errors;
@@ -961,28 +969,33 @@ export function validateBudgetItem(item: ProjectBudgetItem): Record<string, stri
     const hash = cyrb53(JSON.stringify(item));
 
     if (!item.title.trim()) {
-        errors[`budget_error_title_${hash}`] = "wizard.validation.budget.title_required";
+        errors[`budget_error_title_${hash}`] =
+            "pages.project.edit.rewards.validationtitle_required.reward";
     }
 
     if (!item.description.trim()) {
         errors[`budget_error_description_${hash}`] =
-            "wizard.validation.budget.description_required";
+            "pages.project.edit.rewards.validationdescription_required.reward";
     }
 
     if (!item.money.amount || item.money.amount <= 0) {
-        errors[`budget_error_amount_${hash}`] = "wizard.validation.budget.amount_invalid";
+        errors[`budget_error_amount_${hash}`] =
+            "pages.project.edit.rewards.validationamount_invalid.reward";
     }
 
     if (!item.money.currency) {
-        errors[`budget_error_currency_${hash}`] = "wizard.validation.budget.currency_required";
+        errors[`budget_error_currency_${hash}`] =
+            "pages.project.edit.rewards.validationcurrency_required.reward";
     }
 
     if (!item.type) {
-        errors[`budget_error_type_${hash}`] = "wizard.validation.budget.type_required";
+        errors[`budget_error_type_${hash}`] =
+            "pages.project.edit.rewards.validationtype_required.reward";
     }
 
     if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-        errors[`budget_error_deadline_${hash}`] = "wizard.validation.budget.deadline_invalid";
+        errors[`budget_error_deadline_${hash}`] =
+            "pages.project.edit.rewards.validationdeadline_invalid.reward";
     }
 
     return errors;
@@ -993,14 +1006,15 @@ export function validateBudgetAmount() {
     const errors: Record<string, string> = {};
 
     if (budgetItems.minimum.length <= 0) {
-        errors.minimum = "wizard.validation.budget.minimum_required";
+        errors.minimum = "pages.project.edit.rewards.validationminimum_required.reward";
     }
 
     const minTotal = budgetItems.minimum.reduce((sum, i) => sum + i.money.amount, 0);
     const optTotal = budgetItems.optimum.reduce((sum, i) => sum + i.money.amount, 0);
 
     if (budgetItems.optimum.length && optTotal < minTotal) {
-        errors.optimum_total = "wizard.validation.budget.optimum_less_than_minimum";
+        errors.optimum_total =
+            "pages.project.edit.rewards.validationoptimum_less_than_minimum.reward";
     }
 
     return errors;

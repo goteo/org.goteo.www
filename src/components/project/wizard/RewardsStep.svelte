@@ -1,15 +1,10 @@
 <script lang="ts">
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
-    import { type Project } from "../../../openapi/client";
     import { navigateToStep, wizardState, type WizardReward } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-
-    let { project } = $props<{
-        project: Project;
-    }>();
 
     let rewards = $state<WizardReward[]>($wizardState.rewards);
     let loading = $state(false);
@@ -36,10 +31,10 @@
 <div class="w-full space-y-10">
     <div class="flex w-full flex-col gap-4">
         <h2 class="text-[40px] leading-12 font-bold text-black">
-            {$t("wizard.steps.rewards.title")}
+            {$t("pages.project.edit.rewards.title")}
         </h2>
         <p class="text-content text-base font-normal">
-            {$t("wizard.steps.rewards.subtitle")}
+            {$t("pages.project.edit.rewards.subtitle")}
         </p>
     </div>
     {#if loading}
@@ -56,13 +51,8 @@
 
     <!-- Continue Button -->
     <div class="flex justify-start">
-        <Button
-            kind="secondary"
-            size="md"
-            onclick={handleContinue}
-            data-testid="rewards-continue-btn"
-        >
-            {$t("wizard.rewards.continue")}
+        <Button kind="secondary" size="md" onclick={handleContinue}>
+            {$t("pages.project.edit.rewards.continue")}
         </Button>
     </div>
 </div>

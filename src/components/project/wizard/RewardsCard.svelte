@@ -64,8 +64,8 @@
 
 {#if isCreateCard}
     <CreateCard
-        title={$t("wizard.rewards.createCard.title")}
-        description={$t("wizard.rewards.createCard.description")}
+        title={$t("pages.project.edit.rewards.add.title")}
+        description={$t("pages.project.edit.rewards.add.description")}
         variant="reward"
         onSave={handleSaveReward}
         onclick={() => (openModal = true)}
@@ -79,13 +79,9 @@
         <div class="flex flex-col">
             <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
                 <div>
-                    {@html $t(
-                        "rewards.by-amount",
-                        {
-                            amount: formatCurrency(reward.money.amount, reward.money.currency),
-                        },
-                        { allowHTML: true },
-                    )}
+                    {@html $t("domain.project.reward.byAtLeast", {
+                        amount: formatCurrency(reward.money.amount, reward.money.currency),
+                    })}
                 </div>
                 {reward.title}
             </h3>
@@ -99,18 +95,16 @@
             {/if}
         </div>
 
-        <div class="flex w-full justify-between">
+        <div class="mt-auto flex w-full justify-between">
             {#if reward.isFinite}
                 <div
                     class="text-secondary flex items-center justify-between gap-2 text-sm font-bold"
                 >
                     <UnitIcon />
                     <span>
-                        {@html $t(
-                            "wizard.rewards.units",
-                            { units: `${reward.unitsTotal}` },
-                            { allowHTML: true },
-                        )}
+                        {@html $t("domain.project.reward.unitsTotal", {
+                            units: String(reward.unitsTotal),
+                        })}
                     </span>
                 </div>
             {:else}
@@ -123,7 +117,7 @@
             {/if}
         </div>
         <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-            {$t("pages.project.edit.rewards.edit")}
+            {$t("common.edit")}
         </Button>
         <RewardsModal
             bind:open={openModal}
