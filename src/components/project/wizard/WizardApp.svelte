@@ -25,10 +25,8 @@
 
     let {
         project,
-        lang = "es",
     }: {
         project: Project;
-        lang?: string;
     } = $props();
 
     // Initialize wizard state from project and set up URL sync
