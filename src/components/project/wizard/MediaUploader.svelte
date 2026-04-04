@@ -257,12 +257,11 @@
         disabled={images.length >= maxFiles || isUploading}
         onclick={() => fileInput?.click()}
         aria-label={isUploading
-            ? $t("wizard.campaignInfo.media.uploading")
+            ? $t("pages.project.edit.campaignInfo.media.uploading")
             : images.length >= maxFiles
-              ? $t("wizard.campaignInfo.media.maxImagesReached", { max: maxFiles })
-              : $t("wizard.campaignInfo.media.addImage")}
+              ? $t("pages.project.edit.campaignInfo.media.maxImagesReached", { max: maxFiles })
+              : $t("pages.project.edit.campaignInfo.media.addImage")}
         aria-busy={isUploading}
-        aria-describedby={errorMessage ? `${uploaderId}-error` : undefined}
     >
         {#snippet children()}
             {#if isUploading}
@@ -271,8 +270,8 @@
                 <UploadIcon />
             {/if}
             {isUploading
-                ? $t("wizard.campaignInfo.media.uploading")
-                : $t("wizard.campaignInfo.media.addImage")}
+                ? $t("pages.project.edit.campaignInfo.media.uploading")
+                : $t("pages.project.edit.campaignInfo.media.addImage")}
         {/snippet}
     </Button>
 
@@ -283,7 +282,7 @@
         {accept}
         onchange={handleFileSelect}
         class="hidden"
-        aria-label={$t("wizard.campaignInfo.media.fileInputLabel")}
+        aria-label={$t("pages.project.edit.campaignInfo.media.fileInputLabel")}
         disabled={images.length >= maxFiles || isUploading}
     />
 
@@ -297,7 +296,7 @@
     <!-- Upload Progress -->
     {#if isUploading && uploadProgress}
         <div role="status" aria-live="polite" class="text-content mt-1 text-[12px]">
-            {$t("wizard.campaignInfo.media.processing", { name: uploadProgress })}
+            {$t("pages.project.edit.campaignInfo.media.processing", { name: uploadProgress })}
         </div>
     {/if}
 
@@ -306,7 +305,7 @@
         <div
             class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
             role="list"
-            aria-label={$t("wizard.campaignInfo.media.uploadedImages")}
+            aria-label={$t("pages.project.edit.campaignInfo.media.uploadedImages")}
         >
             {#each images as image (image.id)}
                 <div class="group relative aspect-video overflow-hidden rounded-lg" role="listitem">
@@ -318,7 +317,7 @@
                         kind="invert"
                         size="sm"
                         onclick={() => handleRemove(image.id)}
-                        aria-label={$t("wizard.campaignInfo.media.removeImage", {
+                        aria-label={$t("pages.project.edit.campaignInfo.media.removeImage", {
                             name: image.name,
                         })}
                         class={twMerge(
@@ -351,7 +350,7 @@
     <!-- Max Files Reached Message -->
     {#if images.length >= maxFiles}
         <p class="text-content mt-1 text-[12px]" role="status" aria-live="polite">
-            {$t("wizard.campaignInfo.media.maxImagesReached", { max: maxFiles })}
+            {$t("pages.project.edit.campaignInfo.media.maxImagesReached", { max: maxFiles })}
         </p>
     {/if}
 </div>

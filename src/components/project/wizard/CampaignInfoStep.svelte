@@ -117,9 +117,9 @@
     <!-- Page Header -->
     <div class="space-y-4">
         <h1 class="text-3xl leading-12 font-bold text-black lg:text-[40px]">
-            {$t("wizard.campaignInfo.title")}
+            {$t("pages.project.edit.campaignInfo.title")}
         </h1>
-        <p class="text-content text-base">{$t("wizard.campaignInfo.subtitle")}</p>
+        <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>
     </div>
 
     <div class="space-y-10">
@@ -127,11 +127,11 @@
         <section data-field="media" class="space-y-4">
             <div>
                 <h2 class="mb-1 text-2xl font-bold text-black">
-                    {$t("wizard.campaignInfo.media.title")}
+                    {$t("pages.project.edit.campaignInfo.media.title")}
                     <span aria-label="required">*</span>
                 </h2>
                 <p class="text-content text-base">
-                    {$t("wizard.campaignInfo.media.help")}
+                    {$t("pages.project.edit.campaignInfo.media.description")}
                 </p>
             </div>
 
@@ -150,11 +150,11 @@
         <section data-field="objectives" class="space-y-4">
             <div>
                 <label for="objectives" class="mb-1 block text-2xl font-bold text-black">
-                    {$t("wizard.campaignInfo.objectives.label")}
+                    {$t("pages.project.edit.campaignInfo.goals.title")}
                     <span aria-label="required">*</span>
                 </label>
                 <p class="text-content text-base" id="objectives-help">
-                    {$t("wizard.campaignInfo.objectives.help")}
+                    {$t("pages.project.edit.campaignInfo.goals.description")}
                 </p>
             </div>
 
@@ -162,7 +162,7 @@
                 id="objectives"
                 value={campaignInfo.objectives}
                 onChange={handleObjectivesChange}
-                placeholder={$t("wizard.campaignInfo.objectives.placeholder")}
+                placeholder={$t("common.textPlaceholder")}
                 minLength={50}
                 maxLength={5000}
                 ariaDescribedBy="objectives-help"
@@ -173,11 +173,11 @@
         <section data-field="legacy" class="space-y-4">
             <div>
                 <label for="legacy" class="mb-1 block text-2xl font-bold text-black">
-                    {$t("wizard.campaignInfo.legacy.label")}
+                    {$t("pages.project.edit.campaignInfo.legacy.title")}
                     <span aria-label="required">*</span>
                 </label>
                 <p class="text-content text-base" id="legacy-help">
-                    {$t("wizard.campaignInfo.legacy.help")}
+                    {$t("pages.project.edit.campaignInfo.legacy.description")}
                 </p>
             </div>
 
@@ -185,7 +185,7 @@
                 id="legacy"
                 value={campaignInfo.legacy}
                 onChange={handleLegacyChange}
-                placeholder={$t("wizard.campaignInfo.legacy.placeholder")}
+                placeholder={$t("common.textPlaceholder")}
                 minLength={50}
                 maxLength={5000}
                 ariaDescribedBy="legacy-help"
@@ -196,11 +196,11 @@
         <section data-field="targetAudience" class="space-y-4">
             <div>
                 <label for="target-audience" class="mb-1 block text-2xl font-bold text-black">
-                    {$t("wizard.campaignInfo.target.label")}
+                    {$t("pages.project.edit.campaignInfo.target.title")}
                     <span aria-label="required">*</span>
                 </label>
                 <p class="text-content text-base" id="target-help">
-                    {$t("wizard.campaignInfo.target.help")}
+                    {$t("pages.project.edit.campaignInfo.target.description")}
                 </p>
             </div>
 
@@ -208,7 +208,7 @@
                 id="target-audience"
                 value={campaignInfo.targetAudience}
                 onChange={handleTargetAudienceChange}
-                placeholder={$t("wizard.campaignInfo.target.placeholder")}
+                placeholder={$t("common.textPlaceholder")}
                 minLength={30}
                 maxLength={5000}
                 ariaDescribedBy="target-help"
@@ -219,11 +219,11 @@
         <section data-field="team" class="space-y-4">
             <div>
                 <label for="team" class="mb-1 block text-2xl font-bold text-black">
-                    {$t("wizard.campaignInfo.team.label")}
+                    {$t("pages.project.edit.campaignInfo.team.title")}
                     <span aria-label="required">*</span>
                 </label>
                 <p class="text-content text-base" id="team-help">
-                    {$t("wizard.campaignInfo.team.help")}
+                    {$t("pages.project.edit.campaignInfo.team.description")}
                 </p>
             </div>
 
@@ -231,7 +231,7 @@
                 id="team"
                 value={campaignInfo.team}
                 onChange={handleTeamChange}
-                placeholder={$t("wizard.campaignInfo.team.placeholder")}
+                placeholder={$t("common.textPlaceholder")}
                 minLength={50}
                 maxLength={5000}
                 ariaDescribedBy="team-help"
@@ -241,14 +241,9 @@
 
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
-        <Button
-            kind="secondary"
-            size="md"
-            onclick={handleContinue}
-            data-testid="campaign-info-continue-btn"
-        >
+        <Button kind="secondary" size="md" onclick={handleContinue}>
             {#snippet children()}
-                {$t("wizard.campaignInfo.continue")}
+                {$t("pages.project.edit.campaignInfo.continue")}
             {/snippet}
         </Button>
     </div>

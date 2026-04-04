@@ -9,7 +9,8 @@
     "publish": "Publicar",
     "preview": "Vista previa",
     "select": "Elige una opción",
-    "remove": "Quitar"
+    "remove": "Quitar",
+    "textPlaceholder": "Escribe aquí"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -31,7 +32,7 @@
       "edit": {
         "tabs": {
           "configuration": "Configuración",
-          "campaign": "Campaña",
+          "campaign": "Información de campaña",
           "rewards": "Recompensas",
           "collaborations": "Colaboraciones",
           "budget": "Presupuesto",
@@ -54,6 +55,33 @@
             "option2": "2 Rondas"
           },
           "continue": "Continuar con info de campaña"
+        },
+        "campaignInfo": {
+          "title": "Información de campaña",
+          "subtitle": "Completa la información necesaria para tu campaña",
+          "media": {
+            "title": "Imágen y vídeo de presentación",
+            "description": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
+            "addImage": "Añadir imagen",
+            "addVideo": "Añadir vídeo"
+          },
+          "goals": {
+            "title": "Objetivos y propósito de tu campaña",
+            "description": "Indica los objetivos y el propósito de tu proyecto. Responde al qué, cómo y por qué"
+          },
+          "legacy": {
+            "title": "¿Cual será el legado de tu proyecto?",
+            "description": "Cuando termine la campaña, ¿qué quedará? Cuéntanos cual será el legado que deje tu proyecto"
+          },
+          "target": {
+            "title": "¿A quién va dirigido?",
+            "description": "Describe a quién va dirigido tu proyecto"
+          },
+          "team": {
+            "title": "¿Con qué equipo cuentas?",
+            "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
+          },
+          "continue": "Continuar con recompensas"
         },
         "rewards": {
           "edit": "Editar"

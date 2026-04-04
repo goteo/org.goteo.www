@@ -183,11 +183,11 @@
                 kind="secondary"
                 size="md"
                 onclick={handleShowInput}
-                aria-label={$t("wizard.campaignInfo.media.addVideo")}
+                aria-label={$t("pages.project.edit.campaignInfo.media.addVideo")}
             >
                 {#snippet children()}
                     <VideoIcon />
-                    {$t("wizard.campaignInfo.media.addVideo")}
+                    {$t("pages.project.edit.campaignInfo.media.addVideo")}
                 {/snippet}
             </Button>
 
@@ -196,7 +196,7 @@
                 <TextInput
                     id="video-url-input"
                     type="url"
-                    placeholder={$t("wizard.campaignInfo.media.videoPlaceholder")}
+                    placeholder={$t("pages.project.edit.campaignInfo.media.videoPlaceholder")}
                     bind:value={videoUrl}
                     error={validationError}
                 />
@@ -222,14 +222,14 @@
                 kind="secondary"
                 size="sm"
                 onclick={handleRemove}
-                aria-label={$t("wizard.campaignInfo.media.removeVideo")}
+                aria-label={$t("pages.project.edit.campaignInfo.media.removeVideo")}
                 class="border-secondary text-secondary hover:bg-light-surface self-start border-2 bg-white"
             >
                 {#snippet children()}
                     <span class="h-4 w-4">
                         <CloseIcon />
                     </span>
-                    {$t("wizard.campaignInfo.media.removeVideo")}
+                    {$t("pages.project.edit.campaignInfo.media.removeVideo")}
                 {/snippet}
             </Button>
         </div>
