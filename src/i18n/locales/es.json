@@ -4,7 +4,12 @@
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
-    "donateAmount": "Dona {{ amount }}"
+    "donateAmount": "Dona {{ amount }}",
+    "save": "Guardar",
+    "publish": "Publicar",
+    "preview": "Vista previa",
+    "select": "Elige una opción",
+    "remove": "Quitar"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -25,24 +30,30 @@
     "project": {
       "edit": {
         "tabs": {
-          "configuration": {
-            "title": "Configuración"
+          "configuration": "Configuración",
+          "campaign": "Campaña",
+          "rewards": "Recompensas",
+          "collaborations": "Colaboraciones",
+          "budget": "Presupuesto",
+          "aboutYou": "Sobre ti"
+        },
+        "configuration": {
+          "title": "Configuración",
+          "subtitle": "Configura los datos básicos de tu campaña",
+          "languages": {
+            "title": "Idiomas de la campaña",
+            "description": "Cuáles son los idiomas en los que publicarás el contenido de  la campaña",
+            "primaryLabel": "Idioma principal del contenido",
+            "secondaryLabel": "Idioma secundario del contenido",
+            "addButton": "Añadir idioma"
           },
-          "campaign": {
-            "title": "Campaña"
+          "rounds": {
+            "title": "Elige las rondas que tendrá tu campaña",
+            "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
+            "option1": "1 Ronda",
+            "option2": "2 Rondas"
           },
-          "rewards": {
-            "title": "Recompensas"
-          },
-          "collaborations": {
-            "title": "Colaboraciones"
-          },
-          "budget": {
-            "title": "Presupuesto"
-          },
-          "aboutYou": {
-            "title": "Sobre ti"
-          }
+          "continue": "Continuar con info de campaña"
         },
         "rewards": {
           "edit": "Editar"
@@ -56,6 +67,7 @@
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",
+    "loading": "Cargando...",
     "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!"
   },
   "reward": {
@@ -1118,7 +1130,6 @@
       }
     }
   },
-  "loading": "Cargando...",
   "lang": {
     "error": {
       "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."

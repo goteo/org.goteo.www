@@ -39,7 +39,7 @@
         checked={rounds === 1}
         onchange={() => handleChange(1)}
         id="round-1-radio"
-        label={$t("wizard.configuration.rounds.option1")}
+        label={$t("pages.project.edit.configuration.rounds.option1")}
     />
 
     <!-- 2 Rounds Option -->
@@ -49,6 +49,6 @@
         checked={rounds === 2}
         onchange={() => handleChange(2)}
         id="round-2-radio"
-        label={$t("wizard.configuration.rounds.option2")}
+        label={$t("pages.project.edit.configuration.rounds.option2")}
     />
 </div>

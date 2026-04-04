@@ -56,19 +56,21 @@
     <!-- Page Header -->
     <div class="space-y-4">
         <h1 class="text-[40px]/12 font-bold text-black">
-            {$t("wizard.configuration.title")}
+            {$t("pages.project.edit.configuration.title")}
         </h1>
-        <p class="text-content text-base font-normal">{$t("wizard.configuration.subtitle")}</p>
+        <p class="text-content text-base font-normal">
+            {$t("pages.project.edit.configuration.subtitle")}
+        </p>
     </div>
 
     <!-- Languages Section -->
     <div class="space-y-6">
         <div class="space-y-4">
             <h2 class="text-2xl font-bold text-black">
-                {$t("wizard.configuration.languages.title")}
+                {$t("pages.project.edit.configuration.languages.title")}
             </h2>
             <p class="text-content text-base font-normal">
-                {$t("wizard.configuration.languages.description")}
+                {$t("pages.project.edit.configuration.languages.description")}
             </p>
         </div>
         <LanguageSelector languages={configuration.languages} onChange={handleLanguagesChange} />
@@ -78,25 +80,20 @@
     <div class="space-y-6">
         <div class="space-y-4">
             <h2 class="text-2xl font-bold text-black">
-                {$t("wizard.configuration.rounds.title")}
+                {$t("pages.project.edit.configuration.rounds.title")}
             </h2>
             <p class="text-content text-base font-normal">
-                {$t("wizard.configuration.rounds.description")}
+                {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
         <RoundSelector bind:rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->
-    <div class="flex justify-start">
-        <Button
-            kind="secondary"
-            size="md"
-            onclick={handleContinue}
-            data-testid="config-continue-btn"
-        >
+    <div class="mb- flex justify-start">
+        <Button kind="secondary" size="md" onclick={handleContinue}>
             {#snippet children()}
-                {$t("wizard.configuration.continue")}
+                {$t("pages.project.edit.configuration.continue")}
             {/snippet}
         </Button>
     </div>
