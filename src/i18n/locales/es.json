@@ -24,6 +24,26 @@
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
     "project": {
       "edit": {
+        "tabs": {
+          "configuration": {
+            "title": "Configuración"
+          },
+          "campaign": {
+            "title": "Campaña"
+          },
+          "rewards": {
+            "title": "Recompensas"
+          },
+          "collaborations": {
+            "title": "Colaboraciones"
+          },
+          "budget": {
+            "title": "Presupuesto"
+          },
+          "aboutYou": {
+            "title": "Sobre ti"
+          }
+        },
         "rewards": {
           "edit": "Editar"
         },
@@ -35,7 +55,8 @@
     }
   },
   "system": {
-    "_": "System messages (errors, notifications, validation, etc.)"
+    "_": "System messages (errors, notifications, validation, etc.)",
+    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!"
   },
   "reward": {
     "donors": "donates",

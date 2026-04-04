@@ -149,9 +149,9 @@
         {:else if currentStep === 6}
             <div class="py-12 text-center">
                 <h2 class="text-secondary mb-4 text-2xl font-bold">
-                    {$t("wizard.steps.about_you")}
+                    {$t("pages.project.edit.tabs.aboutYou.title")}
                 </h2>
-                <p class="text-tertiary">{$t("wizard.placeholders.step_not_implemented")}</p>
+                <p class="text-tertiary">{$t("system.notImplemented")}</p>
             </div>
         {/if}
     {/snippet}

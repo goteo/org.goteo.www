@@ -52,12 +52,12 @@
 
     // Define the six wizard steps (reactive to language changes)
     const steps = $derived<Tab[]>([
-        { id: 1, label: $t("wizard.steps.configuration") },
-        { id: 2, label: $t("wizard.steps.campaign_info") },
-        { id: 3, label: $t("wizard.steps.rewards") },
-        { id: 4, label: $t("wizard.steps.collaborations") },
-        { id: 5, label: $t("wizard.steps.budget") },
-        { id: 6, label: $t("wizard.steps.about_you") },
+        { id: 1, label: $t("pages.project.edit.tabs.configuration.title") },
+        { id: 2, label: $t("pages.project.edit.tabs.campaign.title") },
+        { id: 3, label: $t("pages.project.edit.tabs.rewards.title") },
+        { id: 4, label: $t("pages.project.edit.tabs.collaborations.title") },
+        { id: 5, label: $t("pages.project.edit.tabs.budget.title") },
+        { id: 6, label: $t("pages.project.edit.tabs.aboutYou.title") },
     ]);
 
     // Reactive values from store
