@@ -34,13 +34,13 @@
             <span
                 class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap"
             >
-                {$t("campaignProgress.optimumReached")}
+                {$t("domain.project.campaign.optimumReached")}
             </span>
         {:else if hasReached(project.budget?.minimum?.money)}
             <span
                 class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap"
             >
-                {$t("campaignProgress.minimumReached")}
+                {$t("domain.project.campaign.minimumReached")}
             </span>
         {/if}
     </div>
@@ -48,7 +48,7 @@
     <Grid class="col-span-2 grid-cols-2 gap-6">
         <div class="flex flex-col gap-4">
             <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.obtained`)}</p>
+                <p class="text-content text-sm">{$t("domain.project.campaign.obtained")}</p>
                 <p class="text-3xl font-bold text-black">
                     {formatCurrency(
                         Number(accounting.balance?.amount) || 0,
@@ -57,7 +57,7 @@
                 </p>
             </div>
             <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.supports`)}</p>
+                <p class="text-content text-sm">{$t("domain.project.campaign.supports")}</p>
                 <p class="text-2xl font-bold text-black">
                     {totalSupports}
                 </p>
@@ -65,7 +65,7 @@
         </div>
         <div class="flex flex-col gap-4">
             <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.optimum`)}</p>
+                <p class="text-content text-sm">{$t("domain.project.campaign.optimum")}</p>
                 <p class="text-3xl font-bold text-black">
                     {formatCurrency(
                         project.budget?.optimum?.money?.amount ?? 0,
@@ -74,7 +74,7 @@
                 </p>
             </div>
             <div>
-                <p class="text-content text-sm">{$t(`campaignProgress.minimum`)}</p>
+                <p class="text-content text-sm">{$t("domain.project.campaign.minimum")}</p>
                 <p class="text-2xl font-bold text-black">
                     {formatCurrency(
                         project.budget?.minimum?.money?.amount ?? 0,
@@ -85,6 +85,6 @@
         </div>
     </Grid>
     <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={onScrollToRewards}>
-        {$t("campaignProgress.donate")}
+        {$t("domain.project.campaign.donate")}
     </Button>
 </div>

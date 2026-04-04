@@ -5,22 +5,24 @@
     "farewell": "Adiós"
   },
   "domain": {
-    "_": "Business concepts (project, reward, contribution, etc.)"
+    "_": "Business concepts (project, reward, contribution, etc.)",
+    "project": {
+      "campaign": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "optimumReached": "¡Óptimo conseguido!",
+        "obtained": "Obtenido",
+        "supports": "Donantes únicos",
+        "optimum": "Óptimo",
+        "minimum": "Mínimo",
+        "donate": "Donar a esta campaña"
+      }
+    }
   },
   "pages": {
     "_": "Page-specific content (/home, /search, /project/[id], etc.)"
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)"
-  },
-  "campaignProgress": {
-    "minimumReached": "¡Mínimo conseguido!",
-    "optimumReached": "¡Óptimo conseguido!",
-    "obtained": "Obtenido",
-    "supports": "Donantes únicos",
-    "optimum": "Óptimo",
-    "minimum": "Mínimo",
-    "donate": "Donar a esta campaña"
   },
   "reward": {
     "donate": "Dona",
