@@ -1,5 +1,5 @@
-import { decodeJWT } from "./jwt";
 import { refreshToken } from "./grant";
+import { decodeJWT } from "./jwt";
 import {
     apiAccountingsIdGet,
     apiUsersIdorganizationGet,
@@ -91,11 +91,9 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
         throw new Error("Cannot build a Session from an expired token");
     }
 
-    const headers = { Authorization: `${token.token_type} ${token.access_token}` };
-
     const { data: user } = await apiUsersIdOrHandleGet({
         path: { idOrHandle: jwt.sub },
-        headers,
+        headers: token.asHttpHeaders,
     });
 
     if (!user) {
@@ -109,15 +107,15 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
     } = await Promise.all([
         apiAccountingsIdGet({
             path: { id: extractId(user.accounting)! },
-            headers,
+            headers: token.asHttpHeaders,
         }),
         apiUsersIdpersonGet({
             path: { id: String(user.id) },
-            headers,
+            headers: token.asHttpHeaders,
         }),
         apiUsersIdorganizationGet({
             path: { id: String(user!.id) },
-            headers,
+            headers: token.asHttpHeaders,
         }),
     ]);
 

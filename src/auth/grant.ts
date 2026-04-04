@@ -1,3 +1,5 @@
+import { withHttpHeaders } from "./token";
+
 import type { OAuthToken } from "./types";
 
 export async function authorizationCode(args: {
@@ -15,7 +17,9 @@ export async function authorizationCode(args: {
         method: "POST",
         body: params,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    }).then((res) => res.json());
+    })
+        .then((res) => res.json())
+        .then((token) => withHttpHeaders(token));
 
     if (oauth.error!) {
         console.error(oauth);
@@ -40,7 +44,9 @@ export async function refreshToken(token: OAuthToken): Promise<OAuthToken> {
         method: "POST",
         body: params,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    }).then((res) => res.json());
+    })
+        .then((res) => res.json())
+        .then((token) => withHttpHeaders(token));
 
     if (oauth.error!) {
         console.error(oauth);
