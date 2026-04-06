@@ -65,7 +65,7 @@
         </div>
         <div class="flex flex-col gap-4">
             <div>
-                <p class="text-content text-sm">{$t("domain.project.campaign.optimum")}</p>
+                <p class="text-content text-sm">{$t("domain.project.budget.optimum")}</p>
                 <p class="text-3xl font-bold text-black">
                     {formatCurrency(
                         project.budget?.optimum?.money?.amount ?? 0,
@@ -74,7 +74,7 @@
                 </p>
             </div>
             <div>
-                <p class="text-content text-sm">{$t("domain.project.campaign.minimum")}</p>
+                <p class="text-content text-sm">{$t("domain.project.budget.minimum")}</p>
                 <p class="text-2xl font-bold text-black">
                     {formatCurrency(
                         project.budget?.minimum?.money?.amount ?? 0,

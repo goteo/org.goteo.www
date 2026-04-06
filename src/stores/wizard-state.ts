@@ -968,33 +968,28 @@ export function validateBudgetItem(item: ProjectBudgetItem): Record<string, stri
     const hash = cyrb53(JSON.stringify(item));
 
     if (!item.title.trim()) {
-        errors[`budget_error_title_${hash}`] =
-            "pages.project.edit.rewards.validationtitle_required.reward";
+        errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
     }
 
     if (!item.description.trim()) {
         errors[`budget_error_description_${hash}`] =
-            "pages.project.edit.rewards.validationdescription_required.reward";
+            "pages.project.edit.budget.validation.description";
     }
 
     if (!item.money.amount || item.money.amount <= 0) {
-        errors[`budget_error_amount_${hash}`] =
-            "pages.project.edit.rewards.validationamount_invalid.reward";
+        errors[`budget_error_amount_${hash}`] = "pages.project.edit.budget.validation.amount";
     }
 
     if (!item.money.currency) {
-        errors[`budget_error_currency_${hash}`] =
-            "pages.project.edit.rewards.validationcurrency_required.reward";
+        errors[`budget_error_currency_${hash}`] = "pages.project.edit.budget.validation.currency";
     }
 
     if (!item.type) {
-        errors[`budget_error_type_${hash}`] =
-            "pages.project.edit.rewards.validationtype_required.reward";
+        errors[`budget_error_type_${hash}`] = "pages.project.edit.budget.validation.type";
     }
 
     if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
-        errors[`budget_error_deadline_${hash}`] =
-            "pages.project.edit.rewards.validationdeadline_invalid.reward";
+        errors[`budget_error_deadline_${hash}`] = "pages.project.edit.budget.validation.class";
     }
 
     return errors;
@@ -1005,15 +1000,7 @@ export function validateBudgetAmount() {
     const errors: Record<string, string> = {};
 
     if (budgetItems.minimum.length <= 0) {
-        errors.minimum = "pages.project.edit.rewards.validationminimum_required.reward";
-    }
-
-    const minTotal = budgetItems.minimum.reduce((sum, i) => sum + i.money.amount, 0);
-    const optTotal = budgetItems.optimum.reduce((sum, i) => sum + i.money.amount, 0);
-
-    if (budgetItems.optimum.length && optTotal < minTotal) {
-        errors.optimum_total =
-            "pages.project.edit.rewards.validationoptimum_less_than_minimum.reward";
+        errors.minimum = "pages.project.edit.budget.validation.amountMinimum";
     }
 
     return errors;

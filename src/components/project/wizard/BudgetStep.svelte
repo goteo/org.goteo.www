@@ -73,14 +73,14 @@
     {/if}
     <div class="space-y-4">
         <h1 class="text-3xl leading-12 font-bold text-black lg:text-[40px]">
-            {$t("wizard.budget.title")}
+            {$t("pages.project.edit.budget.title")}
         </h1>
-        <p class="text-content text-base">{$t("wizard.budget.subtitle")}</p>
+        <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 
     <div class="flex flex-col gap-6">
         <span class="text-secondary text-3xl font-bold">
-            {$t("wizard.budget.minimum")}:
+            {$t("domain.project.budget.minimum")}:
             {formatCurrency(
                 project.budget?.minimum?.money?.amount,
                 project.budget?.minimum?.money?.currency,
@@ -100,7 +100,7 @@
     </div>
     <div class="flex flex-col gap-6">
         <span class="text-secondary text-3xl font-bold">
-            {$t("wizard.budget.optimum")}:
+            {$t("domain.project.budget.optimum")}:
             {formatCurrency(
                 project.budget?.optimum?.money?.amount,
                 project.budget?.optimum?.money?.currency,
@@ -121,13 +121,7 @@
 </div>
 
 <div class="mt-10 flex">
-    <Button
-        kind="secondary"
-        size="md"
-        onclick={handleContinue}
-        class="min-w-50"
-        data-testid="budget-continue-btn"
-    >
-        {$t("wizard.campaignInfo.continue")}
+    <Button kind="secondary" size="md" onclick={handleContinue} class="min-w-50">
+        {$t("pages.project.edit.budget.continue")}
     </Button>
 </div>

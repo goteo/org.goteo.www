@@ -35,7 +35,9 @@
                 class="inline-block h-2.5 w-5 rounded-lg"
                 style={`background-color: ${typeBudget[item.type as ProjectBudgetItem["type"]]}`}
             ></div>
-            <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span>
+            <span class="text-content text-sm">
+                {$t(`domain.project.budget.type.${item.type}`)}
+            </span>
         </div>
     </div>
 </div>

@@ -24,9 +24,16 @@
         "optimumReached": "¡Óptimo conseguido!",
         "obtained": "Obtenido",
         "supports": "Donantes únicos",
+        "donate": "Donar a esta campaña"
+      },
+      "budget": {
         "optimum": "Óptimo",
         "minimum": "Mínimo",
-        "donate": "Donar a esta campaña"
+        "type": {
+          "infrastructure": "Infraestructura",
+          "material": "Material",
+          "task": "Tarea"
+        }
       },
       "reward": {
         "byAtLeast": "Por {{ amount }}",
@@ -97,7 +104,7 @@
           "subtitle": "Añade recompensas atractivas para alcanzar tu meta",
           "continue": "Continuar con colaboraciones",
           "add": {
-            "title": "¡No Lances Tu Campaña Sin Ellas! Las recompensas son tu superpoder",
+            "title": "¡No lances tu campaña sin ellas! Las recompensas son tu superpoder",
             "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
             "button": "Añadir recompensa"
           },
@@ -127,7 +134,7 @@
           "subtitle": "Añade colaboraciones que consideres oportunas para ayudar a tu campaña",
           "continue": "Continuar a presupuesto",
           "add": {
-            "title": "¡Amplía Tu Campaña! Busca Colaboradores, No Solo Dinero.",
+            "title": "¡Amplía tu campaña! Busca colaboradores, no solo dinero",
             "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
             "button": "Añadir colaboración"
           },
@@ -147,6 +154,40 @@
             "title": "El título no puede estar vacío",
             "descriptionTooLong": "La descripción de la colaboración es demasiado larga",
             "description": "La descripción no puede estar vacía"
+          }
+        },
+        "budget": {
+          "title": "Presupuesto",
+          "subtitle": "Indica el presupuesto mínimo y óptimo que necesitas para llevar a cabo tu proyecto",
+          "continue": "Siguiente paso",
+          "add": {
+            "title": "Añade una partida",
+            "description": "Puedes indicar cual es el mínimo y cual es el óptimo que necesitas para llevar a cabo tu proyecto.",
+            "button": "Añadir partida"
+          },
+          "modal": {
+            "title": "Añadir partidas del presupuesto",
+            "description": "Describe las partidas del presupuesto",
+            "placeholders": {
+              "title": "Título de la partida",
+              "type": "Tipo de partida",
+              "moneyAmount": "Importe",
+              "deadline": "Clase",
+              "description": "Descripción"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta partida",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "description": "La descripción no puede estar vacía",
+            "amount": "El importe debe ser mayor que cero",
+            "amountMinimum": "El presupuesto mínimo debe ser mayor que cero",
+            "currency": "El importe debe especificar una divisa",
+            "type": "El tipo de partida se debe especificar",
+            "class": "La clase de partida se debe especificar"
           }
         }
       },
@@ -186,9 +227,6 @@
   },
   "budget": {
     "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
-    "infrastructure": "Infraestructura",
-    "material": "Material",
-    "task": "Tareas",
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
@@ -208,11 +246,6 @@
         "optimal": "Óptimo",
         "raised": "Obtenido",
         "total": "Total",
-        "typeBudget": {
-          "infrastructure": "Infraestructura",
-          "material": "Material",
-          "task": "Tareas"
-        },
         "campaingState": "Estado de la campaña"
       },
       "rewards": "Recompensas",
