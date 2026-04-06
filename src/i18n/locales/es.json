@@ -122,8 +122,32 @@
             "units": "La cantidad de unidades debe ser mayor que cero si la recompensa es limitada"
           }
         },
-        "collarations": {
-          "edit": "Editar"
+        "collaborations": {
+          "title": "Colaboraciones",
+          "subtitle": "Añade colaboraciones que consideres oportunas para ayudar a tu campaña",
+          "continue": "Continuar a presupuesto",
+          "add": {
+            "title": "¡Amplía Tu Campaña! Busca Colaboradores, No Solo Dinero.",
+            "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
+            "button": "Añadir colaboración"
+          },
+          "modal": {
+            "title": "Añade colaboraciones",
+            "description": "Indica el tipo de colaboración que necesitas",
+            "placeholders": {
+              "title": "Título de la colaboración",
+              "description": "Descripción de la colaboración"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta colaboración",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "descriptionTooLong": "La descripción de la colaboración es demasiado larga",
+            "description": "La descripción no puede estar vacía"
+          }
         }
       },
       "view": {}

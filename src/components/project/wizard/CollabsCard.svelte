@@ -62,8 +62,8 @@
 
 {#if isCreateCard}
     <CreateCard
-        title={$t("wizard.collaborations.createCard.title")}
-        description={$t("wizard.collaborations.createCard.description")}
+        title={$t("pages.project.edit.collaborations.add.title")}
+        description={$t("pages.project.edit.collaborations.add.description")}
         variant="collab"
         onSave={handleSaveCollab}
         onclick={() => (openModal = true)}
@@ -89,7 +89,7 @@
         </div>
 
         <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-            {$t("pages.project.edit.collaborations.edit")}
+            {$t("common.edit")}
         </Button>
 
         <CollabsModal

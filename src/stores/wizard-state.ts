@@ -874,18 +874,17 @@ export function validateCollaboration(collab: WizardCollaboration): Record<strin
     const hash = cyrb53(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
-        errors[`collab_error_title_${hash}`] =
-            "pages.project.edit.rewards.validationrations.reward.title";
+        errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
     }
 
     if (collab.description && collab.description.length > 1000) {
         errors[`collab_error_description_too_long_${hash}`] =
-            "pages.project.edit.rewards.validationrations.reward.description_too_long";
+            "pages.project.edit.collaborations.validation.descriptionTooLong";
     }
 
     if (!collab.description.trim()) {
         errors[`collab_error_description_${hash}`] =
-            "pages.project.edit.rewards.validationrations.reward.description";
+            "pages.project.edit.collaborations.validation.description";
     }
 
     return errors;

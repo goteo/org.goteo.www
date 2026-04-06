@@ -141,9 +141,9 @@
         {:else if currentStep === 2}
             <CampaignInfoStep />
         {:else if currentStep === 3}
-            <RewardsStep {project} />
+            <RewardsStep />
         {:else if currentStep === 4}
-            <CollaborationsStep {project} />
+            <CollaborationsStep />
         {:else if currentStep === 5}
             <BudgetStep {project} />
         {:else if currentStep === 6}

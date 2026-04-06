@@ -53,32 +53,33 @@
     footerClass="md:p-0 p-0 flex items-center justify-end gap-4"
 >
     {#if Object.keys($validationErrors).length === 1}
-        {@const validationError = Object.values($validationErrors)}
-        <Toast class="absolute z-999 self-end" variant="error" bind:showToast>
-            {validationError}
-        </Toast>
+        {#each Object.values($validationErrors) as validationError}
+            <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
+                {$t(validationError)}
+            </Toast>
+        {/each}
     {:else if Object.keys($validationErrors).length >= 2}
         <Toast class="absolute z-999 self-end" variant="error" bind:showToast>
-            {$t("wizard.validation.budget.missing-requiered-fields")}
+            {$t("system.validation.missingRequiredFields")}
         </Toast>
     {/if}
     {#snippet header()}
         <h2 class="text-xl font-bold text-black">
-            {$t(`wizard.collaborations.modal.title`)}
+            {$t("pages.project.edit.collaborations.modal.title")}
         </h2>
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
-            {$t(`wizard.collaborations.modal.description`)}
+            {$t("pages.project.edit.collaborations.modal.description")}
         </p>
     {/snippet}
     <div class="flex flex-col gap-4">
         <input
             type="text"
-            placeholder={$t("wizard.collaborations.modal.placeholders.title")}
+            placeholder={$t("pages.project.edit.collaborations.modal.placeholders.title")}
             bind:value={title}
             class={INPUTS_CLASSES}
         />
         <textarea
-            placeholder={$t("wizard.collaborations.modal.placeholders.description")}
+            placeholder={$t("pages.project.edit.collaborations.modal.placeholders.description")}
             bind:value={description}
             class={`h-32 resize-none ${INPUTS_CLASSES}`}
         ></textarea>
@@ -87,7 +88,7 @@
     {#snippet footer()}
         {#if collab !== null && onDelete}
             <Button kind="secondary" onclick={() => (openDeleteModal = true)} class="w-fit">
-                {$t(`wizard.collaborations.modal.btns.delete`)}
+                {$t("common.remove")}
             </Button>
             <DeleteModal
                 variant="collaborations"
@@ -96,7 +97,7 @@
             />
         {/if}
         <Button onclick={() => handleSaveOrCreate()} class="w-fit">
-            {$t(`wizard.collaborations.modal.btns.continue`)}
+            {$t("common.continue")}
         </Button>
     {/snippet}
 </Modal>
