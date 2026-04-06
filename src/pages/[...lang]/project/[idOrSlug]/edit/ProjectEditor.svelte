@@ -9,12 +9,7 @@
 -->
 <script lang="ts">
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
-    import BudgetStep from "../../../../../components/project/edit/BudgetStep.svelte";
-    import CampaignInfoStep from "../../../../../components/project/edit/CampaignInfoStep.svelte";
-    import CollaborationsStep from "../../../../../components/project/edit/CollaborationsStep.svelte";
-    import ConfigurationStep from "../../../../../components/project/edit/ConfigurationStep.svelte";
-    import RewardsStep from "../../../../../components/project/edit/RewardsStep.svelte";
-    import { t } from "../../../../../i18n/store";
+    import { getStepComponent } from "./steps";
     import { type Project } from "../../../../../openapi/client";
     import {
         wizardState,
@@ -135,24 +130,6 @@
     onSave={handleSave}
     onPublish={handlePublish}
 >
-    {#snippet currentStepContent()}
-        {#if currentStep === 1}
-            <ConfigurationStep />
-        {:else if currentStep === 2}
-            <CampaignInfoStep />
-        {:else if currentStep === 3}
-            <RewardsStep />
-        {:else if currentStep === 4}
-            <CollaborationsStep />
-        {:else if currentStep === 5}
-            <BudgetStep {project} />
-        {:else if currentStep === 6}
-            <div class="py-12 text-center">
-                <h2 class="text-secondary mb-4 text-2xl font-bold">
-                    {$t("pages.project.edit.tabs.aboutYou")}
-                </h2>
-                <p class="text-tertiary">{$t("system.notImplemented")}</p>
-            </div>
-        {/if}
-    {/snippet}
+    {@const StepComponent = getStepComponent(currentStep)}
+    <StepComponent {project} />
 </ProjectEditorShell>

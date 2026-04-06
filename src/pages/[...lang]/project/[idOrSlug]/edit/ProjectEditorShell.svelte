@@ -37,7 +37,7 @@
     let {
         title = "",
         subtitle = "",
-        currentStepContent,
+        children,
         onTitleChange,
         onSubtitleChange,
         onSave,
@@ -45,7 +45,7 @@
     }: {
         title?: string;
         subtitle?: string;
-        currentStepContent: Snippet;
+        children: Snippet;
         onTitleChange?: (value: string) => void;
         onSubtitleChange?: (value: string) => void;
         onSave?: () => void;
@@ -221,7 +221,7 @@
 
         <!-- Step Content -->
         <div class="min-h-100">
-            {@render currentStepContent()}
+            {@render children()}
         </div>
     </div>
 </div>
