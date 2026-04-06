@@ -149,7 +149,7 @@
         {:else if currentStep === 6}
             <div class="py-12 text-center">
                 <h2 class="text-secondary mb-4 text-2xl font-bold">
-                    {$t("pages.project.edit.tabs.aboutYou.title")}
+                    {$t("pages.project.edit.tabs.aboutYou")}
                 </h2>
                 <p class="text-tertiary">{$t("system.notImplemented")}</p>
             </div>
