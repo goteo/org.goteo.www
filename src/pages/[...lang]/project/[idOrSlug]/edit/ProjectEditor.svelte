@@ -9,19 +9,19 @@
 -->
 <script lang="ts">
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
-    import BudgetStep from "../../../../components/project/edit/BudgetStep.svelte";
-    import CampaignInfoStep from "../../../../components/project/edit/CampaignInfoStep.svelte";
-    import CollaborationsStep from "../../../../components/project/edit/CollaborationsStep.svelte";
-    import ConfigurationStep from "../../../../components/project/edit/ConfigurationStep.svelte";
-    import RewardsStep from "../../../../components/project/edit/RewardsStep.svelte";
-    import { t } from "../../../../i18n/store";
-    import { type Project } from "../../../../openapi/client";
+    import BudgetStep from "../../../../../components/project/edit/BudgetStep.svelte";
+    import CampaignInfoStep from "../../../../../components/project/edit/CampaignInfoStep.svelte";
+    import CollaborationsStep from "../../../../../components/project/edit/CollaborationsStep.svelte";
+    import ConfigurationStep from "../../../../../components/project/edit/ConfigurationStep.svelte";
+    import RewardsStep from "../../../../../components/project/edit/RewardsStep.svelte";
+    import { t } from "../../../../../i18n/store";
+    import { type Project } from "../../../../../openapi/client";
     import {
         wizardState,
         initializeFromProject,
         clearLocalStorage,
         saveToLocalStorage,
-    } from "../../../../stores/wizard-state";
+    } from "../../../../../stores/wizard-state";
 
     let {
         project,

@@ -16,19 +16,21 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import Button from "../../../../components/library/Button.svelte";
-    import TabNavigation, { type Tab } from "../../../../components/library/TabNavigation.svelte";
-    import Toast from "../../../../components/library/Toast.svelte";
-    import { t } from "../../../../i18n/store";
+    import Button from "../../../../../components/library/Button.svelte";
+    import TabNavigation, {
+        type Tab,
+    } from "../../../../../components/library/TabNavigation.svelte";
+    import Toast from "../../../../../components/library/Toast.svelte";
+    import { t } from "../../../../../i18n/store";
     import {
         wizardState,
         navigateToStep,
         saveToLocalStorage,
         persistenceError,
         hasUnsavedChanges,
-    } from "../../../../stores/wizard-state";
-    import EditIcon from "../../../../svgs/EditIcon.svelte";
-    import EyeIcon from "../../../../svgs/EyeIcon.svelte";
+    } from "../../../../../stores/wizard-state";
+    import EditIcon from "../../../../../svgs/EditIcon.svelte";
+    import EyeIcon from "../../../../../svgs/EyeIcon.svelte";
 
     import type { Snippet } from "svelte";
 
