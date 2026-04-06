@@ -5,6 +5,7 @@ import { getSession } from "../../../../../auth/session";
 import App from "../../../../../components/App.svelte";
 import ProjectEditor from "./ProjectEditor.svelte";
 
+const { t } = Astro.locals;
 const locale = Astro.locals.lang;
 
 const { idOrSlug } = Astro.params;
@@ -34,7 +35,7 @@ if (error) {
 }
 ---
 
-<Layout title="Configurar Proyecto">
+<Layout title={t("pages.project.edit.title", { project: project.title })}>
     <App locale={locale} session={session} client:load />
     <ProjectEditor project={project} client:load />
 </Layout>

@@ -46,6 +46,7 @@
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
     "project": {
       "edit": {
+        "title": "Editando proyecto: {{ project }}",
         "tabs": {
           "configuration": "Configuración",
           "campaign": "Información de campaña",
