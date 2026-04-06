@@ -122,14 +122,7 @@
     }
 </script>
 
-<ProjectEditorShell
-    {title}
-    {subtitle}
-    onTitleChange={handleTitleChange}
-    onSubtitleChange={handleSubtitleChange}
-    onSave={handleSave}
-    onPublish={handlePublish}
->
+<ProjectEditorShell {project} onSave={handleSave} onPublish={handlePublish}>
     {@const StepComponent = getStepComponent(currentStep)}
     <StepComponent {project} />
 </ProjectEditorShell>

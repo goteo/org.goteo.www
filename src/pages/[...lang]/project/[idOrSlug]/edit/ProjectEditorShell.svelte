@@ -32,22 +32,17 @@
     import EditIcon from "../../../../../svgs/EditIcon.svelte";
     import EyeIcon from "../../../../../svgs/EyeIcon.svelte";
 
+    import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";
 
     let {
-        title = "",
-        subtitle = "",
+        project,
         children,
-        onTitleChange,
-        onSubtitleChange,
         onSave,
         onPublish,
     }: {
-        title?: string;
-        subtitle?: string;
+        project: Project;
         children: Snippet;
-        onTitleChange?: (value: string) => void;
-        onSubtitleChange?: (value: string) => void;
         onSave?: () => void;
         onPublish?: () => void;
     } = $props();
@@ -166,15 +161,15 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={title}
-                        oninput={(e) => onTitleChange?.(e.currentTarget.value)}
+                        value={project.title}
+                        oninput={(e) => console.log(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={subtitle}
-                        oninput={(e) => onSubtitleChange?.(e.currentTarget.value)}
+                        value={project.subtitle}
+                        oninput={(e) => console.log(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
                     />
