@@ -282,7 +282,6 @@
         {accept}
         onchange={handleFileSelect}
         class="hidden"
-        aria-label={$t("pages.project.edit.campaignInfo.media.fileInputLabel")}
         disabled={images.length >= maxFiles || isUploading}
     />
 
@@ -302,11 +301,7 @@
 
     <!-- Preview Grid -->
     {#if images.length > 0}
-        <div
-            class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
-            role="list"
-            aria-label={$t("pages.project.edit.campaignInfo.media.uploadedImages")}
-        >
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
             {#each images as image (image.id)}
                 <div class="group relative aspect-video overflow-hidden rounded-lg" role="listitem">
                     <img src={image.url} alt={image.name} class="h-full w-full object-cover" />
@@ -317,7 +312,7 @@
                         kind="invert"
                         size="sm"
                         onclick={() => handleRemove(image.id)}
-                        aria-label={$t("pages.project.edit.campaignInfo.media.removeImage", {
+                        aria-label={$t("common.remove", {
                             name: image.name,
                         })}
                         class={twMerge(

@@ -8,20 +8,20 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import BudgetStep from "./BudgetStep.svelte";
-    import CampaignInfoStep from "./CampaignInfoStep.svelte";
-    import CollaborationsStep from "./CollaborationsStep.svelte";
-    import ConfigurationStep from "./ConfigurationStep.svelte";
-    import RewardsStep from "./RewardsStep.svelte";
-    import WizardShell from "./WizardShell.svelte";
-    import { t } from "../../../i18n/store";
-    import { type Project } from "../../../openapi/client";
+    import ProjectEditorShell from "./ProjectEditorShell.svelte";
+    import BudgetStep from "../../../../components/project/edit/BudgetStep.svelte";
+    import CampaignInfoStep from "../../../../components/project/edit/CampaignInfoStep.svelte";
+    import CollaborationsStep from "../../../../components/project/edit/CollaborationsStep.svelte";
+    import ConfigurationStep from "../../../../components/project/edit/ConfigurationStep.svelte";
+    import RewardsStep from "../../../../components/project/edit/RewardsStep.svelte";
+    import { t } from "../../../../i18n/store";
+    import { type Project } from "../../../../openapi/client";
     import {
         wizardState,
         initializeFromProject,
         clearLocalStorage,
         saveToLocalStorage,
-    } from "../../../stores/wizard-state";
+    } from "../../../../stores/wizard-state";
 
     let {
         project,
@@ -127,7 +127,7 @@
     }
 </script>
 
-<WizardShell
+<ProjectEditorShell
     {title}
     {subtitle}
     onTitleChange={handleTitleChange}
@@ -155,4 +155,4 @@
             </div>
         {/if}
     {/snippet}
-</WizardShell>
+</ProjectEditorShell>

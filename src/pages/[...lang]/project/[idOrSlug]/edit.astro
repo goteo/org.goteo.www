@@ -1,10 +1,10 @@
 ---
 import Layout from "../../../../layouts/Layout.astro";
-import WizardApp from "../../../../components/project/wizard/WizardApp.svelte";
 import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../openapi/client";
 import { getSession } from "../../../../auth/session";
 import App from "../../../../components/App.svelte";
 import type { Locale } from "../../../../i18n/locales";
+import ProjectEditor from "./ProjectEditor.svelte";
 
 const locale = Astro.currentLocale as Locale;
 
@@ -37,5 +37,5 @@ if (error) {
 
 <Layout title="Configurar Proyecto">
     <App locale={locale} session={session} client:load />
-    <WizardApp project={project} client:load />
+    <ProjectEditor project={project} client:load />
 </Layout>
