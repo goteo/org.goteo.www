@@ -23,6 +23,7 @@
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
+    import Thtml from "../Thtml.svelte";
 
     let {
         project,
@@ -132,8 +133,12 @@
         <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
                 <h3 class="text-content text-xl font-bold lg:text-2xl">
-                    {$t("project.owner")}
-                    <span class="font-bold text-black underline"> {owner.displayName}</span>
+                    <Thtml
+                        key="pages.project.view.owner"
+                        vars={{
+                            owner: `<span class="font-bold text-black underline">${owner.displayName}</span>`,
+                        }}
+                    />
                 </h3>
                 <h1 class="text-content text-3xl font-bold lg:text-4xl">
                     {project.title}

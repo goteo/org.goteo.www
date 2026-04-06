@@ -17,7 +17,7 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string | un
         ) as string | undefined;
 }
 
-type TranslationOptions = {
+export type TranslationOptions = {
     allowHTML?: boolean;
 };
 
