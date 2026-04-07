@@ -13,7 +13,7 @@
     import ContentFooter from "./ContentFooter.svelte";
     import Tooltip from "./Tooltip.svelte";
     import { t } from "../../i18n/store";
-    import CopyIcon from "../../svgs/CopyIcon.svelte";
+    import CopyIcon from "../icons/CopyIcon.svelte";
 
     import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
 
