@@ -7,9 +7,9 @@
     import FacebookIcon from "../../svgs/FacebookIcon.svelte";
     import Loader from "../../svgs/Loader.svelte";
     import ShareIcon from "../../svgs/ShareIcon.svelte";
-    import WebIcon from "../../svgs/WebIcon.svelte";
     import XIcon from "../../svgs/XIcon.svelte";
     import Tooltip from "../Admin/Tooltip.svelte";
+    import WebIcon from "../icons/WebIcon.svelte";
 
     import type { Project } from "../../openapi/client/index";
 
