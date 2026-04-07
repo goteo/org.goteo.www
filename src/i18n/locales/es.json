@@ -37,7 +37,10 @@
       },
       "reward": {
         "byAtLeast": "Por {{ amount }}",
-        "unitsTotal": "Hay {{ units }} unidades",
+        "unitsTotal": {
+          "single": "Hay una unidad",
+          "multiple": "Hay {{ units }} unidades"
+        },
         "isInfinite": "Sin límite de unidades"
       }
     }

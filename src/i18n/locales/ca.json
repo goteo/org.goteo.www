@@ -37,7 +37,10 @@
       },
       "reward": {
         "byAtLeast": "Per {{ amount }}",
-        "unitsTotal": "Hi ha {{ units }} unitats",
+        "unitsTotal": {
+          "single": "Hi ha una unitat",
+          "multiple": "Hi ha {{ units }} unitats"
+        },
         "isInfinite": "Sense límit d'unitats"
       }
     }

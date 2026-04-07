@@ -37,7 +37,10 @@
       },
       "reward": {
         "byAtLeast": "By {{ amount }}",
-        "unitsTotal": "There are {{ units }} units",
+        "unitsTotal": {
+          "single": "There is 1 unit",
+          "multiple": "There are {{ units }} units"
+        },
         "isInfinite": "No unit limit"
       }
     }
