@@ -6,8 +6,8 @@ Converted from CampaignCard.astro to maintain exact functionality
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
+    import ClockIcon from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import Clock from "../icons/Clock.svelte";

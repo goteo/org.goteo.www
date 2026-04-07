@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    import ClockIcon from "../components/icons/Clock.svelte";
     import { t } from "../i18n/store";
-    import ClockIcon from "../svgs/ClockIcon.svelte";
 
     export let countdownEnd: Date | undefined = undefined;
 

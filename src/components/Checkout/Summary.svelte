@@ -1,9 +1,9 @@
 <script lang="ts">
     import { derived } from "svelte/store";
 
+    import WarningIcon from "../../components/icons/Warning.svelte";
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import WarningIcon from "../../svgs/WarningIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
+    import ClockIcon from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
     import FlashIcon from "../../svgs/FlashIcon.svelte";
     import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import Tabs from "../Tabs.svelte";
