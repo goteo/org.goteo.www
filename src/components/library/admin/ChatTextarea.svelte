@@ -2,7 +2,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import SendIcon from "../../../svgs/SendIcon.svelte";
+    import SendIcon from "../../icons/SendIcon.svelte";
 
     let { class: classes = "" } = $props<{
         class?: ClassNameValue;
