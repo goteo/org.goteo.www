@@ -1,8 +1,23 @@
 <script lang="ts">
-    export let size: number = 40;
+    import { twMerge } from "tailwind-merge";
+
+    interface Props {
+        class?: string;
+        width?: string | number;
+        height?: string | number;
+    }
+
+    let { class: classes = "", width = "24", height = "24" }: Props = $props();
 </script>
 
-<svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<svg
+    {width}
+    {height}
+    viewBox="0 0 40 40"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    class={twMerge("text-secondary", classes)}
+>
     <rect width="40" height="40" rx="8" fill="#59E9D3" />
     <path
         fill-rule="evenodd"
