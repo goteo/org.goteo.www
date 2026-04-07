@@ -2,7 +2,7 @@
     import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
-    import FiltersIcon from "../../svgs/FiltersIcon.svelte";
+    import FiltersIcon from "../icons/Filters.svelte";
     import Search from "../icons/Search.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
