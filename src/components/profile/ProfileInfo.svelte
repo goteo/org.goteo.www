@@ -3,9 +3,9 @@
     import GmailIcon from "../../svgs/GmailIcon.svelte";
     import InstagramIcon from "../../svgs/InstagramIcon.svelte";
     import LinkedinIcon from "../../svgs/LinkedinIcon.svelte";
-    import MapIcon from "../../svgs/MapIcon.svelte";
     import MediumIcon from "../../svgs/MediumIcon.svelte";
     import XIcon from "../../svgs/XIcon.svelte";
+    import MapIcon from "../icons/MapIcon.svelte";
 
     interface Props {
         displayName: string;
