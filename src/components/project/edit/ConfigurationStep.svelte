@@ -25,6 +25,7 @@
 
     // Reactive values from store
     const configuration = $derived($wizardState.configuration);
+    let rounds = $state(configuration.fundingRounds ?? 1);
 
     /**
      * Handle Continue button
@@ -86,7 +87,7 @@
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector bind:rounds={configuration.fundingRounds} onChange={handleRoundsChange} />
+        <RoundSelector bind:rounds onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->
