@@ -5,7 +5,7 @@
     import LinkedinIcon from "../../svgs/LinkedinIcon.svelte";
     import MediumIcon from "../../svgs/MediumIcon.svelte";
     import XIcon from "../../svgs/XIcon.svelte";
-    import MapIcon from "../icons/MapIcon.svelte";
+    import MapIcon from "../icons/Location.svelte";
 
     interface Props {
         displayName: string;

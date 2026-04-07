@@ -1,7 +1,7 @@
 <script lang="ts">
     import iso3166 from "iso-3166-2";
 
-    import MapIcon from "./icons/MapIcon.svelte";
+    import MapIcon from "./icons/Location.svelte";
     import { locale } from "../i18n/store";
     import { getTerritoryTag } from "../utils/getTerritoryTag";
     import Tag from "./library/Tag.svelte";
