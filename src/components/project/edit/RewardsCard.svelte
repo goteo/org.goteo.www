@@ -102,9 +102,13 @@
                 >
                     <UnitIcon />
                     <span>
-                        {@html $t("domain.project.reward.unitsTotal", {
-                            units: String(reward.unitsTotal),
-                        })}
+                        {#if reward.unitsTotal === 1}
+                            {$t("domain.project.reward.unitsTotal.single")}
+                        {:else}
+                            {@html $t("domain.project.reward.unitsTotal.multiple", {
+                                units: String(reward.unitsTotal),
+                            })}
+                        {/if}
                     </span>
                 </div>
             {:else}
