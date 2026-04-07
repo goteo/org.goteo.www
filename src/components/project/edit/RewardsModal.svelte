@@ -31,7 +31,7 @@
 
     let moneyAmount = $state(reward?.money.amount ? reward.money.amount / 100 : 0);
     let rewardCount = $state(reward?.unitsTotal ?? 1);
-    let unlimited = $state(reward?.isFinite ?? false);
+    let unlimited = $state(!reward?.isFinite ? true : false);
     let files = $state<File[]>([]);
 
     let openDeleteModal = $state(false);

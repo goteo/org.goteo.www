@@ -5,13 +5,13 @@
 
     let {
         value = $bindable(1),
-        unlimited = $bindable(true),
+        unlimited = $bindable(false),
         min = 1,
-    } = $props<{
-        value?: number;
-        unlimited?: boolean;
+    }: {
+        value: number;
+        unlimited: boolean;
         min?: number;
-    }>();
+    } = $props();
 
     function increment() {
         if (!unlimited) value += 1;
