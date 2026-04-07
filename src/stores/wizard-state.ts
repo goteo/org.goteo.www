@@ -996,11 +996,21 @@ export function validateBudgetItem(item: ProjectBudgetItem): Record<string, stri
 }
 
 export function validateBudgetAmount() {
-    const { budgetItems } = get(wizardState);
+    const { budgetItems, budget } = get(wizardState);
     const errors: Record<string, string> = {};
 
     if (budgetItems.minimum.length <= 0) {
-        errors.minimum = "pages.project.edit.budget.validation.amountMinimum";
+        errors.minimum_length = "pages.project.edit.budget.validation.minimumItemsLength";
+    }
+
+    let minimumItemsTotalAmount: number = 0;
+
+    for (let i = 0; i < budgetItems.minimum.length - 1; i++) {
+        minimumItemsTotalAmount += budgetItems.minimum[i].money.amount;
+    };
+
+    if (minimumItemsTotalAmount !== budget.amount) {
+        errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";
     }
 
     return errors;
