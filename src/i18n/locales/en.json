@@ -528,21 +528,33 @@
     },
     "page-approved": {
       "title": "Your means of payment has been processed with an overwhelming success",
-      "description": "Good! ",
+      "description": "Good! You are just one step away from finishing and to make the world a little better.",
       "form-goal": {
         "title": "If the campaign does not achieve its goal",
         "options": {
-          "1": "Enter my drip purse to be able to allocate it to other projects. ",
+          "1": "Enter my drip purse to be able to allocate it to other projects.",
           "2": "Return it to my payment medium card"
-        }
+        },
+        "learnMore": "Learn more"
       },
       "form-review": {
         "title": "Leave a message in the projects you have supported",
-        "description": "Your donation will be reflected in the projects you have supported.  ",
+        "description": "Your donation will be reflected in the projects you have supported. You can leave a message or stay anonymous.",
+        "project": "Crowdfunding campaign:",
+        "donated": "You donated:",
+        "btn-comment": {
+          "editComment": "Edit my comment",
+          "leaveComment": "Leave a comment"
+        },
+        "comment-modal": {
+          "title": "Add a comment",
+          "label": "Write here your comment",
+          "btn": "Add comment"
+        },
+        "anonymous": "I want my comment to be anonymous",
         "labels": {
-          "name": "Label",
-          "anonymous": "Leave a message anonymously",
-          "leave-a-message": "Leave a message publicly"
+          "placeholder": "Write here your support message",
+          "name": "Label"
         }
       }
     },

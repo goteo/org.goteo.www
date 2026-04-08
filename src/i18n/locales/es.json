@@ -536,17 +536,29 @@
       "form-goal": {
         "title": "Si la campaña no logra su objetivo",
         "options": {
-          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos.",
           "2": "Devolverlo a mi medio de pago"
-        }
+        },
+        "learnMore": "Saber más"
       },
       "form-review": {
         "title": "Deja un mensaje en los proyectos a los que has apoyado",
-        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato.",
+        "project": "Campaña de crowdfunding:",
+        "donated": "Has donado:",
+        "btn-comment": {
+          "editComment": "Editar comentario",
+          "leaveComment": "Quiero dejar comentario"
+        },
+        "comment-modal": {
+          "title": "Añade un comentario",
+          "label": "Escribe aquí tu comentario",
+          "btn": "Añadir comentario"
+        },
+        "anonymous": "Quiero que mi mensaje sea anónimo",
         "labels": {
-          "name": "Label",
-          "anonymous": "Dejar un mensaje de forma anónima",
-          "leave-a-message": "Dejar un mensaje de forma pública"
+          "placeholder": "Escribe tu mensaje de apoyo al impulsor...",
+          "name": "Label"
         }
       }
     },
