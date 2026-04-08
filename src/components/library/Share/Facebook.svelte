@@ -1,12 +1,19 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
     import FacebookIcon from "../../../svgs/FacebookIcon.svelte";
 
-    const appId = "184483011630708";
+    interface Props {
+        url?: string;
+        appId?: string;
+    }
 
-    let fbShareUrl = $state("");
+    let { url = "", appId = import.meta.env.PUBLIC_FACEBOOK_APP_ID }: Props = $props();
+
     let fbWindow: Window | null = null;
+
+    const fbShareUrl = $derived(() => {
+        const encoded = encodeURIComponent(url);
+        return `https://www.facebook.com/dialog/share?app_id=${appId}&display=popup&href=${encoded}&redirect_uri=${encoded}`;
+    });
 
     function openFbPopup() {
         const width = 626;
@@ -19,16 +26,11 @@
         }
 
         fbWindow = window.open(
-            fbShareUrl,
+            fbShareUrl(),
             "facebook-share-dialog",
             `width=${width},height=${height},top=${top},left=${left}`,
         );
     }
-
-    onMount(() => {
-        const currentUrl = encodeURIComponent(window.location.href);
-        fbShareUrl = `https://www.facebook.com/dialog/share?app_id=${appId}&display=popup&href=${currentUrl}&redirect_uri=${currentUrl}`;
-    });
 </script>
 
 <button

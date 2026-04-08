@@ -6,17 +6,13 @@
     import Loader from "../../../svgs/Loader.svelte";
 
     interface Props {
-        projectSlug?: string;
+        url?: string;
     }
 
-    let { projectSlug = "" }: Props = $props();
-
-    const widgetUrl = $derived(
-        `https://www.goteo.org/widget/project/${projectSlug}`,
-    );
+    let { url = "" }: Props = $props();
 
     const iframeCode = $derived(
-        `<iframe frameborder="0" height="492px" src="${widgetUrl}" width="300px" scrolling="no"></iframe>`,
+        `<iframe frameborder="0" height="492px" src="${url}" width="300px" scrolling="no"></iframe>`,
     );
 
     let iframeModal = $state(false);
@@ -53,7 +49,7 @@
             {/if}
             <iframe
                 onload={() => (iframeLoaded = true)}
-                src={widgetUrl}
+                src={url}
                 width="100%"
                 height="492px"
                 frameborder="0"

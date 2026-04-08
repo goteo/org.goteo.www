@@ -3,8 +3,8 @@
 
     import CopyUrl from "./CopyUrl.svelte";
     import Facebook from "./Facebook.svelte";
-    import Ifreme from "./ifreme.svelte";
-    import X from "./x.svelte";
+    import Iframe from "./Iframe.svelte";
+    import X from "./X.svelte";
     import { t } from "../../../i18n/store";
     import ShareIcon from "../../../svgs/ShareIcon.svelte";
 
@@ -12,9 +12,12 @@
         shareText?: string;
         variant?: "blog" | "project";
         projectSlug?: string;
+        url?: string;
     }
 
-    let { shareText = "", variant = "project", projectSlug = "" }: Props = $props();
+    let { shareText = "", variant = "project", projectSlug = "", url = "" }: Props = $props();
+
+    const widgetUrl = $derived(`https://www.goteo.org/widget/project/${projectSlug}`);
 
     let openModal = $state(false);
 
@@ -47,11 +50,11 @@
     <p>{modalDescription}</p>
 
     <div class="flex flex-row items-center justify-center gap-6">
-        <CopyUrl />
-        <Facebook />
-        <X text={shareText} />
+        <CopyUrl {url} />
+        <Facebook {url} />
+        <X text={shareText} {url} />
         {#if variant === "project"}
-            <Ifreme {projectSlug} />
+            <Iframe url={widgetUrl} />
         {/if}
     </div>
 </Modal>
