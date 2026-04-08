@@ -8,12 +8,12 @@
 
     interface Props {
         class?: ClassNameValue;
-        label: string;
+        heading: string;
         open?: boolean;
         children?: Snippet;
     }
 
-    let { class: classes = "", label, open = $bindable(false), children }: Props = $props();
+    let { class: classes = "", heading, open = $bindable(false), children }: Props = $props();
 
     function handleToggle() {
         open = !open;
@@ -36,14 +36,14 @@
         onclick={handleToggle}
         aria-expanded={open}
     >
-        <span class="text-body text-[15px] font-bold lg:text-[16px]">{label}</span>
+        <span class="text-body text-sm font-bold lg:text-base">{heading}</span>
         <span class="text-secondary ml-4 shrink-0">
             <ChevronDown rotate={open} />
         </span>
     </button>
     {#if open}
         <div transition:slide|local={{ duration: 300 }}>
-            <div class="text-content px-6 pt-6 pb-6 text-[13px] leading-relaxed lg:text-[14px]">
+            <div class="text-content px-6 pt-6 pb-6 text-xs leading-relaxed lg:text-sm">
                 {@render children?.()}
             </div>
         </div>
