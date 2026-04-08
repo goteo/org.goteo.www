@@ -77,30 +77,6 @@
     // Reactive current step
     const currentStep = $derived($wizardState.currentStep);
 
-    // Reactive derived values for title and subtitle
-    const title = $derived($wizardState.title);
-    const subtitle = $derived($wizardState.subtitle);
-
-    /**
-     * Handle title change
-     */
-    function handleTitleChange(newTitle: string) {
-        wizardState.update((state) => ({
-            ...state,
-            title: newTitle,
-        }));
-    }
-
-    /**
-     * Handle subtitle change
-     */
-    function handleSubtitleChange(newSubtitle: string) {
-        wizardState.update((state) => ({
-            ...state,
-            subtitle: newSubtitle,
-        }));
-    }
-
     /**
      * Handle save draft
      */

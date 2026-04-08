@@ -62,6 +62,30 @@
 
     let showSuccessToast = $state(false);
 
+    // Reactive derived values for title and subtitle
+    const title = $derived($wizardState.title);
+    const subtitle = $derived($wizardState.subtitle);
+
+    /**
+     * Handle title change
+     */
+    function handleTitleChange(newTitle: string) {
+        wizardState.update((state) => ({
+            ...state,
+            title: newTitle,
+        }));
+    }
+
+    /**
+     * Handle subtitle change
+     */
+    function handleSubtitleChange(newSubtitle: string) {
+        wizardState.update((state) => ({
+            ...state,
+            subtitle: newSubtitle,
+        }));
+    }
+
     /**
      * Handle tab click
      * Free navigation - no validation
@@ -161,15 +185,15 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={project.title}
-                        oninput={(e) => console.log(e.currentTarget.value)}
+                        value={title}
+                        oninput={(e) => handleTitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={project.subtitle}
-                        oninput={(e) => console.log(e.currentTarget.value)}
+                        value={subtitle}
+                        oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
                     />
