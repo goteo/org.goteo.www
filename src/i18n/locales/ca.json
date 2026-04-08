@@ -1041,5 +1041,10 @@
         "viewCall": "Anar a la convocatòria"
       }
     }
+  },
+  "lang": {
+    "error": {
+      "notAvailable": "L'idioma seleccionat \"{{lang}}\" no està disponible per a aquest projecte. Mostrant contingut a l'idioma disponible."
+    }
   }
 }

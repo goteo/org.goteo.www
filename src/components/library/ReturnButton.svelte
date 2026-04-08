@@ -6,7 +6,6 @@
 
     interface Props {
         class?: ClassNameValue;
-
         text?: string;
     }
 

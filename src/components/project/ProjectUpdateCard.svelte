@@ -4,7 +4,7 @@
 
     import { t } from "../../i18n/store";
     import { locale } from "../../i18n/store";
-    import { apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
+    import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
     import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import { formatDate } from "../../utils/dates.ts";
     import { extractId } from "../../utils/extractId.ts";
@@ -27,11 +27,11 @@
     let author: User | undefined = $state(undefined);
 
     async function getAuthor(update: ProjectUpdate): Promise<User | undefined> {
-        const authorId: string | null = extractId(update.author);
+        const authorId: string | null = extractId(update.author!);
         if (!authorId) return undefined;
 
-        const { data: user, error: err } = await apiUsersIdGet({
-            path: { id: authorId },
+        const { data: user, error: err } = await apiUsersIdOrHandleGet({
+            path: { idOrHandle: authorId },
         });
 
         if (err) {

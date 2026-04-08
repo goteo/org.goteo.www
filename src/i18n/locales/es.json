@@ -1053,5 +1053,10 @@
         "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
       }
     }
+  },
+  "lang": {
+    "error": {
+      "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
+    }
   }
 }
