@@ -1,7 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Hero from "../../components/Hero/Hero.astro";
-import RenovationBanner from "../../components/home/RenovationBanner.astro";
 import Campaigns from "../../components/home/Campaigns.astro";
 import CampaignsTabs from "../../components/home/CampaignsTabs.astro";
 import Stats from "../../components/home/Stats.astro";
@@ -10,17 +9,20 @@ import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
+import HomeBanner from "../../components/library/HomeBanner.svelte";
 
 const { t } = Astro.locals;
 ---
 
-<Layout
-    title={t("metadata.title")}
-    description={t("metadata.description")}
-    class="mb-20 gap-[72px]"
->
+<Layout title={t("metadata.title")} description={t("metadata.description")} class="mb-20 gap-18">
     <Hero />
-    <RenovationBanner />
+    <HomeBanner
+        title={t("homeBanner.title")}
+        description={t("homeBanner.description")}
+        ctaText={t("homeBanner.ctaText")}
+        ctaLink={t("homeBanner.ctaLink")}
+        closeAriaLabel={t("homeBanner.closeAriaLabel")}
+    />
     <Campaigns />
     <Blog />
     <Stats />
