@@ -1,6 +1,7 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
+import { getSession } from "../auth/session.ts";
 import { apiGatewayCheckoutsPost } from "../openapi/client/index.ts";
 import { getDefaultCurrency } from "../utils/consts.ts";
 
@@ -41,7 +42,6 @@ export const payment = defineAction({
             const cart = input.cartData;
             const charges: GatewayCharge[] = cart.items.map((item) => ({
                 type: "single",
-                status: "in_pending",
                 title: item.title,
                 description: item.title,
                 target: `/v4/accountings/${item.target}`,
@@ -51,31 +51,36 @@ export const payment = defineAction({
                 },
             }));
 
-            const accessToken = context.cookies.get("access-token")?.json();
-            const accountingId = accessToken?.accountingId ?? null;
+            const session = await getSession(context.cookies);
 
-            if (!accountingId) {
+            if (!session) {
                 throw new ActionError({
                     code: "UNAUTHORIZED",
                     message: t("payment.error.missingAccountingId"),
                 });
             }
 
-            const origin = `/v4/accountings/${accountingId}`;
-            const base = context.url.origin;
-            const returnUrl = `${base}/payment/verify`;
-            const gateway = `/v4/gateways/${input.paymentMethod}`;
-
             const response = await apiGatewayCheckoutsPost({
                 body: {
-                    gateway,
-                    origin,
                     charges,
-                    returnUrl,
+                    gateway: `/v4/gateways/${input.paymentMethod}`,
+                    origin: session.user.accounting!,
+                    returnUrl: `${context.url.origin}/payment/verify`,
+                },
+                headers: {
+                    Authorization: `Bearer ${session.token.access_token}`,
                 },
             });
 
-            return { success: true, checkout: response.data };
+            let success = true;
+
+            if (response.error) {
+                success = false;
+
+                console.error(response);
+            }
+
+            return { success, checkout: response.data };
         } catch (err) {
             console.error(err);
 
