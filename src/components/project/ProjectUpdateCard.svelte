@@ -70,7 +70,7 @@
             </div>
         </div>
         <div
-            class="bg-light-pink relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
+            class="bg-tertiary relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
         >
             <h2 class="font-body text-[2.5rem] leading-12 font-bold text-ellipsis text-white">
                 {update.title}
@@ -94,7 +94,7 @@
 {:else if type === "large"}
     <div
         class={twMerge(
-            "bg-soft-purple border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
+            "bg-purple-soft border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
             cardClasses,
         )}
     >

@@ -224,7 +224,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
-                            class="bg-variant1 text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
+                            class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.uploadNewsButton")}
                         </button>

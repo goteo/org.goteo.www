@@ -23,7 +23,7 @@
 {#if variant === "multiselect"}
     <div
         class={twMerge(
-            "border-grey hover:bg-soft-purple hover:border-variant1 cursor-pointer border bg-white p-4 text-start",
+            "border-grey hover:bg-purple-soft hover:border-variant1 cursor-pointer border bg-white p-4 text-start",
             classes,
         )}
     >
@@ -46,7 +46,7 @@
 {:else if variant === "basic"}
     <div
         class={twMerge(
-            "border-grey hover:bg-soft-purple hover:border-variant1 cursor-pointer border bg-white p-4 text-start",
+            "border-grey hover:bg-purple-soft hover:border-variant1 cursor-pointer border bg-white p-4 text-start",
             classes,
         )}
     >
