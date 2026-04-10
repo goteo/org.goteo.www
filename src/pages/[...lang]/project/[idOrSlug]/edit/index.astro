@@ -37,5 +37,5 @@ if (error) {
 
 <Layout title={t("pages.project.edit.title", { project: project.title })}>
     <App locale={locale} session={session} client:load />
-    <ProjectEditor project={project} client:load />
+    <ProjectEditor project={project} {session} client:load />
 </Layout>

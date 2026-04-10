@@ -28,6 +28,7 @@
         saveToLocalStorage,
         persistenceError,
         hasUnsavedChanges,
+        isReadyToPublish,
     } from "../../../../../stores/wizard-state";
     import EditIcon from "../../../../../svgs/EditIcon.svelte";
     import EyeIcon from "../../../../../svgs/EyeIcon.svelte";
@@ -43,7 +44,7 @@
     }: {
         project: Project;
         children: Snippet;
-        onSave?: () => void;
+        onSave: () => Promise<void>;
         onPublish?: () => void;
     } = $props();
 
@@ -60,7 +61,8 @@
     // Reactive values from store
     const currentStep = $derived($wizardState.currentStep);
 
-    let showSuccessToast = $state(false);
+    let saveState = $state<"idle" | "saving" | "saved">("idle");
+    let errorMessage = $state("");
 
     // Reactive derived values for title and subtitle
     const title = $derived($wizardState.title);
@@ -96,13 +98,19 @@
     }
 
     /**
-     * Handle Save Draft button
+     * Handle Save localStorage Draft to API button
      */
-    function handleSave() {
-        saveToLocalStorage();
-        if (onSave) {
-            onSave();
-            showSuccessToast = true;
+    async function handleSave() {
+        saveState = "saving";
+
+        try {
+            saveToLocalStorage();
+            await onSave();
+            saveState = "saved";
+        } catch (e) {
+            console.error(e);
+            errorMessage = "Error al guardar"; // Pending change to i18n key
+            saveState = "idle";
         }
     }
 
@@ -200,13 +208,6 @@
                 </div>
             </div>
 
-            <!-- Save success Toast -->
-            {#if showSuccessToast}
-                <Toast variant="success" bind:showToast={showSuccessToast}
-                    >{$t("wizard.successToast")}</Toast
-                >
-            {/if}
-
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-[16px]">
                 <Button kind="ghost" size="md" disabled={true}>
@@ -216,17 +217,24 @@
                 <Button
                     kind="secondary"
                     size="md"
+                    class="disabled:pointer-events-none"
                     onclick={handleSave}
-                    disabled={$hasUnsavedChanges ? false : true}
+                    disabled={saveState === "saving" || saveState === "saved" ? true : false}
                 >
-                    {$t("common.save")}
+                    {#if saveState === "saving"}
+                        {$t("common.saving")}
+                    {:else if saveState === "saved"}
+                        {$t("common.saved")}
+                    {:else}
+                        {$t("common.save")}
+                    {/if}
                 </Button>
                 <Button
                     class="disabled:pointer-events-none disabled:opacity-24"
                     kind="primary"
                     size="md"
                     onclick={handlePublish}
-                    disabled={currentStep !== 7}
+                    disabled={$isReadyToPublish ? false : true}
                 >
                     {$t("common.publish")}
                 </Button>

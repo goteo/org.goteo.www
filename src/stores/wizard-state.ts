@@ -19,6 +19,7 @@ import { writable, derived, get } from "svelte/store";
 import { cyrb53 } from "../utils/hash";
 
 import type {
+    Category,
     MoneyWithConversion,
     Project,
     ProjectBudgetItem,
@@ -29,7 +30,6 @@ import type {
  * Wizard configuration data (Step 1: Configuration)
  */
 export interface WizardConfiguration {
-    languages: string[]; // Primary + secondary languages
     fundingRounds: 1 | 2; // Default: 1
 }
 
@@ -45,21 +45,12 @@ export interface MediaImage {
 }
 
 /**
- * Video embed data
- */
-export interface VideoEmbed {
-    type: "youtube" | "vimeo" | "direct";
-    url: string;
-    embedId?: string; // Extracted video ID
-}
-
-/**
  * Campaign Information data (Step 2)
  */
 export interface WizardCampaignInfo {
     // Media
     images: MediaImage[];
-    video: VideoEmbed | null;
+    video: string | undefined;
 
     // Rich text content (stored as HTML)
     objectives: string;
@@ -116,9 +107,7 @@ export interface WizardState {
     // Pre-filled from proposal (Stage 1)
     title: string;
     subtitle: string;
-    categories: string[];
     budget: MoneyWithConversion;
-    calendar: ProjectCalendar;
 
     // Step navigation
     currentStep: number;
@@ -149,20 +138,17 @@ const getDefaultState = (): WizardState => ({
     projectId: undefined,
     title: "",
     subtitle: "",
-    categories: [],
     budget: {
         amount: 0,
         currency: "EUR",
     },
-    calendar: {},
     currentStep: 1,
     configuration: {
-        languages: [],
         fundingRounds: 1, // Default to 1 round
     },
     campaignInfo: {
         images: [],
-        video: null,
+        video: "",
         objectives: "",
         legacy: "",
         targetAudience: "",
@@ -174,7 +160,7 @@ const getDefaultState = (): WizardState => ({
         {
             title: "",
             description: null,
-            money: { amount: 0, currency: "" },
+            money: { amount: 0, currency: "EUR" },
             isFinite: false,
             unitsTotal: null,
         },
@@ -210,6 +196,12 @@ export const hasUnsavedChanges = writable<boolean>(false);
 export const persistenceError = writable<string | null>(null);
 
 /**
+ * Define whether the project is ready to publish (all steps completed and valid).
+ * Used to enable/disable the Publish button in the UI
+ */
+export const isReadyToPublish = writable<boolean>(false);
+
+/**
  * LocalStorage key for wizard state persistence
  */
 const STORAGE_KEY = "goteo-project-wizard";
@@ -237,20 +229,17 @@ export function initializeFromProject(project: Project) {
         projectId: project.id ? String(project.id) : undefined,
         title: project.title || "",
         subtitle: project.subtitle || "",
-        categories: project.categories || [],
         budget: {
             amount: project.budget?.minimum?.money?.amount || 0,
             currency: project.budget?.minimum?.money?.currency || "EUR",
         },
-        calendar: {},
         currentStep: 1,
         configuration: {
-            languages: [],
             fundingRounds: 1,
         },
         campaignInfo: {
             images: [],
-            video: null,
+            video: "",
             objectives: "",
             legacy: "",
             targetAudience: "",
@@ -566,10 +555,9 @@ export const isConfigurationValid = derived(
 
         // Check required fields
         const config = $state.configuration;
-        const hasLanguages = config.languages.length > 0;
         const roundsSelected = config.fundingRounds;
 
-        return hasLanguages && roundsSelected;
+        return roundsSelected;
     },
 );
 
