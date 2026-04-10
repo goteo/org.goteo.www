@@ -20,14 +20,11 @@
     import TabNavigation, {
         type Tab,
     } from "../../../../../components/library/TabNavigation.svelte";
-    import Toast from "../../../../../components/library/Toast.svelte";
     import { t } from "../../../../../i18n/store";
     import {
         wizardState,
         navigateToStep,
-        saveToLocalStorage,
         persistenceError,
-        hasUnsavedChanges,
         isReadyToPublish,
     } from "../../../../../stores/wizard-state";
     import EditIcon from "../../../../../svgs/EditIcon.svelte";
@@ -41,11 +38,15 @@
         children,
         onSave,
         onPublish,
+        saveState = $bindable("idle"),
+        errorMessage = $bindable(""),
     }: {
         project: Project;
         children: Snippet;
         onSave: () => Promise<void>;
         onPublish?: () => void;
+        saveState: "idle" | "saving" | "saved";
+        errorMessage: string;
     } = $props();
 
     // Define the six wizard steps (reactive to language changes)
@@ -60,9 +61,6 @@
 
     // Reactive values from store
     const currentStep = $derived($wizardState.currentStep);
-
-    let saveState = $state<"idle" | "saving" | "saved">("idle");
-    let errorMessage = $state("");
 
     // Reactive derived values for title and subtitle
     const title = $derived($wizardState.title);
@@ -101,17 +99,7 @@
      * Handle Save localStorage Draft to API button
      */
     async function handleSave() {
-        saveState = "saving";
-
-        try {
-            saveToLocalStorage();
-            await onSave();
-            saveState = "saved";
-        } catch (e) {
-            console.error(e);
-            errorMessage = "Error al guardar"; // Pending change to i18n key
-            saveState = "idle";
-        }
+        await onSave();
     }
 
     /**

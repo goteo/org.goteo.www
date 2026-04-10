@@ -17,17 +17,17 @@
     import RadioButton from "../../library/RadioButton.svelte";
 
     interface RoundSelectorProps {
-        rounds: 1 | 2;
-        onChange: (rounds: 1 | 2) => void;
+        projectDeadline: "minimum" | "optimum";
+        onChange: (selectedDeadline: "minimum" | "optimum") => void;
     }
 
-    let { rounds = $bindable(1), onChange }: RoundSelectorProps = $props();
+    let { projectDeadline = $bindable("minimum"), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
      */
-    function handleChange(selectedRounds: 1 | 2) {
-        onChange(selectedRounds);
+    function handleChange(selectedDeadline: "minimum" | "optimum") {
+        onChange(selectedDeadline);
     }
 </script>
 
@@ -35,9 +35,9 @@
     <!-- 1 Round Option -->
     <RadioButton
         name="funding-rounds"
-        value={1}
-        checked={rounds === 1}
-        onchange={() => handleChange(1)}
+        value="minimum"
+        checked={projectDeadline === "minimum"}
+        onchange={() => handleChange("minimum")}
         id="round-1-radio"
         label={$t("pages.project.edit.configuration.rounds.option1")}
     />
@@ -45,9 +45,9 @@
     <!-- 2 Rounds Option -->
     <RadioButton
         name="funding-rounds"
-        value={2}
-        checked={rounds === 2}
-        onchange={() => handleChange(2)}
+        value="optimum"
+        checked={projectDeadline === "optimum"}
+        onchange={() => handleChange("optimum")}
         id="round-2-radio"
         label={$t("pages.project.edit.configuration.rounds.option2")}
     />

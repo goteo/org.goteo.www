@@ -8,6 +8,8 @@
     - URL query parameter sync
 -->
 <script lang="ts">
+    import { get } from "svelte/store";
+
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
     import {
@@ -17,14 +19,14 @@
         apiProjectsIdPatch,
         type Project,
     } from "../../../../../openapi/client";
+    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
     import {
         wizardState,
         initializeFromProject,
         clearLocalStorage,
     } from "../../../../../stores/wizard-state";
+
     import type { Session } from "../../../../../auth/types";
-    import { get } from "svelte/store";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
 
     let {
         project,
@@ -86,19 +88,23 @@
 
     // Reactive current step
     const currentStep = $derived($wizardState.currentStep);
+    let saveState = $state<"idle" | "saving" | "saved">("idle");
+    let errorMessage = $state("");
 
     /**
      * Handle save draft to API
      */
     async function handleSave() {
+        saveState = "saving";
+
         try {
             const currentData = get(wizardState);
             const projectIri =
                 apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
 
             if (currentData.rewards.length > 0) {
-                currentData.rewards.forEach((reward) => {
-                    apiProjectRewardsPost({
+                currentData.rewards.forEach(async (reward) => {
+                    const { error: rewardErr } = await apiProjectRewardsPost({
                         body: {
                             project: projectIri,
                             title: reward.title,
@@ -112,12 +118,13 @@
                         },
                         headers: session.token.asHttpHeaders,
                     });
+                    if (rewardErr) throw rewardErr;
                 });
             }
 
             if (currentData.collaborations.length > 0) {
-                currentData.collaborations.forEach((collab) => {
-                    apiProjectCollaborationsPost({
+                currentData.collaborations.forEach(async (collab) => {
+                    const { error: collaborationErr } = await apiProjectCollaborationsPost({
                         body: {
                             project: projectIri,
                             title: collab.title,
@@ -126,12 +133,13 @@
                         },
                         headers: session.token.asHttpHeaders,
                     });
+                    if (collaborationErr) throw collaborationErr;
                 });
             }
 
             if (currentData.budgetItems.minimum.length > 0) {
-                currentData.budgetItems.minimum.forEach((item) => {
-                    apiProjectBudgetItemsPost({
+                currentData.budgetItems.minimum.forEach(async (item) => {
+                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
                             project: projectIri,
                             type: item.type,
@@ -145,13 +153,13 @@
                         },
                         headers: session.token.asHttpHeaders,
                     });
+                    if (budgetItemErr) throw budgetItemErr;
                 });
-
             }
 
             if (currentData.budgetItems.optimum.length > 0) {
                 currentData.budgetItems.optimum.forEach(async (item) => {
-                    const { error } = await apiProjectBudgetItemsPost({
+                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
                             project: projectIri,
                             type: item.type,
@@ -165,10 +173,11 @@
                         },
                         headers: session.token.asHttpHeaders,
                     });
+                    if (budgetItemErr) throw budgetItemErr;
                 });
             }
 
-            await apiProjectsIdPatch({
+            const { error: projectErr } = await apiProjectsIdPatch({
                 path: { id: String(project.id) },
                 body: {
                     title: currentData.title,
@@ -179,11 +188,18 @@
                         currentData.campaignInfo.legacy +
                         currentData.campaignInfo.targetAudience +
                         currentData.campaignInfo.team,
+                    deadline: currentData.configuration.projectDeadline,
                 },
                 headers: session.token.asHttpHeaders,
             });
+
+            if (projectErr) throw projectErr;
         } catch (err: any) {
-            throw new Error("Error during save:", err);
+            errorMessage = err;
+            saveState = "idle";
+        } finally {
+            errorMessage = "";
+            saveState = "saved";
         }
     }
 
@@ -198,7 +214,13 @@
     }
 </script>
 
-<ProjectEditorShell {project} onSave={handleSave} onPublish={handlePublish}>
+<ProjectEditorShell
+    {errorMessage}
+    {saveState}
+    {project}
+    onSave={handleSave}
+    onPublish={handlePublish}
+>
     {@const StepComponent = getStepComponent(currentStep)}
     <StepComponent {project} />
 </ProjectEditorShell>

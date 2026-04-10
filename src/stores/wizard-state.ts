@@ -19,18 +19,16 @@ import { writable, derived, get } from "svelte/store";
 import { cyrb53 } from "../utils/hash";
 
 import type {
-    Category,
     MoneyWithConversion,
     Project,
-    ProjectBudgetItem,
-    ProjectCalendar,
+    ProjectBudgetItem
 } from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
  */
 export interface WizardConfiguration {
-    fundingRounds: 1 | 2; // Default: 1
+    projectDeadline: "minimum" | "optimum"; // Default: minimum
 }
 
 /**
@@ -144,7 +142,7 @@ const getDefaultState = (): WizardState => ({
     },
     currentStep: 1,
     configuration: {
-        fundingRounds: 1, // Default to 1 round
+        projectDeadline: "minimum", // Default to minimum deadline (1 round) 
     },
     campaignInfo: {
         images: [],
@@ -235,7 +233,7 @@ export function initializeFromProject(project: Project) {
         },
         currentStep: 1,
         configuration: {
-            fundingRounds: 1,
+            projectDeadline: "minimum",
         },
         campaignInfo: {
             images: [],
@@ -477,8 +475,7 @@ export function resetWizard() {
  * Validation schema for Configuration step
  */
 export const configurationSchema = z.object({
-    languages: z.array(z.string()).min(1, "validation.wizard.languages.required"),
-    fundingRounds: z.union([z.literal(1), z.literal(2)]),
+    projectDeadline: z.union([z.literal(1), z.literal(2)]),
 });
 
 /**
@@ -555,9 +552,9 @@ export const isConfigurationValid = derived(
 
         // Check required fields
         const config = $state.configuration;
-        const roundsSelected = config.fundingRounds;
+        const deadlineSelected = config.projectDeadline;
 
-        return roundsSelected;
+        return deadlineSelected;
     },
 );
 
