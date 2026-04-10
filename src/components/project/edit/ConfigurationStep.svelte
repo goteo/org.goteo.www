@@ -20,10 +20,6 @@
 
     let { onContinue }: ConfigurationStepProps = $props();
 
-    // Reactive values from store
-    const configuration = $derived($wizardState.configuration);
-    let projectDeadline = $state(configuration.projectDeadline ?? "minimum");
-
     /**
      * Handle Continue button
      * Simple navigation to next step (2) - validation happens on save/submit
@@ -64,7 +60,10 @@
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector bind:projectDeadline onChange={handleRoundsChange} />
+        <RoundSelector
+            bind:deadline={$wizardState.configuration.projectDeadline}
+            onChange={handleRoundsChange}
+        />
     </div>
 
     <!-- Continue Button -->

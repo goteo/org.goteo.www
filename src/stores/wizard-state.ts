@@ -18,11 +18,7 @@ import { writable, derived, get } from "svelte/store";
 
 import { cyrb53 } from "../utils/hash";
 
-import type {
-    MoneyWithConversion,
-    Project,
-    ProjectBudgetItem
-} from "../openapi/client";
+import type { MoneyWithConversion, Project, ProjectBudgetItem } from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
@@ -142,7 +138,7 @@ const getDefaultState = (): WizardState => ({
     },
     currentStep: 1,
     configuration: {
-        projectDeadline: "minimum", // Default to minimum deadline (1 round) 
+        projectDeadline: "minimum", // Default to minimum deadline (1 round)
     },
     campaignInfo: {
         images: [],
@@ -992,7 +988,7 @@ export function validateBudgetAmount() {
 
     for (let i = 0; i < budgetItems.minimum.length - 1; i++) {
         minimumItemsTotalAmount += budgetItems.minimum[i].money.amount;
-    };
+    }
 
     if (minimumItemsTotalAmount !== budget.amount) {
         errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";

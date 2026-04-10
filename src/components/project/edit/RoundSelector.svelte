@@ -16,12 +16,14 @@
     import { t } from "../../../i18n/store";
     import RadioButton from "../../library/RadioButton.svelte";
 
+    import type { Project } from "../../../openapi/client";
+
     interface RoundSelectorProps {
-        projectDeadline: "minimum" | "optimum";
+        deadline: Project["deadline"];
         onChange: (selectedDeadline: "minimum" | "optimum") => void;
     }
 
-    let { projectDeadline = $bindable("minimum"), onChange }: RoundSelectorProps = $props();
+    let { deadline = $bindable("minimum"), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
@@ -34,21 +36,19 @@
 <div class="flex gap-4">
     <!-- 1 Round Option -->
     <RadioButton
+        bind:group={deadline}
         name="funding-rounds"
         value="minimum"
-        checked={projectDeadline === "minimum"}
         onchange={() => handleChange("minimum")}
-        id="round-1-radio"
         label={$t("pages.project.edit.configuration.rounds.option1")}
     />
 
     <!-- 2 Rounds Option -->
     <RadioButton
+        bind:group={deadline}
         name="funding-rounds"
         value="optimum"
-        checked={projectDeadline === "optimum"}
         onchange={() => handleChange("optimum")}
-        id="round-2-radio"
         label={$t("pages.project.edit.configuration.rounds.option2")}
     />
 </div>
