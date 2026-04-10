@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
 import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
@@ -27,7 +28,7 @@ const { data: accounting } = await apiAccountingsIdGet({
     },
 });
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 
 let error = null;
 let amount: number | undefined = undefined;
@@ -71,6 +72,7 @@ const postPaymentUrl = checkoutId
 ---
 
 <Layout title="Estado del pago">
+    <App client:load locale={lang} session={session} />
     <main class="wrapper py-10">
         {
             error ? (

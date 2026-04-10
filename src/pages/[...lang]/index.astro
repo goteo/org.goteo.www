@@ -11,12 +11,8 @@ import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
-import { getSession } from "../../auth/session";
-import type { Locale } from "../../i18n/locales";
 
-const { t } = Astro.locals;
-const locale = Astro.currentLocale as Locale;
-const session = await getSession(Astro.cookies);
+const { t, lang, session } = Astro.locals;
 ---
 
 <Layout
@@ -24,7 +20,7 @@ const session = await getSession(Astro.cookies);
     description={t("metadata.description")}
     class="mb-20 gap-[72px]"
 >
-    <App client:load locale={locale} session={session} />
+    <App client:load locale={lang} session={session} />
     <Hero />
     <RenovationBanner />
     <Campaigns />
