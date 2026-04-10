@@ -1,5 +1,5 @@
+import { refreshToken } from "./grant";
 import { decodeJWT } from "./jwt";
-import { refreshToken } from "./token";
 import {
     apiAccountingsIdGet,
     apiUsersIdorganizationGet,
@@ -30,9 +30,17 @@ export async function getSession(cookies: AstroCookies): Promise<Session | undef
         return session;
     }
 
-    const token = await refreshToken(session.token);
+    try {
+        const token = await refreshToken(session.token);
+        const fresh = await buildSession(token);
 
-    return buildSession(token);
+        setSession(cookies, fresh);
+
+        return fresh;
+    } catch (err) {
+        console.error(err);
+        return undefined;
+    }
 }
 
 /**
@@ -57,8 +65,16 @@ export function clearSession(cookies: AstroCookies) {
     cookies.delete(COOKIE_NAME, { path: "/" });
 }
 
-export function isExpired(session: Session): boolean {
-    return session.expires_at < new Date();
+/**
+ * Checks if a given session is expired
+ * @param session The session to check for expiration
+ * @param margin Time (in ms) of margin to consider a session expired before the actual expiration date
+ * @returns `true` if the given session is expired
+ */
+export function isExpired(session: Session, margin: number = 600000): boolean {
+    const nearExpirationDate = new Date(session.expires_at.getTime() - margin);
+
+    return nearExpirationDate < new Date();
 }
 
 /**
@@ -75,11 +91,9 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
         throw new Error("Cannot build a Session from an expired token");
     }
 
-    const headers = { Authorization: `${token.token_type} ${token.access_token}` };
-
     const { data: user } = await apiUsersIdOrHandleGet({
         path: { idOrHandle: jwt.sub },
-        headers,
+        headers: token.asHttpHeaders,
     });
 
     if (!user) {
@@ -93,15 +107,15 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
     } = await Promise.all([
         apiAccountingsIdGet({
             path: { id: extractId(user.accounting)! },
-            headers,
+            headers: token.asHttpHeaders,
         }),
         apiUsersIdpersonGet({
             path: { id: String(user.id) },
-            headers,
+            headers: token.asHttpHeaders,
         }),
         apiUsersIdorganizationGet({
             path: { id: String(user!.id) },
-            headers,
+            headers: token.asHttpHeaders,
         }),
     ]);
 

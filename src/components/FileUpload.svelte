@@ -23,14 +23,12 @@
         const validType = accept.includes(file.type);
 
         if (!validSize) {
-            // For example: El archivo ${file.name} supera el tamaño máximo (${maxSizeMB}MB).
-            error = `${$t("wizard.steps.rewards.modal.filesError.size", { fileName: file.name, maxSize: maxSizeMB })}`;
+            error = `${$t("system.error.file.sizeTooLarge", { file: file.name, max: maxSizeMB })}`;
             return false;
         }
 
         if (!validType) {
-            // For example: Tipo de archivo no permitido: ${file.name}
-            error = `${$t("wizard.steps.rewards.modal.filesError.type", { fileName: file.name })}`;
+            error = `${$t("system.error.file.unsupportedType", { file: file.name })}`;
             return false;
         }
 
@@ -90,10 +88,7 @@
         <label for="fileInput" class="flex h-32 cursor-pointer flex-col justify-center gap-2">
             <UploadFileIcon class="size-10 self-center" />
             <p class="text-content overflow-hidden text-base font-normal text-ellipsis">
-                {$t("wizard.steps.rewards.modal.uploadFiles.dragAndDrop")}
-                <span class="text-secondary underline">
-                    {$t("wizard.steps.rewards.modal.uploadFiles.clickHere")}
-                </span>
+                {$t("pages.project.edit.rewards.modal.placeholders.files")}
             </p>
         </label>
     </div>
@@ -101,9 +96,9 @@
     <div class="text-content flex justify-between text-sm/4 font-medium">
         <div class="flex items-center gap-2">
             <WarningIcon width="16" height="16" />
-            <span>{$t("wizard.steps.rewards.modal.compatibleFiles")}</span>
+            <span>{$t("system.constraint.file.supportedTypes")}</span>
         </div>
-        <span>{$t("wizard.steps.rewards.modal.maxSize", { maxSizeMB })}</span>
+        <span>{$t("system.constraint.file.maxAllowedSize", { maxSizeMB })}</span>
     </div>
 </div>
 

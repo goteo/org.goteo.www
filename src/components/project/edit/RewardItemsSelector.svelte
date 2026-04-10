@@ -5,13 +5,13 @@
 
     let {
         value = $bindable(1),
-        unlimited = $bindable(true),
+        unlimited = $bindable(false),
         min = 1,
-    } = $props<{
-        value?: number;
-        unlimited?: boolean;
+    }: {
+        value: number;
+        unlimited: boolean;
         min?: number;
-    }>();
+    } = $props();
 
     function increment() {
         if (!unlimited) value += 1;
@@ -24,7 +24,7 @@
 
 <div class="flex flex-col gap-4">
     <h3 class="text-secondary text-base font-bold">
-        {$t("wizard.steps.rewards.modal.rewardItems.title")}
+        {$t("pages.project.edit.rewards.modal.unitsExisting")}
     </h3>
 
     <div class="flex items-center gap-10">
@@ -55,7 +55,7 @@
         <label class="text-content flex cursor-pointer items-center gap-2 text-base font-normal">
             <!-- Pending to add Checkbox library component, which is implemented in another PR -->
             <input type="checkbox" bind:checked={unlimited} />
-            {$t("wizard.steps.rewards.modal.rewardItems.unlimited")}
+            {$t("domain.project.reward.isInfinite")}
         </label>
     </div>
 </div>

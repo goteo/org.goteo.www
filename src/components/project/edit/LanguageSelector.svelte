@@ -133,13 +133,13 @@
     <Select
         bind:value={primaryLanguage}
         id="primary-language-{primaryLanguage}"
-        labelText={$t("wizard.configuration.languages.primaryLabel")}
+        labelText={$t("pages.project.edit.configuration.languages.primaryLabel")}
         required={true}
         error={showError ? errors.languages : undefined}
         onBlur={handleBlur}
         onChange={handlePrimaryChange}
     >
-        <option value="">{$t("wizard.configuration.languages.selectPlaceholder")}</option>
+        <option value="">{$t("common.select")}</option>
         {#each availableLanguages as lang}
             <option value={lang.code} disabled={isLanguageDisabled(lang.code, primaryLanguage)}
                 >{lang.name}</option
@@ -154,12 +154,10 @@
                 <Select
                     bind:value={secondaryLanguages[index]}
                     id="secondary-language-{index}-{secondary}"
-                    labelText={$t("wizard.configuration.languages.secondaryLabel")}
+                    labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
                     onChange={(value) => handleSecondaryChange(index, value)}
                 >
-                    <option value=""
-                        >{$t("wizard.configuration.languages.selectPlaceholder")}</option
-                    >
+                    <option value="">{$t("common.select")}</option>
                     {#each availableLanguages as lang}
                         <option
                             value={lang.code}
@@ -175,7 +173,7 @@
                     onclick={() => removeSecondaryLanguage(index)}
                     data-testid="language-remove-btn-{index}"
                     class="hover:bg-light-muted text-secondary hover:text-tertiary rounded-lg p-2 transition-colors"
-                    aria-label={$t("wizard.configuration.languages.removeButton")}
+                    aria-label={$t("common.remove")}
                 >
                     <svg
                         class="h-5 w-5"
@@ -206,6 +204,6 @@
             <circle cx="12" cy="12" r="10" />
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
         </svg>
-        {$t("wizard.configuration.languages.addButton")}
+        {$t("pages.project.edit.configuration.languages.addButton")}
     </button>
 </div>

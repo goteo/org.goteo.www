@@ -81,8 +81,9 @@
         disabled={!isAvailable}
         onclick={() => (openModal = true)}
     >
-        {$t("reward.donate")}
-        {formatCurrency(reward.money.amount, reward.money.currency)}
+        {$t("common.donateAmount", {
+            amount: formatCurrency(reward.money.amount, reward.money.currency),
+        })}
     </Button>
 </div>
 <RewardModal {reward} {project} bind:open={openModal} />

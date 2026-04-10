@@ -16,16 +16,15 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import type { Project } from "../openapi/client";
+import { cyrb53 } from "../utils/hash";
+
+import type { MoneyWithConversion, Project, ProjectBudgetItem } from "../openapi/client";
 
 /**
  * Wizard configuration data (Step 1: Configuration)
  */
 export interface WizardConfiguration {
-    languages: string[]; // Primary + secondary languages
-    geographicScope?: "local" | "estatal" | "internacional";
-    localities?: string; // Only for local scope
-    fundingRounds: 1 | 2; // Default: 1
+    projectDeadline: "minimum" | "optimum"; // Default: minimum
 }
 
 /**
@@ -40,21 +39,12 @@ export interface MediaImage {
 }
 
 /**
- * Video embed data
- */
-export interface VideoEmbed {
-    type: "youtube" | "vimeo" | "direct";
-    url: string;
-    embedId?: string; // Extracted video ID
-}
-
-/**
  * Campaign Information data (Step 2)
  */
 export interface WizardCampaignInfo {
     // Media
     images: MediaImage[];
-    video: VideoEmbed | null;
+    video: string | undefined;
 
     // Rich text content (stored as HTML)
     objectives: string;
@@ -68,6 +58,40 @@ export interface WizardCampaignInfo {
 }
 
 /**
+ * Wizard Rewards data (Step 3: Rewards)
+ */
+export interface WizardReward {
+    title: string; // Title displayed in reward card
+    description: string | null; // Description displayed in reward card
+
+    // The minimal monetary sum to be able to claim this reward
+    money: {
+        amount: number;
+        currency: string;
+    };
+
+    // isFinite sets if the reward has a limit of exchanges, and if not, unitsTotal sets the limit
+    isFinite: boolean;
+    unitsTotal: number | null;
+}
+
+/**
+ * Wizard Collaborations data (Step 4: Collaborations)
+ */
+export interface WizardCollaboration {
+    title: string;
+    description: string;
+}
+
+/**
+ * Wizard Budget data (Step 5: Budget)
+ */
+export interface WizardBudgetItems {
+    minimum: ProjectBudgetItem[];
+    optimum: ProjectBudgetItem[];
+}
+
+/**
  * Complete wizard state
  */
 export interface WizardState {
@@ -77,9 +101,7 @@ export interface WizardState {
     // Pre-filled from proposal (Stage 1)
     title: string;
     subtitle: string;
-    categories: string[];
-    budget: number;
-    releaseDate: string | null;
+    budget: MoneyWithConversion;
 
     // Step navigation
     currentStep: number;
@@ -90,10 +112,16 @@ export interface WizardState {
     // Step 2: Campaign Information
     campaignInfo: WizardCampaignInfo;
 
-    // Future steps (Phase 3-6) - placeholders
-    // rewards: WizardReward[];
-    // collaborations: WizardCollaboration[];
-    // detailedBudget: WizardBudgetItem[];
+    // Step 3: Rewards
+    rewards: WizardReward[];
+
+    // Step 4: Collaborations
+    collaborations: WizardCollaboration[];
+
+    // Step 5: Budget
+    budgetItems: WizardBudgetItems;
+
+    // Pending future step (Phase 6) - placeholders
     // aboutYou: WizardAboutYou;
 }
 
@@ -104,19 +132,17 @@ const getDefaultState = (): WizardState => ({
     projectId: undefined,
     title: "",
     subtitle: "",
-    categories: [],
-    budget: 0,
-    releaseDate: null,
+    budget: {
+        amount: 0,
+        currency: "EUR",
+    },
     currentStep: 1,
     configuration: {
-        languages: [],
-        geographicScope: undefined,
-        localities: undefined,
-        fundingRounds: 1, // Default to 1 round
+        projectDeadline: "minimum", // Default to minimum deadline (1 round)
     },
     campaignInfo: {
         images: [],
-        video: null,
+        video: "",
         objectives: "",
         legacy: "",
         targetAudience: "",
@@ -124,6 +150,17 @@ const getDefaultState = (): WizardState => ({
         touched: new Set(),
         errors: {},
     },
+    rewards: [
+        {
+            title: "",
+            description: null,
+            money: { amount: 0, currency: "EUR" },
+            isFinite: false,
+            unitsTotal: null,
+        },
+    ],
+    collaborations: [],
+    budgetItems: { minimum: [], optimum: [] },
 });
 
 /**
@@ -153,6 +190,12 @@ export const hasUnsavedChanges = writable<boolean>(false);
 export const persistenceError = writable<string | null>(null);
 
 /**
+ * Define whether the project is ready to publish (all steps completed and valid).
+ * Used to enable/disable the Publish button in the UI
+ */
+export const isReadyToPublish = writable<boolean>(false);
+
+/**
  * LocalStorage key for wizard state persistence
  */
 const STORAGE_KEY = "goteo-project-wizard";
@@ -180,19 +223,17 @@ export function initializeFromProject(project: Project) {
         projectId: project.id ? String(project.id) : undefined,
         title: project.title || "",
         subtitle: project.subtitle || "",
-        categories: project.categories || [],
-        budget: project.budget?.minimum?.money?.amount || 0,
-        releaseDate: project.deadline || null,
+        budget: {
+            amount: project.budget?.minimum?.money?.amount || 0,
+            currency: project.budget?.minimum?.money?.currency || "EUR",
+        },
         currentStep: 1,
         configuration: {
-            languages: [],
-            geographicScope: undefined,
-            localities: undefined,
-            fundingRounds: 1,
+            projectDeadline: "minimum",
         },
         campaignInfo: {
             images: [],
-            video: null,
+            video: "",
             objectives: "",
             legacy: "",
             targetAudience: "",
@@ -200,6 +241,9 @@ export function initializeFromProject(project: Project) {
             touched: new Set(),
             errors: {},
         },
+        rewards: [],
+        collaborations: [],
+        budgetItems: { minimum: [], optimum: [] },
     });
 
     // Try to restore additional wizard data from localStorage
@@ -291,6 +335,9 @@ export function restoreFromLocalStorage(): boolean {
             currentStep: parsed.currentStep || 1,
             configuration: parsed.configuration || getDefaultState().configuration,
             campaignInfo: parsed.campaignInfo || getDefaultState().campaignInfo,
+            rewards: parsed.rewards || getDefaultState().rewards,
+            collaborations: parsed.collaborations || getDefaultState().collaborations,
+            budgetItems: parsed.budgetItems || getDefaultState().budgetItems,
         }));
 
         return true;
@@ -424,12 +471,7 @@ export function resetWizard() {
  * Validation schema for Configuration step
  */
 export const configurationSchema = z.object({
-    languages: z.array(z.string()).min(1, "validation.wizard.languages.required"),
-    geographicScope: z
-        .enum(["local", "estatal", "internacional"])
-        .refine((val) => val !== undefined, "validation.wizard.geographic_scope.required"),
-    localities: z.string().optional(),
-    fundingRounds: z.union([z.literal(1), z.literal(2)]),
+    projectDeadline: z.union([z.literal(1), z.literal(2)]),
 });
 
 /**
@@ -443,9 +485,6 @@ export const configurationSchema = z.object({
  * @example
  * // Update languages
  * updateConfiguration({ languages: ['es', 'en'] });
- *
- * // Update geographic scope
- * updateConfiguration({ geographicScope: 'local', localities: 'Barcelona' });
  */
 export function updateConfiguration(config: Partial<WizardConfiguration>) {
     wizardState.update((state) => ({
@@ -492,16 +531,6 @@ export function validateConfiguration(): boolean {
         return false;
     }
 
-    // Additional validation: if scope is local, localities must be provided
-    if (state.configuration.geographicScope === "local") {
-        if (!state.configuration.localities || state.configuration.localities.trim().length === 0) {
-            validationErrors.set({
-                localities: "validation.wizard.localities.required",
-            });
-            return false;
-        }
-    }
-
     validationErrors.set({});
     return true;
 }
@@ -519,12 +548,9 @@ export const isConfigurationValid = derived(
 
         // Check required fields
         const config = $state.configuration;
-        const hasLanguages = config.languages.length > 0;
-        const hasScope = config.geographicScope !== undefined;
-        const hasLocalities =
-            config.geographicScope !== "local" || (config.localities?.trim().length || 0) > 0;
+        const deadlineSelected = config.projectDeadline;
 
-        return hasLanguages && hasScope && hasLocalities;
+        return deadlineSelected;
     },
 );
 
@@ -607,47 +633,53 @@ export function validateCampaignInfo(): Record<string, string> {
 
     // Media validation
     if (data.images.length === 0 && !data.video) {
-        errors.media = "wizard.validation.campaign_info.media.required";
+        errors.media = "pages.project.edit.rewards.validationn_info.reward.media.required";
     }
 
     // Objectives validation
     const objectivesPlainText = stripHtml(data.objectives).trim();
     if (objectivesPlainText.length === 0) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.required";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.min_length";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.min_length";
     } else if (objectivesPlainText.length > 5000) {
-        errors.objectives = "wizard.validation.campaign_info.objectives.max_length";
+        errors.objectives =
+            "pages.project.edit.rewards.validationn_info.reward.objectives.max_length";
     }
 
     // Legacy validation
     const legacyPlainText = stripHtml(data.legacy).trim();
     if (legacyPlainText.length === 0) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.required";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.required";
     } else if (legacyPlainText.length < 50) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.min_length";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.min_length";
     } else if (legacyPlainText.length > 5000) {
-        errors.legacy = "wizard.validation.campaign_info.legacy.max_length";
+        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.max_length";
     }
 
     // Target audience validation
     const targetPlainText = stripHtml(data.targetAudience).trim();
     if (targetPlainText.length === 0) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.required";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.required";
     } else if (targetPlainText.length < 30) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.min_length";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.min_length";
     } else if (targetPlainText.length > 5000) {
-        errors.targetAudience = "wizard.validation.campaign_info.target.max_length";
+        errors.targetAudience =
+            "pages.project.edit.rewards.validationn_info.reward.target.max_length";
     }
 
     // Team validation
     const teamPlainText = stripHtml(data.team).trim();
     if (teamPlainText.length === 0) {
-        errors.team = "wizard.validation.campaign_info.team.required";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.required";
     } else if (teamPlainText.length < 50) {
-        errors.team = "wizard.validation.campaign_info.team.min_length";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.min_length";
     } else if (teamPlainText.length > 5000) {
-        errors.team = "wizard.validation.campaign_info.team.max_length";
+        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.max_length";
     }
 
     return errors;
@@ -670,3 +702,297 @@ export const isCampaignInfoValidStore = derived(wizardState, () => {
     const errors = validateCampaignInfo();
     return Object.keys(errors).length === 0;
 });
+
+// ============================================
+// Rewards State Management (Step 3)
+// ============================================
+
+/**
+ * Update rewards data (Step 3)
+ *
+ * Merges rewards updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param index - Index of current reward
+ * @param reward - Reward object to merge
+ *
+ * @example
+ * // Update reward
+ * updateReward(index: currentIndex, reward: updatedReward);
+ */
+export function updateReward(index: number, reward: WizardReward) {
+    const errors = validateReward(reward);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => {
+        const updated = [...state.rewards];
+        updated[index] = reward;
+        return { ...state, rewards: updated };
+    });
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function addReward(reward: WizardReward) {
+    const errors = validateReward(reward);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => ({
+        ...state,
+        rewards: [...state.rewards, reward],
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function deleteReward(index: number) {
+    wizardState.update((state) => ({
+        ...state,
+        rewards: state.rewards.filter((_, i) => i !== index),
+    }));
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function validateReward(reward: WizardReward): Record<string, string> {
+    const errors: Record<string, string> = {};
+    const hash = cyrb53(JSON.stringify(reward));
+
+    if (!reward.title.trim()) {
+        errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
+    }
+
+    if (!reward.money.amount || reward.money.amount <= 0) {
+        errors[`reward_error_amount_${hash}`] = "pages.project.edit.rewards.validation.amount";
+    }
+
+    if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
+        errors[`reward_error_units_${hash}`] = "pages.project.edit.rewards.validation.units";
+    }
+
+    return errors;
+}
+
+// ============================================
+// Collaborations State Management (Step 4)
+// ============================================
+
+/**
+ * Update Collaborations data (Step 4)
+ *
+ * Merges collaborations updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param index - Current collaboration's index
+ * @param collab - Collaboration object to merge
+ *
+ * @example
+ * // Update collaboration
+ * updateCollaboration(index: currentIndex, collab: updatedCollab);
+ */
+export function updateCollaboration(
+    index: number,
+    collab: WizardCollaboration,
+): Record<string, string> {
+    const errors = validateCollaboration(collab);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => {
+        const updated = [...state.collaborations];
+        updated[index] = collab;
+
+        return { ...state, collaborations: updated };
+    });
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+
+    return {};
+}
+
+export function addCollaboration(collab: WizardCollaboration): Record<string, string> {
+    const errors = validateCollaboration(collab);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => ({
+        ...state,
+        collaborations: [...state.collaborations, collab],
+    }));
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+
+    return {};
+}
+
+export function deleteCollaboration(index: number) {
+    wizardState.update((state) => {
+        const collaborations = state.collaborations.splice(index, 1); // Remove the collaboration from the array
+
+        return {
+            ...state,
+            collaborations: { ...collaborations },
+        };
+    });
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function validateCollaboration(collab: WizardCollaboration): Record<string, string> {
+    const errors: Record<string, string> = {};
+    const hash = cyrb53(JSON.stringify(collab));
+
+    if (!collab.title.trim()) {
+        errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
+    }
+
+    if (collab.description && collab.description.length > 1000) {
+        errors[`collab_error_description_too_long_${hash}`] =
+            "pages.project.edit.collaborations.validation.descriptionTooLong";
+    }
+
+    if (!collab.description.trim()) {
+        errors[`collab_error_description_${hash}`] =
+            "pages.project.edit.collaborations.validation.description";
+    }
+
+    return errors;
+}
+
+// ============================================
+// BudgetItems State Management (Step 5)
+// ============================================
+
+/**
+ * Update budgetItems data (Step 5)
+ *
+ * Merges budget items updates with existing data.
+ * Triggers auto-save to localStorage.
+ *
+ * @param index - Current budget item index
+ * @param item - Budget item object to merge
+ *
+ * @example
+ * // Update unitsTotal
+ * updateRewards({ unitsTotal: newCount });
+ */
+export function updateBudgetItem(index: number, item: ProjectBudgetItem) {
+    const errors = validateBudgetItem(item);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => {
+        const updated = [...state.budgetItems[item.deadline]];
+        updated[index] = item;
+
+        return {
+            ...state,
+            budgetItems: {
+                ...state.budgetItems,
+                [item.deadline]: updated,
+            },
+        };
+    });
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function addBudgetItem(item: ProjectBudgetItem) {
+    const errors = validateBudgetItem(item);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    wizardState.update((state) => ({
+        ...state,
+        budgetItems: {
+            ...state.budgetItems,
+            [item.deadline]: [...state.budgetItems[item.deadline], item],
+        },
+    }));
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum") {
+    wizardState.update((state) => ({
+        ...state,
+        budgetItems: {
+            ...state.budgetItems,
+            [deadline]: state.budgetItems[deadline].filter((_, i) => i !== index),
+        },
+    }));
+
+    hasUnsavedChanges.set(true);
+    saveToLocalStorage();
+}
+
+export function validateBudgetItem(item: ProjectBudgetItem): Record<string, string> {
+    const errors: Record<string, string> = {};
+    const hash = cyrb53(JSON.stringify(item));
+
+    if (!item.title.trim()) {
+        errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
+    }
+
+    if (!item.description.trim()) {
+        errors[`budget_error_description_${hash}`] =
+            "pages.project.edit.budget.validation.description";
+    }
+
+    if (!item.money.amount || item.money.amount <= 0) {
+        errors[`budget_error_amount_${hash}`] = "pages.project.edit.budget.validation.amount";
+    }
+
+    if (!item.money.currency) {
+        errors[`budget_error_currency_${hash}`] = "pages.project.edit.budget.validation.currency";
+    }
+
+    if (!item.type) {
+        errors[`budget_error_type_${hash}`] = "pages.project.edit.budget.validation.type";
+    }
+
+    if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
+        errors[`budget_error_deadline_${hash}`] = "pages.project.edit.budget.validation.class";
+    }
+
+    return errors;
+}
+
+export function validateBudgetAmount() {
+    const { budgetItems, budget } = get(wizardState);
+    const errors: Record<string, string> = {};
+
+    if (budgetItems.minimum.length <= 0) {
+        errors.minimum_length = "pages.project.edit.budget.validation.minimumItemsLength";
+    }
+
+    let minimumItemsTotalAmount: number = 0;
+
+    for (let i = 0; i < budgetItems.minimum.length - 1; i++) {
+        minimumItemsTotalAmount += budgetItems.minimum[i].money.amount;
+    }
+
+    if (minimumItemsTotalAmount !== budget.amount) {
+        errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";
+    }
+
+    return errors;
+}

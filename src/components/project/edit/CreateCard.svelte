@@ -1,11 +1,12 @@
 <script lang="ts">
-    import WizardModal from "./WizardModal.svelte";
+    import BudgetModal from "./BudgetModal.svelte";
+    import CollabsModal from "./CollabsModal.svelte";
+    import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import PlusIcon from "../../../svgs/PlusIcon.svelte";
     import Button from "../../library/Button.svelte";
 
     import type {
-        Project,
         ProjectBudgetItem,
         ProjectCollaboration,
         ProjectReward,
@@ -17,7 +18,7 @@
         onclick,
         variant,
         open = $bindable(false),
-        project,
+        showToast = $bindable(false),
         reward,
         collab,
         budgetItem,
@@ -28,11 +29,11 @@
         onclick: () => void;
         variant: "reward" | "collab" | "budget";
         open: boolean;
-        project: Project;
+        showToast: boolean;
         reward?: ProjectReward | null;
         collab?: ProjectCollaboration | null;
         budgetItem?: ProjectBudgetItem | null;
-        onSave: (data: any) => Promise<void>;
+        onSave: (data: any) => void;
     }>();
 </script>
 
@@ -43,33 +44,33 @@
         <h2
             class="text-soft-purple font-bold {variant === 'budget'
                 ? 'text-2xl leading-8'
-                : 'text-[40px] leading-12'}"
+                : 'text-4xl leading-12'}"
         >
             {title}
         </h2>
         <p class="text-variant1 text-base font-normal">
             {description}
         </p>
+        <Button
+            kind="secondary"
+            class="mt-auto flex w-full items-center justify-center gap-2"
+            {onclick}
+        >
+            <PlusIcon class="p-[2.25px]" />
+            {#if variant === "reward"}
+                {$t("pages.project.edit.rewards.add.button")}
+            {:else if variant === "collab"}
+                {$t("pages.project.edit.collaborations.add.button")}
+            {:else if variant === "budget"}
+                {$t("pages.project.edit.budget.add.button")}
+            {/if}
+        </Button>
     </div>
-    <Button
-        kind="secondary"
-        class="mt-auto flex w-full items-center justify-center gap-2"
-        {onclick}
-    >
-        <PlusIcon class="p-[2.25px]" />
-        {#if variant === "reward"}
-            {$t("wizard.rewards.createCard.btn")}
-        {:else if variant === "collab"}
-            {$t("wizard.collabs.createCard.btn")}
-        {:else if variant === "budget"}
-            {$t("wizard.budget.createCard.btn")}
-        {/if}
-    </Button>
 </div>
 {#if variant === "reward"}
-    <WizardModal bind:open {project} {onSave} {reward} />
+    <RewardsModal bind:open bind:showToast {onSave} {reward} />
 {:else if variant === "collab"}
-    <WizardModal bind:open {project} {onSave} {collab} />
+    <CollabsModal bind:open bind:showToast {onSave} {collab} />
 {:else if variant === "budget"}
-    <WizardModal bind:open {project} {onSave} {budgetItem} />
+    <BudgetModal bind:open bind:showToast {onSave} {budgetItem} />
 {/if}

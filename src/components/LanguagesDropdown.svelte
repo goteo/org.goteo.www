@@ -1,61 +1,29 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    import { clickOutside } from "flowbite-svelte";
 
     import ChevronDown from "../svgs/ChevronDown.svelte";
     import LanguageIcon from "../svgs/LanguageIcon.svelte";
     import { getLanguageDisplayName } from "../utils/lang";
 
-    let { languages, selected, select } = $props();
+    let { languages, selected, onSelect } = $props();
 
     let open = $state(false);
-    let dropdownRef: HTMLElement;
 
     function selectLanguage(code: string) {
         open = false;
-        removeClickOutsideListener();
-
         selected = code;
-        select(code);
+
+        onSelect(code);
     }
-
-    function handleClickOutside(event: MouseEvent) {
-        if (!dropdownRef?.contains(event.target as Node)) {
-            open = false;
-            removeClickOutsideListener();
-        }
-    }
-
-    let listenerAdded = false;
-
-    function addClickOutsideListener() {
-        if (!listenerAdded) {
-            document.addEventListener("click", handleClickOutside);
-            listenerAdded = true;
-        }
-    }
-
-    function removeClickOutsideListener() {
-        if (listenerAdded) {
-            document.removeEventListener("click", handleClickOutside);
-            listenerAdded = false;
-        }
-    }
-
     function toggleDropdown() {
         open = !open;
-        if (open) {
-            addClickOutsideListener();
-        } else {
-            removeClickOutsideListener();
-        }
     }
-
-    onDestroy(() => {
-        removeClickOutsideListener();
-    });
 </script>
 
-<div class="relative inline-block w-full text-left lg:max-w-max" bind:this={dropdownRef}>
+<div
+    class="relative inline-block w-full text-left lg:max-w-max"
+    use:clickOutside={() => (open = false)}
+>
     <button
         type="button"
         class="flex w-full items-center gap-2 rounded-md border border-gray-300 px-4 py-2 transition-colors hover:bg-gray-100"

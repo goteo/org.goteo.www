@@ -16,39 +16,39 @@
     import { t } from "../../../i18n/store";
     import RadioButton from "../../library/RadioButton.svelte";
 
+    import type { Project } from "../../../openapi/client";
+
     interface RoundSelectorProps {
-        rounds: 1 | 2;
-        onChange: (rounds: 1 | 2) => void;
+        deadline: Project["deadline"];
+        onChange: (selectedDeadline: "minimum" | "optimum") => void;
     }
 
-    let { rounds = $bindable(1), onChange }: RoundSelectorProps = $props();
+    let { deadline = $bindable("minimum"), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
      */
-    function handleChange(selectedRounds: 1 | 2) {
-        onChange(selectedRounds);
+    function handleChange(selectedDeadline: "minimum" | "optimum") {
+        onChange(selectedDeadline);
     }
 </script>
 
 <div class="flex gap-4">
     <!-- 1 Round Option -->
     <RadioButton
+        bind:group={deadline}
         name="funding-rounds"
-        value={1}
-        checked={rounds === 1}
-        onchange={() => handleChange(1)}
-        id="round-1-radio"
-        label={$t("wizard.configuration.rounds.option1")}
+        value="minimum"
+        onchange={() => handleChange("minimum")}
+        label={$t("pages.project.edit.configuration.rounds.option1")}
     />
 
     <!-- 2 Rounds Option -->
     <RadioButton
+        bind:group={deadline}
         name="funding-rounds"
-        value={2}
-        checked={rounds === 2}
-        onchange={() => handleChange(2)}
-        id="round-2-radio"
-        label={$t("wizard.configuration.rounds.option2")}
+        value="optimum"
+        onchange={() => handleChange("optimum")}
+        label={$t("pages.project.edit.configuration.rounds.option2")}
     />
 </div>
