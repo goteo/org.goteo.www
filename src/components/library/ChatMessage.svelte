@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { locale } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
@@ -18,7 +18,7 @@
     let isOwn = $derived(type === "own");
 </script>
 
-{#snippet avatar(bgColor: string, iconColor: string)}
+{#snippet avatar(bgColor: string, iconColor: string = "var(--color-black)")}
     <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="64" height="64" rx="8" fill={bgColor} />
         <path
@@ -34,27 +34,24 @@
         {#if photo}
             <img src={photo} alt={name} class="h-full w-full object-cover" />
         {:else}
-            {@render avatar(
-                isOwn ? "var(--color-primary)" : "var(--color-grey)",
-                "var(--color-black)",
-            )}
+            {@render avatar(isOwn ? "var(--color-primary)" : "var(--color-grey)")}
         {/if}
     </div>
 
     <!-- Message -->
     <div
         class={twMerge(
-            "flex min-h-16 flex-1 flex-col items-end justify-end",
+            "flex min-h-16 flex-1 flex-col items-end justify-end rounded-tl-2xl rounded-tr-2xl border px-4",
             isOwn
-                ? "bg-primary border-primary text-secondary rounded-tl-2xl rounded-tr-2xl rounded-br-none rounded-bl-2xl border px-4 pt-4 pb-2"
-                : "border-secondary text-content rounded-tl-2xl rounded-tr-2xl rounded-br-2xl rounded-bl-none border bg-white px-4 py-2",
+                ? "bg-primary border-primary text-secondary rounded-br-none rounded-bl-2xl pt-4 pb-2"
+                : "border-secondary text-content rounded-br-2xl rounded-bl-none bg-white py-2",
         )}
     >
         {#if !isOwn}
             <span class="text-secondary self-stretch text-sm font-semibold">{name}</span>
         {/if}
         <p class="self-stretch text-sm leading-relaxed">{message}</p>
-        <span class={twMerge("text-xs", isOwn ? "text-secondary" : "text-content")}>
+        <span class={twJoin("text-xs", isOwn ? "text-secondary" : "text-content")}>
             {formatDate(date, $locale)}
         </span>
     </div>
