@@ -15,11 +15,7 @@ import HomeBanner from "../../components/library/HomeBanner.svelte";
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout
-    title={t("metadata.title")}
-    description={t("metadata.description")}
-    class="mb-20 gap-18"
->
+<Layout title={t("metadata.title")} description={t("metadata.description")} class="mb-20 gap-18">
     <App client:load locale={lang} session={session} />
     <Hero />
     <HomeBanner
