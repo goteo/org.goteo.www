@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import App from "../../components/App.svelte";
 import ActivitySection from "../../components/profile/ActivitySection.svelte";
 import PeriodDropdown from "../../components/profile/PeriodDropdown.svelte";
 import CTACard from "../../components/profile/CTACard.svelte";
@@ -7,7 +8,7 @@ import DonatedProjectsSection from "../../components/profile/DonatedProjectsSect
 import OwnedProjectsSection from "../../components/profile/OwnedProjectsSection.svelte";
 import MatchfundingSection from "../../components/profile/MatchfundingSection.svelte";
 
-const { lang, t } = Astro.locals;
+const { lang, t, session } = Astro.locals;
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
     return Astro.redirect("/login?callback=/me");
@@ -19,6 +20,7 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
 ---
 
 <Layout title={t("me.page.title")} class="mb-20">
+    <App client:load locale={lang} session={session} />
     <div
         class="wrapper flex flex-col gap-[40px] px-[16px] pt-[24px] pb-[40px] md:px-[40px] md:pt-[40px] md:pb-[40px]"
     >
