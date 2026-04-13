@@ -1,6 +1,7 @@
 ---
 import SingleProject from "../../../components/project/SingleProject.svelte";
 import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
 import { extractId } from "../../../utils/extractId";
 const { idOrSlug } = Astro.params;
 
@@ -17,7 +18,7 @@ if (!idOrSlug) {
     throw new Error("Project ID or Project Slug is undefined.");
 }
 
-let lang = Astro.locals.lang;
+const { lang, session } = Astro.locals;
 
 const { data: project, error } = await apiProjectsIdOrSlugGet({
     path: { idOrSlug },
@@ -65,6 +66,7 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
 ---
 
 <Layout title={project.title} description={project.description}>
+    <App client:load locale={lang} session={session} />
     <SingleProject
         {lang}
         {project}

@@ -37,7 +37,7 @@
 {#if href}
     <a
         {href}
-        class="focus:ring-soft-purple focus:ring-offset-soft-purple rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
+        class="focus:ring-purple-soft focus:ring-offset-purple-soft rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
         aria-label={hrefAriaLabel || `Visit ${href}`}
     >
         {@render image()}

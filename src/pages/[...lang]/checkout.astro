@@ -1,17 +1,19 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import App from "../../components/App.svelte";
 import Cart from "../../components/Checkout/Cart.svelte";
 import Summary from "../../components/Checkout/Summary.svelte";
 import Steps from "../../components/Checkout/Steps.svelte";
 import BackButton from "../../components/BackButton.astro";
 import { getPlatoniqAccountingId, getDefaultCurrency } from "../../utils/consts";
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();
 const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session} />
     <main class="wrapper">
         <div class="flex flex-col gap-8 py-10 lg:flex-row">
             <div class="flex w-full flex-col gap-10 lg:w-1/2">
