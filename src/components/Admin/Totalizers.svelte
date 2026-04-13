@@ -16,10 +16,7 @@
 </script>
 
 <div class="grid w-full max-w-[1360px] grid-cols-1 gap-6 self-center md:grid-cols-2 lg:grid-cols-4">
-    <TotalizerCard
-        title={$t("admin.projects.totalizers.selectedCampaigns")}
-        value={selectedCampaigns}
-    />
+    <TotalizerCard title={$t("admin.projects.totalizers.selected")} value={selectedCampaigns} />
     <TotalizerCard title={$t("admin.projects.totalizers.totalEarned")} value={totalEarned} />
     <TotalizerCard title={$t("admin.projects.totalizers.totalPaid")} value={totalPaid} />
     <TotalizerCard title={$t("admin.projects.totalizers.totalUnpaid")} value={totalUnpaid} />
