@@ -15,7 +15,7 @@
         success: "bg-variant2",
         warning: "bg-variant4",
         error: "bg-tertiary",
-        bold: "bg-grey border-grey text-secondary font-bold border-soft-purple",
+        bold: "bg-grey border-grey text-secondary font-bold border-purple-soft",
     };
 </script>
 

@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
 import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
 import Tabs from "../../../components/Tabs.svelte";
@@ -20,7 +21,7 @@ import { getLanguage } from "../../../middleware/utils";
 import { client } from "../../../openapi/client/client.gen";
 
 const { idOrHandle } = Astro.params;
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 
 if (!idOrHandle) {
     return Astro.redirect("/404");
@@ -165,6 +166,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
     description={`${t("profile.tabs.about")} ${displayName}`}
     class="mb-20"
 >
+    <App client:load locale={lang} session={session} />
     {
         errorMessage ? (
             <div class="flex min-h-screen items-center justify-center">

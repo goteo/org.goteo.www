@@ -882,7 +882,7 @@
   "admin": {
     "projects": {
       "totalizers": {
-        "selectedCampaigns": "Campañas seleccionadas:",
+        "selected": "Proyectos seleccionados:",
         "totalEarned": "Total conseguido:",
         "totalPaid": "Total pagado:",
         "totalUnpaid": "Falta por pagar:"
@@ -1046,6 +1046,14 @@
     }
   },
   "loading": "Cargando...",
+  "blog": {
+    "share": {
+      "modal": {
+        "title": "Difunde este blog por el mundo",
+        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
+      }
+    }
+  },
   "lang": {
     "error": {
       "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."

@@ -74,15 +74,15 @@
 
 <div class="mt-32 flex w-full flex-col items-center gap-4">
     <!-- Name -->
-    <h1 class="text-body text-2xl leading-tight font-bold">
+    <h1 class="text-secondary text-2xl leading-tight font-bold">
         {displayName}
     </h1>
 
     <!-- Location -->
     {#if location}
         <div class="flex items-center gap-1">
-            <MapIcon class="text-body size-8" />
-            <span class="text-body text-base leading-normal">
+            <MapIcon class="text-secondary size-8" />
+            <span class="text-secondary text-base leading-normal">
                 {location}
             </span>
         </div>

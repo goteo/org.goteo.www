@@ -1,7 +1,6 @@
 <script lang="ts">
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
-    import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
     import { setLocale, t } from "../../i18n/store";
@@ -17,6 +16,7 @@
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Sharebutton from "../library/Share/ShareButton.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import Tags from "../Tags.svelte";
@@ -200,7 +200,7 @@
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
         <Tags {project} />
         <div class="flex flex-row justify-between gap-6">
-            <Sharebutton {project} />
+            <Sharebutton shareText={project.title ?? ""} projectSlug={project.slug ?? ""} />
             <Button kind="invert" size="sm" class="px-0">
                 <RememberIcon />
                 {$t("project.actions.remember")}

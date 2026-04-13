@@ -1,9 +1,10 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
 import ReturnHeader from "../../../components/library/ReturnHeader.svelte";
 import BodyText from "../../../components/library/BodyText.svelte";
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 const { fileName } = Astro.params;
 
 const markdownFiles = import.meta.glob<{ default: any }>("../../../../static/*md");
@@ -24,6 +25,7 @@ const Content = file.default;
     description={t("metadata.description")}
     class="mb-20 gap-[72px]"
 >
+    <App client:load locale={lang} session={session} />
     <ReturnHeader client:load />
 
     <BodyText client:load>
