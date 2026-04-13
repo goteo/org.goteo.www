@@ -5,12 +5,12 @@
     import HeaderButtons from "./HeaderButtons.svelte";
     import UiLanguages from "./UiLanguages.svelte";
     import { session } from "../auth/store";
+    import CloseIconMenu from "../components/icons/CloseIconMenu.svelte";
     import { t } from "../i18n/store";
-    import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
     import SearchIcon from "../svgs/SearchIcon.svelte";
-    import UserIcon from "../svgs/UserIcon.svelte";
+    import UserIcon from "./icons/UserIcon.svelte";
 
     function isHidden(element: HTMLElement): boolean {
         return element.classList.contains("hidden");

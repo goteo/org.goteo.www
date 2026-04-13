@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CloseIcon from "../../svgs/CloseIcon.svelte";
+    import CloseIcon from "../icons/CloseIconMenu.svelte";
 
     interface Props {
         title: string;
