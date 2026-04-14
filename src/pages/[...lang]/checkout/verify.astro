@@ -17,7 +17,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    return Astro.redirect("/login?callback=/payment/verify" + Astro.url.searchParams);
+    return Astro.redirect("/login?callback=/checkout/verify" + Astro.url.searchParams);
 }
 
 const { token, user } = authCookie.json();
@@ -67,8 +67,8 @@ try {
 
 const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
 const postPaymentUrl = checkoutId
-    ? `/payment/post-payment?checkoutId=${checkoutId}`
-    : "/payment/post-payment";
+    ? `/checkout/post-payment?checkoutId=${checkoutId}`
+    : "/checkout/post-payment";
 ---
 
 <Layout title="Estado del pago">

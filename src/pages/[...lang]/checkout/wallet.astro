@@ -13,7 +13,7 @@ const defaultCurrency = getDefaultCurrency();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    return Astro.redirect("/login?callback=/payment/wallet");
+    return Astro.redirect("/login?callback=/checkout/wallet");
 }
 const { token, user } = authCookie.json();
 
