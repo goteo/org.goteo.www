@@ -16,10 +16,18 @@
     "preview": "Vista previa",
     "select": "Elige una opción",
     "remove": "Eliminar",
-    "textPlaceholder": "Escribe aquí"
+    "textPlaceholder": "Escribe aquí",
+    "unknown": "Desconocido"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
+    "header": {
+      "login": "Iniciar Sesión",
+      "loggedIn": "Hola, {{ name }}",
+      "search": "Buscar",
+      "createProject": "Crea tu proyecto",
+      "goToProfile": "Ir a Perfil"
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
@@ -644,13 +652,6 @@
     "ctaButton": "Súmate a nuestra historia"
   },
   "title": "Hola!",
-  "header": {
-    "login": "Iniciar Sesión",
-    "btnCart": "Ir al checkout",
-    "search": "Buscar",
-    "createProject": "Crea tu proyecto",
-    "goToProfile": "Ir a Perfil"
-  },
   "checkout": {
     "title": "Resumen de tus donaciones seleccionadas",
     "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
