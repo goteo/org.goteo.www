@@ -296,8 +296,8 @@
                         <TableBodyRow
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
-                                ? 'bg-soft-purple'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple text-content border transition-colors"
+                                ? 'bg-purple-soft'
+                                : 'bg-white'} border-variant1 hover:bg-purple-soft text-content border transition-colors"
                         >
                             <TableBodyCell
                                 class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
@@ -362,7 +362,7 @@
                             <TableBodyRow>
                                 <TableBodyCell
                                     colspan={tableHeaders.length}
-                                    class="border-variant1 bg-soft-purple rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    class="border-variant1 bg-purple-soft rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
                                 >
                                     <DetailsRow
                                         platformLinks={charge.platformLinks}

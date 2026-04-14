@@ -1078,7 +1078,7 @@
   "admin": {
     "projects": {
       "totalizers": {
-        "selectedCampaigns": "Campañas seleccionadas:",
+        "selected": "Proyectos seleccionados:",
         "totalEarned": "Total conseguido:",
         "totalPaid": "Total pagado:",
         "totalUnpaid": "Falta por pagar:"
@@ -1267,6 +1267,14 @@
         "successfulProjects": "Proyectos acogidos con éxito",
         "projects": "proyectos",
         "viewCall": "Ir a la convocatoria"
+      }
+    }
+  },
+  "blog": {
+    "share": {
+      "modal": {
+        "title": "Difunde este blog por el mundo",
+        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
       }
     }
   },

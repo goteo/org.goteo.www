@@ -1,7 +1,6 @@
 <script lang="ts">
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
-    import Sharebutton from "./Sharebutton.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
     import { languagesList } from "../../i18n/locales";
@@ -9,10 +8,10 @@
     import {
         type Project,
         type Accounting,
-        type ApiAccountingBalancePointsGetCollectionData,
         apiProjectsIdOrSlugGet,
         type User,
         type ProjectCalendar,
+        type AccountingBalancePoint,
     } from "../../openapi/client/index";
     import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
@@ -20,6 +19,7 @@
     import Countdown from "../Countdown.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
+    import Sharebutton from "../library/Share/ShareButton.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
     import ProjectTags from "../ProjectTags.svelte";
@@ -36,7 +36,7 @@
         accounting: Accounting;
         owner: User;
         totalSupports: number;
-        balancePoints: ApiAccountingBalancePointsGetCollectionData;
+        balancePoints: AccountingBalancePoint[];
     } = $props();
 
     const projectDeadline = $derived(getCurrentDeadline(project.calendar!));
@@ -193,7 +193,7 @@
     <div class="mb-12 flex w-full flex-col justify-between gap-4 lg:flex-row">
         <ProjectTags {project} />
         <div class="flex flex-row justify-between gap-6">
-            <Sharebutton {project} />
+            <Sharebutton shareText={project.title ?? ""} projectSlug={project.slug ?? ""} />
             <Button kind="invert" size="sm" class="px-0">
                 <RememberIcon />
                 {$t("project.actions.remember")}

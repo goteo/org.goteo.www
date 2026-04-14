@@ -3,9 +3,9 @@
     import { t } from "../../i18n/store";
     import {
         type Project,
-        type ApiAccountingBalancePointsGetCollectionData,
         type Money,
         type Accounting,
+        type AccountingBalancePoint,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/Button.svelte";
@@ -14,7 +14,7 @@
     export let project: Project;
     export let totalSupports: number = 0;
     export let accounting: Accounting;
-    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    export let balancePoints: AccountingBalancePoint[];
     export let onScrollToRewards: () => void;
 
     function hasReached(money?: Money) {

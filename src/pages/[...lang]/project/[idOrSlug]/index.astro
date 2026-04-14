@@ -1,6 +1,8 @@
 ---
 import SingleProject from "../../../../components/project/SingleProject.svelte";
 import Layout from "../../../../layouts/Layout.astro";
+import App from "../../../../components/App.svelte";
+
 import {
     apiAccountingBalancePointsGetCollection,
     apiAccountingsIdGet,
@@ -16,7 +18,7 @@ if (!idOrSlug) {
     throw new Error("Project ID or Project Slug is undefined.");
 }
 
-let lang = Astro.locals.lang;
+const { lang, session } = Astro.locals;
 
 const { data: project, error } = await apiProjectsIdOrSlugGet({
     path: { idOrSlug },
@@ -27,14 +29,13 @@ if (error || typeof project === "undefined") {
     throw new Error("Project not found");
 }
 
-const accountingId = extractId(project?.accounting)!;
-const { data: accounting } = await apiAccountingsIdGet({ path: { id: accountingId } });
+const { data: accounting } = await apiAccountingsIdGet({
+    path: { id: extractId(project?.accounting)! },
+});
 
 const { data: owner } = await apiUsersIdOrHandleGet({
     path: { idOrHandle: extractId(project.owner) || "" },
 });
-
-const ownerName = owner?.displayName || "";
 
 const { data: supports } = await apiProjectSupportsGetCollection({
     query: { project: String(project.id!) },
@@ -59,12 +60,13 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
 ---
 
 <Layout title={project.title} description={project.description}>
+    <App client:load locale={lang} session={session} />
     <SingleProject
         {project}
         accounting={accounting!}
         owner={owner!}
         {totalSupports}
-        {balancePoints}
+        balancePoints={balancePoints!}
         client:load
     />
 </Layout>

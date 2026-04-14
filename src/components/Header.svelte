@@ -66,7 +66,7 @@
 <header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:py-8">
     <div class="mx-auto max-w-[1440px] px-2">
         <div
-            class="border-gray-light flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
+            class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
             id="header-container"
         >
             <div
@@ -149,7 +149,7 @@
                 bind:this={mobileMenu}
                 class="hidden transform overflow-hidden opacity-0 transition-all duration-300 ease-in-out md:hidden"
             >
-                <div class="border-gray-light border-t">
+                <div class="border-grey border-t">
                     <div class="flex flex-col gap-4 p-4">
                         <div class="flex gap-2">
                             <a
@@ -162,7 +162,7 @@
 
                             <a
                                 href="/create/project"
-                                class="font-karla bg-primary text-secondary hover:bg-primary-hover flex-1 rounded-lg px-3 py-2 text-center text-base leading-6 font-bold"
+                                class="font-karla bg-primary text-secondary hover:bg-primary flex-1 rounded-lg px-3 py-2 text-center text-base leading-6 font-bold"
                             >
                                 {$t("header.createProject")}
                             </a>
