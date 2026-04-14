@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CartButton from "./CartButton.svelte";
+    import HeaderCart from "./HeaderCart.svelte";
     import HeaderLanguages from "./HeaderLanguages.svelte";
     import HeaderLogin from "./HeaderLogin.svelte";
     import { session } from "../auth/store";
@@ -77,7 +77,7 @@
                     <ul class="flex items-center gap-1 md:gap-4">
                         {#if $session}
                             <li class="flex items-center pr-2">
-                                <CartButton />
+                                <HeaderCart />
                             </li>
                         {/if}
                         <li class="flex items-center gap-1 pr-2 text-sm md:text-base">

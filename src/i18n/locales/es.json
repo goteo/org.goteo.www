@@ -26,7 +26,8 @@
       "loggedIn": "Hola, {{ name }}",
       "search": "Buscar",
       "createProject": "Crea tu proyecto",
-      "goToProfile": "Ir a Perfil"
+      "goToProfile": "Ir a Perfil",
+      "goToCheckout": "Ir al pago"
     },
     "project": {
       "campaign": {
