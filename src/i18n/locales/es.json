@@ -9,6 +9,8 @@
     "edit": "Editar",
     "delete": "Borrar",
     "continue": "Continuar",
+    "send": "Enviar",
+    "back": "Volver",
     "cancel": "Cancelar",
     "publish": "Publicar",
     "preview": "Vista previa",
@@ -773,7 +775,6 @@
   "global": {
     "btn": {
       "continue": "Continuar",
-      "back": "Volver",
       "send": "Enviar"
     }
   },
