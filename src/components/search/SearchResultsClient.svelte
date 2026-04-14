@@ -23,6 +23,7 @@ Manages real-time filtering of campaigns without page reloads
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import Grid from "../library/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
     import type { Campaign } from "../../types/campaign";
@@ -216,14 +217,14 @@ Manages real-time filtering of campaigns without page reloads
 
         <!-- Results Grid (keep visible during load more) -->
         {#if campaigns.length > 0}
-            <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
                         <CampaignCard size={campaign.size} {campaign} />
                     </div>
                 {/each}
-            </div>
+            </Grid>
         {/if}
     </div>
 
