@@ -1,6 +1,9 @@
 import { writable, derived, get } from "svelte/store";
 
+import { session } from "../auth/store";
 import { t } from "../i18n/store";
+
+import type { Session } from "../auth/types";
 
 export type CartItem = {
     key: string;
@@ -33,36 +36,50 @@ function generateKey({ title, target, position, freeDonationTitle }: GenerateKey
     return { key: `${target}-${prefix}-${position}` };
 }
 
-function loadInitialCart(): CartStore {
+function getCartKey(session?: Session) {
+    return session?.user?.id ? `user:${session.user.id}:cart` : "guest:cart";
+}
+
+function loadCart(key: string): CartStore {
     if (!isBrowser) return { items: [] };
 
     try {
-        const stored = localStorage.getItem("cart");
+        const stored = localStorage.getItem(key);
         if (stored) return JSON.parse(stored);
     } catch (e) {
-        console.warn("⚠️ Error loading cart from localStorage:", e);
+        console.warn("⚠️ Error loading cart:", e);
     }
 
-    const fresh = { items: [] };
-    localStorage.setItem("cart", JSON.stringify(fresh));
-    return fresh;
+    return { items: [] };
 }
 
 function createCartStore() {
-    const { subscribe, set, update } = writable<CartStore>(loadInitialCart());
+    const { subscribe, set, update } = writable<CartStore>({ items: [] });
+
+    let currentKey = getCartKey();
 
     if (isBrowser) {
+        session.subscribe((session) => {
+            const newKey = getCartKey(session);
+
+            if (newKey === currentKey) return;
+
+            currentKey = newKey;
+
+            const newCart = loadCart(currentKey);
+            set(newCart);
+        });
+
         subscribe((cart) => {
             try {
-                localStorage.setItem("cart", JSON.stringify(cart));
+                localStorage.setItem(currentKey, JSON.stringify(cart));
             } catch (e) {
-                console.error("Error to save cart to localStorage:", e);
+                console.error("Error saving cart:", e);
             }
         });
     }
 
-    const translations = get(t);
-    const freeDonationTitle = translations("checkout.cart.freeDonation.title");
+    const getFreeDonationTitle = () => get(t)("checkout.cart.freeDonation.title");
 
     return {
         subscribe,
@@ -78,7 +95,7 @@ function createCartStore() {
                 if (existingIndex >= 0) {
                     if (item.quantity === 0) {
                         return {
-                            items: updatedItems.filter((_, index) => index !== existingIndex),
+                            items: updatedItems.filter((_, i) => i !== existingIndex),
                         };
                     }
 
@@ -88,16 +105,15 @@ function createCartStore() {
                         amount: item.amount,
                     };
                 } else {
-                    if (item.quantity === 0) {
-                        return { items: updatedItems };
-                    }
+                    if (item.quantity === 0) return { items: updatedItems };
 
                     const position = updatedItems.length;
+
                     const { key } = generateKey({
                         title: item.title,
                         target: item.target,
                         position,
-                        freeDonationTitle,
+                        freeDonationTitle: getFreeDonationTitle(),
                     });
 
                     updatedItems.push({ ...item, key });
@@ -117,18 +133,11 @@ function createCartStore() {
                     quantity <= 0
                         ? cart.items.filter((item) => item.key !== key)
                         : cart.items.map((item) =>
-                              item.key === key && item.quantity !== quantity
-                                  ? { ...item, quantity }
-                                  : item,
+                              item.key === key ? { ...item, quantity } : item,
                           ),
             })),
 
-        clear: () => {
-            set({ items: [] });
-            if (isBrowser) {
-                localStorage.removeItem("cart");
-            }
-        },
+        clear: () => set({ items: [] }),
 
         clearProject: (projectId: number) =>
             update((cart) => ({
