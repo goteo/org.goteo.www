@@ -39,6 +39,8 @@ export async function getSession(cookies: AstroCookies): Promise<Session | undef
         return fresh;
     } catch (err) {
         console.error(err);
+        clearSession(cookies);
+
         return undefined;
     }
 }
