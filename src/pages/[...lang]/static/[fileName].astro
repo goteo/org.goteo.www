@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 import ReturnHeader from "../../../components/library/ReturnHeader.svelte";
 import BodyText from "../../../components/library/BodyText.svelte";
@@ -21,6 +21,7 @@ const Content = file.default;
 ---
 
 <Layout
+    client:load
     title={t("metadata.title")}
     description={t("metadata.description")}
     class="mb-20 gap-[72px]"

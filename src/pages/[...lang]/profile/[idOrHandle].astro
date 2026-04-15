@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
@@ -162,6 +162,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
 ---
 
 <Layout
+    client:load
     title={`${displayName} - ${t("metadata.title")}`}
     description={`${t("profile.tabs.about")} ${displayName}`}
     class="mb-20"

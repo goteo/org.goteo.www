@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.astro";
@@ -25,7 +25,7 @@ const { data: accounting } = await apiAccountingsIdGet({
 });
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} />
     <main class="wrapper">
         <div class="flex flex-row gap-8 py-10">

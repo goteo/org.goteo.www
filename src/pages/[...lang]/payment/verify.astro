@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
@@ -71,7 +71,7 @@ const postPaymentUrl = checkoutId
     : "/payment/post-payment";
 ---
 
-<Layout title="Estado del pago">
+<Layout client:load title="Estado del pago">
     <App client:load locale={lang} session={session} />
     <main class="wrapper py-10">
         {

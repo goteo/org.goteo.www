@@ -1,5 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 import Carousel from "../../../components/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
@@ -116,6 +116,7 @@ try {
 ---
 
 <Layout
+    client:load
     title={t("payment.postPayment.title")}
     description={t("payment.postPayment.certificate.description")}
 >

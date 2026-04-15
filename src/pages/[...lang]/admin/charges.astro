@@ -1,11 +1,11 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../../layouts/Layout.svelte";
 import App from "../../../components/App.svelte";
 const { t, lang, session } = Astro.locals;
 import Contributions from "../../../components/Admin/Contributions.svelte";
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} />
     <main class="wrapper">
         <div class="flex w-full flex-col gap-10 py-10">

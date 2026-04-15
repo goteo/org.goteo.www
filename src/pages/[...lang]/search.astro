@@ -1,5 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.svelte";
 import App from "../../components/App.svelte";
 import SearchFilters from "../../components/search/SearchFilters.svelte";
 import SearchResultsClient from "../../components/search/SearchResultsClient.svelte";
@@ -27,7 +27,7 @@ const hasInitialSearch = !!(
 );
 ---
 
-<Layout title={t("search.title")} description={t("search.description")}>
+<Layout client:load title={t("search.title")} description={t("search.description")}>
     <App client:load locale={lang} session={session} />
     <section class="wrapper">
         <!-- Page Header -->
