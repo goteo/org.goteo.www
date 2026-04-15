@@ -14,15 +14,11 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
 
-    import type {
-        Accounting,
-        ApiAccountingBalancePointsGetCollectionData,
-        Project,
-    } from "../../openapi/client/index";
+    import type { Accounting, AccountingBalancePoint, Project } from "../../openapi/client/index";
 
     export let accounting: Accounting;
     export let project: Project;
-    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    export let balancePoints: AccountingBalancePoint[];
 
     function formatAmount(amount: number | null | undefined): number {
         return +formatCurrency(amount ?? 0, accounting.balance?.currency, {
@@ -42,9 +38,9 @@
     let firstDateMs: number | null = null;
     let lastDay = 0;
 
-    if (Array.isArray(balancePoints) && balancePoints.length > 0) {
+    if (balancePoints.length > 0) {
         sortedBalancePoints = [...balancePoints].sort(
-            (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+            (a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime(),
         );
 
         firstDateMs = new Date(sortedBalancePoints[0].start).getTime();

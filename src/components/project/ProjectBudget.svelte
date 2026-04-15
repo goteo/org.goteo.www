@@ -6,6 +6,7 @@
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import Carousel from "../Carousel.svelte";
+    import PublicBudgetCard from "./PublicBudgetCard.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
 
@@ -36,12 +37,6 @@
             optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
         });
     });
-
-    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
-        task: "#99FFCC",
-        infrastructure: "#462949",
-        material: "#E94668",
-    };
 
     function updateItemsPerGroup() {
         // Check for mobile devices using multiple criteria
@@ -87,36 +82,14 @@
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if minimumItems.length === 0}
                     <div
-                        class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
+                        class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
                         {$t("project.tabs.updates.content.empty")}
                     </div>
                 {/if}
 
                 {#each minimumItems as item}
-                    <div
-                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
-                    >
-                        <div class="flex flex-col gap-4">
-                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="text-content line-clamp-3 font-normal">
-                                {item.description}
-                            </p>
-                        </div>
-                        <div class="flex flex-row items-center justify-between">
-                            <p class="text-2xl text-black">
-                                {formatCurrency(item.money.amount, item.money.currency)}
-                            </p>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${typeBudget[item.type]}`}
-                                ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
-                                >
-                            </div>
-                        </div>
-                    </div>
+                    <PublicBudgetCard {item} />
                 {/each}
             </Carousel>
         </div>
@@ -133,36 +106,14 @@
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if optimumItems.length === 0}
                     <div
-                        class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
+                        class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
                         {$t("project.tabs.updates.content.empty")}
                     </div>
                 {/if}
 
                 {#each optimumItems as item}
-                    <div
-                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
-                    >
-                        <div class="flex flex-col gap-4">
-                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="text-content line-clamp-3 font-normal">
-                                {item.description}
-                            </p>
-                        </div>
-                        <div class="flex flex-row items-center justify-between">
-                            <p class="text-2xl text-black">
-                                {formatCurrency(item.money.amount, item.money.currency)}
-                            </p>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${typeBudget[item.type]}`}
-                                ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
-                                >
-                            </div>
-                        </div>
-                    </div>
+                    <PublicBudgetCard {item} />
                 {/each}
             </Carousel>
         </div>

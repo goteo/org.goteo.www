@@ -74,7 +74,7 @@
     <div bind:this={mainCarousel} class="main-carousel h-full w-full">
         {#each slides as { title, subtitle, date, body, cover }}
             <div
-                class="carousel-cell bg-soft-purple mr-6 flex h-full w-[100%] flex-col items-start justify-center gap-4 rounded-xl border border-[red] p-8 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="carousel-cell bg-purple-soft mr-6 flex h-full w-[100%] flex-col items-start justify-center gap-4 rounded-xl border border-[red] p-8 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <span class="text-content text-base font-semibold">{date}</span>
                 {#if cover}

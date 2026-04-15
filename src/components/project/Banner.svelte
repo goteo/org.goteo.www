@@ -2,6 +2,7 @@
     import { t } from "../../i18n/store";
     import CertificateIcon from "../../svgs/CertificateIcon.svelte";
     import DonatorIcon from "../../svgs/DonatorIcon.svelte";
+    import Thtml from "../Thtml.svelte";
 
     export let ownerName: string;
 </script>
@@ -10,11 +11,10 @@
     <div class="flex flex-row items-center justify-center gap-4">
         <div><DonatorIcon /></div>
         <div class="text-content">
-            {@html $t(
-                "project.banner.donator.description",
-                { owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` },
-                { allowHTML: true },
-            )}
+            <Thtml
+                key="project.banner.donator.description"
+                vars={{ owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` }}
+            />
             <a href="#" class="text-secondary font-bold"
                 >{$t("project.banner.donator.learnMore")}
             </a>

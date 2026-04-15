@@ -125,6 +125,7 @@ export default [
             "svelte/prefer-writable-derived": "off",
             "svelte/prefer-svelte-reactivity": "off",
             "svelte/no-unused-props": "warn",
+            "svelte/no-useless-children-snippet": "warn",
         },
     },
 ];

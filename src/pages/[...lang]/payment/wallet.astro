@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
@@ -7,7 +8,7 @@ import { apiAccountingsIdGet } from "../../../openapi/client/index";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
 import { extractId } from "../../../utils/extractId";
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();
 
 const authCookie = Astro.cookies.get("auth");
@@ -25,6 +26,7 @@ const { data: accounting } = await apiAccountingsIdGet({
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session} />
     <main class="wrapper">
         <div class="flex flex-row gap-8 py-10">
             <div class="flex w-1/2 flex-col gap-10">

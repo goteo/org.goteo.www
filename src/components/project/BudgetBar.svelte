@@ -132,7 +132,7 @@
 
         <div
             class="absolute top-0 bottom-0 z-40"
-            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-divider);"
+            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-variant1);"
         ></div>
 
         <div

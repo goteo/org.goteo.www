@@ -1,15 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import App from "../../components/App.svelte";
 import RegisterForm from "../../components/RegisterForm.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
-import Steps from "../../components/Checkout/Steps.svelte";
 import AuthSummary from "../../components/AuthSummary.svelte";
 import Oauth from "../../components/Oauth.astro";
 import Button from "../../components/library/Button.svelte";
 import BackButton from "../../components/BackButton.astro";
 import { itemCount } from "../../stores/cart";
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 
 let hasCart = false;
 itemCount.subscribe((count) => {
@@ -18,6 +18,7 @@ itemCount.subscribe((count) => {
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session} />
     <main class="wrapper">
         <div class="flex flex-col gap-8 py-10 lg:flex-row">
             <div class="flex w-full flex-col gap-10 lg:w-1/2">
@@ -27,7 +28,7 @@ itemCount.subscribe((count) => {
                     <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">
                         <div class="flex flex-col gap-4">
                             <h2
-                                class="text-2xl font-bold tracking-[0%] text-black md:text-3xl md:leading-tight lg:text-[40px] lg:leading-[48px]"
+                                class="text-2xl font-bold tracking-[0%] text-black md:text-3xl md:leading-tight lg:text-[40px] lg:leading-12"
                             >
                                 {t("register.page.title")}
                             </h2>
@@ -62,7 +63,7 @@ itemCount.subscribe((count) => {
             </div>
 
             <div
-                class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
+                class="fixed right-0 bottom-0 left-0 flex h-fit w-full flex-col rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
             >
                 <AuthSummary client:load />
                 {hasCart && <Summary client:load />}
