@@ -32,7 +32,7 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
         <div
             class="sticky right-0 bottom-0 left-0 flex h-fit w-full flex-col gap-6 rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
         >
-            <Summary client:load {defaultCurrency} {accountingIdPlatoniq} />
+            <Summary client:load />
             <div class="lg:block" id="checkout-details">
                 <Steps step={1} client:load />
                 <div class="flex flex-col px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">

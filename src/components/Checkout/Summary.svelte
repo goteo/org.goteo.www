@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
+    import { twJoin } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
@@ -7,27 +7,25 @@
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
 
-    export let hasError: boolean;
-    export let amount: number | undefined;
-    export let currency: string;
-    export let accountingIdPlatoniq: number;
+    interface Props {
+        amount?: number;
+        hasError?: boolean;
+    }
 
-    let summaryRef;
+    let { amount, hasError }: Props = $props();
 
-    const total = derived(cart, ($cart) =>
-        $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
-    );
+    const total = $derived($cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0));
 
-    const foundation = derived(cart, ($cart) =>
+    const foundation = $derived(
         $cart.items
-            .filter((item) => item.target === accountingIdPlatoniq)
+            .filter((item) => item.target === import.meta.env.PUBLIC_PLATONIQ_ACCOUNTING_ID)
             .reduce((sum, item) => sum + item.amount * item.quantity, 0),
     );
 
-    const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
+    const donations = $derived(total - foundation);
 </script>
 
-<div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
+<div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0">
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
@@ -36,7 +34,10 @@
     >
         {#snippet header()}
             <h2
-                class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={twJoin(
+                    "flex items-center gap-2 text-base font-semibold lg:text-[32px]",
+                    hasError ? "text-tertiary" : "text-secondary",
+                )}
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -46,27 +47,30 @@
                 {$t("checkout.summary.total.title")}
             </h2>
             <p
-                class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={twJoin(
+                    "text-[32px] leading-tight font-bold lg:text-[56px]",
+                    hasError ? "text-tertiary" : "text-secondary",
+                )}
             >
-                {formatCurrency(amount ?? $total, currency)}
+                {formatCurrency(amount ?? total)}
             </p>
         {/snippet}
 
         {#snippet content()}
-            {#if $donations > 0}
+            {#if donations > 0}
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-sm">
                         <span>{$t("checkout.summary.donations")}</span>
-                        <span>{formatCurrency($donations, currency)}</span>
+                        <span>{formatCurrency(donations)}</span>
                     </div>
                 </div>
             {/if}
 
-            {#if $foundation > 0}
+            {#if foundation > 0}
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-sm">
                         <span>{$t("checkout.summary.foundation")}</span>
-                        <span>{formatCurrency($foundation, currency)}</span>
+                        <span>{formatCurrency(foundation)}</span>
                     </div>
                 </div>
             {/if}
