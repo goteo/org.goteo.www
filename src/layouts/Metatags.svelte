@@ -1,0 +1,28 @@
+<script lang="ts">
+    const { title, description, url = "" } = $props();
+</script>
+
+<svelte:head>
+    <meta name="title" content={title} />
+    <meta
+        name="description"
+        content={description ||
+            "Goteo es la red abierta de crowdfunding, colaboraciones y formación, líder en proyectos de innovación social. Con 2 rondas y ventajas fiscales para donantes!"}
+    />
+    <meta
+        name="keywords"
+        content="goteo, crowdfunding, innovación social, colaboración, financiación colectiva, proyectos, innovación, social, red abierta, donaciones, donar"
+    />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={url} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={url} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+</svelte:head>

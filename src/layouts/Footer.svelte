@@ -1,16 +1,15 @@
----
-import FooterXIcon from "../svgs/footer/FooterXIcon.astro";
-import FooterFacebookIcon from "../svgs/footer/FooterFacebookIcon.astro";
-import FooterLinkedinIcon from "../svgs/footer/FooterLinkedinIcon.astro";
-import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.astro";
-import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.astro";
-import FooterPartnerImage from "./FooterPartnerImage.svelte";
-import FooterLink from "./FooterLink.svelte";
+<script lang="ts">
+    import FooterLink from "../components/FooterLink.svelte";
+    import FooterPartnerImage from "../components/FooterPartnerImage.svelte";
+    import { t } from "../i18n/store";
+    import FooterFacebookIcon from "../svgs/footer/FooterFacebookIcon.svelte";
+    import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.svelte";
+    import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.svelte";
+    import FooterLinkedinIcon from "../svgs/footer/FooterLinkedinIcon.svelte";
+    import FooterXIcon from "../svgs/footer/FooterXIcon.svelte";
+</script>
 
-const { t } = Astro.locals;
----
-
-<footer class="text-variant1" role="contentinfo" aria-labelledby="footer-heading">
+<footer class="text-variant1" aria-labelledby="footer-heading">
     <!-- Funding Partners Section -->
     <section
         class="bg-purple-soft text-tertiary border-variant1 border-2 border-b-0 py-6 sm:py-8 md:py-10"
@@ -26,29 +25,25 @@ const { t } = Astro.locals;
                         id="funding-partners-heading"
                         class="text-secondary text-sm font-bold sm:text-base"
                     >
-                        {t("footer.funding.title")}
+                        {$t("footer.funding.title")}
                     </h3>
                     <div
                         class="flex items-center gap-4"
                         role="list"
                         aria-label="Funding partner organizations"
                     >
-                        <!-- Funding Partner Logos -->
                         <div class="flex items-center gap-3 sm:gap-4">
                             <FooterPartnerImage
                                 src="/imgs/orgs/NGEU.png"
                                 alt="Funded by the European Union NextGeneration EU"
-                                client:load
                             />
                             <FooterPartnerImage
                                 src="/imgs/orgs/MTES.png"
                                 alt="Ministerio de Trabajo y Economía Social"
-                                client:load
                             />
                             <FooterPartnerImage
                                 src="/imgs/orgs/PRTR.png"
                                 alt="Plan de Recuperación, Transformación y Resiliencia"
-                                client:load
                             />
                         </div>
                     </div>
@@ -57,7 +52,7 @@ const { t } = Astro.locals;
                 <!-- Part Of Section -->
                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
                     <h3 class="text-secondary text-sm font-medium sm:text-base">
-                        {t("footer.funding.partOf")}
+                        {$t("footer.funding.partOf")}
                     </h3>
                     <div
                         class="flex items-center gap-2 sm:gap-3"
@@ -70,7 +65,6 @@ const { t } = Astro.locals;
                             href="https://xes.cat"
                             class="rounded-lg"
                             size="medium"
-                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/alda-europe.svg"
@@ -78,7 +72,6 @@ const { t } = Astro.locals;
                             href="https://www.alda-europe.eu"
                             class="rounded-lg"
                             size="medium"
-                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/alianza-por-el-clima.webp"
@@ -86,7 +79,6 @@ const { t } = Astro.locals;
                             href="https://alianzaporelclima.org"
                             class="rounded-lg"
                             size="medium"
-                            client:load
                         />
                         <FooterPartnerImage
                             src="/imgs/orgs/ampliando-democracia.jpg"
@@ -94,7 +86,6 @@ const { t } = Astro.locals;
                             href="https://ampliandodemocracia.org"
                             class="rounded-lg"
                             size="medium"
-                            client:load
                         />
                     </div>
                 </div>
@@ -103,7 +94,7 @@ const { t } = Astro.locals;
     </section>
 
     <div
-        class="bg-secondary relative rounded-t-3xl bg-[length:116%_114%] bg-[position:-127%_42%] bg-no-repeat min-[700px]:bg-[length:64%_108%] min-[700px]:bg-[position:114%]"
+        class="bg-secondary relative rounded-t-3xl bg-size-[116%_114%] bg-position-[-127%_42%] bg-no-repeat min-[700px]:bg-size-[64%_108%] min-[700px]:bg-position-[114%]"
         style="background-image: url('/path2.svg');"
     >
         <!-- Main Footer Content -->
@@ -123,22 +114,22 @@ const { t } = Astro.locals;
                         <!-- Collaborate -->
                         <div class="space-y-2">
                             <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {t("footer.navigation.collaborate.title")}
+                                {$t("footer.navigation.collaborate.title")}
                             </h4>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
-                                    <FooterLink href="/create-project" client:load>
-                                        {t("footer.navigation.collaborate.createProject")}
+                                    <FooterLink href="/create-project">
+                                        {$t("footer.navigation.collaborate.createProject")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/matchfunding" client:load>
-                                        {t("footer.navigation.collaborate.matchfunding")}
+                                    <FooterLink href="/matchfunding">
+                                        {$t("footer.navigation.collaborate.matchfunding")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/workshops" client:load>
-                                        {t("footer.navigation.collaborate.workshops")}
+                                    <FooterLink href="/workshops">
+                                        {$t("footer.navigation.collaborate.workshops")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -147,22 +138,22 @@ const { t } = Astro.locals;
                         <!-- Help -->
                         <div class="space-y-2">
                             <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {t("footer.navigation.help.title")}
+                                {$t("footer.navigation.help.title")}
                             </h4>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
-                                    <FooterLink href="/faqs" client:load>
-                                        {t("footer.navigation.help.faqs")}
+                                    <FooterLink href="/faqs">
+                                        {$t("footer.navigation.help.faqs")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/contact" client:load>
-                                        {t("footer.navigation.help.contact")}
+                                    <FooterLink href="/contact">
+                                        {$t("footer.navigation.help.contact")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/tax-calculator" client:load>
-                                        {t("footer.navigation.help.taxCalculator")}
+                                    <FooterLink href="/tax-calculator">
+                                        {$t("footer.navigation.help.taxCalculator")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -171,27 +162,27 @@ const { t } = Astro.locals;
                         <!-- About Goteo -->
                         <div class="space-y-2">
                             <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {t("footer.navigation.aboutGoteo.title")}
+                                {$t("footer.navigation.aboutGoteo.title")}
                             </h4>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
-                                    <FooterLink href="/about" client:load>
-                                        {t("footer.navigation.aboutGoteo.whoWeAre")}
+                                    <FooterLink href="/about">
+                                        {$t("footer.navigation.aboutGoteo.whoWeAre")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/benefits" client:load>
-                                        {t("footer.navigation.aboutGoteo.goteoBenefits")}
+                                    <FooterLink href="/benefits">
+                                        {$t("footer.navigation.aboutGoteo.goteoBenefits")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/impact" client:load>
-                                        {t("footer.navigation.aboutGoteo.foundationImpact")}
+                                    <FooterLink href="/impact">
+                                        {$t("footer.navigation.aboutGoteo.foundationImpact")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/platoniq" client:load>
-                                        {t("footer.navigation.aboutGoteo.platoniqFoundation")}
+                                    <FooterLink href="/platoniq">
+                                        {$t("footer.navigation.aboutGoteo.platoniqFoundation")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -200,27 +191,27 @@ const { t } = Astro.locals;
                         <!-- For Users -->
                         <div class="space-y-2">
                             <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {t("footer.navigation.forUsers.title")}
+                                {$t("footer.navigation.forUsers.title")}
                             </h4>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
-                                    <FooterLink href="/wallet" client:load>
-                                        {t("footer.navigation.forUsers.rechargeWallet")}
+                                    <FooterLink href="/wallet">
+                                        {$t("footer.navigation.forUsers.rechargeWallet")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/certificate" client:load>
-                                        {t("footer.navigation.forUsers.downloadCertificate")}
+                                    <FooterLink href="/certificate">
+                                        {$t("footer.navigation.forUsers.downloadCertificate")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/funds" client:load>
-                                        {t("footer.navigation.forUsers.accessComplementaryFunds")}
+                                    <FooterLink href="/funds">
+                                        {$t("footer.navigation.forUsers.accessComplementaryFunds")}
                                     </FooterLink>
                                 </li>
                                 <li>
-                                    <FooterLink href="/program" client:load>
-                                        {t("footer.navigation.forUsers.designFundingProgram")}
+                                    <FooterLink href="/program">
+                                        {$t("footer.navigation.forUsers.designFundingProgram")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -257,25 +248,17 @@ const { t } = Astro.locals;
                         aria-label="Legal navigation"
                     >
                         <h3 id="footer-bottom-heading" class="sr-only">Legal and Social Links</h3>
-                        <FooterLink href="/terms" class="text-xs leading-4 font-medium" client:load>
-                            {t("footer.legal.termsOfUse")}
+                        <FooterLink href="/terms" class="text-xs leading-4 font-medium">
+                            {$t("footer.legal.termsOfUse")}
                         </FooterLink>
-                        <FooterLink
-                            href="/privacy"
-                            class="text-xs leading-4 font-medium"
-                            client:load
-                        >
-                            {t("footer.legal.privacyPolicy")}
+                        <FooterLink href="/privacy" class="text-xs leading-4 font-medium">
+                            {$t("footer.legal.privacyPolicy")}
                         </FooterLink>
-                        <FooterLink
-                            href="/licenses"
-                            class="text-xs leading-4 font-medium"
-                            client:load
-                        >
-                            {t("footer.legal.licenses")}
+                        <FooterLink href="/licenses" class="text-xs leading-4 font-medium">
+                            {$t("footer.legal.licenses")}
                         </FooterLink>
-                        <FooterLink href="/stats" class="text-xs leading-4 font-medium" client:load>
-                            {t("footer.legal.stats")}
+                        <FooterLink href="/stats" class="text-xs leading-4 font-medium">
+                            {$t("footer.legal.stats")}
                         </FooterLink>
                     </nav>
 
@@ -333,7 +316,7 @@ const { t } = Astro.locals;
                                 loading="lazy"
                             />
                             <div class="text-xs leading-normal font-light sm:text-sm">
-                                {t("footer.platoniq.foundation")}
+                                {$t("footer.platoniq.foundation")}
                             </div>
                         </div>
                     </div>

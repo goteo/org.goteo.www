@@ -1,10 +1,10 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
 
-    import CartButton from "./CartButton.svelte";
-    import HeaderButtons from "./HeaderButtons.svelte";
-    import UiLanguages from "./UiLanguages.svelte";
     import { session } from "../auth/store";
+    import CartButton from "../components/CartButton.svelte";
+    import HeaderButtons from "../components/HeaderButtons.svelte";
+    import UiLanguages from "../components/UiLanguages.svelte";
     import { t } from "../i18n/store";
     import CloseIconMenu from "../svgs/CloseIconMenu.svelte";
     import Logo from "../svgs/Logo.svelte";
