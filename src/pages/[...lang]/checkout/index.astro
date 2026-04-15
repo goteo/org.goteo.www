@@ -14,7 +14,7 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} />
-    <div class="flex flex-col gap-8 py-10 lg:mx-auto lg:max-w-360 lg:flex-row lg:px-8">
+    <div class="flex flex-col gap-8 pt-10 lg:mx-auto lg:max-w-360 lg:flex-row lg:px-8 lg:py-10">
         <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
             <BackButton client:load />
 
@@ -30,7 +30,7 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
             <Cart client:load {defaultCurrency} {accountingIdPlatoniq} />
         </div>
         <div
-            class="fixed right-0 bottom-0 left-0 flex h-fit w-full flex-col gap-6 rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
+            class="sticky right-0 bottom-0 left-0 flex h-fit w-full flex-col gap-6 rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
         >
             <Summary client:load {defaultCurrency} {accountingIdPlatoniq} />
             <div class="lg:block" id="checkout-details">
