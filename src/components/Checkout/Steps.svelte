@@ -2,8 +2,12 @@
     import { t } from "../../i18n/store";
     import WarningIcon from "../../svgs/WarningIcon.svelte";
 
-    export let step = 1;
-    export let hasError: boolean;
+    interface Props {
+        step: number;
+        hasError?: boolean;
+    }
+
+    let { step = 1, hasError }: Props = $props();
 
     const stepsLabels = [
         $t("checkout.steps.reward.title"),
@@ -44,7 +48,7 @@
     <div class="mt-4 flex w-full items-center justify-between text-sm font-bold text-gray-700">
         {#each stepsLabels as label, index}
             <div
-                class={`flex max-w-[80px] items-center gap-1 text-center ${
+                class={`flex max-w-20 items-center gap-1 text-center ${
                     step === index + 1 && hasError
                         ? "text-black"
                         : step >= index + 1
@@ -53,7 +57,7 @@
                 }`}
             >
                 {#if step === index + 1 && hasError}
-                    <WarningIcon className="w-4 h-4" iconColor="#E94668" />
+                    <WarningIcon class="text-tertiary h-4 w-4" />
                 {/if}
                 <span class="text-xs leading-tight">{label}</span>
             </div>
