@@ -2,22 +2,18 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
-        iconColor,
         width = "26",
         height = "26",
         class: classes = "",
     }: {
-        iconColor?: string;
         width?: string;
         height?: string;
         class?: ClassNameValue;
     } = $props();
-
-    const variantColor = `text-${iconColor ? `[${iconColor}]` : "secondary"}`;
 </script>
 
 <svg
-    class={twMerge(variantColor, classes ? classes : "")}
+    class={twMerge("text-secondary", classes ? classes : "")}
     {width}
     {height}
     viewBox="0 0 26 26"
