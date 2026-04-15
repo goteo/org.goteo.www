@@ -1,73 +1,87 @@
+<!--
+    @component
+    Dynamic Toggle button
+-->
 <script lang="ts">
-    /**
-     * @component
-     * Dynamic Toggle component.
-     * @props
-     * - `onChange`: callback function that receives the new state of the toggle (true for on, false for off).
-     * - `colorsOn`: object with `bg` and `circle` properties for the "on" state colors (supports Tailwind classes or CSS color values).
-     * - `colorsOff`: object with `bg` and `circle` properties for the "off" state colors (supports Tailwind classes or CSS color values).
-     * - `padding`: internal spacing in pixels between the circle and the toggle container.
-     * - `width`: width of the toggle in pixels (default: 64). Must be double the height for proper functionality.
-     * - `height`: height of the toggle in pixels (default: 32). Must be half the width for proper functionality.
-     */
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import type { HTMLButtonAttributes } from "svelte/elements";
+
+    interface Props extends Omit<HTMLButtonAttributes, "class"> {
+        /**
+         * Callback function that receives the new value of the state
+         * @param value `true` for on, `false` for off
+         */
+        onChange?: (value: boolean) => void;
+
+        /**
+         * Generic classes applied to the inner button markup on both on and off positions
+         */
+        btnClass?: ClassNameValue;
+        btnClassOn?: ClassNameValue;
+        btnClassOff?: ClassNameValue;
+
+        /**
+         * Generic classes applied to the inner div markup on both on and off positions
+         */
+        circleClass?: ClassNameValue;
+        circleClassOn?: ClassNameValue;
+        circleClassOff?: ClassNameValue;
+    }
 
     let {
         onChange,
-        colorsOn = { bg: "#9fc", circle: "#59E9D3" },
-        colorsOff = { bg: "#e6e5f7", circle: "#462949" },
-        padding = 4,
-        width = 64,
-        height = 32,
-    }: {
-        onChange: (newState: boolean) => void;
-        colorsOn?: { bg: string; circle: string };
-        colorsOff?: { bg: string; circle: string };
-        padding?: number;
-        width?: number;
-        height?: number;
-    } = $props();
+        btnClass,
+        btnClassOn,
+        btnClassOff,
+        circleClass,
+        circleClassOn,
+        circleClassOff,
+        ...rest
+    }: Props = $props();
 
-    // true = on ---- false = off
-    let toggle = $state(false);
-
-    const currentBgColor = $derived(toggle ? `bg-[${colorsOn.bg}]` : `bg-[${colorsOff.bg}]`);
-    const currentCircleColor = $derived(
-        toggle ? `bg-[${colorsOn.circle}]` : `bg-[${colorsOff.circle}]`,
-    );
-    const circleSize = $derived(height - padding * 2);
-    const translateX = $derived((toggle ? width - circleSize - padding * 2 : 0) - 1);
-
-    const bgClasses = $derived(
-        `bg-${currentBgColor} w-[${width}px] h-[${height}px] p-[${padding}px]`,
-    );
-    const circleClasses = $derived(
-        `size-[${circleSize}px] ${currentCircleColor} translate-x-[${translateX}px]`,
-    );
+    let value = $state(false);
 
     function handleToggle() {
-        toggle = !toggle;
-        if (onChange) onChange(toggle);
+        value = !value;
+
+        onChange?.(value);
     }
+
+    let button: HTMLButtonElement | undefined;
+    let toggleEnd: string = $state("0px");
+
+    $effect(() => {
+        if (!button) return;
+
+        toggleEnd = `${button.offsetWidth - button.offsetHeight}px`;
+    });
 </script>
 
 <button
-    onclick={() => handleToggle()}
+    bind:this={button}
     type="button"
-    aria-label="toggle"
-    aria-checked={toggle}
     role="switch"
+    aria-checked={value}
+    onclick={() => handleToggle()}
+    style={`--toggleEnd: ${toggleEnd}`}
     class={twMerge(
-        `border-soft-purple flex h-8 w-16 items-center overflow-hidden rounded-3xl border p-1 transition-all duration-500 ease-in-out`,
-        bgClasses,
+        "border-purple-soft flex h-8 w-16 cursor-pointer items-center overflow-hidden rounded-full border p-1 transition-all duration-500 ease-in-out",
+        value ? "bg-variant2" : "bg-variant1",
+        value ? btnClassOn : btnClassOff,
+        btnClass,
     )}
+    {...rest}
 >
     <!-- Filter Drop shadow CSS attribute from Figma (better with inline style due to the large amount of drop shadows) -->
     <div
-        class={twMerge(
-            "shrink-0 rounded-full transition-all duration-500 ease-in-out",
-            circleClasses,
-        )}
         style="filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.10)) drop-shadow(0 6px 6px rgba(0, 0, 0, 0.09)) drop-shadow(0 13px 8px rgba(0, 0, 0, 0.05)) drop-shadow(0 22px 9px rgba(0, 0, 0, 0.01)) drop-shadow(0 35px 10px rgba(0, 0, 0, 0.00));"
+        class={twMerge(
+            "aspect-square h-full shrink-0 rounded-full transition-all duration-500 ease-in-out",
+            value ? "bg-primary" : "bg-secondary",
+            value ? "translate-x-(--toggleEnd)" : "translate-x-0",
+            value ? circleClassOn : circleClassOff,
+            circleClass,
+        )}
     ></div>
 </button>
