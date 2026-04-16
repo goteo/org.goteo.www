@@ -1,14 +1,5 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
-
-    interface Props {
-        class?: string;
-        direction?: "left" | "right" | "up" | "down";
-        width?: string | number;
-        height?: string | number;
-    }
-
-    let { class: classes = "", direction = "right", width = "24", height = "24" }: Props = $props();
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     const paths = {
         left: "M21 6L11 16L21 26",
@@ -16,6 +7,15 @@
         up: "M26 21L16 11L6 21",
         down: "M6 11L16 21L26 11",
     };
+
+    interface Props {
+        class?: ClassNameValue;
+        direction?: keyof typeof paths;
+        width?: string | number;
+        height?: string | number;
+    }
+
+    let { class: classes = "", direction = "right", width = "24", height = "24" }: Props = $props();
 </script>
 
 <svg
