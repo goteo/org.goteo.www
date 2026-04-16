@@ -39,8 +39,6 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import { cyrb53 } from "../../utils/hash";
-
     import type { Snippet } from "svelte";
 
     interface SelectProps {
@@ -74,7 +72,8 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-    const selectId = id || `select-${cyrb53(labelText || name || "select")}`;
+    const generatedId = $props.id();
+    const selectId = id || `select-${generatedId}`;
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
 
