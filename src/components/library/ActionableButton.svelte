@@ -1,39 +1,29 @@
-<script module lang="ts">
-    export type ActionableState = "accionable" | "accionando" | "accionado";
-</script>
-
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import Button from "./Button.svelte";
+    import Check from "../icons/Check.svelte";
+    import Spinner from "../icons/Spinner.svelte";
 
     import type { Snippet } from "svelte";
     import type { HTMLButtonAttributes } from "svelte/elements";
 
-    const sizeStyles = {
-        md: "px-8 py-4 rounded-[24px]",
-        sm: "px-4 py-2 rounded-[16px]",
-    };
-
-    const kindStyles = {
-        primary: "bg-primary",
-        secondary: "bg-variant1",
-        ghost: "inset-ring-1 inset-ring-secondary",
-        invert: "",
-    };
+    type ActionableState = "actionable" | "loading" | "actioned";
 
     interface Props extends Omit<HTMLButtonAttributes, "class" | "onclick"> {
         children: Snippet;
         actionedChildren?: Snippet;
         class?: ClassNameValue;
-        size?: keyof typeof sizeStyles;
-        kind?: keyof typeof kindStyles;
+        size?: "md" | "sm";
+        kind?: "primary" | "secondary" | "ghost" | "invert";
         action: () => Promise<void>;
         state?: ActionableState;
-        /* Time from conform to reset*/
+        /* Time from actioned to reset */
         autoreset?: number;
     }
 
     let {
-        children,
+        children: renderChildren,
         actionedChildren,
         type = "button",
         class: classes = "",
@@ -41,83 +31,52 @@
         kind = "primary",
         action,
         autoreset,
-        state = $bindable("accionable"),
+        state = $bindable("actionable"),
         ...rest
     }: Props = $props();
 
     async function handleClick() {
-        if (state !== "accionable") return;
-        state = "accionando";
+        if (state !== "actionable") return;
+        state = "loading";
         try {
             await action();
         } finally {
-            state = "accionado";
+            state = "actioned";
             if (autoreset !== undefined) {
-                setTimeout(() => (state = "accionable"), autoreset);
+                setTimeout(() => (state = "actionable"), autoreset);
             }
         }
     }
 
     export function reset() {
-        state = "accionable";
+        state = "actionable";
     }
 </script>
 
-<button
+<Button
     {type}
-    disabled={state !== "accionable"}
+    {size}
+    {kind}
+    class={twMerge("relative w-full", classes)}
+    disabled={state !== "actionable"}
     onclick={handleClick}
-    class={twMerge(
-        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-bold transition hover:cursor-pointer",
-        sizeStyles[size],
-        kindStyles[kind],
-        classes,
-    )}
     {...rest}
 >
-    {#if state === "accionando"}
-        <span class="spinner"></span>
-    {:else if state === "accionado"}
-        {#if actionedChildren}
-            {@render actionedChildren()}
-        {:else}
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1.25em"
-                height="1.25em"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-            >
-                <polyline points="20 6 9 17 4 12"></polyline>
-            </svg>
-        {/if}
-    {:else}
-        {@render children()}
+    <span class={state !== "actionable" ? "invisible" : ""}>
+        {@render renderChildren()}
+    </span>
+
+    {#if state === "loading"}
+        <span class="absolute inset-0 flex items-center justify-center">
+            <Spinner />
+        </span>
+    {:else if state === "actioned"}
+        <span class="absolute inset-0 flex items-center justify-center">
+            {#if actionedChildren}
+                {@render actionedChildren()}
+            {:else}
+                <Check />
+            {/if}
+        </span>
     {/if}
-</button>
-
-<style>
-    .spinner {
-        width: 1.25em;
-        height: 1.25em;
-        border: 2px solid currentColor;
-        border-bottom-color: transparent;
-        border-radius: 50%;
-        display: inline-block;
-        box-sizing: border-box;
-        animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-        from {
-            transform: rotate(0deg);
-        }
-        to {
-            transform: rotate(360deg);
-        }
-    }
-</style>
+</Button>
