@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
-        class?: string;
+        class?: ClassNameValue;
         on?: boolean;
         width?: string | number;
         height?: string | number;

@@ -13,10 +13,10 @@
         type ProjectCalendar,
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
-    import Arrow from "../icons/Arrow.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
     import Countdown from "../Countdown.svelte";
+    import Arrow from "../icons/Arrow.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
