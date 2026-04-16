@@ -1,22 +1,22 @@
 <script lang="ts">
-    import { twMerge } from "tailwind-merge";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    const fillColors = {
+        tarea: "var(--color-secondary)",
+        material: "var(--color-tertiary)",
+        infraestructura: "var(--color-variant2)",
+    };
 
     interface Props {
-        class?: string;
-        variant: "tarea" | "material" | "infraestructura";
+        class?: ClassNameValue;
+        variant: keyof typeof fillColors;
         width?: string | number;
         height?: string | number;
     }
 
     let { class: classes = "", width = "24", height = "24", variant }: Props = $props();
 
-    const fillColor = $derived(
-        {
-            tarea: "var(--color-secondary)",
-            material: "var(--color-tertiary)",
-            infraestructura: "var(--color-variant2)",
-        }[variant],
-    );
+    const fillColor = $derived(fillColors[variant]);
 </script>
 
 <svg
