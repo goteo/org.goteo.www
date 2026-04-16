@@ -5,11 +5,11 @@
     import HeaderButtons from "./HeaderButtons.svelte";
     import UiLanguages from "./UiLanguages.svelte";
     import { session } from "../auth/store";
-    import CloseIconMenu from "../components/icons/CloseIconMenu.svelte";
+    import CloseMenu from "./icons/CloseMenu.svelte";
     import { t } from "../i18n/store";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
-    import SearchIcon from "../svgs/SearchIcon.svelte";
+    import Search from "./icons/Search.svelte";
     import UserIcon from "./icons/UserIcon.svelte";
 
     function isHidden(element: HTMLElement): boolean {
@@ -134,7 +134,7 @@
                                     <MenuIcon />
                                 </div>
                                 <div bind:this={closeIcon} class="hidden">
-                                    <CloseIconMenu />
+                                    <CloseMenu />
                                 </div>
                             </button>
                         </li>
@@ -156,7 +156,7 @@
                                 href="/search"
                                 class="font-karla text-secondary disabled:bg-grey bg-purple-tint flex w-auto items-center justify-center gap-2 rounded-2xl px-4 py-2 text-base leading-6 font-bold transition hover:cursor-pointer"
                             >
-                                <SearchIcon width="16" height="16" />
+                                <Search width="16" height="16" />
                                 {$t("header.search")}
                             </a>
 

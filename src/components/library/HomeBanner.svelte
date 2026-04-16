@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CloseIcon from "../icons/CloseIconMenu.svelte";
+    import CloseMenu from "../icons/CloseMenu.svelte";
 
     interface Props {
         title: string;
@@ -67,7 +67,7 @@
                     aria-label={closeAriaLabel}
                     class="flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-white/10"
                 >
-                    <CloseIcon class="h-6 w-6" />
+                    <CloseMenu class="h-6 w-6" />
                 </button>
             </div>
         </div>

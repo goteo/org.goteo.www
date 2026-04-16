@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import WebIcon from "../../../svgs/WebIcon.svelte";
     import Tooltip from "../../Admin/Tooltip.svelte";
+    import WebIcon from "../../icons/WebIcon.svelte";
 
     interface Props {
         url?: string;
