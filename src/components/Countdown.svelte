@@ -4,7 +4,7 @@
     import ClockIcon from "../components/icons/Clock.svelte";
     import { t } from "../i18n/store";
 
-    export let countdownEnd: Date | undefined = undefined;
+    export let deadline: Date | undefined = undefined;
 
     let timeLeft: {
         total: number;
@@ -14,16 +14,16 @@
         seconds?: number;
     } = { total: 0 };
 
-    if (countdownEnd) {
+    if (deadline) {
         const now = new Date().getTime();
-        const diff = countdownEnd.getTime() - now;
+        const diff = deadline.getTime() - now;
         if (diff > 0) {
             timeLeft = calculateTimeLeft();
         }
     }
 
     onMount(() => {
-        if (!countdownEnd) return;
+        if (!deadline) return;
 
         const interval = setInterval(() => {
             timeLeft = calculateTimeLeft();
@@ -37,7 +37,7 @@
 
     function calculateTimeLeft() {
         const now = new Date().getTime();
-        const difference = countdownEnd!.getTime() - now;
+        const difference = deadline!.getTime() - now;
 
         return difference > 0
             ? {

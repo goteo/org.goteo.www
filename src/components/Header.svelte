@@ -96,7 +96,7 @@
                                     >
                                         <UserIcon />
                                         <span class="hidden sm:inline">
-                                            {$t("greeting")}, {$session.person?.firstName}
+                                            {$t("common.greeting")}, {$session.person?.firstName}
                                         </span>
                                     </button>
 

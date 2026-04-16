@@ -1,17 +1,226 @@
 {
-  "greeting": "Hola",
-  "farewell": "Adiós",
-  "campaignProgress": {
-    "minimumReached": "¡Mínimo conseguido!",
-    "optimumReached": "¡Óptimo conseguido!",
-    "obtained": "Obtenido",
-    "supports": "Donantes únicos",
-    "optimum": "Óptimo",
-    "minimum": "Mínimo",
-    "donate": "Donar a esta campaña"
+  "common": {
+    "_": "Global UI translations (buttons, labels, etc.)",
+    "greeting": "Hola",
+    "farewell": "Adiós",
+    "donate": "Donar",
+    "donateAmount": "Dona {{ amount }}",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "continue": "Continuar",
+    "cancel": "Cancelar",
+    "publish": "Publicar",
+    "preview": "Vista previa",
+    "select": "Elige una opción",
+    "remove": "Eliminar",
+    "textPlaceholder": "Escribe aquí"
+  },
+  "domain": {
+    "_": "Business concepts (project, reward, contribution, etc.)",
+    "project": {
+      "campaign": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "optimumReached": "¡Óptimo conseguido!",
+        "obtained": "Obtenido",
+        "supports": "Donantes únicos",
+        "donate": "Donar a esta campaña"
+      },
+      "budget": {
+        "optimum": "Óptimo",
+        "minimum": "Mínimo",
+        "type": {
+          "infrastructure": "Infraestructura",
+          "material": "Material",
+          "task": "Tarea"
+        }
+      },
+      "reward": {
+        "byAtLeast": "Por {{ amount }}",
+        "unitsTotal": {
+          "single": "Hay una unidad",
+          "multiple": "Hay {{ units }} unidades"
+        },
+        "isInfinite": "Sin límite de unidades"
+      }
+    }
+  },
+  "pages": {
+    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "project": {
+      "edit": {
+        "title": "Editando proyecto: {{ project }}",
+        "tabs": {
+          "configuration": "Configuración",
+          "campaign": "Información de campaña",
+          "rewards": "Recompensas",
+          "collaborations": "Colaboraciones",
+          "budget": "Presupuesto",
+          "aboutYou": "Sobre ti"
+        },
+        "configuration": {
+          "title": "Configuración",
+          "subtitle": "Configura los datos básicos de tu campaña",
+          "languages": {
+            "title": "Idiomas de la campaña",
+            "description": "Cuáles son los idiomas en los que publicarás el contenido de  la campaña",
+            "primaryLabel": "Idioma principal del contenido",
+            "secondaryLabel": "Idioma secundario del contenido",
+            "addButton": "Añadir idioma"
+          },
+          "rounds": {
+            "title": "Elige las rondas que tendrá tu campaña",
+            "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
+            "option1": "1 Ronda",
+            "option2": "2 Rondas"
+          },
+          "continue": "Continuar con info de campaña"
+        },
+        "campaignInfo": {
+          "title": "Información de campaña",
+          "subtitle": "Completa la información necesaria para tu campaña",
+          "media": {
+            "title": "Imágen y vídeo de presentación",
+            "description": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
+            "addImage": "Añadir imagen",
+            "addVideo": "Añadir vídeo"
+          },
+          "goals": {
+            "title": "Objetivos y propósito de tu campaña",
+            "description": "Indica los objetivos y el propósito de tu proyecto. Responde al qué, cómo y por qué"
+          },
+          "legacy": {
+            "title": "¿Cual será el legado de tu proyecto?",
+            "description": "Cuando termine la campaña, ¿qué quedará? Cuéntanos cual será el legado que deje tu proyecto"
+          },
+          "target": {
+            "title": "¿A quién va dirigido?",
+            "description": "Describe a quién va dirigido tu proyecto"
+          },
+          "team": {
+            "title": "¿Con qué equipo cuentas?",
+            "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
+          },
+          "continue": "Continuar con recompensas"
+        },
+        "rewards": {
+          "title": "Recompensas",
+          "subtitle": "Añade recompensas atractivas para alcanzar tu meta",
+          "continue": "Continuar con colaboraciones",
+          "add": {
+            "title": "¡No lances tu campaña sin ellas! Las recompensas son tu superpoder",
+            "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
+            "button": "Añadir recompensa"
+          },
+          "modal": {
+            "title": "Añade recompensas",
+            "description": "Describe la recompensa que ofreces",
+            "unitsExisting": "Número de unidades existentes",
+            "placeholders": {
+              "title": "Título de la recompensa",
+              "description": "Descripción de la recompensa",
+              "moneyAmount": "Precio",
+              "files": "Haz click o arrastra aquí tu archivo para subirlo"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta recompensa",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "amount": "El precio debe ser mayor que cero",
+            "units": "La cantidad de unidades debe ser mayor que cero si la recompensa es limitada"
+          }
+        },
+        "collaborations": {
+          "title": "Colaboraciones",
+          "subtitle": "Añade colaboraciones que consideres oportunas para ayudar a tu campaña",
+          "continue": "Continuar a presupuesto",
+          "add": {
+            "title": "¡Amplía tu campaña! Busca colaboradores, no solo dinero",
+            "description": "Las donaciones aumentan un 30%* en campañas con múltiples y atractivas recompensas. Es simple: más opciones significan más posibilidades de conectar con los intereses de potenciales donantes. ¿Productos exclusivos? ¿Experiencias únicas? ¿Reconocimientos especiales? ¡Tu creatividad es el límite! Cuanto más variado sea tu menú de recompensas, mayor será tu éxito.",
+            "button": "Añadir colaboración"
+          },
+          "modal": {
+            "title": "Añade colaboraciones",
+            "description": "Indica el tipo de colaboración que necesitas",
+            "placeholders": {
+              "title": "Título de la colaboración",
+              "description": "Descripción de la colaboración"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta colaboración",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "descriptionTooLong": "La descripción de la colaboración es demasiado larga",
+            "description": "La descripción no puede estar vacía"
+          }
+        },
+        "budget": {
+          "title": "Presupuesto",
+          "subtitle": "Indica el presupuesto mínimo y óptimo que necesitas para llevar a cabo tu proyecto",
+          "continue": "Siguiente paso",
+          "add": {
+            "title": "Añade una partida",
+            "description": "Puedes indicar cual es el mínimo y cual es el óptimo que necesitas para llevar a cabo tu proyecto.",
+            "button": "Añadir partida"
+          },
+          "modal": {
+            "title": "Añadir partidas del presupuesto",
+            "description": "Describe las partidas del presupuesto",
+            "placeholders": {
+              "title": "Título de la partida",
+              "type": "Tipo de partida",
+              "moneyAmount": "Importe",
+              "deadline": "Clase",
+              "description": "Descripción"
+            }
+          },
+          "deleteModal": {
+            "title": "Vas a borrar esta partida",
+            "description": "Esta es una acción permanente y no se puede deshacer"
+          },
+          "validation": {
+            "title": "El título no puede estar vacío",
+            "description": "La descripción no puede estar vacía",
+            "amount": "El importe debe ser mayor que cero",
+            "amountMinimum": "El presupuesto mínimo debe ser mayor que cero",
+            "currency": "El importe debe especificar una divisa",
+            "type": "El tipo de partida se debe especificar",
+            "class": "La clase de partida se debe especificar"
+          }
+        }
+      },
+      "view": {
+        "owner": "Campaña de crowdfunding impulsada por {{ owner }}"
+      }
+    }
+  },
+  "system": {
+    "_": "System messages (errors, notifications, validation, etc.)",
+    "loading": "Cargando...",
+    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
+    "error": {
+      "file": {
+        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
+        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      }
+    },
+    "constraint": {
+      "file": {
+        "maxAllowedSize": "Tamaño máximo permitido 10MB",
+        "supportedTypes": "Archivos compatibles: .png, .jpg"
+      }
+    },
+    "validation": {
+      "missingRequiredFields": "Uno o más campos obligatorios están vacíos"
+    }
   },
   "reward": {
-    "donate": "Dona",
     "donors": "donates",
     "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",
@@ -19,15 +228,11 @@
     "headline": "Selecciona tu recompensa",
     "addAndContinue": "Añadir al carro y continuar",
     "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonation": "Donar",
     "btnFreeDonationLabel": "Donación libre",
     "showAll": "Ver todas"
   },
   "budget": {
     "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
-    "infrastructure": "Infraestructura",
-    "material": "Material",
-    "task": "Tareas",
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
@@ -37,7 +242,6 @@
     }
   },
   "project": {
-    "owner": "Campaña de crowdfunding impulsada por ",
     "tabs": {
       "project": "Información de campaña",
       "budget": {
@@ -47,11 +251,6 @@
         "optimal": "Óptimo",
         "raised": "Obtenido",
         "total": "Total",
-        "typeBudget": {
-          "infrastructure": "Infraestructura",
-          "material": "Material",
-          "task": "Tareas"
-        },
         "campaingState": "Estado de la campaña"
       },
       "rewards": "Recompensas",
@@ -412,10 +611,8 @@
     "donation-free": {
       "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
       "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
-      "placeholder": "Seleccione el aporte  Ej.20€",
-      "btn": "Donar"
+      "placeholder": "Seleccione el aporte  Ej.20€"
     },
-    "by-amount": "Por {{amount}}",
     "by-amount-or-more": "Por {{amount}} o más",
     "thanks-message": "Gracias por cooperar",
     "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
@@ -563,7 +760,6 @@
       "amountToUse": "Cuánto vas a usar",
       "remainingBalance": "Saldo que te quedará"
     },
-
     "wallet": {
       "balanceLabel": "Saldo: "
     },
@@ -941,6 +1137,35 @@
       "name": "Platoniq"
     }
   },
+  "create": {
+    "project": {
+      "title": "Propón una campaña",
+      "subtitle": "Describe brevemete el proyecto y la campaña de crowdfunding.",
+      "budgetPreview": "Dinero necesario",
+      "description": {
+        "title": "Describe brevemente tu propuesta",
+        "titlePrompt": "Indica el nombre de tu campaña",
+        "titlePlaceholder": "Nombre de campaña",
+        "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación.",
+        "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
+        "subtitlePlaceholder": "Sin descripción"
+      },
+      "categories": {
+        "title": "¿Qué categoría se ajusta a tu campaña?",
+        "subtitle": "(Puedes elegir un máximo de 2)"
+      },
+      "budget": {
+        "title": "¿Cuánto dinero necesitas?",
+        "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto.",
+        "amountPrompt": "Indica la cantidad que necesitas"
+      },
+      "release": {
+        "title": "Fecha salida de campaña",
+        "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
+      },
+      "submit": "Proponer campaña"
+    }
+  },
   "profile": {
     "share": "Compartir",
     "subscribe": "Subscríbete",
@@ -1045,7 +1270,6 @@
       }
     }
   },
-  "loading": "Cargando...",
   "blog": {
     "share": {
       "modal": {

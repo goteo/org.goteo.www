@@ -1,7 +1,6 @@
 <script lang="ts">
     import { languagesList } from "../i18n/locales";
     import { locale } from "../i18n/store";
-    import { getDefaultLanguage } from "../utils/consts";
 
     const languages = Object.keys(languagesList);
 
@@ -21,9 +20,7 @@
             pathParts.shift();
         }
 
-        if (selectedLang !== getDefaultLanguage()) {
-            pathParts.unshift(selectedLang);
-        }
+        pathParts.unshift(selectedLang);
 
         const newPath = `/${pathParts.join("/")}`;
 

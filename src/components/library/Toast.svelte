@@ -37,7 +37,7 @@
 {#if showToast}
     <div
         class={twMerge(
-            "flex max-w-[1360px] min-w-[327px] items-start gap-4 self-center rounded-lg border p-6 sm:items-center sm:justify-between",
+            "flex max-w-[1440px] min-w-[270px] items-start gap-4 self-center rounded-lg border p-6 text-wrap sm:items-center sm:justify-between",
             variantStyles[variant],
             classes,
         )}

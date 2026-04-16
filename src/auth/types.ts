@@ -21,6 +21,11 @@ export interface OAuthToken {
      * An encrypted payload that can be used to refresh the access token when it expires.
      */
     refresh_token?: string;
+
+    /**
+     * HTTP Headers to use this token in requests.
+     */
+    asHttpHeaders: Record<string, unknown> | HeadersInit | undefined;
 }
 
 /**
