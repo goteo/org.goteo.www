@@ -5,7 +5,7 @@
         class?: ClassNameValue;
         width?: string | number;
         height?: string | number;
-        align?: "left" | "right" | "center";
+        align?: keyof typeof paths;
     }
 
     let { class: classes = "", width = "32", height = "32", align = "left" }: Props = $props();
