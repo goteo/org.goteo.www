@@ -2,12 +2,13 @@ import { writable, derived, get } from "svelte/store";
 
 import { projectsService } from "../services/projectsService";
 
-import type { Project } from "../openapi/client/types.gen";
+import type { Project, Territory } from "../openapi/client/types.gen";
 
 export interface SearchFilters {
     query: string;
     statusFilter: string;
     categories: string[];
+    territory?: Territory | null;
 }
 
 export interface SearchState {
@@ -37,6 +38,7 @@ function getInitialState(): SearchState {
             query: "",
             statusFilter: "",
             categories: [],
+            territory: {},
         },
         results: [],
         isLoading: false,
@@ -469,7 +471,12 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
     const { filters } = $searchStore;
-    return !!(filters.query || filters.statusFilter || filters.categories.length > 0);
+    return !!(
+        filters.query ||
+        filters.statusFilter ||
+        filters.categories.length > 0 ||
+        filters.territory
+    );
 });
 
 // Pagination derived stores

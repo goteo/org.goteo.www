@@ -4,63 +4,91 @@ Interactive category selection using existing categories from utils/categories.t
 Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
+    import { onMount } from "svelte";
+
     import { t } from "../../i18n/store";
-    import { apiCategoriesGetCollection, type Category } from "../../openapi/client";
-    import CategorySelect, { type Option } from "../library/CategorySelect.svelte";
+    import {
+        apiCategoriesGetCollection,
+        type Category as OpenAPICategory,
+    } from "../../openapi/client";
+
+    interface Category extends OpenAPICategory {
+        id: string;
+        name: string;
+    }
 
     interface Props {
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
-        showLabel?: boolean;
         "data-testid"?: string;
     }
 
-    let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
+    let { selectedCategories = [], onCategoryChange, "data-testid": testId }: Props = $props();
 
-    let categories = getAvailableCategories();
-    let selected = $state(
-        selectedCategories.map((s) => {
-            return { id: s, text: $t("categories." + s) };
-        }),
-    );
+    let categories = $state<Category[]>([]);
+    let isLoading = $state(true);
 
-    async function getAvailableCategories(): Promise<Category[]> {
-        const { data } = await apiCategoriesGetCollection();
+    onMount(async () => {
+        try {
+            const response = await apiCategoriesGetCollection();
 
-        if (!data) {
-            return [];
+            const responseData = response as any;
+            const rawData = responseData.data || responseData["hydra:member"] || responseData;
+
+            if (Array.isArray(rawData)) {
+                categories = rawData.map((cat: any) => ({
+                    ...cat,
+                    id: String(cat.id),
+                    name: cat.name || cat.title || "Category",
+                }));
+            }
+        } catch (error) {
+            console.error("Failed to load categories:", error);
+        } finally {
+            isLoading = false;
         }
+    });
 
-        return data;
-    }
+    function toggleCategory(categoryId: string) {
+        const newSelection = selectedCategories.includes(categoryId)
+            ? selectedCategories.filter((id) => id !== categoryId)
+            : [...selectedCategories, categoryId];
 
-    function mapCategoryToOption(category: Category): Option {
-        return {
-            id: category.id!,
-            text: $t("categories." + category.id!),
-        };
+        if (onCategoryChange) {
+            onCategoryChange(newSelection);
+        }
     }
 </script>
 
-<div class="w-full">
-    {#if showLabel}
-        <h3 class="mb-6 font-['Karla'] text-base font-bold text-[#3d3d3d]">
-            {$t("search.categoryLabel")}
-        </h3>
-    {/if}
+<div class="flex flex-col gap-4" data-testid={testId}>
+    <h3 class="text-sm font-bold tracking-wider text-gray-500 uppercase">
+        {$t("search.categoryLabel")}
+    </h3>
 
-    {#await categories then categories}
-        <CategorySelect
-            bind:selected
-            selectedIds={selected.map((s) => s.id)}
-            options={categories.map((c) => mapCategoryToOption(c))}
-            onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
-        />
-    {/await}
-
-    {#if selected.length > 0}
-        <div class="mt-4 text-sm text-[#3d3d3d] opacity-70">
-            {$t("search.selectedCategories", { count: selected.length })}
+    {#if isLoading}
+        <div class="flex flex-wrap gap-2">
+            {#each Array(6) as _}
+                <div class="h-10 w-24 animate-pulse rounded-full bg-gray-100"></div>
+            {/each}
         </div>
+    {:else if categories.length > 0}
+        <div class="flex flex-wrap gap-2">
+            {#each categories as category}
+                {@const isSelected = selectedCategories.includes(category.id)}
+                <button
+                    type="button"
+                    onclick={() => toggleCategory(category.id)}
+                    class="rounded-full border px-4 py-2 text-sm font-medium transition-all {isSelected
+                        ? 'border-purple-800 bg-purple-800 text-white shadow-sm'
+                        : 'border-gray-300 bg-white text-gray-600 hover:border-purple-400 hover:text-purple-600'}"
+                >
+                    {category.name}
+                </button>
+            {/each}
+        </div>
+    {:else}
+        <p class="text-sm text-gray-400 italic">
+            {$t("search.results.empty.description")}
+        </p>
     {/if}
 </div>

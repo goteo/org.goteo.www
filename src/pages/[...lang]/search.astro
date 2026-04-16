@@ -12,23 +12,34 @@ const initialProjects: Project[] = [];
 
 // Parse URL search parameters for SSR
 const url = new URL(Astro.request.url);
+
+/**
+ * se agrega  la lógica para extraer los datos geográficos de la URL
+ * Esto permite que al compartir el link, la ubicación se mantenga.
+ */
 const initialFilters = {
     query: url.searchParams.get("q") || "",
     statusFilter: url.searchParams.get("status") || "",
     categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    territory: {
+        country: url.searchParams.get("country") || null,
+        subLvl1: url.searchParams.get("subLvl1") || null,
+        subLvl2: url.searchParams.get("subLvl2") || null,
+        rawQuery: url.searchParams.get("locationText") || "",
+    },
 };
 
-// Check if URL has search parameters
+// Check if URL has search parameters (Actualizado para incluir territorio)
 const hasInitialSearch = !!(
     initialFilters.query ||
     initialFilters.statusFilter ||
-    initialFilters.categories.length > 0
+    initialFilters.categories.length > 0 ||
+    initialFilters.territory.rawQuery
 );
 ---
 
 <Layout title={t("search.title")} description={t("search.description")}>
     <section class="wrapper">
-        <!-- Page Header -->
         <div class="mb-12 text-center">
             <h1 class="text-secondary mb-4 text-4xl font-bold">
                 {t("search.heading")}
@@ -38,12 +49,11 @@ const hasInitialSearch = !!(
             </p>
         </div>
 
-        <!-- Search Filters -->
         <div class="mb-8">
-            <SearchFilters locale={lang} initialFilters={initialFilters} client:load />
+            <!-- <SearchFilters locale={lang} initialFilters={initialFilters} client:load /> -->
+            <SearchFilters client:load initialFilters={initialFilters} locale={lang} />
         </div>
 
-        <!-- Search Results -->
         <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
             <SearchResultsClient
                 initialProjects={initialProjects}
