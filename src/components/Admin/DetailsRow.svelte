@@ -13,7 +13,7 @@
     import ContentFooter from "./ContentFooter.svelte";
     import Tooltip from "./Tooltip.svelte";
     import { t } from "../../i18n/store";
-    import CopyIcon from "../icons/CopyIcon.svelte";
+    import Copy from "../icons/Copy.svelte";
     import Grid from "../library/Grid.svelte";
 
     import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
@@ -132,7 +132,7 @@
                                                 onclick={() =>
                                                     navigator.clipboard.writeText(item.value)}
                                             >
-                                                <CopyIcon />
+                                                <Copy />
                                             </button>
                                         </Tooltip>
                                     </div>
@@ -235,7 +235,7 @@
                                                 onclick={() =>
                                                     navigator.clipboard.writeText(item.href)}
                                             >
-                                                <CopyIcon />
+                                                <Copy />
                                             </button>
                                         </Tooltip>
                                     </div>
