@@ -8,6 +8,7 @@
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import Button from "../library/Button.svelte";
+    import Grid from "../library/Grid.svelte";
     import Reward from "../Reward.svelte";
 
     import type { ProjectReward, Project, Accounting } from "../../openapi/client/index";
@@ -35,9 +36,13 @@
 
     let freeAmount = $state("");
 
-    let isAvailable = calcAvailability();
-    function calcAvailability(): boolean {
+    let isAvailable = $state(calcAvailability());
+    function calcAvailability(reward?: ProjectReward): boolean {
         if (project.status !== "in_campaign") {
+            return false;
+        }
+
+        if (reward && reward.isFinite && reward.unitsAvailable === 0) {
             return false;
         }
 
@@ -60,7 +65,7 @@
         const calculatedAmount = numericAmount * unit;
 
         cart.addItem({
-            title: $t("reward.btnFreeDonationLabel"),
+            title: $t("common.donate"),
             amount: calculatedAmount,
             quantity: 1,
             image: "",
@@ -78,8 +83,8 @@
         <h2 class="text-secondary text-4xl font-bold">
             {$t("rewards.title")}
         </h2>
-        <ul class="grid gap-6 lg:grid-cols-3">
-            <li
+        <Grid>
+            <div
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
                 class="border-grey flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
@@ -105,13 +110,13 @@
                         disabled={!isAvailable}
                         onclick={handleFreeDonation}
                     >
-                        {$t("rewards.donation-free.btn")}
+                        {$t("common.donate")}
                     </Button>
                 </div>
-            </li>
+            </div>
             {#each rewards as reward}
-                <Reward {reward} {project} />
+                <Reward {reward} {project} isAvailable={calcAvailability(reward)} />
             {/each}
-        </ul>
+        </Grid>
     </div>
 </section>

@@ -2,6 +2,7 @@
 import PromoterCard from "./PromoterCard.astro";
 import type { Promoter } from "../../types/promoter";
 import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+import Grid from "../library/Grid.svelte";
 
 const { t } = Astro.locals;
 
@@ -51,8 +52,8 @@ const promoters: Promoter[] = [
         </div>
 
         <!-- Promoters cards grid -->
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" client:load>
             {promoters.map((promoter) => <PromoterCard promoter={promoter} />)}
-        </div>
+        </Grid>
     </div>
 </section>
