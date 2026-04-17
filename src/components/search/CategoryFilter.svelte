@@ -88,7 +88,7 @@ Implements active/inactive pill states matching Figma design
         </div>
     {:else}
         <p class="text-sm text-gray-400 italic">
-            {$t("search.results.empty.description")}
+            {$t("domain.search.categories.without")}
         </p>
     {/if}
 </div>
