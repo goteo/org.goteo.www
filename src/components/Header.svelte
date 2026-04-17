@@ -10,7 +10,7 @@
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
     import Search from "./icons/Search.svelte";
-    import UserIcon from "./icons/UserIcon.svelte";
+    import UserIcon from "./icons/User.svelte";
 
     function isHidden(element: HTMLElement): boolean {
         return element.classList.contains("hidden");

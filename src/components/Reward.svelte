@@ -2,7 +2,7 @@
     import RewardModal from "./RewardModal.svelte";
     import { t } from "../i18n/store";
     import UnitIcon from "../svgs/UnitIcon.svelte";
-    import UserIcon from "./icons/UserIcon.svelte";
+    import UserIcon from "./icons/User.svelte";
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
