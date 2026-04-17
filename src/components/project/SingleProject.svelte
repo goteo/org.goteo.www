@@ -13,10 +13,10 @@
         type ProjectCalendar,
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
-    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
     import Countdown from "../Countdown.svelte";
+    import Arrow from "../icons/Arrow.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
@@ -206,12 +206,12 @@
                 {$t("reward.trending")}
             </h2>
             <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
-                <ArrowRightIcon />{$t("reward.showAll")}
+                <Arrow />{$t("reward.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang={projectLanguage} {project} />
         <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
-            <ArrowRightIcon />{$t("reward.showAll")}
+            <Arrow />{$t("reward.showAll")}
         </Button>
     </div>
     <Banner ownerName={owner.displayName || ""} />

@@ -1,6 +1,6 @@
 <script lang="ts">
+    import WarningIcon from "../../components/icons/Warning.svelte";
     import { t } from "../../i18n/store";
-    import WarningIcon from "../../svgs/WarningIcon.svelte";
 
     export let step = 1;
     export let hasError: boolean;

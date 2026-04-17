@@ -6,11 +6,10 @@ Converted from CampaignCard.astro to maintain exact functionality
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
+    import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import Flames from "../icons/Flames.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
     import Tag from "../library/Tag.svelte";
 
@@ -101,7 +100,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
                         <Tag>
-                            <MatchFundingIcon />
+                            <Flames />
                             <span>{$t("home.campaigns.matchfunding")}</span>
                         </Tag>
                     {/if}
@@ -131,7 +130,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Days Remaining -->
                     {#if campaign.daysRemaining !== undefined}
                         <div class="flex items-center gap-2">
-                            <ClockIcon />
+                            <Clock />
                             <span class="text-sm text-black">
                                 {$t("home.campaigns.daysRemaining", {
                                     days: campaign.daysRemaining,
@@ -143,7 +142,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Category (display only first) -->
                     {#if firstCategory()}
                         <div class="flex items-center gap-2">
-                            <CategoryIcon />
+                            <Clock />
                             <span class="text-sm text-black">
                                 {$t(`categories.${firstCategory()}`)}
                             </span>

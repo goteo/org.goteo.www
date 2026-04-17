@@ -16,6 +16,7 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
+    import Eye from "../../../../../components/icons/Eye.svelte";
     import Button from "../../../../../components/library/Button.svelte";
     import TabNavigation, {
         type Tab,
@@ -28,7 +29,6 @@
         isReadyToPublish,
     } from "../../../../../stores/wizard-state";
     import EditIcon from "../../../../../svgs/EditIcon.svelte";
-    import EyeIcon from "../../../../../svgs/EyeIcon.svelte";
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";
@@ -199,7 +199,7 @@
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-[16px]">
                 <Button kind="ghost" size="md" disabled={true}>
-                    <EyeIcon width="20" height="20" />
+                    <Eye />
                     {$t("common.preview")}
                 </Button>
                 <Button
