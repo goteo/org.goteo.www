@@ -16,7 +16,7 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import { cyrb53 } from "../utils/hash";
+import { murmur3 } from "../utils/hash";
 
 import type { MoneyWithConversion, Project, ProjectBudgetItem } from "../openapi/client";
 
@@ -61,6 +61,7 @@ export interface WizardCampaignInfo {
  * Wizard Rewards data (Step 3: Rewards)
  */
 export interface WizardReward {
+    id?: string | number;
     title: string; // Title displayed in reward card
     description: string | null; // Description displayed in reward card
 
@@ -743,6 +744,8 @@ export function addReward(reward: WizardReward) {
         return errors;
     }
 
+    const id = murmur3(JSON.stringify(reward) + Date.now());
+
     wizardState.update((state) => ({
         ...state,
         rewards: [...state.rewards, reward],
@@ -762,7 +765,7 @@ export function deleteReward(index: number) {
 
 export function validateReward(reward: WizardReward): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = cyrb53(JSON.stringify(reward));
+    const hash = murmur3(JSON.stringify(reward));
 
     if (!reward.title.trim()) {
         errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
@@ -852,7 +855,7 @@ export function deleteCollaboration(index: number) {
 
 export function validateCollaboration(collab: WizardCollaboration): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = cyrb53(JSON.stringify(collab));
+    const hash = murmur3(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
         errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
@@ -946,7 +949,7 @@ export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum")
 
 export function validateBudgetItem(item: ProjectBudgetItem): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = cyrb53(JSON.stringify(item));
+    const hash = murmur3(JSON.stringify(item));
 
     if (!item.title.trim()) {
         errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
