@@ -67,7 +67,7 @@
     import CloseIcon from "../../../svgs/CloseIcon.svelte";
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
-    import { murmur3 } from "../../../utils/hash";
+    import murmur from "murmurhash-js";
 
     import type { MediaImage } from "../../../stores/wizard-state";
 
@@ -99,7 +99,7 @@
     let uploadProgress = $state<string | null>(null);
 
     // Generate unique ID for ARIA associations
-    const uploaderId = `uploader-${murmu3("media-uploader")}`;
+    const uploaderId = `uploader-${murmur.murmur3("media-uploader")}`;
 
     /**
      * Compresses an image file to reduce base64 size for localStorage.
