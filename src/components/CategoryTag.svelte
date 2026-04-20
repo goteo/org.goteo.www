@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../i18n/store";
-    import BookmarkIcon from "../svgs/BookmarkIcon.svelte";
+    import BookmarkIcon from "./icons/Bookmark.svelte";
     import Tag from "./library/Tag.svelte";
 
     interface Props {

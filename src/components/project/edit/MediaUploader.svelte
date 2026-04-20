@@ -62,9 +62,9 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import CloseIcon from "../../../components/icons/Close.svelte";
     import Button from "../../../components/library/Button.svelte";
     import { t } from "../../../i18n/store";
-    import CloseIcon from "../../../svgs/CloseIcon.svelte";
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
     import { cyrb53 } from "../../../utils/hash";

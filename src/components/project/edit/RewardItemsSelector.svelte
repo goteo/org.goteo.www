@@ -1,7 +1,6 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import MinusIcon from "../../../svgs/MinusIcon.svelte";
-    import PlusIcon from "../../../svgs/PlusIcon.svelte";
+    import MoreAndLess from "../../icons/MoreAndLess.svelte";
 
     let {
         value = $bindable(1),
@@ -35,7 +34,7 @@
                 disabled={unlimited || value <= min}
                 class="flex cursor-pointer items-center justify-center disabled:opacity-50"
             >
-                <MinusIcon />
+                <MoreAndLess sign="less" />
             </button>
 
             <span class="text-secondary w-fit text-center text-2xl font-bold">
@@ -48,7 +47,7 @@
                 disabled={unlimited}
                 class="flex cursor-pointer items-center justify-center disabled:opacity-50"
             >
-                <PlusIcon />
+                <MoreAndLess sign="more" />
             </button>
         </div>
 

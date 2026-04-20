@@ -1,7 +1,7 @@
 <script lang="ts">
+    import Bag from "../components/icons/Bag.svelte";
     import { t } from "../i18n/store";
     import { itemCount } from "../stores/cart";
-    import BagIcon from "../svgs/BagIcon.svelte";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -36,7 +36,7 @@
     class="group relative inline-flex cursor-pointer items-center"
     aria-label={$t("header.btnCart")}
 >
-    <BagIcon />
+    <Bag />
 
     {#if count > 1}
         <span
