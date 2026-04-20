@@ -39,7 +39,7 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import { murmur3 } from "../../utils/hash";
+    import murmur from "murmurhash-js";
 
     import type { Snippet } from "svelte";
 
@@ -74,7 +74,7 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-    const selectId = id || `select-${murmur3(labelText || name || "select")}`;
+    const selectId = id || `select-${murmur.murmur3(labelText || name || "select")}`;
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
 
