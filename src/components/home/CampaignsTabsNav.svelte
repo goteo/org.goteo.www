@@ -1,8 +1,8 @@
 <script lang="ts">
+    import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
-    import FlashIcon from "../../svgs/FlashIcon.svelte";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
+    import Flames from "../icons/Flames.svelte";
+    import Flash from "../icons/Flash.svelte";
     import Tabs from "../Tabs.svelte";
 
     interface Props {
@@ -14,15 +14,15 @@
 </script>
 
 {#snippet flashIconSnippet()}
-    <FlashIcon width="17" height="16" />
+    <Flash />
 {/snippet}
 
 {#snippet clockIconSnippet()}
-    <ClockIcon width="20" height="20" />
+    <Clock />
 {/snippet}
 
 {#snippet matchFundingIconSnippet()}
-    <MatchFundingIcon width="32" height="32" />
+    <Flames />
 {/snippet}
 
 <Tabs
