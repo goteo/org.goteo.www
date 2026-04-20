@@ -67,7 +67,6 @@
     import { t } from "../../../i18n/store";
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
-    import { cyrb53 } from "../../../utils/hash";
 
     import type { MediaImage } from "../../../stores/wizard-state";
 
@@ -99,7 +98,8 @@
     let uploadProgress = $state<string | null>(null);
 
     // Generate unique ID for ARIA associations
-    const uploaderId = `uploader-${cyrb53("media-uploader")}`;
+    const generatedId = $props.id();
+    const uploaderId = `uploader-${generatedId}`;
 
     /**
      * Compresses an image file to reduce base64 size for localStorage.

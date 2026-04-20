@@ -75,7 +75,8 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-    const selectId = id || `select-${cyrb53(labelText || name || "select")}`;
+    const generatedId = $props.id();
+    const selectId = id || `select-${generatedId}`;
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
 
@@ -136,7 +137,7 @@
     >
         {@render children()}
     </select>
-    <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+    <div class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
         <Chevron direction={isOpen ? "up" : "down"} width="20" height="20" />
     </div>
 
