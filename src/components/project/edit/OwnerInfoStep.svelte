@@ -12,7 +12,7 @@
     import Select from "../../library/Select.svelte";
     import TextArea from "../../library/TextArea.svelte";
     import TextInput from "../../library/TextInput.svelte";
-    import Toggle from "../../library/Toggle.svelte";
+    import Toggle from "../../library/ToggleSwitch.svelte";
 
     import type { Project } from "../../../openapi/client";
 
