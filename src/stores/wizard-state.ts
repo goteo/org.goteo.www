@@ -16,7 +16,7 @@
 import { z } from "astro/zod";
 import { writable, derived, get } from "svelte/store";
 
-import { murmur3 } from "../utils/hash";
+import murmur from "murmurhash-js";
 
 import type { MoneyWithConversion, Project, ProjectBudgetItem } from "../openapi/client";
 
@@ -744,7 +744,7 @@ export function addReward(reward: WizardReward) {
         return errors;
     }
 
-    const id = murmur3(JSON.stringify(reward) + Date.now());
+    const id = murmur.murmur3(JSON.stringify(reward) + Date.now());
 
     wizardState.update((state) => ({
         ...state,
@@ -765,7 +765,7 @@ export function deleteReward(index: number) {
 
 export function validateReward(reward: WizardReward): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = murmur3(JSON.stringify(reward));
+    const hash = murmur.murmur3(JSON.stringify(reward));
 
     if (!reward.title.trim()) {
         errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
@@ -855,7 +855,7 @@ export function deleteCollaboration(index: number) {
 
 export function validateCollaboration(collab: WizardCollaboration): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = murmur3(JSON.stringify(collab));
+    const hash = murmur.murmur3(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
         errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
@@ -949,7 +949,7 @@ export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum")
 
 export function validateBudgetItem(item: ProjectBudgetItem): Record<string, string> {
     const errors: Record<string, string> = {};
-    const hash = murmur3(JSON.stringify(item));
+    const hash = murmur.murmur3(JSON.stringify(item));
 
     if (!item.title.trim()) {
         errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
