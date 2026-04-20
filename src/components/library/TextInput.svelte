@@ -1,7 +1,7 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
     
-    import { murmur3 } from "../../utils/hash"; 
+    import murmur from "murmurhash-js"; 
 
     let {
         value = $bindable(""),
@@ -34,7 +34,7 @@
     const finalId = id ? id : getIdForInput();
 
     function getIdForInput(): string {
-        const hash = murmur3(type + name + placeholder + labelText + helperText);
+        const hash = murmur.murmur3(type + name + placeholder + labelText + helperText);
 
         return `input-${hash}`;
     }
