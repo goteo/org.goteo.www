@@ -1,5 +1,5 @@
 <script lang="ts">
-    import murmur3 from "murmurhash-js";
+    import murmur from "murmurhash-js";
     
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
@@ -90,7 +90,7 @@
     }
 
     function getIdForInput(): string {
-        const hash = murmur3.murmur3(name || "" + labelText || "" + helperText || "");
+        const hash = murmur.murmur3(name || "" + labelText || "" + helperText || "");
         return `date-input-${hash}`;
     }
 
