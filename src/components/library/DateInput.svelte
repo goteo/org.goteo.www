@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { murmur3 } from "../utils/hash";
+    import murmur3 from "murmurhash-js";
     
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
@@ -90,8 +90,8 @@
     }
 
     function getIdForInput(): string {
-        const murmurhash = murmur3(name + labelText + helperText);
-        return `date-input-${murmurhash}`;
+        const hash = murmur3.murmur3(name || "" + labelText || "" + helperText || "");
+        return `date-input-${hash}`;
     }
 
     // Convert min/max to string format for HTML input
