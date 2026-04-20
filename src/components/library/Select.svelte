@@ -40,6 +40,7 @@
     import { twMerge } from "tailwind-merge";
 
     import { cyrb53 } from "../../utils/hash";
+    import Chevron from "../icons/Chevron.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -78,10 +79,13 @@
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
 
+    let isOpen = $state(false);
+
     /**
      * Handle blur event
      */
     function handleBlur() {
+        isOpen = false;
         onBlur?.();
     }
 
@@ -91,6 +95,7 @@
     function handleChange(event: Event) {
         const target = event.target as HTMLSelectElement;
         value = target.value;
+        isOpen = false;
         onChange?.(target.value);
     }
 </script>
@@ -116,18 +121,24 @@
         {disabled}
         id={selectId}
         bind:value
+        onclick={() => (isOpen = !isOpen)}
         onchange={handleChange}
         onblur={handleBlur}
+        onkeydown={(e) => e.key === "Escape" && (isOpen = false)}
         class={twMerge(
-            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}
         aria-invalid={error ? "true" : "false"}
         aria-describedby={error ? errorId : helperText ? helperId : undefined}
+        style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none;"
     >
         {@render children()}
     </select>
+    <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+        <Chevron direction={isOpen ? "up" : "down"} width="20" height="20" />
+    </div>
 
     <!-- Helper Text -->
     {#if !error && helperText}
