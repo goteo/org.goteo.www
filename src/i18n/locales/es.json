@@ -1282,5 +1282,8 @@
     "error": {
       "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
     }
+  },
+  "common": {
+    "textPlaceholder": "Escriba aquí"
   }
 }
