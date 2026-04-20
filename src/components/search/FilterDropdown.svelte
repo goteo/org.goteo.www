@@ -46,20 +46,8 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
     });
 
     // Generate unique ID for accessibility
-    // Use custom ID if provided, otherwise hash the options set for collision-free ID
-    const dropdownId = customId || hashOptions(options);
-
-    function hashOptions(opts: DropdownOption[]): string {
-        // Create a stable hash from the options array
-        const optionsString = opts.map((opt) => `${opt.value}:${opt.label}`).join("|");
-        let hash = 0;
-        for (let i = 0; i < optionsString.length; i++) {
-            const char = optionsString.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return `dropdown-${Math.abs(hash).toString(36)}`;
-    }
+    const generatedId = $props.id();
+    const dropdownId = customId || generatedId;
 
     function toggleDropdown() {
         isOpen = !isOpen;
