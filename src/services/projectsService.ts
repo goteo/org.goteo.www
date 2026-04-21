@@ -28,6 +28,11 @@ export class ProjectsService {
         try {
             const response = await apiProjectsGetCollection({
                 query: {
+                    ...(filters.territory && {
+                        country: filters.territory.country,
+                        subLvl1: filters.territory.subLvl1,
+                        subLvl2: filters.territory.subLvl2,
+                    }),
                     // Text search
                     ...(filters.query?.trim() && { title: filters.query.trim() }),
                     // Categories (array filter for OR logic) - Fixed: use "categories[]" not "category[]"

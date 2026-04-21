@@ -9,23 +9,27 @@ Implements main search bar with floating label matching Figma design exactly
 
     interface Props extends HTMLInputAttributes {
         value?: string;
+        label?: string;
         onSearch?: (query: string) => void;
         onEnter?: () => void;
         onClear?: () => void;
+        onBlur?: () => void;
     }
 
     let {
         value = "",
+        label,
         onSearch,
         onEnter,
         onClear,
+        onBlur,
         placeholder = "",
         class: className = "",
         "data-testid": dataTestId,
         ...props
     }: Props = $props();
 
-    let searchQuery = $state(value);
+    let searchQuery = $state("");
 
     // Keep local state in sync with prop changes (important for SSR hydration)
     $effect(() => {
@@ -54,7 +58,7 @@ Implements main search bar with floating label matching Figma design exactly
 
 <!-- Search input with floating label -->
 <div
-    class="relative flex h-14 w-full items-center justify-between rounded-[24px] border border-[#462949] bg-[#fbfbfb] p-4 transition-colors focus-within:border-[#855a96] {className}"
+    class="border-secondary relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4 transition-colors focus-within:border-[#855a96] {className}"
 >
     <!-- Input field -->
     <input
@@ -62,7 +66,8 @@ Implements main search bar with floating label matching Figma design exactly
         bind:value={searchQuery}
         oninput={handleInput}
         onkeydown={handleKeydown}
-        class="flex-1 border-none bg-transparent text-base text-[#575757] outline-none placeholder:text-[#575757] focus:ring-0 focus:outline-none focus-visible:outline-none"
+        onblur={onBlur}
+        class="text-content placeholder:text-content flex-1 border-none bg-transparent text-base outline-none focus:ring-0 focus:outline-none focus-visible:outline-none ..."
         placeholder={placeholder || $t("search.placeholder")}
         aria-label={$t("search.label")}
         data-testid={dataTestId}
@@ -73,7 +78,7 @@ Implements main search bar with floating label matching Figma design exactly
     {#if searchQuery}
         <button
             onclick={clearSearch}
-            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-[#e6e6e6]"
+            class="text-secondary hover:bg-neutral-light ml-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-colors"
             aria-label={$t("search.clearSearch")}
         >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -88,11 +93,13 @@ Implements main search bar with floating label matching Figma design exactly
     {/if}
 
     <!-- Floating label -->
-    <div class="pointer-events-none absolute -top-[4.5px] left-3 bg-[#fbfbfb] px-1">
-        <div class="font-['Karla'] text-xs leading-4 font-medium text-[#3d3d3d]">
-            {$t("search.label")}
+    {#if label !== ""}
+        <div class="pointer-events-none absolute -top-[4.5px] left-3 bg-white px-1">
+            <div class="font-['Karla'] text-xs leading-4 font-medium text-black">
+                {label || $t("search.label")}
+            </div>
         </div>
-    </div>
+    {/if}
 </div>
 
 <style>
