@@ -5,7 +5,7 @@
     import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import { navigateToStep } from "../../../stores/wizard-state";
+    import { isReadyToPublish } from "../../../stores/wizard-state";
     import Web from "../../icons/social/Web.svelte";
     import Button from "../../library/Button.svelte";
     import RadioButton from "../../library/RadioButton.svelte";
@@ -16,7 +16,10 @@
 
     import type { Project } from "../../../openapi/client";
 
-    let { project: _project }: { project: Project } = $props();
+    let {
+        project: _project,
+        onPublish,
+    }: { project: Project; onPublish?: () => void } = $props();
 
     type ContactEntry = { type: "email" | "phone"; value: string; preferred: boolean };
 
@@ -45,9 +48,6 @@
         privateContacts = privateContacts.map((c, idx) => ({ ...c, preferred: idx === i }));
     }
 
-    function handleContinue() {
-        navigateToStep(6);
-    }
 </script>
 
 <div class="w-1/2">
@@ -262,7 +262,13 @@
         </div>
 
         <div class="mt-10 flex">
-            <Button kind="secondary" size="md" onclick={handleContinue} class="min-w-50">
+            <Button
+                kind="primary"
+                size="md"
+                class="min-w-50 disabled:pointer-events-none disabled:opacity-24"
+                onclick={onPublish}
+                disabled={$isReadyToPublish ? false : true}
+            >
                 {$t("pages.project.edit.aboutYou.continue")}
             </Button>
         </div>
