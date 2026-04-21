@@ -1,11 +1,6 @@
 import { refreshToken } from "./grant";
 import { decodeJWT } from "./jwt";
-import {
-    apiAccountingsIdGet,
-    apiUsersIdorganizationGet,
-    apiUsersIdOrHandleGet,
-    apiUsersIdpersonGet,
-} from "../openapi/client";
+import { apiAccountingsIdGet, apiUsersIdOrHandleGet } from "../openapi/client";
 import { extractId } from "../utils/extractId";
 
 import type { OAuthToken, Session } from "./types";
@@ -100,36 +95,19 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
         throw new Error("The User of the token does not exist");
     }
 
-    const {
-        [0]: { data: accounting, error: accountingError },
-        [1]: { data: person },
-        [2]: { data: organization },
-    } = await Promise.all([
-        apiAccountingsIdGet({
-            path: { id: extractId(user.accounting)! },
-            headers: token.asHttpHeaders,
-        }),
-        apiUsersIdpersonGet({
-            path: { id: String(user.id) },
-            headers: token.asHttpHeaders,
-        }),
-        apiUsersIdorganizationGet({
-            path: { id: String(user.id) },
-            headers: token.asHttpHeaders,
-        }),
-    ]);
+    const { data: accounting } = await apiAccountingsIdGet({
+        path: { id: extractId(user.accounting)! },
+        headers: token.asHttpHeaders,
+    });
 
-    if (!accounting || accountingError) {
-        console.error(accountingError);
+    if (!accounting) {
         throw new Error("Could not retrieve Accounting for the User of the token");
     }
 
     return {
         token,
-        user: user,
+        user,
         expires_at: expiresAt,
-        accounting: accounting,
-        person: person!,
-        organization,
+        accounting,
     };
 }
