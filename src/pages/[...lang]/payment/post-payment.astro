@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.svelte";
+import Head from "../../../layouts/Head.astro";
 import App from "../../../components/App.svelte";
 import Carousel from "../../../components/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
@@ -115,6 +116,7 @@ try {
 }
 ---
 
+<Head>
 <Layout
     client:load
     title={t("payment.postPayment.title")}
@@ -219,3 +221,4 @@ try {
         </div>
     </section>
 </Layout>
+</Head>

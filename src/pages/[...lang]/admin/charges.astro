@@ -1,10 +1,12 @@
 ---
 import Layout from "../../../layouts/Layout.svelte";
+import Head from "../../../layouts/Head.astro";
 import App from "../../../components/App.svelte";
 const { t, lang, session } = Astro.locals;
 import Contributions from "../../../components/Admin/Contributions.svelte";
 ---
 
+<Head>
 <Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} />
     <main class="wrapper">
@@ -20,3 +22,4 @@ import Contributions from "../../../components/Admin/Contributions.svelte";
         </div>
     </main>
 </Layout>
+</Head>

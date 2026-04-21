@@ -1,6 +1,7 @@
 ---
 import SingleProject from "../../../../components/project/SingleProject.svelte";
 import Layout from "../../../../layouts/Layout.svelte";
+import Head from "../../../../layouts/Head.astro";
 import App from "../../../../components/App.svelte";
 
 import {
@@ -59,6 +60,7 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
 });
 ---
 
+<Head>
 <Layout client:load title={project.title} description={project.description}>
     <App client:load locale={lang} session={session} />
     <SingleProject
@@ -70,3 +72,4 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
         client:load
     />
 </Layout>
+</Head>

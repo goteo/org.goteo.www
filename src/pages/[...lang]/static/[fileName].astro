@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.svelte";
+import Head from "../../../layouts/Head.astro";
 import App from "../../../components/App.svelte";
 import ReturnHeader from "../../../components/library/ReturnHeader.svelte";
 import BodyText from "../../../components/library/BodyText.svelte";
@@ -20,6 +21,7 @@ const file = await markdownFiles[fileKey]();
 const Content = file.default;
 ---
 
+<Head>
 <Layout
     client:load
     title={t("metadata.title")}
@@ -33,3 +35,4 @@ const Content = file.default;
         <Content />
     </BodyText>
 </Layout>
+</Head>

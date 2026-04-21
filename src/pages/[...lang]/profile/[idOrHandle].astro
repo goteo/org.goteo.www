@@ -1,5 +1,6 @@
 ---
 import Layout from "../../../layouts/Layout.svelte";
+import Head from "../../../layouts/Head.astro";
 import App from "../../../components/App.svelte";
 import ProfileHero from "../../../components/profile/ProfileHero.astro";
 import ProfileInfo from "../../../components/profile/ProfileInfo.svelte";
@@ -161,6 +162,7 @@ const coverImage = undefined; // API doesn't provide cover image, use default
 const avatarImage = user?.avatar || undefined; // Use user avatar or default placeholder
 ---
 
+<Head>
 <Layout
     client:load
     title={`${displayName} - ${t("metadata.title")}`}
@@ -231,3 +233,4 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
         )
     }
 </Layout>
+</Head>
