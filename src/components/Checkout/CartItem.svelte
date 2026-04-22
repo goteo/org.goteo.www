@@ -1,7 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import MinusIcon from "../../svgs/MinusIcon.svelte";
-    import PlusIcon from "../../svgs/PlusIcon.svelte";
+    import MoreAndLess from "../icons/MoreAndLess.svelte";
     import { formatCurrency } from "../../utils/currencies";
 
     import type { CartItem } from "../../stores/cart";
@@ -61,7 +60,7 @@
                         on:click={handleDecrement}
                         class="cursor-pointer text-xl text-purple-800"
                     >
-                        <MinusIcon />
+                        <MoreAndLess sign="less" />
                     </button>
                     <div class="relative flex w-4 items-center justify-center">
                         <span class="text-secondary absolute text-2xl font-bold"
@@ -73,7 +72,7 @@
                         on:click={() => onIncrement(item)}
                         class="cursor-pointer text-xl text-purple-800"
                     >
-                        <PlusIcon />
+                        <MoreAndLess sign="more" />
                     </button>
                 </div>
             </div>
