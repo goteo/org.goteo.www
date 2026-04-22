@@ -1,9 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import Message from "./Message.svelte";
+import Message404 from "../components/404/Message404.svelte";
+import Layout from "../layouts/Layout.astro";
+
 const { t } = Astro.locals;
 ---
 
 <Layout title={t("system.error.404.metaTitle")} description={t("system.error.404.metaDescription")}>
-    <Message />
+    <Message404 />
 </Layout>

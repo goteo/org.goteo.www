@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Ilustration404 from "./ilustration-404.svelte";
+    import Illustration404 from "./Illustration404.svelte";
     import { t } from "../../i18n/store";
 </script>
 
@@ -12,7 +12,7 @@
         404
     </span>
     <div class="relative z-10 w-full max-w-full px-4 sm:bottom-20 sm:max-w-202.25 sm:px-0">
-        <Ilustration404 />
+        <Illustration404 />
     </div>
     <div
         class="relative z-10 flex w-full max-w-full flex-col items-center gap-4 px-4 pb-6 text-center sm:absolute sm:bottom-0 sm:max-w-192.5 sm:gap-6 sm:pb-0"
