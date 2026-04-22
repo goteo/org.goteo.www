@@ -18,9 +18,9 @@
         class="relative z-10 flex w-full max-w-full flex-col items-center gap-4 px-4 pb-6 text-center sm:absolute sm:bottom-0 sm:max-w-192.5 sm:gap-6 sm:pb-0"
     >
         <h1 id="error-404-heading" class="text-3xl leading-tight font-bold text-black sm:text-5xl">
-            {$t("system.error.404.title")}
+            {$t("pages.404.title")}
         </h1>
-        <p class="text-content text-sm sm:text-base">{$t("system.error.404.subtitle")}</p>
+        <p class="text-content text-sm sm:text-base">{$t("pages.404.subtitle")}</p>
         <a
             href="/"
             class="bg-primary text-secondary rounded-3xl px-8 py-4 font-bold transition hover:cursor-pointer"
