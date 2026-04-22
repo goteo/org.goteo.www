@@ -55,45 +55,10 @@ export function getLanguage(context: APIContext): string {
     return defaultLang;
 }
 
-export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
-    const pathname = context.url.pathname;
-    if (pathname === "/favicon.ico") return null;
-
-    const authCookie = context.cookies.get("auth")?.value;
-    const pathParts = pathname.replace(/^\/+/, "").split("/");
-
-    const langFromPath = parsePathLang(pathname);
-    const isLangInPath = langFromPath !== null;
-    const currentLang = langFromPath ?? lang;
-    const pathAfterLang = isLangInPath ? pathParts.slice(1) : pathParts;
-    const nextSegment = pathAfterLang[0] ?? "";
-
-    const protectedRoutes = ["me", "admin"];
-    const isProtected = protectedRoutes.includes(nextSegment);
-
-    if (!authCookie && isProtected) {
-        return isLangInPath ? `/${currentLang}/login` : `/login`;
-    }
-
-    if (nextSegment === "admin") {
-        try {
-            const auth = JSON.parse(authCookie || "{}");
-
-            if (!auth.user.roles.includes("ROLE_ADMIN")) {
-                return isLangInPath ? `/${currentLang}/login` : `/login`;
-            }
-        } catch {
-            return isLangInPath ? `/${currentLang}/login` : `/login`;
-        }
-    }
-
-    return null;
-}
-
 /**
- * Checks if the path is exempt from language detection (e.g., _actions, api).
+ * Checks if the request is to an stateless path (e.g, api).
  */
-export function isLanguageExemptPath(context: APIContext): boolean {
+export function isStatelessRequest(context: APIContext): boolean {
     const firstSegment = context.url.pathname.split("/")[1];
     const exemptRoutes = ["api"];
 
