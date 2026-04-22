@@ -7,19 +7,19 @@ import Contributions from "../../../components/Admin/Contributions.svelte";
 ---
 
 <Head>
-<Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
-    <App client:load locale={lang} session={session} />
-    <main class="wrapper">
-        <div class="flex w-full flex-col gap-10 py-10">
-            <div class="flex flex-col gap-4">
-                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
-                    {t("contributions.title")}
-                </h2>
-                <p class="text-content">{t("contributions.description")}</p>
-            </div>
+    <Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
+        <App client:load locale={lang} session={session} />
+        <main class="wrapper">
+            <div class="flex w-full flex-col gap-10 py-10">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                        {t("contributions.title")}
+                    </h2>
+                    <p class="text-content">{t("contributions.description")}</p>
+                </div>
 
-            <Contributions client:load />
-        </div>
-    </main>
-</Layout>
+                <Contributions client:load />
+            </div>
+        </main>
+    </Layout>
 </Head>

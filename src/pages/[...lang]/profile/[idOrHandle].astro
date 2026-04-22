@@ -163,74 +163,74 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
 ---
 
 <Head>
-<Layout
-    client:load
-    title={`${displayName} - ${t("metadata.title")}`}
-    description={`${t("profile.tabs.about")} ${displayName}`}
-    class="mb-20"
->
-    <App client:load locale={lang} session={session} />
-    {
-        errorMessage ? (
-            <div class="flex min-h-screen items-center justify-center">
-                <p class="text-tertiary text-xl">{errorMessage}</p>
-            </div>
-        ) : (
-            <div class="flex w-full flex-col items-center gap-10">
-                {/* Hero Section with Cover and Avatar */}
-                <ProfileHero coverImage={coverImage} avatarImage={avatarImage} />
-
-                {/* User Info Section */}
-                <ProfileInfo
-                    displayName={displayName}
-                    location={location}
-                    socialLinks={socialLinks}
-                    client:load
-                />
-
-                {/* Tabs Navigation */}
-                <div class="mt-8 w-full">
-                    <Tabs tabs={tabs} client:load />
+    <Layout
+        client:load
+        title={`${displayName} - ${t("metadata.title")}`}
+        description={`${t("profile.tabs.about")} ${displayName}`}
+        class="mb-20"
+    >
+        <App client:load locale={lang} session={session} />
+        {
+            errorMessage ? (
+                <div class="flex min-h-screen items-center justify-center">
+                    <p class="text-tertiary text-xl">{errorMessage}</p>
                 </div>
+            ) : (
+                <div class="flex w-full flex-col items-center gap-10">
+                    {/* Hero Section with Cover and Avatar */}
+                    <ProfileHero coverImage={coverImage} avatarImage={avatarImage} />
 
-                {/* Tab Content - About */}
-                <div data-tab-content="about">
-                    {bio && (
-                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
-                            <div
-                                class="prose prose-base text-tertiary leading-6"
-                                set:html={renderMarkdown(bio)}
+                    {/* User Info Section */}
+                    <ProfileInfo
+                        displayName={displayName}
+                        location={location}
+                        socialLinks={socialLinks}
+                        client:load
+                    />
+
+                    {/* Tabs Navigation */}
+                    <div class="mt-8 w-full">
+                        <Tabs tabs={tabs} client:load />
+                    </div>
+
+                    {/* Tab Content - About */}
+                    <div data-tab-content="about">
+                        {bio && (
+                            <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
+                                <div
+                                    class="prose prose-base text-tertiary leading-6"
+                                    set:html={renderMarkdown(bio)}
+                                />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Tab Content - Projects */}
+                    <div data-tab-content="projects" style="display: none;">
+                        {campaigns.length > 0 ? (
+                            <div class="mx-auto mt-10 w-full max-w-[1200px] px-4">
+                                <ProfileProjectsList campaigns={campaigns} />
+                            </div>
+                        ) : (
+                            <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
+                                <p class="text-tertiary text-base">{t("profile.noProjects")}</p>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Tab Content - Donor Type */}
+                    <div data-tab-content="donorType" class="w-full" style="display: none;">
+                        <div class="mx-auto w-full max-w-[1200px] px-4">
+                            <ProfileDonorType
+                                projectsDonated={projectsDonatedCount}
+                                moneyDonatedAmount={totalDonated.amount}
+                                moneyDonatedCurrency={totalDonated.currency}
+                                client:load
                             />
                         </div>
-                    )}
-                </div>
-
-                {/* Tab Content - Projects */}
-                <div data-tab-content="projects" style="display: none;">
-                    {campaigns.length > 0 ? (
-                        <div class="mx-auto mt-10 w-full max-w-[1200px] px-4">
-                            <ProfileProjectsList campaigns={campaigns} />
-                        </div>
-                    ) : (
-                        <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
-                            <p class="text-tertiary text-base">{t("profile.noProjects")}</p>
-                        </div>
-                    )}
-                </div>
-
-                {/* Tab Content - Donor Type */}
-                <div data-tab-content="donorType" class="w-full" style="display: none;">
-                    <div class="mx-auto w-full max-w-[1200px] px-4">
-                        <ProfileDonorType
-                            projectsDonated={projectsDonatedCount}
-                            moneyDonatedAmount={totalDonated.amount}
-                            moneyDonatedCurrency={totalDonated.currency}
-                            client:load
-                        />
                     </div>
                 </div>
-            </div>
-        )
-    }
-</Layout>
+            )
+        }
+    </Layout>
 </Head>

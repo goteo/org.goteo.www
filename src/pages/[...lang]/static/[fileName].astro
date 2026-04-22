@@ -22,17 +22,17 @@ const Content = file.default;
 ---
 
 <Head>
-<Layout
-    client:load
-    title={t("metadata.title")}
-    description={t("metadata.description")}
-    class="mb-20 gap-[72px]"
->
-    <App client:load locale={lang} session={session} />
-    <ReturnHeader client:load />
+    <Layout
+        client:load
+        title={t("metadata.title")}
+        description={t("metadata.description")}
+        class="mb-20 gap-[72px]"
+    >
+        <App client:load locale={lang} session={session} />
+        <ReturnHeader client:load />
 
-    <BodyText client:load>
-        <Content />
-    </BodyText>
-</Layout>
+        <BodyText client:load>
+            <Content />
+        </BodyText>
+    </Layout>
 </Head>

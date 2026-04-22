@@ -29,33 +29,33 @@ const hasInitialSearch = !!(
 ---
 
 <Head>
-<Layout client:load title={t("search.title")} description={t("search.description")}>
-    <App client:load locale={lang} session={session} />
-    <section class="wrapper">
-        <!-- Page Header -->
-        <div class="mb-12 text-center">
-            <h1 class="text-secondary mb-4 text-4xl font-bold">
-                {t("search.heading")}
-            </h1>
-            <p class="text-secondary text-lg">
-                {t("search.subtitle")}
-            </p>
-        </div>
+    <Layout client:load title={t("search.title")} description={t("search.description")}>
+        <App client:load locale={lang} session={session} />
+        <section class="wrapper">
+            <!-- Page Header -->
+            <div class="mb-12 text-center">
+                <h1 class="text-secondary mb-4 text-4xl font-bold">
+                    {t("search.heading")}
+                </h1>
+                <p class="text-secondary text-lg">
+                    {t("search.subtitle")}
+                </p>
+            </div>
 
-        <!-- Search Filters -->
-        <div class="mb-8">
-            <SearchFilters locale={lang} initialFilters={initialFilters} client:load />
-        </div>
+            <!-- Search Filters -->
+            <div class="mb-8">
+                <SearchFilters locale={lang} initialFilters={initialFilters} client:load />
+            </div>
 
-        <!-- Search Results -->
-        <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
-            <SearchResultsClient
-                initialProjects={initialProjects}
-                initialFilters={initialFilters}
-                hasInitialSearch={hasInitialSearch}
-                client:load
-            />
-        </div>
-    </section>
-</Layout>
+            <!-- Search Results -->
+            <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
+                <SearchResultsClient
+                    initialProjects={initialProjects}
+                    initialFilters={initialFilters}
+                    hasInitialSearch={hasInitialSearch}
+                    client:load
+                />
+            </div>
+        </section>
+    </Layout>
 </Head>

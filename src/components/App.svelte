@@ -1,16 +1,20 @@
 <script lang="ts">
     import { session } from "../auth/store";
     import { locale } from "../i18n/store";
+    import Footer from "../layouts/Footer.svelte";
+    import Header from "../layouts/Header.svelte";
 
     import type { Session } from "../auth/types";
     import type { Locale } from "../i18n/locales";
+    import type { Snippet } from "svelte";
 
     interface AppState {
         locale: Locale;
         session?: Session;
+        children: Snippet;
     }
 
-    let { locale: localeProp, session: sessionProp }: AppState = $props();
+    let { locale: localeProp, session: sessionProp, children }: AppState = $props();
 
     $effect(() => {
         locale.set(localeProp);
@@ -20,3 +24,9 @@
         session.set(sessionProp);
     });
 </script>
+
+<Header />
+<main class="flex w-full max-w-screen flex-1 flex-col">
+    {@render children()}
+</main>
+<Footer />

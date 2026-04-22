@@ -61,15 +61,15 @@ const { data: balancePoints } = await apiAccountingBalancePointsGetCollection({
 ---
 
 <Head>
-<Layout client:load title={project.title} description={project.description}>
-    <App client:load locale={lang} session={session} />
-    <SingleProject
-        {project}
-        accounting={accounting!}
-        owner={owner!}
-        {totalSupports}
-        balancePoints={balancePoints!}
-        client:load
-    />
-</Layout>
+    <Layout client:load title={project.title} description={project.description}>
+        <App client:load locale={lang} session={session} />
+        <SingleProject
+            {project}
+            accounting={accounting!}
+            owner={owner!}
+            {totalSupports}
+            balancePoints={balancePoints!}
+            client:load
+        />
+    </Layout>
 </Head>

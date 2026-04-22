@@ -1,18 +1,11 @@
 <script lang="ts">
-    const { title, description, url = "" } = $props();
+    const { title, description, keywords, url = "" } = $props();
 </script>
 
 <svelte:head>
     <meta name="title" content={title} />
-    <meta
-        name="description"
-        content={description ||
-            "Goteo es la red abierta de crowdfunding, colaboraciones y formación, líder en proyectos de innovación social. Con 2 rondas y ventajas fiscales para donantes!"}
-    />
-    <meta
-        name="keywords"
-        content="goteo, crowdfunding, innovación social, colaboración, financiación colectiva, proyectos, innovación, social, red abierta, donaciones, donar"
-    />
+    <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
