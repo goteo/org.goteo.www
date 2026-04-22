@@ -14,7 +14,8 @@
     "preview": "Vista previa",
     "select": "Elige una opción",
     "remove": "Eliminar",
-    "textPlaceholder": "Escribe aquí"
+    "textPlaceholder": "Escribe aquí",
+    "goHome": "Volver a inicio"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -208,6 +209,12 @@
       "file": {
         "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
         "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      },
+      "404": {
+        "title": "No queda ni gota de la página que estás buscando",
+        "subtitle": "Por favor vuelve al inicio",
+        "metaTitle": "Página no encontrada",
+        "metaDescription": "La página que buscas no existe o ha sido movida."
       }
     },
     "constraint": {
