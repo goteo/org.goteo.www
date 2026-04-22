@@ -1,10 +1,17 @@
 ---
-import Message404 from "../components/404/Message404.svelte";
+import BrokenRobot from "../components/ErrorPage/BrokenRobot.svelte";
+import Error from "../components/ErrorPage/Error.svelte";
 import Layout from "../layouts/Layout.astro";
 
 const { t } = Astro.locals;
 ---
 
 <Layout title={t("pages.404.meta.title")} description={t("pages.404.meta.description")}>
-    <Message404 />
+    <Error
+        title={t("pages.404.title")}
+        subtitle={t("pages.404.subtitle")}
+        ctaText={t("common.goHome")}
+    >
+        <BrokenRobot />
+    </Error>
 </Layout>

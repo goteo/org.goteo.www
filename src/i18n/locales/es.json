@@ -14,6 +14,7 @@
     "preview": "Vista previa",
     "select": "Elige una opción",
     "remove": "Eliminar",
+    "login": "Iniciar Sesión",
     "textPlaceholder": "Escribe aquí",
     "goHome": "Volver a inicio"
   },
@@ -48,6 +49,14 @@
   },
   "pages": {
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "401": {
+      "title": "No podemos dejarte pasar si no das la cara",
+      "subtitle": "Por favor inicia sesión",
+      "meta": {
+        "title": "Sin autorización",
+        "description": "La página que intentas visitar requiere que estés identificado."
+      }
+    },
     "404": {
       "title": "No queda ni gota de la página que estás buscando",
       "subtitle": "Por favor vuelve al inicio",
@@ -652,7 +661,6 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión",
     "btnCart": "Ir al checkout",
     "search": "Buscar",
     "createProject": "Crea tu proyecto",
