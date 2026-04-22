@@ -1,0 +1,9 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Message from "./Message.svelte";
+const { t } = Astro.locals;
+---
+
+<Layout title={t("system.error.404.metaTitle")} description={t("system.error.404.metaDescription")}>
+    <Message />
+</Layout>
