@@ -1,5 +1,5 @@
 import { db } from "./db";
-import type { Draft } from "../../stores/projectDraft";
+import type { Draft } from "../../stores/drafts/projectDraft";
 import Dexie from "dexie";
 
 export const draftRepo = {

@@ -1,9 +1,10 @@
 import { writable, readable, get, derived } from "svelte/store";
 
-import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
+import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
 import { liveQuery } from "dexie";
-import { db } from "../utils/drafts/db";
-import { draftRepo } from "../utils/drafts/projectDraft.repository";
+import { db } from "../../utils/drafts/db";
+import { draftRepo } from "../../utils/drafts/repository";
+import { validateDraft, validationErrors } from "./draftValidation";
 
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
@@ -64,7 +65,6 @@ export const currentDraft = writable<Draft | null>(null);
 export const wizard = derived(currentDraft, ($d) => $d?.wizardForm);
 export const project = derived(currentDraft, ($d) => $d?.createProject);
 
-export const validationErrors = writable<Record<string, string>>({});
 export const touchedFields = writable<Set<string>>(new Set());
 
 export function createDraftId() {
@@ -217,20 +217,4 @@ export async function deleteDraft(draftId: string, userId: string) {
     if (current?.draftId === draftId) {
         currentDraft.set(null);
     }
-}
-
-function validateDraft(draft: Draft): Record<string, string> {
-    const errors: Record<string, string> = {};
-
-    const campaign = draft.wizardForm.campaignInfo;
-
-    if (!campaign.objectives || campaign.objectives.length < 50) {
-        errors.objectives = "min_length";
-    }
-
-    if (!campaign.images.length && !campaign.video) {
-        errors.media = "required";
-    }
-
-    return errors;
 }
