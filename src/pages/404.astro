@@ -1,17 +1,19 @@
 ---
+import App from "../components/App.svelte";
 import BrokenRobot from "../components/ErrorPage/BrokenRobot.svelte";
-import Error from "../components/ErrorPage/Error.svelte";
+import ErrorPage from "../components/ErrorPage/ErrorPage.svelte";
 import Layout from "../layouts/Layout.astro";
 
-const { t } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 ---
 
 <Layout title={t("pages.404.meta.title")} description={t("pages.404.meta.description")}>
-    <Error
+    <App locale={lang} session={session} client:load />
+    <ErrorPage
         title={t("pages.404.title")}
         subtitle={t("pages.404.subtitle")}
         ctaText={t("common.goHome")}
     >
         <BrokenRobot />
-    </Error>
+    </ErrorPage>
 </Layout>
