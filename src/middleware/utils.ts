@@ -1,4 +1,4 @@
-import { languagesList } from "../i18n/locales/index";
+import { isSupportedLocale } from "../i18n/locales/index";
 import { getDefaultLanguage } from "../utils/consts";
 
 import type { APIContext } from "astro";
@@ -37,9 +37,8 @@ export function getLanguage(context: APIContext): string {
     const userPreferredLangs = getUserLangPreferences(context);
     if (!userPreferredLangs) return defaultLang;
 
-    const validLangs = Object.keys(languagesList);
     for (const lang of userPreferredLangs) {
-        if (validLangs.includes(lang)) {
+        if (isSupportedLocale(lang)) {
             context.cookies.set("preferred-lang", lang, {
                 path: "/",
                 httpOnly: false,
@@ -119,7 +118,7 @@ export function parseAcceptLanguageHeader(header: string): { code: string; q: nu
 export function parsePathLang(path: string): string | null {
     const firstSegment = path.split("/")[1];
 
-    if (Object.keys(languagesList).includes(firstSegment)) {
+    if (isSupportedLocale(firstSegment)) {
         return firstSegment;
     }
 
