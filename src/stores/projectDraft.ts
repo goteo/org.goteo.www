@@ -1,6 +1,9 @@
-import { writable } from "svelte/store";
+import { writable, readable, get, derived } from "svelte/store";
 
 import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
+import { liveQuery } from "dexie";
+import { db } from "../utils/drafts/db";
+import { draftRepo } from "../utils/drafts/projectDraft.repository";
 
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
@@ -16,10 +19,6 @@ export interface WizardCampaignInfo {
     legacy: string;
     targetAudience: string;
     team: string;
-
-    // Validation tracking
-    touched: Set<string>;
-    errors: Record<string, string>;
 }
 
 export type Wizard = {
@@ -48,16 +47,190 @@ export type Wizard = {
     // aboutYou: WizardAboutYou;
 }
 
-export interface Draft extends Project {
+export interface Draft {
     draftId: string;
+    userId: string;
+
     createProject: Project;
     wizardForm: Wizard;
+
+    updatedAt: number;
 }
 
-export const drafts = writable<Project[]>();
+export const drafts = writable<Draft[]>([]);
 
-const STORAGE_PREFIX = "project";
+export const currentDraft = writable<Draft | null>(null);
 
-export function buildStorageKey(hash: string) {
-    return `${STORAGE_PREFIX}:${hash}`;
+export const wizard = derived(currentDraft, ($d) => $d?.wizardForm);
+export const project = derived(currentDraft, ($d) => $d?.createProject);
+
+export const validationErrors = writable<Record<string, string>>({});
+export const touchedFields = writable<Set<string>>(new Set());
+
+export function createDraftId() {
+    return crypto.randomUUID();
+}
+
+export function createDraftsStore(userId: string) {
+    return readable<Draft[]>([], (set) => {
+        const subscription = liveQuery(() =>
+            db.drafts
+                .where("userId")
+                .equals(userId)
+                .reverse()
+                .sortBy("updatedAt")
+        ).subscribe({
+            next: set,
+            error: console.error,
+        });
+
+        return () => subscription.unsubscribe();
+    });
+}
+
+export async function createDraft(project?: Project) {
+    const draftId = createDraftId();
+    const userId = "a";
+
+    const draft: Draft = {
+        draftId,
+        userId,
+        createProject: project ?? ({} as Partial<Project> as Project),
+        wizardForm: {
+            currentStep: 1,
+            configuration: {
+                projectDeadline: "minimum",
+            },
+            campaignInfo: {
+                images: [],
+                video: "",
+                objectives: "",
+                legacy: "",
+                targetAudience: "",
+                team: "",
+            },
+            rewards: [],
+            collaborations: [],
+            budgetItems: {
+                minimum: [],
+                optimum: [],
+            },
+        },
+        updatedAt: Date.now(),
+    };
+
+    await draftRepo.create(draft);
+    currentDraft.set(draft);
+
+    return draftId;
+}
+
+export async function loadDraft(userId: string, draftId: string) {
+    const draft = await draftRepo.get(draftId, userId);
+
+    if (!draft) return false;
+
+    currentDraft.set(draft);
+    return true;
+}
+
+let saveTimer: ReturnType<typeof setTimeout> | null = null;
+
+/**
+ * Draft Autosave
+ *
+ * Autosaves the current draft into the draft indexedDB repository
+ */
+function persistDraft() {
+    if (saveTimer) clearTimeout(saveTimer);
+
+    saveTimer = setTimeout(async () => {
+        const draft = get(currentDraft);
+        if (!draft) return;
+
+        const errors = validateDraft(draft);
+
+        validationErrors.set(errors);
+
+        if (Object.keys(errors).length > 0) {
+            return;
+        }
+
+        await draftRepo.update(draft.draftId, draft.userId, draft);
+    }, 1000);
+}
+
+/**
+ * Update Wizard Form data
+ *
+ * Merges new wizard updates with already existing wizard data.
+ *
+ * @param data - Partial object with wizard data that has been modified
+ */
+export function updateWizard(data: Partial<Wizard>) {
+    currentDraft.update((draft) => {
+        if (!draft) return draft;
+
+        const updated = {
+            ...draft,
+            wizardForm: {
+                ...draft.wizardForm,
+                ...data,
+            },
+        };
+
+        return updated;
+    });
+
+    persistDraft();
+}
+
+/**
+ * Update create Project form data
+ *
+ * Merges new project updates with already existing project data.
+ *
+ * @param data - Partial object with Project API Type data that has been modified
+ */
+export function updateProject(data: Partial<Project>) {
+    currentDraft.update((draft) => {
+        if (!draft) return draft;
+
+        const updated = {
+            ...draft,
+            createProject: {
+                ...draft.createProject,
+                ...data,
+            },
+        };
+
+        return updated;
+    });
+
+    persistDraft();
+}
+
+export async function deleteDraft(draftId: string, userId: string) {
+    await draftRepo.delete(draftId, userId);
+
+    const current = get(currentDraft);
+    if (current?.draftId === draftId) {
+        currentDraft.set(null);
+    }
+}
+
+function validateDraft(draft: Draft): Record<string, string> {
+    const errors: Record<string, string> = {};
+
+    const campaign = draft.wizardForm.campaignInfo;
+
+    if (!campaign.objectives || campaign.objectives.length < 50) {
+        errors.objectives = "min_length";
+    }
+
+    if (!campaign.images.length && !campaign.video) {
+        errors.media = "required";
+    }
+
+    return errors;
 }
