@@ -11,9 +11,7 @@
     >
         404
     </span>
-    <div
-        class="relative z-10 w-full max-w-full px-4 sm:bottom-20 sm:max-w-202.25 sm:px-0"
-    >
+    <div class="relative z-10 w-full max-w-full px-4 sm:bottom-20 sm:max-w-202.25 sm:px-0">
         <Ilustration404 />
     </div>
     <div

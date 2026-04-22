@@ -9,7 +9,7 @@
 </script>
 
 <svg
-    class={twMerge("w-full h-auto", classes)}
+    class={twMerge("h-auto w-full", classes)}
     viewBox="0 0 810 700"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -20,7 +20,13 @@
             style="backdrop-filter:blur(7.05px);clip-path:url(#bgblur_0_568_42655_clip_path);height:100%;width:100%"
         ></div></foreignObject
     ><g data-figma-bg-blur-radius="14.0993">
-        <rect width="809.091" height="700" rx="70.4963" fill="var(--color-white)" fill-opacity="0.01" />
+        <rect
+            width="809.091"
+            height="700"
+            rx="70.4963"
+            fill="var(--color-white)"
+            fill-opacity="0.01"
+        />
         <path
             fill-rule="evenodd"
             clip-rule="evenodd"
