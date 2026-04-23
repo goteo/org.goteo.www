@@ -1,12 +1,12 @@
 <script lang="ts">
     import FooterLink from "../components/FooterLink.svelte";
     import FooterPartnerImage from "../components/FooterPartnerImage.svelte";
+    import Facebook from "../components/icons/social/Facebook.svelte";
+    import Gmail from "../components/icons/social/Gmail.svelte";
+    import Instagram from "../components/icons/social/Instagram.svelte";
+    import Linkedin from "../components/icons/social/Linkedin.svelte";
+    import X from "../components/icons/social/X.svelte";
     import { t } from "../i18n/store";
-    import FooterFacebookIcon from "../svgs/footer/FooterFacebookIcon.svelte";
-    import FooterGmailIcon from "../svgs/footer/FooterGmailIcon.svelte";
-    import FooterInstagramIcon from "../svgs/footer/FooterInstagramIcon.svelte";
-    import FooterLinkedinIcon from "../svgs/footer/FooterLinkedinIcon.svelte";
-    import FooterXIcon from "../svgs/footer/FooterXIcon.svelte";
 </script>
 
 <footer class="text-variant1" aria-labelledby="footer-heading">
@@ -275,35 +275,35 @@
                                 class="focus:ring-purple-soft focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 aria-label="Send email to info@goteo.org"
                             >
-                                <FooterGmailIcon />
+                                <Gmail width="24" height="24" />
                             </a>
                             <a
                                 href="https://instagram.com/goteofunding"
                                 class="focus:ring-purple-soft focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 aria-label="Follow us on Instagram"
                             >
-                                <FooterInstagramIcon />
+                                <Instagram width="24" height="24" />
                             </a>
                             <a
                                 href="https://facebook.com/goteofunding"
                                 class="focus:ring-purple-soft focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 aria-label="Follow us on Facebook"
                             >
-                                <FooterFacebookIcon />
+                                <Facebook width="24" height="24" />
                             </a>
                             <a
                                 href="https://twitter.com/goteofunding"
                                 class="focus:ring-purple-soft focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 aria-label="Follow us on X (formerly Twitter)"
                             >
-                                <FooterXIcon />
+                                <X width="24" height="24" />
                             </a>
                             <a
                                 href="https://www.linkedin.com/company/platoniqlab"
                                 class="focus:ring-purple-soft focus:ring-offset-secondary rounded-sm transition-all duration-200 hover:opacity-80 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                 aria-label="Connect with us on LinkedIn"
                             >
-                                <FooterLinkedinIcon />
+                                <Linkedin width="24" height="24" />
                             </a>
                         </div>
 
