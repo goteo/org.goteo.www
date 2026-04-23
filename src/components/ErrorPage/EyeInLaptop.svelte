@@ -1,19 +1,4 @@
-<script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
-
-    interface Props {
-        class?: ClassNameValue;
-    }
-
-    let { class: classes = "" }: Props = $props();
-</script>
-
-<svg
-    class={twMerge("h-full w-full", classes)}
-    fill="none"
-    viewBox="0 0 408 352"
-    xmlns="http://www.w3.org/2000/svg"
->
+<svg fill="none" viewBox="0 0 408 352" xmlns="http://www.w3.org/2000/svg">
     <path
         fill-rule="evenodd"
         clip-rule="evenodd"
