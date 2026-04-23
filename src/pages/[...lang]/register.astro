@@ -1,6 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.svelte";
-import Head from "../../layouts/Head.astro";
+import Layout from "../../layouts/Layout.astro";
 import App from "../../components/App.svelte";
 import RegisterForm from "../../components/RegisterForm.astro";
 import Summary from "../../components/Checkout/Summary.svelte";
@@ -18,9 +17,8 @@ itemCount.subscribe((count) => {
 });
 ---
 
-<Head>
-    <Layout client:load title={t("metadata.title")} description={t("metadata.description")}>
-        <App client:load locale={lang} session={session} />
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session}>
         <main class="wrapper">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 lg:w-1/2">
@@ -95,5 +93,5 @@ itemCount.subscribe((count) => {
                 </div>
             </div>
         </main>
-    </Layout>
-</Head>
+    </App>
+</Layout>

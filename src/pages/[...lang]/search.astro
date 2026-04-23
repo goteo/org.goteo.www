@@ -1,6 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.svelte";
-import Head from "../../layouts/Head.astro";
+import Layout from "../../layouts/Layout.astro";
 import App from "../../components/App.svelte";
 import SearchFilters from "../../components/search/SearchFilters.svelte";
 import SearchResultsClient from "../../components/search/SearchResultsClient.svelte";
@@ -28,9 +27,8 @@ const hasInitialSearch = !!(
 );
 ---
 
-<Head>
-    <Layout client:load title={t("search.title")} description={t("search.description")}>
-        <App client:load locale={lang} session={session} />
+<Layout title={t("search.title")} description={t("search.description")}>
+    <App client:load locale={lang} session={session}>
         <section class="wrapper">
             <!-- Page Header -->
             <div class="mb-12 text-center">
@@ -57,5 +55,5 @@ const hasInitialSearch = !!(
                 />
             </div>
         </section>
-    </Layout>
-</Head>
+    </App>
+</Layout>

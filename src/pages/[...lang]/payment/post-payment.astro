@@ -1,6 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.svelte";
-import Head from "../../../layouts/Head.astro";
+import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
 import Carousel from "../../../components/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
@@ -116,13 +115,11 @@ try {
 }
 ---
 
-<Head>
-    <Layout
-        client:load
-        title={t("payment.postPayment.title")}
-        description={t("payment.postPayment.certificate.description")}
-    >
-        <App client:load locale={lang} session={session} />
+<Layout
+    title={t("payment.postPayment.title")}
+    description={t("payment.postPayment.certificate.description")}
+>
+    <App client:load locale={lang} session={session}>
         <section class="wrapper flex flex-col items-start gap-6 pb-16 md:gap-10 md:pb-20">
             <div class="flex w-full items-start self-stretch">
                 <div class="flex flex-1 flex-col items-start gap-4 self-stretch">
@@ -220,5 +217,5 @@ try {
                 </div>
             </div>
         </section>
-    </Layout>
-</Head>
+    </App>
+</Layout>

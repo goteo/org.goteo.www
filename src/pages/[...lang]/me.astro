@@ -1,6 +1,5 @@
 ---
-import Layout from "../../layouts/Layout.svelte";
-import Head from "../../layouts/Head.astro";
+import Layout from "../../layouts/Layout.astro";
 import App from "../../components/App.svelte";
 import ActivitySection from "../../components/profile/ActivitySection.svelte";
 import PeriodDropdown from "../../components/profile/PeriodDropdown.svelte";
@@ -21,9 +20,8 @@ const { user } = authCookie.json();
 const period = Astro.url.searchParams.get("period") || new Date().getFullYear().toString();
 ---
 
-<Head>
-    <Layout client:load title={t("me.page.title")} class="mb-20">
-        <App client:load locale={lang} session={session} />
+<Layout title={t("me.page.title")}>
+    <App client:load locale={lang} session={session} class="mb-20">
         <div
             class="wrapper flex flex-col gap-[40px] px-[16px] pt-[24px] pb-[40px] md:px-[40px] md:pt-[40px] md:pb-[40px]"
         >
@@ -87,5 +85,5 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
                 />
             </Grid>
         </div>
-    </Layout>
-</Head>
+    </App>
+</Layout>

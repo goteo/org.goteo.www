@@ -1,6 +1,5 @@
 ---
-import Layout from "../../../../../layouts/Layout.svelte";
-import Head from "../../../../../layouts/Head.astro";
+import Layout from "../../../../../layouts/Layout.astro";
 import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../openapi/client";
 import { getSession } from "../../../../../auth/session";
 import App from "../../../../../components/App.svelte";
@@ -36,9 +35,8 @@ if (error) {
 }
 ---
 
-<Head>
-    <Layout client:load title={t("pages.project.edit.title", { project: project.title })}>
-        <App locale={locale} session={session} client:load />
+<Layout title={t("pages.project.edit.title", { project: project.title })}>
+    <App locale={locale} session={session} client:load>
         <ProjectEditor project={project} {session} client:load />
-    </Layout>
-</Head>
+    </App>
+</Layout>

@@ -1,6 +1,5 @@
 ---
-import Layout from "../../../layouts/Layout.svelte";
-import Head from "../../../layouts/Head.astro";
+import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
 import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
@@ -72,9 +71,8 @@ const postPaymentUrl = checkoutId
     : "/payment/post-payment";
 ---
 
-<Head>
-    <Layout client:load title="Estado del pago">
-        <App client:load locale={lang} session={session} />
+<Layout title="Estado del pago">
+    <App client:load locale={lang} session={session}>
         <main class="wrapper py-10">
             {
                 error ? (
@@ -185,5 +183,5 @@ const postPaymentUrl = checkoutId
                 )
             }
         </main>
-    </Layout>
-</Head>
+    </App>
+</Layout>
