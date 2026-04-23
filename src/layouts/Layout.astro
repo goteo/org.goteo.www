@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import Metatags from "./Metatags.svelte";
 
-const { title } = Astro.props;
+const { title, description, keywords } = Astro.props;
 ---
 
 <!doctype html>
@@ -11,7 +11,7 @@ const { title } = Astro.props;
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
         <title>{title}</title>
-        <Metatags client:load {title} description="" keywords="" />
+        <Metatags client:load {title} {description} {keywords} />
     </head>
     <body>
         <slot />
