@@ -12,9 +12,15 @@
         locale: Locale;
         session?: Session;
         children: Snippet;
+        class?: string;
     }
 
-    let { locale: localeProp, session: sessionProp, children }: AppState = $props();
+    let {
+        locale: localeProp,
+        session: sessionProp,
+        children,
+        class: className,
+    }: AppState = $props();
 
     $effect(() => {
         locale.set(localeProp);
@@ -26,7 +32,7 @@
 </script>
 
 <Header />
-<main class="flex w-full max-w-screen flex-1 flex-col">
+<main class={`flex w-full max-w-screen flex-1 flex-col${className ? ` ${className}` : ""}`}>
     {@render children()}
 </main>
 <Footer />
