@@ -8,11 +8,11 @@
         subtitle: string;
         ctaText: string;
         ctaHref?: string;
-        code?: number;
+        code: number;
         children?: Snippet;
     }
 
-    let { title, subtitle, ctaText, ctaHref = "/", code = 404, children }: Props = $props();
+    let { title, subtitle, ctaText, ctaHref = "/", code, children }: Props = $props();
 </script>
 
 <section
@@ -23,8 +23,10 @@
     >
         {code}
     </span>
-    <div class="relative z-10 w-full max-w-full px-4 sm:bottom-20 sm:max-w-202.25 sm:px-0">
-        {@render children?.()}
+    <div class="item-center relative z-10 flex aspect-89/77 w-full max-w-200 justify-center backdrop-filter-[blur(7.049632549285889px)] rounded-[70px]">
+        <div class="w-full origin-center scale-50">
+            {@render children?.()}
+        </div>
     </div>
     <div
         class="relative z-10 flex w-full max-w-full flex-col items-center gap-4 px-4 pb-6 text-center sm:absolute sm:bottom-0 sm:max-w-192.5 sm:gap-6 sm:pb-0"

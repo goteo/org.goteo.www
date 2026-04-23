@@ -65,6 +65,14 @@
         "description": "La página que buscas no existe o ha sido movida."
       }
     },
+    "500": {
+      "title": "Hemos tenido un fallo en los servidores",
+      "subtitle": "Por favor espera unos segundos para recargar la página.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",

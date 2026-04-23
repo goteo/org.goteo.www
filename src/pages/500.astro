@@ -1,20 +1,20 @@
 ---
 import App from "../components/App.svelte";
-import BrokenRobot from "../components/ErrorPage/BrokenRobot.svelte";
 import ErrorPage from "../components/ErrorPage/ErrorPage.svelte";
+import EyeInLaptop from "../components/ErrorPage/EyeInLaptop.svelte";
 import Layout from "../layouts/Layout.astro";
 
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout title={t("pages.404.meta.title")} description={t("pages.404.meta.description")}>
+<Layout title={t("pages.500.meta.title")} description={t("pages.500.meta.description")}>
     <App locale={lang} session={session} client:load />
     <ErrorPage
-        code={404}
-        title={t("pages.404.title")}
-        subtitle={t("pages.404.subtitle")}
+        code={500}
+        title={t("pages.500.title")}
+        subtitle={t("pages.500.subtitle")}
         ctaText={t("common.goHome")}
-    >
-        <BrokenRobot />
+    >       
+        <EyeInLaptop />
     </ErrorPage>
 </Layout>
