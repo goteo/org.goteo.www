@@ -7,12 +7,12 @@ import App from "../components/App.svelte";
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout title={t("pages.401.meta.title")} description={t("pages.401.meta.description")}>
+<Layout title={t("pages.403.meta.title")} description={t("pages.403.meta.description")}>
     <App locale={lang} session={session} client:load />
     <ErrorPage
-        code={401}
-        title={t("pages.401.title")}
-        subtitle={t("pages.401.subtitle")}
+        code={403}
+        title={t("pages.403.title")}
+        subtitle={t("pages.403.subtitle")}
         ctaHref="/login"
         ctaText={t("common.login")}
     >

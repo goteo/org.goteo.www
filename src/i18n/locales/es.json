@@ -52,25 +52,25 @@
     "index": {
       "title": "Goteo"
     },
-    "401": {
-      "title": "No podemos dejarte pasar si no das la cara",
-      "subtitle": "Por favor inicia sesión",
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
       "meta": {
-        "title": "Sin autorización",
-        "description": "La página que intentas visitar requiere que estés identificado."
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
       }
     },
     "404": {
       "title": "No queda ni gota de la página que estás buscando",
-      "subtitle": "Por favor vuelve al inicio",
+      "subtitle": "Por favor, vuelve al inicio.",
       "meta": {
         "title": "Página no encontrada",
         "description": "La página que buscas no existe o ha sido movida."
       }
     },
     "500": {
-      "title": "Hemos tenido un fallo en los servidores",
-      "subtitle": "Por favor espera unos segundos para recargar la página.",
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
       "meta": {
         "title": "Condición inesperada para la solicitud",
         "description": "Error interno del servidor."
