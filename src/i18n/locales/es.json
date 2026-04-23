@@ -48,7 +48,10 @@
     }
   },
   "pages": {
-    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "_": "Page-specific content (/, /search, /project/[id], etc.)",
+    "index": {
+      "title": "Goteo"
+    },
     "401": {
       "title": "No podemos dejarte pasar si no das la cara",
       "subtitle": "Por favor inicia sesión",
