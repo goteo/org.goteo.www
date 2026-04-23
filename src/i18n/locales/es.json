@@ -47,6 +47,9 @@
   },
   "pages": {
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "index": {
+      "title": "Inicio"
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
