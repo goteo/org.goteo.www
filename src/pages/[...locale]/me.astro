@@ -13,7 +13,7 @@ import { goto } from "../../utils/navigation";
 const { lang, t, session } = Astro.locals;
 
 if (!session) {
-    return goto("/login", { callback: '/me' });
+    return goto("/login", { query: { callback: "/me" } });
 }
 
 const user = session.user;

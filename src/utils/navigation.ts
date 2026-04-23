@@ -11,15 +11,15 @@ type RedirectOptions = {
      * Add query params to the target URL
      */
     query?: string | URLSearchParams | Record<string, string> | string[][];
-}
+};
 
 const defaultOptions: RedirectOptions = {
-    type: "temporary"
-}
+    type: "temporary",
+};
 
 export function goto(target: URL | string, options: RedirectOptions = defaultOptions): Response {
     const status = options.type === "permanent" ? 301 : 302;
-    const query = options.query ? '?' + options.query.toString() : '';
+    const query = options.query ? "?" + options.query.toString() : "";
 
-    return new Response(null, { status, headers: { "Location": target + query } });
+    return new Response(null, { status, headers: { Location: target + query } });
 }

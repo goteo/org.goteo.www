@@ -1,6 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
+    import { session } from "../../auth/store.ts";
     import { t } from "../../i18n/store";
     import { apiProjectsGetCollection, apiAccountingsIdGet } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
@@ -10,7 +11,6 @@
 
     import type { Money, Project, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
-    import { session } from "../../auth/store.ts";
 
     interface Props {
         lang: string;
