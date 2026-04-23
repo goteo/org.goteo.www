@@ -22,17 +22,19 @@
     import { toCollectionItems } from "../../utils/hydra.ts";
     import Grid from "../library/Grid.svelte";
 
-    import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
+    import type {
+        ProjectSupport,
+        Project,
+        MatchCall,
+        User,
+    } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
+    import { client } from "../../openapi/client/client.gen.ts";
 
     interface Props {
         lang: string;
         period?: string;
-        user: {
-            id: number;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, period = new Date().getFullYear().toString(), user }: Props = $props();
@@ -47,14 +49,6 @@
     const relayClient = createClient({
         baseUrl: "/api/relay",
     });
-
-    // Helper function to build URLs from templates by replacing path parameters
-    function buildUrl(template: string, params: Record<string, string | number>): string {
-        return Object.entries(params).reduce(
-            (url, [key, value]) => url.replace(`{${key}}`, String(value)),
-            template,
-        );
-    }
 
     async function fetchActivityData() {
         loading = true;
@@ -72,12 +66,11 @@
             };
 
             // Fetch user's contributions (donations) - using accounting IRI as origin
-            const accountingIri = buildUrl(apiAccountingsIdGetUrl, { id: user.accountingId });
             const { data: supportsResponse, error: supportsError } =
                 await apiProjectSupportsGetCollection({
                     client: relayClient,
                     query: {
-                        origin: accountingIri,
+                        origin: user.accounting,
                         itemsPerPage: 100,
                     },
                     headers,
@@ -92,7 +85,7 @@
                 const response = await apiProjectSupportsmoneyTotalGetCollection({
                     client: relayClient,
                     query: {
-                        origin: accountingIri,
+                        origin: user.accounting,
                     },
                     headers,
                 });
@@ -107,12 +100,16 @@
             if (totalMoneyError) {
                 console.warn("Total money endpoint returned error, calculating manually:", {
                     error: totalMoneyError,
-                    accountingIri,
+                    user,
                 });
             }
 
             // Fetch user's owned projects - using user IRI as owner
-            const userIri = buildUrl(apiUsersIdOrHandleGetUrl, { id: user.id });
+            const userIri = client.buildUrl({
+                url: apiUsersIdOrHandleGetUrl,
+                path: { idOrHandle: user.id },
+            });
+
             const { data: projectsResponse, error: projectsError } = await apiProjectsGetCollection(
                 {
                     client: relayClient,

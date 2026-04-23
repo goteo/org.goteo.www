@@ -11,12 +11,10 @@ import type { APIContext } from "astro";
 export const onRequest = defineMiddleware(async (context: APIContext, next) => {
     const auth = await checkAuth(context);
     switch (auth.type) {
-        case "ok":
-            break;
         case "basic-auth":
             return auth.response;
         case "unauthorized":
-            return context.rewrite("/401");
+            return context.rewrite("/login");
         case "forbidden":
             return context.rewrite("/403");
     }
