@@ -16,7 +16,7 @@
         <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
         <div class="flex flex-col items-end">
             <div class="font-bold text-black">
-                {$t("project.tabs.community.contribution")}
+                {$t("pages.project.view.tabs.community.contribution")}
             </div>
             <p class="text-2xl font-bold text-black">
                 {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}

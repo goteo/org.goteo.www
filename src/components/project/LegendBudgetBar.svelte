@@ -23,7 +23,7 @@
 
 <div class="flex flex-row flex-wrap items-center justify-between gap-6">
     <div class="text-secondary text-base">
-        <span>{$t("project.tabs.budget.total")}:</span>
+        <span>{$t("pages.project.view.tabs.budget.total")}:</span>
         <span class="font-bold">{formatCurrency(totalBudget)}</span>
     </div>
 

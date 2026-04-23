@@ -138,7 +138,7 @@
                     ctx.fillStyle = "#fff";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText($t("budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
+                    ctx.fillText($t("pages.project.view.tabs.budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
 
                     const lineStartY = badgeY + badgeHeight + 4;
                     ctx.beginPath();
@@ -208,7 +208,7 @@
                                 const point = sortedBalancePoints[bpIndex];
                                 return point
                                     ? new Date(point.start).toLocaleDateString()
-                                    : $t("budget.chart.start");
+                                    : $t("pages.project.view.tabs.budget.chart.start");
                             },
                         },
                     },
