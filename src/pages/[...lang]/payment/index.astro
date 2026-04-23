@@ -33,7 +33,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session}>
-        <main class="wrapper">
+        <div class="wrapper">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 lg:w-1/2">
                     <BackButton />
@@ -72,6 +72,6 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                     </div>
                 </div>
             </div>
-        </main>
+        </div>
     </App>
 </Layout>
