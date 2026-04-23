@@ -11,6 +11,14 @@ import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
 import HomeBanner from "../../components/library/HomeBanner.svelte";
+import { isSupportedLocale } from "../../i18n/locales";
+import { NotFound } from "../../utils/responses";
+
+const { locale } = Astro.params;
+
+if (locale && !isSupportedLocale(locale)) {
+    return NotFound;
+}
 
 const { t, lang, session } = Astro.locals;
 ---
