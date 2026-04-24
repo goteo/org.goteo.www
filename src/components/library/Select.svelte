@@ -39,7 +39,6 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import { cyrb53 } from "../../utils/hash";
     import Chevron from "../icons/Chevron.svelte";
 
     import type { Snippet } from "svelte";

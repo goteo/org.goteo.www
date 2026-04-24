@@ -16,10 +16,7 @@
 
     import type { Project } from "../../../openapi/client";
 
-    let {
-        project: _project,
-        onPublish,
-    }: { project: Project; onPublish?: () => void } = $props();
+    let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
 
     type ContactEntry = { type: "email" | "phone"; value: string; preferred: boolean };
 
@@ -47,7 +44,6 @@
     function setPreferred(i: number) {
         privateContacts = privateContacts.map((c, idx) => ({ ...c, preferred: idx === i }));
     }
-
 </script>
 
 <div class="w-1/2">
