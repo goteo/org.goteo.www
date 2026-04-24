@@ -2,8 +2,8 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import CodeIcon from "../../../svgs/CodeIcon.svelte";
     import Loader from "../../../svgs/Loader.svelte";
+    import Code from "../../icons/Code.svelte";
 
     interface Props {
         url?: string;
@@ -30,7 +30,7 @@
     class="flex h-23 w-23 items-center justify-center rounded-2xl shadow-[0_1px_3px_0_rgba(0,0,0,0.1)]"
     onclick={() => (iframeModal = true)}
 >
-    <CodeIcon />
+    <Code />
 </button>
 
 <Modal

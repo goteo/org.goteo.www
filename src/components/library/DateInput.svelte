@@ -1,6 +1,4 @@
-<script lang="ts">
-    import murmur from "murmurhash-js";
-    
+<script lang="ts"> 
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
@@ -33,7 +31,8 @@
         onInput?: (date: Date) => void;
     } = $props();
 
-    const finalId = id ? id : getIdForInput();
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);
 
     /**
      * Converts a Date object to YYYY-MM-DD string format for HTML date input.
@@ -88,12 +87,7 @@
             onInput(dateValue);
         }
     }
-
-    function getIdForInput(): string {
-        const hash = murmur.murmur3(name || "" + labelText || "" + helperText || "");
-        return `date-input-${hash}`;
-    }
-
+    
     // Convert min/max to string format for HTML input
     const minString = $derived(toDateString(min));
     const maxString = $derived(toDateString(max));

@@ -1,10 +1,10 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ErrorIcon from "../../svgs/ErrorIcon.svelte";
+    import WarningIcon from "../../components/icons/Warning.svelte";
     import NotificationIcon from "../../svgs/NotificationIcon.svelte";
-    import SuccessIcon from "../../svgs/SuccessIcon.svelte";
-    import WarningIcon from "../../svgs/WarningIcon.svelte";
+    import Bookmark from "../icons/Bookmark.svelte";
+    import ErrorIcon from "../icons/Error.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -46,11 +46,11 @@
             {#if variant === "error"}
                 <ErrorIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "success"}
-                <SuccessIcon class="size-5 shrink-0 sm:size-6" />
+                <Bookmark check class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "notification"}
                 <NotificationIcon class="size-5 shrink-0 sm:size-6" />
             {:else if variant === "warning"}
-                <WarningIcon className="size-5 shrink-0 sm:size-6" />
+                <WarningIcon class="size-5 shrink-0 sm:size-6" />
             {/if}
             {#if children}
                 <p class="text-sm leading-6 font-normal text-[#000]">

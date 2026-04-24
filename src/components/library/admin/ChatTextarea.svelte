@@ -2,7 +2,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import SendIcon from "../../../svgs/SendIcon.svelte";
+    import Send from "../../icons/Send.svelte";
 
     let { class: classes = "" } = $props<{
         class?: ClassNameValue;
@@ -16,6 +16,6 @@
     ></textarea>
     <button
         class="border-grey flex aspect-square size-10 shrink-0 cursor-pointer items-center justify-center rounded-[80px] border bg-white p-2 shadow-[0_2px_4px_0_rgba(0,0,0,0.16)]"
-        ><SendIcon /></button
+        ><Send /></button
     >
 </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import Back from "../../components/icons/Back.svelte";
     import { t } from "../../i18n/store";
-    import Back from "../../svgs/Back.svelte";
 
     interface Props {
         class?: ClassNameValue;

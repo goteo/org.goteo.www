@@ -39,8 +39,6 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import murmur from "murmurhash-js";
-
     import type { Snippet } from "svelte";
 
     interface SelectProps {
@@ -74,9 +72,11 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-    const selectId = id || `select-${murmur.murmur3(labelText || name || "select")}`;
-    const errorId = `${selectId}-error`;
-    const helperId = `${selectId}-helper`;
+const generatedId = $props.id();
+const finalId = $derived(id ?? generatedId);
+
+const errorId = $derived(`${finalId}-error`);
+const helperId = $derived(`${finalId}-helper`);
 
     /**
      * Handle blur event
@@ -99,8 +99,8 @@
     <!-- Floating Label -->
     {#if labelText}
         <label
-            for={selectId}
-            class="text-secondary absolute top-[-8px] left-3 bg-white px-1 text-[12px] leading-[16px] font-medium transition-all duration-200"
+            for={finalId}
+            class="text-secondary absolute -top-2 left-3 bg-white px-1 text-[12px] leading-4 font-medium transition-all duration-200"
         >
             {labelText}
             {#if required}
@@ -114,12 +114,12 @@
         {name}
         {required}
         {disabled}
-        id={selectId}
+        id={finalId}
         bind:value
         onchange={handleChange}
         onblur={handleBlur}
         class={twMerge(
-            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}

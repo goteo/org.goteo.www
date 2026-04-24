@@ -1,7 +1,6 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
     
-    import murmur from "murmurhash-js"; 
 
     let {
         value = $bindable(""),
@@ -15,7 +14,7 @@
         labelText = undefined,
         helperText = undefined,
         error = undefined,
-        onBlur = undefined,
+
     }: {
         value?: string;
         id?: string;
@@ -28,16 +27,12 @@
         labelText?: string;
         helperText?: string;
         error?: string;
-        onBlur?: () => void;
+        
     } = $props();
 
-    const finalId = id ? id : getIdForInput();
-
-    function getIdForInput(): string {
-        const hash = murmur.murmur3(type + name + placeholder + labelText + helperText);
-
-        return `input-${hash}`;
-    }
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);    
+    
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-40")}>

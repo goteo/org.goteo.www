@@ -1,8 +1,8 @@
 <script lang="ts">
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
-    import CloseIcon from "../../svgs/CloseIcon.svelte";
     import { formatDate } from "../../utils/dates";
+    import CloseIcon from "../icons/Close.svelte";
     import Tag from "../library/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
