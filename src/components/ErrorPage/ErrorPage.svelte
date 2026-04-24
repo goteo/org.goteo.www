@@ -16,14 +16,15 @@
 </script>
 
 <section class="flex min-h-[85dvh] flex-col items-center justify-center">
- <span
-    class="pointer-events-none absolute z-0 select-none font-bold leading-[1.17] text-grey font-body text-[150px] sm:text-[400px] lg:text-[780px]"
->
-    {code}
-</span>
+    <span
+        class="text-grey font-body pointer-events-none absolute z-0 text-[200px] leading-[1.17] font-bold select-none sm:text-[300px] md:text-[400px] lg:text-[500px] xl:text-[740px]"
+    >
+        {code}
+    </span>
 
-    <div class="z-10 flex flex-col justify-center w-full max-w-[95%] sm:max-w-200 aspect-square sm:aspect-89/77 px-6 py-10 sm:px-0 rounded-[40px] sm:rounded-[70px] bg-white/10 backdrop-blur-md">
-
+    <div
+        class="z-10 flex aspect-square w-full max-w-[95%] flex-col justify-center bg-white/10 px-6 py-10 sm:aspect-89/77 sm:max-w-200 sm:px-0"
+    >
         <div class="mx-auto w-[42%]">
             {@render children?.()}
         </div>
