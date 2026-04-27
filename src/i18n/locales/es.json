@@ -19,7 +19,9 @@
     "countdown": {
       "remaining": "Quedan",
       "expired": "Campaña finalizada"
-    }
+    },
+    "login": "Iniciar Sesión",
+    "goHome": "Volver a inicio"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -51,7 +53,34 @@
     }
   },
   "pages": {
-    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "_": "Page-specific content (/, /search, /project/[id], etc.)",
+    "index": {
+      "title": "Goteo"
+    },
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
+      "meta": {
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
+      }
+    },
+    "404": {
+      "title": "No queda ni gota de la página que estás buscando",
+      "subtitle": "Por favor, vuelve al inicio.",
+      "meta": {
+        "title": "Página no encontrada",
+        "description": "La página que buscas no existe o ha sido movida."
+      }
+    },
+    "500": {
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
@@ -198,6 +227,45 @@
             "type": "El tipo de partida se debe especificar",
             "class": "La clase de partida se debe especificar"
           }
+        },
+        "aboutYou": {
+          "title": "Más sobre ti",
+          "subtitle": "Descríbete al impulsor de la campaña.",
+          "prefill": "Seleccione datos guardados",
+          "legalEntity": "Forma jurídica",
+          "legalEntityHelper": "Indica la forma jurídica de quien impulsa esta campaña.",
+          "individual": "Persona física",
+          "organization": "Persona jurídica",
+          "name": "Indica el nombre del impulsor",
+          "nameHelper": "Dinos cómo denominaremos el impulsor. Esta denominación aparecerá en la parte pública de la campaña.",
+          "namePlaceholder": "Nombre del impulsor",
+          "taxId": "Indica el NIF del impulsor",
+          "taxIdHelper": "Solo lo verá el impulsor. Esta información no será pública, solo se usará para formalizar los acuerdos y condiciones de la campaña.",
+          "taxIdPlaceholder": "Indica el CIF",
+          "location": "Lugar de actividad",
+          "locationHelper": "Indica cuál es el ámbito geográfico de actuación del impulsor o grupo impulsor.",
+          "territory": "Ámbito de actuación",
+          "country": "Para qué Estado",
+          "teamDescription": "Descripción del equipo impulsor",
+          "teamDescriptionHelper": "Cuéntanos a qué se dedica la entidad impulsora, qué tipo de actividades lleva a cabo en el día a día y cuáles son sus objetivos.",
+          "teamDescriptionPlaceholder": "Describe brevemente la actividad del impulsor",
+          "privateContacts": "Datos de contacto privados",
+          "privateContactsHelper": "Completa al menos un dato de contacto. La información no será pública, solo lo podrá usar Goteo para comunicarse sobre usos relacionados con la campaña que estás preparando.",
+          "email": "Mail",
+          "phone": "Teléfono",
+          "addContact": "Añadir contacto",
+          "preferred": "Preferido",
+          "publicContacts": "Datos de contacto públicos",
+          "publicContactsHelper": "Indicaremos qué datos de contacto/públicos quieres que aparezcan en tu campaña y en tu perfil impulsor.",
+          "placeholders": {
+            "website": "Inserta tu web",
+            "email": "Inserta tu cuenta de correo",
+            "instagram": "Inserta tu cuenta de Instagram",
+            "facebook": "Inserta tu cuenta de Facebook",
+            "twitter": "Inserta tu cuenta de X/Twitter",
+            "linkedin": "Inserta tu cuenta de LinkedIn"
+          },
+          "continue": "Siguiente paso"
         }
       },
       "view": {
@@ -651,7 +719,6 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión",
     "btnCart": "Ir al checkout",
     "search": "Buscar",
     "createProject": "Crea tu proyecto",
