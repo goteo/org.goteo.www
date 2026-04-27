@@ -7,7 +7,7 @@ import Steps from "../../../components/Checkout/Steps.svelte";
 import Button from "../../../components/library/Button.svelte";
 import BackButton from "../../../components/BackButton.astro";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
-import { extractId } from "../../../utils/extractId";
+import { extractId } from "../../../utils/extractId.ts";
 import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
 
 const { t, lang, session } = Astro.locals;

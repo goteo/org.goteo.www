@@ -14,7 +14,14 @@
     "preview": "Vista previa",
     "select": "Elige una opción",
     "remove": "Eliminar",
-    "textPlaceholder": "Escribe aquí"
+    "textPlaceholder": "Escribe aquí",
+    "remember": "Recordar",
+    "countdown": {
+      "remaining": "Quedan",
+      "expired": "Campaña finalizada"
+    },
+    "login": "Iniciar Sesión",
+    "goHome": "Volver a inicio"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -46,7 +53,34 @@
     }
   },
   "pages": {
-    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "_": "Page-specific content (/, /search, /project/[id], etc.)",
+    "index": {
+      "title": "Goteo"
+    },
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
+      "meta": {
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
+      }
+    },
+    "404": {
+      "title": "No queda ni gota de la página que estás buscando",
+      "subtitle": "Por favor, vuelve al inicio.",
+      "meta": {
+        "title": "Página no encontrada",
+        "description": "La página que buscas no existe o ha sido movida."
+      }
+    },
+    "500": {
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
@@ -193,10 +227,119 @@
             "type": "El tipo de partida se debe especificar",
             "class": "La clase de partida se debe especificar"
           }
+        },
+        "aboutYou": {
+          "title": "Más sobre ti",
+          "subtitle": "Descríbete al impulsor de la campaña.",
+          "prefill": "Seleccione datos guardados",
+          "legalEntity": "Forma jurídica",
+          "legalEntityHelper": "Indica la forma jurídica de quien impulsa esta campaña.",
+          "individual": "Persona física",
+          "organization": "Persona jurídica",
+          "name": "Indica el nombre del impulsor",
+          "nameHelper": "Dinos cómo denominaremos el impulsor. Esta denominación aparecerá en la parte pública de la campaña.",
+          "namePlaceholder": "Nombre del impulsor",
+          "taxId": "Indica el NIF del impulsor",
+          "taxIdHelper": "Solo lo verá el impulsor. Esta información no será pública, solo se usará para formalizar los acuerdos y condiciones de la campaña.",
+          "taxIdPlaceholder": "Indica el CIF",
+          "location": "Lugar de actividad",
+          "locationHelper": "Indica cuál es el ámbito geográfico de actuación del impulsor o grupo impulsor.",
+          "territory": "Ámbito de actuación",
+          "country": "Para qué Estado",
+          "teamDescription": "Descripción del equipo impulsor",
+          "teamDescriptionHelper": "Cuéntanos a qué se dedica la entidad impulsora, qué tipo de actividades lleva a cabo en el día a día y cuáles son sus objetivos.",
+          "teamDescriptionPlaceholder": "Describe brevemente la actividad del impulsor",
+          "privateContacts": "Datos de contacto privados",
+          "privateContactsHelper": "Completa al menos un dato de contacto. La información no será pública, solo lo podrá usar Goteo para comunicarse sobre usos relacionados con la campaña que estás preparando.",
+          "email": "Mail",
+          "phone": "Teléfono",
+          "addContact": "Añadir contacto",
+          "preferred": "Preferido",
+          "publicContacts": "Datos de contacto públicos",
+          "publicContactsHelper": "Indicaremos qué datos de contacto/públicos quieres que aparezcan en tu campaña y en tu perfil impulsor.",
+          "placeholders": {
+            "website": "Inserta tu web",
+            "email": "Inserta tu cuenta de correo",
+            "instagram": "Inserta tu cuenta de Instagram",
+            "facebook": "Inserta tu cuenta de Facebook",
+            "twitter": "Inserta tu cuenta de X/Twitter",
+            "linkedin": "Inserta tu cuenta de LinkedIn"
+          },
+          "continue": "Siguiente paso"
         }
       },
       "view": {
-        "owner": "Campaña de crowdfunding impulsada por {{ owner }}"
+        "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
+        "tabs": {
+          "project": "Información de campaña",
+          "rewards": "Recompensas",
+          "budget": {
+            "title": "Presupuesto",
+            "minimum": "Mínimo",
+            "optimal": "Óptimo",
+            "raised": "Obtenido",
+            "total": "Total",
+            "chartTitle": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
+            "chart": {
+              "secondRound": "2ª Ronda",
+              "start": "Inicio"
+            }
+          },
+          "updates": {
+            "title": "Actualizaciones",
+            "modalTitle": "Nueva actualización",
+            "by": "Por:",
+            "content": {
+              "title": "No pierdas detalle de los avances de esta campaña",
+              "empty": "No existen más actualizaciones previstas.",
+              "btn": {
+                "readMore": "Seguir leyendo",
+                "share": "Compartir"
+              }
+            }
+          },
+          "community": {
+            "title": "Comunidad",
+            "content": {
+              "title": "Donaciones y mensajes de apoyo de la comunidad"
+            },
+            "contribution": "Aporte",
+            "matchfunding": {
+              "contribution": "Suma de los aportes",
+              "aported": "Aportados",
+              "upTo": "de hasta"
+            },
+            "anonymous": {
+              "length": "anónimos",
+              "title": "Donaciones anónimas",
+              "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
+            }
+          }
+        },
+        "rewards": {
+          "trending": "Recompensas más populares",
+          "showAll": "Ver todas",
+          "title": "Selecciona tus recompensas",
+          "donationFree": {
+            "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
+            "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
+            "placeholder": "Seleccione el aporte  Ej.20€"
+          },
+          "error": {
+            "amount": "Por favor, ingresa una monto válido"
+          }
+        },
+        "banner": {
+          "donator": {
+            "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados.",
+            "learnMore": "Saber más."
+          },
+          "certificate": {
+            "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
+            "learnMore": "Saber más."
+          }
+        },
+        "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
       }
     },
     "about": {
@@ -306,71 +449,22 @@
     "donors": "donates",
     "units": "Quedan {{units}} unidades",
     "noUnits": "No quedan unidades",
-    "trending": "Recompensas más populares",
     "headline": "Selecciona tu recompensa",
     "addAndContinue": "Añadir al carro y continuar",
     "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonationLabel": "Donación libre",
-    "showAll": "Ver todas"
+    "btnFreeDonationLabel": "Donación libre"
   },
   "budget": {
     "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
     "chart": {
       "minimum": "Mínimo",
       "optimal": "Óptimo",
-      "progress": "Estado de la campaña",
-      "secondRound": "2ª Ronda",
-      "start": "Inicio"
+      "progress": "Estado de la campaña"
     }
   },
   "project": {
-    "tabs": {
-      "project": "Información de campaña",
-      "budget": {
-        "chart-title": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
-        "title": "Presupuesto",
-        "minimum": "Mínimo",
-        "optimal": "Óptimo",
-        "raised": "Obtenido",
-        "total": "Total",
-        "campaingState": "Estado de la campaña"
-      },
-      "rewards": "Recompensas",
-      "updates": {
-        "title": "Actualizaciones",
-        "modal-title": "Nueva actualización",
-        "by": "Por:",
-        "content": {
-          "title": "No pierdas detalle de los avances de esta campaña",
-          "empty": "No existen más actualizaciones previstas.",
-          "btn": {
-            "read-more": "Seguir leyendo",
-            "share": "Compartir"
-          }
-        }
-      },
-      "community": {
-        "title": "Comunidad",
-        "owner-anonymous": "Anónimo",
-        "content": {
-          "title": "Donaciones y mensajes de apoyo de la comunidad"
-        },
-        "contribution": "Aporte",
-        "matchfunding": {
-          "contribution": "Suma de los aportes",
-          "aported": "Aportados",
-          "up_to": "de hasta"
-        },
-        "anonymous": {
-          "length": "anónimos",
-          "title": "Donaciones anónimas",
-          "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
-        }
-      }
-    },
     "actions": {
       "share": "Compartir",
-      "remember": "Recordar",
       "viewAll": "Ver todas",
       "viewMore": "Ver más",
       "viewLess": "Ver menos"
@@ -378,16 +472,6 @@
     "impact": {
       "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
       "learnMore": "Saber más."
-    },
-    "banner": {
-      "donator": {
-        "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados.",
-        "learnMore": "Saber más."
-      },
-      "certificate": {
-        "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-        "learnMore": "Saber más."
-      }
     },
     "share": {
       "modal": {
@@ -679,22 +763,14 @@
     "invalid": "Entrada no válida"
   },
   "countdown": {
-    "expired": "Campaña finalizada",
-    "remaining": "Quedan",
     "error": {
       "not-found": "No se ha encontrado la fecha de finalización de la campaña."
     }
   },
   "rewards": {
-    "title": "Selecciona tus recompensas",
     "unavailable": "No hay recompensas disponibles.",
     "donators": "{{donators}} donantes",
     "units-available": "Quedan {{units}} unidades",
-    "donation-free": {
-      "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
-      "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
-      "placeholder": "Seleccione el aporte  Ej.20€"
-    },
     "by-amount-or-more": "Por {{amount}} o más",
     "thanks-message": "Gracias por cooperar",
     "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
@@ -725,7 +801,6 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión",
     "btnCart": "Ir al checkout",
     "search": "Buscar",
     "createProject": "Crea tu proyecto",
@@ -1358,11 +1433,6 @@
         "title": "Difunde este blog por el mundo",
         "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
       }
-    }
-  },
-  "lang": {
-    "error": {
-      "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
     }
   }
 }

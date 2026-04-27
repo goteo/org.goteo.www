@@ -12,10 +12,12 @@ import {
     type Project,
 } from "../../../../openapi/client";
 import { extractId } from "../../../../utils/extractId";
+import { NotFound } from "../../../../utils/responses";
+
 const { idOrSlug } = Astro.params;
 
 if (!idOrSlug) {
-    throw new Error("Project ID or Project Slug is undefined.");
+    throw new Error("No project identifier supplied.");
 }
 
 const { lang, session } = Astro.locals;
@@ -25,8 +27,8 @@ const { data: project, error } = await apiProjectsIdOrSlugGet({
     headers: { "Accept-Language": lang },
 });
 
-if (error || typeof project === "undefined") {
-    throw new Error("Project not found");
+if (error?.status === NotFound.status || project === undefined) {
+    return NotFound;
 }
 
 const { data: accounting } = await apiAccountingsIdGet({

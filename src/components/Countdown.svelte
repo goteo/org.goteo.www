@@ -54,9 +54,12 @@
 <div class="text-secondary flex items-center gap-2 text-end text-2xl font-bold lg:justify-end">
     {#if timeLeft.total > 0}
         <Clock />
-        <p>{$t("countdown.remaining")} {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</p>
+        <p>
+            {$t("common.countdown.remaining")}
+            {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m
+        </p>
     {:else}
         <Clock />
-        <p>{$t("countdown.expired")}</p>
+        <p>{$t("common.countdown.expired")}</p>
     {/if}
 </div>
