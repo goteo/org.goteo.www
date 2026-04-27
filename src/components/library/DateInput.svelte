@@ -1,4 +1,4 @@
-<script lang="ts"> 
+<script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
@@ -87,7 +87,7 @@
             onInput(dateValue);
         }
     }
-    
+
     // Convert min/max to string format for HTML input
     const minString = $derived(toDateString(min));
     const maxString = $derived(toDateString(max));

@@ -14,9 +14,8 @@
  */
 
 import { z } from "astro/zod";
-import { writable, derived, get } from "svelte/store";
-
 import murmur from "murmurhash-js";
+import { writable, derived, get } from "svelte/store";
 
 import type { MoneyWithConversion, Project, ProjectBudgetItem } from "../openapi/client";
 
@@ -748,8 +747,9 @@ export function addReward(reward: WizardReward) {
 
     wizardState.update((state) => ({
         ...state,
-        rewards: [...state.rewards, reward],
+        rewards: [...state.rewards, { ...reward, id }],
     }));
+
     hasUnsavedChanges.set(true);
     saveToLocalStorage();
 }

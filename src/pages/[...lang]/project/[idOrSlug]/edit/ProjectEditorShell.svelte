@@ -123,7 +123,7 @@
             >
                 <div class="flex items-start gap-3">
                     <svg
-                        class="text-tertiary h-5 w-5 flex-shrink-0"
+                        class="text-tertiary h-5 w-5 shrink-0"
                         fill="currentColor"
                         viewBox="0 0 20 20"
                         aria-hidden="true"
@@ -148,7 +148,7 @@
                     </div>
                     <button
                         type="button"
-                        class="text-tertiary hover:text-secondary flex-shrink-0"
+                        class="text-tertiary hover:text-secondary shrink-0"
                         onclick={() => persistenceError.set(null)}
                         aria-label={$t("wizard.errors.storage.close")}
                     >
@@ -197,7 +197,7 @@
             </div>
 
             <!-- Right section: Action Buttons -->
-            <div class="flex shrink-0 items-center gap-[16px]">
+            <div class="flex shrink-0 items-center gap-4">
                 <Button kind="ghost" size="md" disabled={true}>
                     <Eye />
                     {$t("common.preview")}

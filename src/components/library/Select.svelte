@@ -72,11 +72,11 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-const generatedId = $props.id();
-const finalId = $derived(id ?? generatedId);
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);
 
-const errorId = $derived(`${finalId}-error`);
-const helperId = $derived(`${finalId}-helper`);
+    const errorId = $derived(`${finalId}-error`);
+    const helperId = $derived(`${finalId}-helper`);
 
     /**
      * Handle blur event
@@ -119,7 +119,7 @@ const helperId = $derived(`${finalId}-helper`);
         onchange={handleChange}
         onblur={handleBlur}
         class={twMerge(
-            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}

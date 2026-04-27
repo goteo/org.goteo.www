@@ -263,14 +263,14 @@
               : $t("pages.project.edit.campaignInfo.media.addImage")}
         aria-busy={isUploading}
     >
-            {#if isUploading}
-                <Loader />
-            {:else}
-                <UploadIcon />
-            {/if}
-            {isUploading
-                ? $t("pages.project.edit.campaignInfo.media.uploading")
-                : $t("pages.project.edit.campaignInfo.media.addImage")}
+        {#if isUploading}
+            <Loader />
+        {:else}
+            <UploadIcon />
+        {/if}
+        {isUploading
+            ? $t("pages.project.edit.campaignInfo.media.uploading")
+            : $t("pages.project.edit.campaignInfo.media.addImage")}
     </Button>
 
     <!-- Hidden File Input -->
@@ -323,8 +323,8 @@
                             "focus:outline-none",
                             "group-hover:opacity-100 sm:opacity-0",
                         )}
-                    >                        
-                            <CloseIcon />                        
+                    >
+                        <CloseIcon />
                     </Button>
 
                     <!-- File Info -->
