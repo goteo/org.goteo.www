@@ -11,7 +11,7 @@ if (!getSession(Astro.cookies)) {
 }
 ---
 
-<Layout title={t("create.project.title")}>
+<Layout title={t("pages.project.create.title")}>
     <App client:load locale={lang} session={session}>
         <CreateProjectForm client:load />
     </App>
