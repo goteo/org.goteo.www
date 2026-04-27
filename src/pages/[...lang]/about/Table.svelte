@@ -20,7 +20,7 @@
     )}
 >
     <svg
-        class="pointer-events-none absolute right-0 top-0"
+        class="pointer-events-none absolute top-0 right-0"
         width="437"
         height="477"
         viewBox="0 0 437 477"

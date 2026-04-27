@@ -138,7 +138,11 @@
                     ctx.fillStyle = "#fff";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText($t("pages.project.view.tabs.budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
+                    ctx.fillText(
+                        $t("pages.project.view.tabs.budget.chart.secondRound"),
+                        xPos,
+                        badgeY + badgeHeight / 2,
+                    );
 
                     const lineStartY = badgeY + badgeHeight + 4;
                     ctx.beginPath();

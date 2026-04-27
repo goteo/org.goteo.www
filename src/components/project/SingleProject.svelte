@@ -126,7 +126,9 @@
 
 <section class="wrapper">
     <Toast variant="warning" bind:showToast={langMismatch} class="mb-6 w-full">
-        {$t("system.error.lang.notAvailable", { lang: getLanguageDisplayName(attemptedLang)! })}
+        {$t("pages.project.view.langNotAvailable", {
+            lang: getLanguageDisplayName(attemptedLang)!,
+        })}
     </Toast>
 
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">

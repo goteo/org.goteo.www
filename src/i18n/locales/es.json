@@ -270,7 +270,8 @@
             "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
             "learnMore": "Saber más."
           }
-        }
+        },
+        "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
       }
     }
   },
@@ -282,9 +283,6 @@
       "file": {
         "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
         "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
-      },
-      "lang": {
-        "notAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
       }
     },
     "constraint": {
