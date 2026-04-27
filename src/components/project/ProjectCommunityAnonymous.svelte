@@ -35,12 +35,12 @@
     </div>
     <div class="flex w-full flex-col gap-4 p-6 md:w-2/3">
         <div class="flex flex-col items-start gap-2 font-bold text-black md:items-end">
-            <span>{$t("project.tabs.community.matchfunding.contribution")}</span>
+            <span>{$t("pages.project.view.tabs.community.matchfunding.contribution")}</span>
             <div class="flex flex-col items-start text-2xl md:items-end">
                 <div class="flex items-center gap-2 text-sm">
                     <span>
                         {length}
-                        {$t("project.tabs.community.anonymous.length")}
+                        {$t("pages.project.view.tabs.community.anonymous.length")}
                     </span>
                 </div>
                 <div class="flex items-center gap-2">
@@ -51,10 +51,10 @@
             </div>
         </div>
         <div class="line-clamp-2 text-left text-2xl font-bold text-black md:text-right">
-            {$t("project.tabs.community.anonymous.title")}
+            {$t("pages.project.view.tabs.community.anonymous.title")}
         </div>
         <p class="text-content line-clamp-2 text-left text-sm md:text-right">
-            {$t("project.tabs.community.anonymous.description")}
+            {$t("pages.project.view.tabs.community.anonymous.description")}
         </p>
     </div>
 </div>

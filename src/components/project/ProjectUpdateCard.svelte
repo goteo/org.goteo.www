@@ -134,11 +134,11 @@
             </div>
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
-                    {$t("project.tabs.updates.by")}
+                    {$t("pages.project.view.tabs.updates.by")}
                     <strong class="font-bold text-black"> {author?.displayName}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
-                    {$t("project.tabs.updates.content.btn.read-more")}
+                    {$t("pages.project.view.tabs.updates.content.btn.readMore")}
                 </Button>
             </div>
         </div>
