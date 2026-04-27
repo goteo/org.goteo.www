@@ -170,7 +170,9 @@
             updateNavState(i);
             const target = actualChildren[i * itemsPerGroup];
             target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-            setTimeout(() => { programmaticScroll = false; }, 600);
+            setTimeout(() => {
+                programmaticScroll = false;
+            }, 600);
         } catch (error) {
             console.warn("Carousel: Error scrolling to group:", error);
             programmaticScroll = false;
@@ -231,7 +233,10 @@
                             if (e.isIntersecting && container) {
                                 for (const [index, element] of observerMap.entries()) {
                                     if (element === e.target) {
-                                        minGroup = Math.min(minGroup, Math.floor(index / itemsPerGroup));
+                                        minGroup = Math.min(
+                                            minGroup,
+                                            Math.floor(index / itemsPerGroup),
+                                        );
                                         break;
                                     }
                                 }
