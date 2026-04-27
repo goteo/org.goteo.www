@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import { session } from "../auth/store";
     import { locale } from "../i18n/store";
     import Footer from "../layouts/Footer.svelte";
@@ -12,15 +14,10 @@
         locale: Locale;
         session?: Session;
         children: Snippet;
-        class?: string;
+        class?: ClassNameValue;
     }
 
-    let {
-        locale: localeProp,
-        session: sessionProp,
-        children,
-        class: className,
-    }: AppState = $props();
+    let { locale: localeProp, session: sessionProp, children, class: classes }: AppState = $props();
 
     $effect(() => {
         locale.set(localeProp);
@@ -32,7 +29,7 @@
 </script>
 
 <Header />
-<main class={`flex w-full max-w-screen flex-1 flex-col${className ? ` ${className}` : ""}`}>
+<main class={twMerge("flex w-full max-w-screen flex-1 flex-col", classes)}>
     {@render children()}
 </main>
 <Footer />
