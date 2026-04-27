@@ -13,7 +13,7 @@
     interface AppState {
         locale: Locale;
         session?: Session;
-        children: Snippet;
+        children?: Snippet;
         class?: ClassNameValue;
     }
 
@@ -30,6 +30,6 @@
 
 <Header />
 <main class={twMerge("flex w-full max-w-screen flex-1 flex-col", classes)}>
-    {@render children()}
+    {@render children?.()}
 </main>
 <Footer />
