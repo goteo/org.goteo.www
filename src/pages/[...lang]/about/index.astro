@@ -2,7 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import Table from "./Table.svelte";
 import Cell from "./Cell.svelte";
-import PhasesCarousel from "./PhasesCarousel.svelte";
+import Carousel from "../../../components/Carousel.svelte";
 import handshakeImage from "./img/handshake.png";
 import meetingImage from "./img/meeting.png";
 import calendarImage from "./img/calendar.png";
@@ -30,7 +30,7 @@ const phases = [
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
-    <div class="flex flex-col gap-18 pb-10">
+    <div class="flex flex-col gap-18 pb-20">
         <!-- Hero section -->
         <section class="py-20">
             <div class="wrapper text-center">
@@ -117,7 +117,15 @@ const phases = [
             <h2 class="text-secondary mb-10 text-2xl font-bold lg:text-3xl">
                 {t("pages.about.phases.title")}
             </h2>
-            <PhasesCarousel client:load {phases} />
+            <Carousel client:load showDots={true} itemsPerGroup={1} desktopItemsToShow={3} mobileItemsToShow={1} gap={24}>
+                {phases.map((phase, i) => (
+                    <div class="border-grey relative flex flex-col gap-4 overflow-hidden rounded-2xl border bg-white p-6 shadow-sm">
+                        <span class="text-grey pointer-events-none absolute bottom-16 left-4 text-[175px] font-bold select-none">{i + 1}</span>
+                        <h3 class="text-secondary relative z-10 text-base font-bold lg:text-lg">{phase.title}</h3>
+                        <p class="text-content relative z-10 text-sm leading-relaxed">{phase.description}</p>
+                    </div>
+                ))}
+            </Carousel>
         </section>
 
         <!-- Training and events -->
@@ -138,12 +146,6 @@ const phases = [
                         <p class="text-secondary leading-relaxed">
                             {t("pages.about.events.description")}
                         </p>
-                        <a
-                            href="#"
-                            class="bg-variant1 text-secondary inline-flex items-center justify-center rounded-3xl px-8 py-4 font-bold transition hover:opacity-90"
-                        >
-                            {t("pages.about.events.cta")}
-                        </a>
                     </div>
                 </div>
             </div>
