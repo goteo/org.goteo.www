@@ -121,7 +121,7 @@
                             {:else}
                                 <a href="/login" class="flex w-full items-center gap-1">
                                     <UserIcon />
-                                    <span class="hidden sm:inline">{$t("header.login")}</span>
+                                    <span class="hidden sm:inline">{$t("common.login")}</span>
                                 </a>
                             {/if}
                         </li>

@@ -14,7 +14,9 @@
     "preview": "Vista previa",
     "select": "Elige una opción",
     "remove": "Eliminar",
-    "textPlaceholder": "Escribe aquí"
+    "login": "Iniciar Sesión",
+    "textPlaceholder": "Escribe aquí",
+    "goHome": "Volver a inicio"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
@@ -46,7 +48,34 @@
     }
   },
   "pages": {
-    "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "_": "Page-specific content (/, /search, /project/[id], etc.)",
+    "index": {
+      "title": "Goteo"
+    },
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
+      "meta": {
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
+      }
+    },
+    "404": {
+      "title": "No queda ni gota de la página que estás buscando",
+      "subtitle": "Por favor, vuelve al inicio.",
+      "meta": {
+        "title": "Página no encontrada",
+        "description": "La página que buscas no existe o ha sido movida."
+      }
+    },
+    "500": {
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
@@ -643,7 +672,6 @@
   },
   "title": "Hola!",
   "header": {
-    "login": "Iniciar Sesión",
     "btnCart": "Ir al checkout",
     "search": "Buscar",
     "createProject": "Crea tu proyecto",
