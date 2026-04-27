@@ -1,8 +1,11 @@
 import { derived, get, writable } from "svelte/store";
-import { currentDraft, type Draft, type Wizard } from "./projectDraft";
-import { cyrb53 } from "../../utils/hash";
-import { projectCreationSchema } from "../../pages/[...lang]/create/validation";
 import z from "zod";
+
+import { currentDraft, type Draft, type Wizard } from "./projectDraft";
+import { projectCreationSchema } from "../../pages/[...lang]/create/validation";
+import { cyrb53 } from "../../utils/hash";
+
+import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
 
 export type ValidationErrors = Record<string, string>;
 
@@ -10,17 +13,6 @@ export const validationErrors = writable<ValidationErrors>({});
 export const isDraftValid = derived(validationErrors, ($errors) => {
     return Object.keys($errors).length === 0;
 });
-
-export function validateDraft(draft: Draft): ValidationErrors {
-    return {
-        ...validateCreateForm(),
-        ...validateConfiguration(draft.wizardForm),
-        ...validateCampaignInfo(draft.wizardForm),
-        ...validateRewards(draft.wizardForm),
-        ...validateCollaborations(draft.wizardForm),
-        ...validateBudget(draft.wizardForm),
-    };
-}
 
 /**
  * Validates the entire create project form and updates the validation errors store.
@@ -45,20 +37,13 @@ export function validateCreateForm(): boolean {
     }
 }
 
-export function validateField(field: string, draft: Draft) {
-    const errors = get(validationErrors);
+export function validateDraftPublish(draft: Draft): ValidationErrors {
+    const wizard = draft.wizardForm;
 
-    switch (field) {
-        case "objectives":
-            if (draft.wizardForm.campaignInfo.objectives.length < 50) {
-                errors.objectives = "min_length";
-            } else {
-                delete errors.objectives;
-            }
-            break;
-    }
-
-    validationErrors.set({ ...errors });
+    return {
+        ...validateConfiguration(wizard),
+        ...validateCampaignInfo(wizard),
+    };
 }
 
 export function stripHtml(html: string): string {
@@ -191,60 +176,112 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     return errors;
 }
 
-export function validateRewards(wizard: Wizard): ValidationErrors {
+export function validateReward(reward: ProjectReward): ValidationErrors {
     const errors: ValidationErrors = {};
+    const hash = cyrb53(JSON.stringify(reward));
 
-    wizard.rewards.forEach((reward) => {
-        const hash = cyrb53(JSON.stringify(reward));
+    if (!reward.title.trim()) {
+        errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
+    }
 
-        if (!reward.title?.trim()) {
-            errors[`reward_title_${hash}`] = "validation.reward.title";
-        }
+    if (!reward.money.amount || reward.money.amount <= 0) {
+        errors[`reward_error_amount_${hash}`] = "pages.project.edit.rewards.validation.amount";
+    }
 
-        if (!reward.money?.amount || reward.money.amount <= 0) {
-            errors[`reward_amount_${hash}`] = "validation.reward.amount";
-        }
-
-        if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
-            errors[`reward_units_${hash}`] = "validation.reward.units";
-        }
-    });
+    if (reward.isFinite && (!reward.unitsTotal || reward.unitsTotal <= 0)) {
+        errors[`reward_error_units_${hash}`] = "pages.project.edit.rewards.validation.units";
+    }
 
     return errors;
 }
 
-export function validateCollaborations(wizard: Wizard): ValidationErrors {
+export function validateCollaboration(collab: ProjectCollaboration): ValidationErrors {
     const errors: ValidationErrors = {};
+    const hash = cyrb53(JSON.stringify(collab));
 
-    wizard.collaborations.forEach((c) => {
-        const hash = cyrb53(JSON.stringify(c));
+    if (!collab.title.trim()) {
+        errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
+    }
 
-        if (!c.title?.trim()) {
-            errors[`collab_title_${hash}`] = "validation.collab.title";
-        }
+    if (collab.description && collab.description.length > 1000) {
+        errors[`collab_error_description_too_long_${hash}`] =
+            "pages.project.edit.collaborations.validation.descriptionTooLong";
+    }
 
-        if (!c.description?.trim()) {
-            errors[`collab_desc_${hash}`] = "validation.collab.description";
-        }
-    });
+    if (!collab.description.trim()) {
+        errors[`collab_error_description_${hash}`] =
+            "pages.project.edit.collaborations.validation.description";
+    }
 
     return errors;
 }
 
-export function validateBudget(wizard: Wizard): ValidationErrors {
+export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
     const errors: ValidationErrors = {};
+    const hash = cyrb53(JSON.stringify(item));
 
-    wizard.budgetItems.minimum.forEach((item) => {
-        const hash = cyrb53(JSON.stringify(item));
+    if (!item.title.trim()) {
+        errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
+    }
 
-        if (!item.title?.trim()) {
-            errors[`budget_title_${hash}`] = "validation.budget.title";
-        }
+    if (!item.description.trim()) {
+        errors[`budget_error_description_${hash}`] =
+            "pages.project.edit.budget.validation.description";
+    }
 
-        if (!item.money?.amount || item.money.amount <= 0) {
-            errors[`budget_amount_${hash}`] = "validation.budget.amount";
-        }
-    });
+    if (!item.money.amount || item.money.amount <= 0) {
+        errors[`budget_error_amount_${hash}`] = "pages.project.edit.budget.validation.amount";
+    }
+
+    if (!item.money.currency) {
+        errors[`budget_error_currency_${hash}`] = "pages.project.edit.budget.validation.currency";
+    }
+
+    if (!item.type) {
+        errors[`budget_error_type_${hash}`] = "pages.project.edit.budget.validation.type";
+    }
+
+    if (!item.deadline || (item.deadline !== "minimum" && item.deadline !== "optimum")) {
+        errors[`budget_error_deadline_${hash}`] = "pages.project.edit.budget.validation.class";
+    }
 
     return errors;
+}
+
+export function validateBudgetAmount(draft: Draft) {
+    const budgetItems = draft.wizardForm.budgetItems;
+    const budget = draft.createProject.budget;
+    const errors: ValidationErrors = {};
+
+    if (budgetItems.minimum.length <= 0) {
+        errors.minimum_length = "pages.project.edit.budget.validation.minimumItemsLength";
+    }
+
+    let minimumItemsTotalAmount: number = 0;
+
+    for (let i = 0; i < budgetItems.minimum.length - 1; i++) {
+        minimumItemsTotalAmount += budgetItems.minimum[i].money.amount;
+    }
+
+    if (minimumItemsTotalAmount !== budget?.minimum?.money?.amount) {
+        errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";
+    }
+
+    return errors;
+}
+
+export function validateField(field: string, draft: Draft) {
+    const errors = get(validationErrors);
+
+    switch (field) {
+        case "objectives":
+            if (draft.wizardForm.campaignInfo.objectives.length < 50) {
+                errors.objectives = "min_length";
+            } else {
+                delete errors.objectives;
+            }
+            break;
+    }
+
+    validationErrors.set({ ...errors });
 }

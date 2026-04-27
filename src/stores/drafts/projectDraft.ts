@@ -1,11 +1,12 @@
+import { liveQuery } from "dexie";
 import { writable, readable, get, derived } from "svelte/store";
 
-import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
-import { liveQuery } from "dexie";
+import { validateCreateForm, validationErrors } from "./draftValidation";
+import { session } from "../../auth/store";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
-import { validateDraft, validationErrors } from "./draftValidation";
-import { session } from "../../auth/store";
+
+import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
 
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
@@ -59,7 +60,7 @@ export interface Draft {
     updatedAt: number;
 }
 
-export const drafts = writable<Draft[]>([]);
+export const drafts = readable(createDraftStore(getUserId()));
 
 export const currentDraft = writable<Draft | null>(null);
 
@@ -219,7 +220,7 @@ export function updateWizard(data: Partial<Wizard>) {
 /**
  * Update create Project form data
  *
- * Merges new project updates with already existing project data.
+ * Merges new create project form updates with already existing project data.
  *
  * @param data - Partial object with Project API Type data that has been modified
  */
@@ -238,7 +239,9 @@ export function updateProject(data: Partial<Project>) {
         return updated;
     });
 
-    persistDraft();
+    if (validateCreateForm()) {
+        persistDraft();
+    } else return;
 }
 
 export async function deleteDraft(draftId: string, userId: number) {

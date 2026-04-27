@@ -1,6 +1,8 @@
-import { db } from "./db";
-import type { Draft } from "../../stores/drafts/projectDraft";
 import Dexie from "dexie";
+
+import { db } from "./db";
+
+import type { Draft } from "../../stores/drafts/projectDraft";
 
 export const draftRepo = {
     async create(draft: Draft) {
