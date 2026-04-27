@@ -20,8 +20,8 @@
         alt: string;
         href?: string;
         hrefAriaLabel?: string;
-        size: keyof typeof sizeStyles;
-        class: ClassNameValue;
+        size?: keyof typeof sizeStyles;
+        class?: ClassNameValue;
     } = $props();
 </script>
 

@@ -1,16 +1,16 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
 
-    import CartButton from "./CartButton.svelte";
-    import HeaderButtons from "./HeaderButtons.svelte";
-    import UiLanguages from "./UiLanguages.svelte";
     import { session } from "../auth/store";
-    import CloseMenu from "./icons/CloseMenu.svelte";
+    import CartButton from "../components/CartButton.svelte";
+    import HeaderButtons from "../components/HeaderButtons.svelte";
+    import CloseMenu from "../components/icons/CloseMenu.svelte";
+    import Search from "../components/icons/Search.svelte";
+    import UserIcon from "../components/icons/User.svelte";
+    import UiLanguages from "../components/UiLanguages.svelte";
     import { t } from "../i18n/store";
     import Logo from "../svgs/Logo.svelte";
     import MenuIcon from "../svgs/MenuIcon.svelte";
-    import Search from "./icons/Search.svelte";
-    import UserIcon from "./icons/User.svelte";
 
     function isHidden(element: HTMLElement): boolean {
         return element.classList.contains("hidden");
