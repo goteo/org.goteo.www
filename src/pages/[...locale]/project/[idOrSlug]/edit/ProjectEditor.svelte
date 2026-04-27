@@ -222,5 +222,5 @@
     onPublish={handlePublish}
 >
     {@const StepComponent = getStepComponent(currentStep)}
-    <StepComponent {project} />
+    <StepComponent {project} onPublish={handlePublish} />
 </ProjectEditorShell>

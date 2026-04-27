@@ -11,11 +11,19 @@ import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
 import HomeBanner from "../../components/library/HomeBanner.svelte";
+import { isSupportedLocale } from "../../i18n/locales";
+import { NotFound } from "../../utils/responses";
+
+const { locale } = Astro.params;
+
+if (locale && !isSupportedLocale(locale)) {
+    return NotFound;
+}
 
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")} class="mb-20 gap-18">
+<Layout title={t("pages.index.title")} description={t("metadata.description")} class="mb-20 gap-18">
     <App client:load locale={lang} session={session} />
     <Hero />
     <HomeBanner

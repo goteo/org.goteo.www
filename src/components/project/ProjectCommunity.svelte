@@ -96,7 +96,7 @@
         </div>
     {:else}
         <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
-            {$t("project.tabs.community.content.title")}
+            {$t("pages.project.view.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
             <Grid class="grid-cols-1 gap-6 md:grid-cols-2">
@@ -139,7 +139,7 @@
                 </div>
                 <div class="flex flex-col items-end">
                     <div class="font-bold text-black">
-                        {$t("project.tabs.community.contribution")}
+                        {$t("pages.project.view.tabs.community.contribution")}
                     </div>
                     <p class="text-2xl font-bold text-black">
                         {formatCurrency(
