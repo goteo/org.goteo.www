@@ -6,7 +6,7 @@ import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.
 import Steps from "../../../components/Checkout/Steps.svelte";
 import { apiAccountingsIdGet } from "../../../openapi/client/index";
 import { getDefaultCurrency } from "../../../utils/consts.ts";
-import { extractId } from "../../../utils/extractId";
+import { extractId } from "../../../utils/extractId.ts";
 
 const { t, lang, session } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();

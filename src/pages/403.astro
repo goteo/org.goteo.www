@@ -1,0 +1,21 @@
+---
+import EyeInLaptop from "../components/ErrorPage/EyeInLaptop.svelte";
+import ErrorPage from "../components/ErrorPage/ErrorPage.svelte";
+import Layout from "../layouts/Layout.astro";
+import App from "../components/App.svelte";
+
+const { t, lang, session } = Astro.locals;
+---
+
+<Layout title={t("pages.403.meta.title")} description={t("pages.403.meta.description")}>
+    <App locale={lang} session={session} client:load />
+    <ErrorPage
+        code={403}
+        title={t("pages.403.title")}
+        subtitle={t("pages.403.subtitle")}
+        ctaHref="/login"
+        ctaText={t("common.login")}
+    >
+        <EyeInLaptop />
+    </ErrorPage>
+</Layout>

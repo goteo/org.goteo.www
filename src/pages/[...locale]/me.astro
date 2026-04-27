@@ -8,14 +8,15 @@ import DonatedProjectsSection from "../../components/profile/DonatedProjectsSect
 import OwnedProjectsSection from "../../components/profile/OwnedProjectsSection.svelte";
 import MatchfundingSection from "../../components/profile/MatchfundingSection.svelte";
 import Grid from "../../components/library/Grid.svelte";
+import { goto } from "../../utils/navigation";
 
 const { lang, t, session } = Astro.locals;
-const authCookie = Astro.cookies.get("auth");
-if (!authCookie) {
-    return Astro.redirect("/login?callback=/me");
+
+if (!session) {
+    return goto("/login", { query: { callback: "/me" } });
 }
 
-const { user } = authCookie.json();
+const user = session.user;
 
 const period = Astro.url.searchParams.get("period") || new Date().getFullYear().toString();
 ---

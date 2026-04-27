@@ -63,7 +63,7 @@
     }
 </script>
 
-<header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:py-8">
+<header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8">
     <div class="mx-auto max-w-[1440px] px-2">
         <div
             class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
@@ -96,7 +96,7 @@
                                     >
                                         <UserIcon />
                                         <span class="hidden sm:inline">
-                                            {$t("common.greeting")}, {$session.person?.firstName}
+                                            {$t("common.greeting")}, {$session.user.displayName}
                                         </span>
                                     </button>
 
@@ -121,7 +121,7 @@
                             {:else}
                                 <a href="/login" class="flex w-full items-center gap-1">
                                     <UserIcon />
-                                    <span class="hidden sm:inline">{$t("header.login")}</span>
+                                    <span class="hidden sm:inline">{$t("common.login")}</span>
                                 </a>
                             {/if}
                         </li>

@@ -1,20 +1,15 @@
 import { refreshToken } from "./grant";
 import { decodeJWT } from "./jwt";
-import {
-    apiAccountingsIdGet,
-    apiUsersIdorganizationGet,
-    apiUsersIdOrHandleGet,
-    apiUsersIdpersonGet,
-} from "../openapi/client";
+import { apiAccountingsIdGet, apiUsersIdOrHandleGet } from "../openapi/client";
 import { extractId } from "../utils/extractId";
 
 import type { OAuthToken, Session } from "./types";
 import type { AstroCookies } from "astro";
 
-const COOKIE_NAME = "auth";
+const COOKIE_NAME = "session";
 
 /**
- * Retrieve the session data from storage
+ * Retrieve the session data from session cookie
  * @param cookies AstroCookies interface
  * @returns The Session data
  */
@@ -39,6 +34,8 @@ export async function getSession(cookies: AstroCookies): Promise<Session | undef
         return fresh;
     } catch (err) {
         console.error(err);
+        clearSession(cookies);
+
         return undefined;
     }
 }
@@ -49,7 +46,7 @@ export async function getSession(cookies: AstroCookies): Promise<Session | undef
  * @param session The Session data
  */
 export function setSession(cookies: AstroCookies, session: Session) {
-    cookies.set(COOKIE_NAME, JSON.stringify(session), {
+    cookies.set(COOKIE_NAME, session, {
         path: "/",
         httpOnly: true,
         secure: true,
@@ -58,7 +55,7 @@ export function setSession(cookies: AstroCookies, session: Session) {
 }
 
 /**
- * Delete the session data from storage
+ * Delete the session data from session cookie
  * @param cookies AstroCookies interface
  */
 export function clearSession(cookies: AstroCookies) {
@@ -71,10 +68,8 @@ export function clearSession(cookies: AstroCookies) {
  * @param margin Time (in ms) of margin to consider a session expired before the actual expiration date
  * @returns `true` if the given session is expired
  */
-export function isExpired(session: Session, margin: number = 600000): boolean {
-    const nearExpirationDate = new Date(session.expires_at.getTime() - margin);
-
-    return nearExpirationDate < new Date();
+export function isExpired(session: Session, margin: number = 300000): boolean {
+    return Date.now() >= session.expires_at.getTime() - margin;
 }
 
 /**
@@ -100,31 +95,19 @@ export async function buildSession(token: OAuthToken): Promise<Session> {
         throw new Error("The User of the token does not exist");
     }
 
-    const {
-        [0]: { data: accounting },
-        [1]: { data: person },
-        [2]: { data: organization },
-    } = await Promise.all([
-        apiAccountingsIdGet({
-            path: { id: extractId(user.accounting)! },
-            headers: token.asHttpHeaders,
-        }),
-        apiUsersIdpersonGet({
-            path: { id: String(user.id) },
-            headers: token.asHttpHeaders,
-        }),
-        apiUsersIdorganizationGet({
-            path: { id: String(user!.id) },
-            headers: token.asHttpHeaders,
-        }),
-    ]);
+    const { data: accounting } = await apiAccountingsIdGet({
+        path: { id: extractId(user.accounting)! },
+        headers: token.asHttpHeaders,
+    });
+
+    if (!accounting) {
+        throw new Error("Could not retrieve Accounting for the User of the token");
+    }
 
     return {
         token,
-        user: user,
+        user,
         expires_at: expiresAt,
-        accounting: accounting!,
-        person: person!,
-        organization,
+        accounting,
     };
 }
