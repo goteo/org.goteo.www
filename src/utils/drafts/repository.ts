@@ -8,7 +8,7 @@ export const draftRepo = {
         return draft;
     },
 
-    async update(draftId: string, userId: string, data: Partial<Draft>) {
+    async update(draftId: string, userId: number, data: Partial<Draft>) {
         const existing = await db.drafts.get(draftId);
 
         if (!existing || existing.userId !== userId) return;
@@ -20,7 +20,7 @@ export const draftRepo = {
         });
     },
 
-    async get(draftId: string, userId: string) {
+    async get(draftId: string, userId: number) {
         const draft = await db.drafts.get(draftId);
 
         if (!draft || draft.userId !== userId) return undefined;
@@ -28,7 +28,7 @@ export const draftRepo = {
         return draft;
     },
 
-    async getAll(userId: string) {
+    async getAll(userId: number) {
         return db.drafts
             .where("[userId+updatedAt]")
             .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
@@ -36,7 +36,7 @@ export const draftRepo = {
             .toArray()
     },
 
-    async delete(draftId: string, userId: string) {
+    async delete(draftId: string, userId: number) {
         const draft = await db.drafts.get(draftId);
 
         if (!draft || draft.userId !== userId) return;

@@ -5,6 +5,7 @@ import { liveQuery } from "dexie";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 import { validateDraft, validationErrors } from "./draftValidation";
+import { session } from "../../auth/store";
 
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
@@ -50,7 +51,7 @@ export type Wizard = {
 
 export interface Draft {
     draftId: string;
-    userId: string;
+    userId: number;
 
     createProject: Project;
     wizardForm: Wizard;
@@ -71,7 +72,17 @@ export function createDraftId() {
     return crypto.randomUUID();
 }
 
-export function createDraftsStore(userId: string) {
+function getUserId(): number {
+    const s = get(session);
+
+    if (!s?.user?.id) {
+        throw new Error("User not authenticated");
+    }
+
+    return s.user.id;
+}
+
+export function createDraftsStore(userId: number) {
     return readable<Draft[]>([], (set) => {
         const subscription = liveQuery(() =>
             db.drafts
@@ -90,7 +101,7 @@ export function createDraftsStore(userId: string) {
 
 export async function createDraft(project?: Project) {
     const draftId = createDraftId();
-    const userId = "a";
+    const userId = getUserId();
 
     const draft: Draft = {
         draftId,
@@ -125,7 +136,7 @@ export async function createDraft(project?: Project) {
     return draftId;
 }
 
-export async function loadDraft(userId: string, draftId: string) {
+export async function loadDraft(userId: number, draftId: string) {
     const draft = await draftRepo.get(draftId, userId);
 
     if (!draft) return false;
@@ -210,7 +221,7 @@ export function updateProject(data: Partial<Project>) {
     persistDraft();
 }
 
-export async function deleteDraft(draftId: string, userId: string) {
+export async function deleteDraft(draftId: string, userId: number) {
     await draftRepo.delete(draftId, userId);
 
     const current = get(currentDraft);
