@@ -166,10 +166,14 @@
                 }
             }
 
+            programmaticScroll = true;
+            updateNavState(i);
             const target = actualChildren[i * itemsPerGroup];
             target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+            setTimeout(() => { programmaticScroll = false; }, 600);
         } catch (error) {
             console.warn("Carousel: Error scrolling to group:", error);
+            programmaticScroll = false;
         }
     }
 
@@ -205,6 +209,7 @@
     let resizeObs: ResizeObserver | undefined;
     let mutationObs: MutationObserver | undefined;
     let mounted = false;
+    let programmaticScroll = false;
 
     onMount(() => {
         // Ensure we're in the browser and DOM is ready
@@ -220,22 +225,20 @@
                 // Create IntersectionObserver only in the browser
                 intersectionObs = new IntersectionObserver(
                     (entries) => {
-                        if (!mounted) return;
+                        if (!mounted || programmaticScroll) return;
+                        let minGroup = Infinity;
                         for (const e of entries) {
                             if (e.isIntersecting && container) {
-                                let idx = -1;
                                 for (const [index, element] of observerMap.entries()) {
                                     if (element === e.target) {
-                                        idx = index;
+                                        minGroup = Math.min(minGroup, Math.floor(index / itemsPerGroup));
                                         break;
                                     }
                                 }
-
-                                if (idx !== -1) {
-                                    const group = Math.floor(idx / itemsPerGroup);
-                                    if (group !== activeCard) updateNavState(group);
-                                }
                             }
+                        }
+                        if (minGroup !== Infinity && minGroup !== activeCard) {
+                            updateNavState(minGroup);
                         }
                     },
                     { threshold: 0.6 },
