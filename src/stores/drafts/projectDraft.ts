@@ -82,7 +82,7 @@ function getUserId(): number {
     return s.user.id;
 }
 
-export function createDraftsStore(userId: number) {
+export function createDraftStore(userId: number) {
     return readable<Draft[]>([], (set) => {
         const subscription = liveQuery(() =>
             db.drafts
@@ -143,6 +143,26 @@ export async function loadDraft(userId: number, draftId: string) {
 
     currentDraft.set(draft);
     return true;
+}
+
+/**
+ * Mark a field as touched (for validation UX)
+ *
+ * Used to track which fields the user has interacted with,
+ * so validation errors only show after user touches the field.
+ *
+ * @param fieldName - The field identifier to mark as touched
+ *
+ * @example
+ * // Mark field as touched on blur
+ * <input on:blur={() => markFieldAsTouched('languages')} />
+ */
+export function markFieldAsTouched(fieldName: string) {
+    touchedFields.update((fields) => {
+        const newFields = new Set(fields);
+        newFields.add(fieldName);
+        return newFields;
+    });
 }
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
