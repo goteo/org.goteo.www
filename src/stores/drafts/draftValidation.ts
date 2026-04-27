@@ -1,10 +1,13 @@
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import type { Draft, Wizard } from "./projectDraft";
 import { cyrb53 } from "../../utils/hash";
 
 export type ValidationErrors = Record<string, string>;
 
 export const validationErrors = writable<ValidationErrors>({});
+export const isDraftValid = derived(validationErrors, ($errors) => {
+    return Object.keys($errors).length === 0;
+});
 
 export function validateDraft(draft: Draft): ValidationErrors {
     return {
@@ -17,7 +20,7 @@ export function validateDraft(draft: Draft): ValidationErrors {
 }
 
 export function validateField(field: string, draft: Draft) {
-    const errors = get(validationErrors);   
+    const errors = get(validationErrors);
 
     switch (field) {
         case "objectives":
