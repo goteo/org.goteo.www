@@ -1,6 +1,5 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
-    import { onMount } from "svelte";
 
     import { session } from "../auth/store";
     import CartButton from "../components/CartButton.svelte";
@@ -49,19 +48,6 @@
         menuIcon.classList.remove("hidden");
     }
 
-    let headerEl: HTMLElement;
-
-    onMount(() => {
-        const observer = new ResizeObserver(() => {
-            document.documentElement.style.setProperty(
-                "--header-height",
-                `${headerEl.offsetHeight}px`,
-            );
-        });
-        observer.observe(headerEl);
-        return () => observer.disconnect();
-    });
-
     let userDropdown: HTMLDivElement;
 
     function userDropdownToggle() {
@@ -77,7 +63,13 @@
     }
 </script>
 
-<header bind:this={headerEl} class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8">
+<header {@attach (el) => {
+    const observer = new ResizeObserver(() => {
+        document.documentElement.style.setProperty("--header-height", `${el.offsetHeight}px`);
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+}} class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8">
     <div class="mx-auto max-w-[1440px] px-2">
         <div
             class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
