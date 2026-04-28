@@ -20,7 +20,7 @@ Implements active/inactive pill states matching Figma design
     let categories = getAvailableCategories();
     let selected = $state(
         selectedCategories.map((s) => {
-            return { id: s, text: $t("categories." + s) };
+            return { id: s, text: $t("domain.category." + s) };
         }),
     );
 
@@ -37,7 +37,7 @@ Implements active/inactive pill states matching Figma design
     function mapCategoryToOption(category: Category): Option {
         return {
             id: category.id!,
-            text: $t("categories." + category.id!),
+            text: $t("domain.category." + category.id!),
         };
     }
 </script>
@@ -45,7 +45,7 @@ Implements active/inactive pill states matching Figma design
 <div class="w-full">
     {#if showLabel}
         <h3 class="mb-6 font-['Karla'] text-base font-bold text-[#3d3d3d]">
-            {$t("search.categoryLabel")}
+            {$t("pages.search.filters.categoryLabel")}
         </h3>
     {/if}
 
@@ -60,7 +60,7 @@ Implements active/inactive pill states matching Figma design
 
     {#if selected.length > 0}
         <div class="mt-4 text-sm text-[#3d3d3d] opacity-70">
-            {$t("search.selectedCategories", { count: selected.length })}
+            {$t("pages.search.filters.selectedCategories", { count: selected.length })}
         </div>
     {/if}
 </div>
