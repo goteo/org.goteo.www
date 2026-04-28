@@ -368,6 +368,88 @@
         },
         "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
       }
+    },
+    "about": {
+      "hero": {
+        "title": "Conoce nuestra manera de hacer crowdfunding",
+        "description": "En Goteo creemos que la financiación colectiva es más que dinero: es confianza, comunidad y compromiso social. Nuestro modelo de crowdfunding se basa en el impulso de proyectos que generan impacto positivo y en el acompañamiento cercano a las personas y organizaciones que los hacen posibles.",
+        "cta": "Impulsa tu proyecto"
+      },
+      "whatIs": {
+        "title": "Qué es crowdfunding",
+        "subtitle": "Un impacto social de verdad.",
+        "description": "El crowdfunding es una forma de financiación que une a muchas personas que creen en una idea y deciden apoyarla con pequeñas (o grandes) aportaciones. En Goteo lo entendemos como un espacio donde no solo se busca recaudar fondos, sino también crear redes de apoyo, visibilidad y aprendizaje."
+      },
+      "advisory": {
+        "title": "Asesoría y acompañamiento de nuestro equipo",
+        "description": "En Goteo no estás sola. Nuestro equipo te acompaña paso a paso, desde la definición de tu proyecto hasta la gestión de la campaña. Ofrecemos asesoría gratuita que te ayudará a preparar tu proyecto. Si necesitas más ayuda puedes solicitar una asesoría personalizada premium, con materiales de apoyo y una metodología probada para aumentar tus posibilidades de éxito."
+      },
+      "phases": {
+        "title": "Entiende las fases y mecánica",
+        "items": {
+          "preparation": {
+            "title": "Preparación",
+            "description": "Define objetivos, presupuesto, duración y plan de comunicación. Tu proyecto podrá publicarse si cumple estos criterios."
+          },
+          "launch": {
+            "title": "Lanzamiento",
+            "description": "Activamos la recaudación y te apoyamos en la difusión."
+          },
+          "fundsReceived": {
+            "title": "Fondos recibidos",
+            "description": "Al alcanzar el objetivo, completa un formulario y envía documentación para la transferencia. Asegura la transparencia y explica a la comunidad el proyecto."
+          },
+          "followUp": {
+            "title": "Seguimiento",
+            "description": "Tras la campaña, comparte el avance del proyecto con tu comunidad de donantes y cierra el ciclo con transparencia."
+          }
+        }
+      },
+      "events": {
+        "title": "Apúntate a nuestras formaciones y eventos",
+        "description": "Periódicamente organizamos talleres, webinars y encuentros donde compartimos aprendizajes, tendencias y experiencias reales de crowdfunding. Son espacios para formarte, inspirarte y conectar con otras personas que, como tú, quieren transformar ideas en realidades. Suscríbete para recibir información actualizada desde nuestro boletín."
+      },
+      "advantages": {
+        "title": "Ventajas de Goteo",
+        "items": {
+          "taxDeductions": {
+            "title": "Desgravaciones fiscales",
+            "description": "Las donaciones en Goteo tienen ventajas fiscales tanto para particulares como para empresas, gracias a que gestionamos las aportaciones a través de una fundación. Esto es algo que la mayoría de plataformas no ofrecen."
+          },
+          "allOrNothing": {
+            "title": "Todo o nada",
+            "description": "Los proyectos reciben el apoyo económico únicamente si demuestran ser viables y alcanzan el presupuesto mínimo. Si no, las donaciones regresan a los donantes para seguir apoyando nuevas iniciativas."
+          },
+          "twoRounds": {
+            "title": "Dos rondas de cofinanciación en 40+40 días",
+            "description": "Por defecto se establecen dos rondas de cofinanciación, de 40 días cada una. La primera, a \"todo o nada\", ligada al presupuesto mínimo imprescindible; y la segunda a un importe óptimo, para realizar mejoras adicionales en la que todo entra."
+          },
+          "personalizedSupport": {
+            "title": "Acompañamiento personalizado",
+            "description": "No dejamos a los impulsores solos. Nuestro equipo asesora antes, durante y después de la campaña, con recomendaciones estratégicas y apoyo técnico. Otras plataformas se limitan a ser un escaparate de proyectos."
+          },
+          "loyalCommunity": {
+            "title": "Comunidad fidelizada",
+            "description": "Contamos con una base de donantes recurrentes que confían en Goteo y vuelven a apoyar campañas porque valoran el impacto social y cultural. Esto da a los proyectos más oportunidades de alcanzar sus metas."
+          },
+          "matchfunding": {
+            "title": "Cofinanciación institucional (matchfunding)",
+            "description": "A través de alianzas con instituciones, multiplicamos las aportaciones ciudadanas con fondos públicos o privados. Este modelo híbrido es único en Goteo y no existe en la mayoría de plataformas."
+          },
+          "socialImpact": {
+            "title": "Foco en impacto social transformador",
+            "description": "No todos los proyectos son aceptados. En Goteo priorizamos aquellos alineados con la Economía Social y los valores democráticos, ya sea en forma de conocimiento abierto, mejoras comunitarias o impacto ambiental y social."
+          },
+          "transparency": {
+            "title": "Transparencia y confianza",
+            "description": "Las campañas pasan por un proceso de validación y asesoría. La comunidad sabe que los proyectos publicados cumplen unos mínimos de calidad y coherencia, lo que aumenta la credibilidad."
+          },
+          "provenMethodology": {
+            "title": "Metodología probada",
+            "description": "Más de una década de experiencia, con cientos de proyectos financiados, nos permite ofrecer una metodología contrastada que incrementa las posibilidades de éxito."
+          }
+        }
+      }
     }
   },
   "system": {
@@ -993,12 +1075,12 @@
       "rangeAmount": {
         "title": "Selecciona importe",
         "options": {
+          "500000": "+ 5.000€",
           "all": "Todos",
           "000..10000": "0€ - 100€",
           "10000..50000": "100€ - 500€",
           "50000..100000": "500€ - 1.000€",
-          "100000..500000": "1.000€ - 5.000€",
-          "500000": "+ 5.000€"
+          "100000..500000": "1.000€ - 5.000€"
         }
       },
       "dateRange": {

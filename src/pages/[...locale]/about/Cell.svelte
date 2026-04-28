@@ -1,7 +1,7 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ArrowRightIcon from "../../../svgs/ArrowRightIcon.svelte";
+    import Arrow from "../../../components/icons/Arrow.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -16,7 +16,7 @@
 
 <div class={twMerge("border-secondary flex flex-col gap-4 border-b py-6", classes)}>
     <div class="flex items-center gap-3">
-        <ArrowRightIcon />
+        <Arrow />
         <span class="text-secondary flex-1 text-sm font-bold lg:text-base">{title}</span>
     </div>
     {#if children}
