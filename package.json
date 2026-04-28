@@ -47,6 +47,7 @@
     "iso-3166-2": "^1.0.0",
     "marked": "^15.0.12",
     "media-icons": "^1.1.5",
+    "murmurhash-js": "^1.0.0",
     "svelte": "^5.45.8",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.1.17",
@@ -56,6 +57,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.1",
     "@hey-api/openapi-ts": "^0.69.2",
+    "@types/murmurhash-js": "^1.0.7",
     "@types/node": "^24.10.2",
     "@typescript-eslint/eslint-plugin": "^8.49.0",
     "@typescript-eslint/parser": "^8.49.0",

@@ -32,7 +32,7 @@
     } = $props();
 
     const generatedId = $props.id();
-    const finalId = id ?? generatedId;
+    const finalId = $derived(id ?? generatedId);
 
     /**
      * Converts a Date object to YYYY-MM-DD string format for HTML date input.

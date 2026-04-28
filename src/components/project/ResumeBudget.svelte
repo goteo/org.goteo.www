@@ -13,7 +13,7 @@
 
 <div class="flex flex-col gap-6 lg:flex-row">
     <div class="text-secondary basis-5/12 text-4xl font-bold">
-        {$t("project.tabs.budget.chart-title")}
+        {$t("pages.project.view.tabs.budget.chartTitle")}
     </div>
 
     <div class="flex basis-7/12 flex-col gap-10 rounded-3xl bg-[#efeeff] px-6 pt-10 pb-6 shadow-sm">

@@ -99,7 +99,7 @@
 
     // Generate unique ID for ARIA associations
     const generatedId = $props.id();
-    const uploaderId = `uploader-${generatedId}`;
+    const uploaderId = $derived(generatedId);
 
     /**
      * Compresses an image file to reduce base64 size for localStorage.
@@ -263,16 +263,14 @@
               : $t("pages.project.edit.campaignInfo.media.addImage")}
         aria-busy={isUploading}
     >
-        {#snippet children()}
-            {#if isUploading}
-                <Loader />
-            {:else}
-                <UploadIcon />
-            {/if}
-            {isUploading
-                ? $t("pages.project.edit.campaignInfo.media.uploading")
-                : $t("pages.project.edit.campaignInfo.media.addImage")}
-        {/snippet}
+        {#if isUploading}
+            <Loader />
+        {:else}
+            <UploadIcon />
+        {/if}
+        {isUploading
+            ? $t("pages.project.edit.campaignInfo.media.uploading")
+            : $t("pages.project.edit.campaignInfo.media.addImage")}
     </Button>
 
     <!-- Hidden File Input -->
@@ -326,9 +324,7 @@
                             "group-hover:opacity-100 sm:opacity-0",
                         )}
                     >
-                        {#snippet children()}
-                            <CloseIcon />
-                        {/snippet}
+                        <CloseIcon />
                     </Button>
 
                     <!-- File Info -->
