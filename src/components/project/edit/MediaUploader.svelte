@@ -62,12 +62,11 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import CloseIcon from "../../../components/icons/Close.svelte";
     import Button from "../../../components/library/Button.svelte";
     import { t } from "../../../i18n/store";
-    import CloseIcon from "../../../svgs/CloseIcon.svelte";
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
-    import { cyrb53 } from "../../../utils/hash";
 
     import type { MediaImage } from "../../../stores/wizard-state";
 
@@ -99,7 +98,8 @@
     let uploadProgress = $state<string | null>(null);
 
     // Generate unique ID for ARIA associations
-    const uploaderId = `uploader-${cyrb53("media-uploader")}`;
+    const generatedId = $props.id();
+    const uploaderId = $derived(generatedId);
 
     /**
      * Compresses an image file to reduce base64 size for localStorage.
@@ -263,16 +263,14 @@
               : $t("pages.project.edit.campaignInfo.media.addImage")}
         aria-busy={isUploading}
     >
-        {#snippet children()}
-            {#if isUploading}
-                <Loader />
-            {:else}
-                <UploadIcon />
-            {/if}
-            {isUploading
-                ? $t("pages.project.edit.campaignInfo.media.uploading")
-                : $t("pages.project.edit.campaignInfo.media.addImage")}
-        {/snippet}
+        {#if isUploading}
+            <Loader />
+        {:else}
+            <UploadIcon />
+        {/if}
+        {isUploading
+            ? $t("pages.project.edit.campaignInfo.media.uploading")
+            : $t("pages.project.edit.campaignInfo.media.addImage")}
     </Button>
 
     <!-- Hidden File Input -->
@@ -326,9 +324,7 @@
                             "group-hover:opacity-100 sm:opacity-0",
                         )}
                     >
-                        {#snippet children()}
-                            <CloseIcon />
-                        {/snippet}
+                        <CloseIcon />
                     </Button>
 
                     <!-- File Info -->

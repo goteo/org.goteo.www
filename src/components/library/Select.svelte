@@ -39,7 +39,7 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import { cyrb53 } from "../../utils/hash";
+    import Chevron from "../icons/Chevron.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -74,14 +74,19 @@
     }: SelectProps = $props();
 
     // Generate ID if not provided
-    const selectId = id || `select-${cyrb53(labelText || name || "select")}`;
-    const errorId = `${selectId}-error`;
-    const helperId = `${selectId}-helper`;
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);
+
+    const errorId = $derived(`${finalId}-error`);
+    const helperId = $derived(`${finalId}-helper`);
+
+    let isOpen = $state(false);
 
     /**
      * Handle blur event
      */
     function handleBlur() {
+        isOpen = false;
         onBlur?.();
     }
 
@@ -91,6 +96,7 @@
     function handleChange(event: Event) {
         const target = event.target as HTMLSelectElement;
         value = target.value;
+        isOpen = false;
         onChange?.(target.value);
     }
 </script>
@@ -99,8 +105,8 @@
     <!-- Floating Label -->
     {#if labelText}
         <label
-            for={selectId}
-            class="text-secondary absolute top-[-8px] left-3 bg-white px-1 text-[12px] leading-[16px] font-medium transition-all duration-200"
+            for={finalId}
+            class="text-secondary absolute -top-2 left-3 bg-white px-1 text-[12px] leading-4 font-medium transition-all duration-200"
         >
             {labelText}
             {#if required}
@@ -114,20 +120,26 @@
         {name}
         {required}
         {disabled}
-        id={selectId}
+        id={finalId}
         bind:value
+        onclick={() => (isOpen = !isOpen)}
         onchange={handleChange}
         onblur={handleBlur}
+        onkeydown={(e) => e.key === "Escape" && (isOpen = false)}
         class={twMerge(
-            "w-full rounded-lg border bg-white px-4 py-4 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}
         aria-invalid={error ? "true" : "false"}
         aria-describedby={error ? errorId : helperText ? helperId : undefined}
+        style="-webkit-appearance: none; -moz-appearance: none; appearance: none; background-image: none;"
     >
         {@render children()}
     </select>
+    <div class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2">
+        <Chevron direction={isOpen ? "up" : "down"} width="20" height="20" />
+    </div>
 
     <!-- Helper Text -->
     {#if !error && helperText}

@@ -13,10 +13,10 @@
         type ProjectCalendar,
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
-    import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
     import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
     import Countdown from "../Countdown.svelte";
+    import Arrow from "../icons/Arrow.svelte";
     import LanguagesDropdown from "../LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
@@ -126,7 +126,9 @@
 
 <section class="wrapper">
     <Toast variant="warning" bind:showToast={langMismatch} class="mb-6 w-full">
-        {$t("lang.error.notAvailable", { lang: getLanguageDisplayName(attemptedLang)! })}
+        {$t("pages.project.view.langNotAvailable", {
+            lang: getLanguageDisplayName(attemptedLang)!,
+        })}
     </Toast>
 
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
@@ -196,22 +198,22 @@
             <Sharebutton shareText={project.title ?? ""} projectSlug={project.slug ?? ""} />
             <Button kind="invert" size="sm" class="px-0">
                 <RememberIcon />
-                {$t("project.actions.remember")}
+                {$t("common.remember")}
             </Button>
         </div>
     </div>
     <div class="flex flex-col gap-8">
         <div class="flex items-center justify-between">
             <h2 class="text-2xl font-bold text-black">
-                {$t("reward.trending")}
+                {$t("pages.project.view.rewards.trending")}
             </h2>
             <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
-                <ArrowRightIcon />{$t("reward.showAll")}
+                <Arrow />{$t("pages.project.view.rewards.showAll")}
             </Button>
         </div>
         <TopRewards bind:lang={projectLanguage} {project} />
         <Button kind="secondary" class="lg:hidden" onclick={scrollToRewards}>
-            <ArrowRightIcon />{$t("reward.showAll")}
+            <Arrow />{$t("pages.project.view.rewards.showAll")}
         </Button>
     </div>
     <Banner ownerName={owner.displayName || ""} />

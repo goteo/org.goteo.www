@@ -73,7 +73,7 @@
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
             <span class="text-secondary text-3xl font-bold">
-                {$t("project.tabs.budget.minimum")}:
+                {$t("pages.project.view.tabs.budget.minimum")}:
                 {formatCurrency(
                     project.budget?.minimum?.money?.amount,
                     project.budget?.minimum?.money?.currency,
@@ -84,7 +84,7 @@
                     <div
                         class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
-                        {$t("project.tabs.updates.content.empty")}
+                        {$t("pages.project.view.tabs.updates.content.empty")}
                     </div>
                 {/if}
 
@@ -96,7 +96,7 @@
         <div class="flex flex-col gap-6">
             <div></div>
             <span class="text-secondary text-3xl font-bold">
-                {$t("project.tabs.budget.optimal")}:
+                {$t("pages.project.view.tabs.budget.optimal")}:
 
                 {formatCurrency(
                     project.budget?.optimum?.money?.amount,
@@ -108,7 +108,7 @@
                     <div
                         class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
-                        {$t("project.tabs.updates.content.empty")}
+                        {$t("pages.project.view.tabs.updates.content.empty")}
                     </div>
                 {/if}
 

@@ -1,4 +1,4 @@
-import type { Accounting, Organization, Person, User } from "../openapi/client";
+import type { Accounting, User } from "../openapi/client";
 
 /**
  * Object received from OAuth flows with the v4 API OAuth layer.
@@ -51,14 +51,4 @@ export interface Session {
      * Accounting object of the session owner.
      */
     accounting: Accounting;
-
-    /**
-     * Person data of the session owner.
-     */
-    person: Person;
-
-    /**
-     * Organization data, if any, of the session owner.
-     */
-    organization?: Organization;
 }

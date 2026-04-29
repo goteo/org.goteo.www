@@ -13,7 +13,6 @@
         labelText = undefined,
         helperText = undefined,
         error = undefined,
-        onBlur = undefined,
     }: {
         value?: string;
         id?: string;
@@ -26,34 +25,10 @@
         labelText?: string;
         helperText?: string;
         error?: string;
-        onBlur?: () => void;
     } = $props();
 
-    const finalId = id ? id : getIdForInput();
-
-    function getIdForInput(): string {
-        const cyrb53hash = cyrb53(type + name + placeholder + labelText + helperText);
-
-        return `input-${cyrb53hash}`;
-    }
-
-    function cyrb53(str: string, seed = 0) {
-        let h1 = 0xdeadbeef ^ seed,
-            h2 = 0x41c6ce57 ^ seed;
-
-        for (let i = 0, ch; i < str.length; i++) {
-            ch = str.charCodeAt(i);
-            h1 = Math.imul(h1 ^ ch, 2654435761);
-            h2 = Math.imul(h2 ^ ch, 1597334677);
-        }
-
-        h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507);
-        h1 ^= Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-        h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507);
-        h2 ^= Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-
-        return 4294967296 * (2097151 & h2) + (h1 >>> 0);
-    }
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-40")}>

@@ -2,10 +2,10 @@
     import { onMount } from "svelte";
     import { twMerge } from "tailwind-merge";
 
+    import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { locale } from "../../i18n/store";
     import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import { formatDate } from "../../utils/dates.ts";
     import { extractId } from "../../utils/extractId.ts";
     import { renderMarkdown } from "../../utils/renderMarkdown";
@@ -65,7 +65,7 @@
                     {formatDate(new Date(update.date), $locale)}
                 {/if}
                 <div class="pt-1">
-                    <ActiveFilterIcon />
+                    <Bullet />
                 </div>
             </div>
         </div>
@@ -104,7 +104,7 @@
                     {formatDate(new Date(update.date), $locale)}
                 {/if}
                 <div class="pt-1">
-                    <ActiveFilterIcon />
+                    <Bullet />
                 </div>
             </div>
             {#if update.cover}
@@ -134,11 +134,11 @@
             </div>
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
-                    {$t("project.tabs.updates.by")}
+                    {$t("pages.project.view.tabs.updates.by")}
                     <strong class="font-bold text-black"> {author?.displayName}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
-                    {$t("project.tabs.updates.content.btn.read-more")}
+                    {$t("pages.project.view.tabs.updates.content.btn.readMore")}
                 </Button>
             </div>
         </div>

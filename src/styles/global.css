@@ -6,6 +6,9 @@
 
 @import "./marked";
 
+@source "../pages/**/*.{astro,svelte}";
+@source "../layouts/**/*.{astro,svelte}";
+@source "../components/**/*.{astro,svelte}";
 @source "../node_modules/flowbite-svelte/dist";
 @source "../node_modules/flowbite-svelte-icons/dist";
 

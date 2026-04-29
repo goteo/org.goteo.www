@@ -1,0 +1,10 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+
+import Cell from "./Cell.svelte";
+import Table from "./Table.svelte";
+
+const { t } = Astro.locals;
+---
+
+<Layout title={t("metadata.title")} description={t("metadata.description")} class="px-10" />

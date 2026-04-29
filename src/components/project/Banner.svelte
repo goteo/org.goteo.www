@@ -12,11 +12,11 @@
         <div><DonatorIcon /></div>
         <div class="text-content">
             <Thtml
-                key="project.banner.donator.description"
+                key="pages.project.view.banner.donator.description"
                 vars={{ owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` }}
             />
             <a href="#" class="text-secondary font-bold"
-                >{$t("project.banner.donator.learnMore")}
+                >{$t("pages.project.view.banner.donator.learnMore")}
             </a>
         </div>
     </div>
@@ -24,9 +24,9 @@
         <div><CertificateIcon /></div>
         <div>
             <div class="text-content">
-                {$t("project.banner.certificate.description")}
+                {$t("pages.project.view.banner.certificate.description")}
                 <a href="#" class="text-secondary font-bold"
-                    >{$t("project.banner.certificate.learnMore")}
+                    >{$t("pages.project.view.banner.certificate.learnMore")}
                 </a>
             </div>
         </div>

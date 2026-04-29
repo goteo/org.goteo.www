@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import { t } from "../i18n/store";
-    import ClockIcon from "../svgs/ClockIcon.svelte";
+    import Clock from "./icons/Clock.svelte";
 
     export let deadline: Date | undefined = undefined;
 
@@ -53,10 +53,13 @@
 
 <div class="text-secondary flex items-center gap-2 text-end text-2xl font-bold lg:justify-end">
     {#if timeLeft.total > 0}
-        <ClockIcon />
-        <p>{$t("countdown.remaining")} {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</p>
+        <Clock />
+        <p>
+            {$t("common.countdown.remaining")}
+            {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m
+        </p>
     {:else}
-        <ClockIcon />
-        <p>{$t("countdown.expired")}</p>
+        <Clock />
+        <p>{$t("common.countdown.expired")}</p>
     {/if}
 </div>
