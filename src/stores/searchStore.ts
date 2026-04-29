@@ -256,4 +256,3 @@ export const searchFilters = derived(searchStore, ($searchStore) => $searchStore
 export const searchResults = derived(searchStore, ($s) => $s.results);
 export const isSearching = derived(searchStore, ($s) => $s.isLoading);
 export const resultCount = derived(searchStore, ($s) => $s.totalCount);
-

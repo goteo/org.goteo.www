@@ -13,9 +13,9 @@ Integrated with searchStore for state management and URL synchronization
     import SearchInput from "./SearchInput.svelte";
     import TerritoryInputFilter from "./TerritoryInputFilter.svelte";
     import { t, setLocale } from "../../i18n/store";
-    import { searchStore, searchFilters } from "../../stores/searchStore";    
+    import { searchStore, searchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
-    
+
     import type { Territory } from "../../openapi/client";
 
     interface CustomTerritory extends Territory {

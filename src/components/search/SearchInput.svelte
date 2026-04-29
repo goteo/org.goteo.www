@@ -32,7 +32,7 @@ Implements main search bar with floating label matching Figma design exactly
     let searchQuery = $state(value);
 
     // Keep local state in sync with prop changes (important for SSR hydration)
-     $effect(() => {
+    $effect(() => {
         if (value !== searchQuery) {
             searchQuery = value;
         }
@@ -45,8 +45,8 @@ Implements main search bar with floating label matching Figma design exactly
         onSearch?.(searchQuery);
     }
 
-     function handleKeydown(event: KeyboardEvent) {
-        if (event.key === "Enter") {            
+    function handleKeydown(event: KeyboardEvent) {
+        if (event.key === "Enter") {
             if (onEnter) {
                 onEnter();
             } else {

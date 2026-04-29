@@ -16,7 +16,6 @@ const url = new URL(Astro.request.url);
 
 const { searchParams } = url;
 
-
 const initialFilters = {
     query: searchParams.get("q") || "",
     statusFilter: searchParams.get("status") || "",
@@ -28,7 +27,6 @@ const initialFilters = {
         rawQuery: searchParams.get("locationText") || "",
     },
 };
-
 
 const hasInitialSearch = !!(
     initialFilters.query ||
@@ -50,13 +48,9 @@ const hasInitialSearch = !!(
             </p>
         </div>
 
-         <!-- Search Filters -->
+        <!-- Search Filters -->
         <div class="mb-8">
-            <SearchFilters 
-                client:load 
-                locale={lang} 
-                initialFilters={initialFilters} 
-            />
+            <SearchFilters client:load locale={lang} initialFilters={initialFilters} />
         </div>
 
         <!-- Search Results -->

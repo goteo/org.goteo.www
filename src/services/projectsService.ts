@@ -24,11 +24,13 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
-            const territoryParams = filters.territory ? {
-                country: filters.territory.country,
-                ...(filters.territory.subLvl1 && { subLvl1: filters.territory.subLvl1 }),
-                ...(filters.territory.subLvl2 && { subLvl2: filters.territory.subLvl2 }),
-            } : {};
+            const territoryParams = filters.territory
+                ? {
+                      country: filters.territory.country,
+                      ...(filters.territory.subLvl1 && { subLvl1: filters.territory.subLvl1 }),
+                      ...(filters.territory.subLvl2 && { subLvl2: filters.territory.subLvl2 }),
+                  }
+                : {};
 
             const response = await apiProjectsGetCollection({
                 query: {

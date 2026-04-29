@@ -22,10 +22,9 @@
         label = "",
         placeholder = "",
         onTerritoryDetected,
-        id  = `territory-input-${crypto.randomUUID().slice(0, 8)}`,
+        id = `territory-input-${crypto.randomUUID().slice(0, 8)}`,
     }: Props = $props();
 
-   
     async function handleValidation(text: string) {
         if (!text || text.trim().length < 2) return;
         // Call to the Nominatim fetch service
@@ -40,8 +39,7 @@
 
 <div class="flex w-full flex-col gap-1.5">
     {#if label}
-         <label for={id} class="text-secondary text-sm font-medium">    {label}
-        </label>
+        <label for={id} class="text-secondary text-sm font-medium"> {label} </label>
     {/if}
 
     <SearchInput
@@ -52,6 +50,5 @@
         onSearch={(text) => (value = text)}
         onEnter={() => handleValidation(value)}
         onBlur={() => handleValidation(value)}
-        
     />
 </div>
