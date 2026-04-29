@@ -50,6 +50,14 @@
         },
         "isInfinite": "Sin límite de unidades"
       }
+    },
+    "search": {
+      "categories": {
+        "without": "No hay categorías disponibles",
+        "button": "Buscar",
+        "placeholder": "Escribe aquí...",
+        "label": "Buscador"
+      }
     }
   },
   "pages": {

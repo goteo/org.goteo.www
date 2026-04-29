@@ -5,8 +5,8 @@ Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import { apiCategoriesGetCollection, type Category } from "../../openapi/client";
-    import CategorySelect, { type Option } from "../library/CategorySelect.svelte";
+    import { apiCategoriesGetCollection } from "../../openapi/client";
+    import Category from "../library/Category.svelte";
 
     interface Props {
         selectedCategories?: string[];
@@ -15,52 +15,58 @@ Implements active/inactive pill states matching Figma design
         "data-testid"?: string;
     }
 
-    let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
+    let {
+        selectedCategories = [],
+        onCategoryChange,
+        showLabel = true,
+        "data-testid": testId,
+    }: Props = $props();
 
-    let categories = getAvailableCategories();
-    let selected = $state(
-        selectedCategories.map((s) => {
-            return { id: s, text: $t("categories." + s) };
-        }),
-    );
+    const categoriesPromise = apiCategoriesGetCollection();
 
-    async function getAvailableCategories(): Promise<Category[]> {
-        const { data } = await apiCategoriesGetCollection();
+    function toggleCategory(categoryId: string) {
+        const idStr = String(categoryId);
+        const newSelection = selectedCategories.includes(idStr)
+            ? selectedCategories.filter((id) => id !== idStr)
+            : [...selectedCategories, idStr];
 
-        if (!data) {
-            return [];
-        }
-
-        return data;
-    }
-
-    function mapCategoryToOption(category: Category): Option {
-        return {
-            id: category.id!,
-            text: $t("categories." + category.id!),
-        };
+        onCategoryChange?.(newSelection);
     }
 </script>
 
-<div class="w-full">
+<div class="w-full" data-testid={testId}>
     {#if showLabel}
-        <h3 class="mb-6 font-['Karla'] text-base font-bold text-[#3d3d3d]">
+        <h3 class="text-Black mb-6 font-['Karla'] text-base font-bold">
             {$t("search.categoryLabel")}
         </h3>
     {/if}
 
-    {#await categories then categories}
-        <CategorySelect
-            bind:selected
-            selectedIds={selected.map((s) => s.id)}
-            options={categories.map((c) => mapCategoryToOption(c))}
-            onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
-        />
-    {/await}
-
-    {#if selected.length > 0}
-        <div class="mt-4 text-sm text-[#3d3d3d] opacity-70">
-            {$t("search.selectedCategories", { count: selected.length })}
+    {#await categoriesPromise}
+        <div class="flex flex-wrap gap-2">
+            {#each Array(6) as _}
+                <div class="h-10 w-24 animate-pulse rounded-full bg-gray-100"></div>
+            {/each}
         </div>
-    {/if}
+    {:then { data, error }}
+        {#if error}
+            <p class="text-sm text-red-500">{$t("common.error.loading_categories")}</p>
+        {:else if data && data.length > 0}
+            <div class="flex flex-wrap gap-2">
+                {#each data as category}
+                    {@const isSelected = selectedCategories.includes(String(category.id))}
+
+                    <Category
+                        type={isSelected ? "active" : "default"}
+                        onclick={() => toggleCategory(String(category.id))}
+                    >
+                        {$t("categories." + category.id)}
+                    </Category>
+                {/each}
+            </div>
+        {:else}
+            <p class="text-sm text-gray-400 italic">
+                {$t("domain.search.categories.without")}
+            </p>
+        {/if}
+    {/await}
 </div>

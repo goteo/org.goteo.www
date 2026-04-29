@@ -11,19 +11,28 @@ const { t, lang, session } = Astro.locals;
 // Initial projects will be fetched client-side to avoid blocking SSR
 const initialProjects: Project[] = [];
 
-// Parse URL search parameters for SSR
+// URL search parameters for SSR
 const url = new URL(Astro.request.url);
+
+const { searchParams } = url;
+
 const initialFilters = {
-    query: url.searchParams.get("q") || "",
-    statusFilter: url.searchParams.get("status") || "",
-    categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    query: searchParams.get("q") || "",
+    statusFilter: searchParams.get("status") || "",
+    categories: searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    territory: {
+        country: searchParams.get("country") || null,
+        subLvl1: searchParams.get("subLvl1") || null,
+        subLvl2: searchParams.get("subLvl2") || null,
+        rawQuery: searchParams.get("locationText") || "",
+    },
 };
 
-// Check if URL has search parameters
 const hasInitialSearch = !!(
     initialFilters.query ||
     initialFilters.statusFilter ||
-    initialFilters.categories.length > 0
+    initialFilters.categories.length > 0 ||
+    initialFilters.territory.rawQuery
 );
 ---
 
