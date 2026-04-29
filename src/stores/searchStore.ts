@@ -38,7 +38,7 @@ function getInitialState(): SearchState {
             query: "",
             statusFilter: "",
             categories: [],
-            territory: {},
+            territory: null,
         },
         results: [],
         isLoading: false,
@@ -72,9 +72,19 @@ function loadInitialState(): SearchState {
         state.filters.categories = categories.split(",").filter(Boolean);
     }
 
-    // If we have URL parameters, mark as having searched
+    const country = urlParams.get("country");
+    if (country) {
+        state.filters.territory = {
+            country,
+            subLvl1: urlParams.get("subLvl1") || undefined,
+            subLvl2: urlParams.get("subLvl2") || undefined,
+        };
+    }
     const hasUrlFilters =
-        state.filters.query || state.filters.statusFilter || state.filters.categories.length > 0;
+        state.filters.query ||
+        state.filters.statusFilter ||
+        state.filters.categories.length > 0 ||
+        state.filters.territory;
 
     if (hasUrlFilters) {
         state.hasSearched = true;
@@ -115,14 +125,12 @@ function createSearchStore() {
 
             // Check if request wasn't cancelled
             if (!abortController.signal.aborted) {
-                const hasPrevPage = currentState.currentPage > 1;
-
                 update((state) => ({
                     ...state,
                     results: response.projects,
                     totalCount: response.totalCount,
                     hasNextPage: response.hasNextPage,
-                    hasPrevPage,
+                    hasPrevPage: currentState.currentPage > 1,
                     isLoading: false,
                     hasSearched: true,
                     lastSearchTime: Date.now(),
@@ -151,122 +159,46 @@ function createSearchStore() {
             update((state) => ({
                 ...state,
                 filters: { ...state.filters, ...newFilters },
+                currentPage: 1,
             }));
         },
 
-        // Initialize filters (for SSR hydration)
-        initializeFilters: (newFilters: Partial<SearchFilters>) => {
-            update((state) => ({
-                ...state,
-                filters: { ...state.filters, ...newFilters },
-            }));
-        },
-
-        // Set search results
-        setResults: (results: Project[], totalCount: number = results.length) =>
-            update((state) => ({
-                ...state,
-                results,
-                totalCount,
-                isLoading: false,
-                hasError: false,
-                errorMessage: "",
-                hasSearched: true,
-                lastSearchTime: Date.now(),
-            })),
-
-        // Set initial results without marking as searched (for SSR data)
-        setInitialResults: (results: Project[], totalCount: number = results.length) => {
-            return update((state) => ({
-                ...state,
-                results,
-                totalCount,
-                isLoading: false,
-                hasError: false,
-                errorMessage: "",
-                hasSearched: false,
-                lastSearchTime: Date.now(),
-            }));
-        },
-
-        // Set loading state
-        setLoading: (isLoading: boolean) =>
-            update((state) => ({
-                ...state,
-                isLoading,
-                hasError: false,
-                errorMessage: "",
-            })),
-
-        // Set error state
-        setError: (errorMessage: string) =>
-            update((state) => ({
-                ...state,
-                isLoading: false,
-                hasError: true,
-                errorMessage,
-            })),
-
-        // Clear search results
-        clearResults: () =>
-            update((state) => ({
-                ...state,
-                results: [],
-                totalCount: 0,
-                hasSearched: false,
-                hasError: false,
-                errorMessage: "",
-            })),
-
-        // Clear all filters
-        clearFilters: () =>
-            update((state) => ({
-                ...state,
-                filters: {
-                    query: "",
-                    statusFilter: "",
-                    categories: [],
-                },
-            })),
-
-        // Reset to initial state
-        reset: () => set(getInitialState()),
-
-        // Update URL parameters to reflect current filters
         updateUrl: () => {
             if (!isBrowser) return;
 
             const state = get(searchStore);
             const urlParams = new URLSearchParams();
 
-            if (state.filters.query) {
-                urlParams.set("q", state.filters.query);
-            }
-            if (state.filters.statusFilter) {
-                urlParams.set("status", state.filters.statusFilter);
-            }
+            if (state.filters.query) urlParams.set("q", state.filters.query);
+            if (state.filters.statusFilter) urlParams.set("status", state.filters.statusFilter);
             if (state.filters.categories.length > 0) {
                 urlParams.set("categories", state.filters.categories.join(","));
+            }
+
+            if (state.filters.territory) {
+                urlParams.set("country", String(state.filters.territory.country));
+
+                if (state.filters.territory.subLvl1) {
+                    urlParams.set("subLvl1", String(state.filters.territory.subLvl1));
+                }
+
+                if (state.filters.territory.subLvl2) {
+                    urlParams.set("subLvl2", String(state.filters.territory.subLvl2));
+                }
             }
 
             const newUrl = urlParams.toString()
                 ? `${window.location.pathname}?${urlParams.toString()}`
                 : window.location.pathname;
 
-            // Use replaceState to avoid adding to browser history on every filter change
             window.history.replaceState({}, "", newUrl);
         },
 
-        // Initialize store with server-provided data
         initializeFromServer: (
             filters: SearchFilters,
             results: Project[],
             totalCount: number,
-            pagination?: {
-                currentPage: number;
-                hasNext: boolean;
-                hasPrev: boolean;
-            },
+            pagination?: any,
         ) =>
             update((state) => ({
                 ...state,
@@ -276,221 +208,52 @@ function createSearchStore() {
                 currentPage: pagination?.currentPage || 1,
                 hasNextPage: pagination?.hasNext || false,
                 hasPrevPage: pagination?.hasPrev || false,
-                hasSearched:
-                    totalCount > 0 ||
-                    !!(filters.query || filters.statusFilter || filters.categories.length > 0),
+                hasSearched: totalCount > 0 || !!(filters.query || filters.territory), // CAMBIO: Check de territorio
                 isLoading: false,
-                hasError: false,
-                errorMessage: "",
                 lastSearchTime: Date.now(),
             })),
 
-        // Search with API (manual trigger)
         searchWithApi: async (resetPage = true) => {
-            if (resetPage) {
-                update((state) => ({
-                    ...state,
-                    currentPage: 1,
-                }));
-            }
-
-            // Get the updated state AFTER resetting the page
-            const currentState = get(store);
+            if (resetPage) update((s) => ({ ...s, currentPage: 1 }));
+            const currentState = get(searchStore);
             await performSearch(currentState.filters);
         },
 
-        // Load next page
-        loadNextPage: async () => {
-            const currentState = get(store);
-            if (!currentState.hasNextPage || currentState.isLoading) return;
-
-            update((state) => ({
-                ...state,
-                currentPage: state.currentPage + 1,
-            }));
-
-            await store.searchWithApi(false);
-        },
-
-        // Load previous page
-        loadPreviousPage: async () => {
-            const currentState = get(store);
-            if (
-                !currentState.hasPrevPage ||
-                currentState.isLoading ||
-                currentState.currentPage <= 1
-            )
-                return;
-
-            update((state) => ({
-                ...state,
-                currentPage: state.currentPage - 1,
-            }));
-
-            await store.searchWithApi(false);
-        },
-
-        // Go to specific page
-        goToPage: async (page: number) => {
-            const currentState = get(store);
-            if (page < 1 || currentState.isLoading) return;
-
-            update((state) => ({
-                ...state,
-                currentPage: page,
-            }));
-
-            await store.searchWithApi(false);
-        },
-
-        // Cancel current API request
-        cancelRequest: () => {
-            update((state) => {
-                if (state.currentAbortController) {
-                    state.currentAbortController.abort();
-                }
-                return {
-                    ...state,
-                    isLoading: false,
-                    currentAbortController: undefined,
-                };
-            });
-        },
-
-        // Load more results (accumulative pagination)
         loadMoreResults: async () => {
-            const currentState = get(store);
+            const currentState = get(searchStore);
             if (!currentState.hasNextPage || currentState.isLoading) return;
 
-            try {
-                // Increment page before fetching
-                update((state) => ({
-                    ...state,
-                    currentPage: state.currentPage + 1,
-                }));
+            update((s) => ({ ...s, currentPage: s.currentPage + 1 }));
+            const nextState = get(searchStore);
 
-                const nextPageState = get(store);
-
-                // Cancel previous request if exists
-                if (nextPageState.currentAbortController) {
-                    nextPageState.currentAbortController.abort();
-                }
-
-                // Create new abort controller
-                const abortController = new AbortController();
-
-                update((state) => ({
-                    ...state,
-                    isLoading: true,
-                    hasError: false,
-                    errorMessage: "",
-                    currentAbortController: abortController,
-                }));
-
-                const response = await projectsService.searchProjects(nextPageState.filters, {
-                    page: nextPageState.currentPage,
-                    limit: nextPageState.itemsPerPage,
-                    abortSignal: abortController.signal,
-                });
-
-                // Check if request wasn't cancelled
-                if (!abortController.signal.aborted) {
-                    const hasPrevPage = nextPageState.currentPage > 1;
-
-                    update((state) => ({
-                        ...state,
-                        // Append new results to existing results
-                        results: [...state.results, ...response.projects],
-                        totalCount: response.totalCount,
-                        hasNextPage: response.hasNextPage,
-                        hasPrevPage,
-                        isLoading: false,
-                        hasSearched: true,
-                        lastSearchTime: Date.now(),
-                        currentAbortController: undefined,
-                    }));
-                }
-            } catch (error) {
-                // Only set error if request wasn't cancelled
-                // Keep existing results on error
-                if (!(error instanceof Error) || error.name !== "AbortError") {
-                    update((state) => ({
-                        ...state,
-                        isLoading: false,
-                        hasError: true,
-                        errorMessage:
-                            error instanceof Error ? error.message : "Failed to load more results",
-                        currentAbortController: undefined,
-                        // Revert page increment on error
-                        currentPage: state.currentPage - 1,
-                    }));
-                }
-            }
+            await performSearch(nextState.filters);
         },
+
+        clearFilters: () =>
+            update((s) => ({
+                ...s,
+                filters: getInitialState().filters,
+            })),
+
+        reset: () => set(getInitialState()),
     };
 
     return store;
 }
 
-// Create the main search store
 export const searchStore = createSearchStore();
 
-// Derived stores for computed values
-export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters);
-
-export const searchResults = derived(searchStore, ($searchStore) => $searchStore.results);
-
-export const isSearching = derived(searchStore, ($searchStore) => $searchStore.isLoading);
-
-export const searchError = derived(searchStore, ($searchStore) =>
-    $searchStore.hasError ? $searchStore.errorMessage : null,
-);
-
-export const hasSearchResults = derived(
-    searchStore,
-    ($searchStore) => $searchStore.results.length > 0,
-);
-
-export const hasActualSearchResults = derived(
-    searchStore,
-    ($searchStore) => $searchStore.hasSearched && $searchStore.results.length > 0,
-);
-
-export const hasInitialResults = derived(
-    searchStore,
-    ($searchStore) => !$searchStore.hasSearched && $searchStore.results.length > 0,
-);
-
-export const isEmpty = derived(
-    searchStore,
-    ($searchStore) => $searchStore.hasSearched && $searchStore.results.length === 0,
-);
-
-export const resultCount = derived(searchStore, ($searchStore) => $searchStore.totalCount);
-
-// Derived store to check if any filters are active
-export const hasActiveFilters = derived(searchStore, ($searchStore) => {
-    const { filters } = $searchStore;
+export const hasActiveFilters = derived(searchStore, ($s) => {
     return !!(
-        filters.query ||
-        filters.statusFilter ||
-        filters.categories.length > 0 ||
-        filters.territory
+        $s.filters.query ||
+        $s.filters.statusFilter ||
+        $s.filters.categories.length > 0 ||
+        $s.filters.territory
     );
 });
 
-// Pagination derived stores
-export const currentPage = derived(searchStore, ($searchStore) => $searchStore.currentPage);
+export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters);
+export const searchResults = derived(searchStore, ($s) => $s.results);
+export const isSearching = derived(searchStore, ($s) => $s.isLoading);
+export const resultCount = derived(searchStore, ($s) => $s.totalCount);
 
-export const hasNextPage = derived(searchStore, ($searchStore) => $searchStore.hasNextPage);
-
-export const hasPrevPage = derived(searchStore, ($searchStore) => $searchStore.hasPrevPage);
-
-// Pagination info derived store
-export const paginationInfo = derived(searchStore, ($searchStore) => ({
-    currentPage: $searchStore.currentPage,
-    totalCount: $searchStore.totalCount,
-    hasNext: $searchStore.hasNextPage,
-    hasPrev: $searchStore.hasPrevPage,
-    isLoading: $searchStore.isLoading,
-}));

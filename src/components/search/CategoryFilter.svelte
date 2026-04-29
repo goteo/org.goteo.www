@@ -4,91 +4,71 @@ Interactive category selection using existing categories from utils/categories.t
 Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
-
+    
     import { t } from "../../i18n/store";
-    import {
-        apiCategoriesGetCollection,
-        type Category as OpenAPICategory,
-    } from "../../openapi/client";
+    import { apiCategoriesGetCollection } from "../../openapi/client";
+    import Category from "../library/Category.svelte";
+    
 
-    interface Category extends OpenAPICategory {
-        id: string;
-        name: string;
-    }
-
-    interface Props {
+   interface Props {
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
+        showLabel?: boolean;
         "data-testid"?: string;
     }
 
-    let { selectedCategories = [], onCategoryChange, "data-testid": testId }: Props = $props();
+    let { 
+        selectedCategories = [], 
+        onCategoryChange, 
+        showLabel = true, 
+        "data-testid": testId 
+    }: Props = $props();
 
-    let categories = $state<Category[]>([]);
-    let isLoading = $state(true);
+    const categoriesPromise = apiCategoriesGetCollection();
 
-    onMount(async () => {
-        try {
-            const response = await apiCategoriesGetCollection();
+      function toggleCategory(categoryId: string) {
+        const idStr = String(categoryId);
+        const newSelection = selectedCategories.includes(idStr)
+            ? selectedCategories.filter((id) => id !== idStr)
+            : [...selectedCategories, idStr];
 
-            const responseData = response as any;
-            const rawData = responseData.data || responseData["hydra:member"] || responseData;
-
-            if (Array.isArray(rawData)) {
-                categories = rawData.map((cat: any) => ({
-                    ...cat,
-                    id: String(cat.id),
-                    name: cat.name || cat.title || "Category",
-                }));
-            }
-        } catch (error) {
-            console.error("Failed to load categories:", error);
-        } finally {
-            isLoading = false;
-        }
-    });
-
-    function toggleCategory(categoryId: string) {
-        const newSelection = selectedCategories.includes(categoryId)
-            ? selectedCategories.filter((id) => id !== categoryId)
-            : [...selectedCategories, categoryId];
-
-        if (onCategoryChange) {
-            onCategoryChange(newSelection);
-        }
-    }
+        onCategoryChange?.(newSelection);
+    }    
 </script>
 
-<div class="flex flex-col gap-4" data-testid={testId}>
-    <h3 class="text-sm font-bold tracking-wider text-gray-500 uppercase">
-        {$t("search.categoryLabel")}
-    </h3>
+<div class="w-full" data-testid={testId}>
+    {#if showLabel}
+        <h3 class="mb-6 font-['Karla'] text-base font-bold text-Black">
+            {$t("search.categoryLabel")}
+        </h3>
+    {/if}
 
-    {#if isLoading}
+    {#await categoriesPromise}
         <div class="flex flex-wrap gap-2">
             {#each Array(6) as _}
                 <div class="h-10 w-24 animate-pulse rounded-full bg-gray-100"></div>
             {/each}
         </div>
-    {:else if categories.length > 0}
-        <div class="flex flex-wrap gap-2">
-            {#each categories as category}
-                {@const isSelected = selectedCategories.includes(category.id)}
-                <button
-                    type="button"
-                    onclick={() => toggleCategory(category.id)}
-                    class="rounded-full border px-4 py-2 text-sm font-medium transition-all {isSelected
-                        ? 'border-purple-800 bg-purple-800 text-white shadow-sm'
-                        : 'border-gray-300 bg-white text-gray-600 hover:border-purple-400 hover:text-purple-600'}"
-                >
-                    {category.name}
-                </button>
-            {/each}
-        </div>
-    {:else}
-        <p class="text-sm text-gray-400 italic">
-            {$t("domain.search.categories.without")}
-        </p>
-    {/if}
+    {:then { data, error }}
+        {#if error}
+        <p class="text-sm text-red-500">{$t("common.error.loading_categories")}</p>
+    {:else if data && data.length > 0}
+            <div class="flex flex-wrap gap-2">
+                {#each data as category}
+                    {@const isSelected = selectedCategories.includes(String(category.id))}
+                    
+                    <Category 
+                        type={isSelected ? "active" : "default"} 
+                        onclick={() => toggleCategory(String(category.id))}
+                    >
+                        {$t("categories." + category.id)}
+                    </Category>
+                {/each}
+            </div>
+        {:else}
+            <p class="text-sm text-gray-400 italic">
+                {$t("domain.search.categories.without")}
+            </p>
+        {/if}
+    {/await}
 </div>

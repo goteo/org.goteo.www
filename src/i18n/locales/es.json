@@ -46,7 +46,10 @@
     },
     "search": {
       "categories": {
-        "without": "No hay categorías disponibles"
+        "without": "No hay categorías disponibles",
+        "button": "Buscar",
+        "placeholder": "Escribe aquí...",
+        "label": "Buscador"
       }
     }
   },

@@ -11,10 +11,10 @@ export const nominatim = {
      * @param text The location string to search for
      */
     async findIsoByText(text: string): Promise<Territory | null> {
-        if (!text || text.trim().length < 3) return null;
+        if (!text || text.trim().length < 1) return null;
 
         try {
-            // We use addressdetails=1 to get ISO codes in the response
+            const url = "https://nominatim.openstreetmap.org/search?";
             const params = new URLSearchParams({
                 q: text,
                 format: "json",
@@ -22,12 +22,21 @@ export const nominatim = {
                 limit: "1",
             });
 
-            const response = await fetch("https://nominatim.openstreetmap.org/search?" + params, {
-                headers: {
-                    // Nominatim requires a descriptive User-Agent
-                    "User-Agent": "BuscarProyecto(contact@yourproyect.com)",
-                },
-            });
+            const fullUrl = url + params.toString();
+            const cache = await caches.open("nominatim-cache");
+            let response = await cache.match(fullUrl);
+
+            if (!response) {
+                response = await fetch(fullUrl, {
+                    headers: {
+                        "User-Agent": "Platoniq Goteo-v4-web",
+                    },
+                });
+
+                if (response.ok) {
+                    await cache.put(fullUrl, response.clone());
+                }
+            }
 
             if (!response.ok) {
                 throw new Error(`Nominatim API error: ${response.statusText}`);
@@ -38,10 +47,18 @@ export const nominatim = {
             if (data && data.length > 0) {
                 const address = data[0].address;
 
+                const foundIsoCodes: string[] = [];
+                for (let level = 1; level <= 10; level++) {
+                    const key = `ISO3166-2-lvl${level}`;
+                    if (address[key]) {
+                        foundIsoCodes.push(address[key]);
+                    }
+                }
+
                 return {
                     country: address.country_code?.toUpperCase() || null,
-                    subLvl1: address["ISO3166-2-lvl4"] || address["ISO3166-2-lvl3"] || null,
-                    subLvl2: address["ISO3166-2-lvl6"] || null,
+                    subLvl1: foundIsoCodes[0] || null,
+                    subLvl2: foundIsoCodes[1] || null,
                 };
             }
 

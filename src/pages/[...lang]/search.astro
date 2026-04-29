@@ -11,26 +11,25 @@ const { t, lang, session } = Astro.locals;
 // Initial projects will be fetched client-side to avoid blocking SSR
 const initialProjects: Project[] = [];
 
-// Parse URL search parameters for SSR
+// URL search parameters for SSR
 const url = new URL(Astro.request.url);
 
-/**
- * se agrega  la lógica para extraer los datos geográficos de la URL
- * Esto permite que al compartir el link, la ubicación se mantenga.
- */
+const { searchParams } = url;
+
+
 const initialFilters = {
-    query: url.searchParams.get("q") || "",
-    statusFilter: url.searchParams.get("status") || "",
-    categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    query: searchParams.get("q") || "",
+    statusFilter: searchParams.get("status") || "",
+    categories: searchParams.get("categories")?.split(",").filter(Boolean) || [],
     territory: {
-        country: url.searchParams.get("country") || null,
-        subLvl1: url.searchParams.get("subLvl1") || null,
-        subLvl2: url.searchParams.get("subLvl2") || null,
-        rawQuery: url.searchParams.get("locationText") || "",
+        country: searchParams.get("country") || null,
+        subLvl1: searchParams.get("subLvl1") || null,
+        subLvl2: searchParams.get("subLvl2") || null,
+        rawQuery: searchParams.get("locationText") || "",
     },
 };
 
-// Check if URL has search parameters (Actualizado para incluir territorio)
+
 const hasInitialSearch = !!(
     initialFilters.query ||
     initialFilters.statusFilter ||
@@ -51,17 +50,22 @@ const hasInitialSearch = !!(
             </p>
         </div>
 
+         <!-- Search Filters -->
         <div class="mb-8">
-            <!-- <SearchFilters locale={lang} initialFilters={initialFilters} client:load /> -->
-            <SearchFilters client:load initialFilters={initialFilters} locale={lang} />
+            <SearchFilters 
+                client:load 
+                locale={lang} 
+                initialFilters={initialFilters} 
+            />
         </div>
 
+        <!-- Search Results -->
         <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
             <SearchResultsClient
+                client:load
                 initialProjects={initialProjects}
                 initialFilters={initialFilters}
                 hasInitialSearch={hasInitialSearch}
-                client:load
             />
         </div>
     </section>

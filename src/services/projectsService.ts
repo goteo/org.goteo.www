@@ -6,12 +6,10 @@ import type { SearchFilters } from "../stores/searchStore";
 
 /**
  * Simple service wrapper for project API calls
- * Based on OpenAPI client documentation
  */
 export class ProjectsService {
     /**
      * Search projects with filters and pagination
-     * Returns raw Project[] from API
      */
     async searchProjects(
         filters: SearchFilters,
@@ -26,16 +24,18 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const territoryParams = filters.territory ? {
+                country: filters.territory.country,
+                ...(filters.territory.subLvl1 && { subLvl1: filters.territory.subLvl1 }),
+                ...(filters.territory.subLvl2 && { subLvl2: filters.territory.subLvl2 }),
+            } : {};
+
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...(filters.territory && {
-                        country: filters.territory.country,
-                        subLvl1: filters.territory.subLvl1,
-                        subLvl2: filters.territory.subLvl2,
-                    }),
+                    ...territoryParams,
                     // Text search
                     ...(filters.query?.trim() && { title: filters.query.trim() }),
-                    // Categories (array filter for OR logic) - Fixed: use "categories[]" not "category[]"
+                    // Categories
                     ...(filters.categories?.length && { "categories[]": filters.categories }),
                     // Status filter
                     ...(filters.statusFilter &&
@@ -47,18 +47,16 @@ export class ProjectsService {
                 ...(options?.abortSignal && { signal: options.abortSignal }),
             });
 
-            // According to OpenAPI types, response.data is Array<Project>
             const projects = (response.data as Project[]) || [];
             const limit = options?.limit || 20;
+            const currentPage = options?.page || 1;
 
             // Infer hasNextPage: if we got exactly the requested amount, there might be more
             const hasNextPage = projects.length === limit;
 
-            // Without Hydra metadata, we can only use the current page count
-            // Multiply by current page to give a rough estimate
             const totalCount = hasNextPage
-                ? projects.length * (options?.page || 1) + 1 // At least one more page
-                : projects.length * (options?.page || 1);
+                ? projects.length * currentPage + 1
+                : (currentPage - 1) * limit + projects.length;
 
             return {
                 projects,
@@ -81,7 +79,6 @@ export class ProjectsService {
 
     /**
      * Get initial projects for SSR
-     * Returns empty array on error
      */
     async getInitialProjects(
         locale: string,
@@ -106,14 +103,6 @@ export class ProjectsService {
         } catch {
             return [];
         }
-    }
-
-    /**
-     * Helper: Check if there are more pages
-     * API doesn't return pagination metadata, so we infer from results
-     */
-    hasNextPage(projects: Project[], limit: number): boolean {
-        return projects.length === limit;
     }
 }
 
