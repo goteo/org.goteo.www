@@ -14,12 +14,11 @@ const { t, lang, session } = Astro.locals;
 
 const defaultCurrency = getDefaultCurrency();
 
-const authCookie = Astro.cookies.get("auth");
-if (!authCookie) {
+if (!session) {
     return Astro.redirect("/login?callback=/payment");
 }
 
-const { token, user } = authCookie.json();
+const { token, user } = session;
 
 const { data: accounting } = await apiAccountingsIdGet({
     path: { id: extractId(user.accounting)! },
