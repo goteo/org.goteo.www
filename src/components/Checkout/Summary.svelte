@@ -6,7 +6,7 @@
     import CollapsibleBox from "../CollapsibleBox.svelte";
     import Thtml from "../Thtml.svelte";
 
-    let { hasError = false }: { hasError: boolean } = $props();
+    let { hasError = false }: { hasError?: boolean } = $props();
 
     const recipients = $derived(
         Object.entries($cartByRecipient).sort((a, b) => {
