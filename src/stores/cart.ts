@@ -20,11 +20,23 @@ export interface CartItem extends GatewayCharge {
     reward?: ProjectReward;
 }
 
-type CartStore = {
+type CartState = {
     items: Record<string, CartItem>;
 };
 
+export interface CartStore {
+    subscribe: (run: (value: CartState) => void) => () => void;
+
+    addItem: (item: Omit<CartItem, "key">) => void;
+    removeItem: (key: string) => void;
+    updateQuantity: (key: string, quantity: number) => void;
+
+    clear: () => void;
+    clearTarget: (target: string) => void;
+}
+
 type GenerateKeyOptions = {
+    kind: CartItem["kind"];
     target: GatewayCharge["target"];
     title: GatewayCharge["title"];
     description?: GatewayCharge["description"];
@@ -35,11 +47,11 @@ const isBrowser = typeof window !== "undefined";
 
 function generateKey(args: GenerateKeyOptions): string {
     return murmur
-        .murmur3(`${args.target}-${args.title}${args.description}-${args.dateCreated}`)
+        .murmur3(`${args.kind}${args.target}-${args.title}${args.description}-${args.dateCreated}`)
         .toString(16);
 }
 
-function loadInitialCart(): CartStore {
+function loadInitialCart(): CartState {
     const fresh = { items: {} };
 
     if (!isBrowser) return fresh;
@@ -55,8 +67,8 @@ function loadInitialCart(): CartStore {
     return fresh;
 }
 
-function createCartStore() {
-    const { subscribe, set, update } = writable<CartStore>(loadInitialCart());
+function createCartStore(): CartStore {
+    const { subscribe, set, update } = writable<CartState>(loadInitialCart());
 
     subscribe((cart) => {
         try {
@@ -79,14 +91,7 @@ function createCartStore() {
                     return { items };
                 }
 
-                if (items[key]) {
-                    items[key] = {
-                        ...items[key],
-                        quantity: item.quantity ?? 1,
-                    };
-                } else {
-                    items[key] = { ...item, key };
-                }
+                items[key] = { ...item, key };
 
                 return { items };
             }),
@@ -147,6 +152,19 @@ export const cartByTarget = derived(cart, ($cart) => {
         if (item.target != null) {
             grouped[item.target] ??= [];
             grouped[item.target].push(item);
+        }
+    }
+
+    return grouped;
+});
+
+export const cartByRecipient = derived(cart, ($cart) => {
+    const grouped: Record<string, CartItem[]> = {};
+
+    for (const item of Object.values($cart.items)) {
+        if (item.recipient != null) {
+            grouped[item.recipient] ??= [];
+            grouped[item.recipient].push(item);
         }
     }
 

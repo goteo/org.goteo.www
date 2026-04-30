@@ -15,8 +15,9 @@
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
-    import { cart, cartByTarget } from "../../stores/cart";
+    import { cart, cartByRecipient } from "../../stores/cart";
     import { extractId } from "../../utils/extractId";
+    import * as tipping from "../../utils/tipping";
 
     const displayNames = writable<Record<string, string>>({});
 
@@ -52,7 +53,7 @@
     async function loadDisplayNames() {
         const names: Record<string, string> = {};
 
-        for (const [target, items] of Object.entries($cartByTarget)) {
+        for (const [target, items] of Object.entries($cartByRecipient)) {
             names[target] = await getOwnerName(items[0].recipient);
         }
 
@@ -77,17 +78,25 @@
         loadDisplayNames();
     });
 
-    const acceptsTippin =
-        import.meta.env.PUBLIC_TIPPING_TIPJAR_ID && import.meta.env.PUBLIC_TIPPING_TIPJAR_ID !== "";
+    function getItems() {
+        let items = Object.entries($cartByRecipient);
+
+        if (tipping.isEnabled) {
+            items = items.filter((item) => item[0] !== tipping.tipjarIri);
+        }
+
+        return items;
+    }
 </script>
 
 <div class="flex flex-col gap-10">
-    {#each Object.entries($cartByTarget) as [target, items]}
+    {#each getItems() as [target, items]}
         <div class="flex flex-col gap-6">
             <h2 class="text-2xl font-bold text-black">
                 {$t("project.owner")}
                 {$displayNames[target] ?? ""}
             </h2>
+
             {#each items as item (item.key)}
                 <CartItem
                     {item}
@@ -100,6 +109,6 @@
     {/each}
 </div>
 
-{#if acceptsTippin}
+{#if tipping.isEnabled}
     <Tipjar />
 {/if}

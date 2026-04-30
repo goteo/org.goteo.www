@@ -30,11 +30,7 @@ const { t, lang, session } = Astro.locals;
                 <div
                     class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
-                    <Summary
-                        client:load
-                        hasError={false}
-                        amount={undefined}
-                    />
+                    <Summary client:load hasError={false} amount={undefined} />
                     <div class="lg:block" id="checkout-details">
                         <Steps step={1} client:load hasError={false} />
                         <div class="flex flex-col px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">

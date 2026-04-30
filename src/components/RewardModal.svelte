@@ -7,7 +7,6 @@
     import UnitIcon from "../svgs/UnitIcon.svelte";
     import UserIcon from "./icons/User.svelte";
     import { formatCurrency, getUnit } from "../utils/currencies";
-    import { extractId } from "../utils/extractId";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
 
@@ -38,17 +37,18 @@
             return;
         }
 
-        const target = Number(extractId(project.accounting));
-
         cart.addItem({
+            kind: "reward",
+            type: "single",
+            reward: reward,
             title: reward.title,
-            amount: numericAmount * getUnit(reward.money?.currency),
             quantity: 1,
-            image: "",
-            project: Number(extractId(reward.project)),
-            target,
-            claimed: reward.unitsTotal! - reward.unitsAvailable!,
-            currency: reward.money?.currency,
+            recipient: reward.project,
+            target: project.accounting!,
+            money: {
+                amount: numericAmount * getUnit(reward.money?.currency),
+                currency: reward.money.currency,
+            },
         });
 
         if (action === "checkout") {

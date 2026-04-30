@@ -78,7 +78,8 @@ export function formatCurrency(
 }
 
 export function getUnit(currency?: string): number {
-    if (!currency) return 0;
+    if (!currency) currency = getDefaultCurrency();
+
     const currencyData = currencySymbols[currency];
     if (!currencyData) return 0;
 
