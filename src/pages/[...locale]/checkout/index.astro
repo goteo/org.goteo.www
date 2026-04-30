@@ -5,11 +5,8 @@ import Cart from "../../../components/Checkout/Cart.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import BackButton from "../../../components/BackButton.astro";
-import { getPlatoniqAccountingId, getDefaultCurrency } from "../../../utils/consts";
 
 const { t, lang, session } = Astro.locals;
-const defaultCurrency = getDefaultCurrency();
-const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -28,15 +25,13 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
                         </p>
                     </div>
 
-                    <Cart client:load {defaultCurrency} {accountingIdPlatoniq} />
+                    <Cart client:load />
                 </div>
                 <div
                     class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
                     <Summary
                         client:load
-                        currency={defaultCurrency}
-                        {accountingIdPlatoniq}
                         hasError={false}
                         amount={undefined}
                     />

@@ -18,9 +18,6 @@
     import { cart, cartByTarget } from "../../stores/cart";
     import { extractId } from "../../utils/extractId";
 
-    export let defaultCurrency: string;
-    export let accountingIdPlatoniq: number;
-
     const displayNames = writable<Record<string, string>>({});
 
     async function getOwnerName(owner: string): Promise<string> {
@@ -79,27 +76,30 @@
     onMount(() => {
         loadDisplayNames();
     });
+
+    const acceptsTippin =
+        import.meta.env.PUBLIC_TIPPING_TIPJAR_ID && import.meta.env.PUBLIC_TIPPING_TIPJAR_ID !== "";
 </script>
 
-{#if $cartByTarget}
-    <div class="flex flex-col gap-10">
-        {#each Object.entries($cartByTarget) as [target, items]}
-            <div class="flex flex-col gap-6">
-                <h2 class="text-2xl font-bold text-black">
-                    {$t("project.owner")}
-                    {$displayNames[target] ?? ""}
-                </h2>
-                {#each items as item (item.key)}
-                    <CartItem
-                        {item}
-                        onIncrement={() => increment(item)}
-                        onDecrement={() => decrement(item)}
-                        onRemove={() => remove(item)}
-                    />
-                {/each}
-            </div>
-        {/each}
-    </div>
-{/if}
+<div class="flex flex-col gap-10">
+    {#each Object.entries($cartByTarget) as [target, items]}
+        <div class="flex flex-col gap-6">
+            <h2 class="text-2xl font-bold text-black">
+                {$t("project.owner")}
+                {$displayNames[target] ?? ""}
+            </h2>
+            {#each items as item (item.key)}
+                <CartItem
+                    {item}
+                    onIncrement={() => increment(item)}
+                    onDecrement={() => decrement(item)}
+                    onRemove={() => remove(item)}
+                />
+            {/each}
+        </div>
+    {/each}
+</div>
 
-<Tipjar {accountingIdPlatoniq} {defaultCurrency} />
+{#if acceptsTippin}
+    <Tipjar />
+{/if}

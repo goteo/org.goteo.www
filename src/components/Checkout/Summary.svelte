@@ -10,8 +10,6 @@
 
     export let hasError: boolean;
     export let amount: number | undefined;
-    export let currency: string;
-    export let accountingIdPlatoniq: number;
 
     let summaryRef;
 
@@ -43,7 +41,7 @@
             <p
                 class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency(amount ?? $cartAmount, currency)}
+                {formatCurrency(amount ?? $cartAmount)}
             </p>
         {/snippet}
 
@@ -52,7 +50,7 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-sm">
                         <span>{$t("checkout.summary.donations")}</span>
-                        <span>{formatCurrency($cartAmount, currency)}</span>
+                        <span>{formatCurrency($cartAmount)}</span>
                     </div>
                 </div>
             {/if}
@@ -61,7 +59,7 @@
                 <div class="flex flex-col gap-2">
                     <div class="flex justify-between text-sm">
                         <span>{$t("checkout.summary.foundation")}</span>
-                        <span>{formatCurrency($totalTips, currency)}</span>
+                        <span>{formatCurrency($totalTips)}</span>
                     </div>
                 </div>
             {/if}
