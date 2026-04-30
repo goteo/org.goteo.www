@@ -36,13 +36,5 @@
     class="group relative inline-flex cursor-pointer items-center"
     aria-label={$t("header.btnCart")}
 >
-    <Bag />
-
-    {#if count > 1}
-        <span
-            class="absolute -top-2 -right-2 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-xs font-bold text-white"
-        >
-            {count}
-        </span>
-    {/if}
+    <Bag items={count > 1 ? count : undefined} />
 </button>
