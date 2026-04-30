@@ -1,36 +1,30 @@
-import { writable, derived, get } from "svelte/store";
+import murmur from "murmurhash-js";
+import { writable, derived } from "svelte/store";
 
-import { t } from "../i18n/store";
+import type { GatewayCharge } from "../openapi/client";
 
-export type CartItem = {
+export interface CartItem extends GatewayCharge {
     key: string;
-    title: string;
-    amount: number;
     quantity: number;
-    image?: string;
-    project?: number;
-    target: number;
-    claimed?: number;
-    currency: string;
-};
+}
 
 type CartStore = {
     items: CartItem[];
 };
 
-const isBrowser = typeof window !== "undefined";
-
 type GenerateKeyOptions = {
-    title: string;
-    target: number;
-    position: number;
-    freeDonationTitle: string;
+    target: GatewayCharge["target"];
+    title: GatewayCharge["title"];
+    description?: GatewayCharge["description"];
+    dateCreated?: GatewayCharge["dateCreated"];
 };
 
-function generateKey({ title, target, position, freeDonationTitle }: GenerateKeyOptions) {
-    const normalize = (str: string) => str.trim().toLowerCase();
-    const prefix = normalize(title) === normalize(freeDonationTitle) ? "O" : "R";
-    return { key: `${target}-${prefix}-${position}` };
+const isBrowser = typeof window !== "undefined";
+
+function generateKey(args: GenerateKeyOptions): string {
+    return murmur
+        .murmur3(`${args.target}-${args.title}${args.description}-${args.dateCreated}`)
+        .toString(16);
 }
 
 function loadInitialCart(): CartStore {
@@ -51,28 +45,21 @@ function loadInitialCart(): CartStore {
 function createCartStore() {
     const { subscribe, set, update } = writable<CartStore>(loadInitialCart());
 
-    if (isBrowser) {
-        subscribe((cart) => {
-            try {
-                localStorage.setItem("cart", JSON.stringify(cart));
-            } catch (e) {
-                console.error("Error to save cart to localStorage:", e);
-            }
-        });
-    }
-
-    const translations = get(t);
-    const freeDonationTitle = translations("checkout.cart.freeDonation.title");
+    subscribe((cart) => {
+        try {
+            localStorage.setItem("cart", JSON.stringify(cart));
+        } catch (e) {
+            console.error("Error to save cart to localStorage:", e);
+        }
+    });
 
     return {
         subscribe,
 
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
-                const existingIndex = cart.items.findIndex(
-                    (i) => i.target === item.target && i.title === item.title,
-                );
-
+                const key = generateKey({ ...item });
+                const existingIndex = cart.items.findIndex((i) => i.key === key);
                 const updatedItems = [...cart.items];
 
                 if (existingIndex >= 0) {
@@ -85,20 +72,11 @@ function createCartStore() {
                     updatedItems[existingIndex] = {
                         ...updatedItems[existingIndex],
                         quantity: item.quantity ?? 1,
-                        amount: item.amount,
                     };
                 } else {
                     if (item.quantity === 0) {
                         return { items: updatedItems };
                     }
-
-                    const position = updatedItems.length;
-                    const { key } = generateKey({
-                        title: item.title,
-                        target: item.target,
-                        position,
-                        freeDonationTitle,
-                    });
 
                     updatedItems.push({ ...item, key });
                 }
@@ -116,23 +94,23 @@ function createCartStore() {
                 items:
                     quantity <= 0
                         ? cart.items.filter((item) => item.key !== key)
-                        : cart.items.map((item) =>
-                              item.key === key && item.quantity !== quantity
-                                  ? { ...item, quantity }
-                                  : item,
-                          ),
+                        : cart.items.map((item) => {
+                            if (item.key !== key) {
+                                return item;
+                            }
+
+                            return { ...item, quantity };
+                        }),
             })),
 
         clear: () => {
             set({ items: [] });
-            if (isBrowser) {
-                localStorage.removeItem("cart");
-            }
+            localStorage.removeItem("cart");
         },
 
-        clearProject: (projectId: number) =>
+        clearTarget: (target: string) =>
             update((cart) => ({
-                items: cart.items.filter((item) => item.project !== projectId),
+                items: cart.items.filter((item) => item.target !== target),
             })),
     };
 }
@@ -144,16 +122,18 @@ export const itemCount = derived(cart, ($cart) =>
 );
 
 export const totalAmount = derived(cart, ($cart) =>
-    $cart.items.reduce((total, item) => total + item.amount * item.quantity, 0),
+    $cart.items.reduce((total, item) => total + item.money.amount * item.quantity, 0),
 );
 
 export const itemsByProject = derived(cart, ($cart) => {
-    const grouped: Record<number, CartItem[]> = {};
+    const grouped: Record<string, CartItem[]> = {};
+
     for (const item of $cart.items) {
-        if (item.project != null) {
-            grouped[item.project] ??= [];
-            grouped[item.project].push(item);
+        if (item.target != null) {
+            grouped[item.target] ??= [];
+            grouped[item.target].push(item);
         }
     }
+
     return grouped;
 });
