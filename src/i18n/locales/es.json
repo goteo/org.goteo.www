@@ -872,13 +872,6 @@
       "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
     }
   },
-  "global": {
-    "btn": {
-      "continue": "Continuar",
-      "back": "Volver",
-      "send": "Enviar"
-    }
-  },
   "contributions": {
     "title": "Aportes",
     "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
