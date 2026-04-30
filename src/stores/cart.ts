@@ -1,11 +1,23 @@
 import murmur from "murmurhash-js";
 import { writable, derived } from "svelte/store";
 
-import type { GatewayCharge } from "../openapi/client";
+import type { GatewayCharge, ProjectReward } from "../openapi/client";
 
 export interface CartItem extends GatewayCharge {
     key: string;
+    kind: "free" | "reward" | "tip";
     quantity: number;
+
+    /**
+     * `target` references the Accounting that will receive the money\
+     * `recipient` references the owner of that Accounting
+     */
+    recipient: string;
+
+    /**
+     * Items of kind "reward" must have an associated ProjectReward
+     */
+    reward?: ProjectReward;
 }
 
 type CartStore = {
@@ -117,18 +129,18 @@ function createCartStore() {
 
 export const cart = createCartStore();
 
-export const itemCount = derived(cart, ($cart) =>
+export const cartCount = derived(cart, ($cart) =>
     Object.values($cart.items).reduce((total, item) => total + item.quantity, 0),
 );
 
-export const totalAmount = derived(cart, ($cart) =>
+export const cartAmount = derived(cart, ($cart) =>
     Object.values($cart.items).reduce(
         (total, item) => total + item.money.amount * item.quantity,
         0,
     ),
 );
 
-export const itemsByProject = derived(cart, ($cart) => {
+export const cartByTarget = derived(cart, ($cart) => {
     const grouped: Record<string, CartItem[]> = {};
 
     for (const item of Object.values($cart.items)) {
