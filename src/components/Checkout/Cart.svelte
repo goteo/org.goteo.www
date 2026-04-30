@@ -1,64 +1,62 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { derived, writable } from "svelte/store";
-    import { get } from "svelte/store";
+    import { writable } from "svelte/store";
 
     import CartItem from "./CartItem.svelte";
     import Tipjar from "./Tipjar.svelte";
     import { t } from "../../i18n/store";
-    import { apiProjectsIdOrSlugGet, apiUsersIdOrHandleGet } from "../../openapi/client";
-    import { cart } from "../../stores/cart";
+    import {
+        apiProjectsIdOrSlugGet,
+        apiTipjarsIdGet,
+        apiUsersIdOrHandleGet,
+    } from "../../openapi/client";
+    import {
+        apiProjectsGetCollectionUrl,
+        apiTipjarsGetCollectionUrl,
+        apiUsersGetCollectionUrl,
+    } from "../../openapi/client/paths.gen";
+    import { cart, cartByTarget } from "../../stores/cart";
     import { extractId } from "../../utils/extractId";
 
     export let defaultCurrency: string;
     export let accountingIdPlatoniq: number;
 
-    const items = derived(cart, ($cart) => $cart.items);
-
-    const groupedByOwner = derived(items, ($items) => {
-        const grouped = $items.reduce(
-            (acc, item) => {
-                const key = item.target || "";
-                if (key === accountingIdPlatoniq) return acc;
-
-                if (!acc[key]) acc[key] = [];
-                acc[key].push(item);
-                return acc;
-            },
-            {} as Record<string, typeof $items>,
-        );
-
-        return Object.fromEntries(Object.entries(grouped).sort(([a], [b]) => a.localeCompare(b)));
-    });
-
     const displayNames = writable<Record<string, string>>({});
 
-    async function getOwnerName(target: string, projectId: number): Promise<string> {
+    async function getOwnerName(owner: string): Promise<string> {
         try {
-            const project = await apiProjectsIdOrSlugGet({
-                path: { idOrSlug: projectId.toString() },
-            });
-            const ownerId = extractId(project.data?.owner);
-            if (ownerId) {
-                const user = await apiUsersIdOrHandleGet({ path: { idOrHandle: ownerId } });
-                return user.data?.displayName ?? "";
+            if (owner.startsWith(apiUsersGetCollectionUrl)) {
+                const { data: user } = await apiUsersIdOrHandleGet({
+                    path: { idOrHandle: extractId(owner)! },
+                });
+
+                return user?.displayName!;
+            }
+
+            if (owner.startsWith(apiProjectsGetCollectionUrl)) {
+                const { data: project } = await apiProjectsIdOrSlugGet({
+                    path: { idOrSlug: extractId(owner)! },
+                });
+
+                return project?.title!;
+            }
+
+            if (owner.startsWith(apiTipjarsGetCollectionUrl)) {
+                const { data: tipjar } = await apiTipjarsIdGet({ path: { id: extractId(owner)! } });
+
+                return tipjar?.name!;
             }
         } catch (err) {
-            console.warn(`Error fetching owner name for target ${target}:`, err);
+            console.warn(`Error fetching owner name for ${owner}:`, err);
         }
         return "";
     }
 
     async function loadDisplayNames() {
         const names: Record<string, string> = {};
-        const $grouped = get(groupedByOwner);
 
-        for (const [target, items] of Object.entries($grouped)) {
-            if (target === accountingIdPlatoniq.toString()) continue;
-            const projectId = items[0]?.project;
-            if (projectId) {
-                names[target] = await getOwnerName(target, projectId);
-            }
+        for (const [target, items] of Object.entries($cartByTarget)) {
+            names[target] = await getOwnerName(items[0].recipient);
         }
 
         displayNames.set(names);
@@ -79,16 +77,13 @@
     }
 
     onMount(() => {
-        const unsubscribe = groupedByOwner.subscribe(() => {
-            loadDisplayNames();
-        });
-        return unsubscribe;
+        loadDisplayNames();
     });
 </script>
 
-{#if $groupedByOwner}
+{#if $cartByTarget}
     <div class="flex flex-col gap-10">
-        {#each Object.entries($groupedByOwner) as [target, items]}
+        {#each Object.entries($cartByTarget) as [target, items]}
             <div class="flex flex-col gap-6">
                 <h2 class="text-2xl font-bold text-black">
                     {$t("project.owner")}
