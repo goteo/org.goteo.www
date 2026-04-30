@@ -63,7 +63,16 @@
     }
 </script>
 
-<header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8">
+<header
+    {@attach (el) => {
+        const observer = new ResizeObserver(() => {
+            document.documentElement.style.setProperty("--header-height", `${el.offsetHeight}px`);
+        });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }}
+    class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8"
+>
     <div class="mx-auto max-w-360 px-2">
         <div
             class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
