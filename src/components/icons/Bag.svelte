@@ -33,7 +33,7 @@
             text-anchor="middle"
             font-size="14"
             font-weight="bold"
-            letter-spacing={items !== undefined && items > 9 ? "1" : "0"}
+            letter-spacing="1"
             fill="var(--color-white)">{items > 9 ? "9+" : items}</text
         >
     {/if}
