@@ -1,23 +1,19 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import WarningIcon from "../../components/icons/Warning.svelte";
     import { t } from "../../i18n/store";
-    import { apiTipjarsGetCollectionUrl } from "../../openapi/client/paths.gen";
-    import { cart, cartAmount } from "../../stores/cart";
+    import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
-    import { tipjarId } from "../../utils/tipping";
+    import Thtml from "../Thtml.svelte";
 
-    export let hasError: boolean;
-    export let amount: number | undefined;
+    let { hasError = false }: { hasError: boolean } = $props();
 
-    let summaryRef;
-
-    const totalTips = derived(cart, ($cart) =>
-        Object.values($cart.items)
-            .filter((item) => item.recipient.startsWith(apiTipjarsGetCollectionUrl))
-            .reduce((sum, item) => sum + item.money.amount * item.quantity, 0),
+    const recipients = $derived(
+        Object.entries($cartByRecipient).sort((a, b) => {
+            if (a[0] < b[0]) return -1;
+            if (a[0] > b[0]) return 1;
+            return 0;
+        }),
     );
 </script>
 
@@ -42,29 +38,26 @@
             <p
                 class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency(amount ?? $cartAmount)}
+                {formatCurrency($cartAmount)}
             </p>
         {/snippet}
 
         {#snippet content()}
             <hr class="bg-secondary h-px border-none" />
             <div>
-                {#if $cartAmount > 0}
-                    <span>
-                        <strong>{formatCurrency($cartAmount)}</strong>
-                        {$t("checkout.summary.donations")}
-                    </span>
-                {/if}
-                {#if $cartAmount > 0 && $totalTips > 0}
-                    <span>+</span>
-                {/if}
-                {#if $totalTips > 0}
-                    <span>
-                        <strong>
-                            {formatCurrency($totalTips)}
-                        </strong>
-                    </span>
-                {/if}
+                {#each recipients as [_, items]}
+                    {@const name = items[0].recipientDisplayName}
+                    {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
+                    <p>
+                        <Thtml
+                            key="pages.checkout.summary.toRecipient"
+                            vars={{
+                                amount: `<strong>${formatCurrency(amount)}</strong>`,
+                                name: name,
+                            }}
+                        />
+                    </p>
+                {/each}
             </div>
         {/snippet}
     </CollapsibleBox>

@@ -27,9 +27,9 @@
             <div
                 class="flex h-[80px] w-[80px] items-center justify-center overflow-hidden rounded-3xl bg-orange-200 md:h-[160px] md:w-[160px]"
             >
-                {#if item.image}
+                {#if item.kind === "reward"}
                     <img
-                        src={item.image}
+                        src={item.reward.image}
                         alt={item.title}
                         class="h-[80px] w-[80px] object-cover md:h-[160px] md:w-[160px]"
                     />
@@ -39,13 +39,17 @@
             </div>
             <div class="flex flex-col gap-2 md:gap-4">
                 <p class="text-secondary text-lg font-bold md:text-[32px]">
-                    {formatCurrency(item.amount, item.currency)}
+                    {formatCurrency(item.money.amount, item.money.currency)}
                 </p>
                 <p class="text-secondary text-sm font-bold md:text-base">{item.title}</p>
                 <p class="text-content text-sm">
-                    {#if typeof item.claimed === "number"}
-                        {#if item.claimed > 0}
-                            <span>{item.claimed} {$t("checkout.reward.claimed")} </span>
+                    {#if item.kind === "reward"}
+                        {#if item.reward?.unitsClaimed! > 0}
+                            <span
+                                >{$t("checkout.reward.claimed", {
+                                    units: item.reward?.unitsClaimed!,
+                                })}
+                            </span>
                         {:else}
                             <span>{$t("checkout.reward.unclaimed")} </span>
                         {/if}

@@ -13,6 +13,7 @@ export interface CartItem extends GatewayCharge {
      * `recipient` references the owner of that Accounting
      */
     recipient: string;
+    recipientDisplayName: string;
 
     /**
      * Items of kind "reward" must have an associated ProjectReward

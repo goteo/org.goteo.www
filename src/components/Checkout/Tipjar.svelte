@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+
     import { t } from "../../i18n/store";
     import { apiTipjarsIdGet } from "../../openapi/client";
     import { cart, cartByRecipient, type CartItem } from "../../stores/cart";
@@ -9,6 +11,10 @@
     let hasError = $state(false);
 
     let isChecked = $state(tipping.defaultChecked);
+
+    onMount(() => {
+        toggleTip();
+    });
 
     function getMoney(amount: number) {
         return {
@@ -31,6 +37,7 @@
             title: $t("domain.tipping.title"),
             money: getMoney(tipping.defaultAmount),
             recipient: tipping.tipjarIri,
+            recipientDisplayName: tipjar?.name!,
             target: tipjar?.accounting!,
         };
     }

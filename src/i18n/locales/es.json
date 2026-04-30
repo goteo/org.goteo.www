@@ -98,6 +98,11 @@
         "description": "Error interno del servidor."
       }
     },
+    "checkout": {
+      "summary": {
+        "toRecipient": "{{ amount }} a {{ name }}"
+      }
+    },
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
@@ -742,7 +747,7 @@
     "title": "Resumen de tus donaciones seleccionadas",
     "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
     "reward": {
-      "claimed": "personas ya han reclamado esta recompensa",
+      "claimed": "{{ units }} personas ya han reclamado esta recompensa",
       "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
     },
     "tipjar": {
