@@ -11,8 +11,7 @@
     export let amount: number | undefined;
     export let currency: string;
     export let accountingIdPlatoniq: number;
-
-    let summaryRef;
+    export let defaultTipjarName: string | undefined = undefined;
 
     const total = derived(cart, ($cart) =>
         $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
@@ -27,7 +26,7 @@
     const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
 </script>
 
-<div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
+<div class="flex w-full flex-col gap-6">
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
@@ -53,23 +52,27 @@
         {/snippet}
 
         {#snippet content()}
-            {#if $donations > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.donations")}</span>
-                        <span>{formatCurrency($donations, currency)}</span>
-                    </div>
-                </div>
-            {/if}
-
-            {#if $foundation > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.foundation")}</span>
-                        <span>{formatCurrency($foundation, currency)}</span>
-                    </div>
-                </div>
-            {/if}
+            <hr class="bg-secondary h-px border-none" />
+            <div>
+                {#if $donations > 0}
+                    <span>
+                        <strong>{formatCurrency($donations, currency)}</strong>
+                        {$t("checkout.summary.donations")}
+                    </span>
+                {/if}
+                {#if $donations > 0 && $foundation > 0}
+                    <span>+</span>
+                {/if}
+                {#if $foundation > 0}
+                    <span>
+                        <strong>
+                            {formatCurrency($foundation, currency)}
+                        </strong>
+                        {$t("checkout.summary.foundation")}
+                        {defaultTipjarName}
+                    </span>
+                {/if}
+            </div>
         {/snippet}
     </CollapsibleBox>
 </div>
