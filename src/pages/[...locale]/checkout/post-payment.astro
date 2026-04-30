@@ -16,11 +16,15 @@ import type { Campaign } from "../../../types/campaign";
 const { t, lang, session } = Astro.locals;
 
 const mapProjectToCard = (project: Project): Campaign => ({
-    id: project.slug || "",
+    slug: project.slug || "",
     title: project.title || "",
+    subtitle: project.subtitle || "",
+    description: project.description || "",
     image: project.video?.thumbnail || "/images/placeholder-project.jpg",
     obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    categories: project.categories || [],
+    territory: project.territory || "",
     size: "small",
 });
 
