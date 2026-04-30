@@ -6,13 +6,13 @@ import Summary from "../../components/Checkout/Summary.svelte";
 import AuthSummary from "../../components/AuthSummary.svelte";
 import Oauth from "../../components/Oauth.astro";
 import Button from "../../components/library/Button.svelte";
-import BackButton from "../../components/BackButton.astro";
-import { itemCount } from "../../stores/cart";
+import BackButton from "../../components/BackButton.svelte";
+import { cartCount } from "../../stores/cart";
 
 const { t, lang, session } = Astro.locals;
 
 let hasCart = false;
-itemCount.subscribe((count) => {
+cartCount.subscribe((count) => {
     hasCart = count > 1;
 });
 ---
@@ -22,7 +22,7 @@ itemCount.subscribe((count) => {
         <div class="wrapper">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 lg:w-1/2">
-                    <BackButton />
+                    <BackButton client:load />
 
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">

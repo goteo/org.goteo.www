@@ -2,7 +2,9 @@
 import WalletInfo from "./WalletInfo.svelte";
 
 const { t } = Astro.locals;
-const { accounting, defaultCurrency } = Astro.props;
+const { accounting } = Astro.props;
+
+const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 ---
 
 <section>
