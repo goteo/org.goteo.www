@@ -96,7 +96,7 @@ const { accounting } = Astro.props;
             const selectedMethod = formData.get("paymentMethod");
 
             if (selectedMethod === "wallet") {
-                window.location.href = "/payment/wallet";
+                window.location.href = "/checkout/wallet";
                 return;
             }
 
