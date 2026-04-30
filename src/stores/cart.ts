@@ -9,7 +9,7 @@ export interface CartItem extends GatewayCharge {
 }
 
 type CartStore = {
-    items: CartItem[];
+    items: Record<string, CartItem>;
 };
 
 type GenerateKeyOptions = {
@@ -28,7 +28,9 @@ function generateKey(args: GenerateKeyOptions): string {
 }
 
 function loadInitialCart(): CartStore {
-    if (!isBrowser) return { items: [] };
+    const fresh = { items: {} };
+
+    if (!isBrowser) return fresh;
 
     try {
         const stored = localStorage.getItem("cart");
@@ -37,7 +39,6 @@ function loadInitialCart(): CartStore {
         console.warn("⚠️ Error loading cart from localStorage:", e);
     }
 
-    const fresh = { items: [] };
     localStorage.setItem("cart", JSON.stringify(fresh));
     return fresh;
 }
@@ -59,76 +60,78 @@ function createCartStore() {
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
                 const key = generateKey({ ...item });
-                const existingIndex = cart.items.findIndex((i) => i.key === key);
-                const updatedItems = [...cart.items];
+                const items = { ...cart.items };
 
-                if (existingIndex >= 0) {
-                    if (item.quantity === 0) {
-                        return {
-                            items: updatedItems.filter((_, index) => index !== existingIndex),
-                        };
-                    }
+                if (item.quantity === 0) {
+                    delete items[key];
+                    return { items };
+                }
 
-                    updatedItems[existingIndex] = {
-                        ...updatedItems[existingIndex],
+                if (items[key]) {
+                    items[key] = {
+                        ...items[key],
                         quantity: item.quantity ?? 1,
                     };
                 } else {
-                    if (item.quantity === 0) {
-                        return { items: updatedItems };
-                    }
-
-                    updatedItems.push({ ...item, key });
+                    items[key] = { ...item, key };
                 }
 
-                return { items: updatedItems };
+                return { items };
             }),
 
         removeItem: (key: string) =>
-            update((cart) => ({
-                items: cart.items.filter((i) => i.key !== key),
-            })),
+            update((cart) => {
+                const items = { ...cart.items };
+                delete items[key];
+                return { items };
+            }),
 
         updateQuantity: (key: string, quantity: number) =>
-            update((cart) => ({
-                items:
-                    quantity <= 0
-                        ? cart.items.filter((item) => item.key !== key)
-                        : cart.items.map((item) => {
-                            if (item.key !== key) {
-                                return item;
-                            }
+            update((cart) => {
+                const items = { ...cart.items };
 
-                            return { ...item, quantity };
-                        }),
-            })),
+                if (quantity <= 0) {
+                    delete items[key];
+                } else if (items[key]) {
+                    items[key] = { ...items[key], quantity };
+                }
+
+                return { items };
+            }),
 
         clear: () => {
-            set({ items: [] });
+            set({ items: {} });
             localStorage.removeItem("cart");
         },
 
         clearTarget: (target: string) =>
-            update((cart) => ({
-                items: cart.items.filter((item) => item.target !== target),
-            })),
+            update((cart) => {
+                const items = Object.fromEntries(
+                    Object.entries(cart.items).filter((item) => item[1].target !== target),
+                );
+
+                return { items };
+            }),
     };
 }
 
 export const cart = createCartStore();
 
 export const itemCount = derived(cart, ($cart) =>
-    $cart.items.reduce((total, item) => total + item.quantity, 0),
+    Object.values($cart.items).reduce((total, item) => total + item.quantity, 0),
 );
 
 export const totalAmount = derived(cart, ($cart) =>
-    $cart.items.reduce((total, item) => total + item.money.amount * item.quantity, 0),
+    Object.values($cart.items).reduce(
+        (total, item) => total + item.money.amount * item.quantity,
+        0,
+    ),
 );
 
 export const itemsByProject = derived(cart, ($cart) => {
     const grouped: Record<string, CartItem[]> = {};
 
-    for (const item of $cart.items) {
+    for (const item of Object.values($cart.items)) {
         if (item.target != null) {
             grouped[item.target] ??= [];
             grouped[item.target].push(item);
