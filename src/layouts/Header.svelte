@@ -64,7 +64,7 @@
 </script>
 
 <header class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8">
-    <div class="mx-auto max-w-[1440px] px-2">
+    <div class="mx-auto max-w-360 px-2">
         <div
             class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl transition-all duration-300"
             id="header-container"
@@ -102,7 +102,7 @@
 
                                     <div
                                         bind:this={userDropdown}
-                                        class="absolute top-full left-0 mt-2 hidden w-full min-w-[120px] flex-col rounded-lg bg-white p-2 shadow-lg"
+                                        class="absolute top-full left-0 mt-2 hidden w-full min-w-30 flex-col rounded-lg bg-white p-2 shadow-lg"
                                     >
                                         <a
                                             href="/me"
