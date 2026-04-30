@@ -9,6 +9,7 @@
     "edit": "Editar",
     "delete": "Borrar",
     "continue": "Continuar",
+    "back": "Volver",
     "cancel": "Cancelar",
     "publish": "Publicar",
     "preview": "Vista previa",
@@ -96,6 +97,11 @@
       "meta": {
         "title": "Condición inesperada para la solicitud",
         "description": "Error interno del servidor."
+      }
+    },
+    "checkout": {
+      "summary": {
+        "toRecipient": "{{ amount }} a {{ name }}"
       }
     },
     "project": {
@@ -742,7 +748,7 @@
     "title": "Resumen de tus donaciones seleccionadas",
     "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
     "reward": {
-      "claimed": "personas ya han reclamado esta recompensa",
+      "claimed": "{{ units }} personas ya han reclamado esta recompensa",
       "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
     },
     "tipjar": {
@@ -857,13 +863,6 @@
       "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
       "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
       "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
-    }
-  },
-  "global": {
-    "btn": {
-      "continue": "Continuar",
-      "back": "Volver",
-      "send": "Enviar"
     }
   },
   "contributions": {

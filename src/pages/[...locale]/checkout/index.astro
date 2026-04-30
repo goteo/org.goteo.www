@@ -1,22 +1,13 @@
 ---
 import Card from "../../../components/library/Card.svelte";
-import { apiTipjarsIdGet } from "../../../openapi/client";
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
 import Cart from "../../../components/Checkout/Cart.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
 import Steps from "../../../components/Checkout/Steps.svelte";
-import BackButton from "../../../components/BackButton.astro";
-import { getPlatoniqAccountingId, getDefaultCurrency } from "../../../utils/consts";
+import BackButton from "../../../components/BackButton.svelte";
 
 const { t, lang, session } = Astro.locals;
-const defaultCurrency = getDefaultCurrency();
-const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
-
-const { data: tipjar } = await apiTipjarsIdGet({
-    path: { id: String(accountingIdPlatoniq) },
-});
-const defaultTipjarName = tipjar?.name;
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
@@ -24,7 +15,7 @@ const defaultTipjarName = tipjar?.name;
         <div class="wrapper max-md:px-0">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
-                    <BackButton />
+                    <BackButton client:load />
 
                     <div class="flex flex-col gap-4">
                         <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
@@ -35,20 +26,13 @@ const defaultTipjarName = tipjar?.name;
                         </p>
                     </div>
 
-                    <Cart client:load {defaultCurrency} {accountingIdPlatoniq} />
+                    <Cart client:load />
                 </div>
 
                 <Card
                     class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
-                    <Summary
-                        client:load
-                        currency={defaultCurrency}
-                        {accountingIdPlatoniq}
-                        {defaultTipjarName}
-                        hasError={false}
-                        amount={undefined}
-                    />
+                    <Summary client:load />
                     <div class="w-full lg:block" id="checkout-details">
                         <div class="w-full">
                             <Steps step={1} hasError={false} client:load />
@@ -62,7 +46,7 @@ const defaultTipjarName = tipjar?.name;
                             class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
                             href="/checkout/payment"
                         >
-                            {t("global.btn.continue")}
+                            {t("common.continue")}
                         </a>
                     </div>
                 </Card>

@@ -5,14 +5,11 @@ import Summary from "../../../components/Checkout/Summary.svelte";
 import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.astro";
 import Steps from "../../../components/Checkout/Steps.svelte";
 import Card from "../../../components/library/Card.svelte";
-import BackButton from "../../../components/BackButton.astro";
+import BackButton from "../../../components/BackButton.svelte";
 import { apiAccountingsIdGet } from "../../../openapi/client/index";
-import { getDefaultCurrency, getPlatoniqAccountingId } from "../../../utils/consts.ts";
 import { extractId } from "../../../utils/extractId.ts";
 
 const { t, lang, session } = Astro.locals;
-const defaultCurrency = getDefaultCurrency();
-const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 
 if (!session) {
     return Astro.redirect("/login?callback=/checkout/wallet");
@@ -32,7 +29,7 @@ const { data: accounting } = await apiAccountingsIdGet({
         <div class="wrapper">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 lg:w-1/2">
-                    <BackButton />
+                    <BackButton client:load />
 
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-col gap-10">
@@ -45,20 +42,14 @@ const { data: accounting } = await apiAccountingsIdGet({
                                 </p>
                             </div>
 
-                            <WalletConfirmation {accounting} {defaultCurrency} />
+                            <WalletConfirmation {accounting} />
                         </div>
                     </div>
                 </div>
                 <Card
                     class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
-                    <Summary
-                        client:load
-                        currency={defaultCurrency}
-                        {accountingIdPlatoniq}
-                        hasError={false}
-                        amount={undefined}
-                    />
+                    <Summary client:load />
                     <div class="w-full lg:block" id="checkout-details">
                         <div class="w-full">
                             <Steps step={3} hasError={false} client:load />

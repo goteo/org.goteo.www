@@ -1,29 +1,20 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import WarningIcon from "../../components/icons/Warning.svelte";
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
+    import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
+    import Thtml from "../Thtml.svelte";
 
-    export let hasError: boolean;
-    export let amount: number | undefined;
-    export let currency: string;
-    export let accountingIdPlatoniq: number;
-    export let defaultTipjarName: string | undefined = undefined;
+    let { hasError = false }: { hasError?: boolean } = $props();
 
-    const total = derived(cart, ($cart) =>
-        $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
+    const recipients = $derived(
+        Object.entries($cartByRecipient).sort((a, b) => {
+            if (a[0] < b[0]) return -1;
+            if (a[0] > b[0]) return 1;
+            return 0;
+        }),
     );
-
-    const foundation = derived(cart, ($cart) =>
-        $cart.items
-            .filter((item) => item.target === accountingIdPlatoniq)
-            .reduce((sum, item) => sum + item.amount * item.quantity, 0),
-    );
-
-    const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
 </script>
 
 <div class="flex w-full flex-col gap-6">
@@ -47,31 +38,26 @@
             <p
                 class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency(amount ?? $total, currency)}
+                {formatCurrency($cartAmount)}
             </p>
         {/snippet}
 
         {#snippet content()}
             <hr class="bg-secondary h-px border-none" />
             <div>
-                {#if $donations > 0}
-                    <span>
-                        <strong>{formatCurrency($donations, currency)}</strong>
-                        {$t("checkout.summary.donations")}
-                    </span>
-                {/if}
-                {#if $donations > 0 && $foundation > 0}
-                    <span>+</span>
-                {/if}
-                {#if $foundation > 0}
-                    <span>
-                        <strong>
-                            {formatCurrency($foundation, currency)}
-                        </strong>
-                        {$t("checkout.summary.foundation")}
-                        {defaultTipjarName}
-                    </span>
-                {/if}
+                {#each recipients as [_, items]}
+                    {@const name = items[0].recipientDisplayName}
+                    {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
+                    <p>
+                        <Thtml
+                            key="pages.checkout.summary.toRecipient"
+                            vars={{
+                                amount: `<strong>${formatCurrency(amount)}</strong>`,
+                                name: name,
+                            }}
+                        />
+                    </p>
+                {/each}
             </div>
         {/snippet}
     </CollapsibleBox>
