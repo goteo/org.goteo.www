@@ -1,4 +1,6 @@
 ---
+import Card from "../../../components/library/Card.svelte";
+import { apiTipjarsIdGet } from "../../../openapi/client";
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
 import Cart from "../../../components/Checkout/Cart.svelte";
@@ -11,9 +13,9 @@ const { t, lang, session } = Astro.locals;
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session}>
-        <div class="wrapper">
+        <div class="wrapper max-md:px-0">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
-                <div class="flex w-full flex-col gap-10 lg:w-1/2">
+                <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
                     <BackButton />
 
                     <div class="flex flex-col gap-4">
@@ -27,17 +29,20 @@ const { t, lang, session } = Astro.locals;
 
                     <Cart client:load />
                 </div>
-                <div
-                    class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
+
+                <Card
+                    class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
                     <Summary client:load hasError={false} amount={undefined} />
-                    <div class="lg:block" id="checkout-details">
-                        <Steps step={1} client:load hasError={false} />
-                        <div class="flex flex-col px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                    <div class="w-full lg:block" id="checkout-details">
+                        <div class="w-full">
+                            <Steps step={1} hasError={false} client:load />
+                        </div>
+                        <div class="flex flex-col">
                             <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-end px-0 pt-0 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
+                    <div class="flex flex-col items-end">
                         <a
                             class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
                             href="/checkout/payment"
@@ -45,7 +50,7 @@ const { t, lang, session } = Astro.locals;
                             {t("common.continue")}
                         </a>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     </App>

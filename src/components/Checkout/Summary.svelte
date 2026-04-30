@@ -7,6 +7,7 @@
     import { cart, cartAmount } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
+    import { tipjarId } from "../../utils/tipping";
 
     export let hasError: boolean;
     export let amount: number | undefined;
@@ -20,7 +21,7 @@
     );
 </script>
 
-<div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
+<div class="flex w-full flex-col gap-6">
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
@@ -46,23 +47,25 @@
         {/snippet}
 
         {#snippet content()}
-            {#if $cartAmount > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.donations")}</span>
-                        <span>{formatCurrency($cartAmount)}</span>
-                    </div>
-                </div>
-            {/if}
-
-            {#if $totalTips > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.foundation")}</span>
-                        <span>{formatCurrency($totalTips)}</span>
-                    </div>
-                </div>
-            {/if}
+            <hr class="bg-secondary h-px border-none" />
+            <div>
+                {#if $cartAmount > 0}
+                    <span>
+                        <strong>{formatCurrency($cartAmount)}</strong>
+                        {$t("checkout.summary.donations")}
+                    </span>
+                {/if}
+                {#if $cartAmount > 0 && $totalTips > 0}
+                    <span>+</span>
+                {/if}
+                {#if $totalTips > 0}
+                    <span>
+                        <strong>
+                            {formatCurrency($totalTips)}
+                        </strong>
+                    </span>
+                {/if}
+            </div>
         {/snippet}
     </CollapsibleBox>
 </div>

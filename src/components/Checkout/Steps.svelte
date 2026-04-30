@@ -13,30 +13,24 @@
     ];
 </script>
 
-<div class="lg:px-6">
+<div class="w-full">
     <div class="relative">
         <div class="bg-variant1 h-4 w-full rounded-full"></div>
 
         <div
             class="bg-primary absolute top-0 left-0 h-4 rounded-full transition-all duration-500"
-            style="width: {((step - 1) / 3) * 100}%;"
+            style="width: {Math.min(((2 * step - 1) / 6) * 100, 100)}%;"
         ></div>
 
         <div
-            class="absolute top-1/2 flex w-full -translate-y-1/2 items-center justify-between px-1"
+            class="absolute top-1/2 flex w-full -translate-y-1/2 items-center justify-between px-2"
         >
             {#each [1, 2, 3, 4] as i}
                 <div
-                    class="relative z-10 flex h-4 w-4 items-center justify-center rounded-full border-2 transition-all duration-300"
+                    class="border-secondary relative z-10 flex h-2 w-2 items-center justify-center rounded-full border-2 transition-all duration-300 lg:h-3 lg:w-3"
                     class:bg-secondary={i <= step}
                     class:bg-variant1={i > step}
-                    class:border-primary={i <= step}
-                    class:border-black={i > step}
-                >
-                    {#if i <= step}
-                        <div class="bg-secondary h-1.5 w-1.5 rounded-full"></div>
-                    {/if}
-                </div>
+                ></div>
             {/each}
         </div>
     </div>
@@ -53,7 +47,7 @@
                 }`}
             >
                 {#if step === index + 1 && hasError}
-                    <WarningIcon class="text-tertiary h-4 w-4" />
+                    <WarningIcon class="h-4 w-4" />
                 {/if}
                 <span class="text-xs leading-tight">{label}</span>
             </div>
