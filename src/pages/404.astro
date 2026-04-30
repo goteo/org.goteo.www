@@ -8,13 +8,14 @@ const { t, lang, session } = Astro.locals;
 ---
 
 <Layout title={t("pages.404.meta.title")} description={t("pages.404.meta.description")}>
-    <App locale={lang} session={session} client:load />
-    <ErrorPage
-        code={404}
-        title={t("pages.404.title")}
-        subtitle={t("pages.404.subtitle")}
-        ctaText={t("common.goHome")}
-    >
-        <BrokenRobot />
-    </ErrorPage>
+    <App locale={lang} session={session} client:load>
+        <ErrorPage
+            code={404}
+            title={t("pages.404.title")}
+            subtitle={t("pages.404.subtitle")}
+            ctaText={t("common.goHome")}
+        >
+            <BrokenRobot />
+        </ErrorPage>
+    </App>
 </Layout>
