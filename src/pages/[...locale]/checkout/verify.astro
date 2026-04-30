@@ -20,7 +20,7 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 if (!session) {
-    return Astro.redirect("/login?callback=/payment/verify" + Astro.url.searchParams);
+    return Astro.redirect("/login?callback=/checkout/verify" + Astro.url.searchParams);
 }
 
 const { token, user } = session;
@@ -110,7 +110,6 @@ const postPaymentUrl = checkoutId
                                     {amount}
                                     {accountingIdPlatoniq}
                                     hasError={!!error}
-                                    accountingIdPlatoniq={accounting?.id ?? 0}
                                 />
                                 <div class="w-full lg:block" id="checkout-details">
                                     <div class="flex flex-col">
@@ -164,7 +163,6 @@ const postPaymentUrl = checkoutId
                                         {amount}
                                         {accountingIdPlatoniq}
                                         hasError={!!error}
-                                        accountingIdPlatoniq={accounting?.id ?? 0}
                                     />
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">

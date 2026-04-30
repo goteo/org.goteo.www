@@ -17,7 +17,7 @@ const defaultCurrency = getDefaultCurrency();
 const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
 
 if (!session) {
-    return Astro.redirect("/login?callback=/payment");
+    return Astro.redirect("/login?callback=/checkout/payment");
 }
 
 const { token, user } = session;
