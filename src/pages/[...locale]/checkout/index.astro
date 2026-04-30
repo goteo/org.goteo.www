@@ -1,11 +1,11 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import App from "../../components/App.svelte";
-import Cart from "../../components/Checkout/Cart.svelte";
-import Summary from "../../components/Checkout/Summary.svelte";
-import Steps from "../../components/Checkout/Steps.svelte";
-import BackButton from "../../components/BackButton.astro";
-import { getPlatoniqAccountingId, getDefaultCurrency } from "../../utils/consts";
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
+import Cart from "../../../components/Checkout/Cart.svelte";
+import Summary from "../../../components/Checkout/Summary.svelte";
+import Steps from "../../../components/Checkout/Steps.svelte";
+import BackButton from "../../../components/BackButton.astro";
+import { getPlatoniqAccountingId, getDefaultCurrency } from "../../../utils/consts";
 
 const { t, lang, session } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();
@@ -33,9 +33,15 @@ const accountingIdPlatoniq = Number(getPlatoniqAccountingId() || 0);
                 <div
                     class="fixed right-0 bottom-0 left-0 flex h-fit w-full flex-col gap-6 rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
                 >
-                    <Summary client:load {defaultCurrency} {accountingIdPlatoniq} />
+                    <Summary
+                        client:load
+                        currency={defaultCurrency}
+                        {accountingIdPlatoniq}
+                        hasError={false}
+                        amount={undefined}
+                    />
                     <div class="lg:block" id="checkout-details">
-                        <Steps step={1} client:load />
+                        <Steps step={1} client:load hasError={false} />
                         <div class="flex flex-col px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
                             <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
                         </div>

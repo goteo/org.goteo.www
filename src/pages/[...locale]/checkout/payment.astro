@@ -16,7 +16,7 @@ const defaultCurrency = getDefaultCurrency();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    return Astro.redirect("/login?callback=/payment");
+    return Astro.redirect("/checkout/login?callback=/checkout/payment");
 }
 
 const { token, user } = authCookie.json();
@@ -56,9 +56,15 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                 <div
                     class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col gap-6 rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
                 >
-                    <Summary client:load {defaultCurrency} />
+                    <Summary
+                        client:load
+                        currency={defaultCurrency}
+                        hasError={false}
+                        amount={accounting?.balance?.amount}
+                        accountingIdPlatoniq={accounting?.id ?? 0}
+                    />
                     <div class="lg:block" id="checkout-details">
-                        <Steps step={3} client:load />
+                        <Steps step={3} hasError={false} client:load />
                         <div class="flex flex-col gap-4 px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
                             <p class="text-content text-sm">
                                 {t("checkout.summary.deduct")}

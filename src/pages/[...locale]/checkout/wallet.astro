@@ -13,7 +13,7 @@ const defaultCurrency = getDefaultCurrency();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    return Astro.redirect("/login?callback=/payment/wallet");
+    return Astro.redirect("/checkout/login?callback=/checkout/wallet");
 }
 const { token, user } = authCookie.json();
 
@@ -48,8 +48,14 @@ const { data: accounting } = await apiAccountingsIdGet({
                 <div
                     class="border-secondary sticky top-10 flex h-fit w-1/2 flex-col gap-6 rounded-[40px] border bg-white"
                 >
-                    <Summary client:load {defaultCurrency} />
-                    <Steps step={3} client:load />
+                    <Summary
+                        client:load
+                        currency={defaultCurrency}
+                        hasError={false}
+                        amount={undefined}
+                        accountingIdPlatoniq={accounting?.id ?? 0}
+                    />
+                    <Steps step={3} hasError={false} client:load />
                     <div class="flex flex-col gap-4 px-6 pt-0 pb-6">
                         <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
                         <a

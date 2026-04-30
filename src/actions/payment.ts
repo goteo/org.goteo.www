@@ -65,7 +65,7 @@ export const payment = defineAction({
                     charges,
                     gateway: `/v4/gateways/${input.paymentMethod}`,
                     origin: session.user.accounting!,
-                    returnUrl: `${context.url.origin}/payment/verify`,
+                    returnUrl: `${context.url.origin}/checkout/verify`,
                 },
                 headers: {
                     Authorization: `Bearer ${session.token.access_token}`,

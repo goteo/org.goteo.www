@@ -17,7 +17,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 const authCookie = Astro.cookies.get("auth");
 if (!authCookie) {
-    return Astro.redirect("/login?callback=/payment/verify" + Astro.url.searchParams);
+    return Astro.redirect("/checkout/login?callback=/checkout/verify" + Astro.url.searchParams);
 }
 
 const { token, user } = authCookie.json();
@@ -67,8 +67,8 @@ try {
 
 const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
 const postPaymentUrl = checkoutId
-    ? `/payment/post-payment?checkoutId=${checkoutId}`
-    : "/payment/post-payment";
+    ? `/checkout/post-payment?checkoutId=${checkoutId}`
+    : "/checkout/post-payment";
 ---
 
 <Layout title="Estado del pago">
@@ -104,9 +104,10 @@ const postPaymentUrl = checkoutId
                             <div class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col gap-6 rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6">
                                 <Summary
                                     client:load
-                                    {defaultCurrency}
+                                    currency={defaultCurrency}
                                     {amount}
                                     hasError={!!error}
+                                    accountingIdPlatoniq={accounting?.id ?? 0}
                                 />
                                 <div class="lg:block" id="checkout-details">
                                     <div class="flex flex-col gap-4 px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
@@ -156,9 +157,10 @@ const postPaymentUrl = checkoutId
                                 <div class="fixed right-0 bottom-0 left-0 flex h-[320px] h-fit w-full flex-col gap-6 rounded-t-[24px] border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:relative lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6">
                                     <Summary
                                         client:load
-                                        {defaultCurrency}
+                                        currency={defaultCurrency}
                                         {amount}
                                         hasError={!!error}
+                                        accountingIdPlatoniq={accounting?.id ?? 0}
                                     />
                                     <div class="lg:block" id="checkout-details">
                                         <div class="flex flex-col gap-4 px-0 pt-6 pb-0 lg:px-6 lg:pt-0 lg:pb-0">
