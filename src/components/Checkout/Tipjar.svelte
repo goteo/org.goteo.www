@@ -5,10 +5,10 @@
     import { getUnit } from "../../utils/currencies";
     import * as tipping from "../../utils/tipping";
 
-    let hasTip = $cartByRecipient[tipping.tipjarIri]?.length > 0;
-
     let amount = $state(tipping.defaultAmount / getUnit());
     let hasError = $state(false);
+
+    let isChecked = $state(tipping.defaultChecked);
 
     function getMoney(amount: number) {
         return {
@@ -43,8 +43,6 @@
             money: getMoney(amount),
         });
     }
-
-    let isChecked = $state(hasTip);
 
     function handleAmountChange(amount: number) {
         if (amount <= 0) {

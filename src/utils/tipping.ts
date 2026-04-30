@@ -17,4 +17,8 @@ export const tipjarIri = client.buildUrl({
     path: { id: tipjarId },
 });
 
-export const defaultAmount = import.meta.env.PUBLIC_TIPPING_DEFAULT_AMOUNT;
+export const defaultAmount = import.meta.env.PUBLIC_TIPPING_DEFAULT_AMOUNT || 1;
+
+export const defaultChecked =
+    import.meta.env.PUBLIC_TIPPING_DEFAULT_CHECKED &&
+    import.meta.env.PUBLIC_TIPPING_DEFAULT_CHECKED == "true";
