@@ -1,13 +1,13 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import App from "../../components/App.svelte";
-import Cart from "../../components/Checkout/Cart.svelte";
-import Summary from "../../components/Checkout/Summary.svelte";
-import Steps from "../../components/Checkout/Steps.svelte";
-import BackButton from "../../components/BackButton.astro";
-import { getPlatoniqAccountingId, getDefaultCurrency } from "../../utils/consts";
 import Card from "../../components/library/Card.svelte";
-import { apiTipjarsIdGet } from "../../openapi/client";
+import { apiTipjarsIdGet } from "../../../openapi/client";
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../components/App.svelte";
+import Cart from "../../../components/Checkout/Cart.svelte";
+import Summary from "../../../components/Checkout/Summary.svelte";
+import Steps from "../../../components/Checkout/Steps.svelte";
+import BackButton from "../../../components/BackButton.astro";
+import { getPlatoniqAccountingId, getDefaultCurrency } from "../../../utils/consts";
 
 const { t, lang, session } = Astro.locals;
 const defaultCurrency = getDefaultCurrency();

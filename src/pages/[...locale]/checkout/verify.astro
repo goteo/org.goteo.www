@@ -69,8 +69,8 @@ try {
 
 const checkoutId = new URL(Astro.request.url).searchParams.get("checkoutId");
 const postPaymentUrl = checkoutId
-    ? `/payment/post-payment?checkoutId=${checkoutId}`
-    : "/payment/post-payment";
+    ? `/checkout/post-payment?checkoutId=${checkoutId}`
+    : "/checkout/post-payment";
 ---
 
 <Layout title="Estado del pago">
@@ -103,19 +103,20 @@ const postPaymentUrl = checkoutId
                                     </div>
                                 </div>
                             </div>
-                            <Card
-                                class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
-                            >
+                            <Card class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6">
                                 <Summary
                                     client:load
                                     currency={defaultCurrency}
                                     {amount}
                                     {accountingIdPlatoniq}
                                     hasError={!!error}
+                                    accountingIdPlatoniq={accounting?.id ?? 0}
                                 />
                                 <div class="w-full lg:block" id="checkout-details">
                                     <div class="flex flex-col">
-                                        <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                                        <p class="text-content text-sm">
+                                            {t("checkout.summary.deduct")}
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="flex flex-col items-end">
@@ -156,19 +157,20 @@ const postPaymentUrl = checkoutId
                                         </div>
                                     </div>
                                 </div>
-                                <Card
-                                    class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
-                                >
+                                <Card class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6">
                                     <Summary
                                         client:load
                                         currency={defaultCurrency}
                                         {amount}
                                         {accountingIdPlatoniq}
                                         hasError={!!error}
+                                        accountingIdPlatoniq={accounting?.id ?? 0}
                                     />
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">
-                                            <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                                            <p class="text-content text-sm">
+                                                {t("checkout.summary.deduct")}
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="flex flex-col items-end">
