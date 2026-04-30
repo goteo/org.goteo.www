@@ -175,7 +175,7 @@ Manages real-time filtering of campaigns without page reloads
     // Generate accessibility announcement
     $effect(() => {
         if ($hasActualSearchResults && !$isSearching) {
-            const announcement = $t("search.accessibility.resultsFound", {
+            const announcement = $t("pages.search.accessibility.resultsFound", {
                 count: $resultCount,
             });
 
@@ -259,16 +259,16 @@ Manages real-time filtering of campaigns without page reloads
                 </svg>
             </div>
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.empty.title")}
+                {$t("pages.search.empty.title")}
             </h3>
             <p class="mb-6 text-gray-600">
-                {$t("search.empty.description")}
+                {$t("pages.search.empty.description")}
             </p>
             <button
                 onclick={clearAllFilters}
                 class="bg-primary text-tertiary rounded-full px-6 py-2 font-semibold transition-opacity hover:opacity-90"
             >
-                {$t("search.results.empty.clearFilters")}
+                {$t("pages.search.empty.clearFilters")}
             </button>
         </div>
     {/if}
@@ -277,9 +277,9 @@ Manages real-time filtering of campaigns without page reloads
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.initial.title")}
+                {$t("pages.search.initial.title")}
             </h3>
-            <p class="text-gray-600">{$t("search.initial.description")}</p>
+            <p class="text-gray-600">{$t("pages.search.initial.description")}</p>
         </div>
     {/if}
 </div>

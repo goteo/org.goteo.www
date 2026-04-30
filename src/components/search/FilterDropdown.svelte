@@ -75,7 +75,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
                 ? $t(selectedOption.translationKey)
                 : selectedOption.label || selectedOption.value;
         }
-        return placeholder || $t("filters.selectOption");
+        return placeholder || $t("common.select");
     }
 </script>
 
