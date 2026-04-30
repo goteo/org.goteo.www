@@ -24,9 +24,9 @@ export async function checkAuth(context: APIContext): Promise<FirewallResult> {
 }
 
 export function withBasicAuth(context: APIContext): FirewallResult | null {
-    const activeBasicAuth = import.meta.env.ACTIVE_BASIC_AUTH;
+    const hasBasicAuth = import.meta.env.BASIC_AUTH;
 
-    if (!activeBasicAuth || activeBasicAuth !== "true") {
+    if (!hasBasicAuth || hasBasicAuth !== "true") {
         return null;
     }
 
