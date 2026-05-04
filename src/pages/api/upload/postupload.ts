@@ -89,7 +89,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             return json({ error: "Invalid image type" }, 400);
         }
 
-        const hash = getHexHash(buffer);
+        const hash = await getHexHash(buffer);
         const stableKey = `${STORAGE_PREFIX_STABLE}/${session.user.id}/${hash}.${detected.ext}`;
 
         await s3.send(
