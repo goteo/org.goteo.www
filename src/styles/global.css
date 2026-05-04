@@ -55,6 +55,10 @@
     }
 }
 
+:root {
+    --sticky-top: calc(var(--header-height, 0px) + 1rem);
+}
+
 html {
     min-height: 100%;
 }

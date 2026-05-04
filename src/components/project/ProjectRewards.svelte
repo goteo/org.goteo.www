@@ -61,17 +61,18 @@
             path: { id: String(extractId(project.accounting)) },
         });
 
-        const unit = getUnit((accounting as Accounting)?.currency);
-        const calculatedAmount = numericAmount * unit;
-
         cart.addItem({
-            title: $t("common.donate"),
-            amount: calculatedAmount,
+            kind: "free",
+            type: "single",
             quantity: 1,
-            image: "",
-            project: Number(project.id),
-            target: Number(extractId(project.accounting)),
-            currency: accounting?.currency!,
+            title: $t("common.donate"),
+            recipient: accounting?.owner!,
+            recipientDisplayName: project.title,
+            target: project.accounting!,
+            money: {
+                amount: numericAmount * getUnit(accounting?.currency),
+                currency: accounting?.currency!,
+            },
         });
 
         window.location.href = "/checkout";

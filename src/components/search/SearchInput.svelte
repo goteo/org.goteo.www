@@ -63,8 +63,8 @@ Implements main search bar with floating label matching Figma design exactly
         oninput={handleInput}
         onkeydown={handleKeydown}
         class="flex-1 border-none bg-transparent text-base text-[#575757] outline-none placeholder:text-[#575757] focus:ring-0 focus:outline-none focus-visible:outline-none"
-        placeholder={placeholder || $t("search.placeholder")}
-        aria-label={$t("search.label")}
+        placeholder={placeholder || $t("pages.search.input.placeholder")}
+        aria-label={$t("pages.search.input.label")}
         data-testid={dataTestId}
         {...props}
     />
@@ -74,7 +74,7 @@ Implements main search bar with floating label matching Figma design exactly
         <button
             onclick={clearSearch}
             class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-[#e6e6e6]"
-            aria-label={$t("search.clearSearch")}
+            aria-label={$t("pages.search.input.clear")}
         >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                 <path
@@ -90,7 +90,7 @@ Implements main search bar with floating label matching Figma design exactly
     <!-- Floating label -->
     <div class="pointer-events-none absolute -top-[4.5px] left-3 bg-[#fbfbfb] px-1">
         <div class="font-['Karla'] text-xs leading-4 font-medium text-[#3d3d3d]">
-            {$t("search.label")}
+            {$t("pages.search.input.label")}
         </div>
     </div>
 </div>

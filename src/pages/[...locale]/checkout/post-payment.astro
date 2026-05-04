@@ -16,11 +16,15 @@ import type { Campaign } from "../../../types/campaign";
 const { t, lang, session } = Astro.locals;
 
 const mapProjectToCard = (project: Project): Campaign => ({
-    id: project.slug || "",
+    slug: project.slug || "",
     title: project.title || "",
+    subtitle: project.subtitle || "",
+    description: project.description || "",
     image: project.video?.thumbnail || "/images/placeholder-project.jpg",
     obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+    categories: project.categories || [],
+    territory: project.territory || "",
     size: "small",
 });
 
@@ -124,7 +128,7 @@ try {
             <div class="flex w-full items-start self-stretch">
                 <div class="flex flex-1 flex-col items-start gap-4 self-stretch">
                     <h2
-                        class="self-stretch text-2xl leading-8 font-bold text-black md:text-3xl md:leading-10 lg:text-[40px] lg:leading-[48px]"
+                        class="self-stretch text-2xl leading-8 font-bold text-black md:text-3xl md:leading-10 lg:text-[40px] lg:leading-12"
                     >
                         {t("payment.postPayment.title")}
                     </h2>
@@ -137,11 +141,11 @@ try {
                 </div>
             </div>
 
-            <div class="flex w-full flex-col items-start gap-12 pb-20 md:gap-[72px]">
+            <div class="flex w-full flex-col items-start gap-12 pb-20 md:gap-18">
                 <div
-                    class="flex flex-col items-start gap-6 self-stretch rounded-[32px] bg-white md:flex-row md:items-center md:gap-10"
+                    class="flex flex-col items-start gap-6 self-stretch rounded-4xl bg-white md:flex-row md:items-center md:gap-10"
                 >
-                    <div class="h-16 w-16 flex-shrink-0 md:h-20 md:w-20">
+                    <div class="h-16 w-16 shrink-0 md:h-20 md:w-20">
                         <img
                             src="/post-payment.svg"
                             alt="Post payment"

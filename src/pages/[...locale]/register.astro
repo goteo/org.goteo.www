@@ -6,13 +6,13 @@ import Summary from "../../components/Checkout/Summary.svelte";
 import AuthSummary from "../../components/AuthSummary.svelte";
 import Oauth from "../../components/Oauth.astro";
 import Button from "../../components/library/Button.svelte";
-import BackButton from "../../components/BackButton.astro";
-import { itemCount } from "../../stores/cart";
+import BackButton from "../../components/BackButton.svelte";
+import { cartCount } from "../../stores/cart";
 
 const { t, lang, session } = Astro.locals;
 
 let hasCart = false;
-itemCount.subscribe((count) => {
+cartCount.subscribe((count) => {
     hasCart = count > 1;
 });
 ---
@@ -22,7 +22,7 @@ itemCount.subscribe((count) => {
         <div class="wrapper">
             <div class="flex flex-col gap-8 py-10 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 lg:w-1/2">
-                    <BackButton />
+                    <BackButton client:load />
 
                     <div class="flex flex-col gap-4">
                         <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">
@@ -65,7 +65,7 @@ itemCount.subscribe((count) => {
                 </div>
 
                 <div
-                    class="fixed right-0 bottom-0 left-0 flex h-fit w-full flex-col rounded-t-3xl border-t border-r border-l bg-white pt-6 pr-4 pb-6 pl-4 lg:sticky lg:top-10 lg:right-auto lg:bottom-auto lg:left-auto lg:h-fit lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:border lg:p-6"
+                    class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
                     <AuthSummary client:load />
                     {hasCart && <Summary client:load />}
