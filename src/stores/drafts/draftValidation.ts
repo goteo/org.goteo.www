@@ -2,10 +2,10 @@ import { derived, get, writable } from "svelte/store";
 import z from "zod";
 
 import { currentDraft, type Draft, type Wizard } from "./projectDraft";
-import { projectCreationSchema } from "../../pages/[...lang]/create/validation";
-import { cyrb53 } from "../../utils/hash";
+import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
 import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
+import murmur from "murmurhash-js";
 
 export type ValidationErrors = Record<string, string>;
 
@@ -178,7 +178,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
 
 export function validateReward(reward: ProjectReward): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = cyrb53(JSON.stringify(reward));
+    const hash = murmur(JSON.stringify(reward));
 
     if (!reward.title.trim()) {
         errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
@@ -197,7 +197,7 @@ export function validateReward(reward: ProjectReward): ValidationErrors {
 
 export function validateCollaboration(collab: ProjectCollaboration): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = cyrb53(JSON.stringify(collab));
+    const hash = murmur(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
         errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
@@ -218,7 +218,7 @@ export function validateCollaboration(collab: ProjectCollaboration): ValidationE
 
 export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = cyrb53(JSON.stringify(item));
+    const hash = murmur(JSON.stringify(item));
 
     if (!item.title.trim()) {
         errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
