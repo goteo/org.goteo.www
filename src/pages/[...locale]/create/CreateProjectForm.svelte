@@ -178,10 +178,10 @@
     <div class="flex max-w-[668px] flex-col gap-10">
         <div class="flex flex-col gap-4">
             <h1 class="text-3xl font-bold text-black lg:text-4xl">
-                {$t("create.project.title")}
+                {$t("pages.project.create.title")}
             </h1>
             <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("create.project.subtitle")}
+                {$t("pages.project.create.subtitle")}
             </p>
         </div>
         {#if submitted && Object.keys($validationErrors).length > 0}
@@ -220,14 +220,14 @@
         {/if}
         <div class="flex flex-col gap-4">
             <h2 class="text-2xl font-bold text-black">
-                {$t("create.project.description.title")}
+                {$t("pages.project.create.description.title")}
             </h2>
             <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("create.project.description.subtitle")}
+                {$t("pages.project.create.description.subtitle")}
             </p>
             <TextInput
                 name="title"
-                placeholder={$t("create.project.description.titlePrompt")}
+                placeholder={$t("pages.project.create.description.titlePrompt")}
                 bind:value={$draft.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
                 onBlur={() => handleFieldBlur("title")}
@@ -236,7 +236,7 @@
                 <textarea
                     id="subtitle"
                     name="subtitle"
-                    placeholder={$t("create.project.description.subtitlePrompt")}
+                    placeholder={$t("pages.project.create.description.subtitlePrompt")}
                     class="h-[240px] w-full resize-none rounded-md border p-[16px] {shouldShowError(
                         'subtitle',
                     )
@@ -256,10 +256,10 @@
         </div>
         <div class="flex flex-col gap-4">
             <h2 class="text-2xl font-bold text-black">
-                {$t("create.project.categories.title")}
+                {$t("pages.project.create.categories.title")}
             </h2>
             <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("create.project.categories.subtitle")}
+                {$t("pages.project.create.categories.subtitle")}
             </p>
             <CategorySelect
                 max={2}
@@ -270,10 +270,10 @@
         </div>
         <div class="flex flex-col gap-4">
             <h2 class="text-2xl font-bold text-black">
-                {$t("create.project.release.title")}
+                {$t("pages.project.create.release.title")}
             </h2>
             <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("create.project.release.subtitle")}
+                {$t("pages.project.create.release.subtitle")}
             </p>
             <DateInput
                 name="release"
@@ -298,20 +298,20 @@
         {/if}
         <p>
             <Button size="md" disabled={!$isFormValid || isSubmitting} onclick={handleSubmit}>
-                {isSubmitting ? "Submitting..." : $t("create.project.submit")}
+                {isSubmitting ? "Submitting..." : $t("pages.project.create.submit")}
             </Button>
         </p>
     </div>
     <div class="ml-auto">
         <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">
             <h1 class="text-secondary text-2xl leading-8 font-bold {$draft.title || 'opacity-50'}">
-                {$draft.title || $t("create.project.description.titlePlaceholder")}
+                {$draft.title || $t("pages.project.create.description.titlePlaceholder")}
             </h1>
             <p class="text-sm text-black">
-                {$draft.subtitle || $t("create.project.description.subtitlePlaceholder")}
+                {$draft.subtitle || $t("pages.project.create.description.subtitlePlaceholder")}
             </p>
             <div class="mt-auto">
-                <p class="text-sm text-black">{$t("create.project.budgetPreview")}</p>
+                <p class="text-sm text-black">{$t("pages.project.create.budgetPreview")}</p>
                 <p class="text-secondary text-3xl font-bold">
                     {formatCurrency($draft.budget)}
                 </p>

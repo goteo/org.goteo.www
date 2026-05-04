@@ -75,9 +75,10 @@
 
     // Generate ID if not provided
     const generatedId = $props.id();
-    const selectId = id || `select-${generatedId}`;
-    const errorId = `${selectId}-error`;
-    const helperId = `${selectId}-helper`;
+    const finalId = $derived(id ?? generatedId);
+
+    const errorId = $derived(`${finalId}-error`);
+    const helperId = $derived(`${finalId}-helper`);
 
     let isOpen = $state(false);
 
@@ -104,8 +105,8 @@
     <!-- Floating Label -->
     {#if labelText}
         <label
-            for={selectId}
-            class="text-secondary absolute top-[-8px] left-3 bg-white px-1 text-[12px] leading-[16px] font-medium transition-all duration-200"
+            for={finalId}
+            class="text-secondary absolute -top-2 left-3 bg-white px-1 text-[12px] leading-4 font-medium transition-all duration-200"
         >
             {labelText}
             {#if required}
@@ -119,14 +120,14 @@
         {name}
         {required}
         {disabled}
-        id={selectId}
+        id={finalId}
         bind:value
         onclick={() => (isOpen = !isOpen)}
         onchange={handleChange}
         onblur={handleBlur}
         onkeydown={(e) => e.key === "Escape" && (isOpen = false)}
         class={twMerge(
-            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-[24px] transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}

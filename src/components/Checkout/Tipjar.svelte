@@ -1,88 +1,79 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import { get } from "svelte/store";
 
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
-    import { getUnit, formatCurrency } from "../../utils/currencies";
+    import { apiTipjarsIdGet } from "../../openapi/client";
+    import { cart, cartByRecipient, type CartItem } from "../../stores/cart";
+    import { getUnit } from "../../utils/currencies";
+    import * as tipping from "../../utils/tipping";
 
-    import type { CartItem } from "../../stores/cart";
+    let amount = $state(tipping.defaultAmount / getUnit());
+    let hasError = $state(false);
 
-    export let defaultCurrency: string;
-    export let accountingIdPlatoniq: number;
+    let isChecked = $state(tipping.defaultChecked);
 
-    let value = 3;
-    let rawInput = "3";
-    let isChecked = true;
-    let isFocused = false;
-    let hasError = false;
-    let initialized = false;
-
-    const createDonationItem = (amount: number): Omit<CartItem, "key"> => ({
-        title: "Donación Platoniq",
-        amount: Math.round(amount * getUnit(defaultCurrency)),
-        quantity: 1,
-        image: "",
-        target: accountingIdPlatoniq,
-        currency: defaultCurrency,
+    onMount(() => {
+        toggleTip();
     });
 
-    function toggleDonation(checked: boolean) {
-        const $cart = get(cart);
-        const existing = $cart.items.find((i) => i.target === accountingIdPlatoniq);
-        if (checked) {
-            if (!existing && value > 0 && !hasError) {
-                cart.addItem(createDonationItem(value));
-            }
-        } else {
-            if (existing) {
-                cart.removeItem(existing.key);
-            }
+    function getMoney(amount: number) {
+        return {
+            amount,
+            currency: import.meta.env.PUBLIC_DEFAULT_CURRENCY,
+        };
+    }
+
+    async function getTip(): Promise<Omit<CartItem, "key">> {
+        if ($cartByRecipient[tipping.tipjarIri]) {
+            return $cartByRecipient[tipping.tipjarIri][0];
         }
+
+        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipping.tipjarId } });
+
+        return {
+            kind: "tip",
+            type: "single",
+            quantity: 1,
+            title: $t("domain.tipping.title"),
+            money: getMoney(tipping.defaultAmount),
+            recipient: tipping.tipjarIri,
+            recipientDisplayName: tipjar?.name!,
+            target: tipjar?.accounting!,
+        };
     }
 
-    function handleFocus() {
-        isFocused = true;
-        rawInput = value.toString();
-        hasError = false;
+    async function setTip(amount: number) {
+        const tip = await getTip();
+
+        cart.addItem({
+            ...tip,
+            money: getMoney(amount),
+        });
     }
 
-    function handleBlur() {
-        isFocused = false;
-
-        const parsed = parseFloat(rawInput.replace(/[^\d.,]/g, "").replace(",", "."));
-        value = isNaN(parsed) ? 0 : parsed;
-
-        if (!value || value <= 0) {
+    function handleAmountChange(amount: number) {
+        if (amount <= 0) {
             hasError = true;
             return;
         }
 
         hasError = false;
-        rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency);
 
-        const $cart = get(cart);
-        const existing = $cart.items.find((i) => i.target === accountingIdPlatoniq);
-        if (existing) {
-            cart.removeItem(existing.key);
-            cart.addItem(createDonationItem(value));
-        }
+        setTip(amount * getUnit());
     }
 
-    onMount(() => {
-        const $cart = get(cart);
-        const item = $cart.items.find((i) => i.target === accountingIdPlatoniq);
+    function toggleTip() {
+        if (!isChecked) {
+            if ($cartByRecipient[tipping.tipjarIri].length < 1) {
+                return;
+            }
 
-        if (item) {
-            value = item.amount / getUnit(defaultCurrency);
-            rawInput = formatCurrency(item.amount, defaultCurrency);
+            const tip = $cartByRecipient[tipping.tipjarIri][0];
+            cart.removeItem(tip.key);
         } else {
-            cart.addItem(createDonationItem(value));
-            rawInput = formatCurrency(value * getUnit(defaultCurrency), defaultCurrency);
+            setTip(amount * getUnit());
         }
-
-        initialized = true;
-    });
+    }
 </script>
 
 <div class="flex w-auto flex-col gap-4">
@@ -95,10 +86,10 @@
             class="w-full rounded border border-gray-300 p-2
 			transition focus:border-blue-500 focus:outline-none
 			disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500"
-            type="text"
-            bind:value={rawInput}
-            on:focus={handleFocus}
-            on:blur={handleBlur}
+            type="number"
+            min="1"
+            bind:value={amount}
+            oninput={(e) => handleAmountChange(+e.currentTarget.value)}
             placeholder={$t("checkout.tipjar.input")}
             disabled={!isChecked}
             class:border-red-500={hasError}
@@ -118,11 +109,8 @@
                 id="donation-checkbox"
                 type="checkbox"
                 class="accent-primary h-6 w-6 rounded"
-                checked={isChecked}
-                on:change={(e) => {
-                    isChecked = e.currentTarget.checked;
-                    toggleDonation(isChecked);
-                }}
+                bind:checked={isChecked}
+                onchange={(e) => toggleTip()}
             />
             <label for="donation-checkbox" class="text-secondary">
                 {$t("checkout.tipjar.checkboxLabel")}

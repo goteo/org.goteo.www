@@ -6,7 +6,8 @@
 
 @import "./marked";
 
-@source "../pages/**/*.astro";
+@source "../pages/**/*.{astro,svelte}";
+@source "../layouts/**/*.{astro,svelte}";
 @source "../components/**/*.{astro,svelte}";
 @source "../node_modules/flowbite-svelte/dist";
 @source "../node_modules/flowbite-svelte-icons/dist";
@@ -52,6 +53,10 @@
         --color-purple-soft: #1a1730;
         --color-purple-med: #22203a;
     }
+}
+
+:root {
+    --sticky-top: calc(var(--header-height, 0px) + 1rem);
 }
 
 html {

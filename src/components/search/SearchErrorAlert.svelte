@@ -44,7 +44,7 @@ Displays basic error messages with retry functionality
             <!-- Error Content -->
             <div class="min-w-0 flex-1">
                 <h3 class="text-sm font-medium text-red-800">
-                    {$t("search.error.title", "Search Error")}
+                    {$t("pages.search.error.title", "Search Error")}
                 </h3>
                 <p class="mt-1 text-sm text-red-700">
                     {error}
@@ -71,7 +71,7 @@ Displays basic error messages with retry functionality
                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
                             />
                         </svg>
-                        {$t("search.error.retry", "Try Again")}
+                        {$t("pages.search.error.retry", "Try Again")}
                     </button>
                 {/if}
             </div>

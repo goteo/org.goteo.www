@@ -20,15 +20,12 @@ const file = await markdownFiles[fileKey]();
 const Content = file.default;
 ---
 
-<Layout
-    title={t("metadata.title")}
-    description={t("metadata.description")}
-    class="mb-20 gap-[72px]"
->
-    <App client:load locale={lang} session={session} />
-    <ReturnHeader client:load />
+<Layout title={t("metadata.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session} class="mb-20 gap-[72px]">
+        <ReturnHeader client:load />
 
-    <BodyText client:load>
-        <Content />
-    </BodyText>
+        <BodyText client:load>
+            <Content />
+        </BodyText>
+    </App>
 </Layout>

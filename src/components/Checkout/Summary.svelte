@@ -1,33 +1,23 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import WarningIcon from "../../components/icons/Warning.svelte";
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
+    import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../CollapsibleBox.svelte";
+    import Thtml from "../Thtml.svelte";
 
-    export let hasError: boolean;
-    export let amount: number | undefined;
-    export let currency: string;
-    export let accountingIdPlatoniq: number;
+    let { hasError = false }: { hasError?: boolean } = $props();
 
-    let summaryRef;
-
-    const total = derived(cart, ($cart) =>
-        $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0),
+    const recipients = $derived(
+        Object.entries($cartByRecipient).sort((a, b) => {
+            if (a[0] < b[0]) return -1;
+            if (a[0] > b[0]) return 1;
+            return 0;
+        }),
     );
-
-    const foundation = derived(cart, ($cart) =>
-        $cart.items
-            .filter((item) => item.target === accountingIdPlatoniq)
-            .reduce((sum, item) => sum + item.amount * item.quantity, 0),
-    );
-
-    const donations = derived([total, foundation], ([$total, $foundation]) => $total - $foundation);
 </script>
 
-<div class="flex flex-col gap-6 px-0 pt-0 pb-0 lg:px-6 lg:pt-6 lg:pb-0" bind:this={summaryRef}>
+<div class="flex w-full flex-col gap-6">
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
@@ -48,28 +38,27 @@
             <p
                 class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency(amount ?? $total, currency)}
+                {formatCurrency($cartAmount)}
             </p>
         {/snippet}
 
         {#snippet content()}
-            {#if $donations > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.donations")}</span>
-                        <span>{formatCurrency($donations, currency)}</span>
-                    </div>
-                </div>
-            {/if}
-
-            {#if $foundation > 0}
-                <div class="flex flex-col gap-2">
-                    <div class="flex justify-between text-sm">
-                        <span>{$t("checkout.summary.foundation")}</span>
-                        <span>{formatCurrency($foundation, currency)}</span>
-                    </div>
-                </div>
-            {/if}
+            <hr class="bg-secondary h-px border-none" />
+            <div>
+                {#each recipients as [_, items]}
+                    {@const name = items[0].recipientDisplayName}
+                    {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
+                    <p>
+                        <Thtml
+                            key="pages.checkout.summary.toRecipient"
+                            vars={{
+                                amount: `<strong>${formatCurrency(amount)}</strong>`,
+                                name: name,
+                            }}
+                        />
+                    </p>
+                {/each}
+            </div>
         {/snippet}
     </CollapsibleBox>
 </div>
