@@ -168,11 +168,6 @@ export function markFieldAsTouched(fieldName: string) {
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
-/**
- * Draft Autosave
- *
- * Autosaves the current draft into the draft indexedDB repository
- */
 function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
@@ -180,15 +175,14 @@ function persistDraft() {
         const draft = get(currentDraft);
         if (!draft) return;
 
-        const errors = validateDraft(draft);
-
-        validationErrors.set(errors);
-
-        if (Object.keys(errors).length > 0) {
-            return;
+        try {
+            await draftRepo.update(draft.draftId, draft.userId, {
+                ...draft,
+                updatedAt: Date.now(),
+            });
+        } catch (error) {
+            console.error("Failed to persist draft:", error);
         }
-
-        await draftRepo.update(draft.draftId, draft.userId, draft);
     }, 1000);
 }
 
