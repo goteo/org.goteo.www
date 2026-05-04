@@ -389,7 +389,8 @@
             "learnMore": "Saber más."
           }
         },
-        "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible."
+        "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible.",
+        "outOfCampaign": "Este proyecto está fuera de campaña y ya no admite pagos."
       }
     },
     "search": {
