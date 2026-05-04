@@ -16,7 +16,7 @@
         onBlur = undefined,
         onInput = undefined,
     }: {
-        value?: Date;
+        value?: string | Date;
         id?: string;
         name?: string;
         required?: boolean;
@@ -93,7 +93,7 @@
     const maxString = $derived(toDateString(max));
 
     // Convert current value to string for HTML input
-    const valueString = $derived(dateToString(value));
+    const valueString = $derived(typeof value === "string" ? value : dateToString(value));
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-40")}>

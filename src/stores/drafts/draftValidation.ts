@@ -1,17 +1,38 @@
+import murmur from "murmurhash-js";
 import { derived, get, writable } from "svelte/store";
 import z from "zod";
 
 import { currentDraft, type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
-import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
-import murmur from "murmurhash-js";
+import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
+
 
 export type ValidationErrors = Record<string, string>;
 
 export const validationErrors = writable<ValidationErrors>({});
 export const isDraftValid = derived(validationErrors, ($errors) => {
     return Object.keys($errors).length === 0;
+});
+
+/**
+ * Derived store that indicates if the form is valid.
+ * Returns true only when:
+ * 1. All required fields have values
+ * 2. There are no validation errors
+ */
+export const isFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
+    // Check if there are any validation errors
+    if (Object.keys($errors).length > 0) {
+        return false;
+    }
+
+    // Check that required fields have values
+    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
+    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
+    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
+
+    return hasTitle && hasSubtitle && hasCategories;
 });
 
 /**
@@ -37,7 +58,7 @@ export function validateCreateForm(): boolean {
     }
 }
 
-export function validateDraftPublish(draft: Draft): ValidationErrors {
+export function validateDraftToPublish(draft: Draft): ValidationErrors {
     const wizard = draft.wizardForm;
 
     return {
@@ -250,7 +271,7 @@ export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
 
 export function validateBudgetAmount(draft: Draft) {
     const budgetItems = draft.wizardForm.budgetItems;
-    const budget = draft.createProject.budget;
+    const budget = draft.wizardForm.budget;
     const errors: ValidationErrors = {};
 
     if (budgetItems.minimum.length <= 0) {
@@ -270,18 +291,37 @@ export function validateBudgetAmount(draft: Draft) {
     return errors;
 }
 
-export function validateField(field: string, draft: Draft) {
-    const errors = get(validationErrors);
+/**
+ * Validates a single field and updates the validation errors store.
+ * Uses Zod's type system with proper type guards to avoid unsafe type assertions.
+ * @param fieldName - The name of the field to validate
+ * @param value - The current value of the field
+ */
+export function validateField(fieldName: keyof ProjectProjectCreationDto, value: unknown) {
+    // Type guard to check if field exists in schema
+    type SchemaFields = keyof typeof projectCreationSchema.shape;
 
-    switch (field) {
-        case "objectives":
-            if (draft.wizardForm.campaignInfo.objectives.length < 50) {
-                errors.objectives = "min_length";
-            } else {
-                delete errors.objectives;
-            }
-            break;
+    if (!(fieldName in projectCreationSchema.shape)) {
+        // Field not in schema, skip validation
+        return;
     }
 
-    validationErrors.set({ ...errors });
+    // Now we know fieldName exists in the schema
+    const fieldSchema = projectCreationSchema.shape[fieldName as SchemaFields];
+
+    // Use Zod's ZodTypeAny for proper type handling
+    const result = (fieldSchema as z.ZodTypeAny).safeParse(value);
+
+    validationErrors.update((errors) => {
+        if (!result.success) {
+            // Extract the first error message
+            const errorMessage = result.error.issues[0]?.message || "";
+            return { ...errors, [fieldName]: errorMessage };
+        } else {
+            // Remove error if validation passes
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { [fieldName]: _, ...rest } = errors;
+            return rest;
+        }
+    });
 }

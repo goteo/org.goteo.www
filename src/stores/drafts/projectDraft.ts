@@ -1,12 +1,11 @@
 import { liveQuery } from "dexie";
 import { writable, readable, get, derived } from "svelte/store";
 
-import { validateCreateForm, validationErrors } from "./draftValidation";
 import { session } from "../../auth/store";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
-import type { Project, ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../../openapi/client";
+import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
 
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
@@ -27,6 +26,9 @@ export interface WizardCampaignInfo {
 export type Wizard = {
     // Step navigation
     currentStep: number;
+
+    // Total budget amount
+    budget?: Budget;
 
     // Step 1: Configuration
     configuration: WizardConfiguration;
@@ -54,7 +56,7 @@ export interface Draft {
     draftId: string;
     userId: number;
 
-    createProject: Project;
+    createProject: ProjectProjectCreationDto;
     wizardForm: Wizard;
 
     updatedAt: number;
@@ -100,14 +102,14 @@ export function createDraftStore(userId: number) {
     });
 }
 
-export async function createDraft(project?: Project) {
+export async function createDraft(project?: ProjectProjectCreationDto) {
     const draftId = createDraftId();
     const userId = getUserId();
 
     const draft: Draft = {
         draftId,
         userId,
-        createProject: project ?? ({} as Partial<Project> as Project),
+        createProject: project ?? ({} as Partial<ProjectProjectCreationDto> as ProjectProjectCreationDto),
         wizardForm: {
             currentStep: 1,
             configuration: {
@@ -218,7 +220,7 @@ export function updateWizard(data: Partial<Wizard>) {
  *
  * @param data - Partial object with Project API Type data that has been modified
  */
-export function updateProject(data: Partial<Project>) {
+export function updateProject(data: Partial<ProjectProjectCreationDto>) {
     currentDraft.update((draft) => {
         if (!draft) return draft;
 
@@ -233,9 +235,7 @@ export function updateProject(data: Partial<Project>) {
         return updated;
     });
 
-    if (validateCreateForm()) {
-        persistDraft();
-    } else return;
+    persistDraft();
 }
 
 export async function deleteDraft(draftId: string, userId: number) {

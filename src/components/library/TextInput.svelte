@@ -13,8 +13,9 @@
         labelText = undefined,
         helperText = undefined,
         error = undefined,
+        onBlur = undefined,
     }: {
-        value?: string;
+        value?: string | undefined;
         id?: string;
         name?: string;
         placeholder?: string;
@@ -25,6 +26,7 @@
         labelText?: string;
         helperText?: string;
         error?: string;
+        onBlur?: () => void;
     } = $props();
 
     const generatedId = $props.id();
@@ -43,6 +45,7 @@
     <input
         bind:value
         id={finalId}
+        onblur={onBlur}
         {name}
         {type}
         {required}
