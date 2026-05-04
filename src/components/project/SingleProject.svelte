@@ -94,6 +94,11 @@
         project = data!;
     }
 
+    let outOfCampaign = $state(false);
+    $effect(() => {
+        outOfCampaign = project.status !== "in_campaign";
+    });
+
     let langMismatch = $state(false);
     let attemptedLang = $state("");
 
@@ -125,10 +130,14 @@
 </script>
 
 <section class="wrapper">
-    <Toast variant="warning" bind:showToast={langMismatch} class="mb-6 w-full">
+    <Toast variant="warning" bind:showToast={langMismatch} class="mb-3 w-full">
         {$t("pages.project.view.langNotAvailable", {
             lang: getLanguageDisplayName(attemptedLang)!,
         })}
+    </Toast>
+
+    <Toast variant="notification" bind:showToast={outOfCampaign} class="w-full">
+        {$t("pages.project.view.outOfCampaign")}
     </Toast>
 
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
