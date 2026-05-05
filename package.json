@@ -19,7 +19,9 @@
     "preview": "astro preview",
     "preview:ci": "NODE_ENV=test NODE_TLS_REJECT_UNAUTHORIZED=0 SKIP_PAYMENT_GATEWAYS=true PAYMENT_GATEWAYS_ENABLED=false wrangler dev --env preview --port 4321 --ip 0.0.0.0",
     "test:e2e": "start-server-and-test dev http://localhost:4321 cypress:run",
-    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run"
+    "test:e2e:ci": "NODE_TLS_REJECT_UNAUTHORIZED=0 start-server-and-test preview:ci http://localhost:4321 cypress:run",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.9",
@@ -56,6 +58,9 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@hey-api/openapi-ts": "^0.69.2",
+    "@storybook/addon-svelte-csf": "^5.1.2",
+    "@storybook/svelte-vite": "^10.3.6",
+    "@sveltejs/vite-plugin-svelte": "^5.1.1",
     "@types/murmurhash-js": "^1.0.7",
     "@types/node": "^24.12.2",
     "@typescript-eslint/eslint-plugin": "^8.59.2",
@@ -64,6 +69,7 @@
     "eslint": "^9.39.4",
     "eslint-plugin-cypress": "^5.3.0",
     "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-storybook": "^10.3.6",
     "eslint-plugin-svelte": "^3.17.1",
     "eslint-plugin-unused-imports": "^4.4.1",
     "flowbite": "^3.1.2",
@@ -75,6 +81,7 @@
     "prettier-plugin-svelte": "^3.5.1",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "start-server-and-test": "^2.1.5",
+    "storybook": "^10.3.6",
     "svelte-eslint-parser": "^1.6.1",
     "svelte-range-slider-pips": "^4.1.1",
     "typescript-eslint": "^8.59.2",
