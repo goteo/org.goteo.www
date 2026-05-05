@@ -120,7 +120,9 @@
             </div>
 
             <div
-                class="grid transition-[grid-template-rows] duration-300 {menuOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}"
+                class="grid transition-[grid-template-rows] duration-300 {menuOpen
+                    ? 'grid-rows-[1fr]'
+                    : 'grid-rows-[0fr]'}"
             >
                 <div class="overflow-hidden">
                     <div class="flex flex-col gap-4 p-4 sm:hidden">

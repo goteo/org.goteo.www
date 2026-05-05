@@ -9,7 +9,13 @@
         height?: string | number;
     }
 
-    let { class: classes = "", barClass = "", width = "40", height = "40", close = false }: Props = $props();
+    let {
+        class: classes = "",
+        barClass = "",
+        width = "40",
+        height = "40",
+        close = false,
+    }: Props = $props();
 </script>
 
 {#if close === false}
