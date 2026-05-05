@@ -1,24 +1,14 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
+import {
+    STORAGE_ALLOWEDTYPES,
+    STORAGE_PREFIX_TEMP,
+    client,
+} from "../../../utils/objectStorage";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
-
-/**
- * Temporary pre-fix for unvalidated, unprocessed files.
- */
-export const STORAGE_PREFIX_TEMP = "uploads/temp";
-
-const s3 = new S3Client({
-    region: import.meta.env.OBJECT_STORAGE_REGION,
-    endpoint: import.meta.env.OBJECT_STORAGE_ENDPOINT,
-    credentials: {
-        accessKeyId: import.meta.env.OBJECT_STORAGE_ACCESS_KEY,
-        secretAccessKey: import.meta.env.OBJECT_STORAGE_SECRET_KEY,
-    },
-    forcePathStyle: true,
-});
 
 function json(data: unknown, status = 200) {
     return new Response(JSON.stringify(data), {
@@ -33,7 +23,14 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const { contentType } = await request.json();
     if (!contentType) {
-        return json({ error: "Missing key `contentType` in request body" }, 400);
+        return json({ error: `Missing key "contentType" in request body` }, 400);
+    }
+
+    if (!STORAGE_ALLOWEDTYPES.includes(contentType)) {
+        return json(
+            { error: `Invalid type. Allowed types are: ${STORAGE_ALLOWEDTYPES.join(",")}` },
+            400,
+        );
     }
 
     const tempKey = `${STORAGE_PREFIX_TEMP}/${session.user.id}/${crypto.randomUUID()}`;
@@ -44,7 +41,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         ContentType: contentType,
     });
 
-    const signedUrl = await getSignedUrl(s3, command, {
+    const signedUrl = await getSignedUrl(client, command, {
         expiresIn: 120,
     });
 
