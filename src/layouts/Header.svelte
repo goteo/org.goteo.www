@@ -106,7 +106,7 @@
                         <li class="hidden items-center pr-2 md:flex">
                             <UiLanguages />
                         </li>
-                        <li class="flex items-center">
+                        <li class="flex items-center {children ? '' : 'sm:hidden'}">
                             <button class="p-1" onclick={menuToggle}>
                                 <Hamburger
                                     close={menuOpen}
