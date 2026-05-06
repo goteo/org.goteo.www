@@ -62,7 +62,18 @@ export interface Draft {
     updatedAt: number;
 }
 
-export const drafts = readable(createDraftStore(getUserId()));
+export const drafts = derived(session, ($session, set) => {
+    if (!$session?.user?.id) {
+        set([]);
+        return;
+    }
+
+    const store = createDraftStore($session.user.id);
+
+    const unsubscribe = store.subscribe(set);
+
+    return unsubscribe;
+});
 
 export const currentDraft = writable<Draft | null>(null);
 
@@ -178,10 +189,14 @@ function persistDraft() {
         if (!draft) return;
 
         try {
-            await draftRepo.update(draft.draftId, draft.userId, {
+            const updatedDraft = {
                 ...draft,
                 updatedAt: Date.now(),
-            });
+            };
+
+            currentDraft.set(updatedDraft);
+
+            await draftRepo.update(draft.draftId, draft.userId, updatedDraft);
         } catch (error) {
             console.error("Failed to persist draft:", error);
         }
@@ -245,4 +260,9 @@ export async function deleteDraft(draftId: string, userId: number) {
     if (current?.draftId === draftId) {
         currentDraft.set(null);
     }
+}
+
+export function resetCurrentDraftState() {
+    currentDraft.set(null);
+    touchedFields.set(new Set());
 }
