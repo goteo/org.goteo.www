@@ -33,6 +33,7 @@ export default [
             "src/openapi/client/**",
             ".github/**",
             "env.d.ts",
+            "storybook-static/**",
         ],
     },
     {
@@ -131,5 +132,5 @@ export default [
             "svelte/no-useless-children-snippet": "warn",
         },
     },
-    ...storybook.configs["flat/recommended"]
+    ...storybook.configs["flat/recommended"],
 ];
