@@ -58,6 +58,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@hey-api/openapi-ts": "^0.69.2",
+    "@storybook/addon-docs": "^10.3.6",
     "@storybook/addon-svelte-csf": "^5.1.2",
     "@storybook/svelte-vite": "^10.3.6",
     "@sveltejs/vite-plugin-svelte": "^5.1.1",
