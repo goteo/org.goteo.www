@@ -5,7 +5,8 @@ import type { StorybookConfig } from "@storybook/svelte-vite";
 
 const config: StorybookConfig = {
     stories: ["../src/**/*.stories.@(js|ts|svelte)"],
-    addons: ["@storybook/addon-svelte-csf"],
+    staticDirs: ["../public"],
+    addons: ["@storybook/addon-svelte-csf", "@storybook/addon-docs"],
     framework: "@storybook/svelte-vite",
     async viteFinal(config) {
         config.plugins = [tailwindcss(), svelte(), ...(config.plugins || [])];
