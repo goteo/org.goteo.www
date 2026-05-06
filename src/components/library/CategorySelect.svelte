@@ -56,19 +56,19 @@
 </script>
 
 <div>
-    <div class="flex flex-wrap gap-[16px]" role="group" aria-invalid={!!error}>
+    <fieldset class="flex flex-wrap gap-4 border-0 p-0 m-0" aria-describedby={error ? 'category-error' : undefined}>
         {#each options as option}
             <Category
                 type={calcTagType(option)}
                 disabled={calcTagDisabled(option)}
-                onclick={(e) => handleClick(option)}
+                onclick={() => handleClick(option)}
             >
                 {option.text}
             </Category>
         {/each}
-    </div>
+    </fieldset>
     {#if error}
-        <p class="mt-2 ml-4 text-[12px] text-red-600" role="alert">
+        <p id="category-error" class="mt-2 ml-4 text-[12px] text-red-600" role="alert">
             {error}
         </p>
     {/if}
