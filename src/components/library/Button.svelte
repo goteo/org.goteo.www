@@ -38,7 +38,7 @@
     {type}
     {disabled}
     class={twMerge(
-        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-[700] transition hover:cursor-pointer",
+        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-bold transition hover:cursor-pointer",
         sizeStyles[size],
         kindStyles[kind],
         classes,
