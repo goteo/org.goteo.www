@@ -56,7 +56,10 @@
 </script>
 
 <div>
-    <fieldset class="flex flex-wrap gap-4 border-0 p-0 m-0" aria-describedby={error ? 'category-error' : undefined}>
+    <fieldset
+        class="m-0 flex flex-wrap gap-4 border-0 p-0"
+        aria-describedby={error ? "category-error" : undefined}
+    >
         {#each options as option}
             <Category
                 type={calcTagType(option)}

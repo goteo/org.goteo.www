@@ -21,14 +21,20 @@
 
 <Story name="WithLabel" args={{ labelText: "Start date" }} />
 
-<Story name="WithHelperText" args={{ labelText: "Start date", helperText: "Select a date in the future" }} />
+<Story
+    name="WithHelperText"
+    args={{ labelText: "Start date", helperText: "Select a date in the future" }}
+/>
 
 <Story name="WithError" args={{ labelText: "Start date", error: "Date is required" }} />
 
 <Story name="Disabled" args={{ labelText: "Start date", disabled: true }} />
 
-<Story name="WithMinMax" args={{
-    labelText: "Event date",
-    min: new Date("2024-01-01"),
-    max: new Date("2024-12-31"),
-}} />
+<Story
+    name="WithMinMax"
+    args={{
+        labelText: "Event date",
+        min: new Date("2024-01-01"),
+        max: new Date("2024-12-31"),
+    }}
+/>

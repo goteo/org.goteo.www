@@ -26,7 +26,11 @@
 
 <Story name="OwnWithPhoto" args={{ type: "own", name: "You", photo: "/imgs/promoter-2.jpg" }} />
 
-<Story name="LongMessage" args={{
-    type: "foreign",
-    message: "This is a longer message to test how the bubble handles multi-line content. It should wrap gracefully and maintain proper padding and alignment throughout.",
-}} />
+<Story
+    name="LongMessage"
+    args={{
+        type: "foreign",
+        message:
+            "This is a longer message to test how the bubble handles multi-line content. It should wrap gracefully and maintain proper padding and alignment throughout.",
+    }}
+/>

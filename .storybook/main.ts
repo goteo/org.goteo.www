@@ -10,7 +10,7 @@ const config: StorybookConfig = {
         "@storybook/addon-svelte-csf",
         "@storybook/addon-docs",
         "@storybook/addon-vitest",
-        "@storybook/addon-a11y"
+        "@storybook/addon-a11y",
     ],
     framework: "@storybook/svelte-vite",
     async viteFinal(config) {
