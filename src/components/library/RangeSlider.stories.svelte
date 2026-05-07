@@ -17,7 +17,10 @@
 
 <Story name="Default" />
 
-<Story name="WithCurrency" args={{ min: 0, max: 100000, values: [10000, 80000], currency: "EUR" }} />
+<Story
+    name="WithCurrency"
+    args={{ min: 0, max: 100000, values: [10000, 80000], currency: "EUR" }}
+/>
 
 <Story name="SmallRange" args={{ min: 0, max: 100, values: [20, 80] }} />
 

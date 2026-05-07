@@ -28,7 +28,10 @@
     <option value="internacional">Internacional</option>
 </Story>
 
-<Story name="WithHelperText" args={{ labelText: "Category", helperText: "Choose the campaign category" }}>
+<Story
+    name="WithHelperText"
+    args={{ labelText: "Category", helperText: "Choose the campaign category" }}
+>
     <option value="">Select category</option>
     <option value="tech">Technology</option>
     <option value="health">Health</option>
