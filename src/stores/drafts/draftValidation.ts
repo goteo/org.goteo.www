@@ -199,7 +199,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
 
 export function validateReward(reward: ProjectReward): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = murmur(JSON.stringify(reward));
+    const hash = murmur.murmur3(JSON.stringify(reward));
 
     if (!reward.title.trim()) {
         errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
@@ -218,7 +218,7 @@ export function validateReward(reward: ProjectReward): ValidationErrors {
 
 export function validateCollaboration(collab: ProjectCollaboration): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = murmur(JSON.stringify(collab));
+    const hash = murmur.murmur3(JSON.stringify(collab));
 
     if (!collab.title.trim()) {
         errors[`collab_error_title_${hash}`] = "pages.project.edit.collaborations.validation.title";
@@ -239,7 +239,7 @@ export function validateCollaboration(collab: ProjectCollaboration): ValidationE
 
 export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
     const errors: ValidationErrors = {};
-    const hash = murmur(JSON.stringify(item));
+    const hash = murmur.murmur3(JSON.stringify(item));
 
     if (!item.title.trim()) {
         errors[`budget_error_title_${hash}`] = "pages.project.edit.budget.validation.title.";
