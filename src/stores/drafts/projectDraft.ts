@@ -7,12 +7,23 @@ import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
 
+/**
+ * Media image data
+ */
+export interface MediaImage {
+    id: string;
+    url: string; // Base64 data URL or API URL
+    file?: File; // Original file reference
+    size: number; // File size in bytes
+    name: string; // Original filename
+}
+
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
 }
 
 export interface WizardCampaignInfo {
-    // Media
+    // Media/**
     images: MediaImage[];
     video: string | undefined;
 
@@ -60,6 +71,7 @@ export interface Draft {
     wizardForm: Wizard;
 
     updatedAt: number;
+    status: "initial" | "project-created" | "to-review" | "editing";
 }
 
 export const drafts = derived(session, ($session, set) => {
@@ -68,7 +80,7 @@ export const drafts = derived(session, ($session, set) => {
         return;
     }
 
-    const store = createDraftStore($session.user.id);
+    const store = setDraftsStore($session.user.id);
 
     const unsubscribe = store.subscribe(set);
 
@@ -80,7 +92,27 @@ export const currentDraft = writable<Draft | null>(null);
 export const wizard = derived(currentDraft, ($d) => $d?.wizardForm);
 export const project = derived(currentDraft, ($d) => $d?.createProject);
 
+/**
+ * Touched fields tracker
+ */
 export const touchedFields = writable<Set<string>>(new Set());
+
+/**
+ * Unsaved changes flag (for beforeunload warning)
+ */
+export const hasUnsavedChanges = writable<boolean>(false);
+
+/**
+ * Persistence error state
+ * Tracks localStorage save failures (quota exceeded, general errors)
+ */
+export const persistenceError = writable<string | null>(null);
+
+/**
+ * Define whether the project is ready to publish (all steps completed and valid).
+ * Used to enable/disable the Publish button in the UI
+ */
+export const isReadyToPublish = writable<boolean>(false);
 
 export function createDraftId() {
     return crypto.randomUUID();
@@ -96,7 +128,7 @@ function getUserId(): number {
     return s.user.id;
 }
 
-export function createDraftStore(userId: number) {
+export function setDraftsStore(userId: number) {
     return readable<Draft[]>([], (set) => {
         const subscription = liveQuery(() =>
             db.drafts
@@ -142,6 +174,7 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
             },
         },
         updatedAt: Date.now(),
+        status: "initial",
     };
 
     await draftRepo.create(draft);
@@ -184,6 +217,7 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null;
 function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
+    hasUnsavedChanges.set(true);
     saveTimer = setTimeout(async () => {
         const draft = get(currentDraft);
         if (!draft) return;
@@ -197,8 +231,21 @@ function persistDraft() {
             currentDraft.set(updatedDraft);
 
             await draftRepo.update(draft.draftId, draft.userId, updatedDraft);
+
+            hasUnsavedChanges.set(false);
+            persistenceError.set(null);
         } catch (error) {
             console.error("Failed to persist draft:", error);
+
+            // Handle QuotaExceededError specifically
+            if (error instanceof DOMException && error.name === "QuotaExceededError") {
+                persistenceError.set("storage_quota_exceeded");
+            } else {
+                persistenceError.set("storage_general_error");
+            }
+
+            // Keep hasUnsavedChanges as true when persistence fails
+            hasUnsavedChanges.set(true);
         }
     }, 1000);
 }
@@ -218,7 +265,23 @@ export function updateWizard(data: Partial<Wizard>) {
             ...draft,
             wizardForm: {
                 ...draft.wizardForm,
+
                 ...data,
+
+                configuration: {
+                    ...draft.wizardForm.configuration,
+                    ...data.configuration,
+                },
+
+                campaignInfo: {
+                    ...draft.wizardForm.campaignInfo,
+                    ...data.campaignInfo,
+                },
+
+                budgetItems: {
+                    ...draft.wizardForm.budgetItems,
+                    ...data.budgetItems,
+                },
             },
         };
 
@@ -226,6 +289,20 @@ export function updateWizard(data: Partial<Wizard>) {
     });
 
     persistDraft();
+}
+
+export function updateCampaignInfo(
+    data: Partial<WizardCampaignInfo>,
+) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        campaignInfo: {
+            ...draft.wizardForm.campaignInfo,
+            ...data
+        }
+    });
 }
 
 /**
@@ -253,16 +330,70 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
     persistDraft();
 }
 
-export async function deleteDraft(draftId: string, userId: number) {
-    await draftRepo.delete(draftId, userId);
-
+export async function deleteCurrentDraft(draftId: string, userId: number) {
     const current = get(currentDraft);
+
     if (current?.draftId === draftId) {
         currentDraft.set(null);
     }
+
+    await draftRepo.delete(draftId, userId);
+    touchedFields.set(new Set());
+    hasUnsavedChanges.set(false);
+    persistenceError.set(null);
 }
 
-export function resetCurrentDraftState() {
-    currentDraft.set(null);
-    touchedFields.set(new Set());
+/**
+ * Navigate to a specific wizard step
+ *
+ * Navigation rules:
+ * - Can navigate to current step (no-op, returns true)
+ * - Can navigate backward to any previous step
+ * - Can navigate forward only if ALL previous steps are completed
+ * - Updates URL with browser history for back/forward button support
+ *
+ * @param targetStep - The step number to navigate to (1-indexed)
+ * @returns true if navigation was successful, false if blocked
+ *
+ * @example
+ * // Navigate to step 2 (allowed if step 1 is completed)
+ * navigateToStep(2);
+ *
+ * // Navigate back to step 1 (always allowed)
+ * navigateToStep(1);
+ */
+export function navigateToStep(targetStep: number): boolean {
+    const state = get(currentDraft);
+    const currentStep = state?.wizardForm.currentStep;
+
+    // No validation - free navigation
+    if (targetStep === currentStep) {
+        console.log(`[wizard-state] Already on step ${targetStep}`);
+        return true;
+    }
+
+    console.log(`[wizard-state] Navigating: ${currentStep} → ${targetStep}`);
+    hasUnsavedChanges.set(true);
+    updateWizard({ currentStep: targetStep });
+    updateUrl(targetStep);
+    return true;
+}
+
+/**
+ * Update browser URL with current step (for browser back/forward support)
+ * @param step - Current step number
+ */
+export function updateUrl(step: number) {
+    // SSR safety check
+    if (typeof window === "undefined") {
+        return;
+    }
+
+    try {
+        const url = new URL(window.location.href);
+        url.searchParams.set("step", step.toString());
+        window.history.pushState({ step }, "", url.toString());
+    } catch (error) {
+        console.error("[wizard-state] Failed to update URL:", error);
+    }
 }
