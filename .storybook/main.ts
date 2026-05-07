@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     framework: "@storybook/svelte-vite",
     async viteFinal(config) {
         config.plugins = [tailwindcss(), svelte(), ...(config.plugins || [])];
+        config.envPrefix = ["VITE_", "PUBLIC_"];
 
         return config;
     },
