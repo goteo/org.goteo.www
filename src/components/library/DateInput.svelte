@@ -28,7 +28,7 @@
         helperText?: string;
         error?: string;
         onBlur?: () => void;
-        onInput?: (date: Date) => void;
+        onInput?: (date: string) => void;
     } = $props();
 
     const generatedId = $props.id();
@@ -84,7 +84,7 @@
 
         // Call optional input handler
         if (onInput) {
-            onInput(dateValue);
+            onInput(dateToString(dateValue));
         }
     }
 
