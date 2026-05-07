@@ -6,7 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { validateBudgetItem, validateCollaboration, validateReward } from "./draftValidation";
+import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward } from "./draftValidation";
 
 /**
  * Media image data
@@ -113,7 +113,16 @@ export const persistenceError = writable<string | null>(null);
  * Define whether the project is ready to publish (all steps completed and valid).
  * Used to enable/disable the Publish button in the UI
  */
-export const isReadyToPublish = writable<boolean>(false);
+export const isReadyToPublish = derived(
+    currentDraft,
+    ($draft) => {
+        if (!$draft) return false;
+
+        const errors = validateDraftToPublish($draft);
+
+        return Object.keys(errors).length === 0;
+    },
+);
 
 export function createDraftId() {
     return crypto.randomUUID();
@@ -215,7 +224,7 @@ export function markFieldAsTouched(fieldName: string) {
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
 
-function persistDraft() {
+export function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
     hasUnsavedChanges.set(true);
