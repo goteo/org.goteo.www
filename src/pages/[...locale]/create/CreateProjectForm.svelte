@@ -19,12 +19,15 @@
         validationErrors,
     } from "../../../stores/drafts/draftValidation";
     import {
+        createDraft,
         currentDraft,
         markFieldAsTouched,
         touchedFields,
+        updateProject,
     } from "../../../stores/drafts/projectDraft";
     import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
+    import { goto } from "../../../utils/navigation";
 
     const categoriesOptions = categories.map((categories) => {
         return { id: categories.id, text: $t(categories.translationKey) };
@@ -69,9 +72,8 @@
         fieldName: K,
         value: ProjectProjectCreationDto[K],
     ) {
-        if (!$currentDraft) return;
         // Update the draft value with proper typing
-        $currentDraft.createProject[fieldName] = value;
+        updateProject({ [fieldName]: value });
 
         // Only validate on change if field has been touched
         if ($touchedFields.has(fieldName) || submitted) {
@@ -121,6 +123,11 @@
             return;
         }
 
+        if (!$currentDraft) {
+            apiError = "Draft not initialized";
+            return;
+        }
+
         // Submit to API
         isSubmitting = true;
 
@@ -131,10 +138,6 @@
             // Need to update the form to collect the correct fields or map them appropriately
 
             // TODO: Implement actual API submission when form fields match API requirements
-            if (!$currentDraft) {
-                apiError = "Draft data is missing. Please refresh the page and try again.";
-                return;
-            }
 
             const { data, error } = await apiProjectsPost({
                 body: {
@@ -154,19 +157,27 @@
                             $validationErrors[field] = violation.message || "Invalid value";
                         }
                     });
+                    return;
                 } else {
                     apiError = "An unexpected error occurred. Please try again.";
+                    return;
                 }
             } else if (data) {
                 submitSuccess = true;
+                updateProject({
+                    title: $currentDraft.createProject.title,
+                    subtitle: $currentDraft.createProject.subtitle,
+                    categories: $currentDraft.createProject.categories as Category[],
+                    release: $currentDraft.createProject.release,
+                });
+                currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
+
                 // Redirect to project page
+                goto(`/project/${data.id}/edit`);
             }
         } catch (err) {
             // Handle unexpected errors
             apiError = "An unexpected error occurred. Please try again.";
-            if (import.meta.env.DEV) {
-                console.error("Unexpected error:", err);
-            }
         } finally {
             isSubmitting = false;
         }
@@ -185,8 +196,14 @@
     }
 
     $effect(() => {
-        console.log("Current draft state:", $currentDraft);
-        console.log("Current validation errors:", $validationErrors);
+        if (!$currentDraft) {
+            createDraft({
+                title: "",
+                subtitle: "",
+                categories: [],
+                release: undefined,
+            });
+        }
     });
 </script>
 
@@ -247,6 +264,7 @@
                 bind:value={createProjectDraft.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
                 onBlur={() => handleFieldBlur("title")}
+                onInput={(e) => handleFieldChange("title", (e.target as HTMLInputElement).value)}
             />
             <div class="relative">
                 <textarea
@@ -260,6 +278,8 @@
                         : 'border-[#855a96]'}"
                     bind:value={createProjectDraft.subtitle}
                     onblur={() => handleFieldBlur("subtitle")}
+                    oninput={(e) =>
+                        handleFieldChange("subtitle", (e.target as HTMLTextAreaElement).value)}
                     aria-invalid={shouldShowError("subtitle")}
                     aria-describedby={shouldShowError("subtitle") ? "subtitle-error" : undefined}
                 ></textarea>
@@ -297,7 +317,7 @@
                 min={getMinDate()}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}
-                onInput={(date) => handleFieldChange("release", date.toDateString())}
+                onInput={(date) => handleFieldChange("release", date)}
             />
         </div>
         {#if apiError}
