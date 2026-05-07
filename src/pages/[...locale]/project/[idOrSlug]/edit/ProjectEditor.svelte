@@ -13,10 +13,6 @@
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
     import {
-        apiProjectBudgetItemsPost,
-        apiProjectCollaborationsPost,
-        apiProjectRewardsPost,
-        apiProjectsIdPatch,
         type Category,
         type Project,
     } from "../../../../../openapi/client";
@@ -25,9 +21,12 @@
     import {
         currentDraft,
         deleteCurrentDraft,
+        persistDraft,
         updateProject,
         updateWizard,
     } from "../../../../../stores/drafts/projectDraft";
+    import { publishDraft } from "../../../../../utils/projectPublisher";
+    import { onMount } from "svelte";
 
     let {
         project,
@@ -37,8 +36,7 @@
         session: Session;
     } = $props();
 
-    // Initialize wizard state from project and set up URL sync
-    $effect(() => {
+    onMount(() => {
         // Read URL parameter first (before initializing)
         let initialStep = 1;
         if (typeof window !== "undefined") {
@@ -94,129 +92,27 @@
     let saveState = $state<"idle" | "saving" | "saved">("idle");
     let errorMessage = $state("");
 
-    /**
-     * Handle save draft to API
-     */
-    async function handleSaveToApi() {
+    async function handlePublish() {
+        const draft = get(currentDraft);
+
+        if (!draft) return;
+
         saveState = "saving";
 
         try {
-            const draft = get(currentDraft);
-            if (!draft) return;
+            await publishDraft(draft, session, String(project.id));
 
-            const { createProject, wizardForm } = draft;
+            await deleteCurrentDraft(draft.draftId, draft.userId);
 
-            if (wizardForm.rewards.length > 0) {
-                wizardForm.rewards.forEach(async (reward) => {
-                    const { error: rewardErr } = await apiProjectRewardsPost({
-                        body: {
-                            project: reward.project,
-                            title: reward.title,
-                            description: reward.description,
-                            money: {
-                                amount: reward.money.amount,
-                                currency: reward.money.currency,
-                            },
-                            isFinite: reward.isFinite,
-                            unitsTotal: reward.unitsTotal,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (rewardErr) throw rewardErr;
-                });
-            }
+            window.location.href = "/project/" + (project.slug ?? project.id) + "/publish";
+        } catch (err) {
+            errorMessage = err instanceof Error ? err.message : "Unknown error";
 
-            if (wizardForm.collaborations.length > 0) {
-                wizardForm.collaborations.forEach(async (collab) => {
-                    const { error: collaborationErr } = await apiProjectCollaborationsPost({
-                        body: {
-                            project: collab.project,
-                            title: collab.title,
-                            description: collab.description,
-                            isFulfilled: false,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (collaborationErr) throw collaborationErr;
-                });
-            }
-
-            if (wizardForm.budgetItems.minimum.length > 0) {
-                wizardForm.budgetItems.minimum.forEach(async (item) => {
-                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
-                        body: {
-                            project: item.project,
-                            type: item.type,
-                            title: item.title,
-                            description: item.description,
-                            money: {
-                                amount: item.money.amount,
-                                currency: item.money.currency,
-                            },
-                            deadline: item.deadline,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (budgetItemErr) throw budgetItemErr;
-                });
-            }
-
-            if (wizardForm.budgetItems.optimum.length > 0) {
-                wizardForm.budgetItems.optimum.forEach(async (item) => {
-                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
-                        body: {
-                            project: item.project,
-                            type: item.type,
-                            title: item.title,
-                            description: item.description,
-                            money: {
-                                amount: item.money.amount,
-                                currency: item.money.currency,
-                            },
-                            deadline: item.deadline,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (budgetItemErr) throw budgetItemErr;
-                });
-            }
-
-            const { error: projectErr } = await apiProjectsIdPatch({
-                path: { id: String(project.id) },
-                body: {
-                    title: createProject.title,
-                    subtitle: createProject.subtitle,
-                    video: wizardForm.campaignInfo.video,
-                    description:
-                        wizardForm.campaignInfo.objectives +
-                        wizardForm.campaignInfo.legacy +
-                        wizardForm.campaignInfo.targetAudience +
-                        wizardForm.campaignInfo.team,
-                    deadline: wizardForm.configuration.projectDeadline,
-                },
-                headers: session.token.asHttpHeaders,
-            });
-
-            if (projectErr) throw projectErr;
-        } catch (err: any) {
-            errorMessage = err;
             saveState = "idle";
-        } finally {
-            errorMessage = "";
-            saveState = "saved";
+            return;
         }
-    }
 
-    /**
-     * Handle publish
-     */
-    async function handlePublish() {
-        // In Phase 1, this is disabled until all steps are complete and sent to API
-        if (!$currentDraft) return;
-
-        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
-        window.location.href =
-            "/project/" + (project.slug ?? project.id) + "/publish";
+        saveState = "saved";
     }
 </script>
 
@@ -224,7 +120,7 @@
     {errorMessage}
     {saveState}
     {project}
-    onSave={handleSaveToApi}
+    onSave={persistDraft}
     onPublish={handlePublish}
 >
     {@const StepComponent = getStepComponent(currentStep)}

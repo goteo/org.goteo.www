@@ -26,7 +26,13 @@
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";
-    import { currentDraft, isReadyToPublish, navigateToStep, persistenceError, updateProject } from "../../../../../stores/drafts/projectDraft";
+    import {
+        currentDraft,
+        isReadyToPublish,
+        navigateToStep,
+        persistenceError,
+        updateProject,
+    } from "../../../../../stores/drafts/projectDraft";
 
     let {
         project,
@@ -38,7 +44,7 @@
     }: {
         project: Project;
         children: Snippet;
-        onSave: () => Promise<void>;
+        onSave: () => void;
         onPublish?: () => void;
         saveState: "idle" | "saving" | "saved";
         errorMessage: string;

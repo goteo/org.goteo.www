@@ -58,13 +58,36 @@ export function validateCreateForm(): boolean {
     }
 }
 
-export function validateDraftToPublish(draft: Draft): ValidationErrors {
+export function validateDraftToPublish(
+    draft: Draft,
+): ValidationErrors {
     const wizard = draft.wizardForm;
 
-    return {
-        ...validateConfiguration(wizard),
-        ...validateCampaignInfo(wizard),
-    };
+    const errors: ValidationErrors = {};
+
+    Object.assign(errors, validateConfiguration(wizard));
+
+    Object.assign(errors, validateCampaignInfo(wizard));
+
+    for (const reward of wizard.rewards) {
+        Object.assign(errors, validateReward(reward));
+    }
+
+    for (const collab of wizard.collaborations) {
+        Object.assign(errors, validateCollaboration(collab));
+    }
+
+    for (const item of wizard.budgetItems.minimum) {
+        Object.assign(errors, validateBudgetItem(item));
+    }
+
+    for (const item of wizard.budgetItems.optimum) {
+        Object.assign(errors, validateBudgetItem(item));
+    }
+
+    Object.assign(errors, validateBudgetAmount(draft));
+
+    return errors;
 }
 
 export function stripHtml(html: string): string {
@@ -80,7 +103,7 @@ export function stripHtml(html: string): string {
  * Validation schema for Configuration step
  */
 export const configurationSchema = z.object({
-    projectDeadline: z.union([z.literal(1), z.literal(2)]),
+    projectDeadline: z.enum(["minimum", "optimum"]),
 });
 
 /**
@@ -278,11 +301,11 @@ export function validateBudgetAmount(draft: Draft) {
         errors.minimum_length = "pages.project.edit.budget.validation.minimumItemsLength";
     }
 
-    let minimumItemsTotalAmount: number = 0;
-
-    for (let i = 0; i < budgetItems.minimum.length - 1; i++) {
-        minimumItemsTotalAmount += budgetItems.minimum[i].money.amount;
-    }
+    const minimumItemsTotalAmount =
+        budgetItems.minimum.reduce(
+            (acc, item) => acc + item.money.amount,
+            0,
+        );
 
     if (minimumItemsTotalAmount !== budget?.minimum?.money?.amount) {
         errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";
