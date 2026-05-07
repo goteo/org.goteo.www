@@ -17,16 +17,18 @@
         apiProjectCollaborationsPost,
         apiProjectRewardsPost,
         apiProjectsIdPatch,
+        type Category,
         type Project,
     } from "../../../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
-    import {
-        wizardState,
-        initializeFromProject,
-        clearLocalStorage,
-    } from "../../../../../stores/wizard-state";
 
     import type { Session } from "../../../../../auth/types";
+    import {
+        currentDraft,
+        deleteCurrentDraft,
+        updateProject,
+        updateWizard,
+    } from "../../../../../stores/drafts/projectDraft";
 
     let {
         project,
@@ -52,14 +54,19 @@
         }
 
         // Initialize from project
-        initializeFromProject(project);
+        updateProject({
+            title: project.title || "",
+            subtitle: project.subtitle || "",
+            categories: project.categories as Category[],
+            release: project.calendar?.release ?? undefined,
+        });
+        updateWizard({
+            currentStep: 1, // Start at step 1 by default
+        });
 
         // Set the step from URL parameter if present
         if (initialStep !== 1) {
-            wizardState.update((state) => ({
-                ...state,
-                currentStep: initialStep,
-            }));
+            updateWizard({ currentStep: initialStep });
         }
 
         // Listen for browser back/forward navigation (client-side only)
@@ -70,10 +77,7 @@
                 if (stepParam) {
                     const step = parseInt(stepParam, 10);
                     if (!isNaN(step) && step >= 1 && step <= 6) {
-                        wizardState.update((state) => ({
-                            ...state,
-                            currentStep: step,
-                        }));
+                        updateWizard({ currentStep: step });
                     }
                 }
             };
@@ -87,23 +91,26 @@
     });
 
     // Reactive current step
-    const currentStep = $derived($wizardState.currentStep);
+    const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
     let saveState = $state<"idle" | "saving" | "saved">("idle");
     let errorMessage = $state("");
 
     /**
      * Handle save draft to API
      */
-    async function handleSave() {
+    async function handleSaveToApi() {
         saveState = "saving";
 
         try {
-            const currentData = get(wizardState);
+            const draft = get(currentDraft);
+            if (!draft) return;
+
+            const { createProject, wizardForm } = draft;
             const projectIri =
                 apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
 
-            if (currentData.rewards.length > 0) {
-                currentData.rewards.forEach(async (reward) => {
+            if (wizardForm.rewards.length > 0) {
+                wizardForm.rewards.forEach(async (reward) => {
                     const { error: rewardErr } = await apiProjectRewardsPost({
                         body: {
                             project: projectIri,
@@ -122,8 +129,8 @@
                 });
             }
 
-            if (currentData.collaborations.length > 0) {
-                currentData.collaborations.forEach(async (collab) => {
+            if (wizardForm.collaborations.length > 0) {
+                wizardForm.collaborations.forEach(async (collab) => {
                     const { error: collaborationErr } = await apiProjectCollaborationsPost({
                         body: {
                             project: projectIri,
@@ -137,8 +144,8 @@
                 });
             }
 
-            if (currentData.budgetItems.minimum.length > 0) {
-                currentData.budgetItems.minimum.forEach(async (item) => {
+            if (wizardForm.budgetItems.minimum.length > 0) {
+                wizardForm.budgetItems.minimum.forEach(async (item) => {
                     const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
                             project: projectIri,
@@ -157,8 +164,8 @@
                 });
             }
 
-            if (currentData.budgetItems.optimum.length > 0) {
-                currentData.budgetItems.optimum.forEach(async (item) => {
+            if (wizardForm.budgetItems.optimum.length > 0) {
+                wizardForm.budgetItems.optimum.forEach(async (item) => {
                     const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
                             project: projectIri,
@@ -180,15 +187,15 @@
             const { error: projectErr } = await apiProjectsIdPatch({
                 path: { id: String(project.id) },
                 body: {
-                    title: currentData.title,
-                    subtitle: currentData.subtitle,
-                    video: currentData.campaignInfo.video,
+                    title: createProject.title,
+                    subtitle: createProject.subtitle,
+                    video: wizardForm.campaignInfo.video,
                     description:
-                        currentData.campaignInfo.objectives +
-                        currentData.campaignInfo.legacy +
-                        currentData.campaignInfo.targetAudience +
-                        currentData.campaignInfo.team,
-                    deadline: currentData.configuration.projectDeadline,
+                        wizardForm.campaignInfo.objectives +
+                        wizardForm.campaignInfo.legacy +
+                        wizardForm.campaignInfo.targetAudience +
+                        wizardForm.campaignInfo.team,
+                    deadline: wizardForm.configuration.projectDeadline,
                 },
                 headers: session.token.asHttpHeaders,
             });
@@ -208,9 +215,11 @@
      */
     async function handlePublish() {
         // In Phase 1, this is disabled until all steps are complete and sent to API
-        clearLocalStorage();
+        if (!$currentDraft) return;
+
+        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
         window.location.href =
-            "/project/" + (project.slug ? project.slug : project.id) + "/publish";
+            "/project/" + (project.slug ?? project.id) + "/publish";
     }
 </script>
 
@@ -218,7 +227,7 @@
     {errorMessage}
     {saveState}
     {project}
-    onSave={handleSave}
+    onSave={handleSaveToApi}
     onPublish={handlePublish}
 >
     {@const StepComponent = getStepComponent(currentStep)}

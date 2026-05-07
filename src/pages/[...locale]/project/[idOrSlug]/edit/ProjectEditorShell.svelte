@@ -22,16 +22,11 @@
         type Tab,
     } from "../../../../../components/library/TabNavigation.svelte";
     import { t } from "../../../../../i18n/store";
-    import {
-        wizardState,
-        navigateToStep,
-        persistenceError,
-        isReadyToPublish,
-    } from "../../../../../stores/wizard-state";
     import EditIcon from "../../../../../svgs/EditIcon.svelte";
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";
+    import { currentDraft, isReadyToPublish, navigateToStep, persistenceError, updateProject } from "../../../../../stores/drafts/projectDraft";
 
     let {
         project,
@@ -60,30 +55,24 @@
     ]);
 
     // Reactive values from store
-    const currentStep = $derived($wizardState.currentStep);
+    const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
 
     // Reactive derived values for title and subtitle
-    const title = $derived($wizardState.title);
-    const subtitle = $derived($wizardState.subtitle);
+    const title = $derived($currentDraft?.createProject.title);
+    const subtitle = $derived($currentDraft?.createProject.subtitle);
 
     /**
      * Handle title change
      */
     function handleTitleChange(newTitle: string) {
-        wizardState.update((state) => ({
-            ...state,
-            title: newTitle,
-        }));
+        updateProject({ title: newTitle });
     }
 
     /**
      * Handle subtitle change
      */
     function handleSubtitleChange(newSubtitle: string) {
-        wizardState.update((state) => ({
-            ...state,
-            subtitle: newSubtitle,
-        }));
+        updateProject({ subtitle: newSubtitle });
     }
 
     /**
