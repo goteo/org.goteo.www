@@ -2,17 +2,13 @@
     import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
-    import {
-        navigateToStep,
-        validateBudgetAmount,
-        validationErrors,
-        wizardState,
-    } from "../../../stores/wizard-state";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import Toast from "../../library/Toast.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
+    import { validateBudgetAmount, validationErrors } from "../../../stores/drafts/draftValidation";
 
     let {
         project,
@@ -20,8 +16,12 @@
         project: Project;
     } = $props();
 
-    let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
-    let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
+    let minBudgetItems: ProjectBudgetItem[] = $state(
+        $currentDraft?.wizardForm.budgetItems.minimum || [],
+    );
+    let optBudgetItems: ProjectBudgetItem[] = $state(
+        $currentDraft?.wizardForm.budgetItems.optimum || [],
+    );
     let loading = $state(false);
     let showErrorToast = $state(false);
 
@@ -30,7 +30,9 @@
      * Simple navigation to next step (6) - validation happens on save/submit
      */
     function handleContinue() {
-        const errors = validateBudgetAmount();
+        if (!$currentDraft) return;
+
+        const errors = validateBudgetAmount($currentDraft);
 
         if (Object.keys(errors).length > 0) {
             validationErrors.set(errors);
@@ -43,8 +45,8 @@
     async function loadBudgetItems() {
         loading = true;
 
-        minBudgetItems = $wizardState.budgetItems.minimum;
-        optBudgetItems = $wizardState.budgetItems.optimum;
+        minBudgetItems = $currentDraft?.wizardForm.budgetItems.minimum || [];
+        optBudgetItems = $currentDraft?.wizardForm.budgetItems.optimum || [];
 
         loading = false;
     }
@@ -52,7 +54,7 @@
     $effect(() => {
         if (Object.keys($validationErrors).length > 0)
             console.log("Errores de validación:", $validationErrors);
-        if ($wizardState) {
+        if ($currentDraft) {
             loadBudgetItems();
         }
     });

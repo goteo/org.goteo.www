@@ -20,7 +20,6 @@
         type Category,
         type Project,
     } from "../../../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
 
     import type { Session } from "../../../../../auth/types";
     import {
@@ -106,14 +105,12 @@
             if (!draft) return;
 
             const { createProject, wizardForm } = draft;
-            const projectIri =
-                apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
 
             if (wizardForm.rewards.length > 0) {
                 wizardForm.rewards.forEach(async (reward) => {
                     const { error: rewardErr } = await apiProjectRewardsPost({
                         body: {
-                            project: projectIri,
+                            project: reward.project,
                             title: reward.title,
                             description: reward.description,
                             money: {
@@ -133,7 +130,7 @@
                 wizardForm.collaborations.forEach(async (collab) => {
                     const { error: collaborationErr } = await apiProjectCollaborationsPost({
                         body: {
-                            project: projectIri,
+                            project: collab.project,
                             title: collab.title,
                             description: collab.description,
                             isFulfilled: false,
@@ -148,7 +145,7 @@
                 wizardForm.budgetItems.minimum.forEach(async (item) => {
                     const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
-                            project: projectIri,
+                            project: item.project,
                             type: item.type,
                             title: item.title,
                             description: item.description,
@@ -168,7 +165,7 @@
                 wizardForm.budgetItems.optimum.forEach(async (item) => {
                     const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
                         body: {
-                            project: projectIri,
+                            project: item.project,
                             type: item.type,
                             title: item.title,
                             description: item.description,

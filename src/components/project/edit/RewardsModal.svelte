@@ -4,25 +4,29 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { validationErrors, type WizardReward } from "../../../stores/wizard-state";
     import { defaultCurrency } from "../../../utils/currencies";
     import FileUpload from "../../FileUpload.svelte";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
     import type { ClassNameValue } from "tailwind-merge";
+    import type { Project, ProjectReward } from "../../../openapi/client";
+    import { validationErrors } from "../../../stores/drafts/draftValidation";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
 
     let {
         open = $bindable(false),
         showToast = $bindable(false),
+        project,
         reward,
         onSave,
         onDelete,
     }: {
         open: boolean;
         showToast: boolean;
-        reward: WizardReward | null;
-        onSave: (data: WizardReward | null) => void;
+        project: Project;
+        reward: ProjectReward | null;
+        onSave: (data: ProjectReward | null) => void;
         onDelete?: () => void;
     } = $props();
 
@@ -40,7 +44,10 @@
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
     function handleSaveOrCreate() {
+        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
+
         onSave({
+            project: projectIri,
             title,
             description,
             money: {

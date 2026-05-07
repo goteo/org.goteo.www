@@ -1,12 +1,15 @@
 <script lang="ts">
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
-    import { navigateToStep, wizardState, type WizardReward } from "../../../stores/wizard-state";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import type { Project, ProjectReward } from "../../../openapi/client";
+    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
 
-    let rewards = $state<WizardReward[]>($wizardState.rewards);
+    let { project }: { project: Project } = $props();
+
+    let rewards = $state<ProjectReward[]>($currentDraft?.wizardForm.rewards || []);
     let loading = $state(false);
 
     /**
@@ -19,12 +22,12 @@
 
     async function loadRewards() {
         loading = true;
-        rewards = $wizardState.rewards;
+        rewards = $currentDraft?.wizardForm.rewards || [];
         loading = false;
     }
 
     $effect(() => {
-        if ($wizardState) loadRewards();
+        if ($currentDraft) loadRewards();
     });
 </script>
 
@@ -42,10 +45,10 @@
     {:else}
         <Grid>
             {#each rewards as reward, index}
-                <RewardsCard {index} {reward} bind:loading />
+                <RewardsCard {project} {index} {reward} bind:loading />
             {/each}
 
-            <RewardsCard isCreateCard={true} reward={null} bind:loading />
+            <RewardsCard isCreateCard={true} {project} reward={null} bind:loading />
         </Grid>
     {/if}
 

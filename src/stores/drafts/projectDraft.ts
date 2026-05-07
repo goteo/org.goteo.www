@@ -6,6 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
+import { validateBudgetItem, validateCollaboration, validateReward } from "./draftValidation";
 
 /**
  * Media image data
@@ -291,6 +292,18 @@ export function updateWizard(data: Partial<Wizard>) {
     persistDraft();
 }
 
+export function updateConfiguration(data: Partial<WizardConfiguration>) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        configuration: {
+            ...draft.wizardForm.configuration,
+            ...data
+        }
+    });
+}
+
 export function updateCampaignInfo(
     data: Partial<WizardCampaignInfo>,
 ) {
@@ -302,6 +315,199 @@ export function updateCampaignInfo(
             ...draft.wizardForm.campaignInfo,
             ...data
         }
+    });
+}
+
+export function addReward(reward: ProjectReward) {
+    const errors = validateReward(reward);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        rewards: [
+            ...draft.wizardForm.rewards,
+            {
+                ...reward,
+                project: reward.project,
+            },
+        ],
+    });
+
+    return {};
+}
+
+export function updateReward(
+    index: number,
+    reward: ProjectReward,
+) {
+    const errors = validateReward(reward);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    const rewards = [...draft.wizardForm.rewards];
+
+    rewards[index] = reward;
+
+    updateWizard({
+        rewards,
+    });
+
+    return {};
+}
+
+export function deleteReward(index: number) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        rewards: draft.wizardForm.rewards.filter(
+            (_, i) => i !== index,
+        ),
+    });
+}
+
+export function addCollaboration(
+    collab: ProjectCollaboration
+): Record<string, string> {
+    const errors = validateCollaboration(collab);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return {};
+
+    updateWizard({
+        collaborations: [
+            ...draft.wizardForm.collaborations,
+            { ...collab },
+        ],
+    });
+
+    return {};
+}
+
+export function updateCollaboration(
+    index: number,
+    collab: ProjectCollaboration,
+): Record<string, string> {
+    const errors = validateCollaboration(collab);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return {};
+
+    const collaborations = [...draft.wizardForm.collaborations];
+
+    collaborations[index] = collab;
+
+    updateWizard({
+        collaborations,
+    });
+
+    return {};
+}
+
+export function deleteCollaboration(index: number) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        collaborations:
+            draft.wizardForm.collaborations.filter(
+                (_, i) => i !== index,
+            ),
+    });
+}
+
+export function addBudgetItem(
+    item: ProjectBudgetItem
+) {
+    const errors = validateBudgetItem(item);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return {};
+
+    updateWizard({
+        budgetItems: {
+            ...draft.wizardForm.budgetItems,
+
+            [item.deadline]: [
+                ...draft.wizardForm.budgetItems[
+                item.deadline
+                ],
+                item,
+            ],
+        },
+    });
+
+    return {};
+}
+
+export function updateBudgetItem(
+    index: number,
+    item: ProjectBudgetItem,
+) {
+    const errors = validateBudgetItem(item);
+
+    if (Object.keys(errors).length > 0) {
+        return errors;
+    }
+
+    const draft = get(currentDraft);
+    if (!draft) return {};
+
+    const updated = [
+        ...draft.wizardForm.budgetItems[item.deadline],
+    ];
+
+    updated[index] = item;
+
+    updateWizard({
+        budgetItems: {
+            ...draft.wizardForm.budgetItems,
+
+            [item.deadline]: updated,
+        },
+    });
+
+    return {};
+}
+
+export function deleteBudgetItem(
+    index: number,
+    deadline: "minimum" | "optimum",
+) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        budgetItems: {
+            ...draft.wizardForm.budgetItems,
+
+            [deadline]:
+                draft.wizardForm.budgetItems[
+                    deadline
+                ].filter((_, i) => i !== index),
+        },
     });
 }
 

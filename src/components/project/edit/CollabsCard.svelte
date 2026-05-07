@@ -2,23 +2,25 @@
     import CollabsModal from "./CollabsModal.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
+    import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import Button from "../../library/Button.svelte";
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import {
         addCollaboration,
         deleteCollaboration,
         updateCollaboration,
-        validationErrors,
-        type WizardCollaboration,
-    } from "../../../stores/wizard-state";
-    import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
+    } from "../../../stores/drafts/projectDraft";
+    import { validationErrors } from "../../../stores/drafts/draftValidation";
 
     let {
+        project,
         collab,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
-        collab: WizardCollaboration | null;
+        project: Project;
+        collab: ProjectCollaboration | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
@@ -27,7 +29,7 @@
     let openModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    function handleSaveCollab(data: WizardCollaboration | null) {
+    function handleSaveCollab(data: ProjectCollaboration | null) {
         if (!data) return;
         let errors;
 
@@ -95,6 +97,7 @@
         <CollabsModal
             bind:open={openModal}
             bind:showToast={showModalErrorToast}
+            {project}
             {collab}
             onSave={handleSaveCollab}
             onDelete={handleDeleteCollab}
