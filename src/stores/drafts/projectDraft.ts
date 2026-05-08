@@ -71,7 +71,7 @@ export interface Draft {
     createProject: ProjectProjectCreationDto;
     wizardForm: Wizard;
 
-    updatedAt: number;
+    updatedAt: Date;
 }
 
 export const drafts = derived(session, ($session, set) => {
@@ -202,7 +202,7 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
                 optimum: [],
             },
         },
-        updatedAt: Date.now(),
+        updatedAt: new Date(),
     };
 
     await draftRepo.create(draft);
@@ -211,8 +211,8 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
     return draftId;
 }
 
-export async function loadDraft(userId: number, draftId: string) {
-    const draft = await draftRepo.get(draftId, userId);
+export async function loadDraft(draftId: string) {
+    const draft = await draftRepo.get(draftId);
 
     if (!draft) return false;
 
@@ -246,19 +246,19 @@ export function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
     hasUnsavedChanges.set(true);
-    saveTimer = setTimeout(async () => {
+    saveTimer = setTimeout(() => {
         const draft = get(currentDraft);
         if (!draft) return;
 
         try {
             const updatedDraft = {
                 ...draft,
-                updatedAt: Date.now(),
+                updatedAt: new Date(),
             };
 
             currentDraft.set(updatedDraft);
 
-            await draftRepo.update(draft.draftId, draft.userId, updatedDraft);
+            draftRepo.update(draft.draftId, draft.userId, updatedDraft);
 
             hasUnsavedChanges.set(false);
             persistenceError.set(null);
@@ -563,14 +563,14 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
     persistDraft();
 }
 
-export async function deleteCurrentDraft(draftId: string, userId: number) {
+export function deleteCurrentDraft(draftId: string, userId: number) {
     const current = get(currentDraft);
 
     if (current?.draftId === draftId) {
         currentDraft.set(null);
     }
 
-    await draftRepo.delete(draftId, userId);
+    draftRepo.delete(draftId, userId);
     touchedFields.set(new Set());
     hasUnsavedChanges.set(false);
     persistenceError.set(null);

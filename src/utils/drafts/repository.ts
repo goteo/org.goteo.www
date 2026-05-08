@@ -18,19 +18,19 @@ export const draftRepo = {
         await db.drafts.put({
             ...existing,
             ...data,
-            updatedAt: Date.now(),
+            updatedAt: new Date(),
         });
     },
 
-    async get(draftId: string, userId: number) {
+    async get(draftId: string) {
         const draft = await db.drafts.get(draftId);
 
-        if (!draft || draft.userId !== userId) return undefined;
+        if (!draft) return undefined;
 
         return draft;
     },
 
-    async getAll(userId: number) {
+    async getAllByUser(userId: number) {
         return db.drafts
             .where("[userId+updatedAt]")
             .between([userId, Dexie.minKey], [userId, Dexie.maxKey])

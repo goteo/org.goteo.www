@@ -15,7 +15,7 @@ if (!idOrSlug) {
 
 const session = await getSession(Astro.cookies);
 if (!session) {
-    return Astro.redirect("/");
+    return Astro.redirect("/login?callback=" + encodeURIComponent(Astro.request.url.pathname + Astro.request.url.search));
 }
 
 const { data: project } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });

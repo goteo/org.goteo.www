@@ -13,7 +13,6 @@
         type ProjectProjectCreationDto,
     } from "../../../openapi/client";
     import {
-        isFormValid,
         validateCreateForm,
         validateField,
         validationErrors,
@@ -24,10 +23,10 @@
         markFieldAsTouched,
         touchedFields,
         updateProject,
+        isCreateFormValid,
     } from "../../../stores/drafts/projectDraft";
     import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
-    import { goto } from "../../../utils/navigation";
 
     const categoriesOptions = categories.map((categories) => {
         return { id: categories.id, text: $t(categories.translationKey) };
@@ -103,7 +102,7 @@
         apiError = null;
 
         // Validate entire form
-        const isValid = validateCreateForm();
+        const isValid = validateCreateForm(createProjectDraft);
 
         if (!isValid) {
             // Scroll to error summary
@@ -173,7 +172,7 @@
                 currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
 
                 // Redirect to project page
-                goto(`/project/${data.id}/edit`);
+                window.location.href = `/project/${data.id}/edit`;
             }
         } catch (err) {
             // Handle unexpected errors
@@ -333,7 +332,7 @@
             </div>
         {/if}
         <p>
-            <Button size="md" disabled={!$isFormValid || isSubmitting} onclick={handleSubmit}>
+            <Button size="md" disabled={!$isCreateFormValid || isSubmitting} onclick={handleSubmit}>
                 {isSubmitting ? "Submitting..." : $t("pages.project.create.submit")}
             </Button>
         </p>
