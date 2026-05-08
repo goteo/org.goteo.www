@@ -72,6 +72,15 @@
   },
   "pages": {
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "home": {
+      "banner": {
+        "title": "¡Renovamos Goteo!",
+        "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
+        "ctaText": "Súmate a nuestra historia",
+        "ctaLink": "/about",
+        "closeAriaLabel": "Cerrar banner"
+      }
+    },
     "index": {
       "title": "Goteo"
     },
