@@ -1,4 +1,3 @@
-import murmur from "murmurhash-js";
 import { writable, derived } from "svelte/store";
 
 import type { GatewayCharge, ProjectReward } from "../openapi/client";
@@ -12,7 +11,6 @@ export interface CartItem extends GatewayCharge {
      * `target` references the Accounting that will receive the money\
      * `recipient` references the owner of that Accounting
      */
-    recipient: string;
     recipientDisplayName: string;
 
     /**
@@ -25,10 +23,12 @@ type CartState = {
     items: Record<string, CartItem>;
 };
 
+export type CartItemInput = Omit<CartItem, "key"> & { recipient: string };
+
 export interface CartStore {
     subscribe: (run: (value: CartState) => void) => () => void;
 
-    addItem: (item: Omit<CartItem, "key">) => void;
+    addItem: (item: CartItemInput) => void;
     removeItem: (key: string) => void;
     updateQuantity: (key: string, quantity: number) => void;
 
@@ -36,20 +36,23 @@ export interface CartStore {
     clearTarget: (target: string) => void;
 }
 
-type GenerateKeyOptions = {
-    kind: CartItem["kind"];
-    target: GatewayCharge["target"];
-    title: GatewayCharge["title"];
-    description?: GatewayCharge["description"];
-    dateCreated?: GatewayCharge["dateCreated"];
-};
-
 const isBrowser = typeof window !== "undefined";
 
-function generateKey(args: GenerateKeyOptions): string {
-    return murmur
-        .murmur3(`${args.kind}${args.target}-${args.title}${args.description}-${args.dateCreated}`)
-        .toString(16);
+function generateKey(kind: CartItem["kind"], recipient: string, reward?: ProjectReward): string {
+    const prefix = kind === "tip" ? "tip" : "project";
+    const base = `${prefix}:${recipient}`;
+    if (kind === "reward" && reward?.id != null) {
+        return `${base};reward:/v4/project_rewards/${reward.id}`;
+    }
+    return base;
+}
+
+function parseKey(key: string): { recipient: string; rewardIRI?: string } {
+    const segments = key.split(";");
+    const recipient = segments[0].slice(segments[0].indexOf(":") + 1);
+    const rewardSegment = segments.find((s) => s.startsWith("reward:"));
+    const rewardIRI = rewardSegment?.slice("reward:".length);
+    return { recipient, rewardIRI };
 }
 
 function loadInitialCart(): CartState {
@@ -82,9 +85,9 @@ function createCartStore(): CartStore {
     return {
         subscribe,
 
-        addItem: (item: Omit<CartItem, "key">) =>
+        addItem: ({ recipient, ...item }: CartItemInput) =>
             update((cart) => {
-                const key = generateKey({ ...item });
+                const key = generateKey(item.kind, recipient, item.reward);
                 const items = { ...cart.items };
 
                 if (item.quantity === 0) {
@@ -163,11 +166,12 @@ export const cartByRecipient = derived(cart, ($cart) => {
     const grouped: Record<string, CartItem[]> = {};
 
     for (const item of Object.values($cart.items)) {
-        if (item.recipient != null) {
-            grouped[item.recipient] ??= [];
-            grouped[item.recipient].push(item);
-        }
+        const { recipient } = parseKey(item.key);
+        grouped[recipient] ??= [];
+        grouped[recipient].push(item);
     }
 
     return grouped;
 });
+
+export { parseKey };
