@@ -5,7 +5,7 @@
     import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import { isReadyToPublish } from "../../../stores/wizard-state";
+    import { isReadyToPublish } from "../../../stores/drafts/projectDraft";
     import Web from "../../icons/social/Web.svelte";
     import Button from "../../library/Button.svelte";
     import RadioButton from "../../library/RadioButton.svelte";

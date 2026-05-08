@@ -14,11 +14,8 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import {
-        validationErrors,
-        touchedFields,
-        markFieldAsTouched,
-    } from "../../../stores/wizard-state";
+    import { touchedFields, markFieldAsTouched } from "../../../stores/drafts/projectDraft";
+    import { validationErrors } from "../../../stores/drafts/draftValidation";
     import Select from "../../library/Select.svelte";
     import TextInput from "../../library/TextInput.svelte";
 

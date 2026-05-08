@@ -68,7 +68,7 @@
     import Loader from "../../../svgs/Loader.svelte";
     import UploadIcon from "../../../svgs/UploadIcon.svelte";
 
-    import type { MediaImage } from "../../../stores/wizard-state";
+    import type { MediaImage } from "../../../stores/drafts/projectDraft";
 
     interface MediaUploaderProps {
         images: MediaImage[];
