@@ -32,7 +32,10 @@
 
 <Story name="Multiselect" args={{ variant: "multiselect" }} />
 
-<Story name="MultiselectWithPreselected" args={{ variant: "multiselect", selectedIds: ["tech", "energy"] }} />
+<Story
+    name="MultiselectWithPreselected"
+    args={{ variant: "multiselect", selectedIds: ["tech", "energy"] }}
+/>
 
 <Story name="WithSearch" args={{ variant: "basic", hasSearch: true }} />
 
