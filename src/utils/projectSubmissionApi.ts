@@ -9,12 +9,13 @@ import type {
     ProjectReward,
     ProjectCollaboration,
     ProjectBudgetItem,
+    ProjectProjectUpdationDto,
 } from "../openapi/client";
 import type { Session } from "../auth/types";
 
-export async function updateProject(
+export async function patchProject(
     projectId: string,
-    body: any,
+    body: ProjectProjectUpdationDto,
     session: Session,
 ) {
     return apiProjectsIdPatch({

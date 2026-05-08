@@ -2,7 +2,7 @@ import {
     createReward,
     createCollaboration,
     createBudgetItem,
-    updateProject,
+    patchProject,
 } from "./projectSubmissionApi";
 
 import type { Session } from "../auth/types";
@@ -57,7 +57,7 @@ export async function publishDraft(
         .filter(Boolean)
         .join("\n\n");
 
-    const result = await updateProject(
+    const result = await patchProject(
         projectId,
         {
             title: draft.createProject.title,
