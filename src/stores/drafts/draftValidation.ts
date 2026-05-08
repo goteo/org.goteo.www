@@ -2,7 +2,7 @@ import murmur from "murmurhash-js";
 import { derived, get, writable } from "svelte/store";
 import z from "zod";
 
-import { currentDraft, type Draft, type Wizard } from "./projectDraft";
+import type { Draft, Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
 import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
@@ -16,31 +16,11 @@ export const isDraftValid = derived(validationErrors, ($errors) => {
 });
 
 /**
- * Derived store that indicates if the form is valid.
- * Returns true only when:
- * 1. All required fields have values
- * 2. There are no validation errors
- */
-export const isFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
-    // Check if there are any validation errors
-    if (Object.keys($errors).length > 0) {
-        return false;
-    }
-
-    // Check that required fields have values
-    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
-    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
-    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
-
-    return hasTitle && hasSubtitle && hasCategories;
-});
-
-/**
  * Validates the entire create project form and updates the validation errors store.
  * Returns true if the form is valid, false otherwise.
  */
-export function validateCreateForm(): boolean {
-    const result = projectCreationSchema.safeParse(get(currentDraft));
+export function validateCreateForm(createProjectDraft: ProjectProjectCreationDto): boolean {
+    const result = projectCreationSchema.safeParse(createProjectDraft);
 
     if (!result.success) {
         const errors: ValidationErrors = {};

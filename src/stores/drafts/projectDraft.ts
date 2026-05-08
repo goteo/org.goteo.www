@@ -6,7 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward } from "./draftValidation";
+import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, validationErrors } from "./draftValidation";
 
 /**
  * Media image data
@@ -72,7 +72,6 @@ export interface Draft {
     wizardForm: Wizard;
 
     updatedAt: number;
-    status: "initial" | "project-created" | "to-review" | "editing";
 }
 
 export const drafts = derived(session, ($session, set) => {
@@ -123,6 +122,26 @@ export const isReadyToPublish = derived(
         return Object.keys(errors).length === 0;
     },
 );
+
+/**
+ * Derived store that indicates if the form is valid.
+ * Returns true only when:
+ * 1. All required fields have values
+ * 2. There are no validation errors
+ */
+export const isCreateFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
+    // Check if there are any validation errors
+    if (Object.keys($errors).length > 0) {
+        return false;
+    }
+
+    // Check that required fields have values
+    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
+    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
+    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
+
+    return hasTitle && hasSubtitle && hasCategories;
+});
 
 export function createDraftId() {
     return crypto.randomUUID();
@@ -184,7 +203,6 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
             },
         },
         updatedAt: Date.now(),
-        status: "initial",
     };
 
     await draftRepo.create(draft);
