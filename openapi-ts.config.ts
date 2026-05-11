@@ -10,7 +10,7 @@ export default defineConfig({
     plugins: [
         ...defaultPlugins,
         operationPathsConfig(),
-        'zod',
+        "zod",
         {
             name: "@hey-api/client-fetch",
             runtimeConfigPath: "./src/openapi/api.ts",

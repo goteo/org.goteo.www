@@ -1,19 +1,25 @@
 import { defineAction, ActionError } from "astro:actions";
+
 import { apiGatewayCheckoutsPost, type GatewayCharge } from "../openapi/client";
 import { client } from "../openapi/client/client.gen";
 import { apiGatewaysNameGetUrl } from "../openapi/client/paths.gen";
+import { Unauthorized } from "../utils/responses";
 
 export const payment = defineAction({
     accept: "form",
     handler: async (input, context) => {
         const { t, session } = context.locals;
 
+        if (!session) {
+            return Unauthorized;
+        }
+
         try {
             const paymentMethod = input.get("paymentMethod");
             if (!paymentMethod) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("system.error.payment.missingMethod")
+                    message: t("system.error.payment.missingMethod"),
                 });
             }
 
@@ -21,7 +27,7 @@ export const payment = defineAction({
             if (!cartData) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("system.error.payment.missingCartData")
+                    message: t("system.error.payment.missingCartData"),
                 });
             }
 
@@ -29,22 +35,27 @@ export const payment = defineAction({
             try {
                 cart = JSON.parse(cartData.toString());
             } catch (err) {
+                console.error(err);
+
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("system.error.payment.unprocessableCartData")
+                    message: t("system.error.payment.unprocessableCartData"),
                 });
             }
 
             const charges: GatewayCharge[] = Object.values(cart.items);
 
             const response = await apiGatewayCheckoutsPost({
-                headers: session?.token.asHttpHeaders,
+                headers: session.token.asHttpHeaders,
                 body: {
-                    origin: session?.user.accounting!,
-                    gateway: client.buildUrl({ url: apiGatewaysNameGetUrl, path: { name: paymentMethod } }),
+                    origin: session.user.accounting!,
+                    gateway: client.buildUrl({
+                        url: apiGatewaysNameGetUrl,
+                        path: { name: paymentMethod },
+                    }),
                     returnUrl: `${context.url.origin}/checkout/verify`,
-                    charges
-                }
+                    charges,
+                },
             });
 
             if (response.error) {
@@ -52,8 +63,8 @@ export const payment = defineAction({
 
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("system.error.payment.badAPIResponse")
-                })
+                    message: t("system.error.payment.badAPIResponse"),
+                });
             }
 
             return { success: true, checkout: response.data };
@@ -63,7 +74,7 @@ export const payment = defineAction({
             if (err instanceof ActionError) throw err;
             throw new ActionError({
                 code: "INTERNAL_SERVER_ERROR",
-                message: t("system.error.unknown")
+                message: t("system.error.unknown"),
             });
         }
     },
