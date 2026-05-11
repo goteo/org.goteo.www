@@ -26,13 +26,15 @@ const { t, lang, session } = Astro.locals;
 <Layout title={t("pages.index.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} class="mb-20 gap-18">
         <Hero />
-        <HomeBanner
-            title={t("pages.home.banner.title")}
-            description={t("pages.home.banner.description")}
-            ctaText={t("pages.home.banner.ctaText")}
-            ctaLink={t("pages.home.banner.ctaLink")}
-            closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
-        />
+        <div class="wrapper">
+            <HomeBanner
+                title={t("pages.home.banner.title")}
+                description={t("pages.home.banner.description")}
+                ctaText={t("pages.home.banner.ctaText")}
+                ctaLink={t("pages.home.banner.ctaLink")}
+                closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
+            />
+        </div>
         <Campaigns />
         <Blog />
         <Stats />
