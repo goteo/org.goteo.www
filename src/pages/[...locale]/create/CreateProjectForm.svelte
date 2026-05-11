@@ -24,22 +24,16 @@
         touchedFields,
         updateProject,
         isCreateFormValid,
+        project,
     } from "../../../stores/drafts/projectDraft";
     import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
 
+    let releaseDate = $state($project.release ? new Date($project.release) : new Date());
+
     const categoriesOptions = categories.map((categories) => {
         return { id: categories.id, text: $t(categories.translationKey) };
     });
-
-    let createProjectDraft = $derived(
-        $currentDraft?.createProject || {
-            title: "",
-            subtitle: "",
-            categories: [],
-            release: undefined,
-        },
-    );
 
     // Track if form has been submitted once (for showing all errors)
     let submitted = $state(false);
@@ -102,7 +96,7 @@
         apiError = null;
 
         // Validate entire form
-        const isValid = validateCreateForm(createProjectDraft);
+        const isValid = validateCreateForm($project);
 
         if (!isValid) {
             // Scroll to error summary
@@ -260,7 +254,7 @@
             <TextInput
                 name="title"
                 placeholder={$t("pages.project.create.description.titlePrompt")}
-                bind:value={createProjectDraft.title}
+                bind:value={$project.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
                 onBlur={() => handleFieldBlur("title")}
                 onInput={(e) => handleFieldChange("title", (e.target as HTMLInputElement).value)}
@@ -275,7 +269,7 @@
                     )
                         ? 'border-red-500'
                         : 'border-[#855a96]'}"
-                    bind:value={createProjectDraft.subtitle}
+                    bind:value={$project.subtitle}
                     onblur={() => handleFieldBlur("subtitle")}
                     oninput={(e) =>
                         handleFieldChange("subtitle", (e.target as HTMLTextAreaElement).value)}
@@ -312,7 +306,7 @@
             </p>
             <DateInput
                 name="release"
-                bind:value={createProjectDraft.release}
+                bind:value={releaseDate}
                 min={getMinDate()}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}

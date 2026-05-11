@@ -89,8 +89,32 @@ export const drafts = derived(session, ($session, set) => {
 
 export const currentDraft = writable<Draft | null>(null);
 
-export const wizard = derived(currentDraft, ($d) => $d?.wizardForm);
-export const project = derived(currentDraft, ($d) => $d?.createProject);
+export const wizard = derived(currentDraft, ($d) => $d?.wizardForm ?? {
+    currentStep: 1,
+    configuration: {
+        projectDeadline: "minimum",
+    },
+    campaignInfo: {
+        images: [],
+        video: "",
+        objectives: "",
+        legacy: "",
+        targetAudience: "",
+        team: "",
+    },
+    rewards: [],
+    collaborations: [],
+    budgetItems: {
+        minimum: [],
+        optimum: [],
+    },
+} as Wizard);
+export const project = derived(currentDraft, ($d) => $d?.createProject ?? {
+    title: "",
+    subtitle: "",
+    categories: [],
+    release: undefined,
+});
 
 /**
  * Touched fields tracker

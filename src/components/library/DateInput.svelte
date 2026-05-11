@@ -16,7 +16,7 @@
         onBlur = undefined,
         onInput = undefined,
     }: {
-        value?: string | Date;
+        value: Date;
         id?: string;
         name?: string;
         required?: boolean;
