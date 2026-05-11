@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource/karla";
+@import "svelte-range-slider-pips/dist/range-slider-pips.css";
 
 @plugin "flowbite/plugin";
 @import "flowbite/src/themes/default";
