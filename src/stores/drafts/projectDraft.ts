@@ -229,6 +229,8 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
         updatedAt: new Date(),
     };
 
+    draft.createProject.categories = Object.values(project?.categories || []);
+
     await draftRepo.create(draft);
     currentDraft.set(draft);
 
