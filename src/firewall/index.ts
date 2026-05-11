@@ -14,7 +14,7 @@ function normalizePath(pathname: string): string {
 }
 
 function matchesPath(pathname: string, basePath: string): boolean {
-    return pathname === basePath || pathname.startsWith(basePath + "/");
+    return pathname === basePath || pathname.startsWith(basePath + "/") || new RegExp(`^${basePath.replace(/\*/g, ".*")}$`).test(pathname);
 }
 
 export function getMatchingACL(pathname: string): ControlItem | null {
