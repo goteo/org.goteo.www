@@ -1,6 +1,8 @@
 import { ACL, type ControlItem } from "./access-control";
 import { isSupportedLocale } from "../i18n/locales";
 
+const regexCache = new Map<string, RegExp>();
+
 function normalizePath(pathname: string): string {
     const path = pathname.replace(/\/+$/, "");
 
@@ -13,6 +15,18 @@ function normalizePath(pathname: string): string {
     return "/" + segments.join("/");
 }
 
+function isRegexPath(path: string): boolean {
+    return /[.*+?^${}()|[\]\\]/.test(path);
+}
+
+function getRegex(path: string): RegExp {
+    if (!regexCache.has(path)) {
+        regexCache.set(path, new RegExp(`^${path}$`));
+    }
+
+    return regexCache.get(path)!;
+}
+
 function matchesPath(pathname: string, path: string): boolean {
     // Exact match
     if (pathname === path) {
@@ -20,8 +34,8 @@ function matchesPath(pathname: string, path: string): boolean {
     }
 
     // Dynamic regex route
-    if (path.includes(".*")) {
-        return new RegExp(`^${path}$`).test(pathname);
+    if (isRegexPath(path)) {
+        return getRegex(path).test(pathname);
     }
 
     // Nested routes
