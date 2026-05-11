@@ -20,7 +20,7 @@ export type Accounting = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: MoneyWithConversion;
+    balance?: MoneyOutput;
 };
 
 /**
@@ -50,7 +50,7 @@ export type AccountingJsonld = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: MoneyWithConversionJsonld;
+    balance?: MoneyOutputJsonld;
 };
 
 /**
@@ -71,7 +71,7 @@ export type AccountingBalancePoint = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyWithConversion;
+    balance?: MoneyOutput;
     /**
      * The number of items aggregated in this point.
      */
@@ -98,7 +98,7 @@ export type AccountingBalancePointJsonld = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyWithConversionJsonld;
+    balance?: MoneyOutputJsonld;
     /**
      * The number of items aggregated in this point.
      */
@@ -119,7 +119,7 @@ export type AccountingTransaction = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -151,7 +151,7 @@ export type AccountingTransactionJsonld = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -195,19 +195,19 @@ export type BudgetSummary = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyWithConversion;
+    task?: MoneyOutput;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyWithConversion;
+    material?: MoneyOutput;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyWithConversion;
+    infra?: MoneyOutput;
 };
 
 export type BudgetSummaryJsonld = {
@@ -221,19 +221,19 @@ export type BudgetSummaryJsonld = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyWithConversionJsonld;
+    task?: MoneyOutputJsonld;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyWithConversionJsonld;
+    material?: MoneyOutputJsonld;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyWithConversionJsonld;
+    infra?: MoneyOutputJsonld;
 };
 
 export type Category = {
@@ -249,6 +249,62 @@ export type CategoryJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     id?: string;
+};
+
+export type ChargeCreationDto = {
+    /**
+     * How this item should be processed by the Gateway.\
+     * \
+     * `single` is for one time payments.\
+     * `recurring` is for payments repeated over time.
+     */
+    type: 'single' | 'recurring';
+    /**
+     * A short, descriptive string for this charge item.\
+     * May be displayed to the payer.
+     */
+    title: string;
+    /**
+     * Detailed information about the charge item.\
+     * May be displayed to the payer.
+     */
+    description?: string | null;
+    /**
+     * The Accounting receiving the money after a successful payment.
+     */
+    target: string;
+    /**
+     * The money to-be-paid for this item at the Gateway.
+     */
+    money: MoneyInput;
+};
+
+export type ChargeCreationDtoJsonld = {
+    /**
+     * How this item should be processed by the Gateway.\
+     * \
+     * `single` is for one time payments.\
+     * `recurring` is for payments repeated over time.
+     */
+    type: 'single' | 'recurring';
+    /**
+     * A short, descriptive string for this charge item.\
+     * May be displayed to the payer.
+     */
+    title: string;
+    /**
+     * Detailed information about the charge item.\
+     * May be displayed to the payer.
+     */
+    description?: string | null;
+    /**
+     * The Accounting receiving the money after a successful payment.
+     */
+    target: string;
+    /**
+     * The money to-be-paid for this item at the Gateway.
+     */
+    money: MoneyInputJsonld;
 };
 
 /**
@@ -444,7 +500,7 @@ export type GatewayCharge = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyWithConversion;
+    money: MoneyOutput;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -507,7 +563,7 @@ export type GatewayChargeJsonld = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyOutputJsonld;
     /**
      * The status of the charge item with the Gateway.
      */
@@ -560,6 +616,68 @@ export type GatewayCheckout = {
     readonly trackings?: Array<Tracking>;
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
+};
+
+/**
+ * A GatewayCheckout represents a payment session with a Gateway.
+ */
+export type GatewayCheckoutCheckoutCreationDto = {
+    /**
+     * The desired Gateway to checkout with.
+     */
+    gateway: string;
+    /**
+     * The Accounting paying for the charges.
+     */
+    origin: string;
+    /**
+     * A list of the payment items to be charged to the origin.
+     */
+    charges: Array<ChargeCreationDto>;
+    /**
+     * Gateways will redirect the user back to the v4 API,
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
+     */
+    returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
+};
+
+/**
+ * A GatewayCheckout represents a payment session with a Gateway.
+ */
+export type GatewayCheckoutCheckoutCreationDtoJsonld = {
+    /**
+     * The desired Gateway to checkout with.
+     */
+    gateway: string;
+    /**
+     * The Accounting paying for the charges.
+     */
+    origin: string;
+    /**
+     * A list of the payment items to be charged to the origin.
+     */
+    charges: Array<ChargeCreationDtoJsonld>;
+    /**
+     * Gateways will redirect the user back to the v4 API,
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
+     */
+    returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
 };
 
 /**
@@ -984,7 +1102,7 @@ export type MatchStrategy = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: MoneyWithConversion;
+    limit: MoneyInput;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1038,7 +1156,7 @@ export type MatchStrategyJsonld = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: MoneyWithConversionJsonld;
+    limit: MoneyInputJsonld;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1071,7 +1189,38 @@ export type MoneyJsonld = {
     conversion?: ConversionJsonld | null;
 };
 
-export type MoneyWithConversion = {
+export type MoneyInput = {
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+};
+
+export type MoneyInputJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+};
+
+export type MoneyOutput = {
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -1087,7 +1236,7 @@ export type MoneyWithConversion = {
     conversion?: Conversion | null;
 };
 
-export type MoneyWithConversionJsonld = {
+export type MoneyOutputJsonld = {
     '@context'?: string | {
         '@vocab': string;
         hydra: 'http://www.w3.org/ns/hydra/core#';
@@ -1544,7 +1693,7 @@ export type ProjectBudgetItem = {
     /**
      * The amount of money required for this item.
      */
-    money: MoneyWithConversion;
+    money: MoneyInput;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1585,7 +1734,7 @@ export type ProjectBudgetItemJsonld = {
     /**
      * The amount of money required for this item.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyInputJsonld;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1730,7 +1879,7 @@ export type ProjectReward = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyWithConversion;
+    money: MoneyInput;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1783,7 +1932,7 @@ export type ProjectRewardJsonld = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyInputJsonld;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1907,7 +2056,7 @@ export type ProjectSupport = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -1976,7 +2125,7 @@ export type ProjectSupportJsonld = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
      * User's will to have their support to the Project be shown publicly.
      */
@@ -2914,7 +3063,7 @@ export type ApiGatewayCheckoutsPostData = {
     /**
      * The new GatewayCheckout resource
      */
-    body: GatewayCheckout;
+    body: GatewayCheckoutCheckoutCreationDto;
     path?: never;
     query?: never;
     url: '/v4/gateway_checkouts';
@@ -2925,6 +3074,10 @@ export type ApiGatewayCheckoutsPostErrors = {
      * Invalid input
      */
     400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
     /**
      * An error occurred
      */
@@ -3809,6 +3962,12 @@ export type ApiProjectsGetCollectionData = {
         subtitle?: string;
         categories?: string;
         'categories[]'?: Array<string>;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
         description?: string;
         status?: string;
         'status[]'?: Array<string>;
