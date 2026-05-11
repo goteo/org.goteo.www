@@ -24,6 +24,8 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1041.0",
+    "@aws-sdk/s3-request-presigner": "^3.1041.0",
     "@astrojs/check": "^0.9.9",
     "@astrojs/cloudflare": "^12.6.13",
     "@astrojs/node": "^9.5.5",
@@ -44,6 +46,7 @@
     "chart.js": "^4.5.1",
     "csrf": "^3.1.0",
     "dotenv": "^16.6.1",
+    "file-type": "^22.0.1",
     "flickity": "^3.0.0",
     "iso-3166-2": "^1.0.0",
     "marked": "^15.0.12",

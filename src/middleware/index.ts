@@ -1,7 +1,7 @@
 import { defineMiddleware } from "astro:middleware";
 
 import { checkAuth } from "./firewall";
-import { getLanguage, isStatelessRequest } from "./utils";
+import { getLanguage } from "./utils";
 import { getSession } from "../auth/session";
 import { useTranslations } from "../i18n/utils";
 
@@ -19,15 +19,10 @@ export const onRequest = defineMiddleware(async (context: APIContext, next) => {
             return context.rewrite("/403");
     }
 
-    if (isStatelessRequest(context)) {
-        return next();
-    }
-
     try {
         const lang = getLanguage(context) as Locale;
         const session = await getSession(context.cookies);
 
-        //throw new Error(lang);
         context.locals.lang = lang;
         context.locals.t = useTranslations(lang);
         context.locals.session = session;

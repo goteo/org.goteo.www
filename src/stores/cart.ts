@@ -73,6 +73,8 @@ function createCartStore(): CartStore {
 
     subscribe((cart) => {
         try {
+            if (!isBrowser) return;
+
             localStorage.setItem("cart", JSON.stringify(cart));
         } catch (e) {
             console.error("Error to save cart to localStorage:", e);
