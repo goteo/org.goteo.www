@@ -68,7 +68,11 @@ const displayCampaigns = campaigns.slice(0, 4); // Show first 4 campaigns
     <!-- Campaigns Carousel -->
     <div>
         <Carousel client:load itemsPerGroup={3} gap={24} showDots={false}>
-            {displayCampaigns.map((campaign) => <CampaignCard size="small" campaign={campaign} />)}
+            {
+                displayCampaigns.map((campaign) => (
+                    <CampaignCard size="small" campaign={campaign} client:load />
+                ))
+            }
         </Carousel>
     </div>
 </section>
