@@ -11,7 +11,7 @@
     import Grid from "../library/Grid.svelte";
     import Reward from "../Reward.svelte";
 
-    import type { ProjectReward, Project, Accounting } from "../../openapi/client/index";
+    import type { ProjectReward, Project } from "../../openapi/client/index";
 
     let {
         lang = $bindable(),

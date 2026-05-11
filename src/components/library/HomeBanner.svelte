@@ -28,17 +28,17 @@
             <img
                 src="/imgs/banner-home.svg"
                 alt=""
-                class="absolute -top-[23%] right-97 h-56.5 w-61 -translate-y-[25%] rotate-[4deg]"
+                class="absolute top-[-23%] right-97 h-56.5 w-61 translate-y-[-25%] rotate-[4deg]"
             />
             <img
                 src="/imgs/banner-home.svg"
                 alt=""
-                class="absolute top-[54%] right-53.5 h-56.5 w-61 -translate-y-[37%] -rotate-2"
+                class="absolute top-[54%] right-53.5 h-56.5 w-61 translate-y-[-37%] -rotate-2"
             />
             <img
                 src="/imgs/banner-home.svg"
                 alt=""
-                class="absolute top-[24%] right-0 h-56.5 w-61 -translate-y-[60%] rotate-2"
+                class="absolute top-[24%] right-0 h-56.5 w-61 translate-y-[-60%] rotate-2"
             />
         </div>
 

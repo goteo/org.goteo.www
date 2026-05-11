@@ -37,7 +37,9 @@
 
         <div class="meta-container pt-6">
             <div class="profile-section">
-                <img src={post.author?.avatar} class="avatar" alt={post.author?.name} />
+                {#if post.author?.avatar}
+                    <img src={post.author.avatar} class="avatar" alt={post.author?.name} />
+                {/if}
                 <div class="info">
                     <p class="author-name">{post.author?.name}</p>
                     <p class="date">{post.date}</p>

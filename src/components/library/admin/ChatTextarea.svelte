@@ -9,7 +9,7 @@
     }>();
 </script>
 
-<div class={twMerge("flex w-full max-w-[1360px] items-center gap-6 self-center", classes)}>
+<div class={twMerge("flex w-full max-w-340 items-center gap-6 self-center", classes)}>
     <textarea
         class="text-content bg-grey h-20 w-full resize-none rounded-lg border-0 p-4 text-base shadow-sm ring-0"
         placeholder={$t("reviews.chat.placeholder")}
