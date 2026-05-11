@@ -75,12 +75,12 @@ const postPaymentUrl = checkoutId
 
 <Layout title="Estado del pago">
     <App client:load locale={lang} session={session}>
-        <div class="wrapper py-10">
+        <div class="wrapper max-md:px-0 pt-6">
             {
                 error ? (
-                    <div class="wrapper">
-                        <div class="flex flex-col gap-8 py-10 lg:flex-row">
-                            <div class="flex w-full flex-col gap-10 lg:w-1/2">
+                    <div class="wrapper max-md:px-0">
+                        <div class="flex flex-col gap-8 pt-6 lg:flex-row">
+                            <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
                                 <div class="flex flex-col gap-4">
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
@@ -131,9 +131,9 @@ const postPaymentUrl = checkoutId
                     </div>
                 ) : (
                     <>
-                        <div class="wrapper">
-                            <div class="flex flex-col gap-8 py-10 lg:flex-row">
-                                <div class="flex w-full flex-col gap-10 lg:w-1/2">
+                        <div class="wrapper max-md:px-0">
+                            <div class="flex flex-col gap-8 pt-6 lg:flex-row">
+                                <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
                                     <div class="flex flex-col gap-4">
                                         <div class="flex flex-col gap-9">
                                             <div class="flex flex-row items-center justify-between gap-6">
