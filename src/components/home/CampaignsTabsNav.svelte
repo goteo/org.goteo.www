@@ -29,18 +29,18 @@
     tabs={[
         {
             id: "most-successful",
-            label: $t("home.campaigns.tabs.mostSuccessful"),
+            label: $t("pages.home.campaigns.tabs.mostSuccessful"),
             icon: flashIconSnippet,
         },
         // Uncomment when ready to enable
         // {
         //     id: "ending-soon",
-        //     label: $t("home.campaigns.tabs.endingSoon"),
+        //     label: $t("pages.home.campaigns.tabs.endingSoon"),
         //     icon: clockIconSnippet,
         // },
         // {
         //     id: "matchfunding",
-        //     label: $t("home.campaigns.tabs.withMatchfunding"),
+        //     label: $t("pages.home.campaigns.tabs.withMatchfunding"),
         //     icon: matchFundingIconSnippet,
         // },
     ]}

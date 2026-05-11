@@ -14,20 +14,20 @@ const { t } = Astro.locals;
                 <h2
                     class="text-secondary text-2xl leading-tight font-bold md:text-[40px] md:leading-[48px]"
                 >
-                    {t("home.stories.title")}
+                    {t("pages.home.stories.title")}
                 </h2>
 
                 <!-- Subtitle -->
                 <h3
                     class="text-secondary text-lg leading-8 font-bold md:text-[24px] md:leading-[32px]"
                 >
-                    {t("home.stories.subtitle")}
+                    {t("pages.home.stories.subtitle")}
                 </h3>
 
                 <!-- Description -->
                 <div class="text-content flex-1 text-sm leading-6 md:text-base md:leading-6">
                     {
-                        t("home.stories.description")
+                        t("pages.home.stories.description")
                             .split("\n")
                             .map((paragraph, index) => (
                                 <p key={index} class:list={[index > 0 && "mt-4"]}>
@@ -43,7 +43,7 @@ const { t } = Astro.locals;
                 href="/donate"
                 class="bg-variant1 text-secondary hover:bg-secondary flex w-fit items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:text-base"
             >
-                {t("home.stories.button")}
+                {t("pages.home.stories.button")}
             </a>
         </div>
 

@@ -72,6 +72,133 @@
   },
   "pages": {
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "home": {
+      "banner": {
+        "title": "¡Renovamos Goteo!",
+        "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
+        "ctaText": "Súmate a nuestra historia",
+        "ctaLink": "/about",
+        "closeAriaLabel": "Cerrar banner"
+      },
+      "campaigns": {
+        "title": "Campañas más recientes",
+        "tabsTitle": "Campañas en Goteo",
+        "tabs": {
+          "endingSoon": "Acaban pronto",
+          "mostSuccessful": "Más exitosas",
+          "withMatchfunding": "Con Matchfunding"
+        },
+        "viewAll": "Ver todas",
+        "obtained": "Obtenido",
+        "minimum": "Mínimo",
+        "optimum": "Óptimo",
+        "daysRemaining": "Quedan {{days}} días",
+        "matchfunding": "Matchfunding",
+        "status": {
+          "minimumReached": "¡Mínimo conseguido!",
+          "goForMinimum": "¡A por el mínimo!"
+        },
+        "remaining": {
+          "toOptimum": "Falta para óptimo",
+          "toMinimum": "Falta para mínimo"
+        },
+        "userDonations": "Tus donaciones:"
+      },
+      "blog": {
+        "title": "Se avecinan grandes cambios… ¡no te pierdas nada!",
+        "excerpt": "Un proceso que implica una importante migración técnica de la plataforma actual, y para hacerlo con todas las garantías de seguridad y sin pérdida de información, necesitamos llevar a cabo una transición ordenada, con fechas clave para la publicación de campañas y la realización de donaciones…",
+        "readMore": "Seguir leyendo"
+      },
+      "matchfunding": {
+        "title": "Matchfunding",
+        "description": "El efecto match sólo lo verás en Goteo. Desde el 2013 buscamos organizaciones que quieran multiplicar el impacto del crowdfunding. Por cada euro que una persona aporta a una campaña de Goteo, una institución colaboradora (fundación, administración pública, empresa…) aporta la misma cantidad, o incluso más.",
+        "actions": {
+          "learnMore": "Quiero saber más",
+          "viewCalls": "Ver convocatorias activas"
+        },
+        "impact": {
+          "title": "Datos de impacto",
+          "description": "El matchfunding no solo multiplica recursos económicos, sino que genera un impacto social tangible. En esencia, el matchfunding transforma microdonaciones en impacto macro, validando proyectos con apoyo ciudadano y optimizando recursos públicos/privados.",
+          "matchers": "Aportado en Matchfunding:",
+          "successfulProjects": "Proyectos beneficiados:",
+          "successRate": "Porcentaje de éxito:"
+        },
+        "cards": {
+          "grant": "Dotación convocatoria",
+          "inscription": "Fecha de inscripción",
+          "participants": "Proyectos participantes",
+          "apply": "Inscríbete en la convocatoria",
+          "viewCampaigns": "Ver las campañas de la convocatoria",
+          "finished": "Finalizada {{date}}"
+        }
+      },
+      "stats": {
+        "title": "Estadísticas de Goteo",
+        "theoryToAction": {
+          "title": "De la teoría a la acción",
+          "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
+          "projectsReceived": {
+            "value": "10.281",
+            "label": "Proyectos recibidos"
+          },
+          "projectsPublished": {
+            "value": "2.813",
+            "label": "Proyectos publicados"
+          },
+          "successRate": {
+            "value": "83%",
+            "label": "Tasa de éxito"
+          },
+          "button": "Ver Stats de Goteo"
+        },
+        "whyGoteo": {
+          "title": "¿Por qué Goteo?",
+          "subtitle": "Tenemos valores y los datos nos avalan. Datos a fecha de diciembre de 2024.",
+          "community": {
+            "value": "384.341",
+            "label": "Comunidad"
+          },
+          "averageDonors": {
+            "value": "152",
+            "label": "Media de donantes por proyecto"
+          },
+          "totalRaised": {
+            "value": "23M €",
+            "label": "Recaudación total"
+          },
+          "button": "Quiero saber más"
+        }
+      },
+      "stories": {
+        "title": "Goteo estrena nueva web!",
+        "subtitle": "Encantados de compartirlo contigo",
+        "description": "¡Goteo tiene una nueva cara! Navega por nuestra web renovada y descubre una experiencia de crowdfunding social más intuitiva y atractiva. Explora proyectos innovadores, conoce a los creadores detrás de ellos y únete a nuestra comunidad.\n¡Conviértete en donante y haz realidad tus ideas!",
+        "button": "Conviértete en donante"
+      },
+      "featuredPromoters": {
+        "title": "Impulsores destacados",
+        "viewAll": "Ver todes",
+        "projectsPromoted": "Proyectos impulados",
+        "capitalRaised": "Capital recaudado",
+        "promoterImage": "Foto del impulsor",
+        "shareProfile": "Compartir perfil de {{name}}"
+      },
+      "resources": {
+        "title": "Recursos: Combustible para Proyectos Creativos",
+        "viewAll": "Ver más recursos",
+        "readMore": "Leer más",
+        "articles": {
+          "firstCampaign": {
+            "title": "¿Cómo hago mi primera campaña?",
+            "description": "Tu proyecto merece despegar: Domina el crowdfunding social con nuestra CAJA DE HERRAMIENTAS GRATUITA. Guía práctica + plantillas descargables para conquistar a tu audiencia."
+          },
+          "testimonials": {
+            "title": "Testimonios de nuestros impulsores",
+            "description": "¿Quién puede contarte mejor como es impulsar campañas exitosas? Nuestros impulsores nos cuentan de primera mano como es gestionar una campaña con Goteo."
+          }
+        }
+      }
+    },
     "index": {
       "title": "Goteo"
     },
@@ -1124,126 +1251,6 @@
       "filename": "gateway-charges",
       "itemsText": "items",
       "noData": "No se encontraron datos para exportar"
-    }
-  },
-  "home": {
-    "campaigns": {
-      "title": "Campañas más recientes",
-      "tabsTitle": "Campañas en Goteo",
-      "tabs": {
-        "endingSoon": "Acaban pronto",
-        "mostSuccessful": "Más exitosas",
-        "withMatchfunding": "Con Matchfunding"
-      },
-      "viewAll": "Ver todas",
-      "obtained": "Obtenido",
-      "minimum": "Mínimo",
-      "optimum": "Óptimo",
-      "daysRemaining": "Quedan {{days}} días",
-      "matchfunding": "Matchfunding",
-      "status": {
-        "minimumReached": "¡Mínimo conseguido!",
-        "goForMinimum": "¡A por el mínimo!"
-      },
-      "remaining": {
-        "toOptimum": "Falta para óptimo",
-        "toMinimum": "Falta para mínimo"
-      },
-      "userDonations": "Tus donaciones:"
-    },
-    "blog": {
-      "title": "Se avecinan grandes cambios… ¡no te pierdas nada!",
-      "excerpt": "Un proceso que implica una importante migración técnica de la plataforma actual, y para hacerlo con todas las garantías de seguridad y sin pérdida de información, necesitamos llevar a cabo una transición ordenada, con fechas clave para la publicación de campañas y la realización de donaciones…",
-      "readMore": "Seguir leyendo"
-    },
-    "matchfunding": {
-      "title": "Matchfunding",
-      "description": "El efecto match sólo lo verás en Goteo. Desde el 2013 buscamos organizaciones que quieran multiplicar el impacto del crowdfunding. Por cada euro que una persona aporta a una campaña de Goteo, una institución colaboradora (fundación, administración pública, empresa…) aporta la misma cantidad, o incluso más.",
-      "actions": {
-        "learnMore": "Quiero saber más",
-        "viewCalls": "Ver convocatorias activas"
-      },
-      "impact": {
-        "title": "Datos de impacto",
-        "description": "El matchfunding no solo multiplica recursos económicos, sino que genera un impacto social tangible. En esencia, el matchfunding transforma microdonaciones en impacto macro, validando proyectos con apoyo ciudadano y optimizando recursos públicos/privados.",
-        "matchers": "Aportado en Matchfunding:",
-        "successfulProjects": "Proyectos beneficiados:",
-        "successRate": "Porcentaje de éxito:"
-      },
-      "cards": {
-        "grant": "Dotación convocatoria",
-        "inscription": "Fecha de inscripción",
-        "participants": "Proyectos participantes",
-        "apply": "Inscríbete en la convocatoria",
-        "viewCampaigns": "Ver las campañas de la convocatoria",
-        "finished": "Finalizada {{date}}"
-      }
-    },
-    "stats": {
-      "title": "Estadísticas de Goteo",
-      "theoryToAction": {
-        "title": "De la teoría a la acción",
-        "subtitle": "Las cifras que revelan nuestra huella real. Datos a fecha de diciembre de 2024.",
-        "projectsReceived": {
-          "value": "10.281",
-          "label": "Proyectos recibidos"
-        },
-        "projectsPublished": {
-          "value": "2.813",
-          "label": "Proyectos publicados"
-        },
-        "successRate": {
-          "value": "83%",
-          "label": "Tasa de éxito"
-        },
-        "button": "Ver Stats de Goteo"
-      },
-      "whyGoteo": {
-        "title": "¿Por qué Goteo?",
-        "subtitle": "Tenemos valores y los datos nos avalan. Datos a fecha de diciembre de 2024.",
-        "community": {
-          "value": "384.341",
-          "label": "Comunidad"
-        },
-        "averageDonors": {
-          "value": "152",
-          "label": "Media de donantes por proyecto"
-        },
-        "totalRaised": {
-          "value": "23M €",
-          "label": "Recaudación total"
-        },
-        "button": "Quiero saber más"
-      }
-    },
-    "stories": {
-      "title": "Goteo estrena nueva web!",
-      "subtitle": "Encantados de compartirlo contigo",
-      "description": "¡Goteo tiene una nueva cara! Navega por nuestra web renovada y descubre una experiencia de crowdfunding social más intuitiva y atractiva. Explora proyectos innovadores, conoce a los creadores detrás de ellos y únete a nuestra comunidad.\n¡Conviértete en donante y haz realidad tus ideas!",
-      "button": "Conviértete en donante"
-    },
-    "featuredPromoters": {
-      "title": "Impulsores destacados",
-      "viewAll": "Ver todes",
-      "projectsPromoted": "Proyectos impulados",
-      "capitalRaised": "Capital recaudado",
-      "promoterImage": "Foto del impulsor",
-      "shareProfile": "Compartir perfil de {{name}}"
-    },
-    "resources": {
-      "title": "Recursos: Combustible para Proyectos Creativos",
-      "viewAll": "Ver más recursos",
-      "readMore": "Leer más",
-      "articles": {
-        "firstCampaign": {
-          "title": "¿Cómo hago mi primera campaña?",
-          "description": "Tu proyecto merece despegar: Domina el crowdfunding social con nuestra CAJA DE HERRAMIENTAS GRATUITA. Guía práctica + plantillas descargables para conquistar a tu audiencia."
-        },
-        "testimonials": {
-          "title": "Testimonios de nuestros impulsores",
-          "description": "¿Quién puede contarte mejor como es impulsar campañas exitosas? Nuestros impulsores nos cuentan de primera mano como es gestionar una campaña con Goteo."
-        }
-      }
     }
   },
   "admin": {
