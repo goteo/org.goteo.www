@@ -13,8 +13,19 @@ function normalizePath(pathname: string): string {
     return "/" + segments.join("/");
 }
 
-function matchesPath(pathname: string, basePath: string): boolean {
-    return pathname === basePath || pathname.startsWith(basePath + "/") || new RegExp(`^${basePath.replace(/\*/g, ".*")}$`).test(pathname);
+function matchesPath(pathname: string, path: string): boolean {
+    // Exact match
+    if (pathname === path) {
+        return true;
+    }
+
+    // Dynamic regex route
+    if (path.includes(".*")) {
+        return new RegExp(`^${path}$`).test(pathname);
+    }
+
+    // Nested routes
+    return pathname.startsWith(path + "/");
 }
 
 export function getMatchingACL(pathname: string): ControlItem | null {
