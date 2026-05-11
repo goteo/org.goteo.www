@@ -9,6 +9,8 @@ export default defineConfig({
     output: "src/openapi/client",
     plugins: [
         ...defaultPlugins,
+        operationPathsConfig(),
+        'zod',
         {
             name: "@hey-api/client-fetch",
             runtimeConfigPath: "./src/openapi/api.ts",
@@ -21,6 +23,5 @@ export default defineConfig({
             enums: "javascript",
             readOnlyWriteOnlyBehavior: "off",
         },
-        operationPathsConfig(),
     ],
 });
