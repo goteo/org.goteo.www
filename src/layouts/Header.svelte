@@ -31,16 +31,7 @@
     }
 </script>
 
-<header
-    {@attach (el) => {
-        const observer = new ResizeObserver(() => {
-            document.documentElement.style.setProperty("--header-height", `${el.offsetHeight}px`);
-        });
-        observer.observe(el);
-        return () => observer.disconnect();
-    }}
-    class="sticky top-0 z-100 w-full px-2 py-3 md:px-6 md:pt-8"
->
+<header class="fixed top-0 z-100 w-full px-2 pt-6 md:px-6 md:pt-8">
     <div class="mx-auto max-w-360 px-2">
         <div
             class="border-grey flex flex-col rounded-xl border bg-white/50 backdrop-blur-xl"
@@ -49,6 +40,16 @@
             <div
                 class="flex w-full items-center justify-between px-2 py-3 md:px-4 md:py-6"
                 id="header-main"
+                {@attach (el) => {
+                    const observer = new ResizeObserver(() => {
+                        document.documentElement.style.setProperty(
+                            "--header-height",
+                            `${el.getBoundingClientRect().bottom}px`,
+                        );
+                    });
+                    observer.observe(el);
+                    return () => observer.disconnect();
+                }}
             >
                 <div class="flex items-center gap-2 md:gap-4">
                     <a href="/" class="shrink-0"><Logo /></a>
@@ -84,13 +85,13 @@
                                     >
                                         <a
                                             href="/me"
-                                            class="border-grey text-secondary hover:bg-grey block w-full overflow-hidden border-b px-4 py-2 font-bold overflow-ellipsis"
+                                            class="border-grey text-secondary hover:bg-grey block w-full overflow-hidden border-b px-4 py-2 font-bold text-ellipsis"
                                         >
                                             {$t("header.goToProfile")}
                                         </a>
                                         <a
                                             href="/logout"
-                                            class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold overflow-ellipsis"
+                                            class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold text-ellipsis"
                                         >
                                             {$t("logout.label")}
                                         </a>
