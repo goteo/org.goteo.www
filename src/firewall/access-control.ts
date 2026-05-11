@@ -5,10 +5,11 @@ export type ControlItem = {
 
 export const ACL: ControlItem[] = [
     {
-        path: "/admin",
-        roles: ["ROLE_ADMIN"]
-    },
-    {
         path: "/project/.*/edit",
         roles: ["ROLE_USER"]
-    }];
+    },
+    {
+        path: "/admin",
+        roles: ["ROLE_ADMIN"]
+    }
+];
