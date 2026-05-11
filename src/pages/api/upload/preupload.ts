@@ -1,11 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import {
-    STORAGE_ALLOWEDTYPES,
-    STORAGE_PREFIX_TEMP,
-    client,
-} from "../../../utils/objectStorage";
+import { STORAGE_ALLOWEDTYPES, STORAGE_PREFIX_TEMP, client } from "../../../utils/objectStorage";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
