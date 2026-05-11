@@ -1,5 +1,7 @@
 import { writable, derived } from "svelte/store";
 
+import { apiProjectRewardsIdGetUrl } from "../openapi/client/paths.gen";
+
 import type { GatewayCharge, ProjectReward } from "../openapi/client";
 
 export interface CartItem extends GatewayCharge {
@@ -7,10 +9,6 @@ export interface CartItem extends GatewayCharge {
     kind: "free" | "reward" | "tip";
     quantity: number;
 
-    /**
-     * `target` references the Accounting that will receive the money\
-     * `recipient` references the owner of that Accounting
-     */
     recipientDisplayName: string;
 
     /**
@@ -38,21 +36,28 @@ export interface CartStore {
 
 const isBrowser = typeof window !== "undefined";
 
-function generateKey(kind: CartItem["kind"], recipient: string, reward?: ProjectReward): string {
-    const prefix = kind === "tip" ? "tip" : "project";
-    const base = `${prefix}:${recipient}`;
-    if (kind === "reward" && reward?.id != null) {
-        return `${base};reward:/v4/project_rewards/${reward.id}`;
+function generateKey(item: CartItemInput): string {
+    const base = `${item.kind}:${item.recipient}`;
+    if (item.kind === "reward" && item.reward?.id != null) {
+        return `${base};reward:${apiProjectRewardsIdGetUrl.replace("{id}", String(item.reward.id))}`;
     }
     return base;
 }
 
-function parseKey(key: string): { recipient: string; rewardIRI?: string } {
+export function parseKey(key: string): {
+    kind: string;
+    recipient: string;
+    extra: { kind: string; recipient: string }[];
+} {
     const segments = key.split(";");
-    const recipient = segments[0].slice(segments[0].indexOf(":") + 1);
-    const rewardSegment = segments.find((s) => s.startsWith("reward:"));
-    const rewardIRI = rewardSegment?.slice("reward:".length);
-    return { recipient, rewardIRI };
+    const colonIdx = segments[0].indexOf(":");
+    const kind = segments[0].slice(0, colonIdx);
+    const recipient = segments[0].slice(colonIdx + 1);
+    const extra = segments.slice(1).map((s) => {
+        const idx = s.indexOf(":");
+        return { kind: s.slice(0, idx), recipient: s.slice(idx + 1) };
+    });
+    return { kind, recipient, extra };
 }
 
 function loadInitialCart(): CartState {
@@ -85,9 +90,9 @@ function createCartStore(): CartStore {
     return {
         subscribe,
 
-        addItem: ({ recipient, ...item }: CartItemInput) =>
+        addItem: (item: CartItemInput) =>
             update((cart) => {
-                const key = generateKey(item.kind, recipient, item.reward);
+                const key = generateKey(item);
                 const items = { ...cart.items };
 
                 if (item.quantity === 0) {
@@ -95,7 +100,7 @@ function createCartStore(): CartStore {
                     return { items };
                 }
 
-                items[key] = { ...item, key };
+                items[key] = { ...item, key } as CartItem;
 
                 return { items };
             }),
@@ -174,4 +179,3 @@ export const cartByRecipient = derived(cart, ($cart) => {
     return grouped;
 });
 
-export { parseKey };
