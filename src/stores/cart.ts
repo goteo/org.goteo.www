@@ -9,6 +9,11 @@ export interface CartItem extends GatewayCharge {
     kind: "free" | "reward" | "tip";
     quantity: number;
 
+    /**
+     * `target` references the Accounting that will receive the money\
+     * `recipient` references the owner of that Accounting
+     */
+    recipient: string;
     recipientDisplayName: string;
 
     /**
@@ -21,12 +26,10 @@ type CartState = {
     items: Record<string, CartItem>;
 };
 
-export type CartItemInput = Omit<CartItem, "key"> & { recipient: string };
-
 export interface CartStore {
     subscribe: (run: (value: CartState) => void) => () => void;
 
-    addItem: (item: CartItemInput) => void;
+    addItem: (item: Omit<CartItem, "key">) => void;
     removeItem: (key: string) => void;
     updateQuantity: (key: string, quantity: number) => void;
 
@@ -36,7 +39,7 @@ export interface CartStore {
 
 const isBrowser = typeof window !== "undefined";
 
-function generateKey(item: CartItemInput): string {
+function generateKey(item: Omit<CartItem, "key">): string {
     const base = `${item.kind}:${item.recipient}`;
     if (item.kind === "reward" && item.reward?.id != null) {
         return `${base};reward:${apiProjectRewardsIdGetUrl.replace("{id}", String(item.reward.id))}`;
@@ -90,7 +93,7 @@ function createCartStore(): CartStore {
     return {
         subscribe,
 
-        addItem: (item: CartItemInput) =>
+        addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
                 const key = generateKey(item);
                 const items = { ...cart.items };
@@ -178,4 +181,3 @@ export const cartByRecipient = derived(cart, ($cart) => {
 
     return grouped;
 });
-
