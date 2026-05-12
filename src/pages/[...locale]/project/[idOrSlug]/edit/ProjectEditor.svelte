@@ -59,7 +59,7 @@
                 status: project.status || "in_draft",
             });
         }
-        
+
         // Set the step from URL parameter if present
         if (initialStep !== 1) {
             updateWizard({ currentStep: initialStep });
@@ -95,7 +95,7 @@
     let saveState = $state<"idle" | "saving" | "saved">("idle");
     let errorMessage = $state("");
 
-    async function handlePublish() {
+    async function saveToAPI() {
         const draft = get(currentDraft);
 
         if (!draft) return;
@@ -117,15 +117,21 @@
 
         saveState = "saved";
     }
+
+    function handlePublish() {
+        const idOrSlug = project.slug ?? project.id;
+
+        window.location.href = `/project/${idOrSlug}/publish`;
+    }
 </script>
 
 <ProjectEditorShell
     {errorMessage}
     {saveState}
     {project}
-    onSave={handlePublish}
+    onSave={saveToAPI}
     onPublish={handlePublish}
 >
     {@const StepComponent = getStepComponent(currentStep)}
-    <StepComponent {project} onPublish={handlePublish} />
+    <StepComponent {project} />
 </ProjectEditorShell>
