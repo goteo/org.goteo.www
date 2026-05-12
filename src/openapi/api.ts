@@ -1,3 +1,4 @@
+import { createCachedFetch, PLATINIQ_API_CACHE } from "./cacheFetch";
 import { getBaseUrl } from "../utils/consts";
 
 import type { CreateClientConfig } from "./client/client.gen";
@@ -101,5 +102,6 @@ export const createClientConfig: CreateClientConfig = (config) => {
     return {
         ...config,
         baseUrl: getBaseUrl(),
+        fetch: createCachedFetch(PLATINIQ_API_CACHE),
     };
 };
