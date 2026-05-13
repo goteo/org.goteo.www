@@ -1,0 +1,102 @@
+---
+import User from "./User.svelte";
+import Layout from "../../../../layouts/Layout.astro";
+import App from "../../../../components/App.svelte";
+import {
+    apiUsersIdOrHandleGet,
+    apiProjectSupportsGetCollection,
+    apiProjectSupportsmoneyTotalGetCollection,
+} from "../../../../openapi/client";
+import type { Accounting, Money, ProjectSupport } from "../../../../openapi/client";
+import type { Campaign } from "../../../../types/campaign";
+import { client } from "../../../../openapi/client/client.gen";
+import { getLanguage } from "../../../../middleware/utils";
+import { NotFound } from "../../../../utils/responses";
+
+const { idOrHandle } = Astro.params;
+const { lang, session } = Astro.locals;
+
+if (!idOrHandle) {
+    return NotFound;
+}
+
+const { data: user, error } = await apiUsersIdOrHandleGet({
+    path: { idOrHandle },
+});
+
+if (error || !user) {
+    return NotFound;
+}
+
+let userSupports: ProjectSupport[] = [];
+let totalDonated = { amount: 0, currency: "EUR" };
+let projectsDonatedCount = 0;
+
+if (user.accounting) {
+    try {
+        const { data: supports } = await apiProjectSupportsGetCollection({
+            query: { origin: user.accounting },
+        });
+
+        if (supports) {
+            userSupports = supports;
+            projectsDonatedCount = supports.length;
+
+            const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
+                query: { origin: user.accounting },
+            });
+
+            if (moneyTotal?.amount && moneyTotal?.currency) {
+                totalDonated = {
+                    amount: Number(moneyTotal.amount),
+                    currency: moneyTotal.currency,
+                };
+            }
+        }
+    } catch (e) {
+        console.error("Error fetching user supports:", e);
+    }
+}
+
+const projectIRIs = userSupports
+    .slice(0, 10)
+    .map((s) => s.project)
+    .filter(Boolean);
+let campaigns: Campaign[] = [];
+
+if (projectIRIs.length > 0) {
+    campaigns = await Promise.all(
+        projectIRIs.map(async (projectIRI) => {
+            try {
+                const { data: project } = (await client.get({
+                    url: client.buildUrl({ url: projectIRI! }),
+                    headers: { "Accept-Language": getLanguage(Astro) },
+                })) as { data: any };
+
+                const { data: accounting } = (await client.get({
+                    url: client.buildUrl({ url: project.accounting! }),
+                })) as { data: Accounting };
+
+                return {
+                    size: "small",
+                    id: project.slug!,
+                    title: project.title!,
+                    image: project.video?.thumbnail!,
+                    minimum: project.budget?.minimum?.money!,
+                    obtained: accounting!.balance as Money,
+                    optimum: project.budget?.optimum?.money,
+                } as Campaign;
+            } catch (e) {
+                console.error(`Error fetching project ${projectIRI}:`, e);
+                return null;
+            }
+        }),
+    ).then((results) => results.filter(Boolean) as Campaign[]);
+}
+---
+
+<Layout title={user.displayName ?? user.handle} description={user.handle}>
+    <App client:load locale={lang} session={session} class="mt-0 pb-20">
+        <User {user} {campaigns} client:load />
+    </App>
+</Layout>
