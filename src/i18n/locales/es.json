@@ -22,10 +22,14 @@
       "expired": "Campaña finalizada"
     },
     "login": "Iniciar Sesión",
-    "goHome": "Volver a inicio"
+    "goHome": "Volver a inicio",
+    "viewAll": "Ver todo"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
+    "header": {
+      "categories": "Proyectos"
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
