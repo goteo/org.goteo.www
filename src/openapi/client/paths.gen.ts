@@ -14,7 +14,13 @@ export const apiAccountingTransactionsIdGetUrl = '/v4/accounting_transactions/{i
 
 export const apiCategoriesGetCollectionUrl = '/v4/categories';
 
+export const apiCategoriesPostUrl = '/v4/categories';
+
+export const apiCategoriesIdDeleteUrl = '/v4/categories/{id}';
+
 export const apiCategoriesIdGetUrl = '/v4/categories/{id}';
+
+export const apiCategoriesIdPatchUrl = '/v4/categories/{id}';
 
 export const apiGatewaysGetCollectionUrl = '/v4/gateways';
 
