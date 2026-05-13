@@ -71,7 +71,7 @@
         }
     });
 
-    function handleCategoryChange(selected: { id: number | string; text: string }[]) {
+    function handleCategoryChange(selected: Category[]) {
         const categoryIds = selected.map((s) => s.id.toString());
         handleFieldChange("categories", categoryIds);
     }
@@ -260,9 +260,7 @@
             </p>
             <CategorySelect
                 max={2}
-                options={categories.map((c) => {
-                    return { id: c.id!, text: c.name };
-                })}
+                options={categories}
                 onchange={handleCategoryChange}
                 error={shouldShowError("categories") ? $t($validationErrors.categories) : undefined}
             />
