@@ -97,6 +97,13 @@ if (projectIRIs.length > 0) {
 
 <Layout title={user.displayName ?? user.handle} description={user.handle}>
     <App client:load locale={lang} session={session} class="mt-0 pb-20">
-        <User {user} {campaigns} client:load />
+        <User
+            {user}
+            {campaigns}
+            projectsDonated={projectsDonatedCount}
+            moneyDonatedAmount={totalDonated.amount}
+            moneyDonatedCurrency={totalDonated.currency}
+            client:load
+        />
     </App>
 </Layout>

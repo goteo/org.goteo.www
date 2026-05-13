@@ -3,7 +3,7 @@
     import ShareIcon from "../../../../components/icons/Share.svelte";
     import Button from "../../../../components/library/Button.svelte";
     import Grid from "../../../../components/library/Grid.svelte";
-    // import ProfileDonorType from "../../../../components/profile/ProfileDonorType.svelte";
+    import ProfileDonorType from "../../../../components/profile/ProfileDonorType.svelte";
     import ProfileInfo from "../../../../components/profile/ProfileInfo.svelte";
     import Tabs from "../../../../components/Tabs.svelte";
     import { t } from "../../../../i18n/store";
@@ -16,17 +16,17 @@
     interface Props {
         user: User;
         campaigns?: Campaign[];
-        // projectsDonated?: number;
-        // moneyDonatedAmount?: number;
-        // moneyDonatedCurrency?: string;
+        projectsDonated?: number;
+        moneyDonatedAmount?: number;
+        moneyDonatedCurrency?: string;
     }
 
     let {
         user,
         campaigns = [],
-        // projectsDonated = 0,
-        // moneyDonatedAmount = 0,
-        // moneyDonatedCurrency = "EUR",
+        projectsDonated = 0,
+        moneyDonatedAmount = 0,
+        moneyDonatedCurrency = "EUR",
     }: Props = $props();
 
     const DEFAULT_COVER = "https://placehold.co/4000x2700/D43111/FFFFFF?text=+&font=raleway";
@@ -38,7 +38,7 @@
     const tabs = $derived([
         { id: "about", label: $t("profile.tabs.about") },
         { id: "projects", label: $t("profile.tabs.projects") },
-        //{ id: "donorType", label: $t("profile.tabs.donorType") },
+        { id: "donorType", label: $t("profile.tabs.donorType") },
     ]);
 
     // TODO: replace with user.bio when the API adds it
@@ -124,13 +124,6 @@
     </div>
 
     <!-- Tab: Tipo de donante -->
-    <!--
-        Props que deben venir de index.astro:
-          - projectsDonated: number (de apiProjectSupportsGetCollection)
-          - moneyDonatedAmount: number (de apiProjectSupportsmoneyTotalGetCollection)
-          - moneyDonatedCurrency: string (de apiProjectSupportsmoneyTotalGetCollection)
-    -->
-    <!--
     <div data-tab-content="donorType" class="w-full" style="display:none">
         <ProfileDonorType
             {projectsDonated}
@@ -138,5 +131,4 @@
             {moneyDonatedCurrency}
         />
     </div>
-    -->
 </div>
