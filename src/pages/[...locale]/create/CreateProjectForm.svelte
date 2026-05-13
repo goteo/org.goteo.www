@@ -16,16 +16,14 @@
     import DateInput from "../../../components/library/DateInput.svelte";
     import TextInput from "../../../components/library/TextInput.svelte";
     import { t } from "../../../i18n/store";
-    import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
 
     import type { ProjectDraft } from "./project-draft";
+    import type { Category } from "../../../openapi/client";
 
     // import { apiProjectsPost } from "../../../openapi/client"; // TODO: Use when API integration is complete
 
-    const categoriesOptions = categories.map((categories) => {
-        return { id: categories.id, text: $t(categories.translationKey) };
-    });
+    let { categories }: { categories: Category[] } = $props();
 
     // Track if form has been submitted once (for showing all errors)
     let submitted = false;
@@ -230,7 +228,6 @@
                 placeholder={$t("pages.project.create.description.titlePrompt")}
                 bind:value={$draft.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
-                onBlur={() => handleFieldBlur("title")}
             />
             <div class="relative">
                 <textarea
@@ -263,7 +260,9 @@
             </p>
             <CategorySelect
                 max={2}
-                options={categoriesOptions}
+                options={categories.map((c) => {
+                    return { id: c.id!, text: c.name };
+                })}
                 onchange={handleCategoryChange}
                 error={shouldShowError("categories") ? $t($validationErrors.categories) : undefined}
             />
