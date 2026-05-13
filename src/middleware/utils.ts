@@ -3,6 +3,7 @@ import { isSupportedLocale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
 
 const PREFERRED_LANGUAGE_COOKIE = "preferred-lang";
+const PREFERRED_LANGUAGE_HEADER = "accept-language";
 
 /**
  * Builds a clean redirect URL by combining the language code and pathname.
@@ -14,24 +15,39 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
 }
 
 /**
- * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
- * Always ensures the preferred-lang cookie is synchronized.
+ * Detects the language preferences from URL path, preferred-lang cookie and Accept-Language header.
+ * @param context
+ * @returns {string[]} A sorted list of language codes. Languages first in the list have a higher preference.
  */
 export function getUserLangPreferences(context: APIContext): string[] {
+    let langs: string[] = [];
+
     const langInPath = parsePathLang(context.url.pathname);
-    if (langInPath) return [langInPath];
-
-    const langInCookie = context.cookies.get(PREFERRED_LANGUAGE_COOKIE)?.value;
-    if (langInCookie) return [langInCookie];
-
-    const langsInHeader = parseAcceptLanguageHeader(context.request.headers.get("accept-language"));
-    if (langsInHeader?.length > 0) {
-        return langsInHeader.map((lang) => lang.code);
+    if (langInPath) {
+        langs = [...langs, langInPath];
     }
 
-    return [];
+    const langInCookie = context.cookies.get(PREFERRED_LANGUAGE_COOKIE)?.value;
+    if (langInCookie) {
+        langs = [...langs, langInCookie];
+    }
+
+    const langsInHeader = parseAcceptLanguageHeader(
+        context.request.headers.get(PREFERRED_LANGUAGE_HEADER),
+    );
+    if (langsInHeader?.length > 0) {
+        langs = [...langs, ...langsInHeader.map((lang) => lang.code)];
+    }
+
+    return [...new Set(langs)];
 }
 
+/**
+ * Detect the working language by checking the request preferences that have an available localisation.
+ * Fallsback to application default `PUBLIC_DEFAULT_LANGUAGE` when no available language was found.
+ * @param context
+ * @returns {string} A language code of one of the available localisations.
+ */
 export function getLanguage(context: APIContext): string {
     const defaultLang = import.meta.env.PUBLIC_DEFAULT_LANGUAGE;
     const userPreferredLangs = getUserLangPreferences(context);
