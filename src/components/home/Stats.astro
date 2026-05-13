@@ -6,7 +6,7 @@ const { t } = Astro.locals;
 
 <section class="wrapper py-16">
     <h2 class="mb-6 text-2xl font-bold text-black">
-        {t("home.stats.title")}
+        {t("pages.home.stats.title")}
     </h2>
     <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-2" client:load>
         <!-- First Card: De la teoría a la acción -->
@@ -17,10 +17,10 @@ const { t } = Astro.locals;
                     <h2
                         class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                     >
-                        {t("home.stats.theoryToAction.title")}
+                        {t("pages.home.stats.theoryToAction.title")}
                     </h2>
                     <p class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                        {t("home.stats.theoryToAction.subtitle")}
+                        {t("pages.home.stats.theoryToAction.subtitle")}
                     </p>
                 </div>
 
@@ -30,30 +30,30 @@ const { t } = Astro.locals;
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.theoryToAction.projectsReceived.value")}
+                            {t("pages.home.stats.theoryToAction.projectsReceived.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.theoryToAction.projectsReceived.label")}
+                            {t("pages.home.stats.theoryToAction.projectsReceived.label")}
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.theoryToAction.projectsPublished.value")}
+                            {t("pages.home.stats.theoryToAction.projectsPublished.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.theoryToAction.projectsPublished.label")}
+                            {t("pages.home.stats.theoryToAction.projectsPublished.label")}
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.theoryToAction.successRate.value")}
+                            {t("pages.home.stats.theoryToAction.successRate.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.theoryToAction.successRate.label")}
+                            {t("pages.home.stats.theoryToAction.successRate.label")}
                         </div>
                     </div>
                 </div>
@@ -64,7 +64,7 @@ const { t } = Astro.locals;
                 href="https://stats.goteo.org"
                 class="border-secondary text-secondary hover:bg-secondary flex w-fit items-center justify-center gap-2 self-center rounded-3xl border px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:self-start md:text-base"
             >
-                {t("home.stats.theoryToAction.button")}
+                {t("pages.home.stats.theoryToAction.button")}
             </a>
         </div>
 
@@ -76,10 +76,10 @@ const { t } = Astro.locals;
                     <h2
                         class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                     >
-                        {t("home.stats.whyGoteo.title")}
+                        {t("pages.home.stats.whyGoteo.title")}
                     </h2>
                     <p class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                        {t("home.stats.whyGoteo.subtitle")}
+                        {t("pages.home.stats.whyGoteo.subtitle")}
                     </p>
                 </div>
 
@@ -89,30 +89,30 @@ const { t } = Astro.locals;
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.whyGoteo.community.value")}
+                            {t("pages.home.stats.whyGoteo.community.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.whyGoteo.community.label")}
+                            {t("pages.home.stats.whyGoteo.community.label")}
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.whyGoteo.averageDonors.value")}
+                            {t("pages.home.stats.whyGoteo.averageDonors.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.whyGoteo.averageDonors.label")}
+                            {t("pages.home.stats.whyGoteo.averageDonors.label")}
                         </div>
                     </div>
                     <div class="flex flex-col items-center text-center md:items-start md:text-left">
                         <div
                             class="text-secondary text-2xl leading-tight font-bold md:text-4xl md:leading-12"
                         >
-                            {t("home.stats.whyGoteo.totalRaised.value")}
+                            {t("pages.home.stats.whyGoteo.totalRaised.value")}
                         </div>
                         <div class="text-secondary text-sm leading-5 md:text-base md:leading-6">
-                            {t("home.stats.whyGoteo.totalRaised.label")}
+                            {t("pages.home.stats.whyGoteo.totalRaised.label")}
                         </div>
                     </div>
                 </div>
@@ -123,7 +123,7 @@ const { t } = Astro.locals;
                 href="/about"
                 class="border-secondary text-secondary hover:bg-secondary flex w-fit items-center justify-center gap-2 self-center rounded-3xl border px-6 py-4 text-sm leading-6 font-bold transition-all duration-200 hover:text-white md:self-start md:text-base"
             >
-                {t("home.stats.whyGoteo.button")}
+                {t("pages.home.stats.whyGoteo.button")}
             </a>
         </div>
     </Grid>

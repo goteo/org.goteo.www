@@ -11,12 +11,11 @@ const { t, lang, session } = Astro.locals;
 ---
 
 <Layout title={t("metadata.title")} description={t("metadata.description")}>
-    <App client:load locale={lang} session={session}>
+    <App client:load locale={lang} session={session} class="mb-20">
         <div class="wrapper max-md:px-0">
-            <div class="flex flex-col gap-8 py-10 lg:flex-row">
+            <BackButton client:load />
+            <div class="flex flex-col gap-8 pt-6 lg:flex-row">
                 <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
-                    <BackButton client:load />
-
                     <div class="flex flex-col gap-4">
                         <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
                             {t("checkout.title")}
