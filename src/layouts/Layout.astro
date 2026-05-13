@@ -17,3 +17,9 @@ const { title, description, keywords } = Astro.props;
         <slot />
     </body>
 </html>
+
+<script>
+    import { client } from "../openapi/client/client.gen";
+    import { createBrowserCacheInterceptor } from "../openapi/cacheFetch";
+    client.interceptors.request.use(createBrowserCacheInterceptor());
+</script>
