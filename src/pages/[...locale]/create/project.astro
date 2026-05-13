@@ -6,7 +6,7 @@ import { apiCategoriesGetCollection } from "../../../openapi/client";
 
 const { t, lang, langs, session } = Astro.locals;
 
-if (session) {
+if (!session) {
     return Astro.redirect("/login");
 }
 

@@ -5,6 +5,7 @@
     import { locale } from "../i18n/store";
     import Footer from "../layouts/Footer.svelte";
     import Header from "../layouts/Header.svelte";
+    import HeaderSubmenu from "../layouts/HeaderSubmenu.svelte";
 
     import type { Session } from "../auth/types";
     import type { Locale } from "../i18n/locales";
@@ -28,7 +29,9 @@
     });
 </script>
 
-<Header />
+<Header>
+    <HeaderSubmenu />
+</Header>
 <main
     class={twMerge(
         " mt-(--sticky-top) flex w-full max-w-screen flex-1 flex-col lg:max-h-none",

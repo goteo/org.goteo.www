@@ -22,10 +22,14 @@
       "expired": "Campaña finalizada"
     },
     "login": "Iniciar Sesión",
-    "goHome": "Volver a inicio"
+    "goHome": "Volver a inicio",
+    "viewAll": "Ver todo"
   },
   "domain": {
     "_": "Business concepts (project, reward, contribution, etc.)",
+    "header": {
+      "categories": "Proyectos"
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
@@ -57,17 +61,6 @@
         "successful": "Exitosas",
         "completed": "Completadas"
       }
-    },
-    "category": {
-      "culture": "Cultura",
-      "rights": "Derechos",
-      "education": "Educación",
-      "journalism": "Periodismo independiente",
-      "health": "Salud",
-      "ecological_transition": "Transición ecológica",
-      "social_economy": "Economía social",
-      "rural": "Rural",
-      "science": "Ciencia"
     }
   },
   "pages": {
