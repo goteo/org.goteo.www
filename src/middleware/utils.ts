@@ -56,16 +56,6 @@ export function getLanguage(context: APIContext): string {
 }
 
 /**
- * Checks if the request is to an stateless path (e.g, api).
- */
-export function isStatelessRequest(context: APIContext): boolean {
-    const firstSegment = context.url.pathname.split("/")[1];
-    const exemptRoutes = ["api"];
-
-    return exemptRoutes.includes(firstSegment);
-}
-
-/**
  * Detects the user's preferred locale from the Accept-Language HTTP header.
  * @returns A sorted list of the locales from the header
  */

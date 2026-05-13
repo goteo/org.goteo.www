@@ -29,7 +29,12 @@
 </script>
 
 <Header />
-<main class={twMerge("flex w-full max-w-screen flex-1 flex-col lg:max-h-none", classes)}>
+<main
+    class={twMerge(
+        " mt-(--sticky-top) flex w-full max-w-screen flex-1 flex-col lg:max-h-none",
+        classes,
+    )}
+>
     {@render children?.()}
 </main>
 <Footer />

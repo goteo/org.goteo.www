@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource/karla";
+@import "svelte-range-slider-pips/dist/range-slider-pips.css";
 
 @plugin "flowbite/plugin";
 @import "flowbite/src/themes/default";
@@ -56,7 +57,7 @@
 }
 
 :root {
-    --sticky-top: calc(var(--header-height, 0px) + 1rem);
+    --sticky-top: calc(var(--header-height, 0px) + 1.5rem);
 }
 
 html {
