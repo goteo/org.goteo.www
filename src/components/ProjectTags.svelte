@@ -5,15 +5,11 @@
     import type { Project } from "../openapi/client";
 
     export let project: Project;
-
-    function parseCategoryIri(category: string) {
-        return category.split("/")[3];
-    }
 </script>
 
 <div class="flex w-auto gap-2">
     {#each project.categories as category}
-        <CategoryTag category={parseCategoryIri(category)} />
+        <CategoryTag iri={category} />
     {/each}
     <TerritoryTag territory={project.territory} />
 </div>
