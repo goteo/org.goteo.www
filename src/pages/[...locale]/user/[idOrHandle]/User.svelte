@@ -51,7 +51,7 @@
         <img src={DEFAULT_COVER} alt="" class="size-full object-cover" />
 
         <div class="absolute right-6 bottom-6 flex gap-3">
-            <Button kind="secondary" size="md">
+            <Button kind="secondary" size="md" onclick={() => navigator.share?.({ url: window.location.href })}>
                 <ShareIcon class="size-5" />
                 {$t("profile.share")}
             </Button>
