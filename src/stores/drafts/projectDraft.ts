@@ -6,7 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, validationErrors } from "./draftValidation";
+import { publishErrors, validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, validationErrors } from "./draftValidation";
 
 /**
  * Media image data
@@ -134,16 +134,14 @@ export const persistenceError = writable<string | null>(null);
 
 /**
  * Define whether the project is ready to publish (all steps completed and valid).
- * Used to enable/disable the Publish button in the UI
+ * Used to enable/disable the Publish button in the wizard UI
  */
 export const isReadyToPublish = derived(
-    currentDraft,
-    ($draft) => {
+    [publishErrors, currentDraft],
+    ([$errors, $draft]) => {
         if (!$draft) return false;
 
-        const errors = validateDraftToPublish($draft);
-
-        return Object.keys(errors).length === 0;
+        return Object.keys($errors).length === 0;
     },
 );
 

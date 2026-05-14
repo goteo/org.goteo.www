@@ -91,10 +91,10 @@
     }
 
     /**
-     * Handle Save localStorage Draft to API button
+     * Handle Save IndexedDB Draft to API button
      */
-    async function handleSave() {
-        await onSave();
+    function handleSave() {
+        onSave();
     }
 
     /**

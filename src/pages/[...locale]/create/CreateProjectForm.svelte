@@ -95,8 +95,10 @@
         submitted = true;
         apiError = null;
 
+        const errors = validateCreateForm($project);
+
         // Validate entire form
-        const isValid = validateCreateForm($project);
+        const isValid = Object.keys(errors).length === 0;
 
         if (!isValid) {
             // Scroll to error summary

@@ -2,7 +2,7 @@ import murmur from "murmurhash-js";
 import { derived, get, writable } from "svelte/store";
 import z from "zod";
 
-import type { Draft, Wizard } from "./projectDraft";
+import { currentDraft, type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
 import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
@@ -11,6 +11,16 @@ import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto
 export type ValidationErrors = Record<string, string>;
 
 export const validationErrors = writable<ValidationErrors>({});
+
+export const publishErrors = derived(currentDraft, ($draft) => {
+    if (!$draft) {
+        return {};
+    }
+
+    const errors = validateDraftToPublish(get(currentDraft) as Draft);
+    return errors;
+});
+
 export const isDraftValid = derived(validationErrors, ($errors) => {
     return Object.keys($errors).length === 0;
 });
@@ -19,23 +29,27 @@ export const isDraftValid = derived(validationErrors, ($errors) => {
  * Validates the entire create project form and updates the validation errors store.
  * Returns true if the form is valid, false otherwise.
  */
-export function validateCreateForm(createProjectDraft: ProjectProjectCreationDto): boolean {
-    const result = projectCreationSchema.safeParse(createProjectDraft);
+export function validateCreateForm(
+    createProject: ProjectProjectCreationDto,
+): ValidationErrors {
+    const result =
+        projectCreationSchema.safeParse(createProject);
 
     if (!result.success) {
         const errors: ValidationErrors = {};
+
         result.error.issues.forEach((issue) => {
             const fieldName = issue.path[0] as string;
+
             if (!errors[fieldName]) {
                 errors[fieldName] = issue.message;
             }
         });
-        validationErrors.set(errors);
-        return false;
-    } else {
-        validationErrors.set({});
-        return true;
+
+        return errors;
     }
+
+    return {};
 }
 
 export function validateDraftToPublish(
@@ -44,6 +58,8 @@ export function validateDraftToPublish(
     const wizard = draft.wizardForm;
 
     const errors: ValidationErrors = {};
+
+    Object.assign(errors, validateCreateForm(draft.createProject));
 
     Object.assign(errors, validateConfiguration(wizard));
 
@@ -57,12 +73,12 @@ export function validateDraftToPublish(
         Object.assign(errors, validateCollaboration(collab));
     }
 
-    for (const item of wizard.budgetItems.minimum) {
-        Object.assign(errors, validateBudgetItem(item));
+    for (const minimumItem of wizard.budgetItems.minimum) {
+        Object.assign(errors, validateBudgetItem(minimumItem));
     }
 
-    for (const item of wizard.budgetItems.optimum) {
-        Object.assign(errors, validateBudgetItem(item));
+    for (const optimumItem of wizard.budgetItems.optimum) {
+        Object.assign(errors, validateBudgetItem(optimumItem));
     }
 
     Object.assign(errors, validateBudgetAmount(draft));
@@ -92,33 +108,30 @@ export const configurationSchema = z.object({
  * Validates against the configurationSchema using Zod.
  * Updates validationErrors store with any validation failures.
  *
- * @returns true if configuration is valid, false otherwise
- *
- * @example
- * // Validate before completing step
- * function handleContinue() {
- *   if (validateConfiguration()) {
- *     completeCurrentStep();
- *   }
- * }
+ * @returns Record of field errors (empty if valid)
  */
-export function validateConfiguration(wizard: Wizard): boolean {
-    const result = configurationSchema.safeParse(wizard.configuration);
+export function validateConfiguration(
+    wizard: Wizard,
+): ValidationErrors {
+    const result = configurationSchema.safeParse(
+        wizard.configuration,
+    );
 
     if (!result.success) {
         const errors: ValidationErrors = {};
+
         result.error.issues.forEach((issue) => {
             const fieldName = issue.path[0] as string;
+
             if (!errors[fieldName]) {
                 errors[fieldName] = issue.message;
             }
         });
-        validationErrors.set(errors);
-        return false;
+
+        return errors;
     }
 
-    validationErrors.set({});
-    return true;
+    return {};
 }
 
 /**
@@ -148,53 +161,53 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
 
     // Media validation
     if (data.images.length === 0 && !data.video) {
-        errors.media = "pages.project.edit.rewards.validationn_info.reward.media.required";
+        errors.media = "pages.project.edit.rewards.validation_info.reward.media.required";
     }
 
     // Objectives validation
     const objectivesPlainText = stripHtml(data.objectives).trim();
     if (objectivesPlainText.length === 0) {
         errors.objectives =
-            "pages.project.edit.rewards.validationn_info.reward.objectives.required";
+            "pages.project.edit.rewards.validation_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
         errors.objectives =
-            "pages.project.edit.rewards.validationn_info.reward.objectives.min_length";
+            "pages.project.edit.rewards.validation_info.reward.objectives.min_length";
     } else if (objectivesPlainText.length > 5000) {
         errors.objectives =
-            "pages.project.edit.rewards.validationn_info.reward.objectives.max_length";
+            "pages.project.edit.rewards.validation_info.reward.objectives.max_length";
     }
 
     // Legacy validation
     const legacyPlainText = stripHtml(data.legacy).trim();
     if (legacyPlainText.length === 0) {
-        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.required";
+        errors.legacy = "pages.project.edit.rewards.validation_info.reward.legacy.required";
     } else if (legacyPlainText.length < 50) {
-        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.min_length";
+        errors.legacy = "pages.project.edit.rewards.validation_info.reward.legacy.min_length";
     } else if (legacyPlainText.length > 5000) {
-        errors.legacy = "pages.project.edit.rewards.validationn_info.reward.legacy.max_length";
+        errors.legacy = "pages.project.edit.rewards.validation_info.reward.legacy.max_length";
     }
 
     // Target audience validation
     const targetPlainText = stripHtml(data.targetAudience).trim();
     if (targetPlainText.length === 0) {
         errors.targetAudience =
-            "pages.project.edit.rewards.validationn_info.reward.target.required";
+            "pages.project.edit.rewards.validation_info.reward.target.required";
     } else if (targetPlainText.length < 30) {
         errors.targetAudience =
-            "pages.project.edit.rewards.validationn_info.reward.target.min_length";
+            "pages.project.edit.rewards.validation_info.reward.target.min_length";
     } else if (targetPlainText.length > 5000) {
         errors.targetAudience =
-            "pages.project.edit.rewards.validationn_info.reward.target.max_length";
+            "pages.project.edit.rewards.validation_info.reward.target.max_length";
     }
 
     // Team validation
     const teamPlainText = stripHtml(data.team).trim();
     if (teamPlainText.length === 0) {
-        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.required";
+        errors.team = "pages.project.edit.rewards.validation_info.reward.team.required";
     } else if (teamPlainText.length < 50) {
-        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.min_length";
+        errors.team = "pages.project.edit.rewards.validation_info.reward.team.min_length";
     } else if (teamPlainText.length > 5000) {
-        errors.team = "pages.project.edit.rewards.validationn_info.reward.team.max_length";
+        errors.team = "pages.project.edit.rewards.validation_info.reward.team.max_length";
     }
 
     return errors;
