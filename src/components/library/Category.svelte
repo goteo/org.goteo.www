@@ -4,7 +4,7 @@
     import type { Snippet } from "svelte";
 
     const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white",
+        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary t bg-white text-secondary",
         active: "bg-secondary text-primary hover:text-secondary",
         ghost: "",
     };
@@ -27,7 +27,7 @@
 <button
     {disabled}
     class={twMerge(
-        "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
+        "hover:bg-variant1 w-auto overflow-hidden rounded-4xl px-4 py-2 text-base font-bold text-ellipsis transition-all duration-300 ease-in-out",
         styles[type],
         classes,
     )}
