@@ -3,6 +3,7 @@
 
     import { languagesList } from "../i18n/locales";
     import { locale } from "../i18n/store";
+    import { getLanguageDisplayName } from "../utils/lang";
     import Chevron from "./icons/Chevron.svelte";
 
     const languages = Object.keys(languagesList) as (keyof typeof languagesList)[];
@@ -36,7 +37,7 @@
         aria-haspopup="listbox"
         aria-expanded={open}
     >
-        {languagesList[$locale]}
+        {getLanguageDisplayName($locale) ?? $locale}
         <Chevron direction={open ? "up" : "down"} width="16" height="16" />
     </button>
 
@@ -57,7 +58,7 @@
                             : ''}"
                         onclick={() => handleSelect(lang)}
                     >
-                        {languagesList[lang]}
+                        {getLanguageDisplayName(lang) ?? lang}
                     </button>
                 </li>
             {/each}
