@@ -68,7 +68,7 @@
 </script>
 
 <section class="flex flex-col gap-10">
-    <Grid class="text-content grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-[16px]">
+    <Grid class="text-content grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-body-regular">
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
             <span title={dataTimeCreated.fulltime}>{dataTimeCreated.time}</span>
@@ -87,7 +87,7 @@
             <Modal
                 bind:open={trackingModal}
                 closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-                class="left-1/2! max-w-[800px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+                class="left-1/2! max-w-200 p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
                 title={$t("contributions.grid.details.trackingCodes.title")}
                 headerClass="py-2"
             >
@@ -174,7 +174,7 @@
             <Modal
                 bind:open={linksModal}
                 closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-                class="left-1/2! max-w-[800px] p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+                class="left-1/2! max-w-200 p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
                 title={$t("contributions.grid.details.platformLinks.title")}
                 headerClass="py-2"
             >

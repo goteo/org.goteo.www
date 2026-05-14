@@ -54,7 +54,7 @@ Implements main search bar with floating label matching Figma design exactly
 
 <!-- Search input with floating label -->
 <div
-    class="relative flex h-14 w-full items-center justify-between rounded-[24px] border border-[#462949] bg-[#fbfbfb] p-4 transition-colors focus-within:border-[#855a96] {className}"
+    class="relative flex h-14 w-full items-center justify-between rounded-3xl border border-secondary bg-white p-4 transition-colors focus-within:border-[#855a96] {className}"
 >
     <!-- Input field -->
     <input
@@ -62,7 +62,7 @@ Implements main search bar with floating label matching Figma design exactly
         bind:value={searchQuery}
         oninput={handleInput}
         onkeydown={handleKeydown}
-        class="flex-1 border-none bg-transparent text-base text-[#575757] outline-none placeholder:text-[#575757] focus:ring-0 focus:outline-none focus-visible:outline-none"
+        class="flex-1 border-none bg-transparent text-base text-content outline-none placeholder:text-content focus:ring-0 focus:outline-none focus-visible:outline-none"
         placeholder={placeholder || $t("pages.search.input.placeholder")}
         aria-label={$t("pages.search.input.label")}
         data-testid={dataTestId}
@@ -73,7 +73,7 @@ Implements main search bar with floating label matching Figma design exactly
     {#if searchQuery}
         <button
             onclick={clearSearch}
-            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-[#462949] transition-colors hover:bg-[#e6e6e6]"
+            class="ml-2 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-secondary transition-colors hover:bg-[#e6e6e6]"
             aria-label={$t("pages.search.input.clear")}
         >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -88,8 +88,8 @@ Implements main search bar with floating label matching Figma design exactly
     {/if}
 
     <!-- Floating label -->
-    <div class="pointer-events-none absolute -top-[4.5px] left-3 bg-[#fbfbfb] px-1">
-        <div class="font-['Karla'] text-xs leading-4 font-medium text-[#3d3d3d]">
+    <div class="pointer-events-none absolute -top-1.125 left-3 bg-white px-1">
+        <div class="font-body text-xs leading-4 font-medium text-black">
             {$t("pages.search.input.label")}
         </div>
     </div>
