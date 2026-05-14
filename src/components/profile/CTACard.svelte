@@ -57,7 +57,7 @@
 </script>
 
 <div
-    class="flex flex-col justify-between gap-10 rounded-[32px] border p-6 transition-shadow duration-200 {isDark
+    class="flex flex-col justify-between gap-10 rounded-8 border p-6 transition-shadow duration-200 {isDark
         ? 'border-grey bg-secondary text-background'
         : 'border-variant1 bg-purple-soft text-content'}"
 >

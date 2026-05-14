@@ -26,7 +26,7 @@
     >
         {#snippet header()}
             <h2
-                class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={`flex items-center gap-2 text-base font-semibold lg:text-8 ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -36,7 +36,7 @@
                 {$t("checkout.summary.total.title")}
             </h2>
             <p
-                class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+                class={`text-8 leading-tight font-bold lg:text-14 ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
                 {formatCurrency($cartAmount)}
             </p>

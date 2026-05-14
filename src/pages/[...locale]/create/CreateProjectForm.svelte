@@ -173,7 +173,7 @@
 </script>
 
 <section class="wrapper md:flex md:flex-row">
-    <div class="flex max-w-[668px] flex-col gap-10">
+    <div class="flex max-w-167 flex-col gap-10">
         <div class="flex flex-col gap-4">
             <h1 class="text-3xl font-bold text-black lg:text-4xl">
                 {$t("pages.project.create.title")}
@@ -234,7 +234,7 @@
                     id="subtitle"
                     name="subtitle"
                     placeholder={$t("pages.project.create.description.subtitlePrompt")}
-                    class="h-[240px] w-full resize-none rounded-md border p-[16px] {shouldShowError(
+                    class="h-60 w-full resize-none rounded-md border p-4 {shouldShowError(
                         'subtitle',
                     )
                         ? 'border-red-500'
@@ -245,7 +245,7 @@
                     aria-describedby={shouldShowError("subtitle") ? "subtitle-error" : undefined}
                 ></textarea>
                 {#if shouldShowError("subtitle")}
-                    <p id="subtitle-error" class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+                    <p id="subtitle-error" class="mt-1 ml-4 text-xs text-red-600" role="alert">
                         {$t($validationErrors.subtitle)}
                     </p>
                 {/if}
@@ -300,7 +300,7 @@
         </p>
     </div>
     <div class="ml-auto">
-        <BaseCard class="flex h-full max-h-[506px] w-full max-w-[437px] flex-col">
+        <BaseCard class="flex h-full max-h-126.5 w-full max-w-109.25 flex-col">
             <h1 class="text-secondary text-2xl leading-8 font-bold {$draft.title || 'opacity-50'}">
                 {$draft.title || $t("pages.project.create.description.titlePlaceholder")}
             </h1>

@@ -192,7 +192,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
                     {/* Tab Content - About */}
                     <div data-tab-content="about">
                         {bio && (
-                            <div class="mx-auto mt-10 w-full max-w-[898px] px-4">
+                            <div class="mx-auto mt-10 w-full max-w-224.5 px-4">
                                 <div
                                     class="prose prose-base text-tertiary leading-6"
                                     set:html={renderMarkdown(bio)}
@@ -204,11 +204,11 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
                     {/* Tab Content - Projects */}
                     <div data-tab-content="projects" style="display: none;">
                         {campaigns.length > 0 ? (
-                            <div class="mx-auto mt-10 w-full max-w-[1200px] px-4">
+                            <div class="mx-auto mt-10 w-full max-w-300 px-4">
                                 <ProfileProjectsList campaigns={campaigns} />
                             </div>
                         ) : (
-                            <div class="mx-auto mt-10 w-full max-w-[898px] px-4 text-center">
+                            <div class="mx-auto mt-10 w-full max-w-224.5 px-4 text-center">
                                 <p class="text-tertiary text-base">{t("profile.noProjects")}</p>
                             </div>
                         )}
@@ -216,7 +216,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
 
                     {/* Tab Content - Donor Type */}
                     <div data-tab-content="donorType" class="w-full" style="display: none;">
-                        <div class="mx-auto w-full max-w-[1200px] px-4">
+                        <div class="mx-auto w-full max-w-300 px-4">
                             <ProfileDonorType
                                 projectsDonated={projectsDonatedCount}
                                 moneyDonatedAmount={totalDonated.amount}

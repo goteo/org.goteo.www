@@ -154,7 +154,7 @@
             },
             editorProps: {
                 attributes: {
-                    class: "prose prose-sm max-w-none focus:outline-none min-h-[150px] p-4",
+                    class: "prose prose-sm max-w-none focus:outline-none min-h-37.5 p-4",
                 },
             },
         });
@@ -215,7 +215,7 @@
                     title="Font size"
                     class={twMerge(
                         BUTTONS_CLASSES,
-                        "border-grey text-secondary w-auto max-w-[110px] appearance-none bg-none px-2 py-1 pr-8 text-sm ring-0",
+                        "border-grey text-secondary w-auto max-w-27.5 appearance-none bg-none px-2 py-1 pr-8 text-sm ring-0",
                     )}
                 >
                     <option value="12px">12px</option>

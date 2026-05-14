@@ -60,7 +60,7 @@
 </script>
 
 <div
-    class="border-variant1 relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-variant1 relative flex flex-col gap-10 rounded-10 border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />
@@ -128,7 +128,7 @@
                 </select>
 
                 <div class="relative">
-                    <label for="dateFrom" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.initDate")}
                     </label>
                     <input
@@ -141,7 +141,7 @@
                 </div>
 
                 <div class="relative">
-                    <label for="dateTo" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.endDate")}
                     </label>
                     <input

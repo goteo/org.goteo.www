@@ -74,7 +74,7 @@
     headerClass="py-2"
 >
     <div class="flex flex-col gap-6">
-        <div class="text-secondary flex w-full flex-col gap-6 text-left text-[40px] font-semibold">
+        <div class="text-secondary flex w-full flex-col gap-6 text-left text-10 font-semibold">
             <h3>
                 {@html $t(
                     "rewards.by-amount-or-more",
