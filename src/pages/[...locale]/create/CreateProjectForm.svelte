@@ -15,7 +15,7 @@
     import {
         validateCreateForm,
         validateField,
-        validationErrors,
+        type ValidationErrors,
     } from "../../../stores/drafts/draftValidation";
     import {
         createDraft,
@@ -25,6 +25,7 @@
         updateProject,
         isCreateFormValid,
         project,
+        validationErrors,
     } from "../../../stores/drafts/projectDraft";
     import { categories } from "../../../utils/categories";
     import { formatCurrency } from "../../../utils/currencies";
@@ -54,7 +55,20 @@
         if (!$currentDraft) return;
 
         markFieldAsTouched(fieldName);
-        validateField(fieldName, $currentDraft.createProject[fieldName]);
+        const error = validateField(fieldName, $currentDraft.createProject[fieldName]);
+
+        validationErrors.update((errors: ValidationErrors) => {
+            if (error) {
+                return {
+                    ...errors,
+                    title: error,
+                };
+            }
+
+            const { title, ...rest } = errors;
+
+            return rest;
+        });
     }
 
     /**
@@ -73,7 +87,20 @@
             // Debounce validation
             if (debounceTimer) clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-                validateField(fieldName, value);
+                const error = validateField(fieldName, value);
+
+                validationErrors.update((errors: ValidationErrors) => {
+                    if (error) {
+                        return {
+                            ...errors,
+                            title: error,
+                        };
+                    }
+
+                    const { title, ...rest } = errors;
+
+                    return rest;
+                });
             }, 300);
         }
     }

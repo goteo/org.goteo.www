@@ -7,8 +7,12 @@
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import { addReward, deleteReward, updateReward } from "../../../stores/drafts/projectDraft";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
+    import {
+        addReward,
+        deleteReward,
+        updateReward,
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
 
     let {
         project,

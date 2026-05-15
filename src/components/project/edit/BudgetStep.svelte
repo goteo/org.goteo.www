@@ -7,8 +7,12 @@
     import Grid from "../../library/Grid.svelte";
     import Toast from "../../library/Toast.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
-    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
-    import { validateBudgetAmount, validationErrors } from "../../../stores/drafts/draftValidation";
+    import {
+        currentDraft,
+        navigateToStep,
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
+    import { validateBudgetAmount } from "../../../stores/drafts/draftValidation";
 
     let {
         project,

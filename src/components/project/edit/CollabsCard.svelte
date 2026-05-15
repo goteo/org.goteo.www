@@ -9,8 +9,8 @@
         addCollaboration,
         deleteCollaboration,
         updateCollaboration,
+        validationErrors
     } from "../../../stores/drafts/projectDraft";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
 
     let {
         project,

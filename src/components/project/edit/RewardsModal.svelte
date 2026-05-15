@@ -11,7 +11,7 @@
 
     import type { ClassNameValue } from "tailwind-merge";
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
 
     let {

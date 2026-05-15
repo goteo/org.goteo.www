@@ -6,8 +6,12 @@
     import Button from "../../library/Button.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
-    import { addBudgetItem, deleteBudgetItem, updateBudgetItem } from "../../../stores/drafts/projectDraft";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
+    import {
+        addBudgetItem,
+        deleteBudgetItem,
+        updateBudgetItem,
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
 
     let {
         item,

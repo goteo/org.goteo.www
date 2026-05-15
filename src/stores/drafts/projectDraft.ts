@@ -6,7 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { publishErrors, validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, validationErrors } from "./draftValidation";
+import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, type ValidationErrors } from "./draftValidation";
 
 /**
  * Media image data
@@ -133,6 +133,26 @@ export const hasUnsavedChanges = writable<boolean>(false);
 export const persistenceError = writable<string | null>(null);
 
 /**
+ * Validation errors store
+ * Stores field-specific validation error messages for the current step
+ * Updated on each field change and used to provide real-time validation feedback in the UI
+ */
+export const validationErrors = writable<ValidationErrors>({});
+
+/**
+ * Derived store that validates the draft for publishing.
+ * Returns an object with validation errors for each field, or an empty object if valid.
+ */
+export const publishErrors = derived(currentDraft, ($draft) => {
+    if (!$draft) {
+        return {};
+    }
+
+    const errors = validateDraftToPublish(get(currentDraft) as Draft);
+    return errors;
+});
+
+/**
  * Define whether the project is ready to publish (all steps completed and valid).
  * Used to enable/disable the Publish button in the wizard UI
  */
@@ -151,19 +171,29 @@ export const isReadyToPublish = derived(
  * 1. All required fields have values
  * 2. There are no validation errors
  */
-export const isCreateFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
-    // Check if there are any validation errors
-    if (Object.keys($errors).length > 0) {
-        return false;
-    }
+export const isCreateFormValid = derived(
+    [currentDraft, validationErrors],
+    ([$draft, $errors]) => {
+        if (Object.keys($errors).length > 0) {
+            return false;
+        }
 
-    // Check that required fields have values
-    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
-    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
-    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
+        const hasTitle =
+            ($draft?.createProject?.title?.trim().length ?? 0) > 0;
 
-    return hasTitle && hasSubtitle && hasCategories;
-});
+        const hasSubtitle =
+            ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
+
+        const hasCategories =
+            ($draft?.createProject?.categories?.length ?? 0) > 0;
+
+        return (
+            hasTitle &&
+            hasSubtitle &&
+            hasCategories
+        );
+    },
+);
 
 export function createDraftId() {
     return crypto.randomUUID();

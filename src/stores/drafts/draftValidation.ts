@@ -1,29 +1,12 @@
 import murmur from "murmurhash-js";
-import { derived, get, writable } from "svelte/store";
 import z from "zod";
 
-import { currentDraft, type Draft, type Wizard } from "./projectDraft";
+import { type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
 import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
 
-
 export type ValidationErrors = Record<string, string>;
-
-export const validationErrors = writable<ValidationErrors>({});
-
-export const publishErrors = derived(currentDraft, ($draft) => {
-    if (!$draft) {
-        return {};
-    }
-
-    const errors = validateDraftToPublish(get(currentDraft) as Draft);
-    return errors;
-});
-
-export const isDraftValid = derived(validationErrors, ($errors) => {
-    return Object.keys($errors).length === 0;
-});
 
 /**
  * Validates the entire create project form and updates the validation errors store.
@@ -313,31 +296,28 @@ export function validateBudgetAmount(draft: Draft) {
  * @param fieldName - The name of the field to validate
  * @param value - The current value of the field
  */
-export function validateField(fieldName: keyof ProjectProjectCreationDto, value: unknown) {
-    // Type guard to check if field exists in schema
-    type SchemaFields = keyof typeof projectCreationSchema.shape;
+export function validateField(
+    fieldName: keyof ProjectProjectCreationDto,
+    value: unknown,
+): string | null {
+    type SchemaFields =
+        keyof typeof projectCreationSchema.shape;
 
     if (!(fieldName in projectCreationSchema.shape)) {
-        // Field not in schema, skip validation
-        return;
+        return null;
     }
 
-    // Now we know fieldName exists in the schema
-    const fieldSchema = projectCreationSchema.shape[fieldName as SchemaFields];
+    const fieldSchema =
+        projectCreationSchema.shape[
+        fieldName as SchemaFields
+        ];
 
-    // Use Zod's ZodTypeAny for proper type handling
-    const result = (fieldSchema as z.ZodTypeAny).safeParse(value);
+    const result =
+        (fieldSchema as z.ZodTypeAny).safeParse(value);
 
-    validationErrors.update((errors) => {
-        if (!result.success) {
-            // Extract the first error message
-            const errorMessage = result.error.issues[0]?.message || "";
-            return { ...errors, [fieldName]: errorMessage };
-        } else {
-            // Remove error if validation passes
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { [fieldName]: _, ...rest } = errors;
-            return rest;
-        }
-    });
+    if (!result.success) {
+        return result.error.issues[0]?.message || "";
+    }
+
+    return null;
 }
