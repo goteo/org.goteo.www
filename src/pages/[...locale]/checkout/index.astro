@@ -10,7 +10,7 @@ import BackButton from "../../../components/BackButton.svelte";
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout title={t("pages.checkout.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session} class="mb-20">
         <div class="wrapper max-md:px-0">
             <BackButton client:load />
