@@ -220,6 +220,9 @@
       }
     },
     "checkout": {
+      "title": "Caja",
+      "payment": { "title": "Método de pago" },
+      "wallet": { "title": "Monedero" },
       "summary": {
         "toRecipient": "{{ amount }} a {{ name }}"
       }
@@ -514,6 +517,7 @@
       }
     },
     "about": {
+      "title": "Sobre Goteo",
       "hero": {
         "title": "Conoce nuestra manera de hacer crowdfunding",
         "description": "En Goteo creemos que la financiación colectiva es más que dinero: es confianza, comunidad y compromiso social. Nuestro modelo de crowdfunding se basa en el impulso de proyectos que generan impacto positivo y en el acompañamiento cercano a las personas y organizaciones que los hacen posibles.",
@@ -705,7 +709,11 @@
         "loadMore": "Cargar más resultados",
         "noMoreResults": "No hay más resultados"
       }
-    }
+    },
+    "register": { "title": "Registro" },
+    "admin": { "charges": { "title": "Cargos" } },
+    "static": { "title": "Goteo" },
+    "profile": { "title": "Goteo" }
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",

@@ -5,7 +5,7 @@ const { t, lang, session } = Astro.locals;
 import Contributions from "../../../components/Admin/Contributions.svelte";
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout title={t("pages.admin.charges.title")} description={t("metadata.description")}>
     <App client:load locale={lang} session={session}>
         <div class="wrapper">
             <div class="flex w-full flex-col gap-10 py-10">
