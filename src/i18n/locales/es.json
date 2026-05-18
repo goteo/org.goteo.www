@@ -486,7 +486,8 @@
               "length": "anónimos",
               "title": "Donaciones anónimas",
               "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
-            }
+            },
+            "loadMore": "Ver más"
           }
         },
         "rewards": {
