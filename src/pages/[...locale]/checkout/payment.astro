@@ -28,7 +28,10 @@ const { data: accounting } = await apiAccountingsIdGet({
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 ---
 
-<Layout title={t("pages.checkout.metadata.title")} description={t("pages.checkout.metadata.description")}>
+<Layout
+    title={t("pages.checkout.metadata.title")}
+    description={t("pages.checkout.metadata.description")}
+>
     <App client:load locale={lang} session={session} class="mb-20">
         <div class="wrapper max-md:px-0">
             <BackButton client:load />
