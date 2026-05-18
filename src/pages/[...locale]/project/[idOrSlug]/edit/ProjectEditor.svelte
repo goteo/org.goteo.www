@@ -19,6 +19,7 @@
         createDraft,
         currentDraft,
         deleteCurrentDraft,
+        hasUnsavedChanges,
         loadDraft,
         updateWizard,
     } from "../../../../../stores/drafts/projectDraft";
@@ -92,46 +93,39 @@
 
     // Reactive current step
     const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
-    let saveState = $state<"idle" | "saving" | "saved">("idle");
     let errorMessage = $state("");
 
     async function saveToAPI() {
-        const draft = get(currentDraft);
-
-        if (!draft) return;
-
-        saveState = "saving";
+        if (!$currentDraft) return;
 
         try {
-            await publishDraft(draft, session, String(project.id));
+            const currentSession = get(session);
 
-            deleteCurrentDraft(draft.draftId, draft.userId);
+            if (!currentSession) {
+                throw new Error("User session not found");
+            }
 
-            window.location.href = "/project/" + (project.slug ?? project.id) + "/publish";
+            await publishDraft($currentDraft, currentSession, String(project.id));
+
+            hasUnsavedChanges.set(false);
         } catch (err) {
             errorMessage = err instanceof Error ? err.message : "Unknown error";
 
-            saveState = "idle";
             return;
         }
-
-        saveState = "saved";
     }
 
     function handlePublish() {
+        if (!$currentDraft) return;
+
         const idOrSlug = project.slug ?? project.id;
 
+        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
         window.location.href = `/project/${idOrSlug}/publish`;
     }
 </script>
 
-<ProjectEditorShell
-    {errorMessage}
-    {saveState}
-    {project}
-    onSave={saveToAPI}
-    onPublish={handlePublish}
->
+<ProjectEditorShell {errorMessage} {project} onSave={saveToAPI} onPublish={handlePublish}>
     {@const StepComponent = getStepComponent(currentStep)}
     <StepComponent {project} />
 </ProjectEditorShell>

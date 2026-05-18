@@ -122,9 +122,15 @@ export const project = derived(currentDraft, ($d) => $d?.createProject ?? {
 export const touchedFields = writable<Set<string>>(new Set());
 
 /**
- * Unsaved changes flag (for beforeunload warning)
+ * Store to track if there are unsaved changes in the current draft to send it to API
+ * Used to enable/disable the Save button in wizard form
  */
 export const hasUnsavedChanges = writable<boolean>(false);
+
+/**
+ * Store to track if the draft is currently being saved to IndexedDB (persistence in progress)
+ */
+export const isSavingDraft = writable(false);
 
 /**
  * Persistence error state
@@ -299,7 +305,7 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null;
 export function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
-    hasUnsavedChanges.set(true);
+    isSavingDraft.set(true);
     saveTimer = setTimeout(() => {
         const draft = get(currentDraft);
         if (!draft) return;
@@ -314,7 +320,7 @@ export function persistDraft() {
 
             draftRepo.update(draft.draftId, draft.userId, updatedDraft);
 
-            hasUnsavedChanges.set(false);
+            isSavingDraft.set(false);
             persistenceError.set(null);
         } catch (error) {
             console.error("Failed to persist draft:", error);
@@ -326,8 +332,8 @@ export function persistDraft() {
                 persistenceError.set("storage_general_error");
             }
 
-            // Keep hasUnsavedChanges as true when persistence fails
-            hasUnsavedChanges.set(true);
+            // Keep isSavingDraft as true when persistence fails
+            isSavingDraft.set(true);
         }
     }, 1000);
 }
@@ -371,6 +377,7 @@ export function updateWizard(data: Partial<Wizard>) {
     });
 
     persistDraft();
+    hasUnsavedChanges.set(true);
 }
 
 export function updateConfiguration(data: Partial<WizardConfiguration>) {
@@ -590,6 +597,8 @@ export function deleteBudgetItem(
                 ].filter((_, i) => i !== index),
         },
     });
+
+    hasUnsavedChanges.set(true);
 }
 
 /**
@@ -615,6 +624,7 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
     });
 
     persistDraft();
+    hasUnsavedChanges.set(true);
 }
 
 export function deleteCurrentDraft(draftId: string, userId: number) {
@@ -626,7 +636,7 @@ export function deleteCurrentDraft(draftId: string, userId: number) {
 
     draftRepo.delete(draftId, userId);
     touchedFields.set(new Set());
-    hasUnsavedChanges.set(false);
+    isSavingDraft.set(false);
     persistenceError.set(null);
 }
 
@@ -660,7 +670,6 @@ export function navigateToStep(targetStep: number): boolean {
     }
 
     console.log(`[wizard-state] Navigating: ${currentStep} → ${targetStep}`);
-    hasUnsavedChanges.set(true);
     updateWizard({ currentStep: targetStep });
     updateUrl(targetStep);
     return true;

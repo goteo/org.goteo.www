@@ -66,6 +66,7 @@
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.rewards.add.title")}
         description={$t("pages.project.edit.rewards.add.description")}
         variant="reward"

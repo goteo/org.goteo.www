@@ -28,25 +28,26 @@
     import type { Snippet } from "svelte";
     import {
         currentDraft,
+        hasUnsavedChanges,
         isReadyToPublish,
+        isSavingDraft,
         navigateToStep,
         persistenceError,
         updateProject,
     } from "../../../../../stores/drafts/projectDraft";
+    import ActionableButton from "../../../../../components/library/ActionableButton.svelte";
 
     let {
         project,
         children,
         onSave,
         onPublish,
-        saveState = $bindable("idle"),
         errorMessage = $bindable(""),
     }: {
         project: Project;
         children: Snippet;
         onSave: () => void;
         onPublish?: () => void;
-        saveState: "idle" | "saving" | "saved";
         errorMessage: string;
     } = $props();
 
@@ -93,12 +94,12 @@
     /**
      * Handle Save IndexedDB Draft to API button
      */
-    function handleSave() {
-        onSave();
+    async function handleSave() {
+        await onSave();
     }
 
     /**
-     * Handle Publish button
+     * Handle Publish button (redirects to publish page after saving)
      */
     function handlePublish() {
         if (onPublish) {
@@ -197,21 +198,20 @@
                     <Eye />
                     {$t("common.preview")}
                 </Button>
-                <Button
+                <ActionableButton
                     kind="secondary"
                     size="md"
                     class="disabled:pointer-events-none"
-                    onclick={handleSave}
-                    disabled={saveState === "saving" || saveState === "saved" ? true : false}
+                    action={handleSave}
+                    disabled={!$hasUnsavedChanges || $isSavingDraft}
                 >
-                    {#if saveState === "saving"}
-                        {$t("common.saving")}
-                    {:else if saveState === "saved"}
-                        {$t("common.saved")}
-                    {:else}
+                    {#snippet children()}
                         {$t("common.save")}
-                    {/if}
-                </Button>
+                    {/snippet}
+                    {#snippet actionedChildren()}
+                        {$t("common.saved")}
+                    {/snippet}
+                </ActionableButton>
                 <Button
                     class="disabled:pointer-events-none disabled:opacity-24"
                     kind="primary"
