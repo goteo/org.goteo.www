@@ -9,6 +9,7 @@
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/Button.svelte";
+    import Card from "../library/Card.svelte";
     import Grid from "../library/Grid.svelte";
 
     export let project: Project;
@@ -26,26 +27,26 @@
     }
 </script>
 
-<div
-    class="border-grey flex h-full flex-col gap-6 rounded-4xl border bg-[#fff] p-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
+<Card
+    class="h-full items-stretch gap-6 shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]"
 >
-    <div class="flex w-full items-center justify-end">
+    <div class="relative">
+        <ProgressChart {accounting} {project} {balancePoints} />
         {#if hasReached(project.budget?.optimum?.money)}
             <span
-                class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap"
+                class="border-secondary absolute top-3 right-3 rounded-lg border bg-white px-2 py-1 text-xs text-nowrap"
             >
                 {$t("domain.project.campaign.optimumReached")}
             </span>
         {:else if hasReached(project.budget?.minimum?.money)}
             <span
-                class="border-secondary self-end rounded-2xl border px-2 py-1 text-xs text-nowrap"
+                class="border-secondary absolute top-3 right-3 rounded-4xl border bg-white px-2 py-1 text-xs text-nowrap"
             >
                 {$t("domain.project.campaign.minimumReached")}
             </span>
         {/if}
     </div>
-    <ProgressChart {accounting} {project} {balancePoints} />
-    <Grid class="col-span-2 grid-cols-2 gap-6">
+    <Grid class="col-span-2 grid grid-cols-2 gap-6 lg:grid-cols-2">
         <div class="flex flex-col gap-4">
             <div>
                 <p class="text-content text-sm">{$t("domain.project.campaign.obtained")}</p>
@@ -84,7 +85,11 @@
             </div>
         </div>
     </Grid>
-    <Button disabled={project.status !== "in_campaign"} class="w-full" onclick={onScrollToRewards}>
+    <Button
+        disabled={project.status !== "in_campaign"}
+        class="w-full {project.status !== 'in_campaign' ? 'hover:cursor-not-allowed' : ''}"
+        onclick={onScrollToRewards}
+    >
         {$t("domain.project.campaign.donate")}
     </Button>
-</div>
+</Card>
