@@ -1,14 +1,16 @@
 <script lang="ts">
+    import { onMount, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { session } from "../auth/store";
     import { locale } from "../i18n/store";
     import Footer from "../layouts/Footer.svelte";
     import Header from "../layouts/Header.svelte";
+    import { createBrowserCacheInterceptor } from "../openapi/cacheFetch";
+    import { client } from "../openapi/client/client.gen";
 
     import type { Session } from "../auth/types";
     import type { Locale } from "../i18n/locales";
-    import type { Snippet } from "svelte";
 
     interface AppState {
         locale: Locale;
@@ -18,6 +20,10 @@
     }
 
     let { locale: localeProp, session: sessionProp, children, class: classes }: AppState = $props();
+
+    onMount(() => {
+        client.interceptors.request.use(createBrowserCacheInterceptor());
+    });
 
     $effect(() => {
         locale.set(localeProp);
