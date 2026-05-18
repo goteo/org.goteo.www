@@ -201,7 +201,7 @@
 </script>
 
 <section class="wrapper md:flex md:flex-row">
-    <div class="flex max-w-167 flex-col gap-10 mb-20">
+    <div class="mb-20 flex max-w-167 flex-col gap-10">
         <div class="flex flex-col gap-4">
             <h1 class="text-3xl font-bold text-black lg:text-4xl">
                 {$t("pages.project.create.title")}
@@ -327,17 +327,19 @@
         {/if}
         <p>
             <Button size="md" disabled={!$isCreateFormValid || isSubmitting} onclick={handleSubmit}>
-                {isSubmitting ? $t("pages.project.create.submitting") : $t("pages.project.create.submit")}
+                {isSubmitting
+                    ? $t("pages.project.create.submitting")
+                    : $t("pages.project.create.submit")}
             </Button>
         </p>
     </div>
     <div class="ml-auto">
         <BaseCard
             class="border-grey flex h-full max-h-126.5 w-full max-w-109.25 flex-col bg-white"
-            inlineStyles="box-shadow: 0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);"
+            style="box-shadow: 0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);"
         >
             <h1
-                class="text-secondary mb-2 text-[32px] leading-10 font-bold {$currentDraft
+                class="text-secondary mb-2 text-double leading-10 font-bold {$currentDraft
                     ?.createProject.title || 'opacity-24'}"
             >
                 {$currentDraft?.createProject.title ||

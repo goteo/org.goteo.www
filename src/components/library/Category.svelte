@@ -4,7 +4,7 @@
     import type { Snippet } from "svelte";
 
     const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary t bg-white text-secondary",
+        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white text-secondary",
         active: "bg-secondary text-primary hover:text-secondary",
         ghost: "",
     };
