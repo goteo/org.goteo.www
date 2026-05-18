@@ -38,7 +38,9 @@
         aria-expanded={open}
     >
         {getLanguageDisplayName($locale) ?? $locale}
-        <Chevron direction={open ? "up" : "down"} width="16" height="16" />
+        <span class="transition-transform duration-200 {open ? 'rotate-180' : 'rotate-0'}">
+            <Chevron direction="down" width="16" height="16" />
+        </span>
     </button>
 
     {#if open}
