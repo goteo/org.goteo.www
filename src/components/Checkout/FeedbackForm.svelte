@@ -39,7 +39,9 @@
                         {$t("pages.checkout.verify.approved.formReview.title")}
                     </h2>
                 </div>
-                <p class="text-content">{$t("pages.checkout.verify.approved.formReview.description")}</p>
+                <p class="text-content">
+                    {$t("pages.checkout.verify.approved.formReview.description")}
+                </p>
             </div>
 
             <fieldset class="flex flex-col gap-6">
