@@ -13,6 +13,7 @@
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import ActionableButton from "../library/ActionableButton.svelte";
     import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
@@ -25,26 +26,24 @@
         accounting: Accounting;
     } = $props();
 
-    const projectId = project.id!.toString();
+    const projectId = $derived(project.id?.toString());
+    const PAGE_SIZE = 30;
 
-    let projectsSupportItems = $state<
-        (ProjectSupport & {
-            displayName: string;
-            matchfunding: boolean;
-        })[]
-    >([]);
+    type EnrichedSupport = ProjectSupport & {
+        displayName: string;
+        matchfunding: boolean;
+    };
 
-    let selectedProjectSupport:
-        | (ProjectSupport & {
-              displayName: string;
-              matchfunding: boolean;
-          })
-        | null = $state(null);
+    let projectsSupportItems = $state<EnrichedSupport[]>([]);
+
+    let selectedProjectSupport: EnrichedSupport | null = $state(null);
 
     let isLoaded = $state(false);
     let openModal = $state(false);
+    let hasMore = $state(false);
+    let currentPage = $state(1);
 
-    function getSupportType(item: (typeof projectsSupportItems)[number]) {
+    function getSupportType(item: EnrichedSupport) {
         switch (true) {
             case item.matchfunding:
                 return "matchfunding";
@@ -64,29 +63,43 @@
         ),
     );
 
-    onMount(async () => {
-        const { data: publicSupports } = await apiProjectSupportsGetCollection({
-            query: { project: projectId, anonymous: false },
+    async function fetchPage(page: number): Promise<ProjectSupport[]> {
+        const { data } = await apiProjectSupportsGetCollection({
+            query: { project: projectId, anonymous: false, page },
         });
 
-        const supportsWithOwners = await Promise.all(
-            (publicSupports || []).map(async (support) => {
+        const items = (data as ProjectSupport[] | null) ?? [];
+        hasMore = items.length >= PAGE_SIZE;
+        return items;
+    }
+
+    async function enrichSupports(supports: ProjectSupport[]): Promise<EnrichedSupport[]> {
+        return Promise.all(
+            supports.map(async (support) => {
                 const id = extractId(support?.origin!);
-
                 const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
-                const displayName = user?.displayName!;
-
                 return {
                     ...support,
-                    displayName,
+                    displayName: user?.displayName!,
                     matchfunding: support.origin?.includes("match")!,
                 };
             }),
         );
+    }
 
-        projectsSupportItems = supportsWithOwners;
+    onMount(async () => {
+        const supports = await fetchPage(1);
+        projectsSupportItems = await enrichSupports(supports);
         isLoaded = true;
     });
+
+    async function loadMore() {
+        const nextPage = currentPage + 1;
+        const supports = await fetchPage(nextPage);
+        const enriched = await enrichSupports(supports);
+        projectsSupportItems = [...projectsSupportItems, ...enriched];
+        currentPage = nextPage;
+    }
 </script>
 
 <div class="flex flex-col gap-10">
@@ -121,6 +134,14 @@
                     {/each}
                 </Grid>
             {/if}
+
+            {#if hasMore}
+                <div class="flex w-full justify-center">
+                    <ActionableButton action={loadMore} autoreset={0} class="w-32">
+                        {$t("pages.project.view.tabs.community.loadMore")}
+                    </ActionableButton>
+                </div>
+            {/if}
         </div>
     {/if}
 </div>
@@ -128,7 +149,7 @@
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     {#if selectedProjectSupport}
