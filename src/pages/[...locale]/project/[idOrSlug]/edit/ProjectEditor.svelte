@@ -8,8 +8,6 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import { get } from "svelte/store";
-
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
     import { type Category, type Project } from "../../../../../openapi/client";
@@ -19,6 +17,7 @@
         createDraft,
         currentDraft,
         deleteCurrentDraft,
+        hasUnsavedChanges,
         loadDraft,
         updateWizard,
     } from "../../../../../stores/drafts/projectDraft";
@@ -32,6 +31,7 @@
         project: Project;
     } = $props();
 
+    let showSessionErrorToast = $state(false);
     const user = $derived(($session: Session | null) => $session?.user);
 
     onMount(() => {
@@ -59,7 +59,7 @@
                 status: project.status || "in_draft",
             });
         }
-        
+
         // Set the step from URL parameter if present
         if (initialStep !== 1) {
             updateWizard({ currentStep: initialStep });
@@ -92,40 +92,38 @@
 
     // Reactive current step
     const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
-    let saveState = $state<"idle" | "saving" | "saved">("idle");
     let errorMessage = $state("");
 
-    async function handlePublish() {
-        const draft = get(currentDraft);
-
-        if (!draft) return;
-
-        saveState = "saving";
+    async function saveToAPI() {
+        if (!$currentDraft) return;
 
         try {
-            await publishDraft(draft, session, String(project.id));
+            if (!$session) {
+                showSessionErrorToast = true;
+                throw new Error("User session not found");
+            }
 
-            deleteCurrentDraft(draft.draftId, draft.userId);
+            await publishDraft($currentDraft, $session, String(project.id));
 
-            window.location.href = "/project/" + (project.slug ?? project.id) + "/publish";
+            hasUnsavedChanges.set(false);
         } catch (err) {
             errorMessage = err instanceof Error ? err.message : "Unknown error";
 
-            saveState = "idle";
             return;
         }
+    }
 
-        saveState = "saved";
+    function handlePublish() {
+        if (!$currentDraft) return;
+
+        const idOrSlug = project.slug ?? project.id;
+
+        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
+        window.location.href = `/project/${idOrSlug}/publish`;
     }
 </script>
 
-<ProjectEditorShell
-    {errorMessage}
-    {saveState}
-    {project}
-    onSave={handlePublish}
-    onPublish={handlePublish}
->
+<ProjectEditorShell {errorMessage} {project} {showSessionErrorToast} onSave={saveToAPI} onPublish={handlePublish}>
     {@const StepComponent = getStepComponent(currentStep)}
-    <StepComponent {project} onPublish={handlePublish} />
+    <StepComponent {project} />
 </ProjectEditorShell>

@@ -4,6 +4,7 @@ import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../opena
 import { getSession } from "../../../../../auth/session";
 import App from "../../../../../components/App.svelte";
 import ProjectEditor from "./ProjectEditor.svelte";
+import { goto } from "../../../../../utils/navigation";
 
 const { t } = Astro.locals;
 const locale = Astro.locals.lang;
@@ -15,7 +16,8 @@ if (!idOrSlug) {
 
 const session = await getSession(Astro.cookies);
 if (!session) {
-    return Astro.redirect("/login?callback=" + encodeURIComponent(Astro.request.url.pathname + Astro.request.url.search));
+    const requestUrl = new URL(Astro.request.url);
+    return goto("/login", { query: { callback: requestUrl.pathname + requestUrl.search } });
 }
 
 const { data: project } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });

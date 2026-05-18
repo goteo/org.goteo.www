@@ -9,7 +9,7 @@
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),

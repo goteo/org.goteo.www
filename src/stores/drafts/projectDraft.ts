@@ -6,7 +6,7 @@ import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
 import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, validationErrors } from "./draftValidation";
+import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, type ValidationErrors } from "./draftValidation";
 
 /**
  * Media image data
@@ -122,9 +122,15 @@ export const project = derived(currentDraft, ($d) => $d?.createProject ?? {
 export const touchedFields = writable<Set<string>>(new Set());
 
 /**
- * Unsaved changes flag (for beforeunload warning)
+ * Store to track if there are unsaved changes in the current draft to send it to API
+ * Used to enable/disable the Save button in wizard form
  */
 export const hasUnsavedChanges = writable<boolean>(false);
+
+/**
+ * Store to track if the draft is currently being saved to IndexedDB (persistence in progress)
+ */
+export const isSavingDraft = writable(false);
 
 /**
  * Persistence error state
@@ -133,17 +139,35 @@ export const hasUnsavedChanges = writable<boolean>(false);
 export const persistenceError = writable<string | null>(null);
 
 /**
+ * Validation errors store
+ * Stores field-specific validation error messages for the current step
+ * Updated on each field change and used to provide real-time validation feedback in the UI
+ */
+export const validationErrors = writable<ValidationErrors>({});
+
+/**
+ * Derived store that validates the draft for publishing.
+ * Returns an object with validation errors for each field, or an empty object if valid.
+ */
+export const publishErrors = derived(currentDraft, ($draft) => {
+    if (!$draft) {
+        return {};
+    }
+
+    const errors = validateDraftToPublish(get(currentDraft) as Draft);
+    return errors;
+});
+
+/**
  * Define whether the project is ready to publish (all steps completed and valid).
- * Used to enable/disable the Publish button in the UI
+ * Used to enable/disable the Publish button in the wizard UI
  */
 export const isReadyToPublish = derived(
-    currentDraft,
-    ($draft) => {
+    [publishErrors, currentDraft],
+    ([$errors, $draft]) => {
         if (!$draft) return false;
 
-        const errors = validateDraftToPublish($draft);
-
-        return Object.keys(errors).length === 0;
+        return Object.keys($errors).length === 0;
     },
 );
 
@@ -153,19 +177,29 @@ export const isReadyToPublish = derived(
  * 1. All required fields have values
  * 2. There are no validation errors
  */
-export const isCreateFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
-    // Check if there are any validation errors
-    if (Object.keys($errors).length > 0) {
-        return false;
-    }
+export const isCreateFormValid = derived(
+    [currentDraft, validationErrors],
+    ([$draft, $errors]) => {
+        if (Object.keys($errors).length > 0) {
+            return false;
+        }
 
-    // Check that required fields have values
-    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
-    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
-    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
+        const hasTitle =
+            ($draft?.createProject?.title?.trim().length ?? 0) > 0;
 
-    return hasTitle && hasSubtitle && hasCategories;
-});
+        const hasSubtitle =
+            ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
+
+        const hasCategories =
+            ($draft?.createProject?.categories?.length ?? 0) > 0;
+
+        return (
+            hasTitle &&
+            hasSubtitle &&
+            hasCategories
+        );
+    },
+);
 
 export function createDraftId() {
     return crypto.randomUUID();
@@ -271,7 +305,7 @@ let saveTimer: ReturnType<typeof setTimeout> | null = null;
 export function persistDraft() {
     if (saveTimer) clearTimeout(saveTimer);
 
-    hasUnsavedChanges.set(true);
+    isSavingDraft.set(true);
     saveTimer = setTimeout(() => {
         const draft = get(currentDraft);
         if (!draft) return;
@@ -286,7 +320,7 @@ export function persistDraft() {
 
             draftRepo.update(draft.draftId, draft.userId, updatedDraft);
 
-            hasUnsavedChanges.set(false);
+            isSavingDraft.set(false);
             persistenceError.set(null);
         } catch (error) {
             console.error("Failed to persist draft:", error);
@@ -298,8 +332,8 @@ export function persistDraft() {
                 persistenceError.set("storage_general_error");
             }
 
-            // Keep hasUnsavedChanges as true when persistence fails
-            hasUnsavedChanges.set(true);
+            // Keep isSavingDraft as true when persistence fails
+            isSavingDraft.set(true);
         }
     }, 1000);
 }
@@ -343,6 +377,7 @@ export function updateWizard(data: Partial<Wizard>) {
     });
 
     persistDraft();
+    hasUnsavedChanges.set(true);
 }
 
 export function updateConfiguration(data: Partial<WizardConfiguration>) {
@@ -562,6 +597,8 @@ export function deleteBudgetItem(
                 ].filter((_, i) => i !== index),
         },
     });
+
+    hasUnsavedChanges.set(true);
 }
 
 /**
@@ -587,6 +624,7 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
     });
 
     persistDraft();
+    hasUnsavedChanges.set(true);
 }
 
 export function deleteCurrentDraft(draftId: string, userId: number) {
@@ -598,7 +636,7 @@ export function deleteCurrentDraft(draftId: string, userId: number) {
 
     draftRepo.delete(draftId, userId);
     touchedFields.set(new Set());
-    hasUnsavedChanges.set(false);
+    isSavingDraft.set(false);
     persistenceError.set(null);
 }
 
@@ -632,7 +670,6 @@ export function navigateToStep(targetStep: number): boolean {
     }
 
     console.log(`[wizard-state] Navigating: ${currentStep} → ${targetStep}`);
-    hasUnsavedChanges.set(true);
     updateWizard({ currentStep: targetStep });
     updateUrl(targetStep);
     return true;

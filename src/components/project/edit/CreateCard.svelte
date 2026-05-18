@@ -6,35 +6,29 @@
     import MoreAndLess from "../../icons/MoreAndLess.svelte";
     import Button from "../../library/Button.svelte";
 
-    import type {
-        ProjectBudgetItem,
-        ProjectCollaboration,
-        ProjectReward,
-    } from "../../../openapi/client";
+    import type { Project } from "../../../openapi/client";
 
-    let {
-        title,
-        description,
-        onclick,
-        variant,
-        open = $bindable(false),
-        showToast = $bindable(false),
-        reward,
-        collab,
-        budgetItem,
-        onSave,
-    } = $props<{
+    interface Props {
+        project: Project;
         title: string;
         description: string;
         onclick: () => void;
         variant: "reward" | "collab" | "budget";
         open: boolean;
         showToast: boolean;
-        reward?: ProjectReward | null;
-        collab?: ProjectCollaboration | null;
-        budgetItem?: ProjectBudgetItem | null;
         onSave: (data: any) => void;
-    }>();
+    }
+
+    let {
+        project,
+        title,
+        description,
+        onclick,
+        variant,
+        open = $bindable(false),
+        showToast = $bindable(false),
+        onSave,
+    }: Props = $props();
 </script>
 
 <div
@@ -68,9 +62,9 @@
     </div>
 </div>
 {#if variant === "reward"}
-    <RewardsModal bind:open bind:showToast {onSave} {reward} />
+    <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />
 {:else if variant === "collab"}
-    <CollabsModal bind:open bind:showToast {onSave} {collab} />
+    <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
 {:else if variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} {budgetItem} />
+    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} />
 {/if}

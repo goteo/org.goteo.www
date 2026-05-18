@@ -9,8 +9,8 @@
         addCollaboration,
         deleteCollaboration,
         updateCollaboration,
+        validationErrors,
     } from "../../../stores/drafts/projectDraft";
-    import { validationErrors } from "../../../stores/drafts/draftValidation";
 
     let {
         project,
@@ -64,6 +64,7 @@
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.collaborations.add.title")}
         description={$t("pages.project.edit.collaborations.add.description")}
         variant="collab"
