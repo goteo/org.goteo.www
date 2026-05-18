@@ -8,8 +8,6 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import { get } from "svelte/store";
-
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
     import { type Category, type Project } from "../../../../../openapi/client";
@@ -33,6 +31,7 @@
         project: Project;
     } = $props();
 
+    let showSessionErrorToast = $state(false);
     const user = $derived(($session: Session | null) => $session?.user);
 
     onMount(() => {
@@ -99,13 +98,12 @@
         if (!$currentDraft) return;
 
         try {
-            const currentSession = get(session);
-
-            if (!currentSession) {
+            if (!$session) {
+                showSessionErrorToast = true;
                 throw new Error("User session not found");
             }
 
-            await publishDraft($currentDraft, currentSession, String(project.id));
+            await publishDraft($currentDraft, $session, String(project.id));
 
             hasUnsavedChanges.set(false);
         } catch (err) {
@@ -125,7 +123,7 @@
     }
 </script>
 
-<ProjectEditorShell {errorMessage} {project} onSave={saveToAPI} onPublish={handlePublish}>
+<ProjectEditorShell {errorMessage} {project} {showSessionErrorToast} onSave={saveToAPI} onPublish={handlePublish}>
     {@const StepComponent = getStepComponent(currentStep)}
     <StepComponent {project} />
 </ProjectEditorShell>

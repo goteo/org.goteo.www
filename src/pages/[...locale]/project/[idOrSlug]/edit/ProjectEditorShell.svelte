@@ -36,16 +36,19 @@
         updateProject,
     } from "../../../../../stores/drafts/projectDraft";
     import ActionableButton from "../../../../../components/library/ActionableButton.svelte";
+    import Toast from "../../../../../components/library/Toast.svelte";
 
     let {
         project,
         children,
+        showSessionErrorToast = $bindable(false),
         onSave,
         onPublish,
         errorMessage = $bindable(""),
     }: {
         project: Project;
         children: Snippet;
+        showSessionErrorToast?: boolean;
         onSave: () => void;
         onPublish?: () => void;
         errorMessage: string;
@@ -110,6 +113,12 @@
 
 <div class="wrapper">
     <div class="p-10 pb-20">
+        <!-- Session Error Toast -->
+        {#if showSessionErrorToast}
+            <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}>
+                {$t("wizard.errors.session.title")}
+            </Toast>
+        {/if}
         <!-- Storage Error Alert -->
         {#if $persistenceError}
             <div
