@@ -236,10 +236,37 @@ export type BudgetSummaryJsonld = {
     infra?: MoneyOutputJsonld;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type Category = {
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type CategoryJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -248,7 +275,18 @@ export type CategoryJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
 export type ChargeCreationDto = {
@@ -2826,6 +2864,76 @@ export type ApiCategoriesGetCollectionResponses = {
 
 export type ApiCategoriesGetCollectionResponse = ApiCategoriesGetCollectionResponses[keyof ApiCategoriesGetCollectionResponses];
 
+export type ApiCategoriesPostData = {
+    /**
+     * The new Category resource
+     */
+    body: Category;
+    path?: never;
+    query?: never;
+    url: '/v4/categories';
+};
+
+export type ApiCategoriesPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesPostError = ApiCategoriesPostErrors[keyof ApiCategoriesPostErrors];
+
+export type ApiCategoriesPostResponses = {
+    /**
+     * Category resource created
+     */
+    201: Category;
+};
+
+export type ApiCategoriesPostResponse = ApiCategoriesPostResponses[keyof ApiCategoriesPostResponses];
+
+export type ApiCategoriesIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdDeleteErrors = {
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiCategoriesIdDeleteError = ApiCategoriesIdDeleteErrors[keyof ApiCategoriesIdDeleteErrors];
+
+export type ApiCategoriesIdDeleteResponses = {
+    /**
+     * Category resource deleted
+     */
+    204: void;
+};
+
+export type ApiCategoriesIdDeleteResponse = ApiCategoriesIdDeleteResponses[keyof ApiCategoriesIdDeleteResponses];
+
 export type ApiCategoriesIdGetData = {
     body?: never;
     path: {
@@ -2855,6 +2963,51 @@ export type ApiCategoriesIdGetResponses = {
 };
 
 export type ApiCategoriesIdGetResponse = ApiCategoriesIdGetResponses[keyof ApiCategoriesIdGetResponses];
+
+export type ApiCategoriesIdPatchData = {
+    /**
+     * The updated Category resource
+     */
+    body: Category;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesIdPatchError = ApiCategoriesIdPatchErrors[keyof ApiCategoriesIdPatchErrors];
+
+export type ApiCategoriesIdPatchResponses = {
+    /**
+     * Category resource updated
+     */
+    200: Category;
+};
+
+export type ApiCategoriesIdPatchResponse = ApiCategoriesIdPatchResponses[keyof ApiCategoriesIdPatchResponses];
 
 export type ApiGatewaysGetCollectionData = {
     body?: never;
