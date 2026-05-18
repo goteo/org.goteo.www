@@ -1,13 +1,27 @@
 /// <reference types="astro/client" />
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import type { useTranslations } from "./i18n/utils";
-import type { Locale } from "../i18n/locales/index";
 
-declare global {
-    namespace App {
-        interface Locals {
-            lang: import("./i18n/store").Locale;
-            t: ReturnType<typeof import("./i18n/ui").useTranslations>;
-        }
+declare namespace App {
+    interface Locals {
+        /**
+         * Language code of one of the available localisations.\
+         * Based on requesting client preferences, fallsback to `PUBLIC_DEFAULT_LANGUAGE`.
+         */
+        lang: import("./src/i18n/locales/index").Locale;
+
+        /**
+         * A sorted list of language codes as preferred by the requesting client.\
+         * Languages first in the list have a higher preference.
+         */
+        langs: string[];
+
+        /**
+         * Translation function with locale set.
+         */
+        t: ReturnType<typeof import("./src/i18n/utils").useTranslations>;
+
+        /**
+         * The detected session.
+         */
+        session: import("./src/auth/types").Session | undefined;
     }
 }

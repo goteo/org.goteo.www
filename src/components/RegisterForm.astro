@@ -221,7 +221,7 @@ const { t } = Astro.locals;
                 const isFromCheckout = urlParams.get("checkout") === "true";
 
                 if (isFromCheckout) {
-                    window.location.href = `/payment`;
+                    window.location.href = `/checkout/payment`;
                 } else {
                     const lang = location.pathname.split("/")[1];
                     window.location.href = `/${lang}/`;

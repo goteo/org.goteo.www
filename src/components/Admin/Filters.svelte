@@ -1,9 +1,10 @@
 <script lang="ts">
-    import Search from "./Search.svelte";
+    import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
-    import FiltersIcon from "../../svgs/FiltersIcon.svelte";
+    import FiltersIcon from "../icons/Filters.svelte";
+    import Search from "../icons/Search.svelte";
+    import Grid from "../library/Grid.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
         $props<{
@@ -74,7 +75,7 @@
                     <FiltersIcon />
                     {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
                         <span class="absolute -top-1 -right-1">
-                            <ActiveFilterIcon />
+                            <Bullet />
                         </span>
                     {/if}
                 </span>
@@ -89,7 +90,7 @@
 
     {#if showFilters}
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
-            <div class="grid grid-cols-3 gap-4">
+            <Grid class="grid-cols-3 gap-4">
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedPaymentMethod}
@@ -151,7 +152,7 @@
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                     />
                 </div>
-            </div>
+            </Grid>
 
             <div class="col-span-3 flex justify-end">
                 <button

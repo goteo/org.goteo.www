@@ -96,7 +96,7 @@ const { accounting } = Astro.props;
             const selectedMethod = formData.get("paymentMethod");
 
             if (selectedMethod === "wallet") {
-                window.location.href = "/payment/wallet";
+                window.location.href = "/checkout/wallet";
                 return;
             }
 
@@ -110,14 +110,14 @@ const { accounting } = Astro.props;
                 }
 
                 if (checkoutLink.method === "GET") {
-                    window.location.href = checkoutLink.href!;
+                    window.location.href = checkoutLink.url!;
                 }
 
                 if (checkoutLink.method === "POST") {
                     const form = document.createElement("form");
 
                     form.method = "POST";
-                    form.action = checkoutLink.href!;
+                    form.action = checkoutLink.url!;
 
                     if (checkoutLink.body) {
                         Object.entries(checkoutLink.body).forEach(([key, value]) => {

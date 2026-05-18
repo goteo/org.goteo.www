@@ -99,14 +99,14 @@
 
 <div class="flex flex-col gap-10">
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
-        {$t("project.tabs.updates.content.title")}
+        {$t("pages.project.view.tabs.updates.content.title")}
     </h2>
     <Carousel bind:activeCard gap={24} showDots={true} {itemsPerGroup}>
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
             >
-                {$t("project.tabs.updates.content.empty")}
+                {$t("pages.project.view.tabs.updates.content.empty")}
             </div>
         {/if}
 
@@ -136,7 +136,7 @@
             {#if shouldShowHeader(selected.date)}
                 <div class="text-secondary flex items-center gap-2 text-base font-bold">
                     <AlertIcon />
-                    {$t("project.tabs.updates.modal-title")}
+                    {$t("pages.project.view.tabs.updates.modalTitle")}
                 </div>
             {/if}
             <h3 class="text-secondary text-3xl font-bold">
@@ -151,7 +151,7 @@
             <div class="flex w-full justify-end">
                 <Button>
                     <ShareIcon />
-                    {$t("project.tabs.updates.content.btn.share")}
+                    {$t("pages.project.view.tabs.updates.content.btn.share")}
                 </Button>
             </div>
         {/if}

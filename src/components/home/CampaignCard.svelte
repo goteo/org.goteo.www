@@ -6,11 +6,10 @@ Converted from CampaignCard.astro to maintain exact functionality
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
+    import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import Flames from "../icons/Flames.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
     import Tag from "../library/Tag.svelte";
 
@@ -57,7 +56,7 @@ Converted from CampaignCard.astro to maintain exact functionality
             const remaining = campaign.optimum.amount - campaign.obtained.amount;
             return {
                 amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toOptimum"),
+                label: $t("pages.home.campaigns.remaining.toOptimum"),
                 currency: campaign.optimum.currency,
             };
         } else {
@@ -65,7 +64,7 @@ Converted from CampaignCard.astro to maintain exact functionality
             const remaining = campaign.minimum.amount - campaign.obtained.amount;
             return {
                 amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toMinimum"),
+                label: $t("pages.home.campaigns.remaining.toMinimum"),
                 currency: campaign.minimum.currency,
             };
         }
@@ -101,8 +100,8 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
                         <Tag>
-                            <MatchFundingIcon />
-                            <span>{$t("home.campaigns.matchfunding")}</span>
+                            <Flames />
+                            <span>{$t("pages.home.campaigns.matchfunding")}</span>
                         </Tag>
                     {/if}
 
@@ -131,9 +130,9 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Days Remaining -->
                     {#if campaign.daysRemaining !== undefined}
                         <div class="flex items-center gap-2">
-                            <ClockIcon />
+                            <Clock />
                             <span class="text-sm text-black">
-                                {$t("home.campaigns.daysRemaining", {
+                                {$t("pages.home.campaigns.daysRemaining", {
                                     days: campaign.daysRemaining,
                                 })}
                             </span>
@@ -143,7 +142,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Category (display only first) -->
                     {#if firstCategory()}
                         <div class="flex items-center gap-2">
-                            <CategoryIcon />
+                            <Clock />
                             <span class="text-sm text-black">
                                 {$t(`categories.${firstCategory()}`)}
                             </span>
@@ -162,7 +161,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
                             <span class="text-secondary text-base"
-                                >{$t("home.campaigns.obtained")}</span
+                                >{$t("pages.home.campaigns.obtained")}</span
                             >
                             <span class="text-secondary text-2xl font-bold">
                                 {formatCurrency(
@@ -175,7 +174,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <div class="flex flex-col gap-1 text-right">
                             {#if campaign.optimum && campaign.obtained.amount >= campaign.minimum.amount}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.optimum")}
+                                    {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -185,7 +184,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.minimum")}
+                                    {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -204,7 +203,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         class="bg-primary -mx-6 -mb-6 flex items-center justify-between rounded-b-3xl px-6 py-4"
                     >
                         <span class="text-base font-normal text-black"
-                            >{$t("home.campaigns.userDonations")}</span
+                            >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
                             {formatCurrency(
@@ -224,7 +223,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
-                            class="bg-variant1 text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
+                            class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.uploadNewsButton")}
                         </button>

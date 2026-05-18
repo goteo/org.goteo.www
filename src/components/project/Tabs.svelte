@@ -27,11 +27,11 @@
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "project", label: $t("project.tabs.project") },
-        { id: "rewards", label: $t("project.tabs.rewards") },
-        { id: "budget", label: $t("project.tabs.budget.title") },
-        { id: "updates", label: $t("project.tabs.updates.title") },
-        { id: "community", label: $t("project.tabs.community.title") },
+        { id: "project", label: $t("pages.project.view.tabs.project") },
+        { id: "rewards", label: $t("pages.project.view.tabs.rewards") },
+        { id: "budget", label: $t("pages.project.view.tabs.budget.title") },
+        { id: "updates", label: $t("pages.project.view.tabs.updates.title") },
+        { id: "community", label: $t("pages.project.view.tabs.community.title") },
     ];
 
     function selectTab(tabId: string) {

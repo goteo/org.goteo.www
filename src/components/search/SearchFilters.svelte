@@ -45,11 +45,11 @@ Integrated with searchStore for state management and URL synchronization
 
     // Dropdown options - use translation keys for labels
     const statusOptions = [
-        { value: "all", translationKey: "filters.status.all" },
+        { value: "all", translationKey: "domain.project.status.all" },
         // API status values - pass directly to backend
-        { value: "in_campaign", translationKey: "filters.status.funding" }, // Actively raising funds
-        { value: "in_funding", translationKey: "filters.status.successful" }, // Successfully raised, receiving funds
-        { value: "funded", translationKey: "filters.status.completed" }, // Completed funding process
+        { value: "in_campaign", translationKey: "domain.project.status.funding" }, // Actively raising funds
+        { value: "in_funding", translationKey: "domain.project.status.successful" }, // Successfully raised, receiving funds
+        { value: "funded", translationKey: "domain.project.status.completed" }, // Completed funding process
     ];
 
     // Handle filter updates using searchStore
@@ -87,7 +87,7 @@ Integrated with searchStore for state management and URL synchronization
                     onSearch={(query) => updateFilters({ query })}
                     onEnter={handleSearch}
                     onClear={handleSearch}
-                    placeholder={$t("search.placeholder")}
+                    placeholder={$t("pages.search.input.placeholder")}
                     data-testid="search-input"
                 />
             </div>
@@ -99,7 +99,7 @@ Integrated with searchStore for state management and URL synchronization
                 data-testid="search-btn"
                 class="w-full shrink-0 sm:w-auto"
             >
-                {$t("search.searchButton")}
+                {$t("pages.search.input.button")}
             </SearchButton>
         </div>
 
@@ -113,7 +113,7 @@ Integrated with searchStore for state management and URL synchronization
                 class="w-full justify-center min-[500px]:w-auto"
             >
                 <FilterIcon width="16" height="16" class="mr-2" />
-                {$t("search.showFilters")}
+                {$t("pages.search.filters.show")}
             </SearchButton>
         {/if}
     </div>
@@ -124,7 +124,7 @@ Integrated with searchStore for state management and URL synchronization
         <div class="w-full lg:max-w-sm">
             <FilterDropdown
                 options={statusOptions}
-                placeholder={$t("filters.campaignStatus")}
+                placeholder={$t("pages.search.filters.status.label")}
                 selectedValue={$searchFilters.statusFilter}
                 onSelect={(value) => updateFilters({ statusFilter: value })}
                 data-testid="status-filter"
@@ -151,7 +151,7 @@ Integrated with searchStore for state management and URL synchronization
                 data-testid="apply-filters-btn"
                 class="w-full min-[500px]:w-auto"
             >
-                {$t("search.applyFilters")}
+                {$t("pages.search.filters.apply")}
             </SearchButton>
 
             <!-- Close filters button -->
@@ -162,7 +162,7 @@ Integrated with searchStore for state management and URL synchronization
                 class="w-full min-[500px]:w-auto"
             >
                 <FilterIcon width="16" height="16" class="mr-2" />
-                {$t("search.closeFilters")}
+                {$t("pages.search.filters.close")}
             </SearchButton>
         </div>
     {/if}

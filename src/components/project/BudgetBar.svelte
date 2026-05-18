@@ -86,7 +86,7 @@
             style="left: {animValues.balance}%;"
         >
             <div class="text-secondary ml-4 flex items-center gap-2 text-base">
-                <span>{$t("project.tabs.budget.raised")}:</span>
+                <span>{$t("pages.project.view.tabs.budget.raised")}:</span>
                 <span class="font-bold">{formatCurrency(balanceAmount)}</span>
             </div>
         </div>
@@ -132,7 +132,7 @@
 
         <div
             class="absolute top-0 bottom-0 z-40"
-            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-divider);"
+            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-variant1);"
         ></div>
 
         <div
@@ -164,11 +164,11 @@
 
     <div class="flex gap-2">
         <div class="text-secondary min-w-fit text-base" style="width: {leftSectionWidth}%">
-            <span>{$t("project.tabs.budget.minimum")}:</span>
+            <span>{$t("pages.project.view.tabs.budget.minimum")}:</span>
             <span class="font-bold">{formatCurrency(minimumTotal)}</span>
         </div>
         <div class="text-secondary flex-none text-base">
-            <span>{$t("project.tabs.budget.optimal")}:</span>
+            <span>{$t("pages.project.view.tabs.budget.optimal")}:</span>
             <span class="font-bold">{formatCurrency(optimumTotal)}</span>
         </div>
     </div>

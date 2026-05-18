@@ -6,10 +6,14 @@
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import { t } from "../../i18n/store";
-    import { apiProjectSupportsGetCollection, apiUsersIdGet } from "../../openapi/client/index";
+    import {
+        apiProjectSupportsGetCollection,
+        apiUsersIdOrHandleGet,
+    } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
+    import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
@@ -69,7 +73,7 @@
             (publicSupports || []).map(async (support) => {
                 const id = extractId(support?.origin!);
 
-                const { data: user } = await apiUsersIdGet({ path: { id: id! } });
+                const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
                 const displayName = user?.displayName!;
 
                 return {
@@ -92,10 +96,10 @@
         </div>
     {:else}
         <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
-            {$t("project.tabs.community.content.title")}
+            {$t("pages.project.view.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Grid class="grid-cols-1 gap-6 md:grid-cols-2">
                 {#each groupedItems.matchfunding as item (item.id)}
                     <ProjectCommunityMatchfunding
                         {item}
@@ -104,10 +108,10 @@
                     />
                 {/each}
                 <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
-            </div>
+            </Grid>
 
             {#if groupedItems.default?.length}
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#each groupedItems.default as item (item.id)}
                         <ProjectCommunityMessage
                             {item}
@@ -115,7 +119,7 @@
                             bind:selectedProjectSupport
                         />
                     {/each}
-                </div>
+                </Grid>
             {/if}
         </div>
     {/if}
@@ -135,7 +139,7 @@
                 </div>
                 <div class="flex flex-col items-end">
                     <div class="font-bold text-black">
-                        {$t("project.tabs.community.contribution")}
+                        {$t("pages.project.view.tabs.community.contribution")}
                     </div>
                     <p class="text-2xl font-bold text-black">
                         {formatCurrency(

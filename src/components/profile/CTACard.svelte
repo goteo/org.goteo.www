@@ -59,7 +59,7 @@
 <div
     class="flex flex-col justify-between gap-10 rounded-[32px] border p-6 transition-shadow duration-200 {isDark
         ? 'border-grey bg-secondary text-background'
-        : 'border-variant1 bg-soft-purple text-content'}"
+        : 'border-variant1 bg-purple-soft text-content'}"
 >
     <!-- Content -->
     <div class="flex flex-col gap-4">
@@ -81,7 +81,7 @@
                 href={button.href}
                 class="inline-flex w-full items-center justify-center rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none md:w-auto {button.variant ===
                 'primary'
-                    ? 'bg-light-accent text-secondary focus-visible:ring-secondary hover:opacity-90'
+                    ? 'bg-purple-soft text-secondary focus-visible:ring-secondary hover:opacity-90'
                     : isDark
                       ? 'hover:text-secondary focus-visible:ring-offset-secondary border border-white bg-transparent text-white hover:bg-white focus-visible:ring-white'
                       : 'border-secondary text-secondary hover:bg-secondary focus-visible:ring-secondary border bg-transparent hover:text-white'}"

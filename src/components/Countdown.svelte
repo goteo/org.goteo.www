@@ -2,9 +2,9 @@
     import { onMount } from "svelte";
 
     import { t } from "../i18n/store";
-    import ClockIcon from "../svgs/ClockIcon.svelte";
+    import Clock from "./icons/Clock.svelte";
 
-    export let countdownEnd: Date | undefined = undefined;
+    export let deadline: Date | undefined = undefined;
 
     let timeLeft: {
         total: number;
@@ -14,16 +14,16 @@
         seconds?: number;
     } = { total: 0 };
 
-    if (countdownEnd) {
+    if (deadline) {
         const now = new Date().getTime();
-        const diff = countdownEnd.getTime() - now;
+        const diff = deadline.getTime() - now;
         if (diff > 0) {
             timeLeft = calculateTimeLeft();
         }
     }
 
     onMount(() => {
-        if (!countdownEnd) return;
+        if (!deadline) return;
 
         const interval = setInterval(() => {
             timeLeft = calculateTimeLeft();
@@ -37,7 +37,7 @@
 
     function calculateTimeLeft() {
         const now = new Date().getTime();
-        const difference = countdownEnd!.getTime() - now;
+        const difference = deadline!.getTime() - now;
 
         return difference > 0
             ? {
@@ -53,10 +53,13 @@
 
 <div class="text-secondary flex items-center gap-2 text-end text-2xl font-bold lg:justify-end">
     {#if timeLeft.total > 0}
-        <ClockIcon />
-        <p>{$t("countdown.remaining")} {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m</p>
+        <Clock />
+        <p>
+            {$t("common.countdown.remaining")}
+            {timeLeft.days}d {timeLeft.hours}h {timeLeft.minutes}m
+        </p>
     {:else}
-        <ClockIcon />
-        <p>{$t("countdown.expired")}</p>
+        <Clock />
+        <p>{$t("common.countdown.expired")}</p>
     {/if}
 </div>

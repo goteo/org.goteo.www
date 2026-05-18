@@ -1,0 +1,42 @@
+---
+import Layout from "../../../../../layouts/Layout.astro";
+import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../openapi/client";
+import { getSession } from "../../../../../auth/session";
+import App from "../../../../../components/App.svelte";
+import ProjectEditor from "./ProjectEditor.svelte";
+
+const { t } = Astro.locals;
+const locale = Astro.locals.lang;
+
+const { idOrSlug } = Astro.params;
+if (!idOrSlug) {
+    return Astro.redirect("/");
+}
+
+const session = await getSession(Astro.cookies);
+if (!session) {
+    return Astro.redirect("/");
+}
+
+const { data: project } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
+if (!project) {
+    return Astro.redirect("/");
+}
+
+const { error, request } = await apiProjectsIdPatch({
+    path: { id: String(project.id!) },
+    body: { id: project.id },
+    headers: session.token.asHttpHeaders,
+});
+
+if (error) {
+    console.error({ error, request });
+    return Astro.redirect("/");
+}
+---
+
+<Layout title={t("pages.project.edit.title", { project: project.title })}>
+    <App locale={locale} session={session} client:load>
+        <ProjectEditor project={project} {session} client:load />
+    </App>
+</Layout>

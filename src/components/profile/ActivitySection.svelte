@@ -5,7 +5,8 @@
     import DonationsCard from "./DonationsCard.svelte";
     import MatchfundingCard from "./MatchfundingCard.svelte";
     import ProjectsCard from "./ProjectsCard.svelte";
-    import { apiAccountingsIdGetUrl, apiUsersIdGetUrl } from "../../openapi/client/paths.gen.ts";
+    import { client } from "../../openapi/client/client.gen.ts";
+    import { apiUsersIdOrHandleGetUrl } from "../../openapi/client/paths.gen.ts";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
@@ -17,18 +18,20 @@
     import { projectCache } from "../../stores/projectCache";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import Grid from "../library/Grid.svelte";
 
-    import type { ProjectSupport, Project, MatchCall } from "../../openapi/client/types.gen.ts";
+    import type {
+        ProjectSupport,
+        Project,
+        MatchCall,
+        User,
+    } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
 
     interface Props {
         lang: string;
         period?: string;
-        user: {
-            id: number;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, period = new Date().getFullYear().toString(), user }: Props = $props();
@@ -43,14 +46,6 @@
     const relayClient = createClient({
         baseUrl: "/api/relay",
     });
-
-    // Helper function to build URLs from templates by replacing path parameters
-    function buildUrl(template: string, params: Record<string, string | number>): string {
-        return Object.entries(params).reduce(
-            (url, [key, value]) => url.replace(`{${key}}`, String(value)),
-            template,
-        );
-    }
 
     async function fetchActivityData() {
         loading = true;
@@ -68,12 +63,11 @@
             };
 
             // Fetch user's contributions (donations) - using accounting IRI as origin
-            const accountingIri = buildUrl(apiAccountingsIdGetUrl, { id: user.accountingId });
             const { data: supportsResponse, error: supportsError } =
                 await apiProjectSupportsGetCollection({
                     client: relayClient,
                     query: {
-                        origin: accountingIri,
+                        origin: user.accounting,
                         itemsPerPage: 100,
                     },
                     headers,
@@ -88,7 +82,7 @@
                 const response = await apiProjectSupportsmoneyTotalGetCollection({
                     client: relayClient,
                     query: {
-                        origin: accountingIri,
+                        origin: user.accounting,
                     },
                     headers,
                 });
@@ -103,12 +97,16 @@
             if (totalMoneyError) {
                 console.warn("Total money endpoint returned error, calculating manually:", {
                     error: totalMoneyError,
-                    accountingIri,
+                    user,
                 });
             }
 
             // Fetch user's owned projects - using user IRI as owner
-            const userIri = buildUrl(apiUsersIdGetUrl, { id: user.id });
+            const userIri = client.buildUrl({
+                url: apiUsersIdOrHandleGetUrl,
+                path: { idOrHandle: user.id },
+            });
+
             const { data: projectsResponse, error: projectsError } = await apiProjectsGetCollection(
                 {
                     client: relayClient,
@@ -473,38 +471,38 @@
     });
 </script>
 
-<div class="grid grid-cols-1 gap-6 lg:grid-cols-{matchfundingData ? '3' : '2'}">
+<Grid class="grid-cols-1 gap-6 lg:grid-cols-{matchfundingData ? '3' : '2'}">
     {#if loading}
         <!-- Loading state -->
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-content">Loading...</p>
         </div>
     {:else if error}
         <!-- Error state -->
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
         <div
-            class="border-grey flex min-h-[384px] items-center justify-center rounded-[32px] border bg-white"
+            class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white"
         >
             <p class="text-tertiary font-semibold">{error}</p>
         </div>
@@ -516,4 +514,4 @@
             <MatchfundingCard {lang} data={matchfundingData} />
         {/if}
     {/if}
-</div>
+</Grid>

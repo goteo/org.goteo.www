@@ -14,7 +14,13 @@ export const apiAccountingTransactionsIdGetUrl = '/v4/accounting_transactions/{i
 
 export const apiCategoriesGetCollectionUrl = '/v4/categories';
 
+export const apiCategoriesPostUrl = '/v4/categories';
+
+export const apiCategoriesIdDeleteUrl = '/v4/categories/{id}';
+
 export const apiCategoriesIdGetUrl = '/v4/categories/{id}';
+
+export const apiCategoriesIdPatchUrl = '/v4/categories/{id}';
 
 export const apiGatewaysGetCollectionUrl = '/v4/gateways';
 
@@ -188,17 +194,11 @@ export const apiUsersGetCollectionUrl = '/v4/users';
 
 export const apiUsersPostUrl = '/v4/users';
 
+export const apiUsersIdOrHandleGetUrl = '/v4/users/{idOrHandle}';
+
 export const apiUsersIdDeleteUrl = '/v4/users/{id}';
 
-export const apiUsersIdGetUrl = '/v4/users/{id}';
-
 export const apiUsersIdPatchUrl = '/v4/users/{id}';
-
-export const apiUserTokensPostUrl = '/v4/user_tokens';
-
-export const apiUserTokensIdDeleteUrl = '/v4/user_tokens/{id}';
-
-export const apiUserTokensIdGetUrl = '/v4/user_tokens/{id}';
 
 export const apiVersionsGetCollectionUrl = '/v4/versions';
 

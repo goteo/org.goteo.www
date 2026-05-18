@@ -1,0 +1,9 @@
+---
+import { clearSession } from "../../../auth/session";
+
+clearSession(Astro.cookies);
+
+const withCallback = Astro.url.searchParams.get("callback");
+
+return Astro.redirect(withCallback || "/");
+---

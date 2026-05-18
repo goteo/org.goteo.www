@@ -1,8 +1,8 @@
 <script lang="ts">
+    import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
-    import FlashIcon from "../../svgs/FlashIcon.svelte";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
+    import Flames from "../icons/Flames.svelte";
+    import Flash from "../icons/Flash.svelte";
     import Tabs from "../Tabs.svelte";
 
     interface Props {
@@ -14,33 +14,33 @@
 </script>
 
 {#snippet flashIconSnippet()}
-    <FlashIcon width="17" height="16" />
+    <Flash />
 {/snippet}
 
 {#snippet clockIconSnippet()}
-    <ClockIcon width="20" height="20" />
+    <Clock />
 {/snippet}
 
 {#snippet matchFundingIconSnippet()}
-    <MatchFundingIcon width="32" height="32" />
+    <Flames />
 {/snippet}
 
 <Tabs
     tabs={[
         {
             id: "most-successful",
-            label: $t("home.campaigns.tabs.mostSuccessful"),
+            label: $t("pages.home.campaigns.tabs.mostSuccessful"),
             icon: flashIconSnippet,
         },
         // Uncomment when ready to enable
         // {
         //     id: "ending-soon",
-        //     label: $t("home.campaigns.tabs.endingSoon"),
+        //     label: $t("pages.home.campaigns.tabs.endingSoon"),
         //     icon: clockIconSnippet,
         // },
         // {
         //     id: "matchfunding",
-        //     label: $t("home.campaigns.tabs.withMatchfunding"),
+        //     label: $t("pages.home.campaigns.tabs.withMatchfunding"),
         //     icon: matchFundingIconSnippet,
         // },
     ]}

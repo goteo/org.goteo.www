@@ -23,7 +23,7 @@
 
 <div class="flex flex-row flex-wrap items-center justify-between gap-6">
     <div class="text-secondary text-base">
-        <span>{$t("project.tabs.budget.total")}:</span>
+        <span>{$t("pages.project.view.tabs.budget.total")}:</span>
         <span class="font-bold">{formatCurrency(totalBudget)}</span>
     </div>
 
@@ -32,7 +32,7 @@
             <div class="flex flex-row items-center gap-2">
                 <div class="h-4 w-6 rounded-sm" style="background-color: {color};"></div>
                 <span class="text-base text-black capitalize">
-                    {$t(`project.tabs.budget.typeBudget.${key}`)}
+                    {$t(`domain.project.budget.type.${key}`)}
                 </span>
             </div>
         {/each}

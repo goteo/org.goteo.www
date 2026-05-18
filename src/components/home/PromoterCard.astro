@@ -55,7 +55,7 @@ const { t } = Astro.locals;
             class="absolute inset-0 bg-cover bg-center bg-no-repeat"
             style={`background-image: url('${promoter.image}')`}
             role="img"
-            aria-label={`${promoter.name} - ${t("home.featuredPromoters.promoterImage")}`}
+            aria-label={`${promoter.name} - ${t("pages.home.featuredPromoters.promoterImage")}`}
         >
         </div>
 
@@ -72,8 +72,8 @@ const { t } = Astro.locals;
 
     <!-- Share button -->
     <!-- <button
-        class="bg-white border-neutral-light absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
-        aria-label={t("home.featuredPromoters.shareProfile", { name: promoter.name })}
+        class="bg-white border-grey absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
+        aria-label={t("pages.home.featuredPromoters.shareProfile", { name: promoter.name })}
     >
         <ShareIcon />
     </button> -->
@@ -90,7 +90,7 @@ const { t } = Astro.locals;
             <!-- Projects promoted -->
             <div class="flex flex-col gap-1 text-left">
                 <span class="text-content text-base leading-6">
-                    {t("home.featuredPromoters.projectsPromoted")}
+                    {t("pages.home.featuredPromoters.projectsPromoted")}
                 </span>
                 <span class="text-content text-2xl leading-8 font-bold">
                     {promoter.projectsPromoted}
@@ -100,7 +100,7 @@ const { t } = Astro.locals;
             <!-- Capital raised -->
             <div class="flex flex-col gap-1 text-right">
                 <span class="text-content text-base leading-6">
-                    {t("home.featuredPromoters.capitalRaised")}
+                    {t("pages.home.featuredPromoters.capitalRaised")}
                 </span>
                 <span class="text-content text-2xl leading-8 font-bold">
                     {promoter.capitalRaised}

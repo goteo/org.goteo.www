@@ -1,3 +1,6 @@
+// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
+import storybook from "eslint-plugin-storybook";
+
 import pluginJs from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 import globals from "globals";
@@ -30,6 +33,7 @@ export default [
             "src/openapi/client/**",
             ".github/**",
             "env.d.ts",
+            "storybook-static/**",
         ],
     },
     {
@@ -125,6 +129,8 @@ export default [
             "svelte/prefer-writable-derived": "off",
             "svelte/prefer-svelte-reactivity": "off",
             "svelte/no-unused-props": "warn",
+            "svelte/no-useless-children-snippet": "warn",
         },
     },
+    ...storybook.configs["flat/recommended"],
 ];

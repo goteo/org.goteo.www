@@ -14,16 +14,12 @@
     import { toCollectionItems } from "../../utils/hydra.ts";
     import Carousel from "../Carousel.svelte";
 
-    import type { MatchCall, MatchCallSubmission } from "../../openapi/client/types.gen.ts";
+    import type { MatchCall, MatchCallSubmission, User } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";
 
     interface Props {
         lang: string;
-        user: {
-            id: number;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, user }: Props = $props();

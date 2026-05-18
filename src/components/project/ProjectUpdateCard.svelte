@@ -2,10 +2,10 @@
     import { onMount } from "svelte";
     import { twMerge } from "tailwind-merge";
 
+    import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { locale } from "../../i18n/store";
-    import { apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
+    import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
     import { formatDate } from "../../utils/dates.ts";
     import { extractId } from "../../utils/extractId.ts";
     import { renderMarkdown } from "../../utils/renderMarkdown";
@@ -27,11 +27,11 @@
     let author: User | undefined = $state(undefined);
 
     async function getAuthor(update: ProjectUpdate): Promise<User | undefined> {
-        const authorId: string | null = extractId(update.author);
+        const authorId: string | null = extractId(update.author!);
         if (!authorId) return undefined;
 
-        const { data: user, error: err } = await apiUsersIdGet({
-            path: { id: authorId },
+        const { data: user, error: err } = await apiUsersIdOrHandleGet({
+            path: { idOrHandle: authorId },
         });
 
         if (err) {
@@ -65,12 +65,12 @@
                     {formatDate(new Date(update.date), $locale)}
                 {/if}
                 <div class="pt-1">
-                    <ActiveFilterIcon />
+                    <Bullet />
                 </div>
             </div>
         </div>
         <div
-            class="bg-light-pink relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
+            class="bg-tertiary relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
         >
             <h2 class="font-body text-[2.5rem] leading-12 font-bold text-ellipsis text-white">
                 {update.title}
@@ -94,7 +94,7 @@
 {:else if type === "large"}
     <div
         class={twMerge(
-            "bg-soft-purple border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
+            "bg-purple-soft border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
             cardClasses,
         )}
     >
@@ -104,7 +104,7 @@
                     {formatDate(new Date(update.date), $locale)}
                 {/if}
                 <div class="pt-1">
-                    <ActiveFilterIcon />
+                    <Bullet />
                 </div>
             </div>
             {#if update.cover}
@@ -134,11 +134,11 @@
             </div>
             <div class="flex w-full items-end justify-between">
                 <span class="text-content flex text-sm font-medium">
-                    {$t("project.tabs.updates.by")}
+                    {$t("pages.project.view.tabs.updates.by")}
                     <strong class="font-bold text-black"> {author?.displayName}</strong>
                 </span>
                 <Button kind="ghost" onclick={onClick}>
-                    {$t("project.tabs.updates.content.btn.read-more")}
+                    {$t("pages.project.view.tabs.updates.content.btn.readMore")}
                 </Button>
             </div>
         </div>

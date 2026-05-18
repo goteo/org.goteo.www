@@ -23,6 +23,7 @@ Manages real-time filtering of campaigns without page reloads
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import Grid from "../library/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
     import type { Campaign } from "../../types/campaign";
@@ -174,7 +175,7 @@ Manages real-time filtering of campaigns without page reloads
     // Generate accessibility announcement
     $effect(() => {
         if ($hasActualSearchResults && !$isSearching) {
-            const announcement = $t("search.accessibility.resultsFound", {
+            const announcement = $t("pages.search.accessibility.resultsFound", {
                 count: $resultCount,
             });
 
@@ -216,14 +217,14 @@ Manages real-time filtering of campaigns without page reloads
 
         <!-- Results Grid (keep visible during load more) -->
         {#if campaigns.length > 0}
-            <div class="grid auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
                         <CampaignCard size={campaign.size} {campaign} />
                     </div>
                 {/each}
-            </div>
+            </Grid>
         {/if}
     </div>
 
@@ -258,16 +259,16 @@ Manages real-time filtering of campaigns without page reloads
                 </svg>
             </div>
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.empty.title")}
+                {$t("pages.search.empty.title")}
             </h3>
             <p class="mb-6 text-gray-600">
-                {$t("search.empty.description")}
+                {$t("pages.search.empty.description")}
             </p>
             <button
                 onclick={clearAllFilters}
                 class="bg-primary text-tertiary rounded-full px-6 py-2 font-semibold transition-opacity hover:opacity-90"
             >
-                {$t("search.results.empty.clearFilters")}
+                {$t("pages.search.empty.clearFilters")}
             </button>
         </div>
     {/if}
@@ -276,9 +277,9 @@ Manages real-time filtering of campaigns without page reloads
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.initial.title")}
+                {$t("pages.search.initial.title")}
             </h3>
-            <p class="text-gray-600">{$t("search.initial.description")}</p>
+            <p class="text-gray-600">{$t("pages.search.initial.description")}</p>
         </div>
     {/if}
 </div>

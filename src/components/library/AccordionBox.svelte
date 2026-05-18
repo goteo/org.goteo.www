@@ -1,0 +1,51 @@
+<script lang="ts">
+    import { slide } from "svelte/transition";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import ChevronDown from "../../svgs/ChevronDown.svelte";
+
+    import type { Snippet } from "svelte";
+
+    interface Props {
+        class?: ClassNameValue;
+        heading: string;
+        open?: boolean;
+        children?: Snippet;
+    }
+
+    let { class: classes = "", heading, open = $bindable(false), children }: Props = $props();
+
+    function handleToggle() {
+        open = !open;
+    }
+</script>
+
+<div
+    class={twMerge(
+        "overflow-hidden rounded-2xl border transition-all duration-300",
+        open ? "border-grey bg-soft-purple shadow-md" : "border-grey bg-white shadow-sm",
+        classes,
+    )}
+>
+    <button
+        type="button"
+        class={twMerge(
+            "flex w-full items-center justify-between px-6 text-left transition-all duration-300 focus:outline-none",
+            open ? "pt-4 pb-0" : "py-4",
+        )}
+        onclick={handleToggle}
+        aria-expanded={open}
+    >
+        <span class="text-body text-sm font-bold lg:text-base">{heading}</span>
+        <span class="text-secondary ml-4 shrink-0">
+            <ChevronDown rotate={open} />
+        </span>
+    </button>
+    {#if open}
+        <div transition:slide|local={{ duration: 300 }}>
+            <div class="text-content px-6 pt-6 pb-6 text-xs leading-relaxed lg:text-sm">
+                {@render children?.()}
+            </div>
+        </div>
+    {/if}
+</div>
