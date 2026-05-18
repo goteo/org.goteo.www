@@ -42,6 +42,7 @@
     --body-small: 0.875rem;
     --text-body-regular: 1rem;
     --text-body-small: 0.875rem;
+    --text-double: 2rem; /** 32px **/
 }
 
 @layer base {
