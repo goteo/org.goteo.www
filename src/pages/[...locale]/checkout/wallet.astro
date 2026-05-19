@@ -24,7 +24,10 @@ const { data: accounting } = await apiAccountingsIdGet({
 });
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout
+    title={t("pages.checkout.metadata.title")}
+    description={t("pages.checkout.metadata.description")}
+>
     <App client:load locale={lang} session={session}>
         <div class="wrapper max-md:px-0">
             <BackButton client:load />
@@ -37,7 +40,7 @@ const { data: accounting } = await apiAccountingsIdGet({
                                     {t("payment.wallet-confirmation.title")}
                                 </h2>
                                 <p class="text-content">
-                                    {t("payment.wallet-confirmation.description")}
+                                    {t("pages.checkout.wallet.description")}
                                 </p>
                             </div>
 
@@ -54,7 +57,7 @@ const { data: accounting } = await apiAccountingsIdGet({
                             <Steps step={3} hasError={false} client:load />
                         </div>
                         <div class="flex flex-col">
-                            <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                            <p class="text-content text-sm">{t("pages.checkout.summary.deduct")}</p>
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
@@ -62,7 +65,7 @@ const { data: accounting } = await apiAccountingsIdGet({
                             href="/checkout/verify"
                             class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
                         >
-                            {t("global.btn.continue")}
+                            {t("common.continue")}
                         </a>
                     </div>
                 </Card>

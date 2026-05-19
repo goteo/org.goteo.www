@@ -16,8 +16,7 @@
 
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div class="text-center sm:text-left">
-        <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.currentBalance")}</span
+        <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.currentBalance")}</span
         >
         <p class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
@@ -35,7 +34,7 @@
 
     <div class="text-center sm:text-left">
         <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.remainingBalance")}
+            >{$t("pages.checkout.wallet.remainingBalance")}
         </span>
         <p id="cart-difference" class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}

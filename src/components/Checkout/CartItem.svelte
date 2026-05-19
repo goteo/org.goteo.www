@@ -46,12 +46,12 @@
                     {#if item.kind === "reward"}
                         {#if item.reward?.unitsClaimed! > 0}
                             <span
-                                >{$t("checkout.reward.claimed", {
+                                >{$t("pages.checkout.reward.claimed", {
                                     units: item.reward?.unitsClaimed!,
                                 })}
                             </span>
                         {:else}
-                            <span>{$t("checkout.reward.unclaimed")} </span>
+                            <span>{$t("pages.checkout.reward.unclaimed")} </span>
                         {/if}
                     {/if}
                 </p>
@@ -83,7 +83,7 @@
                 class="accent-primary h-6 w-6 rounded"
             />
             <label for="donation-checkbox" class=" text-content">
-                {$t("checkout.changeAddressLabel")}
+                {$t("pages.checkout.changeAddressLabel")}
             </label>
         </div> -->
 </div>

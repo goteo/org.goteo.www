@@ -220,8 +220,124 @@
       }
     },
     "checkout": {
+      "metadata": {
+        "title": "Checkout",
+        "description": "Página de checkout"
+      },
+      "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+      "reward": {
+        "claimed": "{{ units }} personas ya han reclamado esta recompensa",
+        "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
+      },
+      "tipjar": {
+        "community": "Quiero apoyar a la Fundación Platoniq",
+        "checkboxLabel": "Impulsar una sociedad más justa y solidaria",
+        "input": "Ingrese monto libre",
+        "error": {
+          "invalidAmount": "La cantidad mínima es de 1€"
+        }
+      },
+      "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
+      "title": "Caja",
       "summary": {
-        "toRecipient": "{{ amount }} a {{ name }}"
+        "toRecipient": "{{ amount }} a {{ name }}",
+        "total": {
+          "title": "Total que vas a donar",
+          "description": "Descripción del total"
+        },
+        "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
+        "resume": {
+          "donationsPrefix": "de donaciones",
+          "foundationPrefix": "de aporte a la fundación"
+        },
+        "showDetails": "Ver detalle",
+        "hideDetails": "Ocultar desglose",
+        "showMore": "Ver más",
+        "hide": "Ocultar",
+        "donations": "de donaciones",
+        "foundation": "de aporte a "
+      },
+      "cart": {
+        "freeDonation": {
+          "title": "Donación libre"
+        }
+      },
+      "steps": {
+        "reward": {
+          "title": "Recompensa"
+        },
+        "data": {
+          "title": "Tus datos"
+        },
+        "payment": {
+          "title": "Método de pago"
+        },
+        "confirmation": {
+          "title": "Confirmar"
+        }
+      },
+      "payment": {
+        "title": "Indícanos tus datos de pago",
+        "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
+        "selectMethod": "Selecciona método de pago:"
+      },
+      "wallet": {
+        "title": "Tu monedero virtual",
+        "description": "Bien, vas a pagar con el saldo acumulado en tu monedero. Recuerda que si tienes saldo y en dos años no lo gastas, se transferirá a la fundación.",
+        "balanceLabel": "Saldo: ",
+        "currentBalance": "Saldo actual",
+        "amountToUse": "Cuánto vas a usar",
+        "remainingBalance": "Saldo que te quedará"
+      },
+      "verify": {
+        "approved": {
+          "title": "Tu medio de pago se ha procesado con un éxito apabullante",
+          "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
+          "formGoal": {
+            "title": "Si la campaña no logra su objetivo",
+            "options": {
+              "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+              "2": "Devolverlo a mi medio de pago"
+            }
+          },
+          "formReview": {
+            "title": "Deja un mensaje en los proyectos a los que has apoyado",
+            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
+            "labels": {
+              "name": "Label",
+              "anonymous": "Dejar un mensaje de forma anónima",
+              "leave-a-message": "Dejar un mensaje de forma pública"
+            }
+          }
+        },
+        "error": {
+          "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
+          "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
+          "selectMethod": "Selecciona de nuevo un método de pago:",
+          "btnContinue": "Volver a intentarlo"
+        }
+      },
+      "postPayment": {
+        "title": "¡Enhorabuena! Gracias por tu donación",
+        "emailSent": "Te hemos enviado un resumen a:",
+        "certificate": {
+          "title": "¿Cómo solicito mi certificado?",
+          "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
+        },
+        "donatedProjects": {
+          "title": "Has donado a los siguientes proyectos",
+          "empty": "No se encontraron proyectos donados"
+        },
+        "suggestedProjects": {
+          "title": "Otros proyectos que requieren de tu ayuda",
+          "empty": "No hay proyectos disponibles en este momento"
+        }
+      },
+      "error": {
+        "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
+        "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
+        "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
+        "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
       }
     },
     "project": {
@@ -514,6 +630,7 @@
       }
     },
     "about": {
+      "title": "Sobre Goteo",
       "hero": {
         "title": "Conoce nuestra manera de hacer crowdfunding",
         "description": "En Goteo creemos que la financiación colectiva es más que dinero: es confianza, comunidad y compromiso social. Nuestro modelo de crowdfunding se basa en el impulso de proyectos que generan impacto positivo y en el acompañamiento cercano a las personas y organizaciones que los hacen posibles.",
@@ -705,7 +822,11 @@
         "loadMore": "Cargar más resultados",
         "noMoreResults": "No hay más resultados"
       }
-    }
+    },
+    "register": { "title": "Registro" },
+    "admin": { "charges": { "title": "Cargos" } },
+    "static": { "title": "Goteo" },
+    "profile": { "title": "Goteo" }
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",
@@ -953,127 +1074,6 @@
     "search": "Buscar",
     "createProject": "Crea tu proyecto",
     "goToProfile": "Ir a Perfil"
-  },
-  "checkout": {
-    "title": "Resumen de tus donaciones seleccionadas",
-    "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
-    "reward": {
-      "claimed": "{{ units }} personas ya han reclamado esta recompensa",
-      "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
-    },
-    "tipjar": {
-      "community": "Quiero apoyar a la Fundación Platoniq",
-      "checkboxLabel": "Impulsar una sociedad más justa y solidaria",
-      "input": "Ingrese monto libre",
-      "error": {
-        "invalidAmount": "La cantidad mínima es de 1€"
-      }
-    },
-    "changeAddressLabel": "Enviar esta recompensa a una dirección distinta a la mia.",
-    "summary": {
-      "total": {
-        "title": "Total que vas a donar",
-        "description": "Descripción del total"
-      },
-      "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
-      "resume": {
-        "donationsPrefix": "de donaciones",
-        "foundationPrefix": "de aporte a la fundación"
-      },
-      "show_details": "Ver detalle",
-      "hide_details": "Ocultar desglose",
-      "show_more": "Ver más",
-      "hide": "Ocultar",
-      "donations": "de donaciones",
-      "foundation": "de aporte a "
-    },
-    "cart": {
-      "freeDonation": {
-        "title": "Donación libre"
-      }
-    },
-    "steps": {
-      "reward": {
-        "title": "Recompensa"
-      },
-      "data": {
-        "title": "Tus datos"
-      },
-      "payment": {
-        "title": "Método de pago"
-      },
-      "confirmation": {
-        "title": "Confirmar"
-      }
-    },
-    "btnContinue": {
-      "label": "Continuar"
-    }
-  },
-  "payment": {
-    "postPayment": {
-      "title": "¡Enhorabuena! Gracias por tu donación",
-      "emailSent": "Te hemos enviado un resumen a:",
-      "certificate": {
-        "title": "¿Cómo solicito mi certificado?",
-        "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
-      },
-      "donatedProjects": {
-        "title": "Has donado a los siguientes proyectos",
-        "empty": "No se encontraron proyectos donados"
-      },
-      "suggestedProjects": {
-        "title": "Otros proyectos que requieren de tu ayuda",
-        "empty": "No hay proyectos disponibles en este momento"
-      }
-    },
-    "page": {
-      "title": "Indícanos tus datos de pago",
-      "description": "Ahora necesitamos que nos digas cómo quieres pagar.",
-      "selectMethod": "Selecciona método de pago:"
-    },
-    "page-approved": {
-      "title": "Tu medio de pago se ha procesado con un éxito apabullante",
-      "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
-      "form-goal": {
-        "title": "Si la campaña no logra su objetivo",
-        "options": {
-          "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
-          "2": "Devolverlo a mi medio de pago"
-        }
-      },
-      "form-review": {
-        "title": "Deja un mensaje en los proyectos a los que has apoyado",
-        "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
-        "labels": {
-          "name": "Label",
-          "anonymous": "Dejar un mensaje de forma anónima",
-          "leave-a-message": "Dejar un mensaje de forma pública"
-        }
-      }
-    },
-    "page-error": {
-      "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
-      "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
-      "selectMethod": "Selecciona de nuevo un método de pago:",
-      "btnContinue": "Volver a intentarlo"
-    },
-    "wallet-confirmation": {
-      "title": "Tu monedero virtual",
-      "description": "Bien, vas a pagar con el saldo acumulado en tu monedero. Recuerda que si tienes saldo y en dos años no lo gastas, se transferirá a la fundación.",
-      "currentBalance": "Saldo actual",
-      "amountToUse": "Cuánto vas a usar",
-      "remainingBalance": "Saldo que te quedará"
-    },
-    "wallet": {
-      "balanceLabel": "Saldo: "
-    },
-    "error": {
-      "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
-      "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
-      "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
-      "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
-    }
   },
   "contributions": {
     "title": "Aportes",

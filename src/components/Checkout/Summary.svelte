@@ -21,8 +21,8 @@
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
-        buttonTextShow={$t("checkout.summary.show_details")}
-        buttonTextHide={$t("checkout.summary.hide_details")}
+        buttonTextShow={$t("pages.checkout.summary.showDetails")}
+        buttonTextHide={$t("pages.checkout.summary.hideDetails")}
     >
         {#snippet header()}
             <h2
@@ -33,7 +33,7 @@
                         <WarningIcon />
                     </span>
                 {/if}
-                {$t("checkout.summary.total.title")}
+                {$t("pages.checkout.summary.total.title")}
             </h2>
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}

@@ -85,7 +85,7 @@ const postPaymentUrl = checkoutId
                                                     {t("payment.page-error.title")}
                                                 </h2>
                                                 <p class="text-content">
-                                                    {t("payment.page-error.description")}
+                                                    {t("pages.checkout.verify.error.description")}
                                                 </p>
                                             </div>
                                             <PaymentErrorIcon />
@@ -104,7 +104,7 @@ const postPaymentUrl = checkoutId
                                 <div class="w-full lg:block" id="checkout-details">
                                     <div class="flex flex-col">
                                         <p class="text-content text-sm">
-                                            {t("checkout.summary.deduct")}
+                                            {t("pages.checkout.summary.deduct")}
                                         </p>
                                     </div>
                                 </div>
@@ -132,7 +132,9 @@ const postPaymentUrl = checkoutId
                                                         {t("payment.page-approved.title")}
                                                     </h2>
                                                     <p class="text-content">
-                                                        {t("payment.page-approved.description")}
+                                                        {t(
+                                                            "pages.checkout.verify.approved.description",
+                                                        )}
                                                     </p>
                                                 </div>
                                                 <ApprovedIcon />
@@ -151,7 +153,7 @@ const postPaymentUrl = checkoutId
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">
                                             <p class="text-content text-sm">
-                                                {t("checkout.summary.deduct")}
+                                                {t("pages.checkout.summary.deduct")}
                                             </p>
                                         </div>
                                     </div>
