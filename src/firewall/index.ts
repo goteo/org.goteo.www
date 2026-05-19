@@ -60,6 +60,16 @@ export function getMatchingACL(pathname: string): ControlItem | null {
     return null;
 }
 
+/**
+ * Checks if a user is authorized to access a control item.
+ * @param control The control item (ACL) to check authorization for
+ * @param roles The roles of the current user
+ * @returns True if the user is authorized, false otherwise
+ */
 export function isAuthorized(control: ControlItem, roles: string[]): boolean {
+    if (control.roles.length === 0) {
+        return true;
+    }
+
     return control.roles.some((role) => roles.includes(role));
 }
