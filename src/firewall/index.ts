@@ -15,8 +15,13 @@ function normalizePath(pathname: string): string {
     return "/" + segments.join("/");
 }
 
-function isRegexPath(path: string): boolean {
-    return /[.*+?^${}()|[\]\\]/.test(path);
+function isValidRegex(pattern: string): boolean {
+    try {
+        new RegExp(pattern);
+        return true;
+    } catch {
+        return false;
+    }
 }
 
 function getRegex(path: string): RegExp {
@@ -40,7 +45,7 @@ function matchesPath(pathname: string, path: string): boolean {
     }
 
     // Dynamic regex route
-    if (isRegexPath(path)) {
+    if (isValidRegex(path)) {
         return getRegex(path).test(pathname);
     }
 
