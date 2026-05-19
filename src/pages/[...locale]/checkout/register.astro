@@ -1,89 +1,17 @@
 ---
-import Layout from "../../layouts/Layout.astro";
-import App from "../../components/App.svelte";
-import RegisterForm from "../../components/RegisterForm.astro";
-import Summary from "../../components/Checkout/Summary.svelte";
-import AuthSummary from "../../components/AuthSummary.svelte";
-import Button from "../../components/library/Button.svelte";
-import BackButton from "../../components/BackButton.svelte";
-import { cartCount } from "../../stores/cart";
+import Layout from "../../../layouts/Layout.astro";
+import RegisterForm from "../../../components/RegisterForm.svelte";
 
-const { t, lang, session } = Astro.locals;
-
-let hasCart = false;
-cartCount.subscribe((count) => {
-    hasCart = count >= 1;
-});
+const { lang, session } = Astro.locals;
+const { t } = Astro.locals;
 ---
 
-<Layout title={t("register.page.title")}>
-    <App client:load locale={lang} session={session}>
-        <div class="wrapper">
-            <div class="flex flex-col gap-8 py-10 lg:flex-row">
-                <!-- Left Column -->
-                <div class="flex w-full flex-col gap-10 lg:w-1/2">
-                    <BackButton client:load />
-
-                    <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">
-                        <div class="flex flex-col gap-4">
-                            <h1 class="text-2xl font-bold tracking-tight text-black md:text-3xl lg:text-[40px] lg:leading-tight">
-                                {t("register.page.title")}
-                            </h1>
-                            {hasCart && (
-                                <p class="text-content text-sm md:text-base">
-                                    {t("register.page.description")}
-                                </p>
-                            )}
-                        </div>
-
-                        <div class="flex flex-col gap-6">
-                            <div class="flex flex-col flex-wrap items-start gap-2 sm:flex-row sm:items-center">
-                                <h2 class="text-lg font-bold text-black md:text-xl lg:text-2xl">
-                                    {t("register.page.registerOr")}
-                                </h2>
-                                <a
-                                    href="/login"
-                                    class="text-secondary bg-purple-tint inline-block rounded-xl px-3 py-1.5 text-sm font-bold transition-transform hover:scale-105 md:rounded-2xl md:px-4 md:py-2 md:text-base"
-                                >
-                                    {t("register.page.loginBtnLabel")}
-                                </a>
-                            </div>
-                            
-                            <!-- form -->
-                            <RegisterForm />
-                        </div>
-                    </div>
-                </div>
-
-                <!-- row right (Sticky) -->
-                <div class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white p-6 lg:top-24 lg:bottom-auto lg:w-1/2 lg:rounded-[40px]">
-                    <AuthSummary client:load />
-                    
-                    {hasCart && <Summary client:load />}
-
-                    <div id="auth-details" class="flex flex-col gap-4">
-                        <!-- Message visible only on mobile -->
-                        <div class="flex flex-col gap-4 pt-4 lg:hidden">
-                            <p class="text-content text-sm font-light">
-                                {t("login.page.welcome.subtitle")}
-                            </p>
-                            <hr class="border-gray-200" />
-                        </div>
-
-                        <div class="pt-4">
-                            <Button 
-                                client:load 
-                                type="submit" 
-                                form="register" 
-                                class="w-full py-5 text-xl font-bold"
-                            >
-                                {t("register.form.btnSubmit")}
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </App>
+<Layout title={t("pages.register.metadata.title")}>
+    <main class="bg-grey min-h-screen w-full overflow-visible">
+        <RegisterForm 
+            client:load 
+            lang={lang} 
+            session={session} 
+        />
+    </main>
 </Layout>
