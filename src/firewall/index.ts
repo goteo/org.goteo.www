@@ -27,6 +27,12 @@ function getRegex(path: string): RegExp {
     return regexCache.get(path)!;
 }
 
+/**
+ * Checks if a pathname matches a given path.
+ * @param pathname The pathname to check, e.g. "/admin/dashboard"
+ * @param path The path to match against, which can be an exact path (e.g. "/admin") or a regex pattern (e.g. "/admin/.*")
+ * @returns True if the pathname matches the path, false otherwise
+ */
 function matchesPath(pathname: string, path: string): boolean {
     // Exact match
     if (pathname === path) {
