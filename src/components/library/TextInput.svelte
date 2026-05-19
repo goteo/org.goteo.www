@@ -35,7 +35,7 @@
     {#if labelText}
         <label
             for={finalId}
-            class="absolute -top-2 left-4 -translate-y-1/2 transform text-2.5 font-medium text-gray-500 transition-all"
+            class="absolute -top-2 left-4 -translate-y-1/2 transform text-[0.625rem] font-medium text-gray-500 transition-all"
         >
             {labelText}
         </label>

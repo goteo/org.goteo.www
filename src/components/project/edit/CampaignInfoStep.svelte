@@ -116,7 +116,7 @@
 <div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-10">
+        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
             {$t("pages.project.edit.campaignInfo.title")}
         </h1>
         <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>

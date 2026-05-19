@@ -38,7 +38,7 @@
                 {/if}
             </div>
             <div class="flex flex-col gap-2 md:gap-4">
-                <p class="text-secondary text-lg font-bold md:text-8">
+                <p class="text-secondary md:text-double text-lg font-bold">
                     {formatCurrency(item.money.amount, item.money.currency)}
                 </p>
                 <p class="text-secondary text-sm font-bold md:text-base">{item.title}</p>

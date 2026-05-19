@@ -6,7 +6,7 @@
 
 <div
     class={twMerge(
-        "bg-light-surface border-light-muted min-w-sm rounded-8 border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "bg-light-surface border-light-muted min-w-sm rounded-4xl border p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         className,
     )}
 >

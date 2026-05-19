@@ -19,7 +19,7 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.currentBalance")}</span
         >
-        <p class="text-secondary text-8 font-bold">
+        <p class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
         </p>
     </div>
@@ -28,7 +28,7 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.amountToUse")}
         </span>
-        <p id="cart-total" class="text-8 font-bold text-red-500">
+        <p id="cart-total" class="text-double font-bold text-red-500">
             {formatCurrency($total, defaultCurrency)}
         </p>
     </div>
@@ -37,7 +37,7 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.remainingBalance")}
         </span>
-        <p id="cart-difference" class="text-secondary text-8 font-bold">
+        <p id="cart-difference" class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}
         </p>
     </div>

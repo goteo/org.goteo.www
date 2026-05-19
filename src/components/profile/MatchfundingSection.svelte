@@ -167,7 +167,7 @@
             {$t("me.matchfunding.section.title")}
         </h2>
         <!-- Single hero card skeleton matching actual dimensions -->
-        <div class="bg-grey h-64 w-full animate-pulse rounded-8 md:h-80 lg:h-96"></div>
+        <div class="bg-grey h-64 w-full animate-pulse rounded-4xl md:h-80 lg:h-96"></div>
     </div>
 {:else if error}
     <!-- Error State -->

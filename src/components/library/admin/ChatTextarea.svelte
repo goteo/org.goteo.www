@@ -15,7 +15,7 @@
         placeholder={$t("reviews.chat.placeholder")}
     ></textarea>
     <button
-        class="border-grey flex aspect-square size-10 shrink-0 cursor-pointer items-center justify-center rounded-20 border bg-white p-2 shadow-[0_2px_4px_0_rgba(0,0,0,0.16)]"
+        class="border-grey flex aspect-square size-10 shrink-0 cursor-pointer items-center justify-center rounded-[80px] border bg-white p-2 shadow-[0_2px_4px_0_rgba(0,0,0,0.16)]"
         ><Send /></button
     >
 </div>

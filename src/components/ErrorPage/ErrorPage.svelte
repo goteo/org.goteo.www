@@ -17,7 +17,7 @@
 
 <section class="flex min-h-[85dvh] flex-col items-center justify-center">
     <span
-        class="text-grey font-body pointer-events-none absolute z-0 text-50 leading-[1.17] font-bold select-none sm:text-75 md:text-100 lg:text-125 xl:text-185"
+        class="text-grey font-body pointer-events-none absolute z-0 text-[200px] leading-[1.17] font-bold select-none sm:text-[300px] md:text-[400px] lg:text-[500px] xl:text-[740px]"
     >
         {code}
     </span>

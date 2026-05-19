@@ -30,8 +30,8 @@ Supports: primary (Aplicar filtros), secondary (Buscar), ghost (Cerrar filtros)
 
     // Size classes - matching Figma specifications exactly
     const sizeClasses = {
-        medium: "px-6 py-4 text-body-regular leading-6 rounded-3xl",
-        small: "px-4 py-2 text-sm rounded-5",
+        medium: "px-6 py-4 text-base leading-6 rounded-3xl",
+        small: "px-4 py-2 text-sm rounded-[20px]",
     };
 
     // Variant classes matching Figma design exactly

@@ -42,7 +42,7 @@
 <div class="space-y-8">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-10/12 font-bold text-black">
+        <h1 class="text-[2.5rem]/12 font-bold text-black">
             {$t("pages.project.edit.configuration.title")}
         </h1>
         <p class="text-content text-base font-normal">

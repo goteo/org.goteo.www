@@ -127,7 +127,7 @@
         onblur={handleBlur}
         onkeydown={(e) => e.key === "Escape" && (isOpen = false)}
         class={twMerge(
-            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-body-regular leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-base leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}

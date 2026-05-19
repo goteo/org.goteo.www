@@ -28,7 +28,7 @@ cartCount.subscribe((count) => {
                         <div class="flex flex-col gap-6 md:gap-8 lg:gap-10">
                             <div class="flex flex-col gap-4">
                                 <h2
-                                    class="text-2xl font-bold tracking-[0%] text-black md:text-3xl md:leading-tight lg:text-10 lg:leading-12"
+                                    class="text-2xl font-bold tracking-[0%] text-black md:text-3xl md:leading-tight lg:text-[2.5rem] lg:leading-12"
                                 >
                                     {t("register.page.title")}
                                 </h2>
@@ -65,7 +65,7 @@ cartCount.subscribe((count) => {
                 </div>
 
                 <div
-                    class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-10 lg:p-6"
+                    class="sticky bottom-4 flex h-fit w-full flex-col gap-6 rounded-3xl border bg-white pt-6 pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
                 >
                     <AuthSummary client:load />
                     {hasCart && <Summary client:load />}

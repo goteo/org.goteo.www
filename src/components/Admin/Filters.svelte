@@ -60,7 +60,7 @@
 </script>
 
 <div
-    class="border-variant1 relative flex flex-col gap-10 rounded-10 border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-variant1 rounded-[] relative flex flex-col gap-10 border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
         <Search onSelectTarget={handleSelectTarget} />

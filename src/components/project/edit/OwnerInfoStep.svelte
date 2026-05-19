@@ -50,7 +50,7 @@
     <div class="flex flex-col gap-10">
         <!-- Header -->
         <div class="space-y-4">
-            <h1 class="text-10 leading-12 font-bold text-black lg:text-10">
+            <h1 class="text-[2.5rem] leading-12 font-bold text-black lg:text-[2.5rem]">
                 {$t("pages.project.edit.aboutYou.title")}
             </h1>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.subtitle")}</p>
