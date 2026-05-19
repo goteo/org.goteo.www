@@ -1,7 +1,3 @@
-<!--
-    @component
-    Use this component whenever you need to render a translation with HTML inside of it
--->
 <script lang="ts">
     import { t } from "../i18n/store";
 
@@ -17,16 +13,24 @@
         options?: TranslationOptions;
     } = $props();
 
-    let markup: string | undefined = $derived($t(key, vars, { allowHTML: true, ...options }));
+    let rawText = $derived($t(key, {}, { allowHTML: true, ...options }));
 
-    // Without the next lines Svelte won't reload the rendered markup on locale changes
-    // https://svelte.dev/docs/svelte/runtime-warnings#Client-warnings-hydration_html_changed
+    let markup = $derived.by(() => {
+        if (!rawText) return "";
+        let processed = rawText;
+        
+        for (const [varKey, varValue] of Object.entries(vars)) {
+            processed = processed.replaceAll(`{{${varKey}}}`, String(varValue));
+        }
+        return processed;
+    });
+
     if (typeof window !== "undefined") {
         const initial = markup;
-        markup = undefined;
+        let hydrationMarkup = $state<string | undefined>(undefined);
 
         $effect(() => {
-            markup = initial;
+            hydrationMarkup = markup;
         });
     }
 </script>
