@@ -52,33 +52,29 @@
         {/snippet}
 
         {#snippet content()}
-            <div class="flex w-full flex-col pb-6">
-                <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-155 border-none"></div>
+    <div class="flex flex-col w-full pb-6"> <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-[620px] border-none"></div>
 
-                <div class="text-content font-karla text-[16px] leading-6 font-normal">
-                    {#each recipients() as [id, items], index}
-                        {@const amount = items.reduce(
-                            (sum, i) => sum + i.money.amount * i.quantity,
-                            0,
-                        )}
+        <div class="text-content font-karla text-[16px] leading-6 font-normal">
+            {#each recipients() as [id, items], index}
+                {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
 
-                        <span class="inline">
-                            <Thtml
-                                key={id === "foundation"
-                                    ? "checkout.summary.resume.foundationPrefix"
-                                    : "checkout.summary.resume.donationsPrefix"}
-                                vars={{
-                                    amount: `<strong class="font-bold text-secondary">${formatCurrency(amount)}</strong>`,
-                                }}
-                            />
+                <span class="inline">
+                    <Thtml
+                        key={id === "foundation"
+                            ? "checkout.summary.resume.foundationPrefix"
+                            : "checkout.summary.resume.donationsPrefix"}
+                        vars={{
+                            amount: `<strong class="font-bold text-secondary">${formatCurrency(amount)}</strong>`,
+                        }}
+                    />
 
-                            {#if index < recipients().length - 1}
-                                <span class="text-content mx-2 font-medium">+</span>
-                            {/if}
-                        </span>
-                    {/each}
-                </div>
-            </div>
-        {/snippet}
+                    {#if index < recipients().length - 1}
+                        <span class="mx-2 font-medium text-content">+</span>
+                    {/if}
+                </span>
+            {/each}
+        </div>
+    </div>
+{/snippet}
     </CollapsibleBox>
 </div>
