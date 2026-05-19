@@ -11,21 +11,21 @@
         { icon: FacebookIcon, id: "facebook" },
         { icon: LinkedinIcon, id: "linkedin" },
     ];
-
+                    
     const handleLogin = (id: string) => {
-        console.log(`Iniciando flujo de OAuth para: ${id}`);       
+        console.log(`Iniciando flujo de Oauth para: ${id}`);       
     };
 </script>
 
-<div class="flex w-full flex-row gap-4">
+<div class="flex flex-row flex-wrap items-center justify-start gap-4">
     {#each providers as { icon: Icon, id }}
         <button
             type="button"
             onclick={() => handleLogin(id)}
-            aria-label={`Login con ${id}`}
-            class="flex flex-1 items-center justify-center rounded-xl border border-gray-200 p-4.5 transition-all hover:bg-gray-50 active:scale-95"
+            class="flex size-22.75 shrink-0 items-center justify-center rounded-2xl border border-[#F3F3EF] bg-[#FBFBFB] p-4.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.10)] transition-all hover:bg-white hover:shadow-md active:scale-95"
         >
-            <Icon width="24" height="24" />
+            <Icon width="48" height="48" />
         </button>
     {/each}
 </div>
+
