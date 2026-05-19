@@ -95,7 +95,9 @@
                             />
                         </div>
 
-                        <div class="flex flex-col items-start gap-5 flex-initial self-stretch max-w-121">
+                        <div
+                            class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                        >
                             <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 {#if userType === "individual"}
                                     <input
@@ -141,7 +143,9 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="flex flex-col items-start gap-5 flex-initial self-stretch max-w-121">
+                            <div
+                                class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                            >
                                 <Checkbox
                                     id="tax-deduction"
                                     bind:checked={showDniField}
@@ -158,26 +162,26 @@
                                 />
                             </div>
                         </div>
-                        <div class="fflex flex-col items-start gap-5 flex-initial self-stretch max-w-121">
-                        <Checkbox id="policies" bind:checked={acceptTerms}>
-                            <Thtml
-                                key="register.form.policiesCheckbox"
-                                vars={{
-                                    terms: `<a href="/legal/terms" class="text-secondary underline font-bold hover:opacity-80">`,
-                                    _terms: "</a>",
-                                    privacy: `<a href="/legal/privacy" class="text-secondary underline font-bold hover:opacity-80">`,
-                                    _privacy: "</a>",
-                                    cookies: `<a href="/legal/cookies" class="text-secondary underline font-bold hover:opacity-80">`,
-                                    _cookies: "</a>",
-                                }}
-                            />
-                        </Checkbox>
+                        <div
+                            class="fflex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                        >
+                            <Checkbox id="policies" bind:checked={acceptTerms}>
+                                <Thtml
+                                    key="register.form.policiesCheckbox"
+                                    vars={{
+                                        terms: `<a href="/legal/terms" class="text-secondary underline font-bold hover:opacity-80">`,
+                                        _terms: "</a>",
+                                        privacy: `<a href="/legal/privacy" class="text-secondary underline font-bold hover:opacity-80">`,
+                                        _privacy: "</a>",
+                                        cookies: `<a href="/legal/cookies" class="text-secondary underline font-bold hover:opacity-80">`,
+                                        _cookies: "</a>",
+                                    }}
+                                />
+                            </Checkbox>
                         </div>
                     </form>
                     <div class="flex flex-col items-start">
-                        <p
-                            class="text-content font-body w-109.25 text-base leading-8 font-normal"
-                        >
+                        <p class="text-content font-body w-109.25 text-base leading-8 font-normal">
                             {$t("register.page.otherAccessMethods")}
                         </p>
 

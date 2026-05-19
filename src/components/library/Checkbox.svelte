@@ -18,16 +18,17 @@
     }>();
 </script>
 
-<div class="flex items-start justify-center gap-2"> <input
+<div class="flex items-start justify-center gap-2">
+    <input
         type="checkbox"
         {id}
         bind:checked
         class={twMerge(
-            "border-secondary text-primary ring-white size-5 shrink-0 rounded-sm border ring-0 accent-secondary outline-0 mt-0.5",
+            "border-secondary text-primary accent-secondary mt-0.5 size-5 shrink-0 rounded-sm border ring-0 ring-white outline-0",
             classes,
         )}
     />
-    
+
     <label for={id} class="text-content text-base font-normal">
         {#if children}
             {@render children()}

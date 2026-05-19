@@ -18,7 +18,7 @@
     let markup = $derived.by(() => {
         if (!rawText) return "";
         let processed = rawText;
-        
+
         for (const [varKey, varValue] of Object.entries(vars)) {
             processed = processed.replaceAll(`{{${varKey}}}`, String(varValue));
         }

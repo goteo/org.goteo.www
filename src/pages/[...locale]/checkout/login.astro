@@ -8,10 +8,6 @@ const { t } = Astro.locals;
 
 <Layout title={t("pages.login.metadata.title")}>
     <main class="bg-grey min-h-screen w-full overflow-visible">
-        <LoginForm 
-            client:load 
-            lang={lang} 
-            session={session} 
-        />
+        <LoginForm client:load lang={lang} session={session} />
     </main>
 </Layout>

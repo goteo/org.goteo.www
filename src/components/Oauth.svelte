@@ -1,19 +1,18 @@
 <script lang="ts">
-    
     import FacebookIcon from "../svgs/FacebookIcon.svelte";
     import GoogleIcon from "../svgs/GoogleIcon.svelte";
-    import LinkedinIcon from "../svgs/LinkedinIcon.svelte";  
-    import XIcon from "../svgs/XIcon.svelte";    
-    
+    import LinkedinIcon from "../svgs/LinkedinIcon.svelte";
+    import XIcon from "../svgs/XIcon.svelte";
+
     const providers = [
         { icon: GoogleIcon, id: "google" },
         { icon: XIcon, id: "x" },
         { icon: FacebookIcon, id: "facebook" },
         { icon: LinkedinIcon, id: "linkedin" },
     ];
-                    
+
     const handleLogin = (id: string) => {
-        console.log(`Iniciando flujo de Oauth para: ${id}`);       
+        console.log(`Iniciando flujo de Oauth para: ${id}`);
     };
 </script>
 
@@ -28,4 +27,3 @@
         </button>
     {/each}
 </div>
-
