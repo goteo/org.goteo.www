@@ -30,30 +30,29 @@
     <CollapsibleBox
         detailsId="checkout-details"
         isInitiallyCollapsed={false}
-        buttonTextShow={$t("checkout.summary.show_details")}
-        buttonTextHide={$t("checkout.summary.hide_details")}
+        buttonTextShow={$t("pages.checkout.summary.showDetails")}
+        buttonTextHide={$t("pages.checkout.summary.hideDetails")}
     >
         {#snippet header()}
-            <div class="flex flex-col items-start gap-1">
-                <h2
-                    class={`font-karla flex items-center gap-2 text-xl leading-tight font-medium lg:text-[32px] lg:leading-[40px] ${hasError ? "text-tertiary" : "text-secondary"}`}
-                >
-                    {#if hasError}
-                        <span class="h-6 w-6"><WarningIcon /></span>
-                    {/if}
-                    {$t("checkout.summary.total.title")}
-                </h2>
-
-                <p
-                    class={`font-karla text-[48px] leading-14 font-bold tracking-tight lg:text-[56px] lg:leading-[64px] ${hasError ? "text-tertiary" : "text-secondary"}`}
-                >
-                    {formatCurrency($cartAmount || 0)}
-                </p>
-            </div>
+            <h2
+                class={`flex items-center gap-2 text-base font-semibold lg:text-[32px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+            >
+                {#if hasError}
+                    <span class="h-6 w-6">
+                        <WarningIcon />
+                    </span>
+                {/if}
+                {$t("pages.checkout.summary.total.title")}
+            </h2>
+            <p
+                class={`text-[32px] leading-tight font-bold lg:text-[56px] ${hasError ? "text-tertiary" : "text-secondary"}`}
+            >
+                {formatCurrency($cartAmount)}
+            </p>
         {/snippet}
 
         {#snippet content()}
-    <div class="flex flex-col w-full pb-6"> <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-[620px] border-none"></div>
+    <div class="flex flex-col w-full pb-6"> <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-155 border-none"></div>
 
         <div class="text-content font-karla text-[16px] leading-6 font-normal">
             {#each recipients() as [id, items], index}

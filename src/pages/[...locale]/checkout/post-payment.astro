@@ -120,8 +120,8 @@ try {
 ---
 
 <Layout
-    title={t("payment.postPayment.title")}
-    description={t("payment.postPayment.certificate.description")}
+    title={t("pages.checkout.postPayment.title")}
+    description={t("pages.checkout.postPayment.certificate.description")}
 >
     <App client:load locale={lang} session={session}>
         <section class="wrapper flex flex-col items-start gap-6 pb-16 md:gap-10 md:pb-20">
@@ -130,12 +130,12 @@ try {
                     <h2
                         class="self-stretch text-2xl leading-8 font-bold text-black md:text-3xl md:leading-10 lg:text-[40px] lg:leading-12"
                     >
-                        {t("payment.postPayment.title")}
+                        {t("pages.checkout.postPayment.title")}
                     </h2>
                     <p
                         class="text-content font-feature-settings-['case'_on] self-stretch text-sm leading-6 font-normal ordinal md:text-base"
                     >
-                        {t("payment.postPayment.emailSent")}
+                        {t("pages.checkout.postPayment.emailSent")}
                         {userEmail}
                     </p>
                 </div>
@@ -157,12 +157,12 @@ try {
                         <h2
                             class="text-secondary self-stretch text-xl leading-7 font-bold md:text-2xl md:leading-9 lg:text-[32px] lg:leading-10"
                         >
-                            {t("payment.postPayment.certificate.title")}
+                            {t("pages.checkout.postPayment.certificate.title")}
                         </h2>
                         <p
                             class="text-secondary font-feature-settings-['case'_on] text-base leading-6 font-normal ordinal"
                         >
-                            {t("payment.postPayment.certificate.description")}
+                            {t("pages.checkout.postPayment.certificate.description")}
                         </p>
                     </div>
                 </div>
@@ -171,7 +171,7 @@ try {
                     donatedProjects.length > 0 && (
                         <div class="flex w-full flex-col items-start gap-4 self-stretch md:gap-6">
                             <p class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8">
-                                {t("payment.postPayment.donatedProjects.title")} (
+                                {t("pages.checkout.postPayment.donatedProjects.title")} (
                                 {donatedProjects.length})
                             </p>
                             <Carousel
@@ -195,7 +195,7 @@ try {
                     <p
                         class="text-lg leading-7 font-bold text-black md:text-xl md:leading-8 lg:text-2xl lg:leading-8"
                     >
-                        {t("payment.postPayment.suggestedProjects.title")}
+                        {t("pages.checkout.postPayment.suggestedProjects.title")}
                     </p>
                     {
                         suggestedProjects.length > 0 ? (
@@ -214,7 +214,7 @@ try {
                             </Carousel>
                         ) : (
                             <p class="text-content text-base">
-                                {t("payment.postPayment.suggestedProjects.empty")}
+                                {t("pages.checkout.postPayment.suggestedProjects.empty")}
                             </p>
                         )
                     }

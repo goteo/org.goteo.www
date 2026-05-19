@@ -28,7 +28,10 @@ const { data: accounting } = await apiAccountingsIdGet({
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 ---
 
-<Layout title={t("metadata.title")} description={t("metadata.description")}>
+<Layout
+    title={t("pages.checkout.metadata.title")}
+    description={t("pages.checkout.metadata.description")}
+>
     <App client:load locale={lang} session={session} class="mb-20">
         <div class="wrapper max-md:px-0">
             <BackButton client:load />
@@ -38,10 +41,10 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                         <div class="flex flex-col gap-10">
                             <div class="flex flex-col gap-4">
                                 <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
-                                    {t("payment.page.title")}
+                                    {t("pages.checkout.payment.title")}
                                 </h2>
                                 <p class="text-content">
-                                    {t("payment.page.description")}
+                                    {t("pages.checkout.payment.description")}
                                 </p>
                             </div>
 
@@ -58,7 +61,7 @@ const { data: paymentGateways } = await apiGatewaysGetCollection();
                             <Steps step={3} hasError={false} client:load />
                         </div>
                         <div class="flex flex-col">
-                            <p class="text-content text-sm">{t("checkout.summary.deduct")}</p>
+                            <p class="text-content text-sm">{t("pages.checkout.summary.deduct")}</p>
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
