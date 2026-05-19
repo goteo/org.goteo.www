@@ -1478,7 +1478,7 @@ export type Project = {
      */
     calendar?: ProjectCalendar;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -1540,9 +1540,9 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<Category>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1564,9 +1564,9 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<CategoryJsonld>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1589,9 +1589,9 @@ export type ProjectProjectUpdationDto = {
      */
     subtitle?: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories?: Array<Category>;
+    categories?: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1659,7 +1659,7 @@ export type ProjectJsonld = {
      */
     calendar?: ProjectCalendarJsonld;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
