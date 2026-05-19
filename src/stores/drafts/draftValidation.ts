@@ -277,16 +277,6 @@ export function validateBudgetAmount(draft: Draft) {
         errors.minimum_length = "pages.project.edit.budget.validation.minimumItemsLength";
     }
 
-    const minimumItemsTotalAmount =
-        budgetItems.minimum.reduce(
-            (acc, item) => acc + item.money.amount,
-            0,
-        );
-
-    if (minimumItemsTotalAmount !== budget?.minimum?.money?.amount) {
-        errors.minimum_length = "pages.project.edit.budget.validation.amountMinimum";
-    }
-
     return errors;
 }
 

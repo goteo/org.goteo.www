@@ -64,11 +64,15 @@ export type Wizard = {
     // aboutYou: WizardAboutYou;
 }
 
+export interface CreateProjectForm extends ProjectProjectCreationDto {
+    budget?: Budget;
+}
+
 export interface Draft {
     draftId: string;
     userId: number;
 
-    createProject: ProjectProjectCreationDto;
+    createProject: CreateProjectForm;
     wizardForm: Wizard;
 
     updatedAt: Date;
@@ -239,7 +243,7 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
     const draft: Draft = {
         draftId,
         userId,
-        createProject: project ?? ({} as Partial<ProjectProjectCreationDto> as ProjectProjectCreationDto),
+        createProject: project ?? ({} as Partial<CreateProjectForm> as CreateProjectForm),
         wizardForm: {
             currentStep: 1,
             configuration: {
