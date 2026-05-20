@@ -50,7 +50,7 @@
             class="mt-auto flex w-full items-center justify-center gap-2"
             {onclick}
         >
-            <MoreAndLess sign="more" class="p-[2.25px]" />
+            <MoreAndLess sign="more" class="p-0.5625" />
             {#if variant === "reward"}
                 {$t("pages.project.edit.rewards.add.button")}
             {:else if variant === "collab"}

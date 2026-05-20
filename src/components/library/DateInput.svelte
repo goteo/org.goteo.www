@@ -100,7 +100,7 @@
     {#if labelText}
         <label
             for={finalId}
-            class="absolute -top-2 left-4 -translate-y-1/2 transform text-[10px] font-medium text-gray-500 transition-all"
+            class="absolute -top-2 left-4 -translate-y-1/2 transform text-[0.625rem] font-medium text-gray-500 transition-all"
         >
             {labelText}
         </label>
@@ -126,12 +126,12 @@
         )}
     />
     {#if helperText && !error}
-        <span id={`helper-${finalId}`} class="ml-4 text-[12px] text-gray-500">
+        <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
             {helperText}
         </span>
     {/if}
     {#if error}
-        <p id={`${finalId}-error`} class="mt-1 ml-4 text-[12px] text-red-600" role="alert">
+        <p id={`${finalId}-error`} class="mt-1 ml-4 text-xs text-red-600" role="alert">
             {error}
         </p>
     {/if}

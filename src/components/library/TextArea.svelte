@@ -26,7 +26,7 @@
     }: Props = $props();
     let textareaClasses = $derived(
         twMerge(
-            "border-secondary flex w-full min-h-[120px] resize-none items-start gap-2 rounded-lg border bg-white p-3 text-sm text-content transition-all outline-none focus:ring-secondary placeholder:text-gray-400",
+            "border-secondary flex w-full min-h-30 resize-none items-start gap-2 rounded-lg border bg-white p-3 text-sm text-content transition-all outline-none focus:ring-secondary placeholder:text-gray-400",
             error &&
                 "border-tertiary focus:ring-tertiary text-tertiary placeholder:text-tertiary/60 focus:ring-1",
             disabled && "border-transparent bg-grey cursor-not-allowed",

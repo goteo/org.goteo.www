@@ -128,7 +128,7 @@
                 </select>
 
                 <div class="relative">
-                    <label for="dateFrom" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.initDate")}
                     </label>
                     <input
@@ -141,7 +141,7 @@
                 </div>
 
                 <div class="relative">
-                    <label for="dateTo" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.endDate")}
                     </label>
                     <input

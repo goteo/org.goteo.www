@@ -38,8 +38,8 @@
     --color-semantic-warning: #ffffc2;
 
     --font-body: "Karla", sans-serif;
-    --body-regular: 1rem;
-    --body-small: 0.875rem;
+    --text-body-small: 0.875rem;
+    --text-double: 2rem;
 }
 
 @layer base {
