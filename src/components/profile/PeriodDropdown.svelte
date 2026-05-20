@@ -44,7 +44,7 @@
 
     <label
         for="period-select"
-        class="pointer-events-none absolute -top-[5px] left-3 bg-white px-1 text-xs leading-none font-medium text-black"
+        class="pointer-events-none absolute -top-1.25 left-3 bg-white px-1 text-xs leading-none font-medium text-black"
     >
         {$t("me.period.label")}
     </label>
