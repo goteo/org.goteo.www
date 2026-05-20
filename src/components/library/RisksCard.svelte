@@ -1,7 +1,8 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
     import Button from "./Button.svelte";
     import Tag from "./Tag.svelte";
+    import { t } from "../../i18n/store";
+
     import type { ProjectReviewArea } from "../../openapi/client";
 
     let {
