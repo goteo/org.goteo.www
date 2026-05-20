@@ -29,9 +29,9 @@
     let showModalErrorToast = $state(false);
 
     const typeBudget: Record<ProjectBudgetItem["type"], string> = {
-        task: "#99FFCC",
-        infrastructure: "#462949",
-        material: "#E94668",
+        task: "bg-variant2",
+        infrastructure: "bg-secondary",
+        material: "bg-tertiary",
     };
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
