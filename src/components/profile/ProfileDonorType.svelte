@@ -78,7 +78,7 @@
                 class="border-grey flex h-4 w-full grow rounded-lg border bg-white p-0.5 shadow-lg"
             >
                 <div
-                    class="from-grey h-3 w-21.5 rounded-lg bg-gradient-to-r to-semantic-notification shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
+                    class="from-grey to-semantic-notification h-3 w-21.5 rounded-lg bg-linear-to-r shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
                 ></div>
             </div>
 

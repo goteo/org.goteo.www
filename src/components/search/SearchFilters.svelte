@@ -72,7 +72,7 @@ Integrated with searchStore for state management and URL synchronization
 </script>
 
 <div
-    class="mx-auto flex w-80 flex-col gap-6 rounded-3xl border border-grey bg-white px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-4xl lg:px-8 lg:py-6"
+    class="border-grey mx-auto flex w-80 flex-col gap-6 rounded-3xl border bg-white px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-4xl lg:px-8 lg:py-6"
     data-testid="search-filters"
 >
     <div
