@@ -3,4 +3,13 @@ export type ControlItem = {
     roles: string[];
 };
 
-export const ACL: ControlItem[] = [{ path: "/admin", roles: ["ROLE_ADMIN"] }];
+export const ACL: ControlItem[] = [
+    {
+        path: "/project/.*/edit",
+        roles: ["ROLE_USER"]
+    },
+    {
+        path: "/admin",
+        roles: ["ROLE_ADMIN"]
+    }
+];
