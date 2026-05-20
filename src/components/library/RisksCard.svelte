@@ -4,24 +4,42 @@
     import Tag from "./Tag.svelte";
     import type { ProjectReviewArea } from "../../openapi/client";
 
-    let { review, newMessage = false } = $props<{
+    let {
+        review,
+        risk,
+        newMessage = false,
+    }: {
         review: ProjectReviewArea;
+        risk: "low" | "mid" | "high";
         newMessage?: boolean;
-    }>();
+    } = $props();
 
     let newMsgCardShadow =
         "0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10)";
-    let tagVariant: any = $state();
+
+    const riskStyles: { [key in "low" | "mid" | "high"]: "success" | "warning" | "error" } = {
+        low: "success",
+        mid: "warning",
+        high: "error",
+    };
+    let tagVariant: "success" | "warning" | "error" = $state(
+        risk ? riskStyles[risk] : review.risk ? riskStyles[review.risk] : "success",
+    );
 
     $effect(() => {
-        if (review.risk === "low") tagVariant = "success";
-        else if (review.risk === "medium") tagVariant = "warning";
-        else if (review.risk === "high") tagVariant = "error";
+        if (risk) {
+            tagVariant = riskStyles[risk];
+            return;
+        }
+
+        if (review.risk) {
+            tagVariant = riskStyles[review.risk];
+        }
     });
 </script>
 
 <article
-    class="border-variant1 bg-soft-purple flex w-full max-w-[437px] flex-col gap-8 rounded-2xl border p-6 {newMessage
+    class="border-variant1 bg-soft-purple flex w-full max-w-109.25 flex-col gap-8 rounded-2xl border p-6 {newMessage
         ? `shadow-[${newMsgCardShadow}]`
         : ''}"
 >
@@ -43,7 +61,7 @@
                     >
                 {/if}
             </div>
-            <Tag variant={tagVariant}>{$t(`reviews.risks-cards.tags.${review.risk}`)}</Tag>
+            <Tag variant={tagVariant}>{$t(`reviews.risks-cards.tags.${risk ?? review.risk}`)}</Tag>
         </div>
         <p class="text-content line-clamp-4 w-full text-base">
             {review.summary}
@@ -51,7 +69,11 @@
     </div>
     <div class="flex justify-between">
         <!-- TODO: Add functionality to both buttons -->
-        <Button kind="ghost">{$t("reviews.risks-cards.btns.seeChat")}</Button>
-        <Button kind="secondary">{$t("reviews.risks-cards.btns.changeRisk")}</Button>
+        <Button kind="ghost">
+            {$t("reviews.risks-cards.btns.seeChat")}
+        </Button>
+        <Button kind="secondary">
+            {$t("reviews.risks-cards.btns.changeRisk")}
+        </Button>
     </div>
 </article>

@@ -61,6 +61,13 @@
         "successful": "Exitosas",
         "completed": "Completadas"
       }
+    },
+    "review": {
+      "risks": {
+        "low": "Riesgo bajo",
+        "medium": "Riesgo medio",
+        "high": "Riesgo alto"
+      }
     }
   },
   "pages": {
@@ -712,6 +719,12 @@
         }
       }
     },
+    "review": {
+      "btns": {
+        "seeChat": "Ver conversación",
+        "changeRisk": "Cambiar riesgo"
+      }
+    },
     "search": {
       "title": "Buscar campañas - Goteo",
       "description": "Explora nuestro catálogo de campañas y encuentra la que más te inspire para hacer tu donación",
@@ -823,10 +836,20 @@
         "noMoreResults": "No hay más resultados"
       }
     },
-    "register": { "title": "Registro" },
-    "admin": { "charges": { "title": "Cargos" } },
-    "static": { "title": "Goteo" },
-    "profile": { "title": "Goteo" }
+    "register": {
+      "title": "Registro"
+    },
+    "admin": {
+      "charges": {
+        "title": "Cargos"
+      }
+    },
+    "static": {
+      "title": "Goteo"
+    },
+    "profile": {
+      "title": "Goteo"
+    }
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",
@@ -1268,19 +1291,6 @@
         "totalCharges": "Total aportes:",
         "totalTips": "Total propinas:",
         "totalFees": "Comisiones totales:"
-      }
-    }
-  },
-  "reviews": {
-    "risks-cards": {
-      "tags": {
-        "low": "Riesgo bajo",
-        "medium": "Riesgo medio",
-        "high": "Riesgo alto"
-      },
-      "btns": {
-        "seeChat": "Ver conversación",
-        "changeRisk": "Cambiar riesgo"
       }
     }
   },
