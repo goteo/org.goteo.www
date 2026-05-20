@@ -20,7 +20,7 @@
 
 <div class="hidden flex-col gap-6 pt-6 pb-0 lg:flex">
     <div>
-        <h2 class="text-secondary text-[56px] leading-tight font-semibold">
+        <h2 class="text-secondary text-[3.5rem] leading-tight font-semibold">
             {$t("login.page.welcome.title")}
         </h2>
         <p class="text-content font-light">

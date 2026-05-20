@@ -106,7 +106,7 @@
     {#if labelText}
         <label
             for={finalId}
-            class="text-secondary absolute -top-2 left-3 bg-white px-1 text-[12px] leading-4 font-medium transition-all duration-200"
+            class="text-secondary absolute -top-2 left-3 bg-white px-1 text-xs leading-4 font-medium transition-all duration-200"
         >
             {labelText}
             {#if required}
@@ -127,7 +127,7 @@
         onblur={handleBlur}
         onkeydown={(e) => e.key === "Escape" && (isOpen = false)}
         class={twMerge(
-            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-[16px] leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
+            "w-full appearance-none rounded-lg border bg-white px-4 py-4 pr-10 text-base leading-6 transition-colors focus:outline-none disabled:cursor-not-allowed disabled:opacity-50",
             error ? "border-red-500 focus:ring-red-500" : "border-secondary focus:ring-0",
             className,
         )}
@@ -143,14 +143,14 @@
 
     <!-- Helper Text -->
     {#if !error && helperText}
-        <p id={helperId} class="mt-1 text-[12px] text-gray-500">
+        <p id={helperId} class="mt-1 text-xs text-gray-500">
             {helperText}
         </p>
     {/if}
 
     <!-- Error Message -->
     {#if error}
-        <p id={errorId} role="alert" class="mt-1 text-[12px] text-red-600">
+        <p id={errorId} role="alert" class="mt-1 text-xs text-red-600">
             {error}
         </p>
     {/if}
