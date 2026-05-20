@@ -54,6 +54,7 @@
     const optTaskPctLocal = 100;
 
     const balancePct = totalBudget > 0 ? Math.min((balanceAmount / totalBudget) * 100, 100) : 0;
+    const flipLabel = balancePct > 60;
 
     let animValues = $state({
         minInfra: 0,
@@ -83,23 +84,27 @@
     <div class="relative h-8 w-full">
         <div
             class="absolute transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%;"
+            style="left: {animValues.balance}%; {flipLabel
+                ? 'transform: translateX(-100%);'
+                : ''}; top: -0.15rem;"
         >
-            <div class="text-secondary ml-4 flex items-center gap-2 text-base">
+            <div
+                class="text-secondary flex items-center gap-2 text-base {flipLabel
+                    ? 'mr-4'
+                    : 'ml-4'}"
+            >
                 <span>{$t("pages.project.view.tabs.budget.raised")}:</span>
                 <span class="font-bold">{formatCurrency(balanceAmount)}</span>
             </div>
         </div>
 
         <div
-            class="absolute z-50 transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%; transform: translateX(-50%); top: 1rem;"
+            class="absolute z-50 flex flex-col items-center transition-all duration-700 ease-out"
+            style="left: {animValues.balance}%; transform: translateX(-50%); top: 0.25rem;"
         >
-            <div class="bg-secondary border-secondary h-7 border-r-2 border-solid"></div>
-            <div class="h-12 border-r-2 border-solid border-white"></div>
-            <div
-                class="bg-secondary absolute top-0 right-0 h-3 w-3 translate-x-1/2 -translate-y-1/2 rounded-full"
-            ></div>
+            <div class="bg-secondary h-3 w-3 rounded-full"></div>
+            <div class="bg-secondary h-7 w-0.5"></div>
+            <div class="h-12 w-0.5 bg-white"></div>
         </div>
     </div>
 
@@ -132,7 +137,7 @@
 
         <div
             class="absolute top-0 bottom-0 z-40"
-            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-variant1);"
+            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%;"
         ></div>
 
         <div
