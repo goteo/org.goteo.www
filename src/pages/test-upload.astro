@@ -1,0 +1,60 @@
+---
+// Página temporal
+---
+
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Test Upload</title>
+        <style>
+            body {
+                font-family: sans-serif;
+                padding: 2rem;
+                max-width: 600px;
+            }
+            #status {
+                margin-top: 1rem;
+                font-weight: bold;
+            }
+            #preview {
+                margin-top: 1rem;
+                max-width: 100%;
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Test subida de imagen</h1>
+        <input type="file" accept="image/*" id="file" />
+        <p id="status"></p>
+        <img id="preview" />
+
+        <script>
+            import { uploadImage } from "../utils/imageUpload";
+
+            const status = document.getElementById("status");
+            const preview = document.getElementById("preview");
+
+            document.getElementById("file")!.addEventListener("change", async (e) => {
+                const file = (e.target as HTMLInputElement).files?.[0];
+                if (!file) return;
+
+                (preview as HTMLImageElement).style.display = "none";
+                status!.textContent = "Iniciando...";
+
+                try {
+                    const result = await uploadImage(file, {
+                        onProgress: (stage) => {
+                            status!.textContent = stage;
+                        },
+                    });
+                    status!.textContent = "✓ " + result.url;
+                    (preview as HTMLImageElement).src = result.url;
+                    (preview as HTMLImageElement).style.display = "block";
+                } catch (err) {
+                    status!.textContent = "Error: " + (err as Error).message;
+                }
+            });
+        </script>
+    </body>
+</html>
