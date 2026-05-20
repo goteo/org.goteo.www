@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Modal } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
 
     import PublicBudgetCard from "./PublicBudgetCard.svelte";
@@ -6,9 +7,16 @@
     import { t } from "../../i18n/store";
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
     import Carousel from "../Carousel.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
+
+    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
+        task: "bg-variant2",
+        infrastructure: "bg-secondary",
+        material: "bg-tertiary",
+    };
 
     let {
         lang = $bindable(),
@@ -20,14 +28,26 @@
         accounting: Accounting;
     } = $props();
 
-    const projectId = project.id!.toString();
-
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
     let itemsPerGroup = $state(3);
+    let openModal = $state(false);
+    let selectedBudgetItem: ProjectBudgetItem | null = $state(null);
+    let renderedDescription = $state("");
 
     $effect(() => {
+        if (selectedBudgetItem?.description) {
+            renderMarkdown(selectedBudgetItem.description).then((html) => {
+                renderedDescription = html;
+            });
+        } else {
+            renderedDescription = "";
+        }
+    });
+
+    $effect(() => {
+        const projectId = project.id!.toString();
         apiProjectBudgetItemsGetCollection({
             query: { project: projectId },
             headers: { "Accept-Language": lang },
@@ -89,7 +109,11 @@
                 {/if}
 
                 {#each minimumItems as item}
-                    <PublicBudgetCard {item} />
+                    <PublicBudgetCard
+                        {item}
+                        bind:openModal
+                        bind:selectedItem={selectedBudgetItem}
+                    />
                 {/each}
             </Carousel>
         </div>
@@ -113,9 +137,51 @@
                 {/if}
 
                 {#each optimumItems as item}
-                    <PublicBudgetCard {item} />
+                    <PublicBudgetCard
+                        {item}
+                        bind:openModal
+                        bind:selectedItem={selectedBudgetItem}
+                    />
                 {/each}
             </Carousel>
         </div>
     </div>
 </div>
+
+<Modal
+    bind:open={openModal}
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    headerClass="py-2"
+>
+    {#if selectedBudgetItem}
+        <div class="flex cursor-pointer flex-col gap-4 bg-white p-4 px-6 py-4">
+            <div class="flex flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="inline-block h-2.5 w-5 rounded-lg {typeBudget[
+                            selectedBudgetItem.type as ProjectBudgetItem['type']
+                        ]}"
+                    ></div>
+                    <span class="text-content text-sm">
+                        {$t(`domain.project.budget.type.${selectedBudgetItem.type}`)}
+                    </span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <p class="text-2xl font-bold text-black">
+                        {formatCurrency(
+                            selectedBudgetItem.money.amount,
+                            selectedBudgetItem.money.currency,
+                        )}
+                    </p>
+                </div>
+            </div>
+            <div class="text-2xl font-bold text-black">
+                {selectedBudgetItem.title}
+            </div>
+            <div class="text-content prose prose-sm text-sm">
+                {@html renderedDescription}
+            </div>
+        </div>
+    {/if}
+</Modal>
