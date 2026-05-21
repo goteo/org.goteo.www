@@ -10,33 +10,40 @@
 <script lang="ts">
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
-    import { type Category, type Project } from "../../../../../openapi/client";
+    import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
 
     import type { Session } from "../../../../../auth/types";
     import {
-        createDraft,
         currentDraft,
         deleteCurrentDraft,
         hasUnsavedChanges,
+        initializeProjectDraft,
         loadDraft,
+        markCurrentDraftClean,
         updateWizard,
     } from "../../../../../stores/drafts/projectDraft";
+    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
+    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
     import { publishDraft } from "../../../../../utils/projectPublisher";
     import { onMount } from "svelte";
     import { session } from "../../../../../auth/store";
 
     let {
-        project,
+        idOrSlug,
+        project = null,
     }: {
-        project: Project;
+        idOrSlug: string;
+        project?: Project | null;
     } = $props();
 
+    let resolvedProject = $state<Project | null>(project);
+    let isInitialized = $state(false);
     let showSessionErrorToast = $state(false);
     const user = $derived(($session: Session | null) => $session?.user);
 
-    onMount(() => {
-        // Read URL parameter first (before initializing)
+    function getInitialStep() {
         let initialStep = 1;
+
         if (typeof window !== "undefined") {
             const url = new URL(window.location.href);
             const stepParam = url.searchParams.get("step");
@@ -48,26 +55,83 @@
             }
         }
 
-        const isDraftExisting = loadDraft(project.id);
+        return initialStep;
+    }
 
-        if (isDraftExisting) {
-            createDraft({
-                title: project.title || "",
-                subtitle: project.subtitle || "",
-                categories: project.categories as Category[],
-                release: project.calendar?.release ?? undefined,
-                status: project.status || "in_draft",
-            });
+    function projectToDraft(project: Project): ProjectProjectCreationDto {
+        return {
+            title: project.title || "",
+            subtitle: project.subtitle || "",
+            categories: project.categories,
+            release: project.calendar?.release ?? undefined,
+            status: project.status || "in_draft",
+        };
+    }
+
+    function projectToIri(project: Project) {
+        return `${apiProjectsGetCollectionUrl}/${project.slug ?? project.id}`;
+    }
+
+    function draftToProject(idOrSlug: string): Project | null {
+        if (!$currentDraft) return null;
+
+        const numericId = Number(idOrSlug);
+
+        return {
+            id: Number.isNaN(numericId) ? undefined : numericId,
+            slug: Number.isNaN(numericId) ? idOrSlug : undefined,
+            title: $currentDraft.createProject.title,
+            subtitle: $currentDraft.createProject.subtitle,
+            categories: $currentDraft.createProject.categories,
+            territory: {} as Project["territory"],
+            description: "",
+            deadline: $currentDraft.wizardForm.configuration.projectDeadline,
+            budget: $currentDraft.wizardForm.budget,
+            status: $currentDraft.createProject.status,
+        };
+    }
+
+    function redirectToNotFound() {
+        window.location.href = "/404";
+    }
+
+    onMount(() => {
+        const initialStep = getInitialStep();
+
+        async function initialize() {
+            try {
+                if (project?.id) {
+                    const resources = $session
+                        ? await getProjectDraftResources(projectToIri(project), $session)
+                        : undefined;
+
+                    await initializeProjectDraft(
+                        projectToDraft(project),
+                        String(project.id),
+                        resources,
+                    );
+                    resolvedProject = project;
+                } else {
+                    const hasDraft = await loadDraft(idOrSlug);
+
+                    if (!hasDraft) {
+                        redirectToNotFound();
+                        return;
+                    }
+
+                    hasUnsavedChanges.set(true);
+                    resolvedProject = draftToProject(idOrSlug);
+                }
+
+                updateWizard({ currentStep: initialStep }, { markUnsaved: false });
+                isInitialized = true;
+            } catch (err) {
+                errorMessage = err instanceof Error ? err.message : "Unknown error";
+                isInitialized = true;
+            }
         }
 
-        // Set the step from URL parameter if present
-        if (initialStep !== 1) {
-            updateWizard({ currentStep: initialStep });
-        } else {
-            updateWizard({
-                currentStep: 1, // Start at step 1 by default
-            });
-        }
+        initialize();
 
         // Listen for browser back/forward navigation (client-side only)
         if (typeof window !== "undefined") {
@@ -96,6 +160,10 @@
 
     async function saveToAPI() {
         if (!$currentDraft) return;
+        if (!resolvedProject?.id) {
+            errorMessage = "Project not found in API";
+            return;
+        }
 
         try {
             if (!$session) {
@@ -103,9 +171,8 @@
                 throw new Error("User session not found");
             }
 
-            await publishDraft($currentDraft, $session, String(project.id));
-
-            hasUnsavedChanges.set(false);
+            const result = await publishDraft($currentDraft, $session, String(resolvedProject.id));
+            markCurrentDraftClean(result.resources);
         } catch (err) {
             errorMessage = err instanceof Error ? err.message : "Unknown error";
 
@@ -114,16 +181,24 @@
     }
 
     function handlePublish() {
-        if (!$currentDraft) return;
+        if (!$currentDraft || !resolvedProject) return;
 
-        const idOrSlug = project.slug ?? project.id;
+        const idOrSlug = resolvedProject.slug ?? resolvedProject.id;
 
         deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
         window.location.href = `/project/${idOrSlug}/publish`;
     }
 </script>
 
-<ProjectEditorShell {errorMessage} {project} {showSessionErrorToast} onSave={saveToAPI} onPublish={handlePublish}>
-    {@const StepComponent = getStepComponent(currentStep)}
-    <StepComponent {project} />
-</ProjectEditorShell>
+{#if isInitialized && resolvedProject}
+    <ProjectEditorShell
+        {errorMessage}
+        project={resolvedProject}
+        {showSessionErrorToast}
+        onSave={saveToAPI}
+        onPublish={handlePublish}
+    >
+        {@const StepComponent = getStepComponent(currentStep)}
+        <StepComponent project={resolvedProject} />
+    </ProjectEditorShell>
+{/if}

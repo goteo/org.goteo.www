@@ -1,27 +1,128 @@
 import {
-    createReward,
-    createCollaboration,
     createBudgetItem,
+    createCollaboration,
+    createReward,
+    deleteBudgetItem,
+    deleteCollaboration,
+    deleteReward,
     patchProject,
+    updateBudgetItem,
+    updateCollaboration,
+    updateReward,
 } from "./projectSubmissionApi";
 
 import type { Session } from "../auth/types";
-import type { Draft } from "../stores/drafts/projectDraft";
+import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
+import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
 
 export class PublishValidationError extends Error {
-    constructor(
-        public errors: Record<string, string>,
-    ) {
+    constructor(public errors: Record<string, string>) {
         super("Draft validation failed");
     }
 }
 
-export async function publishDraft(
-    draft: Draft,
+function getIds<T extends { id?: number }>(items: T[]) {
+    return new Set(items.flatMap((item) => (item.id ? [item.id] : [])));
+}
+
+function flattenBudgetItems(resources: ProjectDraftResources["budgetItems"]) {
+    return [...resources.minimum, ...resources.optimum];
+}
+
+async function assertResult<T>(result: { data?: T; error?: unknown }) {
+    if (result.error) throw result.error;
+    return result.data;
+}
+
+async function syncRewards(current: ProjectReward[], snapshot: ProjectReward[], session: Session) {
+    const currentIds = getIds(current);
+    const deleted = snapshot.filter((reward) => reward.id && !currentIds.has(reward.id));
+
+    await Promise.all(
+        deleted.map(async (reward) => {
+            const result = await deleteReward(reward.id!, session);
+            await assertResult(result);
+        }),
+    );
+
+    const synced = await Promise.all(
+        current.map(async (reward) => {
+            const result = reward.id
+                ? await updateReward(reward, session)
+                : await createReward(reward, session);
+
+            return assertResult(result);
+        }),
+    );
+
+    return synced.filter(Boolean) as ProjectReward[];
+}
+
+async function syncCollaborations(
+    current: ProjectCollaboration[],
+    snapshot: ProjectCollaboration[],
     session: Session,
-    projectId: string,
 ) {
+    const currentIds = getIds(current);
+    const deleted = snapshot.filter((collab) => collab.id && !currentIds.has(collab.id));
+
+    await Promise.all(
+        deleted.map(async (collab) => {
+            const result = await deleteCollaboration(collab.id!, session);
+            await assertResult(result);
+        }),
+    );
+
+    const synced = await Promise.all(
+        current.map(async (collab) => {
+            const result = collab.id
+                ? await updateCollaboration(collab, session)
+                : await createCollaboration(collab, session);
+
+            return assertResult(result);
+        }),
+    );
+
+    return synced.filter(Boolean) as ProjectCollaboration[];
+}
+
+async function syncBudgetItems(
+    current: ProjectDraftResources["budgetItems"],
+    snapshot: ProjectDraftResources["budgetItems"],
+    session: Session,
+) {
+    const currentItems = flattenBudgetItems(current);
+    const snapshotItems = flattenBudgetItems(snapshot);
+    const currentIds = getIds(currentItems);
+    const deleted = snapshotItems.filter((item) => item.id && !currentIds.has(item.id));
+
+    await Promise.all(
+        deleted.map(async (item) => {
+            const result = await deleteBudgetItem(item.id!, session);
+            await assertResult(result);
+        }),
+    );
+
+    const synced = await Promise.all(
+        currentItems.map(async (item) => {
+            const result = item.id
+                ? await updateBudgetItem(item, session)
+                : await createBudgetItem(item, session);
+
+            return assertResult(result);
+        }),
+    );
+
+    const syncedItems = synced.filter(Boolean) as ProjectBudgetItem[];
+
+    return {
+        minimum: syncedItems.filter((item) => item.deadline === "minimum"),
+        optimum: syncedItems.filter((item) => item.deadline === "optimum"),
+    };
+}
+
+export async function publishDraft(draft: Draft, session: Session, projectId: string) {
     const validationErrors = validateDraftToPublish(draft);
 
     if (Object.keys(validationErrors).length > 0) {
@@ -29,24 +130,14 @@ export async function publishDraft(
     }
 
     const wizard = draft.wizardForm;
-
-    await Promise.all([
-        ...wizard.rewards.map((reward) =>
-            createReward(reward, session),
-        ),
-
-        ...wizard.collaborations.map((collab) =>
-            createCollaboration(collab, session),
-        ),
-
-        ...wizard.budgetItems.minimum.map((item) =>
-            createBudgetItem(item, session),
-        ),
-
-        ...wizard.budgetItems.optimum.map((item) =>
-            createBudgetItem(item, session),
-        ),
-    ]);
+    const apiSnapshot = draft.apiSnapshot ?? {
+        rewards: [],
+        collaborations: [],
+        budgetItems: {
+            minimum: [],
+            optimum: [],
+        },
+    };
 
     const description = [
         wizard.campaignInfo.objectives,
@@ -62,6 +153,7 @@ export async function publishDraft(
         {
             title: draft.createProject.title,
             subtitle: draft.createProject.subtitle,
+            categories: draft.createProject.categories,
             video: wizard.campaignInfo.video,
             description,
             deadline: wizard.configuration.projectDeadline,
@@ -73,5 +165,18 @@ export async function publishDraft(
         throw result.error;
     }
 
-    return result.data;
+    const [rewards, collaborations, budgetItems] = await Promise.all([
+        syncRewards(wizard.rewards, apiSnapshot.rewards, session),
+        syncCollaborations(wizard.collaborations, apiSnapshot.collaborations, session),
+        syncBudgetItems(wizard.budgetItems, apiSnapshot.budgetItems, session),
+    ]);
+
+    return {
+        project: result.data,
+        resources: {
+            rewards,
+            collaborations,
+            budgetItems,
+        },
+    };
 }

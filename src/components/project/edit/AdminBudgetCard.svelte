@@ -5,7 +5,8 @@
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
 
-    import type { ProjectBudgetItem } from "../../../openapi/client";
+    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
         addBudgetItem,
         deleteBudgetItem,
@@ -14,11 +15,13 @@
     } from "../../../stores/drafts/projectDraft";
 
     let {
+        project,
         item,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
+        project: Project;
         item: ProjectBudgetItem | null;
         index?: number;
         loading: boolean;
@@ -36,12 +39,17 @@
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
+        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
+        const budgetItem = {
+            ...data,
+            project: item?.project ?? projectIri,
+        };
         let errors;
 
         if (index !== undefined) {
-            errors = updateBudgetItem(index, data);
+            errors = updateBudgetItem(index, budgetItem, item?.deadline);
         } else {
-            errors = addBudgetItem(data);
+            errors = addBudgetItem(budgetItem);
         }
 
         if (errors === undefined) {
@@ -72,6 +80,7 @@
         title={$t("pages.project.edit.budget.add.title")}
         description={$t("pages.project.edit.budget.add.description")}
         variant="budget"
+        {project}
         onSave={handleSaveBudgetItem}
         onclick={() => (openModal = true)}
         bind:open={openModal}
