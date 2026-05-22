@@ -2,6 +2,7 @@
     import { onMount, tick } from "svelte";
 
     import { t } from "../../i18n/store";
+    import { budgetTypeColors } from "../../utils/budgetColors";
     import { formatCurrency } from "../../utils/currencies";
 
     import type { Project, Accounting } from "../../openapi/client/index";
@@ -13,14 +14,6 @@
         project: Project;
         accounting: Accounting;
     } = $props();
-
-    const typeBudget = {
-        task: "var(--color-variant2)",
-        infrastructure: "var(--color-secondary)",
-        material: "var(--color-tertiary)",
-    } as const;
-
-    const dividerWidthPct = 1.5;
 
     const minimumTotal = $derived(project.budget?.minimum?.money?.amount ?? 0);
     const optimumTotal = $derived(project.budget?.optimum?.money?.amount ?? 0);
@@ -34,6 +27,8 @@
     const optInfra = $derived(project.budget?.optimum?.infra?.amount ?? 0);
     const optMaterial = $derived(project.budget?.optimum?.material?.amount ?? 0);
     const optTask = $derived(project.budget?.optimum?.task?.amount ?? 0);
+
+    const dividerWidthPct = 1.5;
 
     const leftSectionWidth = $derived(
         Math.round(totalBudget > 0 ? (minimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0),
@@ -120,21 +115,21 @@
             {#if minInfra > 0}
                 <div
                     class="absolute top-0 left-0 z-30 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minInfra}%; background-color: {typeBudget.infrastructure}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.minInfra}%; background-color: {budgetTypeColors.infrastructure};"
                 ></div>
             {/if}
 
             {#if minMaterial > 0}
                 <div
                     class="absolute top-0 left-0 z-20 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minMaterial}%; background-color: {typeBudget.material}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.minMaterial}%; background-color: {budgetTypeColors.material};"
                 ></div>
             {/if}
 
             {#if minTask > 0}
                 <div
                     class="absolute top-0 left-0 z-10 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minTask}%; background-color: {typeBudget.task}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.minTask}%; background-color: {budgetTypeColors.task};"
                 ></div>
             {/if}
         </div>
@@ -151,21 +146,21 @@
             {#if optInfra > 0}
                 <div
                     class="absolute top-0 left-0 z-30 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optInfra}%; background-color: {typeBudget.infrastructure}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.optInfra}%; background-color: {budgetTypeColors.infrastructure};"
                 ></div>
             {/if}
 
             {#if optMaterial > 0}
                 <div
                     class="absolute top-0 left-0 z-20 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optMaterial}%; background-color: {typeBudget.material}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.optMaterial}%; background-color: {budgetTypeColors.material};"
                 ></div>
             {/if}
 
             {#if optTask > 0}
                 <div
                     class="absolute top-0 left-0 z-10 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optTask}%; background-color: {typeBudget.task}; box-shadow: 8px 8px 20px 0 rgba(255,255,255,0.20) inset;"
+                    style="width: {animValues.optTask}%; background-color: {budgetTypeColors.task};"
                 ></div>
             {/if}
         </div>

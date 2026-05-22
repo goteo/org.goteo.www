@@ -8,6 +8,7 @@
         updateBudgetItem,
         validationErrors,
     } from "../../../stores/wizard-state";
+    import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
 
@@ -27,12 +28,6 @@
 
     let openModal = $state(false);
     let showModalErrorToast = $state(false);
-
-    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
-        task: "bg-variant2",
-        infrastructure: "bg-secondary",
-        material: "bg-tertiary",
-    };
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
@@ -93,8 +88,9 @@
             </p>
             <div class="flex items-center gap-2">
                 <div
-                    class="inline-block h-2.5 w-5 rounded-lg"
-                    style={`background-color: ${typeBudget[item.type as ProjectBudgetItem["type"]]}`}
+                    class="inline-block h-2.5 w-5 rounded-lg {budgetTypeClasses[
+                        item.type as ProjectBudgetItem['type']
+                    ]}"
                 ></div>
                 <span class="text-content text-sm">
                     {$t(`domain.project.budget.type.${item.type}`)}
