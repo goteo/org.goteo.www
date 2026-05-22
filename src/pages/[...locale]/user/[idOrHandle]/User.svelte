@@ -41,8 +41,7 @@
         { id: "donorType", label: $t("profile.tabs.donorType") },
     ]);
 
-    // TODO: replace with user.bio when the API adds it
-    const bio: string | undefined = undefined;
+    const bio = $derived(user.description);
 </script>
 
 <div class="flex w-full flex-col items-center">
@@ -80,9 +79,8 @@
         {displayName}
         links={user.links}
         email={user.email}
-        location="Barcelona, Catalunya"
+        territory={user.territory}
     />
-    <!-- new API variable (location) -->
 
     <!-- Tabs -->
     <div class=" mt-8 w-full" style="--color-tertiary: var(--color-content)">
@@ -101,7 +99,7 @@
             {/await}
         {:else}
             <p class="text-content text-base leading-relaxed">
-                Todavía no hay información sobre este perfil. <!-- new API variable (bio) -->
+                {$t("profile.noBio")}
             </p>
         {/if}
     </div>

@@ -5,18 +5,18 @@
     import LinkedinIcon from "../../svgs/LinkedinIcon.svelte";
     import MediumIcon from "../../svgs/MediumIcon.svelte";
     import XIcon from "../../svgs/XIcon.svelte";
-    import MapIcon from "../icons/Location.svelte";
+    import TerritoryTag from "../TerritoryTag.svelte";
 
-    import type { Link } from "../../openapi/client/types.gen";
+    import type { Link, Territory } from "../../openapi/client/types.gen";
 
     interface Props {
         displayName: string;
-        location?: string;
+        territory?: Territory;
         links?: Link[];
         email?: string;
     }
 
-    let { displayName, location, links = [], email }: Props = $props();
+    let { displayName, territory, links = [], email }: Props = $props();
 
     type SocialLinkKey = "email" | "facebook" | "instagram" | "linkedin" | "medium" | "twitter";
 
@@ -72,13 +72,8 @@
     </h1>
 
     <!-- Location -->
-    {#if location}
-        <div class="flex items-center gap-1">
-            <MapIcon class="text-secondary size-8" />
-            <span class="text-secondary text-base leading-normal">
-                {location}
-            </span>
-        </div>
+    {#if territory}
+        <TerritoryTag {territory} />
     {/if}
 
     <!-- Social Media Links -->

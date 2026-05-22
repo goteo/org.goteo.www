@@ -236,10 +236,37 @@ export type BudgetSummaryJsonld = {
     infra?: MoneyOutputJsonld;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type Category = {
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type CategoryJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -248,7 +275,18 @@ export type CategoryJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
 export type ChargeCreationDto = {
@@ -1440,7 +1478,7 @@ export type Project = {
      */
     calendar?: ProjectCalendar;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -1502,9 +1540,9 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<Category>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1526,9 +1564,9 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<CategoryJsonld>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1551,9 +1589,9 @@ export type ProjectProjectUpdationDto = {
      */
     subtitle?: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories?: Array<Category>;
+    categories?: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1621,7 +1659,7 @@ export type ProjectJsonld = {
      */
     calendar?: ProjectCalendarJsonld;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -2366,11 +2404,15 @@ export type TrackingJsonld = {
  */
 export type User = {
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2402,10 +2444,6 @@ export type User = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2414,6 +2452,14 @@ export type User = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<Link>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: Territory;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -2466,11 +2512,15 @@ export type UserJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2502,10 +2552,6 @@ export type UserJsonld = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2514,6 +2560,14 @@ export type UserJsonld = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<LinkJsonld>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: TerritoryJsonld;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -2826,6 +2880,76 @@ export type ApiCategoriesGetCollectionResponses = {
 
 export type ApiCategoriesGetCollectionResponse = ApiCategoriesGetCollectionResponses[keyof ApiCategoriesGetCollectionResponses];
 
+export type ApiCategoriesPostData = {
+    /**
+     * The new Category resource
+     */
+    body: Category;
+    path?: never;
+    query?: never;
+    url: '/v4/categories';
+};
+
+export type ApiCategoriesPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesPostError = ApiCategoriesPostErrors[keyof ApiCategoriesPostErrors];
+
+export type ApiCategoriesPostResponses = {
+    /**
+     * Category resource created
+     */
+    201: Category;
+};
+
+export type ApiCategoriesPostResponse = ApiCategoriesPostResponses[keyof ApiCategoriesPostResponses];
+
+export type ApiCategoriesIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdDeleteErrors = {
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiCategoriesIdDeleteError = ApiCategoriesIdDeleteErrors[keyof ApiCategoriesIdDeleteErrors];
+
+export type ApiCategoriesIdDeleteResponses = {
+    /**
+     * Category resource deleted
+     */
+    204: void;
+};
+
+export type ApiCategoriesIdDeleteResponse = ApiCategoriesIdDeleteResponses[keyof ApiCategoriesIdDeleteResponses];
+
 export type ApiCategoriesIdGetData = {
     body?: never;
     path: {
@@ -2855,6 +2979,51 @@ export type ApiCategoriesIdGetResponses = {
 };
 
 export type ApiCategoriesIdGetResponse = ApiCategoriesIdGetResponses[keyof ApiCategoriesIdGetResponses];
+
+export type ApiCategoriesIdPatchData = {
+    /**
+     * The updated Category resource
+     */
+    body: Category;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesIdPatchError = ApiCategoriesIdPatchErrors[keyof ApiCategoriesIdPatchErrors];
+
+export type ApiCategoriesIdPatchResponses = {
+    /**
+     * Category resource updated
+     */
+    200: Category;
+};
+
+export type ApiCategoriesIdPatchResponse = ApiCategoriesIdPatchResponses[keyof ApiCategoriesIdPatchResponses];
 
 export type ApiGatewaysGetCollectionData = {
     body?: never;
@@ -5224,10 +5393,16 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        handle?: string;
         email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
-        handle?: string;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
     };
     url: '/v4/users';
 };
