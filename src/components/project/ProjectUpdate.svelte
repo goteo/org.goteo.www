@@ -23,14 +23,14 @@
 
     const projectId = project.id!.toString();
 
-    let projectsUpdates: ProjectUpdate[] = $state([]);
+    let projectUpdates: ProjectUpdate[] = $state([]);
 
     $effect(() => {
         apiProjectUpdatesGetCollection({
-            query: { project: projectId, "order[date]": "asc" },
+            query: { project: projectId, "order[date]": "desc" },
             headers: { "Accept-Language": lang },
         }).then((data) => {
-            projectsUpdates = data.data!;
+            projectUpdates = data.data!;
         });
     });
 
@@ -116,7 +116,7 @@
         mobileItemsToShow={1}
         desktopItemsToShow={2}
     >
-        {#if projectsUpdates.length === 0}
+        {#if projectUpdates.length === 0}
             <div
                 class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
             >
@@ -128,7 +128,7 @@
             {(activeGroup = group)}
         {/snippet} -->
 
-        {#each projectsUpdates as update, i}
+        {#each projectUpdates as update, i}
             <ProjectUpdateCard
                 {update}
                 type={getCardType(i)}
