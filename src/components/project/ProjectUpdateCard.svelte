@@ -14,9 +14,11 @@
     import type { User } from "../../openapi/client/types.gen.ts";
     import type { MouseEventHandler } from "svelte/elements";
 
+    export type ProjectUpdateCardType = "contracted" | "expanded" | "mobile";
+
     interface Props {
         update: ProjectUpdate;
-        type?: "small" | "large";
+        type?: ProjectUpdateCardType;
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         isActive?: boolean;
     }
@@ -43,7 +45,6 @@
 
     onMount(async () => {
         author = await getAuthor(update);
-        type = author === undefined ? "small" : "large";
     });
 
     $effect(() => {
@@ -52,7 +53,7 @@
     });
 </script>
 
-{#if type === "small"}
+{#if type === "contracted"}
     <div
         class={twMerge(
             "flex w-138.5 flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
@@ -91,7 +92,7 @@
             </svg>
         </div>
     </div>
-{:else if type === "large"}
+{:else if type === "expanded"}
     <div
         class={twMerge(
             "bg-purple-soft border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
@@ -133,6 +134,58 @@
                 {/if}
             </div>
             <div class="flex w-full items-end justify-between">
+                <span class="text-content flex text-sm font-medium">
+                    {$t("pages.project.view.tabs.updates.by")}
+                    <strong class="font-bold text-black"> {author?.displayName}</strong>
+                </span>
+                <Button kind="ghost" onclick={onClick}>
+                    {$t("pages.project.view.tabs.updates.content.btn.readMore")}
+                </Button>
+            </div>
+        </div>
+    </div>
+{:else if type === "mobile"}
+    <div
+        class={twMerge(
+            "bg-purple-soft border-variant1 flex w-full flex-col gap-5 rounded-4xl border p-5 shadow-sm",
+            cardClasses,
+        )}
+    >
+        <div class="flex flex-col gap-4">
+            <div class="text-secondary flex flex-row gap-0.5 text-xl font-bold">
+                {#if update.date}
+                    {formatDate(new Date(update.date), $locale)}
+                {/if}
+                <div class="pt-1">
+                    <Bullet />
+                </div>
+            </div>
+            {#if update.cover}
+                <img
+                    src={update.cover}
+                    alt={update.title}
+                    class="no-select aspect-video w-full shrink-0 self-stretch rounded-3xl object-cover"
+                    draggable="false"
+                />
+            {/if}
+        </div>
+        <div class="flex h-full flex-col gap-6">
+            <div class="flex flex-col gap-4">
+                <h2 class="text-secondary text-2xl leading-8 font-bold">{update.title}</h2>
+                {#if update.subtitle || update.body}
+                    <div class="flex flex-col gap-2 leading-6">
+                        <p class="text-base font-bold text-black">{update.subtitle}</p>
+                        <p
+                            class="text-content line-clamp-3 text-base font-normal text-ellipsis ordinal"
+                        >
+                            {#await renderMarkdown(update.body) then content}
+                                {@html content}
+                            {/await}
+                        </p>
+                    </div>
+                {/if}
+            </div>
+            <div class="flex w-full flex-col gap-4">
                 <span class="text-content flex text-sm font-medium">
                     {$t("pages.project.view.tabs.updates.by")}
                     <strong class="font-bold text-black"> {author?.displayName}</strong>
