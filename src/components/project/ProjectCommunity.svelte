@@ -7,6 +7,8 @@
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import { t } from "../../i18n/store";
     import {
+        apiAccountingsIdGet,
+        apiMatchCallsIdGet,
         apiProjectSupportsGetCollection,
         apiUsersIdOrHandleGet,
     } from "../../openapi/client/index";
@@ -27,7 +29,6 @@
     } = $props();
 
     const projectId = $derived(project.id?.toString());
-    const PAGE_SIZE = 30;
 
     type EnrichedSupport = ProjectSupport & {
         displayName: string;
@@ -63,25 +64,45 @@
         ),
     );
 
+    type HydraCollection = {
+        "hydra:member": ProjectSupport[];
+        "hydra:view"?: { "hydra:next"?: string };
+    };
+
     async function fetchPage(page: number): Promise<ProjectSupport[]> {
         const { data } = await apiProjectSupportsGetCollection({
             query: { project: projectId, anonymous: false, page },
+            headers: { Accept: "application/ld+json" },
         });
 
-        const items = (data as ProjectSupport[] | null) ?? [];
-        hasMore = items.length >= PAGE_SIZE;
+        const collection = data as unknown as HydraCollection;
+        const items = collection["hydra:member"] ?? [];
+        hasMore = !!collection["hydra:view"]?.["hydra:next"];
         return items;
     }
 
     async function enrichSupports(supports: ProjectSupport[]): Promise<EnrichedSupport[]> {
         return Promise.all(
             supports.map(async (support) => {
-                const id = extractId(support?.origin!);
-                const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
+                const accountingId = extractId(support?.origin!);
+                const { data: acct } = await apiAccountingsIdGet({ path: { id: accountingId! } });
+                const ownerIri = acct?.owner ?? "";
+                const isMatchfunding = ownerIri.includes("match_calls");
+                const ownerId = extractId(ownerIri);
+
+                let displayName = "";
+                if (isMatchfunding) {
+                    const { data: matchCall } = await apiMatchCallsIdGet({ path: { id: ownerId! } });
+                    displayName = matchCall?.title ?? "";
+                } else {
+                    const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: ownerId! } });
+                    displayName = user?.displayName ?? "";
+                }
+
                 return {
                     ...support,
-                    displayName: user?.displayName!,
-                    matchfunding: support.origin?.includes("match")!,
+                    displayName,
+                    matchfunding: isMatchfunding,
                 };
             }),
         );
