@@ -53,7 +53,7 @@
 
         {#snippet content()}
             <div class="flex w-full flex-col pb-6">
-                <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-[620px] border-none"></div>
+                <div class="bg-secondary mt-0 mb-4 h-px w-full max-w-155 border-none"></div>
 
                 <div class="text-content font-karla text-[16px] leading-6 font-normal">
                     {#each recipients() as [id, items], index}
