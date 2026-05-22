@@ -2,7 +2,7 @@
     import { Modal } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
 
-    import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
+    import ProjectUpdateCard, { type ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import AlertIcon from "../../svgs/AlertIcon.svelte";
@@ -38,7 +38,6 @@
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
     let activeCard: number = $state(0);
-    let cardType: "small" | "large" = $state("small");
 
     $effect(() => {
         if (openModal) cleanCloseButton();
@@ -58,6 +57,12 @@
         const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
 
         itemsPerGroup = isMobile ? 1 : 2;
+    }
+
+    function getCardType(index: number): ProjectUpdateCardType {
+        if (itemsPerGroup === 1) return "mobile";
+
+        return index === activeCard ? "expanded" : "contracted";
     }
 
     function cleanCloseButton() {
@@ -101,7 +106,16 @@
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("pages.project.view.tabs.updates.content.title")}
     </h2>
-    <Carousel bind:activeCard gap={24} showDots={true} {itemsPerGroup}>
+    <Carousel
+        bind:activeCard
+        gap={24}
+        showDots={true}
+        {itemsPerGroup}
+        dotsPerItem={true}
+        lockItemWidth={false}
+        mobileItemsToShow={1}
+        desktopItemsToShow={2}
+    >
         {#if projectsUpdates.length === 0}
             <div
                 class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
@@ -117,7 +131,7 @@
         {#each projectsUpdates as update, i}
             <ProjectUpdateCard
                 {update}
-                type={cardType}
+                type={getCardType(i)}
                 isActive={i === activeCard}
                 onClick={(): void => {
                     selected = update;

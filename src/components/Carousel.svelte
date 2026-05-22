@@ -12,9 +12,11 @@
         itemsPerGroup = 1,
         gap = 24,
         showDots = true,
-        class: className = "",
+        class: classes = "",
         mobileItemsToShow = 1,
         desktopItemsToShow = 3,
+        dotsPerItem = false,
+        lockItemWidth = true,
         children = null,
         onSelect = null,
         activeCard = $bindable(0),
@@ -26,17 +28,20 @@
         class?: ClassNameValue;
         mobileItemsToShow?: number;
         desktopItemsToShow?: number;
+        dotsPerItem?: boolean;
+        lockItemWidth?: boolean;
         children?: any;
         onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
         active?: Snippet;
     } = $props();
 
-    const wrapperClasses = twMerge("relative w-full", className);
+    const wrapperClasses = twMerge("relative w-full", classes);
 
     let container: HTMLDivElement;
 
     let totalGroups = $state(0);
+    let totalItems = $state(0);
     let activeGroup = $state(0);
     let isAtStart = $state(true);
     let isAtEnd = $state(false);
@@ -48,6 +53,23 @@
 
     const observerMap = new Map<number, HTMLElement>();
 
+    function getActualChildren() {
+        if (!container) return [];
+
+        let actualChildren: HTMLElement[] = [];
+        const directChildren = Array.from(container.children) as HTMLElement[];
+
+        for (const child of directChildren) {
+            if (child.tagName.toLowerCase() === "astro-slot") {
+                actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
+            } else {
+                actualChildren.push(child);
+            }
+        }
+
+        return actualChildren;
+    }
+
     function getCurrentItemsToShow(): number {
         if (!browser) return desktopItemsToShow;
         return window.innerWidth >= 1024 ? desktopItemsToShow : mobileItemsToShow;
@@ -57,44 +79,48 @@
         if (!browser || !container || !mounted) return;
 
         try {
-            const containerWidth = container.offsetWidth;
+            const actualChildren = getActualChildren();
 
-            if (containerWidth === 0) {
-                setTimeout(updateItemWidths, 50);
-                return;
+            if (lockItemWidth) {
+                const containerWidth = container.offsetWidth;
+
+                if (containerWidth === 0) {
+                    setTimeout(updateItemWidths, 50);
+                    return;
+                }
+
+                const styles = getComputedStyle(container);
+                const paddingLeft = parseFloat(styles.paddingLeft);
+                const paddingRight = parseFloat(styles.paddingRight);
+                const available = containerWidth - paddingLeft - paddingRight;
+
+                const visibleItems = getCurrentItemsToShow();
+                const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
+
+                actualChildren.forEach((child) => {
+                    child.style.minWidth = `${childWidth}px`;
+                    child.style.maxWidth = `${childWidth}px`;
+                    child.style.width = `${childWidth}px`;
+                    child.style.flex = "0 0 auto";
+                    child.style.overflow = "hidden";
+                });
+            } else {
+                actualChildren.forEach((child) => {
+                    child.style.removeProperty("min-width");
+                    child.style.removeProperty("max-width");
+                    child.style.removeProperty("width");
+                    child.style.flex = "0 0 auto";
+                    child.style.overflow = "hidden";
+                });
             }
 
-            const styles = getComputedStyle(container);
-            const paddingLeft = parseFloat(styles.paddingLeft);
-            const paddingRight = parseFloat(styles.paddingRight);
-            const available = containerWidth - paddingLeft - paddingRight;
-
-            const visibleItems = getCurrentItemsToShow();
-            const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
-
-            const directChildren = Array.from(container.children) as HTMLElement[];
-
-            for (const el of directChildren) {
+            for (const el of Array.from(container.children) as HTMLElement[]) {
                 if (el.tagName.toLowerCase() === "astro-slot") {
-                    const slotChildren = Array.from(el.children) as HTMLElement[];
-                    slotChildren.forEach((child) => {
-                        child.style.minWidth = `${childWidth}px`;
-                        child.style.maxWidth = `${childWidth}px`;
-                        child.style.width = `${childWidth}px`;
-                        child.style.flex = "0 0 auto";
-                        child.style.overflow = "hidden";
-                    });
                     el.style.minWidth = "";
                     el.style.maxWidth = "";
                     el.style.width = "";
                     el.style.flex = "";
                     el.style.display = "contents";
-                } else {
-                    el.style.minWidth = `${childWidth}px`;
-                    el.style.maxWidth = `${childWidth}px`;
-                    el.style.width = `${childWidth}px`;
-                    el.style.flex = "0 0 auto";
-                    el.style.overflow = "hidden";
                 }
             }
             updateNavForShort();
@@ -107,16 +133,7 @@
         if (!browser || !container || !intersectionObs || !mounted) return;
 
         try {
-            let actualChildren: HTMLElement[] = [];
-            const directChildren = Array.from(container.children) as HTMLElement[];
-
-            for (const child of directChildren) {
-                if (child.tagName.toLowerCase() === "astro-slot") {
-                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
-                } else {
-                    actualChildren.push(child);
-                }
-            }
+            const actualChildren = getActualChildren();
 
             intersectionObs.disconnect();
             observerMap.clear();
@@ -127,16 +144,30 @@
             });
 
             totalGroups = Math.ceil(actualChildren.length / itemsPerGroup);
+            totalItems = actualChildren.length;
             updateNavForShort();
         } catch (error) {
             console.warn("Carousel: Error observing visibility:", error);
         }
     }
 
-    function updateNavState(group: number) {
-        activeCard = group;
-        isAtStart = group === 0;
-        isAtEnd = group === totalGroups - 1;
+    function getPositionCount() {
+        return dotsPerItem ? totalItems : totalGroups;
+    }
+
+    function getPositionFromItemIndex(index: number) {
+        return dotsPerItem ? index : Math.floor(index / itemsPerGroup);
+    }
+
+    function getTargetItemIndex(position: number) {
+        return dotsPerItem ? position : position * itemsPerGroup;
+    }
+
+    function updateNavState(position: number) {
+        activeCard = position;
+        activeGroup = position;
+        isAtStart = position === 0;
+        isAtEnd = position === getPositionCount() - 1;
     }
 
     function updateNavForShort() {
@@ -144,31 +175,23 @@
 
         try {
             isScrollable = container.scrollWidth > container.clientWidth;
-            isAtStart = true;
-            isAtEnd = !isScrollable;
+            isAtStart = activeCard === 0;
+            isAtEnd = !isScrollable || activeCard === getPositionCount() - 1;
         } catch (error) {
             console.warn("Carousel: Error updating navigation state:", error);
         }
     }
 
-    function scrollToGroup(i: number) {
+    async function scrollToGroup(i: number) {
         if (!browser || !container || !mounted) return;
 
         try {
-            let actualChildren: HTMLElement[] = [];
-            const directChildren = Array.from(container.children) as HTMLElement[];
-
-            for (const child of directChildren) {
-                if (child.tagName.toLowerCase() === "astro-slot") {
-                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
-                } else {
-                    actualChildren.push(child);
-                }
-            }
-
             programmaticScroll = true;
             updateNavState(i);
-            const target = actualChildren[i * itemsPerGroup];
+            await tick();
+            updateItemWidths();
+            const actualChildren = getActualChildren();
+            const target = actualChildren[getTargetItemIndex(i)];
             target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
             setTimeout(() => {
                 programmaticScroll = false;
@@ -180,10 +203,9 @@
     }
 
     function scroll(dir: "left" | "right") {
+        const lastPosition = getPositionCount() - 1;
         const next =
-            dir === "right"
-                ? Math.min(activeCard + 1, totalGroups - 1)
-                : Math.max(activeCard - 1, 0);
+            dir === "right" ? Math.min(activeCard + 1, lastPosition) : Math.max(activeCard - 1, 0);
         scrollToGroup(next);
     }
 
@@ -235,7 +257,7 @@
                                     if (element === e.target) {
                                         minGroup = Math.min(
                                             minGroup,
-                                            Math.floor(index / itemsPerGroup),
+                                            getPositionFromItemIndex(index),
                                         );
                                         break;
                                     }
@@ -264,7 +286,7 @@
                         observeVisibility();
                     }
                 });
-                mutationObs.observe(container, { childList: true });
+                mutationObs.observe(container, { childList: true, subtree: true });
 
                 window.addEventListener("resize", updateItemWidths);
             } catch (error) {
@@ -329,9 +351,9 @@
         <ArrowSliderIcon />
     </button>
 
-    {#if showDots && totalGroups > 1}
+    {#if showDots && getPositionCount() > 1}
         <div class="mt-4 flex justify-center gap-2">
-            {#each Array(totalGroups) as _, i}
+            {#each Array(getPositionCount()) as _, i}
                 <button
                     onclick={() => scrollToGroup(i)}
                     class="h-2 w-2 rounded-full transition-all"
