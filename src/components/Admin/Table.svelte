@@ -224,7 +224,7 @@
                 <select
                     value={selectedSort}
                     onchange={(e) => onSortChange(e.currentTarget.value)}
-                    class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
+                    class="border-secondary text-secondary min-w-50 rounded-sm py-1"
                     disabled={$isLoading}
                 >
                     {#each sortOptions as option}
@@ -317,7 +317,7 @@
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary decoration-secondary/64 max-w-[100px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
+                                    class="text-secondary decoration-secondary/64 max-w-25 cursor-pointer truncate text-xs/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}

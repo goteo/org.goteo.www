@@ -34,7 +34,7 @@
                         {$t("profile.donorType.fan.description")}
                     </p>
                 </div>
-                <div class="size-[100px]">
+                <div class="size-25">
                     <VerifiedBadge class="size-full" />
                 </div>
             </div>
@@ -75,10 +75,10 @@
 
             <!-- Progress Bar -->
             <div
-                class="border-grey flex h-4 w-full grow rounded-lg border bg-white p-[2px] shadow-lg"
+                class="border-grey flex h-4 w-full grow rounded-lg border bg-white p-0.5 shadow-lg"
             >
                 <div
-                    class="from-grey h-3 w-[86px] rounded-lg bg-gradient-to-r to-[#c2eeff] shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
+                    class="from-grey to-semantic-notification h-3 w-21.5 rounded-lg bg-linear-to-r shadow-[8px_8px_20px_0px_inset_rgba(255,255,255,0.2)]"
                 ></div>
             </div>
 

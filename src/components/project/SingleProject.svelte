@@ -64,6 +64,10 @@
     let projectLanguage = $state(guessProjectLanguage(project.locales!));
 
     function guessProjectLanguage(pLangs: string[]): string {
+        if (typeof navigator === "undefined" || !navigator.languages) {
+            return pLangs[0];
+        }
+
         for (const navLang of navigator.languages) {
             const uLang = navLang.split("-")[0].toLowerCase();
 

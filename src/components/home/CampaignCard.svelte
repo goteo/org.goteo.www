@@ -37,7 +37,7 @@ Converted from CampaignCard.astro to maintain exact functionality
         size === "large" ? "col-span-1 md:col-span-2 lg:col-span-2" : "col-span-1",
     );
 
-    const imageHeight = "h-[215px]"; // More rectangular proportions matching design
+    const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
     const hasReachedMinimum = $derived(campaign.obtained.amount >= campaign.minimum.amount);
@@ -81,7 +81,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
 <div
     class={twMerge(
-        "border-grey grow basis-0 rounded-[32px] border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "border-grey grow basis-0 rounded-4xl border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
         className,
     )}

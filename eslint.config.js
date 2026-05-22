@@ -89,6 +89,16 @@ export default [
             "cypress/no-unnecessary-waiting": "off",
         },
     },
+    // Svelte module scripts
+    {
+        files: ["**/*.svelte.ts"],
+        languageOptions: {
+            parser: tseslint.parser,
+            parserOptions: {
+                projectService: true,
+            },
+        },
+    },
     // Svelte configuration
     {
         files: ["**/*.svelte"],

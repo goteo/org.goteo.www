@@ -5,8 +5,8 @@
     import type { HTMLButtonAttributes } from "svelte/elements";
 
     const sizeStyles = {
-        md: "px-8 py-4 rounded-[24px]",
-        sm: "px-4 py-2 rounded-[16px]",
+        md: "px-8 py-4 rounded-3xl",
+        sm: "px-4 py-2 rounded-2xl",
     };
 
     const kindStyles = {

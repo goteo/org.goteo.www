@@ -5,7 +5,7 @@ import Hero from "../../components/Hero/Hero.astro";
 import Campaigns from "../../components/home/Campaigns.astro";
 import CampaignsTabs from "../../components/home/CampaignsTabs.astro";
 import Stats from "../../components/home/Stats.astro";
-import Stories from "../../components/home/Stories.astro";
+import Stories from "../../components/home/Stories.svelte";
 import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
@@ -31,7 +31,7 @@ const { t, lang, session } = Astro.locals;
                 title={t("pages.home.banner.title")}
                 description={t("pages.home.banner.description")}
                 ctaText={t("pages.home.banner.ctaText")}
-                ctaLink={t("pages.home.banner.ctaLink")}
+                ctaLink={"/about"}
                 closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
             />
         </div>
@@ -40,7 +40,7 @@ const { t, lang, session } = Astro.locals;
         <Stats />
         <CampaignsTabs />
         <Matchfunding />
-        <!-- <Stories /> -->
+        <!-- <Stories client:load /> -->
         <FeaturedPromoters />
         <!-- <Resources /> -->
     </App>

@@ -6,6 +6,7 @@ import { apiProjectsGetCollection, type Accounting, type Money } from "../../ope
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
 import Grid from "../library/Grid.svelte";
+import Button from "../library/Button.svelte";
 
 const { t } = Astro.locals;
 
@@ -81,15 +82,15 @@ const displayCampaigns = selectCampaignsForGrid(campaigns);
         </h2>
 
         <!-- "Ver todas" Button -->
-        <button
-            class="bg-variant1 flex items-center gap-2 rounded-3xl px-6 py-4 transition-all duration-200 hover:opacity-90"
-        >
-            <!-- Arrow Icon -->
-            <Arrow />
-            <span class="text-secondary text-base font-bold">
-                {t("pages.home.campaigns.viewAll")}
-            </span>
-        </button>
+        <a href="/search" aria-label={t("pages.home.campaigns.viewAll")}>
+            <Button client:load kind="secondary" size="md">
+                <!-- Arrow Icon -->
+                <Arrow />
+                <span class="text-secondary text-base font-bold">
+                    {t("pages.home.campaigns.viewAll")}
+                </span>
+            </Button>
+        </a>
     </div>
 
     <!-- Campaigns Grid: 3 columns max, 2 rows, large cards take 2 columns -->
