@@ -92,10 +92,14 @@
 
                 let displayName = "";
                 if (isMatchfunding) {
-                    const { data: matchCall } = await apiMatchCallsIdGet({ path: { id: ownerId! } });
+                    const { data: matchCall } = await apiMatchCallsIdGet({
+                        path: { id: ownerId! },
+                    });
                     displayName = matchCall?.title ?? "";
                 } else {
-                    const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: ownerId! } });
+                    const { data: user } = await apiUsersIdOrHandleGet({
+                        path: { idOrHandle: ownerId! },
+                    });
                     displayName = user?.displayName ?? "";
                 }
 
