@@ -50,7 +50,11 @@
         <img src={DEFAULT_COVER} alt="" class="size-full object-cover" />
 
         <div class="absolute right-6 bottom-6 flex gap-3">
-            <Button kind="secondary" size="md" onclick={() => navigator.share?.({ url: window.location.href })}>
+            <Button
+                kind="secondary"
+                size="md"
+                onclick={() => navigator.share?.({ url: window.location.href })}
+            >
                 <ShareIcon class="size-5" />
                 {$t("profile.share")}
             </Button>
@@ -75,12 +79,7 @@
     </div>
 
     <!-- Name, location, social links -->
-    <ProfileInfo
-        {displayName}
-        links={user.links}
-        email={user.email}
-        territory={user.territory}
-    />
+    <ProfileInfo {displayName} links={user.links} email={user.email} territory={user.territory} />
 
     <!-- Tabs -->
     <div class=" mt-8 w-full" style="--color-tertiary: var(--color-content)">
@@ -123,10 +122,6 @@
 
     <!-- Tab: Tipo de donante -->
     <div data-tab-content="donorType" class="w-full" style="display:none">
-        <ProfileDonorType
-            {projectsDonated}
-            {moneyDonatedAmount}
-            {moneyDonatedCurrency}
-        />
+        <ProfileDonorType {projectsDonated} {moneyDonatedAmount} {moneyDonatedCurrency} />
     </div>
 </div>
