@@ -29,8 +29,7 @@
     let isSubmitting = $state(false);
     let errorMessage = $state("");
 
-    onMount(() => {
-    });
+    onMount(() => {});
 
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
@@ -73,7 +72,9 @@
                     </div>
 
                     <form id="login" onsubmit={handleSubmit} class="flex w-full flex-col gap-8">
-                        <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
+                        <div
+                            class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                        >
                             <div class="grid w-full grid-cols-1 gap-4">
                                 <TextInput
                                     type="text"
@@ -102,7 +103,9 @@
                             </div>
                         </div>
 
-                        <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
+                        <div
+                            class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                        >
                             <Checkbox id="policies" bind:checked={acceptTerms}>
                                 <Thtml
                                     key="register.form.termsCheckbox"
@@ -123,8 +126,12 @@
                     </div>
                 </div>
 
-                <aside class="flex w-full items-start gap-10 self-start pt-10 lg:sticky lg:top-(--sticky-top) lg:ml-auto lg:w-[50%] lg:max-w-[45%]">
-                    <Card class="border-secondary flex h-fit w-full flex-col gap-4 rounded-[40px] border bg-white p-8 shadow-sm lg:p-6">
+                <aside
+                    class="flex w-full items-start gap-10 self-start pt-10 lg:sticky lg:top-(--sticky-top) lg:ml-auto lg:w-[50%] lg:max-w-[45%]"
+                >
+                    <Card
+                        class="border-secondary flex h-fit w-full flex-col gap-4 rounded-[40px] border bg-white p-8 shadow-sm lg:p-6"
+                    >
                         <Summary hasError={errorMessage.length > 0} />
 
                         <Steps step={currentStep} hasError={errorMessage !== ""} />
@@ -136,7 +143,7 @@
                         <Button
                             type="submit"
                             form="login"
-                            class="flex bg-primary text-secondary items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 text-sm leading-4 font-bold"
+                            class="bg-primary text-secondary flex items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 text-sm leading-4 font-bold"
                         >
                             {#if isSubmitting}
                                 <span class="italic">{$t("system.loading")}</span>
