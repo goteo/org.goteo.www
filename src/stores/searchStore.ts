@@ -70,7 +70,9 @@ function loadInitialState(): SearchState {
 
     // If we have URL parameters, mark as having searched
     const hasUrlFilters =
-        state.filters.title || state.filters.status || (state.filters["categories[]"]?.length ?? 0) > 0;
+        state.filters.title ||
+        state.filters.status ||
+        (state.filters["categories[]"]?.length ?? 0) > 0;
 
     if (hasUrlFilters) {
         state.hasSearched = true;
@@ -277,7 +279,11 @@ function createSearchStore() {
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(filters.title || filters.status || (filters["categories[]"]?.length ?? 0) > 0),
+                    !!(
+                        filters.title ||
+                        filters.status ||
+                        (filters["categories[]"]?.length ?? 0) > 0
+                    ),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",

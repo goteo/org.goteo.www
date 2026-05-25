@@ -121,7 +121,7 @@ Integrated with searchStore for state management and URL synchronization
     <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
-         <div class="w-full lg:max-w-sm">
+        <div class="w-full lg:max-w-sm">
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("pages.search.filters.status.label")}
