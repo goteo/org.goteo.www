@@ -1478,7 +1478,7 @@ export type Project = {
      */
     calendar?: ProjectCalendar;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -1540,9 +1540,9 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<Category>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1564,9 +1564,9 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<CategoryJsonld>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
@@ -1589,9 +1589,9 @@ export type ProjectProjectUpdationDto = {
      */
     subtitle?: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories?: Array<Category>;
+    categories?: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1659,7 +1659,7 @@ export type ProjectJsonld = {
      */
     calendar?: ProjectCalendarJsonld;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -2087,6 +2087,7 @@ export type ProjectSupport = {
      * When `anonymous` is *true* it will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2099,6 +2100,10 @@ export type ProjectSupport = {
      * User's will to have their support to the Project be shown publicly.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -2156,6 +2161,7 @@ export type ProjectSupportJsonld = {
      * When `anonymous` is *true* it will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2168,6 +2174,10 @@ export type ProjectSupportJsonld = {
      * User's will to have their support to the Project be shown publicly.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -2404,11 +2414,15 @@ export type TrackingJsonld = {
  */
 export type User = {
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2440,10 +2454,6 @@ export type User = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2452,6 +2462,14 @@ export type User = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<Link>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: Territory;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -2504,11 +2522,15 @@ export type UserJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2540,10 +2562,6 @@ export type UserJsonld = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2552,6 +2570,14 @@ export type UserJsonld = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<LinkJsonld>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: TerritoryJsonld;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -4925,6 +4951,7 @@ export type ApiProjectSupportsGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports';
 };
@@ -4947,6 +4974,7 @@ export type ApiProjectSupportsmoneyTotalGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports/money_total';
 };
@@ -5377,10 +5405,16 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        handle?: string;
         email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
-        handle?: string;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
     };
     url: '/v4/users';
 };

@@ -6,15 +6,9 @@
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import { t } from "../../i18n/store";
-    import {
-        apiAccountingsIdGet,
-        apiMatchCallsIdGet,
-        apiProjectSupportsGetCollection,
-        apiUsersIdOrHandleGet,
-    } from "../../openapi/client/index";
+    import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
-    import { extractId } from "../../utils/extractId";
     import ActionableButton from "../library/ActionableButton.svelte";
     import Grid from "../library/Grid.svelte";
 
@@ -30,21 +24,16 @@
 
     const projectId = $derived(project.id?.toString());
 
-    type EnrichedSupport = ProjectSupport & {
-        displayName: string;
-        matchfunding: boolean;
-    };
+    let projectsSupportItems = $state<ProjectSupport[]>([]);
 
-    let projectsSupportItems = $state<EnrichedSupport[]>([]);
-
-    let selectedProjectSupport: EnrichedSupport | null = $state(null);
+    let selectedProjectSupport: ProjectSupport | null = $state(null);
 
     let isLoaded = $state(false);
     let openModal = $state(false);
     let hasMore = $state(false);
     let currentPage = $state(1);
 
-    function getSupportType(item: EnrichedSupport) {
+    function getSupportType(item: ProjectSupport) {
         switch (true) {
             case item.matchfunding:
                 return "matchfunding";
@@ -81,48 +70,15 @@
         return items;
     }
 
-    async function enrichSupports(supports: ProjectSupport[]): Promise<EnrichedSupport[]> {
-        return Promise.all(
-            supports.map(async (support) => {
-                const accountingId = extractId(support?.origin!);
-                const { data: acct } = await apiAccountingsIdGet({ path: { id: accountingId! } });
-                const ownerIri = acct?.owner ?? "";
-                const isMatchfunding = ownerIri.includes("match_calls");
-                const ownerId = extractId(ownerIri);
-
-                let displayName = "";
-                if (isMatchfunding) {
-                    const { data: matchCall } = await apiMatchCallsIdGet({
-                        path: { id: ownerId! },
-                    });
-                    displayName = matchCall?.title ?? "";
-                } else {
-                    const { data: user } = await apiUsersIdOrHandleGet({
-                        path: { idOrHandle: ownerId! },
-                    });
-                    displayName = user?.displayName ?? "";
-                }
-
-                return {
-                    ...support,
-                    displayName,
-                    matchfunding: isMatchfunding,
-                };
-            }),
-        );
-    }
-
     onMount(async () => {
-        const supports = await fetchPage(1);
-        projectsSupportItems = await enrichSupports(supports);
+        projectsSupportItems = await fetchPage(1);
         isLoaded = true;
     });
 
     async function loadMore() {
         const nextPage = currentPage + 1;
         const supports = await fetchPage(nextPage);
-        const enriched = await enrichSupports(supports);
-        projectsSupportItems = [...projectsSupportItems, ...enriched];
+        projectsSupportItems = [...projectsSupportItems, ...supports];
         currentPage = nextPage;
     }
 </script>
