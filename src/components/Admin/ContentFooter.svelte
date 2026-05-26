@@ -2,6 +2,7 @@
     import { apiVersionsIdGet } from "../../../src/openapi/client/index.ts";
     import { t } from "../../i18n/store";
     import AnnotationIcon from "../icons/Comments.svelte";
+    import Tag from "../library/Tag.svelte";
 
     const { id } = $props<{ id: string }>();
 
@@ -47,13 +48,11 @@
         <p class="text-secondary font-bold">
             {$t("contributions.grid.content-footer.downloadDetails")}
         </p>
-        <span
-            class="text-secondary bg-variant1 flex flex-row items-center gap-2 rounded-2xl px-4 py-2 font-bold"
-        >
+        <Tag class="bg-variant1 text-secondary rounded-2xl border-none px-4 py-2 font-bold">
             <AnnotationIcon />
             {$t("contributions.grid.content-footer.annotations", {
                 annotations: 0,
             })}
-        </span>
+        </Tag>
     </div>
 </section>

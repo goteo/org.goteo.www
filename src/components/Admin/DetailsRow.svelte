@@ -68,7 +68,7 @@
 </script>
 
 <section class="flex flex-col gap-10">
-    <Grid class="text-content grid-cols-4 gap-x-8 gap-y-8 rounded-md bg-[#fbfafe] p-6 text-base">
+    <Grid class="text-content bg-purple-soft grid-cols-4 gap-x-8 gap-y-8 rounded-md p-6 text-base">
         <div class="flex flex-col gap-1">
             <p class="font-semibold">{$t("contributions.grid.details.operationTime")}</p>
             <span title={dataTimeCreated.fulltime}>{dataTimeCreated.time}</span>
