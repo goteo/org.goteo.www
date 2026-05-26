@@ -559,6 +559,9 @@
           "title": "Fecha salida de campaña",
           "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
         },
+        "terms": {
+          "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
+        },
         "submit": "Proponer campaña"
       },
       "view": {
@@ -1447,6 +1450,13 @@
       "modal": {
         "title": "Difunde este blog por el mundo",
         "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
+      }
+    }
+  },
+  "validation": {
+    "project": {
+      "terms": {
+        "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
       }
     }
   }
