@@ -6,18 +6,18 @@ import {
     apiUsersIdOrHandleGet,
     apiProjectSupportsGetCollection,
     apiProjectSupportsmoneyTotalGetCollection,
+    apiProjectsGetCollection,
 } from "../../../../openapi/client";
 import type { Accounting, Money, ProjectSupport } from "../../../../openapi/client";
 import type { Campaign } from "../../../../types/campaign";
 import { client } from "../../../../openapi/client/client.gen";
 import { getLanguage } from "../../../../middleware/utils";
-import { NotFound } from "../../../../utils/responses";
 
 const { idOrHandle } = Astro.params;
 const { lang, session } = Astro.locals;
 
 if (!idOrHandle) {
-    return NotFound;
+    return Astro.redirect("/404");
 }
 
 const { data: user, error } = await apiUsersIdOrHandleGet({
@@ -25,73 +25,85 @@ const { data: user, error } = await apiUsersIdOrHandleGet({
 });
 
 if (error || !user) {
-    return NotFound;
+    return Astro.redirect("/404");
+}
+
+if (!user.accounting) {
+    throw new Error(`User ${idOrHandle} has no Accounting`);
 }
 
 let userSupports: ProjectSupport[] = [];
-let totalDonated = { amount: 0, currency: "EUR" };
+let totalDonated = { amount: 0, currency: import.meta.env.PUBLIC_DEFAULT_CURRENCY as string };
 let projectsDonatedCount = 0;
 
-if (user.accounting) {
-    try {
-        const { data: supports } = await apiProjectSupportsGetCollection({
+try {
+    const { data: supports } = await apiProjectSupportsGetCollection({
+        query: { origin: user.accounting },
+    });
+
+    userSupports = supports ?? [];
+    projectsDonatedCount = userSupports.length;
+
+    if (userSupports.length > 0) {
+        const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
             query: { origin: user.accounting },
         });
 
-        if (supports) {
-            userSupports = supports;
-            projectsDonatedCount = supports.length;
-
-            const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
-                query: { origin: user.accounting },
-            });
-
-            if (moneyTotal?.amount && moneyTotal?.currency) {
-                totalDonated = {
-                    amount: Number(moneyTotal.amount),
-                    currency: moneyTotal.currency,
-                };
-            }
+        if (moneyTotal?.amount && moneyTotal?.currency) {
+            totalDonated = {
+                amount: Number(moneyTotal.amount),
+                currency: moneyTotal.currency,
+            };
         }
-    } catch (e) {
-        console.error("Error fetching user supports:", e);
     }
+} catch (e) {
+    console.error("Error fetching user supports:", e);
 }
 
-const projectIRIs = userSupports
+const slugs = userSupports
     .slice(0, 10)
-    .map((s) => s.project)
-    .filter(Boolean);
+    .map((s) => s.project?.split("/").at(-1))
+    .filter(Boolean) as string[];
+
 let campaigns: Campaign[] = [];
 
-if (projectIRIs.length > 0) {
-    campaigns = await Promise.all(
-        projectIRIs.map(async (projectIRI) => {
-            try {
-                const { data: project } = (await client.get({
-                    url: client.buildUrl({ url: projectIRI! }),
-                    headers: { "Accept-Language": getLanguage(Astro) },
-                })) as { data: any };
+if (slugs.length > 0) {
+    try {
+        const { data: projects } = await apiProjectsGetCollection({
+            query: { "slug[]": slugs },
+            headers: { "Accept-Language": getLanguage(Astro) },
+        });
 
-                const { data: accounting } = (await client.get({
-                    url: client.buildUrl({ url: project.accounting! }),
-                })) as { data: Accounting };
+        if (projects) {
+            campaigns = (
+                await Promise.all(
+                    projects.map(async (project) => {
+                        try {
+                            const { data: accounting } = (await client.get({
+                                url: client.buildUrl({ url: project.accounting! }),
+                            })) as { data: Accounting };
 
-                return {
-                    size: "small",
-                    id: project.slug!,
-                    title: project.title!,
-                    image: project.video?.thumbnail!,
-                    minimum: project.budget?.minimum?.money!,
-                    obtained: accounting!.balance as Money,
-                    optimum: project.budget?.optimum?.money,
-                } as Campaign;
-            } catch (e) {
-                console.error(`Error fetching project ${projectIRI}:`, e);
-                return null;
-            }
-        }),
-    ).then((results) => results.filter(Boolean) as Campaign[]);
+                            return {
+                                ...project,
+                                slug: project.slug!,
+                                title: project.title!,
+                                image: project.video?.thumbnail ?? "",
+                                minimum: project.budget?.minimum?.money as Money,
+                                obtained: accounting!.balance as Money,
+                                optimum: project.budget?.optimum?.money as Money | undefined,
+                                size: "small",
+                            } as Campaign;
+                        } catch (e) {
+                            console.error(`Error fetching project ${project.slug}:`, e);
+                            return null;
+                        }
+                    }),
+                )
+            ).filter(Boolean) as Campaign[];
+        }
+    } catch (e) {
+        console.error("Error fetching projects:", e);
+    }
 }
 ---
 

@@ -40,7 +40,7 @@
     }
 </script>
 
-<Tag>
+<Tag class="border-0 bg-transparent">
     <MapIcon />
     <span>{displayName(territory)}</span>
 </Tag>
