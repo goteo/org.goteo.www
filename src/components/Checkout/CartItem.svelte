@@ -25,20 +25,20 @@
     >
         <div class="flex items-center gap-6">
             <div
-                class="flex h-[80px] w-[80px] items-center justify-center overflow-hidden rounded-3xl bg-orange-200 md:h-[160px] md:w-[160px]"
+                class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-orange-200 md:h-40 md:w-40"
             >
                 {#if item.kind === "reward"}
                     <img
                         src={item.reward.image}
                         alt={item.title}
-                        class="h-[80px] w-[80px] object-cover md:h-[160px] md:w-[160px]"
+                        class="h-20 w-20 object-cover md:h-40 md:w-40"
                     />
                 {:else}
                     <span class="text-xl md:text-2xl">🙂</span>
                 {/if}
             </div>
             <div class="flex flex-col gap-2 md:gap-4">
-                <p class="text-secondary text-lg font-bold md:text-[32px]">
+                <p class="text-secondary md:text-double text-lg font-bold">
                     {formatCurrency(item.money.amount, item.money.currency)}
                 </p>
                 <p class="text-secondary text-sm font-bold md:text-base">{item.title}</p>
@@ -46,12 +46,12 @@
                     {#if item.kind === "reward"}
                         {#if item.reward?.unitsClaimed! > 0}
                             <span
-                                >{$t("checkout.reward.claimed", {
+                                >{$t("pages.checkout.reward.claimed", {
                                     units: item.reward?.unitsClaimed!,
                                 })}
                             </span>
                         {:else}
-                            <span>{$t("checkout.reward.unclaimed")} </span>
+                            <span>{$t("pages.checkout.reward.unclaimed")} </span>
                         {/if}
                     {/if}
                 </p>
@@ -83,7 +83,7 @@
                 class="accent-primary h-6 w-6 rounded"
             />
             <label for="donation-checkbox" class=" text-content">
-                {$t("checkout.changeAddressLabel")}
+                {$t("pages.checkout.changeAddressLabel")}
             </label>
         </div> -->
 </div>

@@ -108,11 +108,11 @@
 {#if isEmpty}
     <!-- Empty State -->
     <div
-        class="border-grey relative flex min-h-[384px] flex-col items-center justify-between overflow-clip rounded-[32px] border bg-white p-6"
+        class="border-grey relative flex min-h-96 flex-col items-center justify-between overflow-clip rounded-4xl border bg-white p-6"
     >
         <!-- Decorative illustration - positioned exactly as in Figma -->
         <div
-            class="absolute top-[calc(50%+48.5px)] left-[calc(50%-126px)] size-[389px] -translate-x-1/2 -translate-y-1/2 opacity-[0.04]"
+            class="absolute top-[calc(50%+48.5px)] left-[calc(50%-126px)] size-97.25 -translate-x-1/2 -translate-y-1/2 opacity-[0.04]"
             style="color: #462949;"
             aria-hidden="true"
         >
@@ -151,7 +151,7 @@
 {:else}
     <!-- Filled State -->
     <div
-        class="border-grey relative flex min-h-[384px] flex-col justify-between overflow-clip rounded-[32px] border bg-white p-6"
+        class="border-grey relative flex min-h-96 flex-col justify-between overflow-clip rounded-4xl border bg-white p-6"
     >
         <div class="flex gap-4">
             <div class="flex flex-1 flex-col">
@@ -183,7 +183,7 @@
                 </div>
             </div>
             <!-- Decorative illustration - top right corner -->
-            <div class="z-0 size-[88px]">
+            <div class="z-0 size-22">
                 <img
                     src={illustrationPath}
                     alt=""
@@ -194,7 +194,7 @@
         </div>
 
         <!-- Recent items list -->
-        <div class="relative z-10 mb-4 flex min-h-[120px] flex-grow flex-col gap-3">
+        <div class="relative z-10 mb-4 flex min-h-30 flex-grow flex-col gap-3">
             <h3 class="text-base font-bold text-black">
                 {$t(recentTitleKey)}
             </h3>

@@ -21,8 +21,8 @@
         detailsId,
         isInitiallyCollapsed = false,
         showToggleButton = true,
-        buttonTextShow = $t("checkout.summary.show_details"),
-        buttonTextHide = $t("checkout.summary.hide_details"),
+        buttonTextShow = $t("pages.checkout.summary.showDetails"),
+        buttonTextHide = $t("pages.checkout.summary.hideDetails"),
         header,
         content,
     }: Props = $props();

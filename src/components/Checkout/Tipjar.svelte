@@ -79,7 +79,7 @@
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-2">
         <h2 class="text-2xl font-bold text-black">
-            {$t("checkout.tipjar.community")}
+            {$t("pages.checkout.tipjar.community")}
         </h2>
 
         <input
@@ -90,7 +90,7 @@
             min="1"
             bind:value={amount}
             oninput={(e) => handleAmountChange(+e.currentTarget.value)}
-            placeholder={$t("checkout.tipjar.input")}
+            placeholder={$t("pages.checkout.tipjar.input")}
             disabled={!isChecked}
             class:border-red-500={hasError}
             class:ring-red-200={hasError}
@@ -98,7 +98,7 @@
         />
         {#if hasError}
             <p class="text-sm text-red-600">
-                {$t("checkout.tipjar.error.invalidAmount")}
+                {$t("pages.checkout.tipjar.error.invalidAmount")}
             </p>
         {/if}
     </div>
@@ -113,7 +113,7 @@
                 onchange={(e) => toggleTip()}
             />
             <label for="donation-checkbox" class="text-secondary">
-                {$t("checkout.tipjar.checkboxLabel")}
+                {$t("pages.checkout.tipjar.checkboxLabel")}
             </label>
         </div>
     </div>

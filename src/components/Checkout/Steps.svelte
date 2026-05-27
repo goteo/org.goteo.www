@@ -6,10 +6,10 @@
     export let hasError: boolean;
 
     const stepsLabels = [
-        $t("checkout.steps.reward.title"),
-        $t("checkout.steps.data.title"),
-        $t("checkout.steps.payment.title"),
-        $t("checkout.steps.confirmation.title"),
+        $t("pages.checkout.steps.reward.title"),
+        $t("pages.checkout.steps.data.title"),
+        $t("pages.checkout.steps.payment.title"),
+        $t("pages.checkout.steps.confirmation.title"),
     ];
 </script>
 

@@ -27,6 +27,9 @@ openapi-ts*.log
 # vscode setting folder
 .vscode/
 
+# Claude Code
+CLAUDE.md
+
 #Other
 yarn.lock
 .wrangler/

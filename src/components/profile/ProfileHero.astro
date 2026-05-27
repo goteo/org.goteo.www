@@ -16,7 +16,7 @@ const defaultCover = "https://placehold.co/1440x400/F4E5D3/8B7355?text=Profile+C
 const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font=raleway";
 ---
 
-<div class="relative h-[400px] w-full">
+<div class="relative h-100 w-full">
     <!-- Cover Image -->
     <div class="absolute inset-0 overflow-hidden">
         <img src={coverImage || defaultCover} alt="Profile cover" class="size-full object-cover" />
@@ -51,7 +51,7 @@ const defaultAvatar = "https://placehold.co/204x204/e6e5f7/462949?text=User&font
             <img
                 src={avatarImage || defaultAvatar}
                 alt="Profile avatar"
-                class="size-[204px] rounded-2xl border-4 border-white object-cover shadow-lg"
+                class="size-51 rounded-2xl border-4 border-white object-cover shadow-lg"
             />
             <!-- Badge Overlay -->
             <div class="absolute top-full left-1/2 size-14 -translate-x-1/2 -translate-y-1/2">

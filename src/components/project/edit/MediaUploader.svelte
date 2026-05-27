@@ -17,7 +17,7 @@
     - Colors: bg-light-surface, border-secondary, text-tertiary
     - Border radius: rounded-lg (8px) for previews, rounded-3xl (24px) for button
     - Spacing: gap-4 for layout, mt-1 for errors
-    - Typography: text-[12px] for file info and errors
+    - Typography: text-xs for file info and errors
     - Icons: Uses icon components from /src/svgs/
     - Components: Uses Button component from library (kind="secondary" for upload, kind="invert" for remove)
 
@@ -285,14 +285,14 @@
 
     <!-- Error Message -->
     {#if errorMessage}
-        <p id={`${uploaderId}-error`} class="mt-1 text-[12px] text-red-600" role="alert">
+        <p id={`${uploaderId}-error`} class="mt-1 text-xs text-red-600" role="alert">
             {errorMessage}
         </p>
     {/if}
 
     <!-- Upload Progress -->
     {#if isUploading && uploadProgress}
-        <div role="status" aria-live="polite" class="text-content mt-1 text-[12px]">
+        <div role="status" aria-live="polite" class="text-content mt-1 text-xs">
             {$t("pages.project.edit.campaignInfo.media.processing", { name: uploadProgress })}
         </div>
     {/if}
@@ -329,7 +329,7 @@
 
                     <!-- File Info -->
                     <div
-                        class="bg-secondary/80 text-primary absolute right-0 bottom-0 left-0 px-2 py-1 text-[12px]"
+                        class="bg-secondary/80 text-primary absolute right-0 bottom-0 left-0 px-2 py-1 text-xs"
                     >
                         {formatFileSize(image.size)}
                     </div>
@@ -340,7 +340,7 @@
 
     <!-- Max Files Reached Message -->
     {#if images.length >= maxFiles}
-        <p class="text-content mt-1 text-[12px]" role="status" aria-live="polite">
+        <p class="text-content mt-1 text-xs" role="status" aria-live="polite">
             {$t("pages.project.edit.campaignInfo.media.maxImagesReached", { max: maxFiles })}
         </p>
     {/if}

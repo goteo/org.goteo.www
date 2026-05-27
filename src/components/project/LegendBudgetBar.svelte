@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import { budgetTypeColors } from "../../utils/budgetColors";
     import { formatCurrency } from "../../utils/currencies";
 
     import type { ProjectBudgetItem, Project } from "../../openapi/client/index";
@@ -8,13 +9,7 @@
         project: Project;
     }>();
 
-    const typeBudget = {
-        infrastructure: "var(--color-secondary)",
-        material: "var(--color-tertiary)",
-        task: "var(--color-variant2)",
-    } as const satisfies Record<ProjectBudgetItem["type"], string>;
-
-    const legendEntries = Object.entries(typeBudget) as [ProjectBudgetItem["type"], string][];
+    const legendEntries = Object.entries(budgetTypeColors) as [ProjectBudgetItem["type"], string][];
 
     const minimumTotal = project.budget?.minimum?.money?.amount ?? 0;
     const optimumTotal = project.budget?.optimum?.money?.amount ?? 0;

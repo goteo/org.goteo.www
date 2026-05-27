@@ -27,7 +27,7 @@
 <button
     {disabled}
     class={twMerge(
-        "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
+        "hover:bg-variant1 w-auto rounded-4xl px-4 py-2 font-bold",
         styles[type],
         classes,
     )}
