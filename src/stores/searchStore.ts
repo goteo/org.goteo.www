@@ -59,25 +59,25 @@ function loadInitialState(): SearchState {
     const urlParams = new URLSearchParams(window.location.search);
 
     // Initialize filters from URL parameters using API field names
-    state.filters.title = urlParams.get("title") || "";
-    state.filters.status = urlParams.get("status") || "";
+    if (state.filters) {
+        state.filters.title = urlParams.get("title") || "";
+        state.filters.status = urlParams.get("status") || "";
 
-    // Handle categories[] array parameters
-    const categoriesArray = urlParams.getAll("categories[]");
-    if (categoriesArray.length > 0) {
-        state.filters["categories[]"] = categoriesArray;
+        // Handle categories[] array parameters
+        const categoriesArray = urlParams.getAll("categories[]");
+        if (categoriesArray.length > 0) {
+            state.filters["categories[]"] = categoriesArray;
+        }
+        // If we have URL parameters, mark as having searched
+        const hasUrlFilters =
+            state.filters.title ||
+            state.filters.status ||
+            (state.filters["categories[]"]?.length ?? 0) > 0;
+
+        if (hasUrlFilters) {
+            state.hasSearched = true;
+        }
     }
-
-    // If we have URL parameters, mark as having searched
-    const hasUrlFilters =
-        state.filters.title ||
-        state.filters.status ||
-        (state.filters["categories[]"]?.length ?? 0) > 0;
-
-    if (hasUrlFilters) {
-        state.hasSearched = true;
-    }
-
     return state;
 }
 
@@ -237,24 +237,26 @@ function createSearchStore() {
 
             const state = get(searchStore);
             const urlParams = new URLSearchParams();
+            const filters = state.filters ?? {};
 
-            if (state.filters.title) {
-                urlParams.set("title", state.filters.title);
-            }
-            if (state.filters.status) {
-                urlParams.set("status", state.filters.status);
-            }
-            if ((state.filters["categories[]"]?.length ?? 0) > 0) {
-                (state.filters["categories[]"] as string[]).forEach((cat) => {
-                    urlParams.append("categories[]", cat);
-                });
-            }
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value === undefined || value === null || value === "") return;
+
+                if (Array.isArray(value)) {
+                    value.forEach((item) => {
+                        urlParams.append(key, String(item));
+                    });
+                } else {
+                    if (key !== "page" && key !== "itemsPerPage") {
+                        urlParams.set(key, String(value));
+                    }
+                }
+            });
 
             const newUrl = urlParams.toString()
                 ? `${window.location.pathname}?${urlParams.toString()}`
                 : window.location.pathname;
 
-            // Use replaceState to avoid adding to browser history on every filter change
             window.history.replaceState({}, "", newUrl);
         },
 
@@ -280,9 +282,9 @@ function createSearchStore() {
                 hasSearched:
                     totalCount > 0 ||
                     !!(
-                        filters.title ||
-                        filters.status ||
-                        (filters["categories[]"]?.length ?? 0) > 0
+                        filters?.title ||
+                        filters?.status ||
+                        (filters?.["categories[]"]?.length ?? 0) > 0
                     ),
                 isLoading: false,
                 hasError: false,
@@ -476,7 +478,7 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
     const { filters } = $searchStore;
-    return !!(filters.title || filters.status || (filters["categories[]"]?.length ?? 0) > 0);
+    return !!(filters?.title || filters?.status || (filters?.["categories[]"]?.length ?? 0) > 0);
 });
 
 // Pagination derived stores

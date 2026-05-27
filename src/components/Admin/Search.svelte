@@ -52,7 +52,6 @@
                     headers: { Accept: "application/ld+json" },
                 }),
                 apiUsersGetCollection({
-                    query: { query: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
             ]);
