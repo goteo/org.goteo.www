@@ -605,8 +605,12 @@
               "aported": "Aportados",
               "upTo": "de hasta"
             },
+            "role": {
+              "sponsor": "Patrocinador/a",
+              "matchfunding": "Matchfunding"
+            },
             "anonymous": {
-              "length": "anónimos",
+              "length": "aportes",
               "title": "Donaciones anónimas",
               "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
             }
