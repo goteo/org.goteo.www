@@ -73,7 +73,7 @@
 
     <!-- Location -->
     {#if territory}
-        <TerritoryTag {territory} />
+        <TerritoryTag {territory} class="border-0 bg-transparent" />
     {/if}
 
     <!-- Social Media Links -->
