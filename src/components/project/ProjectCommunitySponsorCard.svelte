@@ -20,7 +20,11 @@
 >
     <div class="flex w-full flex-row items-center justify-between gap-4">
         {#if item.avatar}
-            <img src={item.avatar} alt={item.displayName} class="h-16 w-16 shrink-0 rounded-xl object-cover" />
+            <img
+                src={item.avatar}
+                alt={item.displayName}
+                class="h-16 w-16 shrink-0 rounded-xl object-cover"
+            />
         {:else}
             <Goteo />
         {/if}

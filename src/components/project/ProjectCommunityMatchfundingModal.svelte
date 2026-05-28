@@ -13,12 +13,12 @@
 
 <div class="flex flex-col gap-4">
     <div class="flex flex-row items-center justify-between gap-4">
-        <div class="h-16 w-16 shrink-0 rounded-xl bg-tertiary"></div>
+        <div class="bg-tertiary h-16 w-16 shrink-0 rounded-xl"></div>
         <div class="flex flex-col items-end">
             <div class="text-sm font-bold text-black">
                 {$t("pages.project.view.tabs.community.matchfunding.contribution")}
             </div>
-            <p class="text-2xl font-bold text-tertiary">
+            <p class="text-tertiary text-2xl font-bold">
                 {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}
             </p>
         </div>

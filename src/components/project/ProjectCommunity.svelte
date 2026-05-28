@@ -7,7 +7,10 @@
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
-    import { apiProjectSupportsGetCollection, apiUsersIdOrHandleGet } from "../../openapi/client/index";
+    import {
+        apiProjectSupportsGetCollection,
+        apiUsersIdOrHandleGet,
+    } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
     import { extractId } from "../../utils/extractId";
     import ActionableButton from "../library/ActionableButton.svelte";
@@ -105,7 +108,7 @@
             {#if groupedItems.matchfunding?.length}
                 <Grid class="grid-cols-2 gap-6 md:grid-cols-6 lg:grid-cols-6">
                     {#each groupedItems.matchfunding as item (item.id)}
-                        <div class="col-span-2 md:col-span-3 flex flex-col">
+                        <div class="col-span-2 flex flex-col md:col-span-3">
                             <ProjectCommunityMatchfunding
                                 {item}
                                 bind:openModal
@@ -114,7 +117,10 @@
                         </div>
                     {/each}
                     <div class="col-span-2 md:col-span-3">
-                        <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
+                        <ProjectCommunityAnonymous
+                            {project}
+                            currency={accounting.balance?.currency!}
+                        />
                     </div>
                     {#each groupedItems.default ?? [] as item (item.id)}
                         <div class="col-span-2 md:col-span-2">
