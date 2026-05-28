@@ -103,9 +103,34 @@
         </h2>
         <div class="flex flex-col gap-6">
             {#if groupedItems.matchfunding?.length}
-                <Grid class="grid-cols-1 gap-6 md:grid-cols-2">
+                <Grid class="grid-cols-2 gap-6 md:grid-cols-6 lg:grid-cols-6">
                     {#each groupedItems.matchfunding as item (item.id)}
-                        <ProjectCommunityMatchfunding
+                        <div class="col-span-2 md:col-span-3 flex flex-col">
+                            <ProjectCommunityMatchfunding
+                                {item}
+                                bind:openModal
+                                bind:selectedProjectSupport
+                            />
+                        </div>
+                    {/each}
+                    <div class="col-span-2 md:col-span-3">
+                        <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
+                    </div>
+                    {#each groupedItems.default ?? [] as item (item.id)}
+                        <div class="col-span-2 md:col-span-2">
+                            <ProjectCommunityMessage
+                                {item}
+                                bind:openModal
+                                bind:selectedProjectSupport
+                            />
+                        </div>
+                    {/each}
+                </Grid>
+            {:else}
+                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
+                    {#each groupedItems.default ?? [] as item (item.id)}
+                        <ProjectCommunityMessage
                             {item}
                             bind:openModal
                             bind:selectedProjectSupport
@@ -113,17 +138,6 @@
                     {/each}
                 </Grid>
             {/if}
-
-            <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
-                {#each groupedItems.default ?? [] as item (item.id)}
-                    <ProjectCommunityMessage
-                        {item}
-                        bind:openModal
-                        bind:selectedProjectSupport
-                    />
-                {/each}
-            </Grid>
 
             {#if hasMore}
                 <div class="flex w-full justify-center">
