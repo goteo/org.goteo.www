@@ -2,13 +2,9 @@ import { writable, derived, get } from "svelte/store";
 
 import { projectsService } from "../services/projectsService";
 
-import type { Project } from "../openapi/client/types.gen";
+import type { ApiProjectsGetCollectionData, Project } from "../openapi/client/types.gen";
 
-export interface SearchFilters {
-    query: string;
-    statusFilter: string;
-    categories: string[];
-}
+export type SearchFilters = ApiProjectsGetCollectionData["query"];
 
 export interface SearchState {
     filters: SearchFilters;
@@ -34,9 +30,10 @@ const isBrowser = typeof window !== "undefined";
 function getInitialState(): SearchState {
     return {
         filters: {
-            query: "",
-            statusFilter: "",
-            categories: [],
+            page: 1,
+            itemsPerPage: 20,
+            title: "",
+            status: "",
         },
         results: [],
         isLoading: false,
@@ -61,23 +58,26 @@ function loadInitialState(): SearchState {
     const state = getInitialState();
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Initialize filters from URL parameters
-    state.filters.query = urlParams.get("q") || "";
-    state.filters.statusFilter = urlParams.get("status") || "";
+    // Initialize filters from URL parameters using API field names
+    if (state.filters) {
+        state.filters.title = urlParams.get("title") || "";
+        state.filters.status = urlParams.get("status") || "";
 
-    const categories = urlParams.get("categories");
-    if (categories) {
-        state.filters.categories = categories.split(",").filter(Boolean);
+        // Handle categories[] array parameters
+        const categoriesArray = urlParams.getAll("categories[]");
+        if (categoriesArray.length > 0) {
+            state.filters["categories[]"] = categoriesArray;
+        }
+        // If we have URL parameters, mark as having searched
+        const hasUrlFilters =
+            state.filters.title ||
+            state.filters.status ||
+            (state.filters["categories[]"]?.length ?? 0) > 0;
+
+        if (hasUrlFilters) {
+            state.hasSearched = true;
+        }
     }
-
-    // If we have URL parameters, mark as having searched
-    const hasUrlFilters =
-        state.filters.query || state.filters.statusFilter || state.filters.categories.length > 0;
-
-    if (hasUrlFilters) {
-        state.hasSearched = true;
-    }
-
     return state;
 }
 
@@ -221,9 +221,10 @@ function createSearchStore() {
             update((state) => ({
                 ...state,
                 filters: {
-                    query: "",
-                    statusFilter: "",
-                    categories: [],
+                    page: 1,
+                    itemsPerPage: 20,
+                    title: "",
+                    status: "",
                 },
             })),
 
@@ -236,22 +237,26 @@ function createSearchStore() {
 
             const state = get(searchStore);
             const urlParams = new URLSearchParams();
+            const filters = state.filters ?? {};
 
-            if (state.filters.query) {
-                urlParams.set("q", state.filters.query);
-            }
-            if (state.filters.statusFilter) {
-                urlParams.set("status", state.filters.statusFilter);
-            }
-            if (state.filters.categories.length > 0) {
-                urlParams.set("categories", state.filters.categories.join(","));
-            }
+            Object.entries(filters).forEach(([key, value]) => {
+                if (value === undefined || value === null || value === "") return;
+
+                if (Array.isArray(value)) {
+                    value.forEach((item) => {
+                        urlParams.append(key, String(item));
+                    });
+                } else {
+                    if (key !== "page" && key !== "itemsPerPage") {
+                        urlParams.set(key, String(value));
+                    }
+                }
+            });
 
             const newUrl = urlParams.toString()
                 ? `${window.location.pathname}?${urlParams.toString()}`
                 : window.location.pathname;
 
-            // Use replaceState to avoid adding to browser history on every filter change
             window.history.replaceState({}, "", newUrl);
         },
 
@@ -276,7 +281,11 @@ function createSearchStore() {
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(filters.query || filters.statusFilter || filters.categories.length > 0),
+                    !!(
+                        filters?.title ||
+                        filters?.status ||
+                        (filters?.["categories[]"]?.length ?? 0) > 0
+                    ),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",
@@ -469,7 +478,7 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
     const { filters } = $searchStore;
-    return !!(filters.query || filters.statusFilter || filters.categories.length > 0);
+    return !!(filters?.title || filters?.status || (filters?.["categories[]"]?.length ?? 0) > 0);
 });
 
 // Pagination derived stores

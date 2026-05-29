@@ -14,16 +14,16 @@ const initialProjects: Project[] = [];
 // Parse URL search parameters for SSR
 const url = new URL(Astro.request.url);
 const initialFilters = {
-    query: url.searchParams.get("q") || "",
-    statusFilter: url.searchParams.get("status") || "",
-    categories: url.searchParams.get("categories")?.split(",").filter(Boolean) || [],
+    title: url.searchParams.get("title") || "",
+    status: url.searchParams.get("status") || "",
+    "categories[]": url.searchParams.getAll("categories[]") || [],
 };
 
 // Check if URL has search parameters
 const hasInitialSearch = !!(
-    initialFilters.query ||
-    initialFilters.statusFilter ||
-    initialFilters.categories.length > 0
+    initialFilters.title ||
+    initialFilters.status ||
+    initialFilters["categories[]"].length > 0
 );
 ---
 
