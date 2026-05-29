@@ -28,8 +28,10 @@
     });
 </script>
 
-<section class="flex flex-row items-center justify-between">
-    <div>
+<section
+    class="flex flex-col gap-6 text-base leading-5 md:flex-row md:items-center md:justify-between"
+>
+    <div class="text-content min-h-5">
         {#if date && time}
             <p>
                 {@html $t(
@@ -43,17 +45,20 @@
             </p>
         {/if}
     </div>
-    <div class="flex flex-row items-center gap-4">
-        <p class="text-secondary font-bold">
-            {$t("contributions.grid.content-footer.downloadDetails")}
-        </p>
-        <span
-            class="text-secondary bg-variant1 flex flex-row items-center gap-2 rounded-2xl px-4 py-2 font-bold"
+    <div class="flex flex-row flex-wrap items-center justify-start gap-8 md:justify-end">
+        <button class="text-secondary cursor-pointer bg-transparent font-bold">
+            {$t("contributions.grid.content-footer.downloadCertificates")}
+        </button>
+        <button class="text-secondary cursor-pointer bg-transparent font-bold">
+            {$t("contributions.grid.content-footer.downloadPdf")}
+        </button>
+        <button
+            class="text-secondary bg-variant1 flex min-h-10 cursor-pointer flex-row items-center gap-2 rounded-2xl px-4 py-2 font-bold"
         >
-            <AnnotationIcon />
+            <AnnotationIcon size={20} class="shrink-0" />
             {$t("contributions.grid.content-footer.annotations", {
                 annotations: 0,
             })}
-        </span>
+        </button>
     </div>
 </section>

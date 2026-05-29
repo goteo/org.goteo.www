@@ -1167,6 +1167,8 @@
       "content-footer": {
         "lastEdited": "Última modificación: {{date}} {{time}}",
         "downloadDetails": "Descarga detalle",
+        "downloadCertificates": "Descarga certificados",
+        "downloadPdf": "Descarga PDF",
         "annotations": "{{annotations}} Anotaciones"
       }
     },
