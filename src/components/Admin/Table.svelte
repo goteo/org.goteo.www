@@ -350,17 +350,21 @@
                             <TableBodyRow>
                                 <TableBodyCell
                                     colspan={tableHeaders.length}
-                                    class="border-variant1 bg-purple-soft rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
                                 >
-                                    <DetailsRow
-                                        platformLinks={charge.platformLinks}
-                                        trackingCodes={charge.trackingCodes}
-                                        dataTimeCreated={getDate(charge.dateCreated)}
-                                        dataTimeUpdated={getDate(charge.dateUpdated)}
-                                        id={charge.id ? String(charge.id) : "-"}
-                                        refundToWallet={charge.refundToWallet}
-                                        concept={charge.concept}
-                                    />
+                                    <div class="detail-expand">
+                                        <div class="detail-expand-content">
+                                            <DetailsRow
+                                                platformLinks={charge.platformLinks}
+                                                trackingCodes={charge.trackingCodes}
+                                                dataTimeCreated={getDate(charge.dateCreated)}
+                                                dataTimeUpdated={getDate(charge.dateUpdated)}
+                                                id={charge.id ? String(charge.id) : "-"}
+                                                refundToWallet={charge.refundToWallet}
+                                                concept={charge.concept}
+                                            />
+                                        </div>
+                                    </div>
                                 </TableBodyCell>
                             </TableBodyRow>
                         {/if}
@@ -382,3 +386,37 @@
 
     <Pagination />
 </div>
+
+<style>
+    .detail-expand {
+        display: grid;
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        animation: detail-expand 220ms ease-out both;
+    }
+
+    .detail-expand-content {
+        min-height: 0;
+        animation: detail-content-in 220ms ease-out both;
+    }
+
+    @keyframes detail-expand {
+        from {
+            grid-template-rows: 0fr;
+        }
+        to {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    @keyframes detail-content-in {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

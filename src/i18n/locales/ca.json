@@ -843,6 +843,8 @@
       "content-footer": {
         "lastEdited": "Última modificació: {{date}} {{time}}",
         "downloadDetails": "Descarrega el detall",
+        "downloadCertificates": "Descarrega certificats",
+        "downloadPdf": "Descarrega PDF",
         "annotations": "{{annotations}} Anotacions"
       }
     },
