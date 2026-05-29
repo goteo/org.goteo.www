@@ -41,6 +41,6 @@
 </script>
 
 <Tag>
-    <MapIcon />
+    <MapIcon width="24" height="24" />
     <span>{displayName(territory)}</span>
 </Tag>
