@@ -1,9 +1,10 @@
 <script lang="ts">
+    import Search from "./Search.svelte";
     import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import FiltersIcon from "../icons/Filters.svelte";
-    import Search from "../icons/Search.svelte";
+    import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
@@ -66,10 +67,11 @@
         <Search onSelectTarget={handleSelectTarget} />
 
         <div class="flex items-center gap-3">
-            <button
+            <Button
                 type="button"
+                kind="ghost"
                 onclick={() => (showFilters = !showFilters)}
-                class="border-secondary text-secondary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+                class="relative text-nowrap"
             >
                 <span class="relative">
                     <FiltersIcon />
@@ -84,7 +86,7 @@
                 {:else}
                     {$t("contributions.filters.btns.openFilters")}
                 {/if}
-            </button>
+            </Button>
         </div>
     </div>
 
@@ -155,12 +157,9 @@
             </Grid>
 
             <div class="col-span-3 flex justify-end">
-                <button
-                    type="submit"
-                    class="bg-primary text-secondary cursor-pointer rounded-3xl px-6 py-4 text-base font-bold"
-                >
+                <Button type="submit" kind="primary">
                     {$t("contributions.filters.btns.apply")}
-                </button>
+                </Button>
             </div>
         </form>
     {/if}

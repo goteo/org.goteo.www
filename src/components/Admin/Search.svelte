@@ -5,9 +5,9 @@
         apiTipjarsGetCollection,
         apiUsersGetCollection,
     } from "../../openapi/client";
-    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { highlightMatch } from "../../utils/highlights";
     import CloseIcon from "../icons/Close.svelte";
+    import SearchIcon from "../icons/Search.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
@@ -21,7 +21,7 @@
         member: T[];
     };
 
-    let { onSelectTarget } = $props();
+    let { onSelectTarget } = $props<{ onSelectTarget: (accounting: string) => void }>();
 
     let query = $state("");
     let results = $state<ResultItem[]>([]);
@@ -52,6 +52,7 @@
                     headers: { Accept: "application/ld+json" },
                 }),
                 apiUsersGetCollection({
+                    query: { handle: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
             ]);
@@ -149,7 +150,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -185,7 +186,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -219,7 +220,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
