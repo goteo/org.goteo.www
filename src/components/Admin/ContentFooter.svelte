@@ -2,6 +2,7 @@
     import { apiVersionsIdGet } from "../../../src/openapi/client/index.ts";
     import { t } from "../../i18n/store";
     import AnnotationIcon from "../icons/Comments.svelte";
+    import Tag from "../library/Tag.svelte";
 
     const { id } = $props<{ id: string }>();
 
