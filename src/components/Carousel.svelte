@@ -17,6 +17,9 @@
         desktopItemsToShow = 3,
         dotsPerItem = false,
         lockItemWidth = true,
+        disableDrag = false,
+        navButtonTop = "50%",
+        centerNavButtons = true,
         children = null,
         onSelect = null,
         activeCard = $bindable(0),
@@ -30,6 +33,9 @@
         desktopItemsToShow?: number;
         dotsPerItem?: boolean;
         lockItemWidth?: boolean;
+        disableDrag?: boolean;
+        navButtonTop?: string;
+        centerNavButtons?: boolean;
         children?: any;
         onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
@@ -37,6 +43,10 @@
     } = $props();
 
     const wrapperClasses = twMerge("relative w-full", classes);
+    const navButtonClasses: ClassNameValue = twMerge(
+        "bg-variant1 absolute z-10 hidden h-10 w-10 rounded-full p-2 shadow-md disabled:opacity-50 lg:block",
+        centerNavButtons ? "-translate-y-1/2" : "",
+    );
 
     let container: HTMLDivElement;
 
@@ -190,16 +200,32 @@
             updateNavState(i);
             await tick();
             updateItemWidths();
+            const targetItemIndex = getTargetItemIndex(i);
             const actualChildren = getActualChildren();
-            const target = actualChildren[getTargetItemIndex(i)];
-            target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
-            setTimeout(() => {
+            const target = actualChildren[targetItemIndex];
+            scrollToTarget(target, "smooth");
+
+            if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
+            programmaticScrollTimeout = setTimeout(() => {
+                const settledTarget = getActualChildren()[targetItemIndex];
+                scrollToTarget(settledTarget, "auto");
+                updateNavForShort();
                 programmaticScroll = false;
-            }, 600);
+            }, 360);
         } catch (error) {
             console.warn("Carousel: Error scrolling to group:", error);
             programmaticScroll = false;
         }
+    }
+
+    function scrollToTarget(target: HTMLElement | undefined, behavior: ScrollBehavior) {
+        if (!container || !target) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const left = targetRect.left - containerRect.left + container.scrollLeft;
+
+        container.scrollTo({ left, behavior });
     }
 
     function scroll(dir: "left" | "right") {
@@ -210,7 +236,7 @@
     }
 
     function handleStart(x: number) {
-        if (!browser || !container || !mounted) return;
+        if (disableDrag || !browser || !container || !mounted) return;
 
         isDragging = true;
         startX = x - container.offsetLeft;
@@ -218,7 +244,7 @@
     }
 
     function handleMove(x: number, ev: Event) {
-        if (!browser || !container || !mounted || !isDragging) return;
+        if (disableDrag || !browser || !container || !mounted || !isDragging) return;
 
         ev.preventDefault();
         const walk = (x - container.offsetLeft - startX) * 1.5;
@@ -226,6 +252,8 @@
     }
 
     function endDrag() {
+        if (disableDrag) return;
+
         isDragging = false;
     }
 
@@ -234,6 +262,7 @@
     let mutationObs: MutationObserver | undefined;
     let mounted = false;
     let programmaticScroll = false;
+    let programmaticScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
     onMount(() => {
         // Ensure we're in the browser and DOM is ready
@@ -301,6 +330,7 @@
             if (intersectionObs) intersectionObs.disconnect();
             if (resizeObs) resizeObs.disconnect();
             if (mutationObs) mutationObs.disconnect();
+            if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
             if (browser) {
                 window.removeEventListener("resize", updateItemWidths);
             }
@@ -311,7 +341,8 @@
 <div class={wrapperClasses}>
     <button
         onclick={() => scroll("left")}
-        class="bg-variant1 absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class={twMerge(navButtonClasses, "-left-4")}
+        style:top={navButtonTop}
         disabled={isAtStart}
         aria-label="Scroll left"
     >
@@ -323,10 +354,12 @@
         bind:this={container}
         role="region"
         aria-label="Carousel"
-        class="hide-scrollbar flex w-full overflow-x-auto scroll-smooth select-none"
-        class:cursor-grab={isScrollable && !isDragging}
-        class:cursor-default={!isScrollable}
-        class:cursor-grabbing={isDragging && isScrollable}
+        class="hide-scrollbar flex w-full scroll-smooth select-none"
+        class:overflow-x-auto={!disableDrag}
+        class:overflow-x-hidden={disableDrag}
+        class:cursor-grab={isScrollable && !isDragging && !disableDrag}
+        class:cursor-default={!isScrollable || disableDrag}
+        class:cursor-grabbing={isDragging && isScrollable && !disableDrag}
         style="gap: {gap}px"
         onmousedown={(e) => handleStart(e.pageX)}
         onmousemove={(e) => handleMove(e.pageX, e)}
@@ -344,7 +377,8 @@
 
     <button
         onclick={() => scroll("right")}
-        class="bg-variant1 absolute top-1/2 -right-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class={twMerge(navButtonClasses, "-right-4")}
+        style:top={navButtonTop}
         disabled={isAtEnd}
         aria-label="Scroll right"
     >
