@@ -12,6 +12,7 @@
     import Button from "../library/Button.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
+    import PlatformUpdateCard from "./PlatformUpdateCard.svelte";
 
     let {
         lang = $bindable(),
@@ -112,7 +113,9 @@
         showDots={true}
         {itemsPerGroup}
         dotsPerItem={true}
-        lockItemWidth={false}
+        lockItemWidth={itemsPerGroup === 1}
+        disableDrag={itemsPerGroup !== 1}
+        centerNavButtons={true}
         mobileItemsToShow={1}
         desktopItemsToShow={2}
     >
@@ -124,20 +127,20 @@
             </div>
         {/if}
 
-        <!-- {#snippet onActiveChange(group: number)}
-            {(activeGroup = group)}
-        {/snippet} -->
-
         {#each projectUpdates as update, i}
-            <ProjectUpdateCard
-                {update}
-                type={getCardType(i)}
-                isActive={i === activeCard}
-                onClick={(): void => {
-                    selected = update;
-                    openModal = true;
-                }}
-            />
+            {#if !update.author}
+                <PlatformUpdateCard {update} type={getCardType(i)} isActive={i === activeCard} />
+            {:else}
+                <ProjectUpdateCard
+                    {update}
+                    type={getCardType(i)}
+                    isActive={i === activeCard}
+                    onClick={(): void => {
+                        selected = update;
+                        openModal = true;
+                    }}
+                />
+            {/if}
         {/each}
     </Carousel>
 
