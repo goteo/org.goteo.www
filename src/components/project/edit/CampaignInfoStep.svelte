@@ -18,15 +18,15 @@
     import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
+    import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
     import {
         currentDraft,
         navigateToStep,
         updateCampaignInfo,
         type MediaImage,
     } from "../../../stores/drafts/projectDraft";
-    import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
+    import Button from "../../library/Button.svelte";
+    import Grid from "../../library/Grid.svelte";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -35,14 +35,16 @@
     let { onContinue }: CampaignInfoStepProps = $props();
 
     // Reactive values from store
-    const campaignInfo = $derived($currentDraft?.wizardForm.campaignInfo ?? {
-        images: [],
-        video: undefined,
-        objectives: "",
-        legacy: "",
-        targetAudience: "",
-        team: "",
-    });
+    const campaignInfo = $derived(
+        $currentDraft?.wizardForm.campaignInfo ?? {
+            images: [],
+            video: undefined,
+            objectives: "",
+            legacy: "",
+            targetAudience: "",
+            team: "",
+        },
+    );
 
     /**
      * Handle Continue button

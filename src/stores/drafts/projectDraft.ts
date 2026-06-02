@@ -1,12 +1,24 @@
 import { liveQuery } from "dexie";
 import { writable, readable, get, derived } from "svelte/store";
 
+import {
+    validateBudgetItem,
+    validateCollaboration,
+    validateDraftToPublish,
+    validateReward,
+    type ValidationErrors,
+} from "./draftValidation";
 import { session } from "../../auth/store";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
 
-import type { Budget, ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
-import { validateBudgetItem, validateCollaboration, validateDraftToPublish, validateReward, type ValidationErrors } from "./draftValidation";
+import type {
+    Budget,
+    ProjectBudgetItem,
+    ProjectCollaboration,
+    ProjectProjectCreationDto,
+    ProjectReward,
+} from "../../openapi/client";
 
 /**
  * Media image data
@@ -62,15 +74,26 @@ export type Wizard = {
 
     // Pending future step (Phase 6) - placeholders
     // aboutYou: WizardAboutYou;
-}
+};
 
 export interface CreateProjectForm extends ProjectProjectCreationDto {
     budget?: Budget;
 }
 
+export interface ProjectDraftResources {
+    rewards: ProjectReward[];
+    collaborations: ProjectCollaboration[];
+    budgetItems: {
+        minimum: ProjectBudgetItem[];
+        optimum: ProjectBudgetItem[];
+    };
+}
+
 export interface Draft {
     draftId: string;
     userId: number;
+    isDirty?: boolean;
+    apiSnapshot?: ProjectDraftResources;
 
     createProject: CreateProjectForm;
     wizardForm: Wizard;
@@ -93,32 +116,41 @@ export const drafts = derived(session, ($session, set) => {
 
 export const currentDraft = writable<Draft | null>(null);
 
-export const wizard = derived(currentDraft, ($d) => $d?.wizardForm ?? {
-    currentStep: 1,
-    configuration: {
-        projectDeadline: "minimum",
-    },
-    campaignInfo: {
-        images: [],
-        video: "",
-        objectives: "",
-        legacy: "",
-        targetAudience: "",
-        team: "",
-    },
-    rewards: [],
-    collaborations: [],
-    budgetItems: {
-        minimum: [],
-        optimum: [],
-    },
-} as Wizard);
-export const project = derived(currentDraft, ($d) => $d?.createProject ?? {
-    title: "",
-    subtitle: "",
-    categories: [],
-    release: undefined,
-});
+export const wizard = derived(
+    currentDraft,
+    ($d) =>
+        $d?.wizardForm ??
+        ({
+            currentStep: 1,
+            configuration: {
+                projectDeadline: "minimum",
+            },
+            campaignInfo: {
+                images: [],
+                video: "",
+                objectives: "",
+                legacy: "",
+                targetAudience: "",
+                team: "",
+            },
+            rewards: [],
+            collaborations: [],
+            budgetItems: {
+                minimum: [],
+                optimum: [],
+            },
+        } as Wizard),
+);
+export const project = derived(
+    currentDraft,
+    ($d) =>
+        $d?.createProject ?? {
+            title: "",
+            subtitle: "",
+            categories: [],
+            release: undefined,
+        },
+);
 
 /**
  * Touched fields tracker
@@ -166,14 +198,11 @@ export const publishErrors = derived(currentDraft, ($draft) => {
  * Define whether the project is ready to publish (all steps completed and valid).
  * Used to enable/disable the Publish button in the wizard UI
  */
-export const isReadyToPublish = derived(
-    [publishErrors, currentDraft],
-    ([$errors, $draft]) => {
-        if (!$draft) return false;
+export const isReadyToPublish = derived([publishErrors, currentDraft], ([$errors, $draft]) => {
+    if (!$draft) return false;
 
-        return Object.keys($errors).length === 0;
-    },
-);
+    return Object.keys($errors).length === 0;
+});
 
 /**
  * Derived store that indicates if the form is valid.
@@ -181,31 +210,21 @@ export const isReadyToPublish = derived(
  * 1. All required fields have values
  * 2. There are no validation errors
  */
-export const isCreateFormValid = derived(
-    [currentDraft, validationErrors],
-    ([$draft, $errors]) => {
-        if (Object.keys($errors).length > 0) {
-            return false;
-        }
+export const isCreateFormValid = derived([currentDraft, validationErrors], ([$draft, $errors]) => {
+    if (Object.keys($errors).length > 0) {
+        return false;
+    }
 
-        const hasTitle =
-            ($draft?.createProject?.title?.trim().length ?? 0) > 0;
+    const hasTitle = ($draft?.createProject?.title?.trim().length ?? 0) > 0;
 
-        const hasSubtitle =
-            ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
+    const hasSubtitle = ($draft?.createProject?.subtitle?.trim().length ?? 0) > 0;
 
-        const hasCategories =
-            ($draft?.createProject?.categories?.length ?? 0) > 0;
+    const hasCategories = ($draft?.createProject?.categories?.length ?? 0) > 0;
 
-        return (
-            hasTitle &&
-            hasSubtitle &&
-            hasCategories
-        );
-    },
-);
+    return hasTitle && hasSubtitle && hasCategories;
+});
 
-export function createDraftId() {
+export function createDraftId(): string {
     return crypto.randomUUID();
 }
 
@@ -222,11 +241,7 @@ function getUserId(): number {
 export function setDraftsStore(userId: number) {
     return readable<Draft[]>([], (set) => {
         const subscription = liveQuery(() =>
-            db.drafts
-                .where("userId")
-                .equals(userId)
-                .reverse()
-                .sortBy("updatedAt")
+            db.drafts.where("userId").equals(userId).reverse().sortBy("updatedAt"),
         ).subscribe({
             next: set,
             error: console.error,
@@ -236,13 +251,19 @@ export function setDraftsStore(userId: number) {
     });
 }
 
-export async function createDraft(project?: ProjectProjectCreationDto) {
-    const draftId = createDraftId();
+export async function createDraft(
+    project?: ProjectProjectCreationDto,
+    draftId = createDraftId(),
+    isDirty = true,
+    resources?: ProjectDraftResources,
+) {
     const userId = getUserId();
 
     const draft: Draft = {
         draftId,
         userId,
+        isDirty,
+        apiSnapshot: resources,
         createProject: project ?? ({} as Partial<CreateProjectForm> as CreateProjectForm),
         wizardForm: {
             currentStep: 1,
@@ -257,9 +278,9 @@ export async function createDraft(project?: ProjectProjectCreationDto) {
                 targetAudience: "",
                 team: "",
             },
-            rewards: [],
-            collaborations: [],
-            budgetItems: {
+            rewards: resources?.rewards ?? [],
+            collaborations: resources?.collaborations ?? [],
+            budgetItems: resources?.budgetItems ?? {
                 minimum: [],
                 optimum: [],
             },
@@ -281,7 +302,44 @@ export async function loadDraft(draftId: string) {
     if (!draft) return false;
 
     currentDraft.set(draft);
+    hasUnsavedChanges.set(draft.isDirty ?? true);
     return true;
+}
+
+export async function initializeProjectDraft(
+    project: ProjectProjectCreationDto,
+    draftId: string,
+    resources?: ProjectDraftResources,
+) {
+    const loadedDraft = await draftRepo.get(draftId);
+
+    if (loadedDraft) {
+        const isDirty = loadedDraft.isDirty ?? true;
+        const nextDraft: Draft = {
+            ...loadedDraft,
+            apiSnapshot: resources ?? loadedDraft.apiSnapshot,
+            createProject: isDirty ? loadedDraft.createProject : project,
+            wizardForm:
+                !isDirty && resources
+                    ? {
+                          ...loadedDraft.wizardForm,
+                          rewards: resources.rewards,
+                          collaborations: resources.collaborations,
+                          budgetItems: resources.budgetItems,
+                      }
+                    : loadedDraft.wizardForm,
+            updatedAt: new Date(),
+        };
+
+        currentDraft.set(nextDraft);
+        hasUnsavedChanges.set(isDirty);
+
+        return true;
+    }
+
+    await createDraft(project, draftId, false, resources);
+    hasUnsavedChanges.set(false);
+    return false;
 }
 
 /**
@@ -349,12 +407,15 @@ export function persistDraft() {
  *
  * @param data - Partial object with wizard data that has been modified
  */
-export function updateWizard(data: Partial<Wizard>) {
+export function updateWizard(data: Partial<Wizard>, options: { markUnsaved?: boolean } = {}) {
+    const markUnsaved = options.markUnsaved ?? true;
+
     currentDraft.update((draft) => {
         if (!draft) return draft;
 
         const updated = {
             ...draft,
+            isDirty: markUnsaved ? true : draft.isDirty,
             wizardForm: {
                 ...draft.wizardForm,
 
@@ -381,7 +442,9 @@ export function updateWizard(data: Partial<Wizard>) {
     });
 
     persistDraft();
-    hasUnsavedChanges.set(true);
+    if (markUnsaved) {
+        hasUnsavedChanges.set(true);
+    }
 }
 
 export function updateConfiguration(data: Partial<WizardConfiguration>) {
@@ -391,22 +454,20 @@ export function updateConfiguration(data: Partial<WizardConfiguration>) {
     updateWizard({
         configuration: {
             ...draft.wizardForm.configuration,
-            ...data
-        }
+            ...data,
+        },
     });
 }
 
-export function updateCampaignInfo(
-    data: Partial<WizardCampaignInfo>,
-) {
+export function updateCampaignInfo(data: Partial<WizardCampaignInfo>) {
     const draft = get(currentDraft);
     if (!draft) return;
 
     updateWizard({
         campaignInfo: {
             ...draft.wizardForm.campaignInfo,
-            ...data
-        }
+            ...data,
+        },
     });
 }
 
@@ -433,10 +494,7 @@ export function addReward(reward: ProjectReward) {
     return {};
 }
 
-export function updateReward(
-    index: number,
-    reward: ProjectReward,
-) {
+export function updateReward(index: number, reward: ProjectReward) {
     const errors = validateReward(reward);
 
     if (Object.keys(errors).length > 0) {
@@ -448,7 +506,10 @@ export function updateReward(
 
     const rewards = [...draft.wizardForm.rewards];
 
-    rewards[index] = reward;
+    rewards[index] = {
+        ...rewards[index],
+        ...reward,
+    };
 
     updateWizard({
         rewards,
@@ -462,15 +523,11 @@ export function deleteReward(index: number) {
     if (!draft) return;
 
     updateWizard({
-        rewards: draft.wizardForm.rewards.filter(
-            (_, i) => i !== index,
-        ),
+        rewards: draft.wizardForm.rewards.filter((_, i) => i !== index),
     });
 }
 
-export function addCollaboration(
-    collab: ProjectCollaboration
-): Record<string, string> {
+export function addCollaboration(collab: ProjectCollaboration): Record<string, string> {
     const errors = validateCollaboration(collab);
 
     if (Object.keys(errors).length > 0) {
@@ -481,10 +538,7 @@ export function addCollaboration(
     if (!draft) return {};
 
     updateWizard({
-        collaborations: [
-            ...draft.wizardForm.collaborations,
-            { ...collab },
-        ],
+        collaborations: [...draft.wizardForm.collaborations, { ...collab }],
     });
 
     return {};
@@ -505,7 +559,10 @@ export function updateCollaboration(
 
     const collaborations = [...draft.wizardForm.collaborations];
 
-    collaborations[index] = collab;
+    collaborations[index] = {
+        ...collaborations[index],
+        ...collab,
+    };
 
     updateWizard({
         collaborations,
@@ -519,16 +576,11 @@ export function deleteCollaboration(index: number) {
     if (!draft) return;
 
     updateWizard({
-        collaborations:
-            draft.wizardForm.collaborations.filter(
-                (_, i) => i !== index,
-            ),
+        collaborations: draft.wizardForm.collaborations.filter((_, i) => i !== index),
     });
 }
 
-export function addBudgetItem(
-    item: ProjectBudgetItem
-) {
+export function addBudgetItem(item: ProjectBudgetItem) {
     const errors = validateBudgetItem(item);
 
     if (Object.keys(errors).length > 0) {
@@ -542,12 +594,7 @@ export function addBudgetItem(
         budgetItems: {
             ...draft.wizardForm.budgetItems,
 
-            [item.deadline]: [
-                ...draft.wizardForm.budgetItems[
-                item.deadline
-                ],
-                item,
-            ],
+            [item.deadline]: [...draft.wizardForm.budgetItems[item.deadline], item],
         },
     });
 
@@ -557,6 +604,7 @@ export function addBudgetItem(
 export function updateBudgetItem(
     index: number,
     item: ProjectBudgetItem,
+    previousDeadline: "minimum" | "optimum" = item.deadline,
 ) {
     const errors = validateBudgetItem(item);
 
@@ -567,27 +615,30 @@ export function updateBudgetItem(
     const draft = get(currentDraft);
     if (!draft) return {};
 
-    const updated = [
-        ...draft.wizardForm.budgetItems[item.deadline],
-    ];
+    const budgetItems = { ...draft.wizardForm.budgetItems };
+    const previousItems = [...budgetItems[previousDeadline]];
+    const existing = previousItems[index];
+    const updatedItem = {
+        ...existing,
+        ...item,
+    };
 
-    updated[index] = item;
+    if (previousDeadline === item.deadline) {
+        previousItems[index] = updatedItem;
+        budgetItems[item.deadline] = previousItems;
+    } else {
+        budgetItems[previousDeadline] = previousItems.filter((_, i) => i !== index);
+        budgetItems[item.deadline] = [...budgetItems[item.deadline], updatedItem];
+    }
 
     updateWizard({
-        budgetItems: {
-            ...draft.wizardForm.budgetItems,
-
-            [item.deadline]: updated,
-        },
+        budgetItems,
     });
 
     return {};
 }
 
-export function deleteBudgetItem(
-    index: number,
-    deadline: "minimum" | "optimum",
-) {
+export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum") {
     const draft = get(currentDraft);
     if (!draft) return;
 
@@ -595,10 +646,7 @@ export function deleteBudgetItem(
         budgetItems: {
             ...draft.wizardForm.budgetItems,
 
-            [deadline]:
-                draft.wizardForm.budgetItems[
-                    deadline
-                ].filter((_, i) => i !== index),
+            [deadline]: draft.wizardForm.budgetItems[deadline].filter((_, i) => i !== index),
         },
     });
 
@@ -618,6 +666,7 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
 
         const updated = {
             ...draft,
+            isDirty: true,
             createProject: {
                 ...draft.createProject,
                 ...data,
@@ -629,6 +678,34 @@ export function updateProject(data: Partial<ProjectProjectCreationDto>) {
 
     persistDraft();
     hasUnsavedChanges.set(true);
+}
+
+export function markCurrentDraftClean(resources?: ProjectDraftResources) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    const nextResources = resources ?? {
+        rewards: draft.wizardForm.rewards,
+        collaborations: draft.wizardForm.collaborations,
+        budgetItems: draft.wizardForm.budgetItems,
+    };
+
+    const cleanDraft = {
+        ...draft,
+        isDirty: false,
+        apiSnapshot: nextResources,
+        wizardForm: {
+            ...draft.wizardForm,
+            rewards: nextResources.rewards,
+            collaborations: nextResources.collaborations,
+            budgetItems: nextResources.budgetItems,
+        },
+        updatedAt: new Date(),
+    };
+
+    currentDraft.set(cleanDraft);
+    draftRepo.update(cleanDraft.draftId, cleanDraft.userId, cleanDraft);
+    hasUnsavedChanges.set(false);
 }
 
 export function deleteCurrentDraft(draftId: string, userId: number) {

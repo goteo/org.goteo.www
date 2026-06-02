@@ -2,17 +2,17 @@
     import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
-    import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
-    import Toast from "../../library/Toast.svelte";
-    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import { validateBudgetAmount } from "../../../stores/drafts/draftValidation";
     import {
         currentDraft,
         navigateToStep,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
-    import { validateBudgetAmount } from "../../../stores/drafts/draftValidation";
+    import { formatCurrency } from "../../../utils/currencies";
+    import Button from "../../library/Button.svelte";
+    import Grid from "../../library/Grid.svelte";
+    import Toast from "../../library/Toast.svelte";
+    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {
         project,
@@ -97,10 +97,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard {item} {index} bind:loading />
+                    <AdminBudgetCard {project} {item} {index} bind:loading />
                 {/each}
 
-                <AdminBudgetCard isCreateCard={true} item={null} bind:loading />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading />
             </Grid>
         {/if}
     </div>
@@ -117,10 +117,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard {item} index={i} {loading} />
+                    <AdminBudgetCard {project} {item} index={i} {loading} />
                 {/each}
 
-                <AdminBudgetCard isCreateCard={true} item={null} {loading} />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} />
             </Grid>
         {/if}
     </div>

@@ -4,7 +4,12 @@ import z from "zod";
 import { type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
-import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectCreationDto, ProjectReward } from "../../openapi/client";
+import type {
+    ProjectBudgetItem,
+    ProjectCollaboration,
+    ProjectProjectCreationDto,
+    ProjectReward,
+} from "../../openapi/client";
 
 export type ValidationErrors = Record<string, string>;
 
@@ -12,11 +17,8 @@ export type ValidationErrors = Record<string, string>;
  * Validates the entire create project form and updates the validation errors store.
  * Returns true if the form is valid, false otherwise.
  */
-export function validateCreateForm(
-    createProject: ProjectProjectCreationDto,
-): ValidationErrors {
-    const result =
-        projectCreationSchema.safeParse(createProject);
+export function validateCreateForm(createProject: ProjectProjectCreationDto): ValidationErrors {
+    const result = projectCreationSchema.safeParse(createProject);
 
     if (!result.success) {
         const errors: ValidationErrors = {};
@@ -35,9 +37,7 @@ export function validateCreateForm(
     return {};
 }
 
-export function validateDraftToPublish(
-    draft: Draft,
-): ValidationErrors {
+export function validateDraftToPublish(draft: Draft): ValidationErrors {
     const wizard = draft.wizardForm;
 
     const errors: ValidationErrors = {};
@@ -93,12 +93,8 @@ export const configurationSchema = z.object({
  *
  * @returns Record of field errors (empty if valid)
  */
-export function validateConfiguration(
-    wizard: Wizard,
-): ValidationErrors {
-    const result = configurationSchema.safeParse(
-        wizard.configuration,
-    );
+export function validateConfiguration(wizard: Wizard): ValidationErrors {
+    const result = configurationSchema.safeParse(wizard.configuration);
 
     if (!result.success) {
         const errors: ValidationErrors = {};
@@ -150,8 +146,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     // Objectives validation
     const objectivesPlainText = stripHtml(data.objectives).trim();
     if (objectivesPlainText.length === 0) {
-        errors.objectives =
-            "pages.project.edit.rewards.validation_info.reward.objectives.required";
+        errors.objectives = "pages.project.edit.rewards.validation_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
         errors.objectives =
             "pages.project.edit.rewards.validation_info.reward.objectives.min_length";
@@ -173,8 +168,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     // Target audience validation
     const targetPlainText = stripHtml(data.targetAudience).trim();
     if (targetPlainText.length === 0) {
-        errors.targetAudience =
-            "pages.project.edit.rewards.validation_info.reward.target.required";
+        errors.targetAudience = "pages.project.edit.rewards.validation_info.reward.target.required";
     } else if (targetPlainText.length < 30) {
         errors.targetAudience =
             "pages.project.edit.rewards.validation_info.reward.target.min_length";
@@ -270,7 +264,6 @@ export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
 
 export function validateBudgetAmount(draft: Draft) {
     const budgetItems = draft.wizardForm.budgetItems;
-    const budget = draft.wizardForm.budget;
     const errors: ValidationErrors = {};
 
     if (budgetItems.minimum.length <= 0) {
@@ -290,20 +283,15 @@ export function validateField(
     fieldName: keyof ProjectProjectCreationDto,
     value: unknown,
 ): string | null {
-    type SchemaFields =
-        keyof typeof projectCreationSchema.shape;
+    type SchemaFields = keyof typeof projectCreationSchema.shape;
 
     if (!(fieldName in projectCreationSchema.shape)) {
         return null;
     }
 
-    const fieldSchema =
-        projectCreationSchema.shape[
-        fieldName as SchemaFields
-        ];
+    const fieldSchema = projectCreationSchema.shape[fieldName as SchemaFields];
 
-    const result =
-        (fieldSchema as z.ZodTypeAny).safeParse(value);
+    const result = (fieldSchema as z.ZodTypeAny).safeParse(value);
 
     if (!result.success) {
         return result.error.issues[0]?.message || "";

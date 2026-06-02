@@ -35,7 +35,7 @@ export const draftRepo = {
             .where("[userId+updatedAt]")
             .between([userId, Dexie.minKey], [userId, Dexie.maxKey])
             .reverse()
-            .toArray()
+            .toArray();
     },
 
     async delete(draftId: string, userId: number) {

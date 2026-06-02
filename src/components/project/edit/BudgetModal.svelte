@@ -3,13 +3,13 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),

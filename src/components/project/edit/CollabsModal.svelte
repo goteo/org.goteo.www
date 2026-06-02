@@ -3,13 +3,13 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
-    import type { ClassNameValue } from "tailwind-merge";
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),

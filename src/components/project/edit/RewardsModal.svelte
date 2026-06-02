@@ -4,15 +4,15 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import FileUpload from "../../FileUpload.svelte";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
-    import type { ClassNameValue } from "tailwind-merge";
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),

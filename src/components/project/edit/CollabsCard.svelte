@@ -2,15 +2,16 @@
     import CollabsModal from "./CollabsModal.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
-    import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import {
         addCollaboration,
         deleteCollaboration,
         updateCollaboration,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
+    import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import Button from "../../library/Button.svelte";
+
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
     let {
         project,

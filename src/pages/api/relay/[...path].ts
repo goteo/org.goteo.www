@@ -1,6 +1,18 @@
-import { getBaseUrl } from "../../../utils/consts";
+import { getSession } from "../../../auth/session";
 
 import type { APIRoute } from "astro";
+
+// Whitelist of safe response headers to forward to the client
+const SAFE_RESPONSE_HEADERS = [
+    "content-type",
+    "content-language",
+    "content-length",
+    "cache-control",
+    "etag",
+    "last-modified",
+    "expires",
+    "vary",
+];
 
 /**
  * API Relay Endpoint
@@ -14,94 +26,53 @@ import type { APIRoute } from "astro";
  *
  * Usage from client:
  * ```ts
- * const response = await fetch('/api/relay/v4/users/123', {
- *   method: 'GET',
- *   headers: { 'Accept-Language': 'en' }
- * });
+ * const { data, err } = await apiProjectsPost({ baseUrl: '/api/relay', ... });
+ * const response = await fetch('/api/relay/v4/users/123', ...;
  * ```
  */
 export const ALL: APIRoute = async ({ request, cookies, params }) => {
-    // Extract the API path from the catch-all parameter
-    const apiPath = params.path || "";
-
-    // Get the access token from cookies
-    const accessToken = cookies.get("access-token")?.value;
-
-    if (!accessToken) {
-        return new Response(
-            JSON.stringify({ error: "Unauthorized", message: "No access token found" }),
-            {
-                status: 401,
-                headers: { "Content-Type": "application/json" },
-            },
-        );
-    }
-
     try {
-        // Parse the token to get the actual bearer token
-        const tokenData = JSON.parse(accessToken);
-        const bearerToken = tokenData.token || accessToken;
+        const query = new URL(request.url).search;
+        const url = `${import.meta.env.PUBLIC_API_URL}/${params.path}${query}`;
 
-        // Build the target URL
-        const url = new URL(request.url);
-        const targetUrl = `${getBaseUrl()}/${apiPath}${url.search}`;
+        const reqHeaders = new Headers(request.headers);
+        reqHeaders.delete("host");
 
-        // Prepare headers
-        const headers = new Headers(request.headers);
-        headers.set("Authorization", `Bearer ${bearerToken}`);
-
-        // Remove host header to avoid conflicts
-        headers.delete("host");
-
-        // Prepare request body for methods that support it
-        let body: string | null = null;
-        if (request.method === "POST" || request.method === "PUT" || request.method === "PATCH") {
-            body = await request.text();
+        const session = await getSession(cookies);
+        if (session && session.token.asHttpHeaders) {
+            for (const [key, value] of Object.entries(session.token.asHttpHeaders)) {
+                reqHeaders.set(key, value);
+            }
         }
 
-        // Forward the request to the actual API
-        const response = await fetch(targetUrl, {
+        let reqBody: string | null = null;
+        if (request.method === "POST" || request.method === "PUT" || request.method === "PATCH") {
+            reqBody = await request.text();
+        }
+
+        const response = await fetch(url, {
             method: request.method,
-            headers,
-            body,
+            headers: reqHeaders,
+            body: reqBody,
         });
 
-        // Get the response body
-        const responseText = await response.text();
+        const resBody = await response.text();
 
-        // Whitelist of safe response headers to forward to the client
-        // These headers are important for caching, content negotiation, and proper HTTP semantics
-        const SAFE_RESPONSE_HEADERS = [
-            "content-type",
-            "content-language",
-            "content-length",
-            "cache-control",
-            "etag",
-            "last-modified",
-            "expires",
-            "vary",
-            "link", // For pagination
-            "x-total-count", // Common in REST APIs for total item count
-        ];
-
-        // Build response headers by copying whitelisted headers from the API response
-        const responseHeaders = new Headers();
+        const resHeaders = new Headers();
         response.headers.forEach((value, key) => {
             if (SAFE_RESPONSE_HEADERS.includes(key.toLowerCase())) {
-                responseHeaders.set(key, value);
+                resHeaders.set(key, value);
             }
         });
 
-        // Ensure Content-Type is always set (fallback to application/json)
-        if (!responseHeaders.has("content-type")) {
-            responseHeaders.set("content-type", "application/json");
+        if (!resHeaders.has("content-type")) {
+            resHeaders.set("content-type", "application/json");
         }
 
-        // Return the response back to the client
-        return new Response(responseText, {
+        return new Response(resBody, {
             status: response.status,
             statusText: response.statusText,
-            headers: responseHeaders,
+            headers: resHeaders,
         });
     } catch (error) {
         console.error("API Relay Error:", error);

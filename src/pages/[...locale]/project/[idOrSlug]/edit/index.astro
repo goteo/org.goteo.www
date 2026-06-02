@@ -17,28 +17,31 @@ if (!idOrSlug) {
 const session = await getSession(Astro.cookies);
 if (!session) {
     const requestUrl = new URL(Astro.request.url);
-    return goto("/login", { query: { callback: requestUrl.pathname + requestUrl.search } });
+    const callbackURL = requestUrl.pathname + requestUrl.search;
+    return goto("/login", { query: { callback: callbackURL } });
 }
 
-const { data: project } = await apiProjectsIdOrSlugGet({ path: { idOrSlug } });
-if (!project) {
-    return Astro.redirect("/");
-}
-
-const { error, request } = await apiProjectsIdPatch({
-    path: { id: String(project.id!) },
-    body: { id: project.id },
+const { data: project } = await apiProjectsIdOrSlugGet({
+    path: { idOrSlug },
     headers: session.token.asHttpHeaders,
 });
 
-if (error) {
-    console.error({ error, request });
-    return Astro.redirect("/");
+if (project?.id) {
+    const { error, request } = await apiProjectsIdPatch({
+        path: { id: String(project.id) },
+        body: { id: project.id },
+        headers: session.token.asHttpHeaders,
+    });
+
+    if (error) {
+        console.error({ error, request });
+        return Astro.redirect("/404");
+    }
 }
 ---
 
-<Layout title={t("pages.project.edit.title", { project: project.title })}>
+<Layout title={t("pages.project.edit.title", { project: project?.title ?? "" })}>
     <App locale={locale} session={session} client:load>
-        <ProjectEditor project={project} {session} client:load />
+        <ProjectEditor idOrSlug={idOrSlug} project={project} client:load />
     </App>
 </Layout>
