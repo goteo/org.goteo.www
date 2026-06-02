@@ -171,7 +171,7 @@
 
         <!-- Header with title and action buttons -->
         <div
-            class="bg-soft-purple border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
+            class="bg-purple-soft border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
         >
             <!-- Left section: Icon + Title/Subtitle -->
             <div class="flex flex-1 items-center gap-4">

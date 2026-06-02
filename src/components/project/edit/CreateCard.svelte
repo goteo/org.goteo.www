@@ -36,7 +36,7 @@
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
-            class="text-soft-purple font-bold {variant === 'budget'
+            class="text-purple-soft font-bold {variant === 'budget'
                 ? 'text-2xl leading-8'
                 : 'text-4xl leading-12'}"
         >
