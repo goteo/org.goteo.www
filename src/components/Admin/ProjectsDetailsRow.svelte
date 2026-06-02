@@ -13,12 +13,7 @@
 <div class="flex flex-col gap-6 px-8 py-6">
     <!-- Row 1: dates -->
     <div class="grid grid-cols-4 gap-6 text-sm">
-        {#each [
-            { key: "datePublished", value: project.datePublished },
-            { key: "dateEnd1", value: project.dateEnd1 },
-            { key: "dateEnd2", value: project.dateEnd2 },
-            { key: "minOptim", value: project.minOptim },
-        ] as item}
+        {#each [{ key: "datePublished", value: project.datePublished }, { key: "dateEnd1", value: project.dateEnd1 }, { key: "dateEnd2", value: project.dateEnd2 }, { key: "minOptim", value: project.minOptim }] as item}
             <div class="flex flex-col gap-1">
                 <span class="text-content font-bold">
                     {$t(`admin.projects.table.rows.details.${item.key}`)}:
@@ -31,19 +26,27 @@
     <!-- Row 2: contact -->
     <div class="grid grid-cols-4 gap-6 text-sm">
         <div class="flex flex-col gap-1">
-            <span class="text-content font-bold">{$t("admin.projects.table.rows.details.email")}:</span>
+            <span class="text-content font-bold"
+                >{$t("admin.projects.table.rows.details.email")}:</span
+            >
             <span class="truncate text-black">{project.promoter}</span>
         </div>
         <div class="flex flex-col gap-1">
-            <span class="text-content font-bold">{$t("admin.projects.table.rows.details.phone")}:</span>
+            <span class="text-content font-bold"
+                >{$t("admin.projects.table.rows.details.phone")}:</span
+            >
             <span class="text-black">—</span>
         </div>
         <div class="flex flex-col gap-1">
-            <span class="text-content font-bold">{$t("admin.projects.table.rows.details.contractExpiry")}:</span>
+            <span class="text-content font-bold"
+                >{$t("admin.projects.table.rows.details.contractExpiry")}:</span
+            >
             <span class="text-black">{project.contractExpiry}</span>
         </div>
         <div class="flex flex-col gap-1">
-            <span class="text-content font-bold">{$t("admin.projects.table.rows.details.remaining")}:</span>
+            <span class="text-content font-bold"
+                >{$t("admin.projects.table.rows.details.remaining")}:</span
+            >
             <span class={project.remaining !== "—" ? "text-tertiary font-bold" : "text-black"}>
                 {project.remaining}
             </span>
@@ -63,13 +66,19 @@
     </div>
 
     <!-- Row 4: footer -->
-    <div class="flex flex-col gap-6 text-base leading-5 md:flex-row md:items-center md:justify-between">
+    <div
+        class="flex flex-col gap-6 text-base leading-5 md:flex-row md:items-center md:justify-between"
+    >
         <div class="text-content min-h-5 text-sm"></div>
         <div class="flex flex-row flex-wrap items-center justify-start gap-8 md:justify-end">
-            <button class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none">
+            <button
+                class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
+            >
                 {$t("admin.projects.table.rows.details.btns.certificates")}
             </button>
-            <button class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none">
+            <button
+                class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
+            >
                 {$t("admin.projects.table.rows.details.btns.contractPdf")}
             </button>
             <button

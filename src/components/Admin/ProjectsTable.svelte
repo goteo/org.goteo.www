@@ -21,15 +21,22 @@
 </script>
 
 <script lang="ts">
-    import { Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from "flowbite-svelte";
+    import {
+        Table,
+        TableBody,
+        TableBodyCell,
+        TableBodyRow,
+        TableHead,
+        TableHeadCell,
+    } from "flowbite-svelte";
 
-    import { t } from "../../i18n/store";
-    import Chevron from "../icons/Chevron.svelte";
-    import Edit from "../icons/Edit.svelte";
     import Pagination from "./Pagination.svelte";
     import ProjectsDetailsRow from "./ProjectsDetailsRow.svelte";
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
+    import { t } from "../../i18n/store";
+    import Chevron from "../icons/Chevron.svelte";
+    import Edit from "../icons/Edit.svelte";
 
     const tableHeaders = [
         "admin.projects.table.headers.name",
@@ -47,10 +54,16 @@
     const processOptions = [
         { value: "", label: "—" },
         { value: "signed", label: $t("admin.projects.table.rows.process.signed") },
-        { value: "sent_for_signature", label: $t("admin.projects.table.rows.process.sent_for_signature") },
+        {
+            value: "sent_for_signature",
+            label: $t("admin.projects.table.rows.process.sent_for_signature"),
+        },
         { value: "form_closed", label: $t("admin.projects.table.rows.process.form_closed") },
         { value: "payments_made", label: $t("admin.projects.table.rows.process.payments_made") },
-        { value: "contract_fulfilled", label: $t("admin.projects.table.rows.process.contract_fulfilled") },
+        {
+            value: "contract_fulfilled",
+            label: $t("admin.projects.table.rows.process.contract_fulfilled"),
+        },
     ];
 
     let currentPage = $state(1);
@@ -82,9 +95,11 @@
 
     function getStatusVariant(status: string): string {
         if (status === "funding_paid") return "border-green-600 text-green-600";
-        if (status.includes("rejected") || status.includes("failed")) return "border-red-600 text-red-600";
+        if (status.includes("rejected") || status.includes("failed"))
+            return "border-red-600 text-red-600";
         if (status.includes("review")) return "border-yellow-600 text-yellow-600";
-        if (status.includes("campaign") || status.includes("funding")) return "border-secondary text-secondary";
+        if (status.includes("campaign") || status.includes("funding"))
+            return "border-secondary text-secondary";
         return "border-black text-black";
     }
 </script>
@@ -101,8 +116,13 @@
                 </select>
             </div>
             <div class="flex flex-row items-center gap-2">
-                <p class="text-content font-bold">{$t("admin.projects.filters.itemsPerPage.title")}</p>
-                <select class="border-secondary text-secondary rounded-sm py-1" bind:value={itemsPerPage}>
+                <p class="text-content font-bold">
+                    {$t("admin.projects.filters.itemsPerPage.title")}
+                </p>
+                <select
+                    class="border-secondary text-secondary rounded-sm py-1"
+                    bind:value={itemsPerPage}
+                >
                     {#each Object.entries($t("admin.projects.filters.itemsPerPage.options")) as [value, label]}
                         <option value={Number(value)}>{label}</option>
                     {/each}
@@ -113,7 +133,9 @@
         <Table class="w-full border-separate border-spacing-y-2">
             <TableHead>
                 {#each tableHeaders as header}
-                    <TableHeadCell class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg">
+                    <TableHeadCell
+                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg"
+                    >
                         <span class="normal-case">{$t(header)}</span>
                     </TableHeadCell>
                 {/each}
@@ -123,9 +145,13 @@
                 {#each projects as project, i}
                     <TableBodyRow
                         onclick={() => toggleRow(i)}
-                        class="{openRow === i ? 'bg-purple-soft' : 'bg-[#ffffff]'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
+                        class="{openRow === i
+                            ? 'bg-purple-soft'
+                            : 'bg-[#ffffff]'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
                     >
-                        <TableBodyCell class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4">
+                        <TableBodyCell
+                            class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4"
+                        >
                             <p class="truncate font-medium text-black">{project.name}</p>
                         </TableBodyCell>
                         <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
@@ -150,21 +176,35 @@
                             </div>
                         </TableBodyCell>
                         <TableBodyCell class="border-variant1 border-t border-b p-4">
-                            <span class="rounded border px-3 py-1 text-sm font-medium {getStatusVariant(project.status)}">
+                            <span
+                                class="rounded border px-3 py-1 text-sm font-medium {getStatusVariant(
+                                    project.status,
+                                )}"
+                            >
                                 {$t(`admin.projects.table.rows.status.${project.status}`)}
                             </span>
                         </TableBodyCell>
                         <TableBodyCell class="border-variant1 border-t border-b p-4">
                             <div onclick={(e) => e.stopPropagation()} role="presentation">
-                                <select class="border-secondary text-secondary rounded-sm border py-1 text-sm" value={project.process}>
+                                <select
+                                    class="border-secondary text-secondary rounded-sm border py-1 text-sm"
+                                    value={project.process}
+                                >
                                     {#each processOptions as opt}
                                         <option value={opt.value}>{opt.label}</option>
                                     {/each}
                                 </select>
                             </div>
                         </TableBodyCell>
-                        <TableBodyCell class="border-variant1 rounded-r-md border-t border-r border-b p-4">
-                            <Chevron direction={openRow === i ? "up" : "down"} width="24" height="24" class="text-black transition-transform" />
+                        <TableBodyCell
+                            class="border-variant1 rounded-r-md border-t border-r border-b p-4"
+                        >
+                            <Chevron
+                                direction={openRow === i ? "up" : "down"}
+                                width="24"
+                                height="24"
+                                class="text-black transition-transform"
+                            />
                         </TableBodyCell>
                     </TableBodyRow>
 
@@ -176,7 +216,8 @@
                             >
                                 <ProjectsDetailsRow
                                     {project}
-                                    onOpenAnnotationsModal={() => openAnnotationsModal(project, new MouseEvent("click"))}
+                                    onOpenAnnotationsModal={() =>
+                                        openAnnotationsModal(project, new MouseEvent("click"))}
                                 />
                             </TableBodyCell>
                         </TableBodyRow>
@@ -186,9 +227,9 @@
         </Table>
 
         <Pagination
-            currentPage={currentPage}
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
+            {currentPage}
+            {totalItems}
+            {itemsPerPage}
             onPageChange={(p) => (currentPage = p)}
         />
     </div>

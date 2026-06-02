@@ -4,15 +4,15 @@
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
-    import { totalItems, isLoading as chargesIsLoading } from "../../stores/chargesPaginationAndSort";
+    import {
+        totalItems,
+        isLoading as chargesIsLoading,
+    } from "../../stores/chargesPaginationAndSort";
 
     import type { Options } from "flickity";
     import type Flickity from "flickity";
 
-    let {
-        slides: slidesProp,
-        loading: loadingProp,
-    } = $props<{
+    let { slides: slidesProp, loading: loadingProp } = $props<{
         slides?: { title: string; amount: string | number }[];
         loading?: boolean;
     }>();
