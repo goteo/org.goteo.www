@@ -103,5 +103,5 @@ body.grid {
     @apply bg-secondary text-primary hover:text-secondary;
 }
 @utility category-ghost {
-    @apply bg-transparent text-black hover:bg-variant1/50 hover:text-secondary;
+    @apply hover:bg-variant1/50 hover:text-secondary bg-transparent text-black;
 }
