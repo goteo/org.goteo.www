@@ -3,21 +3,19 @@
 
     import type { Snippet } from "svelte";
 
-    const styles = {
-        default: "inset-ring-1 hover:inset-ring-0 inset-ring-secondary bg-white",
-        active: "bg-secondary text-primary hover:text-secondary",
-        ghost: "",
-    };
+    type CategoryType = "default" | "active" | "ghost";
 
     let {
         type = "default",
         disabled = false,
+        skeleton = false,
         class: classes = "",
         onclick,
         children,
     }: {
-        type?: keyof typeof styles;
+        type?: CategoryType;
         disabled?: boolean;
+        skeleton?: boolean;
         class?: ClassNameValue;
         onclick?: (event: MouseEvent) => void;
         children: Snippet;
@@ -25,10 +23,12 @@
 </script>
 
 <button
-    {disabled}
+    disabled={disabled || skeleton}
     class={twMerge(
-        "hover:bg-variant1 w-auto rounded-[32px] px-[16px] py-[8px] font-[700]",
-        styles[type],
+        "w-auto rounded-4xl px-4 py-2 font-bold transition-all",
+        skeleton
+            ? "bg-grey pointer-events-none animate-pulse text-transparent select-none"
+            : twMerge("hover:bg-variant1", `category-${type}`),
         classes,
     )}
     onclick={(e) => onclick?.(e)}

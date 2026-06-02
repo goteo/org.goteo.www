@@ -138,9 +138,6 @@ Integrated with searchStore for state management and URL synchronization
             <SearchButton variant="primary" onclick={handleSearch}
                 >{$t("search.applyFilters")}</SearchButton
             >
-            <SearchButton variant="ghost" onclick={toggleFilters} class="w-full min-[500px]:w-auto">
-                {$t("search.closeFilters")}
-            </SearchButton>
         </div>
     {/if}
 </div>

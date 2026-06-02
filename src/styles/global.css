@@ -95,3 +95,13 @@ body.grid {
         padding: 0 0.5rem;
     }
 }
+@utility category-default {
+    @apply inset-ring-secondary bg-white inset-ring-1 hover:inset-ring-0;
+}
+
+@utility category-active {
+    @apply bg-secondary text-primary hover:text-secondary;
+}
+@utility category-ghost {
+    @apply bg-transparent text-black hover:bg-variant1/50 hover:text-secondary;
+}

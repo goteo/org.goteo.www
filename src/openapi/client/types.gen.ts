@@ -5250,7 +5250,7 @@ export type ApiVersionsGetCollectionData = {
         /**
          * The name of the resource.
          */
-        resource: 'GatewayCharge' | 'GatewayCheckout' | 'User';
+        resource: 'User' | 'GatewayCharge' | 'GatewayCheckout';
         /**
          * The ID of the named resource.
          */
