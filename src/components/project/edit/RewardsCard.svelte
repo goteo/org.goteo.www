@@ -2,17 +2,18 @@
     import CreateCard from "./CreateCard.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
-    import UnitIcon from "../../../svgs/UnitIcon.svelte";
-    import { formatCurrency } from "../../../utils/currencies";
-    import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
-    import type { Project, ProjectReward } from "../../../openapi/client";
     import {
         addReward,
         deleteReward,
         updateReward,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
+    import UnitIcon from "../../../svgs/UnitIcon.svelte";
+    import { formatCurrency } from "../../../utils/currencies";
+    import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import Button from "../../library/Button.svelte";
+
+    import type { Project, ProjectReward } from "../../../openapi/client";
 
     let {
         project,

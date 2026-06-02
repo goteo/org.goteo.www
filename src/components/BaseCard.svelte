@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { HTMLStyleAttributes } from "svelte/elements";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import type { HTMLStyleAttributes } from "svelte/elements";
 
     interface Props {
         class?: ClassNameValue;

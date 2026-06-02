@@ -1,11 +1,12 @@
 <script lang="ts">
     import CollabsCard from "./CollabsCard.svelte";
     import { t } from "../../../i18n/store";
+    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
-    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
 
     let { project }: { project: Project } = $props();
 

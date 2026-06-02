@@ -14,13 +14,13 @@ import {
     apiProjectsIdPatch,
 } from "../openapi/client";
 
+import type { Session } from "../auth/types";
 import type {
     ProjectReward,
     ProjectCollaboration,
     ProjectBudgetItem,
     ProjectProjectUpdationDto,
 } from "../openapi/client";
-import type { Session } from "../auth/types";
 import type { ProjectDraftResources } from "../stores/drafts/projectDraft";
 
 export async function patchProject(

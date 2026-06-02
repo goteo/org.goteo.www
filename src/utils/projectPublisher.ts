@@ -10,11 +10,11 @@ import {
     updateCollaboration,
     updateReward,
 } from "./projectSubmissionApi";
+import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
-import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
-import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
+import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
 
 export class PublishValidationError extends Error {
     constructor(public errors: Record<string, string>) {

@@ -365,7 +365,7 @@
             style="box-shadow: 0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);"
         >
             <h1
-                class="text-secondary mb-2 text-double leading-10 font-bold {$currentDraft
+                class="text-secondary text-double mb-2 leading-10 font-bold {$currentDraft
                     ?.createProject.title || 'opacity-24'}"
             >
                 {$currentDraft?.createProject.title ||

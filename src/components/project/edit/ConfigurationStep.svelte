@@ -11,12 +11,12 @@
 <script lang="ts">
     import RoundSelector from "./RoundSelector.svelte";
     import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
     import {
         currentDraft,
         navigateToStep,
         updateConfiguration,
     } from "../../../stores/drafts/projectDraft";
+    import Button from "../../library/Button.svelte";
 
     interface ConfigurationStepProps {
         onContinue?: () => void;

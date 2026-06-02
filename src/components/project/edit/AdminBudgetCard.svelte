@@ -2,10 +2,6 @@
     import BudgetModal from "./BudgetModal.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-
-    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
         addBudgetItem,
@@ -13,6 +9,10 @@
         updateBudgetItem,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
+    import { formatCurrency } from "../../../utils/currencies";
+    import Button from "../../library/Button.svelte";
+
+    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
 
     let {
         project,

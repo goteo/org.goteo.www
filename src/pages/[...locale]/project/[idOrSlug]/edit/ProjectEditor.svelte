@@ -8,11 +8,13 @@
     - URL query parameter sync
 -->
 <script lang="ts">
+    import { onMount } from "svelte";
+
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
+    import { session } from "../../../../../auth/store";
     import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
-
-    import type { Session } from "../../../../../auth/types";
+    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
     import {
         currentDraft,
         deleteCurrentDraft,
@@ -22,11 +24,10 @@
         markCurrentDraftClean,
         updateWizard,
     } from "../../../../../stores/drafts/projectDraft";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
-    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
     import { publishDraft } from "../../../../../utils/projectPublisher";
-    import { onMount } from "svelte";
-    import { session } from "../../../../../auth/store";
+    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
+
+    import type { Session } from "../../../../../auth/types";
 
     let {
         idOrSlug,

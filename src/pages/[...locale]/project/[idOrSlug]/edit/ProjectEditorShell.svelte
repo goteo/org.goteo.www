@@ -17,15 +17,13 @@
 -->
 <script lang="ts">
     import Eye from "../../../../../components/icons/Eye.svelte";
+    import ActionableButton from "../../../../../components/library/ActionableButton.svelte";
     import Button from "../../../../../components/library/Button.svelte";
     import TabNavigation, {
         type Tab,
     } from "../../../../../components/library/TabNavigation.svelte";
+    import Toast from "../../../../../components/library/Toast.svelte";
     import { t } from "../../../../../i18n/store";
-    import EditIcon from "../../../../../svgs/EditIcon.svelte";
-
-    import type { Project } from "../../../../../openapi/client";
-    import type { Snippet } from "svelte";
     import {
         currentDraft,
         hasUnsavedChanges,
@@ -35,8 +33,10 @@
         persistenceError,
         updateProject,
     } from "../../../../../stores/drafts/projectDraft";
-    import ActionableButton from "../../../../../components/library/ActionableButton.svelte";
-    import Toast from "../../../../../components/library/Toast.svelte";
+    import EditIcon from "../../../../../svgs/EditIcon.svelte";
+
+    import type { Project } from "../../../../../openapi/client";
+    import type { Snippet } from "svelte";
 
     let {
         project,
