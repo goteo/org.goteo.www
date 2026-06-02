@@ -12,6 +12,8 @@
         type Category,
         type ProjectProjectCreationDto,
     } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
     import {
         validateCreateForm,
         validateField,
@@ -110,9 +112,12 @@
         }
     });
 
-    function handleCategoryChange(selected: { id: number | string; text: string }[]) {
-        const categoryIds = selected.map((s) => s.id.toString()) as Category[];
-        handleFieldChange("categories", categoryIds);
+    function handleCategoryChange(selected: Category[]) {
+        const categoryIris = selected.map((s) => {
+            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
+        });
+
+        handleFieldChange("categories", categoryIris);
     }
 
     async function handleSubmit() {
@@ -159,10 +164,11 @@
             // TODO: Implement actual API submission when form fields match API requirements
 
             const { data, error } = await apiProjectsPost({
+                baseUrl: "/api/relay",
                 body: {
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
-                    categories: $currentDraft.createProject.categories as Category[], // Map all categories
+                    categories: $currentDraft.createProject.categories, // Map all categories
                     release: $currentDraft.createProject.release, // Map release date
                 },
             });
@@ -186,7 +192,7 @@
                 updateProject({
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
-                    categories: $currentDraft.createProject.categories as Category[],
+                    categories: $currentDraft.createProject.categories,
                     release: $currentDraft.createProject.release,
                 });
                 currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
