@@ -4,10 +4,18 @@
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
-    import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
+    import { totalItems, isLoading as chargesIsLoading } from "../../stores/chargesPaginationAndSort";
 
     import type { Options } from "flickity";
     import type Flickity from "flickity";
+
+    let {
+        slides: slidesProp,
+        loading: loadingProp,
+    } = $props<{
+        slides?: { title: string; amount: string | number }[];
+        loading?: boolean;
+    }>();
 
     let mainCarousel: HTMLDivElement;
     let flickity: Flickity;
@@ -31,19 +39,21 @@
     let slides: { title: string; amount: string | number }[] = $state([]);
 
     const loadSlides = () => {
-        let slidesArr = [];
+        if (slidesProp) return slidesProp;
 
-        // Example dynamic data, just for testing. Pending real data integration.
+        let slidesArr = [];
         slidesArr.push({
             title: $t("admin.projects.totalizers.selected"),
             amount: $totalItems,
         });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" });
+        slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "" });
+        slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "" });
+        slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "" });
 
         return slidesArr;
     };
+
+    let isDataLoading = $derived(loadingProp ?? $chargesIsLoading);
 
     const loadFlickity = async (elem: HTMLElement) => {
         try {
@@ -67,15 +77,15 @@
 </script>
 
 <div class="relative mt-6 h-40">
-    {#if !isSliderLoaded || $isLoading}
+    {#if !isSliderLoaded || isDataLoading}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">{$t("search.pagination.loading")}</span>
+            <span class="text-content">{$t("system.loading")}</span>
         </div>
     {/if}
 
     <div
         bind:this={mainCarousel}
-        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !$isLoading ? 100 : 0}"
+        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !isDataLoading ? 100 : 0}"
     >
         {#each slides as { title, amount }}
             <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />

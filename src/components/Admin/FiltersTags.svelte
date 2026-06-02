@@ -6,18 +6,19 @@
     import Tag from "../library/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
-    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
+
+    type Filters = Record<string, any>;
 
     let { title, filters, onCloseFilter } = $props<{
         title: string;
-        filters: ApiGatewayChargesGetCollectionData["query"];
-        onCloseFilter: (filters: ApiGatewayChargesGetCollectionData["query"]) => void;
+        filters: Filters;
+        onCloseFilter: (filters: Filters) => void;
     }>();
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
     type FilterTags = FilterTag[];
 
-    let tags: FilterTags | undefined = $state(undefined);
+    let tags: FilterTags = $state([]);
 
     function closeTag(tag: FilterTag) {
         if (tag.values?.from && tag.values?.to) {
@@ -93,7 +94,7 @@
                 ];
             }
 
-            tags = formatTags([...normalTags], $locale);
+            tags = formatTags([...normalTags], $locale) ?? [];
         }
     });
 </script>
