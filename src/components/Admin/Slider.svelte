@@ -5,13 +5,41 @@
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
     import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
+    import { fetchAccounting, fetchTipjar } from "../../utils/cachedFetch";
+    import { formatCurrency } from "../../utils/currencies";
+    import { isEnabled, tipjarIri } from "../../utils/tipping";
 
     import type { Options } from "flickity";
-    import type Flickity from "flickity";
+
+    const CACHE_NAME = "charges-cache";
 
     let mainCarousel: HTMLDivElement;
-    let flickity: Flickity;
     let isSliderLoaded = $state(false);
+    let totalTips = $state<string>("—");
+
+    function getAccessToken(): string | null {
+        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
+        if (!match) return null;
+        try {
+            const decoded = decodeURIComponent(match[1]);
+            const parsed = JSON.parse(decoded);
+            return parsed?.token ?? null;
+        } catch {
+            return null;
+        }
+    }
+
+    async function loadTotalTips() {
+        if (!isEnabled) return;
+        const token = getAccessToken();
+        if (!token) return;
+        const tipjar = await fetchTipjar(tipjarIri, token, CACHE_NAME);
+        if (!tipjar?.accounting) return;
+        const accounting = await fetchAccounting(tipjar.accounting, token, CACHE_NAME);
+        if (accounting?.balance) {
+            totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
+        }
+    }
 
     let options: Options = {
         cellAlign: "left",
@@ -31,25 +59,22 @@
     let slides: { title: string; amount: string | number }[] = $state([]);
 
     const loadSlides = () => {
-        let slidesArr = [];
-
-        // Example dynamic data, just for testing. Pending real data integration.
-        slidesArr.push({
-            title: $t("admin.projects.totalizers.selected"),
-            amount: $totalItems,
-        });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" });
-
-        return slidesArr;
+        return [
+            {
+                title: $t("admin.projects.totalizers.selected"),
+                amount: $totalItems,
+            },
+            { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
+            { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
+            { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+        ];
     };
 
     const loadFlickity = async (elem: HTMLElement) => {
         try {
             const FlickityModule = await import("flickity");
             const FlickityClass = FlickityModule.default;
-            flickity = new FlickityClass(elem, options);
+            new FlickityClass(elem, options);
             isSliderLoaded = true;
         } catch (err) {
             console.error("Flickity failed to load:", err);
@@ -63,6 +88,7 @@
     onMount(() => {
         loadSlides();
         if (mainCarousel) loadFlickity(mainCarousel);
+        loadTotalTips();
     });
 </script>
 
