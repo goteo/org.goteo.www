@@ -843,6 +843,8 @@
       "content-footer": {
         "lastEdited": "Last modification: {{date}} {{time}}",
         "downloadDetails": "Download details",
+        "downloadCertificates": "Download certificates",
+        "downloadPdf": "Download PDF",
         "annotations": "{{annotations}} annotations"
       }
     },

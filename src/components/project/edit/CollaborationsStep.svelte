@@ -36,7 +36,7 @@
 
 <div class="w-full space-y-10">
     <div class="flex w-full flex-col gap-4">
-        <h2 class="text-[40px] leading-12 font-bold text-black">
+        <h2 class="text-[2.5rem] leading-12 font-bold text-black">
             {$t("pages.project.edit.collaborations.title")}
         </h2>
         <p class="text-content text-base font-normal">

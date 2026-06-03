@@ -32,9 +32,9 @@ Manages real-time filtering of campaigns without page reloads
         initialProjects: Project[];
         ariaLiveRegion?: "polite" | "assertive" | "off";
         initialFilters?: {
-            query?: string;
-            statusFilter?: string;
-            categories?: string[];
+            title?: string;
+            status?: string;
+            "categories[]"?: string[];
         };
         hasInitialSearch?: boolean;
     }
@@ -93,10 +93,14 @@ Manages real-time filtering of campaigns without page reloads
 
         const filters = $searchFilters;
 
-        // Add search parameters to URL
-        if (filters.query) params.set("q", filters.query);
-        if (filters.statusFilter) params.set("status", filters.statusFilter);
-        if (filters.categories.length > 0) params.set("categories", filters.categories.join(","));
+        // Add search parameters to URL using API field names
+        if (filters.title) params.set("title", filters.title);
+        if (filters.status) params.set("status", filters.status);
+        if ((filters["categories[]"]?.length ?? 0) > 0) {
+            (filters["categories[]"] as string[]).forEach((cat) => {
+                params.append("categories[]", cat);
+            });
+        }
 
         // Update URL using History API to avoid navigation
         const newUrl = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
@@ -129,9 +133,9 @@ Manages real-time filtering of campaigns without page reloads
         if (initialFilters && hasInitialSearch) {
             // Initialize store with server-side filters first
             searchStore.initializeFilters({
-                query: initialFilters.query || "",
-                statusFilter: initialFilters.statusFilter || "",
-                categories: initialFilters.categories || [],
+                title: initialFilters.title || "",
+                status: initialFilters.status || "",
+                "categories[]": initialFilters["categories[]"] || [],
             });
 
             // Trigger API search with the URL parameters

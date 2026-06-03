@@ -68,7 +68,7 @@
         {/each}
     </fieldset>
     {#if error}
-        <p id="category-error" class="mt-2 ml-4 text-[12px] text-red-600" role="alert">
+        <p id="category-error" class="mt-2 ml-4 text-xs text-red-600" role="alert">
             {error}
         </p>
     {/if}

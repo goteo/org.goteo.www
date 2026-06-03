@@ -78,19 +78,19 @@
         class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !$isLoading ? 100 : 0}"
     >
         {#each slides as { title, amount }}
-            <TotalizerCard class="ml-6 h-[162px] w-[322px]" {title} value={amount} />
+            <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
         {/each}
     </div>
 </div>
 
 <style>
     :global(.flickity-button-icon) {
-        fill: #462949;
+        fill: var(--color-secondary);
     }
 
     :global(.flickity-prev-next-button.previous),
     :global(.flickity-prev-next-button.next) {
-        background: #e6e5f7;
+        background: var(--color-variant1);
         width: 40px;
         height: 40px;
     }

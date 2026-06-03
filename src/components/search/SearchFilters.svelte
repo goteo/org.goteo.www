@@ -18,9 +18,9 @@ Integrated with searchStore for state management and URL synchronization
     interface Props {
         locale?: string;
         initialFilters?: {
-            query?: string;
-            statusFilter?: string;
-            categories?: string[];
+            title?: string;
+            status?: string;
+            "categories[]"?: string[];
         };
     }
 
@@ -36,9 +36,9 @@ Integrated with searchStore for state management and URL synchronization
         // Initialize with server-provided filters if available (without triggering search)
         if (initialFilters) {
             searchStore.initializeFilters({
-                query: initialFilters.query || "",
-                statusFilter: initialFilters.statusFilter || "",
-                categories: initialFilters.categories || [],
+                title: initialFilters.title || "",
+                status: initialFilters.status || "",
+                "categories[]": initialFilters["categories[]"] || [],
             });
         }
     });
@@ -72,7 +72,7 @@ Integrated with searchStore for state management and URL synchronization
 </script>
 
 <div
-    class="mx-auto flex w-80 flex-col gap-6 rounded-[24px] border border-[#f3f3ef] bg-[#fbfbfb] px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-[32px] lg:px-8 lg:py-6"
+    class="border-grey mx-auto flex w-80 flex-col gap-6 rounded-3xl border bg-white px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-4xl lg:px-8 lg:py-6"
     data-testid="search-filters"
 >
     <div
@@ -83,8 +83,8 @@ Integrated with searchStore for state management and URL synchronization
             <!-- Search input -->
             <div class="min-w-0 flex-1">
                 <SearchInput
-                    value={$searchFilters.query}
-                    onSearch={(query) => updateFilters({ query })}
+                    value={$searchFilters.title}
+                    onSearch={(title) => updateFilters({ title })}
                     onEnter={handleSearch}
                     onClear={handleSearch}
                     placeholder={$t("pages.search.input.placeholder")}
@@ -125,8 +125,8 @@ Integrated with searchStore for state management and URL synchronization
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("pages.search.filters.status.label")}
-                selectedValue={$searchFilters.statusFilter}
-                onSelect={(value) => updateFilters({ statusFilter: value })}
+                selectedValue={$searchFilters.status}
+                onSelect={(value) => updateFilters({ status: value })}
                 data-testid="status-filter"
             />
         </div>
@@ -134,8 +134,8 @@ Integrated with searchStore for state management and URL synchronization
         <!-- Category filters -->
         <div class="w-full">
             <CategoryFilter
-                selectedCategories={$searchFilters.categories}
-                onCategoryChange={(categories) => updateFilters({ categories })}
+                selectedCategories={$searchFilters["categories[]"] || []}
+                onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
                 data-testid="category-filter"
             />
         </div>
