@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@fontsource/karla";
+@import "svelte-range-slider-pips/dist/range-slider-pips.css";
 
 @plugin "flowbite/plugin";
 @import "flowbite/src/themes/default";
@@ -37,8 +38,8 @@
     --color-semantic-warning: #ffffc2;
 
     --font-body: "Karla", sans-serif;
-    --body-regular: 1rem;
-    --body-small: 0.875rem;
+    --text-body-small: 0.875rem;
+    --text-double: 2rem;
 }
 
 @layer base {
@@ -53,6 +54,10 @@
         --color-purple-soft: #1a1730;
         --color-purple-med: #22203a;
     }
+}
+
+:root {
+    --sticky-top: calc(var(--header-height, 0px) + 1.5rem);
 }
 
 html {

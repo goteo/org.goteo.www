@@ -1,7 +1,8 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import { apiCategoriesGetCollection } from "../../openapi/client";
-    import { categories } from "../../utils/categories"; //
+    // local fallback for skeleton rendering to avoid importing missing module
+    const categories: { id?: string; translationKey?: string }[] = [];
     import Category from "../library/Category.svelte";
 
     interface Props {
@@ -41,7 +42,9 @@
         <div class="flex flex-wrap gap-2">
             {#each categories as category}
                 <Category skeleton>
-                    {$t(category.translationKey)}
+                    {#if category.translationKey}
+                        {$t(category.translationKey)}
+                    {/if}
                 </Category>
             {/each}
         </div>

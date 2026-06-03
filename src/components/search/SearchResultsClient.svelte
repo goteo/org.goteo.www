@@ -32,9 +32,9 @@ Manages real-time filtering of campaigns without page reloads
         initialProjects: Project[];
         ariaLiveRegion?: "polite" | "assertive" | "off";
         initialFilters?: {
-            query?: string;
-            statusFilter?: string;
-            categories?: string[];
+            title?: string;
+            status?: string;
+            "categories[]"?: string[];
         };
         hasInitialSearch?: boolean;
     }
@@ -93,10 +93,14 @@ Manages real-time filtering of campaigns without page reloads
 
         const filters = $searchFilters;
 
-        // Add search parameters to URL
-        if (filters.query) params.set("q", filters.query);
-        if (filters.statusFilter) params.set("status", filters.statusFilter);
-        if (filters.categories.length > 0) params.set("categories", filters.categories.join(","));
+        // Add search parameters to URL using API field names
+        if (filters.title) params.set("title", filters.title);
+        if (filters.status) params.set("status", filters.status);
+        if ((filters["categories[]"]?.length ?? 0) > 0) {
+            (filters["categories[]"] as string[]).forEach((cat) => {
+                params.append("categories[]", cat);
+            });
+        }
 
         // Update URL using History API to avoid navigation
         const newUrl = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
@@ -129,9 +133,9 @@ Manages real-time filtering of campaigns without page reloads
         if (initialFilters && hasInitialSearch) {
             // Initialize store with server-side filters first
             searchStore.initializeFilters({
-                query: initialFilters.query || "",
-                statusFilter: initialFilters.statusFilter || "",
-                categories: initialFilters.categories || [],
+                title: initialFilters.title || "",
+                status: initialFilters.status || "",
+                "categories[]": initialFilters["categories[]"] || [],
             });
 
             // Trigger API search with the URL parameters
@@ -175,7 +179,7 @@ Manages real-time filtering of campaigns without page reloads
     // Generate accessibility announcement
     $effect(() => {
         if ($hasActualSearchResults && !$isSearching) {
-            const announcement = $t("search.accessibility.resultsFound", {
+            const announcement = $t("pages.search.accessibility.resultsFound", {
                 count: $resultCount,
             });
 
@@ -259,16 +263,16 @@ Manages real-time filtering of campaigns without page reloads
                 </svg>
             </div>
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.empty.title")}
+                {$t("pages.search.empty.title")}
             </h3>
             <p class="mb-6 text-gray-600">
-                {$t("search.empty.description")}
+                {$t("pages.search.empty.description")}
             </p>
             <button
                 onclick={clearAllFilters}
                 class="bg-primary text-tertiary rounded-full px-6 py-2 font-semibold transition-opacity hover:opacity-90"
             >
-                {$t("search.results.empty.clearFilters")}
+                {$t("pages.search.empty.clearFilters")}
             </button>
         </div>
     {/if}
@@ -277,9 +281,9 @@ Manages real-time filtering of campaigns without page reloads
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
-                {$t("search.initial.title")}
+                {$t("pages.search.initial.title")}
             </h3>
-            <p class="text-gray-600">{$t("search.initial.description")}</p>
+            <p class="text-gray-600">{$t("pages.search.initial.description")}</p>
         </div>
     {/if}
 </div>

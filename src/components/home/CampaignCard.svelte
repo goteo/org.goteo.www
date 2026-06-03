@@ -37,7 +37,7 @@ Converted from CampaignCard.astro to maintain exact functionality
         size === "large" ? "col-span-1 md:col-span-2 lg:col-span-2" : "col-span-1",
     );
 
-    const imageHeight = "h-[215px]"; // More rectangular proportions matching design
+    const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
     const hasReachedMinimum = $derived(campaign.obtained.amount >= campaign.minimum.amount);
@@ -56,7 +56,7 @@ Converted from CampaignCard.astro to maintain exact functionality
             const remaining = campaign.optimum.amount - campaign.obtained.amount;
             return {
                 amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toOptimum"),
+                label: $t("pages.home.campaigns.remaining.toOptimum"),
                 currency: campaign.optimum.currency,
             };
         } else {
@@ -64,7 +64,7 @@ Converted from CampaignCard.astro to maintain exact functionality
             const remaining = campaign.minimum.amount - campaign.obtained.amount;
             return {
                 amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toMinimum"),
+                label: $t("pages.home.campaigns.remaining.toMinimum"),
                 currency: campaign.minimum.currency,
             };
         }
@@ -81,7 +81,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
 <div
     class={twMerge(
-        "border-grey grow basis-0 rounded-[32px] border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "border-grey grow basis-0 rounded-4xl border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
         className,
     )}
@@ -101,7 +101,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     {#if campaign.hasMatchfunding}
                         <Tag>
                             <Flames />
-                            <span>{$t("home.campaigns.matchfunding")}</span>
+                            <span>{$t("pages.home.campaigns.matchfunding")}</span>
                         </Tag>
                     {/if}
 
@@ -132,7 +132,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <div class="flex items-center gap-2">
                             <Clock />
                             <span class="text-sm text-black">
-                                {$t("home.campaigns.daysRemaining", {
+                                {$t("pages.home.campaigns.daysRemaining", {
                                     days: campaign.daysRemaining,
                                 })}
                             </span>
@@ -161,7 +161,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
                             <span class="text-secondary text-base"
-                                >{$t("home.campaigns.obtained")}</span
+                                >{$t("pages.home.campaigns.obtained")}</span
                             >
                             <span class="text-secondary text-2xl font-bold">
                                 {formatCurrency(
@@ -174,7 +174,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <div class="flex flex-col gap-1 text-right">
                             {#if campaign.optimum && campaign.obtained.amount >= campaign.minimum.amount}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.optimum")}
+                                    {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -184,7 +184,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.minimum")}
+                                    {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -203,7 +203,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         class="bg-primary -mx-6 -mb-6 flex items-center justify-between rounded-b-3xl px-6 py-4"
                     >
                         <span class="text-base font-normal text-black"
-                            >{$t("home.campaigns.userDonations")}</span
+                            >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
                             {formatCurrency(

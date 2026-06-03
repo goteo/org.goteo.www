@@ -63,13 +63,16 @@ function loadInitialState(): SearchState {
     const state = getInitialState();
     const urlParams = new URLSearchParams(window.location.search);
 
-    // Initialize filters from URL parameters
-    state.filters.query = urlParams.get("q") || "";
-    state.filters.statusFilter = urlParams.get("status") || "";
+    // Initialize filters from URL parameters using API field names
+    if (state.filters) {
+        state.filters.query = urlParams.get("title") || urlParams.get("query") || "";
+        state.filters.statusFilter = urlParams.get("status") || "";
 
-    const categories = urlParams.get("categories");
-    if (categories) {
-        state.filters.categories = categories.split(",").filter(Boolean);
+        // Handle categories[] array parameters
+        const categoriesArray = urlParams.getAll("categories[]");
+        if (categoriesArray.length > 0) {
+            state.filters.categories = categoriesArray;
+        }
     }
 
     const country = urlParams.get("country");
@@ -163,27 +166,99 @@ function createSearchStore() {
             }));
         },
 
+        // Initialize filters (for SSR hydration)
+        initializeFilters: (newFilters: Partial<SearchFilters>) => {
+            update((state) => ({
+                ...state,
+                filters: { ...state.filters, ...newFilters },
+            }));
+        },
+
+        // Set search results
+        setResults: (results: Project[], totalCount: number = results.length) =>
+            update((state) => ({
+                ...state,
+                results,
+                totalCount,
+                isLoading: false,
+                hasError: false,
+                errorMessage: "",
+                hasSearched: true,
+                lastSearchTime: Date.now(),
+            })),
+
+        // Set initial results without marking as searched (for SSR data)
+        setInitialResults: (results: Project[], totalCount: number = results.length) => {
+            return update((state) => ({
+                ...state,
+                results,
+                totalCount,
+                isLoading: false,
+                hasError: false,
+                errorMessage: "",
+                hasSearched: false,
+                lastSearchTime: Date.now(),
+            }));
+        },
+
+        // Set loading state
+        setLoading: (isLoading: boolean) =>
+            update((state) => ({
+                ...state,
+                isLoading,
+                hasError: false,
+                errorMessage: "",
+            })),
+
+        // Set error state
+        setError: (errorMessage: string) =>
+            update((state) => ({
+                ...state,
+                isLoading: false,
+                hasError: true,
+                errorMessage,
+            })),
+
+        // Clear search results
+        clearResults: () =>
+            update((state) => ({
+                ...state,
+                results: [],
+                totalCount: 0,
+                hasSearched: false,
+                hasError: false,
+                errorMessage: "",
+            })),
+
+        // Clear all filters
+        // (Removed incorrect properties; use initial filters shape)
+
+        // Reset to initial state
+        reset: () => set(getInitialState()),
+
+        // Update URL parameters to reflect current filters
         updateUrl: () => {
             if (!isBrowser) return;
 
             const state = get(searchStore);
             const urlParams = new URLSearchParams();
+            const filters = state.filters ?? {};
 
-            if (state.filters.query) urlParams.set("q", state.filters.query);
-            if (state.filters.statusFilter) urlParams.set("status", state.filters.statusFilter);
-            if (state.filters.categories.length > 0) {
-                urlParams.set("categories", state.filters.categories.join(","));
+            if (filters.query) urlParams.set("q", filters.query);
+            if (filters.statusFilter) urlParams.set("status", filters.statusFilter);
+            if (filters.categories.length > 0) {
+                urlParams.set("categories", filters.categories.join(","));
             }
 
-            if (state.filters.territory) {
-                urlParams.set("country", String(state.filters.territory.country));
+            if (filters.territory) {
+                urlParams.set("country", String(filters.territory.country));
 
-                if (state.filters.territory.subLvl1) {
-                    urlParams.set("subLvl1", String(state.filters.territory.subLvl1));
+                if (filters.territory.subLvl1) {
+                    urlParams.set("subLvl1", String(filters.territory.subLvl1));
                 }
 
-                if (state.filters.territory.subLvl2) {
-                    urlParams.set("subLvl2", String(state.filters.territory.subLvl2));
+                if (filters.territory.subLvl2) {
+                    urlParams.set("subLvl2", String(filters.territory.subLvl2));
                 }
             }
 
@@ -208,7 +283,7 @@ function createSearchStore() {
                 currentPage: pagination?.currentPage || 1,
                 hasNextPage: pagination?.hasNext || false,
                 hasPrevPage: pagination?.hasPrev || false,
-                hasSearched: totalCount > 0 || !!(filters.query || filters.territory), // CAMBIO: Check de territorio
+                hasSearched: totalCount > 0 || !!(filters.query || filters.territory),
                 isLoading: false,
                 lastSearchTime: Date.now(),
             })),
@@ -234,8 +309,6 @@ function createSearchStore() {
                 ...s,
                 filters: getInitialState().filters,
             })),
-
-        reset: () => set(getInitialState()),
     };
 
     return store;

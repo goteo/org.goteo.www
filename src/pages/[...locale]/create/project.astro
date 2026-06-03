@@ -1,18 +1,22 @@
 ---
-import { getSession } from "../../../auth/session";
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
 import CreateProjectForm from "./CreateProjectForm.svelte";
+import { apiCategoriesGetCollection } from "../../../openapi/client";
 
-const { t, lang, session } = Astro.locals;
+const { t, lang, langs, session } = Astro.locals;
 
-if (!getSession(Astro.cookies)) {
+if (!session) {
     return Astro.redirect("/login");
 }
+
+const { data: categories } = await apiCategoriesGetCollection({
+    headers: { "Accept-Language": langs },
+});
 ---
 
 <Layout title={t("pages.project.create.title")}>
     <App client:load locale={lang} session={session}>
-        <CreateProjectForm client:load />
+        <CreateProjectForm client:load categories={categories || []} />
     </App>
 </Layout>

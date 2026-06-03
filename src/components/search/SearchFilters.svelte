@@ -18,6 +18,8 @@ Integrated with searchStore for state management and URL synchronization
 
     import type { Territory } from "../../openapi/client";
 
+    const SearchInputComponent = SearchInput as any;
+
     interface CustomTerritory extends Territory {
         rawQuery?: string;
     }
@@ -84,9 +86,9 @@ Integrated with searchStore for state management and URL synchronization
     >
         <div class="flex flex-1 flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
             <div class="min-w-0 flex-1">
-                <SearchInput
+                <SearchInputComponent
                     value={$searchFilters.query}
-                    oninput={(e: any) => updateFilters({ query: e.target.value })}
+                    on:input={(e: any) => updateFilters({ query: e.target.value })}
                 />
             </div>
             <SearchButton variant="secondary" onclick={handleSearch}
@@ -120,7 +122,7 @@ Integrated with searchStore for state management and URL synchronization
             <div class="w-full">
                 <TerritoryInputFilter
                     label=""
-                    placeholder={$t("filters.location")}
+                    placeholder={$t("profile.location")}
                     onTerritoryDetected={(data) => handleTerritoryChange(data.territory || null)}
                 />
             </div>

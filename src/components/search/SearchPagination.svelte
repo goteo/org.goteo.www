@@ -28,7 +28,7 @@ Previous/Next navigation for search results
         <!-- Summary -->
         {#if showSummary}
             <div class="text-center text-sm text-gray-600">
-                {$t("search.pagination.page", { page: $currentPage })}
+                {$t("pages.search.pagination.page", { page: $currentPage })}
             </div>
         {/if}
 
@@ -49,14 +49,14 @@ Previous/Next navigation for search results
                         d="M15 19l-7-7 7-7"
                     />
                 </svg>
-                {$t("search.pagination.previous")}
+                {$t("pages.search.pagination.previous")}
             </button>
 
             <!-- Current Page Indicator -->
             <div
                 class="inline-flex items-center rounded-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700"
             >
-                {$t("search.pagination.currentPage", { page: $currentPage })}
+                {$t("pages.search.pagination.currentPage", { page: $currentPage })}
             </div>
 
             <!-- Next Button -->
@@ -66,7 +66,7 @@ Previous/Next navigation for search results
                 class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
                 aria-label="Next page"
             >
-                {$t("search.pagination.next")}
+                {$t("pages.search.pagination.next")}
                 <svg class="ml-1 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                         stroke-linecap="round"

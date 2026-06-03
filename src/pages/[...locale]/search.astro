@@ -17,35 +17,29 @@ const url = new URL(Astro.request.url);
 const { searchParams } = url;
 
 const initialFilters = {
+    // components expect these parameter names (query, statusFilter, and categories)
     query: searchParams.get("q") || "",
     statusFilter: searchParams.get("status") || "",
     categories: searchParams.get("categories")?.split(",").filter(Boolean) || [],
-    territory: {
-        country: searchParams.get("country") || null,
-        subLvl1: searchParams.get("subLvl1") || null,
-        subLvl2: searchParams.get("subLvl2") || null,
-        rawQuery: searchParams.get("locationText") || "",
-    },
 };
 
 const hasInitialSearch = !!(
     initialFilters.query ||
     initialFilters.statusFilter ||
-    initialFilters.categories.length > 0 ||
-    initialFilters.territory.rawQuery
+    (initialFilters.categories || []).length > 0
 );
 ---
 
-<Layout title={t("search.title")} description={t("search.description")}>
+<Layout title={t("pages.search.title")} description={t("pages.search.description")}>
     <App client:load locale={lang} session={session}>
         <section class="wrapper">
             <!-- Page Header -->
             <div class="mb-12 text-center">
                 <h1 class="text-secondary mb-4 text-4xl font-bold">
-                    {t("search.heading")}
+                    {t("pages.search.heading")}
                 </h1>
                 <p class="text-secondary text-lg">
-                    {t("search.subtitle")}
+                    {t("pages.search.subtitle")}
                 </p>
             </div>
 
@@ -55,7 +49,7 @@ const hasInitialSearch = !!(
             </div>
 
             <!-- Search Results -->
-            <div class="mb-8" role="region" aria-label={t("search.results.regionLabel")}>
+            <div class="mb-8" role="region" aria-label={t("pages.search.results.regionLabel")}>
                 <SearchResultsClient
                     initialProjects={initialProjects}
                     initialFilters={initialFilters}

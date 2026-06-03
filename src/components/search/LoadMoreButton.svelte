@@ -53,30 +53,32 @@ Allows accumulative pagination for search results
             onclick={handleClick}
             disabled={isLoading || disabled}
             aria-busy={isLoading}
-            aria-label={isLoading ? $t("search.loadMore.loading") : $t("search.loadMore.button")}
+            aria-label={isLoading
+                ? $t("pages.search.loadMore.loading")
+                : $t("pages.search.loadMore.button")}
             kind="primary"
             size="md"
         >
             {#if isLoading}
                 <span class="flex items-center gap-2">
                     <LoadingSpinner size="sm" />
-                    <span>{$t("search.loadMore.loading")}</span>
+                    <span>{$t("pages.search.loadMore.loading")}</span>
                 </span>
             {:else}
-                <span>{$t("search.loadMore.button")}</span>
+                <span>{$t("pages.search.loadMore.button")}</span>
             {/if}
         </Button>
 
         <!-- Results count indicator -->
         <p class="text-secondary text-sm">
-            {$t("search.results.showing", { count: loadedCount })}
+            {$t("pages.search.results.showing", { count: loadedCount })}
         </p>
     </div>
 
     <!-- Screen reader announcement for new results -->
     <div role="status" aria-live="polite" aria-atomic="true" class="sr-only">
         {#if justLoaded}
-            {$t("search.loadMore.announcement", {
+            {$t("pages.search.loadMore.announcement", {
                 count: newResultsCount,
                 loaded: loadedCount,
             })}

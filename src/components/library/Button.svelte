@@ -5,8 +5,8 @@
     import type { HTMLButtonAttributes } from "svelte/elements";
 
     const sizeStyles = {
-        md: "px-8 py-4 rounded-[24px]",
-        sm: "px-4 py-2 rounded-[16px]",
+        md: "px-8 py-4 rounded-3xl",
+        sm: "px-4 py-2 rounded-2xl",
     };
 
     const kindStyles = {
@@ -38,7 +38,7 @@
     {type}
     {disabled}
     class={twMerge(
-        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-[700] transition hover:cursor-pointer",
+        "text-secondary disabled:bg-grey flex w-auto items-center justify-center gap-2 font-bold transition hover:cursor-pointer",
         sizeStyles[size],
         kindStyles[kind],
         classes,
