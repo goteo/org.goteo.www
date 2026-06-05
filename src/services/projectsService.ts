@@ -26,9 +26,18 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const cleanFilters = Object.fromEntries(
+                Object.entries(filters ?? {}).filter(([k, v]) => {
+                    if (v === "" || v === null || v === undefined) return false;
+                    if (Array.isArray(v) && v.length === 0) return false;
+                    if (k === "status" && v === "all") return false;
+                    return true;
+                }),
+            );
+
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...filters,
+                    ...cleanFilters,
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },

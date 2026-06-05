@@ -4,34 +4,30 @@ import { apiAccountingsIdGet, type Money } from "../openapi/client";
 import type { Project } from "../openapi/client/types.gen";
 import type { Campaign } from "../types/campaign";
 
-/**
- * Transform API Project to Campaign format for search results
- * Follows the same pattern as home page components
- */
 export async function transformProjectToCampaign(project: Project): Promise<Campaign> {
-    // Fetch accounting data from API
-    const accountingId = extractId(project.accounting);
-    if (!accountingId) {
-        throw new Error(`Missing accounting ID for project ${project.slug}`);
-    }
-
-    const { data: accounting } = await apiAccountingsIdGet({
-        path: { id: accountingId },
-    });
-
-    // Get image URL - simple fallback to video thumbnail
+    const minimum: Money = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
+    const optimum: Money | undefined = project.budget?.optimum?.money;
     const image = (project as any).cover || project.video?.thumbnail || "";
 
-    // Get minimum budget
-    const minimum: Money = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
+    let obtained: Money = { amount: 0, currency: minimum.currency || "EUR" };
 
-    // Get optimum budget
-    const optimum: ApiMoney | undefined = project.budget?.optimum?.money;
-
-    // Get raised amount from fetched accounting data
-    const obtained: Money = accounting?.balance || { amount: 0, currency: "EUR" };
+    const accountingId = extractId(project.accounting);
+    if (accountingId) {
+        try {
+            const { data: accounting } = await apiAccountingsIdGet({
+                path: { id: accountingId },
+            });
+            if (accounting?.balance) {
+                obtained = accounting.balance;
+            }
+        } catch {
+            // accounting fetch failed, use default obtained value
+        }
+    }
 
     return {
+        ...project,
+        slug: project.slug || "",
         id: project.slug || String(project.id || "unknown"),
         title: project.title || "",
         image,
@@ -42,9 +38,9 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     };
 }
 
-/**
- * Transform array of Projects to Campaigns
- */
 export async function transformProjectsToCampaigns(projects: Project[]): Promise<Campaign[]> {
-    return await Promise.all(projects.map((project) => transformProjectToCampaign(project)));
+    const results = await Promise.allSettled(projects.map(transformProjectToCampaign));
+    return results
+        .filter((r): r is PromiseFulfilledResult<Campaign> => r.status === "fulfilled")
+        .map((r) => r.value);
 }

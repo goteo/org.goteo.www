@@ -69,10 +69,14 @@ Manages real-time filtering of campaigns without page reloads
         async function transformProjects() {
             isTransforming = true;
             try {
-                const transformed = await Promise.all(
+                const results = await Promise.allSettled(
                     projects.map((project) => transformProjectToCampaign(project)),
                 );
-                campaigns = transformed;
+                campaigns = results
+                    .filter(
+                        (r): r is PromiseFulfilledResult<Campaign> => r.status === "fulfilled",
+                    )
+                    .map((r) => r.value);
             } catch (error) {
                 console.error("Failed to transform projects:", error);
                 campaigns = [];
@@ -91,11 +95,11 @@ Manages real-time filtering of campaigns without page reloads
         const url = new URL(window.location.href);
         const params = new URLSearchParams();
 
-        const filters = $searchFilters;
+        const filters = $searchFilters ?? {};
 
         // Add search parameters to URL using API field names
-        if (filters.title) params.set("title", filters.title);
-        if (filters.status) params.set("status", filters.status);
+        if (filters?.title) params.set("title", filters.title);
+        if (filters?.status) params.set("status", filters.status);
         if ((filters["categories[]"]?.length ?? 0) > 0) {
             (filters["categories[]"] as string[]).forEach((cat) => {
                 params.append("categories[]", cat);
@@ -225,7 +229,7 @@ Manages real-time filtering of campaigns without page reloads
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size={campaign.size} {campaign} />
+                        <CampaignCard size={campaign.size ?? "small"} {campaign} />
                     </div>
                 {/each}
             </Grid>
