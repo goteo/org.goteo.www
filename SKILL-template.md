@@ -3,13 +3,15 @@ name: org.goteo.www
 description: Provides a web GUI to interact with the Goteo v4 API and adds tools for implementing the crowdfunding platform Goteo as an open-core application. Use it when writing or reviewing source code for the Goteo v4 web.
 ---
 
+# Goteo v4 Web Codebase Reference
+
 ## Stack
 
 Astro 5 + Svelte 5 + TailwindCSS 4 + TypeScript 5, deployed on Cloudflare Workers (also supports Node adapter).
 
 ## Folder structure
 
-```
+```bash
 src/
 ├── actions/          # Astro server actions (form mutations)
 ├── auth/             # JWT sessions, OAuth2 tokens, refresh logic
