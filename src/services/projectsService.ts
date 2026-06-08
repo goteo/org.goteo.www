@@ -26,9 +26,11 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const { status, ...restFilters } = filters ?? {};
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...filters,
+                    ...restFilters,
+                    ...(status && status !== "all" && { status }),
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },
