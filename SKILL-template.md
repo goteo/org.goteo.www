@@ -493,7 +493,7 @@ Two packages: `@hey-api/openapi-ts` (codegen, dev dependency) and `@hey-api/clie
 
 SDK functions follow the pattern `api{Resource}{Operation}`:
 
-```
+```bash
 apiProjectsGetCollection()       → GET  /v4/projects
 apiProjectsIdOrSlugGet()         → GET  /v4/projects/{idOrSlug}
 apiUsersPost()                   → POST /v4/users
@@ -502,7 +502,7 @@ apiUsersIdpersonPatch()          → PATCH /v4/users/{id}/person
 
 Path constants (from `paths.gen.ts`) follow the same pattern with `Url` suffix:
 
-```
+```bash
 apiProjectsIdOrSlugGetUrl        → '/v4/projects/{idOrSlug}'
 apiAccountingsIdGetUrl           → '/v4/accountings/{id}'
 ```
