@@ -539,7 +539,8 @@
             "ibanPlaceholder": "ES00 0000 0000 0000 0000 0000",
             "certificate": "Certificado de titularidad de cuenta",
             "certificateHelper": "Adjunta el documento que acredita la titularidad de la cuenta bancaria.",
-            "certificateAriaLabel": "Subir certificado de titularidad"
+            "certificateAriaLabel": "Subir certificado de titularidad",
+            "ibanInvalid": "El formato del IBAN no es válido"
           },
           "continue": "Siguiente paso"
         }
