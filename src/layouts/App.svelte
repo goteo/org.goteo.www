@@ -4,9 +4,9 @@
 
     import { session } from "../auth/store";
     import { locale } from "../i18n/store";
-    import Footer from "../layouts/Footer.svelte";
-    import Header from "../layouts/Header.svelte";
-    import HeaderSubmenu from "../layouts/HeaderSubmenu.svelte";
+    import Footer from "./Footer.svelte";
+    import Header from "./Header.svelte";
+    import HeaderSubmenu from "./HeaderSubmenu.svelte";
     import { createBrowserCacheInterceptor } from "../openapi/cacheFetch";
     import { client } from "../openapi/client/client.gen";
 
