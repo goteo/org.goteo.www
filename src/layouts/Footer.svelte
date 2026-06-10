@@ -1,6 +1,6 @@
 <script lang="ts">
-    import FooterLink from "../components/FooterLink.svelte";
-    import FooterPartnerImage from "../components/FooterPartnerImage.svelte";
+    import FooterLink from "../components/footer/FooterLink.svelte";
+    import FooterPartnerImage from "../components/footer/FooterPartnerImage.svelte";
     import Facebook from "../components/icons/social/Facebook.svelte";
     import Gmail from "../components/icons/social/Gmail.svelte";
     import Instagram from "../components/icons/social/Instagram.svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import CollapsibleBox from "./CollapsibleBox.svelte";
+    import CollapsibleBox from "../library/CollapsibleBox.svelte";
     import { t } from "../i18n/store";
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import Thtml from "../Thtml.svelte";
+    import Thtml from "../library/Thtml.svelte";
 
     let { ownerName }: { ownerName: string } = $props();
 </script>

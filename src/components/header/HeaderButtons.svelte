@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../i18n/store";
-    import SearchIcon from "./icons/Search.svelte";
-    import Button from "./library/Button.svelte";
+    import SearchIcon from "../icons/Search.svelte";
+    import Button from "../library/Button.svelte";
 
     function openSearch() {
         window.location.href = "/search";

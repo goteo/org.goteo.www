@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import LineIcon from "./icons/LineIcon.svelte";
-    import Button from "./library/Button.svelte";
-    import { t } from "../i18n/store.ts";
+    import LineIcon from "../icons/LineIcon.svelte";
+    import Button from "./Button.svelte";
+    import { t } from "../../i18n/store.ts";
 
     import type { Snippet } from "svelte";
 

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import { t } from "../i18n/store";
-    import Clock from "./icons/Clock.svelte";
+    import { t } from "../../i18n/store";
+    import Clock from "../icons/Clock.svelte";
 
     export let deadline: Date | undefined = undefined;
 

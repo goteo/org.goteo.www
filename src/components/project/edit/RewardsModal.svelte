@@ -6,7 +6,7 @@
     import { t } from "../../../i18n/store";
     import { validationErrors, type WizardReward } from "../../../stores/wizard-state";
     import { defaultCurrency } from "../../../utils/currencies";
-    import FileUpload from "../../FileUpload.svelte";
+    import FileUpload from "../../library/FileUpload.svelte";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 

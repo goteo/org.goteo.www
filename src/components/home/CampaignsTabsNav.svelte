@@ -3,7 +3,7 @@
     import { t } from "../../i18n/store";
     import Flames from "../icons/Flames.svelte";
     import Flash from "../icons/Flash.svelte";
-    import Tabs from "../Tabs.svelte";
+    import Tabs from "../library/Tabs.svelte";
 
     interface Props {
         activeTab?: string;

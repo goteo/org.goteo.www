@@ -10,7 +10,7 @@
         validateForm,
         markFieldAsTouched,
     } from "./project-draft";
-    import BaseCard from "../../../components/BaseCard.svelte";
+    import BaseCard from "../../../components/library/BaseCard.svelte";
     import Button from "../../../components/library/Button.svelte";
     import CategorySelect from "../../../components/library/CategorySelect.svelte";
     import Checkbox from "../../../components/library/Checkbox.svelte";

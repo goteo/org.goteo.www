@@ -15,15 +15,15 @@
     } from "../../openapi/client/index";
     import RememberIcon from "../icons/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
-    import Countdown from "../Countdown.svelte";
+    import Countdown from "../library/Countdown.svelte";
     import Arrow from "../icons/Arrow.svelte";
-    import LanguagesDropdown from "../LanguagesDropdown.svelte";
+    import LanguagesDropdown from "../header/LanguagesDropdown.svelte";
     import Button from "../library/Button.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../Player/Player.svelte";
-    import ProjectTags from "../ProjectTags.svelte";
-    import Thtml from "../Thtml.svelte";
+    import ProjectTags from "./ProjectTags.svelte";
+    import Thtml from "../library/Thtml.svelte";
 
     let {
         project,

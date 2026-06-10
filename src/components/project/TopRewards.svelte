@@ -4,7 +4,7 @@
         type Project,
         type ProjectReward,
     } from "../../openapi/client";
-    import TopReward from "../TopReward.svelte";
+    import TopReward from "./TopReward.svelte";
 
     let {
         lang = $bindable(),

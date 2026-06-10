@@ -9,7 +9,7 @@
     import { extractId } from "../../utils/extractId";
     import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
-    import Reward from "../Reward.svelte";
+    import Reward from "./Reward.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
 

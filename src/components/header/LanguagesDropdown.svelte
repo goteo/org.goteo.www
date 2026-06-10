@@ -1,8 +1,8 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
 
-    import Chevron from "./icons/Chevron.svelte";
-    import LanguageIcon from "./icons/LanguageIcon.svelte";
+    import Chevron from "../icons/Chevron.svelte";
+    import LanguageIcon from "../icons/LanguageIcon.svelte";
     import { getLanguageDisplayName } from "../utils/lang";
 
     let { languages, selected, onSelect } = $props();

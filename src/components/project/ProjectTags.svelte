@@ -1,8 +1,8 @@
 <script lang="ts">
-    import CategoryTag from "./CategoryTag.svelte";
-    import TerritoryTag from "./TerritoryTag.svelte";
+    import CategoryTag from "../library/CategoryTag.svelte";
+    import TerritoryTag from "../library/TerritoryTag.svelte";
 
-    import type { Project } from "../openapi/client";
+    import type { Project } from "../../openapi/client";
 
     export let project: Project;
 </script>
