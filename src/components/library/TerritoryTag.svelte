@@ -6,8 +6,8 @@
     import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import MapIcon from "../icons/Location.svelte";
 
-    import type { Locale } from "../i18n/locales";
-    import type { Territory } from "../openapi/client";
+    import type { Locale } from "../../i18n/locales";
+    import type { Territory } from "../../openapi/client";
 
     let {
         territory,

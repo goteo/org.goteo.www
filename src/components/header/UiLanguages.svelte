@@ -1,10 +1,10 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
 
-    import { languagesList } from "../i18n/locales";
-    import { locale } from "../i18n/store";
+    import { languagesList } from "../../i18n/locales";
+    import { locale } from "../../i18n/store";
     import Chevron from "../icons/Chevron.svelte";
-    import { getLanguageDisplayName } from "../utils/lang";
+    import { getLanguageDisplayName } from "../../utils/lang";
 
     const languages = Object.keys(languagesList) as (keyof typeof languagesList)[];
 
