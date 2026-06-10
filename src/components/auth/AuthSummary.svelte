@@ -1,6 +1,6 @@
 <script lang="ts">
-    import CollapsibleBox from "../library/CollapsibleBox.svelte";
     import { t } from "../i18n/store";
+    import CollapsibleBox from "../library/CollapsibleBox.svelte";
 </script>
 
 <div class="flex items-start justify-between px-0 pt-0 pb-0 lg:hidden">

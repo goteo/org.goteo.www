@@ -9,9 +9,9 @@
         validationErrors,
         type WizardReward,
     } from "../../../stores/wizard-state";
-    import UnitIcon from "../../icons/UnitIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/Button.svelte";
 
     let {

@@ -4,10 +4,10 @@
 
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import UnitIcon from "../icons/UnitIcon.svelte";
-    import UserIcon from "../icons/User.svelte";
     import { formatCurrency, getUnit } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import UnitIcon from "../icons/UnitIcon.svelte";
+    import UserIcon from "../icons/User.svelte";
     import Button from "../library/Button.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";

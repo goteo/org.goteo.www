@@ -10,10 +10,10 @@
         apiProjectSupportsGetCollection,
         apiUsersIdOrHandleGet,
     } from "../../openapi/client/index";
-    import Loader from "../library/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import Grid from "../library/Grid.svelte";
+    import Loader from "../library/Loader.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 

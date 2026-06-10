@@ -1,6 +1,7 @@
 <script lang="ts">
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
+    import ProjectTags from "./ProjectTags.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
     import { languagesList } from "../../i18n/locales";
@@ -13,17 +14,16 @@
         type ProjectCalendar,
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
-    import RememberIcon from "../icons/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
-    import Countdown from "../library/Countdown.svelte";
-    import Arrow from "../icons/Arrow.svelte";
     import LanguagesDropdown from "../header/LanguagesDropdown.svelte";
+    import Arrow from "../icons/Arrow.svelte";
+    import RememberIcon from "../icons/RememberIcon.svelte";
     import Button from "../library/Button.svelte";
+    import Countdown from "../library/Countdown.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
+    import Thtml from "../library/Thtml.svelte";
     import Toast from "../library/Toast.svelte";
     import Player from "../player/Player.svelte";
-    import ProjectTags from "./ProjectTags.svelte";
-    import Thtml from "../library/Thtml.svelte";
 
     let {
         project,

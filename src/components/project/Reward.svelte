@@ -1,10 +1,10 @@
 <script lang="ts">
     import RewardModal from "./RewardModal.svelte";
     import { t } from "../../i18n/store";
-    import UnitIcon from "../icons/UnitIcon.svelte";
-    import UserIcon from "../icons/User.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import UnitIcon from "../icons/UnitIcon.svelte";
+    import UserIcon from "../icons/User.svelte";
     import Button from "../library/Button.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";

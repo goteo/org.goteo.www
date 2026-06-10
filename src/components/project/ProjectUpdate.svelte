@@ -5,11 +5,11 @@
     import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
-    import ShareIcon from "../icons/ShareIcon.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Carousel from "../library/Carousel.svelte";
     import AlertIcon from "../icons/AlertIcon.svelte";
+    import ShareIcon from "../icons/ShareIcon.svelte";
     import Button from "../library/Button.svelte";
+    import Carousel from "../library/Carousel.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
 

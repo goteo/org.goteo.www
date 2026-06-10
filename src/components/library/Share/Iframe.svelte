@@ -2,8 +2,8 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import Loader from "../Loader.svelte";
     import Code from "../../icons/Code.svelte";
+    import Loader from "../Loader.svelte";
 
     interface Props {
         url?: string;

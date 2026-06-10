@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
     import VerifiedBadge from "./VerifiedBadge.svelte";
+    import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
 
     interface Props {

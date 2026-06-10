@@ -2,11 +2,11 @@
     import { onMount, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { session } from "../auth/store";
-    import { locale } from "../i18n/store";
     import Footer from "./Footer.svelte";
     import Header from "./Header.svelte";
     import HeaderSubmenu from "./HeaderSubmenu.svelte";
+    import { session } from "../auth/store";
+    import { locale } from "../i18n/store";
     import { createBrowserCacheInterceptor } from "../openapi/cacheFetch";
     import { client } from "../openapi/client/client.gen";
 

@@ -1,11 +1,11 @@
 <script lang="ts">
+    import MapIcon from "../icons/Location.svelte";
     import FacebookIcon from "../icons/social/FacebookIcon.svelte";
     import GmailIcon from "../icons/social/GmailIcon.svelte";
     import InstagramIcon from "../icons/social/InstagramIcon.svelte";
     import LinkedinIcon from "../icons/social/LinkedinIcon.svelte";
     import MediumIcon from "../icons/social/MediumIcon.svelte";
     import XIcon from "../icons/social/XIcon.svelte";
-    import MapIcon from "../icons/Location.svelte";
 
     interface Props {
         displayName: string;

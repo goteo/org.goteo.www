@@ -1,9 +1,9 @@
 <script lang="ts">
+    import Tag from "./Tag.svelte";
     import { locale } from "../../i18n/store";
     import { apiCategoriesIdGet, type Category } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import BookmarkIcon from "../icons/Bookmark.svelte";
-    import Tag from "./Tag.svelte";
 
     interface Props {
         iri: string;

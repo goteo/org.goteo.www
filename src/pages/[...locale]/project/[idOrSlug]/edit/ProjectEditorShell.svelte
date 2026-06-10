@@ -16,6 +16,7 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
+    import EditIcon from "../../../../../components/icons/EditIcon.svelte";
     import Eye from "../../../../../components/icons/Eye.svelte";
     import Button from "../../../../../components/library/Button.svelte";
     import TabNavigation, {
@@ -28,7 +29,6 @@
         persistenceError,
         isReadyToPublish,
     } from "../../../../../stores/wizard-state";
-    import EditIcon from "../../../../../components/icons/EditIcon.svelte";
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";

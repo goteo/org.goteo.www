@@ -17,9 +17,9 @@
     } from "../../../src/openapi/client/paths.gen";
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
-    import Loader from "../library/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import Chevron from "../icons/Chevron.svelte";
+    import Loader from "../library/Loader.svelte";
     import Tag from "../library/Tag.svelte";
 
     import type {
