@@ -28,7 +28,7 @@
         persistenceError,
         isReadyToPublish,
     } from "../../../../../stores/wizard-state";
-    import EditIcon from "../../../../../svgs/EditIcon.svelte";
+    import EditIcon from "../../../../../components/icons/EditIcon.svelte";
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";

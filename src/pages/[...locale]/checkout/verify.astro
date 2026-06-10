@@ -4,8 +4,6 @@ import App from "../../../components/App.svelte";
 import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client/index.ts";
 import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
 import Summary from "../../../components/Checkout/Summary.svelte";
-import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
-import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
 import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/Card.svelte";
@@ -88,7 +86,7 @@ const postPaymentUrl = checkoutId
                                                     {t("pages.checkout.verify.error.description")}
                                                 </p>
                                             </div>
-                                            <PaymentErrorIcon />
+                                            <img src="/images/payment-error.svg" alt="" width="221" height="214" />
                                         </div>
 
                                         <PaymentMethod
@@ -137,7 +135,7 @@ const postPaymentUrl = checkoutId
                                                         )}
                                                     </p>
                                                 </div>
-                                                <ApprovedIcon />
+                                                <img src="/images/payment-approved.svg" alt="" width="215" height="190" />
                                             </div>
                                             <div>
                                                 <FeedbackForm

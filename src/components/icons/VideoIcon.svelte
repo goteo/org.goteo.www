@@ -5,7 +5,7 @@
 <svg {width} {height} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <polygon
         points="23 7 16 12 23 17 23 7"
-        stroke="#462949"
+        stroke="var(--color-secondary)"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -17,7 +17,7 @@
         height="14"
         rx="2"
         ry="2"
-        stroke="#462949"
+        stroke="var(--color-secondary)"
         stroke-width="2"
         stroke-linecap="round"
         stroke-linejoin="round"

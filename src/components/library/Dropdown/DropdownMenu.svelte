@@ -1,6 +1,6 @@
 <script lang="ts">
     import DropdownItem from "./DropdownItem.svelte";
-    import SearchIcon from "../../../svgs/SearchIcon.svelte";
+    import SearchIcon from "../../icons/Search.svelte";
 
     import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
 

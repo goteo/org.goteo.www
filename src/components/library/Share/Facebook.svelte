@@ -1,5 +1,5 @@
 <script lang="ts">
-    import FacebookIcon from "../../../svgs/FacebookIcon.svelte";
+    import FacebookIcon from "../../icons/social/FacebookIcon.svelte";
 
     interface Props {
         url?: string;

@@ -56,7 +56,7 @@
     import Button from "../../../components/library/Button.svelte";
     import TextInput from "../../../components/library/TextInput.svelte";
     import { t } from "../../../i18n/store";
-    import VideoIcon from "../../../svgs/VideoIcon.svelte";
+    import VideoIcon from "../../icons/VideoIcon.svelte";
 
     import type { VideoEmbed } from "../../../stores/wizard-state";
 

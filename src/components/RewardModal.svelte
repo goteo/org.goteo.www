@@ -4,7 +4,7 @@
 
     import { t } from "../i18n/store";
     import { cart } from "../stores/cart";
-    import UnitIcon from "../svgs/UnitIcon.svelte";
+    import UnitIcon from "./icons/UnitIcon.svelte";
     import UserIcon from "./icons/User.svelte";
     import { formatCurrency, getUnit } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";

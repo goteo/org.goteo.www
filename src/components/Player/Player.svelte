@@ -1,8 +1,8 @@
 <script lang="ts">
     import PeerTube from "./PeerTube.svelte";
     import { t } from "../../i18n/store";
-    import Loader from "../../svgs/Loader.svelte";
-    import Spinner from "../../svgs/Spinner.svelte";
+    import Loader from "../library/Loader.svelte";
+    import Spinner from "../icons/Spinner.svelte";
 
     let {
         src,

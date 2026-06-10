@@ -1,7 +1,7 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import LineIcon from "../svgs/LineIcon.svelte";
+    import LineIcon from "./icons/LineIcon.svelte";
     import Button from "./library/Button.svelte";
     import { t } from "../i18n/store.ts";
 

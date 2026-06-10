@@ -5,7 +5,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 -->
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import Chevron from "../icons/Chevron.svelte";
 
     import type { HTMLButtonAttributes } from "svelte/elements";
 
@@ -101,7 +101,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         <span class="truncate">
             {getDisplayText()}
         </span>
-        <ChevronDown rotate={isOpen} />
+        <Chevron direction={isOpen ? "up" : "down"} width="16" height="16" />
     </button>
 
     {#if isOpen}

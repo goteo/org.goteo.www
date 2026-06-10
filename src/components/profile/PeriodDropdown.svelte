@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import Chevron from "../icons/Chevron.svelte";
 
     interface Props {
         /**
@@ -51,6 +51,6 @@
 
     <!-- Dropdown icon -->
     <div class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
-        <ChevronDown />
+        <Chevron direction="down" width="16" height="16" />
     </div>
 </div>

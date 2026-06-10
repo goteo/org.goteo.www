@@ -12,7 +12,7 @@
 >
     <path
         d="M0.5 11L5.5 6L0.500001 1"
-        stroke="#462949"
+        stroke="var(--color-secondary)"
         stroke-linecap="round"
         stroke-linejoin="round"
     />

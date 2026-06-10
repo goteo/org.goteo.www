@@ -8,7 +8,7 @@
     import UserIcon from "../components/icons/User.svelte";
     import UiLanguages from "../components/UiLanguages.svelte";
     import { t } from "../i18n/store";
-    import Logo from "../svgs/Logo.svelte";
+    import Logo from "../components/icons/Logo.svelte";
 
     import type { Snippet } from "svelte";
 

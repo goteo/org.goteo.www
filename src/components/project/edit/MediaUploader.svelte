@@ -65,8 +65,8 @@
     import CloseIcon from "../../../components/icons/Close.svelte";
     import Button from "../../../components/library/Button.svelte";
     import { t } from "../../../i18n/store";
-    import Loader from "../../../svgs/Loader.svelte";
-    import UploadIcon from "../../../svgs/UploadIcon.svelte";
+    import Loader from "../../library/Loader.svelte";
+    import UploadIcon from "../../icons/UploadIcon.svelte";
 
     import type { MediaImage } from "../../../stores/wizard-state";
 

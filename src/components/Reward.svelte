@@ -1,7 +1,7 @@
 <script lang="ts">
     import RewardModal from "./RewardModal.svelte";
     import { t } from "../i18n/store";
-    import UnitIcon from "../svgs/UnitIcon.svelte";
+    import UnitIcon from "./icons/UnitIcon.svelte";
     import UserIcon from "./icons/User.svelte";
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";

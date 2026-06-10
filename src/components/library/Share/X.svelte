@@ -1,5 +1,5 @@
 <script lang="ts">
-    import XIcon from "../../../svgs/XIcon.svelte";
+    import XIcon from "../../icons/social/XIcon.svelte";
 
     interface Props {
         text?: string;

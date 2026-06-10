@@ -9,7 +9,7 @@
         validationErrors,
         type WizardReward,
     } from "../../../stores/wizard-state";
-    import UnitIcon from "../../../svgs/UnitIcon.svelte";
+    import UnitIcon from "../../icons/UnitIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";

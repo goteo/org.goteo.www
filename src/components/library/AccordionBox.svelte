@@ -2,7 +2,7 @@
     import { slide } from "svelte/transition";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import Chevron from "../icons/Chevron.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -38,7 +38,7 @@
     >
         <span class="text-body text-sm font-bold lg:text-base">{heading}</span>
         <span class="text-secondary ml-4 shrink-0">
-            <ChevronDown rotate={open} />
+            <Chevron direction={open ? "up" : "down"} width="16" height="16" />
         </span>
     </button>
     {#if open}

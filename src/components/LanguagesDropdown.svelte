@@ -1,8 +1,8 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
 
-    import ChevronDown from "../svgs/ChevronDown.svelte";
-    import LanguageIcon from "../svgs/LanguageIcon.svelte";
+    import Chevron from "./icons/Chevron.svelte";
+    import LanguageIcon from "./icons/LanguageIcon.svelte";
     import { getLanguageDisplayName } from "../utils/lang";
 
     let { languages, selected, onSelect } = $props();
@@ -33,7 +33,7 @@
     >
         <LanguageIcon />
         <span class="flex-1 text-left">{getLanguageDisplayName(selected)}</span>
-        <ChevronDown rotate={open} />
+        <Chevron direction={open ? "up" : "down"} width="16" height="16" />
     </button>
 
     {#if open}
