@@ -21,7 +21,7 @@
     import Button from "../library/Button.svelte";
     import Sharebutton from "../library/Share/ShareButton.svelte";
     import Toast from "../library/Toast.svelte";
-    import Player from "../Player/Player.svelte";
+    import Player from "../player/Player.svelte";
     import ProjectTags from "./ProjectTags.svelte";
     import Thtml from "../library/Thtml.svelte";
 
