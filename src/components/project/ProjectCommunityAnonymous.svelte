@@ -28,7 +28,7 @@
 >
     <div class="flex h-32 w-full items-center justify-center overflow-hidden md:h-auto md:w-1/3">
         <img
-            src="/imgs/card-comunidad.png"
+            src="/images/home/card-comunidad.png"
             alt="Community donation"
             class="h-full w-full object-cover"
         />

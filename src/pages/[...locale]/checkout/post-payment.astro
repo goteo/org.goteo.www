@@ -20,7 +20,7 @@ const mapProjectToCard = (project: Project): Campaign => ({
     title: project.title || "",
     subtitle: project.subtitle || "",
     description: project.description || "",
-    image: project.video?.thumbnail || "/images/placeholder-project.jpg",
+    image: project.video?.thumbnail || "/images/project/placeholder-project-update.jpg",
     obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
     categories: project.categories || [],
@@ -147,7 +147,7 @@ try {
                 >
                     <div class="h-16 w-16 shrink-0 md:h-20 md:w-20">
                         <img
-                            src="/post-payment.svg"
+                            src="/images/checkout/post-payment.svg"
                             alt="Post payment"
                             class="h-full w-full object-contain"
                         />

@@ -7,11 +7,11 @@
         title: "Lorem ipsum dolor sit amet consectetur",
         description:
             "Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante.",
-        cover: "/imgs/stories-main.png",
+        cover: "/images/home/stories-main.png",
         date: new Date("2024-03-15"),
         author: {
             name: "Prueba",
-            avatar: "/imgs/promoter-1.jpg",
+            avatar: "/images/promoters/promoter-1.jpg",
         },
         body: `## Lorem ipsum dolor sit amet
 

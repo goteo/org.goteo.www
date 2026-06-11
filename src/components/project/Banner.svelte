@@ -7,7 +7,7 @@
 
 <section class="flex flex-col gap-6 py-10 lg:flex-row">
     <div class="flex flex-row items-center justify-center gap-4">
-        <div><img src="/images/donator.svg" alt="" width="69" height="64" /></div>
+        <div><img src="/images/project/donator.svg" alt="" width="69" height="64" /></div>
         <div class="text-content">
             <Thtml
                 key="pages.project.view.banner.donator.description"
@@ -19,7 +19,7 @@
         </div>
     </div>
     <div class="flex flex-row items-center justify-center gap-4">
-        <div><img src="/images/certificate.svg" alt="" width="65" height="67" /></div>
+        <div><img src="/images/project/certificate.svg" alt="" width="65" height="67" /></div>
         <div>
             <div class="text-content">
                 {$t("pages.project.view.banner.certificate.description")}

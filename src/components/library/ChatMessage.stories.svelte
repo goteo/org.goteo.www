@@ -22,9 +22,9 @@
 
 <Story name="Own" args={{ type: "own", name: "You" }} />
 
-<Story name="ForeignWithPhoto" args={{ type: "foreign", photo: "/imgs/promoter-1.jpg" }} />
+<Story name="ForeignWithPhoto" args={{ type: "foreign", photo: "/images/promoters/promoter-1.jpg" }} />
 
-<Story name="OwnWithPhoto" args={{ type: "own", name: "You", photo: "/imgs/promoter-2.jpg" }} />
+<Story name="OwnWithPhoto" args={{ type: "own", name: "You", photo: "/images/promoters/promoter-2.jpg" }} />
 
 <Story
     name="LongMessage"
