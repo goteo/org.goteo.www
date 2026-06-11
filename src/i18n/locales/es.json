@@ -1340,6 +1340,10 @@
   },
   "profile": {
     "share": "Compartir",
+    "shareModal": {
+      "title": "Comparte este perfil",
+      "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
+    },
     "subscribe": "Subscríbete",
     "tabs": {
       "about": "Sobre el perfil",

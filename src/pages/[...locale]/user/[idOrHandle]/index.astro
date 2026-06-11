@@ -8,10 +8,10 @@ import {
     apiProjectSupportsmoneyTotalGetCollection,
     apiProjectsGetCollection,
 } from "../../../../openapi/client";
-import type { Accounting, Money, ProjectSupport } from "../../../../openapi/client";
+import type { Money, ProjectSupport } from "../../../../openapi/client";
+import { apiProjectSupportsGetCollectionUrl } from "../../../../openapi/client/paths.gen";
 import type { Campaign } from "../../../../types/campaign";
 import { client } from "../../../../openapi/client/client.gen";
-import { getLanguage } from "../../../../middleware/utils";
 
 const { idOrHandle } = Astro.params;
 const { lang, session } = Astro.locals;
@@ -32,17 +32,26 @@ if (!user.accounting) {
     throw new Error(`User ${idOrHandle} has no Accounting`);
 }
 
+type ProjectSupportsCollection = { member: ProjectSupport[]; totalItems: number };
+
 let userSupports: ProjectSupport[] = [];
 let totalDonated = { amount: 0, currency: import.meta.env.PUBLIC_DEFAULT_CURRENCY as string };
 let projectsDonatedCount = 0;
 
 try {
-    const { data: supports } = await apiProjectSupportsGetCollection({
-        query: { origin: user.accounting },
-    });
+    const [supportsResponse, supportsTotal] = await Promise.all([
+        apiProjectSupportsGetCollection({ query: { origin: user.accounting } }),
+        client.get({
+            url: client.buildUrl({
+                url: apiProjectSupportsGetCollectionUrl,
+                query: { origin: user.accounting, itemsPerPage: 1 },
+            }),
+            headers: { Accept: "application/ld+json" },
+        }) as unknown as Promise<{ data: ProjectSupportsCollection }>,
+    ]);
 
-    userSupports = supports ?? [];
-    projectsDonatedCount = userSupports.length;
+    userSupports = supportsResponse.data ?? [];
+    projectsDonatedCount = supportsTotal.data?.totalItems ?? userSupports.length;
 
     if (userSupports.length > 0) {
         const { data: moneyTotal } = await apiProjectSupportsmoneyTotalGetCollection({
@@ -71,35 +80,21 @@ if (slugs.length > 0) {
     try {
         const { data: projects } = await apiProjectsGetCollection({
             query: { "slug[]": slugs },
-            headers: { "Accept-Language": getLanguage(Astro) },
+            headers: { "Accept-Language": lang },
         });
 
         if (projects) {
-            campaigns = (
-                await Promise.all(
-                    projects.map(async (project) => {
-                        try {
-                            const { data: accounting } = (await client.get({
-                                url: client.buildUrl({ url: project.accounting! }),
-                            })) as { data: Accounting };
-
-                            return {
-                                ...project,
-                                slug: project.slug!,
-                                title: project.title!,
-                                image: project.video?.thumbnail ?? "",
-                                minimum: project.budget?.minimum?.money as Money,
-                                obtained: accounting!.balance as Money,
-                                optimum: project.budget?.optimum?.money as Money | undefined,
-                                size: "small",
-                            } as Campaign;
-                        } catch (e) {
-                            console.error(`Error fetching project ${project.slug}:`, e);
-                            return null;
-                        }
-                    }),
-                )
-            ).filter(Boolean) as Campaign[];
+            campaigns = projects
+                .map((project) => ({
+                    ...project,
+                    slug: project.slug!,
+                    title: project.title!,
+                    image: project.video?.thumbnail ?? "",
+                    minimum: project.budget?.minimum?.money as Money,
+                    optimum: project.budget?.optimum?.money as Money | undefined,
+                    size: "small",
+                }))
+                .filter((c) => c.slug && c.title) as Campaign[];
         }
     } catch (e) {
         console.error("Error fetching projects:", e);
