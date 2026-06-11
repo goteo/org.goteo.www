@@ -1,6 +1,7 @@
 <script lang="ts">
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
+    import Countdown from "./Countdown.svelte";
     import ProjectTags from "./ProjectTags.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
@@ -19,10 +20,9 @@
     import Arrow from "../icons/Arrow.svelte";
     import RememberIcon from "../icons/RememberIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
-    import Countdown from "./Countdown.svelte";
+    import Toast from "../library/feedback/Toast.svelte";
     import Sharebutton from "../library/share/ShareButton.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
-    import Toast from "../library/feedback/Toast.svelte";
     import Player from "../player/Player.svelte";
 
     let {
