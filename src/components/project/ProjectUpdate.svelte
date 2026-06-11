@@ -7,7 +7,7 @@
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import AlertIcon from "../icons/AlertIcon.svelte";
-    import ShareIcon from "../icons/ShareIcon.svelte";
+    import ShareIcon from "../icons/Share.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
 
