@@ -19,8 +19,8 @@
         touchedFields,
         markFieldAsTouched,
     } from "../../../stores/wizard-state";
-    import Select from "../../library/Select.svelte";
-    import TextInput from "../../library/TextInput.svelte";
+    import Select from "../../library/inputs/Select.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
 
     interface GeoSelectorProps {
         scope?: "local" | "estatal" | "internacional";

@@ -3,7 +3,7 @@
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
     import CloseIcon from "../icons/Close.svelte";
-    import Tag from "../library/Tag.svelte";
+    import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";

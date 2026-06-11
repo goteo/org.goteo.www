@@ -2,7 +2,7 @@
     import PeerTube from "./PeerTube.svelte";
     import { t } from "../../i18n/store";
     import Spinner from "../icons/Spinner.svelte";
-    import Loader from "../library/Loader.svelte";
+    import Loader from "../library/feedback/Loader.svelte";
 
     let {
         src,

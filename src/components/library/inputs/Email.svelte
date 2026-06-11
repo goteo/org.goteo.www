@@ -1,8 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { t } from "../../i18n/store";
-    import CloseIcon from "../icons/Close.svelte";
+    import { t } from "../../../i18n/store";
+    import CloseIcon from "../../icons/Close.svelte";
 
     interface Props {
         class?: ClassNameValue;

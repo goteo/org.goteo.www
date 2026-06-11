@@ -22,7 +22,7 @@
         markFieldAsTouched,
     } from "../../../stores/wizard-state";
     import { getLanguageDisplayName } from "../../../utils/lang";
-    import Select from "../../library/Select.svelte";
+    import Select from "../../library/inputs/Select.svelte";
 
     interface LanguageOption {
         code: string;

@@ -1,5 +1,5 @@
 <script>
-    import { t } from "../../i18n/store";
+    import { t } from "../../../i18n/store";
 </script>
 
 <button

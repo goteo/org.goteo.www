@@ -4,8 +4,8 @@
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { validationErrors, type WizardCollaboration } from "../../../stores/wizard-state";
-    import Button from "../../library/Button.svelte";
-    import Toast from "../../library/Toast.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
 
     import type { ClassNameValue } from "tailwind-merge";
 

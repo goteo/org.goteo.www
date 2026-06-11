@@ -12,7 +12,7 @@
     } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import Carousel from "../library/Carousel.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
 
     import type { MatchCall, MatchCallSubmission, User } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";

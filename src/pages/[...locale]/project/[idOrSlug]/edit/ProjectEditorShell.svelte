@@ -18,10 +18,10 @@
 <script lang="ts">
     import EditIcon from "../../../../../components/icons/EditIcon.svelte";
     import Eye from "../../../../../components/icons/Eye.svelte";
-    import Button from "../../../../../components/library/Button.svelte";
+    import Button from "../../../../../components/library/buttons/Button.svelte";
     import TabNavigation, {
         type Tab,
-    } from "../../../../../components/library/TabNavigation.svelte";
+    } from "../../../../../components/library/layout/TabNavigation.svelte";
     import { t } from "../../../../../i18n/store";
     import {
         wizardState,

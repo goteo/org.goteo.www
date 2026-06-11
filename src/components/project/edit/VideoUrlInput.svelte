@@ -53,8 +53,8 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import CloseIcon from "../../../components/icons/Close.svelte";
-    import Button from "../../../components/library/Button.svelte";
-    import TextInput from "../../../components/library/TextInput.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
     import { t } from "../../../i18n/store";
     import VideoIcon from "../../icons/VideoIcon.svelte";
 

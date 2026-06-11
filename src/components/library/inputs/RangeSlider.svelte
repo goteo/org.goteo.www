@@ -2,7 +2,7 @@
     import RangeSlider from "svelte-range-slider-pips";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { formatCurrency } from "../../utils/currencies";
+    import { formatCurrency } from "../../../utils/currencies";
 
     interface Props {
         class?: ClassNameValue;

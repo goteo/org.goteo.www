@@ -8,8 +8,8 @@
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import AlertIcon from "../icons/AlertIcon.svelte";
     import ShareIcon from "../icons/ShareIcon.svelte";
-    import Button from "../library/Button.svelte";
-    import Carousel from "../library/Carousel.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
 

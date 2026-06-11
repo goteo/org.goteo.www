@@ -1,8 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { t } from "../../../i18n/store";
-    import Send from "../../icons/Send.svelte";
+    import { t } from "../../i18n/store";
+    import Send from "../icons/Send.svelte";
 
     let { class: classes = "" } = $props<{
         class?: ClassNameValue;

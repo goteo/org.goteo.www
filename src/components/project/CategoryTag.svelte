@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Tag from "./Tag.svelte";
+    import Tag from "../library/tags/Tag.svelte";
     import { locale } from "../../i18n/store";
     import { apiCategoriesIdGet, type Category } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";

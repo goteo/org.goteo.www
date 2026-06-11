@@ -63,10 +63,10 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import CloseIcon from "../../../components/icons/Close.svelte";
-    import Button from "../../../components/library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
     import { t } from "../../../i18n/store";
     import UploadIcon from "../../icons/UploadIcon.svelte";
-    import Loader from "../../library/Loader.svelte";
+    import Loader from "../../library/feedback/Loader.svelte";
 
     import type { MediaImage } from "../../../stores/wizard-state";
 

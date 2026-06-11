@@ -2,7 +2,7 @@
     import { marked } from "marked";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ShareButton from "./Share/ShareButton.svelte";
+    import ShareButton from "../share/ShareButton.svelte";
 
     interface BlogPost {
         title?: string;

@@ -12,7 +12,7 @@
     import RoundSelector from "./RoundSelector.svelte";
     import { t } from "../../../i18n/store";
     import { wizardState, updateConfiguration, navigateToStep } from "../../../stores/wizard-state";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     interface ConfigurationStepProps {
         onContinue?: () => void;

@@ -3,7 +3,7 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Button from "../library/Button.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";
 

@@ -3,8 +3,8 @@
     import { t } from "../../i18n/store";
     import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
-    import CollapsibleBox from "../library/CollapsibleBox.svelte";
-    import Thtml from "../library/Thtml.svelte";
+    import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
+    import Thtml from "../library/typography/Thtml.svelte";
 
     let { hasError = false }: { hasError?: boolean } = $props();
 

@@ -10,7 +10,7 @@
         type WizardCollaboration,
     } from "../../../stores/wizard-state";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     let {
         collab,

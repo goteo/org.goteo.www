@@ -2,8 +2,8 @@
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
     import { navigateToStep, wizardState, type WizardReward } from "../../../stores/wizard-state";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Grid from "../../library/layout/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let rewards = $state<WizardReward[]>($wizardState.rewards);

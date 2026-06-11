@@ -3,9 +3,9 @@
     Use this component whenever you need to render a translation with HTML inside of it
 -->
 <script lang="ts">
-    import { t } from "../../i18n/store";
+    import { t } from "../../../i18n/store";
 
-    import type { TranslationOptions } from "../../i18n/utils";
+    import type { TranslationOptions } from "../../../i18n/utils";
 
     let {
         key,

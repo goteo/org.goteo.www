@@ -1,11 +1,11 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import WarningIcon from "../../components/icons/Warning.svelte";
-    import Bookmark from "../icons/Bookmark.svelte";
-    import Close from "../icons/Close.svelte";
-    import ErrorIcon from "../icons/Error.svelte";
-    import NotificationIcon from "../icons/NotificationIcon.svelte";
+    import WarningIcon from "../../icons/Warning.svelte";
+    import Bookmark from "../../icons/Bookmark.svelte";
+    import Close from "../../icons/Close.svelte";
+    import ErrorIcon from "../../icons/Error.svelte";
+    import NotificationIcon from "../../icons/NotificationIcon.svelte";
 
     import type { Snippet } from "svelte";
 

@@ -6,9 +6,9 @@
     import { t } from "../../../i18n/store";
     import { validationErrors, type WizardReward } from "../../../stores/wizard-state";
     import { defaultCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-    import FileUpload from "../../library/FileUpload.svelte";
-    import Toast from "../../library/Toast.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
 
     import type { ClassNameValue } from "tailwind-merge";
 

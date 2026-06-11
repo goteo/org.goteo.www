@@ -11,7 +11,7 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
     import CampaignCard from "../home/CampaignCard.svelte";
-    import Carousel from "../library/Carousel.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
 
     import type { Money, GatewayCharge, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";

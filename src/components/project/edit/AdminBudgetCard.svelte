@@ -10,7 +10,7 @@
     } from "../../../stores/wizard-state";
     import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
 

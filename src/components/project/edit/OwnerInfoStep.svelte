@@ -7,12 +7,12 @@
     import { t } from "../../../i18n/store";
     import { isReadyToPublish } from "../../../stores/wizard-state";
     import Web from "../../icons/social/Web.svelte";
-    import Button from "../../library/Button.svelte";
-    import RadioButton from "../../library/RadioButton.svelte";
-    import Select from "../../library/Select.svelte";
-    import TextArea from "../../library/TextArea.svelte";
-    import TextInput from "../../library/TextInput.svelte";
-    import Toggle from "../../library/ToggleSwitch.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import RadioButton from "../../library/inputs/RadioButton.svelte";
+    import Select from "../../library/inputs/Select.svelte";
+    import TextArea from "../../library/inputs/TextArea.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
+    import Toggle from "../../library/inputs/ToggleSwitch.svelte";
 
     import type { Project } from "../../../openapi/client";
 

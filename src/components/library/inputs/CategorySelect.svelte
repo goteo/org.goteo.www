@@ -1,7 +1,7 @@
 <script lang="ts">
-    import CategoryOption from "./Category.svelte";
+    import CategoryOption from "../tags/Category.svelte";
 
-    import type { Category } from "../../openapi/client";
+    import type { Category } from "../../../openapi/client";
 
     let {
         options,

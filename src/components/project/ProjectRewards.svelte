@@ -8,8 +8,8 @@
     import { cart } from "../../stores/cart";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
-    import Button from "../library/Button.svelte";
-    import Grid from "../library/Grid.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
 

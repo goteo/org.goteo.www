@@ -26,8 +26,8 @@
         type MediaImage,
         type VideoEmbed,
     } from "../../../stores/wizard-state";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Grid from "../../library/layout/Grid.svelte";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;

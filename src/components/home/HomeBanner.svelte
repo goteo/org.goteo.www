@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "./Button.svelte";
+    import Button from "../library/buttons/Button.svelte";
     import Close from "../icons/Close.svelte";
 
     interface Props {

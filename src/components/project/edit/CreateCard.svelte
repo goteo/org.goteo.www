@@ -4,7 +4,7 @@
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import MoreAndLess from "../../icons/MoreAndLess.svelte";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     import type {
         ProjectBudgetItem,

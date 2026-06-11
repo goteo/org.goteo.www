@@ -8,7 +8,7 @@
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Carousel from "../library/Carousel.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
 
