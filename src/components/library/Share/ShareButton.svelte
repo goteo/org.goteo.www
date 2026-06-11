@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import CopyUrl from "./CopyUrl.svelte";
     import Facebook from "./Facebook.svelte";
@@ -10,31 +11,49 @@
 
     interface Props {
         shareText?: string;
-        variant?: "blog" | "project";
+        variant?: "blog" | "project" | "profile";
         projectSlug?: string;
         url?: string;
+        buttonClass?: ClassNameValue;
     }
 
-    let { shareText = "", variant = "project", projectSlug = "", url = "" }: Props = $props();
+    let {
+        shareText = "",
+        variant = "project",
+        projectSlug = "",
+        url = "",
+        buttonClass = "",
+    }: Props = $props();
 
-    const widgetUrl = $derived(`https://www.goteo.org/widget/project/${projectSlug}`);
+    const widgetUrl = $derived(
+        variant === "project" ? `https://www.goteo.org/widget/project/${projectSlug}` : "",
+    );
 
     let openModal = $state(false);
 
     const modalTitle = $derived(
-        variant === "blog" ? $t("blog.share.modal.title") : $t("project.share.modal.title"),
+        variant === "blog"
+            ? $t("blog.share.modal.title")
+            : variant === "profile"
+              ? $t("profile.shareModal.title")
+              : $t("project.share.modal.title"),
     );
 
     const modalDescription = $derived(
         variant === "blog"
             ? $t("blog.share.modal.description")
-            : $t("project.share.modal.description"),
+            : variant === "profile"
+              ? ""
+              : $t("project.share.modal.description"),
     );
 </script>
 
 <button
     onclick={() => (openModal = true)}
-    class="text-secondary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold"
+    class={twMerge(
+        "text-secondary flex cursor-pointer flex-row items-center gap-2 p-2 font-bold",
+        buttonClass,
+    )}
 >
     <ShareIcon />
     {$t("project.actions.share")}
@@ -47,7 +66,9 @@
     title={modalTitle}
     headerClass="py-2 text-secondary text-2xl"
 >
-    <p>{modalDescription}</p>
+    {#if modalDescription}
+        <p>{modalDescription}</p>
+    {/if}
 
     <div class="flex flex-row items-center justify-center gap-6">
         <CopyUrl {url} />
