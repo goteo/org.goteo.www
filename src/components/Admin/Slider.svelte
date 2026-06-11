@@ -85,12 +85,12 @@
 
 <style>
     :global(.flickity-button-icon) {
-        fill: #462949;
+        fill: var(--color-secondary);
     }
 
     :global(.flickity-prev-next-button.previous),
     :global(.flickity-prev-next-button.next) {
-        background: #e6e5f7;
+        background: var(--color-variant1);
         width: 40px;
         height: 40px;
     }

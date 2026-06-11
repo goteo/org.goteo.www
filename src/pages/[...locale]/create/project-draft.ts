@@ -9,6 +9,7 @@ export interface ProjectDraft {
     categories: string[];
     budget: number;
     release: Date;
+    termsAccepted: boolean;
 }
 
 // Default release date: 28 days from now
@@ -24,6 +25,7 @@ export const draft = writable<ProjectDraft>({
     categories: [],
     budget: 0, // Budget is displayed but not validated
     release: getDefaultReleaseDate(),
+    termsAccepted: false,
 });
 
 /**
@@ -54,8 +56,9 @@ export const isFormValid = derived([draft, validationErrors], ([$draft, $errors]
     const hasTitle = $draft.title.trim().length > 0;
     const hasSubtitle = $draft.subtitle.trim().length > 0;
     const hasCategories = $draft.categories.length > 0;
+    const hasTerms = $draft.termsAccepted === true;
 
-    return hasTitle && hasSubtitle && hasCategories;
+    return hasTitle && hasSubtitle && hasCategories && hasTerms;
 });
 
 /**
@@ -140,6 +143,7 @@ export function resetForm() {
         categories: [],
         budget: 0,
         release: getDefaultReleaseDate(),
+        termsAccepted: false,
     });
     validationErrors.set({});
     touchedFields.set(new Set());
