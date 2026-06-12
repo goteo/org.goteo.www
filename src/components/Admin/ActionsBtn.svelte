@@ -10,26 +10,26 @@
             size="sm"
             class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
         >
-            {$t("contributions.grid.actions.refundToWallet")}</Button
+            {$t("pages.admin.charges.actions.refundToWallet")}</Button
         >
         <Button
             kind="ghost"
             size="sm"
             class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
         >
-            {$t("contributions.grid.actions.refundToUser")}
+            {$t("pages.admin.charges.actions.refundToUser")}
         </Button>
         <Button
             kind="ghost"
             size="sm"
             class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
-            >{$t("contributions.grid.actions.changeUser")}</Button
+            >{$t("pages.admin.charges.actions.changeUser")}</Button
         >
         <Button
             kind="ghost"
             size="sm"
             class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
-            >{$t("contributions.grid.actions.manageReward")}
+            >{$t("pages.admin.charges.actions.manageReward")}
         </Button>
     </div>
 </section>

@@ -38,9 +38,9 @@
             title: $t("admin.projects.totalizers.selected"),
             amount: $totalItems,
         });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" });
+        slidesArr.push({ title: $t("domain.charges.totalizers.totalCharges"), amount: "250,98€" });
+        slidesArr.push({ title: $t("domain.charges.totalizers.totalTips"), amount: "250,96€" });
+        slidesArr.push({ title: $t("domain.charges.totalizers.totalFees"), amount: "250,97€" });
 
         return slidesArr;
     };

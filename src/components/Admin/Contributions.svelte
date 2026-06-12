@@ -165,7 +165,7 @@
                     checkoutOrigin: checkout?.origin ?? "—",
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
-                        ? $t(`contributions.table.rows.refund.${checkout.refund}`)
+                        ? $t(`domain.charges.refund.${checkout.refund}`)
                         : "—",
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
@@ -249,15 +249,15 @@
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
         paymentMethodOptions = [
-            ["all", $t("contributions.filters.paymentMethod.options.all")],
+            ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
             ...(paymentGateways ?? []).map((g): [string, string] => [
                 g.name!,
-                $t(`contributions.filters.paymentMethod.options.${g.name}`),
+                $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
             ]),
         ];
 
-        chargeStatusOptions = Object.entries($t("contributions.filters.chargeStatus.options"));
-        rangeAmountOptions = Object.entries($t("contributions.filters.rangeAmount.options")).sort(
+        chargeStatusOptions = Object.entries($t("pages.admin.charges.filters.chargeStatus.options"));
+        rangeAmountOptions = Object.entries($t("pages.admin.charges.filters.rangeAmount.options")).sort(
             ([a], [b]) => {
                 const parseMin = (val: string) =>
                     val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
@@ -281,7 +281,7 @@
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("admin.charges.lastContributions")}
+                title={$t("domain.charges.lastContributions")}
                 {filters}
             />
             <ExportCsv {filters} />
