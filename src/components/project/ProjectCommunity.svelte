@@ -7,12 +7,8 @@
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
-    import {
-        apiProjectSupportsGetCollection,
-        apiUsersIdOrHandleGet,
-    } from "../../openapi/client/index";
+    import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
-    import { extractId } from "../../utils/extractId";
     import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
@@ -69,27 +65,13 @@
     $effect(() => {
         apiProjectSupportsGetCollection({
             query: { project: projectId, anonymous: false },
-        }).then(async ({ data: publicSupports }) => {
-            const supportsWithOwners = await Promise.all(
-                (publicSupports || []).map(async (support) => {
-                    const id = extractId(support?.origin!);
-
-                    const { data: user } = await apiUsersIdOrHandleGet({
-                        path: { idOrHandle: id! },
-                    });
-                    const displayName = user?.displayName!;
-                    const avatar = user?.avatar;
-
-                    return {
-                        ...support,
-                        displayName,
-                        avatar,
-                        matchfunding: support.origin?.includes("match")!,
-                    };
-                }),
-            );
-
-            projectsSupportItems = supportsWithOwners;
+        }).then(({ data: publicSupports }) => {
+            projectsSupportItems = (publicSupports || []).map((support) => ({
+                ...support,
+                displayName: support.displayName ?? "",
+                avatar: support.displayImage,
+                matchfunding: support.matchfunding ?? false,
+            }));
             isLoaded = true;
         });
     });
