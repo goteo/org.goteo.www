@@ -27,7 +27,7 @@
 </script>
 
 <div
-    class="flex cursor-pointer overflow-hidden rounded-4xl border border-grey bg-white shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
+    class="border-grey flex cursor-pointer overflow-hidden rounded-4xl border bg-white shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
 >
     <div class="flex h-48 w-full shrink-0 overflow-hidden md:h-auto md:w-2/5">
         <img
@@ -47,7 +47,7 @@
         <div class="text-xl font-bold text-black">
             {$t("pages.project.view.tabs.community.anonymous.title")}
         </div>
-        <p class="line-clamp-2 text-sm text-content">
+        <p class="text-content line-clamp-2 text-sm">
             {$t("pages.project.view.tabs.community.anonymous.description")}
         </p>
     </div>
