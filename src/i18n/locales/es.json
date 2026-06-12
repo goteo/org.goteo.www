@@ -537,9 +537,9 @@
             "iban": "IBAN",
             "ibanHelper": "Introduce el IBAN de la cuenta bancaria donde recibirás los fondos recaudados.",
             "ibanPlaceholder": "ES00 0000 0000 0000 0000 0000",
-            "certificate": "Certificado de titularidad de cuenta",
-            "certificateHelper": "Adjunta el documento que acredita la titularidad de la cuenta bancaria.",
-            "certificateAriaLabel": "Subir certificado de titularidad",
+            "bankCertificate": "Certificado de titularidad de cuenta",
+            "bankCertificateHelper": "Adjunta el documento que acredita la titularidad de la cuenta bancaria.",
+            "bankCertificateAriaLabel": "Subir certificado de titularidad",
             "ibanInvalid": "El formato del IBAN no es válido"
           },
           "continue": "Siguiente paso"
@@ -885,7 +885,7 @@
     "constraint": {
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido 10MB",
-        "supportedTypes": "Archivos compatibles: .png, .jpg"
+        "supportedTypes": "Archivos compatibles: {{ types }}"
       }
     },
     "validation": {

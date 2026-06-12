@@ -7,7 +7,6 @@
     import { t } from "../../../i18n/store";
     import FileUpload from "../../FileUpload.svelte";
     import Close from "../../icons/Close.svelte";
-    import Web from "../../icons/social/Web.svelte";
     import Button from "../../library/Button.svelte";
     import RadioButton from "../../library/RadioButton.svelte";
     // import Select from "../../library/Select.svelte";
@@ -34,7 +33,7 @@
     ]);
     let preferredIndex = $state(0);
     let iban = $state("");
-    let certificateFiles = $state<File[]>([]);
+    let bankCertificateFiles = $state<File[]>([]);
     // let publicLinks = $state({
     //     website: "",
     //     email: "",
@@ -87,8 +86,8 @@
             : !ibanValid(iban)
               ? $t("pages.project.edit.aboutYou.paymentData.ibanInvalid")
               : undefined,
-        certificate:
-            certificateFiles.length === 0
+        bankCertificate:
+            bankCertificateFiles.length === 0
                 ? $t("system.validation.missingRequiredFields")
                 : undefined,
     });
@@ -366,17 +365,17 @@
                 </div>
                 <div class="flex flex-col gap-2">
                     <p class="text-base font-bold text-black">
-                        {$t("pages.project.edit.aboutYou.paymentData.certificate")}
+                        {$t("pages.project.edit.aboutYou.paymentData.bankCertificate")}
                     </p>
                     <p class="text-content text-base">
-                        {$t("pages.project.edit.aboutYou.paymentData.certificateHelper")}
+                        {$t("pages.project.edit.aboutYou.paymentData.bankCertificateHelper")}
                     </p>
                     <FileUpload
-                        bind:files={certificateFiles}
+                        bind:files={bankCertificateFiles}
                         accept={["application/pdf", "image/jpeg", "image/png"]}
                         maxSizeMB={10}
                         ariaLabel={$t(
-                            "pages.project.edit.aboutYou.paymentData.certificateAriaLabel",
+                            "pages.project.edit.aboutYou.paymentData.bankCertificateAriaLabel",
                         )}
                     />
                 </div>
