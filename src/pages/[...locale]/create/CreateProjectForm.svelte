@@ -1,15 +1,6 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import {
-        draft,
-        validationErrors,
-        touchedFields,
-        isFormValid,
-        validateField,
-        validateForm,
-        markFieldAsTouched,
-    } from "./project-draft";
     import BaseCard from "../../../components/BaseCard.svelte";
     import Button from "../../../components/library/Button.svelte";
     import CategorySelect from "../../../components/library/CategorySelect.svelte";
@@ -17,49 +8,99 @@
     import DateInput from "../../../components/library/DateInput.svelte";
     import TextInput from "../../../components/library/TextInput.svelte";
     import { t } from "../../../i18n/store";
+    import {
+        apiProjectsPost,
+        type Category,
+        type ProjectProjectCreationDto,
+    } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
+    import {
+        validateCreateForm,
+        validateField,
+        type ValidationErrors,
+    } from "../../../stores/drafts/draftValidation";
+    import {
+        createDraft,
+        currentDraft,
+        markFieldAsTouched,
+        touchedFields,
+        updateProject,
+        isCreateFormValid,
+        project,
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
 
-    import type { ProjectDraft } from "./project-draft";
-    import type { Category } from "../../../openapi/client";
-
-    // import { apiProjectsPost } from "../../../openapi/client"; // TODO: Use when API integration is complete
+    let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 
     let { categories }: { categories: Category[] } = $props();
 
     // Track if form has been submitted once (for showing all errors)
-    let submitted = false;
+    let submitted = $state(false);
 
     // Loading state for form submission
-    let isSubmitting = false;
+    let isSubmitting = $state(false);
 
     // API error message
-    let apiError: string | null = null;
+    let apiError: string | null = $state(null);
 
     // Success state
-    let submitSuccess = false;
+    let submitSuccess = $state(false);
 
     // Debounce timer for real-time validation
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-    function handleFieldBlur(fieldName: keyof ProjectDraft) {
+    function handleFieldBlur(fieldName: keyof ProjectProjectCreationDto) {
+        if (!$currentDraft) return;
+
         markFieldAsTouched(fieldName);
-        validateField(fieldName, $draft[fieldName]);
+        const error = validateField(fieldName, $currentDraft.createProject[fieldName]);
+
+        validationErrors.update((errors: ValidationErrors) => {
+            if (error) {
+                return {
+                    ...errors,
+                    title: error,
+                };
+            }
+
+            const { title, ...rest } = errors;
+
+            return rest;
+        });
     }
 
     /**
      * Handles field value changes with type-safe updates.
      * Uses generic typing to ensure type safety without bypassing TypeScript checks.
      */
-    function handleFieldChange<K extends keyof ProjectDraft>(fieldName: K, value: ProjectDraft[K]) {
+    function handleFieldChange<K extends keyof ProjectProjectCreationDto>(
+        fieldName: K,
+        value: ProjectProjectCreationDto[K],
+    ) {
         // Update the draft value with proper typing
-        $draft[fieldName] = value;
+        updateProject({ [fieldName]: value });
 
         // Only validate on change if field has been touched
         if ($touchedFields.has(fieldName) || submitted) {
             // Debounce validation
             if (debounceTimer) clearTimeout(debounceTimer);
             debounceTimer = setTimeout(() => {
-                validateField(fieldName, value);
+                const error = validateField(fieldName, value);
+
+                validationErrors.update((errors: ValidationErrors) => {
+                    if (error) {
+                        return {
+                            ...errors,
+                            title: error,
+                        };
+                    }
+
+                    const { title, ...rest } = errors;
+
+                    return rest;
+                });
             }, 300);
         }
     }
@@ -73,16 +114,26 @@
     });
 
     function handleCategoryChange(selected: Category[]) {
-        const categoryIds = selected.map((s) => s.id.toString());
-        handleFieldChange("categories", categoryIds);
+        const categoryIris = selected.map((s) => {
+            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
+        });
+
+        handleFieldChange("categories", categoryIris);
     }
 
     async function handleSubmit() {
         submitted = true;
         apiError = null;
 
+        if (termsAccepted === false) {
+            submitSuccess = false;
+            $validationErrors["termsAccepted"] = "validation.project.terms.required";
+        }
+
+        const errors = validateCreateForm($project);
+
         // Validate entire form
-        const isValid = validateForm();
+        const isValid = Object.keys(errors).length === 0;
 
         if (!isValid) {
             // Scroll to error summary
@@ -102,6 +153,11 @@
             return;
         }
 
+        if (!$currentDraft) {
+            apiError = "Draft not initialized";
+            return;
+        }
+
         // Submit to API
         isSubmitting = true;
 
@@ -111,50 +167,48 @@
             // The API expects: title, subtitle, category (single), territory, description
             // Need to update the form to collect the correct fields or map them appropriately
 
-            // For now, simulate submission in dev mode
-            if (import.meta.env.DEV) {
-                console.log("Form is valid, would submit:", $draft);
-                // Simulate API delay
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-                submitSuccess = true;
-            } else {
-                // TODO: Implement actual API submission when form fields match API requirements
-                /*
-                const { data, error } = await apiProjectsPost({
-                    body: {
-                        title: $draft.title,
-                        subtitle: $draft.subtitle,
-                        category: $draft.categories[0], // Map first category
-                        territory: // Need territory field
-                        description: // Need description field
-                    },
-                });
+            // TODO: Implement actual API submission when form fields match API requirements
 
-                if (error) {
-                    // Handle API validation errors
-                    if ('violations' in error && error.violations) {
-                        error.violations.forEach((violation) => {
-                            const field = violation.propertyPath as keyof ProjectDraft;
-                            if (field) {
-                                $validationErrors[field] = violation.message || 'Invalid value';
-                            }
-                        });
-                    } else {
-                        apiError = "An unexpected error occurred. Please try again.";
-                    }
-                } else if (data) {
-                    submitSuccess = true;
-                    // Redirect to project page
+            const { data, error } = await apiProjectsPost({
+                baseUrl: "/api/relay",
+                body: {
+                    title: $currentDraft.createProject.title,
+                    subtitle: $currentDraft.createProject.subtitle,
+                    categories: $currentDraft.createProject.categories, // Map all categories
+                    release: $currentDraft.createProject.release, // Map release date
+                },
+            });
+
+            if (error) {
+                // Handle API validation errors
+                if ("violations" in error && error.violations) {
+                    error.violations.forEach((violation) => {
+                        const field = violation.propertyPath as keyof ProjectProjectCreationDto;
+                        if (field) {
+                            $validationErrors[field] = violation.message || "Invalid value";
+                        }
+                    });
+                    return;
+                } else {
+                    apiError = "An unexpected error occurred. Please try again.";
+                    return;
                 }
-                */
-                apiError = "Project creation is not yet fully implemented.";
+            } else if (data) {
+                submitSuccess = true;
+                updateProject({
+                    title: $currentDraft.createProject.title,
+                    subtitle: $currentDraft.createProject.subtitle,
+                    categories: $currentDraft.createProject.categories,
+                    release: $currentDraft.createProject.release,
+                });
+                currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
+
+                // Redirect to project page
+                window.location.href = `/project/${data.id}/edit`;
             }
         } catch (err) {
             // Handle unexpected errors
             apiError = "An unexpected error occurred. Please try again.";
-            if (import.meta.env.DEV) {
-                console.error("Unexpected error:", err);
-            }
         } finally {
             isSubmitting = false;
         }
@@ -171,10 +225,27 @@
         minDate.setDate(minDate.getDate() + 14);
         return minDate;
     }
+
+    $effect(() => {
+        if (!$currentDraft) {
+            createDraft({
+                title: "",
+                subtitle: "",
+                categories: [],
+                release: undefined,
+            });
+        }
+    });
+
+    let termsAccepted: boolean = false;
+
+    function toggleTermsAcceptance() {
+        termsAccepted = !termsAccepted;
+    }
 </script>
 
 <section class="wrapper md:flex md:flex-row">
-    <div class="flex max-w-167 flex-col gap-10">
+    <div class="mb-20 flex max-w-167 flex-col gap-10">
         <div class="flex flex-col gap-4">
             <h1 class="text-3xl font-bold text-black lg:text-4xl">
                 {$t("pages.project.create.title")}
@@ -227,8 +298,10 @@
             <TextInput
                 name="title"
                 placeholder={$t("pages.project.create.description.titlePrompt")}
-                bind:value={$draft.title}
+                bind:value={$project.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
+                onBlur={() => handleFieldBlur("title")}
+                onInput={(e) => handleFieldChange("title", (e.target as HTMLInputElement).value)}
             />
             <div class="relative">
                 <textarea
@@ -240,8 +313,10 @@
                     )
                         ? 'border-red-500'
                         : 'border-[#855a96]'}"
-                    bind:value={$draft.subtitle}
+                    bind:value={$project.subtitle}
                     onblur={() => handleFieldBlur("subtitle")}
+                    oninput={(e) =>
+                        handleFieldChange("subtitle", (e.target as HTMLTextAreaElement).value)}
                     aria-invalid={shouldShowError("subtitle")}
                     aria-describedby={shouldShowError("subtitle") ? "subtitle-error" : undefined}
                 ></textarea>
@@ -275,7 +350,7 @@
             </p>
             <DateInput
                 name="release"
-                bind:value={$draft.release}
+                bind:value={releaseDate}
                 min={getMinDate()}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}
@@ -290,38 +365,50 @@
         {#if submitSuccess}
             <div role="status" class="rounded-md border-l-4 border-green-500 bg-green-50 p-4">
                 <p class="text-sm font-semibold text-green-800">
-                    Project draft created successfully! (Dev mode simulation)
+                    {$t("pages.project.create.submitSuccess")}
                 </p>
             </div>
         {/if}
         <div class="flex items-center gap-2">
-            <Checkbox
-                bind:checked={$draft.termsAccepted}
-                onchange={() => handleFieldChange("termsAccepted", $draft.termsAccepted)}
-            >
+            <Checkbox bind:checked={termsAccepted} onchange={() => toggleTermsAcceptance}>
                 <span class="text-secondary">
                     <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
                 </span>
             </Checkbox>
         </div>
         <p>
-            <Button size="md" disabled={!$isFormValid || isSubmitting} onclick={handleSubmit}>
-                {isSubmitting ? "Submitting..." : $t("pages.project.create.submit")}
+            <Button size="md" disabled={!$isCreateFormValid || isSubmitting} onclick={handleSubmit}>
+                {isSubmitting
+                    ? $t("pages.project.create.submitting")
+                    : $t("pages.project.create.submit")}
             </Button>
         </p>
     </div>
     <div class="ml-auto">
-        <BaseCard class="flex h-full max-h-126.5 w-full max-w-109.25 flex-col">
-            <h1 class="text-secondary text-2xl leading-8 font-bold {$draft.title || 'opacity-50'}">
-                {$draft.title || $t("pages.project.create.description.titlePlaceholder")}
+        <BaseCard
+            class="border-grey flex h-full max-h-126.5 w-full max-w-109.25 flex-col bg-white"
+            style="box-shadow: 0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);"
+        >
+            <h1
+                class="text-secondary text-double mb-2 leading-10 font-bold {$currentDraft
+                    ?.createProject.title || 'opacity-24'}"
+            >
+                {$currentDraft?.createProject.title ||
+                    $t("pages.project.create.description.titlePlaceholder")}
             </h1>
-            <p class="text-sm text-black">
-                {$draft.subtitle || $t("pages.project.create.description.subtitlePlaceholder")}
+            <p
+                class="text-content overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
+            >
+                {$currentDraft?.createProject.subtitle ||
+                    $t("pages.project.create.description.subtitlePlaceholder")}
             </p>
             <div class="mt-auto">
                 <p class="text-sm text-black">{$t("pages.project.create.budgetPreview")}</p>
                 <p class="text-secondary text-3xl font-bold">
-                    {formatCurrency($draft.budget)}
+                    {formatCurrency(
+                        $currentDraft?.wizardForm.budget?.minimum?.money?.amount || 0,
+                        "EUR",
+                    )}
                 </p>
             </div>
         </BaseCard>

@@ -5,10 +5,9 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import { isReadyToPublish } from "../../../stores/wizard-state";
-    // import Web from "../../icons/social/Web.svelte";
     import FileUpload from "../../FileUpload.svelte";
     import Close from "../../icons/Close.svelte";
+    import Web from "../../icons/social/Web.svelte";
     import Button from "../../library/Button.svelte";
     import RadioButton from "../../library/RadioButton.svelte";
     // import Select from "../../library/Select.svelte";
@@ -95,10 +94,6 @@
     });
 
     let isValid = $derived(Object.values(errors).every((e) => e === undefined));
-
-    $effect(() => {
-        isReadyToPublish.set(isValid);
-    });
 </script>
 
 <div class="w-1/2">
@@ -394,7 +389,7 @@
                 size="md"
                 class="min-w-50 disabled:pointer-events-none disabled:opacity-24"
                 onclick={onPublish}
-                disabled={$isReadyToPublish ? false : true}
+                disabled={!isValid}
             >
                 {$t("pages.project.edit.aboutYou.continue")}
             </Button>
