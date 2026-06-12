@@ -3,39 +3,32 @@
 
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
+    import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
+    import { apiAccountingsIdGet, apiTipjarsIdGet } from "../../openapi/client/sdk.gen";
     import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
-    import { fetchAccounting, fetchTipjar } from "../../utils/cachedFetch";
     import { formatCurrency } from "../../utils/currencies";
-    import { isEnabled, tipjarIri } from "../../utils/tipping";
+    import { extractId } from "../../utils/extractId";
+    import { isEnabled, tipjarId } from "../../utils/tipping";
 
     import type { Options } from "flickity";
-
-    const CACHE_NAME = "charges-cache";
 
     let mainCarousel: HTMLDivElement;
     let isSliderLoaded = $state(false);
     let totalTips = $state<string>("—");
 
-    function getAccessToken(): string | null {
-        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
-        if (!match) return null;
-        try {
-            const decoded = decodeURIComponent(match[1]);
-            const parsed = JSON.parse(decoded);
-            return parsed?.token ?? null;
-        } catch {
-            return null;
-        }
-    }
-
     async function loadTotalTips() {
-        if (!isEnabled) return;
-        const token = getAccessToken();
-        if (!token) return;
-        const tipjar = await fetchTipjar(tipjarIri, token, CACHE_NAME);
-        if (!tipjar?.accounting) return;
-        const accounting = await fetchAccounting(tipjar.accounting, token, CACHE_NAME);
+        if (!isEnabled || !$session) return;
+        const headers = $session.token.asHttpHeaders;
+
+        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
+        const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
+        if (!accountingId) return;
+
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: accountingId },
+            headers,
+        });
         if (accounting?.balance) {
             totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
         }
