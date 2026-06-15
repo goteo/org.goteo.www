@@ -1,22 +1,24 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import { onMount } from "svelte";
 
     import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
+    import ProjectCommunityMatchfundingModal from "./ProjectCommunityMatchfundingModal.svelte";
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
+    import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
     import {
         apiProjectSupportsGetCollection,
         apiUsersIdOrHandleGet,
     } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
-    import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import ActionableButton from "../library/ActionableButton.svelte";
     import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
+
+    type EnrichedSupport = ProjectSupport & { displayName: string; avatar: string | undefined };
 
     let {
         project,
@@ -27,12 +29,6 @@
     } = $props();
 
     const projectId = $derived(project.id?.toString());
-    const PAGE_SIZE = 30;
-
-    type EnrichedSupport = ProjectSupport & {
-        displayName: string;
-        matchfunding: boolean;
-    };
 
     let projectsSupportItems = $state<EnrichedSupport[]>([]);
 
@@ -54,26 +50,23 @@
         ),
     );
 
-    async function fetchPage(page: number, size: number): Promise<ProjectSupport[]> {
+    const PAGE_SIZE = 30;
+    const FIRST_PAGE_SIZE = 29;
+
+    async function fetchPage(page: number): Promise<EnrichedSupport[]> {
+        const itemsPerPage = page === 1 ? FIRST_PAGE_SIZE : PAGE_SIZE;
         const { data } = await apiProjectSupportsGetCollection({
-            query: { project: projectId, anonymous: false, page, itemsPerPage: size },
+            query: { project: projectId, anonymous: false, page, itemsPerPage },
         });
 
-        const items = (data as ProjectSupport[] | null) ?? [];
-        hasMore = items.length >= size;
-        return items;
-    }
+        const items = (data as ProjectSupport[]) ?? [];
+        hasMore = items.length === itemsPerPage;
 
-    async function enrichSupports(supports: ProjectSupport[]): Promise<EnrichedSupport[]> {
         return Promise.all(
-            supports.map(async (support) => {
-                const id = extractId(support?.origin!);
+            items.map(async (support) => {
+                const id = extractId(support.origin!);
                 const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
-                return {
-                    ...support,
-                    displayName: user?.displayName!,
-                    matchfunding: support.origin?.includes("match")!,
-                };
+                return { ...support, displayName: user?.displayName ?? "", avatar: user?.avatar };
             }),
         );
     }
@@ -91,17 +84,17 @@
               ),
     );
 
-    onMount(async () => {
-        const supports = await fetchPage(1, PAGE_SIZE);
-        projectsSupportItems = await enrichSupports(supports);
-        isLoaded = true;
+    $effect(() => {
+        fetchPage(1).then((items) => {
+            projectsSupportItems = items;
+            isLoaded = true;
+        });
     });
 
     async function loadMore() {
         const nextPage = currentPage + 1;
-        const supports = await fetchPage(nextPage, PAGE_SIZE);
-        const enriched = await enrichSupports(supports);
-        projectsSupportItems = [...projectsSupportItems, ...enriched];
+        const supports = await fetchPage(nextPage);
+        projectsSupportItems = [...projectsSupportItems, ...supports];
         currentPage = nextPage;
     }
 </script>
@@ -164,34 +157,15 @@
 
 <Modal
     bind:open={openModal}
-    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
+    closeBtnClass="top-4 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
     class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     {#if selectedProjectSupport}
-        <div class="flex cursor-pointer flex-col gap-4 bg-white p-4 px-6 py-4">
-            <div class="flex flex-row items-center justify-between gap-4">
-                <div>
-                    <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
-                </div>
-                <div class="flex flex-col items-end">
-                    <div class="font-bold text-black">
-                        {$t("pages.project.view.tabs.community.contribution")}
-                    </div>
-                    <p class="text-2xl font-bold text-black">
-                        {formatCurrency(
-                            selectedProjectSupport.money?.amount ?? 0,
-                            selectedProjectSupport.money?.currency ?? "undefined",
-                        )}
-                    </p>
-                </div>
-            </div>
-            <div class="text-2xl font-bold text-black">
-                {selectedProjectSupport.displayName}
-            </div>
-            <div class="text-content text-sm">
-                {selectedProjectSupport.message}
-            </div>
-        </div>
+        {#if selectedProjectSupport.matchfunding}
+            <ProjectCommunityMatchfundingModal item={selectedProjectSupport} />
+        {:else}
+            <ProjectCommunitySponsorModal item={selectedProjectSupport} />
+        {/if}
     {/if}
 </Modal>

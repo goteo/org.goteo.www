@@ -111,7 +111,7 @@
                 {tag.value}
             {/if}
             <button onclick={() => closeTag(tag)} class="size-auto cursor-pointer">
-                <CloseIcon class="size-[15px]" />
+                <CloseIcon class="size-3.75" />
             </button>
         </Tag>
     {/each}

@@ -11,7 +11,7 @@
     }>();
 </script>
 
-<div class="flex flex-col gap-6 lg:flex-row">
+<div class="flex flex-col gap-6 lg:flex-row lg:items-center">
     <div class="text-secondary basis-5/12 text-4xl font-bold">
         {$t("pages.project.view.tabs.budget.chartTitle")}
     </div>

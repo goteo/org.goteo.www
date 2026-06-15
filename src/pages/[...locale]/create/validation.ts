@@ -69,6 +69,10 @@ export const projectCreationSchema = z.object({
      * Not required for form submission but included for type consistency.
      */
     budget: z.number().nonnegative().optional().default(0),
+
+    termsAccepted: z.boolean().refine((val) => val === true, {
+        message: "validation.project.terms.required",
+    }),
 });
 
 /**

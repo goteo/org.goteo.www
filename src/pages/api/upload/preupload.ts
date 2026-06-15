@@ -31,15 +31,24 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const tempKey = `${STORAGE_PREFIX_TEMP}/${session.user.id}/${crypto.randomUUID()}`;
 
-    const command = new PutObjectCommand({
-        Bucket: import.meta.env.OBJECT_STORAGE_BUCKET,
-        Key: tempKey,
-        ContentType: contentType,
-    });
+    try {
+        const command = new PutObjectCommand({
+            Bucket: import.meta.env.OBJECT_STORAGE_BUCKET,
+            Key: tempKey,
+            ContentType: contentType,
+        });
 
-    const signedUrl = await getSignedUrl(client, command, {
-        expiresIn: 120,
-    });
+        const signedUrl = await getSignedUrl(client, command, {
+            expiresIn: 120,
+        });
 
-    return json({ url: signedUrl, key: tempKey });
+        return json({ url: signedUrl, key: tempKey });
+    } catch (err: any) {
+        console.error(err);
+
+        return json(
+            { error: `Bucket responded with error code "${err.Code}"` },
+            err["$metadata"].httpStatusCode || 500,
+        );
+    }
 };

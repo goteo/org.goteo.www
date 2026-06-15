@@ -81,11 +81,11 @@ const postPaymentUrl = checkoutId
                                     <div class="flex flex-col gap-10">
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
-                                                <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                                                <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
                                                     {t("payment.page-error.title")}
                                                 </h2>
                                                 <p class="text-content">
-                                                    {t("payment.page-error.description")}
+                                                    {t("pages.checkout.verify.error.description")}
                                                 </p>
                                             </div>
                                             <PaymentErrorIcon />
@@ -104,7 +104,7 @@ const postPaymentUrl = checkoutId
                                 <div class="w-full lg:block" id="checkout-details">
                                     <div class="flex flex-col">
                                         <p class="text-content text-sm">
-                                            {t("checkout.summary.deduct")}
+                                            {t("pages.checkout.summary.deduct")}
                                         </p>
                                     </div>
                                 </div>
@@ -128,11 +128,13 @@ const postPaymentUrl = checkoutId
                                         <div class="flex flex-col gap-9">
                                             <div class="flex flex-row items-center justify-between gap-6">
                                                 <div class="flex w-2/3 flex-col gap-4">
-                                                    <h2 class="text-[40px]/[48px] font-bold tracking-[0%] text-black">
+                                                    <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
                                                         {t("payment.page-approved.title")}
                                                     </h2>
                                                     <p class="text-content">
-                                                        {t("payment.page-approved.description")}
+                                                        {t(
+                                                            "pages.checkout.verify.approved.description",
+                                                        )}
                                                     </p>
                                                 </div>
                                                 <ApprovedIcon />
@@ -151,7 +153,7 @@ const postPaymentUrl = checkoutId
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">
                                             <p class="text-content text-sm">
-                                                {t("checkout.summary.deduct")}
+                                                {t("pages.checkout.summary.deduct")}
                                             </p>
                                         </div>
                                     </div>

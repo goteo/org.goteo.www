@@ -1,25 +1,28 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
     import { t } from "../../i18n/store";
     import { apiProjectSupportsmoneyTotalGetCollection, type Project } from "../../openapi/client";
     import { formatCurrency } from "../../utils/currencies";
 
-    export let project: Project;
-    export let currency: string;
+    let {
+        project,
+        currency,
+    }: {
+        project: Project;
+        currency: string;
+    } = $props();
 
-    const projectId = String(project.id!);
+    const projectId = $derived(String(project.id!));
 
-    let money = 0;
-    let length: number = 0;
+    let money = $state(0);
+    let length = $state(0);
 
-    onMount(async () => {
-        const { data: totalMoney } = await apiProjectSupportsmoneyTotalGetCollection({
+    $effect(() => {
+        apiProjectSupportsmoneyTotalGetCollection({
             query: { project: projectId, anonymous: true },
+        }).then(({ data: totalMoney }) => {
+            money = totalMoney?.amount ?? 0;
+            length = totalMoney?.length ?? 0;
         });
-
-        money = totalMoney?.amount!;
-        length = totalMoney?.length!;
     });
 </script>
 
@@ -47,7 +50,7 @@
             <div class="text-2xl font-bold text-black">
                 {$t("pages.project.view.tabs.community.anonymous.title")}
             </div>
-            <p class="text-content text-sm">
+            <p class="text-content line-clamp-2 text-sm">
                 {$t("pages.project.view.tabs.community.anonymous.description")}
             </p>
         </div>
