@@ -37,7 +37,7 @@
                 <MoreAndLess sign="less" />
             </button>
 
-            <span class="text-secondary w-fit text-center text-2xl font-bold">
+            <span class="text-secondary w-fit text-center text-3xl font-bold">
                 {unlimited ? "∞" : value}
             </span>
 
