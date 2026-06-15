@@ -17,6 +17,7 @@ openapi-ts*.log
 # environment variables
 .env*
 !env.example
+.dev.vars
 
 # macOS-specific files
 .DS_Store

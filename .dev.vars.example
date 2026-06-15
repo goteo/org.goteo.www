@@ -1,0 +1,4 @@
+# Local SQLite database URLs for D1 bindings.
+# Miniflare uses this configuration to force using local SQLite 
+# files instead of connecting remote D1.
+#CLOUDFLARE_D1_URLS='{"goteo-db": "file:./.wrangler/d1/goteo-db.sqlite"}'
