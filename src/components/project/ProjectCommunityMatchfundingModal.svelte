@@ -7,7 +7,7 @@
     let {
         item,
     }: {
-        item: ProjectSupport & { displayName: string };
+        item: ProjectSupport;
     } = $props();
 </script>
 

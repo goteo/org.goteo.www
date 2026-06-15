@@ -23,21 +23,9 @@
 
     const projectId = $derived(project.id!.toString());
 
-    let projectsSupportItems = $state<
-        (ProjectSupport & {
-            displayName: string;
-            avatar: string | undefined;
-            matchfunding: boolean;
-        })[]
-    >([]);
+    let projectsSupportItems = $state<ProjectSupport[]>([]);
 
-    let selectedProjectSupport:
-        | (ProjectSupport & {
-              displayName: string;
-              avatar: string | undefined;
-              matchfunding: boolean;
-          })
-        | null = $state(null);
+    let selectedProjectSupport: ProjectSupport | null = $state(null);
 
     let isLoaded = $state(false);
     let openModal = $state(false);
@@ -66,12 +54,7 @@
         apiProjectSupportsGetCollection({
             query: { project: projectId, anonymous: false },
         }).then(({ data: publicSupports }) => {
-            projectsSupportItems = (publicSupports || []).map((support) => ({
-                ...support,
-                displayName: support.displayName ?? "",
-                avatar: support.displayImage,
-                matchfunding: support.matchfunding ?? false,
-            }));
+            projectsSupportItems = publicSupports || [];
             isLoaded = true;
         });
     });
