@@ -13,6 +13,7 @@
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Close from "../../icons/Close.svelte";
+    import InfinityIcon from "../../icons/Infinity.svelte";
     import Button from "../../library/Button.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
@@ -128,11 +129,9 @@
                     </span>
                 </div>
             {:else}
-                <div
-                    class="text-secondary flex items-center justify-between gap-1 text-3xl font-bold"
-                >
+                <div class="text-secondary flex items-center justify-between font-bold">
                     <UnitIcon />
-                    <span>∞</span>
+                    <InfinityIcon width="32" height="32" />
                 </div>
             {/if}
         </div>
