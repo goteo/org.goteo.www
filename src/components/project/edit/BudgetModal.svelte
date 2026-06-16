@@ -35,6 +35,16 @@
 
     let openDeleteModal = $state(false);
 
+    $effect(() => {
+        if (open) {
+            selectedBudgetTitle = budgetItem?.title ?? "";
+            selectedBudgetType = budgetItem?.type;
+            amount = budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0;
+            selectedBudgetDeadline = budgetItem?.deadline;
+            selectedBudgetDescription = budgetItem?.description ?? "";
+        }
+    });
+
     const INPUTS_CLASSES: ClassNameValue =
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
