@@ -20,10 +20,10 @@
     import Eye from "../../../../../components/icons/media/Eye.svelte";
     import ActionableButton from "../../../../../components/library/buttons/ActionableButton.svelte";
     import Button from "../../../../../components/library/buttons/Button.svelte";
+    import Toast from "../../../../../components/library/feedback/Toast.svelte";
     import TabNavigation, {
         type Tab,
     } from "../../../../../components/library/layout/TabNavigation.svelte";
-    import Toast from "../../../../../components/library/feedback/Toast.svelte";
     import { t } from "../../../../../i18n/store";
     import {
         currentDraft,

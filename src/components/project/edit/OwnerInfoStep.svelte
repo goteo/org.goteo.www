@@ -5,14 +5,10 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import { isReadyToPublish } from "../../../stores/drafts/projectDraft";
-    import FileUpload from "../../library/inputs/FileUpload.svelte";
     import Close from "../../icons/navigation/Close.svelte";
-    import Web from "../../icons/social/Web.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
-    import Select from "../../library/inputs/Select.svelte";
-    import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Toggle from "../../library/inputs/ToggleSwitch.svelte";
 

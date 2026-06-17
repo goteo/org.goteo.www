@@ -2,6 +2,7 @@
     import { Modal } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
 
+    import PlatformUpdateCard from "./PlatformUpdateCard.svelte";
     import ProjectUpdateCard, { type ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
@@ -12,7 +13,6 @@
     import Carousel from "../library/layout/Carousel.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
-    import PlatformUpdateCard from "./PlatformUpdateCard.svelte";
 
     let {
         lang = $bindable(),
