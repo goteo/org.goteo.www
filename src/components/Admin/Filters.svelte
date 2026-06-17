@@ -3,7 +3,7 @@
     import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
-    import FiltersIcon from "../icons/Filters.svelte";
+    import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Grid from "../library/layout/Grid.svelte";
 

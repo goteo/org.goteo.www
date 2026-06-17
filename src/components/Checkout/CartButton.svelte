@@ -1,6 +1,6 @@
 <script lang="ts">
     import { cartCount } from "../../stores/cart";
-    import Bag from "../icons/Bag.svelte";
+    import Bag from "../icons/commerce/Bag.svelte";
 </script>
 
 <a href="/checkout">

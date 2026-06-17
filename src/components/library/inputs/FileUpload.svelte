@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import UploadFileIcon from "../../icons/UploadFile.svelte";
-    import WarningIcon from "../../icons/Warning.svelte";
+    import UploadFileIcon from "../../icons/actions/UploadFile.svelte";
+    import WarningIcon from "../../icons/status/Warning.svelte";
 
     let {
         maxSizeMB = 20,

@@ -2,7 +2,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import Eye from "../../icons/Eye.svelte";
+    import Eye from "../../icons/media/Eye.svelte";
 
     interface Props {
         class?: ClassNameValue;

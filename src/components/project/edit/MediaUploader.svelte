@@ -62,9 +62,9 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import CloseIcon from "../../../components/icons/Close.svelte";
+    import CloseIcon from "../../../components/icons/navigation/Close.svelte";
     import { t } from "../../../i18n/store";
-    import UploadIcon from "../../icons/UploadIcon.svelte";
+    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
 

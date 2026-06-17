@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import SearchIcon from "../icons/Search.svelte";
+    import SearchIcon from "../icons/actions/Search.svelte";
     import Button from "../library/buttons/Button.svelte";
 
     function openSearch() {

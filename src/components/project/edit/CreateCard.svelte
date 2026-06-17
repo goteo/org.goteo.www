@@ -3,7 +3,7 @@
     import CollabsModal from "./CollabsModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
-    import MoreAndLess from "../../icons/MoreAndLess.svelte";
+    import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import Button from "../../library/buttons/Button.svelte";
 
     import type {

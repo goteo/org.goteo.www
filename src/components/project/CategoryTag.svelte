@@ -2,7 +2,7 @@
     import { locale } from "../../i18n/store";
     import { apiCategoriesIdGet, type Category } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
-    import BookmarkIcon from "../icons/Bookmark.svelte";
+    import BookmarkIcon from "../icons/actions/Bookmark.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     interface Props {

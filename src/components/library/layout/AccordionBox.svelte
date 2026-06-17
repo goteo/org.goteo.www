@@ -2,7 +2,7 @@
     import { slide } from "svelte/transition";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import Chevron from "../../icons/Chevron.svelte";
+    import Chevron from "../../icons/navigation/Chevron.svelte";
 
     import type { Snippet } from "svelte";
 

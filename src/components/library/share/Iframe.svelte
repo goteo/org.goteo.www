@@ -2,7 +2,7 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import Code from "../../icons/Code.svelte";
+    import Code from "../../icons/media/Code.svelte";
     import Loader from "../feedback/Loader.svelte";
 
     interface Props {

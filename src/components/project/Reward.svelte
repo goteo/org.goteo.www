@@ -4,7 +4,7 @@
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import UnitIcon from "../icons/UnitIcon.svelte";
-    import UserIcon from "../icons/User.svelte";
+    import UserIcon from "../icons/user/User.svelte";
     import Button from "../library/buttons/Button.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";

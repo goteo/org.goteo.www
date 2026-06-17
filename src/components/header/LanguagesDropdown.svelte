@@ -2,8 +2,8 @@
     import { clickOutside } from "flowbite-svelte";
 
     import { getLanguageDisplayName } from "../../utils/lang";
-    import Chevron from "../icons/Chevron.svelte";
     import LanguageIcon from "../icons/LanguageIcon.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
 
     let { languages, selected, onSelect } = $props();
 

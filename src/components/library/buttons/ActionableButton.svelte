@@ -2,8 +2,8 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import Button from "./Button.svelte";
-    import Check from "../../icons/Check.svelte";
-    import Spinner from "../../icons/Spinner.svelte";
+    import Check from "../../icons/actions/Check.svelte";
+    import Spinner from "../../icons/status/Spinner.svelte";
 
     import type { Snippet } from "svelte";
     import type { HTMLButtonAttributes } from "svelte/elements";

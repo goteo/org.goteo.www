@@ -1,5 +1,5 @@
 <script lang="ts">
-    import WarningIcon from "../../components/icons/Warning.svelte";
+    import WarningIcon from "../../components/icons/status/Warning.svelte";
     import { t } from "../../i18n/store";
     import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";

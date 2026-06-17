@@ -39,7 +39,7 @@
 <script lang="ts">
     import { twMerge } from "tailwind-merge";
 
-    import Chevron from "../../icons/Chevron.svelte";
+    import Chevron from "../../icons/navigation/Chevron.svelte";
 
     import type { Snippet } from "svelte";
 

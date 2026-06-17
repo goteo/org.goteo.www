@@ -6,7 +6,7 @@
     import Iframe from "./Iframe.svelte";
     import X from "./X.svelte";
     import { t } from "../../../i18n/store";
-    import ShareIcon from "../../icons/Share.svelte";
+    import ShareIcon from "../../icons/actions/Share.svelte";
 
     interface Props {
         shareText?: string;

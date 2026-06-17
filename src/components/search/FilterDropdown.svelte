@@ -5,7 +5,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 -->
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import Chevron from "../icons/Chevron.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
 
     import type { HTMLButtonAttributes } from "svelte/elements";
 

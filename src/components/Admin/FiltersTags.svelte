@@ -2,7 +2,7 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
-    import CloseIcon from "../icons/Close.svelte";
+    import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";

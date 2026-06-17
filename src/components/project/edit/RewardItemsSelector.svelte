@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import MoreAndLess from "../../icons/MoreAndLess.svelte";
+    import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
 
     let {
         value = $bindable(1),

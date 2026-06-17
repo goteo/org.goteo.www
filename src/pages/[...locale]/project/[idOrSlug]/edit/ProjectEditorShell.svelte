@@ -16,8 +16,8 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import EditIcon from "../../../../../components/icons/Edit.svelte";
-    import Eye from "../../../../../components/icons/Eye.svelte";
+    import EditIcon from "../../../../../components/icons/actions/Edit.svelte";
+    import Eye from "../../../../../components/icons/media/Eye.svelte";
     import Button from "../../../../../components/library/buttons/Button.svelte";
     import TabNavigation, {
         type Tab,

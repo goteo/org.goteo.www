@@ -2,7 +2,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import Back from "../../icons/Back.svelte";
+    import Back from "../../icons/navigation/Back.svelte";
 
     interface Props {
         class?: ClassNameValue;

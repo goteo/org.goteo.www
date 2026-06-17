@@ -4,8 +4,8 @@
         apiGatewayChargesGetCollection,
         type ApiGatewayChargesGetCollectionData,
     } from "../../openapi/client";
-    import Download from "../icons/Download.svelte";
-    import Spinner from "../icons/Spinner.svelte";
+    import Download from "../icons/actions/Download.svelte";
+    import Spinner from "../icons/status/Spinner.svelte";
     import Button from "../library/buttons/Button.svelte";
 
     let { filters } = $props<{

@@ -18,7 +18,7 @@
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
     import { formatCurrency } from "../../utils/currencies";
-    import Chevron from "../icons/Chevron.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Tag from "../library/tags/Tag.svelte";
 

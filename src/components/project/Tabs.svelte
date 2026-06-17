@@ -7,7 +7,7 @@
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import ArrowSliderIcon from "../icons/ArrowSliderIcon.svelte";
+    import ArrowSliderIcon from "../icons/navigation/ArrowSliderIcon.svelte";
 
     import type { Project, Accounting } from "../../openapi/client/index";
 

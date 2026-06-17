@@ -4,7 +4,7 @@
     import { languagesList } from "../../i18n/locales";
     import { locale } from "../../i18n/store";
     import { getLanguageDisplayName } from "../../utils/lang";
-    import Chevron from "../icons/Chevron.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
 
     const languages = Object.keys(languagesList) as (keyof typeof languagesList)[];
 

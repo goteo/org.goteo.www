@@ -17,8 +17,8 @@
     } from "../../openapi/client/index";
     import { getLanguageDisplayName } from "../../utils/lang";
     import LanguagesDropdown from "../header/LanguagesDropdown.svelte";
-    import Arrow from "../icons/Arrow.svelte";
-    import RememberIcon from "../icons/RememberIcon.svelte";
+    import RememberIcon from "../icons/actions/RememberIcon.svelte";
+    import Arrow from "../icons/navigation/Arrow.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Toast from "../library/feedback/Toast.svelte";
     import Sharebutton from "../library/share/ShareButton.svelte";

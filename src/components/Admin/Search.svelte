@@ -6,8 +6,8 @@
         apiUsersGetCollection,
     } from "../../openapi/client";
     import { highlightMatch } from "../../utils/highlights";
-    import CloseIcon from "../icons/Close.svelte";
-    import SearchIcon from "../icons/Search.svelte";
+    import SearchIcon from "../icons/actions/Search.svelte";
+    import CloseIcon from "../icons/navigation/Close.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 

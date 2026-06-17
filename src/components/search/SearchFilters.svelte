@@ -13,7 +13,7 @@ Integrated with searchStore for state management and URL synchronization
     import SearchInput from "./SearchInput.svelte";
     import { t, setLocale } from "../../i18n/store";
     import { searchStore, searchFilters } from "../../stores/searchStore";
-    import FilterIcon from "../icons/FilterIcon.svelte";
+    import FilterIcon from "../icons/filters/FilterIcon.svelte";
 
     interface Props {
         locale?: string;
