@@ -18,14 +18,13 @@
     import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
+    import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
     import {
-        wizardState,
-        updateCampaignInfo,
+        currentDraft,
         navigateToStep,
-        validateCampaignInfo,
+        updateCampaignInfo,
         type MediaImage,
-        type VideoEmbed,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
 
@@ -36,14 +35,24 @@
     let { onContinue }: CampaignInfoStepProps = $props();
 
     // Reactive values from store
-    const campaignInfo = $derived($wizardState.campaignInfo);
+    const campaignInfo = $derived(
+        $currentDraft?.wizardForm.campaignInfo ?? {
+            images: [],
+            video: undefined,
+            objectives: "",
+            legacy: "",
+            targetAudience: "",
+            team: "",
+        },
+    );
 
     /**
      * Handle Continue button
      * Simple navigation to next step - validation happens on save/submit
      */
     function handleContinue() {
-        const errors = validateCampaignInfo();
+        if (!$currentDraft) return;
+        const errors = validateCampaignInfo($currentDraft.wizardForm);
 
         if (Object.keys(errors).length === 0) {
             navigateToStep(3);
@@ -63,6 +72,7 @@
      * Handle image upload
      */
     function handleImageUpload(image: MediaImage) {
+        if (!campaignInfo) return;
         updateCampaignInfo({
             images: [...campaignInfo.images, image],
         });
@@ -80,29 +90,37 @@
     /**
      * Handle video change
      */
-    function handleVideoChange(video: VideoEmbed | null) {
-        updateCampaignInfo({ video });
+    function handleVideoChange(video: string | null) {
+        updateCampaignInfo({
+            video: video ?? "",
+        });
     }
 
     /**
      * Handle objectives change
      */
     function handleObjectivesChange(html: string) {
-        updateCampaignInfo({ objectives: html });
+        updateCampaignInfo({
+            objectives: html,
+        });
     }
 
     /**
      * Handle legacy change
      */
     function handleLegacyChange(html: string) {
-        updateCampaignInfo({ legacy: html });
+        updateCampaignInfo({
+            legacy: html,
+        });
     }
 
     /**
      * Handle target audience change
      */
     function handleTargetAudienceChange(html: string) {
-        updateCampaignInfo({ targetAudience: html });
+        updateCampaignInfo({
+            targetAudience: html,
+        });
     }
 
     /**

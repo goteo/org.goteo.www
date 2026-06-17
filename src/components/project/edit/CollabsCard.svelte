@@ -7,18 +7,21 @@
         deleteCollaboration,
         updateCollaboration,
         validationErrors,
-        type WizardCollaboration,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/buttons/Button.svelte";
 
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
+
     let {
+        project,
         collab,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
-        collab: WizardCollaboration | null;
+        project: Project;
+        collab: ProjectCollaboration | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
@@ -27,7 +30,7 @@
     let openModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    function handleSaveCollab(data: WizardCollaboration | null) {
+    function handleSaveCollab(data: ProjectCollaboration | null) {
         if (!data) return;
         let errors;
 
@@ -62,6 +65,7 @@
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.collaborations.add.title")}
         description={$t("pages.project.edit.collaborations.add.description")}
         variant="collab"
@@ -95,6 +99,7 @@
         <CollabsModal
             bind:open={openModal}
             bind:showToast={showModalErrorToast}
+            {project}
             {collab}
             onSave={handleSaveCollab}
             onDelete={handleDeleteCollab}

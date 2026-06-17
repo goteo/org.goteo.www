@@ -68,7 +68,7 @@
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
 
-    import type { MediaImage } from "../../../stores/wizard-state";
+    import type { MediaImage } from "../../../stores/drafts/projectDraft";
 
     interface MediaUploaderProps {
         images: MediaImage[];

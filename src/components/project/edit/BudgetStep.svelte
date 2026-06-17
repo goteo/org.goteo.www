@@ -2,12 +2,12 @@
     import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
     import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
+    import { validateBudgetAmount } from "../../../stores/drafts/draftValidation";
     import {
+        currentDraft,
         navigateToStep,
-        validateBudgetAmount,
         validationErrors,
-        wizardState,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
@@ -20,8 +20,12 @@
         project: Project;
     } = $props();
 
-    let minBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.minimum);
-    let optBudgetItems: ProjectBudgetItem[] = $state($wizardState.budgetItems.optimum);
+    let minBudgetItems: ProjectBudgetItem[] = $state(
+        $currentDraft?.wizardForm.budgetItems.minimum || [],
+    );
+    let optBudgetItems: ProjectBudgetItem[] = $state(
+        $currentDraft?.wizardForm.budgetItems.optimum || [],
+    );
     let loading = $state(false);
     let showErrorToast = $state(false);
 
@@ -30,7 +34,9 @@
      * Simple navigation to next step (6) - validation happens on save/submit
      */
     function handleContinue() {
-        const errors = validateBudgetAmount();
+        if (!$currentDraft) return;
+
+        const errors = validateBudgetAmount($currentDraft);
 
         if (Object.keys(errors).length > 0) {
             validationErrors.set(errors);
@@ -43,8 +49,8 @@
     async function loadBudgetItems() {
         loading = true;
 
-        minBudgetItems = $wizardState.budgetItems.minimum;
-        optBudgetItems = $wizardState.budgetItems.optimum;
+        minBudgetItems = $currentDraft?.wizardForm.budgetItems.minimum || [];
+        optBudgetItems = $currentDraft?.wizardForm.budgetItems.optimum || [];
 
         loading = false;
     }
@@ -52,7 +58,7 @@
     $effect(() => {
         if (Object.keys($validationErrors).length > 0)
             console.log("Errores de validación:", $validationErrors);
-        if ($wizardState) {
+        if ($currentDraft) {
             loadBudgetItems();
         }
     });
@@ -91,10 +97,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard {item} {index} bind:loading />
+                    <AdminBudgetCard {project} {item} {index} bind:loading />
                 {/each}
 
-                <AdminBudgetCard isCreateCard={true} item={null} bind:loading />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading />
             </Grid>
         {/if}
     </div>
@@ -111,10 +117,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard {item} index={i} {loading} />
+                    <AdminBudgetCard {project} {item} index={i} {loading} />
                 {/each}
 
-                <AdminBudgetCard isCreateCard={true} item={null} {loading} />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} />
             </Grid>
         {/if}
     </div>

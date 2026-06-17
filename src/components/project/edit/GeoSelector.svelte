@@ -15,10 +15,10 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import {
-        validationErrors,
         touchedFields,
         markFieldAsTouched,
-    } from "../../../stores/wizard-state";
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
     import Select from "../../library/inputs/Select.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 

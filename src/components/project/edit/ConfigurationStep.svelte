@@ -11,7 +11,11 @@
 <script lang="ts">
     import RoundSelector from "./RoundSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { wizardState, updateConfiguration, navigateToStep } from "../../../stores/wizard-state";
+    import {
+        currentDraft,
+        navigateToStep,
+        updateConfiguration,
+    } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
 
     interface ConfigurationStepProps {
@@ -19,6 +23,10 @@
     }
 
     let { onContinue }: ConfigurationStepProps = $props();
+
+    let projectDeadline = $derived(
+        $currentDraft?.wizardForm.configuration.projectDeadline ?? "minimum",
+    );
 
     /**
      * Handle Continue button
@@ -60,10 +68,7 @@
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector
-            bind:deadline={$wizardState.configuration.projectDeadline}
-            onChange={handleRoundsChange}
-        />
+        <RoundSelector bind:deadline={projectDeadline} onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->

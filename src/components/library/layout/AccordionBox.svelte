@@ -23,7 +23,7 @@
 <div
     class={twMerge(
         "overflow-hidden rounded-2xl border transition-all duration-300",
-        open ? "border-grey bg-soft-purple shadow-md" : "border-grey bg-white shadow-sm",
+        open ? "border-grey bg-purple-soft shadow-md" : "border-grey bg-white shadow-sm",
         classes,
     )}
 >
