@@ -86,6 +86,17 @@
         class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
     >
         <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+                <span
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline === 'minimum'
+                        ? 'border-secondary text-secondary border'
+                        : 'bg-secondary text-white'}"
+                >
+                    {item.deadline === 'minimum'
+                        ? $t('domain.project.budget.minimum')
+                        : $t('domain.project.budget.optimum')}
+                </span>
+            </div>
             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
             <p class="text-content line-clamp-3 font-normal">
                 {item.description}

@@ -85,13 +85,23 @@
     </div>
 
     <div class="flex flex-col gap-6">
-        <span class="text-secondary text-3xl font-bold">
-            {$t("domain.project.budget.minimum")}:
-            {formatCurrency(
-                project.budget?.minimum?.money?.amount,
-                project.budget?.minimum?.money?.currency,
-            )}
-        </span>
+        <div class="flex items-center gap-3">
+            <span
+                class="border-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-bold"
+            >
+                1
+            </span>
+            <span class="text-secondary text-3xl font-bold">
+                {$t("domain.project.budget.minimum")}:
+                {formatCurrency(
+                    project.budget?.minimum?.money?.amount,
+                    project.budget?.minimum?.money?.currency,
+                )}
+            </span>
+        </div>
+        <p class="text-content -mt-2 text-sm">
+            {$t("pages.project.edit.budget.minimumSubtitle")}
+        </p>
         {#if loading}
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
@@ -104,14 +114,24 @@
             </Grid>
         {/if}
     </div>
-    <div class="flex flex-col gap-6">
-        <span class="text-secondary text-3xl font-bold">
-            {$t("domain.project.budget.optimum")}:
-            {formatCurrency(
-                project.budget?.optimum?.money?.amount,
-                project.budget?.optimum?.money?.currency,
-            )}
-        </span>
+    <div class="flex flex-col gap-6 rounded-3xl bg-variant1 p-6">
+        <div class="flex items-center gap-3">
+            <span
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white"
+            >
+                2
+            </span>
+            <span class="text-secondary text-3xl font-bold">
+                {$t("domain.project.budget.optimum")}:
+                {formatCurrency(
+                    project.budget?.optimum?.money?.amount,
+                    project.budget?.optimum?.money?.currency,
+                )}
+            </span>
+        </div>
+        <p class="text-content -mt-2 text-sm">
+            {$t("pages.project.edit.budget.optimumSubtitle")}
+        </p>
         {#if loading}
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
