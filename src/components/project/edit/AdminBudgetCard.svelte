@@ -21,12 +21,14 @@
         index,
         loading = $bindable(false),
         isCreateCard = false,
+        defaultDeadline,
     }: {
         project: Project;
         item: ProjectBudgetItem | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
+        defaultDeadline?: "minimum" | "optimum";
     } = $props();
 
     let openModal = $state(false);
@@ -80,6 +82,7 @@
         onclick={() => (openModal = true)}
         bind:open={openModal}
         bind:showToast={showModalErrorToast}
+        {defaultDeadline}
     />
 {:else if item}
     <div

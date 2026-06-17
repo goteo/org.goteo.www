@@ -110,7 +110,7 @@
                     <AdminBudgetCard {project} {item} {index} bind:loading />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading defaultDeadline="minimum" />
             </Grid>
         {/if}
     </div>
@@ -140,7 +140,7 @@
                     <AdminBudgetCard {project} {item} index={i} {loading} />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} defaultDeadline="optimum" />
             </Grid>
         {/if}
     </div>

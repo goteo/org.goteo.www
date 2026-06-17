@@ -17,6 +17,7 @@
         open: boolean;
         showToast: boolean;
         onSave: (data: any) => void;
+        defaultDeadline?: "minimum" | "optimum";
     }
 
     let {
@@ -28,6 +29,7 @@
         open = $bindable(false),
         showToast = $bindable(false),
         onSave,
+        defaultDeadline,
     }: Props = $props();
 </script>
 
@@ -66,5 +68,5 @@
 {:else if variant === "collab"}
     <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
 {:else if variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} />
+    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} {defaultDeadline} />
 {/if}
