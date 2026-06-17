@@ -28,6 +28,7 @@
     );
     let loading = $state(false);
     let showErrorToast = $state(false);
+    let hasMinimumItems = $derived(minBudgetItems.length > 0);
 
     /**
      * Handle Continue button
@@ -97,10 +98,10 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard {project} {item} {index} bind:loading />
+                    <AdminBudgetCard {project} {item} {index} bind:loading {hasMinimumItems} />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading />
+                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading {hasMinimumItems} />
             </Grid>
         {/if}
     </div>
@@ -117,10 +118,22 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard {project} {item} index={i} {loading} />
+                    <AdminBudgetCard {project} {item} index={i} {loading} {hasMinimumItems} />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} />
+                {#if hasMinimumItems}
+                    <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} {hasMinimumItems} />
+                {:else}
+                    <AdminBudgetCard
+                        {project}
+                        isCreateCard={true}
+                        item={null}
+                        {loading}
+                        {hasMinimumItems}
+                        disabled={true}
+                        disabledMessage={$t("pages.project.edit.budget.validation.minimumRequiredFirst")}
+                    />
+                {/if}
             </Grid>
         {/if}
     </div>
