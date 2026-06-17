@@ -5,6 +5,7 @@
     import { locale } from "../../i18n/store";
     import { type ProjectUpdate } from "../../openapi/client/index";
     import { formatDate } from "../../utils/dates.ts";
+
     import type { ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
 
     const cardStyles = {

@@ -214,7 +214,7 @@ Before building new UI, check `src/components/library/` and `src/components/icon
 | `Dropdown/DropdownItem`         | (see file)                                                                                                 | Dropdown menu item                                       |
 | `Share/ShareButton`             | (see file)                                                                                                 | Share button trigger                                     |
 | `Share/CopyUrl`                 | (see file)                                                                                                 | Copy URL to clipboard                                    |
-| `Share/Facebook` / `Share/X`   | (see file)                                                                                                 | Social share buttons                                     |
+| `Share/Facebook` / `Share/X`    | (see file)                                                                                                 | Social share buttons                                     |
 | `Share/Iframe`                  | (see file)                                                                                                 | Embed iframe share                                       |
 | `admin/ChatTextarea`            | (see file)                                                                                                 | Admin chat textarea input                                |
 
@@ -767,20 +767,20 @@ Project creation wizard draft state, persisted via Dexie (IndexedDB). Use `src/u
 
 ## Additional utilities
 
-| Util                                               | Import                        | Signature                                                                     |
-| -------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
-| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts`      | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
-| `formatDate(date, locale)`                         | `src/utils/dates.ts`               | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
-| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`          | Locale-aware currency via `Intl.NumberFormat`                                 |
-| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`          | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
-| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`           | Pre-built `Response` objects for API endpoints                                |
-| `uploadToObjectStorage()`                          | `src/utils/objectStorage.ts`       | Server-side S3-compatible upload (Node/Workers build-time only)               |
-| `publishProject()`                                 | `src/utils/projectPublisher.ts`    | Submit a project draft to the API for publishing                              |
-| `submitProjectData()`                              | `src/utils/projectSubmissionApi.ts`| Low-level API calls for project wizard step submission                        |
-| `getTippingConfig()`                               | `src/utils/tipping.ts`             | Read tipping env vars (`PUBLIC_TIPPING_*`) into a typed config object         |
-| `budgetColors`                                     | `src/utils/budgetColors.ts`        | Budget bar color palette constants                                            |
-| `getCategories()`                                  | `src/utils/categories.ts`          | Fetch + cache project categories from the API                                 |
-| `getLang()`                                        | `src/utils/lang.ts`                | Resolve locale string from URL or Accept-Language                             |
+| Util                                               | Import                              | Signature                                                                     |
+| -------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts`       | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
+| `formatDate(date, locale)`                         | `src/utils/dates.ts`                | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
+| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`           | Locale-aware currency via `Intl.NumberFormat`                                 |
+| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`           | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
+| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`            | Pre-built `Response` objects for API endpoints                                |
+| `uploadToObjectStorage()`                          | `src/utils/objectStorage.ts`        | Server-side S3-compatible upload (Node/Workers build-time only)               |
+| `publishProject()`                                 | `src/utils/projectPublisher.ts`     | Submit a project draft to the API for publishing                              |
+| `submitProjectData()`                              | `src/utils/projectSubmissionApi.ts` | Low-level API calls for project wizard step submission                        |
+| `getTippingConfig()`                               | `src/utils/tipping.ts`              | Read tipping env vars (`PUBLIC_TIPPING_*`) into a typed config object         |
+| `budgetColors`                                     | `src/utils/budgetColors.ts`         | Budget bar color palette constants                                            |
+| `getCategories()`                                  | `src/utils/categories.ts`           | Fetch + cache project categories from the API                                 |
+| `getLang()`                                        | `src/utils/lang.ts`                 | Resolve locale string from URL or Accept-Language                             |
 
 ## `Thtml` component
 
