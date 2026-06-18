@@ -14,6 +14,7 @@ Integrated with searchStore for state management and URL synchronization
     import { t, setLocale } from "../../i18n/store";
     import { searchStore, searchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
+    import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
 
     interface Props {
         locale?: string;
@@ -87,7 +88,7 @@ Integrated with searchStore for state management and URL synchronization
                     onSearch={(title) => updateFilters({ title })}
                     onEnter={handleSearch}
                     onClear={handleSearch}
-                    placeholder={$t("pages.search.input.placeholder")}
+                    placeholder={$t("domain.search.bar.placeholder")}
                     data-testid="search-input"
                 />
             </div>
@@ -126,6 +127,14 @@ Integrated with searchStore for state management and URL synchronization
                 selectedValue={$searchFilters.status}
                 onSelect={(value) => updateFilters({ status: value })}
                 data-testid="status-filter"
+            />
+            <DropdownMenu
+                variant="multiselect"
+                hasSearch={true}
+                items={[
+                    { id: "1", label: "First" },
+                    { id: "2", label: "Second" },
+                ]}
             />
         </div>
 

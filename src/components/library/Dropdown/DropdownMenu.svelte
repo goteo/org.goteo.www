@@ -3,17 +3,20 @@
     import SearchIcon from "../../../svgs/SearchIcon.svelte";
 
     import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
+    import { t } from "../../../i18n/store";
 
     let {
         variant,
         items,
-        hasSearch = false,
         selectedIds = $bindable<string[]>([]),
+        hasSearch = false,
+        searchPlaceholder = $t("domain.search.bar.placeholder")
     } = $props<{
         variant: DropdownVariant;
         items: DropdownItemType[];
-        hasSearch?: boolean;
         selectedIds?: string[];
+        hasSearch?: boolean;
+        searchPlaceholder?: string;
     }>();
 
     const renderedItems = $derived(
@@ -41,7 +44,7 @@
                 <input
                     class="max-h-6 w-full max-w-72 border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                     type="text"
-                    placeholder="Search..."
+                    placeholder={searchPlaceholder}
                 />
                 <SearchIcon class="absolute right-4" width="32" height="32" />
             </div>

@@ -30,6 +30,11 @@
     "header": {
       "categories": "Proyectos"
     },
+    "search": {
+      "bar": {
+        "placeholder": "Buscar..."
+      }
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
@@ -748,7 +753,6 @@
       "showingTopResults": "Mostrando las {{count}} campañas más populares",
       "loading": "Buscando campañas...",
       "input": {
-        "placeholder": "Buscar",
         "label": "Buscar campañas",
         "clear": "Limpiar búsqueda",
         "button": "Buscar"
