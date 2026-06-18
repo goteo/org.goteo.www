@@ -118,6 +118,7 @@ Integrated with searchStore for state management and URL synchronization
                 data-testid="status-filter"
             />
             <DropdownMenu
+                class="border"
                 variant="multiselect"
                 hasSearch={true}
                 onSearch={(value) => console.log(value)}
