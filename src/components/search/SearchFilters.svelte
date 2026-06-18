@@ -15,6 +15,7 @@ Integrated with searchStore for state management and URL synchronization
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
     import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
+    import TerritoryFilter from "./TerritoryFilter.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;
@@ -117,16 +118,7 @@ Integrated with searchStore for state management and URL synchronization
                 onSelect={(value) => updateFilters({ status: value })}
                 data-testid="status-filter"
             />
-            <DropdownMenu
-                class="border"
-                variant="multiselect"
-                hasSearch={true}
-                onSearch={(value) => console.log(value)}
-                items={[
-                    { id: "1", label: "First" },
-                    { id: "2", label: "Second" },
-                ]}
-            />
+            <TerritoryFilter />
         </div>
 
         <!-- Category filters -->
