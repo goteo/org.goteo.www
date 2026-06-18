@@ -131,6 +131,7 @@ Integrated with searchStore for state management and URL synchronization
             <DropdownMenu
                 variant="multiselect"
                 hasSearch={true}
+                onSearch={(value) => console.log(value)}
                 items={[
                     { id: "1", label: "First" },
                     { id: "2", label: "Second" },
