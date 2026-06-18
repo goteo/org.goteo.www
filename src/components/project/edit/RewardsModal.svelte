@@ -9,10 +9,11 @@
     import { defaultCurrency } from "../../../utils/currencies";
     import FileUpload from "../../FileUpload.svelte";
     import Button from "../../library/Button.svelte";
+    import TextArea from "../../library/TextArea.svelte";
+    import TextInput from "../../library/TextInput.svelte";
     import Toast from "../../library/Toast.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),
@@ -40,8 +41,25 @@
 
     let openDeleteModal = $state(false);
 
-    const INPUTS_CLASSES: ClassNameValue =
-        "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
+    let titleTouched = $state(false);
+    let descriptionTouched = $state(false);
+    let moneyTouched = $state(false);
+
+    const isFormValid = $derived(
+        title.trim() !== "" && description.trim() !== "" && moneyAmount > 0,
+    );
+
+    const titleError = $derived(
+        titleTouched && title.trim() === ""
+            ? $t("pages.project.edit.rewards.modal.validation.title")
+            : undefined,
+    );
+    const descriptionError = $derived(descriptionTouched && description.trim() === "" ? $t("pages.project.edit.rewards.modal.validation.description") : undefined);
+    const moneyError = $derived(
+        moneyTouched && moneyAmount <= 0
+            ? $t("pages.project.edit.rewards.modal.validation.amount")
+            : undefined,
+    );
 
     function handleSaveOrCreate() {
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
@@ -96,23 +114,30 @@
             {$t("pages.project.edit.rewards.modal.description")}
         </p>
     {/snippet}
-    <div class="flex flex-col gap-4">
-        <input
-            type="text"
-            placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
-            class={INPUTS_CLASSES}
+    <div class="flex flex-col gap-4 pt-2">
+        <TextInput
             bind:value={title}
+            labelText={$t("pages.project.edit.rewards.modal.placeholders.title")}
+            placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
+            error={titleError}
+            onBlur={() => (titleTouched = true)}
         />
-        <textarea
+        <TextArea
+            id="reward-description"
             bind:value={description}
+            labelText={$t("pages.project.edit.rewards.modal.placeholders.description")}
             placeholder={$t("pages.project.edit.rewards.modal.placeholders.description")}
-            class={`h-32 resize-none ${INPUTS_CLASSES}`}
-        ></textarea>
-        <input
+            rows={5}
+            error={descriptionError}
+            onBlur={() => (descriptionTouched = true)}
+        />
+        <TextInput
             bind:value={moneyAmount}
             type="number"
+            labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
             placeholder={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
-            class={INPUTS_CLASSES}
+            error={moneyError}
+            onBlur={() => (moneyTouched = true)}
         />
         <div class="flex flex-col gap-6">
             <FileUpload bind:files />
@@ -131,7 +156,7 @@
                 onclick={() => handleDeleteClick()}
             />
         {/if}
-        <Button onclick={() => handleSaveOrCreate()} class="w-fit">
+        <Button onclick={() => handleSaveOrCreate()} disabled={!isFormValid} class="w-fit">
             {$t("common.continue")}
         </Button>
     {/snippet}
