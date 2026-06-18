@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - develop
+            - feat/implement-crowdin-auto-translation-pipeline
         paths:
             - "src/i18n/locales/es.json"
     workflow_dispatch:
