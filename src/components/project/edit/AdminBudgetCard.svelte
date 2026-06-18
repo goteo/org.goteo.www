@@ -74,8 +74,8 @@
 
 {#if isCreateCard}
     <CreateCard
-        title={$t("pages.project.edit.budget.add.title")}
-        description={$t("pages.project.edit.budget.add.description")}
+        title={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.title`) : $t("pages.project.edit.budget.add.title")}
+        description={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.description`) : $t("pages.project.edit.budget.add.description")}
         variant="budget"
         {project}
         onSave={handleSaveBudgetItem}
@@ -92,8 +92,8 @@
             <div class="flex items-center gap-2">
                 <span
                     class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline === 'minimum'
-                        ? 'border-secondary text-secondary border'
-                        : 'bg-secondary text-white'}"
+                        ? 'bg-secondary text-white'
+                        : 'border-secondary text-secondary border'}"
                 >
                     {item.deadline === 'minimum'
                         ? $t('domain.project.budget.minimum')

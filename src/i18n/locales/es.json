@@ -467,7 +467,17 @@
           "add": {
             "title": "Añade una partida",
             "description": "Puedes indicar cual es el mínimo y cual es el óptimo que necesitas para llevar a cabo tu proyecto.",
-            "button": "Añadir partida"
+            "button": "Añadir partida",
+            "minimum": {
+              "title": "Partida mínima",
+              "description": "Define los gastos básicos e imprescindibles para que tu proyecto despegue.",
+              "button": "Añadir mínima"
+            },
+            "optimum": {
+              "title": "Partida óptima",
+              "description": "Da un salto de calidad con recursos extra que harían tu proyecto aún más completo.",
+              "button": "Añadir óptima"
+            }
           },
           "modal": {
             "title": "Añadir partidas del presupuesto",

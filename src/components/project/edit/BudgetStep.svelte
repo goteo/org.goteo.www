@@ -84,10 +84,10 @@
         <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6 rounded-3xl border border-grey bg-variant1 p-6 shadow-sm">
         <div class="flex items-center gap-3">
             <span
-                class="border-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-bold"
+                class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white"
             >
                 1
             </span>
@@ -114,10 +114,10 @@
             </Grid>
         {/if}
     </div>
-    <div class="flex flex-col gap-6 rounded-3xl bg-variant1 p-6">
+    <div class="flex flex-col gap-6">
         <div class="flex items-center gap-3">
             <span
-                class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white"
+                class="border-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-bold"
             >
                 2
             </span>
