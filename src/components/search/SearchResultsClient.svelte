@@ -21,8 +21,10 @@ Manages real-time filtering of campaigns without page reloads
         resultCount,
         hasNextPage,
     } from "../../stores/searchStore";
+    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
@@ -246,34 +248,17 @@ Manages real-time filtering of campaigns without page reloads
 
     {#if $isEmpty && !$isSearching && !isTransforming}
         <!-- Empty State -->
-        <div class="py-12 text-center" data-testid="search-empty">
-            <div class="mb-4">
-                <svg
-                    class="mx-auto h-16 w-16 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                </svg>
-            </div>
+        <div class="flex flex-col items-center py-12 text-center" data-testid="search-empty">
+            <SearchIcon class="mb-4 h-16 w-16 text-gray-400" />
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.empty.title")}
             </h3>
             <p class="mb-6 text-gray-600">
                 {$t("pages.search.empty.description")}
             </p>
-            <button
-                onclick={clearAllFilters}
-                class="bg-primary text-tertiary rounded-full px-6 py-2 font-semibold transition-opacity hover:opacity-90"
-            >
+            <Button onclick={clearAllFilters}>
                 {$t("pages.search.empty.clearFilters")}
-            </button>
+            </Button>
         </div>
     {/if}
 

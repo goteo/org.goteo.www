@@ -22,7 +22,7 @@
 >
     <path
         d="M10 10L13 13"
-        stroke="#462949"
+        stroke="currentColor"
         stroke-width="1"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -31,7 +31,7 @@
         cx="7"
         cy="7"
         r="4"
-        stroke="#462949"
+        stroke="currentColor"
         stroke-width="1"
         stroke-linecap="round"
         stroke-linejoin="round"
