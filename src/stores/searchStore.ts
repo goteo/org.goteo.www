@@ -443,7 +443,7 @@ function createSearchStore() {
 export const searchStore = createSearchStore();
 
 // Derived stores for computed values
-export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters);
+export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters || {});
 
 export const searchResults = derived(searchStore, ($searchStore) => $searchStore.results);
 
