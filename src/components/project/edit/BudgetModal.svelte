@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+    import { untrack } from "svelte";
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
@@ -27,13 +28,17 @@
         onDelete?: (deadline: "minimum" | "optimum") => void;
     } = $props();
 
-    let selectedBudgetTitle = $state(budgetItem?.title ?? "");
+    let selectedBudgetTitle = $state(untrack(() => budgetItem?.title ?? ""));
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
-        budgetItem?.type,
+        untrack(() => budgetItem?.type),
     );
-    let amount = $state(budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0);
-    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
-    let selectedBudgetDescription = $state(budgetItem?.description ?? "");
+    let amount = $state(
+        untrack(() => (budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0)),
+    );
+    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
+        untrack(() => budgetItem?.deadline),
+    );
+    let selectedBudgetDescription = $state(untrack(() => budgetItem?.description ?? ""));
 
     let openDeleteModal = $state(false);
 

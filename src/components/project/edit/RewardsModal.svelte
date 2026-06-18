@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+    import { untrack } from "svelte";
 
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
@@ -31,12 +32,12 @@
         onDelete?: () => void;
     } = $props();
 
-    let title = $state(reward?.title ?? "");
-    let description = $state(reward?.description ?? "");
+    let title = $state(untrack(() => reward?.title ?? ""));
+    let description = $state(untrack(() => reward?.description ?? ""));
 
-    let moneyAmount = $state(reward?.money.amount ? reward.money.amount / 100 : 0);
-    let rewardCount = $state(reward?.unitsTotal ?? 1);
-    let unlimited = $state(!reward?.isFinite ? true : false);
+    let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
+    let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
+    let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
     let files = $state<File[]>([]);
 
     let openDeleteModal = $state(false);
@@ -54,7 +55,11 @@
             ? $t("pages.project.edit.rewards.modal.validation.title")
             : undefined,
     );
-    const descriptionError = $derived(descriptionTouched && description.trim() === "" ? $t("pages.project.edit.rewards.modal.validation.description") : undefined);
+    const descriptionError = $derived(
+        descriptionTouched && description.trim() === ""
+            ? $t("pages.project.edit.rewards.modal.validation.description")
+            : undefined,
+    );
     const moneyError = $derived(
         moneyTouched && moneyAmount <= 0
             ? $t("pages.project.edit.rewards.modal.validation.amount")
