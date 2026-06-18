@@ -28,15 +28,15 @@ jobs:
                   CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-            - name: Trigger Machine Translation in Crowdin
+            - name: Trigger AI Pre-translation in Crowdin
               run: |
                   curl -s -X POST \
                     "https://api.crowdin.com/api/v2/projects/${{ secrets.CROWDIN_PROJECT_ID }}/pre-translations" \
                     -H "Authorization: Bearer ${{ secrets.CROWDIN_PERSONAL_TOKEN }}" \
                     -H "Content-Type: application/json" \
                     -d '{
-                      "method": "mt",
-                      "engineId": ${{ secrets.CROWDIN_MT_ENGINE_ID }},
+                      "method": "ai",
+                      "aiPromptId": ${{ secrets.CROWDIN_AI_PROMPT_ID }},
                       "languageIds": ["en", "ca"],
                       "fileIds": []
                     }'
