@@ -11,13 +11,12 @@ Integrated with searchStore for state management and URL synchronization
     import FilterDropdown from "./FilterDropdown.svelte";
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
-    import { t, setLocale } from "../../i18n/store";
+    import { t } from "../../i18n/store";
     import { searchStore, searchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
     import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
 
     interface Props {
-        locale?: string;
         initialFilters?: {
             title?: string;
             status?: string;
@@ -25,15 +24,13 @@ Integrated with searchStore for state management and URL synchronization
         };
     }
 
-    let { locale = "es", initialFilters }: Props = $props();
+    let { initialFilters }: Props = $props();
 
     // Filter visibility (collapsed by default on all devices)
     let filtersOpen = $state(false);
 
     // Initialize locale and filters when component mounts
     onMount(() => {
-        setLocale(locale);
-
         // Initialize with server-provided filters if available (without triggering search)
         if (initialFilters) {
             searchStore.initializeFilters({
