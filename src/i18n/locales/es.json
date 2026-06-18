@@ -867,6 +867,7 @@
   },
   "system": {
     "_": "System messages (errors, notifications, validation, etc.)",
+    "testing": "Probando...",
     "loading": "Cargando...",
     "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
     "error": {
