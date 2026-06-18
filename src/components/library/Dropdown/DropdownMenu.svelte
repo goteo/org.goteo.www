@@ -1,11 +1,12 @@
 <script lang="ts">
+    import { clickOutside } from "flowbite-svelte";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
+
     import DropdownItem from "./DropdownItem.svelte";
     import { t } from "../../../i18n/store";
     import SearchIcon from "../../../svgs/SearchIcon.svelte";
 
     import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
-    import { clickOutside } from "flowbite-svelte";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     interface Props {
         class?: ClassNameValue;

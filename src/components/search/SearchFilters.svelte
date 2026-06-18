@@ -11,11 +11,10 @@ Integrated with searchStore for state management and URL synchronization
     import FilterDropdown from "./FilterDropdown.svelte";
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
+    import TerritoryFilter from "./TerritoryFilter.svelte";
     import { t } from "../../i18n/store";
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
-    import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
-    import TerritoryFilter from "./TerritoryFilter.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;

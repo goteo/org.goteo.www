@@ -1,7 +1,8 @@
 <script lang="ts">
     import { searchPlace } from "../../services/nominatim";
-    import type { DropdownItemType } from "../library/Dropdown/dropdown.types";
     import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
+
+    import type { DropdownItemType } from "../library/Dropdown/dropdown.types";
 
     let items: DropdownItemType[] = $state([]);
 
