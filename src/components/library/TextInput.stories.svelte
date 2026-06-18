@@ -13,7 +13,7 @@
         argTypes: {
             type: {
                 control: "select",
-                options: ["text", "email", "password", "tel", "url", "date"],
+                options: ["text", "email", "password", "tel", "url", "date", "number"],
             },
             disabled: { control: "boolean" },
             required: { control: "boolean" },
@@ -38,3 +38,5 @@
 <Story name="Disabled" args={{ labelText: "Full name", value: "John Doe", disabled: true }} />
 
 <Story name="Email" args={{ labelText: "Email", type: "email", placeholder: "you@example.com" }} />
+
+<Story name="Number" args={{ labelText: "Amount", type: "number", placeholder: "0" }} />
