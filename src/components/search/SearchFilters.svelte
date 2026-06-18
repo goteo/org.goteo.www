@@ -12,32 +12,24 @@ Integrated with searchStore for state management and URL synchronization
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
     import { t } from "../../i18n/store";
-    import { searchStore, searchFilters } from "../../stores/searchStore";
+    import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../../svgs/FilterIcon.svelte";
     import DropdownMenu from "../library/Dropdown/DropdownMenu.svelte";
 
     interface Props {
-        initialFilters?: {
-            title?: string;
-            status?: string;
-            "categories[]"?: string[];
-        };
+        initialFilters?: SearchFilters;
     }
 
     let { initialFilters }: Props = $props();
 
     // Filter visibility (collapsed by default on all devices)
-    let filtersOpen = $state(false);
+    let filtersOpen = $state(true);
 
     // Initialize locale and filters when component mounts
     onMount(() => {
         // Initialize with server-provided filters if available (without triggering search)
         if (initialFilters) {
-            searchStore.initializeFilters({
-                title: initialFilters.title || "",
-                status: initialFilters.status || "",
-                "categories[]": initialFilters["categories[]"] || [],
-            });
+            searchStore.initializeFilters(initialFilters);
         }
     });
 
@@ -117,7 +109,7 @@ Integrated with searchStore for state management and URL synchronization
     <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
-        <div class="w-full lg:max-w-sm">
+        <div class="flex flex-col gap-6 lg:flex-row">
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("pages.search.filters.status.label")}
