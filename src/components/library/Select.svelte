@@ -106,7 +106,10 @@
     {#if labelText}
         <label
             for={finalId}
-            class={twMerge("text-secondary absolute -top-2 left-3 bg-white px-1 text-xs leading-4 font-medium transition-all duration-200", error && "text-tertiary")}
+            class={twMerge(
+                "text-secondary absolute -top-2 left-3 bg-white px-1 text-xs leading-4 font-medium transition-all duration-200",
+                error && "text-tertiary",
+            )}
         >
             {labelText}
             {#if required}
@@ -147,5 +150,4 @@
             {helperText}
         </p>
     {/if}
-
 </div>
