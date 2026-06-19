@@ -6,13 +6,11 @@
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import FileUpload from "../../FileUpload.svelte";
     import Button from "../../library/Button.svelte";
     import TextArea from "../../library/TextArea.svelte";
     import TextInput from "../../library/TextInput.svelte";
-    import Toast from "../../library/Toast.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
 
@@ -93,24 +91,12 @@
 
 <Modal
     bind:open
-    onclose={() => validationErrors.set({})}
     closeBtnClass="top-7 end-7 cursor-pointer bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
     class="fixed top-1/2 left-1/2 mx-2 flex w-full max-w-225 -translate-x-1/2 -translate-y-1/2 flex-col gap-8 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px] sm:mx-4 lg:mx-0"
     headerClass="md:p-0 p-0 flex-col gap-4 justify-start items-start"
     bodyClass="md:p-0 p-0"
     footerClass="md:p-0 p-0 flex items-center justify-end gap-4"
 >
-    {#if Object.keys($validationErrors).length === 1}
-        {#each Object.values($validationErrors) as validationError}
-            <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
-                {$t(validationError)}
-            </Toast>
-        {/each}
-    {:else if Object.keys($validationErrors).length >= 2}
-        <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
-            {$t("system.validation.missingRequiredFields")}
-        </Toast>
-    {/if}
     {#snippet header()}
         <h2 class="text-xl font-bold text-black">
             {$t("pages.project.edit.rewards.modal.title")}
