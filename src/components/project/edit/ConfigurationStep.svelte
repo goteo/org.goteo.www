@@ -71,7 +71,7 @@
 
     /**
      * Handle category selection change
-     * 
+     *
      */
     function handleCategoryChange(selected: Category[]) {
         const categoryIris = selected.map((s) => {
@@ -92,7 +92,7 @@
             {$t("pages.project.edit.configuration.subtitle")}
         </p>
     </div>
-    
+
     <!-- Categories Section -->
     <div class="space-y-4">
         <div class="space-y-4">

@@ -230,7 +230,6 @@
             });
         }
     });
-
 </script>
 
 <section class="wrapper md:flex md:flex-row">
