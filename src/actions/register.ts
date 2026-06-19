@@ -1,13 +1,12 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
+import { passwordGrant } from "../auth/grant.ts";
 import {
     apiUsersPost,
-    apiUserTokensPost,
     apiUsersIdpersonPatch,
     apiUsersIdorganizationPatch,
 } from "../openapi/client/index.ts";
-import { extractId } from "../utils/extractId.ts";
 
 export const register = defineAction({
     accept: "form",
@@ -53,16 +52,10 @@ export const register = defineAction({
                 },
             });
             const userId = String(createUserResponse.data?.id ?? "");
-            const accountingId = extractId(createUserResponse.data?.accounting);
 
-            const { data: authData } = await apiUserTokensPost({
-                body: {
-                    identifier,
-                    password,
-                },
-            });
+            const auth = await passwordGrant({ identifier, password });
 
-            if (!authData?.id || !authData.token) {
+            if (!auth.access_token) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
                     message: t("login.error.invalidCredentials"),
@@ -73,7 +66,7 @@ export const register = defineAction({
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
                     headers: {
-                        Authorization: `Bearer ${authData?.token}`,
+                        Authorization: `Bearer ${auth.access_token}`,
                     },
                     body: {
                         taxId: dni ?? "",
@@ -85,7 +78,7 @@ export const register = defineAction({
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
                     headers: {
-                        Authorization: `Bearer ${authData?.token}`,
+                        Authorization: `Bearer ${auth.access_token}`,
                     },
                     body: {
                         firstName: firstname,
@@ -96,7 +89,7 @@ export const register = defineAction({
                 await apiUsersIdorganizationPatch({
                     path: { id: userId },
                     headers: {
-                        Authorization: `Bearer ${authData?.token}`,
+                        Authorization: `Bearer ${auth.access_token}`,
                     },
                     body: {
                         taxId: cif ?? "",
@@ -104,21 +97,6 @@ export const register = defineAction({
                     },
                 });
             }
-
-            context.cookies.set(
-                "access-token",
-                {
-                    id: authData.id,
-                    token: authData.token,
-                    accountingId,
-                },
-                {
-                    path: "/",
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "strict",
-                },
-            );
 
             return { success: true };
         } catch (error) {
