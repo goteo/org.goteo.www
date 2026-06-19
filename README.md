@@ -2,18 +2,62 @@
 
 Frontend for the [Goteo](https://goteo.org) crowdfunding platform — built on Astro 5 + Svelte 5 + TailwindCSS 4, deployed on Cloudflare Workers.
 
-## Stack
+> **NOTE**: This application is a client of the [Goteo v4 API](https://github.com/goteo/org.goteo.api). You need a running v4 API instance and an OAuth client registered in it before this web app will work.
 
-| Layer      | Technology                                  |
-| ---------- | ------------------------------------------- |
-| Framework  | Astro 5                                     |
-| UI         | Svelte 5 (runes), TailwindCSS 4             |
-| Language   | TypeScript 5                                |
-| Runtime    | Cloudflare Workers (also supports Node)     |
-| API client | `@hey-api/client-fetch` (generated OpenAPI) |
-| Testing    | Vitest (unit), Cypress (E2E), Storybook     |
+## Installation
 
-## Commands
+This application requires [Node.js](https://nodejs.org/en/download) (v20 or later) and the [pnpm](https://pnpm.io/installation) package manager. It also needs a reachable [Goteo v4 API](https://github.com/goteo/org.goteo.api) instance to connect to.
+
+### 1. Clone or download this repository.
+
+```shell
+git clone https://github.com/goteo/org.goteo.www
+cd org.goteo.www
+```
+
+### 2. Install the dependencies.
+
+```shell
+pnpm install
+```
+
+### 3. Configure the environment.
+
+Copy the example environment file and fill in the values for your setup.
+
+```shell
+cp .env.example .env
+```
+
+The minimum required values to boot the app and authenticate users are:
+
+| Variable                                    | Description                                                                                   |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `PUBLIC_API_URL`                            | Base URL of your Goteo v4 API instance (e.g. `http://localhost:8090`)                          |
+| `PUBLIC_API_VERSION`                        | API version — keep as `v4`                                                                     |
+| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` | Credentials of an OAuth client registered in the API. Must allow the grants `authorization_code`, `refresh_token`, `password` |
+
+> NOTE: The OAuth client must exist **in the v4 API instance**. See the API's [Authentication docs](https://api.v4.goteo.org/v4#section/Authentication).
+
+The remaining variables (tipping, Facebook share, object storage, HTTP Basic auth) are **optional** and the app falls back to sane defaults when they are empty. See [`.env.example`](.env.example) for the full annotated list and the [Environment variables](#environment-variables) section below.
+
+## Usage
+
+Start the development server.
+
+```shell
+pnpm dev
+```
+
+The app should be live at [http://localhost:4321](http://localhost:4321).
+
+To run the app the same way it runs in production (on the Cloudflare Workers runtime), use the Wrangler dev server instead:
+
+```shell
+pnpm dev:worker
+```
+
+### Other commands
 
 | Command                | Action                                                  |
 | :--------------------- | :------------------------------------------------------ |
@@ -31,6 +75,81 @@ Frontend for the [Goteo](https://goteo.org) crowdfunding platform — built on A
 | `pnpm cypress:run`     | Cypress E2E headless                                    |
 | `pnpm test:e2e`        | Start dev server + run Cypress headless                 |
 | `pnpm test:e2e:ci`     | CI E2E against Workers preview build                    |
+
+### Regenerating the API SDK
+
+The TypeScript API client under `src/openapi/client/` is generated from the live API's OpenAPI spec. Regenerate it whenever the API spec changes (requires the API running and `PUBLIC_API_URL` / `PUBLIC_API_VERSION` set):
+
+```shell
+pnpm openapi
+```
+
+This fetches the spec from `$PUBLIC_API_URL/$PUBLIC_API_VERSION/docs.json`. Commit the generated files together with any config change.
+
+## Testing
+
+End-to-end tests use [Cypress](https://www.cypress.io/).
+
+```shell
+# Interactive runner
+pnpm cypress:open
+
+# Headless run against an already-running dev server
+pnpm cypress:run
+
+# Start the dev server and run the headless suite in one command
+pnpm test:e2e
+```
+
+Component and unit tests run on [Vitest](https://vitest.dev/) through the Storybook test addon — launch Storybook to develop and visually check components:
+
+```shell
+pnpm storybook
+```
+
+## Before opening a PR
+
+```shell
+pnpm format         # Fix formatting (ESLint + Prettier)
+pnpm cypress:run    # E2E must pass
+```
+
+## Debugging
+
+Common issues you might run into while developing:
+
+### 1. Blank pages or auth failures right after setup.
+
+This almost always means the app cannot reach the API or the OAuth client is misconfigured. Check that:
+
+- `PUBLIC_API_URL` points to a reachable v4 API instance and includes the protocol (`http://` / `https://`).
+- An OAuth client exists **in that API instance** and its `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` match your `.env`.
+- The OAuth client allows the `authorization_code`, `refresh_token` and `password` grants.
+
+### 2. Type errors against the API after the API changed.
+
+The generated SDK is out of date. Regenerate it (API must be running):
+
+```shell
+pnpm openapi
+```
+
+### 3. The app works with `pnpm dev` but breaks with `pnpm dev:worker`.
+
+`pnpm dev:worker` runs on the Cloudflare Workers runtime, which has no Node.js APIs (`fs`, `path`, `os`, `child_process`, …). Runtime code must use Web APIs (`fetch`, `crypto`, `URL`, `Cache`) instead. Move any Node-only logic to build-time code.
+
+---
+
+## Stack
+
+| Layer      | Technology                                  |
+| ---------- | ------------------------------------------- |
+| Framework  | Astro 5                                     |
+| UI         | Svelte 5 (runes), TailwindCSS 4             |
+| Language   | TypeScript 5                                |
+| Runtime    | Cloudflare Workers (also supports Node)     |
+| API client | `@hey-api/client-fetch` (generated OpenAPI) |
+| Testing    | Vitest (unit), Cypress (E2E), Storybook     |
 
 ## Routes
 
@@ -97,6 +216,27 @@ src/
     └── drafts/       # Draft DB repository helpers
 ```
 
+## Environment variables
+
+Full list lives in [`.env.example`](.env.example). Grouped by purpose:
+
+| Variable                                      | Required | Purpose                                                          |
+| --------------------------------------------- | :------: | ---------------------------------------------------------------- |
+| `PUBLIC_API_URL`                              |    ✅    | Base URL of the v4 API instance                                  |
+| `PUBLIC_API_VERSION`                          |    ✅    | API version (`v4`)                                               |
+| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                  |
+| `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                   |
+| `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                              |
+| `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)              |
+| `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                      |
+| `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                            |
+| `PUBLIC_TIPPING_DEFAULT_CHECKED`              |          | `"true"` to pre-check the tip option                            |
+| `PUBLIC_FACEBOOK_APP_ID`                      |          | Facebook share dialog app ID                                    |
+| `CLOUDFLARE_INCLUDE_PROCESS_ENV`              |          | `"true"` — required for Cloudflare Workers to read env vars     |
+| `BASIC_AUTH`                                  |          | `"true"` to add an HTTP Basic auth layer (not a replacement for OAuth) |
+| `BASIC_AUTH_USERNAME` / `BASIC_AUTH_PASSWORD` |          | Credentials for the Basic auth layer                            |
+| `OBJECT_STORAGE_*`                            |          | S3-compatible storage (access key, secret, region, endpoint, bucket) for media upload |
+
 ## CI / Deployment
 
 | Workflow             | Trigger           | Action                            |
@@ -105,10 +245,3 @@ src/
 | `deploy.yml`         | Push to `develop` | Deploy to Cloudflare (staging)    |
 | `cypress-tests.yml`  | PR / push         | Cypress E2E headless              |
 | `prettier-check.yml` | PR / push         | Prettier format check             |
-
-## Before opening a PR
-
-```bash
-pnpm format         # Fix formatting
-pnpm cypress:run    # E2E must pass
-```
