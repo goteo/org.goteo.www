@@ -5,6 +5,7 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
+    import Checkbox from "../../library/Checkbox.svelte";
     import FileUpload from "../../FileUpload.svelte";
     import Close from "../../icons/Close.svelte";
     import Button from "../../library/Button.svelte";
@@ -43,6 +44,7 @@
     //     linkedin: "",
     // });
 
+    let termsAccepted = $state(false);
     let touched = $state<Set<string>>(new Set());
 
     function touch(field: string) {
@@ -92,7 +94,7 @@
                 : undefined,
     });
 
-    let isValid = $derived(Object.values(errors).every((e) => e === undefined));
+    let isValid = $derived(Object.values(errors).every((e) => e === undefined) && termsAccepted);
 </script>
 
 <div class="w-1/2">
@@ -380,6 +382,14 @@
                     />
                 </div>
             </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <Checkbox bind:checked={termsAccepted}>
+                <span class="text-secondary">
+                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
+                </span>
+            </Checkbox>
         </div>
 
         <div class="mt-10 flex">
