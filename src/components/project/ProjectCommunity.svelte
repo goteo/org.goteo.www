@@ -39,19 +39,10 @@
     let hasMore = $state(false);
     let currentPage = $state(1);
 
-    function getSupportType(item: EnrichedSupport) {
-        switch (true) {
-            case item.matchfunding:
-                return "matchfunding";
-            default:
-                return "default";
-        }
-    }
-
     const groupedItems = $derived.by(() =>
         projectsSupportItems.reduce(
             (groups, item) => {
-                const type = getSupportType(item);
+                const type = item.matchfunding ? "matchfunding" : "default";
                 (groups[type] ??= []).push(item);
                 return groups;
             },
@@ -80,6 +71,19 @@
         );
     }
 
+    const matchfundingCount = $derived(groupedItems.matchfunding?.length ?? 0);
+    const hasMatchfunding = $derived(matchfundingCount > 0);
+    const isSingleMatchfunding = $derived(matchfundingCount === 1);
+
+    const visibleDefaultItems = $derived(
+        hasMatchfunding
+            ? groupedItems.default
+            : groupedItems.default?.slice(
+                  0,
+                  PAGE_SIZE - 2 + Math.max(0, (currentPage - 1) * PAGE_SIZE),
+              ),
+    );
+
     $effect(() => {
         fetchPage(1).then((items) => {
             projectsSupportItems = items;
@@ -105,37 +109,32 @@
             {$t("pages.project.view.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            {#if groupedItems.matchfunding?.length}
-                <Grid class="grid-cols-2 gap-6 md:grid-cols-6 lg:grid-cols-6">
+            {#if hasMatchfunding}
+                <Grid
+                    class={`grid-cols-1 gap-6 ${isSingleMatchfunding ? "md:grid-cols-2 lg:grid-cols-2" : "md:grid-cols-3"}`}
+                >
                     {#each groupedItems.matchfunding as item (item.id)}
-                        <div class="col-span-2 flex flex-col md:col-span-3">
-                            <ProjectCommunityMatchfunding
-                                {item}
-                                bind:openModal
-                                bind:selectedProjectSupport
-                            />
-                        </div>
-                    {/each}
-                    <div class="col-span-2 md:col-span-3">
-                        <ProjectCommunityAnonymous
-                            {project}
-                            currency={accounting.balance?.currency!}
+                        <ProjectCommunityMatchfunding
+                            {item}
+                            bind:openModal
+                            bind:selectedProjectSupport
                         />
-                    </div>
-                    {#each groupedItems.default ?? [] as item (item.id)}
-                        <div class="col-span-2 md:col-span-2">
-                            <ProjectCommunityMessage
-                                {item}
-                                bind:openModal
-                                bind:selectedProjectSupport
+                    {/each}
+                    <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
+                </Grid>
+            {/if}
+
+            {#if groupedItems.default?.length}
+                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {#if !hasMatchfunding}
+                        <div class="row-span-2 h-full">
+                            <ProjectCommunityAnonymous
+                                {project}
+                                currency={accounting.balance?.currency!}
                             />
                         </div>
-                    {/each}
-                </Grid>
-            {:else}
-                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                    <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
-                    {#each groupedItems.default ?? [] as item (item.id)}
+                    {/if}
+                    {#each visibleDefaultItems as item (item.id)}
                         <ProjectCommunityMessage
                             {item}
                             bind:openModal
