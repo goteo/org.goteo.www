@@ -14,7 +14,7 @@
 
 <div
     class={twMerge(
-        "border-variant1 bg-soft-purple flex flex-col items-start justify-center gap-2 rounded-2xl border px-10 py-8 shadow-sm shadow-[#000]/10",
+        "border-variant1 bg-purple-soft flex flex-col items-start justify-center gap-2 rounded-2xl border px-10 py-8 shadow-sm shadow-[#000]/10",
         classes,
     )}
 >

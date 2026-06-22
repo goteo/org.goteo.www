@@ -43,7 +43,7 @@ const { t } = Astro.locals;
                     />
                     <label
                         for="firstname"
-                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                        class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
                         {t("register.individual.firstName")}
                     </label>
@@ -61,7 +61,7 @@ const { t } = Astro.locals;
                     />
                     <label
                         for="lastname"
-                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                        class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
                         {t("register.individual.lastName")}
                     </label>
@@ -79,7 +79,7 @@ const { t } = Astro.locals;
                 />
                 <label
                     for="identifier"
-                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
                     {t("register.individual.email")}:
                 </label>
@@ -97,7 +97,7 @@ const { t } = Astro.locals;
                 />
                 <label
                     for="password"
-                    class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                    class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
                     {t("register.individual.password")}
                 </label>
@@ -129,7 +129,7 @@ const { t } = Astro.locals;
                     />
                     <label
                         for="dni"
-                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                        class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
                         {t("register.individual.taxId.label")}
                     </label>
@@ -149,7 +149,7 @@ const { t } = Astro.locals;
                     />
                     <label
                         for="razonSocial"
-                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                        class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
                         {t("register.organization.legalName")}
                     </label>
@@ -167,7 +167,7 @@ const { t } = Astro.locals;
                     />
                     <label
                         for="cif"
-                        class="absolute top-1 left-4 text-[10px] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[10px] peer-focus:text-gray-500"
+                        class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
                         {t("register.organization.taxId")}
                     </label>
@@ -210,7 +210,7 @@ const { t } = Astro.locals;
                 const isFromCheckout = urlParams.get("checkout") === "true";
 
                 if (isFromCheckout) {
-                    window.location.href = `/payment`;
+                    window.location.href = `/checkout/payment`;
                 } else {
                     const lang = location.pathname.split("/")[1];
                     window.location.href = `/${lang}/`;

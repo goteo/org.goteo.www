@@ -4,9 +4,10 @@ Reusable dropdown for filter options matching Figma design
 Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 -->
 <script lang="ts">
-    import type { HTMLButtonAttributes } from "svelte/elements";
     import { t } from "../../i18n/store";
     import ChevronDown from "../../svgs/ChevronDown.svelte";
+
+    import type { HTMLButtonAttributes } from "svelte/elements";
 
     interface DropdownOption {
         value: string;
@@ -45,20 +46,8 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
     });
 
     // Generate unique ID for accessibility
-    // Use custom ID if provided, otherwise hash the options set for collision-free ID
-    const dropdownId = customId || hashOptions(options);
-
-    function hashOptions(opts: DropdownOption[]): string {
-        // Create a stable hash from the options array
-        const optionsString = opts.map((opt) => `${opt.value}:${opt.label}`).join("|");
-        let hash = 0;
-        for (let i = 0; i < optionsString.length; i++) {
-            const char = optionsString.charCodeAt(i);
-            hash = (hash << 5) - hash + char;
-            hash = hash & hash; // Convert to 32bit integer
-        }
-        return `dropdown-${Math.abs(hash).toString(36)}`;
-    }
+    const generatedId = $props.id();
+    const dropdownId = customId || generatedId;
 
     function toggleDropdown() {
         isOpen = !isOpen;
@@ -86,13 +75,13 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
                 ? $t(selectedOption.translationKey)
                 : selectedOption.label || selectedOption.value;
         }
-        return placeholder || $t("filters.selectOption");
+        return placeholder || $t("common.select");
     }
 </script>
 
 <div class="relative w-full">
     {#if label}
-        <label for={dropdownId} class="mb-2 block text-sm font-medium text-[#462949]">
+        <label for={dropdownId} class="text-secondary mb-2 block text-sm font-medium">
             {label}
         </label>
     {/if}
@@ -102,7 +91,7 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         type="button"
         onclick={toggleDropdown}
         onkeydown={handleKeydown}
-        class="flex w-full items-center justify-between rounded-[8px] border border-[#462949] bg-[#fbfbfb] px-4 py-4 font-['Karla'] text-base text-[#3d3d3d] focus:border-[#59e9d3] focus:ring-2 focus:ring-[#59e9d3] focus:outline-none {className}"
+        class="border-secondary font-body focus:border-primary focus:ring-primary flex w-full items-center justify-between rounded-lg border bg-white px-4 py-4 text-base text-black focus:ring-2 focus:outline-none {className}"
         class:opacity-48={!selectedOption}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -117,14 +106,14 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
 
     {#if isOpen}
         <div
-            class="absolute top-full right-0 left-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-[8px] border border-[#462949] bg-white shadow-lg"
+            class="border-secondary absolute top-full right-0 left-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-lg border bg-white shadow-lg"
             data-testid={`${props["data-testid"] || "filter"}-dropdown`}
         >
             <div class="py-1" role="listbox">
                 {#each options as option}
                     <button
                         type="button"
-                        class="hover:bg-variant1 focus:bg-variant1 w-full px-4 py-3 text-left font-['Karla'] text-[#3d3d3d] focus:outline-none"
+                        class="hover:bg-variant1 focus:bg-variant1 font-body w-full px-4 py-3 text-left text-black focus:outline-none"
                         class:bg-variant1={selectedOption?.value === option.value}
                         onclick={() => selectOption(option)}
                         role="option"

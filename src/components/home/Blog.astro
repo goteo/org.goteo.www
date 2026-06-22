@@ -6,16 +6,16 @@ const { t } = Astro.locals;
 // Blog data using translations
 const blogPost = {
     id: "blog-migration",
-    title: t("home.blog.title"),
-    excerpt: t("home.blog.excerpt"),
-    buttonText: t("home.blog.readMore"),
+    title: t("pages.home.blog.title"),
+    excerpt: t("pages.home.blog.excerpt"),
+    buttonText: t("pages.home.blog.readMore"),
     href: "/blog/grandes-cambios",
 };
 ---
 
 <section class="wrapper">
     <!-- Blog Entry Container -->
-    <div class="bg-light-accent flex flex-col rounded-4xl lg:flex-row lg:items-stretch">
+    <div class="bg-purple-soft flex flex-col rounded-4xl lg:flex-row lg:items-stretch">
         <!-- Content Section (Left) -->
         <div class="flex flex-col gap-6 p-10 lg:min-h-0 lg:flex-1">
             <!-- Main Content -->

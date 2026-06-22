@@ -1,10 +1,11 @@
 <script lang="ts">
     import { t } from "../i18n/store";
-    import type { Project, ProjectReward } from "../openapi/client";
     import { formatCurrency } from "../utils/currencies";
     import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
     import RewardModal from "./RewardModal.svelte";
+
+    import type { Project, ProjectReward } from "../openapi/client";
 
     let {
         reward = $bindable(),
@@ -55,8 +56,9 @@
         disabled={!isAvailable}
         onclick={() => (openModal = true)}
     >
-        {$t("reward.donate")}
-        {formatCurrency(reward.money.amount, reward.money.currency)}
+        {$t("common.donateAmount", {
+            amount: formatCurrency(reward.money.amount, reward.money.currency),
+        })}
     </Button>
 </li>
 <RewardModal {reward} {project} bind:open={openModal} />

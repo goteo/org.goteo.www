@@ -1,0 +1,47 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import App from "../../components/App.svelte";
+import Hero from "../../components/Hero/Hero.astro";
+import Campaigns from "../../components/home/Campaigns.astro";
+import CampaignsTabs from "../../components/home/CampaignsTabs.astro";
+import Stats from "../../components/home/Stats.astro";
+import Stories from "../../components/home/Stories.svelte";
+import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
+import Resources from "../../components/home/Resources.astro";
+import Blog from "../../components/home/Blog.astro";
+import Matchfunding from "../../components/home/Matchfunding.astro";
+import HomeBanner from "../../components/library/HomeBanner.svelte";
+import { isSupportedLocale } from "../../i18n/locales";
+import { NotFound } from "../../utils/responses";
+
+const { locale } = Astro.params;
+
+if (locale && !isSupportedLocale(locale)) {
+    return NotFound;
+}
+
+const { t, lang, session } = Astro.locals;
+---
+
+<Layout title={t("pages.index.title")} description={t("metadata.description")}>
+    <App client:load locale={lang} session={session} class="mb-20 gap-18">
+        <Hero />
+        <div class="wrapper">
+            <HomeBanner
+                title={t("pages.home.banner.title")}
+                description={t("pages.home.banner.description")}
+                ctaText={t("pages.home.banner.ctaText")}
+                ctaLink={"/about"}
+                closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
+            />
+        </div>
+        <Campaigns />
+        <Blog />
+        <Stats />
+        <CampaignsTabs />
+        <Matchfunding />
+        <!-- <Stories client:load /> -->
+        <FeaturedPromoters />
+        <!-- <Resources /> -->
+    </App>
+</Layout>

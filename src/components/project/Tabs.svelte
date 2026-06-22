@@ -1,12 +1,14 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import { renderMarkdown } from "../../utils/renderMarkdown";
-    import ProjectRewards from "./ProjectRewards.svelte";
-    import ProjectUpdate from "./ProjectUpdate.svelte";
+    import { onMount } from "svelte";
+
     import ProjectBudget from "./ProjectBudget.svelte";
     import ProjectCommunity from "./ProjectCommunity.svelte";
+    import ProjectRewards from "./ProjectRewards.svelte";
+    import ProjectUpdate from "./ProjectUpdate.svelte";
+    import { t } from "../../i18n/store";
     import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
-    import { onMount } from "svelte";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+
     import type { Project, Accounting } from "../../openapi/client/index";
 
     let {
@@ -25,11 +27,11 @@
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "project", label: $t("project.tabs.project") },
-        { id: "rewards", label: $t("project.tabs.rewards") },
-        { id: "budget", label: $t("project.tabs.budget.title") },
-        { id: "updates", label: $t("project.tabs.updates.title") },
-        { id: "community", label: $t("project.tabs.community.title") },
+        { id: "project", label: $t("pages.project.view.tabs.project") },
+        { id: "rewards", label: $t("pages.project.view.tabs.rewards") },
+        { id: "budget", label: $t("pages.project.view.tabs.budget.title") },
+        { id: "updates", label: $t("pages.project.view.tabs.updates.title") },
+        { id: "community", label: $t("pages.project.view.tabs.community.title") },
     ];
 
     function selectTab(tabId: string) {
@@ -93,7 +95,7 @@
                 aria-selected={activeTab === tab.id}
                 aria-controls={`tab-${tab.id}`}
                 id={`tab-button-${tab.id}`}
-                class="text-secondary lg:border-variant1 inline-flex flex-shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t-1 lg:border-r-1 lg:border-l-1"
+                class="text-secondary lg:border-variant1 inline-flex shrink-0 items-center rounded-t-lg px-6 py-2 font-bold whitespace-nowrap transition-colors duration-100 ease-in-out lg:border-t lg:border-r lg:border-l"
                 class:bg-variant1={activeTab === tab.id}
                 onclick={() => selectTab(tab.id)}
             >

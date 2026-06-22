@@ -1,9 +1,11 @@
 <script lang="ts">
-    import FiltersIcon from "../../svgs/FiltersIcon.svelte";
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
     import Search from "./Search.svelte";
-    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
+    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import FiltersIcon from "../icons/Filters.svelte";
+    import Button from "../library/Button.svelte";
+    import Grid from "../library/Grid.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
         $props<{
@@ -65,16 +67,17 @@
         <Search onSelectTarget={handleSelectTarget} />
 
         <div class="flex items-center gap-3">
-            <button
+            <Button
                 type="button"
+                kind="ghost"
                 onclick={() => (showFilters = !showFilters)}
-                class="border-secondary text-secondary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+                class="relative text-nowrap"
             >
                 <span class="relative">
                     <FiltersIcon />
                     {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
                         <span class="absolute -top-1 -right-1">
-                            <ActiveFilterIcon />
+                            <Bullet />
                         </span>
                     {/if}
                 </span>
@@ -83,13 +86,13 @@
                 {:else}
                     {$t("contributions.filters.btns.openFilters")}
                 {/if}
-            </button>
+            </Button>
         </div>
     </div>
 
     {#if showFilters}
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
-            <div class="grid grid-cols-3 gap-4">
+            <Grid class="grid-cols-3 gap-4">
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedPaymentMethod}
@@ -127,7 +130,7 @@
                 </select>
 
                 <div class="relative">
-                    <label for="dateFrom" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.initDate")}
                     </label>
                     <input
@@ -140,7 +143,7 @@
                 </div>
 
                 <div class="relative">
-                    <label for="dateTo" class="absolute top-0.5 left-4 text-[12px] text-gray-500">
+                    <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
                         {$t("contributions.filters.dateRange.endDate")}
                     </label>
                     <input
@@ -151,15 +154,12 @@
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                     />
                 </div>
-            </div>
+            </Grid>
 
             <div class="col-span-3 flex justify-end">
-                <button
-                    type="submit"
-                    class="bg-primary text-secondary cursor-pointer rounded-3xl px-6 py-4 text-base font-bold"
-                >
+                <Button type="submit" kind="primary">
                     {$t("contributions.filters.btns.apply")}
-                </button>
+                </Button>
             </div>
         </form>
     {/if}

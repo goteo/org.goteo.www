@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import type { Snippet } from "svelte";
 
     interface Props {
         variant?: keyof typeof variantStyles;
@@ -14,13 +15,13 @@
         success: "bg-variant2",
         warning: "bg-variant4",
         error: "bg-tertiary",
-        bold: "bg-grey border-grey text-secondary font-bold border-soft-purple",
+        bold: "bg-grey border-grey text-secondary font-bold border-purple-soft",
     };
 </script>
 
 <div
     class={twMerge(
-        "flex items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 text-[14px] whitespace-nowrap text-black",
+        "text-body-small flex h-fit items-center justify-center gap-2 rounded-sm border border-black bg-white px-2 py-1 whitespace-nowrap text-black",
         variant ? variantStyles[variant] : "",
         classes,
     )}

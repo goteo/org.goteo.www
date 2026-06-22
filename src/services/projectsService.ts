@@ -28,14 +28,7 @@ export class ProjectsService {
         try {
             const response = await apiProjectsGetCollection({
                 query: {
-                    // Text search
-                    ...(filters.query?.trim() && { title: filters.query.trim() }),
-                    // Categories (array filter for OR logic) - Fixed: use "categories[]" not "category[]"
-                    ...(filters.categories?.length && { "categories[]": filters.categories }),
-                    // Status filter
-                    ...(filters.statusFilter &&
-                        filters.statusFilter !== "all" && { status: filters.statusFilter }),
-                    // Pagination
+                    ...filters,
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },

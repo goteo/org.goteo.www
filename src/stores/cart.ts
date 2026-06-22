@@ -1,40 +1,72 @@
-import { writable, derived, get } from "svelte/store";
+import { writable, derived } from "svelte/store";
 
-import { t } from "../i18n/store";
+import { apiProjectRewardsIdGetUrl } from "../openapi/client/paths.gen";
 
-export type CartItem = {
+import type { GatewayCharge, ProjectReward } from "../openapi/client";
+
+export interface CartItem extends GatewayCharge {
     key: string;
-    title: string;
-    amount: number;
+    kind: "free" | "reward" | "tip";
     quantity: number;
-    image?: string;
-    project?: number;
-    target: number;
-    claimed?: number;
-    currency: string;
+
+    /**
+     * `target` references the Accounting that will receive the money\
+     * `recipient` references the owner of that Accounting
+     */
+    recipient: string;
+    recipientDisplayName: string;
+
+    /**
+     * Items of kind "reward" must have an associated ProjectReward
+     */
+    reward?: ProjectReward;
+}
+
+type CartState = {
+    items: Record<string, CartItem>;
 };
 
-type CartStore = {
-    items: CartItem[];
-};
+export interface CartStore {
+    subscribe: (run: (value: CartState) => void) => () => void;
+
+    addItem: (item: Omit<CartItem, "key">) => void;
+    removeItem: (key: string) => void;
+    updateQuantity: (key: string, quantity: number) => void;
+
+    clear: () => void;
+    clearTarget: (target: string) => void;
+}
 
 const isBrowser = typeof window !== "undefined";
 
-type GenerateKeyOptions = {
-    title: string;
-    target: number;
-    position: number;
-    freeDonationTitle: string;
-};
-
-function generateKey({ title, target, position, freeDonationTitle }: GenerateKeyOptions) {
-    const normalize = (str: string) => str.trim().toLowerCase();
-    const prefix = normalize(title) === normalize(freeDonationTitle) ? "O" : "R";
-    return { key: `${target}-${prefix}-${position}` };
+function generateKey(item: Omit<CartItem, "key">): string {
+    const base = `${item.kind}:${item.recipient}`;
+    if (item.kind === "reward" && item.reward?.id != null) {
+        return `${base};reward:${apiProjectRewardsIdGetUrl.replace("{id}", String(item.reward.id))}`;
+    }
+    return base;
 }
 
-function loadInitialCart(): CartStore {
-    if (!isBrowser) return { items: [] };
+export function parseKey(key: string): {
+    kind: string;
+    recipient: string;
+    extra: { kind: string; recipient: string }[];
+} {
+    const segments = key.split(";");
+    const colonIdx = segments[0].indexOf(":");
+    const kind = segments[0].slice(0, colonIdx);
+    const recipient = segments[0].slice(colonIdx + 1);
+    const extra = segments.slice(1).map((s) => {
+        const idx = s.indexOf(":");
+        return { kind: s.slice(0, idx), recipient: s.slice(idx + 1) };
+    });
+    return { kind, recipient, extra };
+}
+
+function loadInitialCart(): CartState {
+    const fresh = { items: {} };
+
+    if (!isBrowser) return fresh;
 
     try {
         const stored = localStorage.getItem("cart");
@@ -43,117 +75,111 @@ function loadInitialCart(): CartStore {
         console.warn("⚠️ Error loading cart from localStorage:", e);
     }
 
-    const fresh = { items: [] };
     localStorage.setItem("cart", JSON.stringify(fresh));
     return fresh;
 }
 
-function createCartStore() {
-    const { subscribe, set, update } = writable<CartStore>(loadInitialCart());
+function createCartStore(): CartStore {
+    const { subscribe, set, update } = writable<CartState>(loadInitialCart());
 
-    if (isBrowser) {
-        subscribe((cart) => {
-            try {
-                localStorage.setItem("cart", JSON.stringify(cart));
-            } catch (e) {
-                console.error("Error to save cart to localStorage:", e);
-            }
-        });
-    }
+    subscribe((cart) => {
+        try {
+            if (!isBrowser) return;
 
-    const translations = get(t);
-    const freeDonationTitle = translations("checkout.cart.freeDonation.title");
+            localStorage.setItem("cart", JSON.stringify(cart));
+        } catch (e) {
+            console.error("Error to save cart to localStorage:", e);
+        }
+    });
 
     return {
         subscribe,
 
         addItem: (item: Omit<CartItem, "key">) =>
             update((cart) => {
-                const existingIndex = cart.items.findIndex(
-                    (i) => i.target === item.target && i.title === item.title,
-                );
+                const key = generateKey(item);
+                const items = { ...cart.items };
 
-                const updatedItems = [...cart.items];
-
-                if (existingIndex >= 0) {
-                    if (item.quantity === 0) {
-                        return {
-                            items: updatedItems.filter((_, index) => index !== existingIndex),
-                        };
-                    }
-
-                    updatedItems[existingIndex] = {
-                        ...updatedItems[existingIndex],
-                        quantity: item.quantity ?? 1,
-                        amount: item.amount,
-                    };
-                } else {
-                    if (item.quantity === 0) {
-                        return { items: updatedItems };
-                    }
-
-                    const position = updatedItems.length;
-                    const { key } = generateKey({
-                        title: item.title,
-                        target: item.target,
-                        position,
-                        freeDonationTitle,
-                    });
-
-                    updatedItems.push({ ...item, key });
+                if (item.quantity === 0) {
+                    delete items[key];
+                    return { items };
                 }
 
-                return { items: updatedItems };
+                items[key] = { ...item, key } as CartItem;
+
+                return { items };
             }),
 
         removeItem: (key: string) =>
-            update((cart) => ({
-                items: cart.items.filter((i) => i.key !== key),
-            })),
+            update((cart) => {
+                const items = { ...cart.items };
+                delete items[key];
+                return { items };
+            }),
 
         updateQuantity: (key: string, quantity: number) =>
-            update((cart) => ({
-                items:
-                    quantity <= 0
-                        ? cart.items.filter((item) => item.key !== key)
-                        : cart.items.map((item) =>
-                              item.key === key && item.quantity !== quantity
-                                  ? { ...item, quantity }
-                                  : item,
-                          ),
-            })),
+            update((cart) => {
+                const items = { ...cart.items };
+
+                if (quantity <= 0) {
+                    delete items[key];
+                } else if (items[key]) {
+                    items[key] = { ...items[key], quantity };
+                }
+
+                return { items };
+            }),
 
         clear: () => {
-            set({ items: [] });
-            if (isBrowser) {
-                localStorage.removeItem("cart");
-            }
+            set({ items: {} });
+            localStorage.removeItem("cart");
         },
 
-        clearProject: (projectId: number) =>
-            update((cart) => ({
-                items: cart.items.filter((item) => item.project !== projectId),
-            })),
+        clearTarget: (target: string) =>
+            update((cart) => {
+                const items = Object.fromEntries(
+                    Object.entries(cart.items).filter((item) => item[1].target !== target),
+                );
+
+                return { items };
+            }),
     };
 }
 
 export const cart = createCartStore();
 
-export const itemCount = derived(cart, ($cart) =>
-    $cart.items.reduce((total, item) => total + item.quantity, 0),
+export const cartCount = derived(cart, ($cart) =>
+    Object.values($cart.items).reduce((total, item) => total + item.quantity, 0),
 );
 
-export const totalAmount = derived(cart, ($cart) =>
-    $cart.items.reduce((total, item) => total + item.amount * item.quantity, 0),
+export const cartAmount = derived(cart, ($cart) =>
+    Object.values($cart.items).reduce(
+        (total, item) => total + item.money.amount * item.quantity,
+        0,
+    ),
 );
 
-export const itemsByProject = derived(cart, ($cart) => {
-    const grouped: Record<number, CartItem[]> = {};
-    for (const item of $cart.items) {
-        if (item.project != null) {
-            grouped[item.project] ??= [];
-            grouped[item.project].push(item);
+export const cartByTarget = derived(cart, ($cart) => {
+    const grouped: Record<string, CartItem[]> = {};
+
+    for (const item of Object.values($cart.items)) {
+        if (item.target != null) {
+            grouped[item.target] ??= [];
+            grouped[item.target].push(item);
         }
     }
+
+    return grouped;
+});
+
+export const cartByRecipient = derived(cart, ($cart) => {
+    const grouped: Record<string, CartItem[]> = {};
+
+    for (const item of Object.values($cart.items)) {
+        const { recipient } = parseKey(item.key);
+        grouped[recipient] ??= [];
+        grouped[recipient].push(item);
+    }
+
     return grouped;
 });

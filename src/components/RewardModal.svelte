@@ -1,15 +1,16 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import type { Project, ProjectReward } from "../openapi/client";
-    import { t } from "../i18n/store";
-    import { formatCurrency, getUnit } from "../utils/currencies";
-    import UnitIcon from "../svgs/UnitIcon.svelte";
-    import UserIcon from "../svgs/UserIcon.svelte";
-    import { extractId } from "../utils/extractId";
-    import { cart } from "../stores/cart";
-    import { renderMarkdown } from "../utils/renderMarkdown";
     import { onMount } from "svelte";
+
+    import { t } from "../i18n/store";
+    import { cart } from "../stores/cart";
+    import UnitIcon from "../svgs/UnitIcon.svelte";
+    import UserIcon from "./icons/User.svelte";
+    import { formatCurrency, getUnit } from "../utils/currencies";
+    import { renderMarkdown } from "../utils/renderMarkdown";
     import Button from "./library/Button.svelte";
+
+    import type { Project, ProjectReward } from "../openapi/client";
 
     let {
         open = $bindable(false),
@@ -36,17 +37,19 @@
             return;
         }
 
-        const target = Number(extractId(project.accounting));
-
         cart.addItem({
+            kind: "reward",
+            type: "single",
+            reward: reward,
             title: reward.title,
-            amount: numericAmount * getUnit(reward.money?.currency),
             quantity: 1,
-            image: "",
-            project: Number(extractId(reward.project)),
-            target,
-            claimed: reward.unitsTotal! - reward.unitsAvailable!,
-            currency: reward.money?.currency,
+            recipient: reward.project,
+            recipientDisplayName: project.title,
+            target: project.accounting!,
+            money: {
+                amount: numericAmount * getUnit(reward.money?.currency),
+                currency: reward.money.currency,
+            },
         });
 
         if (action === "checkout") {
@@ -67,11 +70,13 @@
 <Modal
     bind:open
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-[900px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-225 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     <div class="flex flex-col gap-6">
-        <div class="text-secondary flex w-full flex-col gap-6 text-left text-[40px] font-semibold">
+        <div
+            class="text-secondary flex w-full flex-col gap-6 text-left text-[2.5rem] font-semibold"
+        >
             <h3>
                 {@html $t(
                     "rewards.by-amount-or-more",
@@ -155,7 +160,7 @@
                 {$t("rewards.reward-donate-close")}
             </Button>
             <Button onclick={() => updateAmount("checkout")} class="w-full">
-                {$t("rewards.donation-free.btn")}
+                {$t("common.donate")}
             </Button>
         </div>
     </div>

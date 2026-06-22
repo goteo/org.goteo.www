@@ -1,7 +1,9 @@
-import { languagesList } from "../i18n/locales/index";
-import { getDefaultLanguage } from "../utils/consts";
+import { isSupportedLocale } from "../i18n/locales/index";
 
 import type { APIContext } from "astro";
+
+const PREFERRED_LANGUAGE_COOKIE = "preferred-lang";
+const PREFERRED_LANGUAGE_HEADER = "accept-language";
 
 /**
  * Builds a clean redirect URL by combining the language code and pathname.
@@ -13,34 +15,50 @@ export function buildRedirectUrl(lang: string, pathname: string): string {
 }
 
 /**
- * Detects the appropriate locale based on URL, Accept-Language header, or cookie.
- * Always ensures the preferred-lang cookie is synchronized.
+ * Detects the language preferences from URL path, preferred-lang cookie and Accept-Language header.
+ * @param context
+ * @returns {string[]} A sorted list of language codes. Languages first in the list have a higher preference.
  */
 export function getUserLangPreferences(context: APIContext): string[] {
-    const preferredFromPath = parsePathLang(context.url.pathname);
-    if (preferredFromPath) return [preferredFromPath];
+    let langs: string[] = [];
 
-    const cookieLang = context.cookies.get("preferred-lang")?.value;
-    if (cookieLang) return [cookieLang];
-
-    const acceptLangHeader = context.request.headers.get("accept-language") || "";
-    const preferredFromHeader = parseAcceptLanguageHeader(acceptLangHeader);
-    if (preferredFromHeader?.length > 0) {
-        return preferredFromHeader.map((lang) => lang.code);
+    const langInPath = parsePathLang(context.url.pathname);
+    if (langInPath) {
+        langs = [...langs, langInPath];
     }
 
-    return [];
+    const langInCookie = context.cookies.get(PREFERRED_LANGUAGE_COOKIE)?.value;
+    if (langInCookie) {
+        langs = [...langs, langInCookie];
+    }
+
+    const langsInHeader = parseAcceptLanguageHeader(
+        context.request.headers.get(PREFERRED_LANGUAGE_HEADER),
+    );
+    if (langsInHeader?.length > 0) {
+        langs = [...langs, ...langsInHeader.map((lang) => lang.code)];
+    }
+
+    return [...new Set(langs)];
 }
 
+/**
+ * Detect the working language by checking the request preferences that have an available localisation.
+ * Fallsback to application default `PUBLIC_DEFAULT_LANGUAGE` when no available language was found.
+ * @param context
+ * @returns {string} A language code of one of the available localisations.
+ */
 export function getLanguage(context: APIContext): string {
-    const defaultLang = getDefaultLanguage();
+    const defaultLang = import.meta.env.PUBLIC_DEFAULT_LANGUAGE;
     const userPreferredLangs = getUserLangPreferences(context);
-    if (!userPreferredLangs) return defaultLang;
 
-    const validLangs = Object.keys(languagesList);
+    if (userPreferredLangs.length < 1) {
+        return defaultLang;
+    }
+
     for (const lang of userPreferredLangs) {
-        if (validLangs.includes(lang)) {
-            context.cookies.set("preferred-lang", lang, {
+        if (isSupportedLocale(lang)) {
+            context.cookies.set(PREFERRED_LANGUAGE_COOKIE, lang, {
                 path: "/",
                 httpOnly: false,
                 maxAge: 60 * 60 * 24 * 365,
@@ -53,59 +71,11 @@ export function getLanguage(context: APIContext): string {
     return defaultLang;
 }
 
-export function handleProtectedRoutes(context: APIContext, lang: string): string | null {
-    const pathname = context.url.pathname;
-    if (pathname === "/favicon.ico") return null;
-
-    const accessToken = context.cookies.get("access-token")?.value;
-    const pathParts = pathname.replace(/^\/+/, "").split("/");
-
-    const langFromPath = parsePathLang(pathname);
-    const isLangInPath = langFromPath !== null;
-    const currentLang = langFromPath ?? lang;
-    const pathAfterLang = isLangInPath ? pathParts.slice(1) : pathParts;
-    const nextSegment = pathAfterLang[0] ?? "";
-
-    if (accessToken && (nextSegment === "login" || nextSegment === "register")) {
-        return isLangInPath ? `/${currentLang}/payment` : `/payment`;
-    }
-
-    const protectedRoutes = ["me", "payment", "admin"];
-    const isProtected = protectedRoutes.includes(nextSegment);
-
-    if (!accessToken && isProtected) {
-        return isLangInPath ? `/${currentLang}/login` : `/login`;
-    }
-
-    if (nextSegment === "admin") {
-        try {
-            const token = JSON.parse(accessToken || "{}");
-
-            if (!token.isAdmin) {
-                return isLangInPath ? `/${currentLang}/login` : `/login`;
-            }
-        } catch {
-            return isLangInPath ? `/${currentLang}/login` : `/login`;
-        }
-    }
-
-    return null;
-}
-
-/**
- * Checks if the path is exempt from language detection (e.g., _actions, api).
- */
-export function isLanguageExemptPath(context: APIContext): boolean {
-    const firstSegment = context.url.pathname.split("/")[1];
-    const exemptRoutes = ["api"];
-
-    return exemptRoutes.includes(firstSegment);
-}
-
 /**
  * Detects the user's preferred locale from the Accept-Language HTTP header.
+ * @returns A sorted list of the locales from the header
  */
-export function parseAcceptLanguageHeader(header: string): { code: string; q: number }[] {
+export function parseAcceptLanguageHeader(header: string | null): { code: string; q: number }[] {
     if (!header) return [];
 
     const languages = header.split(",").map((lang) => {
@@ -123,7 +93,7 @@ export function parseAcceptLanguageHeader(header: string): { code: string; q: nu
 export function parsePathLang(path: string): string | null {
     const firstSegment = path.split("/")[1];
 
-    if (Object.keys(languagesList).includes(firstSegment)) {
+    if (isSupportedLocale(firstSegment)) {
         return firstSegment;
     }
 

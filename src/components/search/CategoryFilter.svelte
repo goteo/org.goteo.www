@@ -4,9 +4,16 @@ Interactive category selection using existing categories from utils/categories.t
 Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import { apiCategoriesGetCollection, type Category } from "../../openapi/client";
-    import CategorySelect, { type Option } from "../library/CategorySelect.svelte";
+    import { onMount } from "svelte";
+
+    import { locale, t } from "../../i18n/store";
+    import {
+        apiCategoriesGetCollection,
+        apiCategoriesIdGet,
+        type Category,
+    } from "../../openapi/client";
+    import { extractId } from "../../utils/extractId";
+    import CategorySelect from "../library/CategorySelect.svelte";
 
     interface Props {
         selectedCategories?: string[];
@@ -18,11 +25,11 @@ Implements active/inactive pill states matching Figma design
     let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
 
     let categories = getAvailableCategories();
-    let selected = $state(
-        selectedCategories.map((s) => {
-            return { id: s, text: $t("categories." + s) };
-        }),
-    );
+    let selected = $state<Category[]>([]);
+
+    onMount(async () => {
+        selected = await Promise.all(selectedCategories.map((s) => getCategory(s)));
+    });
 
     async function getAvailableCategories(): Promise<Category[]> {
         const { data } = await apiCategoriesGetCollection();
@@ -34,18 +41,20 @@ Implements active/inactive pill states matching Figma design
         return data;
     }
 
-    function mapCategoryToOption(category: Category): Option {
-        return {
-            id: category.id!,
-            text: $t("categories." + category.id!),
-        };
+    async function getCategory(iri: string): Promise<Category> {
+        const { data: category } = await apiCategoriesIdGet({
+            headers: { "Accept-Language": $locale },
+            path: { id: extractId(iri)! },
+        });
+
+        return category!;
     }
 </script>
 
 <div class="w-full">
     {#if showLabel}
-        <h3 class="mb-6 font-['Karla'] text-base font-bold text-[#3d3d3d]">
-            {$t("search.categoryLabel")}
+        <h3 class="font-body mb-6 text-base font-bold text-black">
+            {$t("pages.search.filters.categoryLabel")}
         </h3>
     {/if}
 
@@ -53,14 +62,14 @@ Implements active/inactive pill states matching Figma design
         <CategorySelect
             bind:selected
             selectedIds={selected.map((s) => s.id)}
-            options={categories.map((c) => mapCategoryToOption(c))}
+            options={categories}
             onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
         />
     {/await}
 
     {#if selected.length > 0}
-        <div class="mt-4 text-sm text-[#3d3d3d] opacity-70">
-            {$t("search.selectedCategories", { count: selected.length })}
+        <div class="mt-4 text-sm text-black opacity-70">
+            {$t("pages.search.filters.selectedCategories", { count: selected.length })}
         </div>
     {/if}
 </div>

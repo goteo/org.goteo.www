@@ -1,7 +1,8 @@
 <script lang="ts">
+    import { derived } from "svelte/store";
+
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import { derived } from "svelte/store";
     import { formatCurrency } from "../../utils/currencies";
 
     const total = derived(cart, ($cart) => {
@@ -15,10 +16,9 @@
 
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div class="text-center sm:text-left">
-        <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.currentBalance")}</span
+        <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.currentBalance")}</span
         >
-        <p class="text-secondary text-[32px] font-bold">
+        <p class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
         </p>
     </div>
@@ -27,16 +27,16 @@
         <span class="block text-sm text-gray-600"
             >{$t("payment.wallet-confirmation.amountToUse")}
         </span>
-        <p id="cart-total" class="text-[32px] font-bold text-red-500">
+        <p id="cart-total" class="text-double font-bold text-red-500">
             {formatCurrency($total, defaultCurrency)}
         </p>
     </div>
 
     <div class="text-center sm:text-left">
         <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.remainingBalance")}
+            >{$t("pages.checkout.wallet.remainingBalance")}
         </span>
-        <p id="cart-difference" class="text-secondary text-[32px] font-bold">
+        <p id="cart-difference" class="text-secondary text-double font-bold">
             {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}
         </p>
     </div>

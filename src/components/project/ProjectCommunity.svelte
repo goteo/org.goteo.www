@@ -1,15 +1,21 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-    import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
-    import { apiProjectSupportsGetCollection, apiUsersIdGet } from "../../openapi/client/index";
-    import { extractId } from "../../utils/extractId";
-    import Loader from "../../svgs/Loader.svelte";
     import { Modal } from "flowbite-svelte";
-    import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
-    import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
+    import { onMount } from "svelte";
+
     import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
+    import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
+    import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
+    import { t } from "../../i18n/store";
+    import {
+        apiProjectSupportsGetCollection,
+        apiUsersIdOrHandleGet,
+    } from "../../openapi/client/index";
+    import Loader from "../../svgs/Loader.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+    import { extractId } from "../../utils/extractId";
+    import Grid from "../library/Grid.svelte";
+
+    import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
     let {
         project,
@@ -67,7 +73,7 @@
             (publicSupports || []).map(async (support) => {
                 const id = extractId(support?.origin!);
 
-                const { data: user } = await apiUsersIdGet({ path: { id: id! } });
+                const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
                 const displayName = user?.displayName!;
 
                 return {
@@ -90,10 +96,10 @@
         </div>
     {:else}
         <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
-            {$t("project.tabs.community.content.title")}
+            {$t("pages.project.view.tabs.community.content.title")}
         </h2>
         <div class="flex flex-col gap-6">
-            <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <Grid class="grid-cols-1 gap-6 md:grid-cols-2">
                 {#each groupedItems.matchfunding as item (item.id)}
                     <ProjectCommunityMatchfunding
                         {item}
@@ -102,10 +108,10 @@
                     />
                 {/each}
                 <ProjectCommunityAnonymous {project} currency={accounting.balance?.currency!} />
-            </div>
+            </Grid>
 
             {#if groupedItems.default?.length}
-                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#each groupedItems.default as item (item.id)}
                         <ProjectCommunityMessage
                             {item}
@@ -113,7 +119,7 @@
                             bind:selectedProjectSupport
                         />
                     {/each}
-                </div>
+                </Grid>
             {/if}
         </div>
     {/if}
@@ -122,7 +128,7 @@
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-[475px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     headerClass="py-2"
 >
     {#if selectedProjectSupport}
@@ -133,7 +139,7 @@
                 </div>
                 <div class="flex flex-col items-end">
                     <div class="font-bold text-black">
-                        {$t("project.tabs.community.contribution")}
+                        {$t("pages.project.view.tabs.community.contribution")}
                     </div>
                     <p class="text-2xl font-bold text-black">
                         {formatCurrency(

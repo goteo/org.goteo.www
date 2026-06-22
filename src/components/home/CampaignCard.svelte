@@ -4,15 +4,18 @@ Displays campaign information in a card format with responsive sizing
 Converted from CampaignCard.astro to maintain exact functionality
 -->
 <script lang="ts">
-    import type { Campaign, CampaignSize } from "../../types/campaign";
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
     import { twMerge } from "tailwind-merge";
-    import MatchFundingIcon from "../../svgs/MatchFundingIcon.svelte";
-    import ClockIcon from "../../svgs/ClockIcon.svelte";
-    import CategoryIcon from "../../svgs/CategoryIcon.svelte";
-    import Tag from "../library/Tag.svelte";
+
+    import Clock from "../../components/icons/Clock.svelte";
+    import { t } from "../../i18n/store";
+    import { client } from "../../openapi/client/client.gen";
+    import { formatCurrency } from "../../utils/currencies";
+    import Flames from "../icons/Flames.svelte";
     import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
+    import Tag from "../library/Tag.svelte";
+
+    import type { Accounting, Money } from "../../openapi/client";
+    import type { Campaign, CampaignSize } from "../../types/campaign";
 
     interface Props {
         size: CampaignSize;
@@ -30,43 +33,43 @@ Converted from CampaignCard.astro to maintain exact functionality
         class: className = "",
     }: Props = $props();
 
+    // Balance pre-loaded from server (home page); fetched client-side via Project.accounting IRI when not provided
+    let obtained = $state<Money | undefined>(undefined);
+
+    $effect(() => {
+        if (obtained === undefined) {
+            if (campaign.obtained) {
+                obtained = campaign.obtained;
+            } else if (campaign.accounting) {
+                (
+                    client.get({ url: campaign.accounting }) as unknown as Promise<{
+                        data: Accounting;
+                    }>
+                )
+                    .then(({ data }) => {
+                        if (data?.balance) obtained = data.balance as Money;
+                    })
+                    .catch(() => {});
+            }
+        }
+    });
+
     // Define responsive classes based on size
     // Large cards span 2 columns in lg+ (3-column grid), 2 columns in md (2-column grid), full width on mobile
     const sizeClasses = $derived(
         size === "large" ? "col-span-1 md:col-span-2 lg:col-span-2" : "col-span-1",
     );
 
-    const imageHeight = "h-[215px]"; // More rectangular proportions matching design
+    const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
-    const hasReachedMinimum = $derived(campaign.obtained.amount >= campaign.minimum.amount);
+    const hasReachedMinimum = $derived((obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0));
 
     // Determine status badge text based on funding level
     // Using lookup pattern for consistency with other i18n implementations
     const statusBadgeText = $derived.by(() => {
         const key = hasReachedMinimum ? "minimumReached" : "goForMinimum";
         return $t(`home.campaigns.status.${key}`);
-    });
-
-    // Calculate remaining amount (to minimum or optimum)
-    const remainingToGoal = $derived(() => {
-        if (hasReachedMinimum && campaign.optimum) {
-            // Show remaining to optimum if minimum is reached
-            const remaining = campaign.optimum.amount - campaign.obtained.amount;
-            return {
-                amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toOptimum"),
-                currency: campaign.optimum.currency,
-            };
-        } else {
-            // Show remaining to minimum
-            const remaining = campaign.minimum.amount - campaign.obtained.amount;
-            return {
-                amount: remaining > 0 ? remaining : 0,
-                label: $t("home.campaigns.remaining.toMinimum"),
-                currency: campaign.minimum.currency,
-            };
-        }
     });
 
     // Get first category only (as per review comments)
@@ -80,7 +83,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
 <div
     class={twMerge(
-        "border-grey grow basis-0 rounded-[32px] border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
+        "border-grey grow basis-0 rounded-4xl border bg-white p-6 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)]",
         sizeClasses,
         className,
     )}
@@ -99,8 +102,8 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
                         <Tag>
-                            <MatchFundingIcon />
-                            <span>{$t("home.campaigns.matchfunding")}</span>
+                            <Flames />
+                            <span>{$t("pages.home.campaigns.matchfunding")}</span>
                         </Tag>
                     {/if}
 
@@ -129,9 +132,9 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Days Remaining -->
                     {#if campaign.daysRemaining !== undefined}
                         <div class="flex items-center gap-2">
-                            <ClockIcon />
+                            <Clock />
                             <span class="text-sm text-black">
-                                {$t("home.campaigns.daysRemaining", {
+                                {$t("pages.home.campaigns.daysRemaining", {
                                     days: campaign.daysRemaining,
                                 })}
                             </span>
@@ -141,7 +144,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <!-- Category (display only first) -->
                     {#if firstCategory()}
                         <div class="flex items-center gap-2">
-                            <CategoryIcon />
+                            <Clock />
                             <span class="text-sm text-black">
                                 {$t(`categories.${firstCategory()}`)}
                             </span>
@@ -160,20 +163,21 @@ Converted from CampaignCard.astro to maintain exact functionality
                     <div class="flex items-start justify-between">
                         <div class="flex flex-col gap-1">
                             <span class="text-secondary text-base"
-                                >{$t("home.campaigns.obtained")}</span
+                                >{$t("pages.home.campaigns.obtained")}</span
                             >
                             <span class="text-secondary text-2xl font-bold">
-                                {formatCurrency(
-                                    campaign.obtained.amount,
-                                    campaign.obtained.currency,
-                                )}
+                                {#if obtained}
+                                    {formatCurrency(obtained.amount, obtained.currency)}
+                                {:else}
+                                    <span class="text-content text-sm">{$t("system.loading")}</span>
+                                {/if}
                             </span>
                         </div>
                         <!-- Remaining to Goal -->
                         <div class="flex flex-col gap-1 text-right">
-                            {#if campaign.optimum && campaign.obtained.amount >= campaign.minimum.amount}
+                            {#if campaign.optimum && (obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0)}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.optimum")}
+                                    {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -183,7 +187,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
-                                    {$t("home.campaigns.minimum")}
+                                    {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
@@ -202,7 +206,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         class="bg-primary -mx-6 -mb-6 flex items-center justify-between rounded-b-3xl px-6 py-4"
                     >
                         <span class="text-base font-normal text-black"
-                            >{$t("home.campaigns.userDonations")}</span
+                            >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
                             {formatCurrency(
@@ -222,7 +226,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             {$t("me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
-                            class="bg-variant1 text-secondary hover:bg-light-accent flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
+                            class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
                             {$t("me.ownedProjects.uploadNewsButton")}
                         </button>

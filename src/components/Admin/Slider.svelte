@@ -1,15 +1,38 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
     import "flickity/css/flickity.css";
-    import type Flickity from "flickity";
-    import type { Options } from "flickity";
     import TotalizerCard from "./TotalizerCard.svelte";
+    import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
+    import { apiAccountingsIdGet, apiTipjarsIdGet } from "../../openapi/client/sdk.gen";
     import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
+    import { formatCurrency } from "../../utils/currencies";
+    import { extractId } from "../../utils/extractId";
+    import { isEnabled, tipjarId } from "../../utils/tipping";
+
+    import type { Options } from "flickity";
 
     let mainCarousel: HTMLDivElement;
-    let flickity: Flickity;
     let isSliderLoaded = $state(false);
+    let totalTips = $state<string>("—");
+
+    async function loadTotalTips() {
+        if (!isEnabled || !$session) return;
+        const headers = $session.token.asHttpHeaders;
+
+        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
+        const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
+        if (!accountingId) return;
+
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: accountingId },
+            headers,
+        });
+        if (accounting?.balance) {
+            totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
+        }
+    }
 
     let options: Options = {
         cellAlign: "left",
@@ -29,25 +52,22 @@
     let slides: { title: string; amount: string | number }[] = $state([]);
 
     const loadSlides = () => {
-        let slidesArr = [];
-
-        // Example dynamic data, just for testing. Pending real data integration.
-        slidesArr.push({
-            title: $t("admin.projects.totalizers.selectedCampaigns"),
-            amount: $totalItems,
-        });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalCharges"), amount: "250,98€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalTips"), amount: "250,96€" });
-        slidesArr.push({ title: $t("admin.charges.totalizers.totalFees"), amount: "250,97€" });
-
-        return slidesArr;
+        return [
+            {
+                title: $t("admin.projects.totalizers.selected"),
+                amount: $totalItems,
+            },
+            { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
+            { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
+            { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+        ];
     };
 
     const loadFlickity = async (elem: HTMLElement) => {
         try {
             const FlickityModule = await import("flickity");
             const FlickityClass = FlickityModule.default;
-            flickity = new FlickityClass(elem, options);
+            new FlickityClass(elem, options);
             isSliderLoaded = true;
         } catch (err) {
             console.error("Flickity failed to load:", err);
@@ -61,6 +81,7 @@
     onMount(() => {
         loadSlides();
         if (mainCarousel) loadFlickity(mainCarousel);
+        loadTotalTips();
     });
 </script>
 
@@ -76,19 +97,19 @@
         class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !$isLoading ? 100 : 0}"
     >
         {#each slides as { title, amount }}
-            <TotalizerCard class="ml-6 h-[162px] w-[322px]" {title} value={amount} />
+            <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
         {/each}
     </div>
 </div>
 
 <style>
     :global(.flickity-button-icon) {
-        fill: #462949;
+        fill: var(--color-secondary);
     }
 
     :global(.flickity-prev-next-button.previous),
     :global(.flickity-prev-next-button.next) {
-        background: #e6e5f7;
+        background: var(--color-variant1);
         width: 40px;
         height: 40px;
     }

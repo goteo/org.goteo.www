@@ -1,11 +1,22 @@
 <script lang="ts">
+    import { Modal } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
-    import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
-    import Carousel from "../Carousel.svelte";
+
+    import PublicBudgetCard from "./PublicBudgetCard.svelte";
     import ResumeBudget from "./ResumeBudget.svelte";
+    import { t } from "../../i18n/store";
+    import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
+    import { formatCurrency } from "../../utils/currencies";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+    import Carousel from "../Carousel.svelte";
+
+    import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
+
+    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
+        task: "bg-variant2",
+        infrastructure: "bg-secondary",
+        material: "bg-tertiary",
+    };
 
     let {
         lang = $bindable(),
@@ -17,14 +28,26 @@
         accounting: Accounting;
     } = $props();
 
-    const projectId = project.id!.toString();
-
     let projectsBudgetItems: ProjectBudgetItem[] = $state([]);
     let minimumItems: ProjectBudgetItem[] = $state([]);
     let optimumItems: ProjectBudgetItem[] = $state([]);
     let itemsPerGroup = $state(3);
+    let openModal = $state(false);
+    let selectedBudgetItem: ProjectBudgetItem | null = $state(null);
+    let renderedDescription = $state("");
 
     $effect(() => {
+        if (selectedBudgetItem?.description) {
+            renderMarkdown(selectedBudgetItem.description).then((html) => {
+                renderedDescription = html;
+            });
+        } else {
+            renderedDescription = "";
+        }
+    });
+
+    $effect(() => {
+        const projectId = project.id!.toString();
         apiProjectBudgetItemsGetCollection({
             query: { project: projectId },
             headers: { "Accept-Language": lang },
@@ -34,12 +57,6 @@
             optimumItems = projectsBudgetItems.filter((item) => item.deadline === "optimum");
         });
     });
-
-    const typeBudget: Record<ProjectBudgetItem["type"], string> = {
-        task: "#99FFCC",
-        infrastructure: "#462949",
-        material: "#E94668",
-    };
 
     function updateItemsPerGroup() {
         // Check for mobile devices using multiple criteria
@@ -76,7 +93,7 @@
     <div class="flex flex-col gap-10">
         <div class="flex flex-col gap-6">
             <span class="text-secondary text-3xl font-bold">
-                {$t("project.tabs.budget.minimum")}:
+                {$t("pages.project.view.tabs.budget.minimum")}:
                 {formatCurrency(
                     project.budget?.minimum?.money?.amount,
                     project.budget?.minimum?.money?.currency,
@@ -85,43 +102,25 @@
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if minimumItems.length === 0}
                     <div
-                        class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
+                        class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
-                        {$t("project.tabs.updates.content.empty")}
+                        {$t("pages.project.view.tabs.updates.content.empty")}
                     </div>
                 {/if}
 
                 {#each minimumItems as item}
-                    <div
-                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
-                    >
-                        <div class="flex flex-col gap-4">
-                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="text-content line-clamp-3 font-normal">
-                                {item.description}
-                            </p>
-                        </div>
-                        <div class="flex flex-row items-center justify-between">
-                            <p class="text-2xl text-black">
-                                {formatCurrency(item.money.amount, item.money.currency)}
-                            </p>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${typeBudget[item.type]}`}
-                                ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
-                                >
-                            </div>
-                        </div>
-                    </div>
+                    <PublicBudgetCard
+                        {item}
+                        bind:openModal
+                        bind:selectedItem={selectedBudgetItem}
+                    />
                 {/each}
             </Carousel>
         </div>
         <div class="flex flex-col gap-6">
             <div></div>
             <span class="text-secondary text-3xl font-bold">
-                {$t("project.tabs.budget.optimal")}:
+                {$t("pages.project.view.tabs.budget.optimal")}:
 
                 {formatCurrency(
                     project.budget?.optimum?.money?.amount,
@@ -131,38 +130,58 @@
             <Carousel gap={16} showDots={true} {itemsPerGroup}>
                 {#if optimumItems.length === 0}
                     <div
-                        class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
+                        class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
                     >
-                        {$t("project.tabs.updates.content.empty")}
+                        {$t("pages.project.view.tabs.updates.content.empty")}
                     </div>
                 {/if}
 
                 {#each optimumItems as item}
-                    <div
-                        class="flex w-full flex-col justify-between gap-6 rounded-4xl bg-white p-6 font-bold"
-                    >
-                        <div class="flex flex-col gap-4">
-                            <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
-                            <p class="text-content line-clamp-3 font-normal">
-                                {item.description}
-                            </p>
-                        </div>
-                        <div class="flex flex-row items-center justify-between">
-                            <p class="text-2xl text-black">
-                                {formatCurrency(item.money.amount, item.money.currency)}
-                            </p>
-                            <div class="flex items-center gap-2">
-                                <div
-                                    class="inline-block h-[10px] w-5 rounded-lg"
-                                    style={`background-color: ${typeBudget[item.type]}`}
-                                ></div>
-                                <span class="text-content text-sm">{$t(`budget.${item.type}`)}</span
-                                >
-                            </div>
-                        </div>
-                    </div>
+                    <PublicBudgetCard
+                        {item}
+                        bind:openModal
+                        bind:selectedItem={selectedBudgetItem}
+                    />
                 {/each}
             </Carousel>
         </div>
     </div>
 </div>
+
+<Modal
+    bind:open={openModal}
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    headerClass="py-2"
+>
+    {#if selectedBudgetItem}
+        <div class="flex cursor-pointer flex-col gap-4 bg-white p-4 px-6 py-4">
+            <div class="flex flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <div
+                        class="inline-block h-2.5 w-5 rounded-lg {typeBudget[
+                            selectedBudgetItem.type as ProjectBudgetItem['type']
+                        ]}"
+                    ></div>
+                    <span class="text-content text-sm">
+                        {$t(`domain.project.budget.type.${selectedBudgetItem.type}`)}
+                    </span>
+                </div>
+                <div class="flex flex-col items-end">
+                    <p class="text-2xl font-bold text-black">
+                        {formatCurrency(
+                            selectedBudgetItem.money.amount,
+                            selectedBudgetItem.money.currency,
+                        )}
+                    </p>
+                </div>
+            </div>
+            <div class="text-2xl font-bold text-black">
+                {selectedBudgetItem.title}
+            </div>
+            <div class="text-content prose prose-sm text-sm">
+                {@html renderedDescription}
+            </div>
+        </div>
+    {/if}
+</Modal>

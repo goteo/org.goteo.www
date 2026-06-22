@@ -1,30 +1,44 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    let {
-        id,
-        label,
-        checked = $bindable(false),
-        class: classes,
-    } = $props<{
-        id?: string;
-        label?: string;
+    import type { Snippet } from "svelte";
+    import type { HTMLInputAttributes } from "svelte/elements";
+
+    const id = $props.id();
+
+    interface Props extends Omit<HTMLInputAttributes, "class"> {
         checked?: boolean;
+        label?: string;
         class?: ClassNameValue;
-    }>();
+        children?: Snippet;
+    }
+
+    let { checked = $bindable(false), label, class: classes, children, ...rest }: Props = $props();
 </script>
 
-<div class="flex items-center justify-center gap-2">
-    <input
-        type="checkbox"
-        {id}
-        bind:checked
-        class={twMerge(
-            "border-secondary text-primary ring-white size-5 shrink-0 rounded-sm border ring-0 accent-secondary outline-0",
-            classes,
-        )}
-    />
+<label for={id} class={twMerge("flex cursor-pointer items-center gap-4", classes)}>
+    <input {id} bind:checked type="checkbox" class="sr-only" {...rest} />
+    <div
+        class="flex h-6 w-6 shrink-0 items-center justify-center rounded-[5px] border-[1.5px] transition-colors
+        {checked ? 'border-primary bg-primary' : 'border-secondary bg-white'}"
+    >
+        <svg
+            viewBox="0 0 12 10"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-3 w-3 transition-opacity {checked ? 'opacity-100' : 'opacity-0'}"
+        >
+            <path
+                d="M1 5L4.5 8.5L11 1"
+                stroke="var(--color-secondary)"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+        </svg>
+    </div>
     {#if label}
-        <label for={id} class="text-content text-base font-normal">{label}</label>
+        <span class="text-content">{label}</span>
     {/if}
-</div>
+    {@render children?.()}
+</label>

@@ -50,7 +50,6 @@ jobs:
                   echo "PUBLIC_API_VERSION='${{ vars.PUBLIC_API_VERSION }}'" >> .env
                   echo "PUBLIC_DEFAULT_CURRENCY='${{ vars.PUBLIC_DEFAULT_CURRENCY }}'" >> .env
                   echo "PUBLIC_DEFAULT_LANGUAGE='${{ vars.PUBLIC_DEFAULT_LANGUAGE }}'" >> .env
-                  echo "PUBLIC_PLATONIQ_ACCOUNTING_ID='${{ vars.PUBLIC_PLATONIQ_ACCOUNTING_ID }}'" >> .env
                   echo "PUBLIC_FACEBOOK_APP_ID='${{ vars.PUBLIC_FACEBOOK_APP_ID }}'" >> .env
 
             - name: Start server

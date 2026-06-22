@@ -33,7 +33,7 @@
             <div class="flex w-full max-w-md flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
                     <h2 class="text-2xl font-bold text-black">
-                        {$t("payment.page-approved.form-goal.title")}
+                        {$t("pages.checkout.verify.approved.formGoal.title")}
                     </h2>
                 </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="mt-6 flex w-full max-w-[668px] flex-col gap-6">
                 <div class="flex w-full max-w-md flex-col gap-4">
                     <h2 class="text-2xl font-bold text-black">
-                        {$t("payment.page-approved.form-review.title")}
+                        {$t("pages.checkout.verify.approved.formReview.title")}
                     </h2>
                     <p class="text-content">
                         {$t("payment.page-approved.form-review.description")}

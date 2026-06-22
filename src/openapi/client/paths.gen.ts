@@ -14,7 +14,13 @@ export const apiAccountingTransactionsIdGetUrl = '/v4/accounting_transactions/{i
 
 export const apiCategoriesGetCollectionUrl = '/v4/categories';
 
+export const apiCategoriesPostUrl = '/v4/categories';
+
+export const apiCategoriesIdDeleteUrl = '/v4/categories/{id}';
+
 export const apiCategoriesIdGetUrl = '/v4/categories/{id}';
+
+export const apiCategoriesIdPatchUrl = '/v4/categories/{id}';
 
 export const apiGatewaysGetCollectionUrl = '/v4/gateways';
 
@@ -110,6 +116,34 @@ export const apiProjectCollaborationsIdGetUrl = '/v4/project_collaborations/{id}
 
 export const apiProjectCollaborationsIdPatchUrl = '/v4/project_collaborations/{id}';
 
+export const apiProjectReviewsGetCollectionUrl = '/v4/project_reviews';
+
+export const apiProjectReviewsIdDeleteUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewsIdGetUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewsIdPatchUrl = '/v4/project_reviews/{id}';
+
+export const apiProjectReviewAreasGetCollectionUrl = '/v4/project_review_areas';
+
+export const apiProjectReviewAreasPostUrl = '/v4/project_review_areas';
+
+export const apiProjectReviewAreasIdDeleteUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewAreasIdGetUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewAreasIdPatchUrl = '/v4/project_review_areas/{id}';
+
+export const apiProjectReviewCommentsGetCollectionUrl = '/v4/project_review_comments';
+
+export const apiProjectReviewCommentsPostUrl = '/v4/project_review_comments';
+
+export const apiProjectReviewCommentsIdDeleteUrl = '/v4/project_review_comments/{id}';
+
+export const apiProjectReviewCommentsIdGetUrl = '/v4/project_review_comments/{id}';
+
+export const apiProjectReviewCommentsIdPatchUrl = '/v4/project_review_comments/{id}';
+
 export const apiProjectRewardsGetCollectionUrl = '/v4/project_rewards';
 
 export const apiProjectRewardsPostUrl = '/v4/project_rewards';
@@ -160,17 +194,11 @@ export const apiUsersGetCollectionUrl = '/v4/users';
 
 export const apiUsersPostUrl = '/v4/users';
 
+export const apiUsersIdOrHandleGetUrl = '/v4/users/{idOrHandle}';
+
 export const apiUsersIdDeleteUrl = '/v4/users/{id}';
 
-export const apiUsersIdGetUrl = '/v4/users/{id}';
-
 export const apiUsersIdPatchUrl = '/v4/users/{id}';
-
-export const apiUserTokensPostUrl = '/v4/user_tokens';
-
-export const apiUserTokensIdDeleteUrl = '/v4/user_tokens/{id}';
-
-export const apiUserTokensIdGetUrl = '/v4/user_tokens/{id}';
 
 export const apiVersionsGetCollectionUrl = '/v4/versions';
 

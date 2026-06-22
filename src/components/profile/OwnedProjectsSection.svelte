@@ -1,24 +1,20 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import Carousel from "../Carousel.svelte";
-    import CampaignCard from "../home/CampaignCard.svelte";
-    import { apiProjectsGetCollection, apiAccountingsIdGet } from "../../openapi/client/sdk.gen.ts";
+    import { session } from "../../auth/store.ts";
     import { t } from "../../i18n/store";
+    import { apiProjectsGetCollection, apiAccountingsIdGet } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import Carousel from "../Carousel.svelte";
+    import CampaignCard from "../home/CampaignCard.svelte";
 
-    import type { Money, Project, Accounting } from "../../openapi/client/types.gen.ts";
+    import type { Money, Project, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
 
     interface Props {
         lang: string;
-        user: {
-            id: number;
-            token: string;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, user }: Props = $props();
@@ -32,7 +28,7 @@
         try {
             const headers = {
                 "Accept-Language": lang,
-                Authorization: `Bearer ${user.token}`,
+                ...$session?.token.asHttpHeaders,
             };
 
             // Get user's owned projects that are currently in campaign

@@ -9,9 +9,9 @@ const { t } = Astro.locals;
 
 // Mock impact metrics (could be localized / formatted later)
 const impact = [
-    { label: t("home.matchfunding.impact.matchers"), value: "2.192.716 €" },
-    { label: t("home.matchfunding.impact.successfulProjects"), value: "255" },
-    { label: t("home.matchfunding.impact.successRate"), value: "91%" },
+    { label: t("pages.home.matchfunding.impact.matchers"), value: "2.192.716 €" },
+    { label: t("pages.home.matchfunding.impact.successfulProjects"), value: "255" },
+    { label: t("pages.home.matchfunding.impact.successRate"), value: "91%" },
 ];
 
 // Mock active / past calls (simplified from Figma example)
@@ -33,8 +33,8 @@ const calls: CallCard[] = [
     {
         title: "Hacendera de proyectos",
         stats: [
-            { label: t("home.matchfunding.cards.grant"), value: "200.000€" },
-            { label: t("home.matchfunding.cards.inscription"), value: "15/08/2025" },
+            { label: t("pages.home.matchfunding.cards.grant"), value: "200.000€" },
+            { label: t("pages.home.matchfunding.cards.inscription"), value: "15/08/2025" },
         ],
         // Figma CTA copy
         cta: "Inscríbete en la convocatoria",
@@ -43,8 +43,8 @@ const calls: CallCard[] = [
     {
         title: "Reeixim L`oesst",
         stats: [
-            { label: t("home.matchfunding.cards.grant"), value: "200.000€" },
-            { label: t("home.matchfunding.cards.participants"), value: "15 proyectos" },
+            { label: t("pages.home.matchfunding.cards.grant"), value: "200.000€" },
+            { label: t("pages.home.matchfunding.cards.participants"), value: "15 proyectos" },
             // TODO i18n: add proper key for "Proyectos acabados con éxito"
             { label: "Proyectos acabados con éxito", value: "4 proyectos" },
         ],
@@ -65,12 +65,12 @@ const calls: CallCard[] = [
                 <div
                     class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[rgba(143,124,146,0.4)] p-10 lg:w-1/2"
                 >
-                    <div class="text-light-accent flex flex-col gap-4 text-balance">
-                        <h2 class="text-light-accent text-4xl font-bold">
-                            {t("home.matchfunding.title")}
+                    <div class="text-purple-soft flex flex-col gap-4 text-balance">
+                        <h2 class="text-purple-soft text-4xl font-bold">
+                            {t("pages.home.matchfunding.title")}
                         </h2>
                         <p class="text-base leading-6 text-white">
-                            {t("home.matchfunding.description")}
+                            {t("pages.home.matchfunding.description")}
                         </p>
                     </div>
                     <div class="flex flex-wrap gap-4">
@@ -78,13 +78,13 @@ const calls: CallCard[] = [
                             href="/matchfunding"
                             class="group relative flex items-center gap-2 rounded-3xl border border-white/40 bg-white/20 px-6 py-4 text-sm font-bold text-white backdrop-blur-md transition hover:bg-white/30"
                         >
-                            {t("home.matchfunding.actions.learnMore")}
+                            {t("pages.home.matchfunding.actions.learnMore")}
                         </a>
                         <a
                             href="/convocatorias"
-                            class="bg-light-accent text-secondary rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
+                            class="bg-purple-soft text-secondary rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
                         >
-                            {t("home.matchfunding.actions.viewCalls")}
+                            {t("pages.home.matchfunding.actions.viewCalls")}
                         </a>
                     </div>
                 </div>
@@ -92,12 +92,12 @@ const calls: CallCard[] = [
                 <div
                     class="backdrop-blur-md/0 flex flex-col gap-10 rounded-2xl bg-[rgba(143,124,146,0.4)] p-10 lg:w-1/2"
                 >
-                    <div class="text-light-accent flex flex-col gap-4">
-                        <h3 class="text-light-accent text-4xl font-bold">
-                            {t("home.matchfunding.impact.title")}
+                    <div class="text-purple-soft flex flex-col gap-4">
+                        <h3 class="text-purple-soft text-4xl font-bold">
+                            {t("pages.home.matchfunding.impact.title")}
                         </h3>
                         <p class="text-base leading-6 text-white">
-                            {t("home.matchfunding.impact.description")}
+                            {t("pages.home.matchfunding.impact.description")}
                         </p>
                     </div>
                     <div class="flex flex-wrap items-start justify-between gap-8">
@@ -137,7 +137,7 @@ const calls: CallCard[] = [
                                 </div>
                                 <a
                                     href="/convocatorias"
-                                    class="bg-light-accent text-secondary w-fit rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
+                                    class="bg-purple-soft text-secondary w-fit rounded-3xl px-6 py-4 text-sm font-bold transition hover:opacity-90"
                                 >
                                     {card.cta}
                                 </a>

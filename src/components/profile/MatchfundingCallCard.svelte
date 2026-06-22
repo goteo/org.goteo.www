@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import { formatAmountWithSymbol } from "../../utils/currencies";
+
     import type { MatchfundingCall } from "../../types/me-page";
 
     interface Props {
@@ -30,12 +31,12 @@
 
 <!-- Hero-style Matchfunding Card -->
 <div
-    class="relative box-border flex w-full flex-col items-start justify-center gap-2 overflow-hidden rounded-[32px] px-0 py-8 md:py-12 lg:py-16"
+    class="relative box-border flex w-full flex-col items-start justify-center gap-2 overflow-hidden rounded-4xl px-0 py-8 md:py-12 lg:py-16"
 >
     <!-- Background Image -->
     {#if call.imageUrl}
-        <div aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-[32px]">
-            <div class="absolute inset-0 overflow-hidden rounded-[32px]">
+        <div aria-hidden="true" class="pointer-events-none absolute inset-0 rounded-4xl">
+            <div class="absolute inset-0 overflow-hidden rounded-4xl">
                 <img
                     alt=""
                     src={call.imageUrl}
@@ -112,7 +113,7 @@
         <!-- Right: Logo Card -->
         {#if call.logo}
             <div
-                class="border-grey flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-[32px] border border-solid bg-white p-8 md:size-56 lg:size-64"
+                class="border-grey flex size-48 shrink-0 flex-col items-center justify-center gap-2 rounded-4xl border border-solid bg-white p-8 md:size-56 lg:size-64"
             >
                 <div class="relative aspect-[250/124] w-full shrink-0">
                     <img

@@ -1,10 +1,7 @@
 <script lang="ts">
-    import Category from "./Category.svelte";
+    import CategoryOption from "./Category.svelte";
 
-    export type Option = {
-        id: number | string;
-        text: string;
-    };
+    import type { Category } from "../../openapi/client";
 
     let {
         options,
@@ -12,19 +9,21 @@
         selectedIds = $bindable([]),
         max,
         onchange,
+        error = undefined,
     }: {
-        options: Option[];
-        selected?: Option[];
+        options: Category[];
+        selected?: Category[];
         selectedIds?: (number | string)[];
         max?: number;
-        onchange?: (selected: Option[], option: Option) => void;
+        onchange?: (selected: Category[], option: Category) => void;
+        error?: string;
     } = $props();
 
-    function isSelected(option: Option): boolean {
+    function isSelected(option: Category): boolean {
         return selectedIds.includes(option.id);
     }
 
-    function handleClick(option: Option): void {
+    function handleClick(option: Category): void {
         if (isSelected(option)) {
             selectedIds = selectedIds.filter((id) => id !== option.id);
         } else {
@@ -36,7 +35,7 @@
         onchange?.(selected, option);
     }
 
-    function calcTagType(option: Option) {
+    function calcTagType(option: Category) {
         if (max === selectedIds.length) {
             return isSelected(option) ? "active" : "ghost";
         }
@@ -44,7 +43,7 @@
         return isSelected(option) ? "active" : "default";
     }
 
-    function calcTagDisabled(option: Option) {
+    function calcTagDisabled(option: Category) {
         if (max === selectedIds.length && !isSelected(option)) {
             return true;
         }
@@ -53,14 +52,24 @@
     }
 </script>
 
-<div class="flex flex-wrap gap-[16px]">
-    {#each options as option}
-        <Category
-            type={calcTagType(option)}
-            disabled={calcTagDisabled(option)}
-            onclick={(e) => handleClick(option)}
-        >
-            {option.text}
-        </Category>
-    {/each}
+<div>
+    <fieldset
+        class="m-0 flex flex-wrap gap-4 border-0 p-0"
+        aria-describedby={error ? "category-error" : undefined}
+    >
+        {#each options as option}
+            <CategoryOption
+                type={calcTagType(option)}
+                disabled={calcTagDisabled(option)}
+                onclick={() => handleClick(option)}
+            >
+                {option.name}
+            </CategoryOption>
+        {/each}
+    </fieldset>
+    {#if error}
+        <p id="category-error" class="mt-2 ml-4 text-xs text-red-600" role="alert">
+            {error}
+        </p>
+    {/if}
 </div>

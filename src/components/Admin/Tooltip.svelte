@@ -1,20 +1,24 @@
 <script lang="ts">
+    import type { Snippet } from "svelte";
+
     const {
+        children,
         text = "¡Tooltip!",
         duration = 1000,
         tooltipClass,
         className = "",
     } = $props<{
+        children: Snippet;
         text?: string;
         duration?: number;
         tooltipClass?: string;
         className?: string;
     }>();
+
     const baseClasses = "text-white text-sm px-2 rounded z-[9999] backdrop-blur-sm";
 
-    const tooltipClasses = `${baseClasses} ${tooltipClass ?? "bg-gray-800/90"}`.trim();
-
     function showTooltip(event: MouseEvent) {
+        const tooltipClasses = `${baseClasses} ${tooltipClass ?? "bg-gray-800/90"}`.trim();
         const wrapper = event.currentTarget as HTMLElement;
         const tooltip = document.createElement("span");
         tooltip.textContent = text;
@@ -41,6 +45,12 @@
     }
 </script>
 
-<span class={className} on:click={showTooltip}>
-    <slot />
+<span
+    class={className}
+    role="button"
+    tabindex="0"
+    onclick={showTooltip}
+    onkeydown={(e) => e.key === "Enter" && showTooltip(e as any)}
+>
+    {@render children()}
 </span>

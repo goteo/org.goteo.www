@@ -1,6 +1,7 @@
 <script lang="ts">
-    import type { ClassNameValue } from "tailwind-merge";
     import { twMerge } from "tailwind-merge";
+
+    import type { ClassNameValue } from "tailwind-merge";
 
     const sizeStyles = {
         small: "h-8 sm:h-10 md:h-12",
@@ -19,8 +20,8 @@
         alt: string;
         href?: string;
         hrefAriaLabel?: string;
-        size: keyof typeof sizeStyles;
-        class: ClassNameValue;
+        size?: keyof typeof sizeStyles;
+        class?: ClassNameValue;
     } = $props();
 </script>
 
@@ -36,7 +37,7 @@
 {#if href}
     <a
         {href}
-        class="focus:ring-soft-purple focus:ring-offset-soft-purple rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
+        class="focus:ring-purple-soft focus:ring-offset-purple-soft rounded-lg focus:ring-2 focus:ring-offset-2 focus:outline-none"
         aria-label={hrefAriaLabel || `Visit ${href}`}
     >
         {@render image()}

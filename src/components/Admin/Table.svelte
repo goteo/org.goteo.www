@@ -8,18 +8,19 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    import Loader from "../../svgs/Loader.svelte";
-    import Pagination from "./Pagination.svelte";
     import DetailsRow from "./DetailsRow.svelte";
-
-    import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-
+    import Pagination from "./Pagination.svelte";
     import {
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
         apiProjectsGetCollectionUrl,
     } from "../../../src/openapi/client/paths.gen";
+    import { t } from "../../i18n/store";
+    import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
+    import Loader from "../../svgs/Loader.svelte";
+    import { formatCurrency } from "../../utils/currencies";
+    import Chevron from "../icons/Chevron.svelte";
+    import Tag from "../library/Tag.svelte";
 
     import type {
         Accounting,
@@ -31,8 +32,6 @@
         Link,
         Tracking,
     } from "../../../src/openapi/client/index.ts";
-
-    import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
@@ -130,13 +129,10 @@
         switch (ownerIri.split("/").slice(0, -1).join("/")) {
             case apiUsersGetCollectionUrl:
                 return (owner as User).displayName ?? undefined;
-                break;
             case apiProjectsGetCollectionUrl:
                 return (owner as Project).title ?? undefined;
-                break;
             case apiTipjarsGetCollectionUrl:
                 return (owner as Tipjar).name ?? undefined;
-                break;
         }
 
         return undefined;
@@ -230,7 +226,7 @@
                 <select
                     value={selectedSort}
                     onchange={(e) => onSortChange(e.currentTarget.value)}
-                    class="border-secondary text-secondary min-w-[200px] rounded-sm py-1"
+                    class="border-secondary text-secondary min-w-50 rounded-sm py-1"
                     disabled={$isLoading}
                 >
                     {#each sortOptions as option}
@@ -302,8 +298,8 @@
                         <TableBodyRow
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
-                                ? 'bg-soft-purple'
-                                : 'bg-white'} border-variant1 hover:bg-soft-purple text-content border transition-colors"
+                                ? 'bg-purple-soft'
+                                : 'bg-white'} border-variant1 hover:bg-purple-soft text-content border transition-colors"
                         >
                             <TableBodyCell
                                 class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
@@ -323,7 +319,7 @@
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
                                 <p
-                                    class="text-secondary decoration-secondary/64 max-w-[100px] cursor-pointer truncate text-[12px]/4 whitespace-nowrap underline opacity-64"
+                                    class="text-secondary decoration-secondary/64 max-w-25 cursor-pointer truncate text-xs/4 whitespace-nowrap underline opacity-64"
                                     title={charge.trackingCodes[0]?.value || "—"}
                                 >
                                     {charge.trackingCodes[0]?.value || "—"}
@@ -331,11 +327,9 @@
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 <div class="flex justify-center">
-                                    <button
-                                        class="flex items-center gap-1 rounded border border-black px-3 py-1 text-base font-medium text-black"
-                                    >
+                                    <Tag>
                                         {$t(`contributions.table.rows.status.${charge.status}`)}
-                                    </button>
+                                    </Tag>
                                 </div>
                             </TableBodyCell>
 
@@ -344,41 +338,33 @@
                             >
                             <TableBodyCell
                                 class="border-variant1 rounded-r-md border-t border-r border-b p-4"
-                                ><svg
-                                    class={openRow === i
-                                        ? "rotate-180 transform transition-transform"
-                                        : "transition-transform"}
+                                ><Chevron
+                                    direction={openRow === i ? "up" : "down"}
                                     width="24"
                                     height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M4.5 8.25L12 15.75L19.5 8.25"
-                                        stroke="#3D3D3D"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg></TableBodyCell
+                                    class="text-black transition-transform"
+                                /></TableBodyCell
                             >
                         </TableBodyRow>
                         {#if openRow === i}
                             <TableBodyRow>
                                 <TableBodyCell
                                     colspan={tableHeaders.length}
-                                    class="border-variant1 bg-soft-purple rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
                                 >
-                                    <DetailsRow
-                                        platformLinks={charge.platformLinks}
-                                        trackingCodes={charge.trackingCodes}
-                                        dataTimeCreated={getDate(charge.dateCreated)}
-                                        dataTimeUpdated={getDate(charge.dateUpdated)}
-                                        id={charge.id ? String(charge.id) : "-"}
-                                        refundToWallet={charge.refundToWallet}
-                                        concept={charge.concept}
-                                    />
+                                    <div class="detail-expand">
+                                        <div class="detail-expand-content">
+                                            <DetailsRow
+                                                platformLinks={charge.platformLinks}
+                                                trackingCodes={charge.trackingCodes}
+                                                dataTimeCreated={getDate(charge.dateCreated)}
+                                                dataTimeUpdated={getDate(charge.dateUpdated)}
+                                                id={charge.id ? String(charge.id) : "-"}
+                                                refundToWallet={charge.refundToWallet}
+                                                concept={charge.concept}
+                                            />
+                                        </div>
+                                    </div>
                                 </TableBodyCell>
                             </TableBodyRow>
                         {/if}
@@ -400,3 +386,37 @@
 
     <Pagination />
 </div>
+
+<style>
+    .detail-expand {
+        display: grid;
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        animation: detail-expand 220ms ease-out both;
+    }
+
+    .detail-expand-content {
+        min-height: 0;
+        animation: detail-content-in 220ms ease-out both;
+    }
+
+    @keyframes detail-expand {
+        from {
+            grid-template-rows: 0fr;
+        }
+        to {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    @keyframes detail-content-in {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

@@ -1,7 +1,8 @@
 <script lang="ts">
-    import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import { onMount, tick, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import ArrowSliderIcon from "../svgs/ArrowSliderIcon.svelte";
     import ProjectUpdate from "./project/ProjectUpdate.svelte";
 
     // Browser check for SSR compatibility
@@ -11,9 +12,14 @@
         itemsPerGroup = 1,
         gap = 24,
         showDots = true,
-        class: className = "",
+        class: classes = "",
         mobileItemsToShow = 1,
         desktopItemsToShow = 3,
+        dotsPerItem = false,
+        lockItemWidth = true,
+        disableDrag = false,
+        navButtonTop = "50%",
+        centerNavButtons = true,
         children = null,
         onSelect = null,
         activeCard = $bindable(0),
@@ -25,17 +31,27 @@
         class?: ClassNameValue;
         mobileItemsToShow?: number;
         desktopItemsToShow?: number;
+        dotsPerItem?: boolean;
+        lockItemWidth?: boolean;
+        disableDrag?: boolean;
+        navButtonTop?: string;
+        centerNavButtons?: boolean;
         children?: any;
         onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
         active?: Snippet;
     } = $props();
 
-    const wrapperClasses = twMerge("relative w-full", className);
+    const wrapperClasses = twMerge("relative w-full", classes);
+    const navButtonClasses: ClassNameValue = twMerge(
+        "bg-variant1 absolute z-10 hidden h-10 w-10 rounded-full p-2 shadow-md disabled:opacity-50 lg:block",
+        centerNavButtons ? "-translate-y-1/2" : "",
+    );
 
     let container: HTMLDivElement;
 
     let totalGroups = $state(0);
+    let totalItems = $state(0);
     let activeGroup = $state(0);
     let isAtStart = $state(true);
     let isAtEnd = $state(false);
@@ -47,6 +63,23 @@
 
     const observerMap = new Map<number, HTMLElement>();
 
+    function getActualChildren() {
+        if (!container) return [];
+
+        let actualChildren: HTMLElement[] = [];
+        const directChildren = Array.from(container.children) as HTMLElement[];
+
+        for (const child of directChildren) {
+            if (child.tagName.toLowerCase() === "astro-slot") {
+                actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
+            } else {
+                actualChildren.push(child);
+            }
+        }
+
+        return actualChildren;
+    }
+
     function getCurrentItemsToShow(): number {
         if (!browser) return desktopItemsToShow;
         return window.innerWidth >= 1024 ? desktopItemsToShow : mobileItemsToShow;
@@ -56,44 +89,48 @@
         if (!browser || !container || !mounted) return;
 
         try {
-            const containerWidth = container.offsetWidth;
+            const actualChildren = getActualChildren();
 
-            if (containerWidth === 0) {
-                setTimeout(updateItemWidths, 50);
-                return;
+            if (lockItemWidth) {
+                const containerWidth = container.offsetWidth;
+
+                if (containerWidth === 0) {
+                    setTimeout(updateItemWidths, 50);
+                    return;
+                }
+
+                const styles = getComputedStyle(container);
+                const paddingLeft = parseFloat(styles.paddingLeft);
+                const paddingRight = parseFloat(styles.paddingRight);
+                const available = containerWidth - paddingLeft - paddingRight;
+
+                const visibleItems = getCurrentItemsToShow();
+                const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
+
+                actualChildren.forEach((child) => {
+                    child.style.minWidth = `${childWidth}px`;
+                    child.style.maxWidth = `${childWidth}px`;
+                    child.style.width = `${childWidth}px`;
+                    child.style.flex = "0 0 auto";
+                    child.style.overflow = "hidden";
+                });
+            } else {
+                actualChildren.forEach((child) => {
+                    child.style.removeProperty("min-width");
+                    child.style.removeProperty("max-width");
+                    child.style.removeProperty("width");
+                    child.style.flex = "0 0 auto";
+                    child.style.overflow = "hidden";
+                });
             }
 
-            const styles = getComputedStyle(container);
-            const paddingLeft = parseFloat(styles.paddingLeft);
-            const paddingRight = parseFloat(styles.paddingRight);
-            const available = containerWidth - paddingLeft - paddingRight;
-
-            const visibleItems = getCurrentItemsToShow();
-            const childWidth = (available - gap * (visibleItems - 1)) / visibleItems;
-
-            const directChildren = Array.from(container.children) as HTMLElement[];
-
-            for (const el of directChildren) {
+            for (const el of Array.from(container.children) as HTMLElement[]) {
                 if (el.tagName.toLowerCase() === "astro-slot") {
-                    const slotChildren = Array.from(el.children) as HTMLElement[];
-                    slotChildren.forEach((child) => {
-                        child.style.minWidth = `${childWidth}px`;
-                        child.style.maxWidth = `${childWidth}px`;
-                        child.style.width = `${childWidth}px`;
-                        child.style.flex = "0 0 auto";
-                        child.style.overflow = "hidden";
-                    });
                     el.style.minWidth = "";
                     el.style.maxWidth = "";
                     el.style.width = "";
                     el.style.flex = "";
                     el.style.display = "contents";
-                } else {
-                    el.style.minWidth = `${childWidth}px`;
-                    el.style.maxWidth = `${childWidth}px`;
-                    el.style.width = `${childWidth}px`;
-                    el.style.flex = "0 0 auto";
-                    el.style.overflow = "hidden";
                 }
             }
             updateNavForShort();
@@ -106,16 +143,7 @@
         if (!browser || !container || !intersectionObs || !mounted) return;
 
         try {
-            let actualChildren: HTMLElement[] = [];
-            const directChildren = Array.from(container.children) as HTMLElement[];
-
-            for (const child of directChildren) {
-                if (child.tagName.toLowerCase() === "astro-slot") {
-                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
-                } else {
-                    actualChildren.push(child);
-                }
-            }
+            const actualChildren = getActualChildren();
 
             intersectionObs.disconnect();
             observerMap.clear();
@@ -126,16 +154,30 @@
             });
 
             totalGroups = Math.ceil(actualChildren.length / itemsPerGroup);
+            totalItems = actualChildren.length;
             updateNavForShort();
         } catch (error) {
             console.warn("Carousel: Error observing visibility:", error);
         }
     }
 
-    function updateNavState(group: number) {
-        activeCard = group;
-        isAtStart = group === 0;
-        isAtEnd = group === totalGroups - 1;
+    function getPositionCount() {
+        return dotsPerItem ? totalItems : totalGroups;
+    }
+
+    function getPositionFromItemIndex(index: number) {
+        return dotsPerItem ? index : Math.floor(index / itemsPerGroup);
+    }
+
+    function getTargetItemIndex(position: number) {
+        return dotsPerItem ? position : position * itemsPerGroup;
+    }
+
+    function updateNavState(position: number) {
+        activeCard = position;
+        activeGroup = position;
+        isAtStart = position === 0;
+        isAtEnd = position === getPositionCount() - 1;
     }
 
     function updateNavForShort() {
@@ -143,45 +185,58 @@
 
         try {
             isScrollable = container.scrollWidth > container.clientWidth;
-            isAtStart = true;
-            isAtEnd = !isScrollable;
+            isAtStart = activeCard === 0;
+            isAtEnd = !isScrollable || activeCard === getPositionCount() - 1;
         } catch (error) {
             console.warn("Carousel: Error updating navigation state:", error);
         }
     }
 
-    function scrollToGroup(i: number) {
+    async function scrollToGroup(i: number) {
         if (!browser || !container || !mounted) return;
 
         try {
-            let actualChildren: HTMLElement[] = [];
-            const directChildren = Array.from(container.children) as HTMLElement[];
+            programmaticScroll = true;
+            updateNavState(i);
+            await tick();
+            updateItemWidths();
+            const targetItemIndex = getTargetItemIndex(i);
+            const actualChildren = getActualChildren();
+            const target = actualChildren[targetItemIndex];
+            scrollToTarget(target, "smooth");
 
-            for (const child of directChildren) {
-                if (child.tagName.toLowerCase() === "astro-slot") {
-                    actualChildren.push(...(Array.from(child.children) as HTMLElement[]));
-                } else {
-                    actualChildren.push(child);
-                }
-            }
-
-            const target = actualChildren[i * itemsPerGroup];
-            target?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+            if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
+            programmaticScrollTimeout = setTimeout(() => {
+                const settledTarget = getActualChildren()[targetItemIndex];
+                scrollToTarget(settledTarget, "auto");
+                updateNavForShort();
+                programmaticScroll = false;
+            }, 360);
         } catch (error) {
             console.warn("Carousel: Error scrolling to group:", error);
+            programmaticScroll = false;
         }
     }
 
+    function scrollToTarget(target: HTMLElement | undefined, behavior: ScrollBehavior) {
+        if (!container || !target) return;
+
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = target.getBoundingClientRect();
+        const left = targetRect.left - containerRect.left + container.scrollLeft;
+
+        container.scrollTo({ left, behavior });
+    }
+
     function scroll(dir: "left" | "right") {
+        const lastPosition = getPositionCount() - 1;
         const next =
-            dir === "right"
-                ? Math.min(activeCard + 1, totalGroups - 1)
-                : Math.max(activeCard - 1, 0);
+            dir === "right" ? Math.min(activeCard + 1, lastPosition) : Math.max(activeCard - 1, 0);
         scrollToGroup(next);
     }
 
     function handleStart(x: number) {
-        if (!browser || !container || !mounted) return;
+        if (disableDrag || !browser || !container || !mounted) return;
 
         isDragging = true;
         startX = x - container.offsetLeft;
@@ -189,7 +244,7 @@
     }
 
     function handleMove(x: number, ev: Event) {
-        if (!browser || !container || !mounted || !isDragging) return;
+        if (disableDrag || !browser || !container || !mounted || !isDragging) return;
 
         ev.preventDefault();
         const walk = (x - container.offsetLeft - startX) * 1.5;
@@ -197,6 +252,8 @@
     }
 
     function endDrag() {
+        if (disableDrag) return;
+
         isDragging = false;
     }
 
@@ -204,6 +261,8 @@
     let resizeObs: ResizeObserver | undefined;
     let mutationObs: MutationObserver | undefined;
     let mounted = false;
+    let programmaticScroll = false;
+    let programmaticScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
     onMount(() => {
         // Ensure we're in the browser and DOM is ready
@@ -219,22 +278,23 @@
                 // Create IntersectionObserver only in the browser
                 intersectionObs = new IntersectionObserver(
                     (entries) => {
-                        if (!mounted) return;
+                        if (!mounted || programmaticScroll) return;
+                        let minGroup = Infinity;
                         for (const e of entries) {
                             if (e.isIntersecting && container) {
-                                let idx = -1;
                                 for (const [index, element] of observerMap.entries()) {
                                     if (element === e.target) {
-                                        idx = index;
+                                        minGroup = Math.min(
+                                            minGroup,
+                                            getPositionFromItemIndex(index),
+                                        );
                                         break;
                                     }
                                 }
-
-                                if (idx !== -1) {
-                                    const group = Math.floor(idx / itemsPerGroup);
-                                    if (group !== activeCard) updateNavState(group);
-                                }
                             }
+                        }
+                        if (minGroup !== Infinity && minGroup !== activeCard) {
+                            updateNavState(minGroup);
                         }
                     },
                     { threshold: 0.6 },
@@ -255,7 +315,7 @@
                         observeVisibility();
                     }
                 });
-                mutationObs.observe(container, { childList: true });
+                mutationObs.observe(container, { childList: true, subtree: true });
 
                 window.addEventListener("resize", updateItemWidths);
             } catch (error) {
@@ -270,6 +330,7 @@
             if (intersectionObs) intersectionObs.disconnect();
             if (resizeObs) resizeObs.disconnect();
             if (mutationObs) mutationObs.disconnect();
+            if (programmaticScrollTimeout) clearTimeout(programmaticScrollTimeout);
             if (browser) {
                 window.removeEventListener("resize", updateItemWidths);
             }
@@ -280,7 +341,8 @@
 <div class={wrapperClasses}>
     <button
         onclick={() => scroll("left")}
-        class="bg-variant1 absolute top-1/2 -left-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class={twMerge(navButtonClasses, "-left-4")}
+        style:top={navButtonTop}
         disabled={isAtStart}
         aria-label="Scroll left"
     >
@@ -292,10 +354,12 @@
         bind:this={container}
         role="region"
         aria-label="Carousel"
-        class="hide-scrollbar flex w-full overflow-x-auto scroll-smooth select-none"
-        class:cursor-grab={isScrollable && !isDragging}
-        class:cursor-default={!isScrollable}
-        class:cursor-grabbing={isDragging && isScrollable}
+        class="hide-scrollbar flex w-full scroll-smooth select-none"
+        class:overflow-x-auto={!disableDrag}
+        class:overflow-x-hidden={disableDrag}
+        class:cursor-grab={isScrollable && !isDragging && !disableDrag}
+        class:cursor-default={!isScrollable || disableDrag}
+        class:cursor-grabbing={isDragging && isScrollable && !disableDrag}
         style="gap: {gap}px"
         onmousedown={(e) => handleStart(e.pageX)}
         onmousemove={(e) => handleMove(e.pageX, e)}
@@ -313,16 +377,17 @@
 
     <button
         onclick={() => scroll("right")}
-        class="bg-variant1 absolute top-1/2 -right-4 z-10 hidden h-10 w-10 -translate-y-1/2 rounded-full p-2 shadow-md disabled:opacity-50 lg:block"
+        class={twMerge(navButtonClasses, "-right-4")}
+        style:top={navButtonTop}
         disabled={isAtEnd}
         aria-label="Scroll right"
     >
         <ArrowSliderIcon />
     </button>
 
-    {#if showDots && totalGroups > 1}
+    {#if showDots && getPositionCount() > 1}
         <div class="mt-4 flex justify-center gap-2">
-            {#each Array(totalGroups) as _, i}
+            {#each Array(getPositionCount()) as _, i}
                 <button
                     onclick={() => scrollToGroup(i)}
                     class="h-2 w-2 rounded-full transition-all"
