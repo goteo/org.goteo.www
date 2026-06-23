@@ -2,7 +2,7 @@
     import { Modal } from "flowbite-svelte";
     import { onDestroy, onMount } from "svelte";
 
-    import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
+    import ProjectUpdateCard, { type ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
     import AlertIcon from "../../svgs/AlertIcon.svelte";
@@ -12,6 +12,7 @@
     import Button from "../library/Button.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
+    import PlatformUpdateCard from "./PlatformUpdateCard.svelte";
 
     let {
         lang = $bindable(),
@@ -23,14 +24,14 @@
 
     const projectId = project.id!.toString();
 
-    let projectsUpdates: ProjectUpdate[] = $state([]);
+    let projectUpdates: ProjectUpdate[] = $state([]);
 
     $effect(() => {
         apiProjectUpdatesGetCollection({
-            query: { project: projectId, "order[date]": "asc" },
+            query: { project: projectId, "order[date]": "desc" },
             headers: { "Accept-Language": lang },
         }).then((data) => {
-            projectsUpdates = data.data!;
+            projectUpdates = data.data!;
         });
     });
 
@@ -38,7 +39,6 @@
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
     let activeCard: number = $state(0);
-    let cardType: "small" | "large" = $state("small");
 
     $effect(() => {
         if (openModal) cleanCloseButton();
@@ -58,6 +58,12 @@
         const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
 
         itemsPerGroup = isMobile ? 1 : 2;
+    }
+
+    function getCardType(index: number): ProjectUpdateCardType {
+        if (itemsPerGroup === 1) return "mobile";
+
+        return index === activeCard ? "expanded" : "contracted";
     }
 
     function cleanCloseButton() {
@@ -101,8 +107,19 @@
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
         {$t("pages.project.view.tabs.updates.content.title")}
     </h2>
-    <Carousel bind:activeCard gap={24} showDots={true} {itemsPerGroup}>
-        {#if projectsUpdates.length === 0}
+    <Carousel
+        bind:activeCard
+        gap={24}
+        showDots={true}
+        {itemsPerGroup}
+        dotsPerItem={true}
+        lockItemWidth={itemsPerGroup === 1}
+        disableDrag={itemsPerGroup !== 1}
+        centerNavButtons={true}
+        mobileItemsToShow={1}
+        desktopItemsToShow={2}
+    >
+        {#if projectUpdates.length === 0}
             <div
                 class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
             >
@@ -110,20 +127,20 @@
             </div>
         {/if}
 
-        <!-- {#snippet onActiveChange(group: number)}
-            {(activeGroup = group)}
-        {/snippet} -->
-
-        {#each projectsUpdates as update, i}
-            <ProjectUpdateCard
-                {update}
-                type={cardType}
-                isActive={i === activeCard}
-                onClick={(): void => {
-                    selected = update;
-                    openModal = true;
-                }}
-            />
+        {#each projectUpdates as update, i}
+            {#if !update.author}
+                <PlatformUpdateCard {update} type={getCardType(i)} isActive={i === activeCard} />
+            {:else}
+                <ProjectUpdateCard
+                    {update}
+                    type={getCardType(i)}
+                    isActive={i === activeCard}
+                    onClick={(): void => {
+                        selected = update;
+                        openModal = true;
+                    }}
+                />
+            {/if}
         {/each}
     </Carousel>
 

@@ -531,6 +531,17 @@
             "twitter": "Inserta tu cuenta de X/Twitter",
             "linkedin": "Inserta tu cuenta de LinkedIn"
           },
+          "paymentData": {
+            "title": "Datos de pago",
+            "subtitle": "Indica los datos bancarios necesarios para gestionar los pagos de la campaña.",
+            "iban": "IBAN",
+            "ibanHelper": "Introduce el IBAN de la cuenta bancaria donde recibirás los fondos recaudados.",
+            "ibanPlaceholder": "ES00 0000 0000 0000 0000 0000",
+            "bankCertificate": "Certificado de titularidad de cuenta",
+            "bankCertificateHelper": "Adjunta el documento que acredita la titularidad de la cuenta bancaria.",
+            "bankCertificateAriaLabel": "Subir certificado de titularidad",
+            "ibanInvalid": "El formato del IBAN no es válido"
+          },
           "continue": "Siguiente paso"
         }
       },
@@ -877,7 +888,7 @@
     "constraint": {
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido 10MB",
-        "supportedTypes": "Archivos compatibles: .png, .jpg"
+        "supportedTypes": "Archivos compatibles: {{ types }}"
       }
     },
     "validation": {
@@ -1515,6 +1526,10 @@
   },
   "profile": {
     "share": "Compartir",
+    "shareModal": {
+      "title": "Comparte este perfil",
+      "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
+    },
     "subscribe": "Subscríbete",
     "tabs": {
       "about": "Sobre el perfil",
@@ -1527,6 +1542,7 @@
     "organizationIntro": "Organización comprometida con el cambio social",
     "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
     "noProjects": "No hay proyectos impulsados aún.",
+    "noBio": "Todavía no hay información sobre este perfil.",
     "donorType": {
       "fan": {
         "title": "Fan",

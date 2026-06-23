@@ -16,7 +16,7 @@
         onBlur = undefined,
         onInput = undefined,
     }: {
-        value?: Date;
+        value: Date;
         id?: string;
         name?: string;
         required?: boolean;
@@ -28,7 +28,7 @@
         helperText?: string;
         error?: string;
         onBlur?: () => void;
-        onInput?: (date: Date) => void;
+        onInput?: (date: string) => void;
     } = $props();
 
     const generatedId = $props.id();
@@ -84,7 +84,7 @@
 
         // Call optional input handler
         if (onInput) {
-            onInput(dateValue);
+            onInput(dateToString(dateValue));
         }
     }
 
@@ -93,7 +93,7 @@
     const maxString = $derived(toDateString(max));
 
     // Convert current value to string for HTML input
-    const valueString = $derived(dateToString(value));
+    const valueString = $derived(typeof value === "string" ? value : dateToString(value));
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-40")}>

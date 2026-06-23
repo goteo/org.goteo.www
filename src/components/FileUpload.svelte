@@ -18,6 +18,18 @@
     let isDragging = $state(false);
     let error = $state<string | null>(null);
 
+    const mimeExtensions: Record<string, string> = {
+        "image/png": ".png",
+        "image/jpeg": ".jpg",
+        "application/pdf": ".pdf",
+        "video/mp4": ".mp4",
+        "video/quicktime": ".mov",
+    };
+
+    let supportedTypes = $derived(
+        accept.map((mime: string) => mimeExtensions[mime] ?? `.${mime.split("/")[1]}`).join(", "),
+    );
+
     function validate(file: File) {
         const validSize = file.size <= maxSizeMB * 1024 * 1024;
         const validType = accept.includes(file.type);
@@ -96,7 +108,7 @@
     <div class="text-content flex justify-between text-sm/4 font-medium">
         <div class="flex items-center gap-2">
             <WarningIcon width="16" height="16" />
-            <span>{$t("system.constraint.file.supportedTypes")}</span>
+            <span>{$t("system.constraint.file.supportedTypes", { types: supportedTypes })}</span>
         </div>
         <span>{$t("system.constraint.file.maxAllowedSize", { maxSizeMB })}</span>
     </div>
