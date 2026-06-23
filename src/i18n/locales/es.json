@@ -503,7 +503,8 @@
             "amountMinimum": "El presupuesto mínimo debe ser mayor que cero",
             "currency": "El importe debe especificar una divisa",
             "type": "El tipo de partida se debe especificar",
-            "class": "La clase de partida se debe especificar"
+            "class": "La clase de partida se debe especificar",
+            "minimumRequiredFirst": "Debes crear al menos una partida de presupuesto mínimo antes de añadir partidas óptimas"
           }
         },
         "aboutYou": {

@@ -22,6 +22,9 @@
         loading = $bindable(false),
         isCreateCard = false,
         defaultDeadline,
+        hasMinimumItems = true,
+        disabled = false,
+        disabledMessage = "",
     }: {
         project: Project;
         item: ProjectBudgetItem | null;
@@ -29,6 +32,9 @@
         loading: boolean;
         isCreateCard?: boolean;
         defaultDeadline?: "minimum" | "optimum";
+        hasMinimumItems?: boolean;
+        disabled?: boolean;
+        disabledMessage?: string;
     } = $props();
 
     let openModal = $state(false);
@@ -36,6 +42,15 @@
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
+
+        if (!hasMinimumItems && data.deadline === "optimum") {
+            validationErrors.set({
+                minimumRequired: "pages.project.edit.budget.validation.minimumRequiredFirst",
+            });
+            showModalErrorToast = true;
+            return;
+        }
+
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
         const budgetItem = {
             ...data,
@@ -83,6 +98,8 @@
         bind:open={openModal}
         bind:showToast={showModalErrorToast}
         {defaultDeadline}
+        {disabled}
+        {disabledMessage}
     />
 {:else if item}
     <div
