@@ -1,16 +1,16 @@
 <script lang="ts">
     import CollabsCard from "./CollabsCard.svelte";
     import { t } from "../../../i18n/store";
-    import {
-        navigateToStep,
-        wizardState,
-        type WizardCollaboration,
-    } from "../../../stores/wizard-state";
+    import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/Button.svelte";
     import Grid from "../../library/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
-    let collabs = $state<WizardCollaboration[]>($wizardState.collaborations);
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
+
+    let { project }: { project: Project } = $props();
+
+    let collabs = $state<ProjectCollaboration[]>($currentDraft?.wizardForm.collaborations || []);
     let loading = $state(false);
 
     /**
@@ -24,13 +24,13 @@
     async function loadCollabs() {
         loading = true;
 
-        collabs = $wizardState.collaborations;
+        collabs = $currentDraft?.wizardForm.collaborations || [];
 
         loading = false;
     }
 
     $effect(() => {
-        if ($wizardState) loadCollabs();
+        if ($currentDraft) loadCollabs();
     });
 </script>
 
@@ -49,10 +49,10 @@
     {:else}
         <Grid>
             {#each collabs as collab, index}
-                <CollabsCard {index} {collab} bind:loading />
+                <CollabsCard {project} {index} {collab} bind:loading />
             {/each}
 
-            <CollabsCard isCreateCard={true} collab={null} bind:loading />
+            <CollabsCard isCreateCard={true} {project} collab={null} bind:loading />
         </Grid>
     {/if}
 

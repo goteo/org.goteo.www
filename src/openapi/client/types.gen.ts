@@ -2523,11 +2523,15 @@ export type TrackingJsonld = {
  */
 export type User = {
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2559,10 +2563,6 @@ export type User = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2571,6 +2571,14 @@ export type User = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<Link>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: Territory;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -2623,11 +2631,15 @@ export type UserJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2659,10 +2671,6 @@ export type UserJsonld = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
@@ -2671,6 +2679,14 @@ export type UserJsonld = {
      * e.g: social profiles, personal website.
      */
     readonly links?: Array<LinkJsonld>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: TerritoryJsonld;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -5968,10 +5984,16 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        handle?: string;
         email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
-        handle?: string;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
     };
     url: '/v4/users';
 };

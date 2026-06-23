@@ -8,38 +8,43 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import { get } from "svelte/store";
+    import { onMount } from "svelte";
 
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
-    import {
-        apiProjectBudgetItemsPost,
-        apiProjectCollaborationsPost,
-        apiProjectRewardsPost,
-        apiProjectsIdPatch,
-        type Project,
-    } from "../../../../../openapi/client";
+    import { session } from "../../../../../auth/store";
+    import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
     import {
-        wizardState,
-        initializeFromProject,
-        clearLocalStorage,
-    } from "../../../../../stores/wizard-state";
+        currentDraft,
+        deleteCurrentDraft,
+        hasUnsavedChanges,
+        initializeProjectDraft,
+        loadDraft,
+        markCurrentDraftClean,
+        updateWizard,
+    } from "../../../../../stores/drafts/projectDraft";
+    import { publishDraft } from "../../../../../utils/projectPublisher";
+    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
 
     import type { Session } from "../../../../../auth/types";
 
     let {
-        project,
-        session,
+        idOrSlug,
+        project = null,
     }: {
-        project: Project;
-        session: Session;
+        idOrSlug: string;
+        project?: Project | null;
     } = $props();
 
-    // Initialize wizard state from project and set up URL sync
-    $effect(() => {
-        // Read URL parameter first (before initializing)
+    let resolvedProject = $state<Project | null>(project);
+    let isInitialized = $state(false);
+    let showSessionErrorToast = $state(false);
+    const user = $derived(($session: Session | null) => $session?.user);
+
+    function getInitialStep() {
         let initialStep = 1;
+
         if (typeof window !== "undefined") {
             const url = new URL(window.location.href);
             const stepParam = url.searchParams.get("step");
@@ -51,16 +56,83 @@
             }
         }
 
-        // Initialize from project
-        initializeFromProject(project);
+        return initialStep;
+    }
 
-        // Set the step from URL parameter if present
-        if (initialStep !== 1) {
-            wizardState.update((state) => ({
-                ...state,
-                currentStep: initialStep,
-            }));
+    function projectToDraft(project: Project): ProjectProjectCreationDto {
+        return {
+            title: project.title || "",
+            subtitle: project.subtitle || "",
+            categories: project.categories,
+            release: project.calendar?.release ?? undefined,
+            status: project.status || "in_draft",
+        };
+    }
+
+    function projectToIri(project: Project) {
+        return `${apiProjectsGetCollectionUrl}/${project.slug ?? project.id}`;
+    }
+
+    function draftToProject(idOrSlug: string): Project | null {
+        if (!$currentDraft) return null;
+
+        const numericId = Number(idOrSlug);
+
+        return {
+            id: Number.isNaN(numericId) ? undefined : numericId,
+            slug: Number.isNaN(numericId) ? idOrSlug : undefined,
+            title: $currentDraft.createProject.title,
+            subtitle: $currentDraft.createProject.subtitle,
+            categories: $currentDraft.createProject.categories,
+            territory: {} as Project["territory"],
+            description: "",
+            deadline: $currentDraft.wizardForm.configuration.projectDeadline,
+            budget: $currentDraft.wizardForm.budget,
+            status: $currentDraft.createProject.status,
+        };
+    }
+
+    function redirectToNotFound() {
+        window.location.href = "/404";
+    }
+
+    onMount(() => {
+        const initialStep = getInitialStep();
+
+        async function initialize() {
+            try {
+                if (project?.id) {
+                    const resources = $session
+                        ? await getProjectDraftResources(projectToIri(project), $session)
+                        : undefined;
+
+                    await initializeProjectDraft(
+                        projectToDraft(project),
+                        String(project.id),
+                        resources,
+                    );
+                    resolvedProject = project;
+                } else {
+                    const hasDraft = await loadDraft(idOrSlug);
+
+                    if (!hasDraft) {
+                        redirectToNotFound();
+                        return;
+                    }
+
+                    hasUnsavedChanges.set(true);
+                    resolvedProject = draftToProject(idOrSlug);
+                }
+
+                updateWizard({ currentStep: initialStep }, { markUnsaved: false });
+                isInitialized = true;
+            } catch (err) {
+                errorMessage = err instanceof Error ? err.message : "Unknown error";
+                isInitialized = true;
+            }
         }
+
+        initialize();
 
         // Listen for browser back/forward navigation (client-side only)
         if (typeof window !== "undefined") {
@@ -70,10 +142,7 @@
                 if (stepParam) {
                     const step = parseInt(stepParam, 10);
                     if (!isNaN(step) && step >= 1 && step <= 6) {
-                        wizardState.update((state) => ({
-                            ...state,
-                            currentStep: step,
-                        }));
+                        updateWizard({ currentStep: step });
                     }
                 }
             };
@@ -87,140 +156,50 @@
     });
 
     // Reactive current step
-    const currentStep = $derived($wizardState.currentStep);
-    let saveState = $state<"idle" | "saving" | "saved">("idle");
+    const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
     let errorMessage = $state("");
 
-    /**
-     * Handle save draft to API
-     */
-    async function handleSave() {
-        saveState = "saving";
+    async function saveToAPI() {
+        if (!$currentDraft) return;
+        if (!resolvedProject?.id) {
+            errorMessage = "Project not found in API";
+            return;
+        }
 
         try {
-            const currentData = get(wizardState);
-            const projectIri =
-                apiProjectsGetCollectionUrl + "/" + (project.slug ? project.slug : project.id);
-
-            if (currentData.rewards.length > 0) {
-                currentData.rewards.forEach(async (reward) => {
-                    const { error: rewardErr } = await apiProjectRewardsPost({
-                        body: {
-                            project: projectIri,
-                            title: reward.title,
-                            description: reward.description,
-                            money: {
-                                amount: reward.money.amount,
-                                currency: reward.money.currency,
-                            },
-                            isFinite: reward.isFinite,
-                            unitsTotal: reward.unitsTotal,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (rewardErr) throw rewardErr;
-                });
+            if (!$session) {
+                showSessionErrorToast = true;
+                throw new Error("User session not found");
             }
 
-            if (currentData.collaborations.length > 0) {
-                currentData.collaborations.forEach(async (collab) => {
-                    const { error: collaborationErr } = await apiProjectCollaborationsPost({
-                        body: {
-                            project: projectIri,
-                            title: collab.title,
-                            description: collab.description,
-                            isFulfilled: false,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (collaborationErr) throw collaborationErr;
-                });
-            }
+            const result = await publishDraft($currentDraft, $session, String(resolvedProject.id));
+            markCurrentDraftClean(result.resources);
+        } catch (err) {
+            errorMessage = err instanceof Error ? err.message : "Unknown error";
 
-            if (currentData.budgetItems.minimum.length > 0) {
-                currentData.budgetItems.minimum.forEach(async (item) => {
-                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
-                        body: {
-                            project: projectIri,
-                            type: item.type,
-                            title: item.title,
-                            description: item.description,
-                            money: {
-                                amount: item.money.amount,
-                                currency: item.money.currency,
-                            },
-                            deadline: item.deadline,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (budgetItemErr) throw budgetItemErr;
-                });
-            }
-
-            if (currentData.budgetItems.optimum.length > 0) {
-                currentData.budgetItems.optimum.forEach(async (item) => {
-                    const { error: budgetItemErr } = await apiProjectBudgetItemsPost({
-                        body: {
-                            project: projectIri,
-                            type: item.type,
-                            title: item.title,
-                            description: item.description,
-                            money: {
-                                amount: item.money.amount,
-                                currency: item.money.currency,
-                            },
-                            deadline: item.deadline,
-                        },
-                        headers: session.token.asHttpHeaders,
-                    });
-                    if (budgetItemErr) throw budgetItemErr;
-                });
-            }
-
-            const { error: projectErr } = await apiProjectsIdPatch({
-                path: { id: String(project.id) },
-                body: {
-                    title: currentData.title,
-                    subtitle: currentData.subtitle,
-                    video: currentData.campaignInfo.video,
-                    description:
-                        currentData.campaignInfo.objectives +
-                        currentData.campaignInfo.legacy +
-                        currentData.campaignInfo.targetAudience +
-                        currentData.campaignInfo.team,
-                    deadline: currentData.configuration.projectDeadline,
-                },
-                headers: session.token.asHttpHeaders,
-            });
-
-            if (projectErr) throw projectErr;
-        } catch (err: any) {
-            errorMessage = err;
-            saveState = "idle";
-        } finally {
-            errorMessage = "";
-            saveState = "saved";
+            return;
         }
     }
 
-    /**
-     * Handle publish
-     */
-    async function handlePublish() {
-        // In Phase 1, this is disabled until all steps are complete and sent to API
-        clearLocalStorage();
-        window.location.href =
-            "/project/" + (project.slug ? project.slug : project.id) + "/publish";
+    function handlePublish() {
+        if (!$currentDraft || !resolvedProject) return;
+
+        const idOrSlug = resolvedProject.slug ?? resolvedProject.id;
+
+        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
+        window.location.href = `/project/${idOrSlug}/publish`;
     }
 </script>
 
-<ProjectEditorShell
-    {errorMessage}
-    {saveState}
-    {project}
-    onSave={handleSave}
-    onPublish={handlePublish}
->
-    {@const StepComponent = getStepComponent(currentStep)}
-    <StepComponent {project} onPublish={handlePublish} />
-</ProjectEditorShell>
+{#if isInitialized && resolvedProject}
+    <ProjectEditorShell
+        {errorMessage}
+        project={resolvedProject}
+        {showSessionErrorToast}
+        onSave={saveToAPI}
+        onPublish={handlePublish}
+    >
+        {@const StepComponent = getStepComponent(currentStep)}
+        <StepComponent project={resolvedProject} />
+    </ProjectEditorShell>
+{/if}

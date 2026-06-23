@@ -15,8 +15,8 @@
     import { t } from "../../i18n/store";
     import Copy from "../icons/Copy.svelte";
 
-    import type { Snippet } from "svelte";
     import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
+    import type { Snippet } from "svelte";
 
     const fallbackDate = {
         date: "—",

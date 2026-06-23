@@ -7,20 +7,23 @@
         deleteReward,
         updateReward,
         validationErrors,
-        type WizardReward,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import UnitIcon from "../../../svgs/UnitIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Button from "../../library/Button.svelte";
 
+    import type { Project, ProjectReward } from "../../../openapi/client";
+
     let {
+        project,
         reward,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
-        reward: WizardReward | null;
+        project: Project;
+        reward: ProjectReward | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
@@ -29,7 +32,7 @@
     let openModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    function handleSaveReward(data: WizardReward | null) {
+    function handleSaveReward(data: ProjectReward | null) {
         if (!data) return;
         let errors;
 
@@ -64,6 +67,7 @@
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.rewards.add.title")}
         description={$t("pages.project.edit.rewards.add.description")}
         variant="reward"
@@ -126,6 +130,7 @@
         <RewardsModal
             bind:open={openModal}
             bind:showToast={showModalErrorToast}
+            {project}
             {reward}
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}

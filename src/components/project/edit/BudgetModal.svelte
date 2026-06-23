@@ -3,7 +3,7 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
-    import { validationErrors } from "../../../stores/wizard-state";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";

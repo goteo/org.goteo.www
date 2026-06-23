@@ -40,7 +40,7 @@
 </script>
 
 <article
-    class="border-variant1 bg-soft-purple flex w-full max-w-109.25 flex-col gap-8 rounded-2xl border p-6 {newMessage
+    class="border-variant1 bg-purple-soft flex w-full max-w-109.25 flex-col gap-8 rounded-2xl border p-6 {newMessage
         ? `shadow-[${newMsgCardShadow}]`
         : ''}"
 >

@@ -1,5 +1,6 @@
 <script lang="ts">
     import iso3166 from "iso-3166-2";
+    import { type ClassNameValue } from "tailwind-merge";
 
     import MapIcon from "./icons/Location.svelte";
     import { locale } from "../i18n/store";
@@ -12,9 +13,11 @@
     let {
         territory,
         lang: initialLang = undefined,
+        class: classes = "",
     }: {
         territory: Territory;
         lang?: Locale;
+        class?: ClassNameValue;
     } = $props();
 
     const lang = initialLang || $locale;
@@ -40,7 +43,7 @@
     }
 </script>
 
-<Tag>
-    <MapIcon width="24" height="24" />
+<Tag class={classes}>
+    <MapIcon />
     <span>{displayName(territory)}</span>
 </Tag>
