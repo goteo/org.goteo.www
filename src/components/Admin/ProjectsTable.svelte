@@ -44,7 +44,6 @@
         "admin.projects.table.headers.contractNumber",
         "admin.projects.table.headers.achieved",
         "admin.projects.table.headers.paid",
-        "admin.projects.table.headers.status",
         "admin.projects.table.headers.process",
         "",
     ];
@@ -52,18 +51,48 @@
     const projects: ProjectRow[] = [];
 
     const processOptions = [
-        { value: "", label: "—" },
-        { value: "signed", label: $t("admin.projects.table.rows.process.signed") },
+        { value: "in_draft", label: $t("admin.projects.table.rows.status.in_draft") },
         {
-            value: "sent_for_signature",
-            label: $t("admin.projects.table.rows.process.sent_for_signature"),
+            value: "to_campaign_review",
+            label: $t("admin.projects.table.rows.status.to_campaign_review"),
         },
-        { value: "form_closed", label: $t("admin.projects.table.rows.process.form_closed") },
-        { value: "payments_made", label: $t("admin.projects.table.rows.process.payments_made") },
         {
-            value: "contract_fulfilled",
-            label: $t("admin.projects.table.rows.process.contract_fulfilled"),
+            value: "in_campaign_review",
+            label: $t("admin.projects.table.rows.status.in_campaign_review"),
         },
+        {
+            value: "in_campaign_review_request_change",
+            label: $t("admin.projects.table.rows.status.in_campaign_review_request_change"),
+        },
+        {
+            value: "campaign_review_rejected",
+            label: $t("admin.projects.table.rows.status.campaign_review_rejected"),
+        },
+        { value: "to_campaign", label: $t("admin.projects.table.rows.status.to_campaign") },
+        { value: "in_campaign", label: $t("admin.projects.table.rows.status.in_campaign") },
+        {
+            value: "campaign_failed",
+            label: $t("admin.projects.table.rows.status.campaign_failed"),
+        },
+        {
+            value: "to_funding_review",
+            label: $t("admin.projects.table.rows.status.to_funding_review"),
+        },
+        {
+            value: "in_funding_review",
+            label: $t("admin.projects.table.rows.status.in_funding_review"),
+        },
+        {
+            value: "in_funding_review_request_change",
+            label: $t("admin.projects.table.rows.status.in_funding_review_request_change"),
+        },
+        {
+            value: "funding_review_rejected",
+            label: $t("admin.projects.table.rows.status.funding_review_rejected"),
+        },
+        { value: "to_funding", label: $t("admin.projects.table.rows.status.to_funding") },
+        { value: "in_funding", label: $t("admin.projects.table.rows.status.in_funding") },
+        { value: "funding_paid", label: $t("admin.projects.table.rows.status.funding_paid") },
     ];
 
     let currentPage = $state(1);
@@ -91,16 +120,6 @@
         e.stopPropagation();
         annotationText = project.annotations;
         annotationsModalOpen = true;
-    }
-
-    function getStatusVariant(status: string): string {
-        if (status === "funding_paid") return "border-green-600 text-green-600";
-        if (status.includes("rejected") || status.includes("failed"))
-            return "border-red-600 text-red-600";
-        if (status.includes("review")) return "border-yellow-600 text-yellow-600";
-        if (status.includes("campaign") || status.includes("funding"))
-            return "border-secondary text-secondary";
-        return "border-black text-black";
     }
 </script>
 
@@ -147,7 +166,7 @@
                         onclick={() => toggleRow(i)}
                         class="{openRow === i
                             ? 'bg-purple-soft'
-                            : 'bg-[#ffffff]'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
+                            : 'bg-white'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
                     >
                         <TableBodyCell
                             class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4"
@@ -174,15 +193,6 @@
                                     <Edit width="14" height="14" />
                                 </button>
                             </div>
-                        </TableBodyCell>
-                        <TableBodyCell class="border-variant1 border-t border-b p-4">
-                            <span
-                                class="rounded border px-3 py-1 text-sm font-medium {getStatusVariant(
-                                    project.status,
-                                )}"
-                            >
-                                {$t(`admin.projects.table.rows.status.${project.status}`)}
-                            </span>
                         </TableBodyCell>
                         <TableBodyCell class="border-variant1 border-t border-b p-4">
                             <div onclick={(e) => e.stopPropagation()} role="presentation">
