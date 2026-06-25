@@ -87,11 +87,11 @@
             class="text-content grid grid-cols-1 gap-x-10 gap-y-8 text-base leading-5 sm:grid-cols-2 xl:grid-cols-4"
         >
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.operationTime")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.operationTime")}</p>
                 <span title={dataTimeCreated.fulltime}>{dataTimeCreated.time}</span>
             </div>
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.trackingCodes.title")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.trackingCodes.title")}</p>
                 <button
                     class="text-secondary flex cursor-pointer items-start truncate whitespace-nowrap underline"
                     title={trackingCodes.map((tc: Tracking) => tc.value).join(", ")}
@@ -105,7 +105,7 @@
                     bind:open={trackingModal}
                     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
                     class="left-1/2! max-w-200 p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-                    title={$t("contributions.grid.details.trackingCodes.title")}
+                    title={$t("pages.admin.charges.details.trackingCodes.title")}
                     headerClass="py-2"
                 >
                     <Table class="w-full table-fixed border-separate border-spacing-y-2">
@@ -113,13 +113,13 @@
                             <TableHeadCell
                                 class="bg-tertiary rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap text-white"
                             >
-                                {$t("contributions.grid.details.trackingCodes.headers.title")}
+                                {$t("pages.admin.charges.details.trackingCodes.headers.title")}
                             </TableHeadCell>
                             <TableHeadCell
                                 class="bg-tertiary rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap text-white"
                             >
                                 {$t(
-                                    "contributions.grid.details.trackingCodes.headers.trackingCode",
+                                    "pages.admin.charges.details.trackingCodes.headers.trackingCode",
                                 )}
                             </TableHeadCell>
                         </TableHead>
@@ -141,7 +141,7 @@
                                                 {item.value}
                                             </div>
                                             <Tooltip
-                                                text={$t("contributions.tootip.copied")}
+                                                text={$t("common.tooltip.coved")}
                                                 tooltipClass="bg-secondary -translate-x-[90%]"
                                                 className="size-5 cursor-copy shrink-0"
                                             >
@@ -163,13 +163,13 @@
                 </Modal>
             </div>
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.toWallet")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.toWallet")}</p>
                 <p>{refundToWallet}</p>
             </div>
             <div class="hidden xl:block"></div>
 
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.platformLinks.title")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.platformLinks.title")}</p>
 
                 <button
                     class="text-secondary flex cursor-pointer items-start truncate whitespace-nowrap underline"
@@ -191,7 +191,7 @@
                     bind:open={linksModal}
                     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
                     class="left-1/2! max-w-200 p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-                    title={$t("contributions.grid.details.platformLinks.title")}
+                    title={$t("pages.admin.charges.details.platformLinks.title")}
                     headerClass="py-2"
                 >
                     <Table class="w-full table-fixed border-separate border-spacing-y-2">
@@ -199,17 +199,17 @@
                             <TableHeadCell
                                 class="bg-tertiary rounded-tl-lg rounded-bl-lg py-4 text-base whitespace-nowrap text-white"
                             >
-                                {$t("contributions.grid.details.platformLinks.headers.type")}
+                                {$t("pages.admin.charges.details.platformLinks.headers.type")}
                             </TableHeadCell>
                             <TableHeadCell
                                 class="bg-tertiary border-t-lg border-b-lg py-4 text-base whitespace-nowrap text-white"
                             >
-                                {$t("contributions.grid.details.platformLinks.headers.rel")}
+                                {$t("pages.admin.charges.details.platformLinks.headers.rel")}
                             </TableHeadCell>
                             <TableHeadCell
                                 class="bg-tertiary rounded-tr-lg rounded-br-lg py-4 text-base whitespace-nowrap text-white"
                             >
-                                {$t("contributions.grid.details.platformLinks.headers.href")}
+                                {$t("pages.admin.charges.details.platformLinks.headers.href")}
                             </TableHeadCell>
                         </TableHead>
                         <TableBody class="text-base">
@@ -239,7 +239,7 @@
                                                 </a>
                                             </div>
                                             <Tooltip
-                                                text={$t("contributions.tootip.copied")}
+                                                text={$t("common.tooltip.coved")}
                                                 tooltipClass="bg-secondary"
                                                 className="size-5 cursor-copy shrink-0"
                                             >
@@ -262,11 +262,11 @@
             </div>
 
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.estimatedFee")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.estimatedFee")}</p>
                 <p>—</p>
             </div>
             <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("contributions.grid.details.concept")}</p>
+                <p class="font-bold">{$t("pages.admin.charges.details.concept")}</p>
                 <p class="truncate" title={concept}>{concept !== "" ? concept : "—"}</p>
             </div>
         </div>
