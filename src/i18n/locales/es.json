@@ -26,6 +26,9 @@
     "login": "Iniciar Sesión",
     "goHome": "Volver a inicio",
     "viewAll": "Ver todo",
+    "viewMore": "Ver más",
+    "viewLess": "Ver menos",
+    "share": "Compartir",
     "noData": "No hay datos disponibles",
     "tooltip": {
       "copied": "¡Copiado!"
@@ -55,10 +58,15 @@
       },
       "reward": {
         "byAtLeast": "Por {{ amount }}",
+        "byAtLeastOrMore": "Por {{ amount }} o más",
         "unitsTotal": {
           "single": "Hay una unidad",
           "multiple": "Hay {{ units }} unidades"
         },
+        "unitsAvailable": "Quedan {{ units }} unidades",
+        "donators": "{{ donators }} donantes",
+        "donors": "donates",
+        "noUnits": "No quedan unidades",
         "isInfinite": "Sin límite de unidades"
       },
       "status": {
@@ -623,6 +631,7 @@
           "rewards": "Recompensas",
           "budget": {
             "title": "Presupuesto",
+            "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
             "minimum": "Mínimo",
             "optimal": "Óptimo",
             "raised": "Obtenido",
@@ -630,7 +639,8 @@
             "chartTitle": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
             "chart": {
               "secondRound": "2ª Ronda",
-              "start": "Inicio"
+              "start": "Inicio",
+              "progress": "Estado de la campaña"
             }
           },
           "updates": {
@@ -668,13 +678,20 @@
           "trending": "Recompensas más populares",
           "showAll": "Ver todas",
           "title": "Selecciona tus recompensas",
+          "headline": "Selecciona tu recompensa",
+          "thanksMessage": "Gracias por cooperar",
+          "ivaMessage": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
+          "addToCart": "Añadir al carro y continuar",
+          "unavailable": "No hay recompensas disponibles.",
+          "loading": "Cargando recompensas...",
           "donationFree": {
             "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
             "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
             "placeholder": "Seleccione el aporte  Ej.20€"
           },
           "error": {
-            "amount": "Por favor, ingresa una monto válido"
+            "amount": "Por favor, ingresa una monto válido",
+            "invalidAmount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa"
           }
         },
         "banner": {
@@ -688,7 +705,31 @@
           }
         },
         "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible.",
-        "outOfCampaign": "Este proyecto está fuera de campaña y ya no admite pagos."
+        "outOfCampaign": "Este proyecto está fuera de campaña y ya no admite pagos.",
+        "share": {
+          "modal": {
+            "title": "Difunde este proyecto por el mundo",
+            "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X.  Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!"
+          },
+          "iframe-modal": {
+            "title": "Así es como se verá en tu plataforma",
+            "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
+            "btnCopy": "Copiar código",
+            "btnCopied": "¡Código copiado!"
+          },
+          "global": "compartir global",
+          "facebook": "compartir en facebook",
+          "twitter": "compartir en X",
+          "code": "compartir como código",
+          "copied": "¡Enlace copiado al portapapeles!"
+        },
+        "video": {
+          "title": "Vídeo de la campaña",
+          "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
+          "poster": "Imagen del vídeo",
+          "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
+          "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
+        }
       }
     },
     "about": {
@@ -892,7 +933,59 @@
       }
     },
     "register": {
-      "title": "Registro"
+      "title": "Registro",
+      "page": {
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Regístrate o",
+        "loginBtnLabel": "Entra con tu cuenta",
+        "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
+        "otherAccessMethods": "También puedes acceder a través de:"
+      },
+      "form": {
+        "userType": {
+          "individual": "Persona física",
+          "organization": "Persona jurídica (empresas)"
+        },
+        "btnSubmit": "Registrarse",
+        "termsCheckbox": "Acepto las condiciones legales",
+        "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+        "zod": {
+          "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
+          "legalName.custom": "La razón social es obligatoria para empresas"
+        },
+        "validation": {
+          "password": {
+            "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+          }
+        }
+      },
+      "individual": {
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+        "taxId": {
+          "label": "DNI*",
+          "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+        }
+      },
+      "organization": {
+        "legalName": "Razón social",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxId": "CIF*",
+        "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
+        "representativeTitle": "Datos del representante de la empresa.",
+        "firstName": "Nombre",
+        "lastName": "Apellidos"
+      },
+      "error": {
+        "incompletePersonFields": "Por favor, completa todos los campos obligatorios para persona física.",
+        "incompleteOrgFields": "Por favor, completa todos los campos obligatorios para persona jurídica.",
+        "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
+      }
     },
     "admin": {
       "charges": {
@@ -1048,6 +1141,40 @@
     },
     "profile": {
       "title": "Goteo"
+    },
+    "login": {
+      "page": {
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Entra en tu cuenta o",
+        "registerBtnLabel": "Regístrate",
+        "otherAccessMethods": "También puedes acceder a través de:",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "welcome": {
+          "title": "Bienvenid@ al nuevo Goteo.",
+          "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
+        }
+      },
+      "form": {
+        "email": "Email o nombre de usuario",
+        "password": "Contraseña",
+        "btnSubmit": "Iniciar sesión"
+      },
+      "error": {
+        "invalidCredentials": "Correo electrónico o contraseña inválidos.",
+        "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
+        "invalidEmail": "El correo electrónico no es válido.",
+        "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
+      }
+    },
+    "logout": {
+      "label": "Cerrar sesión",
+      "error": {
+        "cookieNotFound": "No se ha encontrado la cookie de sesión.",
+        "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
+        "logoutSuccess": "Has cerrado sesión correctamente.",
+        "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
+      }
     }
   },
   "system": {
@@ -1065,6 +1192,9 @@
       "file": {
         "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
         "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      },
+      "countdown": {
+        "notFound": "No se ha encontrado la fecha de finalización de la campaña."
       }
     },
     "constraint": {
@@ -1077,156 +1207,11 @@
       "missingRequiredFields": "Uno o más campos obligatorios están vacíos"
     }
   },
-  "reward": {
-    "donors": "donates",
-    "units": "Quedan {{units}} unidades",
-    "noUnits": "No quedan unidades",
-    "headline": "Selecciona tu recompensa",
-    "addAndContinue": "Añadir al carro y continuar",
-    "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonationLabel": "Donación libre"
-  },
-  "budget": {
-    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
-    "chart": {
-      "minimum": "Mínimo",
-      "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
-    }
-  },
-  "project": {
-    "actions": {
-      "share": "Compartir",
-      "viewAll": "Ver todas",
-      "viewMore": "Ver más",
-      "viewLess": "Ver menos"
-    },
-    "impact": {
-      "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-      "learnMore": "Saber más."
-    },
-    "share": {
-      "modal": {
-        "title": "Difunde este proyecto por el mundo",
-        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X.  Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!"
-      },
-      "iframe-modal": {
-        "title": "Así es como se verá en tu plataforma",
-        "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
-        "btnCopy": "Copiar código",
-        "btnCopied": "¡Código copiado!"
-      }
-    },
-    "video": {
-      "title": "Vídeo de la campaña",
-      "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
-      "poster": "Imagen del vídeo",
-      "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
-      "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
-    }
-  },
   "navigation": {
     "search": {
       "placeholder": "Busca tu campaña"
     },
     "categories": "Categorías"
-  },
-  "ShareButton": {
-    "title": "Difunde este proyecto por el mundo",
-    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
-    "global": "compartir global",
-    "facebook": "compartir en facebook",
-    "twitter": "compartir en X",
-    "code": "compartir como código",
-    "copied": "¡Enlace copiado al portapapeles!"
-  },
-  "register": {
-    "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Regístrate o",
-      "loginBtnLabel": "Entra con tu cuenta",
-      "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
-      "otherAccessMethods": "También puedes acceder a través de:"
-    },
-    "form": {
-      "userType": {
-        "individual": "Persona física",
-        "organization": "Persona jurídica (empresas)"
-      },
-      "btnSubmit": "Registrarse",
-      "termsCheckbox": "Acepto las condiciones legales",
-      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
-      "zod": {
-        "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
-        "legalName.custom": "La razón social es obligatoria para empresas"
-      },
-      "validation": {
-        "password": {
-          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
-        }
-      }
-    },
-    "individual": {
-      "firstName": "Nombre",
-      "lastName": "Apellidos",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
-      "taxId": {
-        "label": "DNI*",
-        "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
-      }
-    },
-    "organization": {
-      "legalName": "Razón social",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "taxId": "CIF*",
-      "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-      "representativeTitle": "Datos del representante de la empresa.",
-      "firstName": "Nombre",
-      "lastName": "Apellidos"
-    },
-    "error": {
-      "incompletePersonFields ": "Por favor, completa todos los campos obligatorios para persona física.",
-      "incompleteOrgFields ": "Por favor, completa todos los campos obligatorios para persona jurídica.",
-      "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
-    }
-  },
-  "login": {
-    "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Entra en tu cuenta o",
-      "registerBtnLabel": "Regístrate",
-      "otherAccessMethods": "También puedes acceder a través de:",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
-      "welcome": {
-        "title": "Bienvenid@ al nuevo Goteo.",
-        "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
-      }
-    },
-    "form": {
-      "email": "Email o nombre de usuario",
-      "password": "Contraseña",
-      "btnSubmit": "Iniciar sesión"
-    },
-    "error": {
-      "invalidCredentials": "Correo electrónico o contraseña inválidos.",
-      "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
-      "invalidEmail": "El correo electrónico no es válido.",
-      "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
-    }
-  },
-  "logout": {
-    "label": "Cerrar sesión",
-    "error": {
-      "cookieNotFound": "No se ha encontrado la cookie de sesión.",
-      "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
-      "logoutSuccess": "Has cerrado sesión correctamente.",
-      "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
-    }
   },
   "zod": {
     "required": "Este campo es obligatorio",
@@ -1253,30 +1238,6 @@
     },
     "invalid": "Entrada no válida"
   },
-  "countdown": {
-    "error": {
-      "not-found": "No se ha encontrado la fecha de finalización de la campaña."
-    }
-  },
-  "rewards": {
-    "unavailable": "No hay recompensas disponibles.",
-    "donators": "{{donators}} donantes",
-    "units-available": "Quedan {{units}} unidades",
-    "by-amount-or-more": "Por {{amount}} o más",
-    "thanks-message": "Gracias por cooperar",
-    "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
-    "reward-donate-close": "Añadir al carro y continuar",
-    "error-invalid-amount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa",
-    "error-amount": "Por favor, ingresa una monto válido",
-    "loading": "Cargando recompensas..."
-  },
-  "updates": {
-    "heading": "No pierdas detalle de los avances de esta campaña",
-    "empty": "No existen más actualizaciones previstas."
-  },
-  "updateCard": {
-    "readMore": "Seguir leyendo"
-  },
   "metadata": {
     "title": "Inicio",
     "description": "Página de inicio"
@@ -1284,11 +1245,6 @@
   "hero": {
     "title": "Financia el cambio que el mundo necesita",
     "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
-  },
-  "renovationBanner": {
-    "title": "¡Renovamos Goteo!",
-    "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
-    "ctaButton": "Súmate a nuestra historia"
   },
   "title": "Hola!",
   "header": {

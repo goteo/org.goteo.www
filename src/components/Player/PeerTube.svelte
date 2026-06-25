@@ -5,7 +5,7 @@
 
     let {
         src,
-        title = $t("project.video.title"),
+        title = $t("pages.project.view.video.title"),
         onReady = () => {},
     } = $props<{
         src: string;

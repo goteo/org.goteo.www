@@ -33,7 +33,7 @@
             isNaN(numericAmount) ||
             numericAmount * getUnit(reward.money?.currency) < (reward.money?.amount ?? 0)
         ) {
-            alert($t("rewards.error-invalid-amount"));
+            alert($t("pages.project.view.rewards.error.invalidAmount"));
             return;
         }
 
@@ -79,14 +79,14 @@
         >
             <h3>
                 {@html $t(
-                    "rewards.by-amount-or-more",
+                    "domain.project.reward.byAtLeastOrMore",
                     {
                         amount: `${formatCurrency(reward.money.amount, reward.money.currency)}`,
                     },
                     { allowHTML: true },
                 )}
             </h3>
-            <h3>{$t("rewards.thanks-message")}</h3>
+            <h3>{$t("pages.project.view.rewards.thanksMessage")}</h3>
         </div>
         <div class="flex flex-row gap-4">
             <div class="marked-content flex min-w-0 flex-1 flex-col gap-2 text-gray-700">
@@ -95,7 +95,7 @@
                 {/await}
                 <p class="mb-8">
                     {@html $t(
-                        "rewards.reward-iva-message",
+                        "pages.project.view.rewards.ivaMessage",
                         {
                             link: `<a class="font-bold" href="${window.location.origin}${link}" target="_blank">${window.location.origin}${link}</a>`,
                         },
@@ -124,7 +124,7 @@
                                     ? formatCurrency(customAmount * unit, currency)
                                     : "";
                         }}
-                        placeholder={$t("rewards.donation-free.placeholder")}
+                        placeholder={$t("pages.project.view.rewards.donationFree.placeholder")}
                     />
                 </div>
             </div>
@@ -134,7 +134,7 @@
                 <UserIcon />
                 <span>
                     {@html $t(
-                        "rewards.donators",
+                        "domain.project.reward.donators",
                         { donators: reward.unitsClaimed! },
                         { allowHTML: true },
                     )}
@@ -147,7 +147,7 @@
                     <UnitIcon />
                     <span>
                         {@html $t(
-                            "rewards.units-available",
+                            "domain.project.reward.unitsAvailable",
                             { units: reward.unitsAvailable! },
                             { allowHTML: true },
                         )}
@@ -157,7 +157,7 @@
         </div>
         <div class="flex flex-row gap-4">
             <Button kind="ghost" onclick={() => updateAmount("close")} class="w-full">
-                {$t("rewards.reward-donate-close")}
+                {$t("pages.project.view.rewards.addToCart")}
             </Button>
             <Button onclick={() => updateAmount("checkout")} class="w-full">
                 {$t("common.donate")}

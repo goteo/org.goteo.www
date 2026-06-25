@@ -16,7 +16,7 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("login.form.password"),
+        placeholder = $t("pages.login.form.password"),
         name = "password",
         id = "password",
         label = undefined,

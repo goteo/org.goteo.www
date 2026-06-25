@@ -6,9 +6,9 @@
 
     let {
         src,
-        title = $t("project.video.title"),
+        title = $t("pages.project.view.video.title"),
         thumbnails = "",
-        poster = { src: "", alt: $t("project.video.poster") },
+        poster = { src: "", alt: $t("pages.project.view.video.poster") },
     } = $props<{
         src: string;
         title?: string;
@@ -183,12 +183,12 @@
     <div
         class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
-        {$t("project.video.not-found")}
+        {$t("pages.project.view.video.not-found")}
     </div>
 {:else}
     <div
         class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
-        {$t("project.video.not-supported")}
+        {$t("pages.project.view.video.not-supported")}
     </div>
 {/if}

@@ -31,7 +31,7 @@ export const register = defineAction({
                 if (!firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: t("register.error.incompletePersonFields"),
+                        message: t("pages.register.error.incompletePersonFields"),
                     });
                 }
             }
@@ -40,7 +40,7 @@ export const register = defineAction({
                 if (!razonSocial?.trim() || !cif?.trim() || !firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: t("register.error.incompleteOrgFields"),
+                        message: t("pages.register.error.incompleteOrgFields"),
                     });
                 }
             }
@@ -65,7 +65,7 @@ export const register = defineAction({
             if (!authData?.id || !authData.token) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("login.error.invalidCredentials"),
+                    message: t("pages.login.error.invalidCredentials"),
                 });
             }
 
@@ -125,7 +125,7 @@ export const register = defineAction({
             console.error("🚨 Error al registrar:", JSON.stringify(error, null, 2));
             throw new ActionError({
                 code: "BAD_REQUEST",
-                message: t("register.error.unexpectedRegistration"),
+                message: t("pages.register.error.unexpectedRegistration"),
             });
         }
     },

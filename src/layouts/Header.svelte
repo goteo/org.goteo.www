@@ -93,7 +93,7 @@
                                             href="/logout"
                                             class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold text-ellipsis"
                                         >
-                                            {$t("logout.label")}
+                                            {$t("pages.logout.label")}
                                         </a>
                                     </div>
                                 </div>
