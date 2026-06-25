@@ -18,6 +18,7 @@
         open: boolean;
         showToast: boolean;
         onSave: (data: any) => void;
+        defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
     }
@@ -31,6 +32,7 @@
         open = $bindable(false),
         showToast = $bindable(false),
         onSave,
+        defaultDeadline,
         disabled = false,
         disabledMessage = "",
     }: Props = $props();
@@ -75,6 +77,20 @@
             {/if}
         </Button>
     </div>
+    <Button
+        kind="secondary"
+        class="mt-auto flex w-full items-center justify-center gap-2"
+        {onclick}
+    >
+        <MoreAndLess sign="more" class="p-0.5625" />
+        {#if variant === "reward"}
+            {$t("pages.project.edit.rewards.add.button")}
+        {:else if variant === "collab"}
+            {$t("pages.project.edit.collaborations.add.button")}
+        {:else if variant === "budget"}
+            {defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.button`) : $t("pages.project.edit.budget.add.button")}
+        {/if}
+    </Button>
 </div>
 
 {#if disabled && disabledMessage}
@@ -88,5 +104,5 @@
 {:else if !disabled && variant === "collab"}
     <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
 {:else if !disabled && variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} />
+    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} {defaultDeadline} />
 {/if}

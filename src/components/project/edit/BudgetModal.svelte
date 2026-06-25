@@ -17,20 +17,27 @@
         budgetItem,
         onSave,
         onDelete,
+        defaultDeadline,
     }: {
         open: boolean;
         showToast: boolean;
         budgetItem: ProjectBudgetItem | null;
         onSave: (data: ProjectBudgetItem | null) => void;
         onDelete?: (deadline: "minimum" | "optimum") => void;
+        defaultDeadline?: "minimum" | "optimum";
     } = $props();
+
+    let isCreating = $derived(!budgetItem);
+    let isDeadlineLocked = $derived(isCreating && defaultDeadline !== undefined);
 
     let selectedBudgetTitle = $state(budgetItem?.title ?? "");
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         budgetItem?.type,
     );
     let amount = $state(budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0);
-    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
+    let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
+        budgetItem?.deadline ?? defaultDeadline,
+    );
     let selectedBudgetDescription = $state(budgetItem?.description ?? "");
 
     let openDeleteModal = $state(false);
@@ -122,25 +129,18 @@
                 bind:value={selectedBudgetDeadline}
                 aria-label={$t("pages.project.edit.budget.modal.placeholders.deadline")}
                 title={$t("pages.project.edit.budget.modal.placeholders.deadline")}
-                class={`${INPUTS_CLASSES} w-[50%]`}
+                class={`${INPUTS_CLASSES} w-[50%] ${isDeadlineLocked ? 'cursor-not-allowed opacity-60' : ''}`}
+                disabled={isDeadlineLocked}
             >
-                <option value="" selected={!budgetItem?.deadline ? true : false}>
-                    {$t("pages.project.edit.budget.modal.placeholders.deadline")}
-                </option>
-                <option
-                    selected={budgetItem?.deadline && budgetItem?.deadline === "minimum"
-                        ? true
-                        : false}
-                    value="minimum"
-                >
+                {#if !isDeadlineLocked}
+                    <option value="">
+                        {$t("pages.project.edit.budget.modal.placeholders.deadline")}
+                    </option>
+                {/if}
+                <option value="minimum">
                     {$t("domain.project.budget.minimum")}
                 </option>
-                <option
-                    selected={budgetItem?.deadline && budgetItem?.deadline === "optimum"
-                        ? true
-                        : false}
-                    value="optimum"
-                >
+                <option value="optimum">
                     {$t("domain.project.budget.optimum")}
                 </option>
             </select>

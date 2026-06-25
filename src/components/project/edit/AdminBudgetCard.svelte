@@ -21,6 +21,7 @@
         index,
         loading = $bindable(false),
         isCreateCard = false,
+        defaultDeadline,
         hasMinimumItems = true,
         disabled = false,
         disabledMessage = "",
@@ -30,6 +31,7 @@
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
+        defaultDeadline?: "minimum" | "optimum";
         hasMinimumItems?: boolean;
         disabled?: boolean;
         disabledMessage?: string;
@@ -87,14 +89,15 @@
 
 {#if isCreateCard}
     <CreateCard
-        title={$t("pages.project.edit.budget.add.title")}
-        description={$t("pages.project.edit.budget.add.description")}
+        title={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.title`) : $t("pages.project.edit.budget.add.title")}
+        description={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.description`) : $t("pages.project.edit.budget.add.description")}
         variant="budget"
         {project}
         onSave={handleSaveBudgetItem}
         onclick={() => (openModal = true)}
         bind:open={openModal}
         bind:showToast={showModalErrorToast}
+        {defaultDeadline}
         {disabled}
         {disabledMessage}
     />
@@ -103,6 +106,17 @@
         class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
     >
         <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+                <span
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline === 'minimum'
+                        ? 'bg-secondary text-white'
+                        : 'border-secondary text-secondary border'}"
+                >
+                    {item.deadline === 'minimum'
+                        ? $t('domain.project.budget.minimum')
+                        : $t('domain.project.budget.optimum')}
+                </span>
+            </div>
             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
             <p class="text-content line-clamp-3 font-normal">
                 {item.description}
