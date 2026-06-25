@@ -1,6 +1,6 @@
 {
   "common": {
-    "_": "Traduccions de la interfície global (botons, etiquetes, etc.)",
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
     "greeting": "Hola",
     "farewell": "Adéu",
     "donate": "Donar",
@@ -17,16 +17,22 @@
     "remove": "Eliminar",
     "textPlaceholder": "Escriu aquí",
     "remember": "Recordar",
+    "search": "Buscar",
+    "searchEtc": "Buscar...",
     "countdown": {
       "remaining": "Quedan",
       "expired": "Campaña finalizada"
     },
     "login": "Iniciar Sesión",
     "goHome": "Volver a inicio",
-    "viewAll": "Ver todo"
+    "viewAll": "Ver todo",
+    "noData": "No hay datos disponibles",
+    "tooltip": {
+      "copied": "¡Copiado!"
+    }
   },
   "domain": {
-    "_": "Conceptes empresarials (projecte, recompensa, contribució, etc.)",
+    "_": "Conceptos de negocio (proyecto, recompensa, contribución, etc.)",
     "header": {
       "categories": "Proyectos"
     },
@@ -62,6 +68,41 @@
         "completed": "Completadas"
       }
     },
+    "gatewayCheckout": {
+      "paymentMethod": "Método",
+      "payments": {
+        "tpv": "Tarjeta",
+        "paypal": "Paypal",
+        "stripe": "Stripe",
+        "wallet": "Monedero"
+      }
+    },
+    "charges": {
+      "status": {
+        "to_charge": "Por cobrar",
+        "in_charge": "Cobrado",
+        "to_refund": "Por reembolsar",
+        "refunded": "Reembolsado",
+        "to_wallet": "Por reembolsar a monedero",
+        "walleted": "Reembolsado a monedero"
+      },
+      "refund": {
+        "to_wallet": "Sí",
+        "to_gateway": "No"
+      },
+      "entityLabels": {
+        "projects": "Proyectos",
+        "users": "Usuarios",
+        "tipjars": "Botes de propina",
+        "tipjar-id": "ID del bote de propina"
+      },
+      "lastContributions": "Últimos aportes:",
+      "totalizers": {
+        "totalCharges": "Total aportes:",
+        "totalTips": "Total propinas:",
+        "totalFees": "Comisiones totales:"
+      }
+    },
     "review": {
       "risks": {
         "low": "Riesgo bajo",
@@ -71,7 +112,7 @@
     }
   },
   "pages": {
-    "_": "Contingut especifíc de la pàgina (/home, /search, /project/[id], etc.)",
+    "_": "Contenido específico de páginas (/home, /search, /project/[id], etc.)",
     "home": {
       "banner": {
         "title": "¡Renovamos Goteo!",
@@ -616,11 +657,16 @@
               "aported": "Aportados",
               "upTo": "de hasta"
             },
+            "role": {
+              "sponsor": "Patrocinador/a",
+              "matchfunding": "Matchfunding"
+            },
             "anonymous": {
-              "length": "anónimos",
+              "length": "aportes",
               "title": "Donaciones anónimas",
               "description": "No todas las personas heróicas llevan capa ni tampoco sienten la necesidad de mostrar su identidad."
-            }
+            },
+            "loadMore": "Ver más"
           }
         },
         "rewards": {
@@ -855,7 +901,151 @@
     },
     "admin": {
       "charges": {
-        "title": "Cargos"
+        "title": "Aportes",
+        "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
+        "headers": {
+          "target": "Destino",
+          "amount": "Importe",
+          "origin": "Origen",
+          "paymentMethod": "Método",
+          "date": "Fecha",
+          "chargeStatus": "Estado de la operación",
+          "refundToWallet": "A Monedero"
+        },
+        "noData": "No hay datos disponibles",
+        "details": {
+          "operationTime": "Hora de la operación",
+          "trackingCodes": {
+            "title": "Códigos de seguimiento",
+            "headers": {
+              "title": "Título",
+              "trackingCode": "Código de seguimiento"
+            }
+          },
+          "toWallet": "A monedero",
+          "platformLinks": {
+            "title": "Enlace a la plataforma",
+            "headers": {
+              "type": "Tipo de Enlace",
+              "rel": "Relación",
+              "href": "Url"
+            }
+          },
+          "estimatedFee": "Comisión estimada",
+          "concept": "Concepto"
+        },
+        "actions": {
+          "refundToWallet": "Devolución a monedero",
+          "refundToUser": "Devolución a usuario",
+          "changeUser": "Cambiar de usuario",
+          "manageReward": "Gestionar recompensa"
+        },
+        "filters": {
+          "order": {
+            "title": "Ordenar por:",
+            "options": {
+              "date-desc": "Fecha (más reciente primero)",
+              "date-asc": "Fecha (más antigua primero)",
+              "amount-desc": "Importe (mayor a menor)",
+              "amount-asc": "Importe (menor a mayor)",
+              "status-desc": "Estado (Z-A)",
+              "status-asc": "Estado (A-Z)"
+            }
+          },
+          "itemsPerPage": {
+            "title": "Líneas por página:",
+            "options": {
+              "10": "10",
+              "20": "20",
+              "30": "30",
+              "50": "50"
+            }
+          },
+          "search": {
+            "placeholder": "Buscar...",
+            "btnLabel": "Buscar",
+            "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
+            "noResults": "No se han encontrado resultados"
+          },
+          "paymentMethod": {
+            "title": "Método de pago",
+            "options": {
+              "all": "Todos",
+              "paypal": "Paypal",
+              "stripe": "Stripe",
+              "wallet": "Monedero"
+            }
+          },
+          "rangeAmount": {
+            "title": "Selecciona importe",
+            "options": {
+              "500000": "+ 5.000€",
+              "all": "Todos",
+              "000..10000": "0€ - 100€",
+              "10000..50000": "100€ - 500€",
+              "50000..100000": "500€ - 1.000€",
+              "100000..500000": "1.000€ - 5.000€"
+            }
+          },
+          "dateRange": {
+            "initDate": "Fecha Inicio",
+            "endDate": "Fecha Fin",
+            "from": "Desde",
+            "to": "Hasta",
+            "errors": {
+              "invalidDate": "Fecha no válida",
+              "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
+            }
+          },
+          "chargeStatus": {
+            "title": "Estado de Aporte",
+            "options": {
+              "all": "Todos",
+              "to_charge": "Por cobrar",
+              "in_charge": "Cobrado",
+              "to_refund": "Por reembolsar",
+              "refunded": "Reembolsado",
+              "to_wallet": "Por reembolsar a monedero",
+              "walleted": "Reembolsado a monedero"
+            }
+          },
+          "projectStatus": {
+            "title": "Estado de la campaña",
+            "options": {
+              "all": "Todas",
+              "active": "Activas",
+              "finished": "Finalizadas",
+              "cancelled": "Canceladas"
+            }
+          },
+          "btns": {
+            "openFilters": "Filtros",
+            "closeFilters": "Cerrar filtros",
+            "reset": "Reiniciar filtros",
+            "apply": "Aplicar filtros"
+          }
+        },
+        "pagination": {
+          "showing": "Mostrando {{items}} de {{total}}",
+          "unloaded": "Mostrando...",
+          "noResults": "No hay resultados"
+        },
+        "export": {
+          "csv": "Exportar CSV",
+          "exporting": "Exportando...",
+          "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
+          "errorAuth": "Error de autenticación. Por favor, inicia sesión de nuevo.",
+          "filename": "gateway-charges",
+          "itemsText": "items",
+          "noData": "No se encontraron datos para exportar"
+        },
+        "downloadButtons": {
+          "details": "Descarga detalle",
+          "certificates": "Descarga certificados",
+          "pdf": "Descarga PDF"
+        },
+        "lastEdited": "Última modificación: {{date}} {{time}}",
+        "annotations": "{{annotations}} Anotaciones"
       }
     },
     "static": {
@@ -866,7 +1056,7 @@
     }
   },
   "system": {
-    "_": "Missatges del sistema (errors, notificacions, validacions, etc.)",
+    "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
     "loading": "Carregant...",
     "notImplemented": "Aquesta funcionalitat encara no està implementada. Estem treballant-hi, gràcies per la teva paciència!",
     "error": {
@@ -1112,186 +1302,6 @@
     "createProject": "Crea el teu projecte",
     "goToProfile": "Anar a Perfil"
   },
-  "contributions": {
-    "title": "Aportacions",
-    "description": "Aquí tens les últimes contribucions a campanyes, pots ordenar-les i filtrar-les com vulguis.",
-    "table": {
-      "headers": {
-        "target": "Destí",
-        "amount": "Import",
-        "origin": "Origen",
-        "paymentMethod": "Mètode",
-        "date": "Data",
-        "chargeStatus": "Estat de l'operació",
-        "refundToWallet": "Al Moneder"
-      },
-      "rows": {
-        "payments": {
-          "tpv": "Targeta",
-          "paypal": "Paypal",
-          "stripe": "Stripe",
-          "wallet": "Moneder"
-        },
-        "status": {
-          "to_charge": "Per cobrar",
-          "in_charge": "Cobrat",
-          "to_refund": "Per reemborsar",
-          "refunded": "Reemborsat",
-          "to_wallet": "Per reemborsar a moneder",
-          "walleted": "Reemborsat a moneder"
-        },
-        "refund": {
-          "to_wallet": "Sí",
-          "to_gateway": "No"
-        },
-        "noData": "No hi ha dades disponibles"
-      }
-    },
-    "grid": {
-      "details": {
-        "operationTime": "Hora de l'operació",
-        "trackingCodes": {
-          "title": "Codis de seguiment",
-          "headers": {
-            "title": "Títol",
-            "trackingCode": "Codi de seguiment"
-          }
-        },
-        "toWallet": "Al moneder",
-        "platformLinks": {
-          "title": "Enllaç a la plataforma",
-          "headers": {
-            "type": "Tipus d'enllaç",
-            "rel": "Relació",
-            "href": "Url"
-          }
-        },
-        "estimatedFee": "Comissió estimada",
-        "concept": "Concepte"
-      },
-      "actions": {
-        "refundToWallet": "Reemborsament a moneder",
-        "refundToUser": "Reemborsament a l'usuari",
-        "changeUser": "Canviar d'usuari",
-        "manageReward": "Gestionar recompensa"
-      },
-      "content-footer": {
-        "lastEdited": "Última modificació: {{date}} {{time}}",
-        "downloadDetails": "Descarrega el detall",
-        "downloadCertificates": "Descarrega certificats",
-        "downloadPdf": "Descarrega PDF",
-        "annotations": "{{annotations}} Anotacions"
-      }
-    },
-    "filters": {
-      "order": {
-        "title": "Ordenar per:",
-        "options": {
-          "date-desc": "Data (més recent primer)",
-          "date-asc": "Data (més antiga primer)",
-          "amount-desc": "Import (de major a menor)",
-          "amount-asc": "Import (de menor a major)",
-          "status-desc": "Estat (Z-A)",
-          "status-asc": "Estat (A-Z)"
-        }
-      },
-      "itemsPerPage": {
-        "title": "Línies per pàgina:",
-        "options": {
-          "10": "10",
-          "20": "20",
-          "30": "30",
-          "50": "50"
-        }
-      },
-      "search": {
-        "placeholder": "Cercar...",
-        "btnLabel": "Cerca",
-        "resultsFound": "{{totalItems}} resultats per \"{{query}}\"",
-        "noResults": "No s'han trobat resultats",
-        "labels": {
-          "projects": "Projectes",
-          "users": "Usuaris",
-          "tipjars": "Botes de propina",
-          "tipjar-id": "ID del bot de propina"
-        }
-      },
-      "paymentMethod": {
-        "title": "Mètode de pagament",
-        "options": {
-          "all": "Tots",
-          "paypal": "Paypal",
-          "stripe": "Stripe",
-          "wallet": "Moneder"
-        }
-      },
-      "rangeAmount": {
-        "title": "Selecciona import",
-        "options": {
-          "500000": "+ 5.000 €",
-          "all": "Tots",
-          "000..10000": "0€ - 100€",
-          "10000..50000": "100€ - 500€",
-          "50000..100000": "500 € - 1.000 €",
-          "100000..500000": "1.000 € - 5.000 €"
-        }
-      },
-      "dateRange": {
-        "initDate": "Data Inici",
-        "endDate": "Data Fi",
-        "from": "Des de",
-        "to": "Fins a",
-        "errors": {
-          "invalidDate": "Data no vàlida",
-          "invalidRange": "La data d'inici no pot ser major que la data de fi."
-        }
-      },
-      "chargeStatus": {
-        "title": "Estat d'Aportació",
-        "options": {
-          "all": "Tots",
-          "to_charge": "Per cobrar",
-          "in_charge": "Cobrat",
-          "to_refund": "Per reemborsar",
-          "refunded": "Reemborsat",
-          "to_wallet": "Per reemborsar a moneder",
-          "walleted": "Reemborsat a moneder"
-        }
-      },
-      "projectStatus": {
-        "title": "Estat de la campanya",
-        "options": {
-          "all": "Totes",
-          "active": "Actives",
-          "finished": "Finalitzades",
-          "cancelled": "Cancel·lades"
-        }
-      },
-      "btns": {
-        "openFilters": "Filtres",
-        "closeFilters": "Tanca filtres",
-        "reset": "Reinicia filtres",
-        "apply": "Aplica filtres"
-      }
-    },
-    "pagination": {
-      "showing": "Mostrant {{items}} de {{total}}",
-      "unloaded": "Mostrant...",
-      "noResults": "No hi ha resultats"
-    },
-    "tootip": {
-      "copied": "Copiat!"
-    },
-    "export": {
-      "csv": "Exportar CSV",
-      "exporting": "Exportant...",
-      "error": "Error a l'exportar l'arxiu CSV. Si us plau, intenta-ho de nou.",
-      "errorAuth": "Error d'autenticació. Si us plau, inicia sessió de nou.",
-      "filename": "gateway-charges",
-      "itemsText": "elements",
-      "noData": "No es van trobar dades per exportar"
-    }
-  },
   "admin": {
     "projects": {
       "totalizers": {
@@ -1299,14 +1309,6 @@
         "totalEarned": "Total aconseguit:",
         "totalPaid": "Total pagat:",
         "totalUnpaid": "Falta per pagar:"
-      }
-    },
-    "charges": {
-      "lastContributions": "Últimes aportacions:",
-      "totalizers": {
-        "totalCharges": "Total aportacions:",
-        "totalTips": "Total propines:",
-        "totalFees": "Comissions totals:"
       }
     }
   },
