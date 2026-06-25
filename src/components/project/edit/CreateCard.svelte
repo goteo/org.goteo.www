@@ -46,11 +46,7 @@
             {description}
         </p>
     </div>
-    <Button
-        kind="secondary"
-        class="flex w-full items-center justify-center gap-2"
-        {onclick}
-    >
+    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
         <MoreAndLess sign="more" class="p-0.5625" />
         {#if variant === "reward"}
             {$t("pages.project.edit.rewards.add.button")}
