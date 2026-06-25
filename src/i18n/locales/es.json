@@ -1373,8 +1373,7 @@
           "contractNumber": "Número de contrato",
           "achieved": "Conseguido",
           "paid": "Pagado",
-          "status": "Estado de proyecto",
-          "process": "Proceso"
+          "process": "Estado"
         },
         "rows": {
           "status": {
@@ -1393,13 +1392,6 @@
             "to_funding": "Pendiente cobro",
             "in_funding": "En cobro",
             "funding_paid": "Cobro pagado"
-          },
-          "process": {
-            "signed": "Firmado",
-            "sent_for_signature": "Enviado para firma",
-            "form_closed": "Formulario cerrado",
-            "payments_made": "Pagos realizados",
-            "contract_fulfilled": "Contrato cumplido"
           },
           "details": {
             "datePublished": "Publicado",
