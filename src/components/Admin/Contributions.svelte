@@ -325,16 +325,18 @@
             ]),
         ];
 
-        chargeStatusOptions = Object.entries($t("pages.admin.charges.filters.chargeStatus.options"));
-        rangeAmountOptions = Object.entries($t("pages.admin.charges.filters.rangeAmount.options")).sort(
-            ([a], [b]) => {
-                const parseMin = (val: string) =>
-                    val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
-                if (a === "all") return -1;
-                if (b === "all") return 1;
-                return parseMin(a) - parseMin(b);
-            },
+        chargeStatusOptions = Object.entries(
+            $t("pages.admin.charges.filters.chargeStatus.options"),
         );
+        rangeAmountOptions = Object.entries(
+            $t("pages.admin.charges.filters.rangeAmount.options"),
+        ).sort(([a], [b]) => {
+            const parseMin = (val: string) =>
+                val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
+            if (a === "all") return -1;
+            if (b === "all") return 1;
+            return parseMin(a) - parseMin(b);
+        });
     });
 </script>
 

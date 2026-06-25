@@ -200,8 +200,8 @@
                                         )}
                                     </div>
                                     <div class="mt-1 text-sm text-gray-500 italic">
-                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item
-                                            .data.id}
+                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item.data
+                                            .id}
                                     </div>
                                 </button>
                             {/each}
@@ -242,7 +242,9 @@
                     </div>
                 {/if}
             {:else}
-                <p class="text-sm text-gray-400">{$t("pages.admin.charges.filters.search.noResults")}</p>
+                <p class="text-sm text-gray-400">
+                    {$t("pages.admin.charges.filters.search.noResults")}
+                </p>
             {/if}
         </div>
     {/if}
