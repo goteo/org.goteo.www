@@ -8,9 +8,9 @@
     import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
-    import Loader from "../../svgs/Loader.svelte";
-    import ActionableButton from "../library/ActionableButton.svelte";
-    import Grid from "../library/Grid.svelte";
+    import ActionableButton from "../library/buttons/ActionableButton.svelte";
+    import Loader from "../library/feedback/Loader.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Reward from "./Reward.svelte";
     import { t } from "../../i18n/store";
     import {
         apiAccountingsIdGet,
@@ -7,9 +8,8 @@
     import { cart } from "../../stores/cart";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
-    import Button from "../library/Button.svelte";
-    import Grid from "../library/Grid.svelte";
-    import Reward from "../Reward.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
 

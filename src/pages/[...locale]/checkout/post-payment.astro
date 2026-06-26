@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import App from "../../../components/App.svelte";
-import Carousel from "../../../components/Carousel.svelte";
+import App from "../../../layouts/App.svelte";
+import Carousel from "../../../components/library/layout/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
 import {
     apiProjectsGetCollection,
@@ -149,7 +149,7 @@ try {
                 >
                     <div class="h-16 w-16 shrink-0 md:h-20 md:w-20">
                         <img
-                            src="/post-payment.svg"
+                            src="/images/checkout/post-payment.svg"
                             alt="Post payment"
                             class="h-full w-full object-contain"
                         />

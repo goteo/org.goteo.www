@@ -5,10 +5,10 @@
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { defaultCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-    import Select from "../../library/Select.svelte";
-    import TextArea from "../../library/TextArea.svelte";
-    import TextInput from "../../library/TextInput.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Select from "../../library/inputs/Select.svelte";
+    import TextArea from "../../library/inputs/TextArea.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
 

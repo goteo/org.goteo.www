@@ -9,12 +9,12 @@
         updateReward,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
-    import UnitIcon from "../../../svgs/UnitIcon.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Close from "../../icons/Close.svelte";
     import InfinityIcon from "../../icons/Infinity.svelte";
-    import Button from "../../library/Button.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import UnitIcon from "../../icons/UnitIcon.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
 

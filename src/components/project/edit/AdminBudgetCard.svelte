@@ -12,8 +12,8 @@
     } from "../../../stores/drafts/projectDraft";
     import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
-    import Close from "../../icons/Close.svelte";
-    import Button from "../../library/Button.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
 

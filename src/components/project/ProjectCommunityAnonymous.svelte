@@ -31,7 +31,7 @@
 >
     <div class="flex h-48 w-full shrink-0 overflow-hidden md:h-auto md:w-2/5">
         <img
-            src="/imgs/card-comunidad.png"
+            src="/images/home/card-comunidad.png"
             alt="Community donation"
             class="h-full w-full object-cover"
         />

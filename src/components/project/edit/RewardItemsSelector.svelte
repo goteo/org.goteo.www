@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import InfinityIcon from "../../icons/Infinity.svelte";
-    import MoreAndLess from "../../icons/MoreAndLess.svelte";
 
     let {
         value = $bindable(1),

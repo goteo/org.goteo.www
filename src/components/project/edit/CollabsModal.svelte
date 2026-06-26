@@ -5,8 +5,8 @@
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import Button from "../../library/Button.svelte";
-    import Toast from "../../library/Toast.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";

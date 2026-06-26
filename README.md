@@ -31,10 +31,10 @@ cp .env.example .env
 
 The minimum required values to boot the app and authenticate users are:
 
-| Variable                                    | Description                                                                                   |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| `PUBLIC_API_URL`                            | Base URL of your Goteo v4 API instance (e.g. `http://localhost:8090`)                          |
-| `PUBLIC_API_VERSION`                        | API version — keep as `v4`                                                                     |
+| Variable                                    | Description                                                                                                                   |
+| ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `PUBLIC_API_URL`                            | Base URL of your Goteo v4 API instance (e.g. `http://localhost:8090`)                                                         |
+| `PUBLIC_API_VERSION`                        | API version — keep as `v4`                                                                                                    |
 | `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` | Credentials of an OAuth client registered in the API. Must allow the grants `authorization_code`, `refresh_token`, `password` |
 
 > NOTE: The OAuth client must exist **in the v4 API instance**. See the API's [Authentication docs](https://api.v4.goteo.org/v4#section/Authentication).
@@ -220,21 +220,21 @@ src/
 
 Full list lives in [`.env.example`](.env.example). Grouped by purpose:
 
-| Variable                                      | Required | Purpose                                                          |
-| --------------------------------------------- | :------: | ---------------------------------------------------------------- |
-| `PUBLIC_API_URL`                              |    ✅    | Base URL of the v4 API instance                                  |
-| `PUBLIC_API_VERSION`                          |    ✅    | API version (`v4`)                                               |
-| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                  |
-| `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                   |
-| `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                              |
-| `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)              |
-| `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                      |
-| `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                            |
-| `PUBLIC_TIPPING_DEFAULT_CHECKED`              |          | `"true"` to pre-check the tip option                            |
-| `PUBLIC_FACEBOOK_APP_ID`                      |          | Facebook share dialog app ID                                    |
-| `CLOUDFLARE_INCLUDE_PROCESS_ENV`              |          | `"true"` — required for Cloudflare Workers to read env vars     |
-| `BASIC_AUTH`                                  |          | `"true"` to add an HTTP Basic auth layer (not a replacement for OAuth) |
-| `BASIC_AUTH_USERNAME` / `BASIC_AUTH_PASSWORD` |          | Credentials for the Basic auth layer                            |
+| Variable                                      | Required | Purpose                                                                               |
+| --------------------------------------------- | :------: | ------------------------------------------------------------------------------------- |
+| `PUBLIC_API_URL`                              |    ✅    | Base URL of the v4 API instance                                                       |
+| `PUBLIC_API_VERSION`                          |    ✅    | API version (`v4`)                                                                    |
+| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                                        |
+| `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                                        |
+| `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                                                    |
+| `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)                                    |
+| `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                                            |
+| `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                                                 |
+| `PUBLIC_TIPPING_DEFAULT_CHECKED`              |          | `"true"` to pre-check the tip option                                                  |
+| `PUBLIC_FACEBOOK_APP_ID`                      |          | Facebook share dialog app ID                                                          |
+| `CLOUDFLARE_INCLUDE_PROCESS_ENV`              |          | `"true"` — required for Cloudflare Workers to read env vars                           |
+| `BASIC_AUTH`                                  |          | `"true"` to add an HTTP Basic auth layer (not a replacement for OAuth)                |
+| `BASIC_AUTH_USERNAME` / `BASIC_AUTH_PASSWORD` |          | Credentials for the Basic auth layer                                                  |
 | `OBJECT_STORAGE_*`                            |          | S3-compatible storage (access key, secret, region, endpoint, bucket) for media upload |
 
 ## CI / Deployment

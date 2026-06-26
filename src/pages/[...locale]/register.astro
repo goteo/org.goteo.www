@@ -1,12 +1,12 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import App from "../../components/App.svelte";
-import RegisterForm from "../../components/RegisterForm.astro";
-import Summary from "../../components/Checkout/Summary.svelte";
-import AuthSummary from "../../components/AuthSummary.svelte";
-import Oauth from "../../components/Oauth.astro";
-import Button from "../../components/library/Button.svelte";
-import BackButton from "../../components/BackButton.svelte";
+import App from "../../layouts/App.svelte";
+import RegisterForm from "../../components/auth/RegisterForm.astro";
+import Summary from "../../components/checkout/Summary.svelte";
+import AuthSummary from "../../components/auth/AuthSummary.svelte";
+import Oauth from "../../components/auth/Oauth.astro";
+import Button from "../../components/library/buttons/Button.svelte";
+import BackButton from "../../components/library/buttons/BackButton.svelte";
 import { cartCount } from "../../stores/cart";
 
 const { t, lang, session } = Astro.locals;

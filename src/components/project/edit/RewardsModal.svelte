@@ -7,10 +7,10 @@
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import { defaultCurrency } from "../../../utils/currencies";
-    import FileUpload from "../../FileUpload.svelte";
-    import Button from "../../library/Button.svelte";
-    import TextArea from "../../library/TextArea.svelte";
-    import TextInput from "../../library/TextInput.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import TextArea from "../../library/inputs/TextArea.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
 

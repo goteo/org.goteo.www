@@ -10,8 +10,8 @@
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Close from "../../icons/Close.svelte";
-    import Button from "../../library/Button.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
