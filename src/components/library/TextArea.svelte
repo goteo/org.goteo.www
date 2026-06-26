@@ -1,56 +1,75 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    interface Props {
-        id: string;
-        label?: string;
-        helper?: string;
+    let {
+        value = $bindable(""),
+        id = undefined,
+        placeholder = undefined,
+        labelText = undefined,
+        helperText = undefined,
+        error = undefined,
+        disabled = false,
+        class: classes = "",
+        rows = 4,
+        onInput = undefined,
+        onBlur = undefined,
+        onFocus = undefined,
+    }: {
         value?: string;
-        error?: boolean;
-        disabled?: boolean;
+        id?: string;
         placeholder?: string;
+        labelText?: string;
+        helperText?: string;
+        error?: string;
+        disabled?: boolean;
         class?: ClassNameValue;
         rows?: number;
-    }
-    let {
-        id,
-        label = "",
-        helper = "",
-        value = $bindable(""),
-        error = false,
-        disabled = false,
-        placeholder,
-        class: className,
-        rows = 4,
-        ...rest
-    }: Props = $props();
-    let textareaClasses = $derived(
+        onInput?: (event: Event) => void;
+        onBlur?: (event?: FocusEvent) => void;
+        onFocus?: (event?: FocusEvent) => void;
+    } = $props();
+
+    const generatedId = $props.id();
+    const finalId = $derived(id ?? generatedId);
+
+    const textareaClasses = $derived(
         twMerge(
-            "border-secondary flex w-full min-h-30 resize-none items-start gap-2 rounded-lg border bg-white p-3 text-sm text-content transition-all outline-none focus:ring-secondary placeholder:text-gray-400",
-            error &&
-                "border-tertiary focus:ring-tertiary text-tertiary placeholder:text-tertiary/60 focus:ring-1",
+            "border-secondary w-full min-h-30 resize-none rounded-lg border bg-white p-4 text-base text-content placeholder:text-gray-400 transition-all outline-none focus:ring-0",
+            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
             disabled && "border-transparent bg-grey cursor-not-allowed",
-            className,
+            classes,
         ),
     );
-    let labelClasses = $derived(
+
+    const labelClasses = $derived(
         twMerge(
-            "absolute -top-2.5 left-2.5 bg-white px-1 text-xs transition-colors font-medium text-gray-400",
+            "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
             error && "text-tertiary",
-            value && !error && "text-content",
             disabled && "opacity-70",
         ),
     );
 </script>
 
-<div class="relative flex w-full flex-col gap-1 {disabled ? 'opacity-50' : ''}">
-    {#if label}
-        <label for={id} class={labelClasses}>{label}</label>
+<div class={twMerge("relative", disabled && "opacity-50")}>
+    {#if labelText}
+        <label for={finalId} class={labelClasses}>
+            {labelText}
+        </label>
     {/if}
-    <textarea {id} {disabled} {placeholder} {rows} bind:value class={textareaClasses} {...rest}
+    <textarea
+        {id}
+        {disabled}
+        {placeholder}
+        {rows}
+        onblur={onBlur}
+        onfocus={onFocus}
+        oninput={onInput}
+        bind:value
+        class={textareaClasses}
     ></textarea>
-
-    {#if error && helper}
-        <span class="text-tertiary mt-1 ml-3 text-xs transition-all">{helper}</span>
+    {#if helperText && !error}
+        <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
+            {helperText}
+        </span>
     {/if}
 </div>

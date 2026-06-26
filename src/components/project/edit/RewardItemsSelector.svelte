@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import InfinityIcon from "../../icons/Infinity.svelte";
     import MoreAndLess from "../../icons/MoreAndLess.svelte";
 
     let {
@@ -37,9 +38,11 @@
                 <MoreAndLess sign="less" />
             </button>
 
-            <span class="text-secondary w-fit text-center text-2xl font-bold">
-                {unlimited ? "∞" : value}
-            </span>
+            {#if unlimited}
+                <InfinityIcon class="text-secondary" width="32" height="32" />
+            {:else}
+                <span class="text-secondary w-fit text-center text-3xl font-bold">{value}</span>
+            {/if}
 
             <button
                 type="button"
