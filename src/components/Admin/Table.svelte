@@ -45,13 +45,13 @@
     };
 
     const tableHeaders = [
-        { name: "contributions.table.headers.target", sortable: false },
-        { name: "contributions.table.headers.amount", sortable: true, sortKey: "amount" },
-        { name: "contributions.table.headers.origin", sortable: false },
-        { name: "contributions.table.headers.paymentMethod", sortable: false },
-        { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
-        { name: "contributions.table.headers.chargeStatus", sortable: false, sortKey: "status" },
-        { name: "contributions.table.headers.refundToWallet", sortable: false },
+        { name: "pages.admin.charges.headers.target", sortable: false },
+        { name: "pages.admin.charges.headers.amount", sortable: true, sortKey: "amount" },
+        { name: "pages.admin.charges.headers.origin", sortable: false },
+        { name: "pages.admin.charges.headers.paymentMethod", sortable: false },
+        { name: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
+        { name: "pages.admin.charges.headers.chargeStatus", sortable: false, sortKey: "status" },
+        { name: "pages.admin.charges.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
 
@@ -221,7 +221,7 @@
         <div class="flex justify-between">
             <div class="flex flex-row items-center gap-2">
                 <p class="text-content font-bold">
-                    {$t("contributions.filters.order.title")}
+                    {$t("pages.admin.charges.filters.order.title")}
                 </p>
                 <select
                     value={selectedSort}
@@ -237,7 +237,7 @@
 
             <div class="flex flex-row items-center gap-2">
                 <p class="text-content font-bold">
-                    {$t("contributions.filters.itemsPerPage.title")}
+                    {$t("pages.admin.charges.filters.itemsPerPage.title")}
                 </p>
                 <select
                     name="itemsPerPage"
@@ -246,7 +246,7 @@
                     bind:value={$itemsPerPage}
                     disabled={$isLoading}
                 >
-                    {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
+                    {#each Object.entries($t("pages.admin.charges.filters.itemsPerPage.options")) as [value, label]}
                         <option value={Number(value)}>{label}</option>
                     {/each}
                 </select>
@@ -263,7 +263,7 @@
                     >
                         <div
                             class="flex items-center justify-between {header.name ===
-                            'contributions.table.headers.chargeStatus'
+                            'pages.admin.charges.headers.chargeStatus'
                                 ? 'justify-center'
                                 : ''}"
                         >
@@ -290,7 +290,7 @@
                 {:else if charges.length === 0 && !$isLoading}
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                            {$t("contributions.table.rows.noData")}
+                            {$t("pages.admin.charges.noData")}
                         </TableBodyCell>
                     </TableBodyRow>
                 {:else}
@@ -314,7 +314,7 @@
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
+                                {$t(`domain.charges.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
@@ -328,7 +328,7 @@
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 <div class="flex justify-center">
                                     <Tag>
-                                        {$t(`contributions.table.rows.status.${charge.status}`)}
+                                        {$t(`domain.charges.status.${charge.status}`)}
                                     </Tag>
                                 </div>
                             </TableBodyCell>

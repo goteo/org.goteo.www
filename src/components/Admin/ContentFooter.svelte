@@ -35,7 +35,7 @@
         {#if date && time}
             <p>
                 {@html $t(
-                    "contributions.grid.content-footer.lastEdited",
+                    "pages.admin.charges.lastEdited",
                     {
                         date: `<span class="font-bold">${date}</span>`,
                         time: `<span class="font-bold">${time}</span>`,
@@ -47,16 +47,16 @@
     </div>
     <div class="flex flex-row flex-wrap items-center justify-start gap-8 md:justify-end">
         <button class="text-secondary cursor-pointer bg-transparent font-bold">
-            {$t("contributions.grid.content-footer.downloadCertificates")}
+            {$t("pages.admin.charges.downloadButtons.certificates")}
         </button>
         <button class="text-secondary cursor-pointer bg-transparent font-bold">
-            {$t("contributions.grid.content-footer.downloadPdf")}
+            {$t("pages.admin.charges.downloadButtons.pdf")}
         </button>
         <button
             class="text-secondary bg-variant1 flex min-h-10 cursor-pointer flex-row items-center gap-2 rounded-2xl px-4 py-2 font-bold"
         >
             <AnnotationIcon size={20} class="shrink-0" />
-            {$t("contributions.grid.content-footer.annotations", {
+            {$t("pages.admin.charges.annotations", {
                 annotations: 0,
             })}
         </button>
