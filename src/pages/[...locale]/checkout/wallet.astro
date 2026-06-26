@@ -1,9 +1,9 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../components/App.svelte";
-import Summary from "../../../components/Checkout/Summary.svelte";
-import WalletConfirmation from "../../../components/Checkout/WalletConfirmation.astro";
-import Steps from "../../../components/Checkout/Steps.svelte";
+import Summary from "../../../components/checkout/Summary.svelte";
+import WalletConfirmation from "../../../components/checkout/WalletConfirmation.astro";
+import Steps from "../../../components/checkout/Steps.svelte";
 import Card from "../../../components/library/Card.svelte";
 import BackButton from "../../../components/BackButton.svelte";
 import { apiAccountingsIdGet } from "../../../openapi/client/index";
@@ -37,7 +37,7 @@ const { data: accounting } = await apiAccountingsIdGet({
                         <div class="flex flex-col gap-10">
                             <div class="flex flex-col gap-4">
                                 <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                                    {t("payment.wallet-confirmation.title")}
+                                    {t("pages.checkout.wallet.title")}
                                 </h2>
                                 <p class="text-content">
                                     {t("pages.checkout.wallet.description")}

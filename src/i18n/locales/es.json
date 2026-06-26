@@ -32,6 +32,62 @@
     "noData": "No hay datos disponibles",
     "tooltip": {
       "copied": "¡Copiado!"
+    },
+    "navigation": {
+      "search": {
+        "placeholder": "Busca tu campaña"
+      },
+      "categories": "Categorías"
+    },
+    "header": {
+      "btnCart": "Ir al checkout",
+      "search": "Buscar",
+      "createProject": "Crea tu proyecto",
+      "goToProfile": "Ir a Perfil"
+    },
+    "footer": {
+      "funding": {
+        "title": "Financia:",
+        "partOf": "Somos parte de:"
+      },
+      "navigation": {
+        "collaborate": {
+          "title": "Colabora",
+          "createProject": "Crea un proyecto",
+          "matchfunding": "Matchfunding",
+          "workshops": "Talleres"
+        },
+        "help": {
+          "title": "Ayuda",
+          "faqs": "FAQs",
+          "contact": "Contacto",
+          "taxCalculator": "Calculadora fiscal"
+        },
+        "aboutGoteo": {
+          "title": "Sobre Goteo",
+          "whoWeAre": "¿Quiénes somos?",
+          "goteoBenefits": "Ventajas de Goteo",
+          "foundationImpact": "Impacto de la fundación",
+          "platoniqFoundation": "Fundación Platoniq"
+        },
+        "forUsers": {
+          "title": "Para usuarias",
+          "rechargeWallet": "Recarga tu monedero",
+          "downloadCertificate": "Descarga certificado",
+          "accessComplementaryFunds": "Accede a fondos complementarios",
+          "designFundingProgram": "Diseña un programa de financiación"
+        }
+      },
+      "legal": {
+        "termsOfUse": "Condiciones de uso",
+        "privacyPolicy": "Política de privacidad",
+        "licenses": "Licencias",
+        "stats": "Stats"
+      },
+      "platoniq": {
+        "foundation": "Fundación",
+        "name": "Platoniq"
+      }
     }
   },
   "domain": {
@@ -1134,13 +1190,51 @@
         },
         "lastEdited": "Última modificación: {{date}} {{time}}",
         "annotations": "{{annotations}} Anotaciones"
+      },
+      "projects": {
+        "totalizers": {
+          "selected": "Proyectos seleccionados:",
+          "totalEarned": "Total conseguido:",
+          "totalPaid": "Total pagado:",
+          "totalUnpaid": "Falta por pagar:"
+        }
       }
     },
     "static": {
       "title": "Goteo"
     },
     "profile": {
-      "title": "Goteo"
+      "title": "Goteo",
+      "share": "Compartir",
+      "shareModal": {
+        "title": "Comparte este perfil",
+        "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
+      },
+      "subscribe": "Subscríbete",
+      "tabs": {
+        "about": "Sobre el perfil",
+        "projects": "Proyectos impulsados",
+        "donorType": "Tipo de donante"
+      },
+      "notFound": "Usuario no encontrado",
+      "location": "Ubicación",
+      "userIntro": "Miembro activo de la comunidad Goteo",
+      "organizationIntro": "Organización comprometida con el cambio social",
+      "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
+      "noProjects": "No hay proyectos impulsados aún.",
+      "noBio": "Todavía no hay información sobre este perfil.",
+      "donorType": {
+        "fan": {
+          "title": "Fan",
+          "description": "Este donante ha invertido más de 25€",
+          "projectsDonated": "Proyectos donados",
+          "moneyDonated": "Dinero donado"
+        },
+        "nextLevel": {
+          "title": "Próximo nivel",
+          "description": "Sigue donando para subir de nivel"
+        }
+      }
     },
     "login": {
       "page": {
@@ -1175,6 +1269,99 @@
         "logoutSuccess": "Has cerrado sesión correctamente.",
         "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
       }
+    },
+    "metadata": {
+      "title": "Inicio",
+      "description": "Página de inicio"
+    },
+    "hero": {
+      "title": "Financia el cambio que el mundo necesita",
+      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
+    },
+    "me": {
+      "page": {
+        "title": "Actividad",
+        "subtitle": "Consulta tu actividad en Goteo"
+      },
+      "period": {
+        "label": "Periodo",
+        "year": "Año {{year}}"
+      },
+      "donations": {
+        "title": "Mis donaciones",
+        "empty": "Aún no has donado a ningún proyecto",
+        "explore": "Explora proyectos",
+        "illustration": "/images/profile/ilustration-donations.png",
+        "ctaLink": "/projects",
+        "count": "Donaciones",
+        "total": "Total donado",
+        "recent": "Últimas donaciones",
+        "viewAll": "Ver todas",
+        "certificate": "Solicitar certificado"
+      },
+      "projects": {
+        "title": "Proyectos impulsados",
+        "empty": "Aún no has impulsado ningún proyecto",
+        "create": "Impulsa tu proyecto",
+        "illustration": "/images/profile/ilustration-project.png",
+        "ctaLink": "/projects/new",
+        "count": "Proyectos",
+        "raised": "Recaudado",
+        "recent": "Últimos proyectos impulsados",
+        "viewAll": "Ver todos",
+        "createNew": "Crear un proyecto"
+      },
+      "ownedProjects": {
+        "title": "Tus Proyectos Activos",
+        "messageToDonatorsButton": "Mensaje a donantes",
+        "uploadNewsButton": "Subir novedad"
+      },
+      "donatedProjects": {
+        "title": "Proyectos activos donde donaste"
+      },
+      "cta": {
+        "discover": {
+          "title": "Descubre, conecta y dona",
+          "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
+          "button": "Dona a un proyecto"
+        },
+        "matchfunding": {
+          "title": "Donaciones que brillan. Proyectos que inspiran.",
+          "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
+          "learnMore": "Descubre cómo funciona el matchfunding",
+          "becomeMatcher": "Hazte Matcher"
+        }
+      },
+      "matchfunding": {
+        "card": {
+          "title": "Matchfunding",
+          "calls": "Convocatorias",
+          "donated": "Donado",
+          "recent": "Últimas convocatorias",
+          "viewAll": "Ver convocatorias",
+          "create": "Crear convocatoria"
+        },
+        "section": {
+          "title": "Tus convocatorias de Matchfunding activas",
+          "empty": "No tienes convocatorias activas",
+          "error": "Error al cargar las convocatorias"
+        },
+        "callCard": {
+          "donationCall": "Dotación convocatoria",
+          "participatingProjects": "Proyectos participantes",
+          "successfulProjects": "Proyectos acogidos con éxito",
+          "projects": "proyectos",
+          "viewCall": "Ir a la convocatoria"
+        }
+      }
+    },
+    "blog": {
+      "share": {
+        "modal": {
+          "title": "Difunde este blog por el mundo",
+          "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
+        }
+      }
     }
   },
   "system": {
@@ -1204,231 +1391,37 @@
       }
     },
     "validation": {
-      "missingRequiredFields": "Uno o más campos obligatorios están vacíos"
-    }
-  },
-  "navigation": {
-    "search": {
-      "placeholder": "Busca tu campaña"
+      "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
+      "project": {
+        "terms": {
+          "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+        }
+      }
     },
-    "categories": "Categorías"
-  },
-  "zod": {
-    "required": "Este campo es obligatorio",
-    "invalid_type": "Se esperaba {expected} pero se recibió {received}",
-    "string": {
-      "too_small": "Debe tener al menos {min} carácter(es)",
-      "too_big": "No debe exceder los {max} caracteres",
-      "invalid": "Formato de texto no válido"
-    },
-    "number": {
+    "zod": {
+      "required": "Este campo es obligatorio",
+      "invalid_type": "Se esperaba {expected} pero se recibió {received}",
+      "string": {
+        "too_small": "Debe tener al menos {min} carácter(es)",
+        "too_big": "No debe exceder los {max} caracteres",
+        "invalid": "Formato de texto no válido"
+      },
+      "number": {
+        "too_small": "Debe ser al menos {min}",
+        "too_big": "No debe exceder {max}"
+      },
       "too_small": "Debe ser al menos {min}",
-      "too_big": "No debe exceder {max}"
-    },
-    "too_small": "Debe ser al menos {min}",
-    "too_big": "No debe exceder {max}",
-    "email": {
-      "invalid": "Correo electrónico no válido"
-    },
-    "url": {
-      "invalid": "Formato de URL no válido"
-    },
-    "enum": {
-      "invalid": "Opción no válida. Las opciones válidas son: {options}"
-    },
-    "invalid": "Entrada no válida"
-  },
-  "metadata": {
-    "title": "Inicio",
-    "description": "Página de inicio"
-  },
-  "hero": {
-    "title": "Financia el cambio que el mundo necesita",
-    "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
-  },
-  "title": "Hola!",
-  "header": {
-    "btnCart": "Ir al checkout",
-    "search": "Buscar",
-    "createProject": "Crea tu proyecto",
-    "goToProfile": "Ir a Perfil"
-  },
-  "admin": {
-    "projects": {
-      "totalizers": {
-        "selected": "Proyectos seleccionados:",
-        "totalEarned": "Total conseguido:",
-        "totalPaid": "Total pagado:",
-        "totalUnpaid": "Falta por pagar:"
-      }
-    }
-  },
-  "footer": {
-    "funding": {
-      "title": "Financia:",
-      "partOf": "Somos parte de:"
-    },
-    "navigation": {
-      "collaborate": {
-        "title": "Colabora",
-        "createProject": "Crea un proyecto",
-        "matchfunding": "Matchfunding",
-        "workshops": "Talleres"
+      "too_big": "No debe exceder {max}",
+      "email": {
+        "invalid": "Correo electrónico no válido"
       },
-      "help": {
-        "title": "Ayuda",
-        "faqs": "FAQs",
-        "contact": "Contacto",
-        "taxCalculator": "Calculadora fiscal"
+      "url": {
+        "invalid": "Formato de URL no válido"
       },
-      "aboutGoteo": {
-        "title": "Sobre Goteo",
-        "whoWeAre": "¿Quiénes somos?",
-        "goteoBenefits": "Ventajas de Goteo",
-        "foundationImpact": "Impacto de la fundación",
-        "platoniqFoundation": "Fundación Platoniq"
+      "enum": {
+        "invalid": "Opción no válida. Las opciones válidas son: {options}"
       },
-      "forUsers": {
-        "title": "Para usuarias",
-        "rechargeWallet": "Recarga tu monedero",
-        "downloadCertificate": "Descarga certificado",
-        "accessComplementaryFunds": "Accede a fondos complementarios",
-        "designFundingProgram": "Diseña un programa de financiación"
-      }
-    },
-    "legal": {
-      "termsOfUse": "Condiciones de uso",
-      "privacyPolicy": "Política de privacidad",
-      "licenses": "Licencias",
-      "stats": "Stats"
-    },
-    "platoniq": {
-      "foundation": "Fundación",
-      "name": "Platoniq"
-    }
-  },
-  "profile": {
-    "share": "Compartir",
-    "shareModal": {
-      "title": "Comparte este perfil",
-      "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
-    },
-    "subscribe": "Subscríbete",
-    "tabs": {
-      "about": "Sobre el perfil",
-      "projects": "Proyectos impulsados",
-      "donorType": "Tipo de donante"
-    },
-    "notFound": "Usuario no encontrado",
-    "location": "Ubicación",
-    "userIntro": "Miembro activo de la comunidad Goteo",
-    "organizationIntro": "Organización comprometida con el cambio social",
-    "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
-    "noProjects": "No hay proyectos impulsados aún.",
-    "noBio": "Todavía no hay información sobre este perfil.",
-    "donorType": {
-      "fan": {
-        "title": "Fan",
-        "description": "Este donante ha invertido más de 25€",
-        "projectsDonated": "Proyectos donados",
-        "moneyDonated": "Dinero donado"
-      },
-      "nextLevel": {
-        "title": "Próximo nivel",
-        "description": "Sigue donando para subir de nivel"
-      }
-    }
-  },
-  "me": {
-    "page": {
-      "title": "Actividad",
-      "subtitle": "Consulta tu actividad en Goteo"
-    },
-    "period": {
-      "label": "Periodo",
-      "year": "Año {{year}}"
-    },
-    "donations": {
-      "title": "Mis donaciones",
-      "empty": "Aún no has donado a ningún proyecto",
-      "explore": "Explora proyectos",
-      "illustration": "/images/profile/ilustration-donations.png",
-      "ctaLink": "/projects",
-      "count": "Donaciones",
-      "total": "Total donado",
-      "recent": "Últimas donaciones",
-      "viewAll": "Ver todas",
-      "certificate": "Solicitar certificado"
-    },
-    "projects": {
-      "title": "Proyectos impulsados",
-      "empty": "Aún no has impulsado ningún proyecto",
-      "create": "Impulsa tu proyecto",
-      "illustration": "/images/profile/ilustration-project.png",
-      "ctaLink": "/projects/new",
-      "count": "Proyectos",
-      "raised": "Recaudado",
-      "recent": "Últimos proyectos impulsados",
-      "viewAll": "Ver todos",
-      "createNew": "Crear un proyecto"
-    },
-    "ownedProjects": {
-      "title": "Tus Proyectos Activos",
-      "messageToDonatorsButton": "Mensaje a donantes",
-      "uploadNewsButton": "Subir novedad"
-    },
-    "donatedProjects": {
-      "title": "Proyectos activos donde donaste"
-    },
-    "cta": {
-      "discover": {
-        "title": "Descubre, conecta y dona",
-        "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
-        "button": "Dona a un proyecto"
-      },
-      "matchfunding": {
-        "title": "Donaciones que brillan. Proyectos que inspiran.",
-        "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
-        "learnMore": "Descubre cómo funciona el matchfunding",
-        "becomeMatcher": "Hazte Matcher"
-      }
-    },
-    "matchfunding": {
-      "card": {
-        "title": "Matchfunding",
-        "calls": "Convocatorias",
-        "donated": "Donado",
-        "recent": "Últimas convocatorias",
-        "viewAll": "Ver convocatorias",
-        "create": "Crear convocatoria"
-      },
-      "section": {
-        "title": "Tus convocatorias de Matchfunding activas",
-        "empty": "No tienes convocatorias activas",
-        "error": "Error al cargar las convocatorias"
-      },
-      "callCard": {
-        "donationCall": "Dotación convocatoria",
-        "participatingProjects": "Proyectos participantes",
-        "successfulProjects": "Proyectos acogidos con éxito",
-        "projects": "proyectos",
-        "viewCall": "Ir a la convocatoria"
-      }
-    }
-  },
-  "blog": {
-    "share": {
-      "modal": {
-        "title": "Difunde este blog por el mundo",
-        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
-      }
-    }
-  },
-  "validation": {
-    "project": {
-      "terms": {
-        "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
-      }
+      "invalid": "Entrada no válida"
     }
   }
 }
