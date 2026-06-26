@@ -45,15 +45,15 @@
             }
 
             if (tag.title === "checkout.gateway") {
-                tag.value = $t(`contributions.filters.paymentMethod.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
             }
 
             if (tag.title === "status") {
-                tag.value = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.chargeStatus.options.${tag.value}`);
             }
 
             if (tag.title === "money.amount[gte]")
-                tag.value = $t(`contributions.filters.rangeAmount.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
         });
 
         return tags;

@@ -118,18 +118,18 @@
     {#if total > 0}
         <span class="text-content text-sm font-bold">
             {@html $t(
-                "contributions.pagination.showing",
+                "pages.admin.charges.pagination.showing",
                 { items: perPage, total },
                 { allowHTML: true },
             )}
         </span>
     {:else if total === 0 && !$isLoading}
         <span class="text-content text-sm font-bold">
-            {@html $t("contributions.pagination.noResults")}
+            {@html $t("pages.admin.charges.pagination.noResults")}
         </span>
     {:else}
         <span class="text-content text-sm font-bold">
-            {@html $t("contributions.pagination.unloaded")}
+            {@html $t("pages.admin.charges.pagination.unloaded")}
         </span>
     {/if}
 </section>

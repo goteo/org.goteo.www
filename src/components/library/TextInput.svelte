@@ -39,7 +39,7 @@
     {#if labelText}
         <label
             for={finalId}
-            class="absolute -top-2 left-4 -translate-y-1/2 transform text-[0.625rem] font-medium text-gray-500 transition-all"
+            class="text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all"
         >
             {labelText}
         </label>
@@ -55,7 +55,7 @@
         {disabled}
         {placeholder}
         class={twMerge(
-            "peer border-secondary focus:ring-tertiary w-full rounded-md border bg-white p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
+            "peer border-secondary focus:ring-tertiary w-full rounded-lg border bg-white p-4 text-base text-gray-700 placeholder-gray-400 focus:ring-1 focus:outline-none",
             disabled && "cursor-not-allowed",
             classes,
         )}

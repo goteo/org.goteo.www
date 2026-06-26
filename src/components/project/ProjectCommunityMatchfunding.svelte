@@ -6,39 +6,46 @@
 </script>
 
 <button
-    class="flex cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg"
+    class="flex h-full w-full cursor-pointer overflow-hidden rounded-4xl bg-white transition-shadow duration-200 ease-in-out hover:shadow-lg"
     onclick={() => {
         selectedProjectSupport = item;
         openModal = true;
     }}
 >
-    <div class="flex w-1/3 items-center justify-center bg-red-500">😀</div>
-    <div class="flex w-2/3 flex-col gap-4 p-6">
-        <div class="text-tertiary flex flex-col items-end gap-2 font-bold">
-            <span>{$t("pages.project.view.tabs.community.matchfunding.contribution")}</span>
-            <div class="flex flex-col items-end text-2xl">
-                <div class="flex items-center gap-2">
-                    <span>{$t("pages.project.view.tabs.community.matchfunding.aported")}</span>
-                    <span>
-                        {formatCurrency(
-                            item.money?.amount ?? 0,
-                            item.money?.currency ?? "undefined",
-                        )}
-                    </span>
-                </div>
-                <div class="text-content flex items-center gap-2">
-                    <span>{$t("pages.project.view.tabs.community.matchfunding.upTo")}</span>
-                    <span class="font-bold">
-                        {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}
-                    </span>
+    <div
+        class="border-grey flex h-58 cursor-pointer overflow-hidden rounded-4xl border bg-white shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
+    >
+        <div class="bg-tertiary flex h-full w-full shrink-0 overflow-hidden md:h-auto md:w-2/5">
+            <!--
+        <img
+            src="/imgs/card-comunidad.png"
+            alt="Community donation"
+            class="h-full w-full object-cover"
+        />
+       -->
+        </div>
+        <div class="flex w-full flex-col justify-between p-6">
+            <div>
+                <div class="flex flex-col items-end font-bold text-black">
+                    <div class="text-base">
+                        {$t("pages.project.view.tabs.community.matchfunding.contribution")}
+                    </div>
+                    <div class="flex flex-col items-end text-2xl">
+                        <div class="flex items-center">
+                            {$t("pages.project.view.tabs.community.matchfunding.aported")}
+                            {formatCurrency(item.money?.amount ?? 0, item.money?.currency ?? "")}
+                        </div>
+                    </div>
                 </div>
             </div>
+            <div>
+                <div class="line-clamp-2 text-left text-2xl font-bold text-black">
+                    {item.displayName}
+                </div>
+                <p class="text-content line-clamp-2 text-left text-sm">
+                    {item.message}
+                </p>
+            </div>
         </div>
-        <div class="text-tertiary line-clamp-2 text-2xl font-bold">
-            {item.displayName}
-        </div>
-        <p class="text-content line-clamp-2 text-sm">
-            {item.message}
-        </p>
     </div>
 </button>
