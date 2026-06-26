@@ -1,6 +1,6 @@
 <script lang="ts">
-    import FooterLink from "../components/FooterLink.svelte";
-    import FooterPartnerImage from "../components/FooterPartnerImage.svelte";
+    import FooterLink from "../components/footer/FooterLink.svelte";
+    import FooterPartnerImage from "../components/footer/FooterPartnerImage.svelte";
     import Facebook from "../components/icons/social/Facebook.svelte";
     import Gmail from "../components/icons/social/Gmail.svelte";
     import Instagram from "../components/icons/social/Instagram.svelte";
@@ -34,15 +34,15 @@
                     >
                         <div class="flex items-center gap-3 sm:gap-4">
                             <FooterPartnerImage
-                                src="/imgs/orgs/NGEU.png"
+                                src="/images/partners/NGEU.png"
                                 alt="Funded by the European Union NextGeneration EU"
                             />
                             <FooterPartnerImage
-                                src="/imgs/orgs/MTES.png"
+                                src="/images/partners/MTES.png"
                                 alt="Ministerio de Trabajo y Economía Social"
                             />
                             <FooterPartnerImage
-                                src="/imgs/orgs/PRTR.png"
+                                src="/images/partners/PRTR.png"
                                 alt="Plan de Recuperación, Transformación y Resiliencia"
                             />
                         </div>
@@ -60,28 +60,28 @@
                         aria-label="Partner organizations"
                     >
                         <FooterPartnerImage
-                            src="/imgs/orgs/xes.png"
+                            src="/images/partners/xes.png"
                             alt="XES - Xarxa d'Economia Solidària"
                             href="https://xes.cat"
                             class="rounded-lg"
                             size="medium"
                         />
                         <FooterPartnerImage
-                            src="/imgs/orgs/alda-europe.svg"
+                            src="/images/partners/alda-europe.svg"
                             alt="Alda Europe - European Association for Local Democracy"
                             href="https://www.alda-europe.eu"
                             class="rounded-lg"
                             size="medium"
                         />
                         <FooterPartnerImage
-                            src="/imgs/orgs/alianza-por-el-clima.webp"
+                            src="/images/partners/alianza-por-el-clima.webp"
                             alt="Alianza por el Clima"
                             href="https://alianzaporelclima.org"
                             class="rounded-lg"
                             size="medium"
                         />
                         <FooterPartnerImage
-                            src="/imgs/orgs/ampliando-democracia.jpg"
+                            src="/images/partners/ampliando-democracia.jpg"
                             alt="Ampliando Democracia"
                             href="https://ampliandodemocracia.org"
                             class="rounded-lg"
@@ -95,7 +95,7 @@
 
     <div
         class="bg-secondary relative rounded-t-3xl bg-size-[116%_114%] bg-position-[-127%_42%] bg-no-repeat min-[700px]:bg-size-[64%_108%] min-[700px]:bg-position-[114%]"
-        style="background-image: url('/path2.svg');"
+        style="background-image: url('/images/brand/path2.svg');"
     >
         <!-- Main Footer Content -->
         <section
@@ -222,7 +222,7 @@
                     <div class="flex justify-center lg:justify-end">
                         <div class="h-8 w-28 sm:h-10 sm:w-36">
                             <img
-                                src="/imgs/goteo-white-logo.svg"
+                                src="/images/brand/goteo-white-logo.svg"
                                 alt="Goteo logo"
                                 class="h-full w-full object-contain"
                                 loading="lazy"
@@ -310,7 +310,7 @@
                         <!-- Platoniq Foundation -->
                         <div class="text-variant1 flex flex-col items-center lg:items-start">
                             <img
-                                src="/imgs/platoniq.png"
+                                src="/images/brand/platoniq.png"
                                 alt="Platoniq Foundation logo"
                                 class="h-4 sm:h-5"
                                 loading="lazy"

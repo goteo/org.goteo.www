@@ -1,12 +1,12 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import BaseCard from "../../../components/BaseCard.svelte";
-    import Button from "../../../components/library/Button.svelte";
-    import CategorySelect from "../../../components/library/CategorySelect.svelte";
-    import Checkbox from "../../../components/library/Checkbox.svelte";
-    import DateInput from "../../../components/library/DateInput.svelte";
-    import TextInput from "../../../components/library/TextInput.svelte";
+    import Button from "../../../components/library/buttons/Button.svelte";
+    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
+    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
+    import Checkbox from "../../../components/library/inputs/Checkbox.svelte";
+    import DateInput from "../../../components/library/inputs/DateInput.svelte";
+    import TextInput from "../../../components/library/inputs/TextInput.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectsPost,
