@@ -1,4 +1,149 @@
 {
+  "system": {
+    "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
+    "loading": "Cargando...",
+    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
+    "error": {
+      "unknown": "Ha ocurrido un error desconocido",
+      "payment": {
+        "missingMethod": "Se debe seleccionar un método de pago",
+        "missingCartData": "La cesta está vacía",
+        "unprocessableCartData": "No se puede procesar la cesta, por favor vacíala y vuelve a intentarlo",
+        "badAPIResponse": "Ha ocurrido un error al comunicarse con la pasarela de pago"
+      },
+      "file": {
+        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
+        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      },
+      "countdown": {
+        "notFound": "No se ha encontrado la fecha de finalización de la campaña."
+      }
+    },
+    "constraint": {
+      "file": {
+        "maxAllowedSize": "Tamaño máximo permitido 10MB",
+        "supportedTypes": "Archivos compatibles: {{ types }}"
+      }
+    },
+    "validation": {
+      "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
+      "project": {
+        "terms": {
+          "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+        }
+      }
+    },
+    "zod": {
+      "required": "Este campo es obligatorio",
+      "invalid_type": "Se esperaba {expected} pero se recibió {received}",
+      "string": {
+        "too_small": "Debe tener al menos {min} carácter(es)",
+        "too_big": "No debe exceder los {max} caracteres",
+        "invalid": "Formato de texto no válido"
+      },
+      "number": {
+        "too_small": "Debe ser al menos {min}",
+        "too_big": "No debe exceder {max}"
+      },
+      "too_small": "Debe ser al menos {min}",
+      "too_big": "No debe exceder {max}",
+      "email": {
+        "invalid": "Correo electrónico no válido"
+      },
+      "url": {
+        "invalid": "Formato de URL no válido"
+      },
+      "enum": {
+        "invalid": "Opción no válida. Las opciones válidas son: {options}"
+      },
+      "invalid": "Entrada no válida"
+    }
+  },
+  "domain": {
+    "_": "Conceptos de negocio (proyecto, recompensa, contribución, etc.)",
+    "header": {
+      "categories": "Proyectos"
+    },
+    "project": {
+      "campaign": {
+        "minimumReached": "¡Mínimo conseguido!",
+        "optimumReached": "¡Óptimo conseguido!",
+        "obtained": "Obtenido",
+        "supports": "Donantes únicos",
+        "donate": "Donar a esta campaña"
+      },
+      "budget": {
+        "optimum": "Óptimo",
+        "minimum": "Mínimo",
+        "type": {
+          "infrastructure": "Infraestructura",
+          "material": "Material",
+          "task": "Tarea"
+        }
+      },
+      "reward": {
+        "byAtLeast": "Por {{ amount }}",
+        "byAtLeastOrMore": "Por {{ amount }} o más",
+        "unitsTotal": {
+          "single": "Hay una unidad",
+          "multiple": "Hay {{ units }} unidades"
+        },
+        "unitsAvailable": "Quedan {{ units }} unidades",
+        "donators": "{{ donators }} donantes",
+        "donors": "donates",
+        "noUnits": "No quedan unidades",
+        "isInfinite": "Sin límite de unidades"
+      },
+      "status": {
+        "all": "Todos los estados",
+        "funding": "En financiación",
+        "successful": "Exitosas",
+        "completed": "Completadas"
+      }
+    },
+    "gatewayCheckout": {
+      "paymentMethod": "Método",
+      "payments": {
+        "tpv": "Tarjeta",
+        "paypal": "Paypal",
+        "stripe": "Stripe",
+        "wallet": "Monedero"
+      }
+    },
+    "charges": {
+      "status": {
+        "to_charge": "Por cobrar",
+        "in_charge": "Cobrado",
+        "to_refund": "Por reembolsar",
+        "refunded": "Reembolsado",
+        "to_wallet": "Por reembolsar a monedero",
+        "walleted": "Reembolsado a monedero"
+      },
+      "refund": {
+        "to_wallet": "Sí",
+        "to_gateway": "No"
+      },
+      "entityLabels": {
+        "projects": "Proyectos",
+        "users": "Usuarios",
+        "tipjars": "Botes de propina",
+        "tipjar-id": "ID del bote de propina"
+      },
+      "lastContributions": "Últimos aportes:",
+      "totalizers": {
+        "totalCharges": "Total aportes:",
+        "totalTips": "Total propinas:",
+        "totalFees": "Comisiones totales:"
+      }
+    },
+    "review": {
+      "risks": {
+        "low": "Riesgo bajo",
+        "medium": "Riesgo medio",
+        "high": "Riesgo alto"
+      }
+    }
+  },
   "common": {
     "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
     "greeting": "Hola",
@@ -87,91 +232,6 @@
       "platoniq": {
         "foundation": "Fundación",
         "name": "Platoniq"
-      }
-    }
-  },
-  "domain": {
-    "_": "Conceptos de negocio (proyecto, recompensa, contribución, etc.)",
-    "header": {
-      "categories": "Proyectos"
-    },
-    "project": {
-      "campaign": {
-        "minimumReached": "¡Mínimo conseguido!",
-        "optimumReached": "¡Óptimo conseguido!",
-        "obtained": "Obtenido",
-        "supports": "Donantes únicos",
-        "donate": "Donar a esta campaña"
-      },
-      "budget": {
-        "optimum": "Óptimo",
-        "minimum": "Mínimo",
-        "type": {
-          "infrastructure": "Infraestructura",
-          "material": "Material",
-          "task": "Tarea"
-        }
-      },
-      "reward": {
-        "byAtLeast": "Por {{ amount }}",
-        "byAtLeastOrMore": "Por {{ amount }} o más",
-        "unitsTotal": {
-          "single": "Hay una unidad",
-          "multiple": "Hay {{ units }} unidades"
-        },
-        "unitsAvailable": "Quedan {{ units }} unidades",
-        "donators": "{{ donators }} donantes",
-        "donors": "donates",
-        "noUnits": "No quedan unidades",
-        "isInfinite": "Sin límite de unidades"
-      },
-      "status": {
-        "all": "Todos los estados",
-        "funding": "En financiación",
-        "successful": "Exitosas",
-        "completed": "Completadas"
-      }
-    },
-    "gatewayCheckout": {
-      "paymentMethod": "Método",
-      "payments": {
-        "tpv": "Tarjeta",
-        "paypal": "Paypal",
-        "stripe": "Stripe",
-        "wallet": "Monedero"
-      }
-    },
-    "charges": {
-      "status": {
-        "to_charge": "Por cobrar",
-        "in_charge": "Cobrado",
-        "to_refund": "Por reembolsar",
-        "refunded": "Reembolsado",
-        "to_wallet": "Por reembolsar a monedero",
-        "walleted": "Reembolsado a monedero"
-      },
-      "refund": {
-        "to_wallet": "Sí",
-        "to_gateway": "No"
-      },
-      "entityLabels": {
-        "projects": "Proyectos",
-        "users": "Usuarios",
-        "tipjars": "Botes de propina",
-        "tipjar-id": "ID del bote de propina"
-      },
-      "lastContributions": "Últimos aportes:",
-      "totalizers": {
-        "totalCharges": "Total aportes:",
-        "totalTips": "Total propinas:",
-        "totalFees": "Comisiones totales:"
-      }
-    },
-    "review": {
-      "risks": {
-        "low": "Riesgo bajo",
-        "medium": "Riesgo medio",
-        "high": "Riesgo alto"
       }
     }
   },
@@ -1362,66 +1422,6 @@
           "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
         }
       }
-    }
-  },
-  "system": {
-    "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
-    "loading": "Cargando...",
-    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
-    "error": {
-      "unknown": "Ha ocurrido un error desconocido",
-      "payment": {
-        "missingMethod": "Se debe seleccionar un método de pago",
-        "missingCartData": "La cesta está vacía",
-        "unprocessableCartData": "No se puede procesar la cesta, por favor vacíala y vuelve a intentarlo",
-        "badAPIResponse": "Ha ocurrido un error al comunicarse con la pasarela de pago"
-      },
-      "file": {
-        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
-        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
-      },
-      "countdown": {
-        "notFound": "No se ha encontrado la fecha de finalización de la campaña."
-      }
-    },
-    "constraint": {
-      "file": {
-        "maxAllowedSize": "Tamaño máximo permitido 10MB",
-        "supportedTypes": "Archivos compatibles: {{ types }}"
-      }
-    },
-    "validation": {
-      "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
-      "project": {
-        "terms": {
-          "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
-        }
-      }
-    },
-    "zod": {
-      "required": "Este campo es obligatorio",
-      "invalid_type": "Se esperaba {expected} pero se recibió {received}",
-      "string": {
-        "too_small": "Debe tener al menos {min} carácter(es)",
-        "too_big": "No debe exceder los {max} caracteres",
-        "invalid": "Formato de texto no válido"
-      },
-      "number": {
-        "too_small": "Debe ser al menos {min}",
-        "too_big": "No debe exceder {max}"
-      },
-      "too_small": "Debe ser al menos {min}",
-      "too_big": "No debe exceder {max}",
-      "email": {
-        "invalid": "Correo electrónico no válido"
-      },
-      "url": {
-        "invalid": "Formato de URL no válido"
-      },
-      "enum": {
-        "invalid": "Opción no válida. Las opciones válidas son: {options}"
-      },
-      "invalid": "Entrada no válida"
     }
   }
 }
