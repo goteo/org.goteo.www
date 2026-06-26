@@ -7,18 +7,12 @@
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
-    import {
-        apiProjectSupportsGetCollection,
-        apiUsersIdOrHandleGet,
-    } from "../../openapi/client/index";
+    import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
     import Loader from "../../svgs/Loader.svelte";
-    import { extractId } from "../../utils/extractId";
     import ActionableButton from "../library/ActionableButton.svelte";
     import Grid from "../library/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
-
-    type EnrichedSupport = ProjectSupport & { displayName: string; avatar: string | undefined };
 
     let {
         project,
@@ -30,9 +24,9 @@
 
     const projectId = $derived(project.id?.toString());
 
-    let projectsSupportItems = $state<EnrichedSupport[]>([]);
+    let projectsSupportItems = $state<ProjectSupport[]>([]);
 
-    let selectedProjectSupport: EnrichedSupport | null = $state(null);
+    let selectedProjectSupport: ProjectSupport | null = $state(null);
 
     let isLoaded = $state(false);
     let openModal = $state(false);
@@ -53,7 +47,7 @@
     const PAGE_SIZE = 30;
     const FIRST_PAGE_SIZE = 29;
 
-    async function fetchPage(page: number): Promise<EnrichedSupport[]> {
+    async function fetchPage(page: number): Promise<ProjectSupport[]> {
         const itemsPerPage = page === 1 ? FIRST_PAGE_SIZE : PAGE_SIZE;
         const { data } = await apiProjectSupportsGetCollection({
             query: { project: projectId, anonymous: false, page, itemsPerPage },
@@ -62,13 +56,7 @@
         const items = (data as ProjectSupport[]) ?? [];
         hasMore = items.length === itemsPerPage;
 
-        return Promise.all(
-            items.map(async (support) => {
-                const id = extractId(support.origin!);
-                const { data: user } = await apiUsersIdOrHandleGet({ path: { idOrHandle: id! } });
-                return { ...support, displayName: user?.displayName ?? "", avatar: user?.avatar };
-            }),
-        );
+        return items;
     }
 
     const matchfundingCount = $derived(groupedItems.matchfunding?.length ?? 0);
