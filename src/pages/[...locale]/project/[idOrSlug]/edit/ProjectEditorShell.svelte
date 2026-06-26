@@ -16,13 +16,14 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import Eye from "../../../../../components/icons/Eye.svelte";
-    import ActionableButton from "../../../../../components/library/ActionableButton.svelte";
-    import Button from "../../../../../components/library/Button.svelte";
+    import EditIcon from "../../../../../components/icons/actions/Edit.svelte";
+    import Eye from "../../../../../components/icons/media/Eye.svelte";
+    import ActionableButton from "../../../../../components/library/buttons/ActionableButton.svelte";
+    import Button from "../../../../../components/library/buttons/Button.svelte";
+    import Toast from "../../../../../components/library/feedback/Toast.svelte";
     import TabNavigation, {
         type Tab,
-    } from "../../../../../components/library/TabNavigation.svelte";
-    import Toast from "../../../../../components/library/Toast.svelte";
+    } from "../../../../../components/library/layout/TabNavigation.svelte";
     import { t } from "../../../../../i18n/store";
     import {
         currentDraft,
@@ -33,7 +34,6 @@
         persistenceError,
         updateProject,
     } from "../../../../../stores/drafts/projectDraft";
-    import EditIcon from "../../../../../svgs/EditIcon.svelte";
 
     import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";

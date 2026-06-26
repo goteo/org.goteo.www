@@ -3,34 +3,40 @@ name: org.goteo.www
 description: Provides a web GUI to interact with the Goteo v4 API and adds tools for implementing the crowdfunding platform Goteo as an open-core application. Use it when writing or reviewing source code for the Goteo v4 web.
 ---
 
+# Goteo v4 Web Codebase Reference
+
 ## Stack
 
 Astro 5 + Svelte 5 + TailwindCSS 4 + TypeScript 5, deployed on Cloudflare Workers (also supports Node adapter).
 
 ## Folder structure
 
-```
+```bash
 src/
 ├── actions/          # Astro server actions (form mutations)
 ├── auth/             # JWT sessions, OAuth2 tokens, refresh logic
 ├── components/       # Svelte components (PascalCase filenames)
-│   ├── library/      # Reusable UI primitives
+│   ├── library/      # Reusable UI primitives + Storybook stories
 │   ├── Admin/        # Admin-specific components
 │   ├── icons/        # Icon SVG components
 │   └── [Feature]/    # Feature-scoped (project/, profile/, Checkout/, etc.)
-├── i18n/             # Translations (es/en) + t() store
+├── firewall/         # Route access control rules
+├── i18n/             # Translations (es/en/ca) + t() store
 ├── layouts/          # Astro layout components
-├── middleware/       # Astro request middleware
+├── middleware/       # Astro request middleware (auth, locale, firewall)
 ├── openapi/          # OpenAPI SDK — see SDK section below
 ├── pages/            # Astro routes
-│   └── [...locale]/  # All user-facing pages under locale prefix
+│   ├── [...locale]/  # All user-facing pages under locale prefix
+│   └── api/          # Server-side API endpoints
 ├── services/         # Business logic & API call wrappers
 ├── stores/           # Svelte stores (client-side state)
-├── stories/          # Storybook stories
-├── styles/           # Global CSS
+│   └── drafts/       # Project draft persistence (Dexie/IndexedDB)
+├── stories/          # Full-page Storybook stories
+├── styles/           # Global CSS + Tailwind theme tokens
 ├── svgs/             # SVG Svelte components
 ├── types/            # Shared TypeScript interfaces
 └── utils/            # Pure helper functions
+    └── drafts/       # Draft DB repository helpers
 ```
 
 Root config files: `astro.config.mjs`, `openapi-ts.config.ts`, `wrangler.toml`, `vitest.config.ts`, `cypress.config.ts`.
@@ -183,19 +189,36 @@ Before building new UI, check `src/components/library/` and `src/components/icon
 | Component                       | Key props                                                                                                  | Notes                                                    |
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `Button`                        | `size?: "md"\|"sm"`, `kind?: "primary"\|"secondary"\|"ghost"\|"invert"`, `children`                        | Spreads all `HTMLButtonAttributes`                       |
+| `ActionableButton`              | (see file)                                                                                                 | Button with async action + loading state                 |
 | `TextInput`                     | `bind:value`, `type?`, `labelText?`, `helperText?`, `error?`, `required?`, `disabled?`                     | Floating label, auto-generated `id`                      |
+| `PasswordInput`                 | `bind:value`, `labelText?`, `error?`                                                                       | TextInput with show/hide toggle                          |
 | `TextArea`                      | `id`, `bind:value`, `label?`, `helper?`, `error?: boolean`, `rows?=4`, `disabled?`                         | `error` is a boolean; use `helper` for the error message |
 | `Select`                        | `bind:value`, `labelText?`, `helperText?`, `error?`, `onChange?`, `onBlur?`, `children` (options)          | Accessible floating label select                         |
+| `DateInput`                     | (see file)                                                                                                 | Date picker input with floating label                    |
+| `Checkbox`                      | (see file)                                                                                                 | Styled checkbox                                          |
+| `RadioButton`                   | (see file)                                                                                                 | Styled radio input                                       |
+| `RangeSlider`                   | (see file)                                                                                                 | Range slider (svelte-range-slider-pips)                  |
 | `Tag`                           | `variant?: "success"\|"warning"\|"error"\|"bold"`, `children`                                              | Small badge pill                                         |
 | `Toast`                         | `bind:showToast`, `variant: "error"\|"success"\|"notification"\|"warning"`, `children`, `button?`, `link?` | Self-dismisses on close button                           |
 | `Card`                          | `children`, `class?`                                                                                       | White rounded card with shadow                           |
 | `Grid`                          | `children`, `class?`                                                                                       | 2-col mobile → 3-col desktop responsive grid             |
 | `Toggle`                        | `onChange?: (value: boolean) => void`                                                                      | Animated toggle switch, `$bindable` internal state       |
+| `ToggleSwitch`                  | (see file)                                                                                                 | Alternative toggle for settings-style UIs                |
 | `TabNavigation`                 | (see file)                                                                                                 | Horizontal tab bar                                       |
 | `AccordionBox`                  | (see file)                                                                                                 | Collapsible content section                              |
-| `RadioButton`                   | (see file)                                                                                                 | Styled radio input                                       |
 | `CategorySelect`                | (see file)                                                                                                 | Category multi-select                                    |
 | `ReturnButton` / `ReturnHeader` | (see file)                                                                                                 | Back navigation                                          |
+| `Search`                        | (see file)                                                                                                 | Search input with icon                                   |
+| `Email`                         | (see file)                                                                                                 | Email display component                                  |
+| `HomeBanner`                    | (see file)                                                                                                 | Homepage hero banner                                     |
+| `BodyText` / `BodyBlog`         | (see file)                                                                                                 | Prose content wrappers                                   |
+| `Dropdown/DropdownMenu`         | (see file)                                                                                                 | Accessible dropdown menu                                 |
+| `Dropdown/DropdownItem`         | (see file)                                                                                                 | Dropdown menu item                                       |
+| `Share/ShareButton`             | (see file)                                                                                                 | Share button trigger                                     |
+| `Share/CopyUrl`                 | (see file)                                                                                                 | Copy URL to clipboard                                    |
+| `Share/Facebook` / `Share/X`    | (see file)                                                                                                 | Social share buttons                                     |
+| `Share/Iframe`                  | (see file)                                                                                                 | Embed iframe share                                       |
+| `admin/ChatTextarea`            | (see file)                                                                                                 | Admin chat textarea input                                |
 
 Usage example:
 
@@ -226,7 +249,9 @@ Warning from "../icons/Warning.svelte";
 
 `Chevron` accepts `direction?: "left"|"right"|"up"|"down"`.
 
-Available icons (in `src/components/icons/`): `Align`, `Arrow`, `Back`, `Bag`, `Basket`, `Bookmark`, `Box`, `BudgetMark`, `Bullet`, `Calendar`, `Category`, `Check`, `Chevron`, `Clock`, `Close`, `CloseMenu`, `Code`, `Comments`, `Copy`, `CreditCard`, `Download`, `Edit`, `Error`, `Eye`, `Filters`, `Flames`, `Flash`, `Forward`, `Hamburger`, `Home`, `Image`, `Languages`, `Link`, `Location`, `Mail`, `Menu`, `Money`, `MoreAndLess`, `Ok`, `Play`, `Profile`, `Search`, `Send`, `Share`, `ShortBy`, `Spinner`, `Trash`, `UploadFile`, `User`, `Wallet`, `Warning`, `Web`.
+Available icons (in `src/components/icons/`): `Align`, `Arrow`, `Back`, `Bag`, `Basket`, `Bookmark`, `Box`, `BudgetMark`, `Bullet`, `Calendar`, `Category`, `Check`, `Chevron`, `Clock`, `Close`, `CloseMenu`, `Code`, `Comments`, `Copy`, `CreditCard`, `DefaultAvatar`, `Download`, `Edit`, `Error`, `Eye`, `Filters`, `Flames`, `Flash`, `Forward`, `Hamburger`, `Home`, `Image`, `Languages`, `Link`, `Location`, `Mail`, `Menu`, `Money`, `MoreAndLess`, `Ok`, `Play`, `Profile`, `Search`, `Send`, `Share`, `ShortBy`, `Spinner`, `Trash`, `UploadFile`, `User`, `Wallet`, `Warning`, `Web`.
+
+Social icons (in `src/components/icons/social/`): `Facebook`, `Gmail`, `Instagram`, `Linkedin`, `Web`, `X`.
 
 ## Svelte 5 runes
 
@@ -449,17 +474,18 @@ throw new ActionError({
 ## Before opening a PR
 
 ```bash
-pnpm format        # Run Prettier — fix formatting before committing
-pnpm cypress   # Run E2E tests headless — must pass before PR
+pnpm format        # ESLint fix + Prettier write
+pnpm cypress:run   # Run E2E tests headless — must pass before PR
 ```
 
 ## Testing
 
 ```bash
-pnpm test          # Vitest unit + component tests
-pnpm storybook     # Storybook visual tests (port 6006)
-pnpm cypress open  # Cypress E2E interactive
-pnpm cypress run   # Cypress E2E headless
+pnpm storybook      # Storybook visual tests (port 6006)
+pnpm cypress:open   # Cypress E2E interactive
+pnpm cypress:run    # Cypress E2E headless
+pnpm test:e2e       # Start dev server + run Cypress headless
+pnpm test:e2e:ci    # CI E2E against Workers preview build
 ```
 
 Stories live in `src/stories/`. Component tests use Vitest + `@storybook/addon-vitest`.
@@ -491,7 +517,7 @@ Two packages: `@hey-api/openapi-ts` (codegen, dev dependency) and `@hey-api/clie
 
 SDK functions follow the pattern `api{Resource}{Operation}`:
 
-```
+```bash
 apiProjectsGetCollection()       → GET  /v4/projects
 apiProjectsIdOrSlugGet()         → GET  /v4/projects/{idOrSlug}
 apiUsersPost()                   → POST /v4/users
@@ -500,7 +526,7 @@ apiUsersIdpersonPatch()          → PATCH /v4/users/{id}/person
 
 Path constants (from `paths.gen.ts`) follow the same pattern with `Url` suffix:
 
-```
+```bash
 apiProjectsIdOrSlugGetUrl        → '/v4/projects/{idOrSlug}'
 apiAccountingsIdGetUrl           → '/v4/accountings/{id}'
 ```
@@ -576,7 +602,7 @@ Available: `fetchProject`, `fetchUser`, `fetchAccounting`, `fetchCheckout`, `fet
 ### Regenerating the SDK
 
 ```bash
-pnpm openapi-ts
+pnpm openapi
 ```
 
 Config in `openapi-ts.config.ts` — fetches the OpenAPI spec from `$PUBLIC_API_URL/$PUBLIC_API_VERSION/docs.json`. Requires the API running and env vars set. Regenerate when the API spec changes; commit generated files together with the config change.
@@ -737,15 +763,26 @@ Key functions: `add()`, `addMany()`, `get(key)`, `has(key)`, `clear()`.
 
 Admin contributions pagination. Exports: `itemsPerPage`, `currentPage`, `totalItems`, `isLoading` stores + `SortOption[]`.
 
+### `src/stores/drafts/projectDraft.ts`
+
+Project creation wizard draft state, persisted via Dexie (IndexedDB). Use `src/utils/drafts/db.ts` + `src/utils/drafts/repository.ts` for read/write.
+
 ## Additional utilities
 
-| Util                                               | Import                        | Signature                                                                     |
-| -------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
-| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts` | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
-| `formatDate(date, locale)`                         | `src/utils/dates.ts`          | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
-| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`     | Locale-aware currency via `Intl.NumberFormat`                                 |
-| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`     | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
-| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`      | Pre-built `Response` objects for API endpoints                                |
+| Util                                               | Import                              | Signature                                                                     |
+| -------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts`       | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
+| `formatDate(date, locale)`                         | `src/utils/dates.ts`                | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
+| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`           | Locale-aware currency via `Intl.NumberFormat`                                 |
+| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`           | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
+| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`            | Pre-built `Response` objects for API endpoints                                |
+| `uploadToObjectStorage()`                          | `src/utils/objectStorage.ts`        | Server-side S3-compatible upload (Node/Workers build-time only)               |
+| `publishProject()`                                 | `src/utils/projectPublisher.ts`     | Submit a project draft to the API for publishing                              |
+| `submitProjectData()`                              | `src/utils/projectSubmissionApi.ts` | Low-level API calls for project wizard step submission                        |
+| `getTippingConfig()`                               | `src/utils/tipping.ts`              | Read tipping env vars (`PUBLIC_TIPPING_*`) into a typed config object         |
+| `budgetColors`                                     | `src/utils/budgetColors.ts`         | Budget bar color palette constants                                            |
+| `getCategories()`                                  | `src/utils/categories.ts`           | Fetch + cache project categories from the API                                 |
+| `getLang()`                                        | `src/utils/lang.ts`                 | Resolve locale string from URL or Accept-Language                             |
 
 ## `Thtml` component
 

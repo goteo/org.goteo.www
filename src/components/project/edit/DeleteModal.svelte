@@ -2,7 +2,7 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     let {
         open = $bindable(false),
