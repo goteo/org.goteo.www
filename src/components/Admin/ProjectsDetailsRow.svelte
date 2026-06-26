@@ -4,9 +4,10 @@
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
 
-    let { project, onOpenAnnotationsModal } = $props<{
+    let { project, onOpenAnnotationsModal, onChangeStatus } = $props<{
         project: ProjectRow;
         onOpenAnnotationsModal: () => void;
+        onChangeStatus?: (projectId: number) => void;
     }>();
 </script>
 
@@ -59,6 +60,9 @@
             <button
                 type="button"
                 class="border-secondary text-secondary cursor-pointer rounded-full border bg-white px-5 py-2 text-sm"
+                onclick={() => {
+                    if (key === "changeStatus") onChangeStatus?.(project.id);
+                }}
             >
                 {$t(`admin.projects.table.rows.details.btns.${key}`)}
             </button>
