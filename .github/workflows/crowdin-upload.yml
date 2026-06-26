@@ -1,0 +1,67 @@
+name: Crowdin Sync Source & Pre-translate
+
+on:
+    push:
+        branches:
+            - develop
+        paths:
+            - "src/i18n/locales/es.json"
+    workflow_dispatch:
+
+jobs:
+    upload:
+        runs-on: ubuntu-latest
+        env:
+            CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+            CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Upload source file to Crowdin
+              uses: crowdin/github-action@v2
+              with:
+                  upload_sources: true
+                  upload_translations: false
+                  download_translations: false
+                  push_translations: false
+                  create_pull_request: false
+                  crowdin_branch_name: develop
+              env:
+                  CROWDIN_PROJECT_ID: ${{ secrets.CROWDIN_PROJECT_ID }}
+                  CROWDIN_PERSONAL_TOKEN: ${{ secrets.CROWDIN_PERSONAL_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Resolve Crowdin branch and file IDs
+              id: ids
+              run: |
+                  api="https://api.crowdin.com/api/v2/projects/${CROWDIN_PROJECT_ID}"
+                  auth="Authorization: Bearer ${CROWDIN_PERSONAL_TOKEN}"
+
+                  branch_id=$(curl -fsS -H "$auth" "$api/branches?name=develop" \
+                    | jq -r '.data[0].data.id')
+                  if [ -z "$branch_id" ] || [ "$branch_id" = "null" ]; then
+                    echo "Branch 'develop' not found in Crowdin"; exit 1
+                  fi
+
+                  file_id=$(curl -fsS -H "$auth" "$api/files?branchId=${branch_id}&limit=500" \
+                    | jq -r '.data[] | select(.data.name=="es.json") | .data.id' | head -n1)
+                  if [ -z "$file_id" ] || [ "$file_id" = "null" ]; then
+                    echo "es.json not found in Crowdin branch 'develop'"; exit 1
+                  fi
+
+                  echo "file_id=$file_id" >> "$GITHUB_OUTPUT"
+                  echo "Resolved es.json fileId=$file_id (branchId=$branch_id)"
+
+            - name: Trigger AI Pre-translation in Crowdin
+              run: |
+                  resp=$(curl -fsS -X POST \
+                    "https://api.crowdin.com/api/v2/projects/${CROWDIN_PROJECT_ID}/pre-translations" \
+                    -H "Authorization: Bearer ${CROWDIN_PERSONAL_TOKEN}" \
+                    -H "Content-Type: application/json" \
+                    -d "{
+                      \"method\": \"ai\",
+                      \"aiPromptId\": ${{ secrets.CROWDIN_AI_PROMPT_ID }},
+                      \"languageIds\": [\"en\", \"ca\"],
+                      \"fileIds\": [${{ steps.ids.outputs.file_id }}]
+                    }") || { echo "Pre-translation request failed"; exit 1; }
+                  echo "$resp"
