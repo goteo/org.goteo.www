@@ -26,10 +26,10 @@
     let total = $derived(totalItemsProp ?? $storeTotalItems);
     let perPage = $derived(itemsPerPageProp ?? $storeItemsPerPage);
 
-    const totalPages = $derived(() => Math.ceil(total / perPage));
+    const totalPages = $derived(Math.ceil(total / perPage));
 
     function goToPage(p: number) {
-        if (p < 1 || p > totalPages()) return;
+        if (p < 1 || p > totalPages) return;
         if (onPageChange) {
             onPageChange(p);
         } else {
@@ -38,7 +38,7 @@
     }
 
     function getVisiblePages(): (number | string)[] {
-        const tp = totalPages();
+        const tp = totalPages;
         const pages: (number | string)[] = [];
 
         if (tp <= 7) {
@@ -102,14 +102,14 @@
         <button
             onclick={() => goToPage(page + 1)}
             class="border-content flex h-10 w-10 items-center justify-center rounded-lg border disabled:opacity-40"
-            disabled={page === totalPages()}
+            disabled={page === totalPages}
         >
             <Chevron direction="right" width="16" height="16" class="text-content" />
         </button>
         <button
-            onclick={() => goToPage(totalPages())}
+            onclick={() => goToPage(totalPages)}
             class="border-content flex h-10 w-10 items-center justify-center rounded-lg border disabled:opacity-40"
-            disabled={page === totalPages()}
+            disabled={page === totalPages}
         >
             <PaginationLast class="text-content" />
         </button>
