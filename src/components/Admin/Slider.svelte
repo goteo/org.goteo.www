@@ -6,19 +6,15 @@
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
     import { apiAccountingsIdGet, apiTipjarsIdGet } from "../../openapi/client/sdk.gen";
-    import {
-        totalItems,
-        isLoading as chargesIsLoading,
-    } from "../../stores/chargesPaginationAndSort";
+    import { totalItems } from "../../stores/chargesPaginationAndSort";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { isEnabled, tipjarId } from "../../utils/tipping";
 
     import type { Options } from "flickity";
 
-    let { slides: slidesProp, loading: loadingProp } = $props<{
+    let { slides: slidesProp } = $props<{
         slides?: { title: string; amount: string | number }[];
-        loading?: boolean;
     }>();
 
     let mainCarousel: HTMLDivElement;
@@ -73,12 +69,9 @@
         ];
     };
 
-    let isDataLoading = $derived(loadingProp ?? $chargesIsLoading);
-
     const loadFlickity = async (elem: HTMLElement) => {
         try {
-            const FlickityModule = await import("flickity");
-            const FlickityClass = FlickityModule.default;
+            const { default: FlickityClass } = await import("flickity/js/index.js");
             new FlickityClass(elem, options);
             isSliderLoaded = true;
         } catch (err) {
@@ -98,7 +91,7 @@
 </script>
 
 <div class="relative mt-6 h-40">
-    {#if !isSliderLoaded || isDataLoading}
+    {#if !isSliderLoaded}
         <div class="absolute inset-0 flex items-center justify-center">
             <span class="text-content">{$t("system.loading")}</span>
         </div>
@@ -106,7 +99,8 @@
 
     <div
         bind:this={mainCarousel}
-        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !isDataLoading ? 100 : 0}"
+        class="main-carousel h-full first:ml-0"
+        class:opacity-0={!isSliderLoaded}
     >
         {#each slides as { title, amount }}
             <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
