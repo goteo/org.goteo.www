@@ -16,7 +16,12 @@
 
     let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
 
-    type ContactEntry = { type: "email" | "phone" | "text"; value: string; preferred: boolean };
+    type ContactEntry = {
+        id: string;
+        type: "email" | "phone" | "text";
+        value: string;
+        preferred: boolean;
+    };
 
     let legalEntityType = $state<"individual" | "organization">("individual");
     // let prefill = $state("");
@@ -26,8 +31,8 @@
     // let country = $state("");
     // let teamDescription = $state("");
     let privateContacts = $state<ContactEntry[]>([
-        { type: "email", value: "", preferred: true },
-        { type: "phone", value: "", preferred: false },
+        { id: crypto.randomUUID(), type: "email", value: "", preferred: true },
+        { id: crypto.randomUUID(), type: "phone", value: "", preferred: false },
     ]);
     let preferredIndex = $state(0);
     let iban = $state("");
@@ -53,7 +58,10 @@
     }
 
     function addContact() {
-        privateContacts = [...privateContacts, { type: "text", value: "", preferred: false }];
+        privateContacts = [
+            ...privateContacts,
+            { id: crypto.randomUUID(), type: "text", value: "", preferred: false },
+        ];
     }
 
     function deleteContact(i: number) {
@@ -214,9 +222,9 @@
                 </p>
             </div>
             <div class="flex flex-col gap-3">
-                {#each privateContacts as contact, i}
+                {#each privateContacts as contact, i (contact.id)}
                     <div class="flex items-center gap-3">
-                        <div class="flex-1" onfocusout={() => touch(`contact-${i}`)}>
+                        <div class="flex-1" onfocusout={() => touch(contact.id)}>
                             <TextInput
                                 bind:value={contact.value}
                                 type={contact.type === "email"
@@ -230,7 +238,7 @@
                                       ? $t("pages.project.edit.aboutYou.phone")
                                       : $t("common.textPlaceholder")}
                                 name={`contact-${i}`}
-                                error={contact.preferred && touched.has(`contact-${i}`)
+                                error={contact.preferred && touched.has(contact.id)
                                     ? errors.contacts
                                     : undefined}
                             />

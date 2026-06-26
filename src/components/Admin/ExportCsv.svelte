@@ -109,7 +109,10 @@
             }
 
             if (allData.length === 0) {
-                alert($t("pages.admin.charges.export.noData") || "No se encontraron datos para exportar");
+                alert(
+                    $t("pages.admin.charges.export.noData") ||
+                        "No se encontraron datos para exportar",
+                );
                 return;
             }
 
