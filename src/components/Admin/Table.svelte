@@ -19,6 +19,8 @@
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
     import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import Chevron from "../icons/Chevron.svelte";
+    import Tag from "../library/Tag.svelte";
 
     import type {
         Accounting,
@@ -43,13 +45,13 @@
     };
 
     const tableHeaders = [
-        { name: "contributions.table.headers.target", sortable: false },
-        { name: "contributions.table.headers.amount", sortable: true, sortKey: "amount" },
-        { name: "contributions.table.headers.origin", sortable: false },
-        { name: "contributions.table.headers.paymentMethod", sortable: false },
-        { name: "contributions.table.headers.date", sortable: true, sortKey: "date" },
-        { name: "contributions.table.headers.chargeStatus", sortable: false, sortKey: "status" },
-        { name: "contributions.table.headers.refundToWallet", sortable: false },
+        { name: "pages.admin.charges.headers.target", sortable: false },
+        { name: "pages.admin.charges.headers.amount", sortable: true, sortKey: "amount" },
+        { name: "pages.admin.charges.headers.origin", sortable: false },
+        { name: "pages.admin.charges.headers.paymentMethod", sortable: false },
+        { name: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
+        { name: "pages.admin.charges.headers.chargeStatus", sortable: false, sortKey: "status" },
+        { name: "pages.admin.charges.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
 
@@ -219,7 +221,7 @@
         <div class="flex justify-between">
             <div class="flex flex-row items-center gap-2">
                 <p class="text-content font-bold">
-                    {$t("contributions.filters.order.title")}
+                    {$t("pages.admin.charges.filters.order.title")}
                 </p>
                 <select
                     value={selectedSort}
@@ -235,7 +237,7 @@
 
             <div class="flex flex-row items-center gap-2">
                 <p class="text-content font-bold">
-                    {$t("contributions.filters.itemsPerPage.title")}
+                    {$t("pages.admin.charges.filters.itemsPerPage.title")}
                 </p>
                 <select
                     name="itemsPerPage"
@@ -244,7 +246,7 @@
                     bind:value={$itemsPerPage}
                     disabled={$isLoading}
                 >
-                    {#each Object.entries($t("contributions.filters.itemsPerPage.options")) as [value, label]}
+                    {#each Object.entries($t("pages.admin.charges.filters.itemsPerPage.options")) as [value, label]}
                         <option value={Number(value)}>{label}</option>
                     {/each}
                 </select>
@@ -261,7 +263,7 @@
                     >
                         <div
                             class="flex items-center justify-between {header.name ===
-                            'contributions.table.headers.chargeStatus'
+                            'pages.admin.charges.headers.chargeStatus'
                                 ? 'justify-center'
                                 : ''}"
                         >
@@ -288,7 +290,7 @@
                 {:else if charges.length === 0 && !$isLoading}
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                            {$t("contributions.table.rows.noData")}
+                            {$t("pages.admin.charges.noData")}
                         </TableBodyCell>
                     </TableBodyRow>
                 {:else}
@@ -312,7 +314,7 @@
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {$t(`contributions.table.rows.payments.${charge.paymentMethod}`)}
+                                {$t(`domain.charges.payments.${charge.paymentMethod}`)}
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}
@@ -325,11 +327,9 @@
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 <div class="flex justify-center">
-                                    <button
-                                        class="flex items-center gap-1 rounded border border-black px-3 py-1 text-base font-medium text-black"
-                                    >
-                                        {$t(`contributions.table.rows.status.${charge.status}`)}
-                                    </button>
+                                    <Tag>
+                                        {$t(`domain.charges.status.${charge.status}`)}
+                                    </Tag>
                                 </div>
                             </TableBodyCell>
 
@@ -338,41 +338,33 @@
                             >
                             <TableBodyCell
                                 class="border-variant1 rounded-r-md border-t border-r border-b p-4"
-                                ><svg
-                                    class={openRow === i
-                                        ? "rotate-180 transform transition-transform"
-                                        : "transition-transform"}
+                                ><Chevron
+                                    direction={openRow === i ? "up" : "down"}
                                     width="24"
                                     height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M4.5 8.25L12 15.75L19.5 8.25"
-                                        stroke="#3D3D3D"
-                                        stroke-width="1.5"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                    />
-                                </svg></TableBodyCell
+                                    class="text-black transition-transform"
+                                /></TableBodyCell
                             >
                         </TableBodyRow>
                         {#if openRow === i}
                             <TableBodyRow>
                                 <TableBodyCell
                                     colspan={tableHeaders.length}
-                                    class="border-variant1 bg-purple-soft rounded-lg border py-10 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
                                 >
-                                    <DetailsRow
-                                        platformLinks={charge.platformLinks}
-                                        trackingCodes={charge.trackingCodes}
-                                        dataTimeCreated={getDate(charge.dateCreated)}
-                                        dataTimeUpdated={getDate(charge.dateUpdated)}
-                                        id={charge.id ? String(charge.id) : "-"}
-                                        refundToWallet={charge.refundToWallet}
-                                        concept={charge.concept}
-                                    />
+                                    <div class="detail-expand">
+                                        <div class="detail-expand-content">
+                                            <DetailsRow
+                                                platformLinks={charge.platformLinks}
+                                                trackingCodes={charge.trackingCodes}
+                                                dataTimeCreated={getDate(charge.dateCreated)}
+                                                dataTimeUpdated={getDate(charge.dateUpdated)}
+                                                id={charge.id ? String(charge.id) : "-"}
+                                                refundToWallet={charge.refundToWallet}
+                                                concept={charge.concept}
+                                            />
+                                        </div>
+                                    </div>
                                 </TableBodyCell>
                             </TableBodyRow>
                         {/if}
@@ -394,3 +386,37 @@
 
     <Pagination />
 </div>
+
+<style>
+    .detail-expand {
+        display: grid;
+        grid-template-rows: 1fr;
+        overflow: hidden;
+        animation: detail-expand 220ms ease-out both;
+    }
+
+    .detail-expand-content {
+        min-height: 0;
+        animation: detail-content-in 220ms ease-out both;
+    }
+
+    @keyframes detail-expand {
+        from {
+            grid-template-rows: 0fr;
+        }
+        to {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    @keyframes detail-content-in {
+        from {
+            opacity: 0;
+            transform: translateY(-6px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>

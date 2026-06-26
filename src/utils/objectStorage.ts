@@ -19,7 +19,19 @@ export const STORAGE_MAXSIZE = 8388608;
 /**
  * Allowed MIME types of single objects.
  */
-export const STORAGE_ALLOWEDTYPES = ["image/jpeg", "image/webp", "image/png", "image/gif"];
+export const STORAGE_ALLOWEDTYPES = [
+    "image/jpeg",
+    "image/webp",
+    "image/png",
+    "image/gif",
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "video/mp4",
+    "video/webm",
+];
 
 export const client = new S3Client({
     region: import.meta.env.OBJECT_STORAGE_REGION,

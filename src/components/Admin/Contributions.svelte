@@ -7,10 +7,16 @@
     import FiltersTags from "./FiltersTags.svelte";
     import Slider from "./Slider.svelte";
     import Table, { type ExtendedCharge } from "./Table.svelte";
+    import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
-    import { client } from "../../openapi/client/client.gen";
     import {
+        apiAccountingsIdGet,
+        apiGatewayChargesGetCollection,
+        apiGatewayCheckoutsIdGet,
         apiGatewaysGetCollection,
+        apiProjectsIdOrSlugGet,
+        apiTipjarsIdGet,
+        apiUsersIdOrHandleGet,
         type Accounting,
         type ApiGatewayChargesGetCollectionData,
         type GatewayCharge,
@@ -20,7 +26,6 @@
         type User,
     } from "../../openapi/client/index.ts";
     import {
-        apiGatewayChargesGetCollectionUrl,
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
@@ -32,22 +37,8 @@
         currentPage,
         sortOptions,
     } from "../../stores/chargesPaginationAndSort.ts";
-    import {
-        fetchAccounting,
-        fetchCheckout,
-        fetchProject,
-        fetchTipjar,
-        fetchUser,
-        fetchWithPersistentCache,
-    } from "../../utils/cachedFetch";
     import { extractId } from "../../utils/extractId";
-
-    type GatewayChargesCollection<T> = {
-        member: T[];
-        totalItems: number;
-    };
-
-    const API_CACHE_NAME = "charges-cache";
+    import { toCollectionItems } from "../../utils/hydra";
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
 
@@ -60,19 +51,6 @@
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
     let selectedSort = $state("date-desc");
-
-    function getAccessToken(): string | null {
-        const match = document.cookie.match(/(?:^|;\s*)access-token=([^;]*)/);
-        if (!match) return null;
-
-        try {
-            const decoded = decodeURIComponent(match[1]);
-            const parsed = JSON.parse(decoded);
-            return parsed?.token ?? null;
-        } catch {
-            return null;
-        }
-    }
 
     function buildChargesQuery(
         filters: ApiGatewayChargesGetCollectionData["query"],
@@ -94,6 +72,103 @@
         return query;
     }
 
+    function getCollectionTotalItems(collection: unknown): number {
+        if (Array.isArray(collection)) return collection.length;
+        if (!collection || typeof collection !== "object") return 0;
+
+        const record = collection as Record<string, unknown>;
+        const totalItems = record.totalItems ?? record["hydra:totalItems"];
+
+        return typeof totalItems === "number"
+            ? totalItems
+            : toCollectionItems<GatewayCharge>(collection).length;
+    }
+
+    async function fetchCheckout(iri: string | undefined, headers: HeadersInit | undefined) {
+        const id = extractId(iri);
+        if (!id) return;
+
+        const { data, error } = await apiGatewayCheckoutsIdGet({
+            path: { id },
+            headers,
+        });
+
+        if (error) {
+            console.error(`Failed to fetch checkout ${iri}:`, error);
+            return;
+        }
+
+        return data;
+    }
+
+    async function fetchAccounting(iri: string | undefined, headers: HeadersInit | undefined) {
+        const id = extractId(iri);
+        if (!id) return;
+
+        const { data, error } = await apiAccountingsIdGet({
+            path: { id },
+            headers,
+        });
+
+        if (error) {
+            console.error(`Failed to fetch accounting ${iri}:`, error);
+            return;
+        }
+
+        return data;
+    }
+
+    async function fetchUser(iri: string | undefined, headers: HeadersInit | undefined) {
+        const idOrHandle = extractId(iri);
+        if (!idOrHandle) return;
+
+        const { data, error } = await apiUsersIdOrHandleGet({
+            path: { idOrHandle },
+            headers,
+        });
+
+        if (error) {
+            console.error(`Failed to fetch user ${iri}:`, error);
+            return;
+        }
+
+        return data;
+    }
+
+    async function fetchProject(iri: string | undefined, headers: HeadersInit | undefined) {
+        const idOrSlug = extractId(iri);
+        if (!idOrSlug) return;
+
+        const { data, error } = await apiProjectsIdOrSlugGet({
+            path: { idOrSlug },
+            headers,
+        });
+
+        if (error) {
+            console.error(`Failed to fetch project ${iri}:`, error);
+            return;
+        }
+
+        return data;
+    }
+
+    async function fetchTipjar(iri: string | undefined, headers: HeadersInit | undefined) {
+        const id = extractId(iri);
+        if (!id) return;
+
+        const { data, error } = await apiTipjarsIdGet({
+            path: { id },
+            headers,
+        });
+
+        if (error) {
+            console.error(`Failed to fetch tipjar ${iri}:`, error);
+            return;
+        }
+
+        return data;
+    }
+
     async function loadCharges(
         filters: ApiGatewayChargesGetCollectionData["query"],
     ): Promise<
@@ -108,44 +183,38 @@
         const owners: Map<string, User | Project | Tipjar> = new Map();
 
         try {
-            const token = getAccessToken();
-            if (!token) return;
-
             let page = $currentPage;
             let items = Number($itemsPerPage);
 
             const query = buildChargesQuery(filters, page, items);
+            const headers = $session?.token.asHttpHeaders as HeadersInit | undefined;
 
-            const collection = await fetchWithPersistentCache<
-                GatewayChargesCollection<GatewayCharge>
-            >(
-                client.buildUrl({
-                    url: apiGatewayChargesGetCollectionUrl,
-                    query,
-                }),
-                token,
-                API_CACHE_NAME,
-            );
+            const { data: collection, error } = await apiGatewayChargesGetCollection({
+                query,
+                headers,
+            });
 
-            const loadedCharges = collection.member ?? [];
-            $totalItems = collection.totalItems ?? 0;
+            if (error) {
+                console.error("Failed to fetch gateway charges:", error);
+                return;
+            }
+
+            const loadedCharges = toCollectionItems<GatewayCharge>(collection);
+            $totalItems = getCollectionTotalItems(collection);
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
                 const targetAccountingIri = charge.target;
 
                 if (checkoutIri && !checkouts.has(checkoutIri)) {
-                    checkouts.set(
-                        checkoutIri,
-                        await Promise.resolve(fetchCheckout(checkoutIri, token, API_CACHE_NAME)),
-                    );
+                    checkouts.set(checkoutIri, await fetchCheckout(checkoutIri, headers));
 
                     const originAccountingIri = checkouts.get(checkoutIri)?.origin;
 
                     if (originAccountingIri && !accountings.has(originAccountingIri)) {
                         await preloadAccountingData(
                             originAccountingIri,
-                            token,
+                            headers,
                             accountings,
                             owners,
                         );
@@ -153,7 +222,7 @@
                 }
 
                 if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(targetAccountingIri, token, accountings, owners);
+                    await preloadAccountingData(targetAccountingIri, headers, accountings, owners);
                 }
             }
 
@@ -165,7 +234,7 @@
                     checkoutOrigin: checkout?.origin ?? "—",
                     paymentMethod: extractId(checkout?.gateway) ?? "—",
                     refundToWallet: checkout?.refund
-                        ? $t(`contributions.table.rows.refund.${checkout.refund}`)
+                        ? $t(`domain.charges.refund.${checkout.refund}`)
                         : "—",
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
@@ -195,7 +264,7 @@
 
     async function resolveOwner(
         ownerIri: string,
-        token: string,
+        headers: HeadersInit | undefined,
         owners: Map<string, User | Project | Tipjar>,
     ) {
         if (owners.has(ownerIri)) return;
@@ -204,19 +273,19 @@
 
         if (!handler) return;
 
-        const entity = await handler.fetcher(ownerIri, token, API_CACHE_NAME);
+        const entity = await handler.fetcher(ownerIri, headers);
         if (entity) owners.set(ownerIri, entity);
     }
 
     async function preloadAccountingData(
         accountingIri: string | null,
-        token: string,
+        headers: HeadersInit | undefined,
         accountings: Map<string, Accounting>,
         owners: Map<string, User | Project | Tipjar>,
     ) {
         if (!accountingIri || accountings.has(accountingIri)) return;
 
-        const accounting = await fetchAccounting(accountingIri, token, API_CACHE_NAME);
+        const accounting = await fetchAccounting(accountingIri, headers);
         if (!accounting) return;
 
         accountings.set(accountingIri, accounting);
@@ -224,7 +293,7 @@
         const ownerIri = accounting.owner;
         if (!ownerIri) return;
 
-        await resolveOwner(ownerIri, token, owners);
+        await resolveOwner(ownerIri, headers, owners);
     }
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
@@ -249,15 +318,15 @@
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
         paymentMethodOptions = [
-            ["all", $t("contributions.filters.paymentMethod.options.all")],
+            ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
             ...(paymentGateways ?? []).map((g): [string, string] => [
                 g.name!,
-                $t(`contributions.filters.paymentMethod.options.${g.name}`),
+                $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
             ]),
         ];
 
-        chargeStatusOptions = Object.entries($t("contributions.filters.chargeStatus.options"));
-        rangeAmountOptions = Object.entries($t("contributions.filters.rangeAmount.options")).sort(
+        chargeStatusOptions = Object.entries($t("pages.admin.charges.filters.chargeStatus.options"));
+        rangeAmountOptions = Object.entries($t("pages.admin.charges.filters.rangeAmount.options")).sort(
             ([a], [b]) => {
                 const parseMin = (val: string) =>
                     val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
@@ -281,7 +350,7 @@
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("admin.charges.lastContributions")}
+                title={$t("domain.charges.lastContributions")}
                 {filters}
             />
             <ExportCsv {filters} />

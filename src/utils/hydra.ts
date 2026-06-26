@@ -4,10 +4,16 @@ export function toCollectionItems<T>(collection: unknown): T[] {
     }
 
     if (collection && typeof collection === "object") {
-        const hydraMembers = (collection as Record<string, unknown>)["hydra:member"];
+        const record = collection as Record<string, unknown>;
+        const hydraMembers = record["hydra:member"];
+        const members = record.member;
 
         if (Array.isArray(hydraMembers)) {
             return hydraMembers as T[];
+        }
+
+        if (Array.isArray(members)) {
+            return members as T[];
         }
     }
 

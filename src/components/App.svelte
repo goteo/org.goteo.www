@@ -40,7 +40,7 @@
 </Header>
 <main
     class={twMerge(
-        " mt-(--sticky-top) flex w-full max-w-screen flex-1 flex-col lg:max-h-none",
+        "mt-(--sticky-top) flex w-full max-w-screen flex-1 flex-col lg:max-h-none",
         classes,
     )}
 >

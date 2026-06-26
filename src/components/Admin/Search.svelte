@@ -5,9 +5,9 @@
         apiTipjarsGetCollection,
         apiUsersGetCollection,
     } from "../../openapi/client";
-    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { highlightMatch } from "../../utils/highlights";
     import CloseIcon from "../icons/Close.svelte";
+    import SearchIcon from "../icons/Search.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
@@ -21,7 +21,7 @@
         member: T[];
     };
 
-    let { onSelectTarget } = $props();
+    let { onSelectTarget } = $props<{ onSelectTarget: (accounting: string) => void }>();
 
     let query = $state("");
     let results = $state<ResultItem[]>([]);
@@ -52,7 +52,7 @@
                     headers: { Accept: "application/ld+json" },
                 }),
                 apiUsersGetCollection({
-                    query: { query: trimmed },
+                    query: { handle: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
             ]);
@@ -100,7 +100,7 @@
                 bind:value={query}
                 oninput={(e) =>
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
-                placeholder={$t("contributions.filters.search.placeholder")}
+                placeholder={$t("pages.admin.charges.filters.search.placeholder")}
                 class="border-secondary w-full rounded-3xl border p-4"
                 minlength="4"
             />
@@ -129,7 +129,7 @@
         <div class="absolute top-full z-10 my-8 w-full space-y-4 rounded-lg bg-gray-200 p-4">
             <p class="text-sm text-gray-500">
                 {@html $t(
-                    "contributions.filters.search.resultsFound",
+                    "pages.admin.charges.filters.search.resultsFound",
                     {
                         totalItems: totalItems,
                         query: `<span class="font-bold">${query}</span>`,
@@ -142,7 +142,7 @@
                 {#if results.some((r) => r.type === "project")}
                     <div>
                         <h3 class="mb-2 text-sm font-bold text-gray-700 uppercase">
-                            {$t("contributions.filters.search.labels.projects")}
+                            {$t("domain.charges.entityLabels.projects")}
                         </h3>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "project") as item}
@@ -150,7 +150,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -178,7 +178,7 @@
                 {#if results.some((r) => r.type === "tipjar")}
                     <div>
                         <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
-                            {$t("contributions.filters.search.labels.tipjars")}
+                            {$t("domain.charges.entityLabels.tipjars")}
                         </h3>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "tipjar") as item}
@@ -186,7 +186,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -200,7 +200,7 @@
                                         )}
                                     </div>
                                     <div class="mt-1 text-sm text-gray-500 italic">
-                                        {$t("contributions.filters.search.labels.tipjar-id")}: {item
+                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item
                                             .data.id}
                                     </div>
                                 </button>
@@ -212,7 +212,7 @@
                 {#if results.some((r) => r.type === "user")}
                     <div>
                         <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
-                            {$t("contributions.filters.search.labels.users")}
+                            {$t("domain.charges.entityLabels.users")}
                         </h3>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "user") as item}
@@ -220,7 +220,7 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting);
+                                        onSelectTarget(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -242,7 +242,7 @@
                     </div>
                 {/if}
             {:else}
-                <p class="text-sm text-gray-400">{$t("contributions.filters.search.noResults")}</p>
+                <p class="text-sm text-gray-400">{$t("pages.admin.charges.filters.search.noResults")}</p>
             {/if}
         </div>
     {/if}

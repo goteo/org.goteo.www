@@ -1,9 +1,10 @@
 <script lang="ts">
+    import Search from "./Search.svelte";
     import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import FiltersIcon from "../icons/Filters.svelte";
-    import Search from "../icons/Search.svelte";
+    import Button from "../library/Button.svelte";
     import Grid from "../library/Grid.svelte";
 
     let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
@@ -26,7 +27,7 @@
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
-            alert($t("contributions.filters.dateRange.errors.invalidRange"));
+            alert($t("pages.admin.charges.filters.dateRange.errors.invalidRange"));
             return;
         }
 
@@ -66,10 +67,11 @@
         <Search onSelectTarget={handleSelectTarget} />
 
         <div class="flex items-center gap-3">
-            <button
+            <Button
                 type="button"
+                kind="ghost"
                 onclick={() => (showFilters = !showFilters)}
-                class="border-secondary text-secondary relative inline-flex cursor-pointer items-center gap-2 rounded-3xl border px-6 py-4 font-bold text-nowrap"
+                class="relative text-nowrap"
             >
                 <span class="relative">
                     <FiltersIcon />
@@ -80,11 +82,11 @@
                     {/if}
                 </span>
                 {#if showFilters}
-                    {$t("contributions.filters.btns.closeFilters")}
+                    {$t("pages.admin.charges.filters.btns.closeFilters")}
                 {:else}
-                    {$t("contributions.filters.btns.openFilters")}
+                    {$t("pages.admin.charges.filters.btns.openFilters")}
                 {/if}
-            </button>
+            </Button>
         </div>
     </div>
 
@@ -96,7 +98,7 @@
                     bind:value={selectedPaymentMethod}
                 >
                     <option value="" disabled selected
-                        >{$t("contributions.filters.paymentMethod.title")}</option
+                        >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
                     >
                     {#each paymentMethodOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -108,7 +110,7 @@
                     bind:value={selectedChargeStatus}
                 >
                     <option value="" disabled
-                        >{$t("contributions.filters.chargeStatus.title")}</option
+                        >{$t("pages.admin.charges.filters.chargeStatus.title")}</option
                     >
                     {#each chargeStatusOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -120,7 +122,7 @@
                     bind:value={selectedRangeAmount}
                 >
                     <option value="" disabled
-                        >{$t("contributions.filters.rangeAmount.title")}</option
+                        >{$t("pages.admin.charges.filters.rangeAmount.title")}</option
                     >
                     {#each rangeAmountOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -129,7 +131,7 @@
 
                 <div class="relative">
                     <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("contributions.filters.dateRange.initDate")}
+                        {$t("pages.admin.charges.filters.dateRange.initDate")}
                     </label>
                     <input
                         id="dateFrom"
@@ -142,7 +144,7 @@
 
                 <div class="relative">
                     <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("contributions.filters.dateRange.endDate")}
+                        {$t("pages.admin.charges.filters.dateRange.endDate")}
                     </label>
                     <input
                         id="dateTo"
@@ -155,12 +157,9 @@
             </Grid>
 
             <div class="col-span-3 flex justify-end">
-                <button
-                    type="submit"
-                    class="bg-primary text-secondary cursor-pointer rounded-3xl px-6 py-4 text-base font-bold"
-                >
-                    {$t("contributions.filters.btns.apply")}
-                </button>
+                <Button type="submit" kind="primary">
+                    {$t("pages.admin.charges.filters.btns.apply")}
+                </Button>
             </div>
         </form>
     {/if}

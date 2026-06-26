@@ -30,8 +30,8 @@ export interface Campaign extends Project {
     title: string;
     /** Campaign image URL path */
     image: string;
-    /** Current funding amount */
-    obtained: Money;
+    /** Current funding amount — optional when fetched client-side per card */
+    obtained?: Money;
     /** Minimum funding goal */
     minimum: Money;
     /** Optional optimum funding goal */

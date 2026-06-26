@@ -1,26 +1,35 @@
-<script>
+<script lang="ts">
     import { t } from "../../i18n/store";
+    import Button from "../library/Button.svelte";
 </script>
 
 <section>
-    <div class="flex flex-row gap-6">
-        <button
-            class="btn btn-primary text-content border-secondary cursor-pointer rounded-2xl border px-4 py-2 font-bold"
+    <div class="flex flex-row flex-wrap gap-6">
+        <Button
+            kind="ghost"
+            size="sm"
+            class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
         >
-            {$t("contributions.grid.actions.refundToWallet")}</button
+            {$t("pages.admin.charges.actions.refundToWallet")}</Button
         >
-        <button
-            class="btn btn-secondary text-content border-secondary cursor-pointer rounded-2xl border px-4 py-2 font-bold"
+        <Button
+            kind="ghost"
+            size="sm"
+            class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
         >
-            {$t("contributions.grid.actions.refundToUser")}
-        </button>
-        <button
-            class="btn btn-danger text-content border-secondary cursor-pointer rounded-2xl border px-4 py-2 font-bold"
-            >{$t("contributions.grid.actions.changeUser")}</button
+            {$t("pages.admin.charges.actions.refundToUser")}
+        </Button>
+        <Button
+            kind="ghost"
+            size="sm"
+            class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
+            >{$t("pages.admin.charges.actions.changeUser")}</Button
         >
-        <button
-            class="btn btn-danger text-content border-secondary cursor-pointer rounded-2xl border px-4 py-2 font-bold"
-            >{$t("contributions.grid.actions.manageReward")}
-        </button>
+        <Button
+            kind="ghost"
+            size="sm"
+            class="min-h-10 rounded-[18px] bg-transparent px-4 py-2 text-base leading-5"
+            >{$t("pages.admin.charges.actions.manageReward")}
+        </Button>
     </div>
 </section>
