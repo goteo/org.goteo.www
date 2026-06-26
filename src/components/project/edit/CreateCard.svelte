@@ -45,21 +45,17 @@
         <p class="text-variant1 text-base font-normal">
             {description}
         </p>
-        <Button
-            kind="secondary"
-            class="mt-auto flex w-full items-center justify-center gap-2"
-            {onclick}
-        >
-            <MoreAndLess sign="more" class="p-0.5625" />
-            {#if variant === "reward"}
-                {$t("pages.project.edit.rewards.add.button")}
-            {:else if variant === "collab"}
-                {$t("pages.project.edit.collaborations.add.button")}
-            {:else if variant === "budget"}
-                {$t("pages.project.edit.budget.add.button")}
-            {/if}
-        </Button>
     </div>
+    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
+        <MoreAndLess sign="more" class="p-0.5625" />
+        {#if variant === "reward"}
+            {$t("pages.project.edit.rewards.add.button")}
+        {:else if variant === "collab"}
+            {$t("pages.project.edit.collaborations.add.button")}
+        {:else if variant === "budget"}
+            {$t("pages.project.edit.budget.add.button")}
+        {/if}
+    </Button>
 </div>
 {#if variant === "reward"}
     <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />

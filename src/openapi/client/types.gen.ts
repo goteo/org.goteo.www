@@ -2206,6 +2206,7 @@ export type ProjectSupport = {
      * When `anonymous` is *true* it will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2218,6 +2219,10 @@ export type ProjectSupport = {
      * User's will to have their support to the Project be shown publicly.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -2275,6 +2280,7 @@ export type ProjectSupportJsonld = {
      * When `anonymous` is *true* it will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2287,6 +2293,10 @@ export type ProjectSupportJsonld = {
      * User's will to have their support to the Project be shown publicly.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -5532,6 +5542,7 @@ export type ApiProjectSupportsGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports';
 };
@@ -5554,6 +5565,7 @@ export type ApiProjectSupportsmoneyTotalGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports/money_total';
 };

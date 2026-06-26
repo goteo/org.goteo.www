@@ -17,24 +17,24 @@ export const sortOptions: SortOption[] = [
         key: "date-desc",
         field: "dateCreated",
         direction: "desc",
-        label: "contributions.filters.order.options.date-desc",
+        label: "pages.admin.charges.filters.order.options.date-desc",
     },
     {
         key: "date-asc",
         field: "dateCreated",
         direction: "asc",
-        label: "contributions.filters.order.options.date-asc",
+        label: "pages.admin.charges.filters.order.options.date-asc",
     },
     {
         key: "amount-desc",
         field: "money.amount",
         direction: "desc",
-        label: "contributions.filters.order.options.amount-desc",
+        label: "pages.admin.charges.filters.order.options.amount-desc",
     },
     {
         key: "amount-asc",
         field: "money.amount",
         direction: "asc",
-        label: "contributions.filters.order.options.amount-asc",
+        label: "pages.admin.charges.filters.order.options.amount-asc",
     },
 ];

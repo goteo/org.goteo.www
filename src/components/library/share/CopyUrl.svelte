@@ -11,7 +11,7 @@
 </script>
 
 <Tooltip
-    text={$t("contributions.tootip.copied")}
+    text={$t("common.tooltip.coved")}
     tooltipClass="bg-secondary -translate-x-[50%]"
     className="cursor-copy shrink-0 w-auto h-auto"
 >

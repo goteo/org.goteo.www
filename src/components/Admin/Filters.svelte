@@ -27,7 +27,7 @@
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
         if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
-            alert($t("contributions.filters.dateRange.errors.invalidRange"));
+            alert($t("pages.admin.charges.filters.dateRange.errors.invalidRange"));
             return;
         }
 
@@ -82,9 +82,9 @@
                     {/if}
                 </span>
                 {#if showFilters}
-                    {$t("contributions.filters.btns.closeFilters")}
+                    {$t("pages.admin.charges.filters.btns.closeFilters")}
                 {:else}
-                    {$t("contributions.filters.btns.openFilters")}
+                    {$t("pages.admin.charges.filters.btns.openFilters")}
                 {/if}
             </Button>
         </div>
@@ -98,7 +98,7 @@
                     bind:value={selectedPaymentMethod}
                 >
                     <option value="" disabled selected
-                        >{$t("contributions.filters.paymentMethod.title")}</option
+                        >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
                     >
                     {#each paymentMethodOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -110,7 +110,7 @@
                     bind:value={selectedChargeStatus}
                 >
                     <option value="" disabled
-                        >{$t("contributions.filters.chargeStatus.title")}</option
+                        >{$t("pages.admin.charges.filters.chargeStatus.title")}</option
                     >
                     {#each chargeStatusOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -122,7 +122,7 @@
                     bind:value={selectedRangeAmount}
                 >
                     <option value="" disabled
-                        >{$t("contributions.filters.rangeAmount.title")}</option
+                        >{$t("pages.admin.charges.filters.rangeAmount.title")}</option
                     >
                     {#each rangeAmountOptions as [value, label]}
                         <option {value}>{label}</option>
@@ -131,7 +131,7 @@
 
                 <div class="relative">
                     <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("contributions.filters.dateRange.initDate")}
+                        {$t("pages.admin.charges.filters.dateRange.initDate")}
                     </label>
                     <input
                         id="dateFrom"
@@ -144,7 +144,7 @@
 
                 <div class="relative">
                     <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("contributions.filters.dateRange.endDate")}
+                        {$t("pages.admin.charges.filters.dateRange.endDate")}
                     </label>
                     <input
                         id="dateTo"
@@ -158,7 +158,7 @@
 
             <div class="col-span-3 flex justify-end">
                 <Button type="submit" kind="primary">
-                    {$t("contributions.filters.btns.apply")}
+                    {$t("pages.admin.charges.filters.btns.apply")}
                 </Button>
             </div>
         </form>
