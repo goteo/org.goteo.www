@@ -1,48 +1,247 @@
-# Astro Starter Kit: Basics
+# Goteo v4 Web
 
-```sh
-pnpm create astro@latest -- --template basics
+Frontend for the [Goteo](https://goteo.org) crowdfunding platform — built on Astro 5 + Svelte 5 + TailwindCSS 4, deployed on Cloudflare Workers.
+
+> **NOTE**: This application is a client of the [Goteo v4 API](https://github.com/goteo/org.goteo.api). You need a running v4 API instance and an OAuth client registered in it before this web app will work.
+
+## Installation
+
+This application requires [Node.js](https://nodejs.org/en/download) (v20 or later) and the [pnpm](https://pnpm.io/installation) package manager. It also needs a reachable [Goteo v4 API](https://github.com/goteo/org.goteo.api) instance to connect to.
+
+### 1. Clone or download this repository.
+
+```shell
+git clone https://github.com/goteo/org.goteo.www
+cd org.goteo.www
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+### 2. Install the dependencies.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.svelte
-│   └── pages/
-│       └── index.astro
-└── package.json
+```shell
+pnpm install
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### 3. Configure the environment.
 
-## 🧞 Commands
+Copy the example environment file and fill in the values for your setup.
 
-All commands are run from the root of the project, from a terminal:
+```shell
+cp .env.example .env
+```
 
-| Command                | Action                                           |
-| :--------------------- | :----------------------------------------------- |
-| `pnpm install`         | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+The minimum required values to boot the app and authenticate users are:
 
-## 👀 Want to learn more?
+| Variable                                    | Description                                                                                   |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `PUBLIC_API_URL`                            | Base URL of your Goteo v4 API instance (e.g. `http://localhost:8090`)                          |
+| `PUBLIC_API_VERSION`                        | API version — keep as `v4`                                                                     |
+| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` | Credentials of an OAuth client registered in the API. Must allow the grants `authorization_code`, `refresh_token`, `password` |
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+> NOTE: The OAuth client must exist **in the v4 API instance**. See the API's [Authentication docs](https://api.v4.goteo.org/v4#section/Authentication).
+
+The remaining variables (tipping, Facebook share, object storage, HTTP Basic auth) are **optional** and the app falls back to sane defaults when they are empty. See [`.env.example`](.env.example) for the full annotated list and the [Environment variables](#environment-variables) section below.
+
+## Usage
+
+Start the development server.
+
+```shell
+pnpm dev
+```
+
+The app should be live at [http://localhost:4321](http://localhost:4321).
+
+To run the app the same way it runs in production (on the Cloudflare Workers runtime), use the Wrangler dev server instead:
+
+```shell
+pnpm dev:worker
+```
+
+### Other commands
+
+| Command                | Action                                                  |
+| :--------------------- | :------------------------------------------------------ |
+| `pnpm install`         | Install dependencies                                    |
+| `pnpm dev`             | Dev server at `localhost:4321`                          |
+| `pnpm dev:worker`      | Build + Wrangler Workers dev server at `localhost:4321` |
+| `pnpm build`           | Build for production                                    |
+| `pnpm preview`         | Preview production build locally                        |
+| `pnpm format`          | ESLint fix + Prettier write                             |
+| `pnpm check`           | Prettier format check                                   |
+| `pnpm openapi`         | Regenerate OpenAPI SDK from live API spec               |
+| `pnpm storybook`       | Storybook dev server at `localhost:6006`                |
+| `pnpm build-storybook` | Build Storybook static output                           |
+| `pnpm cypress:open`    | Cypress E2E interactive                                 |
+| `pnpm cypress:run`     | Cypress E2E headless                                    |
+| `pnpm test:e2e`        | Start dev server + run Cypress headless                 |
+| `pnpm test:e2e:ci`     | CI E2E against Workers preview build                    |
+
+### Regenerating the API SDK
+
+The TypeScript API client under `src/openapi/client/` is generated from the live API's OpenAPI spec. Regenerate it whenever the API spec changes (requires the API running and `PUBLIC_API_URL` / `PUBLIC_API_VERSION` set):
+
+```shell
+pnpm openapi
+```
+
+This fetches the spec from `$PUBLIC_API_URL/$PUBLIC_API_VERSION/docs.json`. Commit the generated files together with any config change.
+
+## Testing
+
+End-to-end tests use [Cypress](https://www.cypress.io/).
+
+```shell
+# Interactive runner
+pnpm cypress:open
+
+# Headless run against an already-running dev server
+pnpm cypress:run
+
+# Start the dev server and run the headless suite in one command
+pnpm test:e2e
+```
+
+Component and unit tests run on [Vitest](https://vitest.dev/) through the Storybook test addon — launch Storybook to develop and visually check components:
+
+```shell
+pnpm storybook
+```
+
+## Before opening a PR
+
+```shell
+pnpm format         # Fix formatting (ESLint + Prettier)
+pnpm cypress:run    # E2E must pass
+```
+
+## Debugging
+
+Common issues you might run into while developing:
+
+### 1. Blank pages or auth failures right after setup.
+
+This almost always means the app cannot reach the API or the OAuth client is misconfigured. Check that:
+
+- `PUBLIC_API_URL` points to a reachable v4 API instance and includes the protocol (`http://` / `https://`).
+- An OAuth client exists **in that API instance** and its `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET` match your `.env`.
+- The OAuth client allows the `authorization_code`, `refresh_token` and `password` grants.
+
+### 2. Type errors against the API after the API changed.
+
+The generated SDK is out of date. Regenerate it (API must be running):
+
+```shell
+pnpm openapi
+```
+
+### 3. The app works with `pnpm dev` but breaks with `pnpm dev:worker`.
+
+`pnpm dev:worker` runs on the Cloudflare Workers runtime, which has no Node.js APIs (`fs`, `path`, `os`, `child_process`, …). Runtime code must use Web APIs (`fetch`, `crypto`, `URL`, `Cache`) instead. Move any Node-only logic to build-time code.
+
+---
+
+## Stack
+
+| Layer      | Technology                                  |
+| ---------- | ------------------------------------------- |
+| Framework  | Astro 5                                     |
+| UI         | Svelte 5 (runes), TailwindCSS 4             |
+| Language   | TypeScript 5                                |
+| Runtime    | Cloudflare Workers (also supports Node)     |
+| API client | `@hey-api/client-fetch` (generated OpenAPI) |
+| Testing    | Vitest (unit), Cypress (E2E), Storybook     |
+
+## Routes
+
+All user-facing pages live under `src/pages/[...locale]/` (locale prefix: `es`, `en`, `ca`).
+
+| Route                      | Page                       |
+| -------------------------- | -------------------------- |
+| `/`                        | Home                       |
+| `/search`                  | Project search             |
+| `/project/[idOrSlug]`      | Project detail             |
+| `/project/[idOrSlug]/edit` | Project editor (auth)      |
+| `/create/project`          | Create project (auth)      |
+| `/checkout`                | Checkout cart              |
+| `/checkout/payment`        | Payment                    |
+| `/checkout/post-payment`   | Post-payment confirmation  |
+| `/checkout/verify`         | Payment verification       |
+| `/checkout/wallet`         | Wallet confirmation        |
+| `/login`                   | Login                      |
+| `/login/callback`          | OAuth2 callback            |
+| `/logout`                  | Logout                     |
+| `/register`                | Register                   |
+| `/me`                      | My profile (auth)          |
+| `/user/[idOrHandle]`       | Public user profile        |
+| `/about`                   | About                      |
+| `/static/[fileName]`       | CMS static content         |
+| `/admin/charges`           | Admin contributions (auth) |
+| `/403`, `/404`, `/500`     | Error pages                |
+
+API endpoints under `src/pages/api/`:
+
+| Endpoint                 | Purpose                      |
+| ------------------------ | ---------------------------- |
+| `/api/relay/[...path]`   | Authenticated API proxy      |
+| `/api/upload/preupload`  | S3 pre-signed URL generation |
+| `/api/upload/postupload` | S3 post-upload validation    |
+
+## Project Structure
+
+```
+src/
+├── actions/          # Astro server actions (form mutations)
+├── auth/             # JWT sessions, OAuth2 tokens, refresh logic
+├── components/       # Svelte components (PascalCase filenames)
+│   ├── library/      # Reusable UI primitives + Storybook stories
+│   ├── Admin/        # Admin-specific components
+│   ├── icons/        # Icon SVG components
+│   └── [Feature]/    # Feature-scoped (project/, profile/, Checkout/, etc.)
+├── firewall/         # Route access control rules
+├── i18n/             # Translations (es/en/ca) + t() store
+├── layouts/          # Astro layout components
+├── middleware/       # Astro request middleware (auth, locale, firewall)
+├── openapi/          # OpenAPI SDK (generated) + config
+├── pages/            # Astro routes
+│   ├── [...locale]/  # All user-facing pages under locale prefix
+│   └── api/          # Server-side API endpoints
+├── services/         # Business logic & API call wrappers
+├── stores/           # Svelte stores (client-side state)
+│   └── drafts/       # Project draft persistence (Dexie/IndexedDB)
+├── stories/          # Full-page Storybook stories
+├── styles/           # Global CSS + Tailwind theme tokens
+├── svgs/             # SVG Svelte components
+├── types/            # Shared TypeScript interfaces
+└── utils/            # Pure helper functions
+    └── drafts/       # Draft DB repository helpers
+```
+
+## Environment variables
+
+Full list lives in [`.env.example`](.env.example). Grouped by purpose:
+
+| Variable                                      | Required | Purpose                                                          |
+| --------------------------------------------- | :------: | ---------------------------------------------------------------- |
+| `PUBLIC_API_URL`                              |    ✅    | Base URL of the v4 API instance                                  |
+| `PUBLIC_API_VERSION`                          |    ✅    | API version (`v4`)                                               |
+| `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                  |
+| `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                   |
+| `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                              |
+| `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)              |
+| `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                      |
+| `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                            |
+| `PUBLIC_TIPPING_DEFAULT_CHECKED`              |          | `"true"` to pre-check the tip option                            |
+| `PUBLIC_FACEBOOK_APP_ID`                      |          | Facebook share dialog app ID                                    |
+| `CLOUDFLARE_INCLUDE_PROCESS_ENV`              |          | `"true"` — required for Cloudflare Workers to read env vars     |
+| `BASIC_AUTH`                                  |          | `"true"` to add an HTTP Basic auth layer (not a replacement for OAuth) |
+| `BASIC_AUTH_USERNAME` / `BASIC_AUTH_PASSWORD` |          | Credentials for the Basic auth layer                            |
+| `OBJECT_STORAGE_*`                            |          | S3-compatible storage (access key, secret, region, endpoint, bucket) for media upload |
+
+## CI / Deployment
+
+| Workflow             | Trigger           | Action                            |
+| -------------------- | ----------------- | --------------------------------- |
+| `deploy.yml`         | Push to `main`    | Deploy to Cloudflare (production) |
+| `deploy.yml`         | Push to `develop` | Deploy to Cloudflare (staging)    |
+| `cypress-tests.yml`  | PR / push         | Cypress E2E headless              |
+| `prettier-check.yml` | PR / push         | Prettier format check             |
