@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Button from "../library/Button.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     import type { Snippet } from "svelte";
 

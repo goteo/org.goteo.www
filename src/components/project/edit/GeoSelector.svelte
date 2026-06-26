@@ -15,12 +15,12 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import {
-        validationErrors,
         touchedFields,
         markFieldAsTouched,
-    } from "../../../stores/wizard-state";
-    import Select from "../../library/Select.svelte";
-    import TextInput from "../../library/TextInput.svelte";
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
+    import Select from "../../library/inputs/Select.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
 
     interface GeoSelectorProps {
         scope?: "local" | "estatal" | "internacional";

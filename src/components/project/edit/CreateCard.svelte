@@ -3,38 +3,32 @@
     import CollabsModal from "./CollabsModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
-    import MoreAndLess from "../../icons/MoreAndLess.svelte";
-    import Button from "../../library/Button.svelte";
+    import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
-    import type {
-        ProjectBudgetItem,
-        ProjectCollaboration,
-        ProjectReward,
-    } from "../../../openapi/client";
+    import type { Project } from "../../../openapi/client";
 
-    let {
-        title,
-        description,
-        onclick,
-        variant,
-        open = $bindable(false),
-        showToast = $bindable(false),
-        reward,
-        collab,
-        budgetItem,
-        onSave,
-    } = $props<{
+    interface Props {
+        project: Project;
         title: string;
         description: string;
         onclick: () => void;
         variant: "reward" | "collab" | "budget";
         open: boolean;
         showToast: boolean;
-        reward?: ProjectReward | null;
-        collab?: ProjectCollaboration | null;
-        budgetItem?: ProjectBudgetItem | null;
         onSave: (data: any) => void;
-    }>();
+    }
+
+    let {
+        project,
+        title,
+        description,
+        onclick,
+        variant,
+        open = $bindable(false),
+        showToast = $bindable(false),
+        onSave,
+    }: Props = $props();
 </script>
 
 <div
@@ -42,7 +36,7 @@
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
-            class="text-soft-purple font-bold {variant === 'budget'
+            class="text-purple-soft font-bold {variant === 'budget'
                 ? 'text-2xl leading-8'
                 : 'text-4xl leading-12'}"
         >
@@ -51,26 +45,22 @@
         <p class="text-variant1 text-base font-normal">
             {description}
         </p>
-        <Button
-            kind="secondary"
-            class="mt-auto flex w-full items-center justify-center gap-2"
-            {onclick}
-        >
-            <MoreAndLess sign="more" class="p-0.5625" />
-            {#if variant === "reward"}
-                {$t("pages.project.edit.rewards.add.button")}
-            {:else if variant === "collab"}
-                {$t("pages.project.edit.collaborations.add.button")}
-            {:else if variant === "budget"}
-                {$t("pages.project.edit.budget.add.button")}
-            {/if}
-        </Button>
     </div>
+    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
+        <MoreAndLess sign="more" class="p-0.5625" />
+        {#if variant === "reward"}
+            {$t("pages.project.edit.rewards.add.button")}
+        {:else if variant === "collab"}
+            {$t("pages.project.edit.collaborations.add.button")}
+        {:else if variant === "budget"}
+            {$t("pages.project.edit.budget.add.button")}
+        {/if}
+    </Button>
 </div>
 {#if variant === "reward"}
-    <RewardsModal bind:open bind:showToast {onSave} {reward} />
+    <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />
 {:else if variant === "collab"}
-    <CollabsModal bind:open bind:showToast {onSave} {collab} />
+    <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
 {:else if variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} {budgetItem} />
+    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} />
 {/if}

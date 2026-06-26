@@ -1,97 +1,85 @@
 <script lang="ts">
-    import FacebookIcon from "../../svgs/FacebookIcon.svelte";
-    import GmailIcon from "../../svgs/GmailIcon.svelte";
-    import InstagramIcon from "../../svgs/InstagramIcon.svelte";
-    import LinkedinIcon from "../../svgs/LinkedinIcon.svelte";
-    import MediumIcon from "../../svgs/MediumIcon.svelte";
-    import XIcon from "../../svgs/XIcon.svelte";
-    import MapIcon from "../icons/Location.svelte";
+    import FacebookIcon from "../icons/social/FacebookIcon.svelte";
+    import GmailIcon from "../icons/social/GmailIcon.svelte";
+    import InstagramIcon from "../icons/social/InstagramIcon.svelte";
+    import LinkedinIcon from "../icons/social/LinkedinIcon.svelte";
+    import MediumIcon from "../icons/social/MediumIcon.svelte";
+    import XIcon from "../icons/social/XIcon.svelte";
+    import TerritoryTag from "../project/TerritoryTag.svelte";
+
+    import type { Link, Territory } from "../../openapi/client/types.gen";
 
     interface Props {
         displayName: string;
-        location?: string;
-        socialLinks?: {
-            twitter?: string;
-            instagram?: string;
-            facebook?: string;
-            linkedin?: string;
-            email?: string;
-            medium?: string;
-            website?: string;
-        };
+        territory?: Territory;
+        links?: Link[];
+        email?: string;
     }
 
-    let { displayName, location, socialLinks = {} }: Props = $props();
+    let { displayName, territory, links = [], email }: Props = $props();
+
+    type SocialLinkKey = "email" | "facebook" | "instagram" | "linkedin" | "medium" | "twitter";
 
     interface SocialLink {
-        name: string;
         url: string;
         label: string;
         icon: any;
     }
 
-    const allSocialLinks: SocialLink[] = [
-        {
-            name: "twitter",
-            url: socialLinks.twitter || "",
-            label: "X/Twitter",
-            icon: XIcon,
-        },
-        {
-            name: "instagram",
-            url: socialLinks.instagram || "",
-            label: "Instagram",
-            icon: InstagramIcon,
-        },
-        {
-            name: "facebook",
-            url: socialLinks.facebook || "",
-            label: "Facebook",
-            icon: FacebookIcon,
-        },
-        {
-            name: "linkedin",
-            url: socialLinks.linkedin || "",
-            label: "LinkedIn",
-            icon: LinkedinIcon,
-        },
-        {
-            name: "gmail",
-            url: socialLinks.email || "",
-            label: "Email",
-            icon: GmailIcon,
-        },
-        {
-            name: "medium",
-            url: socialLinks.medium || "",
-            label: "Medium",
-            icon: MediumIcon,
-        },
-    ];
+    function detectSocialPlatform(link: Link): SocialLinkKey | null {
+        const url = (link.url ?? "").toLowerCase();
+        const rel = (link.rel ?? "").toLowerCase();
+        if (rel === "twitter" || url.includes("twitter.com") || url.includes("x.com"))
+            return "twitter";
+        if (rel === "instagram" || url.includes("instagram.com")) return "instagram";
+        if (rel === "facebook" || url.includes("facebook.com")) return "facebook";
+        if (rel === "linkedin" || url.includes("linkedin.com")) return "linkedin";
+        if (rel === "medium" || url.includes("medium.com")) return "medium";
+        return null;
+    }
 
-    const socialMediaLinks = $derived(allSocialLinks.filter((link) => link.url));
+    const resolvedLinks = $derived(
+        links.reduce<Record<string, string>>(
+            (acc, link) => {
+                const platform = detectSocialPlatform(link);
+                if (platform && link.url && !acc[platform]) acc[platform] = link.url;
+                return acc;
+            },
+            email ? { email: `mailto:${email}` } : {},
+        ),
+    );
+
+    const allSocialLinks: Record<SocialLinkKey, SocialLink> = $derived({
+        email: { url: resolvedLinks.email || "", label: "Email", icon: GmailIcon },
+        facebook: { url: resolvedLinks.facebook || "", label: "Facebook", icon: FacebookIcon },
+        instagram: { url: resolvedLinks.instagram || "", label: "Instagram", icon: InstagramIcon },
+        linkedin: { url: resolvedLinks.linkedin || "", label: "LinkedIn", icon: LinkedinIcon },
+        medium: { url: resolvedLinks.medium || "", label: "Medium", icon: MediumIcon },
+        twitter: { url: resolvedLinks.twitter || "", label: "X/Twitter", icon: XIcon },
+    });
+
+    const socialMediaLinks = $derived(
+        (Object.entries(allSocialLinks) as [SocialLinkKey, SocialLink][]).filter(
+            ([, link]) => link.url,
+        ),
+    );
 </script>
 
-<div class="mt-32 flex w-full flex-col items-center gap-4">
+<div class="mt-28 flex w-full flex-col items-center gap-4">
     <!-- Name -->
     <h1 class="text-secondary text-2xl leading-tight font-bold">
         {displayName}
     </h1>
 
     <!-- Location -->
-    {#if location}
-        <div class="flex items-center gap-1">
-            <MapIcon class="text-secondary size-8" />
-            <span class="text-secondary text-base leading-normal">
-                {location}
-            </span>
-        </div>
+    {#if territory}
+        <TerritoryTag {territory} class="border-0 bg-transparent" />
     {/if}
 
     <!-- Social Media Links -->
     {#if socialMediaLinks.length > 0}
         <div class="flex items-center gap-2">
-            {#each socialMediaLinks as link}
+            {#each socialMediaLinks as [, link]}
                 <a
                     href={link.url}
                     target="_blank"

@@ -1,5 +1,6 @@
 <script lang="ts">
     import CreateCard from "./CreateCard.svelte";
+    import DeleteModal from "./DeleteModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import {
@@ -7,29 +8,35 @@
         deleteReward,
         updateReward,
         validationErrors,
-        type WizardReward,
-    } from "../../../stores/wizard-state";
-    import UnitIcon from "../../../svgs/UnitIcon.svelte";
+    } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
+    import InfinityIcon from "../../icons/Infinity.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import UnitIcon from "../../icons/UnitIcon.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+
+    import type { Project, ProjectReward } from "../../../openapi/client";
 
     let {
+        project,
         reward,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
-        reward: WizardReward | null;
+        project: Project;
+        reward: ProjectReward | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
     } = $props();
 
     let openModal = $state(false);
+    let openDeleteModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    function handleSaveReward(data: WizardReward | null) {
+    function handleSaveReward(data: ProjectReward | null) {
         if (!data) return;
         let errors;
 
@@ -58,12 +65,14 @@
 
         deleteReward(index);
         openModal = false;
+        openDeleteModal = false;
         validationErrors.set({});
     }
 </script>
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.rewards.add.title")}
         description={$t("pages.project.edit.rewards.add.description")}
         variant="reward"
@@ -74,8 +83,16 @@
     />
 {:else if reward}
     <div
-        class="border-grey flex basis-1/3 flex-col justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
+        class="border-grey relative flex basis-1/3 flex-col justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
     >
+        <button
+            type="button"
+            aria-label={$t("common.delete")}
+            class="text-secondary absolute top-6 right-6 cursor-pointer transition-transform hover:scale-110"
+            onclick={() => (openDeleteModal = true)}
+        >
+            <Close class="size-5" />
+        </button>
         <div class="flex flex-col">
             <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
                 <div>
@@ -98,7 +115,7 @@
         <div class="mt-auto flex w-full justify-between">
             {#if reward.isFinite}
                 <div
-                    class="text-secondary flex items-center justify-between gap-2 text-sm font-bold"
+                    class="text-secondary flex items-center justify-between gap-1 text-base font-bold"
                 >
                     <UnitIcon />
                     <span>
@@ -112,11 +129,9 @@
                     </span>
                 </div>
             {:else}
-                <div
-                    class="text-secondary flex items-center justify-between gap-2 text-sm font-bold"
-                >
+                <div class="text-secondary flex items-center justify-between font-bold">
                     <UnitIcon />
-                    <span>∞</span>
+                    <InfinityIcon width="32" height="32" />
                 </div>
             {/if}
         </div>
@@ -126,9 +141,11 @@
         <RewardsModal
             bind:open={openModal}
             bind:showToast={showModalErrorToast}
+            {project}
             {reward}
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
         />
+        <DeleteModal variant="rewards" bind:open={openDeleteModal} onclick={handleDeleteReward} />
     </div>
 {/if}

@@ -3,23 +3,27 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
-    import { validationErrors, type WizardCollaboration } from "../../../stores/wizard-state";
-    import Button from "../../library/Button.svelte";
-    import Toast from "../../library/Toast.svelte";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
 
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),
         showToast = $bindable(false),
+        project,
         collab,
         onSave,
         onDelete,
     }: {
         open: boolean;
         showToast: boolean;
-        collab: WizardCollaboration | null;
-        onSave: (data: WizardCollaboration | null) => void;
+        project: Project;
+        collab: ProjectCollaboration | null;
+        onSave: (data: ProjectCollaboration | null) => void;
         onDelete?: () => void;
     } = $props();
 
@@ -31,7 +35,9 @@
         "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 
     function handleSaveOrCreate() {
-        onSave({ title, description });
+        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
+
+        onSave({ project: projectIri, title, description, isFulfilled: false });
     }
 
     function handleDeleteClick() {

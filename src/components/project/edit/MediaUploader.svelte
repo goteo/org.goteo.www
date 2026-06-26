@@ -62,13 +62,13 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import CloseIcon from "../../../components/icons/Close.svelte";
-    import Button from "../../../components/library/Button.svelte";
+    import CloseIcon from "../../../components/icons/navigation/Close.svelte";
     import { t } from "../../../i18n/store";
-    import Loader from "../../../svgs/Loader.svelte";
-    import UploadIcon from "../../../svgs/UploadIcon.svelte";
+    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Loader from "../../library/feedback/Loader.svelte";
 
-    import type { MediaImage } from "../../../stores/wizard-state";
+    import type { MediaImage } from "../../../stores/drafts/projectDraft";
 
     interface MediaUploaderProps {
         images: MediaImage[];

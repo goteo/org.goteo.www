@@ -26,7 +26,7 @@ Supports: primary (Aplicar filtros), secondary (Buscar), ghost (Cerrar filtros)
 
     // Base button classes - matching Figma design exactly
     const baseClasses =
-        "inline-flex items-center justify-center font-body font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed gap-2";
+        "inline-flex items-center justify-center font-body font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed gap-2";
 
     // Size classes - matching Figma specifications exactly
     const sizeClasses = {

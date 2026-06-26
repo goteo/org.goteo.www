@@ -1,7 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import App from "../../../components/App.svelte";
-import Carousel from "../../../components/Carousel.svelte";
+import App from "../../../layouts/App.svelte";
+import Carousel from "../../../components/library/layout/Carousel.svelte";
 import CampaignCard from "../../../components/home/CampaignCard.svelte";
 import {
     apiProjectsGetCollection,
@@ -15,18 +15,20 @@ import type { Campaign } from "../../../types/campaign";
 
 const { t, lang, session } = Astro.locals;
 
-const mapProjectToCard = (project: Project): Campaign => ({
-    slug: project.slug || "",
-    title: project.title || "",
-    subtitle: project.subtitle || "",
-    description: project.description || "",
-    image: project.video?.thumbnail || "/images/placeholder-project.jpg",
-    obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-    minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-    categories: project.categories || [],
-    territory: project.territory || "",
-    size: "small",
-});
+const mapProjectToCard = (project: Project) =>
+    ({
+        id: project.slug || "",
+        slug: project.slug || "",
+        title: project.title || "",
+        subtitle: project.subtitle || "",
+        description: project.description || "",
+        image: project.video?.thumbnail || "/images/placeholder-project.jpg",
+        obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+        minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+        categories: project.categories || [],
+        territory: project.territory || "",
+        size: "small",
+    }) as unknown as Campaign;
 
 let donatedProjects: Campaign[] = [];
 let suggestedProjects: Campaign[] = [];
@@ -147,7 +149,7 @@ try {
                 >
                     <div class="h-16 w-16 shrink-0 md:h-20 md:w-20">
                         <img
-                            src="/post-payment.svg"
+                            src="/images/checkout/post-payment.svg"
                             alt="Post payment"
                             class="h-full w-full object-contain"
                         />

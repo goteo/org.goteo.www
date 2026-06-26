@@ -17,12 +17,12 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import {
-        validationErrors,
         touchedFields,
         markFieldAsTouched,
-    } from "../../../stores/wizard-state";
+        validationErrors,
+    } from "../../../stores/drafts/projectDraft";
     import { getLanguageDisplayName } from "../../../utils/lang";
-    import Select from "../../library/Select.svelte";
+    import Select from "../../library/inputs/Select.svelte";
 
     interface LanguageOption {
         code: string;

@@ -2,8 +2,8 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
-    import CloseIcon from "../icons/Close.svelte";
-    import Tag from "../library/Tag.svelte";
+    import CloseIcon from "../icons/navigation/Close.svelte";
+    import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client";
@@ -44,15 +44,15 @@
             }
 
             if (tag.title === "checkout.gateway") {
-                tag.value = $t(`contributions.filters.paymentMethod.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
             }
 
             if (tag.title === "status") {
-                tag.value = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.chargeStatus.options.${tag.value}`);
             }
 
             if (tag.title === "money.amount[gte]")
-                tag.value = $t(`contributions.filters.rangeAmount.options.${tag.value}`);
+                tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
         });
 
         return tags;

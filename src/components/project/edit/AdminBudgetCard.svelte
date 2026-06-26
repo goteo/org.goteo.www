@@ -1,25 +1,30 @@
 <script lang="ts">
     import BudgetModal from "./BudgetModal.svelte";
     import CreateCard from "./CreateCard.svelte";
+    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
         addBudgetItem,
         deleteBudgetItem,
         updateBudgetItem,
         validationErrors,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
-    import type { ProjectBudgetItem } from "../../../openapi/client";
+    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
 
     let {
+        project,
         item,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
+        project: Project;
         item: ProjectBudgetItem | null;
         index?: number;
         loading: boolean;
@@ -27,16 +32,22 @@
     } = $props();
 
     let openModal = $state(false);
+    let openDeleteModal = $state(false);
     let showModalErrorToast = $state(false);
 
     function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
         if (!data) return;
+        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
+        const budgetItem = {
+            ...data,
+            project: item?.project ?? projectIri,
+        };
         let errors;
 
         if (index !== undefined) {
-            errors = updateBudgetItem(index, data);
+            errors = updateBudgetItem(index, budgetItem, item?.deadline);
         } else {
-            errors = addBudgetItem(data);
+            errors = addBudgetItem(budgetItem);
         }
 
         if (errors === undefined) {
@@ -58,6 +69,7 @@
 
         deleteBudgetItem(index, deadline);
         openModal = false;
+        openDeleteModal = false;
         validationErrors.set({});
     }
 </script>
@@ -67,6 +79,7 @@
         title={$t("pages.project.edit.budget.add.title")}
         description={$t("pages.project.edit.budget.add.description")}
         variant="budget"
+        {project}
         onSave={handleSaveBudgetItem}
         onclick={() => (openModal = true)}
         bind:open={openModal}
@@ -74,8 +87,16 @@
     />
 {:else if item}
     <div
-        class="border-grey flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
+        class="border-grey relative flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
     >
+        <button
+            type="button"
+            aria-label={$t("common.delete")}
+            class="text-secondary absolute top-6 right-6 cursor-pointer transition-transform hover:scale-110"
+            onclick={() => (openDeleteModal = true)}
+        >
+            <Close class="size-5" />
+        </button>
         <div class="flex flex-col gap-4">
             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
             <p class="text-content line-clamp-3 font-normal">
@@ -108,6 +129,11 @@
             bind:open={openModal}
             onSave={handleSaveBudgetItem}
             onDelete={handleDeleteBudgetItem}
+        />
+        <DeleteModal
+            variant="budget"
+            bind:open={openDeleteModal}
+            onclick={() => handleDeleteBudgetItem(item.deadline)}
         />
     </div>
 {/if}

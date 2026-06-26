@@ -46,21 +46,21 @@
             <!-- Main central image -->
             <div
                 class="absolute top-1/2 left-1/2 h-50 w-70 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-cover bg-center bg-no-repeat shadow-lg md:h-75 md:w-100 lg:h-109 lg:w-109"
-                style="background-image: url('/imgs/stories-main.png')"
+                style="background-image: url('/images/home/stories-main.png')"
                 aria-label="Goteo community members"
             ></div>
 
             <!-- Top right smaller image -->
             <div
                 class="absolute top-4 right-4 h-20 w-30 rounded-2xl bg-cover bg-center bg-no-repeat shadow-md md:h-30 md:w-45 lg:top-[calc(50%-115px)] lg:right-8 lg:h-51.5 lg:w-74.75"
-                style="background-image: url('/imgs/stories-team-rebranding.png')"
+                style="background-image: url('/images/home/stories-team-rebranding.png')"
                 aria-label="Team collaboration on rebranding"
             ></div>
 
             <!-- Bottom right smaller image -->
             <div
                 class="absolute right-4 bottom-4 h-20 w-30 rounded-2xl bg-cover bg-center bg-no-repeat shadow-md md:h-30 md:w-45 lg:top-[calc(50%+115px)] lg:right-8 lg:h-51.5 lg:w-74.75"
-                style="background-image: url('/imgs/stories-office-workspace.png')"
+                style="background-image: url('/images/home/stories-office-workspace.png')"
                 aria-label="Creative workspace"
             ></div>
         </div>

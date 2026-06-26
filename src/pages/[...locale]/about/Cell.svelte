@@ -1,7 +1,7 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import Arrow from "../../../components/icons/Arrow.svelte";
+    import Arrow from "../../../components/icons/navigation/Arrow.svelte";
 
     import type { Snippet } from "svelte";
 

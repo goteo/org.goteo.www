@@ -1,33 +1,39 @@
 <script lang="ts">
     import CollabsModal from "./CollabsModal.svelte";
     import CreateCard from "./CreateCard.svelte";
+    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import {
         addCollaboration,
         deleteCollaboration,
         updateCollaboration,
         validationErrors,
-        type WizardCollaboration,
-    } from "../../../stores/wizard-state";
+    } from "../../../stores/drafts/projectDraft";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
-    import Button from "../../library/Button.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+
+    import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
     let {
+        project,
         collab,
         index,
         loading = $bindable(false),
         isCreateCard = false,
     }: {
-        collab: WizardCollaboration | null;
+        project: Project;
+        collab: ProjectCollaboration | null;
         index?: number;
         loading: boolean;
         isCreateCard?: boolean;
     } = $props();
 
     let openModal = $state(false);
+    let openDeleteModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    function handleSaveCollab(data: WizardCollaboration | null) {
+    function handleSaveCollab(data: ProjectCollaboration | null) {
         if (!data) return;
         let errors;
 
@@ -56,12 +62,14 @@
 
         deleteCollaboration(index);
         openModal = false;
+        openDeleteModal = false;
         validationErrors.set({});
     }
 </script>
 
 {#if isCreateCard}
     <CreateCard
+        {project}
         title={$t("pages.project.edit.collaborations.add.title")}
         description={$t("pages.project.edit.collaborations.add.description")}
         variant="collab"
@@ -72,8 +80,16 @@
     />
 {:else if collab}
     <div
-        class="border-grey flex basis-1/3 flex-col justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
+        class="border-grey relative flex basis-1/3 flex-col justify-between gap-2 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A] md:gap-4"
     >
+        <button
+            type="button"
+            aria-label={$t("common.delete")}
+            class="text-secondary absolute top-6 right-6 cursor-pointer transition-transform hover:scale-110"
+            onclick={() => (openDeleteModal = true)}
+        >
+            <Close class="size-5" />
+        </button>
         <div class="flex flex-col">
             <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
                 {collab.title}
@@ -95,9 +111,15 @@
         <CollabsModal
             bind:open={openModal}
             bind:showToast={showModalErrorToast}
+            {project}
             {collab}
             onSave={handleSaveCollab}
             onDelete={handleDeleteCollab}
+        />
+        <DeleteModal
+            variant="collaborations"
+            bind:open={openDeleteModal}
+            onclick={handleDeleteCollab}
         />
     </div>
 {/if}
