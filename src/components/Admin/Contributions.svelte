@@ -9,6 +9,8 @@
     import Table, { type ExtendedCharge } from "./Table.svelte";
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
+    import { isEnabled, tipjarId } from "../../utils/tipping";
     import {
         apiAccountingsIdGet,
         apiGatewayChargesGetCollection,
@@ -57,6 +59,24 @@
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
     let selectedSort = $state("date-desc");
+    let totalTips = $state<string>("—");
+
+    async function loadTotalTips() {
+        if (!isEnabled || !$session) return;
+        const headers = $session.token.asHttpHeaders;
+
+        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
+        const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
+        if (!accountingId) return;
+
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: accountingId },
+            headers,
+        });
+        if (accounting?.balance) {
+            totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
+        }
+    }
 
     function buildChargesQuery(
         filters: ApiGatewayChargesGetCollectionData["query"],
@@ -343,6 +363,13 @@
         reloadCharges();
     });
 
+    let chargeSlides = $derived([
+        { title: $t("admin.charges.totalizers.selected"), amount: $totalItems },
+        { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+    ]);
+
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
@@ -364,6 +391,8 @@
                 return parseMin(a) - parseMin(b);
             },
         );
+
+        loadTotalTips();
     });
 </script>
 
@@ -386,7 +415,7 @@
             <ExportCsv {filters} />
         </div>
         <Categories {paymentMethodOptions} />
-        <Slider />
+        <Slider slides={chargeSlides} isLoading={$isLoading} />
     </div>
 </div>
 <Table
