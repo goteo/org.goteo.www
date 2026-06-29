@@ -2,6 +2,7 @@ import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
 import { passwordGrant } from "../auth/grant.ts";
+import { buildSession, setSession } from "../auth/session.ts";
 import {
     apiUsersPost,
     apiUsersIdpersonPatch,
@@ -65,9 +66,7 @@ export const register = defineAction({
             if (input.type === "individual") {
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${auth.access_token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         taxId: dni ?? "",
                         firstName: firstname,
@@ -77,9 +76,7 @@ export const register = defineAction({
             } else {
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${auth.access_token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         firstName: firstname,
                         lastName: lastname,
@@ -88,15 +85,16 @@ export const register = defineAction({
 
                 await apiUsersIdorganizationPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${auth.access_token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         taxId: cif ?? "",
                         legalName: razonSocial ?? "",
                     },
                 });
             }
+
+            const session = await buildSession(auth);
+            setSession(context.cookies, session);
 
             return { success: true };
         } catch (error) {
