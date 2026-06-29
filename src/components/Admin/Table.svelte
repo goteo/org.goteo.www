@@ -17,10 +17,10 @@
     } from "../../../src/openapi/client/paths.gen";
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
-    import Loader from "../../svgs/Loader.svelte";
     import { formatCurrency } from "../../utils/currencies";
-    import Chevron from "../icons/Chevron.svelte";
-    import Tag from "../library/Tag.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
+    import Loader from "../library/feedback/Loader.svelte";
+    import Tag from "../library/tags/Tag.svelte";
 
     import type {
         Accounting,

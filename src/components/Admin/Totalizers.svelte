@@ -1,7 +1,7 @@
 <script lang="ts">
     import TotalizerCard from "./TotalizerCard.svelte";
     import { t } from "../../i18n/store";
-    import Grid from "../library/Grid.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     let {
         selectedCampaigns,

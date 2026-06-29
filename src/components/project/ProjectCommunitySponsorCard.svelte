@@ -9,7 +9,7 @@
         item,
         onclick,
     }: {
-        item: ProjectSupport & { displayName: string; avatar: string | undefined };
+        item: ProjectSupport;
         onclick?: () => void;
     } = $props();
 </script>
@@ -19,9 +19,9 @@
     {onclick}
 >
     <div class="flex w-full flex-row items-center justify-between gap-4">
-        {#if item.avatar}
+        {#if item.displayImage}
             <img
-                src={item.avatar}
+                src={item.displayImage}
                 alt={item.displayName}
                 class="h-16 w-16 shrink-0 rounded-xl object-cover"
             />

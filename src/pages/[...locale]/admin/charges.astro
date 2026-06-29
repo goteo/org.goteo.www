@@ -1,8 +1,8 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import App from "../../../components/App.svelte";
-const { t, lang, session } = Astro.locals;
+import App from "../../../layouts/App.svelte";
 import Contributions from "../../../components/Admin/Contributions.svelte";
+const { t, lang, session } = Astro.locals;
 ---
 
 <Layout title={t("pages.admin.charges.title")} description={t("metadata.description")}>

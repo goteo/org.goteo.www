@@ -4,9 +4,9 @@
         apiGatewayChargesGetCollection,
         type ApiGatewayChargesGetCollectionData,
     } from "../../openapi/client";
-    import Download from "../icons/Download.svelte";
-    import Spinner from "../icons/Spinner.svelte";
-    import Button from "../library/Button.svelte";
+    import Download from "../icons/actions/Download.svelte";
+    import Spinner from "../icons/status/Spinner.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     let { filters } = $props<{
         filters?: ApiGatewayChargesGetCollectionData["query"];
@@ -109,7 +109,10 @@
             }
 
             if (allData.length === 0) {
-                alert($t("pages.admin.charges.export.noData") || "No se encontraron datos para exportar");
+                alert(
+                    $t("pages.admin.charges.export.noData") ||
+                        "No se encontraron datos para exportar",
+                );
                 return;
             }
 

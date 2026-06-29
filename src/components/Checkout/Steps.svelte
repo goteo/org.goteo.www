@@ -1,5 +1,5 @@
 <script lang="ts">
-    import WarningIcon from "../../components/icons/Warning.svelte";
+    import WarningIcon from "../../components/icons/status/Warning.svelte";
     import { t } from "../../i18n/store";
 
     export let step = 1;

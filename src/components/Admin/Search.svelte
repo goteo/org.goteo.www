@@ -6,8 +6,8 @@
         apiUsersGetCollection,
     } from "../../openapi/client";
     import { highlightMatch } from "../../utils/highlights";
-    import CloseIcon from "../icons/Close.svelte";
-    import SearchIcon from "../icons/Search.svelte";
+    import SearchIcon from "../icons/actions/Search.svelte";
+    import CloseIcon from "../icons/navigation/Close.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
@@ -200,8 +200,8 @@
                                         )}
                                     </div>
                                     <div class="mt-1 text-sm text-gray-500 italic">
-                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item
-                                            .data.id}
+                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item.data
+                                            .id}
                                     </div>
                                 </button>
                             {/each}
@@ -242,7 +242,9 @@
                     </div>
                 {/if}
             {:else}
-                <p class="text-sm text-gray-400">{$t("pages.admin.charges.filters.search.noResults")}</p>
+                <p class="text-sm text-gray-400">
+                    {$t("pages.admin.charges.filters.search.noResults")}
+                </p>
             {/if}
         </div>
     {/if}
