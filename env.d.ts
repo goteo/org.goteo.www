@@ -1,4 +1,5 @@
 /// <reference types="astro/client" />
+/// <reference types="@cloudflare/workers-types" />
 
 declare namespace App {
     interface Locals {
@@ -23,5 +24,13 @@ declare namespace App {
          * The detected session.
          */
         session: import("./src/auth/types").Session | undefined;
+
+        /**
+         * Cloudflare runtime bindings, including D1.
+         * Available in server mode thanks to `@astrojs/cloudflare`.
+         */
+        runtime: import("@astrojs/cloudflare").AdvancedRuntime<{
+            DB: D1Database;
+        }>;
     }
 }

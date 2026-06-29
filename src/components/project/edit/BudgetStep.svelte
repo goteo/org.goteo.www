@@ -9,9 +9,9 @@
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
-    import Toast from "../../library/Toast.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
+    import Grid from "../../library/layout/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {

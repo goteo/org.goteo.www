@@ -1,13 +1,13 @@
 <script lang="ts">
     import CampaignCard from "../../../../components/home/CampaignCard.svelte";
     import DefaultAvatar from "../../../../components/icons/DefaultAvatar.svelte";
-    import Grid from "../../../../components/library/Grid.svelte";
-    import ShareButton from "../../../../components/library/Share/ShareButton.svelte";
+    import Grid from "../../../../components/library/layout/Grid.svelte";
+    import Tabs from "../../../../components/library/layout/Tabs.svelte";
+    import ShareButton from "../../../../components/library/share/ShareButton.svelte";
     import ProfileDonorType from "../../../../components/profile/ProfileDonorType.svelte";
     import ProfileInfo from "../../../../components/profile/ProfileInfo.svelte";
-    import Tabs from "../../../../components/Tabs.svelte";
+    import VerifiedBadge from "../../../../components/profile/VerifiedBadge.svelte";
     import { t } from "../../../../i18n/store";
-    import VerifiedBadge from "../../../../svgs/VerifiedBadge.svelte";
     import { getDefaultCurrency } from "../../../../utils/consts";
     import { renderMarkdown } from "../../../../utils/renderMarkdown";
 

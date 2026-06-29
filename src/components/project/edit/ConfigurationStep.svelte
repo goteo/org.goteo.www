@@ -16,7 +16,7 @@
         navigateToStep,
         updateConfiguration,
     } from "../../../stores/drafts/projectDraft";
-    import Button from "../../library/Button.svelte";
+    import Button from "../../library/buttons/Button.svelte";
 
     interface ConfigurationStepProps {
         onContinue?: () => void;
