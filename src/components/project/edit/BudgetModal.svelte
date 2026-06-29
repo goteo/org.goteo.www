@@ -4,7 +4,7 @@
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import { defaultCurrency } from "../../../utils/currencies";
+    import { defaultCurrency, getUnit } from "../../../utils/currencies";
     import Button from "../../library/Button.svelte";
     import Toast from "../../library/Toast.svelte";
 
@@ -29,7 +29,9 @@
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         budgetItem?.type,
     );
-    let amount = $state(budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0);
+    let amount = $state(
+        budgetItem?.money.amount ? budgetItem.money.amount / getUnit(budgetItem.money.currency) : 0,
+    );
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(budgetItem?.deadline);
     let selectedBudgetDescription = $state(budgetItem?.description ?? "");
 
@@ -39,7 +41,9 @@
         if (open) {
             selectedBudgetTitle = budgetItem?.title ?? "";
             selectedBudgetType = budgetItem?.type;
-            amount = budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0;
+            amount = budgetItem?.money.amount
+                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
+                : 0;
             selectedBudgetDeadline = budgetItem?.deadline;
             selectedBudgetDescription = budgetItem?.description ?? "";
         }
@@ -54,7 +58,7 @@
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,
             money: {
-                amount: amount * 100,
+                amount: amount * getUnit(defaultCurrency()),
                 currency: defaultCurrency(),
             },
             type: selectedBudgetType!,
