@@ -6,8 +6,9 @@
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
+    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
 
-    type Filters = Record<string, any>;
+    type Filters = ApiGatewayChargesGetCollectionData["query"];
 
     let { title, filters, onCloseFilter } = $props<{
         title: string;
