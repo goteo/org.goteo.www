@@ -7,7 +7,7 @@
 
     import type { Locale } from "../../i18n/locales";
 
-    type Filters = Record<string, any>;
+    type Filters = Record<string, unknown>;
 
     let { title, filters, onCloseFilter } = $props<{
         title: string;

@@ -18,8 +18,11 @@
     import { toCollectionItems } from "../../utils/hydra";
     import { extractId } from "../../utils/extractId";
     import { formatCurrency } from "../../utils/currencies";
+    import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
-    let filters: Record<string, unknown> = $state({});
+    type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
+
+    let filters: ProjectsQuery = $state({});
     let selectedSort = $state("date-desc");
     let searchValue = $state("");
 
@@ -41,20 +44,18 @@
         { title: $t("admin.projects.totalizers.totalUnpaid"), amount: "—" },
     ]);
 
-    const sortMap: Record<string, { field: string; direction: "asc" | "desc" }> = {
+    const sortMap: Record<string, { field: "dateCreated" | "dateUpdated"; direction: "asc" | "desc" }> = {
         "date-desc": { field: "dateCreated", direction: "desc" },
         "date-asc": { field: "dateCreated", direction: "asc" },
-        "title-asc": { field: "title", direction: "asc" },
-        "title-desc": { field: "title", direction: "desc" },
     };
 
     function buildProjectsQuery(
-        filters: Record<string, unknown>,
+        filters: ProjectsQuery,
         page: number,
         perPage: number,
         sort: string,
-    ): Record<string, unknown> {
-        const query: Record<string, unknown> = {
+    ): ProjectsQuery {
+        const query: ProjectsQuery = {
             page,
             itemsPerPage: perPage,
             ...filters,
@@ -235,13 +236,13 @@
         }
     }
 
-    function handleApplyFilters(newFilters: Record<string, unknown>): void {
+    function handleApplyFilters(newFilters: ProjectsQuery): void {
         filters = { ...filters, ...newFilters };
         currentPage = 1;
         reloadProjects();
     }
 
-    function handleCloseFilter(newFilters: Record<string, unknown>): void {
+    function handleCloseFilter(newFilters: ProjectsQuery): void {
         filters = { ...newFilters };
         currentPage = 1;
         reloadProjects();

@@ -3,10 +3,13 @@
     import FiltersIcon from "../icons/Filters.svelte";
     import Button from "../library/Button.svelte";
     import Search from "../library/Search.svelte";
+    import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
+
+    type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
 
     let { onSearch, onApplyFilters } = $props<{
         onSearch?: (value: string) => void;
-        onApplyFilters?: (filters: Record<string, string>) => void;
+        onApplyFilters?: (filters: ProjectsQuery) => void;
     }>();
 
     let showFilters = $state(false);
