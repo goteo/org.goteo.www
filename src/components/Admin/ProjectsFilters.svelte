@@ -17,19 +17,42 @@
     let dateFrom = $state("");
     let dateTo = $state("");
 
+    const CAMPAIGN_STATUS_MAP: Record<string, string[]> = {
+        active: ["in_campaign"],
+        completed: ["funding.paid"],
+        failed: ["campaign.failed"],
+    };
+
     function handleSearch() {
         if (searchError) return;
         onSearch?.(searchValue);
     }
 
+    function normalizeStatus(value: string): string {
+        return value.replace(/_/g, ".");
+    }
+
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
-        const filters: Record<string, string> = {};
+        const filters: ProjectsQuery = {};
+        const statusValues: string[] = [];
 
-        if (campaignStatus) filters["status"] = campaignStatus;
-        if (projectStatus) filters["status"] = projectStatus;
-        if (dateFrom) filters["dateCreated[after]"] = dateFrom;
-        if (dateTo) filters["dateCreated[before]"] = dateTo;
+        if (campaignStatus) {
+            const mapped = CAMPAIGN_STATUS_MAP[campaignStatus];
+            if (mapped) statusValues.push(...mapped);
+        }
+        if (projectStatus) {
+            statusValues.push(normalizeStatus(projectStatus));
+        }
+
+        if (statusValues.length === 1) {
+            filters["status"] = statusValues[0];
+        } else if (statusValues.length > 1) {
+            filters["status[]"] = statusValues;
+        }
+
+        if (dateFrom) filters["dateCreated[after]"] = new Date(dateFrom).toISOString();
+        if (dateTo) filters["dateCreated[before]"] = new Date(dateTo).toISOString();
 
         onApplyFilters?.(filters);
     }
