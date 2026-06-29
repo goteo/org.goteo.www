@@ -13,7 +13,7 @@
         argTypes: {
             type: {
                 control: "select",
-                options: ["text", "email", "password", "tel", "url", "date", "number"],
+                options: ["text", "email", "password", "tel", "url", "number"],
             },
             disabled: { control: "boolean" },
             required: { control: "boolean" },

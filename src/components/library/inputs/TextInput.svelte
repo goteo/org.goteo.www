@@ -21,7 +21,7 @@
         id?: string;
         name?: string;
         placeholder?: string;
-        type?: "text" | "email" | "password" | "tel" | "url" | "date" | "number";
+        type?: "text" | "email" | "password" | "tel" | "url" | "number";
         required?: boolean;
         disabled?: boolean;
         class?: ClassNameValue;
