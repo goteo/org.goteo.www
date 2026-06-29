@@ -198,24 +198,26 @@
     }
 
     $effect(() => {
-        currentPage;
-        itemsPerPage;
-        selectedSort;
-        reloadProjects();
+        if (isFirstLoad) {
+            reloadProjects();
+        }
     });
 
     function handlePageChange(page: number): void {
         currentPage = page;
+        reloadProjects();
     }
 
     function handleItemsPerPageChange(perPage: number): void {
         itemsPerPage = perPage;
         currentPage = 1;
+        reloadProjects();
     }
 
     function handleSortChange(sort: string): void {
         selectedSort = sort;
         currentPage = 1;
+        reloadProjects();
     }
 
     function handleSearch(value: string): void {
@@ -278,7 +280,7 @@
             />
             <ProjectsExportCsv />
         </div>
-        <Slider slides={projectSlides} />
+        <Slider slides={projectSlides} isLoading={isLoading} />
     </div>
 </div>
 <ProjectsTable
