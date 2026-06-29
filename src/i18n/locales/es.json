@@ -136,6 +136,7 @@
       },
       "lastContributions": "Últimos aportes:",
       "totalizers": {
+        "selected": "Aportes seleccionados:",
         "totalCharges": "Total aportes:",
         "totalTips": "Total propinas:",
         "totalFees": "Comisiones totales:"
