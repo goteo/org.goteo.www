@@ -31,6 +31,11 @@
         "terms": {
           "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
         }
+      },
+      "errors": {
+        "summary": {
+          "title": "Corrige los siguientes errores:"
+        }
       }
     },
     "zod": {
@@ -142,6 +147,9 @@
         "medium": "Riesgo medio",
         "high": "Riesgo alto"
       }
+    },
+    "tipping": {
+      "title": "Deja una propina"
     }
   },
   "common": {
@@ -233,9 +241,34 @@
         "foundation": "Fundación",
         "name": "Platoniq"
       }
-    }
+    },
+    "saved": "Guardado"
   },
   "pages": {
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
+      "meta": {
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
+      }
+    },
+    "404": {
+      "title": "No queda ni gota de la página que estás buscando",
+      "subtitle": "Por favor, vuelve al inicio.",
+      "meta": {
+        "title": "Página no encontrada",
+        "description": "La página que buscas no existe o ha sido movida."
+      }
+    },
+    "500": {
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "_": "Contenido específico de páginas (/home, /search, /project/[id], etc.)",
     "home": {
       "banner": {
@@ -366,30 +399,6 @@
     },
     "index": {
       "title": "Goteo"
-    },
-    "403": {
-      "title": "No tienes permisos suficientes para continuar",
-      "subtitle": "Por favor, vuelve por donde has venido.",
-      "meta": {
-        "title": "Acceso prohibido",
-        "description": "Sin permisos suficientes."
-      }
-    },
-    "404": {
-      "title": "No queda ni gota de la página que estás buscando",
-      "subtitle": "Por favor, vuelve al inicio.",
-      "meta": {
-        "title": "Página no encontrada",
-        "description": "La página que buscas no existe o ha sido movida."
-      }
-    },
-    "500": {
-      "title": "Algo ha salido terriblemente mal",
-      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
-      "meta": {
-        "title": "Condición inesperada para la solicitud",
-        "description": "Error interno del servidor."
-      }
     },
     "checkout": {
       "metadata": {
@@ -539,7 +548,19 @@
             "option1": "1 Ronda",
             "option2": "2 Rondas"
           },
-          "continue": "Continuar con info de campaña"
+          "continue": "Continuar con info de campaña",
+          "geography": {
+            "scopeLabel": "Ámbito de actuación",
+            "scopePlaceholder": "Selecciona el ámbito",
+            "options": {
+              "local": "Local",
+              "estatal": "Estatal",
+              "internacional": "Internacional"
+            },
+            "localitiesLabel": "Localidades",
+            "localitiesPlaceholder": "Selecciona las localidades",
+            "localitiesHelper": "Indica las localidades donde se desarrolla el proyecto"
+          }
         },
         "campaignInfo": {
           "title": "Información de campaña",
@@ -548,7 +569,18 @@
             "title": "Imágen y vídeo de presentación",
             "description": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
             "addImage": "Añadir imagen",
-            "addVideo": "Añadir vídeo"
+            "addVideo": "Añadir vídeo",
+            "uploading": "Subiendo…",
+            "processing": "Procesando…",
+            "maxImagesReached": "Has alcanzado el máximo de imágenes",
+            "removeVideo": "Eliminar vídeo",
+            "videoPlaceholder": "Pega aquí la URL del vídeo",
+            "validation": {
+              "image_too_large": "La imagen supera el tamaño máximo permitido",
+              "invalid_image": "Formato de imagen no válido",
+              "max_images": "Número máximo de imágenes alcanzado",
+              "upload_failed": "Error al subir el archivo"
+            }
           },
           "goals": {
             "title": "Objetivos y propósito de tu campaña",
@@ -566,7 +598,12 @@
             "title": "¿Con qué equipo cuentas?",
             "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
           },
-          "continue": "Continuar con recompensas"
+          "continue": "Continuar con recompensas",
+          "video": {
+            "validation": {
+              "invalid_url": "La URL del vídeo no es válida"
+            }
+          }
         },
         "rewards": {
           "title": "Recompensas",
@@ -708,6 +745,17 @@
             "ibanInvalid": "El formato del IBAN no es válido"
           },
           "continue": "Siguiente paso"
+        },
+        "errors": {
+          "session": {
+            "title": "Sesión expirada"
+          },
+          "storage": {
+            "title": "Error de almacenamiento",
+            "save_failed": "No se pudieron guardar los cambios",
+            "quota_exceeded": "Almacenamiento local lleno",
+            "close": "Cerrar"
+          }
         }
       },
       "create": {
@@ -738,7 +786,9 @@
         "terms": {
           "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
         },
-        "submit": "Proponer campaña"
+        "submit": "Proponer campaña",
+        "submitting": "Enviando…",
+        "submitSuccess": "¡Campaña propuesta correctamente!"
       },
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
@@ -935,6 +985,9 @@
       "btns": {
         "seeChat": "Ver conversación",
         "changeRisk": "Cambiar riesgo"
+      },
+      "chat": {
+        "placeholder": "Escribe un mensaje…"
       }
     },
     "search": {
