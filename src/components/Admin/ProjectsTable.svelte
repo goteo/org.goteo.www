@@ -32,6 +32,7 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
+    import Loader from "../../svgs/Loader.svelte";
     import Pagination from "./Pagination.svelte";
     import ProjectsDetailsRow from "./ProjectsDetailsRow.svelte";
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
@@ -199,7 +200,7 @@
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length}>
                             <div class="flex justify-center py-6">
-                                <span class="text-content">{$t("system.loading")}</span>
+                                <Loader />
                             </div>
                         </TableBodyCell>
                     </TableBodyRow>
@@ -300,7 +301,7 @@
                         <TableBodyRow>
                             <TableBodyCell colspan={tableHeaders.length}>
                                 <div class="flex justify-center py-4">
-                                    <span class="text-content">{$t("system.loading")}</span>
+                                    <Loader />
                                 </div>
                             </TableBodyCell>
                         </TableBodyRow>
