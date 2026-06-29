@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
+    import { t, locale } from "../../i18n/store";
     import Comments from "../icons/Comments.svelte";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
@@ -9,6 +9,12 @@
         onOpenAnnotationsModal: () => void;
         onChangeStatus?: (projectId: number) => void;
     }>();
+
+    function navigateToCharges() {
+        const name = project.name;
+        if (!name) return;
+        window.location.href = `/${$locale}/admin/charges?search=${encodeURIComponent(name)}`;
+    }
 </script>
 
 <div class="flex flex-col gap-6 px-8 py-6">
@@ -62,6 +68,7 @@
                 class="border-secondary text-secondary cursor-pointer rounded-full border bg-white px-5 py-2 text-sm"
                 onclick={() => {
                     if (key === "changeStatus") onChangeStatus?.(project.id);
+                    if (key === "contributions") navigateToCharges();
                 }}
             >
                 {$t(`admin.projects.table.rows.details.btns.${key}`)}

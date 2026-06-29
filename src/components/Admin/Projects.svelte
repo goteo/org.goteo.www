@@ -177,6 +177,7 @@
                     remaining: "—",
                     annotationsCount: 0,
                     annotations: "",
+                    accounting: project.accounting ?? "",
                 };
             });
         } finally {

@@ -21,14 +21,23 @@
         member: T[];
     };
 
-    let { onSelectTarget } = $props<{ onSelectTarget: (accounting: string) => void }>();
+    let {
+        onSelectTarget,
+        initialQuery = "",
+    }: { onSelectTarget: (accounting: string) => void; initialQuery?: string } = $props();
 
-    let query = $state("");
+    let query = $state(initialQuery);
     let results = $state<ResultItem[]>([]);
     let totalItems = $state(0);
     let searched = $state(false);
 
     let debounceTimeout: ReturnType<typeof setTimeout>;
+
+    $effect(() => {
+        if (initialQuery && initialQuery.length >= 4) {
+            fetchResults(initialQuery);
+        }
+    });
 
     async function fetchResults(text: string) {
         const trimmed = text.trim();

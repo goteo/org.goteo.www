@@ -25,6 +25,7 @@
         type Tipjar,
         type User,
     } from "../../openapi/client/index.ts";
+    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
@@ -40,7 +41,12 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
 
+    const initialSearchQuery = typeof window !== "undefined"
+        ? new URLSearchParams(window.location.search).get("search") ?? undefined
+        : undefined;
+
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
+    let pendingSearch = $state(!!initialSearchQuery);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
@@ -300,6 +306,28 @@
         filters = { ...filters, ...newFilters };
     }
 
+    $effect(() => {
+        if (!pendingSearch) return;
+        if (!initialSearchQuery || initialSearchQuery.length < 4) {
+            pendingSearch = false;
+            return;
+        }
+
+        const doResolve = async () => {
+            const { data } = await apiProjectsGetCollection({
+                query: { title: initialSearchQuery },
+                headers: { Accept: "application/ld+json" },
+            });
+            const projects = toCollectionItems<Project>(data);
+            const found = projects[0];
+            if (found?.accounting) {
+                filters = { target: found.accounting };
+            }
+            pendingSearch = false;
+        };
+        doResolve();
+    });
+
     const reloadCharges = async () => {
         charges = [];
         const chargesData = await loadCharges(filters);
@@ -311,6 +339,7 @@
     };
 
     $effect(() => {
+        if (pendingSearch) return;
         reloadCharges();
     });
 
@@ -344,6 +373,7 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
+        initialSearchQuery={initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">

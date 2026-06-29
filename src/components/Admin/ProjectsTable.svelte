@@ -18,6 +18,7 @@
         remaining: string;
         annotationsCount: number;
         annotations: string;
+        accounting: string;
     };
 </script>
 
