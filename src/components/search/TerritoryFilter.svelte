@@ -18,9 +18,64 @@
         subLvl2: string[];
     };
 
-    let { onTerritoryChange }: { onTerritoryChange: (value: Territories) => void } = $props();
+    let {
+        onTerritoryChange,
+        selectedTerritory,
+    }: {
+        onTerritoryChange: (value: Territories) => void;
+        selectedTerritory?: Territories;
+    } = $props();
+
+    let hydrated = false;
+    let lastIncoming = "";
 
     $effect(() => {
+        const incoming = selectedTerritory;
+
+        if (!incoming) return;
+
+        const signature = [
+            ...(incoming.countries || []),
+            ...(incoming.subLvl1 || []),
+            ...(incoming.subLvl2 || []),
+        ]
+            .filter(Boolean)
+            .sort()
+            .join("|");
+
+        if (hydrated && signature === lastIncoming) return;
+
+        lastIncoming = signature;
+        hydrated = true;
+
+        const all = [
+            ...(incoming.countries || []),
+            ...(incoming.subLvl1 || []),
+            ...(incoming.subLvl2 || []),
+        ];
+
+        if (all.length === 0) {
+            selected = [];
+            return;
+        }
+
+        (async () => {
+            const results = await Promise.all(
+                all.map((code) => searchPlace(code, 1).then((r) => r?.[0])),
+            );
+
+            const mapped = results.filter(Boolean).map((result) => ({
+                id: result.osm_id.toString(),
+                label: result.display_name,
+                selected: true,
+                result,
+            }));
+
+            selected = mapped;
+        })();
+    });
+
+    function handleChange() {
         const countries = new Set<string>();
         const subLvl1 = new Set<string>();
         const subLvl2 = new Set<string>();
@@ -59,7 +114,7 @@
             subLvl1: [...subLvl1],
             subLvl2: [...subLvl2],
         });
-    });
+    }
 
     async function handleSearch(value: string) {
         if (!value) {
@@ -110,4 +165,5 @@
     variant="multiselect"
     hasSearch
     onSearch={searchHandler}
+    onChange={handleChange}
 />
