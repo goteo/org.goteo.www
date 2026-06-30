@@ -1,0 +1,7 @@
+packages:
+    - .
+
+allowBuilds:
+    cypress: true
+    esbuild: true
+    workerd: true

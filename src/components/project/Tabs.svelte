@@ -6,8 +6,8 @@
     import ProjectRewards from "./ProjectRewards.svelte";
     import ProjectUpdate from "./ProjectUpdate.svelte";
     import { t } from "../../i18n/store";
-    import ArrowSliderIcon from "../../svgs/ArrowSliderIcon.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
+    import ArrowSliderIcon from "../icons/navigation/ArrowSliderIcon.svelte";
 
     import type { Project, Accounting } from "../../openapi/client/index";
 

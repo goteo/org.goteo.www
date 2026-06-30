@@ -13,7 +13,7 @@ Implements active/inactive pill states matching Figma design
         type Category,
     } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
-    import CategorySelect from "../library/CategorySelect.svelte";
+    import CategorySelect from "../library/inputs/CategorySelect.svelte";
 
     interface Props {
         selectedCategories?: string[];

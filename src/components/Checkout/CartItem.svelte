@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
-    import MoreAndLess from "../icons/MoreAndLess.svelte";
+    import MoreAndLess from "../icons/filters/MoreAndLess.svelte";
 
     import type { CartItem } from "../../stores/cart";
 
