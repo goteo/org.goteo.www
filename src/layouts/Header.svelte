@@ -2,7 +2,7 @@
     import { clickOutside } from "flowbite-svelte";
 
     import { session } from "../auth/store";
-    import CartButton from "../components/Checkout/CartButton.svelte";
+    import CartButton from "../components/checkout/CartButton.svelte";
     import HeaderButtons from "../components/header/HeaderButtons.svelte";
     import UiLanguages from "../components/header/UiLanguages.svelte";
     import Logo from "../components/icons/Logo.svelte";
