@@ -4,8 +4,6 @@ Interactive category selection using existing categories from utils/categories.t
 Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
-
     import { locale, t } from "../../i18n/store";
     import {
         apiCategoriesGetCollection,

@@ -32,21 +32,25 @@
 
             const iso3166_2 = Object.entries(address)
                 .filter(([key]) => key.startsWith("ISO3166-2-"))
+                .sort()
                 .map(([, value]) => value);
 
             const lvl1 = iso3166_2[0];
             const lvl2 = iso3166_2[1];
 
-            if (country) {
-                countries.add(country);
+            if (lvl2) {
+                subLvl2.add(lvl2);
+                continue;
             }
 
             if (lvl1) {
                 subLvl1.add(lvl1);
+                continue;
             }
 
-            if (lvl2) {
-                subLvl2.add(lvl2);
+            if (country) {
+                countries.add(country);
+                continue;
             }
         }
 

@@ -118,6 +118,11 @@ Integrated with searchStore for state management and URL synchronization
                 data-testid="status-filter"
             />
             <TerritoryFilter
+                selectedTerritory={{
+                    countries: $searchFilters["territory.country[]"] || [],
+                    subLvl1: $searchFilters["territory.subLvl1[]"] || [],
+                    subLvl2: $searchFilters["territory.subLvl2[]"] || [],
+                }}
                 onTerritoryChange={(territories) =>
                     updateFilters({
                         "territory.country[]": territories.countries,

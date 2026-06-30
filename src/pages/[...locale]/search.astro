@@ -11,20 +11,27 @@ const { t, lang, session } = Astro.locals;
 // Initial projects will be fetched client-side to avoid blocking SSR
 const initialProjects: Project[] = [];
 
-// Parse URL search parameters for SSR
+function parseFilters(searchParams: URLSearchParams) {
+    const filters: Record<string, string | string[]> = {};
+
+    for (const [key] of searchParams.entries()) {
+        const values = searchParams.getAll(key);
+
+        if (values.length > 1 || key.endsWith("[]")) {
+            filters[key] = values;
+        } else {
+            filters[key] = values[0];
+        }
+    }
+
+    return filters;
+}
+
 const url = new URL(Astro.request.url);
-const initialFilters = {
-    title: url.searchParams.get("title") || "",
-    status: url.searchParams.get("status") || "",
-    "categories[]": url.searchParams.getAll("categories[]") || [],
-};
+const initialFilters = parseFilters(url.searchParams);
 
 // Check if URL has search parameters
-const hasInitialSearch = !!(
-    initialFilters.title ||
-    initialFilters.status ||
-    initialFilters["categories[]"].length > 0
-);
+const hasInitialSearch = Object.entries(initialFilters).length > 0;
 ---
 
 <Layout title={t("pages.search.title")} description={t("pages.search.description")}>
