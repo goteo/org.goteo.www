@@ -36,12 +36,22 @@
         isOpen = true,
     }: Props = $props();
 
-    const visibleOptions = $derived.by(() => {
-        const ids = new Set(options.map((o) => o.id));
+    const renderedItems = $derived.by(() => {
+        const selectedIds = new Set(selected.map((s) => s.id));
 
-        return [...selected.filter((s) => !ids.has(s.id)), ...options].map((o, index, arr) => {
-            return { ...o, position: getPosition(index, arr.length) };
-        });
+        const merged: DropdownOption[] = [...options];
+
+        for (const item of selected) {
+            if (!merged.some((option) => option.id === item.id)) {
+                merged.push(item);
+            }
+        }
+
+        return merged.map((item, index, arr) => ({
+            ...item,
+            selected: selectedIds.has(item.id),
+            position: getPosition(index, arr.length),
+        }));
     });
 
     function getPosition(index: number, length: number): "start" | "middle" | "end" {
@@ -78,7 +88,7 @@
         </div>
     {/if}
     {#if isOpen}
-        {#each visibleOptions as item}
+        {#each renderedItems as item}
             <DropdownItem
                 {variant}
                 option={item}
