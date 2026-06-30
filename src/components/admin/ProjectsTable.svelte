@@ -35,8 +35,8 @@
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import { t } from "../../i18n/store";
-    import Chevron from "../icons/Chevron.svelte";
-    import Edit from "../icons/Edit.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
+    import Edit from "../icons/actions/Edit.svelte";
 
     const tableHeaders = [
         "admin.projects.table.headers.name",

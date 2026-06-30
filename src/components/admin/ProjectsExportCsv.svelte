@@ -1,7 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import Download from "../icons/Download.svelte";
-    import Button from "../library/Button.svelte";
+    import Download from "../icons/actions/Download.svelte";
+    import Button from "../library/buttons/Button.svelte";
 </script>
 
 <Button size="sm" kind="secondary" aria-label={$t("admin.projects.export.csv")}>

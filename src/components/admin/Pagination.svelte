@@ -6,7 +6,7 @@
         totalItems as storeTotalItems,
         currentPage as storeCurrentPage,
     } from "../../stores/chargesPaginationAndSort";
-    import Chevron from "../icons/Chevron.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
     import PaginationFirst from "../icons/PaginationFirst.svelte";
     import PaginationLast from "../icons/PaginationLast.svelte";
 

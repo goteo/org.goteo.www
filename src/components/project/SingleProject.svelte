@@ -23,7 +23,7 @@
     import Toast from "../library/feedback/Toast.svelte";
     import Sharebutton from "../library/share/ShareButton.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
-    import Player from "../Player/Player.svelte";
+    import Player from "../player/Player.svelte";
 
     let {
         project,
