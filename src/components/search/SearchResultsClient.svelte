@@ -24,8 +24,8 @@ Manages real-time filtering of campaigns without page reloads
     import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
-    import Button from "../library/Button.svelte";
-    import Grid from "../library/Grid.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
     import type { Campaign } from "../../types/campaign";

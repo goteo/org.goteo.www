@@ -1,14 +1,14 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import App from "../../../components/App.svelte";
-import Summary from "../../../components/Checkout/Summary.svelte";
-import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
-import Steps from "../../../components/Checkout/Steps.svelte";
-import Button from "../../../components/library/Button.svelte";
-import BackButton from "../../../components/BackButton.svelte";
-import Card from "../../../components/library/Card.svelte";
+import App from "../../../layouts/App.svelte";
+import Button from "../../../components/library/buttons/Button.svelte";
+import BackButton from "../../../components/library/buttons/BackButton.svelte";
+import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
 import { apiAccountingsIdGet, apiGatewaysGetCollection } from "../../../openapi/client/index";
+import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
+import Summary from "../../../components/Checkout/Summary.svelte";
+import Steps from "../../../components/Checkout/Steps.svelte";
 
 const { t, lang, session } = Astro.locals;
 

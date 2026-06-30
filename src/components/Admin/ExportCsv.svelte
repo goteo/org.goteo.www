@@ -4,9 +4,9 @@
         apiGatewayChargesGetCollection,
         type ApiGatewayChargesGetCollectionData,
     } from "../../openapi/client";
-    import Download from "../icons/Download.svelte";
-    import Spinner from "../icons/Spinner.svelte";
-    import Button from "../library/Button.svelte";
+    import Download from "../icons/actions/Download.svelte";
+    import Spinner from "../icons/status/Spinner.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     let { filters } = $props<{
         filters?: ApiGatewayChargesGetCollectionData["query"];
@@ -109,7 +109,10 @@
             }
 
             if (allData.length === 0) {
-                alert($t("contributions.export.noData") || "No se encontraron datos para exportar");
+                alert(
+                    $t("pages.admin.charges.export.noData") ||
+                        "No se encontraron datos para exportar",
+                );
                 return;
             }
 
@@ -118,8 +121,8 @@
                 .map(([key, value]) => `${key}-${value}`)
                 .join("_");
 
-            const baseFilename = $t("contributions.export.filename") || "gateway-charges";
-            const itemsText = $t("contributions.export.itemsText") || "items";
+            const baseFilename = $t("pages.admin.charges.export.filename") || "gateway-charges";
+            const itemsText = $t("pages.admin.charges.export.itemsText") || "items";
             const filename = `${baseFilename}_${timestamp}${filterParts ? "_" + filterParts : ""}_${totalItems}${itemsText}.csv`;
 
             const headers = Object.keys(allData[0]);
@@ -159,7 +162,7 @@
             window.URL.revokeObjectURL(url);
         } catch (error) {
             console.error("Error exporting CSV:", error);
-            alert($t("contributions.export.error"));
+            alert($t("pages.admin.charges.export.error"));
         } finally {
             isExporting = false;
         }
@@ -171,17 +174,17 @@
     kind="secondary"
     onclick={handleExportCSV}
     disabled={isExporting}
-    aria-label={$t("contributions.export.csv")}
+    aria-label={$t("pages.admin.charges.export.csv")}
 >
     {#if isExporting}
         <Spinner width="16px" height="16px" class="text-secondary" />
         <span class="text-secondary font-bold">
-            {$t("contributions.export.exporting")}
+            {$t("pages.admin.charges.export.exporting")}
         </span>
     {:else}
         <Download width="16" height="16" class="text-secondary" />
         <span class="text-secondary font-bold">
-            {$t("contributions.export.csv")}
+            {$t("pages.admin.charges.export.csv")}
         </span>
     {/if}
 </Button>

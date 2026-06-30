@@ -10,9 +10,9 @@ Converted from CampaignCard.astro to maintain exact functionality
     import { t } from "../../i18n/store";
     import { client } from "../../openapi/client/client.gen";
     import { formatCurrency } from "../../utils/currencies";
-    import Flames from "../icons/Flames.svelte";
-    import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
-    import Tag from "../library/Tag.svelte";
+    import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
+    import Flames from "../icons/status/Flames.svelte";
+    import Tag from "../library/tags/Tag.svelte";
 
     import type { Accounting, Money } from "../../openapi/client";
     import type { Campaign, CampaignSize } from "../../types/campaign";

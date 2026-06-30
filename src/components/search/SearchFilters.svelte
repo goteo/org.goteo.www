@@ -14,7 +14,7 @@ Integrated with searchStore for state management and URL synchronization
     import TerritoryFilter from "./TerritoryFilter.svelte";
     import { t } from "../../i18n/store";
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
-    import FilterIcon from "../../svgs/FilterIcon.svelte";
+    import FilterIcon from "../icons/filters/FilterIcon.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;

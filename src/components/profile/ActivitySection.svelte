@@ -18,7 +18,7 @@
     import { projectCache } from "../../stores/projectCache";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import Grid from "../library/Grid.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     import type {
         ProjectSupport,
