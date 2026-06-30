@@ -117,7 +117,14 @@ Integrated with searchStore for state management and URL synchronization
                 onSelect={(value) => updateFilters({ status: value })}
                 data-testid="status-filter"
             />
-            <TerritoryFilter />
+            <TerritoryFilter
+                onTerritoryChange={(territories) =>
+                    updateFilters({
+                        "territory.country[]": territories.countries,
+                        "territory.subLvl1[]": territories.subLvl1,
+                        "territory.subLvl2[]": territories.subLvl2,
+                    })}
+            />
         </div>
 
         <!-- Category filters -->

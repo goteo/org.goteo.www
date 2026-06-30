@@ -12,8 +12,49 @@
     let options: TerritoryOption[] = $state([]);
     let selected: TerritoryOption[] = $state([]);
 
+    type Territories = {
+        countries: string[];
+        subLvl1: string[];
+        subLvl2: string[];
+    };
+
+    let { onTerritoryChange }: { onTerritoryChange: (value: Territories) => void } = $props();
+
     $effect(() => {
-        console.log("Selected territories:", selected);
+        const countries = new Set<string>();
+        const subLvl1 = new Set<string>();
+        const subLvl2 = new Set<string>();
+
+        for (const item of selected) {
+            const address = item.result.address ?? {};
+
+            const country = address.country_code?.toUpperCase();
+
+            const iso3166_2 = Object.entries(address)
+                .filter(([key]) => key.startsWith("ISO3166-2-"))
+                .map(([, value]) => value);
+
+            const lvl1 = iso3166_2[0];
+            const lvl2 = iso3166_2[1];
+
+            if (country) {
+                countries.add(country);
+            }
+
+            if (lvl1) {
+                subLvl1.add(lvl1);
+            }
+
+            if (lvl2) {
+                subLvl2.add(lvl2);
+            }
+        }
+
+        onTerritoryChange({
+            countries: [...countries],
+            subLvl1: [...subLvl1],
+            subLvl2: [...subLvl2],
+        });
     });
 
     async function handleSearch(value: string) {

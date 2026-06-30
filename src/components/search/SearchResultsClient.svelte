@@ -90,23 +90,7 @@ Manages real-time filtering of campaigns without page reloads
     function updateUrlWithoutNavigation() {
         if (typeof window === "undefined") return;
 
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams();
-
-        const filters = $searchFilters;
-
-        // Add search parameters to URL using API field names
-        if (filters.title) params.set("title", filters.title);
-        if (filters.status) params.set("status", filters.status);
-        if ((filters["categories[]"]?.length ?? 0) > 0) {
-            (filters["categories[]"] as string[]).forEach((cat) => {
-                params.append("categories[]", cat);
-            });
-        }
-
-        // Update URL using History API to avoid navigation
-        const newUrl = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
-        window.history.replaceState({}, "", newUrl);
+        searchStore.updateUrl();
     }
 
     // Clear all filters
