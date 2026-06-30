@@ -6,13 +6,13 @@
     import { t } from "../../../i18n/store";
     import SearchIcon from "../../icons/actions/Search.svelte";
 
-    import type { DropdownItemType, DropdownVariant } from "./dropdown.types";
+    import type { DropdownOption, DropdownVariant } from "./dropdown.types";
 
     interface Props {
         class?: ClassNameValue;
         variant: DropdownVariant;
-        items: DropdownItemType[];
-        selectedIds?: string[];
+        options: DropdownOption[];
+        selected?: DropdownOption[];
         hasSearch?: boolean;
         searchPlaceholder?: string;
         /**
@@ -26,8 +26,8 @@
     let {
         class: classes = undefined,
         variant,
-        items,
-        selectedIds = $bindable<string[]>([]),
+        options,
+        selected = $bindable([]),
         hasSearch = false,
         searchPlaceholder = $t("domain.search.bar.placeholder"),
         onSearch = undefined,
@@ -35,7 +35,7 @@
     }: Props = $props();
 
     const renderedItems = $derived(
-        items.map((item: DropdownItemType, index: number, arr: DropdownItemType[]) => ({
+        options.map((item: DropdownOption, index: number, arr: DropdownOption[]) => ({
             ...item,
             position: getPosition(index, arr.length),
         })),
@@ -71,9 +71,8 @@
     {#if isOpen}
         {#each renderedItems as item}
             <DropdownItem
-                {...item}
                 {variant}
-                bind:selectedIds
+                option={item}
                 class={item.position === "start"
                     ? "rounded-t-lg"
                     : item.position === "end"

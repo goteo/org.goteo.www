@@ -2,21 +2,22 @@
     import { searchPlace } from "../../services/nominatim";
     import DropdownMenu from "../library/dropdown/DropdownMenu.svelte";
 
-    import type { DropdownItemType } from "../library/dropdown/dropdown.types";
+    import type { DropdownOption } from "../library/dropdown/dropdown.types";
 
-    let items: DropdownItemType[] = $state([]);
+    let options: DropdownOption[] = $state([]);
 
     async function handleSearch(value: string) {
         if (!value) {
-            items = [];
+            options = [];
             return;
         }
 
         const search = await searchPlace(value, 3);
 
-        items = search.map((result) => ({
+        options = search.map((result) => ({
             id: result.osm_id.toString(),
             label: result.display_name,
+            selected: false,
         }));
     }
 
@@ -50,9 +51,9 @@
 </script>
 
 <DropdownMenu
+    {options}
     class="border"
     variant="multiselect"
     hasSearch={true}
     onSearch={searchHandler}
-    {items}
 />

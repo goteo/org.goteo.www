@@ -1,6 +1,7 @@
 export type DropdownVariant = "basic" | "multiselect";
 
-export type DropdownItemType = {
+export type DropdownOption = {
     id: string;
     label: string;
+    selected: boolean;
 };
