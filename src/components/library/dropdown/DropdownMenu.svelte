@@ -27,7 +27,7 @@
     let {
         class: classes = undefined,
         variant,
-        options,
+        options = $bindable([]),
         selected = $bindable([]),
         onChange,
         hasSearch = false,
@@ -70,7 +70,9 @@
                 type="text"
                 placeholder={searchPlaceholder}
                 oninput={(e) => onSearch?.(e.currentTarget.value)}
-                onclick={() => (isOpen = !isOpen)}
+                onclick={() => {
+                    if (!isOpen) isOpen = true;
+                }}
             />
             <SearchIcon class="absolute right-4" width="32" height="32" />
         </div>
