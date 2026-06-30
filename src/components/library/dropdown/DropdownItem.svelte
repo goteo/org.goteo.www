@@ -14,6 +14,12 @@
         onChange?: (option: DropdownOption) => void;
         class?: ClassNameValue;
     }>();
+
+    function handleChange(o: DropdownOption) {
+        option = { ...o, selected: !o.selected };
+
+        onChange?.(option);
+    }
 </script>
 
 <div
@@ -28,14 +34,14 @@
             <input
                 type="checkbox"
                 checked={option.selected}
-                onchange={() => onChange?.(option)}
+                onchange={() => handleChange(option)}
                 class="text-primary border-secondary mt-1 size-5 shrink-0 rounded-sm border ring-0"
             />
         </label>
     {:else if variant === "basic"}
         <button
             class="w-full cursor-pointer text-base text-black"
-            onclick={() => onChange?.(option)}
+            onclick={() => handleChange(option)}
         >
             {option.label}
         </button>

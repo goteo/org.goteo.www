@@ -1,6 +1,6 @@
 <script lang="ts">
     import { clickOutside } from "flowbite-svelte";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import DropdownItem from "./DropdownItem.svelte";
     import { t } from "../../../i18n/store";
@@ -13,6 +13,7 @@
         variant: DropdownVariant;
         options: DropdownOption[];
         selected?: DropdownOption[];
+        onChange?: (option: DropdownOption) => void;
         hasSearch?: boolean;
         searchPlaceholder?: string;
         /**
@@ -28,23 +29,29 @@
         variant,
         options,
         selected = $bindable([]),
+        onChange,
         hasSearch = false,
         searchPlaceholder = $t("domain.search.bar.placeholder"),
         onSearch = undefined,
         isOpen = true,
     }: Props = $props();
 
-    const renderedItems = $derived(
-        options.map((item: DropdownOption, index: number, arr: DropdownOption[]) => ({
-            ...item,
-            position: getPosition(index, arr.length),
-        })),
-    );
+    const visibleOptions = $derived.by(() => {
+        const ids = new Set(options.map((o) => o.id));
+
+        return [...selected.filter((s) => !ids.has(s.id)), ...options].map((o, index, arr) => {
+            return { ...o, position: getPosition(index, arr.length) };
+        });
+    });
 
     function getPosition(index: number, length: number): "start" | "middle" | "end" {
         if (index === 0 && !hasSearch) return "start";
         if (index === length - 1) return "end";
         return "middle";
+    }
+
+    function isSelected(option: DropdownOption): boolean {
+        return selected.length > 0 && selected.some((s) => s.id === option.id);
     }
 </script>
 
@@ -69,15 +76,25 @@
         </div>
     {/if}
     {#if isOpen}
-        {#each renderedItems as item}
+        {#each visibleOptions as item}
             <DropdownItem
                 {variant}
                 option={item}
-                class={item.position === "start"
-                    ? "rounded-t-lg"
-                    : item.position === "end"
-                      ? "rounded-b-lg"
-                      : ""}
+                onChange={(option) => {
+                    if (option.selected && !isSelected(option)) {
+                        selected = [...selected, option];
+                    }
+
+                    if (!option.selected && isSelected(option)) {
+                        selected = selected.filter((s) => s.id !== option.id);
+                    }
+
+                    onChange?.(option);
+                }}
+                class={twJoin(
+                    item.position === "start" && "rounded-t-lg",
+                    item.position === "end" && "rounded-b-lg",
+                )}
             />
         {/each}
     {/if}
