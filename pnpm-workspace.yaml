@@ -1,7 +1,8 @@
 packages:
-    - .
+  - .
 
 allowBuilds:
-    cypress: true
-    esbuild: true
-    workerd: true
+  cypress: true
+  esbuild: true
+  sharp: false
+  workerd: true
