@@ -21,9 +21,9 @@ Manages real-time filtering of campaigns without page reloads
         resultCount,
         hasNextPage,
     } from "../../stores/searchStore";
-    import SearchIcon from "../../svgs/SearchIcon.svelte";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import SearchIcon from "../icons/actions/Search.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Grid from "../library/layout/Grid.svelte";
 
@@ -227,7 +227,7 @@ Manages real-time filtering of campaigns without page reloads
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size={campaign.size} {campaign} />
+                        <CampaignCard size={campaign.size!} {campaign} />
                     </div>
                 {/each}
             </Grid>
