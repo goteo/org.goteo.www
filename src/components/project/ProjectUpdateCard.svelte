@@ -8,7 +8,7 @@
     import { formatDate } from "../../utils/dates.ts";
     import { extractId } from "../../utils/extractId.ts";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Button from "../library/Button.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     import type { User } from "../../openapi/client/types.gen.ts";
     import type { MouseEventHandler } from "svelte/elements";

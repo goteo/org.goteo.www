@@ -2,13 +2,13 @@
     import { clickOutside } from "flowbite-svelte";
 
     import { session } from "../auth/store";
-    import CartButton from "../components/CartButton.svelte";
-    import HeaderButtons from "../components/HeaderButtons.svelte";
-    import Hamburger from "../components/icons/Hamburger.svelte";
-    import UserIcon from "../components/icons/User.svelte";
-    import UiLanguages from "../components/UiLanguages.svelte";
+    import CartButton from "../components/checkout/CartButton.svelte";
+    import HeaderButtons from "../components/header/HeaderButtons.svelte";
+    import UiLanguages from "../components/header/UiLanguages.svelte";
+    import Logo from "../components/icons/Logo.svelte";
+    import Hamburger from "../components/icons/navigation/Hamburger.svelte";
+    import UserIcon from "../components/icons/user/User.svelte";
     import { t } from "../i18n/store";
-    import Logo from "../svgs/Logo.svelte";
 
     import type { Snippet } from "svelte";
 

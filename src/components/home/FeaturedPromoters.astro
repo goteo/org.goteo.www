@@ -1,8 +1,8 @@
 ---
 import PromoterCard from "./PromoterCard.astro";
 import type { Promoter } from "../../types/promoter";
-import Arrow from "../../components/icons/Arrow.svelte";
-import Grid from "../library/Grid.svelte";
+import Arrow from "../../components/icons/navigation/Arrow.svelte";
+import Grid from "../library/layout/Grid.svelte";
 
 const { t } = Astro.locals;
 
@@ -11,7 +11,7 @@ const promoters: Promoter[] = [
     {
         id: 1,
         name: "La Marea",
-        image: "/imgs/project-owners/la-marea.png",
+        image: "/images/promoters/project-owners/la-marea.png",
         projectsPromoted: 4,
         capitalRaised: "539.689 €",
         variant: "1",
@@ -19,7 +19,7 @@ const promoters: Promoter[] = [
     {
         id: 2,
         name: "Agrocuir",
-        image: "/imgs/project-owners/agrocuir.png",
+        image: "/images/promoters/project-owners/agrocuir.png",
         projectsPromoted: 4,
         capitalRaised: "71.472 €",
         variant: "2",
@@ -27,7 +27,7 @@ const promoters: Promoter[] = [
     {
         id: 3,
         name: "IRIDIA",
-        image: "/imgs/project-owners/iridia.png",
+        image: "/images/promoters/project-owners/iridia.png",
         projectsPromoted: 9,
         capitalRaised: "311.258 €",
         variant: "3",
