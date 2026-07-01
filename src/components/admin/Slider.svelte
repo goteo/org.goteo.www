@@ -44,7 +44,7 @@
 </script>
 
 <div class="relative mt-6 h-40">
-    {#if !isSliderLoaded || isLoading}
+    {#if isLoading}
         <div class="absolute inset-0 flex items-center justify-center">
             <Loader />
         </div>
@@ -53,7 +53,7 @@
     <div
         bind:this={mainCarousel}
         class="main-carousel h-full first:ml-0"
-        class:opacity-0={!isSliderLoaded || isLoading}
+        class:opacity-0={isLoading}
     >
         {#each slides as { title, amount }}
             <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
