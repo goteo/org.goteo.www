@@ -5,10 +5,10 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import Checkbox from "../../library/inputs/Checkbox.svelte";
-    import FileUpload from "../../library/inputs/FileUpload.svelte";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Checkbox from "../../library/inputs/Checkbox.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
     // import Select from "../../library/Select.svelte";
     // import TextArea from "../../library/TextArea.svelte";

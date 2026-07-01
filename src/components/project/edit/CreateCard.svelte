@@ -49,7 +49,9 @@
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm {disabled ? 'cursor-not-allowed opacity-50 grayscale' : ''}"
+    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm {disabled
+        ? 'cursor-not-allowed opacity-50 grayscale'
+        : ''}"
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
@@ -88,13 +90,19 @@
         {:else if variant === "collab"}
             {$t("pages.project.edit.collaborations.add.button")}
         {:else if variant === "budget"}
-            {defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.button`) : $t("pages.project.edit.budget.add.button")}
+            {defaultDeadline
+                ? $t(`pages.project.edit.budget.add.${defaultDeadline}.button`)
+                : $t("pages.project.edit.budget.add.button")}
         {/if}
     </Button>
 </div>
 
 {#if disabled && disabledMessage}
-    <Toast class="fixed top-1/2 left-1/2 z-999 -translate-x-1/2 -translate-y-1/2" variant="error" bind:showToast={showDisabledToast}>
+    <Toast
+        class="fixed top-1/2 left-1/2 z-999 -translate-x-1/2 -translate-y-1/2"
+        variant="error"
+        bind:showToast={showDisabledToast}
+    >
         {disabledMessage}
     </Toast>
 {/if}

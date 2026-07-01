@@ -12,21 +12,22 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import RoundSelector from "./RoundSelector.svelte";
+    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import { locale, t } from "../../../i18n/store";
+    import { apiCategoriesGetCollection } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
     import {
         currentDraft,
         navigateToStep,
         updateConfiguration,
         updateProject,
     } from "../../../stores/drafts/projectDraft";
-    import { apiCategoriesGetCollection } from "../../../openapi/client";
-    import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
-    import type { Category, Project } from "../../../openapi/client";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
+
+    import type { Category, Project } from "../../../openapi/client";
 
     interface ConfigurationStepProps {
         project?: Project;

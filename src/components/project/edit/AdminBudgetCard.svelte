@@ -93,8 +93,12 @@
 
 {#if isCreateCard}
     <CreateCard
-        title={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.title`) : $t("pages.project.edit.budget.add.title")}
-        description={defaultDeadline ? $t(`pages.project.edit.budget.add.${defaultDeadline}.description`) : $t("pages.project.edit.budget.add.description")}
+        title={defaultDeadline
+            ? $t(`pages.project.edit.budget.add.${defaultDeadline}.title`)
+            : $t("pages.project.edit.budget.add.title")}
+        description={defaultDeadline
+            ? $t(`pages.project.edit.budget.add.${defaultDeadline}.description`)
+            : $t("pages.project.edit.budget.add.description")}
         variant="budget"
         {project}
         onSave={handleSaveBudgetItem}
@@ -120,13 +124,14 @@
         <div class="flex flex-col gap-4">
             <div class="flex items-center gap-2">
                 <span
-                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline === 'minimum'
+                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline ===
+                    'minimum'
                         ? 'bg-secondary text-white'
                         : 'border-secondary text-secondary border'}"
                 >
-                    {item.deadline === 'minimum'
-                        ? $t('domain.project.budget.minimum')
-                        : $t('domain.project.budget.optimum')}
+                    {item.deadline === "minimum"
+                        ? $t("domain.project.budget.minimum")
+                        : $t("domain.project.budget.optimum")}
                 </span>
             </div>
             <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>

@@ -85,10 +85,10 @@
         <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 
-    <div class="flex flex-col gap-6 rounded-3xl border border-grey bg-variant1 p-6 shadow-sm">
+    <div class="border-grey bg-variant1 flex flex-col gap-6 rounded-3xl border p-6 shadow-sm">
         <div class="flex items-center gap-3">
             <span
-                class="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-sm font-bold text-white"
+                class="bg-secondary flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white"
             >
                 1
             </span>
@@ -108,10 +108,24 @@
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard {project} {item} {index} bind:loading {hasMinimumItems} defaultDeadline="minimum" />
+                    <AdminBudgetCard
+                        {project}
+                        {item}
+                        {index}
+                        bind:loading
+                        {hasMinimumItems}
+                        defaultDeadline="minimum"
+                    />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading {hasMinimumItems} defaultDeadline="minimum" />
+                <AdminBudgetCard
+                    {project}
+                    isCreateCard={true}
+                    item={null}
+                    bind:loading
+                    {hasMinimumItems}
+                    defaultDeadline="minimum"
+                />
             </Grid>
         {/if}
     </div>
@@ -142,7 +156,14 @@
                 {/each}
 
                 {#if hasMinimumItems}
-                    <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} {hasMinimumItems} defaultDeadline="optimum" />
+                    <AdminBudgetCard
+                        {project}
+                        isCreateCard={true}
+                        item={null}
+                        {loading}
+                        {hasMinimumItems}
+                        defaultDeadline="optimum"
+                    />
                 {:else}
                     <AdminBudgetCard
                         {project}
@@ -151,7 +172,9 @@
                         {loading}
                         {hasMinimumItems}
                         disabled={true}
-                        disabledMessage={$t("pages.project.edit.budget.validation.minimumRequiredFirst")}
+                        disabledMessage={$t(
+                            "pages.project.edit.budget.validation.minimumRequiredFirst",
+                        )}
                         defaultDeadline="optimum"
                     />
                 {/if}
