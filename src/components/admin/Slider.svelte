@@ -6,12 +6,20 @@
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
     import { apiAccountingsIdGet, apiTipjarsIdGet } from "../../openapi/client/sdk.gen";
-    import { totalItems, isLoading } from "../../stores/chargesPaginationAndSort";
+    import {
+        totalItems,
+        isLoading as chargesIsLoading,
+    } from "../../stores/chargesPaginationAndSort";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { isEnabled, tipjarId } from "../../utils/tipping";
 
     import type { Options } from "flickity";
+
+    let { slides: slidesProp, loading: loadingProp } = $props<{
+        slides?: { title: string; amount: string | number }[];
+        loading?: boolean;
+    }>();
 
     let mainCarousel: HTMLDivElement;
     let isSliderLoaded = $state(false);
@@ -52,6 +60,8 @@
     let slides: { title: string; amount: string | number }[] = $state([]);
 
     const loadSlides = () => {
+        if (slidesProp) return slidesProp;
+
         return [
             {
                 title: $t("admin.projects.totalizers.selected"),
@@ -62,6 +72,8 @@
             { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
         ];
     };
+
+    let isDataLoading = $derived(loadingProp ?? $chargesIsLoading);
 
     const loadFlickity = async (elem: HTMLElement) => {
         try {
@@ -86,15 +98,15 @@
 </script>
 
 <div class="relative mt-6 h-40">
-    {#if !isSliderLoaded || $isLoading}
+    {#if !isSliderLoaded || isDataLoading}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">{$t("search.pagination.loading")}</span>
+            <span class="text-content">{$t("system.loading")}</span>
         </div>
     {/if}
 
     <div
         bind:this={mainCarousel}
-        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !$isLoading ? 100 : 0}"
+        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !isDataLoading ? 100 : 0}"
     >
         {#each slides as { title, amount }}
             <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
