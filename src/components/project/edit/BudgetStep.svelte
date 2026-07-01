@@ -1,7 +1,7 @@
 <script lang="ts">
     import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectBudgetItemsGetCollection, type Project, type ProjectBudgetItem } from "../../../openapi/client";
+    import { type Project, type ProjectBudgetItem } from "../../../openapi/client";
     import { validateBudgetAmount } from "../../../stores/drafts/draftValidation";
     import {
         currentDraft,
@@ -50,8 +50,18 @@
     async function loadBudgetItems() {
         loading = true;
 
-        minBudgetItems = Array.from(new Set([...$currentDraft?.wizardForm.budgetItems.minimum || [], ...$currentDraft?.apiSnapshot?.budgetItems.minimum || []]));
-        optBudgetItems = Array.from(new Set([...$currentDraft?.wizardForm.budgetItems.optimum || [], ...$currentDraft?.apiSnapshot?.budgetItems.optimum || []]));
+        minBudgetItems = Array.from(
+            new Set([
+                ...($currentDraft?.wizardForm.budgetItems.minimum || []),
+                ...($currentDraft?.apiSnapshot?.budgetItems.minimum || []),
+            ]),
+        );
+        optBudgetItems = Array.from(
+            new Set([
+                ...($currentDraft?.wizardForm.budgetItems.optimum || []),
+                ...($currentDraft?.apiSnapshot?.budgetItems.optimum || []),
+            ]),
+        );
 
         loading = false;
     }
