@@ -29,7 +29,9 @@
                 <span class="text-content font-bold">
                     {$t(`admin.projects.table.rows.details.${item.key}`)}:
                 </span>
-                <span class="text-black">{item.value === "—" ? "—" : formatDate(new Date(item.value), $locale)}</span>
+                <span class="text-black"
+                    >{item.value === "—" ? "—" : formatDate(new Date(item.value), $locale)}</span
+                >
             </div>
         {/each}
     </div>

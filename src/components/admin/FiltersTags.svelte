@@ -51,16 +51,16 @@
 
             if (tag.title === "status") {
                 const chargeLabel = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
-                tag.value = chargeLabel !== tag.value
-                    ? chargeLabel
-                    : $t(`admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
+                tag.value =
+                    chargeLabel !== tag.value
+                        ? chargeLabel
+                        : $t(`admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
             }
 
             if (tag.title === "status[]" && Array.isArray(tag.value)) {
                 tag.value = tag.value
-                    .map(
-                        (s: string) =>
-                            $t(`admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
+                    .map((s: string) =>
+                        $t(`admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
                     )
                     .join(", ");
             }

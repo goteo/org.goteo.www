@@ -43,9 +43,10 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
 
-    const initialSearchQuery = typeof window !== "undefined"
-        ? new URLSearchParams(window.location.search).get("search") ?? undefined
-        : undefined;
+    const initialSearchQuery =
+        typeof window !== "undefined"
+            ? (new URLSearchParams(window.location.search).get("search") ?? undefined)
+            : undefined;
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
     let pendingSearch = $state(!!initialSearchQuery);
@@ -389,12 +390,12 @@
             $t("pages.admin.charges.filters.rangeAmount.options"),
         ).sort(([a], [b]) => {
             const parseMin = (val: string) =>
-            val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
+                val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
             if (a === "all") return -1;
             if (b === "all") return 1;
             return parseMin(a) - parseMin(b);
         });
-        
+
         loadTotalTips();
     });
 </script>
@@ -405,7 +406,7 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
-        initialSearchQuery={initialSearchQuery}
+        {initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">

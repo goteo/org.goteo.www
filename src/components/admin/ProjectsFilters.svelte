@@ -1,8 +1,8 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import FiltersIcon from "../icons/filters/Filters.svelte";
-import Button from "../library/buttons/Button.svelte";
-import Search from "../library/inputs/Search.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Search from "../library/inputs/Search.svelte";
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;

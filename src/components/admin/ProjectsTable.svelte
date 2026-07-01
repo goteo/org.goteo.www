@@ -147,13 +147,11 @@
             if (!ownerUsers.has(ownerIri)) {
                 const userId = extractId(ownerIri);
                 if (userId) {
-                    apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(
-                        ({ data }) => {
-                            if (data) {
-                                ownerUsers = new Map(ownerUsers).set(ownerIri, data as User);
-                            }
-                        },
-                    );
+                    apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(({ data }) => {
+                        if (data) {
+                            ownerUsers = new Map(ownerUsers).set(ownerIri, data as User);
+                        }
+                    });
                 }
             }
         }
@@ -185,7 +183,9 @@
 
     function handleSaveAnnotations() {
         annotationsCache = new Map(annotationsCache).set(selectedProjectId, annotationText);
-        const project: ProjectRow | undefined = projects.find((p: ProjectRow) => p.id === selectedProjectId);
+        const project: ProjectRow | undefined = projects.find(
+            (p: ProjectRow) => p.id === selectedProjectId,
+        );
         if (project) {
             project.annotations = annotationText;
             project.annotationsCount = annotationText ? 1 : 0;

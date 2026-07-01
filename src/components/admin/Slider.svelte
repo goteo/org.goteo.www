@@ -8,7 +8,10 @@
 
     import type { Options } from "flickity";
 
-    let { slides = [], isLoading = false }: { slides?: { title: string; amount: string | number }[]; isLoading?: boolean } = $props();
+    let {
+        slides = [],
+        isLoading = false,
+    }: { slides?: { title: string; amount: string | number }[]; isLoading?: boolean } = $props();
 
     let mainCarousel: HTMLDivElement;
     let isSliderLoaded = $state(false);

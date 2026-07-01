@@ -44,7 +44,10 @@
         { title: $t("admin.projects.totalizers.totalUnpaid"), amount: "—" },
     ]);
 
-    const sortMap: Record<string, { field: "dateCreated" | "dateUpdated"; direction: "asc" | "desc" }> = {
+    const sortMap: Record<
+        string,
+        { field: "dateCreated" | "dateUpdated"; direction: "asc" | "desc" }
+    > = {
         "date-desc": { field: "dateCreated", direction: "desc" },
         "date-asc": { field: "dateCreated", direction: "asc" },
     };
@@ -281,7 +284,7 @@
             />
             <ProjectsExportCsv />
         </div>
-        <Slider slides={projectSlides} isLoading={isLoading} />
+        <Slider slides={projectSlides} {isLoading} />
     </div>
 </div>
 <ProjectsTable
