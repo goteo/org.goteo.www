@@ -20,6 +20,7 @@ Manages real-time filtering of campaigns without page reloads
         isEmpty,
         resultCount,
         hasNextPage,
+        type SearchFilters,
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
@@ -33,11 +34,7 @@ Manages real-time filtering of campaigns without page reloads
     interface Props {
         initialProjects: Project[];
         ariaLiveRegion?: "polite" | "assertive" | "off";
-        initialFilters?: {
-            title?: string;
-            status?: string;
-            "categories[]"?: string[];
-        };
+        initialFilters?: SearchFilters;
         hasInitialSearch?: boolean;
     }
 
@@ -118,11 +115,7 @@ Manages real-time filtering of campaigns without page reloads
         // Initialize from server-side data
         if (initialFilters && hasInitialSearch) {
             // Initialize store with server-side filters first
-            searchStore.initializeFilters({
-                title: initialFilters.title || "",
-                status: initialFilters.status || "",
-                "categories[]": initialFilters["categories[]"] || [],
-            });
+            searchStore.initializeFilters(initialFilters);
 
             // Trigger API search with the URL parameters
             setTimeout(() => {

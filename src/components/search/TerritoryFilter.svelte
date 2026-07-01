@@ -2,8 +2,8 @@
     import { searchPlace } from "../../services/nominatim";
     import DropdownMenu from "../library/dropdown/DropdownMenu.svelte";
 
-    import type { DropdownOption } from "../library/dropdown/dropdown.types";
     import type { NominatimResult } from "../../services/nominatim";
+    import type { DropdownOption } from "../library/dropdown/dropdown.types";
 
     interface TerritoryOption extends DropdownOption {
         result: NominatimResult;
