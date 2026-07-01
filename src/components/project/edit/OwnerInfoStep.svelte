@@ -5,20 +5,26 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import FileUpload from "../../FileUpload.svelte";
-    import Close from "../../icons/Close.svelte";
-    import Button from "../../library/Button.svelte";
-    import RadioButton from "../../library/RadioButton.svelte";
+    import Checkbox from "../../library/inputs/Checkbox.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import RadioButton from "../../library/inputs/RadioButton.svelte";
     // import Select from "../../library/Select.svelte";
     // import TextArea from "../../library/TextArea.svelte";
-    import TextInput from "../../library/TextInput.svelte";
-    import Toggle from "../../library/ToggleSwitch.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
+    import Toggle from "../../library/inputs/Toggle.svelte";
 
     import type { Project } from "../../../openapi/client";
 
     let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
 
-    type ContactEntry = { type: "email" | "phone" | "text"; value: string; preferred: boolean };
+    type ContactEntry = {
+        id: string;
+        type: "email" | "phone" | "text";
+        value: string;
+        preferred: boolean;
+    };
 
     let legalEntityType = $state<"individual" | "organization">("individual");
     // let prefill = $state("");
@@ -28,8 +34,8 @@
     // let country = $state("");
     // let teamDescription = $state("");
     let privateContacts = $state<ContactEntry[]>([
-        { type: "email", value: "", preferred: true },
-        { type: "phone", value: "", preferred: false },
+        { id: crypto.randomUUID(), type: "email", value: "", preferred: true },
+        { id: crypto.randomUUID(), type: "phone", value: "", preferred: false },
     ]);
     let preferredIndex = $state(0);
     let iban = $state("");
@@ -43,6 +49,7 @@
     //     linkedin: "",
     // });
 
+    let termsAccepted = $state(false);
     let touched = $state<Set<string>>(new Set());
 
     function touch(field: string) {
@@ -55,7 +62,10 @@
     }
 
     function addContact() {
-        privateContacts = [...privateContacts, { type: "text", value: "", preferred: false }];
+        privateContacts = [
+            ...privateContacts,
+            { id: crypto.randomUUID(), type: "text", value: "", preferred: false },
+        ];
     }
 
     function deleteContact(i: number) {
@@ -92,7 +102,7 @@
                 : undefined,
     });
 
-    let isValid = $derived(Object.values(errors).every((e) => e === undefined));
+    let isValid = $derived(Object.values(errors).every((e) => e === undefined) && termsAccepted);
 </script>
 
 <div class="w-1/2">
@@ -216,9 +226,9 @@
                 </p>
             </div>
             <div class="flex flex-col gap-3">
-                {#each privateContacts as contact, i}
+                {#each privateContacts as contact, i (contact.id)}
                     <div class="flex items-center gap-3">
-                        <div class="flex-1" onfocusout={() => touch(`contact-${i}`)}>
+                        <div class="flex-1" onfocusout={() => touch(contact.id)}>
                             <TextInput
                                 bind:value={contact.value}
                                 type={contact.type === "email"
@@ -232,7 +242,7 @@
                                       ? $t("pages.project.edit.aboutYou.phone")
                                       : $t("common.textPlaceholder")}
                                 name={`contact-${i}`}
-                                error={contact.preferred && touched.has(`contact-${i}`)
+                                error={contact.preferred && touched.has(contact.id)
                                     ? errors.contacts
                                     : undefined}
                             />
@@ -380,6 +390,14 @@
                     />
                 </div>
             </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <Checkbox bind:checked={termsAccepted}>
+                <span class="text-secondary">
+                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
+                </span>
+            </Checkbox>
         </div>
 
         <div class="mt-10 flex">

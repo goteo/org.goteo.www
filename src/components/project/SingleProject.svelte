@@ -1,6 +1,8 @@
 <script lang="ts">
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
+    import Countdown from "./Countdown.svelte";
+    import ProjectTags from "./ProjectTags.svelte";
     import Tabs from "./Tabs.svelte";
     import TopRewards from "./TopRewards.svelte";
     import { languagesList } from "../../i18n/locales";
@@ -13,17 +15,15 @@
         type ProjectCalendar,
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
-    import RememberIcon from "../../svgs/RememberIcon.svelte";
     import { getLanguageDisplayName } from "../../utils/lang";
-    import Countdown from "../Countdown.svelte";
-    import Arrow from "../icons/Arrow.svelte";
-    import LanguagesDropdown from "../LanguagesDropdown.svelte";
-    import Button from "../library/Button.svelte";
-    import Sharebutton from "../library/Share/ShareButton.svelte";
-    import Toast from "../library/Toast.svelte";
-    import Player from "../Player/Player.svelte";
-    import ProjectTags from "../ProjectTags.svelte";
-    import Thtml from "../Thtml.svelte";
+    import LanguagesDropdown from "../header/LanguagesDropdown.svelte";
+    import RememberIcon from "../icons/actions/RememberIcon.svelte";
+    import Arrow from "../icons/navigation/Arrow.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Toast from "../library/feedback/Toast.svelte";
+    import Sharebutton from "../library/share/ShareButton.svelte";
+    import Thtml from "../library/typography/Thtml.svelte";
+    import Player from "../player/Player.svelte";
 
     let {
         project,

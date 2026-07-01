@@ -11,35 +11,25 @@ Integrated with searchStore for state management and URL synchronization
     import FilterDropdown from "./FilterDropdown.svelte";
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
-    import { t, setLocale } from "../../i18n/store";
-    import { searchStore, searchFilters } from "../../stores/searchStore";
-    import FilterIcon from "../../svgs/FilterIcon.svelte";
+    import TerritoryFilter from "./TerritoryFilter.svelte";
+    import { t } from "../../i18n/store";
+    import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
+    import FilterIcon from "../icons/filters/FilterIcon.svelte";
 
     interface Props {
-        locale?: string;
-        initialFilters?: {
-            title?: string;
-            status?: string;
-            "categories[]"?: string[];
-        };
+        initialFilters?: SearchFilters;
     }
 
-    let { locale = "es", initialFilters }: Props = $props();
+    let { initialFilters }: Props = $props();
 
     // Filter visibility (collapsed by default on all devices)
-    let filtersOpen = $state(false);
+    let filtersOpen = $state(true);
 
     // Initialize locale and filters when component mounts
     onMount(() => {
-        setLocale(locale);
-
         // Initialize with server-provided filters if available (without triggering search)
         if (initialFilters) {
-            searchStore.initializeFilters({
-                title: initialFilters.title || "",
-                status: initialFilters.status || "",
-                "categories[]": initialFilters["categories[]"] || [],
-            });
+            searchStore.initializeFilters(initialFilters);
         }
     });
 
@@ -72,11 +62,11 @@ Integrated with searchStore for state management and URL synchronization
 </script>
 
 <div
-    class="border-grey mx-auto flex w-80 flex-col gap-6 rounded-3xl border bg-white px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-0 min-[500px]:w-auto lg:gap-10 lg:rounded-4xl lg:px-8 lg:py-6"
+    class="border-grey mx-auto flex w-80 flex-col gap-4 rounded-3xl border bg-white px-4 py-4 shadow-[0px_1px_3px_0px_rgba(0,0,0,0.1)] min-[500px]:mx-auto min-[500px]:w-auto min-[500px]:max-w-6xl lg:gap-6 lg:rounded-4xl lg:px-6 lg:py-5"
     data-testid="search-filters"
 >
     <div
-        class="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:items-center min-[500px]:gap-16"
+        class="flex flex-col gap-3 min-[500px]:flex-row min-[500px]:items-center min-[500px]:gap-6"
     >
         <!-- Search section with input and button -->
         <div class="flex flex-1 flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:gap-4">
@@ -87,7 +77,7 @@ Integrated with searchStore for state management and URL synchronization
                     onSearch={(title) => updateFilters({ title })}
                     onEnter={handleSearch}
                     onClear={handleSearch}
-                    placeholder={$t("pages.search.input.placeholder")}
+                    placeholder={$t("domain.search.bar.placeholder")}
                     data-testid="search-input"
                 />
             </div>
@@ -104,30 +94,41 @@ Integrated with searchStore for state management and URL synchronization
         </div>
 
         <!-- Filter toggle button - full width on mobile, auto on desktop -->
-        {#if !filtersOpen}
-            <SearchButton
-                variant="ghost"
-                onclick={toggleFilters}
-                data-testid="toggle-filters"
-                aria-expanded={filtersOpen}
-                class="w-full justify-center min-[500px]:w-auto"
-            >
-                <FilterIcon width="16" height="16" class="mr-2" />
-                {$t("pages.search.filters.show")}
-            </SearchButton>
-        {/if}
+        <SearchButton
+            variant="ghost"
+            onclick={toggleFilters}
+            data-testid="toggle-filters"
+            aria-expanded={filtersOpen}
+            class="w-full justify-center min-[500px]:w-auto"
+        >
+            <FilterIcon width="16" height="16" class="mr-2" />
+            {filtersOpen ? $t("pages.search.filters.close") : $t("pages.search.filters.show")}
+        </SearchButton>
     </div>
 
     <!-- Expanded filters section (collapsed by default) -->
     {#if filtersOpen}
         <!-- Status filter dropdown -->
-        <div class="w-full lg:max-w-sm">
+        <div class="flex flex-col gap-6 lg:flex-row">
             <FilterDropdown
                 options={statusOptions}
                 placeholder={$t("pages.search.filters.status.label")}
                 selectedValue={$searchFilters.status}
                 onSelect={(value) => updateFilters({ status: value })}
                 data-testid="status-filter"
+            />
+            <TerritoryFilter
+                selectedTerritory={{
+                    countries: $searchFilters["territory.country[]"] || [],
+                    subLvl1: $searchFilters["territory.subLvl1[]"] || [],
+                    subLvl2: $searchFilters["territory.subLvl2[]"] || [],
+                }}
+                onTerritoryChange={(territories) =>
+                    updateFilters({
+                        "territory.country[]": territories.countries,
+                        "territory.subLvl1[]": territories.subLvl1,
+                        "territory.subLvl2[]": territories.subLvl2,
+                    })}
             />
         </div>
 
@@ -152,17 +153,6 @@ Integrated with searchStore for state management and URL synchronization
                 class="w-full min-[500px]:w-auto"
             >
                 {$t("pages.search.filters.apply")}
-            </SearchButton>
-
-            <!-- Close filters button -->
-            <SearchButton
-                variant="ghost"
-                onclick={toggleFilters}
-                data-testid="close-filters-btn"
-                class="w-full min-[500px]:w-auto"
-            >
-                <FilterIcon width="16" height="16" class="mr-2" />
-                {$t("pages.search.filters.close")}
             </SearchButton>
         </div>
     {/if}
