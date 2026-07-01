@@ -1,14 +1,18 @@
 <script lang="ts">
     import { t, locale } from "../../i18n/store";
     import Comments from "../icons/Comments.svelte";
+    import { formatDate } from "../../utils/dates";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
 
-    let { project, onOpenAnnotationsModal, onChangeStatus } = $props<{
+    interface Props {
         project: ProjectRow;
         onOpenAnnotationsModal: () => void;
         onChangeStatus?: (projectId: number) => void;
-    }>();
+        userEmail?: string;
+    }
+
+    let { project, onOpenAnnotationsModal, onChangeStatus, userEmail }: Props = $props();
 
     function navigateToCharges() {
         const name = project.name;
@@ -36,7 +40,7 @@
             <span class="text-content font-bold"
                 >{$t("admin.projects.table.rows.details.email")}:</span
             >
-            <span class="truncate text-black">{project.promoter}</span>
+            <span class="truncate text-black">{userEmail ?? "—"}</span>
         </div>
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
