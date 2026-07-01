@@ -513,7 +513,17 @@
           "add": {
             "title": "Añade una partida",
             "description": "Puedes indicar cual es el mínimo y cual es el óptimo que necesitas para llevar a cabo tu proyecto.",
-            "button": "Añadir partida"
+            "button": "Añadir partida",
+            "minimum": {
+              "title": "Partida mínima",
+              "description": "Define los gastos básicos e imprescindibles para que tu proyecto despegue.",
+              "button": "Añadir mínima"
+            },
+            "optimum": {
+              "title": "Partida óptima",
+              "description": "Da un salto de calidad con recursos extra que harían tu proyecto aún más completo.",
+              "button": "Añadir óptima"
+            }
           },
           "modal": {
             "title": "Añadir partidas del presupuesto",
@@ -530,6 +540,8 @@
             "title": "Vas a borrar esta partida",
             "description": "Esta es una acción permanente y no se puede deshacer"
           },
+          "minimumSubtitle": "Partidas imprescindibles para realizar tu proyecto",
+          "optimumSubtitle": "Partidas adicionales para mejoras y ampliaciones",
           "validation": {
             "title": "El título no puede estar vacío",
             "description": "La descripción no puede estar vacía",
@@ -537,7 +549,8 @@
             "amountMinimum": "El presupuesto mínimo debe ser mayor que cero",
             "currency": "El importe debe especificar una divisa",
             "type": "El tipo de partida se debe especificar",
-            "class": "La clase de partida se debe especificar"
+            "class": "La clase de partida se debe especificar",
+            "minimumRequiredFirst": "Debes crear al menos una partida de presupuesto mínimo antes de añadir partidas óptimas"
           }
         },
         "aboutYou": {

@@ -28,6 +28,7 @@
     );
     let loading = $state(false);
     let showErrorToast = $state(false);
+    let hasMinimumItems = $derived(minBudgetItems.length > 0);
 
     /**
      * Handle Continue button
@@ -49,8 +50,18 @@
     async function loadBudgetItems() {
         loading = true;
 
-        minBudgetItems = $currentDraft?.wizardForm.budgetItems.minimum || [];
-        optBudgetItems = $currentDraft?.wizardForm.budgetItems.optimum || [];
+        minBudgetItems = Array.from(
+            new Set([
+                ...($currentDraft?.wizardForm.budgetItems.minimum || []),
+                ...($currentDraft?.apiSnapshot?.budgetItems.minimum || []),
+            ]),
+        );
+        optBudgetItems = Array.from(
+            new Set([
+                ...($currentDraft?.wizardForm.budgetItems.optimum || []),
+                ...($currentDraft?.apiSnapshot?.budgetItems.optimum || []),
+            ]),
+        );
 
         loading = false;
     }
@@ -67,12 +78,7 @@
 <div class="flex flex-col gap-10">
     {#if Object.keys($validationErrors).length > 0}
         {#each Object.entries($validationErrors) as [key, message]}
-            <Toast
-                aria-label={key}
-                class="absolute z-999 self-end"
-                variant="error"
-                bind:showToast={showErrorToast}
-            >
+            <Toast class="absolute z-999 self-end" variant="error" bind:showToast={showErrorToast}>
                 {message}
             </Toast>
         {/each}
@@ -84,43 +90,99 @@
         <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 
-    <div class="flex flex-col gap-6">
-        <span class="text-secondary text-3xl font-bold">
-            {$t("domain.project.budget.minimum")}:
-            {formatCurrency(
-                project.budget?.minimum?.money?.amount,
-                project.budget?.minimum?.money?.currency,
-            )}
-        </span>
+    <div class="border-grey bg-variant1 flex flex-col gap-6 rounded-3xl border p-6 shadow-sm">
+        <div class="flex items-center gap-3">
+            <span
+                class="bg-secondary flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white"
+            >
+                1
+            </span>
+            <span class="text-secondary text-3xl font-bold">
+                {$t("domain.project.budget.minimum")}:
+                {formatCurrency(
+                    project.budget?.minimum?.money?.amount,
+                    project.budget?.minimum?.money?.currency,
+                )}
+            </span>
+        </div>
+        <p class="text-content -mt-2 text-sm">
+            {$t("pages.project.edit.budget.minimumSubtitle")}
+        </p>
         {#if loading}
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard {project} {item} {index} bind:loading />
+                    <AdminBudgetCard
+                        {project}
+                        {item}
+                        {index}
+                        bind:loading
+                        {hasMinimumItems}
+                        defaultDeadline="minimum"
+                    />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} bind:loading />
+                <AdminBudgetCard
+                    {project}
+                    isCreateCard={true}
+                    item={null}
+                    bind:loading
+                    {hasMinimumItems}
+                    defaultDeadline="minimum"
+                />
             </Grid>
         {/if}
     </div>
     <div class="flex flex-col gap-6">
-        <span class="text-secondary text-3xl font-bold">
-            {$t("domain.project.budget.optimum")}:
-            {formatCurrency(
-                project.budget?.optimum?.money?.amount,
-                project.budget?.optimum?.money?.currency,
-            )}
-        </span>
+        <div class="flex items-center gap-3">
+            <span
+                class="border-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full border-2 text-sm font-bold"
+            >
+                2
+            </span>
+            <span class="text-secondary text-3xl font-bold">
+                {$t("domain.project.budget.optimum")}:
+                {formatCurrency(
+                    project.budget?.optimum?.money?.amount,
+                    project.budget?.optimum?.money?.currency,
+                )}
+            </span>
+        </div>
+        <p class="text-content -mt-2 text-sm">
+            {$t("pages.project.edit.budget.optimumSubtitle")}
+        </p>
         {#if loading}
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:else}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    <AdminBudgetCard {project} {item} index={i} {loading} />
+                    <AdminBudgetCard {project} {item} index={i} {loading} {hasMinimumItems} />
                 {/each}
 
-                <AdminBudgetCard {project} isCreateCard={true} item={null} {loading} />
+                {#if hasMinimumItems}
+                    <AdminBudgetCard
+                        {project}
+                        isCreateCard={true}
+                        item={null}
+                        {loading}
+                        {hasMinimumItems}
+                        defaultDeadline="optimum"
+                    />
+                {:else}
+                    <AdminBudgetCard
+                        {project}
+                        isCreateCard={true}
+                        item={null}
+                        {loading}
+                        {hasMinimumItems}
+                        disabled={true}
+                        disabledMessage={$t(
+                            "pages.project.edit.budget.validation.minimumRequiredFirst",
+                        )}
+                        defaultDeadline="optimum"
+                    />
+                {/if}
             </Grid>
         {/if}
     </div>

@@ -5,15 +5,15 @@
     // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
     // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
-    import Checkbox from "../../library/Checkbox.svelte";
-    import FileUpload from "../../FileUpload.svelte";
-    import Close from "../../icons/Close.svelte";
-    import Button from "../../library/Button.svelte";
-    import RadioButton from "../../library/RadioButton.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Checkbox from "../../library/inputs/Checkbox.svelte";
+    import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import RadioButton from "../../library/inputs/RadioButton.svelte";
     // import Select from "../../library/Select.svelte";
     // import TextArea from "../../library/TextArea.svelte";
-    import TextInput from "../../library/TextInput.svelte";
-    import Toggle from "../../library/ToggleSwitch.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
+    import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
     import type { Project } from "../../../openapi/client";
 
@@ -131,7 +131,7 @@
             <p class="text-content text-base">
                 {$t("pages.project.edit.aboutYou.legalEntityHelper")}
             </p>
-            <Toggle
+            <ToggleSwitch
                 bind:value={legalEntityType}
                 options={[
                     { value: "individual", label: $t("pages.project.edit.aboutYou.individual") },
