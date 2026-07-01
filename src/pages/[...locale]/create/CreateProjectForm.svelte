@@ -1,12 +1,11 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import Button from "../../../components/library/buttons/Button.svelte";
-    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
-    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
-    import Checkbox from "../../../components/library/inputs/Checkbox.svelte";
-    import DateInput from "../../../components/library/inputs/DateInput.svelte";
-    import TextInput from "../../../components/library/inputs/TextInput.svelte";
+    import BaseCard from "../../../components/BaseCard.svelte";
+    import Button from "../../../components/library/Button.svelte";
+    import CategorySelect from "../../../components/library/CategorySelect.svelte";
+    import DateInput from "../../../components/library/DateInput.svelte";
+    import TextInput from "../../../components/library/TextInput.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectsPost,
@@ -125,11 +124,6 @@
         submitted = true;
         apiError = null;
 
-        if (termsAccepted === false) {
-            submitSuccess = false;
-            $validationErrors["termsAccepted"] = "validation.project.terms.required";
-        }
-
         const errors = validateCreateForm($project);
 
         // Validate entire form
@@ -236,12 +230,6 @@
             });
         }
     });
-
-    let termsAccepted: boolean = false;
-
-    function toggleTermsAcceptance() {
-        termsAccepted = !termsAccepted;
-    }
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -369,13 +357,6 @@
                 </p>
             </div>
         {/if}
-        <div class="flex items-center gap-2">
-            <Checkbox bind:checked={termsAccepted} onchange={() => toggleTermsAcceptance}>
-                <span class="text-secondary">
-                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
-                </span>
-            </Checkbox>
-        </div>
         <p>
             <Button size="md" disabled={!$isCreateFormValid || isSubmitting} onclick={handleSubmit}>
                 {isSubmitting
