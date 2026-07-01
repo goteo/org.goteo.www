@@ -20,9 +20,12 @@ Manages real-time filtering of campaigns without page reloads
         isEmpty,
         resultCount,
         hasNextPage,
+        type SearchFilters,
     } from "../../stores/searchStore";
     import { transformProjectToCampaign } from "../../utils/projectTransform";
     import CampaignCard from "../home/CampaignCard.svelte";
+    import SearchIcon from "../icons/actions/Search.svelte";
+    import Button from "../library/buttons/Button.svelte";
     import Grid from "../library/layout/Grid.svelte";
 
     import type { Project } from "../../openapi/client/types.gen";
@@ -31,11 +34,7 @@ Manages real-time filtering of campaigns without page reloads
     interface Props {
         initialProjects: Project[];
         ariaLiveRegion?: "polite" | "assertive" | "off";
-        initialFilters?: {
-            title?: string;
-            status?: string;
-            "categories[]"?: string[];
-        };
+        initialFilters?: SearchFilters;
         hasInitialSearch?: boolean;
     }
 
@@ -88,23 +87,7 @@ Manages real-time filtering of campaigns without page reloads
     function updateUrlWithoutNavigation() {
         if (typeof window === "undefined") return;
 
-        const url = new URL(window.location.href);
-        const params = new URLSearchParams();
-
-        const filters = $searchFilters;
-
-        // Add search parameters to URL using API field names
-        if (filters.title) params.set("title", filters.title);
-        if (filters.status) params.set("status", filters.status);
-        if ((filters["categories[]"]?.length ?? 0) > 0) {
-            (filters["categories[]"] as string[]).forEach((cat) => {
-                params.append("categories[]", cat);
-            });
-        }
-
-        // Update URL using History API to avoid navigation
-        const newUrl = `${url.pathname}${params.toString() ? "?" + params.toString() : ""}`;
-        window.history.replaceState({}, "", newUrl);
+        searchStore.updateUrl();
     }
 
     // Clear all filters
@@ -132,11 +115,7 @@ Manages real-time filtering of campaigns without page reloads
         // Initialize from server-side data
         if (initialFilters && hasInitialSearch) {
             // Initialize store with server-side filters first
-            searchStore.initializeFilters({
-                title: initialFilters.title || "",
-                status: initialFilters.status || "",
-                "categories[]": initialFilters["categories[]"] || [],
-            });
+            searchStore.initializeFilters(initialFilters);
 
             // Trigger API search with the URL parameters
             setTimeout(() => {
@@ -225,7 +204,7 @@ Manages real-time filtering of campaigns without page reloads
                 {#each campaigns as campaign}
                     <!-- Render campaign cards using the Svelte CampaignCard component -->
                     <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size={campaign.size} {campaign} />
+                        <CampaignCard size={campaign.size!} {campaign} />
                     </div>
                 {/each}
             </Grid>
@@ -246,34 +225,17 @@ Manages real-time filtering of campaigns without page reloads
 
     {#if $isEmpty && !$isSearching && !isTransforming}
         <!-- Empty State -->
-        <div class="py-12 text-center" data-testid="search-empty">
-            <div class="mb-4">
-                <svg
-                    class="mx-auto h-16 w-16 text-gray-400"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                    />
-                </svg>
-            </div>
+        <div class="flex flex-col items-center py-12 text-center" data-testid="search-empty">
+            <SearchIcon class="mb-4 h-16 w-16 text-gray-400" />
             <h3 class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.empty.title")}
             </h3>
             <p class="mb-6 text-gray-600">
                 {$t("pages.search.empty.description")}
             </p>
-            <button
-                onclick={clearAllFilters}
-                class="bg-primary text-tertiary rounded-full px-6 py-2 font-semibold transition-opacity hover:opacity-90"
-            >
+            <Button onclick={clearAllFilters}>
                 {$t("pages.search.empty.clearFilters")}
-            </button>
+            </Button>
         </div>
     {/if}
 
