@@ -4,8 +4,6 @@ Interactive category selection using existing categories from utils/categories.t
 Implements active/inactive pill states matching Figma design
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
-
     import { locale, t } from "../../i18n/store";
     import {
         apiCategoriesGetCollection,
@@ -27,8 +25,10 @@ Implements active/inactive pill states matching Figma design
     let categories = getAvailableCategories();
     let selected = $state<Category[]>([]);
 
-    onMount(async () => {
-        selected = await Promise.all(selectedCategories.map((s) => getCategory(s)));
+    $effect(() => {
+        Promise.all(selectedCategories.map((s) => getCategory(s))).then((categories) => {
+            selected = categories;
+        });
     });
 
     async function getAvailableCategories(): Promise<Category[]> {
@@ -44,7 +44,7 @@ Implements active/inactive pill states matching Figma design
     async function getCategory(iri: string): Promise<Category> {
         const { data: category } = await apiCategoriesIdGet({
             headers: { "Accept-Language": $locale },
-            path: { id: extractId(iri)! },
+            path: { id: extractId(iri) || iri },
         });
 
         return category!;

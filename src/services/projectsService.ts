@@ -63,6 +63,7 @@ export class ProjectsService {
             if (error instanceof Error) {
                 throw new Error(`Project search failed: ${error.message}`);
             }
+
             throw new Error("Project search failed");
         }
     }

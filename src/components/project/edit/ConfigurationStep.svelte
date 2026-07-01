@@ -3,26 +3,50 @@
 
     First step of the project setup wizard.
     Handles:
+    - Categories (up to 2)
     - Funding rounds (1 or 2)
 
     Validation:
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
+    import { onMount } from "svelte";
+
     import RoundSelector from "./RoundSelector.svelte";
-    import { t } from "../../../i18n/store";
+    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
+    import { locale, t } from "../../../i18n/store";
+    import { apiCategoriesGetCollection } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
     import {
         currentDraft,
         navigateToStep,
         updateConfiguration,
+        updateProject,
     } from "../../../stores/drafts/projectDraft";
+    import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
 
+    import type { Category, Project } from "../../../openapi/client";
+
     interface ConfigurationStepProps {
+        project?: Project;
         onContinue?: () => void;
     }
 
-    let { onContinue }: ConfigurationStepProps = $props();
+    let { project, onContinue }: ConfigurationStepProps = $props();
+    let allCategories = $state<Category[]>([]);
+    let selectedCategoryIds = $state<(number | string)[]>(
+        (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? ""),
+    );
+
+    onMount(async () => {
+        const { data } = await apiCategoriesGetCollection({
+            baseUrl: "/api/relay",
+            headers: { "Accept-Language": $locale },
+        });
+        allCategories = toCollectionItems<Category>(data);
+    });
 
     let projectDeadline = $derived(
         $currentDraft?.wizardForm.configuration.projectDeadline ?? "minimum",
@@ -45,6 +69,18 @@
     function handleRoundsChange(projectDeadline: "minimum" | "optimum") {
         updateConfiguration({ projectDeadline });
     }
+
+    /**
+     * Handle category selection change
+     *
+     */
+    function handleCategoryChange(selected: Category[]) {
+        const categoryIris = selected.map((s) => {
+            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
+        });
+
+        updateProject({ categories: categoryIris });
+    }
 </script>
 
 <div class="space-y-8">
@@ -56,6 +92,24 @@
         <p class="text-content text-base font-normal">
             {$t("pages.project.edit.configuration.subtitle")}
         </p>
+    </div>
+
+    <!-- Categories Section -->
+    <div class="space-y-4">
+        <div class="space-y-4">
+            <h2 class="text-2xl font-bold text-black">
+                {$t("pages.project.create.categories.title")}
+            </h2>
+            <p class="text-black transition-all duration-300 ease-in-out">
+                {$t("pages.project.create.categories.subtitle")}
+            </p>
+        </div>
+        <CategorySelect
+            max={2}
+            options={allCategories}
+            bind:selectedIds={selectedCategoryIds}
+            onchange={handleCategoryChange}
+        />
     </div>
 
     <!-- Funding Rounds Section -->

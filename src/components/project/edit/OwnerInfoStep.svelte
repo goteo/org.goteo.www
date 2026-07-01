@@ -7,10 +7,13 @@
     import { t } from "../../../i18n/store";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Checkbox from "../../library/inputs/Checkbox.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
+    // import Select from "../../library/Select.svelte";
+    // import TextArea from "../../library/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
-    import Toggle from "../../library/inputs/ToggleSwitch.svelte";
+    import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
     import type { Project } from "../../../openapi/client";
 
@@ -46,6 +49,7 @@
     //     linkedin: "",
     // });
 
+    let termsAccepted = $state(false);
     let touched = $state<Set<string>>(new Set());
 
     function touch(field: string) {
@@ -98,7 +102,7 @@
                 : undefined,
     });
 
-    let isValid = $derived(Object.values(errors).every((e) => e === undefined));
+    let isValid = $derived(Object.values(errors).every((e) => e === undefined) && termsAccepted);
 </script>
 
 <div class="w-1/2">
@@ -127,7 +131,7 @@
             <p class="text-content text-base">
                 {$t("pages.project.edit.aboutYou.legalEntityHelper")}
             </p>
-            <Toggle
+            <ToggleSwitch
                 bind:value={legalEntityType}
                 options={[
                     { value: "individual", label: $t("pages.project.edit.aboutYou.individual") },
@@ -386,6 +390,14 @@
                     />
                 </div>
             </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <Checkbox bind:checked={termsAccepted}>
+                <span class="text-secondary">
+                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
+                </span>
+            </Checkbox>
         </div>
 
         <div class="mt-10 flex">

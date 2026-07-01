@@ -5,6 +5,7 @@
     import { t } from "../../../i18n/store";
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
 
     import type { Project } from "../../../openapi/client";
 
@@ -17,6 +18,9 @@
         open: boolean;
         showToast: boolean;
         onSave: (data: any) => void;
+        defaultDeadline?: "minimum" | "optimum";
+        disabled?: boolean;
+        disabledMessage?: string;
     }
 
     let {
@@ -28,11 +32,26 @@
         open = $bindable(false),
         showToast = $bindable(false),
         onSave,
+        defaultDeadline,
+        disabled = false,
+        disabledMessage = "",
     }: Props = $props();
+
+    let showDisabledToast = $state(false);
+
+    function handleClick() {
+        if (disabled) {
+            showDisabledToast = true;
+            return;
+        }
+        onclick();
+    }
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm"
+    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm {disabled
+        ? 'cursor-not-allowed opacity-50 grayscale'
+        : ''}"
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
@@ -46,21 +65,38 @@
             {description}
         </p>
     </div>
-    <Button kind="secondary" class="flex w-full items-center justify-center gap-2" {onclick}>
+    <Button
+        kind="secondary"
+        class="mt-auto flex w-full items-center justify-center gap-2"
+        {onclick}
+    >
         <MoreAndLess sign="more" class="p-0.5625" />
         {#if variant === "reward"}
             {$t("pages.project.edit.rewards.add.button")}
         {:else if variant === "collab"}
             {$t("pages.project.edit.collaborations.add.button")}
         {:else if variant === "budget"}
-            {$t("pages.project.edit.budget.add.button")}
+            {defaultDeadline
+                ? $t(`pages.project.edit.budget.add.${defaultDeadline}.button`)
+                : $t("pages.project.edit.budget.add.button")}
         {/if}
     </Button>
 </div>
-{#if variant === "reward"}
+
+{#if disabled && disabledMessage}
+    <Toast
+        class="fixed top-1/2 left-1/2 z-999 -translate-x-1/2 -translate-y-1/2"
+        variant="error"
+        bind:showToast={showDisabledToast}
+    >
+        {disabledMessage}
+    </Toast>
+{/if}
+
+{#if !disabled && variant === "reward"}
     <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />
-{:else if variant === "collab"}
+{:else if !disabled && variant === "collab"}
     <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
-{:else if variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} />
+{:else if !disabled && variant === "budget"}
+    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} {defaultDeadline} />
 {/if}

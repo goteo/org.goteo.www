@@ -5,6 +5,7 @@
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import DateInput from "../library/inputs/DateInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
 
     let {
@@ -136,31 +137,19 @@
                     {/each}
                 </select>
 
-                <div class="relative">
-                    <label for="dateFrom" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("pages.admin.charges.filters.dateRange.initDate")}
-                    </label>
-                    <input
-                        id="dateFrom"
-                        type="date"
-                        bind:value={dateFrom}
-                        onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
-                        class="border-secondary w-full rounded-lg border p-4 pt-4"
-                    />
-                </div>
+                <DateInput
+                    id="dateFrom"
+                    labelText={$t("pages.admin.charges.filters.dateRange.initDate")}
+                    value={dateFrom ? new Date(dateFrom) : new Date(NaN)}
+                    onInput={(date) => (dateFrom = date)}
+                />
 
-                <div class="relative">
-                    <label for="dateTo" class="absolute top-0.5 left-4 text-xs text-gray-500">
-                        {$t("pages.admin.charges.filters.dateRange.endDate")}
-                    </label>
-                    <input
-                        id="dateTo"
-                        type="date"
-                        class="border-secondary w-full rounded-lg border p-4 pt-4"
-                        bind:value={dateTo}
-                        onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
-                    />
-                </div>
+                <DateInput
+                    id="dateTo"
+                    labelText={$t("pages.admin.charges.filters.dateRange.endDate")}
+                    value={dateTo ? new Date(dateTo) : new Date(NaN)}
+                    onInput={(date) => (dateTo = date)}
+                />
             </Grid>
 
             <div class="col-span-3 flex justify-end">
