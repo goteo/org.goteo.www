@@ -9,7 +9,6 @@
         paid: string;
         paidMatchfunding: string;
         status: string;
-        process: string;
         datePublished: string;
         dateEnd1: string;
         dateEnd2: string;
@@ -19,6 +18,7 @@
         annotationsCount: number;
         annotations: string;
         accounting: string;
+        owner: string;
     };
 </script>
 
@@ -40,6 +40,8 @@
     import { t } from "../../i18n/store";
     import Chevron from "../icons/navigation/Chevron.svelte";
     import Edit from "../icons/actions/Edit.svelte";
+    import { apiUsersIdOrHandleGet, type User } from "../../openapi/client/index.ts";
+    import { extractId } from "../../utils/extractId";
 
     const tableHeaders = [
         "admin.projects.table.headers.name",

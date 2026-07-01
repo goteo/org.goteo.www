@@ -169,7 +169,6 @@
                     paid: "—",
                     paidMatchfunding: "—",
                     status: project.status ?? "",
-                    process: "",
                     datePublished: calendar?.release ?? "—",
                     dateEnd1: calendar?.minimum ?? "—",
                     dateEnd2: calendar?.optimum ?? "—",
@@ -179,6 +178,7 @@
                     annotationsCount: 0,
                     annotations: "",
                     accounting: project.accounting ?? "",
+                    owner: project.owner ?? "",
                 };
             });
         } finally {
@@ -228,7 +228,7 @@
             if (value) {
                 filters = { ...filters, title: value };
             } else {
-                const { title: _, ...rest } = filters;
+                const { ...rest } = filters;
                 filters = rest;
             }
             currentPage = 1;
@@ -248,12 +248,12 @@
         reloadProjects();
     }
 
-    async function handleProcessChange(projectId: number, process: string): Promise<void> {
+    async function handleStatusChange(projectId: number, status: string): Promise<void> {
         const { error } = await apiProjectsIdPatch({
             path: { id: String(projectId) },
-            body: { status: process as any },
+            body: { status: status as any },
         });
-        if (error) console.error("Failed to update project process:", error);
+        if (error) console.error("Failed to update project status:", error);
     }
 
     async function handleSavePaid(
@@ -295,7 +295,7 @@
     onPageChange={handlePageChange}
     onSortChange={handleSortChange}
     onItemsPerPageChange={handleItemsPerPageChange}
-    onProcessChange={handleProcessChange}
+    onStatusChange={handleStatusChange}
     onSavePaid={handleSavePaid}
     onSaveAnnotations={handleSaveAnnotations}
 />
