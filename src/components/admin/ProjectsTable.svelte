@@ -129,7 +129,7 @@
     }>();
 
     let openRow = $state<number | null>(null);
-    let userCache = $state(new Map<string, User>());
+    let ownerUsers = $state(new Map<string, User>());
     let annotationsCache = $state(new Map<number, string>());
     let paidModalOpen = $state(false);
     let annotationsModalOpen = $state(false);
@@ -144,13 +144,13 @@
 
         if (!wasOpen && projects[i]?.owner) {
             const ownerIri = projects[i].owner;
-            if (!userCache.has(ownerIri)) {
+            if (!ownerUsers.has(ownerIri)) {
                 const userId = extractId(ownerIri);
                 if (userId) {
                     apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(
                         ({ data }) => {
                             if (data) {
-                                userCache = new Map(userCache).set(ownerIri, data as User);
+                                ownerUsers = new Map(ownerUsers).set(ownerIri, data as User);
                             }
                         },
                     );
@@ -321,7 +321,7 @@
                                         {project}
                                         onOpenAnnotationsModal={() =>
                                             openAnnotationsModal(project, new MouseEvent("click"))}
-                                        userEmail={userCache.get(project.owner)?.email}
+                                        userEmail={ownerUsers.get(project.owner)?.email}
                                     />
                                 </TableBodyCell>
                             </TableBodyRow>
