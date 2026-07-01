@@ -13,7 +13,7 @@
     // import Select from "../../library/Select.svelte";
     // import TextArea from "../../library/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
-    import Toggle from "../../library/inputs/Toggle.svelte";
+    import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
     import type { Project } from "../../../openapi/client";
 
@@ -131,7 +131,7 @@
             <p class="text-content text-base">
                 {$t("pages.project.edit.aboutYou.legalEntityHelper")}
             </p>
-            <Toggle
+            <ToggleSwitch
                 bind:value={legalEntityType}
                 options={[
                     { value: "individual", label: $t("pages.project.edit.aboutYou.individual") },
