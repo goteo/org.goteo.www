@@ -3,7 +3,6 @@
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Search from "../library/inputs/Search.svelte";
-<<<<<<< feat/add-API-calls-for-projects-admin-actions
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
@@ -12,8 +11,6 @@
         onSearch?: (value: string) => void;
         onApplyFilters?: (filters: ProjectsQuery) => void;
     }>();
-=======
->>>>>>> develop
 
     let showFilters = $state(false);
     let searchValue = $state("");
