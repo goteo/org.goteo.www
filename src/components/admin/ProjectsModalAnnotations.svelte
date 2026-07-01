@@ -2,8 +2,8 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../i18n/store";
-    import Button from "../library/Button.svelte";
-    import TextArea from "../library/TextArea.svelte";
+import Button from "../library/buttons/Button.svelte";
+import TextArea from "../library/inputs/TextArea.svelte";
 
     let {
         open = $bindable(false),

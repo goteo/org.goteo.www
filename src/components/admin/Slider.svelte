@@ -3,7 +3,7 @@
 
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
-    import Loader from "../../svgs/Loader.svelte";
+    import Loader from "../library/feedback/Loader.svelte";
     import { t } from "../../i18n/store";
 
     import type { Options } from "flickity";
@@ -30,7 +30,7 @@
 
     const loadFlickity = async (elem: HTMLElement) => {
         try {
-            const { default: FlickityClass } = await import("flickity/js/index.js");
+            const { default: FlickityClass } = await import("flickity");
             new FlickityClass(elem, options);
             isSliderLoaded = true;
         } catch (err) {
