@@ -53,7 +53,7 @@
         "",
     ];
 
-    const processOptions = [
+    const statusOptions = [
         { value: "in_draft", label: $t("admin.projects.table.rows.status.in_draft") },
         {
             value: "to_campaign_review",
@@ -109,7 +109,7 @@
         onPageChange,
         onSortChange,
         onItemsPerPageChange,
-        onProcessChange,
+        onStatusChange,
         onSavePaid,
         onSaveAnnotations,
     } = $props<{
@@ -123,12 +123,14 @@
         onPageChange?: (page: number) => void;
         onSortChange?: (sort: string) => void;
         onItemsPerPageChange?: (perPage: number) => void;
-        onProcessChange?: (projectId: number, process: string) => void;
+        onStatusChange?: (projectId: number, status: string) => void;
         onSavePaid?: (projectId: number, paid: string, paidMatchfunding: string) => void;
         onSaveAnnotations?: (projectId: number, text: string) => void;
     }>();
 
     let openRow = $state<number | null>(null);
+    let userCache = $state(new Map<string, User>());
+    let annotationsCache = $state(new Map<number, string>());
     let paidModalOpen = $state(false);
     let annotationsModalOpen = $state(false);
     let paidValue = $state("");
@@ -137,7 +139,24 @@
     let selectedProjectId = $state(0);
 
     const toggleRow = (i: number) => {
-        openRow = openRow === i ? null : i;
+        const wasOpen = openRow === i;
+        openRow = wasOpen ? null : i;
+
+        if (!wasOpen && projects[i]?.owner) {
+            const ownerIri = projects[i].owner;
+            if (!userCache.has(ownerIri)) {
+                const userId = extractId(ownerIri);
+                if (userId) {
+                    apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(
+                        ({ data }) => {
+                            if (data) {
+                                userCache = new Map(userCache).set(ownerIri, data as User);
+                            }
+                        },
+                    );
+                }
+            }
+        }
     };
 
     function openPaidModal(project: ProjectRow, e: MouseEvent) {
@@ -151,12 +170,12 @@
     function openAnnotationsModal(project: ProjectRow, e: MouseEvent) {
         e.stopPropagation();
         selectedProjectId = project.id;
-        annotationText = project.annotations;
+        annotationText = annotationsCache.get(project.id) ?? project.annotations;
         annotationsModalOpen = true;
     }
 
-    function handleProcessChange(project: ProjectRow, newProcess: string) {
-        onProcessChange?.(project.id, newProcess);
+    function handleStatusChange(project: ProjectRow, newStatus: string) {
+        onStatusChange?.(project.id, newStatus);
     }
 
     function handleSavePaid() {
@@ -165,22 +184,13 @@
     }
 
     function handleSaveAnnotations() {
-        onSaveAnnotations?.(selectedProjectId, annotationText);
+        annotationsCache = new Map(annotationsCache).set(selectedProjectId, annotationText);
+        const project: ProjectRow | undefined = projects.find((p: ProjectRow) => p.id === selectedProjectId);
+        if (project) {
+            project.annotations = annotationText;
+            project.annotationsCount = annotationText ? 1 : 0;
+        }
         annotationsModalOpen = false;
-    }
-
-    function normalizeStatus(status: string): string {
-        return status.replace(/\./g, "_");
-    }
-
-    function getStatusVariant(status: string): string {
-        if (status === "funding_paid") return "border-green-600 text-green-600";
-        if (status.includes("rejected") || status.includes("failed"))
-            return "border-red-600 text-red-600";
-        if (status.includes("review")) return "border-yellow-600 text-yellow-600";
-        if (status.includes("campaign") || status.includes("funding"))
-            return "border-secondary text-secondary";
-        return "border-black text-black";
     }
 </script>
 
@@ -247,7 +257,7 @@
                             onclick={() => toggleRow(i)}
                             class="{openRow === i
                                 ? 'bg-purple-soft'
-                                : 'bg-[#ffffff]'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
+                                : 'bg-white'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
                         >
                             <TableBodyCell
                                 class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4"
@@ -276,25 +286,14 @@
                                 </div>
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                <span
-                                    class="rounded border px-3 py-1 text-sm font-medium {getStatusVariant(
-                                        project.status,
-                                    )}"
-                                >
-                                    {$t(
-                                        `admin.projects.table.rows.status.${normalizeStatus(project.status)}`,
-                                    )}
-                                </span>
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 <div onclick={(e) => e.stopPropagation()} role="presentation">
                                     <select
                                         class="border-secondary text-secondary rounded-sm border py-1 text-sm"
-                                        value={project.process}
+                                        value={project.status}
                                         onchange={(e) =>
-                                            handleProcessChange(project, e.currentTarget.value)}
+                                            handleStatusChange(project, e.currentTarget.value)}
                                     >
-                                        {#each processOptions as opt}
+                                        {#each statusOptions as opt}
                                             <option value={opt.value}>{opt.label}</option>
                                         {/each}
                                     </select>
@@ -322,6 +321,7 @@
                                         {project}
                                         onOpenAnnotationsModal={() =>
                                             openAnnotationsModal(project, new MouseEvent("click"))}
+                                        userEmail={userCache.get(project.owner)?.email}
                                     />
                                 </TableBodyCell>
                             </TableBodyRow>
