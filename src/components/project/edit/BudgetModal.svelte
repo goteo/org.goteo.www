@@ -4,7 +4,7 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
-    import { defaultCurrency } from "../../../utils/currencies";
+    import { defaultCurrency, getUnit } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
@@ -31,7 +31,11 @@
         untrack(() => budgetItem?.type),
     );
     let amount = $state(
-        untrack(() => (budgetItem?.money.amount ? budgetItem.money.amount / 100 : 0)),
+        untrack(() =>
+            budgetItem?.money.amount
+                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
+                : 0,
+        ),
     );
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
         untrack(() => budgetItem?.deadline),
@@ -39,6 +43,18 @@
     let selectedBudgetDescription = $state(untrack(() => budgetItem?.description ?? ""));
 
     let openDeleteModal = $state(false);
+
+    $effect(() => {
+        if (open) {
+            selectedBudgetTitle = budgetItem?.title ?? "";
+            selectedBudgetType = budgetItem?.type;
+            amount = budgetItem?.money.amount
+                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
+                : 0;
+            selectedBudgetDeadline = budgetItem?.deadline;
+            selectedBudgetDescription = budgetItem?.description ?? "";
+        }
+    });
 
     const isFormValid = $derived(
         selectedBudgetTitle.trim() !== "" &&
@@ -86,7 +102,7 @@
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,
             money: {
-                amount: Number(amount) * 100,
+                amount: Number(amount) * getUnit(defaultCurrency()),
                 currency: defaultCurrency(),
             },
             type: selectedBudgetType!,
