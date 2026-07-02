@@ -2,8 +2,8 @@
     import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
     import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
-    import Button from "../../library/Button.svelte";
-    import Grid from "../../library/Grid.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Grid from "../../library/layout/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";

@@ -8,9 +8,9 @@
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
-    import Button from "../library/Button.svelte";
-    import Card from "../library/Card.svelte";
-    import Grid from "../library/Grid.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Card from "../library/cards/Card.svelte";
+    import Grid from "../library/layout/Grid.svelte";
 
     export let project: Project;
     export let totalSupports: number = 0;

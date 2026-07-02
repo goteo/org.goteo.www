@@ -29,6 +29,33 @@ export async function authorizationCode(args: {
     return oauth;
 }
 
+export async function passwordGrant(args: {
+    identifier: string;
+    password: string;
+}): Promise<OAuthToken> {
+    const params = new URLSearchParams();
+    params.set("grant_type", "password");
+    params.set("username", args.identifier);
+    params.set("password", args.password);
+    params.set("client_id", import.meta.env.OAUTH2_CLIENT_ID);
+    params.set("client_secret", import.meta.env.OAUTH2_CLIENT_SECRET);
+
+    const oauth: OAuthToken = await fetch(new URL("/oauth/token", import.meta.env.PUBLIC_API_URL), {
+        method: "POST",
+        body: params,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    })
+        .then((res) => res.json())
+        .then((token) => withHttpHeaders(token));
+
+    if (oauth.error!) {
+        console.error(oauth);
+        throw new Error(oauth.error_description);
+    }
+
+    return oauth;
+}
+
 export async function refreshToken(token: OAuthToken): Promise<OAuthToken> {
     if (token.refresh_token === undefined) {
         throw new Error("Cannot refresh the given token as it does not have a refresh_token");
