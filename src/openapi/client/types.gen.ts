@@ -543,7 +543,6 @@ export type GatewayCharge = {
      * The status of the charge item with the Gateway.
      */
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
-    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -559,7 +558,6 @@ export type GatewayChargeChargeUpdationDto = {
     /**
      * To ask for a refund, set the status `to_refund`.
      */
-    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
 };
 
@@ -608,7 +606,6 @@ export type GatewayChargeJsonld = {
      * The status of the charge item with the Gateway.
      */
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
-    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
 };
@@ -646,7 +643,6 @@ export type GatewayCheckout = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'to_charge' | 'charged';
     status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
@@ -774,7 +770,6 @@ export type GatewayCheckoutJsonld = {
     /**
      * The status of this Checkout, as confirmed by the Gateway.
      */
-    status?: 'to_charge' | 'charged';
     status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
@@ -1502,7 +1497,6 @@ export type Project = {
      * The status of a Project represents how far it is in it's life-cycle.
      */
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1555,7 +1549,6 @@ export type ProjectProjectCreationDto = {
      */
     release?: string;
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1579,7 +1572,6 @@ export type ProjectProjectCreationDtoJsonld = {
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1621,7 +1613,6 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1686,7 +1677,6 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
@@ -5452,12 +5442,6 @@ export type ApiUsersPostData = {
          */
         email?: string;
     };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
     url: '/v4/users';
 };
 
@@ -5532,12 +5516,6 @@ export type ApiUsersIdDeleteData = {
          */
         email?: string;
     };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
     url: '/v4/users/{id}';
 };
 
@@ -5569,12 +5547,6 @@ export type ApiUsersIdPatchData = {
          * User identifier
          */
         id: string;
-    };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
     };
     query?: {
         /**
@@ -5626,7 +5598,7 @@ export type ApiVersionsGetCollectionData = {
         /**
          * The name of the resource.
          */
-        resource: 'User' | 'GatewayCharge' | 'GatewayCheckout';
+        resource: 'GatewayCharge' | 'GatewayCheckout' | 'User';
         /**
          * The ID of the named resource.
          */
