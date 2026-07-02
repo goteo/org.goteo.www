@@ -16,7 +16,7 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
     }
 
     const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
-    let maxAge = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) * 1000 : defaultMaxAgeMs;
+    const maxAge = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) * 1000 : defaultMaxAgeMs;
 
     if (!maxAgeMatch) {
         const expires = cached.headers.get("Expires");

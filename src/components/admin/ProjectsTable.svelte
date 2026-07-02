@@ -32,16 +32,16 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    import Loader from "../library/feedback/Loader.svelte";
     import Pagination from "./Pagination.svelte";
     import ProjectsDetailsRow from "./ProjectsDetailsRow.svelte";
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import { t } from "../../i18n/store";
-    import Chevron from "../icons/navigation/Chevron.svelte";
-    import Edit from "../icons/actions/Edit.svelte";
     import { apiUsersIdOrHandleGet, type User } from "../../openapi/client/index.ts";
     import { extractId } from "../../utils/extractId";
+    import Edit from "../icons/actions/Edit.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
+    import Loader from "../library/feedback/Loader.svelte";
 
     const tableHeaders = [
         "admin.projects.table.headers.name",

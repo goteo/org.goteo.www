@@ -3,7 +3,6 @@
     import ProjectsExportCsv from "./ProjectsExportCsv.svelte";
     import ProjectsFilters from "./ProjectsFilters.svelte";
     import ProjectsTable from "./ProjectsTable.svelte";
-    import type { ProjectRow } from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";
     import {
@@ -15,9 +14,11 @@
         type Accounting,
         type User,
     } from "../../openapi/client/index.ts";
-    import { toCollectionItems } from "../../utils/hydra";
-    import { extractId } from "../../utils/extractId";
     import { formatCurrency } from "../../utils/currencies";
+    import { extractId } from "../../utils/extractId";
+    import { toCollectionItems } from "../../utils/hydra";
+
+    import type { ProjectRow } from "./ProjectsTable.svelte";
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;

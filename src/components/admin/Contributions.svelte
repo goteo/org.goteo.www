@@ -9,8 +9,6 @@
     import Table, { type ExtendedCharge } from "./Table.svelte";
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
-    import { formatCurrency } from "../../utils/currencies";
-    import { isEnabled, tipjarId } from "../../utils/tipping";
     import {
         apiAccountingsIdGet,
         apiGatewayChargesGetCollection,
@@ -27,12 +25,12 @@
         type Tipjar,
         type User,
     } from "../../openapi/client/index.ts";
-    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
+    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         isLoading,
         itemsPerPage,
@@ -40,8 +38,10 @@
         currentPage,
         sortOptions,
     } from "../../stores/chargesPaginationAndSort.ts";
+    import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import { isEnabled, tipjarId } from "../../utils/tipping";
 
     const initialSearchQuery =
         typeof window !== "undefined"

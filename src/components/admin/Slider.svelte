@@ -4,7 +4,6 @@
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
     import Loader from "../library/feedback/Loader.svelte";
-    import { t } from "../../i18n/store";
 
     import type { Options } from "flickity";
 
