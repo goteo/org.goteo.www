@@ -1,7 +1,8 @@
 ---
 import PromoterCard from "./PromoterCard.astro";
 import type { Promoter } from "../../types/promoter";
-import ArrowRightIcon from "../../svgs/ArrowRightIcon.svelte";
+import Arrow from "../../components/icons/navigation/Arrow.svelte";
+import Grid from "../library/layout/Grid.svelte";
 
 const { t } = Astro.locals;
 
@@ -10,7 +11,7 @@ const promoters: Promoter[] = [
     {
         id: 1,
         name: "La Marea",
-        image: "/imgs/project-owners/la-marea.png",
+        image: "/images/promoters/project-owners/la-marea.png",
         projectsPromoted: 4,
         capitalRaised: "539.689 €",
         variant: "1",
@@ -18,7 +19,7 @@ const promoters: Promoter[] = [
     {
         id: 2,
         name: "Agrocuir",
-        image: "/imgs/project-owners/agrocuir.png",
+        image: "/images/promoters/project-owners/agrocuir.png",
         projectsPromoted: 4,
         capitalRaised: "71.472 €",
         variant: "2",
@@ -26,7 +27,7 @@ const promoters: Promoter[] = [
     {
         id: 3,
         name: "IRIDIA",
-        image: "/imgs/project-owners/iridia.png",
+        image: "/images/promoters/project-owners/iridia.png",
         projectsPromoted: 9,
         capitalRaised: "311.258 €",
         variant: "3",
@@ -39,20 +40,20 @@ const promoters: Promoter[] = [
         <!-- Header with title and view all button -->
         <div class="flex items-center justify-between px-0 md:px-0">
             <h2 class="text-2xl leading-8 font-bold text-black">
-                {t("home.featuredPromoters.title")}
+                {t("pages.home.featuredPromoters.title")}
             </h2>
             <a
                 href="/promoters"
                 class="bg-variant1 text-secondary hover:bg-secondary flex items-center gap-2 rounded-3xl px-6 py-4 text-base leading-6 font-bold transition-all duration-200 hover:text-white"
             >
-                <ArrowRightIcon />
-                {t("home.featuredPromoters.viewAll")}
+                <Arrow />
+                {t("pages.home.featuredPromoters.viewAll")}
             </a>
         </div>
 
         <!-- Promoters cards grid -->
-        <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" client:load>
             {promoters.map((promoter) => <PromoterCard promoter={promoter} />)}
-        </div>
+        </Grid>
     </div>
 </section>

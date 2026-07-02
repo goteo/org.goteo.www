@@ -1,0 +1,25 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../layouts/App.svelte";
+import CreateProjectForm from "./CreateProjectForm.svelte";
+import { apiCategoriesGetCollection } from "../../../openapi/client";
+import { toCollectionItems } from "../../../utils/hydra";
+import type { Category } from "../../../openapi/client";
+
+const { t, lang, langs, session } = Astro.locals;
+
+if (!session) {
+    return Astro.redirect("/login");
+}
+
+const { data: categoriesRaw } = await apiCategoriesGetCollection({
+    headers: { "Accept-Language": langs },
+});
+const categories = toCollectionItems<Category>(categoriesRaw);
+---
+
+<Layout title={t("pages.project.create.title")}>
+    <App client:load locale={lang} session={session}>
+        <CreateProjectForm client:load categories={categories || []} />
+    </App>
+</Layout>

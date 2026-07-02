@@ -20,7 +20,7 @@ export type Accounting = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: MoneyWithConversion;
+    balance?: MoneyOutput;
 };
 
 /**
@@ -50,7 +50,7 @@ export type AccountingJsonld = {
      * 3-letter ISO 4217 currency code.
      */
     currency?: string;
-    balance?: MoneyWithConversionJsonld;
+    balance?: MoneyOutputJsonld;
 };
 
 /**
@@ -71,7 +71,7 @@ export type AccountingBalancePoint = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyWithConversion;
+    balance?: MoneyOutput;
     /**
      * The number of items aggregated in this point.
      */
@@ -98,7 +98,7 @@ export type AccountingBalancePointJsonld = {
     /**
      * Resulting balance for items in this point.
      */
-    balance?: MoneyWithConversionJsonld;
+    balance?: MoneyOutputJsonld;
     /**
      * The number of items aggregated in this point.
      */
@@ -119,7 +119,7 @@ export type AccountingTransaction = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -151,7 +151,7 @@ export type AccountingTransactionJsonld = {
     /**
      * The monetary value received at target and issued at origin.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
      * The Accounting from which the Transaction comes from.
      */
@@ -195,19 +195,19 @@ export type BudgetSummary = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyWithConversion;
+    task?: MoneyOutput;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyWithConversion;
+    material?: MoneyOutput;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyWithConversion;
+    infra?: MoneyOutput;
 };
 
 export type BudgetSummaryJsonld = {
@@ -221,25 +221,52 @@ export type BudgetSummaryJsonld = {
     /**
      * The total money by the included items.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
      * The total money of type 'task'.
      */
-    task?: MoneyWithConversionJsonld;
+    task?: MoneyOutputJsonld;
     /**
      * The total money of type 'material'.
      */
-    material?: MoneyWithConversionJsonld;
+    material?: MoneyOutputJsonld;
     /**
      * The total money of type 'infrastructure'.
      */
-    infra?: MoneyWithConversionJsonld;
+    infra?: MoneyOutputJsonld;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type Category = {
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
 };
 
+/**
+ * A Category can be used by other resources as a "topic intent".\
+ * For example. Projects might relate with up to 2 Categories, which are used by the Project
+ * as a way to describe itself and can be used to discover similar Projects.\
+ * \
+ * Categories can only be modified by users with the role "ROLE_ADMIN", but can usually
+ * be referenced by non-admin users in their own resources, such as Project owners.
+ */
 export type CategoryJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -248,7 +275,74 @@ export type CategoryJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
-    id?: string;
+    /**
+     * This value will identify this Category in relationships with other resources.
+     */
+    id: string;
+    /**
+     * A human-readable self-descriptive string of what this Category is about.
+     */
+    name: string;
+    /**
+     * List of the available content locales.
+     */
+    readonly locales?: Array<string>;
+};
+
+export type ChargeCreationDto = {
+    /**
+     * How this item should be processed by the Gateway.\
+     * \
+     * `single` is for one time payments.\
+     * `recurring` is for payments repeated over time.
+     */
+    type: 'single' | 'recurring';
+    /**
+     * A short, descriptive string for this charge item.\
+     * May be displayed to the payer.
+     */
+    title: string;
+    /**
+     * Detailed information about the charge item.\
+     * May be displayed to the payer.
+     */
+    description?: string | null;
+    /**
+     * The Accounting receiving the money after a successful payment.
+     */
+    target: string;
+    /**
+     * The money to-be-paid for this item at the Gateway.
+     */
+    money: MoneyInput;
+};
+
+export type ChargeCreationDtoJsonld = {
+    /**
+     * How this item should be processed by the Gateway.\
+     * \
+     * `single` is for one time payments.\
+     * `recurring` is for payments repeated over time.
+     */
+    type: 'single' | 'recurring';
+    /**
+     * A short, descriptive string for this charge item.\
+     * May be displayed to the payer.
+     */
+    title: string;
+    /**
+     * Detailed information about the charge item.\
+     * May be displayed to the payer.
+     */
+    description?: string | null;
+    /**
+     * The Accounting receiving the money after a successful payment.
+     */
+    target: string;
+    /**
+     * The money to-be-paid for this item at the Gateway.
+     */
+    money: MoneyInputJsonld;
 };
 
 /**
@@ -419,7 +513,7 @@ export type GatewayCharge = {
     /**
      * The Checkout to which this Charge item belongs to.
      */
-    readonly checkout?: string;
+    checkout?: string;
     /**
      * How this item should be processed by the Gateway.\
      * \
@@ -444,10 +538,11 @@ export type GatewayCharge = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyWithConversion;
+    money: MoneyOutput;
     /**
      * The status of the charge item with the Gateway.
      */
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
@@ -464,6 +559,7 @@ export type GatewayChargeChargeUpdationDto = {
     /**
      * To ask for a refund, set the status `to_refund`.
      */
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
 };
 
@@ -482,7 +578,7 @@ export type GatewayChargeJsonld = {
     /**
      * The Checkout to which this Charge item belongs to.
      */
-    readonly checkout?: string;
+    checkout?: string;
     /**
      * How this item should be processed by the Gateway.\
      * \
@@ -507,10 +603,11 @@ export type GatewayChargeJsonld = {
     /**
      * The money to-be-paid for this item at the Gateway.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyOutputJsonld;
     /**
      * The status of the charge item with the Gateway.
      */
+    status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
@@ -550,16 +647,79 @@ export type GatewayCheckout = {
      * The status of this Checkout, as confirmed by the Gateway.
      */
     status?: 'to_charge' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
-    readonly links?: Array<Link>;
+    readonly links?: Array<GatewayLink>;
     /**
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
     readonly trackings?: Array<Tracking>;
     readonly dateCreated?: string;
     readonly dateUpdated?: string;
+};
+
+/**
+ * A GatewayCheckout represents a payment session with a Gateway.
+ */
+export type GatewayCheckoutCheckoutCreationDto = {
+    /**
+     * The desired Gateway to checkout with.
+     */
+    gateway: string;
+    /**
+     * The Accounting paying for the charges.
+     */
+    origin: string;
+    /**
+     * A list of the payment items to be charged to the origin.
+     */
+    charges: Array<ChargeCreationDto>;
+    /**
+     * Gateways will redirect the user back to the v4 API,
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
+     */
+    returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
+};
+
+/**
+ * A GatewayCheckout represents a payment session with a Gateway.
+ */
+export type GatewayCheckoutCheckoutCreationDtoJsonld = {
+    /**
+     * The desired Gateway to checkout with.
+     */
+    gateway: string;
+    /**
+     * The Accounting paying for the charges.
+     */
+    origin: string;
+    /**
+     * A list of the payment items to be charged to the origin.
+     */
+    charges: Array<ChargeCreationDtoJsonld>;
+    /**
+     * Gateways will redirect the user back to the v4 API,
+     * which will then redirect the user to this address.\
+     * \
+     * An URL query param `checkoutId` with the Checkout ID value
+     * will be appended on the redirection.
+     */
+    returnUrl: string;
+    /**
+     * The strategy chosen by the User to decide where the money will go to
+     * in the event that one Charge needs to be returned.
+     */
+    refund?: 'to_wallet' | 'to_gateway';
 };
 
 /**
@@ -615,10 +775,11 @@ export type GatewayCheckoutJsonld = {
      * The status of this Checkout, as confirmed by the Gateway.
      */
     status?: 'to_charge' | 'charged';
+    status?: 'to_charge' | 'charged';
     /**
      * A list of related hyperlinks, as provided by the Gateway.
      */
-    readonly links?: Array<LinkJsonld>;
+    readonly links?: Array<GatewayLinkJsonld>;
     /**
      * A list of related tracking codes and numbers, as provided by the Gateway.
      */
@@ -627,15 +788,7 @@ export type GatewayCheckoutJsonld = {
     readonly dateUpdated?: string;
 };
 
-export type Link = {
-    /**
-     * The complete target URL.
-     */
-    href?: string;
-    /**
-     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
-     */
-    rel?: string;
+export type GatewayLink = {
     /**
      * The HTTP method required to make the related call.
      */
@@ -646,6 +799,53 @@ export type Link = {
      * `payment` links are for end-users who must visit this link to complete the checkout.
      */
     type?: 'debug' | 'payment';
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
+};
+
+export type GatewayLinkJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The HTTP method required to make the related call.
+     */
+    method?: string;
+    /**
+     * The type of the link indicates who is the intended user of a link.\
+     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
+     * `payment` links are for end-users who must visit this link to complete the checkout.
+     */
+    type?: 'debug' | 'payment';
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
+};
+
+export type Link = {
+    /**
+     * The complete target URL.
+     */
+    url?: string;
+    /**
+     * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
+     */
+    rel?: string | null;
 };
 
 export type LinkJsonld = {
@@ -659,21 +859,11 @@ export type LinkJsonld = {
     /**
      * The complete target URL.
      */
-    href?: string;
+    url?: string;
     /**
      * The link relation type, which serves as an ID for a link that unambiguously describes the semantics of the link.
      */
-    rel?: string;
-    /**
-     * The HTTP method required to make the related call.
-     */
-    method?: string;
-    /**
-     * The type of the link indicates who is the intended user of a link.\
-     * `debug` links are for developers and platform maintainers to get useful information about the checkout.\
-     * `payment` links are for end-users who must visit this link to complete the checkout.
-     */
-    type?: 'debug' | 'payment';
+    rel?: string | null;
 };
 
 /**
@@ -955,7 +1145,7 @@ export type MatchStrategy = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: MoneyWithConversion;
+    limit: MoneyInput;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1009,7 +1199,7 @@ export type MatchStrategyJsonld = {
     /**
      * The assigned maximum amount of funding that will be given by the MatchFormula per operation.
      */
-    limit: MoneyWithConversionJsonld;
+    limit: MoneyInputJsonld;
     /**
      * The `x` factor used to calculate the resulting match of funds with the MatchFormula.
      */
@@ -1042,7 +1232,38 @@ export type MoneyJsonld = {
     conversion?: ConversionJsonld | null;
 };
 
-export type MoneyWithConversion = {
+export type MoneyInput = {
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+};
+
+export type MoneyInputJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * An amount of currency.\
+     * Expressed as the minor unit, e.g: cents, pennies, etc.
+     */
+    amount: number;
+    /**
+     * 3-letter ISO 4217 currency code.
+     */
+    currency: string;
+};
+
+export type MoneyOutput = {
     /**
      * An amount of currency.\
      * Expressed as the minor unit, e.g: cents, pennies, etc.
@@ -1058,7 +1279,7 @@ export type MoneyWithConversion = {
     conversion?: Conversion | null;
 };
 
-export type MoneyWithConversionJsonld = {
+export type MoneyOutputJsonld = {
     '@context'?: string | {
         '@vocab': string;
         hydra: 'http://www.w3.org/ns/hydra/core#';
@@ -1262,7 +1483,7 @@ export type Project = {
      */
     calendar?: ProjectCalendar;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -1281,6 +1502,7 @@ export type Project = {
      * The status of a Project represents how far it is in it's life-cycle.
      */
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1298,6 +1520,11 @@ export type Project = {
      */
     readonly updates?: Array<string>;
     readonly matchCallSubmissions?: Array<string>;
+    /**
+     * A list of URLs related to the Project.\
+     * e.g: social profiles, project website.
+     */
+    readonly links?: Array<Link>;
     /**
      * List of the available content locales.
      */
@@ -1319,14 +1546,15 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<Category>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1343,14 +1571,15 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories: Array<CategoryJsonld>;
+    categories: Array<string>;
     /**
      * Desired date-time of release for the created Project.\
      * By default 28 days from now, at minimum 14 days from now.
      */
     release?: string;
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1368,9 +1597,9 @@ export type ProjectProjectUpdationDto = {
      */
     subtitle?: string;
     /**
-     * One of the available categories.
+     * List of Categories.
      */
-    categories?: Array<Category>;
+    categories?: Array<string>;
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
@@ -1392,6 +1621,7 @@ export type ProjectProjectUpdationDto = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1438,7 +1668,7 @@ export type ProjectJsonld = {
      */
     calendar?: ProjectCalendarJsonld;
     /**
-     * A list of the available categories most relevant to this Project.
+     * A list of the available Categories of this Project.
      */
     categories: Array<string>;
     /**
@@ -1457,6 +1687,7 @@ export type ProjectJsonld = {
      * The status of a Project represents how far it is in it's life-cycle.
      */
     status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1474,6 +1705,11 @@ export type ProjectJsonld = {
      */
     readonly updates?: Array<string>;
     readonly matchCallSubmissions?: Array<string>;
+    /**
+     * A list of URLs related to the Project.\
+     * e.g: social profiles, project website.
+     */
+    readonly links?: Array<LinkJsonld>;
     /**
      * List of the available content locales.
      */
@@ -1505,7 +1741,7 @@ export type ProjectBudgetItem = {
     /**
      * The amount of money required for this item.
      */
-    money: MoneyWithConversion;
+    money: MoneyInput;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1546,7 +1782,7 @@ export type ProjectBudgetItemJsonld = {
     /**
      * The amount of money required for this item.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyInputJsonld;
     /**
      * Defines the budget category for this item within the project.
      */
@@ -1691,7 +1927,7 @@ export type ProjectReward = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyWithConversion;
+    money: MoneyInput;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1744,7 +1980,7 @@ export type ProjectRewardJsonld = {
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
-    money: MoneyWithConversionJsonld;
+    money: MoneyInputJsonld;
     /**
      * Rewards might be finite, i.e: has a limited amount of existing unitsTotal.
      */
@@ -1858,9 +2094,11 @@ export type ProjectSupport = {
     /**
      * The Accounting of origin for the Transactions under this ProjectSupport record.\
      * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
+     * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
+    readonly displayImage?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -1868,11 +2106,15 @@ export type ProjectSupport = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: MoneyWithConversion;
+    money?: MoneyOutput;
     /**
-     * User's will to have their support to the Project be shown publicly.
+     * If the origin wishes to remain anonymous behind this ProjectSupport.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -1927,9 +2169,11 @@ export type ProjectSupportJsonld = {
     /**
      * The Accounting of origin for the Transactions under this ProjectSupport record.\
      * \
-     * When `anonymous` is *true* it will only be public to admins and the User.
+     * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
+    readonly displayName?: string;
+    readonly displayImage?: string;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -1937,11 +2181,15 @@ export type ProjectSupportJsonld = {
     /**
      * The total monetary value of the Transactions going to the Project.
      */
-    money?: MoneyWithConversionJsonld;
+    money?: MoneyOutputJsonld;
     /**
-     * User's will to have their support to the Project be shown publicly.
+     * If the origin wishes to remain anonymous behind this ProjectSupport.
      */
     anonymous: boolean;
+    /**
+     * If this ProjectSupport comes from a MatchCall this flag will be true.
+     */
+    readonly matchfunding?: boolean;
     /**
      * A message of support from the User to the Project.
      */
@@ -2049,6 +2297,7 @@ export type ProjectUpdateJsonld = {
 
 export type ProjectVideo = {
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2061,6 +2310,7 @@ export type ProjectVideoJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     src?: string | null;
+    cover?: string | null;
     thumbnail?: string | null;
 };
 
@@ -2176,11 +2426,15 @@ export type TrackingJsonld = {
  */
 export type User = {
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2212,13 +2466,22 @@ export type User = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
+    /**
+     * A list of URLs provided by the User.\
+     * e.g: social profiles, personal website.
+     */
+    readonly links?: Array<Link>;
+    /**
+     * ISO 3166 data about the Users's location territory.
+     */
+    territory?: Territory;
+    /**
+     * Free-form rich text description for the User.
+     */
+    description?: string;
 };
 
 /**
@@ -2271,11 +2534,15 @@ export type UserJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
-    email: string;
     /**
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    email: string;
+    /**
+     * Has this User confirmed their email address?
+     */
+    readonly emailConfirmed?: boolean;
     /**
      * URL to the avatar image of this User.
      */
@@ -2307,90 +2574,22 @@ export type UserJsonld = {
      */
     readonly projects?: Array<string>;
     /**
-     * Has this User confirmed their email address?
-     */
-    readonly emailConfirmed?: boolean;
-    /**
      * A flag determined by the platform for Users who are known to be active.
      */
     readonly active?: boolean;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserToken = {
-    readonly id?: number;
     /**
-     * The User token itself.
+     * A list of URLs provided by the User.\
+     * e.g: social profiles, personal website.
      */
-    readonly token?: string;
+    readonly links?: Array<LinkJsonld>;
     /**
-     * The User who this token grants access as.
+     * ISO 3166 data about the Users's location territory.
      */
-    readonly owner?: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenUserTokenLoginDto = {
+    territory?: TerritoryJsonld;
     /**
-     * The identifier (email, handle) of the User to be authenticated.
+     * Free-form rich text description for the User.
      */
-    identifier: string;
-    /**
-     * The password of the User to be authenticated.
-     */
-    password: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenUserTokenLoginDtoJsonld = {
-    /**
-     * The identifier (email, handle) of the User to be authenticated.
-     */
-    identifier: string;
-    /**
-     * The password of the User to be authenticated.
-     */
-    password: string;
-};
-
-/**
- * UserTokens authenticate requests on behalf of the User who owns them.\
- * \
- * When a UserToken is created v4 generates a SHA-256 hash that is unique for each UserToken.
- * The value of a UserToken comes preceded by a 4-digit-length prefix based on the type of token it is.
- */
-export type UserTokenJsonld = {
-    '@context'?: string | {
-        '@vocab': string;
-        hydra: 'http://www.w3.org/ns/hydra/core#';
-        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
-    };
-    readonly '@id'?: string;
-    readonly '@type'?: string;
-    readonly id?: number;
-    /**
-     * The User token itself.
-     */
-    readonly token?: string;
-    /**
-     * The User who this token grants access as.
-     */
-    readonly owner?: string;
+    description?: string;
 };
 
 /**
@@ -2703,6 +2902,76 @@ export type ApiCategoriesGetCollectionResponses = {
 
 export type ApiCategoriesGetCollectionResponse = ApiCategoriesGetCollectionResponses[keyof ApiCategoriesGetCollectionResponses];
 
+export type ApiCategoriesPostData = {
+    /**
+     * The new Category resource
+     */
+    body: Category;
+    path?: never;
+    query?: never;
+    url: '/v4/categories';
+};
+
+export type ApiCategoriesPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesPostError = ApiCategoriesPostErrors[keyof ApiCategoriesPostErrors];
+
+export type ApiCategoriesPostResponses = {
+    /**
+     * Category resource created
+     */
+    201: Category;
+};
+
+export type ApiCategoriesPostResponse = ApiCategoriesPostResponses[keyof ApiCategoriesPostResponses];
+
+export type ApiCategoriesIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdDeleteErrors = {
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiCategoriesIdDeleteError = ApiCategoriesIdDeleteErrors[keyof ApiCategoriesIdDeleteErrors];
+
+export type ApiCategoriesIdDeleteResponses = {
+    /**
+     * Category resource deleted
+     */
+    204: void;
+};
+
+export type ApiCategoriesIdDeleteResponse = ApiCategoriesIdDeleteResponses[keyof ApiCategoriesIdDeleteResponses];
+
 export type ApiCategoriesIdGetData = {
     body?: never;
     path: {
@@ -2732,6 +3001,51 @@ export type ApiCategoriesIdGetResponses = {
 };
 
 export type ApiCategoriesIdGetResponse = ApiCategoriesIdGetResponses[keyof ApiCategoriesIdGetResponses];
+
+export type ApiCategoriesIdPatchData = {
+    /**
+     * The updated Category resource
+     */
+    body: Category;
+    path: {
+        /**
+         * Category identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/categories/{id}';
+};
+
+export type ApiCategoriesIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiCategoriesIdPatchError = ApiCategoriesIdPatchErrors[keyof ApiCategoriesIdPatchErrors];
+
+export type ApiCategoriesIdPatchResponses = {
+    /**
+     * Category resource updated
+     */
+    200: Category;
+};
+
+export type ApiCategoriesIdPatchResponse = ApiCategoriesIdPatchResponses[keyof ApiCategoriesIdPatchResponses];
 
 export type ApiGatewaysGetCollectionData = {
     body?: never;
@@ -2825,6 +3139,8 @@ export type ApiGatewayChargesGetCollectionData = {
         'dateUpdated[strictly_before]'?: string;
         'dateUpdated[after]'?: string;
         'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
     };
     url: '/v4/gateway_charges';
 };
@@ -2925,15 +3241,6 @@ export type ApiGatewayCheckoutsGetCollectionData = {
     url: '/v4/gateway_checkouts';
 };
 
-export type ApiGatewayCheckoutsGetCollectionErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-};
-
-export type ApiGatewayCheckoutsGetCollectionError = ApiGatewayCheckoutsGetCollectionErrors[keyof ApiGatewayCheckoutsGetCollectionErrors];
-
 export type ApiGatewayCheckoutsGetCollectionResponses = {
     /**
      * GatewayCheckout collection
@@ -2947,7 +3254,7 @@ export type ApiGatewayCheckoutsPostData = {
     /**
      * The new GatewayCheckout resource
      */
-    body: GatewayCheckout;
+    body: GatewayCheckoutCheckoutCreationDto;
     path?: never;
     query?: never;
     url: '/v4/gateway_checkouts';
@@ -2958,6 +3265,10 @@ export type ApiGatewayCheckoutsPostErrors = {
      * Invalid input
      */
     400: ErrorJsonld;
+    /**
+     * Forbidden
+     */
+    403: ErrorJsonld;
     /**
      * An error occurred
      */
@@ -3842,6 +4153,12 @@ export type ApiProjectsGetCollectionData = {
         subtitle?: string;
         categories?: string;
         'categories[]'?: Array<string>;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
         description?: string;
         status?: string;
         'status[]'?: Array<string>;
@@ -4646,6 +4963,7 @@ export type ApiProjectSupportsGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports';
 };
@@ -4668,6 +4986,7 @@ export type ApiProjectSupportsmoneyTotalGetCollectionData = {
         origin?: string;
         'origin[]'?: Array<string>;
         anonymous?: boolean;
+        matchfunding?: boolean;
     };
     url: '/v4/project_supports/money_total';
 };
@@ -5098,10 +5417,16 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
-        email?: string;
         handle?: string;
+        email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;
+        'territory.country'?: string;
+        'territory.country[]'?: Array<string>;
+        'territory.subLvl1'?: string;
+        'territory.subLvl1[]'?: Array<string>;
+        'territory.subLvl2'?: string;
+        'territory.subLvl2[]'?: Array<string>;
     };
     url: '/v4/users';
 };
@@ -5121,6 +5446,12 @@ export type ApiUsersPostData = {
      */
     body: UserUserSignupDto;
     path?: never;
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
     query?: {
         /**
          * Only available to admin users
@@ -5152,6 +5483,41 @@ export type ApiUsersPostResponses = {
 
 export type ApiUsersPostResponse = ApiUsersPostResponses[keyof ApiUsersPostResponses];
 
+export type ApiUsersIdOrHandleGetData = {
+    body?: never;
+    path: {
+        /**
+         * User identifier or handle
+         */
+        idOrHandle: string;
+    };
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
+    };
+    url: '/v4/users/{idOrHandle}';
+};
+
+export type ApiUsersIdOrHandleGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiUsersIdOrHandleGetError = ApiUsersIdOrHandleGetErrors[keyof ApiUsersIdOrHandleGetErrors];
+
+export type ApiUsersIdOrHandleGetResponses = {
+    /**
+     * User resource
+     */
+    200: User;
+};
+
+export type ApiUsersIdOrHandleGetResponse = ApiUsersIdOrHandleGetResponses[keyof ApiUsersIdOrHandleGetResponses];
+
 export type ApiUsersIdDeleteData = {
     body?: never;
     path: {
@@ -5159,6 +5525,12 @@ export type ApiUsersIdDeleteData = {
          * User identifier
          */
         id: string;
+    };
+    query?: {
+        /**
+         * Only available to admin users
+         */
+        email?: string;
     };
     query?: {
         /**
@@ -5187,8 +5559,11 @@ export type ApiUsersIdDeleteResponses = {
 
 export type ApiUsersIdDeleteResponse = ApiUsersIdDeleteResponses[keyof ApiUsersIdDeleteResponses];
 
-export type ApiUsersIdGetData = {
-    body?: never;
+export type ApiUsersIdPatchData = {
+    /**
+     * The updated User resource
+     */
+    body: User;
     path: {
         /**
          * User identifier
@@ -5200,38 +5575,6 @@ export type ApiUsersIdGetData = {
          * Only available to admin users
          */
         email?: string;
-    };
-    url: '/v4/users/{id}';
-};
-
-export type ApiUsersIdGetErrors = {
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUsersIdGetError = ApiUsersIdGetErrors[keyof ApiUsersIdGetErrors];
-
-export type ApiUsersIdGetResponses = {
-    /**
-     * User resource
-     */
-    200: User;
-};
-
-export type ApiUsersIdGetResponse = ApiUsersIdGetResponses[keyof ApiUsersIdGetResponses];
-
-export type ApiUsersIdPatchData = {
-    /**
-     * The updated User resource
-     */
-    body: User;
-    path: {
-        /**
-         * User identifier
-         */
-        id: string;
     };
     query?: {
         /**
@@ -5267,106 +5610,6 @@ export type ApiUsersIdPatchResponses = {
 };
 
 export type ApiUsersIdPatchResponse = ApiUsersIdPatchResponses[keyof ApiUsersIdPatchResponses];
-
-export type ApiUserTokensPostData = {
-    /**
-     * The new UserToken resource
-     */
-    body: UserTokenUserTokenLoginDto;
-    path?: never;
-    query?: never;
-    url: '/v4/user_tokens';
-};
-
-export type ApiUserTokensPostErrors = {
-    /**
-     * Invalid input
-     */
-    400: ErrorJsonld;
-    /**
-     * An error occurred
-     */
-    422: ConstraintViolationJsonldJsonld;
-};
-
-export type ApiUserTokensPostError = ApiUserTokensPostErrors[keyof ApiUserTokensPostErrors];
-
-export type ApiUserTokensPostResponses = {
-    /**
-     * UserToken resource created
-     */
-    201: UserToken;
-};
-
-export type ApiUserTokensPostResponse = ApiUserTokensPostResponses[keyof ApiUserTokensPostResponses];
-
-export type ApiUserTokensIdDeleteData = {
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/user_tokens/{id}';
-};
-
-export type ApiUserTokensIdDeleteErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUserTokensIdDeleteError = ApiUserTokensIdDeleteErrors[keyof ApiUserTokensIdDeleteErrors];
-
-export type ApiUserTokensIdDeleteResponses = {
-    /**
-     * UserToken resource deleted
-     */
-    204: void;
-};
-
-export type ApiUserTokensIdDeleteResponse = ApiUserTokensIdDeleteResponses[keyof ApiUserTokensIdDeleteResponses];
-
-export type ApiUserTokensIdGetData = {
-    body?: never;
-    path: {
-        /**
-         * UserToken identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/user_tokens/{id}';
-};
-
-export type ApiUserTokensIdGetErrors = {
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiUserTokensIdGetError = ApiUserTokensIdGetErrors[keyof ApiUserTokensIdGetErrors];
-
-export type ApiUserTokensIdGetResponses = {
-    /**
-     * UserToken resource
-     */
-    200: UserToken;
-};
-
-export type ApiUserTokensIdGetResponse = ApiUserTokensIdGetResponses[keyof ApiUserTokensIdGetResponses];
 
 export type ApiVersionsGetCollectionData = {
     body?: never;

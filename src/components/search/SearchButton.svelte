@@ -26,19 +26,19 @@ Supports: primary (Aplicar filtros), secondary (Buscar), ghost (Cerrar filtros)
 
     // Base button classes - matching Figma design exactly
     const baseClasses =
-        "inline-flex items-center justify-center font-['Karla'] font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed gap-[8px]";
+        "inline-flex items-center justify-center font-body font-bold transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed gap-2";
 
     // Size classes - matching Figma specifications exactly
     const sizeClasses = {
-        medium: "px-[24px] py-[16px] text-[16px] leading-[24px] rounded-[24px]",
+        medium: "px-6 py-4 text-base leading-6 rounded-3xl",
         small: "px-4 py-2 text-sm rounded-[20px]",
     };
 
     // Variant classes matching Figma design exactly
     const variantClasses = {
-        primary: "bg-[#59e9d3] text-[#462949] hover:bg-[#4dd4bd] focus:ring-[#59e9d3]",
-        secondary: "bg-variant1 text-[#462949] hover:bg-[#d4d2f0] focus:ring-[#462949]",
-        ghost: "bg-transparent text-[#462949] border border-[#462949] hover:bg-variant1 focus:ring-[#462949]",
+        primary: "bg-primary text-secondary hover:bg-[#4dd4bd] focus:ring-primary",
+        secondary: "bg-variant1 text-secondary hover:bg-[#d4d2f0] focus:ring-secondary",
+        ghost: "bg-transparent text-secondary border border-secondary hover:bg-variant1 focus:ring-secondary",
     };
 
     // Width classes

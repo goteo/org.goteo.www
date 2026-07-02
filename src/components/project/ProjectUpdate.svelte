@@ -1,15 +1,18 @@
 <script lang="ts">
-    import { onDestroy, onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import AlertIcon from "../../svgs/AlertIcon.svelte";
-    import ShareIcon from "../../svgs/ShareIcon.svelte";
     import { Modal } from "flowbite-svelte";
-    import type { Project, ProjectUpdate } from "../../openapi/client/index";
+    import { onDestroy, onMount } from "svelte";
+
+    import PlatformUpdateCard from "./PlatformUpdateCard.svelte";
+    import ProjectUpdateCard, { type ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
+    import { t } from "../../i18n/store";
     import { apiProjectUpdatesGetCollection } from "../../openapi/client/index";
-    import Carousel from "../Carousel.svelte";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Button from "../library/Button.svelte";
-    import ProjectUpdateCard from "./ProjectUpdateCard.svelte";
+    import ShareIcon from "../icons/actions/Share.svelte";
+    import AlertIcon from "../icons/status/AlertIcon.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
+
+    import type { Project, ProjectUpdate } from "../../openapi/client/index";
 
     let {
         lang = $bindable(),
@@ -21,14 +24,14 @@
 
     const projectId = project.id!.toString();
 
-    let projectsUpdates: ProjectUpdate[] = $state([]);
+    let projectUpdates: ProjectUpdate[] = $state([]);
 
     $effect(() => {
         apiProjectUpdatesGetCollection({
-            query: { project: projectId, "order[date]": "asc" },
+            query: { project: projectId, "order[date]": "desc" },
             headers: { "Accept-Language": lang },
         }).then((data) => {
-            projectsUpdates = data.data!;
+            projectUpdates = data.data!;
         });
     });
 
@@ -36,7 +39,6 @@
     let openModal = $state(false);
     let selected: ProjectUpdate | null = $state(null);
     let activeCard: number = $state(0);
-    let cardType: "small" | "large" = $state("small");
 
     $effect(() => {
         if (openModal) cleanCloseButton();
@@ -56,6 +58,12 @@
         const isMobile = isMobileScreen || (isTouchDevice && isMobileUserAgent);
 
         itemsPerGroup = isMobile ? 1 : 2;
+    }
+
+    function getCardType(index: number): ProjectUpdateCardType {
+        if (itemsPerGroup === 1) return "mobile";
+
+        return index === activeCard ? "expanded" : "contracted";
     }
 
     function cleanCloseButton() {
@@ -97,44 +105,55 @@
 
 <div class="flex flex-col gap-10">
     <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
-        {$t("project.tabs.updates.content.title")}
+        {$t("pages.project.view.tabs.updates.content.title")}
     </h2>
-    <Carousel bind:activeCard gap={24} showDots={true} {itemsPerGroup}>
-        {#if projectsUpdates.length === 0}
+    <Carousel
+        bind:activeCard
+        gap={24}
+        showDots={true}
+        {itemsPerGroup}
+        dotsPerItem={true}
+        lockItemWidth={itemsPerGroup === 1}
+        disableDrag={itemsPerGroup !== 1}
+        centerNavButtons={true}
+        mobileItemsToShow={1}
+        desktopItemsToShow={2}
+    >
+        {#if projectUpdates.length === 0}
             <div
-                class="flex h-[140px] w-full items-center justify-center rounded bg-indigo-100 font-bold"
+                class="flex h-35 w-full items-center justify-center rounded bg-indigo-100 font-bold"
             >
-                {$t("project.tabs.updates.content.empty")}
+                {$t("pages.project.view.tabs.updates.content.empty")}
             </div>
         {/if}
 
-        <!-- {#snippet onActiveChange(group: number)}
-            {(activeGroup = group)}
-        {/snippet} -->
-
-        {#each projectsUpdates as update, i}
-            <ProjectUpdateCard
-                {update}
-                type={cardType}
-                isActive={i === activeCard}
-                onClick={(): void => {
-                    selected = update;
-                    openModal = true;
-                }}
-            />
+        {#each projectUpdates as update, i}
+            {#if !update.author}
+                <PlatformUpdateCard {update} type={getCardType(i)} isActive={i === activeCard} />
+            {:else}
+                <ProjectUpdateCard
+                    {update}
+                    type={getCardType(i)}
+                    isActive={i === activeCard}
+                    onClick={(): void => {
+                        selected = update;
+                        openModal = true;
+                    }}
+                />
+            {/if}
         {/each}
     </Carousel>
 
     <Modal
         bind:open={openModal}
         closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-        class="fixed top-1/2 left-1/2 w-full max-w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+        class="fixed top-1/2 left-1/2 w-full max-w-200 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     >
         {#if selected}
             {#if shouldShowHeader(selected.date)}
                 <div class="text-secondary flex items-center gap-2 text-base font-bold">
                     <AlertIcon />
-                    {$t("project.tabs.updates.modal-title")}
+                    {$t("pages.project.view.tabs.updates.modalTitle")}
                 </div>
             {/if}
             <h3 class="text-secondary text-3xl font-bold">
@@ -149,7 +168,7 @@
             <div class="flex w-full justify-end">
                 <Button>
                     <ShareIcon />
-                    {$t("project.tabs.updates.content.btn.share")}
+                    {$t("pages.project.view.tabs.updates.content.btn.share")}
                 </Button>
             </div>
         {/if}

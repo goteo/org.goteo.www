@@ -1,8 +1,11 @@
 <script lang="ts">
-    import type { Project, Accounting } from "../../openapi/client/index";
     import { onMount, tick } from "svelte";
+
     import { t } from "../../i18n/store";
+    import { budgetTypeColors } from "../../utils/budgetColors";
     import { formatCurrency } from "../../utils/currencies";
+
+    import type { Project, Accounting } from "../../openapi/client/index";
 
     let {
         project,
@@ -12,46 +15,45 @@
         accounting: Accounting;
     } = $props();
 
-    const typeBudget = {
-        task: "var(--color-variant2)",
-        infrastructure: "var(--color-secondary)",
-        material: "var(--color-tertiary)",
-    } as const;
+    const minimumTotal = $derived(project.budget?.minimum?.money?.amount ?? 0);
+    const optimumTotal = $derived(project.budget?.optimum?.money?.amount ?? 0);
+    const totalBudget = $derived(minimumTotal + optimumTotal);
+    const balanceAmount = $derived(accounting.balance?.amount ?? 0);
 
-    const minimumTotal = project.budget?.minimum?.money?.amount ?? 0;
-    const optimumTotal = project.budget?.optimum?.money?.amount ?? 0;
-    const totalBudget = minimumTotal + optimumTotal;
-    const balanceAmount = accounting.balance?.amount ?? 0;
+    const minInfra = $derived(project.budget?.minimum?.infra?.amount ?? 0);
+    const minMaterial = $derived(project.budget?.minimum?.material?.amount ?? 0);
+    const minTask = $derived(project.budget?.minimum?.task?.amount ?? 0);
 
-    const minInfra = project.budget?.minimum?.infra?.amount ?? 0;
-    const minMaterial = project.budget?.minimum?.material?.amount ?? 0;
-    const minTask = project.budget?.minimum?.task?.amount ?? 0;
-
-    const optInfra = project.budget?.optimum?.infra?.amount ?? 0;
-    const optMaterial = project.budget?.optimum?.material?.amount ?? 0;
-    const optTask = project.budget?.optimum?.task?.amount ?? 0;
+    const optInfra = $derived(project.budget?.optimum?.infra?.amount ?? 0);
+    const optMaterial = $derived(project.budget?.optimum?.material?.amount ?? 0);
+    const optTask = $derived(project.budget?.optimum?.task?.amount ?? 0);
 
     const dividerWidthPct = 1.5;
 
-    const leftSectionWidth = Math.round(
-        totalBudget > 0 ? (minimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0,
+    const leftSectionWidth = $derived(
+        Math.round(totalBudget > 0 ? (minimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0),
     );
-    const rightSectionWidth = Math.round(
-        totalBudget > 0 ? (optimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0,
+    const rightSectionWidth = $derived(
+        Math.round(totalBudget > 0 ? (optimumTotal / totalBudget) * 100 - dividerWidthPct / 2 : 0),
     );
-    const rightSectionStart = leftSectionWidth + dividerWidthPct;
+    const rightSectionStart = $derived(leftSectionWidth + dividerWidthPct);
 
-    const minInfraPctLocal = minimumTotal > 0 ? (minInfra / minimumTotal) * 100 : 0;
-    const minMaterialPctLocal =
-        minimumTotal > 0 ? ((minInfra + minMaterial) / minimumTotal) * 100 : 0;
+    const minInfraPctLocal = $derived(minimumTotal > 0 ? (minInfra / minimumTotal) * 100 : 0);
+    const minMaterialPctLocal = $derived(
+        minimumTotal > 0 ? ((minInfra + minMaterial) / minimumTotal) * 100 : 0,
+    );
     const minTaskPctLocal = 100;
 
-    const optInfraPctLocal = optimumTotal > 0 ? (optInfra / optimumTotal) * 100 : 0;
-    const optMaterialPctLocal =
-        optimumTotal > 0 ? ((optInfra + optMaterial) / optimumTotal) * 100 : 0;
+    const optInfraPctLocal = $derived(optimumTotal > 0 ? (optInfra / optimumTotal) * 100 : 0);
+    const optMaterialPctLocal = $derived(
+        optimumTotal > 0 ? ((optInfra + optMaterial) / optimumTotal) * 100 : 0,
+    );
     const optTaskPctLocal = 100;
 
-    const balancePct = totalBudget > 0 ? Math.min((balanceAmount / totalBudget) * 100, 100) : 0;
+    const balancePct = $derived(
+        totalBudget > 0 ? Math.min((balanceAmount / totalBudget) * 100, 100) : 0,
+    );
+    const flipLabel = $derived(balancePct > 60);
 
     let animValues = $state({
         minInfra: 0,
@@ -81,23 +83,27 @@
     <div class="relative h-8 w-full">
         <div
             class="absolute transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%;"
+            style="left: {animValues.balance}%; {flipLabel
+                ? 'transform: translateX(-100%);'
+                : ''}; top: -0.15rem;"
         >
-            <div class="text-secondary ml-4 flex items-center gap-2 text-base">
-                <span>{$t("project.tabs.budget.raised")}:</span>
+            <div
+                class="text-secondary flex items-center gap-2 text-base {flipLabel
+                    ? 'mr-4'
+                    : 'ml-4'}"
+            >
+                <span>{$t("pages.project.view.tabs.budget.raised")}:</span>
                 <span class="font-bold">{formatCurrency(balanceAmount)}</span>
             </div>
         </div>
 
         <div
-            class="absolute z-50 transition-all duration-700 ease-out"
-            style="left: {animValues.balance}%; transform: translateX(-50%); top: 1rem;"
+            class="absolute z-50 flex flex-col items-center transition-all duration-700 ease-out"
+            style="left: {animValues.balance}%; transform: translateX(-50%); top: 0.25rem;"
         >
-            <div class="bg-secondary border-secondary h-7 border-r-2 border-solid"></div>
-            <div class="h-12 border-r-2 border-solid border-white"></div>
-            <div
-                class="bg-secondary absolute top-0 right-0 h-3 w-3 translate-x-1/2 -translate-y-1/2 rounded-full"
-            ></div>
+            <div class="bg-secondary h-3 w-3 rounded-full"></div>
+            <div class="bg-secondary h-7 w-0.5"></div>
+            <div class="h-12 w-0.5 bg-white"></div>
         </div>
     </div>
 
@@ -109,28 +115,28 @@
             {#if minInfra > 0}
                 <div
                     class="absolute top-0 left-0 z-30 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minInfra}%; background-color: {typeBudget.infrastructure};"
+                    style="width: {animValues.minInfra}%; background-color: {budgetTypeColors.infrastructure};"
                 ></div>
             {/if}
 
             {#if minMaterial > 0}
                 <div
                     class="absolute top-0 left-0 z-20 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minMaterial}%; background-color: {typeBudget.material};"
+                    style="width: {animValues.minMaterial}%; background-color: {budgetTypeColors.material};"
                 ></div>
             {/if}
 
             {#if minTask > 0}
                 <div
                     class="absolute top-0 left-0 z-10 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.minTask}%; background-color: {typeBudget.task};"
+                    style="width: {animValues.minTask}%; background-color: {budgetTypeColors.task};"
                 ></div>
             {/if}
         </div>
 
         <div
             class="absolute top-0 bottom-0 z-40"
-            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%; background-color: var(--color-divider);"
+            style="left: {leftSectionWidth}%; width: {dividerWidthPct}%;"
         ></div>
 
         <div
@@ -140,21 +146,21 @@
             {#if optInfra > 0}
                 <div
                     class="absolute top-0 left-0 z-30 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optInfra}%; background-color: {typeBudget.infrastructure};"
+                    style="width: {animValues.optInfra}%; background-color: {budgetTypeColors.infrastructure};"
                 ></div>
             {/if}
 
             {#if optMaterial > 0}
                 <div
                     class="absolute top-0 left-0 z-20 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optMaterial}%; background-color: {typeBudget.material};"
+                    style="width: {animValues.optMaterial}%; background-color: {budgetTypeColors.material};"
                 ></div>
             {/if}
 
             {#if optTask > 0}
                 <div
                     class="absolute top-0 left-0 z-10 h-full rounded-xl transition-all duration-700 ease-out"
-                    style="width: {animValues.optTask}%; background-color: {typeBudget.task};"
+                    style="width: {animValues.optTask}%; background-color: {budgetTypeColors.task};"
                 ></div>
             {/if}
         </div>
@@ -162,11 +168,11 @@
 
     <div class="flex gap-2">
         <div class="text-secondary min-w-fit text-base" style="width: {leftSectionWidth}%">
-            <span>{$t("project.tabs.budget.minimum")}:</span>
+            <span>{$t("pages.project.view.tabs.budget.minimum")}:</span>
             <span class="font-bold">{formatCurrency(minimumTotal)}</span>
         </div>
         <div class="text-secondary flex-none text-base">
-            <span>{$t("project.tabs.budget.optimal")}:</span>
+            <span>{$t("pages.project.view.tabs.budget.optimal")}:</span>
             <span class="font-bold">{formatCurrency(optimumTotal)}</span>
         </div>
     </div>

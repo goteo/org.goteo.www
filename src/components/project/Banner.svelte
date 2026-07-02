@@ -1,32 +1,30 @@
 <script lang="ts">
-    import DonatorIcon from "../../svgs/DonatorIcon.svelte";
-    import CertificateIcon from "../../svgs/CertificateIcon.svelte";
     import { t } from "../../i18n/store";
+    import Thtml from "../library/typography/Thtml.svelte";
 
-    export let ownerName: string;
+    let { ownerName }: { ownerName: string } = $props();
 </script>
 
 <section class="flex flex-col gap-6 py-10 lg:flex-row">
     <div class="flex flex-row items-center justify-center gap-4">
-        <div><DonatorIcon /></div>
+        <div><img src="/images/project/donator.svg" alt="" width="69" height="64" /></div>
         <div class="text-content">
-            {@html $t(
-                "project.banner.donator.description",
-                { owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` },
-                { allowHTML: true },
-            )}
+            <Thtml
+                key="pages.project.view.banner.donator.description"
+                vars={{ owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` }}
+            />
             <a href="#" class="text-secondary font-bold"
-                >{$t("project.banner.donator.learnMore")}
+                >{$t("pages.project.view.banner.donator.learnMore")}
             </a>
         </div>
     </div>
     <div class="flex flex-row items-center justify-center gap-4">
-        <div><CertificateIcon /></div>
+        <div><img src="/images/project/certificate.svg" alt="" width="65" height="67" /></div>
         <div>
             <div class="text-content">
-                {$t("project.banner.certificate.description")}
+                {$t("pages.project.view.banner.certificate.description")}
                 <a href="#" class="text-secondary font-bold"
-                    >{$t("project.banner.certificate.learnMore")}
+                    >{$t("pages.project.view.banner.certificate.learnMore")}
                 </a>
             </div>
         </div>

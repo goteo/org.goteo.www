@@ -1,10 +1,10 @@
 <script lang="ts">
+    import TopReward from "./TopReward.svelte";
     import {
         apiProjectRewardsGetCollection,
         type Project,
         type ProjectReward,
     } from "../../openapi/client";
-    import TopReward from "../TopReward.svelte";
 
     let {
         lang = $bindable(),
@@ -14,13 +14,11 @@
         project: Project;
     } = $props();
 
-    const projectId = project.id!.toString();
-
     let rewards: ProjectReward[] = $state([]);
 
     $effect(() => {
         apiProjectRewardsGetCollection({
-            query: { project: projectId, itemsPerPage: 3 },
+            query: { project: String(project.id), itemsPerPage: 3 },
             headers: { "Accept-Language": lang },
         }).then((data) => {
             rewards = data.data!;

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
 
     interface Props {
         /**
@@ -44,13 +44,13 @@
 
     <label
         for="period-select"
-        class="pointer-events-none absolute -top-[5px] left-3 bg-white px-1 text-xs leading-none font-medium text-black"
+        class="pointer-events-none absolute -top-1.25 left-3 bg-white px-1 text-xs leading-none font-medium text-black"
     >
         {$t("me.period.label")}
     </label>
 
     <!-- Dropdown icon -->
     <div class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
-        <ChevronDown />
+        <Chevron direction="down" width="16" height="16" />
     </div>
 </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
     import { onMount } from "svelte";
+
+    import { session } from "../../auth/store.ts";
     import { t } from "../../i18n/store";
-    import CampaignCard from "../home/CampaignCard.svelte";
-    import Carousel from "../Carousel.svelte";
     import {
         apiGatewayChargesGetCollection,
         apiAccountingsIdGet,
@@ -10,22 +10,15 @@
     } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import CampaignCard from "../home/CampaignCard.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
+
+    import type { Money, GatewayCharge, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
-    import type {
-        Money,
-        GatewayCharge,
-        Accounting,
-        Project,
-    } from "../../openapi/client/types.gen.ts";
 
     interface Props {
         lang: string;
-        user: {
-            id: number;
-            token: string;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, user }: Props = $props();
@@ -39,7 +32,7 @@
         try {
             const headers = {
                 "Accept-Language": lang,
-                Authorization: `Bearer ${user.token}`,
+                ...$session?.token.asHttpHeaders,
             };
 
             // Get user's gateway charges to find donated projects

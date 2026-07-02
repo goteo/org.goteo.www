@@ -34,10 +34,6 @@ export function getApiVersion(): string {
     return getEnvVar("PUBLIC_API_VERSION");
 }
 
-export function getPlatoniqAccountingId(): string {
-    return getEnvVar("PUBLIC_PLATONIQ_ACCOUNTING_ID");
-}
-
 export function getFacebookAppId(): string {
     return getEnvVar("PUBLIC_FACEBOOK_APP_ID");
 }

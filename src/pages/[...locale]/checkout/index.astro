@@ -1,0 +1,58 @@
+---
+import Card from "../../../components/library/cards/Card.svelte";
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../layouts/App.svelte";
+import Cart from "../../../components/checkout/Cart.svelte";
+import Summary from "../../../components/checkout/Summary.svelte";
+import Steps from "../../../components/checkout/Steps.svelte";
+import BackButton from "../../../components/library/buttons/BackButton.svelte";
+
+const { t, lang, session } = Astro.locals;
+---
+
+<Layout
+    title={t("pages.checkout.metadata.title")}
+    description={t("pages.checkout.metadata.description")}
+>
+    <App client:load locale={lang} session={session} class="mb-20">
+        <div class="wrapper max-md:px-0">
+            <BackButton client:load />
+            <div class="flex flex-col gap-8 pt-6 lg:flex-row">
+                <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
+                    <div class="flex flex-col gap-4">
+                        <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
+                            {t("checkout.title")}
+                        </h2>
+                        <p class="text-content">
+                            {t("pages.checkout.subtitle")}
+                        </p>
+                    </div>
+
+                    <Cart client:load />
+                </div>
+
+                <Card
+                    class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
+                >
+                    <Summary client:load />
+                    <div class="w-full lg:block" id="checkout-details">
+                        <div class="w-full">
+                            <Steps step={1} hasError={false} client:load />
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="text-content text-sm">{t("pages.checkout.summary.deduct")}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-end">
+                        <a
+                            class="bg-primary text-secondary w-fit cursor-pointer rounded-3xl px-6 py-4 font-bold"
+                            href="/checkout/payment"
+                        >
+                            {t("common.continue")}
+                        </a>
+                    </div>
+                </Card>
+            </div>
+        </div>
+    </App>
+</Layout>

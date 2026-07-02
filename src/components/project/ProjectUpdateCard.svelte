@@ -1,35 +1,91 @@
 <script lang="ts">
-    import ActiveFilterIcon from "../../svgs/ActiveFilterIcon.svelte";
-    import Button from "../library/Button.svelte";
-    import { t } from "../../i18n/store";
-    import { apiUsersIdGet, type ProjectUpdate } from "../../openapi/client/index";
     import { twMerge } from "tailwind-merge";
-    import type { MouseEventHandler } from "svelte/elements";
-    import { renderMarkdown } from "../../utils/renderMarkdown";
-    import { onMount } from "svelte";
-    import type { User } from "../../openapi/client/types.gen.ts";
-    import { extractId } from "../../utils/extractId.ts";
+
+    import Bullet from "../../components/icons/Bullet.svelte";
+    import { t } from "../../i18n/store";
     import { locale } from "../../i18n/store";
+    import { apiUsersIdOrHandleGet, type ProjectUpdate } from "../../openapi/client/index";
     import { formatDate } from "../../utils/dates.ts";
+    import { extractId } from "../../utils/extractId.ts";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+    import Button from "../library/buttons/Button.svelte";
+
+    import type { User } from "../../openapi/client/types.gen.ts";
+    import type { MouseEventHandler } from "svelte/elements";
+
+    export type ProjectUpdateCardType = "contracted" | "expanded" | "mobile";
+
+    const cardStyles = {
+        contracted: "h-[24.5rem] w-[21.75rem] gap-6",
+        expanded: "h-[24.5rem] w-[30.75rem] gap-6",
+        mobile: "h-[25.625rem] w-[13.5rem] gap-3",
+    };
+
+    const mediaGroupStyles = {
+        contracted: "flex flex-col gap-4",
+        expanded: "flex shrink-0 flex-col gap-4",
+        mobile: "flex shrink-0 flex-col gap-3",
+    };
+
+    const dateStyles = {
+        contracted: "shrink-0 text-2xl",
+        expanded: "text-2xl",
+        mobile: "text-2xl",
+    };
+
+    const imageStyles = {
+        contracted: "rounded-3xl",
+        expanded: "rounded-3xl",
+        mobile: "rounded-2xl",
+    };
+
+    const contentGroupStyles = {
+        contracted: "gap-4",
+        expanded: "gap-4",
+        mobile: "gap-2",
+    };
+
+    const titleStyles = {
+        contracted: "line-clamp-1 text-double leading-7",
+        expanded: "line-clamp-1 text-xl leading-7",
+        mobile: "line-clamp-2 text-lg leading-5",
+    };
+
+    const bodyStyles = {
+        contracted: "text-base text-ellipsis",
+        expanded: "text-base text-ellipsis",
+        mobile: "text-[0.6875rem]",
+    };
+
+    const footerStyles = {
+        contracted: "items-end justify-between gap-3",
+        expanded: "items-end justify-between gap-3",
+        mobile: "flex-col gap-3",
+    };
+
+    const authorStyles = {
+        contracted: "line-clamp-1 text-xs",
+        expanded: "text-xs",
+        mobile: "line-clamp-1 text-center text-[0.6875rem]",
+    };
 
     interface Props {
         update: ProjectUpdate;
-        type?: "small" | "large";
+        type?: ProjectUpdateCardType;
         onClick?: MouseEventHandler<HTMLButtonElement> | undefined;
         isActive?: boolean;
     }
 
-    let { update, type, onClick, isActive }: Props = $props();
+    let { update, type = "contracted", onClick, isActive }: Props = $props();
 
-    let cardClasses = $state("");
     let author: User | undefined = $state(undefined);
 
     async function getAuthor(update: ProjectUpdate): Promise<User | undefined> {
-        const authorId: string | null = extractId(update.author);
+        const authorId: string | null = extractId(update.author!);
         if (!authorId) return undefined;
 
-        const { data: user, error: err } = await apiUsersIdGet({
-            path: { id: authorId },
+        const { data: user, error: err } = await apiUsersIdOrHandleGet({
+            path: { idOrHandle: authorId },
         });
 
         if (err) {
@@ -39,106 +95,68 @@
         return user;
     }
 
-    onMount(async () => {
-        author = await getAuthor(update);
-        type = author === undefined ? "small" : "large";
-    });
-
     $effect(() => {
-        isActive;
-        cardClasses = isActive ? "opacity-100" : "";
+        getAuthor(update).then((data) => (author = data));
     });
 </script>
 
-{#if type === "small"}
-    <div
-        class={twMerge(
-            "flex w-138.5 flex-col gap-6 rounded-4xl bg-white p-6 opacity-48",
-            cardClasses,
-        )}
-    >
-        <div class="flex flex-col gap-4">
-            <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
-                {#if update.date}
-                    {formatDate(new Date(update.date), $locale)}
-                {/if}
-                <div class="pt-1">
-                    <ActiveFilterIcon />
-                </div>
+<div
+    class={twMerge(
+        "flex shrink-0 flex-col overflow-hidden rounded-[1.25rem] border border-[#E7E1F1] bg-[#FCFAFF] p-4 shadow-sm transition-[width,opacity,box-shadow] duration-300 ease-out",
+        cardStyles[type],
+        isActive && "opacity-100",
+    )}
+>
+    <div class={mediaGroupStyles[type]}>
+        <div
+            class={twMerge(
+                "text-secondary flex flex-row gap-0.5 leading-6 font-bold",
+                dateStyles[type],
+            )}
+        >
+            {#if update.date}
+                {formatDate(new Date(update.date), $locale)}
+            {/if}
+            <div class="pt-0.5">
+                <Bullet />
             </div>
         </div>
-        <div
-            class="bg-light-pink relative flex h-full flex-col gap-4 overflow-hidden rounded-3xl bg-cover p-5"
-        >
-            <h2 class="font-body text-[2.5rem] leading-12 font-bold text-ellipsis text-white">
+        {#if update.cover}
+            <img
+                src={update.cover}
+                alt={update.title}
+                class={twMerge(
+                    "no-select h-[268.6px] w-full shrink-0 self-stretch object-cover",
+                    imageStyles[type],
+                )}
+                draggable="false"
+            />
+        {/if}
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col justify-between gap-6">
+        <div class={twMerge("flex flex-col", contentGroupStyles[type])}>
+            <h2 class={twMerge("text-secondary font-bold", titleStyles[type])}>
                 {update.title}
             </h2>
-            <svg
-                class="absolute -top-77 left-24.75"
-                width="681"
-                height="964.575"
-                viewBox="0 0 407 533"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    class="fill-black"
-                    opacity="0.08"
-                    d="M339.41 -307.908C341.812 -308.41 342.063 -306.776 342.23 -305.059C382.622 -179.016 441.101 -96.5034 517.041 -10.932C589.701 70.9316 673.723 148.459 680.594 291.679C685.983 404.231 636.839 495.227 584.73 551.849C526.585 615.069 432.183 658.578 333.771 656.504C232.603 654.346 149.792 609.602 91.271 543.386C32.9799 477.443 -7.07829 393.966 1.04613 280.346C12.9717 113.351 138.075 31.8013 218.171 -73.1467C270.238 -141.436 306.579 -212.072 339.41 -307.908ZM130.744 314.323C131.747 390.552 172.849 460.14 229.449 495.332C309.294 544.957 420.362 532.242 486.047 467.011C520.717 432.615 544.254 384.603 550.896 314.323C463.219 314.323 443.211 313.024 341.332 313.024C341.332 243.247 342.251 169.114 342.251 99.3786C220.426 99.0644 129.262 199.781 130.744 314.323Z"
-                />
-            </svg>
-        </div>
-    </div>
-{:else if type === "large"}
-    <div
-        class={twMerge(
-            "bg-soft-purple border-variant1 flex w-[49.063rem] flex-col gap-6 rounded-4xl border p-6 shadow-sm",
-            cardClasses,
-        )}
-    >
-        <div class="flex flex-col gap-4">
-            <div class="text-secondary flex flex-row gap-0.5 text-2xl font-bold">
-                {#if update.date}
-                    {formatDate(new Date(update.date), $locale)}
-                {/if}
-                <div class="pt-1">
-                    <ActiveFilterIcon />
+            {#if update.subtitle || update.body}
+                <div class="flex flex-col gap-2 leading-5">
+                    <p class="line-clamp-2 text-base font-bold text-black">{update.subtitle}</p>
+                    <p class={twMerge("text-content line-clamp-2 font-normal", bodyStyles[type])}>
+                        {#await renderMarkdown(update.body) then content}
+                            {@html content}
+                        {/await}
+                    </p>
                 </div>
-            </div>
-            {#if update.cover}
-                <img
-                    src={update.cover}
-                    alt={update.title}
-                    class="no-select h-[16.8rem] shrink-0 self-stretch rounded-3xl"
-                    draggable="false"
-                />
             {/if}
         </div>
-        <div class="flex h-full flex-col justify-between">
-            <div class="flex flex-col gap-4">
-                <h2 class="text-secondary text-[2rem] leading-10 font-bold">{update.title}</h2>
-                {#if update.subtitle || update.body}
-                    <div class="flex flex-col gap-2 leading-6">
-                        <p class="text-base font-bold text-black">{update.subtitle}</p>
-                        <p
-                            class="text-content line-clamp-2 text-base font-normal text-ellipsis ordinal"
-                        >
-                            {#await renderMarkdown(update.body) then content}
-                                {@html content}
-                            {/await}
-                        </p>
-                    </div>
-                {/if}
-            </div>
-            <div class="flex w-full items-end justify-between">
-                <span class="text-content flex text-sm font-medium">
-                    {$t("project.tabs.updates.by")}
-                    <strong class="font-bold text-black"> {author?.displayName}</strong>
-                </span>
-                <Button kind="ghost" onclick={onClick}>
-                    {$t("project.tabs.updates.content.btn.read-more")}
-                </Button>
-            </div>
+        <div class={twMerge("flex w-full", footerStyles[type])}>
+            <span class={twMerge("text-content font-medium", authorStyles[type])}>
+                {$t("pages.project.view.tabs.updates.by")}
+                <strong class="font-bold text-black"> {author?.displayName}</strong>
+            </span>
+            <Button kind="ghost" onclick={onClick}>
+                {$t("pages.project.view.tabs.updates.content.btn.readMore")}
+            </Button>
         </div>
     </div>
-{/if}
+</div>

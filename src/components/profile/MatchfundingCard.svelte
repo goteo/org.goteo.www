@@ -1,6 +1,7 @@
 <script lang="ts">
     import BaseActivityCard from "./BaseActivityCard.svelte";
     import { formatAmountWithSymbol } from "../../utils/currencies";
+
     import type { MatchfundingCardData } from "../../types/me-page";
 
     interface Props {

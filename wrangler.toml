@@ -5,6 +5,12 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 keep_vars = true
 
+[[d1_databases]]
+binding = "DB"
+database_name = "goteo-db"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "db/migrations"
+
 [assets]
 binding = "ASSETS"
 directory = "./dist"

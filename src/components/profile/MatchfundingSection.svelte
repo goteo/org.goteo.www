@@ -1,28 +1,25 @@
 <script lang="ts">
+    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
-    import { t } from "../../i18n/store";
-    import { extractId } from "../../utils/extractId";
-    import { toCollectionItems } from "../../utils/hydra.ts";
+
     import MatchfundingCallCard from "./MatchfundingCallCard.svelte";
-    import Carousel from "../Carousel.svelte";
+    import { t } from "../../i18n/store";
     import {
         apiMatchCallsGetCollection,
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
         apiMatchCallSubmissionsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
-    import { createClient } from "@hey-api/client-fetch";
+    import { extractId } from "../../utils/extractId";
+    import { toCollectionItems } from "../../utils/hydra.ts";
+    import Carousel from "../library/layout/Carousel.svelte";
 
-    import type { MatchCall, MatchCallSubmission } from "../../openapi/client/types.gen.ts";
+    import type { MatchCall, MatchCallSubmission, User } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";
 
     interface Props {
         lang: string;
-        user: {
-            id: number;
-            accountingId: string;
-            isAdmin?: boolean;
-        };
+        user: User;
     }
 
     let { lang, user }: Props = $props();
@@ -170,7 +167,7 @@
             {$t("me.matchfunding.section.title")}
         </h2>
         <!-- Single hero card skeleton matching actual dimensions -->
-        <div class="bg-grey h-64 w-full animate-pulse rounded-[32px] md:h-80 lg:h-96"></div>
+        <div class="bg-grey h-64 w-full animate-pulse rounded-4xl md:h-80 lg:h-96"></div>
     </div>
 {:else if error}
     <!-- Error State -->

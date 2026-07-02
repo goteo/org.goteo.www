@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import {
         Chart,
         LineController,
@@ -10,17 +9,16 @@
         Filler,
         Tooltip,
     } from "chart.js";
-    import type {
-        Accounting,
-        ApiAccountingBalancePointsGetCollectionData,
-        Project,
-    } from "../../openapi/client/index";
-    import { formatCurrency } from "../../utils/currencies";
+    import { onMount } from "svelte";
+
     import { t } from "../../i18n/store";
+    import { formatCurrency } from "../../utils/currencies";
+
+    import type { Accounting, AccountingBalancePoint, Project } from "../../openapi/client/index";
 
     export let accounting: Accounting;
     export let project: Project;
-    export let balancePoints: ApiAccountingBalancePointsGetCollectionData;
+    export let balancePoints: AccountingBalancePoint[];
 
     function formatAmount(amount: number | null | undefined): number {
         return +formatCurrency(amount ?? 0, accounting.balance?.currency, {
@@ -40,9 +38,9 @@
     let firstDateMs: number | null = null;
     let lastDay = 0;
 
-    if (Array.isArray(balancePoints) && balancePoints.length > 0) {
+    if (balancePoints.length > 0) {
         sortedBalancePoints = [...balancePoints].sort(
-            (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+            (a, b) => new Date(a.start!).getTime() - new Date(b.start!).getTime(),
         );
 
         firstDateMs = new Date(sortedBalancePoints[0].start).getTime();
@@ -140,7 +138,11 @@
                     ctx.fillStyle = "#fff";
                     ctx.textAlign = "center";
                     ctx.textBaseline = "middle";
-                    ctx.fillText($t("budget.chart.secondRound"), xPos, badgeY + badgeHeight / 2);
+                    ctx.fillText(
+                        $t("pages.project.view.tabs.budget.chart.secondRound"),
+                        xPos,
+                        badgeY + badgeHeight / 2,
+                    );
 
                     const lineStartY = badgeY + badgeHeight + 4;
                     ctx.beginPath();
@@ -210,7 +212,7 @@
                                 const point = sortedBalancePoints[bpIndex];
                                 return point
                                     ? new Date(point.start).toLocaleDateString()
-                                    : $t("budget.chart.start");
+                                    : $t("pages.project.view.tabs.budget.chart.start");
                             },
                         },
                     },
