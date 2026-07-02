@@ -5,6 +5,7 @@
     import DropdownItem from "./DropdownItem.svelte";
     import { t } from "../../../i18n/store";
     import SearchIcon from "../../icons/actions/Search.svelte";
+    import Chevron from "../../icons/navigation/Chevron.svelte";
 
     import type { DropdownOption, DropdownVariant } from "./dropdown.types";
 
@@ -16,11 +17,10 @@
         onChange?: (option: DropdownOption) => void;
         hasSearch?: boolean;
         searchPlaceholder?: string;
-        /**
-         * Only applies when `hasSearch` is true.
-         * @param value Value of the search input
-         */
         onSearch?: (value: string) => void;
+        chevronLabel?: string;
+        /** Move selected options to the top of the list. */
+        sortSelectedFirst?: boolean;
         isOpen?: boolean;
     }
 
@@ -33,8 +33,12 @@
         hasSearch = false,
         searchPlaceholder = $t("domain.search.bar.placeholder"),
         onSearch = undefined,
-        isOpen = true,
+        chevronLabel = undefined,
+        sortSelectedFirst = false,
+        isOpen = false,
     }: Props = $props();
+
+    const hasHeader = $derived(hasSearch || !!chevronLabel);
 
     const renderedItems = $derived.by(() => {
         const selectedIds = new Set(selected.map((s) => s.id));
@@ -47,6 +51,10 @@
             }
         }
 
+        if (sortSelectedFirst) {
+            merged.sort((a, b) => Number(selectedIds.has(b.id)) - Number(selectedIds.has(a.id)));
+        }
+
         return merged.map((item, index, arr) => ({
             ...item,
             selected: selectedIds.has(item.id),
@@ -55,7 +63,7 @@
     });
 
     function getPosition(index: number, length: number): "start" | "middle" | "end" {
-        if (index === 0 && !hasSearch) return "start";
+        if (index === 0 && !hasHeader) return "start";
         if (index === length - 1) return "end";
         return "middle";
     }
@@ -66,17 +74,15 @@
 </script>
 
 <div
-    class={twMerge(
-        "flex w-full flex-col rounded-lg bg-transparent",
-        "shadow-[0_35px_10px_0_rgba(0,0,0,0),0_22px_9px_0_rgba(0,0,0,0.01),0_13px_8px_0_rgba(0,0,0,0.05),0_6px_6px_0_rgba(0,0,0,0.09),0_1px_3px_0_rgba(0,0,0,0.1)]",
-        classes,
-    )}
+    class={twMerge("relative flex w-full flex-col border-none", classes)}
     use:clickOutside={() => (isOpen = false)}
 >
     {#if hasSearch}
-        <div class="group relative flex items-center justify-between rounded-3xl bg-white p-4">
+        <div
+            class="group flex w-full items-center justify-between rounded-lg border border-gray-100 bg-white p-4 shadow-sm outline-none focus:outline-none"
+        >
             <input
-                class="max-h-6 w-full max-w-72 border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
+                class="max-h-6 w-full border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                 type="text"
                 placeholder={searchPlaceholder}
                 oninput={(e) => onSearch?.(e.currentTarget.value)}
@@ -86,28 +92,47 @@
             />
             <SearchIcon class="absolute right-4" width="32" height="32" />
         </div>
-    {/if}
-    {#if isOpen}
-        {#each renderedItems as item}
-            <DropdownItem
-                {variant}
-                option={item}
-                onChange={(option) => {
-                    if (option.selected && !isSelected(option)) {
-                        selected = [...selected, option];
-                    }
-
-                    if (!option.selected && isSelected(option)) {
-                        selected = selected.filter((s) => s.id !== option.id);
-                    }
-
-                    onChange?.(option);
-                }}
-                class={twJoin(
-                    item.position === "start" && "rounded-t-lg",
-                    item.position === "end" && "rounded-b-lg",
-                )}
+    {:else if chevronLabel}
+        <button
+            type="button"
+            class="group flex w-full items-center justify-between rounded-lg border border-gray-100 bg-white p-4 text-base/6 font-normal text-black shadow-sm outline-none focus:outline-none"
+            onclick={() => (isOpen = !isOpen)}
+        >
+            {chevronLabel}
+            <Chevron
+                direction="down"
+                width="20"
+                height="20"
+                class={twJoin("transition-transform", isOpen && "rotate-180")}
             />
-        {/each}
+        </button>
+    {/if}
+
+    {#if isOpen}
+        <div
+            class="absolute top-full left-0 z-100 mt-2 w-full flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
+        >
+            <div class="flex max-h-72 w-full flex-col overflow-y-auto">
+                {#each renderedItems as item}
+                    <DropdownItem
+                        {variant}
+                        option={item}
+                        onChange={(option) => {
+                            if (option.selected && !isSelected(option)) {
+                                selected = [...selected, option];
+                            }
+                            if (!option.selected && isSelected(option)) {
+                                selected = selected.filter((s) => s.id !== option.id);
+                            }
+                            onChange?.(option);
+                        }}
+                        class={twJoin(
+                            item.position === "start" && "rounded-t-lg",
+                            item.position === "end" && "rounded-b-lg",
+                        )}
+                    />
+                {/each}
+            </div>
+        </div>
     {/if}
 </div>

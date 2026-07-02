@@ -68,9 +68,9 @@
       },
       "status": {
         "all": "Todos los estados",
-        "funding": "En financiación",
-        "successful": "Exitosas",
-        "completed": "Completadas"
+        "in_campaign": "En campaña",
+        "funded": "Financiados",
+        "archived": "Archivados"
       }
     },
     "gatewayCheckout": {
@@ -823,6 +823,7 @@
         "apply": "Aplicar filtros",
         "clear": "Limpiar filtros",
         "categoryLabel": "Elige una categoría",
+        "territoryLabel": "Territorio",
         "selectCategory": "Seleccionar categoría",
         "deselectCategory": "Deseleccionar categoría",
         "selectedCategories": "{{count}} categorías seleccionadas",

@@ -1,6 +1,12 @@
 import { writable, derived, get } from "svelte/store";
 
 import { projectsService } from "../services/projectsService";
+import {
+    ALL_PUBLIC_STATES,
+    expandStatesToStatuses,
+    parseStatesFromParams,
+    type PublicProjectState,
+} from "../utils/projectStatus";
 
 import type { ApiProjectsGetCollectionData, Project } from "../openapi/client/types.gen";
 
@@ -15,6 +21,8 @@ export interface SearchState {
     totalCount: number;
     hasSearched: boolean;
     lastSearchTime: number;
+    // Public states selected in the UI (drives filters["status[]"])
+    selectedStates: PublicProjectState[];
     // Pagination state
     currentPage: number;
     itemsPerPage: number;
@@ -32,6 +40,7 @@ function getInitialState(): SearchState {
         filters: {
             page: 1,
             itemsPerPage: 20,
+            "status[]": expandStatesToStatuses(ALL_PUBLIC_STATES),
         },
         results: [],
         isLoading: false,
@@ -40,6 +49,7 @@ function getInitialState(): SearchState {
         totalCount: 0,
         hasSearched: false,
         lastSearchTime: 0,
+        selectedStates: ALL_PUBLIC_STATES,
         // Pagination state
         currentPage: 1,
         itemsPerPage: 20,
@@ -53,6 +63,10 @@ export function parseSearchParamsFilters(searchParams: URLSearchParams) {
     const filters: Record<string, string | string[]> = {};
 
     for (const [key] of searchParams.entries()) {
+        // Status is never trusted from the URL: it is derived from the public
+        // states below so search can never query a non-public status.
+        if (key === "state[]" || key === "status" || key === "status[]") continue;
+
         const values = searchParams.getAll(key);
 
         if (values.length > 1 || key.endsWith("[]")) {
@@ -61,6 +75,9 @@ export function parseSearchParamsFilters(searchParams: URLSearchParams) {
             filters[key] = values[0];
         }
     }
+
+    // Public search always constrains status to the union of the selected states.
+    filters["status[]"] = expandStatesToStatuses(parseStatesFromParams(searchParams));
 
     return filters;
 }
@@ -75,8 +92,11 @@ function loadInitialState(): SearchState {
     // Initialize filters from URL parameters using API field names
     if (state.filters) {
         state.filters = parseSearchParamsFilters(urlParams);
+        state.selectedStates = parseStatesFromParams(urlParams);
 
-        if (Object.entries(state.filters).length > 0) {
+        // Filters always contain the derived status[], so presence of actual URL
+        // params is what marks a shared/bookmarked search.
+        if ([...urlParams.keys()].length > 0) {
             state.hasSearched = true;
         }
     }
@@ -163,6 +183,15 @@ function createSearchStore() {
             }));
         },
 
+        // Update the selected public states and recompute the API status[] filter
+        updateStates: (states: PublicProjectState[]) => {
+            update((state) => ({
+                ...state,
+                selectedStates: states,
+                filters: { ...state.filters, "status[]": expandStatesToStatuses(states) },
+            }));
+        },
+
         // Set search results
         setResults: (results: Project[], totalCount: number = results.length) =>
             update((state) => ({
@@ -219,13 +248,15 @@ function createSearchStore() {
                 errorMessage: "",
             })),
 
-        // Clear all filters
+        // Clear all filters (public states go back to the default three)
         clearFilters: () =>
             update((state) => ({
                 ...state,
+                selectedStates: ALL_PUBLIC_STATES,
                 filters: {
                     page: 1,
                     itemsPerPage: 20,
+                    "status[]": expandStatesToStatuses(ALL_PUBLIC_STATES),
                 },
             })),
 
@@ -243,6 +274,9 @@ function createSearchStore() {
             Object.entries(filters).forEach(([key, value]) => {
                 if (value === undefined || value === null || value === "") return;
 
+                // Never serialize status to the URL — it is derived from state[].
+                if (key === "status" || key === "status[]" || key === "state[]") return;
+
                 if (Array.isArray(value)) {
                     value.forEach((item) => {
                         urlParams.append(key, String(item));
@@ -253,6 +287,12 @@ function createSearchStore() {
                     }
                 }
             });
+
+            // Only serialize states when a strict subset is selected — the default
+            // (all three) keeps the URL clean and parses back to all three.
+            if (state.selectedStates.length < ALL_PUBLIC_STATES.length) {
+                state.selectedStates.forEach((s) => urlParams.append("state[]", s));
+            }
 
             const newUrl = urlParams.toString()
                 ? `${window.location.pathname}?${urlParams.toString()}`
@@ -282,11 +322,7 @@ function createSearchStore() {
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(
-                        filters?.title ||
-                        filters?.status ||
-                        (filters?.["categories[]"]?.length ?? 0) > 0
-                    ),
+                    !!(filters?.title || (filters?.["categories[]"]?.length ?? 0) > 0),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",
@@ -476,10 +512,16 @@ export const isEmpty = derived(
 
 export const resultCount = derived(searchStore, ($searchStore) => $searchStore.totalCount);
 
+// Selected public states derived store (drives the multiselect UI)
+export const selectedStates = derived(searchStore, ($searchStore) => $searchStore.selectedStates);
+
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
-    const { filters } = $searchStore;
-    return !!(filters?.title || filters?.status || (filters?.["categories[]"]?.length ?? 0) > 0);
+    const { filters, selectedStates } = $searchStore;
+    // States count as an active filter only when a strict, non-empty subset is chosen.
+    const statesActive =
+        selectedStates.length > 0 && selectedStates.length < ALL_PUBLIC_STATES.length;
+    return !!(filters?.title || statesActive || (filters?.["categories[]"]?.length ?? 0) > 0);
 });
 
 // Pagination derived stores
