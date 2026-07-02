@@ -8,14 +8,21 @@
     import DateInput from "../library/inputs/DateInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
 
-    let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
-        $props<{
-            filters: ApiGatewayChargesGetCollectionData["query"];
-            onApplyFilters: (filters: any) => void;
-            paymentMethodOptions: [string, string][];
-            chargeStatusOptions: [string, string][];
-            rangeAmountOptions: [string, string][];
-        }>();
+    let {
+        filters,
+        onApplyFilters,
+        paymentMethodOptions,
+        chargeStatusOptions,
+        rangeAmountOptions,
+        initialSearchQuery = "",
+    } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
+        onApplyFilters: (filters: any) => void;
+        paymentMethodOptions: [string, string][];
+        chargeStatusOptions: [string, string][];
+        rangeAmountOptions: [string, string][];
+        initialSearchQuery?: string;
+    }>();
 
     let showFilters = $state(false);
 
@@ -65,7 +72,7 @@
     class="border-variant1 relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class=" flex items-center justify-between gap-4">
-        <Search onSelectTarget={handleSelectTarget} />
+        <Search onSelectTarget={handleSelectTarget} initialQuery={initialSearchQuery} />
 
         <div class="flex items-center gap-3">
             <Button

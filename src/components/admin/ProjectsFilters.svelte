@@ -4,9 +4,62 @@
     import Button from "../library/buttons/Button.svelte";
     import Search from "../library/inputs/Search.svelte";
 
+    import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
+
+    type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
+
+    let { onSearch, onApplyFilters } = $props<{
+        onSearch?: (value: string) => void;
+        onApplyFilters?: (filters: ProjectsQuery) => void;
+    }>();
+
     let showFilters = $state(false);
     let searchValue = $state("");
     let searchError = $derived(searchValue.length > 0 && searchValue.length < 4);
+    let campaignStatus = $state("");
+    let projectStatus = $state("");
+    let dateFrom = $state("");
+    let dateTo = $state("");
+
+    const CAMPAIGN_STATUS_MAP: Record<string, string[]> = {
+        active: ["in_campaign"],
+        completed: ["funding.paid"],
+        failed: ["campaign.failed"],
+    };
+
+    function handleSearch() {
+        if (searchError) return;
+        onSearch?.(searchValue);
+    }
+
+    function normalizeStatus(value: string): string {
+        return value.replace(/_/g, ".");
+    }
+
+    function handleSubmit(e: SubmitEvent) {
+        e.preventDefault();
+        const filters: ProjectsQuery = {};
+        const statusValues: string[] = [];
+
+        if (campaignStatus) {
+            const mapped = CAMPAIGN_STATUS_MAP[campaignStatus];
+            if (mapped) statusValues.push(...mapped);
+        }
+        if (projectStatus) {
+            statusValues.push(normalizeStatus(projectStatus));
+        }
+
+        if (statusValues.length === 1) {
+            filters["status"] = statusValues[0];
+        } else if (statusValues.length > 1) {
+            filters["status[]"] = statusValues;
+        }
+
+        if (dateFrom) filters["dateCreated[after]"] = new Date(dateFrom).toISOString();
+        if (dateTo) filters["dateCreated[before]"] = new Date(dateTo).toISOString();
+
+        onApplyFilters?.(filters);
+    }
 </script>
 
 <div
@@ -17,7 +70,11 @@
             <Search
                 bind:value={searchValue}
                 placeholder={$t("admin.projects.filters.search.placeholder")}
-                onclear={() => (searchValue = "")}
+                onclear={() => {
+                    searchValue = "";
+                    onSearch?.("");
+                }}
+                onsubmit={handleSearch}
                 class="bg-white {searchError ? 'border-tertiary' : ''}"
             />
             {#if searchError}
@@ -27,7 +84,7 @@
             {/if}
         </div>
 
-        <Button kind="secondary" size="md" class="shrink-0">
+        <Button kind="secondary" size="md" class="shrink-0" onclick={handleSearch}>
             {$t("admin.projects.filters.search.btn")}
         </Button>
 
@@ -47,7 +104,7 @@
     </div>
 
     {#if showFilters}
-        <form class="flex flex-col gap-6">
+        <form class="flex flex-col gap-6" onsubmit={handleSubmit}>
             <div class="grid grid-cols-4 gap-4">
                 <div class="relative">
                     <label
@@ -59,6 +116,7 @@
                     <select
                         id="campaignStatus"
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
+                        bind:value={campaignStatus}
                     >
                         <option value=""></option>
                         {#each Object.entries($t("admin.projects.filters.campaignStatus.options")) as [value, label]}
@@ -74,6 +132,7 @@
                     <select
                         id="projectStatus"
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
+                        bind:value={projectStatus}
                     >
                         <option value=""></option>
                         {#each Object.entries($t("admin.projects.filters.status.options")) as [value, label]}
@@ -89,6 +148,7 @@
                     <input
                         id="dateFrom"
                         type="date"
+                        bind:value={dateFrom}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                     />
@@ -101,6 +161,7 @@
                     <input
                         id="dateTo"
                         type="date"
+                        bind:value={dateTo}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                     />

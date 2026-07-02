@@ -1,13 +1,24 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
+    import { t, locale } from "../../i18n/store";
+    import { formatDate } from "../../utils/dates";
     import Comments from "../icons/Comments.svelte";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
 
-    let { project, onOpenAnnotationsModal } = $props<{
+    interface Props {
         project: ProjectRow;
         onOpenAnnotationsModal: () => void;
-    }>();
+        onChangeStatus?: (projectId: number) => void;
+        userEmail?: string;
+    }
+
+    let { project, onOpenAnnotationsModal, onChangeStatus, userEmail }: Props = $props();
+
+    function navigateToCharges() {
+        const name = project.name;
+        if (!name) return;
+        window.location.href = `/${$locale}/admin/charges?search=${encodeURIComponent(name)}`;
+    }
 </script>
 
 <div class="flex flex-col gap-6 px-8 py-6">
@@ -18,7 +29,9 @@
                 <span class="text-content font-bold">
                     {$t(`admin.projects.table.rows.details.${item.key}`)}:
                 </span>
-                <span class="text-black">{item.value}</span>
+                <span class="text-black"
+                    >{item.value === "—" ? "—" : formatDate(new Date(item.value), $locale)}</span
+                >
             </div>
         {/each}
     </div>
@@ -29,7 +42,7 @@
             <span class="text-content font-bold"
                 >{$t("admin.projects.table.rows.details.email")}:</span
             >
-            <span class="truncate text-black">{project.promoter}</span>
+            <span class="truncate text-black">{userEmail ?? "—"}</span>
         </div>
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
@@ -59,6 +72,10 @@
             <button
                 type="button"
                 class="border-secondary text-secondary cursor-pointer rounded-full border bg-white px-5 py-2 text-sm"
+                onclick={() => {
+                    if (key === "changeStatus") onChangeStatus?.(project.id);
+                    if (key === "contributions") navigateToCharges();
+                }}
             >
                 {$t(`admin.projects.table.rows.details.btns.${key}`)}
             </button>

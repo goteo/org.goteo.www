@@ -30,6 +30,7 @@
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
+    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         isLoading,
         itemsPerPage,
@@ -37,10 +38,18 @@
         currentPage,
         sortOptions,
     } from "../../stores/chargesPaginationAndSort.ts";
+    import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import { isEnabled, tipjarId } from "../../utils/tipping";
+
+    const initialSearchQuery =
+        typeof window !== "undefined"
+            ? (new URLSearchParams(window.location.search).get("search") ?? undefined)
+            : undefined;
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
+    let pendingSearch = $state(!!initialSearchQuery);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
@@ -51,6 +60,24 @@
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
     let selectedSort = $state("date-desc");
+    let totalTips = $state<string>("—");
+
+    async function loadTotalTips() {
+        if (!isEnabled || !$session) return;
+        const headers = $session.token.asHttpHeaders;
+
+        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
+        const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
+        if (!accountingId) return;
+
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: accountingId },
+            headers,
+        });
+        if (accounting?.balance) {
+            totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
+        }
+    }
 
     function buildChargesQuery(
         filters: ApiGatewayChargesGetCollectionData["query"],
@@ -300,6 +327,28 @@
         filters = { ...filters, ...newFilters };
     }
 
+    $effect(() => {
+        if (!pendingSearch) return;
+        if (!initialSearchQuery || initialSearchQuery.length < 4) {
+            pendingSearch = false;
+            return;
+        }
+
+        const doResolve = async () => {
+            const { data } = await apiProjectsGetCollection({
+                query: { title: initialSearchQuery },
+                headers: { Accept: "application/ld+json" },
+            });
+            const projects = toCollectionItems<Project>(data);
+            const found = projects[0];
+            if (found?.accounting) {
+                filters = { target: found.accounting };
+            }
+            pendingSearch = false;
+        };
+        doResolve();
+    });
+
     const reloadCharges = async () => {
         charges = [];
         const chargesData = await loadCharges(filters);
@@ -311,8 +360,16 @@
     };
 
     $effect(() => {
+        if (pendingSearch) return;
         reloadCharges();
     });
+
+    let chargeSlides = $derived([
+        { title: $t("admin.charges.totalizers.selected"), amount: $totalItems },
+        { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+    ]);
 
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
@@ -328,6 +385,7 @@
         chargeStatusOptions = Object.entries(
             $t("pages.admin.charges.filters.chargeStatus.options"),
         );
+
         rangeAmountOptions = Object.entries(
             $t("pages.admin.charges.filters.rangeAmount.options"),
         ).sort(([a], [b]) => {
@@ -337,6 +395,8 @@
             if (b === "all") return 1;
             return parseMin(a) - parseMin(b);
         });
+
+        loadTotalTips();
     });
 </script>
 
@@ -346,6 +406,7 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
+        {initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">
@@ -358,7 +419,7 @@
             <ExportCsv {filters} />
         </div>
         <Categories {paymentMethodOptions} />
-        <Slider />
+        <Slider slides={chargeSlides} isLoading={$isLoading} />
     </div>
 </div>
 <Table

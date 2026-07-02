@@ -9,10 +9,12 @@
         open = $bindable(false),
         paidValue = $bindable(""),
         paidMatchfundingValue = $bindable(""),
+        onsave,
     } = $props<{
         open: boolean;
         paidValue: string;
         paidMatchfundingValue: string;
+        onsave?: (paidValue: string, paidMatchfundingValue: string) => void;
     }>();
 </script>
 
@@ -34,7 +36,7 @@
             />
         </div>
         <div class="flex justify-end">
-            <Button kind="primary" onclick={() => (open = false)}>
+            <Button kind="primary" onclick={() => onsave?.(paidValue, paidMatchfundingValue)}>
                 {$t("admin.projects.modals.paid.save")}
             </Button>
         </div>

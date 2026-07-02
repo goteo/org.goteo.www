@@ -50,7 +50,19 @@
             }
 
             if (tag.title === "status") {
-                tag.value = $t(`pages.admin.charges.filters.chargeStatus.options.${tag.value}`);
+                const chargeLabel = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
+                tag.value =
+                    chargeLabel !== tag.value
+                        ? chargeLabel
+                        : $t(`admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
+            }
+
+            if (tag.title === "status[]" && Array.isArray(tag.value)) {
+                tag.value = tag.value
+                    .map((s: string) =>
+                        $t(`admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
+                    )
+                    .join(", ");
             }
 
             if (tag.title === "money.amount[gte]")
@@ -68,7 +80,7 @@
             let normalTags: FilterTags | undefined = Object.keys(filters)
                 .map((filter) => {
                     if (filter === dateFrom || filter === dateTo) return { title: filter };
-                    else return { title: filter, value: filters[filter] };
+                    else return { title: filter, value: filters[filter] as string | undefined };
                 })
                 .filter((filter) => {
                     if (filter.title === dateFrom || filter.title === dateTo) return false;
@@ -88,8 +100,8 @@
                     {
                         title: "date",
                         values: {
-                            from: filters[dateFrom],
-                            to: filters[dateTo],
+                            from: filters[dateFrom] as string | undefined,
+                            to: filters[dateTo] as string | undefined,
                         },
                     },
                 ];

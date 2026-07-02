@@ -1,5 +1,6 @@
 <script lang="ts">
     import { onMount, type Snippet } from "svelte";
+    import { get } from "svelte/store";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import Footer from "./Footer.svelte";
@@ -23,6 +24,23 @@
     let { locale: localeProp, session: sessionProp, children, class: classes }: AppState = $props();
 
     onMount(() => {
+        client.interceptors.request.use(async (request) => {
+            try {
+                const currentSession = get(session);
+                if (currentSession?.token?.asHttpHeaders) {
+                    const headers = currentSession.token.asHttpHeaders as Record<string, string>;
+                    for (const [key, value] of Object.entries(headers)) {
+                        if (value && !request.headers.has(key)) {
+                            request.headers.set(key, String(value));
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error("Auth interceptor failed:", e);
+            }
+            return request;
+        });
+
         client.interceptors.request.use(createBrowserCacheInterceptor());
     });
 

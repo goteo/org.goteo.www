@@ -5,9 +5,14 @@
     import Button from "../library/buttons/Button.svelte";
     import TextArea from "../library/inputs/TextArea.svelte";
 
-    let { open = $bindable(false), annotationText = $bindable("") } = $props<{
+    let {
+        open = $bindable(false),
+        annotationText = $bindable(""),
+        onsave,
+    } = $props<{
         open: boolean;
         annotationText: string;
+        onsave?: (text: string) => void;
     }>();
 </script>
 
@@ -27,7 +32,7 @@
             <p class="text-content text-sm">{$t("admin.projects.modals.annotations.empty")}</p>
         {:else}{/if}
         <div class="flex justify-end">
-            <Button kind="primary" onclick={() => (open = false)}>
+            <Button kind="primary" onclick={() => onsave?.(annotationText)}>
                 {#if annotationText}
                     {$t("admin.projects.modals.annotations.modify")}
                 {:else}

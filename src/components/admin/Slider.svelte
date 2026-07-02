@@ -3,44 +3,17 @@
 
     import "flickity/css/flickity.css";
     import TotalizerCard from "./TotalizerCard.svelte";
-    import { session } from "../../auth/store";
-    import { t } from "../../i18n/store";
-    import { apiAccountingsIdGet, apiTipjarsIdGet } from "../../openapi/client/sdk.gen";
-    import {
-        totalItems,
-        isLoading as chargesIsLoading,
-    } from "../../stores/chargesPaginationAndSort";
-    import { formatCurrency } from "../../utils/currencies";
-    import { extractId } from "../../utils/extractId";
-    import { isEnabled, tipjarId } from "../../utils/tipping";
+    import Loader from "../library/feedback/Loader.svelte";
 
     import type { Options } from "flickity";
 
-    let { slides: slidesProp, loading: loadingProp } = $props<{
-        slides?: { title: string; amount: string | number }[];
-        loading?: boolean;
-    }>();
+    let {
+        slides = [],
+        isLoading = false,
+    }: { slides?: { title: string; amount: string | number }[]; isLoading?: boolean } = $props();
 
     let mainCarousel: HTMLDivElement;
     let isSliderLoaded = $state(false);
-    let totalTips = $state<string>("—");
-
-    async function loadTotalTips() {
-        if (!isEnabled || !$session) return;
-        const headers = $session.token.asHttpHeaders;
-
-        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
-        const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
-        if (!accountingId) return;
-
-        const { data: accounting } = await apiAccountingsIdGet({
-            path: { id: accountingId },
-            headers,
-        });
-        if (accounting?.balance) {
-            totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
-        }
-    }
 
     let options: Options = {
         cellAlign: "left",
@@ -57,28 +30,9 @@
         },
     };
 
-    let slides: { title: string; amount: string | number }[] = $state([]);
-
-    const loadSlides = () => {
-        if (slidesProp) return slidesProp;
-
-        return [
-            {
-                title: $t("admin.projects.totalizers.selected"),
-                amount: $totalItems,
-            },
-            { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
-            { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
-            { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
-        ];
-    };
-
-    let isDataLoading = $derived(loadingProp ?? $chargesIsLoading);
-
     const loadFlickity = async (elem: HTMLElement) => {
         try {
-            const FlickityModule = await import("flickity");
-            const FlickityClass = FlickityModule.default;
+            const { default: FlickityClass } = await import("flickity");
             new FlickityClass(elem, options);
             isSliderLoaded = true;
         } catch (err) {
@@ -86,27 +40,22 @@
         }
     };
 
-    $effect(() => {
-        slides = loadSlides();
-    });
-
     onMount(() => {
-        loadSlides();
         if (mainCarousel) loadFlickity(mainCarousel);
-        loadTotalTips();
     });
 </script>
 
 <div class="relative mt-6 h-40">
-    {#if !isSliderLoaded || isDataLoading}
+    {#if isLoading}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">{$t("system.loading")}</span>
+            <Loader />
         </div>
     {/if}
 
     <div
         bind:this={mainCarousel}
-        class="main-carousel h-full first:ml-0 opacity-{isSliderLoaded && !isDataLoading ? 100 : 0}"
+        class="main-carousel h-full first:ml-0"
+        class:opacity-0={isLoading}
     >
         {#each slides as { title, amount }}
             <TotalizerCard class="ml-6 h-40.5 w-80.5" {title} value={amount} />
