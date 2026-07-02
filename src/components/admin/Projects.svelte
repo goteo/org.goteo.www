@@ -100,7 +100,10 @@
                 error,
             } = await apiProjectsGetCollection({
                 query,
-                headers: { Accept: "application/ld+json" },
+                headers: {
+                    Accept: "application/ld+json",
+                    "Accept-Language": " ",
+                },
             });
 
             if (error) {
