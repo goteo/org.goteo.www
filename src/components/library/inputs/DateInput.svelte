@@ -1,8 +1,9 @@
 <script lang="ts">
-    import { Datepicker } from "flowbite-svelte";
+    import { clickOutside, Datepicker } from "flowbite-svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { locale, t } from "../../../i18n/store";
+    import { formatDate } from "../../../utils/dates";
     import Calendar from "../../icons/Calendar.svelte";
     import Close from "../../icons/navigation/Close.svelte";
 
@@ -50,7 +51,7 @@
     let container: HTMLDivElement;
 
     const displayValue = $derived(
-        value && !isNaN(value.getTime()) ? value.toLocaleDateString($locale) : "",
+        value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
     );
 
     function dateToString(date: Date): string {
@@ -91,8 +92,14 @@
         open = false;
     }
 
+    // The month label is the <h3 aria-live="polite"> that flowbite-svelte renders
+    // inside the navigation row of #datepicker-dropdown.
+    function monthLabel(root: HTMLElement): HTMLElement | null {
+        return root.querySelector(':scope > div > h3[aria-live="polite"]');
+    }
+
     function calendarMonth(root: HTMLElement): { year: number; month: number } | null {
-        const text = root.querySelector('[aria-live="polite"]')?.textContent?.toLowerCase();
+        const text = monthLabel(root)?.textContent?.toLowerCase();
         const year = text?.match(/\d{4}/)?.[0];
         if (!text || !year) return null;
         for (let month = 0; month < 12; month++) {
@@ -131,15 +138,6 @@
     }
 
     $effect(() => {
-        if (!open) return;
-        const onPointerDown = (event: PointerEvent) => {
-            if (container && !container.contains(event.target as Node)) open = false;
-        };
-        document.addEventListener("pointerdown", onPointerDown);
-        return () => document.removeEventListener("pointerdown", onPointerDown);
-    });
-
-    $effect(() => {
         if (!open || (!minDate && !maxDate)) return;
         const root = container?.querySelector("#datepicker-dropdown");
         if (!root) return;
@@ -152,7 +150,7 @@
     $effect(() => {
         if (!open) return;
         const root = container?.querySelector("#datepicker-dropdown") as HTMLElement | null;
-        const label = root?.querySelector('[aria-live="polite"]') as HTMLElement | null;
+        const label = root ? monthLabel(root) : null;
         if (!root || !label) return;
         const format = () => {
             const current = calendarMonth(root);
@@ -175,7 +173,11 @@
     });
 </script>
 
-<div bind:this={container} class={twMerge("relative", disabled && "opacity-40", className)}>
+<div
+    bind:this={container}
+    use:clickOutside={() => (open = false)}
+    class={twMerge("relative", disabled && "opacity-40", className)}
+>
     {#if labelText}
         <label
             for={finalId}
