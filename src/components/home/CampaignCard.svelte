@@ -65,9 +65,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
     // Calculate funding status and remaining amount
     const hasReachedMinimum = $derived(
-        obtained != null && campaign.minimum != null
-            ? gte(obtained, campaign.minimum)
-            : false,
+        obtained != null && campaign.minimum != null ? gte(obtained, campaign.minimum) : false,
     );
 
     // Determine status badge text based on funding level
@@ -185,18 +183,14 @@ Converted from CampaignCard.astro to maintain exact functionality
                                     {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.optimum,
-                                    )}
+                                    {formatCurrency(campaign.optimum)}
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.minimum,
-                                    )}
+                                    {formatCurrency(campaign.minimum)}
                                 </span>
                             {/if}
                         </div>
@@ -212,9 +206,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
-                            {formatCurrency(
-                                campaign.userDonations,
-                            )}
+                            {formatCurrency(campaign.userDonations)}
                         </span>
                     </div>
                 {/if}

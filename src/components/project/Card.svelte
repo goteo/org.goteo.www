@@ -20,11 +20,7 @@
     export let onScrollToRewards: () => void;
 
     function hasReached(money?: Money) {
-        return (
-            money !== undefined &&
-            accounting.balance != null &&
-            gt(accounting.balance, money)
-        );
+        return money !== undefined && accounting.balance != null && gt(accounting.balance, money);
     }
 </script>
 

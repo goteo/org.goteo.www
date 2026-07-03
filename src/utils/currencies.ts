@@ -54,10 +54,7 @@ export type FormatOptions = {
     locale?: string;
 };
 
-export function formatCurrency(
-    money: Money | undefined | null,
-    options?: FormatOptions,
-): string;
+export function formatCurrency(money: Money | undefined | null, options?: FormatOptions): string;
 export function formatCurrency(
     amount?: number,
     currency?: string | null,

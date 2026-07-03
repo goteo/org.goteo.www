@@ -268,9 +268,7 @@
             const totalMoneyValue = totalMoney
                 ? { amount: totalMoney.amount ?? 0, currency: totalMoney.currency ?? "EUR" }
                 : contributions.length > 0
-                  ? sumMoney(
-                        contributions.map((s) => s.money ?? { amount: 0, currency: "EUR" }),
-                    )
+                  ? sumMoney(contributions.map((s) => s.money ?? { amount: 0, currency: "EUR" }))
                   : { amount: 0, currency: "EUR" };
 
             let totalAmount = totalMoneyValue.amount;

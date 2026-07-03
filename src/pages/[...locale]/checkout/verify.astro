@@ -58,7 +58,8 @@ try {
     }
 
     amount = response.data?.charges?.length
-        ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money)).amount
+        ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
+              .amount
         : undefined;
 } catch (err) {
     console.error("Error trying to get payment status", err);

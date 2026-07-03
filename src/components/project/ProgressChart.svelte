@@ -14,7 +14,12 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
 
-    import type { Accounting, AccountingBalancePoint, Money, Project } from "../../openapi/client/index";
+    import type {
+        Accounting,
+        AccountingBalancePoint,
+        Money,
+        Project,
+    } from "../../openapi/client/index";
 
     export let accounting: Accounting;
     export let project: Project;

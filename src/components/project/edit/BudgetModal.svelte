@@ -37,13 +37,7 @@
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         untrack(() => budgetItem?.type),
     );
-    let amount = $state(
-        untrack(() =>
-            budgetItem?.money
-                ? toUnitsNumber(budgetItem.money)
-                : 0,
-        ),
-    );
+    let amount = $state(untrack(() => (budgetItem?.money ? toUnitsNumber(budgetItem.money) : 0)));
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
         untrack(() => budgetItem?.deadline),
     );
@@ -55,9 +49,7 @@
         if (open) {
             selectedBudgetTitle = budgetItem?.title ?? "";
             selectedBudgetType = budgetItem?.type;
-            amount = budgetItem?.money
-                ? toUnitsNumber(budgetItem.money)
-                : 0;
+            amount = budgetItem?.money ? toUnitsNumber(budgetItem.money) : 0;
             selectedBudgetDeadline = budgetItem?.deadline;
             selectedBudgetDescription = budgetItem?.description ?? "";
         }

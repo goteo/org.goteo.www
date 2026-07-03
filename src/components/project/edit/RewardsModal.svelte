@@ -35,9 +35,7 @@
     let description = $state(untrack(() => reward?.description ?? ""));
 
     let moneyAmount = $state(
-        untrack(() =>
-            reward?.money.amount ? toUnitsNumber(reward.money) : 0,
-        ),
+        untrack(() => (reward?.money.amount ? toUnitsNumber(reward.money) : 0)),
     );
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
