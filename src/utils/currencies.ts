@@ -55,7 +55,7 @@ export type FormatOptions = {
 };
 
 export function formatCurrency(
-    money: Money,
+    money: Money | undefined | null,
     options?: FormatOptions,
 ): string;
 export function formatCurrency(
@@ -64,11 +64,12 @@ export function formatCurrency(
     options?: FormatOptions,
 ): string;
 export function formatCurrency(
-    amountOrMoney?: number | Money,
+    amountOrMoney?: number | Money | null,
     currencyOrOptions?: string | null | FormatOptions,
     options?: FormatOptions,
 ): string {
-    if (typeof amountOrMoney === "object" && amountOrMoney !== null && "currency" in amountOrMoney) {
+    if (amountOrMoney == null) return "";
+    if (typeof amountOrMoney === "object" && "currency" in amountOrMoney) {
         const money = amountOrMoney as Money;
         const opts = currencyOrOptions as FormatOptions | undefined;
         return formatUnits(money.amount ?? 0, money.currency ?? getDefaultCurrency(), opts);

@@ -5,6 +5,7 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { formatCurrency, getUnit } from "../../utils/currencies";
+    import { lt } from "../../utils/money";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import UnitIcon from "../icons/UnitIcon.svelte";
     import UserIcon from "../icons/user/User.svelte";
@@ -31,7 +32,13 @@
 
         if (
             isNaN(numericAmount) ||
-            numericAmount * getUnit(reward.money?.currency) < (reward.money?.amount ?? 0)
+            lt(
+                {
+                    amount: numericAmount * getUnit(reward.money?.currency),
+                    currency: reward.money.currency,
+                },
+                reward.money ?? { amount: 0, currency: "EUR" },
+            )
         ) {
             alert($t("rewards.error-invalid-amount"));
             return;
@@ -60,8 +67,8 @@
     }
 
     onMount(() => {
-        rawInput = formatCurrency(reward.money.amount, reward.money.currency);
-        customAmount = +formatCurrency(reward.money.amount, reward.money.currency, {
+        rawInput = formatCurrency(reward.money);
+        customAmount = +formatCurrency(reward.money, {
             asLocaleString: false,
         });
     });
@@ -81,7 +88,7 @@
                 {@html $t(
                     "rewards.by-amount-or-more",
                     {
-                        amount: `${formatCurrency(reward.money.amount, reward.money.currency)}`,
+                        amount: `${formatCurrency(reward.money)}`,
                     },
                     { allowHTML: true },
                 )}
