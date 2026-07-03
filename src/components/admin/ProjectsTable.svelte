@@ -37,6 +37,7 @@
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import { t } from "../../i18n/store";
+    import { withoutCache } from "../../openapi/cacheInterceptor";
     import { apiUsersIdOrHandleGet, type User } from "../../openapi/client/index.ts";
     import { extractId } from "../../utils/extractId";
     import Edit from "../icons/actions/Edit.svelte";
@@ -147,7 +148,9 @@
             if (!ownerUsers.has(ownerIri)) {
                 const userId = extractId(ownerIri);
                 if (userId) {
-                    apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(({ data }) => {
+                    withoutCache(() =>
+                        apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }),
+                    ).then(({ data }) => {
                         if (data) {
                             ownerUsers = new Map(ownerUsers).set(ownerIri, data as User);
                         }
