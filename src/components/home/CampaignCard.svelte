@@ -10,6 +10,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     import { t } from "../../i18n/store";
     import { client } from "../../openapi/client/client.gen";
     import { formatCurrency } from "../../utils/currencies";
+    import { gte } from "../../utils/money";
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
     import Flames from "../icons/status/Flames.svelte";
     import Tag from "../library/tags/Tag.svelte";
@@ -63,7 +64,11 @@ Converted from CampaignCard.astro to maintain exact functionality
     const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
-    const hasReachedMinimum = $derived((obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0));
+    const hasReachedMinimum = $derived(
+        obtained != null && campaign.minimum != null
+            ? gte(obtained, campaign.minimum)
+            : false,
+    );
 
     // Determine status badge text based on funding level
     // Using lookup pattern for consistency with other i18n implementations
@@ -167,7 +172,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             >
                             <span class="text-secondary text-2xl font-bold">
                                 {#if obtained}
-                                    {formatCurrency(obtained.amount, obtained.currency)}
+                                    {formatCurrency(obtained)}
                                 {:else}
                                     <span class="text-content text-sm">{$t("system.loading")}</span>
                                 {/if}
@@ -175,14 +180,13 @@ Converted from CampaignCard.astro to maintain exact functionality
                         </div>
                         <!-- Remaining to Goal -->
                         <div class="flex flex-col gap-1 text-right">
-                            {#if campaign.optimum && (obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0)}
+                            {#if campaign.optimum && hasReachedMinimum}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
-                                        campaign.optimum.amount,
-                                        campaign.optimum.currency,
+                                        campaign.optimum,
                                     )}
                                 </span>
                             {:else}
@@ -191,8 +195,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
                                     {formatCurrency(
-                                        campaign.minimum.amount,
-                                        campaign.minimum.currency,
+                                        campaign.minimum,
                                     )}
                                 </span>
                             {/if}
@@ -210,8 +213,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                         >
                         <span class="text-2xl font-bold text-black">
                             {formatCurrency(
-                                campaign.userDonations.amount,
-                                campaign.userDonations.currency,
+                                campaign.userDonations,
                             )}
                         </span>
                     </div>

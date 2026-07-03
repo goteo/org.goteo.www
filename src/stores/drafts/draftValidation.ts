@@ -1,6 +1,7 @@
 import murmur from "murmurhash-js";
 import z from "zod";
 
+import { isPositiveMoney } from "../../utils/money";
 import { type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
@@ -198,7 +199,7 @@ export function validateReward(reward: ProjectReward): ValidationErrors {
         errors[`reward_error_title_${hash}`] = "pages.project.edit.rewards.validation.title";
     }
 
-    if (!reward.money.amount || reward.money.amount <= 0) {
+    if (!isPositiveMoney(reward.money)) {
         errors[`reward_error_amount_${hash}`] = "pages.project.edit.rewards.validation.amount";
     }
 
@@ -243,7 +244,7 @@ export function validateBudgetItem(item: ProjectBudgetItem): ValidationErrors {
             "pages.project.edit.budget.validation.description";
     }
 
-    if (!item.money.amount || item.money.amount <= 0) {
+    if (!isPositiveMoney(item.money)) {
         errors[`budget_error_amount_${hash}`] = "pages.project.edit.budget.validation.amount";
     }
 
