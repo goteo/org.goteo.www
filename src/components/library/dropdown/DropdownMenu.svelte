@@ -19,8 +19,8 @@
         searchPlaceholder?: string;
         onSearch?: (value: string) => void;
         chevronLabel?: string;
-        /** Move selected options to the top of the list. */
-        sortSelectedFirst?: boolean;
+        /** Build the list with selected options at the top. */
+        selectedFirst?: boolean;
         isOpen?: boolean;
     }
 
@@ -34,7 +34,7 @@
         searchPlaceholder = $t("domain.search.bar.placeholder"),
         onSearch = undefined,
         chevronLabel = undefined,
-        sortSelectedFirst = false,
+        selectedFirst = false,
         isOpen = false,
     }: Props = $props();
 
@@ -43,17 +43,12 @@
     const renderedItems = $derived.by(() => {
         const selectedIds = new Set(selected.map((s) => s.id));
 
-        const merged: DropdownOption[] = [...options];
-
-        for (const item of selected) {
-            if (!merged.some((option) => option.id === item.id)) {
-                merged.push(item);
-            }
-        }
-
-        if (sortSelectedFirst) {
-            merged.sort((a, b) => Number(selectedIds.has(b.id)) - Number(selectedIds.has(a.id)));
-        }
+        const merged: DropdownOption[] = selectedFirst
+            ? [...selected, ...options.filter((option) => !selectedIds.has(option.id))]
+            : [
+                  ...options,
+                  ...selected.filter((item) => !options.some((option) => option.id === item.id)),
+              ];
 
         return merged.map((item, index, arr) => ({
             ...item,

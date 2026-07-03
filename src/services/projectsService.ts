@@ -1,4 +1,5 @@
 import { apiProjectsGetCollection } from "../openapi/client/sdk.gen";
+import { constrainToPublicStatuses } from "../utils/projectStatus";
 
 import type { AuthError } from "../openapi/api";
 import type { Project } from "../openapi/client/types.gen";
@@ -29,6 +30,9 @@ export class ProjectsService {
             const response = await apiProjectsGetCollection({
                 query: {
                     ...filters,
+                    // Public search never queries a non-public status, regardless of
+                    // what the filters (e.g. from the URL) contain.
+                    "status[]": constrainToPublicStatuses(filters?.["status[]"]),
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },

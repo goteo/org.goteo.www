@@ -13,12 +13,7 @@ Integrated with searchStore for state management and URL synchronization
     import StatusFilter from "./StatusFilter.svelte";
     import TerritoryFilter from "./TerritoryFilter.svelte";
     import { t } from "../../i18n/store";
-    import {
-        searchStore,
-        searchFilters,
-        selectedStates,
-        type SearchFilters,
-    } from "../../stores/searchStore";
+    import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../icons/filters/FilterIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
 
@@ -111,8 +106,8 @@ Integrated with searchStore for state management and URL synchronization
                         {$t("pages.search.filters.status.label")}
                     </h3>
                     <StatusFilter
-                        selectedStates={$selectedStates}
-                        onStatesChange={(states) => searchStore.updateStates(states)}
+                        statuses={$searchFilters["status[]"] || []}
+                        onStatusesChange={(statuses) => updateFilters({ "status[]": statuses })}
                     />
                 </div>
                 <div class="w-full">
