@@ -14,21 +14,21 @@
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
 
-    import type { Accounting, AccountingBalancePoint, Project } from "../../openapi/client/index";
+    import type { Accounting, AccountingBalancePoint, Money, Project } from "../../openapi/client/index";
 
     export let accounting: Accounting;
     export let project: Project;
     export let balancePoints: AccountingBalancePoint[];
 
-    function formatAmount(amount: number | null | undefined): number {
-        return +formatCurrency(amount ?? 0, accounting.balance?.currency, {
+    function formatAmount(money: Money | undefined | null): number {
+        return +formatCurrency(money, {
             asLocaleString: false,
         });
     }
 
-    let received = formatAmount(accounting.balance?.amount);
-    let minimal = formatAmount(project.budget?.minimum?.money?.amount);
-    let optimal = formatAmount(project.budget?.optimum?.money?.amount);
+    let received = formatAmount(accounting.balance);
+    let minimal = formatAmount(project.budget?.minimum?.money);
+    let optimal = formatAmount(project.budget?.optimum?.money);
 
     let canvas: HTMLCanvasElement | null = null;
     const marginDays = 4;
@@ -48,7 +48,7 @@
         data = sortedBalancePoints.map((point) => {
             const pointMs = new Date(point.start).getTime();
             const daysSinceFirst = Math.round((pointMs - firstDateMs!) / 86400000);
-            return { x: daysSinceFirst + marginDays, y: formatAmount(point.balance.amount) };
+            return { x: daysSinceFirst + marginDays, y: formatAmount(point.balance) };
         });
 
         const lastDateMs = new Date(
