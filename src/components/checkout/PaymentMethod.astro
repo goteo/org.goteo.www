@@ -170,9 +170,10 @@ const { accounting } = Astro.props;
         if (cartData && walletInput) {
             try {
                 const cart = JSON.parse(cartData);
-                const total = cart.items.reduce(
-                    (sum: number, item: { amount: number; quantity: number }) =>
-                        sum + item.amount * item.quantity,
+                const items = Object.values(cart.items ?? {});
+                const total = items.reduce(
+                    (sum: number, item: { money: { amount: number }; quantity: number }) =>
+                        sum + item.money.amount * item.quantity,
                     0,
                 );
 

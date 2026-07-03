@@ -4,10 +4,12 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
+    import { multiplyMoney, sumMoney, subtractMoney } from "../../utils/money";
 
     const total = derived(cart, ($cart) => {
-        if (!$cart?.items) return 0;
-        return $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0);
+        const items = Object.values($cart?.items ?? {});
+        if (items.length === 0) return { amount: 0, currency: "EUR" };
+        return sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)));
     });
 
     export let accounting;
@@ -19,7 +21,7 @@
         <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.currentBalance")}</span
         >
         <p class="text-secondary text-double font-bold">
-            {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
+            {formatCurrency(accounting.balance)}
         </p>
     </div>
 
@@ -28,7 +30,7 @@
             >{$t("payment.wallet-confirmation.amountToUse")}
         </span>
         <p id="cart-total" class="text-double font-bold text-red-500">
-            {formatCurrency($total, defaultCurrency)}
+            {formatCurrency($total)}
         </p>
     </div>
 
@@ -37,7 +39,7 @@
             >{$t("pages.checkout.wallet.remainingBalance")}
         </span>
         <p id="cart-difference" class="text-secondary text-double font-bold">
-            {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}
+            {formatCurrency(subtractMoney(accounting.balance, $total))}
         </p>
     </div>
 </div>
