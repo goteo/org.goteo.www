@@ -10,6 +10,7 @@
     } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import { addMoney } from "../../utils/money";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
 
@@ -64,11 +65,14 @@
                 ] as string[];
 
                 // Calculate total donations per project
-                const projectDonations = new Map<string, number>();
+                const projectDonations = new Map<string, Money>();
                 chargeItems.forEach((charge) => {
                     if (charge.target && charge.status === "charged" && charge.money?.amount) {
-                        const current = projectDonations.get(charge.target) || 0;
-                        projectDonations.set(charge.target, current + charge.money.amount);
+                        const current = projectDonations.get(charge.target) ?? {
+                            amount: 0,
+                            currency: charge.money.currency ?? "EUR",
+                        };
+                        projectDonations.set(charge.target, addMoney(current, charge.money));
                     }
                 });
 
@@ -134,11 +138,10 @@
                                     status: project.status,
                                     category: project.categories?.[0], // Get first category
                                     daysRemaining,
-                                    userDonations: {
-                                        amount: projectDonations.get(accountingIRI) || 0,
+                                    userDonations: projectDonations.get(accountingIRI) ?? {
+                                        amount: 0,
                                         currency: "EUR",
-                                        conversion: null,
-                                    } as Money,
+                                    },
                                 } as Campaign;
                             } catch (error) {
                                 console.error(
