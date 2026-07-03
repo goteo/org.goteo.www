@@ -6,7 +6,8 @@
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { defaultCurrency } from "../../../utils/currencies";
+    import { defaultCurrency, getUnit } from "../../../utils/currencies";
+    import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
@@ -33,7 +34,11 @@
     let title = $state(untrack(() => reward?.title ?? ""));
     let description = $state(untrack(() => reward?.description ?? ""));
 
-    let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
+    let moneyAmount = $state(
+        untrack(() =>
+            reward?.money.amount ? toUnitsNumber(reward.money) : 0,
+        ),
+    );
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
     let files = $state<File[]>([]);
@@ -72,7 +77,7 @@
             title,
             description,
             money: {
-                amount: moneyAmount * 100,
+                amount: Math.round(moneyAmount * getUnit(defaultCurrency())),
                 currency: defaultCurrency(),
             },
             isFinite: unlimited ? false : true,

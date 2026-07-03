@@ -5,6 +5,7 @@
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { defaultCurrency, getUnit } from "../../../utils/currencies";
+    import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
@@ -38,8 +39,8 @@
     );
     let amount = $state(
         untrack(() =>
-            budgetItem?.money.amount
-                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
+            budgetItem?.money
+                ? toUnitsNumber(budgetItem.money)
                 : 0,
         ),
     );
@@ -54,8 +55,8 @@
         if (open) {
             selectedBudgetTitle = budgetItem?.title ?? "";
             selectedBudgetType = budgetItem?.type;
-            amount = budgetItem?.money.amount
-                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
+            amount = budgetItem?.money
+                ? toUnitsNumber(budgetItem.money)
                 : 0;
             selectedBudgetDeadline = budgetItem?.deadline;
             selectedBudgetDescription = budgetItem?.description ?? "";
