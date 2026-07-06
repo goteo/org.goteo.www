@@ -108,7 +108,9 @@ const { accounting } = Astro.props;
             const { error, data } = await actions.payment(formData);
 
             if (!error) {
-                const checkoutLink = data?.checkout?.links?.find((link: { type: string }) => link.type === "payment");
+                const checkoutLink = data?.checkout?.links?.find(
+                    (link: { type: string }) => link.type === "payment",
+                );
 
                 if (!checkoutLink) {
                     throw new Error("No payment link found in the response");
@@ -175,9 +177,9 @@ const { accounting } = Astro.props;
                     money: { amount: number; currency?: string };
                     quantity: number;
                 }>;
-                const total = sumMoney(
-                    items.map((item) => multiplyMoney(item.money, item.quantity)),
-                )?.amount ?? 0;
+                const total =
+                    sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)))
+                        ?.amount ?? 0;
 
                 const balanceAttr = form?.dataset.balance;
                 const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
