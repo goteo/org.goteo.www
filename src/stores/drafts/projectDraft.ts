@@ -25,7 +25,8 @@ import type {
  */
 export interface MediaImage {
     id: string;
-    url: string; // Base64 data URL or API URL
+    url: string; // S3 URL or base64 data URL
+    key?: string; // S3 object key for deletion
     file?: File; // Original file reference
     size: number; // File size in bytes
     name: string; // Original filename
@@ -87,6 +88,7 @@ export interface ProjectDraftResources {
         minimum: ProjectBudgetItem[];
         optimum: ProjectBudgetItem[];
     };
+    images?: MediaImage[];
 }
 
 export interface Draft {
@@ -271,7 +273,7 @@ export async function createDraft(
                 projectDeadline: "minimum",
             },
             campaignInfo: {
-                images: [],
+                images: resources?.images ?? [],
                 video: "",
                 objectives: "",
                 legacy: "",

@@ -1,11 +1,12 @@
 <!--
     MediaUploader Component
 
-    Accessible file upload component with image compression and validation.
+    Accessible file upload component that uploads images to S3 via the
+    existing upload pipeline (preupload → PUT → postupload).
 
     Features:
     - File validation (type, size)
-    - Image compression (max 1200px width, 0.8 quality JPEG)
+    - Upload to app storage bucket via S3 signed URLs
     - Preview grid with remove functionality
     - Maximum file limits (default: 3)
     - Inline error messages with visual feedback
@@ -26,7 +27,7 @@
     - onUpload: (image: MediaImage) => void - Callback when image uploaded successfully
     - onRemove: (id: string) => void - Callback when image removed
     - maxFiles?: number - Maximum number of files allowed (default: 3)
-    - maxFileSize?: number - Maximum file size in bytes (default: 500KB)
+    - maxFileSize?: number - Maximum file size in bytes (default: 5MB)
     - accept?: string - Accepted file types (default: "image/*")
     - error?: string - External validation error message
     - class?: ClassNameValue - Additional Tailwind classes
@@ -52,12 +53,6 @@
     - role="list" and role="listitem" for preview grid
     - Keyboard navigation support (focusable remove buttons)
     - Screen reader friendly messages
-
-    Compression Strategy:
-    - Images resized to max 1200px width (maintains aspect ratio)
-    - Converted to JPEG format with 0.8 quality
-    - Reduces localStorage footprint by ~60-70%
-    - Original file metadata preserved (name, size)
 -->
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
@@ -67,6 +62,7 @@
     import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
+    import { uploadImage } from "../../../utils/imageUpload";
 
     import type { MediaImage } from "../../../stores/drafts/projectDraft";
 
@@ -86,7 +82,7 @@
         onUpload,
         onRemove,
         maxFiles = 3,
-        maxFileSize = 500 * 1024, // 500 KB
+        maxFileSize = 5 * 1024 * 1024, // 5 MB
         accept = "image/*",
         error = undefined,
         class: className = "",
@@ -102,71 +98,15 @@
     const uploaderId = $derived(generatedId);
 
     /**
-     * Compresses an image file to reduce base64 size for localStorage.
-     * Uses canvas to resize images larger than 1200px width while maintaining aspect ratio.
-     *
-     * @param file - The image file to compress
-     * @returns Promise<string> - Base64-encoded compressed image
-     * @throws Error if compression fails
-     */
-    async function compressImage(file: File): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const img = new Image();
-            const reader = new FileReader();
-
-            reader.onerror = () => reject(new Error("Failed to read file"));
-            reader.onload = (e) => {
-                img.onerror = () => reject(new Error("Failed to load image"));
-                img.onload = () => {
-                    try {
-                        const canvas = document.createElement("canvas");
-                        const ctx = canvas.getContext("2d");
-                        if (!ctx) {
-                            reject(new Error("Failed to get canvas context"));
-                            return;
-                        }
-
-                        // Calculate new dimensions (max width 1200px)
-                        const MAX_WIDTH = 1200;
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > MAX_WIDTH) {
-                            height = (height * MAX_WIDTH) / width;
-                            width = MAX_WIDTH;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-
-                        // Draw and compress
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        // Use JPEG for better compression (0.8 quality)
-                        const compressed = canvas.toDataURL("image/jpeg", 0.8);
-                        resolve(compressed);
-                    } catch (error) {
-                        reject(error);
-                    }
-                };
-                img.src = e.target?.result as string;
-            };
-            reader.readAsDataURL(file);
-        });
-    }
-
-    /**
-     * Handles file selection from input
-     * Validates, compresses, and uploads the image
+     * Handles file selection from input.
+     * Validates the file and uploads to S3 via the existing upload pipeline.
      */
     async function handleFileSelect(event: Event) {
         const files = (event.target as HTMLInputElement).files;
         if (!files || files.length === 0) return;
 
-        // Clear previous errors
         validationError = null;
 
-        // Check max files limit
         if (images.length >= maxFiles) {
             validationError = $t("wizard.validation.campaign_info.media.max_images");
             resetInput();
@@ -175,31 +115,28 @@
 
         const file = files[0];
 
-        // Validate file type
         if (!file.type.startsWith("image/")) {
             validationError = $t("wizard.validation.campaign_info.media.invalid_image");
             resetInput();
             return;
         }
 
-        // Validate file size
         if (file.size > maxFileSize) {
             validationError = $t("wizard.validation.campaign_info.media.image_too_large");
             resetInput();
             return;
         }
 
-        // Show uploading state
         isUploading = true;
         uploadProgress = file.name;
 
         try {
-            // Compress and encode image
-            const base64 = await compressImage(file);
+            const { url, key } = await uploadImage(file);
 
             const newImage: MediaImage = {
                 id: crypto.randomUUID(),
-                url: base64,
+                url,
+                key,
                 name: file.name,
                 size: file.size,
             };
