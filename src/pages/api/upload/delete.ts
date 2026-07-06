@@ -16,8 +16,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const { session } = locals;
     if (!session) return Unauthorized;
 
-    const body = (await request.json()) as { key?: string } | Record<string, unknown>;
-    const { key } = body as { key?: string };
+    const { key } = await request.json();
     if (!key) {
         return json({ error: `Missing key "key" in request body` }, 400);
     }
@@ -39,9 +38,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     } catch (err: any) {
         console.error(err);
 
-        return json(
-            { error: `Bucket responded with error code "${err.Code}"` },
-            err["$metadata"].httpStatusCode || 500,
-        );
+        const message = err?.Code
+            ? `Bucket responded with error code "${err.Code}"`
+            : err?.message || "Unknown upload error";
+
+        return json({ error: message }, err?.$metadata?.httpStatusCode || 500);
     }
 };
