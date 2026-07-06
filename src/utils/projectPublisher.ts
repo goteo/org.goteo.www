@@ -13,7 +13,7 @@ import {
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
-import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
+import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectUpdationDto, ProjectReward } from "../openapi/client";
 import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
 
 export class PublishValidationError extends Error {
@@ -148,6 +148,8 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
         .filter(Boolean)
         .join("\n\n");
 
+    const firstImage = wizard.campaignInfo.images[0];
+
     const result = await patchProject(
         projectId,
         {
@@ -157,7 +159,8 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
             video: wizard.campaignInfo.video,
             description,
             deadline: wizard.configuration.projectDeadline,
-        },
+            cover: firstImage?.url ?? "",
+        } as ProjectProjectUpdationDto & { cover?: string },
         session,
     );
 
