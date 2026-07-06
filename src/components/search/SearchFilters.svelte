@@ -110,26 +110,36 @@ Integrated with searchStore for state management and URL synchronization
     {#if filtersOpen}
         <!-- Status filter dropdown -->
         <div class="flex flex-col gap-6 lg:flex-row">
-            <FilterDropdown
-                options={statusOptions}
-                placeholder={$t("pages.search.filters.status.label")}
-                selectedValue={$searchFilters.status}
-                onSelect={(value) => updateFilters({ status: value })}
-                data-testid="status-filter"
-            />
-            <TerritoryFilter
-                selectedTerritory={{
-                    countries: $searchFilters["territory.country[]"] || [],
-                    subLvl1: $searchFilters["territory.subLvl1[]"] || [],
-                    subLvl2: $searchFilters["territory.subLvl2[]"] || [],
-                }}
-                onTerritoryChange={(territories) =>
-                    updateFilters({
-                        "territory.country[]": territories.countries,
-                        "territory.subLvl1[]": territories.subLvl1,
-                        "territory.subLvl2[]": territories.subLvl2,
-                    })}
-            />
+            <div class="flex flex-1 flex-col gap-2">
+                <h3 class="font-body text-base font-bold text-black">
+                    {$t("pages.search.filters.status.label")}
+                </h3>
+                <FilterDropdown
+                    options={statusOptions}
+                    placeholder={$t("pages.search.filters.status.label")}
+                    selectedValue={$searchFilters.status}
+                    onSelect={(value) => updateFilters({ status: value })}
+                    data-testid="status-filter"
+                />
+            </div>
+            <div class="flex flex-1 flex-col gap-2">
+                <h3 class="font-body text-base font-bold text-black">
+                    {$t("pages.search.filters.territory.label")}
+                </h3>
+                <TerritoryFilter
+                    selectedTerritory={{
+                        countries: $searchFilters["territory.country[]"] || [],
+                        subLvl1: $searchFilters["territory.subLvl1[]"] || [],
+                        subLvl2: $searchFilters["territory.subLvl2[]"] || [],
+                    }}
+                    onTerritoryChange={(territories) =>
+                        updateFilters({
+                            "territory.country[]": territories.countries,
+                            "territory.subLvl1[]": territories.subLvl1,
+                            "territory.subLvl2[]": territories.subLvl2,
+                        })}
+                />
+            </div>
         </div>
 
         <!-- Category filters -->
