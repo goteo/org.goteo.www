@@ -81,7 +81,20 @@
     /**
      * Handle image removal
      */
-    function handleImageRemove(id: string) {
+    async function handleImageRemove(id: string) {
+        const image = campaignInfo.images.find((img) => img.id === id);
+        if (image?.key) {
+            try {
+                await fetch("/api/upload/delete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ key: image.key }),
+                });
+            } catch (err) {
+                console.error("Failed to delete image from bucket:", err);
+            }
+        }
+
         updateCampaignInfo({
             images: campaignInfo.images.filter((img) => img.id !== id),
         });
