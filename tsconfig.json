@@ -1,6 +1,6 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", ".astro/actions.d.ts", "src/types", "**/*"],
-  "exclude": ["dist", "node_modules", ".astro", "graphify-out"],
+  "exclude": ["dist", "node_modules", "graphify-out"],
   "compilerOptions": {}
 }
