@@ -4,16 +4,16 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { multiplyMoney, sumMoney, subtractMoney } from "../../utils/money";
 
     const total = derived(cart, ($cart) => {
         const items = Object.values($cart?.items ?? {});
-        if (items.length === 0) return { amount: 0, currency: "EUR" };
+        if (items.length === 0) return { amount: 0, currency: getDefaultCurrency() };
         return sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)));
     });
 
     export let accounting;
-    export let defaultCurrency;
 </script>
 
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">

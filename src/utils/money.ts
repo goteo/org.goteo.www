@@ -16,6 +16,7 @@ import {
 } from "dinero.js";
 
 import type { Money } from "../openapi/client";
+import { getDefaultCurrency } from "./consts";
 
 type DineroCurrency = {
     readonly code: string;
@@ -32,7 +33,7 @@ function getCurrency(code: string): DineroCurrency {
 
 function toDinero(money: Money) {
     const amount = money.amount ?? 0;
-    const currency = getCurrency(money.currency ?? "EUR");
+    const currency = getCurrency(money.currency ?? getDefaultCurrency());
     return dinero({ amount, currency });
 }
 
@@ -54,7 +55,7 @@ export function multiplyMoney(m: Money, factor: number): Money {
 }
 
 export function sumMoney(items: Money[]): Money {
-    if (items.length === 0) return { amount: 0, currency: "EUR" };
+    if (items.length === 0) return { amount: 0, currency: getDefaultCurrency() };
     return items.reduce((sum, item) => addMoney(sum, item));
 }
 

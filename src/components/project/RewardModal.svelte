@@ -5,6 +5,7 @@
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
     import { formatCurrency, getUnit } from "../../utils/currencies";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { lt } from "../../utils/money";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import UnitIcon from "../icons/UnitIcon.svelte";
@@ -37,7 +38,7 @@
                     amount: numericAmount * getUnit(reward.money?.currency),
                     currency: reward.money.currency,
                 },
-                reward.money ?? { amount: 0, currency: "EUR" },
+                reward.money ?? { amount: 0, currency: getDefaultCurrency() },
             )
         ) {
             alert($t("rewards.error-invalid-amount"));

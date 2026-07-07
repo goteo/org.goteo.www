@@ -10,6 +10,7 @@
     } from "../../openapi/client/sdk.gen.ts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { addMoney } from "../../utils/money";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
@@ -70,7 +71,7 @@
                     if (charge.target && charge.status === "charged" && charge.money?.amount) {
                         const current = projectDonations.get(charge.target) ?? {
                             amount: 0,
-                            currency: charge.money.currency ?? "EUR",
+                            currency: charge.money.currency ?? getDefaultCurrency(),
                         };
                         projectDonations.set(charge.target, addMoney(current, charge.money));
                     }
@@ -140,7 +141,7 @@
                                     daysRemaining,
                                     userDonations: projectDonations.get(accountingIRI) ?? {
                                         amount: 0,
-                                        currency: "EUR",
+                                        currency: getDefaultCurrency(),
                                     },
                                 } as Campaign;
                             } catch (error) {

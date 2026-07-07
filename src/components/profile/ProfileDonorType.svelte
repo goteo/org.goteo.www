@@ -2,6 +2,7 @@
     import VerifiedBadge from "./VerifiedBadge.svelte";
     import { t } from "../../i18n/store";
     import { formatCurrency } from "../../utils/currencies";
+    import { getDefaultCurrency } from "../../utils/consts";
 
     interface Props {
         projectsDonated?: number;
@@ -12,7 +13,7 @@
     let {
         projectsDonated = 1,
         moneyDonatedAmount = 500,
-        moneyDonatedCurrency = "EUR",
+        moneyDonatedCurrency = getDefaultCurrency(),
     }: Props = $props();
 
     // Format currency using the project's formatCurrency function
