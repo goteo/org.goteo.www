@@ -21,15 +21,16 @@ import type {
 } from "../../openapi/client";
 
 /**
- * Media image data
+ * Uploaded file data
  */
-export interface MediaImage {
+export interface UploadedFile {
     id: string;
     url: string; // S3 URL or base64 data URL
     key?: string; // S3 object key for deletion
     file?: File; // Original file reference
     size: number; // File size in bytes
     name: string; // Original filename
+    type: string; // MIME type
 }
 
 export interface WizardConfiguration {
@@ -38,7 +39,7 @@ export interface WizardConfiguration {
 
 export interface WizardCampaignInfo {
     // Media/**
-    images: MediaImage[];
+    images: UploadedFile[];
     video: string | undefined;
 
     // Rich text content (stored as HTML)
@@ -88,7 +89,7 @@ export interface ProjectDraftResources {
         minimum: ProjectBudgetItem[];
         optimum: ProjectBudgetItem[];
     };
-    images?: MediaImage[];
+    images?: UploadedFile[];
 }
 
 export interface Draft {
