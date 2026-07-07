@@ -12,6 +12,7 @@
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
     import type { Project, ProjectReward } from "../../../openapi/client";
 
     let {
@@ -36,7 +37,7 @@
     let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
-    let files = $state<File[]>([]);
+    let files = $state<UploadedFile[]>([]);
 
     let openDeleteModal = $state(false);
 

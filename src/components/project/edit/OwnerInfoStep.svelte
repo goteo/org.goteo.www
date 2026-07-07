@@ -15,6 +15,7 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
     import type { Project } from "../../../openapi/client";
 
     let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
@@ -39,7 +40,7 @@
     ]);
     let preferredIndex = $state(0);
     let iban = $state("");
-    let bankCertificateFiles = $state<File[]>([]);
+    let bankCertificateFiles = $state<UploadedFile[]>([]);
     // let publicLinks = $state({
     //     website: "",
     //     email: "",
