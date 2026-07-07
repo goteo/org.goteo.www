@@ -23,8 +23,8 @@
     - Components: Uses Button component from library (kind="secondary" for upload, kind="invert" for remove)
 
     Props:
-    - images: MediaImage[] - Array of uploaded images
-    - onUpload: (image: MediaImage) => void - Callback when image uploaded successfully
+     - images: UploadedFile[] - Array of uploaded images
+     - onUpload: (image: UploadedFile) => void - Callback when image uploaded successfully
     - onRemove: (id: string) => void - Callback when image removed
     - maxFiles?: number - Maximum number of files allowed (default: 3)
     - maxFileSize?: number - Maximum file size in bytes (default: 5MB)
@@ -64,11 +64,11 @@
     import Loader from "../../library/feedback/Loader.svelte";
     import { uploadImage } from "../../../utils/imageUpload";
 
-    import type { MediaImage } from "../../../stores/drafts/projectDraft";
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     interface MediaUploaderProps {
-        images: MediaImage[];
-        onUpload: (image: MediaImage) => void;
+        images: UploadedFile[];
+        onUpload: (image: UploadedFile) => void;
         onRemove: (id: string) => void;
         maxFiles?: number;
         maxFileSize?: number;
@@ -133,12 +133,13 @@
         try {
             const { url, key } = await uploadImage(file);
 
-            const newImage: MediaImage = {
+            const newImage: UploadedFile = {
                 id: crypto.randomUUID(),
                 url,
                 key,
                 name: file.name,
                 size: file.size,
+                type: file.type,
             };
 
             onUpload(newImage);

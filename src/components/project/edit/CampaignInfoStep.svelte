@@ -23,7 +23,7 @@
         currentDraft,
         navigateToStep,
         updateCampaignInfo,
-        type MediaImage,
+        type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
@@ -71,7 +71,7 @@
     /**
      * Handle image upload
      */
-    function handleImageUpload(image: MediaImage) {
+    function handleImageUpload(image: UploadedFile) {
         if (!campaignInfo) return;
         updateCampaignInfo({
             images: [...campaignInfo.images, image],
