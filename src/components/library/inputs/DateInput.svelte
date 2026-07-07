@@ -95,7 +95,14 @@
     // The month label is the <h3 aria-live="polite"> that flowbite-svelte renders
     // inside the navigation row of #datepicker-dropdown.
     function monthLabel(root: HTMLElement): HTMLElement | null {
-        return root.querySelector(':scope > div > h3[aria-live="polite"]');
+        const label = root.querySelector<HTMLElement>(':scope > div > h3[aria-live="polite"]');
+        if (!label) {
+            console.error(
+                'DateInput: month label (h3[aria-live="polite"]) not found in #datepicker-dropdown.' +
+                    " The flowbite-svelte Datepicker markup may have changed after an update.",
+            );
+        }
+        return label;
     }
 
     function calendarMonth(root: HTMLElement): { year: number; month: number } | null {
