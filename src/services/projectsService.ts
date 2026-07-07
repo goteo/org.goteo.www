@@ -27,12 +27,14 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const { status, "status[]": statuses, ...restFilters } = filters ?? {};
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...filters,
-                    // Public search never queries a non-public status, regardless of
-                    // what the filters (e.g. from the URL) contain.
-                    "status[]": constrainToPublicStatuses(filters?.["status[]"]),
+                    ...restFilters,
+                    "status[]": constrainToPublicStatuses([
+                        ...(statuses ?? []),
+                        ...(status ? [status] : []),
+                    ]),
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },

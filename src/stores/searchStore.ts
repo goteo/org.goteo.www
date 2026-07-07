@@ -474,11 +474,11 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
-    const { filters } = $searchStore;
-    return !!(
-        filters?.title ||
-        (filters?.["status[]"]?.length ?? 0) > 0 ||
-        (filters?.["categories[]"]?.length ?? 0) > 0
+    const paginationKeys = ["page", "itemsPerPage"];
+    return Object.entries($searchStore.filters ?? {}).some(
+        ([key, value]) =>
+            !paginationKeys.includes(key) &&
+            (Array.isArray(value) ? value.length > 0 : value != null && value !== ""),
     );
 });
 
