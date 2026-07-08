@@ -7,13 +7,17 @@
 
     import type { Locale } from "../../i18n/locales";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
+    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
 
     type Filters = ApiGatewayChargesGetCollectionData["query"];
 
-    let { title, filters, onCloseFilter } = $props<{
+    let { title, filters, onCloseFilter, accountingsMap = new Map(), ownersMap = new Map() } = $props<{
         title: string;
         filters: Filters;
         onCloseFilter: (filters: Filters) => void;
+        accountingsMap?: Map<string, Accounting>;
+        ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
@@ -36,7 +40,12 @@
         }
     }
 
-    function formatTags(tags: FilterTags, locale: Locale) {
+    function formatTags(
+        tags: FilterTags,
+        locale: Locale,
+        accountingsMap: Map<string, Accounting>,
+        ownersMap: Map<string, User | Project | Tipjar>,
+    ) {
         if (tags === undefined) return;
 
         tags.map((tag) => {
@@ -67,6 +76,14 @@
 
             if (tag.title === "money.amount[gte]")
                 tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
+
+            if (tag.title === "target") {
+                const displayName = getDisplayNameFromAccounting(
+                    accountingsMap.get(tag.value ?? ""),
+                    ownersMap,
+                );
+                if (displayName) tag.value = displayName;
+            }
         });
 
         return tags;
@@ -107,7 +124,7 @@
                 ];
             }
 
-            tags = formatTags([...normalTags], $locale) ?? [];
+            tags = formatTags([...normalTags], $locale, accountingsMap, ownersMap) ?? [];
         }
     });
 </script>

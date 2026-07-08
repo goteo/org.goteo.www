@@ -415,6 +415,8 @@
                 onCloseFilter={handleApplyFilters}
                 title={$t("domain.charges.lastContributions")}
                 {filters}
+                {accountingsMap}
+                {ownersMap}
             />
             <ExportCsv {filters} />
         </div>
