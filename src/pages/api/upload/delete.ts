@@ -18,7 +18,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
 
     const body = await request.json();
     const { key } = body as { key?: unknown };
-    if (!key || typeof key !== 'string') {
+    if (!key || typeof key !== "string") {
         return json({ error: `Missing key "key" in request body` }, 400);
     }
 

@@ -147,10 +147,7 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <MediaUploader
-                    images={campaignInfo.images}
-                    onUpload={handleImageUpload}
-                />
+                <MediaUploader images={campaignInfo.images} onUpload={handleImageUpload} />
 
                 <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
             </div>
@@ -158,7 +155,10 @@
             {#if campaignInfo.images.length > 0}
                 <div class="grid grid-cols-1 gap-6 sm:grid-cols-2" role="list">
                     {#each campaignInfo.images as image (image.id)}
-                        <div class="group relative aspect-4/3 overflow-hidden rounded-lg" role="listitem">
+                        <div
+                            class="group relative aspect-4/3 overflow-hidden rounded-lg"
+                            role="listitem"
+                        >
                             <img
                                 src={image.url}
                                 alt={image.name}
@@ -174,7 +174,9 @@
                                 <CloseIcon width="16" height="16" class="text-secondary" />
                             </button>
 
-                            <div class="bg-variant1/90 text-secondary absolute right-0 bottom-0 left-0 px-2 py-1 text-xs">
+                            <div
+                                class="bg-variant1/90 text-secondary absolute right-0 bottom-0 left-0 px-2 py-1 text-xs"
+                            >
                                 {formatFileSize(image.size)}
                             </div>
                         </div>

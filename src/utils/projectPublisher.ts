@@ -13,7 +13,12 @@ import {
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
-import type { ProjectBudgetItem, ProjectCollaboration, ProjectProjectUpdationDto, ProjectReward } from "../openapi/client";
+import type {
+    ProjectBudgetItem,
+    ProjectCollaboration,
+    ProjectProjectUpdationDto,
+    ProjectReward,
+} from "../openapi/client";
 import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
 
 export class PublishValidationError extends Error {
