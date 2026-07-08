@@ -4,12 +4,7 @@ import {
     apiProjectsGetCollectionUrl,
 } from "../openapi/client/paths.gen";
 
-import type {
-    Accounting,
-    User,
-    Project,
-    Tipjar,
-} from "../openapi/client/index.ts";
+import type { Accounting, User, Project, Tipjar } from "../openapi/client/index.ts";
 
 export function getDisplayNameFromAccounting(
     accounting: Accounting | undefined,

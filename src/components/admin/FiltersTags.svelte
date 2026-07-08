@@ -12,7 +12,13 @@
 
     type Filters = ApiGatewayChargesGetCollectionData["query"];
 
-    let { title, filters, onCloseFilter, accountingsMap = new Map(), ownersMap = new Map() } = $props<{
+    let {
+        title,
+        filters,
+        onCloseFilter,
+        accountingsMap = new Map(),
+        ownersMap = new Map(),
+    } = $props<{
         title: string;
         filters: Filters;
         onCloseFilter: (filters: Filters) => void;
