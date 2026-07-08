@@ -229,9 +229,9 @@
                         size="sm"
                         onclick={() => handleRemove(file.id)}
                         aria-label={$t("common.remove", { name: file.name })}
-                        class="shrink-0 rounded-full p-1.5"
+                        class="shrink-0 group rounded-full p-1.5 transition-all duration-200 hover:bg-red-100"
                     >
-                        <CloseIcon />
+                        <CloseIcon class="group-hover:text-red-600 transition-colors duration-200" />
                     </Button>
                 </div>
             {/each}
