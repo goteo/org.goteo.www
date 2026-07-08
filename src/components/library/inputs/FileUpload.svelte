@@ -7,7 +7,6 @@
     import { t } from "../../../i18n/store";
     import { uploadImage } from "../../../utils/imageUpload";
     import Button from "../buttons/Button.svelte";
-    import Loader from "../feedback/Loader.svelte";
     import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let {
@@ -26,7 +25,8 @@
 
     let isDragging = $state(false);
     let error = $state<string | null>(null);
-    let uploadingFiles = $state<Set<string>>(new Set());
+    let uploading = $state<Map<string, number>>(new Map());
+    let deleting = $state<Set<string>>(new Set());
 
     const maxSizeBytes = $derived(maxSizeMB * 1024 * 1024);
 
@@ -41,6 +41,8 @@
     let supportedTypes = $derived(
         accept.map((mime: string) => mimeExtensions[mime] ?? `.${mime.split("/")[1]}`).join(", "),
     );
+
+    const hasUploading = $derived(uploading.size > 0);
 
     function validate(file: File) {
         if (file.size > maxSizeBytes) {
@@ -57,10 +59,17 @@
     }
 
     async function uploadFile(file: File) {
-        uploadingFiles = new Set([...uploadingFiles, file.name]);
+        uploading = new Map(uploading).set(file.name, 0);
 
         try {
-            const { url, key } = await uploadImage(file);
+            const { url, key } = await uploadImage(file, {
+                onBytesProgress: (loaded, total) => {
+                    uploading = new Map(uploading).set(
+                        file.name,
+                        Math.round((loaded / total) * 100),
+                    );
+                },
+            });
 
             const uploaded: UploadedFile = {
                 id: crypto.randomUUID(),
@@ -77,9 +86,9 @@
             error = err instanceof Error ? err.message : "Upload failed";
             console.error("File upload error:", err);
         } finally {
-            const next = new Set(uploadingFiles);
+            const next = new Map(uploading);
             next.delete(file.name);
-            uploadingFiles = next;
+            uploading = next;
         }
     }
 
@@ -117,6 +126,8 @@
     }
 
     async function handleRemove(id: string) {
+        deleting = new Set(deleting).add(id);
+
         const file = files.find((f: UploadedFile) => f.id === id);
         if (file?.key) {
             try {
@@ -129,6 +140,12 @@
                 console.error("Failed to delete file from bucket:", err);
             }
         }
+
+        await new Promise((r) => setTimeout(r, 300));
+
+        const next = new Set(deleting);
+        next.delete(id);
+        deleting = next;
 
         files = files.filter((f: UploadedFile) => f.id !== id);
     }
@@ -172,6 +189,79 @@
                 {$t("pages.project.edit.rewards.modal.placeholders.files")}
             </p>
         </label>
+
+        <!-- Uploading files -->
+        {#if hasUploading}
+            <div class="mt-4 flex flex-col gap-3 text-left">
+                {#each [...uploading.entries()] as [name, pct]}
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center justify-between text-xs">
+                            <span class="truncate text-content">{name}</span>
+                            <span class="shrink-0 font-medium">{pct}%</span>
+                        </div>
+                        <div class="bg-secondary/20 h-2 w-full overflow-hidden rounded-full">
+                            <div
+                                class="h-full rounded-full bg-secondary transition-all duration-300"
+                                style="width: {pct}%"
+                            ></div>
+                        </div>
+                    </div>
+                {/each}
+            </div>
+        {/if}
+
+        {#if files.length > 0}
+            <div class="mt-4 flex flex-col gap-2 text-left" role="list">
+                {#each files as file (file.id)}
+                    <div
+                        class={twMerge(
+                            "bg-light-surface border-secondary flex items-center gap-3 rounded-lg border p-3 transition-all duration-300",
+                            deleting.has(file.id) && "scale-95 opacity-50",
+                        )}
+                        role="listitem"
+                    >
+                        {#if isImage(file.type)}
+                            <img
+                                src={file.url}
+                                alt={file.name}
+                                class="h-12 w-12 shrink-0 rounded object-cover"
+                            />
+                        {:else if file.type.startsWith("video/")}
+                            <div
+                                class="bg-secondary/20 flex h-12 w-12 shrink-0 items-center justify-center rounded"
+                            >
+                                <span class="text-xs font-bold">VIDEO</span>
+                            </div>
+                        {:else}
+                            <div
+                                class="bg-secondary/20 flex h-12 w-12 shrink-0 items-center justify-center rounded"
+                            >
+                                <span class="text-xs font-bold">PDF</span>
+                            </div>
+                        {/if}
+
+                        <div class="min-w-0 flex-1 text-left">
+                            <p class="truncate text-sm font-medium">{file.name}</p>
+                            <p class="text-content text-xs">{formatFileSize(file.size)}</p>
+                        </div>
+
+                        <Button
+                            type="button"
+                            kind="invert"
+                            size="sm"
+                            onclick={() => handleRemove(file.id)}
+                            disabled={deleting.has(file.id)}
+                            aria-label={$t("common.remove", { name: file.name })}
+                            class="group shrink-0 rounded-full p-1.5 transition-all duration-200 hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-40"
+                        >
+                            <CloseIcon
+                                class="transition-colors duration-200 group-hover:text-red-600"
+                            />
+                        </Button>
+                    </div>
+                {/each}
+            </div>
+        {/if}
     </div>
 
     <!-- Constraints -->
@@ -185,70 +275,5 @@
 
     {#if error}
         <p class="mt-2 text-sm text-red-500">{error}</p>
-    {/if}
-
-    <!-- Uploaded Files -->
-    {#if files.length > 0}
-        <div class="mt-2 flex flex-col gap-2" role="list">
-            {#each files as file (file.id)}
-                <div
-                    class="bg-light-surface border-secondary flex items-center gap-3 rounded-lg border p-3"
-                    role="listitem"
-                >
-                    <!-- Preview -->
-                    {#if isImage(file.type)}
-                        <img
-                            src={file.url}
-                            alt={file.name}
-                            class="h-12 w-12 shrink-0 rounded object-cover"
-                        />
-                    {:else if file.type.startsWith("video/")}
-                        <div
-                            class="bg-secondary/20 flex h-12 w-12 shrink-0 items-center justify-center rounded"
-                        >
-                            <span class="text-xs font-bold">VIDEO</span>
-                        </div>
-                    {:else}
-                        <div
-                            class="bg-secondary/20 flex h-12 w-12 shrink-0 items-center justify-center rounded"
-                        >
-                            <span class="text-xs font-bold">PDF</span>
-                        </div>
-                    {/if}
-
-                    <!-- File Info -->
-                    <div class="min-w-0 flex-1">
-                        <p class="truncate text-sm font-medium">{file.name}</p>
-                        <p class="text-content text-xs">{formatFileSize(file.size)}</p>
-                    </div>
-
-                    <!-- Remove Button -->
-                    <Button
-                        type="button"
-                        kind="invert"
-                        size="sm"
-                        onclick={() => handleRemove(file.id)}
-                        aria-label={$t("common.remove", { name: file.name })}
-                        class="group shrink-0 rounded-full p-1.5 transition-all duration-200 hover:bg-red-100"
-                    >
-                        <CloseIcon
-                            class="transition-colors duration-200 group-hover:text-red-600"
-                        />
-                    </Button>
-                </div>
-            {/each}
-        </div>
-    {/if}
-
-    <!-- Uploading Indicator -->
-    {#if uploadingFiles.size > 0}
-        <div
-            role="status"
-            aria-live="polite"
-            class="text-content mt-1 flex items-center gap-2 text-xs"
-        >
-            <Loader />
-            <span>{$t("pages.project.edit.campaignInfo.media.uploading")}</span>
-        </div>
     {/if}
 </div>

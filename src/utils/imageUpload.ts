@@ -7,6 +7,7 @@ export interface UploadResult {
 
 export interface UploadOptions {
     onProgress?: (stage: UploadStage) => void;
+    onBytesProgress?: (loaded: number, total: number) => void;
 }
 
 async function parseError(res: Response): Promise<string> {
@@ -36,28 +37,46 @@ export async function uploadImage(file: File, options?: UploadOptions): Promise<
 
     options?.onProgress?.("uploading");
 
-    const putRes = await fetch(signedUrl, {
-        method: "PUT",
-        headers: { "Content-Type": file.type },
-        body: file,
+    const { url, key } = await new Promise<UploadResult>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("PUT", signedUrl);
+        xhr.setRequestHeader("Content-Type", file.type);
+
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable) {
+                options?.onBytesProgress?.(e.loaded, e.total);
+            }
+        };
+
+        xhr.onload = async () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                try {
+                    options?.onProgress?.("postupload");
+
+                    const postRes = await fetch("/api/upload/postupload", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ key: tempKey }),
+                    });
+
+                    if (!postRes.ok) {
+                        reject(new Error(await parseError(postRes)));
+                        return;
+                    }
+
+                    const result = await postRes.json();
+                    resolve({ url: result.url, key: result.key });
+                } catch (err) {
+                    reject(err);
+                }
+            } else {
+                reject(new Error(`S3 PUT failed: HTTP ${xhr.status}`));
+            }
+        };
+
+        xhr.onerror = () => reject(new Error("S3 PUT network error"));
+        xhr.send(file);
     });
 
-    if (!putRes.ok) {
-        throw new Error(`S3 PUT failed: HTTP ${putRes.status}`);
-    }
-
-    options?.onProgress?.("postupload");
-
-    const postRes = await fetch("/api/upload/postupload", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ key: tempKey }),
-    });
-
-    if (!postRes.ok) {
-        throw new Error(await parseError(postRes));
-    }
-
-    const { url, key } = await postRes.json();
     return { url, key };
 }
