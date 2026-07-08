@@ -58,7 +58,9 @@ const { accounting } = Astro.props;
                                     class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
-                                    <span class="font-semibold capitalize">{gateway.name}</span>
+                                    <span class="font-semibold">
+                                        {t(`domain.gatewayCheckout.payments.${gateway.name}`)}
+                                    </span>
                                     {gateway.name === "wallet" && (
                                         <span class="text-sm font-normal">
                                             {t("pages.checkout.wallet.balanceLabel")}

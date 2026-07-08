@@ -2,7 +2,6 @@
   "system": {
     "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
     "loading": "Cargando...",
-    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
     "error": {
       "unknown": "Ha ocurrido un error desconocido",
       "payment": {
@@ -14,9 +13,6 @@
       "file": {
         "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
         "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
-      },
-      "countdown": {
-        "notFound": "No se ha encontrado la fecha de finalización de la campaña."
       }
     },
     "constraint": {
@@ -37,31 +33,6 @@
           "title": "Corrige los siguientes errores:"
         }
       }
-    },
-    "zod": {
-      "required": "Este campo es obligatorio",
-      "invalid_type": "Se esperaba {expected} pero se recibió {received}",
-      "string": {
-        "too_small": "Debe tener al menos {min} carácter(es)",
-        "too_big": "No debe exceder los {max} caracteres",
-        "invalid": "Formato de texto no válido"
-      },
-      "number": {
-        "too_small": "Debe ser al menos {min}",
-        "too_big": "No debe exceder {max}"
-      },
-      "too_small": "Debe ser al menos {min}",
-      "too_big": "No debe exceder {max}",
-      "email": {
-        "invalid": "Correo electrónico no válido"
-      },
-      "url": {
-        "invalid": "Formato de URL no válido"
-      },
-      "enum": {
-        "invalid": "Opción no válida. Las opciones válidas son: {options}"
-      },
-      "invalid": "Entrada no válida"
     }
   },
   "domain": {
@@ -95,7 +66,6 @@
         },
         "unitsAvailable": "Quedan {{ units }} unidades",
         "donators": "{{ donators }} donantes",
-        "donors": "donates",
         "noUnits": "No quedan unidades",
         "isInfinite": "Sin límite de unidades"
       },
@@ -172,7 +142,6 @@
     "textPlaceholder": "Escribe aquí",
     "remember": "Recordar",
     "search": "Buscar",
-    "searchEtc": "Buscar...",
     "countdown": {
       "remaining": "Quedan",
       "expired": "Campaña finalizada"
@@ -190,11 +159,9 @@
     "navigation": {
       "search": {
         "placeholder": "Busca tu campaña"
-      },
-      "categories": "Categorías"
+      }
     },
     "header": {
-      "btnCart": "Ir al checkout",
       "search": "Buscar",
       "createProject": "Crea tu proyecto",
       "goToProfile": "Ir a Perfil"
@@ -239,8 +206,7 @@
         "stats": "Stats"
       },
       "platoniq": {
-        "foundation": "Fundación",
-        "name": "Platoniq"
+        "foundation": "Fundación"
       }
     },
     "saved": "Guardado"
@@ -276,7 +242,6 @@
         "title": "¡Renovamos Goteo!",
         "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
         "ctaText": "Súmate a nuestra historia",
-        "ctaLink": "/about",
         "closeAriaLabel": "Cerrar banner"
       },
       "campaigns": {
@@ -296,10 +261,6 @@
         "status": {
           "minimumReached": "¡Mínimo conseguido!",
           "goForMinimum": "¡A por el mínimo!"
-        },
-        "remaining": {
-          "toOptimum": "Falta para óptimo",
-          "toMinimum": "Falta para mínimo"
         },
         "userDonations": "Tus donaciones:"
       },
@@ -325,10 +286,7 @@
         "cards": {
           "grant": "Dotación convocatoria",
           "inscription": "Fecha de inscripción",
-          "participants": "Proyectos participantes",
-          "apply": "Inscríbete en la convocatoria",
-          "viewCampaigns": "Ver las campañas de la convocatoria",
-          "finished": "Finalizada {{date}}"
+          "participants": "Proyectos participantes"
         }
       },
       "stats": {
@@ -424,25 +382,13 @@
       "summary": {
         "toRecipient": "{{ amount }} a {{ name }}",
         "total": {
-          "title": "Total que vas a donar",
-          "description": "Descripción del total"
+          "title": "Total que vas a donar"
         },
         "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
-        "resume": {
-          "donationsPrefix": "de donaciones",
-          "foundationPrefix": "de aporte a la fundación"
-        },
         "showDetails": "Ver detalle",
         "hideDetails": "Ocultar desglose",
         "showMore": "Ver más",
-        "hide": "Ocultar",
-        "donations": "de donaciones",
-        "foundation": "de aporte a "
-      },
-      "cart": {
-        "freeDonation": {
-          "title": "Donación libre"
-        }
+        "hide": "Ocultar"
       },
       "steps": {
         "reward": {
@@ -484,19 +430,13 @@
           },
           "formReview": {
             "title": "Deja un mensaje en los proyectos a los que has apoyado",
-            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
-            "labels": {
-              "name": "Label",
-              "anonymous": "Dejar un mensaje de forma anónima",
-              "leave-a-message": "Dejar un mensaje de forma pública"
-            }
+            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. "
           }
         },
         "error": {
           "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
           "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
-          "selectMethod": "Selecciona de nuevo un método de pago:",
-          "btnContinue": "Volver a intentarlo"
+          "selectMethod": "Selecciona de nuevo un método de pago:"
         }
       },
       "postPayment": {
@@ -507,19 +447,12 @@
           "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
         },
         "donatedProjects": {
-          "title": "Has donado a los siguientes proyectos",
-          "empty": "No se encontraron proyectos donados"
+          "title": "Has donado a los siguientes proyectos"
         },
         "suggestedProjects": {
           "title": "Otros proyectos que requieren de tu ayuda",
           "empty": "No hay proyectos disponibles en este momento"
         }
-      },
-      "error": {
-        "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
-        "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
-        "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
-        "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
       }
     },
     "project": {
@@ -777,8 +710,7 @@
         },
         "budget": {
           "title": "¿Cuánto dinero necesitas?",
-          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto.",
-          "amountPrompt": "Indica la cantidad que necesitas"
+          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto."
         },
         "release": {
           "title": "Fecha salida de campaña",
@@ -806,8 +738,7 @@
             "chartTitle": "Este es el presupuesto para esta campaña. Descubre cómo tu apoyo puede llevarnos al éxito.",
             "chart": {
               "secondRound": "2ª Ronda",
-              "start": "Inicio",
-              "progress": "Estado de la campaña"
+              "start": "Inicio"
             }
           },
           "updates": {
@@ -883,16 +814,10 @@
             "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
             "btnCopy": "Copiar código",
             "btnCopied": "¡Código copiado!"
-          },
-          "global": "compartir global",
-          "facebook": "compartir en facebook",
-          "twitter": "compartir en X",
-          "code": "compartir como código",
-          "copied": "¡Enlace copiado al portapapeles!"
+          }
         },
         "video": {
           "title": "Vídeo de la campaña",
-          "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
           "poster": "Imagen del vídeo",
           "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
           "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
@@ -1002,18 +927,13 @@
       "input": {
         "placeholder": "Buscar",
         "label": "Buscar campañas",
-        "clear": "Limpiar búsqueda",
         "button": "Buscar"
       },
       "filters": {
         "show": "Mostrar filtros",
-        "hide": "Ocultar filtros",
         "close": "Cerrar filtros",
         "apply": "Aplicar filtros",
-        "clear": "Limpiar filtros",
         "categoryLabel": "Elige una categoría",
-        "selectCategory": "Seleccionar categoría",
-        "deselectCategory": "Deseleccionar categoría",
         "selectedCategories": "{{count}} categorías seleccionadas",
         "status": {
           "label": "Estado de la campaña"
@@ -1022,14 +942,7 @@
       "empty": {
         "title": "No se encontraron campañas",
         "description": "No hay campañas que coincidan con tu búsqueda actual. Verifica la ortografía o prueba con palabras clave diferentes o términos más generales.",
-        "clearFilters": "Limpiar filtros",
-        "suggestions": {
-          "title": "Sugerencias para mejorar tu búsqueda:",
-          "checkSpelling": "Verifica la ortografía de tus palabras clave",
-          "tryDifferentKeywords": "Prueba con palabras clave diferentes",
-          "removeFilters": "Quita algunos filtros para ampliar la búsqueda",
-          "broadenSearch": "Usa términos más generales"
-        }
+        "clearFilters": "Limpiar filtros"
       },
       "initial": {
         "title": "Busca tu campaña ideal",
@@ -1038,7 +951,6 @@
       "results": {
         "count": "{{count}} resultados encontrados",
         "found": "{{count}} resultados encontrados",
-        "noResults": "No se encontraron resultados",
         "regionLabel": "Resultados de búsqueda",
         "showing": "Mostrando {{count}} resultados",
         "empty": {
@@ -1058,10 +970,6 @@
           "title": "La búsqueda está tardando demasiado",
           "description": "El servidor no responde. Inténtalo de nuevo o usa los datos locales."
         },
-        "server": {
-          "title": "Error del servidor",
-          "description": "Hay un problema con el servidor. Inténtalo más tarde o usa los datos locales."
-        },
         "unknown": {
           "title": "Error inesperado",
           "description": "Ha ocurrido un error inesperado. Inténtalo de nuevo."
@@ -1069,15 +977,11 @@
         "actions": {
           "retry": "Reintentar",
           "showHelp": "Mostrar ayuda"
-        },
-        "technicalDetails": "Detalles técnicos"
+        }
       },
       "errors": {
         "searchFailed": "No se pudo realizar la búsqueda. Intenta de nuevo.",
         "api": {
-          "invalidToken": "Autenticación fallida. Por favor, verifica tus credenciales.",
-          "expiredToken": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
-          "missingToken": "Se requiere autenticación. Por favor, inicia sesión.",
           "networkError": "Error de conexión. Verifica tu conexión a internet.",
           "serverError": "Error del servidor. Por favor, inténtalo de nuevo más tarde."
         }
@@ -1091,15 +995,11 @@
         "announcement": "Se cargaron {{count}} resultados más. Mostrando {{loaded}} resultados en total."
       },
       "pagination": {
-        "summary": "Página {{page}} de {{totalPages}} ({{totalCount}} resultados en total)",
-        "ariaLabel": "Navegación de páginas de resultados",
         "page": "Página {{page}}",
         "currentPage": "Página {{page}}",
         "previous": "Anterior",
         "next": "Siguiente",
-        "loading": "Cargando...",
-        "loadMore": "Cargar más resultados",
-        "noMoreResults": "No hay más resultados"
+        "loading": "Cargando..."
       }
     },
     "register": {
@@ -1108,9 +1008,7 @@
         "title": "Indícanos tus datos personales",
         "description": "Necesitamos saber quién eres antes de pagar.",
         "registerOr": "Regístrate o",
-        "loginBtnLabel": "Entra con tu cuenta",
-        "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
-        "otherAccessMethods": "También puedes acceder a través de:"
+        "loginBtnLabel": "Entra con tu cuenta"
       },
       "form": {
         "userType": {
@@ -1120,10 +1018,6 @@
         "btnSubmit": "Registrarse",
         "termsCheckbox": "Acepto las condiciones legales",
         "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
-        "zod": {
-          "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
-          "legalName.custom": "La razón social es obligatoria para empresas"
-        },
         "validation": {
           "password": {
             "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
@@ -1205,23 +1099,14 @@
               "date-desc": "Fecha (más reciente primero)",
               "date-asc": "Fecha (más antigua primero)",
               "amount-desc": "Importe (mayor a menor)",
-              "amount-asc": "Importe (menor a mayor)",
-              "status-desc": "Estado (Z-A)",
-              "status-asc": "Estado (A-Z)"
+              "amount-asc": "Importe (menor a mayor)"
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página:",
-            "options": {
-              "10": "10",
-              "20": "20",
-              "30": "30",
-              "50": "50"
-            }
+            "title": "Líneas por página:"
           },
           "search": {
             "placeholder": "Buscar...",
-            "btnLabel": "Buscar",
             "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
             "noResults": "No se han encontrado resultados"
           },
@@ -1248,10 +1133,7 @@
           "dateRange": {
             "initDate": "Fecha Inicio",
             "endDate": "Fecha Fin",
-            "from": "Desde",
-            "to": "Hasta",
             "errors": {
-              "invalidDate": "Fecha no válida",
               "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
             }
           },
@@ -1267,19 +1149,9 @@
               "walleted": "Reembolsado a monedero"
             }
           },
-          "projectStatus": {
-            "title": "Estado de la campaña",
-            "options": {
-              "all": "Todas",
-              "active": "Activas",
-              "finished": "Finalizadas",
-              "cancelled": "Canceladas"
-            }
-          },
           "btns": {
             "openFilters": "Filtros",
             "closeFilters": "Cerrar filtros",
-            "reset": "Reiniciar filtros",
             "apply": "Aplicar filtros"
           }
         },
@@ -1292,13 +1164,11 @@
           "csv": "Exportar CSV",
           "exporting": "Exportando...",
           "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
-          "errorAuth": "Error de autenticación. Por favor, inicia sesión de nuevo.",
           "filename": "gateway-charges",
           "itemsText": "items",
           "noData": "No se encontraron datos para exportar"
         },
         "downloadButtons": {
-          "details": "Descarga detalle",
           "certificates": "Descarga certificados",
           "pdf": "Descarga PDF"
         },
@@ -1318,11 +1188,9 @@
       "title": "Goteo"
     },
     "profile": {
-      "title": "Goteo",
       "share": "Compartir",
       "shareModal": {
-        "title": "Comparte este perfil",
-        "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
+        "title": "Comparte este perfil"
       },
       "subscribe": "Subscríbete",
       "tabs": {
@@ -1330,11 +1198,6 @@
         "projects": "Proyectos impulsados",
         "donorType": "Tipo de donante"
       },
-      "notFound": "Usuario no encontrado",
-      "location": "Ubicación",
-      "userIntro": "Miembro activo de la comunidad Goteo",
-      "organizationIntro": "Organización comprometida con el cambio social",
-      "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
       "noProjects": "No hay proyectos impulsados aún.",
       "noBio": "Todavía no hay información sobre este perfil.",
       "donorType": {
@@ -1365,27 +1228,18 @@
       },
       "form": {
         "email": "Email o nombre de usuario",
-        "password": "Contraseña",
-        "btnSubmit": "Iniciar sesión"
+        "password": "Contraseña"
       },
       "error": {
         "invalidCredentials": "Correo electrónico o contraseña inválidos.",
         "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
-        "invalidEmail": "El correo electrónico no es válido.",
-        "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
+        "invalidEmail": "El correo electrónico no es válido."
       }
     },
     "logout": {
-      "label": "Cerrar sesión",
-      "error": {
-        "cookieNotFound": "No se ha encontrado la cookie de sesión.",
-        "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
-        "logoutSuccess": "Has cerrado sesión correctamente.",
-        "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
-      }
+      "label": "Cerrar sesión"
     },
     "metadata": {
-      "title": "Inicio",
       "description": "Página de inicio"
     },
     "hero": {
@@ -1405,8 +1259,6 @@
         "title": "Mis donaciones",
         "empty": "Aún no has donado a ningún proyecto",
         "explore": "Explora proyectos",
-        "illustration": "/images/profile/ilustration-donations.png",
-        "ctaLink": "/projects",
         "count": "Donaciones",
         "total": "Total donado",
         "recent": "Últimas donaciones",
@@ -1417,8 +1269,6 @@
         "title": "Proyectos impulsados",
         "empty": "Aún no has impulsado ningún proyecto",
         "create": "Impulsa tu proyecto",
-        "illustration": "/images/profile/ilustration-project.png",
-        "ctaLink": "/projects/new",
         "count": "Proyectos",
         "raised": "Recaudado",
         "recent": "Últimos proyectos impulsados",
@@ -1457,7 +1307,6 @@
         },
         "section": {
           "title": "Tus convocatorias de Matchfunding activas",
-          "empty": "No tienes convocatorias activas",
           "error": "Error al cargar las convocatorias"
         },
         "callCard": {
