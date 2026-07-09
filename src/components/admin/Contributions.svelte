@@ -101,10 +101,6 @@
 
     function getCollectionTotalItems(collection: unknown, response?: Response): number {
         if (Array.isArray(collection)) {
-            const headerTotal =
-                response?.headers.get("X-Total-Items") ??
-                response?.headers.get("Content-Range")?.split("/")[1];
-            if (headerTotal) return Number(headerTotal);
             return collection.length;
         }
         if (!collection || typeof collection !== "object") return 0;
@@ -220,11 +216,10 @@
             let items = Number($itemsPerPage);
 
             const query = buildChargesQuery(filters, page, items);
-            const authHeaders = $session?.token.asHttpHeaders as Record<string, string> | undefined;
 
             const headers = {
                 Accept: "application/ld+json",
-                ...(authHeaders ?? {}),
+                ...($session?.token.asHttpHeaders ?? {}),
             };
 
             const {
