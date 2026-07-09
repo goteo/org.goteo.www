@@ -54,12 +54,12 @@
     const loadSlides = () => {
         return [
             {
-                title: $t("admin.projects.totalizers.selected"),
+                title: $t("pages.admin.projects.totalizers.selected"),
                 amount: $totalItems,
             },
-            { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
-            { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
-            { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+            { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
+            { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
+            { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
         ];
     };
 
@@ -88,7 +88,7 @@
 <div class="relative mt-6 h-40">
     {#if !isSliderLoaded || $isLoading}
         <div class="absolute inset-0 flex items-center justify-center">
-            <span class="text-content">{$t("search.pagination.loading")}</span>
+            <span class="text-content">{$t("pages.search.pagination.loading")}</span>
         </div>
     {/if}
 

@@ -125,7 +125,7 @@
 {#if !loading && ownedProjects.length > 0}
     <div class="flex flex-col gap-6">
         <h2 class="text-3xl font-bold text-black md:text-4xl">
-            {$t("me.ownedProjects.title")}
+            {$t("pages.me.ownedProjects.title")}
         </h2>
         <Carousel itemsPerGroup={3} gap={24} showDots={false}>
             {#each ownedProjects as campaign, index (campaign.id)}

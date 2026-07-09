@@ -19,11 +19,11 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("login.form.email"),
+        placeholder = $t("pages.login.form.email"),
         name = "email",
         id = "email",
         label = undefined,
-        errorMessage = $t("login.error.invalidEmail"),
+        errorMessage = $t("pages.login.error.invalidEmail"),
         isValid = $bindable(true),
         validate = true,
     }: Props = $props();

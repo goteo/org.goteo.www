@@ -320,21 +320,23 @@
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
             ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.name!,
+                g.id!,
                 $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
             ]),
         ];
 
-        chargeStatusOptions = Object.entries($t("pages.admin.charges.filters.chargeStatus.options"));
-        rangeAmountOptions = Object.entries($t("pages.admin.charges.filters.rangeAmount.options")).sort(
-            ([a], [b]) => {
-                const parseMin = (val: string) =>
-                    val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
-                if (a === "all") return -1;
-                if (b === "all") return 1;
-                return parseMin(a) - parseMin(b);
-            },
+        chargeStatusOptions = Object.entries(
+            $t("pages.admin.charges.filters.chargeStatus.options"),
         );
+        rangeAmountOptions = Object.entries(
+            $t("pages.admin.charges.filters.rangeAmount.options"),
+        ).sort(([a], [b]) => {
+            const parseMin = (val: string) =>
+                val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
+            if (a === "all") return -1;
+            if (b === "all") return 1;
+            return parseMin(a) - parseMin(b);
+        });
     });
 </script>
 
@@ -350,7 +352,7 @@
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("domain.charges.lastContributions")}
+                title={$t("pages.admin.charges.lastContributions")}
                 {filters}
             />
             <ExportCsv {filters} />

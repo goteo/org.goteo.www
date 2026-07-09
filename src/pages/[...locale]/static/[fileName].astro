@@ -20,7 +20,7 @@ const file = await markdownFiles[fileKey]();
 const Content = file.default;
 ---
 
-<Layout title={t("pages.static.title")} description={t("metadata.description")}>
+<Layout title={t("pages.static.title")} description={t("pages.metadata.description")}>
     <App client:load locale={lang} session={session}>
         <ReturnHeader client:load />
 

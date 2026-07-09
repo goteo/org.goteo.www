@@ -22,7 +22,7 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("search.placeholder"),
+        placeholder = $t("domain.navigation.search.placeholder"),
         name = "search",
         id = "search",
         label = undefined,

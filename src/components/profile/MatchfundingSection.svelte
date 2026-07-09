@@ -164,7 +164,7 @@
     <!-- Loading State -->
     <div class="flex flex-col gap-6">
         <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
+            {$t("pages.me.matchfunding.section.title")}
         </h2>
         <!-- Single hero card skeleton matching actual dimensions -->
         <div class="bg-grey h-64 w-full animate-pulse rounded-4xl md:h-80 lg:h-96"></div>
@@ -173,17 +173,17 @@
     <!-- Error State -->
     <div class="flex flex-col gap-6">
         <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
+            {$t("pages.me.matchfunding.section.title")}
         </h2>
         <p class="text-content text-base leading-normal">
-            {$t("me.matchfunding.section.error")}
+            {$t("pages.me.matchfunding.section.error")}
         </p>
     </div>
 {:else if matchfundingCalls.length > 0}
     <!-- Filled State -->
     <div class="flex flex-col gap-6">
         <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
+            {$t("pages.me.matchfunding.section.title")}
         </h2>
         <Carousel itemsPerGroup={1} gap={24} showDots={false}>
             {#each matchfundingCalls as call (call.id)}
