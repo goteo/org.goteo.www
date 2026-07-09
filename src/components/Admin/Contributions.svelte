@@ -320,7 +320,7 @@
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
             ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.name!,
+                g.id!,
                 $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
             ]),
         ];

@@ -2,7 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 
 import { apiGatewayCheckoutsPost, type GatewayCharge } from "../openapi/client";
 import { client } from "../openapi/client/client.gen";
-import { apiGatewaysNameGetUrl } from "../openapi/client/paths.gen";
+import { apiGatewaysIdGetUrl } from "../openapi/client/paths.gen";
 import { Unauthorized } from "../utils/responses";
 
 export const payment = defineAction({
@@ -50,8 +50,8 @@ export const payment = defineAction({
                 body: {
                     origin: session.user.accounting!,
                     gateway: client.buildUrl({
-                        url: apiGatewaysNameGetUrl,
-                        path: { name: paymentMethod },
+                        url: apiGatewaysIdGetUrl,
+                        path: { id: paymentMethod },
                     }),
                     returnUrl: `${context.url.origin}/checkout/verify`,
                     charges,
