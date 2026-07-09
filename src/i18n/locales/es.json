@@ -1,6 +1,12 @@
 {
   "common": {
     "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    "dateInput": {
+      "apply": "Aplicar",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "close": "Cerrar"
+    },
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
