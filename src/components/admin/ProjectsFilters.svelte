@@ -8,7 +8,8 @@
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
 
-    let { onSearch, onApplyFilters } = $props<{
+    let { filters, onSearch, onApplyFilters } = $props<{
+        filters?: ProjectsQuery;
         onSearch?: (value: string) => void;
         onApplyFilters?: (filters: ProjectsQuery) => void;
     }>();
@@ -35,6 +36,34 @@
     function normalizeStatus(value: string): string {
         return value.replace(/_/g, ".");
     }
+
+    $effect(() => {
+        searchValue = typeof filters?.title === "string" ? filters.title : "";
+
+        const statusFilter = filters?.status;
+        const statusValues: string[] = [
+            ...(typeof statusFilter === "string" ? [statusFilter] : (statusFilter ?? [])),
+            ...(filters?.["status[]"] ?? []),
+        ];
+
+        let nextCampaignStatus = "";
+        let nextProjectStatus = "";
+        for (const status of statusValues) {
+            const campaignKey = Object.keys(CAMPAIGN_STATUS_MAP).find((key) =>
+                CAMPAIGN_STATUS_MAP[key].includes(status),
+            );
+            if (campaignKey && !nextCampaignStatus) {
+                nextCampaignStatus = campaignKey;
+            } else {
+                nextProjectStatus = status.replace(/\./g, "_");
+            }
+        }
+        campaignStatus = nextCampaignStatus;
+        projectStatus = nextProjectStatus;
+
+        dateFrom = filters?.["dateCreated[after]"]?.slice(0, 10) ?? "";
+        dateTo = filters?.["dateCreated[before]"]?.slice(0, 10) ?? "";
+    });
 
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();

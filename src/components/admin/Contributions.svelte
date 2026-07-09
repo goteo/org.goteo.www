@@ -30,7 +30,6 @@
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
-    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         isLoading,
         itemsPerPage,
@@ -41,15 +40,23 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import { parseQueryFilters, splitOrderParams } from "../../utils/queryParams";
     import { isEnabled, tipjarId } from "../../utils/tipping";
 
-    const initialSearchQuery =
+    const initialParams =
         typeof window !== "undefined"
-            ? (new URLSearchParams(window.location.search).get("search") ?? undefined)
-            : undefined;
+            ? splitOrderParams(
+                  parseQueryFilters(window.location.search, {
+                      exclude: ["page", "itemsPerPage"],
+                  }),
+              )
+            : { filters: {}, order: {} };
 
-    let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
-    let pendingSearch = $state(!!initialSearchQuery);
+    const initialSort = sortOptions.find(
+        (option) => initialParams.order[option.field] === option.direction,
+    );
+
+    let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
@@ -59,7 +66,7 @@
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
-    let selectedSort = $state("date-desc");
+    let selectedSort = $state(initialSort?.key ?? "date-desc");
     let totalTips = $state<string>("—");
 
     async function loadTotalTips() {
@@ -327,28 +334,6 @@
         filters = { ...filters, ...newFilters };
     }
 
-    $effect(() => {
-        if (!pendingSearch) return;
-        if (!initialSearchQuery || initialSearchQuery.length < 4) {
-            pendingSearch = false;
-            return;
-        }
-
-        const doResolve = async () => {
-            const { data } = await apiProjectsGetCollection({
-                query: { title: initialSearchQuery },
-                headers: { Accept: "application/ld+json" },
-            });
-            const projects = toCollectionItems<Project>(data);
-            const found = projects[0];
-            if (found?.accounting) {
-                filters = { target: found.accounting };
-            }
-            pendingSearch = false;
-        };
-        doResolve();
-    });
-
     const reloadCharges = async () => {
         charges = [];
         const chargesData = await loadCharges(filters);
@@ -360,7 +345,6 @@
     };
 
     $effect(() => {
-        if (pendingSearch) return;
         reloadCharges();
     });
 
@@ -406,7 +390,6 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
-        {initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">
