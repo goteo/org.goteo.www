@@ -190,18 +190,18 @@ Before building new UI, check `src/components/library/` and `src/components/icon
 
 Components are organized in category subfolders — import via `library/<category>/<Component>.svelte`:
 
-| Subfolder     | Components                                                                                                                                                         |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `buttons/`    | `Button`, `ActionableButton`, `BackButton`, `ReturnButton`, `ReturnHeader`                                                                                          |
-| `cards/`      | `Card`, `BaseCard`                                                                                                                                                  |
-| `dropdown/`   | `DropdownMenu`, `DropdownItem` (+ `dropdown.types.ts`)                                                                                                              |
-| `feedback/`   | `Toast`, `Loader`                                                                                                                                                   |
+| Subfolder     | Components                                                                                                                                                                             |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buttons/`    | `Button`, `ActionableButton`, `BackButton`, `ReturnButton`, `ReturnHeader`                                                                                                             |
+| `cards/`      | `Card`, `BaseCard`                                                                                                                                                                     |
+| `dropdown/`   | `DropdownMenu`, `DropdownItem` (+ `dropdown.types.ts`)                                                                                                                                 |
+| `feedback/`   | `Toast`, `Loader`                                                                                                                                                                      |
 | `inputs/`     | `TextInput`, `PasswordInput`, `TextArea`, `Select`, `DateInput`, `Checkbox`, `RadioButton`, `RangeSlider`, `Toggle`, `ToggleSwitch`, `CategorySelect`, `Search`, `Email`, `FileUpload` |
-| `layout/`     | `Grid`, `AccordionBox`, `CollapsibleBox`, `Carousel`, `Tabs`, `TabNavigation`                                                                                       |
-| `share/`      | `ShareButton`, `CopyUrl`, `Facebook`, `X`, `Iframe`                                                                                                                 |
-| `tags/`       | `Tag`, `Category`                                                                                                                                                   |
-| `theme/`      | `ThemeToggle.astro`                                                                                                                                                 |
-| `typography/` | `BodyText`, `BodyBlog`, `Thtml`                                                                                                                                     |
+| `layout/`     | `Grid`, `AccordionBox`, `CollapsibleBox`, `Carousel`, `Tabs`, `TabNavigation`                                                                                                          |
+| `share/`      | `ShareButton`, `CopyUrl`, `Facebook`, `X`, `Iframe`                                                                                                                                    |
+| `tags/`       | `Tag`, `Category`                                                                                                                                                                      |
+| `theme/`      | `ThemeToggle.astro`                                                                                                                                                                    |
+| `typography/` | `BodyText`, `BodyBlog`, `Thtml`                                                                                                                                                        |
 
 Key props of the most used ones:
 
@@ -223,8 +223,8 @@ Usage example:
 
 ```svelte
 import Button from "../library/buttons/Button.svelte"; import TextInput from
-"../library/inputs/TextInput.svelte"; import Toast from "../library/feedback/Toast.svelte"; let
-name = $state(""); let showError = $state(false);
+"../library/inputs/TextInput.svelte"; import Toast from "../library/feedback/Toast.svelte"; let name
+= $state(""); let showError = $state(false);
 ```
 
 ```svelte
@@ -249,17 +249,17 @@ import Chevron from "../icons/navigation/Chevron.svelte"; import Close from
 
 `Chevron` accepts `direction?: "left"|"right"|"up"|"down"`.
 
-| Subfolder     | Icons                                                                                                                                          |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `actions/`    | `Bookmark`, `Check`, `Copy`, `Download`, `Edit`, `MinusIcon`, `PlusIcon`, `RememberIcon`, `Search`, `Send`, `Share`, `Trash`, `UploadFile`, `UploadIcon` |
-| `commerce/`   | `Bag`, `Basket`, `BudgetMark`, `CreditCard`, `Money`, `Wallet`                                                                                    |
-| `filters/`    | `FilterIcon`, `Filters`, `MoreAndLess`, `ShortBy`                                                                                                 |
-| `media/`      | `Code`, `Eye`, `Flash`, `Image`, `Link`, `Play`, `VideoIcon`, `Web`                                                                               |
-| `navigation/` | `Arrow`, `ArrowSliderIcon`, `Back`, `Chevron`, `Close`, `CloseMenu`, `Forward`, `Hamburger`, `Home`, `Menu`                                       |
-| `payment/`    | `CreditCardIcon.astro`, `PaypalIcon.astro`, `StripeIcon.astro`                                                                                    |
-| `social/`     | `Facebook`, `Gmail`, `Instagram`, `Linkedin`, `MediumIcon`, `Web`, `X` (+ `*Icon` variants, some `.astro`)                                        |
-| `status/`     | `AlertIcon`, `Error`, `Flames`, `NotificationIcon`, `Ok`, `Spinner`, `SuccessIcon`, `Warning`                                                     |
-| `user/`       | `Profile`, `User`                                                                                                                                 |
+| Subfolder     | Icons                                                                                                                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions/`    | `Bookmark`, `Check`, `Copy`, `Download`, `Edit`, `MinusIcon`, `PlusIcon`, `RememberIcon`, `Search`, `Send`, `Share`, `Trash`, `UploadFile`, `UploadIcon`                                                                          |
+| `commerce/`   | `Bag`, `Basket`, `BudgetMark`, `CreditCard`, `Money`, `Wallet`                                                                                                                                                                    |
+| `filters/`    | `FilterIcon`, `Filters`, `MoreAndLess`, `ShortBy`                                                                                                                                                                                 |
+| `media/`      | `Code`, `Eye`, `Flash`, `Image`, `Link`, `Play`, `VideoIcon`, `Web`                                                                                                                                                               |
+| `navigation/` | `Arrow`, `ArrowSliderIcon`, `Back`, `Chevron`, `Close`, `CloseMenu`, `Forward`, `Hamburger`, `Home`, `Menu`                                                                                                                       |
+| `payment/`    | `CreditCardIcon.astro`, `PaypalIcon.astro`, `StripeIcon.astro`                                                                                                                                                                    |
+| `social/`     | `Facebook`, `Gmail`, `Instagram`, `Linkedin`, `MediumIcon`, `Web`, `X` (+ `*Icon` variants, some `.astro`)                                                                                                                        |
+| `status/`     | `AlertIcon`, `Error`, `Flames`, `NotificationIcon`, `Ok`, `Spinner`, `SuccessIcon`, `Warning`                                                                                                                                     |
+| `user/`       | `Profile`, `User`                                                                                                                                                                                                                 |
 | (root)        | `Align`, `Box`, `Bullet`, `Calendar`, `Category`, `Clock`, `Comments`, `DefaultAvatar`, `Goteo`, `Infinity`, `LanguageIcon`, `Languages`, `LineIcon`, `Location`, `Logo`, `Mail`, `PaginationFirst`, `PaginationLast`, `UnitIcon` |
 
 ## Svelte 5 runes
