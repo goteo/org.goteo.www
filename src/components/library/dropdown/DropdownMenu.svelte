@@ -55,7 +55,7 @@
     });
 
     function getPosition(index: number, length: number): "start" | "middle" | "end" {
-        if (index === 0 && !hasSearch) return "start";
+        if (index === 0) return "start";
         if (index === length - 1) return "end";
         return "middle";
     }
@@ -66,15 +66,11 @@
 </script>
 
 <div
-    class={twMerge(
-        "flex w-full flex-col rounded-lg bg-transparent",
-        "shadow-[0_35px_10px_0_rgba(0,0,0,0),0_22px_9px_0_rgba(0,0,0,0.01),0_13px_8px_0_rgba(0,0,0,0.05),0_6px_6px_0_rgba(0,0,0,0.09),0_1px_3px_0_rgba(0,0,0,0.1)]",
-        classes,
-    )}
+    class={twMerge("relative flex w-full flex-col rounded-lg bg-transparent", classes)}
     use:clickOutside={() => (isOpen = false)}
 >
     {#if hasSearch}
-        <div class="group relative flex items-center justify-between rounded-3xl bg-white p-4">
+        <div class="group relative flex items-center justify-between rounded-lg bg-white p-4">
             <input
                 class="max-h-6 w-full max-w-72 border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                 type="text"
@@ -87,27 +83,31 @@
             <SearchIcon class="absolute right-4" width="32" height="32" />
         </div>
     {/if}
-    {#if isOpen}
-        {#each renderedItems as item}
-            <DropdownItem
-                {variant}
-                option={item}
-                onChange={(option) => {
-                    if (option.selected && !isSelected(option)) {
-                        selected = [...selected, option];
-                    }
+    {#if isOpen && renderedItems.length > 0}
+        <div
+            class="absolute top-full right-0 left-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-lg border bg-white shadow-lg"
+        >
+            {#each renderedItems as item}
+                <DropdownItem
+                    {variant}
+                    option={item}
+                    onChange={(option) => {
+                        if (option.selected && !isSelected(option)) {
+                            selected = [...selected, option];
+                        }
 
-                    if (!option.selected && isSelected(option)) {
-                        selected = selected.filter((s) => s.id !== option.id);
-                    }
+                        if (!option.selected && isSelected(option)) {
+                            selected = selected.filter((s) => s.id !== option.id);
+                        }
 
-                    onChange?.(option);
-                }}
-                class={twJoin(
-                    item.position === "start" && "rounded-t-lg",
-                    item.position === "end" && "rounded-b-lg",
-                )}
-            />
-        {/each}
+                        onChange?.(option);
+                    }}
+                    class={twJoin(
+                        item.position === "start" && "rounded-t-lg",
+                        item.position === "end" && "rounded-b-lg",
+                    )}
+                />
+            {/each}
+        </div>
     {/if}
 </div>

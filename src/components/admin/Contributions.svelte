@@ -99,8 +99,10 @@
         return query;
     }
 
-    function getCollectionTotalItems(collection: unknown): number {
-        if (Array.isArray(collection)) return collection.length;
+    function getCollectionTotalItems(collection: unknown, response?: Response): number {
+        if (Array.isArray(collection)) {
+            return collection.length;
+        }
         if (!collection || typeof collection !== "object") return 0;
 
         const record = collection as Record<string, unknown>;
@@ -214,9 +216,17 @@
             let items = Number($itemsPerPage);
 
             const query = buildChargesQuery(filters, page, items);
-            const headers = $session?.token.asHttpHeaders as HeadersInit | undefined;
 
-            const { data: collection, error } = await apiGatewayChargesGetCollection({
+            const headers = {
+                Accept: "application/ld+json",
+                ...($session?.token.asHttpHeaders ?? {}),
+            };
+
+            const {
+                data: collection,
+                response,
+                error,
+            } = await apiGatewayChargesGetCollection({
                 query,
                 headers,
             });
@@ -227,7 +237,7 @@
             }
 
             const loadedCharges = toCollectionItems<GatewayCharge>(collection);
-            $totalItems = getCollectionTotalItems(collection);
+            $totalItems = getCollectionTotalItems(collection, response);
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
@@ -325,6 +335,7 @@
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
         filters = { ...filters, ...newFilters };
+        $currentPage = 1;
     }
 
     $effect(() => {
@@ -362,6 +373,16 @@
     $effect(() => {
         if (pendingSearch) return;
         reloadCharges();
+    });
+
+    let prevItemsPerPage = $state($itemsPerPage);
+
+    $effect(() => {
+        const current = $itemsPerPage;
+        if (current !== prevItemsPerPage) {
+            prevItemsPerPage = current;
+            $currentPage = 1;
+        }
     });
 
     let chargeSlides = $derived([
@@ -415,6 +436,8 @@
                 onCloseFilter={handleApplyFilters}
                 title={$t("domain.charges.lastContributions")}
                 {filters}
+                {accountingsMap}
+                {ownersMap}
             />
             <ExportCsv {filters} />
         </div>
@@ -429,5 +452,8 @@
     {ownersMap}
     {isFirstLoad}
     bind:selectedSort
-    onSortChange={(value) => (selectedSort = value)}
+    onSortChange={(value) => {
+        selectedSort = value;
+        $currentPage = 1;
+    }}
 />
