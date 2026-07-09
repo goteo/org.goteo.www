@@ -200,7 +200,7 @@
                                         )}
                                     </div>
                                     <div class="mt-1 text-sm text-gray-500 italic">
-                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item.data
+                                        {$t("domain.charges.entityLabels.tipjarId")}: {item.data
                                             .id}
                                     </div>
                                 </button>

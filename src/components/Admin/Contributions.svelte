@@ -352,7 +352,7 @@
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("domain.charges.lastContributions")}
+                title={$t("pages.admin.charges.lastContributions")}
                 {filters}
             />
             <ExportCsv {filters} />

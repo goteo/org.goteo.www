@@ -96,14 +96,7 @@
         "projects": "Proyectos",
         "users": "Usuarios",
         "tipjars": "Botes de propina",
-        "tipjar-id": "ID del bote de propina"
-      },
-      "lastContributions": "Últimos aportes:",
-      "totalizers": {
-        "selected": "Aportes seleccionados:",
-        "totalCharges": "Total aportes:",
-        "totalTips": "Total propinas:",
-        "totalFees": "Comisiones totales:"
+        "tipjarId": "ID del bote de propina"
       }
     },
     "review": {
@@ -115,6 +108,11 @@
     },
     "tipping": {
       "title": "Deja una propina"
+    },
+    "navigation": {
+      "search": {
+        "placeholder": "Busca tu campaña"
+      }
     }
   },
   "common": {
@@ -149,11 +147,6 @@
     "noData": "No hay datos disponibles",
     "tooltip": {
       "copied": "¡Copiado!"
-    },
-    "navigation": {
-      "search": {
-        "placeholder": "Busca tu campaña"
-      }
     },
     "header": {
       "search": "Buscar",
@@ -1167,7 +1160,14 @@
           "pdf": "Descarga PDF"
         },
         "lastEdited": "Última modificación: {{date}} {{time}}",
-        "annotations": "{{annotations}} Anotaciones"
+        "annotations": "{{annotations}} Anotaciones",
+        "lastContributions": "Últimos aportes:",
+        "totalizers": {
+          "selected": "Aportes seleccionados:",
+          "totalCharges": "Total aportes:",
+          "totalTips": "Total propinas:",
+          "totalFees": "Comisiones totales:"
+        }
       },
       "projects": {
         "totalizers": {

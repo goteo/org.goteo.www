@@ -57,9 +57,9 @@
                 title: $t("pages.admin.projects.totalizers.selected"),
                 amount: $totalItems,
             },
-            { title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
-            { title: $t("domain.charges.totalizers.totalTips"), amount: totalTips },
-            { title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
+            { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
+            { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
+            { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
         ];
     };
 
