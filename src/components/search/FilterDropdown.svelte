@@ -91,14 +91,13 @@ Supports: Periodo de tiempo, Estado de la campaña, Ubicación
         type="button"
         onclick={toggleDropdown}
         onkeydown={handleKeydown}
-        class="border-secondary font-body focus:border-primary focus:ring-primary flex w-full items-center justify-between rounded-lg border bg-white px-4 py-4 text-base text-black focus:ring-2 focus:outline-none {className}"
-        class:opacity-48={!selectedOption}
+        class="border-secondary font-body flex w-full items-center justify-between rounded-lg border bg-white px-4 py-4 text-base text-black focus:outline-none {className}"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
         aria-label={label || placeholder}
         {...props}
     >
-        <span class="truncate">
+        <span class="truncate" class:opacity-48={!selectedOption}>
             {getDisplayText()}
         </span>
         <Chevron direction={isOpen ? "up" : "down"} width="16" height="16" />
