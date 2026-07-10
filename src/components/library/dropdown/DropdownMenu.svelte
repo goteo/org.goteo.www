@@ -103,7 +103,7 @@
         </button>
     {/if}
 
-    {#if isOpen}
+    {#if isOpen && renderedItems.length > 0}
         <div
             class="absolute top-full left-0 z-100 mt-2 w-full flex-col overflow-hidden rounded-lg bg-white shadow-2xl"
         >

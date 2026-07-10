@@ -34,18 +34,20 @@ Integrated with searchStore for state management and URL synchronization
         }
     });
 
-    // Handle filter updates using searchStore
+    // Debounce auto-applied searches so typing in the search input
+    // doesn't fire one API request per keystroke
+    let autoSearchTimeout: ReturnType<typeof setTimeout>;
+
+    // Handle filter updates using searchStore and auto-apply the search
     function updateFilters(newFilters: Partial<typeof $searchFilters>) {
         searchStore.updateFilters(newFilters);
+        clearTimeout(autoSearchTimeout);
+        autoSearchTimeout = setTimeout(() => searchStore.searchWithApi(), 400);
     }
 
     function handleSearch() {
+        clearTimeout(autoSearchTimeout);
         searchStore.searchWithApi();
-    }
-
-    function handleApplyFilters() {
-        searchStore.searchWithApi();
-        filtersOpen = false;
     }
 
     function toggleFilters() {
@@ -137,21 +139,6 @@ Integrated with searchStore for state management and URL synchronization
                     onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
                     data-testid="category-filter"
                 />
-            </div>
-
-            <!-- Action buttons -->
-            <div
-                class="flex flex-col items-stretch gap-3 min-[500px]:flex-row min-[500px]:items-center min-[500px]:justify-end"
-            >
-                <!-- Apply filters button -->
-                <Button
-                    kind="primary"
-                    onclick={handleApplyFilters}
-                    data-testid="apply-filters-btn"
-                    class="w-full min-[500px]:w-auto"
-                >
-                    {$t("pages.search.filters.apply")}
-                </Button>
             </div>
         </div>
     {/if}
