@@ -4,6 +4,7 @@
     First step of the project setup wizard.
     Handles:
     - Categories (up to 2)
+    - Campaign release date
     - Funding rounds (1 or 2)
 
     Validation:
@@ -14,6 +15,7 @@
 
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
+    import DateInput from "../../../components/library/inputs/DateInput.svelte";
     import { locale, t } from "../../../i18n/store";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
@@ -39,6 +41,13 @@
     let selectedCategoryIds = $state<(number | string)[]>(
         (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? ""),
     );
+    let releaseDate = $state(
+        $currentDraft?.createProject.release
+            ? new Date($currentDraft.createProject.release)
+            : project?.calendar?.release
+              ? new Date(project.calendar.release)
+              : new Date(),
+    );
 
     onMount(async () => {
         const { data } = await apiCategoriesGetCollection({
@@ -61,6 +70,20 @@
         if (onContinue) {
             onContinue();
         }
+    }
+
+    // Calculate minimum date (14 days from now) for date input
+    function getMinDate(): Date {
+        const minDate = new Date();
+        minDate.setDate(minDate.getDate() + 14);
+        return minDate;
+    }
+
+    /**
+     * Handle release date change
+     */
+    function handleReleaseChange(date: string) {
+        updateProject({ release: date });
     }
 
     /**
@@ -109,6 +132,24 @@
             options={allCategories}
             bind:selectedIds={selectedCategoryIds}
             onchange={handleCategoryChange}
+        />
+    </div>
+
+    <!-- Release Date Section -->
+    <div class="space-y-4">
+        <div class="space-y-4">
+            <h2 class="text-2xl font-bold text-black">
+                {$t("pages.project.create.release.title")}
+            </h2>
+            <p class="text-content text-base font-normal">
+                {$t("pages.project.create.release.subtitle")}
+            </p>
+        </div>
+        <DateInput
+            name="release"
+            bind:value={releaseDate}
+            min={getMinDate()}
+            onInput={handleReleaseChange}
         />
     </div>
 
