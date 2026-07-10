@@ -8,13 +8,14 @@ Integrated with searchStore for state management and URL synchronization
     import { onMount } from "svelte";
 
     import CategoryFilter from "./CategoryFilter.svelte";
-    import FilterDropdown from "./FilterDropdown.svelte";
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
+    import StatusFilter from "./StatusFilter.svelte";
     import TerritoryFilter from "./TerritoryFilter.svelte";
     import { t } from "../../i18n/store";
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../icons/filters/FilterIcon.svelte";
+    import Button from "../library/buttons/Button.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;
@@ -23,7 +24,7 @@ Integrated with searchStore for state management and URL synchronization
     let { initialFilters }: Props = $props();
 
     // Filter visibility (collapsed by default on all devices)
-    let filtersOpen = $state(true);
+    let filtersOpen = $state(false);
 
     // Initialize locale and filters when component mounts
     onMount(() => {
@@ -32,15 +33,6 @@ Integrated with searchStore for state management and URL synchronization
             searchStore.initializeFilters(initialFilters);
         }
     });
-
-    // Dropdown options - use translation keys for labels
-    const statusOptions = [
-        { value: "all", translationKey: "domain.project.status.all" },
-        // API status values - pass directly to backend
-        { value: "in_campaign", translationKey: "domain.project.status.funding" }, // Actively raising funds
-        { value: "in_funding", translationKey: "domain.project.status.successful" }, // Successfully raised, receiving funds
-        { value: "funded", translationKey: "domain.project.status.completed" }, // Completed funding process
-    ];
 
     // Debounce auto-applied searches so typing in the search input
     // doesn't fire one API request per keystroke
@@ -96,61 +88,58 @@ Integrated with searchStore for state management and URL synchronization
         </div>
 
         <!-- Filter toggle button - full width on mobile, auto on desktop -->
-        <SearchButton
-            variant="ghost"
+        <Button
+            kind="ghost"
             onclick={toggleFilters}
-            data-testid="toggle-filters"
-            aria-expanded={filtersOpen}
             class="w-full justify-center min-[500px]:w-auto"
         >
             <FilterIcon width="16" height="16" class="mr-2" />
             {filtersOpen ? $t("pages.search.filters.close") : $t("pages.search.filters.show")}
-        </SearchButton>
+        </Button>
     </div>
 
-    <!-- Expanded filters section (collapsed by default) -->
+    <!-- Expanded filters section (collapsed by default).-->
     {#if filtersOpen}
-        <!-- Status filter dropdown -->
-        <div class="flex flex-col gap-6 lg:flex-row">
-            <div class="flex flex-1 flex-col gap-2">
-                <h3 class="font-body text-base font-bold text-black">
-                    {$t("pages.search.filters.status.label")}
-                </h3>
-                <FilterDropdown
-                    options={statusOptions}
-                    placeholder={$t("pages.search.filters.status.label")}
-                    selectedValue={$searchFilters.status}
-                    onSelect={(value) => updateFilters({ status: value })}
-                    data-testid="status-filter"
-                />
+        <div class="flex flex-col gap-4 lg:gap-6">
+            <!-- Status + territory filters -->
+            <div class="flex flex-col items-start gap-6 lg:flex-row">
+                <div class="w-full">
+                    <h3 class="font-body mb-2 text-base font-bold text-black">
+                        {$t("pages.search.filters.status.label")}
+                    </h3>
+                    <StatusFilter
+                        statuses={$searchFilters["status[]"] || []}
+                        onStatusesChange={(statuses) => updateFilters({ "status[]": statuses })}
+                    />
+                </div>
+                <div class="w-full">
+                    <h3 class="font-body mb-2 text-base font-bold text-black">
+                        {$t("pages.search.filters.territoryLabel")}
+                    </h3>
+                    <TerritoryFilter
+                        selectedTerritory={{
+                            countries: $searchFilters["territory.country[]"] || [],
+                            subLvl1: $searchFilters["territory.subLvl1[]"] || [],
+                            subLvl2: $searchFilters["territory.subLvl2[]"] || [],
+                        }}
+                        onTerritoryChange={(territories) =>
+                            updateFilters({
+                                "territory.country[]": territories.countries,
+                                "territory.subLvl1[]": territories.subLvl1,
+                                "territory.subLvl2[]": territories.subLvl2,
+                            })}
+                    />
+                </div>
             </div>
-            <div class="flex flex-1 flex-col gap-2">
-                <h3 class="font-body text-base font-bold text-black">
-                    {$t("pages.search.filters.territory.label")}
-                </h3>
-                <TerritoryFilter
-                    selectedTerritory={{
-                        countries: $searchFilters["territory.country[]"] || [],
-                        subLvl1: $searchFilters["territory.subLvl1[]"] || [],
-                        subLvl2: $searchFilters["territory.subLvl2[]"] || [],
-                    }}
-                    onTerritoryChange={(territories) =>
-                        updateFilters({
-                            "territory.country[]": territories.countries,
-                            "territory.subLvl1[]": territories.subLvl1,
-                            "territory.subLvl2[]": territories.subLvl2,
-                        })}
-                />
-            </div>
-        </div>
 
-        <!-- Category filters -->
-        <div class="w-full">
-            <CategoryFilter
-                selectedCategories={$searchFilters["categories[]"] || []}
-                onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
-                data-testid="category-filter"
-            />
+            <!-- Category filters -->
+            <div class="w-full">
+                <CategoryFilter
+                    selectedCategories={$searchFilters["categories[]"] || []}
+                    onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
+                    data-testid="category-filter"
+                />
+            </div>
         </div>
     {/if}
 </div>
