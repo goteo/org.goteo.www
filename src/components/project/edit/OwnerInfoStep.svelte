@@ -15,8 +15,8 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
-    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
     import type { Project } from "../../../openapi/client";
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
 

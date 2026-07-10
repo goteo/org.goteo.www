@@ -25,10 +25,10 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
+    import { uploadImage } from "../../../utils/imageUpload";
     import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
-    import { uploadImage } from "../../../utils/imageUpload";
 
     import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 

@@ -12,8 +12,8 @@
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
-    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
     import type { Project, ProjectReward } from "../../../openapi/client";
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),
