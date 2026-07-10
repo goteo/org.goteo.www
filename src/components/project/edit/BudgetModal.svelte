@@ -11,26 +11,22 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
-    import type { ClassNameValue } from "tailwind-merge";
 
     let {
         open = $bindable(false),
         showToast = $bindable(false),
         budgetItem,
+        defaultDeadline,
         onSave,
         onDelete,
-        defaultDeadline,
     }: {
         open: boolean;
         showToast: boolean;
         budgetItem: ProjectBudgetItem | null;
+        defaultDeadline?: "minimum" | "optimum";
         onSave: (data: ProjectBudgetItem | null) => void;
         onDelete?: (deadline: "minimum" | "optimum") => void;
-        defaultDeadline?: "minimum" | "optimum";
     } = $props();
-
-    let isCreating = $derived(!budgetItem);
-    let isDeadlineLocked = $derived(isCreating && defaultDeadline !== undefined);
 
     let selectedBudgetTitle = $state(untrack(() => budgetItem?.title ?? ""));
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
@@ -44,23 +40,11 @@
         ),
     );
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
-        untrack(() => budgetItem?.deadline),
+        untrack(() => budgetItem?.deadline || defaultDeadline),
     );
     let selectedBudgetDescription = $state(untrack(() => budgetItem?.description ?? ""));
 
     let openDeleteModal = $state(false);
-
-    $effect(() => {
-        if (open) {
-            selectedBudgetTitle = budgetItem?.title ?? "";
-            selectedBudgetType = budgetItem?.type;
-            amount = budgetItem?.money.amount
-                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
-                : 0;
-            selectedBudgetDeadline = budgetItem?.deadline;
-            selectedBudgetDescription = budgetItem?.description ?? "";
-        }
-    });
 
     const isFormValid = $derived(
         selectedBudgetTitle.trim() !== "" &&
@@ -70,34 +54,25 @@
             selectedBudgetDescription.trim() !== "",
     );
 
-    let titleTouched = $state(false);
-    let typeTouched = $state(false);
-    let amountTouched = $state(false);
-    let deadlineTouched = $state(false);
-    let descriptionTouched = $state(false);
+    let formTouched = $state(false);
 
     const titleError = $derived(
-        titleTouched && selectedBudgetTitle.trim() === ""
+        formTouched && selectedBudgetTitle.trim() === ""
             ? $t("pages.project.edit.budget.validation.title")
             : undefined,
     );
     const typeError = $derived(
-        typeTouched && !selectedBudgetType
+        formTouched && !selectedBudgetType
             ? $t("pages.project.edit.budget.validation.type")
             : undefined,
     );
     const amountError = $derived(
-        amountTouched && Number(amount) <= 0
+        formTouched && Number(amount) <= 0
             ? $t("pages.project.edit.budget.validation.amount")
             : undefined,
     );
-    const deadlineError = $derived(
-        deadlineTouched && !selectedBudgetDeadline
-            ? $t("pages.project.edit.budget.validation.class")
-            : undefined,
-    );
     const descriptionError = $derived(
-        descriptionTouched && selectedBudgetDescription.trim() === ""
+        formTouched && selectedBudgetDescription.trim() === ""
             ? $t("pages.project.edit.budget.validation.description")
             : undefined,
     );
@@ -122,9 +97,6 @@
             open = false;
         }
     }
-
-    const INPUTS_CLASSES: ClassNameValue =
-        "border-secondary text-content items-center rounded-lg border bg-white p-4 text-base font-normal placeholder:opacity-48 focus:ring-0";
 </script>
 
 <Modal
@@ -149,13 +121,13 @@
             labelText={$t("pages.project.edit.budget.modal.placeholders.title")}
             placeholder={$t("pages.project.edit.budget.modal.placeholders.title")}
             error={titleError}
-            onBlur={() => (titleTouched = true)}
+            onBlur={() => (formTouched = true)}
         />
         <Select
             bind:value={selectedBudgetType as string}
             labelText={$t("pages.project.edit.budget.modal.placeholders.type")}
             error={typeError}
-            onBlur={() => (typeTouched = true)}
+            onBlur={() => (formTouched = true)}
         >
             <option value="">{$t("pages.project.edit.budget.modal.placeholders.type")}</option>
             <option value="infrastructure">{$t("domain.project.budget.type.infrastructure")}</option
@@ -163,40 +135,19 @@
             <option value="material">{$t("domain.project.budget.type.material")}</option>
             <option value="task">{$t("domain.project.budget.type.task")}</option>
         </Select>
-        <div class="flex gap-4">
-            <input
-                type="number"
-                placeholder={$t("pages.project.edit.budget.modal.placeholders.moneyAmount")}
-                class={`${INPUTS_CLASSES} w-[50%]`}
-                bind:value={amount}
-            />
-            <select
-                bind:value={selectedBudgetDeadline}
-                aria-label={$t("pages.project.edit.budget.modal.placeholders.deadline")}
-                title={$t("pages.project.edit.budget.modal.placeholders.deadline")}
-                class={`${INPUTS_CLASSES} w-[50%] ${isDeadlineLocked ? "cursor-not-allowed opacity-60" : ""}`}
-                disabled={isDeadlineLocked}
-            >
-                {#if !isDeadlineLocked}
-                    <option value="">
-                        {$t("pages.project.edit.budget.modal.placeholders.deadline")}
-                    </option>
-                {/if}
-                <option value="minimum">
-                    {$t("domain.project.budget.minimum")}
-                </option>
-                <option value="optimum">
-                    {$t("domain.project.budget.optimum")}
-                </option>
-            </select>
-        </div>
+        <TextInput
+            bind:value={amount}
+            type="number"
+            placeholder={$t("pages.project.edit.budget.modal.placeholders.moneyAmount")}
+            error={amountError}
+        />
         <TextArea
             bind:value={selectedBudgetDescription}
             labelText={$t("pages.project.edit.budget.modal.placeholders.description")}
             placeholder={$t("pages.project.edit.budget.modal.placeholders.description")}
             rows={5}
             error={descriptionError}
-            onBlur={() => (descriptionTouched = true)}
+            onBlur={() => (formTouched = true)}
         />
     </div>
 
