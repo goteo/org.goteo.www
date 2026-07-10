@@ -138,6 +138,7 @@
         <TextInput
             bind:value={amount}
             type="number"
+            labelText={$t("pages.project.edit.budget.modal.placeholders.moneyAmount")}
             placeholder={$t("pages.project.edit.budget.modal.placeholders.moneyAmount")}
             error={amountError}
         />
