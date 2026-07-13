@@ -12,7 +12,7 @@ export interface UploadOptions {
 
 async function parseError(res: Response): Promise<string> {
     try {
-        const body = await res.json();
+        const body = (await res.json()) as { error?: string };
         if (body?.error) return body.error;
     } catch {
         //
@@ -33,11 +33,17 @@ export async function uploadImage(file: File, options?: UploadOptions): Promise<
         throw new Error(await parseError(preRes));
     }
 
-    const { url: signedUrl, key: tempKey } = await preRes.json();
+    const { url: signedUrl, key: tempKey } = (await preRes.json()) as {
+        url: string;
+        key: string;
+    };
 
     options?.onProgress?.("uploading");
 
-    const { url, key } = await new Promise<UploadResult>((resolve, reject) => {
+    // Use XMLHttpRequest instead of fetch because fetch does not expose
+    // upload progress events. This callback is consumed by FileUpload.svelte
+    // to render a real-time progress bar with percentage.
+    const result = await new Promise<UploadResult>((resolve, reject) => {
         const xhr = new XMLHttpRequest();
         xhr.open("PUT", signedUrl);
         xhr.setRequestHeader("Content-Type", file.type);
@@ -64,8 +70,11 @@ export async function uploadImage(file: File, options?: UploadOptions): Promise<
                         return;
                     }
 
-                    const result = await postRes.json();
-                    resolve({ url: result.url, key: result.key });
+                    const { url, key } = (await postRes.json()) as {
+                        url: string;
+                        key: string;
+                    };
+                    resolve({ url, key });
                 } catch (err) {
                     reject(err);
                 }
@@ -78,5 +87,5 @@ export async function uploadImage(file: File, options?: UploadOptions): Promise<
         xhr.send(file);
     });
 
-    return { url, key };
+    return result;
 }
