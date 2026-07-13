@@ -20,6 +20,7 @@
         showToast = $bindable(false),
         project,
         reward,
+        existingFiles = [],
         onSave,
         onDelete,
     }: {
@@ -27,17 +28,17 @@
         showToast: boolean;
         project: Project;
         reward: ProjectReward | null;
-        onSave: (data: ProjectReward | null) => void;
+        existingFiles?: UploadedFile[];
+        onSave: (data: ProjectReward | null, files: UploadedFile[]) => void;
         onDelete?: () => void;
     } = $props();
 
     let title = $state(untrack(() => reward?.title ?? ""));
     let description = $state(untrack(() => reward?.description ?? ""));
-
     let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
-    let files = $state<UploadedFile[]>([]);
+    let files = $state<UploadedFile[]>(untrack(() => existingFiles));
 
     let openDeleteModal = $state(false);
 
@@ -68,17 +69,20 @@
     function handleSaveOrCreate() {
         const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
 
-        onSave({
-            project: projectIri,
-            title,
-            description,
-            money: {
-                amount: moneyAmount * 100,
-                currency: defaultCurrency(),
+        onSave(
+            {
+                project: projectIri,
+                title,
+                description,
+                money: {
+                    amount: moneyAmount * 100,
+                    currency: defaultCurrency(),
+                },
+                isFinite: unlimited ? false : true,
+                unitsTotal: unlimited ? null : rewardCount,
             },
-            isFinite: unlimited ? false : true,
-            unitsTotal: unlimited ? null : rewardCount,
-        });
+            files,
+        );
     }
 
     function handleDeleteClick() {

@@ -17,7 +17,7 @@
         variant: "reward" | "collab" | "budget";
         open: boolean;
         showToast: boolean;
-        onSave: (data: any) => void;
+        onSave: (data: any, files?: any) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
