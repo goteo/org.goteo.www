@@ -1,5 +1,17 @@
 import { z } from "zod";
 
+const territorySchema = z
+    .object({
+        country: z.string().nullable().optional(),
+        subLvl1: z.string().nullable().optional(),
+        subLvl2: z.string().nullable().optional(),
+        address: z.string().nullable().optional(),
+    })
+    .refine(
+        (t) => !!(t.country || t.subLvl1 || t.subLvl2),
+        "validation.project.territory.required",
+    );
+
 /**
  * Validation schema for project creation form.
  * Mirrors backend validation rules from Project.ProjectCreationDto.
@@ -38,19 +50,16 @@ export const projectCreationSchema = z.object({
         .union([z.date(), z.string()])
         .transform((val) => {
             if (typeof val === "string") {
-                // HTML date input returns YYYY-MM-DD string
                 return new Date(val);
             }
             return val;
         })
         .refine(
             (date) => {
-                // Create minimum date (14 days from now at start of day)
                 const minDate = new Date();
                 minDate.setDate(minDate.getDate() + 14);
                 minDate.setHours(0, 0, 0, 0);
 
-                // Create a copy of the input date to avoid mutation
                 const normalizedDate = new Date(date);
                 normalizedDate.setHours(0, 0, 0, 0);
 
@@ -69,6 +78,16 @@ export const projectCreationSchema = z.object({
      * Not required for form submission but included for type consistency.
      */
     budget: z.number().nonnegative().optional().default(0),
+
+    /**
+     * Plain-text address for the project location.
+     */
+    address: z.string().min(1, "validation.project.address.required"),
+
+    /**
+     * ISO 3166 territory data derived from the selected address.
+     */
+    territory: territorySchema,
 });
 
 /**

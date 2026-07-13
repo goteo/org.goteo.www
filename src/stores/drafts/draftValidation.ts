@@ -1,7 +1,7 @@
 import murmur from "murmurhash-js";
 import z from "zod";
 
-import { type Draft, type Wizard } from "./projectDraft";
+import { type Draft, type Wizard, type CreateProjectForm } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 
 import type {
@@ -280,7 +280,7 @@ export function validateBudgetAmount(draft: Draft) {
  * @param value - The current value of the field
  */
 export function validateField(
-    fieldName: keyof ProjectProjectCreationDto,
+    fieldName: keyof CreateProjectForm,
     value: unknown,
 ): string | null {
     type SchemaFields = keyof typeof projectCreationSchema.shape;

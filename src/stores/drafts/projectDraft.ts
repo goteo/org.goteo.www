@@ -18,6 +18,7 @@ import type {
     ProjectCollaboration,
     ProjectProjectCreationDto,
     ProjectReward,
+    Territory,
 } from "../../openapi/client";
 
 /**
@@ -78,6 +79,8 @@ export type Wizard = {
 
 export interface CreateProjectForm extends ProjectProjectCreationDto {
     budget?: Budget;
+    address?: string;
+    territory?: Territory;
 }
 
 export interface ProjectDraftResources {
@@ -149,6 +152,8 @@ export const project = derived(
             subtitle: "",
             categories: [],
             release: undefined,
+            address: "",
+            territory: undefined,
         },
 );
 
@@ -660,7 +665,7 @@ export function deleteBudgetItem(index: number, deadline: "minimum" | "optimum")
  *
  * @param data - Partial object with Project API Type data that has been modified
  */
-export function updateProject(data: Partial<ProjectProjectCreationDto>) {
+export function updateProject(data: Partial<CreateProjectForm>) {
     currentDraft.update((draft) => {
         if (!draft) return draft;
 

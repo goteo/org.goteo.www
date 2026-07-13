@@ -24,7 +24,7 @@ export const apiCategoriesIdPatchUrl = '/v4/categories/{id}';
 
 export const apiGatewaysGetCollectionUrl = '/v4/gateways';
 
-export const apiGatewaysNameGetUrl = '/v4/gateways/{name}';
+export const apiGatewaysIdGetUrl = '/v4/gateways/{id}';
 
 export const apiGatewayChargesGetCollectionUrl = '/v4/gateway_charges';
 

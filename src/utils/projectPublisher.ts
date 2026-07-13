@@ -157,6 +157,7 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
             video: wizard.campaignInfo.video,
             description,
             deadline: wizard.configuration.projectDeadline,
+            territory: draft.createProject.territory,
         },
         session,
     );
