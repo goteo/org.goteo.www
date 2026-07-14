@@ -5,6 +5,7 @@
     import ProjectsTable from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";
+    import { withoutCache } from "../../openapi/cacheInterceptor";
     import {
         apiProjectsGetCollection,
         apiProjectsIdPatch,
@@ -89,23 +90,27 @@
             : ((record["hydra:member"] as unknown[])?.length ?? 0);
     }
 
-    async function loadProjects(): Promise<void> {
+    async function loadProjects(bypassCache = false): Promise<void> {
         isLoading = true;
 
-        try {
+        async function fetchProjects() {
             const query = buildProjectsQuery(filters, currentPage, itemsPerPage, selectedSort);
 
-            const {
-                data: collection,
-                response,
-                error,
-            } = await apiProjectsGetCollection({
+            return apiProjectsGetCollection({
                 query,
                 headers: {
                     Accept: "application/ld+json",
                     "Accept-Language": " ",
                 },
             });
+        }
+
+        try {
+            const {
+                data: collection,
+                response,
+                error,
+            } = await (bypassCache ? withoutCache(fetchProjects) : fetchProjects());
 
             if (error) {
                 console.error("Failed to fetch projects:", error);
@@ -194,7 +199,7 @@
         }
     }
 
-    function reloadProjects(): void {
+    function reloadProjects(bypassCache = false): void {
         const queryKey = JSON.stringify({ filters, selectedSort, itemsPerPage });
         if (queryKey !== lastQueryKey) {
             accountingsCache = new Map();
@@ -202,7 +207,7 @@
             lastQueryKey = queryKey;
         }
         projectRows = [];
-        loadProjects();
+        loadProjects(bypassCache);
     }
 
     $effect(() => {
@@ -234,6 +239,9 @@
         if (value.length >= 4 || value.length === 0) {
             if (value) {
                 filters = { ...filters, title: value };
+                currentPage = 1;
+                reloadProjects(true);
+                return;
             } else {
                 const { ...rest } = filters;
                 filters = rest;

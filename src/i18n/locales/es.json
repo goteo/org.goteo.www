@@ -1,6 +1,12 @@
 {
   "common": {
     "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    "dateInput": {
+      "apply": "Aplicar",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "close": "Cerrar"
+    },
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
@@ -68,9 +74,9 @@
       },
       "status": {
         "all": "Todos los estados",
-        "funding": "En financiación",
-        "successful": "Exitosas",
-        "completed": "Completadas"
+        "in_campaign": "En campaña",
+        "funded": "Financiados",
+        "archived": "Archivados"
       }
     },
     "gatewayCheckout": {
@@ -569,8 +575,8 @@
           "taxIdPlaceholder": "Indica el CIF",
           "location": "Lugar de actividad",
           "locationHelper": "Indica cuál es el ámbito geográfico de actuación del impulsor o grupo impulsor.",
-          "territory": "Ámbito de actuación",
-          "country": "Para qué Estado",
+          "territory": "Territorio de actuación",
+          "country": "País",
           "teamDescription": "Descripción del equipo impulsor",
           "teamDescriptionHelper": "Cuéntanos a qué se dedica la entidad impulsora, qué tipo de actividades lleva a cabo en el día a día y cuáles son sus objetivos.",
           "teamDescriptionPlaceholder": "Describe brevemente la actividad del impulsor",
@@ -823,11 +829,15 @@
         "apply": "Aplicar filtros",
         "clear": "Limpiar filtros",
         "categoryLabel": "Elige una categoría",
+        "territoryLabel": "Territorio",
         "selectCategory": "Seleccionar categoría",
         "deselectCategory": "Deseleccionar categoría",
         "selectedCategories": "{{count}} categorías seleccionadas",
         "status": {
           "label": "Estado de la campaña"
+        },
+        "territory": {
+          "label": "Ámbito de actuación"
         }
       },
       "empty": {
