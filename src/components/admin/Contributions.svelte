@@ -269,7 +269,7 @@
                 return {
                     ...charge,
                     checkoutOrigin: checkout?.origin ?? "—",
-                    paymentMethod: extractId(checkout?.gateway) ?? "—",
+                    paymentMethod: checkout?.gateway,
                     refundToWallet: checkout?.refund
                         ? $t(`domain.charges.refund.${checkout.refund}`)
                         : "—",
