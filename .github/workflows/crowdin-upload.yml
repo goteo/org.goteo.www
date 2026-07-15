@@ -3,7 +3,7 @@ name: Crowdin Sync Source & Pre-translate
 on:
     push:
         branches:
-            - crowding-test
+            - "chore/crowding-test"
             - develop
         paths:
             - "src/i18n/locales/es.json"
