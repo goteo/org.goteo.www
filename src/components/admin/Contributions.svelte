@@ -40,7 +40,11 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
-    import { parseQueryFilters, splitOrderParams } from "../../utils/queryParams";
+    import {
+        parseQueryFilters,
+        splitOrderParams,
+        syncQueryFiltersToUrl,
+    } from "../../utils/queryParams";
     import { isEnabled, tipjarId } from "../../utils/tipping";
 
     const initialParams =
@@ -346,6 +350,12 @@
 
     $effect(() => {
         reloadCharges();
+    });
+
+    $effect(() => {
+        const sort = sortOptions.find((option) => option.key === selectedSort);
+
+        syncQueryFiltersToUrl(filters ?? {}, sort ? { [sort.field]: sort.direction } : undefined);
     });
 
     let chargeSlides = $derived([

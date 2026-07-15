@@ -17,7 +17,11 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
-    import { parseQueryFilters, splitOrderParams } from "../../utils/queryParams";
+    import {
+        parseQueryFilters,
+        splitOrderParams,
+        syncQueryFiltersToUrl,
+    } from "../../utils/queryParams";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
@@ -226,6 +230,15 @@
         if (isFirstLoad) {
             reloadProjects();
         }
+    });
+
+    $effect(() => {
+        const sortOption = sortMap[selectedSort];
+
+        syncQueryFiltersToUrl(
+            filters,
+            sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
+        );
     });
 
     function handlePageChange(page: number): void {
