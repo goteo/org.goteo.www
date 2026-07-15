@@ -1217,7 +1217,7 @@
         }
       },
       "projects": {
-        "title": "Panel Gestoría",
+        "title": "Proyectos",
         "description": "Busca proyectos y gestiónalos de la manera más rápida posible gracias al buscador",
         "lastProjects": "Listado de campañas:",
         "export": {
