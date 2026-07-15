@@ -7,5 +7,3 @@ preserve_hierarchy: true
 files:
     - source: /src/i18n/locales/es.json
       translation: /src/i18n/locales/%two_letters_code%.json
-      ignore:
-          - /src/i18n/locales/es.json

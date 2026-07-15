@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - develop
+            - chore/crowding-test
         paths:
             - "src/i18n/locales/es.json"
     workflow_dispatch:
