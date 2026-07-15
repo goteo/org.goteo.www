@@ -20,24 +20,27 @@
 
 <Modal
     bind:open
-    title={$t("admin.projects.modals.paid.title")}
+    title={$t("pages.admin.projects.modals.paid.title")}
     closeBtnClass="top-4 end-4 bg-transparent text-secondary hover:bg-transparent hover:text-secondary focus:ring-0 shadow-none"
     class="max-w-lg"
 >
     <div class="flex flex-col gap-6">
         <p class="text-content text-sm">
-            {$t("admin.projects.modals.paid.description")}
+            {$t("pages.admin.projects.modals.paid.description")}
         </p>
         <div class="flex gap-4">
-            <TextInput bind:value={paidValue} labelText={$t("admin.projects.modals.paid.input")} />
+            <TextInput
+                bind:value={paidValue}
+                labelText={$t("pages.admin.projects.modals.paid.input")}
+            />
             <TextInput
                 bind:value={paidMatchfundingValue}
-                labelText={$t("admin.projects.modals.paid.matchfunding")}
+                labelText={$t("pages.admin.projects.modals.paid.matchfunding")}
             />
         </div>
         <div class="flex justify-end">
             <Button kind="primary" onclick={() => onsave?.(paidValue, paidMatchfundingValue)}>
-                {$t("admin.projects.modals.paid.save")}
+                {$t("pages.admin.projects.modals.paid.save")}
             </Button>
         </div>
     </div>

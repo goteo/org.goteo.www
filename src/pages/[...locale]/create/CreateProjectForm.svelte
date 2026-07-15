@@ -124,11 +124,6 @@
         submitted = true;
         apiError = null;
 
-        if (termsAccepted === false) {
-            submitSuccess = false;
-            $validationErrors["termsAccepted"] = "system.validation.project.terms.required";
-        }
-
         const errors = validateCreateForm($project);
 
         // Validate entire form

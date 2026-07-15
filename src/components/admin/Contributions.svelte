@@ -386,10 +386,10 @@
     });
 
     let chargeSlides = $derived([
-        { title: $t("admin.charges.totalizers.selected"), amount: $totalItems },
-        { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
-        { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.selected"), amount: $totalItems },
+        { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     onMount(async () => {

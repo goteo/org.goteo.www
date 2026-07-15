@@ -555,6 +555,11 @@
               "description": "Descripción de la recompensa",
               "moneyAmount": "Precio",
               "files": "Haz click o arrastra aquí tu archivo para subirlo"
+            },
+            "validation": {
+              "title": "El título no puede estar vacío",
+              "description": "La descripción no puede estar vacía",
+              "amount": "El importe debe ser mayor que cero"
             }
           },
           "deleteModal": {
@@ -941,7 +946,9 @@
       "showingTopResults": "Mostrando las {{count}} campañas más populares",
       "loading": "Buscando campañas...",
       "input": {
+        "placeholder": "Buscar",
         "label": "Buscar campañas",
+        "clear": "Limpiar búsqueda",
         "button": "Buscar"
       },
       "filters": {
@@ -1124,7 +1131,13 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página:"
+            "title": "Líneas por página:",
+            "options": {
+              "10": "10",
+              "20": "20",
+              "30": "30",
+              "50": "50"
+            }
           },
           "search": {
             "placeholder": "Buscar...",
@@ -1320,7 +1333,8 @@
                 "contractPdf": "Contrato PDF",
                 "annotations": "Anotaciones"
               }
-            }
+            },
+            "noData": "No hay datos disponibles"
           }
         },
         "modals": {
@@ -1398,7 +1412,9 @@
           "title": "Próximo nivel",
           "description": "Sigue donando para subir de nivel"
         }
-      }
+      },
+      "title": "Goteo",
+      "notFound": "Usuario no encontrado"
     },
     "login": {
       "page": {
@@ -1431,7 +1447,11 @@
     },
     "hero": {
       "title": "Financia el cambio que el mundo necesita",
-      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
+      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!",
+      "buttons": {
+        "discover": "Descubre campañas",
+        "impulse": "Impulsa un proyecto"
+      }
     },
     "me": {
       "page": {

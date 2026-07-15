@@ -10,7 +10,6 @@
 
     import DetailsRow from "./DetailsRow.svelte";
     import Pagination from "./Pagination.svelte";
-
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
     import { formatCurrency } from "../../utils/currencies";
