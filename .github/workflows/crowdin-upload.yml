@@ -5,8 +5,8 @@ on:
         branches:
             - "chore/crowding-test"
             - develop
-        paths:
-            - "src/i18n/locales/es.json"
+        #paths:
+        #   - "src/i18n/locales/es.json"
     workflow_dispatch:
 
 jobs:
