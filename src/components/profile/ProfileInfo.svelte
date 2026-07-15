@@ -1,11 +1,11 @@
 <script lang="ts">
-    import FacebookIcon from "../../svgs/FacebookIcon.svelte";
-    import GmailIcon from "../../svgs/GmailIcon.svelte";
-    import InstagramIcon from "../../svgs/InstagramIcon.svelte";
-    import LinkedinIcon from "../../svgs/LinkedinIcon.svelte";
-    import MediumIcon from "../../svgs/MediumIcon.svelte";
-    import XIcon from "../../svgs/XIcon.svelte";
-    import TerritoryTag from "../TerritoryTag.svelte";
+    import FacebookIcon from "../icons/social/FacebookIcon.svelte";
+    import GmailIcon from "../icons/social/GmailIcon.svelte";
+    import InstagramIcon from "../icons/social/InstagramIcon.svelte";
+    import LinkedinIcon from "../icons/social/LinkedinIcon.svelte";
+    import MediumIcon from "../icons/social/MediumIcon.svelte";
+    import XIcon from "../icons/social/XIcon.svelte";
+    import TerritoryTag from "../project/TerritoryTag.svelte";
 
     import type { Link, Territory } from "../../openapi/client/types.gen";
 

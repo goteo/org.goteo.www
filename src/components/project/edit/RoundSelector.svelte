@@ -14,7 +14,7 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import RadioButton from "../../library/RadioButton.svelte";
+    import RadioButton from "../../library/inputs/RadioButton.svelte";
 
     import type { Project } from "../../../openapi/client";
 

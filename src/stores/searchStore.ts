@@ -32,8 +32,6 @@ function getInitialState(): SearchState {
         filters: {
             page: 1,
             itemsPerPage: 20,
-            title: "",
-            status: "",
         },
         results: [],
         isLoading: false,
@@ -51,6 +49,22 @@ function getInitialState(): SearchState {
     };
 }
 
+export function parseSearchParamsFilters(searchParams: URLSearchParams) {
+    const filters: Record<string, string | string[]> = {};
+
+    for (const [key] of searchParams.entries()) {
+        const values = searchParams.getAll(key);
+
+        if (values.length > 1 || key.endsWith("[]")) {
+            filters[key] = values;
+        } else {
+            filters[key] = values[0];
+        }
+    }
+
+    return filters;
+}
+
 // Load initial state from URL parameters if available
 function loadInitialState(): SearchState {
     if (!isBrowser) return getInitialState();
@@ -60,21 +74,9 @@ function loadInitialState(): SearchState {
 
     // Initialize filters from URL parameters using API field names
     if (state.filters) {
-        state.filters.title = urlParams.get("title") || "";
-        state.filters.status = urlParams.get("status") || "";
+        state.filters = parseSearchParamsFilters(urlParams);
 
-        // Handle categories[] array parameters
-        const categoriesArray = urlParams.getAll("categories[]");
-        if (categoriesArray.length > 0) {
-            state.filters["categories[]"] = categoriesArray;
-        }
-        // If we have URL parameters, mark as having searched
-        const hasUrlFilters =
-            state.filters.title ||
-            state.filters.status ||
-            (state.filters["categories[]"]?.length ?? 0) > 0;
-
-        if (hasUrlFilters) {
+        if ([...urlParams.keys()].length > 0) {
             state.hasSearched = true;
         }
     }
@@ -128,6 +130,7 @@ function createSearchStore() {
                 }));
             }
         } catch (error) {
+            console.error(error);
             // Only set error if request wasn't cancelled
             if (!(error instanceof Error) || error.name !== "AbortError") {
                 update((state) => ({
@@ -223,8 +226,6 @@ function createSearchStore() {
                 filters: {
                     page: 1,
                     itemsPerPage: 20,
-                    title: "",
-                    status: "",
                 },
             })),
 
@@ -281,11 +282,7 @@ function createSearchStore() {
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(
-                        filters?.title ||
-                        filters?.status ||
-                        (filters?.["categories[]"]?.length ?? 0) > 0
-                    ),
+                    !!(filters?.title || (filters?.["categories[]"]?.length ?? 0) > 0),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",
@@ -443,7 +440,7 @@ function createSearchStore() {
 export const searchStore = createSearchStore();
 
 // Derived stores for computed values
-export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters);
+export const searchFilters = derived(searchStore, ($searchStore) => $searchStore.filters || {});
 
 export const searchResults = derived(searchStore, ($searchStore) => $searchStore.results);
 
@@ -477,8 +474,12 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
-    const { filters } = $searchStore;
-    return !!(filters?.title || filters?.status || (filters?.["categories[]"]?.length ?? 0) > 0);
+    const paginationKeys = ["page", "itemsPerPage"];
+    return Object.entries($searchStore.filters ?? {}).some(
+        ([key, value]) =>
+            !paginationKeys.includes(key) &&
+            (Array.isArray(value) ? value.length > 0 : value != null && value !== ""),
+    );
 });
 
 // Pagination derived stores

@@ -16,26 +16,37 @@ src/
 ├── actions/          # Astro server actions (form mutations)
 ├── auth/             # JWT sessions, OAuth2 tokens, refresh logic
 ├── components/       # Svelte components (PascalCase filenames)
-│   ├── library/      # Reusable UI primitives
-│   ├── Admin/        # Admin-specific components
-│   ├── icons/        # Icon SVG components
-│   └── [Feature]/    # Feature-scoped (project/, profile/, Checkout/, etc.)
-├── i18n/             # Translations (es/en) + t() store
+│   ├── library/      # Reusable UI primitives, by category:
+│   │                 #   buttons/, cards/, dropdown/, feedback/, inputs/,
+│   │                 #   layout/, share/, tags/, theme/, typography/
+│   ├── icons/        # Icon SVG components, by category:
+│   │                 #   actions/, commerce/, filters/, media/, navigation/,
+│   │                 #   payment/, social/, status/, user/
+│   ├── admin/        # Admin-specific components
+│   └── [feature]/    # Feature-scoped, lowercase: auth/, checkout/, errorpage/,
+│                     #   footer/, header/, hero/, home/, player/, profile/,
+│                     #   project/ (+ project/edit/), search/
+├── firewall/         # Route access control rules
+├── i18n/             # Translations (es/en/ca) + t() store
+│   └── locales/      # es.json / en.json / ca.json
 ├── layouts/          # Astro layout components
 ├── middleware/       # Astro request middleware
 ├── openapi/          # OpenAPI SDK — see SDK section below
+│   ├── client/       # Generated SDK (do not edit)
+│   └── plugins/      # Custom codegen plugins
 ├── pages/            # Astro routes
-│   └── [...locale]/  # All user-facing pages under locale prefix
+│   ├── [...locale]/  # All user-facing pages under locale prefix
+│   └── api/          # Server-side API endpoints
 ├── services/         # Business logic & API call wrappers
 ├── stores/           # Svelte stores (client-side state)
-├── stories/          # Storybook stories
+│   └── drafts/       # Project draft persistence (Dexie/IndexedDB)
 ├── styles/           # Global CSS
-├── svgs/             # SVG Svelte components
 ├── types/            # Shared TypeScript interfaces
 └── utils/            # Pure helper functions
+    └── drafts/       # Draft DB repository helpers
 ```
 
-Root config files: `astro.config.mjs`, `openapi-ts.config.ts`, `wrangler.toml`, `vitest.config.ts`, `cypress.config.ts`.
+Root config files: `astro.config.mjs`, `openapi-ts.config.ts`, `wrangler.toml`, `vitest.config.ts`, `cypress.config.ts` (+ `cypress.github.ts` for CI).
 
 ## Conventions
 
@@ -76,29 +87,22 @@ TailwindCSS utility classes only. Avoid scoped `<style>` blocks and CSS modules 
 
 Defined in `src/styles/global.css` via Tailwind `@theme`. Always use token classes — never hardcode hex values.
 
-**Colors:**
+**Colors** (hex values in `src/styles/global.css`):
 
-| Token class                       | Value     | Use                           |
-| --------------------------------- | --------- | ----------------------------- |
-| `bg-primary` / `text-primary`     | `#59e9d3` | Primary brand (teal)          |
-| `bg-secondary` / `text-secondary` | `#462949` | Secondary brand (dark purple) |
-| `bg-tertiary` / `text-tertiary`   | `#e94668` | Accent (pink-red)             |
-| `bg-content` / `text-content`     | `#575757` | Body text                     |
-| `bg-white` / `text-white`         | `#fbfbfb` | Backgrounds                   |
-| `bg-black` / `text-black`         | `#3d3d3d` | Headings                      |
-| `bg-grey`                         | `#f3f3ef` | Subtle backgrounds            |
-| `bg-purple-soft`                  | `#faf9ff` | Card backgrounds              |
-| `bg-purple-med`                   | `#f6f5ff` | Slightly deeper cards         |
-| `bg-variant1`                     | `#e6e5f7` | Variant surfaces              |
-| `bg-variant2`                     | `#99ffcc` | Success-like accent           |
-| `bg-variant3`                     | `#72d8ff` | Info accent                   |
-| `bg-variant4`                     | `#ffff99` | Warning accent                |
-| `bg-semantic-error`               | `#e9b1bd` | Error state                   |
-| `bg-semantic-success`             | `#b1e9e1` | Success state                 |
-| `bg-semantic-notification`        | `#c2eeff` | Notification                  |
-| `bg-semantic-warning`             | `#ffffc2` | Warning                       |
+| Token class                                      | Use                           |
+| ------------------------------------------------ | ----------------------------- |
+| `bg-primary` / `text-primary`                    | Primary brand (teal)          |
+| `bg-secondary` / `text-secondary`                | Secondary brand (dark purple) |
+| `bg-tertiary` / `text-tertiary`                  | Accent (pink-red)             |
+| `bg-content` / `text-content`                    | Body text                     |
+| `bg-white` / `text-white`                        | Backgrounds                   |
+| `bg-black` / `text-black`                        | Headings                      |
+| `bg-grey`                                        | Subtle backgrounds            |
+| `bg-purple-soft` / `bg-purple-med`               | Card backgrounds              |
+| `bg-variant1..4`                                 | Surface variants              |
+| `bg-semantic-error/success/notification/warning` | Semantic states               |
 
-Dark theme tokens are applied automatically when `[data-theme="dark"]` is set on a parent element.
+Dark theme tokens apply when `[data-theme="dark"]` is set on a parent element.
 
 **Typography:**
 
@@ -156,7 +160,9 @@ $t("project.funded", { percent: 85 }); // → "Financiado al 85%"
 $t("footer.legal", {}, { allowHTML: true });
 ```
 
-Missing keys log a console warning and fall back to the key string. Always add new keys to all three locale files (`es`, `en`, `ca`).
+Missing keys log a console warning and fall back to the key string.
+
+**Add new keys only to `src/i18n/locales/es.json`. Never modify `en.json` or `ca.json` manually — those translations are managed by Crowdin and manual edits will be overwritten.**
 
 ### Error handling
 
@@ -182,28 +188,43 @@ Before building new UI, check `src/components/library/` and `src/components/icon
 
 ### `src/components/library/`
 
-| Component                       | Key props                                                                                                  | Notes                                                    |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| `Button`                        | `size?: "md"\|"sm"`, `kind?: "primary"\|"secondary"\|"ghost"\|"invert"`, `children`                        | Spreads all `HTMLButtonAttributes`                       |
-| `TextInput`                     | `bind:value`, `type?`, `labelText?`, `helperText?`, `error?`, `required?`, `disabled?`                     | Floating label, auto-generated `id`                      |
-| `TextArea`                      | `id`, `bind:value`, `label?`, `helper?`, `error?: boolean`, `rows?=4`, `disabled?`                         | `error` is a boolean; use `helper` for the error message |
-| `Select`                        | `bind:value`, `labelText?`, `helperText?`, `error?`, `onChange?`, `onBlur?`, `children` (options)          | Accessible floating label select                         |
-| `Tag`                           | `variant?: "success"\|"warning"\|"error"\|"bold"`, `children`                                              | Small badge pill                                         |
-| `Toast`                         | `bind:showToast`, `variant: "error"\|"success"\|"notification"\|"warning"`, `children`, `button?`, `link?` | Self-dismisses on close button                           |
-| `Card`                          | `children`, `class?`                                                                                       | White rounded card with shadow                           |
-| `Grid`                          | `children`, `class?`                                                                                       | 2-col mobile → 3-col desktop responsive grid             |
-| `Toggle`                        | `onChange?: (value: boolean) => void`                                                                      | Animated toggle switch, `$bindable` internal state       |
-| `TabNavigation`                 | (see file)                                                                                                 | Horizontal tab bar                                       |
-| `AccordionBox`                  | (see file)                                                                                                 | Collapsible content section                              |
-| `RadioButton`                   | (see file)                                                                                                 | Styled radio input                                       |
-| `CategorySelect`                | (see file)                                                                                                 | Category multi-select                                    |
-| `ReturnButton` / `ReturnHeader` | (see file)                                                                                                 | Back navigation                                          |
+Components are organized in category subfolders — import via `library/<category>/<Component>.svelte`:
+
+| Subfolder     | Components                                                                                                                                                                             |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `buttons/`    | `Button`, `ActionableButton`, `BackButton`, `ReturnButton`, `ReturnHeader`                                                                                                             |
+| `cards/`      | `Card`, `BaseCard`                                                                                                                                                                     |
+| `dropdown/`   | `DropdownMenu`, `DropdownItem` (+ `dropdown.types.ts`)                                                                                                                                 |
+| `feedback/`   | `Toast`, `Loader`                                                                                                                                                                      |
+| `inputs/`     | `TextInput`, `PasswordInput`, `TextArea`, `Select`, `DateInput`, `Checkbox`, `RadioButton`, `RangeSlider`, `Toggle`, `ToggleSwitch`, `CategorySelect`, `Search`, `Email`, `FileUpload` |
+| `layout/`     | `Grid`, `AccordionBox`, `CollapsibleBox`, `Carousel`, `Tabs`, `TabNavigation`                                                                                                          |
+| `share/`      | `ShareButton`, `CopyUrl`, `Facebook`, `X`, `Iframe`                                                                                                                                    |
+| `tags/`       | `Tag`, `Category`                                                                                                                                                                      |
+| `theme/`      | `ThemeToggle.astro`                                                                                                                                                                    |
+| `typography/` | `BodyText`, `BodyBlog`, `Thtml`                                                                                                                                                        |
+
+Key props of the most used ones:
+
+| Component          | Key props                                                                                                  | Notes                                                    |
+| ------------------ | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `Button`           | `size?: "md"\|"sm"`, `kind?: "primary"\|"secondary"\|"ghost"\|"invert"`, `children`                        | Spreads all `HTMLButtonAttributes`                       |
+| `ActionableButton` | (see file)                                                                                                 | Button with async action + loading state                 |
+| `TextInput`        | `bind:value`, `type?`, `labelText?`, `helperText?`, `error?`, `required?`, `disabled?`                     | Floating label, auto-generated `id`                      |
+| `PasswordInput`    | `bind:value`, `labelText?`, `error?`                                                                       | TextInput with show/hide toggle                          |
+| `TextArea`         | `id`, `bind:value`, `label?`, `helper?`, `error?: boolean`, `rows?=4`, `disabled?`                         | `error` is a boolean; use `helper` for the error message |
+| `Select`           | `bind:value`, `labelText?`, `helperText?`, `error?`, `onChange?`, `onBlur?`, `children` (options)          | Accessible floating label select                         |
+| `Tag`              | `variant?: "success"\|"warning"\|"error"\|"bold"`, `children`                                              | Small badge pill                                         |
+| `Toast`            | `bind:showToast`, `variant: "error"\|"success"\|"notification"\|"warning"`, `children`, `button?`, `link?` | Self-dismisses on close                                  |
+| `Card`             | `children`, `class?`                                                                                       | White rounded card with shadow                           |
+| `Grid`             | `children`, `class?`                                                                                       | 2-col mobile → 3-col desktop grid                        |
+| `Toggle`           | `onChange?: (value: boolean) => void`                                                                      | Animated toggle, `$bindable` internal state              |
 
 Usage example:
 
 ```svelte
-import Button from "../library/Button.svelte"; import TextInput from "../library/TextInput.svelte";
-import Toast from "../library/Toast.svelte"; let name = $state(""); let showError = $state(false);
+import Button from "../library/buttons/Button.svelte"; import TextInput from
+"../library/inputs/TextInput.svelte"; import Toast from "../library/feedback/Toast.svelte"; let name
+= $state(""); let showError = $state(false);
 ```
 
 ```svelte
@@ -214,11 +235,11 @@ import Toast from "../library/Toast.svelte"; let name = $state(""); let showErro
 
 ### `src/components/icons/`
 
-Icons are Svelte components accepting `width?`, `height?`, and `class?`. They use `currentColor` — set color via `text-*` class on the icon or a parent.
+Icons are Svelte components accepting `width?`, `height?`, and `class?`. They use `currentColor` — set color via `text-*` class on the icon or a parent. Most icons live in category subfolders — import via `icons/<category>/<Icon>.svelte`:
 
 ```svelte
-import Chevron from "../icons/Chevron.svelte"; import Close from "../icons/Close.svelte"; import
-Warning from "../icons/Warning.svelte";
+import Chevron from "../icons/navigation/Chevron.svelte"; import Close from
+"../icons/navigation/Close.svelte"; import Warning from "../icons/status/Warning.svelte";
 ```
 
 ```svelte
@@ -228,7 +249,18 @@ Warning from "../icons/Warning.svelte";
 
 `Chevron` accepts `direction?: "left"|"right"|"up"|"down"`.
 
-Available icons (in `src/components/icons/`): `Align`, `Arrow`, `Back`, `Bag`, `Basket`, `Bookmark`, `Box`, `BudgetMark`, `Bullet`, `Calendar`, `Category`, `Check`, `Chevron`, `Clock`, `Close`, `CloseMenu`, `Code`, `Comments`, `Copy`, `CreditCard`, `Download`, `Edit`, `Error`, `Eye`, `Filters`, `Flames`, `Flash`, `Forward`, `Hamburger`, `Home`, `Image`, `Languages`, `Link`, `Location`, `Mail`, `Menu`, `Money`, `MoreAndLess`, `Ok`, `Play`, `Profile`, `Search`, `Send`, `Share`, `ShortBy`, `Spinner`, `Trash`, `UploadFile`, `User`, `Wallet`, `Warning`, `Web`.
+| Subfolder     | Icons                                                                                                                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `actions/`    | `Bookmark`, `Check`, `Copy`, `Download`, `Edit`, `MinusIcon`, `PlusIcon`, `RememberIcon`, `Search`, `Send`, `Share`, `Trash`, `UploadFile`, `UploadIcon`                                                                          |
+| `commerce/`   | `Bag`, `Basket`, `BudgetMark`, `CreditCard`, `Money`, `Wallet`                                                                                                                                                                    |
+| `filters/`    | `FilterIcon`, `Filters`, `MoreAndLess`, `ShortBy`                                                                                                                                                                                 |
+| `media/`      | `Code`, `Eye`, `Flash`, `Image`, `Link`, `Play`, `VideoIcon`, `Web`                                                                                                                                                               |
+| `navigation/` | `Arrow`, `ArrowSliderIcon`, `Back`, `Chevron`, `Close`, `CloseMenu`, `Forward`, `Hamburger`, `Home`, `Menu`                                                                                                                       |
+| `payment/`    | `CreditCardIcon.astro`, `PaypalIcon.astro`, `StripeIcon.astro`                                                                                                                                                                    |
+| `social/`     | `Facebook`, `Gmail`, `Instagram`, `Linkedin`, `MediumIcon`, `Web`, `X` (+ `*Icon` variants, some `.astro`)                                                                                                                        |
+| `status/`     | `AlertIcon`, `Error`, `Flames`, `NotificationIcon`, `Ok`, `Spinner`, `SuccessIcon`, `Warning`                                                                                                                                     |
+| `user/`       | `Profile`, `User`                                                                                                                                                                                                                 |
+| (root)        | `Align`, `Box`, `Bullet`, `Calendar`, `Category`, `Clock`, `Comments`, `DefaultAvatar`, `Goteo`, `Infinity`, `LanguageIcon`, `Languages`, `LineIcon`, `Location`, `Logo`, `Mail`, `PaginationFirst`, `PaginationLast`, `UnitIcon` |
 
 ## Svelte 5 runes
 
@@ -354,13 +386,13 @@ In server actions (`src/actions/`): `context.locals.t` and `context.locals.sessi
 
 ## `App.svelte` — page shell
 
-`App.svelte` is the interactive page shell. It renders `<Header>`, `<main>`, and `<Footer>`, initializes the locale/session Svelte stores, and attaches the browser cache interceptor for the OpenAPI client.
+`src/layouts/App.svelte` is the interactive page shell. It renders `<Header>`, `<main>`, and `<Footer>` (also in `src/layouts/`), initializes the locale/session Svelte stores, and attaches the browser cache interceptor for the OpenAPI client.
 
 **Always wrap interactive page content with `<App client:load>`:**
 
 ```astro
 ---
-import App from "../../components/App.svelte";
+import App from "../../layouts/App.svelte";
 const { lang, session } = Astro.locals;
 ---
 
@@ -405,16 +437,6 @@ This allows callers to safely override or extend styles without class conflicts.
 | `getBaseUrl()`           | `src/utils/consts.ts`     | Returns `PUBLIC_API_URL` env var (throws if missing)                        |
 | `getApiVersion()`        | `src/utils/consts.ts`     | Returns `PUBLIC_API_VERSION` env var                                        |
 | `getEnvVar(key)`         | `src/utils/consts.ts`     | Generic env var accessor with throw-on-missing                              |
-
-`goto` usage in Astro pages:
-
-```astro
----
-import { goto } from "../../utils/navigation";
-const { session } = Astro.locals;
-if (!session) return goto("/login", { query: { callback: "/me" } });
----
-```
 
 ## Zod validation
 
@@ -462,9 +484,11 @@ pnpm test          # Vitest unit + component tests
 pnpm storybook     # Storybook visual tests (port 6006)
 pnpm cypress open  # Cypress E2E interactive
 pnpm cypress run   # Cypress E2E headless
+pnpm test:e2e      # Start dev server + run Cypress headless
+pnpm test:e2e:ci   # CI E2E against Workers preview build
 ```
 
-Stories live in `src/stories/`. Component tests use Vitest + `@storybook/addon-vitest`.
+Stories live alongside their component (`ComponentName.stories.svelte`). Component tests use Vitest + `@storybook/addon-vitest`.
 
 ## Cloudflare Workers constraints
 
@@ -683,7 +707,7 @@ Stages: `preupload` → POST `/api/upload/preupload` gets a signed S3 URL → `u
 {#if uploader.error}<p>{uploader.error}</p>{/if}
 ```
 
-**`FileUpload.svelte` component** (`src/components/FileUpload.svelte`) handles drag-drop UI with validation:
+**`FileUpload.svelte` component** (`src/components/library/inputs/FileUpload.svelte`) handles drag-drop UI with validation:
 
 ```svelte
 <FileUpload bind:files maxSizeMB={8} accept={["image/jpeg", "image/webp", "image/png"]} />
@@ -697,61 +721,38 @@ The OpenAPI SDK client already handles auth internally; the relay is for edge ca
 
 ## Svelte stores
 
-Client-side state. Import stores and subscribe with `$storeName` in Svelte templates.
+Client-side state. Subscribe with `$storeName` in templates.
 
-### `src/auth/store.ts`
-
-```typescript
-import { session } from "../auth/store";
-// $session → Session | undefined (reactive, set by App.svelte from server-rendered prop)
-```
-
-### `src/stores/searchStore.ts`
-
-Manages search state with URL sync, debounce, and abort cancellation.
-
-Key exported stores: `searchFilters`, `searchResults`, `isSearching`, `hasActiveFilters`, `paginationInfo`.
-Key functions: `performSearch()`, `updateFilters()`, `loadNextPage()`.
-
-### `src/stores/cart.ts`
-
-Shopping cart persisted in `localStorage`. Items indexed by target (Accounting IRI) + recipient.
-
-Key derived stores: `cartCount`, `cartAmount`, `cartByTarget`.
-Key functions: `addItem()`, `removeItem()`, `updateQuantity()`, `clear()`, `clearTarget()`.
-
-`CartItem` shape: extends `GatewayCharge` + `kind: "free"|"reward"|"tip"`, `quantity`, `recipient`, `reward`.
-
-### `src/stores/wizard-state.ts`
-
-Multi-step project creation wizard (5 steps). Auto-saves to `localStorage` with 1-second throttle.
-
-Key stores: `isReadyToPublish`, `isCampaignInfoValidStore`.
-Key functions: `navigateToStep()`, `initializeFromProject()`, `saveToLocalStorage()`, `restoreFromLocalStorage()`.
-
-### `src/stores/projectCache.ts`
-
-Session-level in-memory cache for `Project` objects. Indexed by id, slug, and lookup key to avoid duplicate API calls.
-
-Key functions: `add()`, `addMany()`, `get(key)`, `has(key)`, `clear()`.
-
-### `src/stores/chargesPaginationAndSort.ts`
-
-Admin contributions pagination. Exports: `itemsPerPage`, `currentPage`, `totalItems`, `isLoading` stores + `SortOption[]`.
+| Store file                               | Key exports                                                                                                                                        | Notes                                                                   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `src/auth/store.ts`                      | `session`                                                                                                                                          | `Session \| undefined`, set by App.svelte                               |
+| `src/stores/searchStore.ts`              | `searchFilters`, `searchResults`, `isSearching`, `hasActiveFilters`, `paginationInfo`; `performSearch()`, `updateFilters()`, `loadNextPage()`      | URL sync, debounce, abort                                               |
+| `src/stores/cart.ts`                     | `cartCount`, `cartAmount`, `cartByTarget`; `addItem()`, `removeItem()`, `updateQuantity()`, `clear()`, `clearTarget()`                             | `localStorage`, indexed by Accounting IRI + recipient                   |
+| `src/stores/wizard-state.ts`             | `isReadyToPublish`, `isCampaignInfoValidStore`; `navigateToStep()`, `initializeFromProject()`, `saveToLocalStorage()`, `restoreFromLocalStorage()` | 5-step wizard, 1s throttle                                              |
+| `src/stores/projectCache.ts`             | `add()`, `addMany()`, `get(key)`, `has(key)`, `clear()`                                                                                            | Session-level in-memory cache, indexed by id/slug                       |
+| `src/stores/chargesPaginationAndSort.ts` | `itemsPerPage`, `currentPage`, `totalItems`, `isLoading`, `SortOption[]`                                                                           | Admin contributions pagination                                          |
+| `src/stores/drafts/projectDraft.ts`      | —                                                                                                                                                  | Dexie (IndexedDB) draft; use `src/utils/drafts/db.ts` + `repository.ts` |
 
 ## Additional utilities
 
-| Util                                               | Import                        | Signature                                                                     |
-| -------------------------------------------------- | ----------------------------- | ----------------------------------------------------------------------------- |
-| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts` | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
-| `formatDate(date, locale)`                         | `src/utils/dates.ts`          | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
-| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`     | Locale-aware currency via `Intl.NumberFormat`                                 |
-| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`     | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
-| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`      | Pre-built `Response` objects for API endpoints                                |
+| Util                                               | Import                              | Signature                                                                     |
+| -------------------------------------------------- | ----------------------------------- | ----------------------------------------------------------------------------- |
+| `renderMarkdown(text)`                             | `src/utils/renderMarkdown.ts`       | `async (raw: string) => Promise<string>` — HTML output, links open in new tab |
+| `formatDate(date, locale)`                         | `src/utils/dates.ts`                | Locale-aware date formatting via `Intl.DateTimeFormat`                        |
+| `formatCurrency(value, currency?)`                 | `src/utils/currencies.ts`           | Locale-aware currency via `Intl.NumberFormat`                                 |
+| `highlightMatch(text, query, markClass?)`          | `src/utils/highlights.ts`           | Wraps matched chars in `<mark>`, accent-insensitive (NFD)                     |
+| `Unauthorized` / `NotFound` / `InternalSeverError` | `src/utils/responses.ts`            | Pre-built `Response` objects for API endpoints                                |
+| `uploadToObjectStorage()`                          | `src/utils/objectStorage.ts`        | Server-side S3-compatible upload (Node/Workers build-time only)               |
+| `publishProject()`                                 | `src/utils/projectPublisher.ts`     | Submit a project draft to the API for publishing                              |
+| `submitProjectData()`                              | `src/utils/projectSubmissionApi.ts` | Low-level API calls for project wizard step submission                        |
+| `getTippingConfig()`                               | `src/utils/tipping.ts`              | Read tipping env vars (`PUBLIC_TIPPING_*`) into a typed config object         |
+| `budgetColors`                                     | `src/utils/budgetColors.ts`         | Budget bar color palette constants                                            |
+| `getCategories()`                                  | `src/utils/categories.ts`           | Fetch + cache project categories from the API                                 |
+| `getLang()`                                        | `src/utils/lang.ts`                 | Resolve locale string from URL or Accept-Language                             |
 
 ## `Thtml` component
 
-`src/components/Thtml.svelte` — renders a translation key that contains HTML. Avoids writing `{@html $t("key", {}, { allowHTML: true })}` inline:
+`src/components/library/typography/Thtml.svelte` — renders a translation key that contains HTML. Avoids writing `{@html $t("key", {}, { allowHTML: true })}` inline:
 
 ```svelte
 <Thtml key="footer.legal" vars={{ year: 2025 }} />
@@ -759,26 +760,4 @@ Admin contributions pagination. Exports: `itemsPerPage`, `currentPage`, `totalIt
 
 ## Storybook
 
-Stories use `@storybook/addon-svelte-csf`. File naming: `ComponentName.stories.svelte` alongside the component.
-
-```svelte
-<script module>
-    import { defineMeta } from "@storybook/addon-svelte-csf";
-    import Button from "./Button.svelte";
-
-    const { Story } = defineMeta({
-        component: Button,
-        title: "Library/Button",
-        tags: ["autodocs"],
-        args: { size: "md", kind: "primary" },
-        argTypes: {
-            size: { control: "select", options: ["md", "sm"] },
-        },
-    });
-</script>
-
-<Story name="Primary">Label</Story>
-<Story name="Secondary" args={{ kind: "secondary" }}>Label</Story>
-```
-
-`tags: ["autodocs"]` generates automatic documentation. Place stories next to the component file, not in `src/stories/` (which is for full-page demo stories).
+Stories use `@storybook/addon-svelte-csf`. File naming: `ComponentName.stories.svelte` alongside the component. Use `defineMeta` + `Story` from `@storybook/addon-svelte-csf`; add `tags: ["autodocs"]` for auto-generated docs. Place stories next to the component file.
