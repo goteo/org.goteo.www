@@ -397,10 +397,7 @@
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.id!,
-                $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
-            ]),
+            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
         ];
 
         chargeStatusOptions = Object.entries(
