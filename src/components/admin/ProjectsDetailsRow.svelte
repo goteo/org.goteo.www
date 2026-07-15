@@ -15,9 +15,8 @@
     let { project, onOpenAnnotationsModal, onChangeStatus, userEmail }: Props = $props();
 
     function navigateToCharges() {
-        const name = project.name;
-        if (!name) return;
-        window.location.href = `/${$locale}/admin/charges?search=${encodeURIComponent(name)}`;
+        if (!project.accounting) return;
+        window.location.href = `/${$locale}/admin/charges?target=${encodeURIComponent(project.accounting)}`;
     }
 </script>
 
