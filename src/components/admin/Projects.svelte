@@ -56,10 +56,10 @@
     let lastQueryKey = $state("");
 
     let projectSlides = $derived([
-        { title: $t("admin.projects.totalizers.selected"), amount: totalItemsCount },
-        { title: $t("admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalUnpaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.selected"), amount: totalItemsCount },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
     ]);
 
     const sortMap: Record<
@@ -320,7 +320,7 @@
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
             <FiltersTags
-                title={$t("admin.projects.lastProjects")}
+                title={$t("pages.admin.projects.lastProjects")}
                 {filters}
                 onCloseFilter={handleCloseFilter}
             />

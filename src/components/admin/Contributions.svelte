@@ -280,7 +280,7 @@
                 return {
                     ...charge,
                     checkoutOrigin: checkout?.origin ?? "—",
-                    paymentMethod: extractId(checkout?.gateway) ?? "—",
+                    paymentMethod: checkout?.gateway,
                     refundToWallet: checkout?.refund
                         ? $t(`domain.charges.refund.${checkout.refund}`)
                         : "—",
@@ -380,10 +380,10 @@
     });
 
     let chargeSlides = $derived([
-        { title: $t("admin.charges.totalizers.selected"), amount: $totalItems },
-        { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
-        { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.selected"), amount: $totalItems },
+        { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     onMount(async () => {
@@ -391,10 +391,7 @@
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.name!,
-                $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
-            ]),
+            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
         ];
 
         chargeStatusOptions = Object.entries(
@@ -427,7 +424,7 @@
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("domain.charges.lastContributions")}
+                title={$t("pages.admin.charges.lastContributions")}
                 {filters}
                 {accountingsMap}
                 {ownersMap}

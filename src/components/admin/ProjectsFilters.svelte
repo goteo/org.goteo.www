@@ -121,7 +121,7 @@
         <div class="flex w-full flex-col gap-1">
             <Search
                 bind:value={searchValue}
-                placeholder={$t("admin.projects.filters.search.placeholder")}
+                placeholder={$t("pages.admin.projects.filters.search.placeholder")}
                 onclear={() => {
                     searchValue = "";
                     clearTimeout(autoApplyTimeout);
@@ -133,13 +133,13 @@
             />
             {#if searchError}
                 <p class="text-tertiary pl-4 text-sm">
-                    {$t("admin.projects.filters.search.minLength")}
+                    {$t("pages.admin.projects.filters.search.minLength")}
                 </p>
             {/if}
         </div>
 
         <Button kind="secondary" size="md" class="shrink-0" onclick={handleSearch}>
-            {$t("admin.projects.filters.search.btn")}
+            {$t("pages.admin.projects.filters.search.btn")}
         </Button>
 
         <Button
@@ -150,9 +150,9 @@
         >
             <FiltersIcon />
             {#if showFilters}
-                {$t("admin.projects.filters.btns.closeFilters")}
+                {$t("pages.admin.projects.filters.btns.closeFilters")}
             {:else}
-                {$t("admin.projects.filters.btns.openFilters")}
+                {$t("pages.admin.projects.filters.btns.openFilters")}
             {/if}
         </Button>
     </div>
@@ -165,7 +165,7 @@
                         for="campaignStatus"
                         class="text-content absolute top-0.5 left-4 text-xs"
                     >
-                        {$t("admin.projects.filters.campaignStatus.title")}
+                        {$t("pages.admin.projects.filters.campaignStatus.title")}
                     </label>
                     <select
                         id="campaignStatus"
@@ -174,7 +174,7 @@
                         onchange={scheduleApply}
                     >
                         <option value=""></option>
-                        {#each Object.entries($t("admin.projects.filters.campaignStatus.options")) as [value, label]}
+                        {#each Object.entries($t("pages.admin.projects.filters.campaignStatus.options")) as [value, label]}
                             <option {value}>{label}</option>
                         {/each}
                     </select>
@@ -182,7 +182,7 @@
 
                 <div class="relative">
                     <label for="projectStatus" class="text-content absolute top-0.5 left-4 text-xs">
-                        {$t("admin.projects.filters.status.title")}
+                        {$t("pages.admin.projects.filters.status.title")}
                     </label>
                     <select
                         id="projectStatus"
@@ -191,7 +191,7 @@
                         onchange={scheduleApply}
                     >
                         <option value=""></option>
-                        {#each Object.entries($t("admin.projects.filters.status.options")) as [value, label]}
+                        {#each Object.entries($t("pages.admin.projects.filters.status.options")) as [value, label]}
                             <option {value}>{label}</option>
                         {/each}
                     </select>
@@ -199,7 +199,7 @@
 
                 <div class="relative">
                     <label for="dateFrom" class="text-content absolute top-0.5 left-4 text-xs">
-                        {$t("admin.projects.filters.dateRange.initDate")}
+                        {$t("pages.admin.projects.filters.dateRange.initDate")}
                     </label>
                     <input
                         id="dateFrom"
@@ -213,7 +213,7 @@
 
                 <div class="relative">
                     <label for="dateTo" class="text-content absolute top-0.5 left-4 text-xs">
-                        {$t("admin.projects.filters.dateRange.endDate")}
+                        {$t("pages.admin.projects.filters.dateRange.endDate")}
                     </label>
                     <input
                         id="dateTo"
@@ -228,7 +228,7 @@
 
             <div class="flex justify-end">
                 <Button kind="primary" type="submit">
-                    {$t("admin.projects.filters.btns.apply")}
+                    {$t("pages.admin.projects.filters.btns.apply")}
                 </Button>
             </div>
         </form>

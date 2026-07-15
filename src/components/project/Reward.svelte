@@ -31,7 +31,7 @@
         <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-semibold">
             <div>
                 {@html $t(
-                    "rewards.by-amount",
+                    "domain.project.reward.byAtLeast",
                     {
                         amount: formatCurrency(reward.money.amount, reward.money.currency),
                     },
@@ -56,7 +56,7 @@
                 <UnitIcon />
                 <span>
                     {@html $t(
-                        "rewards.units-available",
+                        "domain.project.reward.unitsAvailable",
                         { units: `${reward.unitsAvailable}` },
                         { allowHTML: true },
                     )}
@@ -67,7 +67,7 @@
                 <UserIcon />
                 <span>
                     {@html $t(
-                        "rewards.donators",
+                        "domain.project.reward.donators",
                         { donators: reward.unitsClaimed! },
                         { allowHTML: true },
                     )}

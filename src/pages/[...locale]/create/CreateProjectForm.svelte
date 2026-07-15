@@ -249,7 +249,7 @@
                 class="rounded-md border-l-4 border-red-500 bg-red-50 p-4"
             >
                 <h2 class="mb-2 text-lg font-semibold text-red-800">
-                    {$t("validation.errors.summary.title")}
+                    {$t("system.validation.errors.summary.title")}
                 </h2>
                 <ul class="list-inside list-disc space-y-1">
                     {#each Object.entries($validationErrors) as [field, error]}

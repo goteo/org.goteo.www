@@ -69,17 +69,22 @@
     <Select
         bind:value={scope}
         name="geographic-scope"
-        labelText={$t("wizard.configuration.geography.scopeLabel")}
+        labelText={$t("pages.project.edit.configuration.geography.scopeLabel")}
         required={true}
         error={showScopeError ? errors.geographicScope : undefined}
         onBlur={handleScopeBlur}
         onChange={handleScopeChange}
     >
-        <option value="">{$t("wizard.configuration.geography.scopePlaceholder")}</option>
-        <option value="local">{$t("wizard.configuration.geography.options.local")}</option>
-        <option value="estatal">{$t("wizard.configuration.geography.options.estatal")}</option>
+        <option value="">{$t("pages.project.edit.configuration.geography.scopePlaceholder")}</option
+        >
+        <option value="local"
+            >{$t("pages.project.edit.configuration.geography.options.local")}</option
+        >
+        <option value="estatal"
+            >{$t("pages.project.edit.configuration.geography.options.estatal")}</option
+        >
         <option value="internacional"
-            >{$t("wizard.configuration.geography.options.internacional")}</option
+            >{$t("pages.project.edit.configuration.geography.options.internacional")}</option
         >
     </Select>
 
@@ -88,12 +93,12 @@
         <TextInput
             bind:value={localities}
             name="localities"
-            labelText={$t("wizard.configuration.geography.localitiesLabel")}
-            placeholder={$t("wizard.configuration.geography.localitiesPlaceholder")}
+            labelText={$t("pages.project.edit.configuration.geography.localitiesLabel")}
+            placeholder={$t("pages.project.edit.configuration.geography.localitiesPlaceholder")}
             required={true}
             error={showLocalitiesError ? errors.localities : undefined}
             helperText={!showLocalitiesError
-                ? $t("wizard.configuration.geography.localitiesHelper")
+                ? $t("pages.project.edit.configuration.geography.localitiesHelper")
                 : undefined}
             onBlur={handleLocalitiesBlur}
         />

@@ -168,7 +168,7 @@
 
         // Check max files limit
         if (images.length >= maxFiles) {
-            validationError = $t("wizard.validation.campaign_info.media.max_images");
+            validationError = $t("pages.project.edit.campaignInfo.media.validation.max_images");
             resetInput();
             return;
         }
@@ -177,14 +177,16 @@
 
         // Validate file type
         if (!file.type.startsWith("image/")) {
-            validationError = $t("wizard.validation.campaign_info.media.invalid_image");
+            validationError = $t("pages.project.edit.campaignInfo.media.validation.invalid_image");
             resetInput();
             return;
         }
 
         // Validate file size
         if (file.size > maxFileSize) {
-            validationError = $t("wizard.validation.campaign_info.media.image_too_large");
+            validationError = $t(
+                "pages.project.edit.campaignInfo.media.validation.image_too_large",
+            );
             resetInput();
             return;
         }
@@ -210,7 +212,7 @@
             validationError =
                 error instanceof Error
                     ? error.message
-                    : $t("wizard.validation.campaign_info.media.upload_failed");
+                    : $t("pages.project.edit.campaignInfo.media.validation.upload_failed");
             console.error("Image upload error:", error);
         } finally {
             isUploading = false;
