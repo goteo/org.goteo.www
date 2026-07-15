@@ -147,6 +147,7 @@
         </div>
         <DateInput
             name="release"
+            class="max-w-167"
             bind:value={releaseDate}
             min={getMinDate()}
             onInput={handleReleaseChange}
