@@ -1,4 +1,5 @@
 import { apiProjectsGetCollection } from "../openapi/client/sdk.gen";
+import { constrainToPublicStatuses } from "../utils/projectStatus";
 
 import type { AuthError } from "../openapi/api";
 import type { Project } from "../openapi/client/types.gen";
@@ -26,9 +27,14 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const { status, "status[]": statuses, ...restFilters } = filters ?? {};
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...filters,
+                    ...restFilters,
+                    "status[]": constrainToPublicStatuses([
+                        ...(statuses ?? []),
+                        ...(status ? [status] : []),
+                    ]),
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },

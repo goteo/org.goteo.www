@@ -25,13 +25,14 @@
     let dateFrom = $state("");
     let dateTo = $state("");
 
-    function handleSubmit(event: SubmitEvent) {
-        event.preventDefault();
-        if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
-            alert($t("pages.admin.charges.filters.dateRange.errors.invalidRange"));
-            return;
-        }
+    // Debounce auto-applied filter changes so they don't fire one API request per change
+    let autoApplyTimeout: ReturnType<typeof setTimeout>;
 
+    function hasInvalidDateRange() {
+        return Boolean(dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo));
+    }
+
+    function applyFilters() {
         onApplyFilters({
             ...filters,
             "checkout.gateway": selectedPaymentMethod || undefined,
@@ -44,6 +45,25 @@
                 ? new Date(new Date(dateTo).getTime()).toISOString()
                 : undefined,
         });
+    }
+
+    // Auto-apply filter changes; skip silently while the date range is incomplete/invalid
+    function scheduleApply() {
+        clearTimeout(autoApplyTimeout);
+        autoApplyTimeout = setTimeout(() => {
+            if (hasInvalidDateRange()) return;
+            applyFilters();
+        }, 400);
+    }
+
+    function handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+        clearTimeout(autoApplyTimeout);
+        if (hasInvalidDateRange()) {
+            alert($t("pages.admin.charges.filters.dateRange.errors.invalidRange"));
+            return;
+        }
+        applyFilters();
     }
 
     function handleSelectTarget(accounting: string) {
@@ -96,6 +116,7 @@
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedPaymentMethod}
+                    onchange={scheduleApply}
                 >
                     <option value="" disabled selected
                         >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
@@ -108,6 +129,7 @@
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedChargeStatus}
+                    onchange={scheduleApply}
                 >
                     <option value="" disabled
                         >{$t("pages.admin.charges.filters.chargeStatus.title")}</option
@@ -120,6 +142,7 @@
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedRangeAmount}
+                    onchange={scheduleApply}
                 >
                     <option value="" disabled
                         >{$t("pages.admin.charges.filters.rangeAmount.title")}</option
@@ -133,14 +156,20 @@
                     id="dateFrom"
                     labelText={$t("pages.admin.charges.filters.dateRange.initDate")}
                     value={dateFrom ? new Date(dateFrom) : new Date(NaN)}
-                    onInput={(date) => (dateFrom = date)}
+                    onInput={(date) => {
+                        dateFrom = date;
+                        scheduleApply();
+                    }}
                 />
 
                 <DateInput
                     id="dateTo"
                     labelText={$t("pages.admin.charges.filters.dateRange.endDate")}
                     value={dateTo ? new Date(dateTo) : new Date(NaN)}
-                    onInput={(date) => (dateTo = date)}
+                    onInput={(date) => {
+                        dateTo = date;
+                        scheduleApply();
+                    }}
                 />
             </Grid>
 

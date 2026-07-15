@@ -8,7 +8,7 @@
     import HeaderSubmenu from "./HeaderSubmenu.svelte";
     import { session } from "../auth/store";
     import { locale } from "../i18n/store";
-    import { createBrowserCacheInterceptor } from "../openapi/cacheFetch";
+    import { initCacheInterceptor } from "../openapi/cacheInterceptor";
     import { client } from "../openapi/client/client.gen";
 
     import type { Session } from "../auth/types";
@@ -41,7 +41,7 @@
             return request;
         });
 
-        client.interceptors.request.use(createBrowserCacheInterceptor());
+        initCacheInterceptor();
     });
 
     $effect(() => {

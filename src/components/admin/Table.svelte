@@ -10,14 +10,11 @@
 
     import DetailsRow from "./DetailsRow.svelte";
     import Pagination from "./Pagination.svelte";
-    import {
-        apiTipjarsGetCollectionUrl,
-        apiUsersGetCollectionUrl,
-        apiProjectsGetCollectionUrl,
-    } from "../../../src/openapi/client/paths.gen";
+
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
     import { formatCurrency } from "../../utils/currencies";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
     import Chevron from "../icons/navigation/Chevron.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Tag from "../library/tags/Tag.svelte";
@@ -114,28 +111,6 @@
         }
 
         return "↕️";
-    }
-
-    function getDisplayNameFromAccounting(
-        accounting: Accounting | undefined,
-        owners: Map<string, User | Project | Tipjar>,
-    ): string | undefined {
-        const ownerIri = accounting?.owner;
-        if (!ownerIri) return undefined;
-
-        const owner = owners.get(ownerIri);
-        if (!owner) return undefined;
-
-        switch (ownerIri.split("/").slice(0, -1).join("/")) {
-            case apiUsersGetCollectionUrl:
-                return (owner as User).displayName ?? undefined;
-            case apiProjectsGetCollectionUrl:
-                return (owner as Project).title ?? undefined;
-            case apiTipjarsGetCollectionUrl:
-                return (owner as Tipjar).name ?? undefined;
-        }
-
-        return undefined;
     }
 
     function addChargesMetadata(charges: ExtendedCharge[]) {

@@ -28,9 +28,22 @@
         failed: ["campaign.failed"],
     };
 
+    // Debounce auto-applied changes so typing in the search input
+    // doesn't fire one API request per keystroke
+    let autoApplyTimeout: ReturnType<typeof setTimeout>;
+
     function handleSearch() {
         if (searchError) return;
+        clearTimeout(autoApplyTimeout);
         onSearch?.(searchValue);
+    }
+
+    function scheduleSearch() {
+        clearTimeout(autoApplyTimeout);
+        autoApplyTimeout = setTimeout(() => {
+            if (searchError) return;
+            onSearch?.(searchValue);
+        }, 400);
     }
 
     function normalizeStatus(value: string): string {
@@ -65,8 +78,7 @@
         dateTo = filters?.["dateCreated[before]"]?.slice(0, 10) ?? "";
     });
 
-    function handleSubmit(e: SubmitEvent) {
-        e.preventDefault();
+    function buildFilters(): ProjectsQuery {
         const filters: ProjectsQuery = {};
         const statusValues: string[] = [];
 
@@ -87,7 +99,18 @@
         if (dateFrom) filters["dateCreated[after]"] = new Date(dateFrom).toISOString();
         if (dateTo) filters["dateCreated[before]"] = new Date(dateTo).toISOString();
 
-        onApplyFilters?.(filters);
+        return filters;
+    }
+
+    function scheduleApply() {
+        clearTimeout(autoApplyTimeout);
+        autoApplyTimeout = setTimeout(() => onApplyFilters?.(buildFilters()), 400);
+    }
+
+    function handleSubmit(e: SubmitEvent) {
+        e.preventDefault();
+        clearTimeout(autoApplyTimeout);
+        onApplyFilters?.(buildFilters());
     }
 </script>
 
@@ -101,8 +124,10 @@
                 placeholder={$t("admin.projects.filters.search.placeholder")}
                 onclear={() => {
                     searchValue = "";
+                    clearTimeout(autoApplyTimeout);
                     onSearch?.("");
                 }}
+                oninput={scheduleSearch}
                 onsubmit={handleSearch}
                 class="bg-white {searchError ? 'border-tertiary' : ''}"
             />
@@ -146,6 +171,7 @@
                         id="campaignStatus"
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                         bind:value={campaignStatus}
+                        onchange={scheduleApply}
                     >
                         <option value=""></option>
                         {#each Object.entries($t("admin.projects.filters.campaignStatus.options")) as [value, label]}
@@ -162,6 +188,7 @@
                         id="projectStatus"
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                         bind:value={projectStatus}
+                        onchange={scheduleApply}
                     >
                         <option value=""></option>
                         {#each Object.entries($t("admin.projects.filters.status.options")) as [value, label]}
@@ -178,6 +205,7 @@
                         id="dateFrom"
                         type="date"
                         bind:value={dateFrom}
+                        onchange={scheduleApply}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                     />
@@ -191,6 +219,7 @@
                         id="dateTo"
                         type="date"
                         bind:value={dateTo}
+                        onchange={scheduleApply}
                         onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
                         class="border-secondary w-full rounded-lg border p-4 pt-6"
                     />
