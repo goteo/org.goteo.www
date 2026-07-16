@@ -41,17 +41,20 @@ jobs:
                   api="https://api.crowdin.com/api/v2/projects/${CROWDIN_PROJECT_ID}"
                   auth="Authorization: Bearer ${CROWDIN_PERSONAL_TOKEN}"
 
+                  # Crowdin normalizes branch names: \ / : * ? " < > | become "."
+                  branch_name=$(printf '%s' "$CROWDIN_BRANCH" | sed 's#[\\/:*?"<>|]#.#g')
+
                   branch_id=$(curl -fsS -G -H "$auth" "$api/branches" \
-                    --data-urlencode "name=${CROWDIN_BRANCH}" \
+                    --data-urlencode "name=${branch_name}" \
                     | jq -r '.data[0].data.id')
                   if [ -z "$branch_id" ] || [ "$branch_id" = "null" ]; then
-                    echo "Branch '${CROWDIN_BRANCH}' not found in Crowdin"; exit 1
+                    echo "Branch '${branch_name}' not found in Crowdin"; exit 1
                   fi
 
                   file_id=$(curl -fsS -H "$auth" "$api/files?branchId=${branch_id}&limit=500" \
                     | jq -r '.data[] | select(.data.name=="es.json") | .data.id' | head -n1)
                   if [ -z "$file_id" ] || [ "$file_id" = "null" ]; then
-                    echo "es.json not found in Crowdin branch '${CROWDIN_BRANCH}'"; exit 1
+                    echo "es.json not found in Crowdin branch '${branch_name}'"; exit 1
                   fi
 
                   echo "file_id=$file_id" >> "$GITHUB_OUTPUT"
