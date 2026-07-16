@@ -51,7 +51,7 @@ jobs:
                     echo "Branch '${branch_name}' not found in Crowdin"; exit 1
                   fi
 
-                  file_id=$(curl -fsS -H "$auth" "$api/files?branchId=${branch_id}&limit=500" \
+                  file_id=$(curl -fsS -H "$auth" "$api/files?branchId=${branch_id}&recursion=1&limit=500" \
                     | jq -r '.data[] | select(.data.name=="es.json") | .data.id' | head -n1)
                   if [ -z "$file_id" ] || [ "$file_id" = "null" ]; then
                     echo "es.json not found in Crowdin branch '${branch_name}'"; exit 1
