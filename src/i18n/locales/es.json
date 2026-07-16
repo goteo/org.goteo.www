@@ -1668,5 +1668,6 @@
         "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
       }
     }
-  }
+  },
+  "test": "Test"
 }
