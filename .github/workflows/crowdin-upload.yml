@@ -35,20 +35,23 @@ jobs:
 
             - name: Resolve Crowdin branch and file IDs
               id: ids
+              env:
+                  CROWDIN_BRANCH: "chore/crowding-test"
               run: |
                   api="https://api.crowdin.com/api/v2/projects/${CROWDIN_PROJECT_ID}"
                   auth="Authorization: Bearer ${CROWDIN_PERSONAL_TOKEN}"
 
-                  branch_id=$(curl -fsS -H "$auth" "$api/branches?name=develop" \
+                  branch_id=$(curl -fsS -G -H "$auth" "$api/branches" \
+                    --data-urlencode "name=${CROWDIN_BRANCH}" \
                     | jq -r '.data[0].data.id')
                   if [ -z "$branch_id" ] || [ "$branch_id" = "null" ]; then
-                    echo "Branch 'develop' not found in Crowdin"; exit 1
+                    echo "Branch '${CROWDIN_BRANCH}' not found in Crowdin"; exit 1
                   fi
 
                   file_id=$(curl -fsS -H "$auth" "$api/files?branchId=${branch_id}&limit=500" \
                     | jq -r '.data[] | select(.data.name=="es.json") | .data.id' | head -n1)
                   if [ -z "$file_id" ] || [ "$file_id" = "null" ]; then
-                    echo "es.json not found in Crowdin branch 'develop'"; exit 1
+                    echo "es.json not found in Crowdin branch '${CROWDIN_BRANCH}'"; exit 1
                   fi
 
                   echo "file_id=$file_id" >> "$GITHUB_OUTPUT"
