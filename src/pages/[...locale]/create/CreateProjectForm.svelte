@@ -29,6 +29,7 @@
         project,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
+    import { getMaxReleaseDate } from "../../../utils/campaign";
     import { formatCurrency } from "../../../utils/currencies";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
@@ -340,6 +341,7 @@
                 name="release"
                 bind:value={releaseDate}
                 min={getMinDate()}
+                max={getMaxReleaseDate("minimum")}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}
                 onInput={(date) => handleFieldChange("release", date)}

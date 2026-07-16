@@ -26,6 +26,9 @@
       "project": {
         "terms": {
           "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+        },
+        "release": {
+          "max": "La fecha de inicio es demasiado tardía: la campaña no puede extenderse más allá de la fecha límite de la plataforma"
         }
       },
       "errors": {
@@ -478,7 +481,8 @@
             "title": "Elige las rondas que tendrá tu campaña",
             "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
             "option1": "1 Ronda",
-            "option2": "2 Rondas"
+            "option2": "2 Rondas",
+            "optimumDisabled": "La opción de 2 rondas no está disponible: la campaña superaría la fecha límite del {{ date }}"
           },
           "continue": "Continuar con info de campaña",
           "geography": {

@@ -24,6 +24,8 @@
         updateConfiguration,
         updateProject,
     } from "../../../stores/drafts/projectDraft";
+    import { getMaxReleaseDate, isEnabled, maxEndDate } from "../../../utils/campaign";
+    import { formatDate } from "../../../utils/dates";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
 
@@ -51,6 +53,26 @@
     let projectDeadline = $derived(
         $currentDraft?.wizardForm.configuration.projectDeadline ?? "minimum",
     );
+
+    // Campaign start date: server-computed calendar first, draft as fallback
+    let releaseDate = $derived.by(() => {
+        const release = project?.calendar?.release ?? $currentDraft?.createProject.release;
+        return release ? new Date(release) : undefined;
+    });
+
+    // The 2-rounds (optimum) campaign lasts 80 days; block it when it would
+    // extend past the platform-wide cutoff (PUBLIC_CAMPAIGN_MAX_END_DATE)
+    let optimumDisabled = $derived.by(() => {
+        if (!isEnabled || !releaseDate) return false;
+        const maxRelease = getMaxReleaseDate("optimum");
+        return maxRelease !== undefined && releaseDate > maxRelease;
+    });
+
+    $effect(() => {
+        if (optimumDisabled && projectDeadline === "optimum") {
+            updateConfiguration({ projectDeadline: "minimum" });
+        }
+    });
 
     /**
      * Handle Continue button
@@ -122,7 +144,16 @@
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector bind:deadline={projectDeadline} onChange={handleRoundsChange} />
+        <RoundSelector
+            bind:deadline={projectDeadline}
+            onChange={handleRoundsChange}
+            {optimumDisabled}
+            optimumDisabledReason={maxEndDate
+                ? $t("pages.project.edit.configuration.rounds.optimumDisabled", {
+                      date: formatDate(maxEndDate, $locale),
+                  })
+                : undefined}
+        />
     </div>
 
     <!-- Continue Button -->
