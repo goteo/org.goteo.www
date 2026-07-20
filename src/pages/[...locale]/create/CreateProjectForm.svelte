@@ -302,8 +302,7 @@
                 bind:value={$project.title}
                 error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
                 onBlur={() => handleFieldBlur("title")}
-                onInput={(e) =>
-                    handleFieldChange("title", (e.target as HTMLInputElement).value)}
+                onInput={(e) => handleFieldChange("title", (e.target as HTMLInputElement).value)}
             />
             <div class="relative">
                 <textarea

@@ -279,10 +279,7 @@ export function validateBudgetAmount(draft: Draft) {
  * @param fieldName - The name of the field to validate
  * @param value - The current value of the field
  */
-export function validateField(
-    fieldName: keyof CreateProjectForm,
-    value: unknown,
-): string | null {
+export function validateField(fieldName: keyof CreateProjectForm, value: unknown): string | null {
     type SchemaFields = keyof typeof projectCreationSchema.shape;
 
     if (!(fieldName in projectCreationSchema.shape)) {
