@@ -18,7 +18,7 @@
 
 <Modal
     bind:open
-    title={$t("admin.projects.modals.annotations.title")}
+    title={$t("pages.admin.projects.modals.annotations.title")}
     closeBtnClass="top-4 end-4 bg-transparent text-secondary hover:bg-transparent hover:text-secondary focus:ring-0 shadow-none"
     class="max-w-lg"
 >
@@ -26,17 +26,19 @@
         <TextArea
             id="annotations-input"
             bind:value={annotationText}
-            label={$t("admin.projects.modals.annotations.placeholder")}
+            label={$t("pages.admin.projects.modals.annotations.placeholder")}
         />
         {#if !annotationText}
-            <p class="text-content text-sm">{$t("admin.projects.modals.annotations.empty")}</p>
+            <p class="text-content text-sm">
+                {$t("pages.admin.projects.modals.annotations.empty")}
+            </p>
         {:else}{/if}
         <div class="flex justify-end">
             <Button kind="primary" onclick={() => onsave?.(annotationText)}>
                 {#if annotationText}
-                    {$t("admin.projects.modals.annotations.modify")}
+                    {$t("pages.admin.projects.modals.annotations.modify")}
                 {:else}
-                    {$t("admin.projects.modals.annotations.add")}
+                    {$t("pages.admin.projects.modals.annotations.add")}
                 {/if}
             </Button>
         </div>

@@ -1,5 +1,5 @@
-import { client } from "./client/client.gen";
 import { createBrowserCacheInterceptor } from "./cacheFetch";
+import { client } from "./client/client.gen";
 
 let _interceptor: ReturnType<typeof createBrowserCacheInterceptor> | null = null;
 let _interceptorId: number | null = null;

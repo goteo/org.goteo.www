@@ -4,14 +4,14 @@
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency, getUnit } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
-    import TextArea from "../../library/inputs/TextArea.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
+    import TextArea from "../../library/inputs/TextArea.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),
