@@ -130,16 +130,12 @@
                 {$t("system.validation.missingRequiredFields")}
             </Toast>
         {/if}
-        {#snippet header()}
-            <h2 class="text-xl font-bold text-black">
-                {$t("pages.project.edit.budget.modal.title")}
-            </h2>
-            <p
-                class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis"
-            >
-                {$t("pages.project.edit.budget.modal.description")}
-            </p>
-        {/snippet}
+        <h2 class="text-xl font-bold text-black">
+            {$t("pages.project.edit.budget.modal.title")}
+        </h2>
+        <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
+            {$t("pages.project.edit.budget.modal.description")}
+        </p>
         <div class="flex flex-col gap-4 pt-2">
             <TextInput
                 bind:value={selectedBudgetTitle}
@@ -177,8 +173,7 @@
                 onBlur={() => (formTouched = true)}
             />
         </div>
-
-        {#snippet footer()}
+        <div class="flex items-center justify-end gap-4">
             {#if budgetItem !== null && onDelete}
                 <Button kind="secondary" onclick={() => (openDeleteModal = true)} class="w-fit">
                     {$t("common.remove")}
@@ -192,6 +187,6 @@
             <Button onclick={() => handleSaveOrCreate()} disabled={!isFormValid} class="w-fit">
                 {$t("common.continue")}
             </Button>
-        {/snippet}
+        </div>
     </div>
 </Modal>
