@@ -1,15 +1,14 @@
 <script lang="ts">
-    import { clickOutside } from "flowbite-svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import {
         searchPlace,
         extractTerritory,
         type NominatimResult,
     } from "../../../services/nominatim";
-    import SearchIcon from "../../icons/actions/Search.svelte";
-    import Close from "../../icons/navigation/Close.svelte";
 
+    import type { DropdownOption } from "../dropdown/dropdown.types";
     import type { Territory } from "../../../openapi/client";
 
     interface Props {
@@ -32,103 +31,70 @@
         onBlur = undefined,
     }: Props = $props();
 
-    let options: NominatimResult[] = $state([]);
-    let isOpen = $state(false);
-    let lastSelectedAddress = $state("");
+    let results: NominatimResult[] = $state([]);
+    let selected: DropdownOption[] = $state([]);
 
-    function handleSelect(result: NominatimResult) {
+    let searchTimer: ReturnType<typeof setTimeout> | null = null;
+
+    const options = $derived(
+        results.map((result) => ({
+            id: result.osm_id.toString(),
+            label: result.display_name,
+            selected: selected.some((s) => s.id === result.osm_id.toString()),
+        })),
+    );
+
+    function handleSearch(searchText: string) {
+        if (searchTimer) clearTimeout(searchTimer);
+
+        if (!searchText || searchText.length < 2) {
+            results = [];
+            return;
+        }
+
+        searchTimer = setTimeout(async () => {
+            results = await searchPlace(searchText, 6);
+        }, 300);
+    }
+
+    function handleSelect(option: DropdownOption) {
+        const result = results.find((r) => r.osm_id.toString() === option.id);
+        if (!result) return;
+
         value = result.display_name;
-        lastSelectedAddress = result.display_name;
-        isOpen = false;
-        options = [];
-
         const territory = extractTerritory(result);
         onAddressChange?.(result.display_name, territory);
     }
 
     function handleClear() {
         value = "";
-        lastSelectedAddress = "";
-        options = [];
-        isOpen = false;
-        onAddressChange?.("", { country: null, subLvl1: null, subLvl2: null, address: null });
-    }
-
-    let searchTimer: ReturnType<typeof setTimeout> | null = null;
-
-    function handleInput(e: Event) {
-        const newValue = (e.target as HTMLInputElement).value;
-        value = newValue;
-
-        if (searchTimer) clearTimeout(searchTimer);
-
-        if (!newValue || newValue.length < 2) {
-            options = [];
-            isOpen = false;
-            return;
-        }
-
-        searchTimer = setTimeout(async () => {
-            const results = await searchPlace(newValue, 6);
-            options = results;
-            isOpen = results.length > 0;
-        }, 300);
-    }
-
-    function handleFocus() {
-        if (options.length > 0) {
-            isOpen = true;
-        }
-    }
-
-    function handleDropdownClose() {
-        isOpen = false;
+        results = [];
+        selected = [];
+        onAddressChange?.("", {
+            country: null,
+            subLvl1: null,
+            subLvl2: null,
+            address: null,
+        });
     }
 </script>
 
-<div class={twMerge("relative w-full", classes)} use:clickOutside={handleDropdownClose}>
-    <div
-        class="flex w-full items-center gap-2 rounded-md border p-3 {error
-            ? 'border-red-500'
-            : 'border-[#855a96]'}"
-    >
-        <SearchIcon class="shrink-0 opacity-40" width="20" height="20" />
-        <input
-            type="text"
-            {name}
-            {placeholder}
-            class="w-full bg-transparent text-base text-black outline-none placeholder:opacity-48"
-            {value}
-            oninput={handleInput}
-            onfocus={handleFocus}
-            onblur={onBlur}
-            autocomplete="off"
-        />
-        {#if value}
-            <button type="button" class="shrink-0 hover:opacity-75" onclick={handleClear}>
-                <Close class="size-4" />
-            </button>
-        {/if}
-    </div>
-
-    {#if isOpen && options.length > 0}
-        <div
-            class="absolute top-full left-0 z-100 mt-1 w-full overflow-hidden rounded-lg bg-white shadow-2xl"
-        >
-            <div class="flex max-h-72 w-full flex-col overflow-y-auto">
-                {#each options as result}
-                    <button
-                        type="button"
-                        class="hover:bg-purple-soft cursor-pointer border-b border-gray-100 bg-white p-3 text-start text-sm text-black last:border-b-0"
-                        onclick={() => handleSelect(result)}
-                    >
-                        {result.display_name}
-                    </button>
-                {/each}
-            </div>
-        </div>
-    {/if}
-
+<div class={twMerge("relative w-full", classes)}>
+    <DropdownMenu
+        variant="basic"
+        hasSearch
+        singleSelect
+        clearable
+        bind:searchValue={value}
+        inputName={name}
+        searchPlaceholder={placeholder}
+        {options}
+        bind:selected
+        onSearch={handleSearch}
+        onChange={handleSelect}
+        onClear={handleClear}
+        onInputBlur={() => onBlur?.()}
+    />
     {#if error}
         <p class="mt-1 ml-4 text-xs text-red-600" role="alert">{error}</p>
     {/if}
