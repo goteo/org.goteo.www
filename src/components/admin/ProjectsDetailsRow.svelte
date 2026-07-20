@@ -15,9 +15,8 @@
     let { project, onOpenAnnotationsModal, onChangeStatus, userEmail }: Props = $props();
 
     function navigateToCharges() {
-        const name = project.name;
-        if (!name) return;
-        window.location.href = `/${$locale}/admin/charges?search=${encodeURIComponent(name)}`;
+        if (!project.accounting) return;
+        window.location.href = `/${$locale}/admin/charges?target=${encodeURIComponent(project.accounting)}`;
     }
 </script>
 
@@ -40,25 +39,25 @@
     <div class="grid grid-cols-4 gap-6 text-sm">
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
-                >{$t("admin.projects.table.rows.details.email")}:</span
+                >{$t("pages.admin.projects.table.rows.details.email")}:</span
             >
             <span class="truncate text-black">{userEmail ?? "—"}</span>
         </div>
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
-                >{$t("admin.projects.table.rows.details.phone")}:</span
+                >{$t("pages.admin.projects.table.rows.details.phone")}:</span
             >
             <span class="text-black">—</span>
         </div>
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
-                >{$t("admin.projects.table.rows.details.contractExpiry")}:</span
+                >{$t("pages.admin.projects.table.rows.details.contractExpiry")}:</span
             >
             <span class="text-black">{project.contractExpiry}</span>
         </div>
         <div class="flex flex-col gap-1">
             <span class="text-content font-bold"
-                >{$t("admin.projects.table.rows.details.remaining")}:</span
+                >{$t("pages.admin.projects.table.rows.details.remaining")}:</span
             >
             <span class={project.remaining !== "—" ? "text-tertiary font-bold" : "text-black"}>
                 {project.remaining}
@@ -91,19 +90,19 @@
             <button
                 class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
             >
-                {$t("admin.projects.table.rows.details.btns.certificates")}
+                {$t("pages.admin.projects.table.rows.details.btns.certificates")}
             </button>
             <button
                 class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
             >
-                {$t("admin.projects.table.rows.details.btns.contractPdf")}
+                {$t("pages.admin.projects.table.rows.details.btns.contractPdf")}
             </button>
             <button
                 onclick={onOpenAnnotationsModal}
                 class="text-secondary bg-variant1 flex min-h-10 cursor-pointer flex-row items-center gap-2 rounded-2xl px-4 py-2 font-bold"
             >
                 <Comments size={20} class="shrink-0" />
-                {$t("admin.projects.table.rows.details.btns.annotations")}
+                {$t("pages.admin.projects.table.rows.details.btns.annotations")}
                 {#if project.annotationsCount > 0}
                     ({project.annotationsCount})
                 {/if}

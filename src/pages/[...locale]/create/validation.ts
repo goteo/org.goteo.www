@@ -25,21 +25,21 @@ export const projectCreationSchema = z.object({
      */
     title: z
         .string()
-        .min(1, "validation.project.title.required")
-        .regex(/^(.*[a-zA-Z]{1,}.*)$/, "validation.project.title.pattern"),
+        .min(1, "system.validation.project.title.required")
+        .regex(/^(.*[a-zA-Z]{1,}.*)$/, "system.validation.project.title.pattern"),
 
     /**
      * Project subtitle - required field.
      */
-    subtitle: z.string().min(1, "validation.project.subtitle.required"),
+    subtitle: z.string().min(1, "system.validation.project.subtitle.required"),
 
     /**
      * Project categories - array with minimum 1 and maximum 2 items.
      */
     categories: z
         .array(z.string())
-        .min(1, "validation.project.categories.min")
-        .max(2, "validation.project.categories.max"),
+        .min(1, "system.validation.project.categories.min")
+        .max(2, "system.validation.project.categories.max"),
 
     /**
      * Release date - must be at least 14 days from now.
@@ -65,7 +65,7 @@ export const projectCreationSchema = z.object({
 
                 return normalizedDate >= minDate;
             },
-            { message: "validation.project.release.min" },
+            { message: "system.validation.project.release.min" },
         )
         .default(() => {
             const defaultDate = new Date();

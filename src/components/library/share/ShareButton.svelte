@@ -33,18 +33,18 @@
 
     const modalTitle = $derived(
         variant === "blog"
-            ? $t("blog.share.modal.title")
+            ? $t("pages.blog.share.modal.title")
             : variant === "profile"
-              ? $t("profile.shareModal.title")
-              : $t("project.share.modal.title"),
+              ? $t("pages.profile.shareModal.title")
+              : $t("pages.project.view.share.modal.title"),
     );
 
     const modalDescription = $derived(
         variant === "blog"
-            ? $t("blog.share.modal.description")
+            ? $t("pages.blog.share.modal.description")
             : variant === "profile"
               ? ""
-              : $t("project.share.modal.description"),
+              : $t("pages.project.view.share.modal.description"),
     );
 </script>
 
@@ -56,7 +56,7 @@
     )}
 >
     <ShareIcon />
-    {$t("project.actions.share")}
+    {$t("common.share")}
 </button>
 
 <Modal

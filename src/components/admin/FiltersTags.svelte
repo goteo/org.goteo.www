@@ -2,13 +2,13 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
-    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
     import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
-    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
+    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
 
     type Filters = ApiGatewayChargesGetCollectionData["query"];
 
@@ -58,10 +58,6 @@
             if (tag.values?.from && tag.values?.to) {
                 tag.values.from = formatDate(new Date(tag.values.from), locale);
                 tag.values.to = formatDate(new Date(tag.values.to), locale);
-            }
-
-            if (tag.title === "checkout.gateway") {
-                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
             }
 
             if (tag.title === "status") {

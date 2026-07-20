@@ -14,7 +14,9 @@ const { t } = Astro.locals;
                         checked
                         class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
-                    <span class="text-gray-700"> {t("register.form.userType.individual")}</span>
+                    <span class="text-gray-700">
+                        {t("pages.register.form.userType.individual")}</span
+                    >
                 </label>
 
                 <label class="flex cursor-pointer items-center gap-2">
@@ -24,7 +26,9 @@ const { t } = Astro.locals;
                         value="organization"
                         class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
-                    <span class="text-gray-700">{t("register.form.userType.organization")}</span>
+                    <span class="text-gray-700"
+                        >{t("pages.register.form.userType.organization")}</span
+                    >
                 </label>
             </fieldset>
 
@@ -43,7 +47,7 @@ const { t } = Astro.locals;
                         for="firstname"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("register.individual.firstName")}
+                        {t("pages.register.individual.firstName")}
                     </label>
                 </div>
 
@@ -61,7 +65,7 @@ const { t } = Astro.locals;
                         for="lastname"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("register.individual.lastName")}
+                        {t("pages.register.individual.lastName")}
                     </label>
                 </div>
             </div>
@@ -79,7 +83,7 @@ const { t } = Astro.locals;
                     for="identifier"
                     class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
-                    {t("register.individual.email")}:
+                    {t("pages.register.individual.email")}:
                 </label>
             </div>
 
@@ -97,12 +101,12 @@ const { t } = Astro.locals;
                     for="password"
                     class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
-                    {t("register.individual.password")}
+                    {t("pages.register.individual.password")}
                 </label>
             </div>
 
             <div class="text-content relative w-full text-xs font-medium">
-                <span> {t("register.form.validation.password.minLength")}</span>
+                <span> {t("pages.register.form.validation.password.minLength")}</span>
             </div>
 
             <div class="relative flex w-full flex-col gap-4" id="fields-individual">
@@ -114,7 +118,7 @@ const { t } = Astro.locals;
                             class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                         />
                         <span class="text-sm text-gray-700"
-                            >{t("register.individual.taxId.msgDeduction")}</span
+                            >{t("pages.register.individual.taxId.msgDeduction")}</span
                         >
                     </label>
                 </div>
@@ -132,7 +136,7 @@ const { t } = Astro.locals;
                         for="dni"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("register.individual.taxId.label")}
+                        {t("pages.register.individual.taxId.label")}
                     </label>
                 </div>
             </div>
@@ -152,7 +156,7 @@ const { t } = Astro.locals;
                         for="razonSocial"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("register.organization.legalName")}
+                        {t("pages.register.organization.legalName")}
                     </label>
                 </div>
 
@@ -170,7 +174,7 @@ const { t } = Astro.locals;
                         for="cif"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("register.organization.taxId")}
+                        {t("pages.register.organization.taxId")}
                     </label>
                 </div>
             </div>
@@ -183,7 +187,7 @@ const { t } = Astro.locals;
                         class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                     />
                     <span class="text-sm text-gray-700">
-                        {t("register.form.termsCheckbox")}
+                        {t("pages.register.form.termsCheckbox")}
                     </span>
                 </label>
                 <label class="flex items-start gap-2">
@@ -193,7 +197,7 @@ const { t } = Astro.locals;
                         class="accent-primary text-secondary focus:ring-secondary mt-1 h-5 w-5 shrink-0 border border-gray-400"
                     />
                     <span class="text-sm text-gray-700">
-                        {t("register.form.policiesCheckbox")}
+                        {t("pages.register.form.policiesCheckbox")}
                     </span>
                 </label>
             </div>

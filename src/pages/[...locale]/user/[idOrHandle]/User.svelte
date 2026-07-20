@@ -38,9 +38,9 @@
     });
 
     const tabs = $derived([
-        { id: "about", label: $t("profile.tabs.about") },
-        { id: "projects", label: $t("profile.tabs.projects") },
-        { id: "donorType", label: $t("profile.tabs.donorType") },
+        { id: "about", label: $t("pages.profile.tabs.about") },
+        { id: "projects", label: $t("pages.profile.tabs.projects") },
+        { id: "donorType", label: $t("pages.profile.tabs.donorType") },
     ]);
 </script>
 
@@ -55,7 +55,7 @@
             />
             <!--
                 <Button kind="primary" size="sm">
-                    {$t("profile.subscribe")}
+                    {$t("pages.profile.subscribe")}
                 </Button>
             -->
         </div>
@@ -99,7 +99,7 @@
             {/await}
         {:else}
             <p class="text-content text-base leading-relaxed">
-                {$t("profile.noBio")}
+                {$t("pages.profile.noBio")}
             </p>
         {/if}
     </div>
@@ -117,7 +117,7 @@
                 {/each}
             </Grid>
         {:else}
-            <p class="text-content text-center text-base">{$t("profile.noProjects")}</p>
+            <p class="text-content text-center text-base">{$t("pages.profile.noProjects")}</p>
         {/if}
     </div>
 
