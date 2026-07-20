@@ -17,7 +17,6 @@
     import MediaUploader from "./MediaUploader.svelte";
     import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
-    import CloseIcon from "../../icons/navigation/Close.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
     import {
@@ -26,6 +25,7 @@
         updateCampaignInfo,
         type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
+    import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
 
     interface CampaignInfoStepProps {

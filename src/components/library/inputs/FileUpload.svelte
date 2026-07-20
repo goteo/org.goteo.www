@@ -1,12 +1,13 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import CloseIcon from "../../icons/navigation/Close.svelte";
-    import UploadFileIcon from "../../icons/actions/UploadFile.svelte";
-    import WarningIcon from "../../icons/status/Warning.svelte";
     import { t } from "../../../i18n/store";
     import { uploadImage } from "../../../utils/imageUpload";
+    import UploadFileIcon from "../../icons/actions/UploadFile.svelte";
+    import CloseIcon from "../../icons/navigation/Close.svelte";
+    import WarningIcon from "../../icons/status/Warning.svelte";
     import Button from "../buttons/Button.svelte";
+
     import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let {
@@ -196,12 +197,12 @@
                 {#each [...uploading.entries()] as [name, pct]}
                     <div class="flex flex-col gap-1">
                         <div class="flex items-center justify-between text-xs">
-                            <span class="truncate text-content">{name}</span>
+                            <span class="text-content truncate">{name}</span>
                             <span class="shrink-0 font-medium">{pct}%</span>
                         </div>
                         <div class="bg-secondary/20 h-2 w-full overflow-hidden rounded-full">
                             <div
-                                class="h-full rounded-full bg-secondary transition-all duration-300"
+                                class="bg-secondary h-full rounded-full transition-all duration-300"
                                 style="width: {pct}%"
                             ></div>
                         </div>
