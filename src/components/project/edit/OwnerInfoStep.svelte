@@ -113,7 +113,7 @@
         </div>
         -->
 
-        <!-- Forma jurídica -->
+        <!-- Legal Entity -->
         <div class="flex flex-col gap-3">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.legalEntity")}
@@ -133,7 +133,7 @@
             />
         </div>
 
-        <!-- Nombre del impulsor -->
+        <!-- Name -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.name")}
@@ -149,7 +149,7 @@
             </div>
         </div>
 
-        <!-- NIF del impulsor -->
+        <!-- NIF -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.taxId")}
@@ -165,7 +165,7 @@
             </div>
         </div>
 
-        <!-- Lugar de actividad -->
+        <!-- Location/Territory -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.location")}
@@ -181,7 +181,7 @@
             />
         </div>
 
-        <!-- Descripción del equipo impulsor
+        <!-- Team description
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.teamDescription")}
@@ -198,7 +198,7 @@
         </div>
         -->
 
-        <!-- Datos de contacto privados -->
+        <!-- Private contacts data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <!-- Datos de contacto públicos
+        <!-- Public contacts data
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
@@ -335,7 +335,7 @@
         </div>
         -->
 
-        <!-- Datos de pago -->
+        <!-- Payment Data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
