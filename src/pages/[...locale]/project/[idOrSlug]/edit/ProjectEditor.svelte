@@ -84,7 +84,7 @@
             title: $currentDraft.createProject.title,
             subtitle: $currentDraft.createProject.subtitle,
             categories: $currentDraft.createProject.categories,
-            territory: {} as Project["territory"],
+            territory: $currentDraft.createProject.territory as Project["territory"],
             description: "",
             deadline: $currentDraft.wizardForm.configuration.projectDeadline,
             budget: $currentDraft.wizardForm.budget,

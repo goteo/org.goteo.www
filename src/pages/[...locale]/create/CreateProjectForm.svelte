@@ -3,12 +3,14 @@
 
     import Button from "../../../components/library/buttons/Button.svelte";
     import BaseCard from "../../../components/library/cards/BaseCard.svelte";
+    import AddressAutocomplete from "../../../components/library/inputs/AddressAutocomplete.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import DateInput from "../../../components/library/inputs/DateInput.svelte";
     import TextInput from "../../../components/library/inputs/TextInput.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectsPost,
+        apiProjectsIdPatch,
         type Category,
         type ProjectProjectCreationDto,
     } from "../../../openapi/client";
@@ -28,6 +30,7 @@
         isCreateFormValid,
         project,
         validationErrors,
+        type CreateProjectForm,
     } from "../../../stores/drafts/projectDraft";
     import { getDefaultCurrency } from "../../../utils/consts";
     import { formatCurrency } from "../../../utils/currencies";
@@ -51,7 +54,7 @@
     // Debounce timer for real-time validation
     let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
-    function handleFieldBlur(fieldName: keyof ProjectProjectCreationDto) {
+    function handleFieldBlur(fieldName: keyof CreateProjectForm) {
         if (!$currentDraft) return;
 
         markFieldAsTouched(fieldName);
@@ -61,11 +64,11 @@
             if (error) {
                 return {
                     ...errors,
-                    title: error,
+                    [fieldName]: error,
                 };
             }
 
-            const { title, ...rest } = errors;
+            const { [fieldName]: _, ...rest } = errors;
 
             return rest;
         });
@@ -75,9 +78,9 @@
      * Handles field value changes with type-safe updates.
      * Uses generic typing to ensure type safety without bypassing TypeScript checks.
      */
-    function handleFieldChange<K extends keyof ProjectProjectCreationDto>(
+    function handleFieldChange<K extends keyof CreateProjectForm>(
         fieldName: K,
-        value: ProjectProjectCreationDto[K],
+        value: CreateProjectForm[K],
     ) {
         // Update the draft value with proper typing
         updateProject({ [fieldName]: value });
@@ -93,11 +96,11 @@
                     if (error) {
                         return {
                             ...errors,
-                            title: error,
+                            [fieldName]: error,
                         };
                     }
 
-                    const { title, ...rest } = errors;
+                    const { [fieldName]: _, ...rest } = errors;
 
                     return rest;
                 });
@@ -157,25 +160,17 @@
         isSubmitting = true;
 
         try {
-            // TODO: Map form fields to API ProjectCreationDto
-            // The current form collects: title, subtitle, categories (array), release, budget
-            // The API expects: title, subtitle, category (single), territory, description
-            // Need to update the form to collect the correct fields or map them appropriately
-
-            // TODO: Implement actual API submission when form fields match API requirements
-
             const { data, error } = await apiProjectsPost({
                 baseUrl: "/api/relay",
                 body: {
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
-                    categories: $currentDraft.createProject.categories, // Map all categories
-                    release: $currentDraft.createProject.release, // Map release date
+                    categories: $currentDraft.createProject.categories,
+                    release: $currentDraft.createProject.release,
                 },
             });
 
             if (error) {
-                // Handle API validation errors
                 if ("violations" in error && error.violations) {
                     error.violations.forEach((violation) => {
                         const field = violation.propertyPath as keyof ProjectProjectCreationDto;
@@ -189,12 +184,30 @@
                     return;
                 }
             } else if (data) {
+                const address = $currentDraft.createProject.address;
+                const territory = $currentDraft.createProject.territory;
+
+                if (address && territory) {
+                    await apiProjectsIdPatch({
+                        baseUrl: "/api/relay",
+                        path: { id: String(data.id) },
+                        body: {
+                            territory: {
+                                ...territory,
+                                address,
+                            },
+                        },
+                    });
+                }
+
                 submitSuccess = true;
                 updateProject({
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
                     categories: $currentDraft.createProject.categories,
                     release: $currentDraft.createProject.release,
+                    address: $currentDraft.createProject.address,
+                    territory: $currentDraft.createProject.territory,
                 });
                 currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
 
@@ -332,6 +345,25 @@
         </div>
         <div class="flex flex-col gap-4">
             <h2 class="text-2xl font-bold text-black">
+                {$t("pages.project.create.address.title")}
+            </h2>
+            <p class="text-black transition-all duration-300 ease-in-out">
+                {$t("pages.project.create.address.subtitle")}
+            </p>
+            <AddressAutocomplete
+                name="address"
+                placeholder={$t("pages.project.create.address.placeholder")}
+                value={$project.address ?? ""}
+                error={shouldShowError("address") ? $t($validationErrors.address) : undefined}
+                onAddressChange={(address, territory) => {
+                    handleFieldChange("address", address);
+                    handleFieldChange("territory", territory);
+                }}
+                onBlur={() => handleFieldBlur("address")}
+            />
+        </div>
+        <div class="flex flex-col gap-4">
+            <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.create.release.title")}
             </h2>
             <p class="text-black transition-all duration-300 ease-in-out">
@@ -343,7 +375,7 @@
                 min={getMinDate()}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}
-                onInput={(date) => handleFieldChange("release", date)}
+                onInput={(date: any) => handleFieldChange("release", date)}
             />
         </div>
         {#if apiError}

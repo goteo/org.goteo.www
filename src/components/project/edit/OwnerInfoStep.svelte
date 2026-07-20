@@ -1,17 +1,12 @@
 <script lang="ts">
-    // import Facebook from "../../../components/icons/social/Facebook.svelte";
-    // import Gmail from "../../../components/icons/social/Gmail.svelte";
-    // import Instagram from "../../../components/icons/social/Instagram.svelte";
-    // import Linkedin from "../../../components/icons/social/Linkedin.svelte";
-    // import X from "../../../components/icons/social/X.svelte";
     import { t } from "../../../i18n/store";
+    import { currentDraft, updateProject } from "../../../stores/drafts/projectDraft";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import AddressAutocomplete from "../../library/inputs/AddressAutocomplete.svelte";
     import Checkbox from "../../library/inputs/Checkbox.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
-    // import Select from "../../library/Select.svelte";
-    // import TextArea from "../../library/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
@@ -28,12 +23,8 @@
     };
 
     let legalEntityType = $state<"individual" | "organization">("individual");
-    // let prefill = $state("");
     let name = $state("");
     let taxId = $state("");
-    // let territory = $state("");
-    // let country = $state("");
-    // let teamDescription = $state("");
     let privateContacts = $state<ContactEntry[]>([
         { id: crypto.randomUUID(), type: "email", value: "", preferred: true },
         { id: crypto.randomUUID(), type: "phone", value: "", preferred: false },
@@ -49,7 +40,6 @@
     //     twitter: "",
     //     linkedin: "",
     // });
-
     let termsAccepted = $state(false);
     let touched = $state<Set<string>>(new Set());
 
@@ -124,7 +114,7 @@
         </div>
         -->
 
-        <!-- Forma jurídica -->
+        <!-- Legal Entity -->
         <div class="flex flex-col gap-3">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.legalEntity")}
@@ -144,7 +134,7 @@
             />
         </div>
 
-        <!-- Nombre del impulsor -->
+        <!-- Name -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.name")}
@@ -160,7 +150,7 @@
             </div>
         </div>
 
-        <!-- NIF del impulsor -->
+        <!-- NIF -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.taxId")}
@@ -176,30 +166,23 @@
             </div>
         </div>
 
-        <!-- Lugar de actividad
+        <!-- Location/Territory -->
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.location")}
             </h2>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.locationHelper")}</p>
-            <div class="flex flex-col gap-3">
-                <Select
-                    bind:value={territory}
-                    labelText={$t("pages.project.edit.aboutYou.territory")}
-                    name="territory"
-                >
-                    <option value=""></option>
-                </Select>
-                <TextInput
-                    bind:value={country}
-                    placeholder={$t("pages.project.edit.aboutYou.country")}
-                    name="country"
-                />
-            </div>
+            <AddressAutocomplete
+                name="address"
+                placeholder={$t("pages.project.edit.aboutYou.locationPlaceholder")}
+                value={$currentDraft?.createProject.address ?? ""}
+                onAddressChange={(address, territory) => {
+                    updateProject({ address, territory });
+                }}
+            />
         </div>
-        -->
 
-        <!-- Descripción del equipo impulsor
+        <!-- Team description
         <div class="flex flex-col gap-2">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.project.edit.aboutYou.teamDescription")}
@@ -216,7 +199,7 @@
         </div>
         -->
 
-        <!-- Datos de contacto privados -->
+        <!-- Private contacts data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
@@ -276,7 +259,7 @@
             </div>
         </div>
 
-        <!-- Datos de contacto públicos
+        <!-- Public contacts data
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
@@ -353,7 +336,7 @@
         </div>
         -->
 
-        <!-- Datos de pago -->
+        <!-- Payment Data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
                 <h2 class="text-2xl font-bold text-black">
