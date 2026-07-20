@@ -9,7 +9,8 @@
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import { defaultCurrency } from "../../../utils/currencies";
+    import { getUnit } from "../../../utils/currencies";
+    import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
@@ -38,7 +39,10 @@
 
     let title = $state(untrack(() => reward?.title ?? ""));
     let description = $state(untrack(() => reward?.description ?? ""));
-    let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
+
+    let moneyAmount = $state(
+        untrack(() => (reward?.money.amount ? toUnitsNumber(reward.money) : 0)),
+    );
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
     let files = $state<UploadedFile[]>(untrack(() => existingFiles));
@@ -79,8 +83,8 @@
                 title,
                 description,
                 money: {
-                    amount: moneyAmount * 100,
-                    currency: defaultCurrency(),
+                    amount: Math.round(moneyAmount * getUnit(reward!.money?.currency)),
+                    currency: reward!.money.currency,
                 },
                 isFinite: unlimited ? false : true,
                 unitsTotal: unlimited ? null : rewardCount,

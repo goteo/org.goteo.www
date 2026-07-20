@@ -6,6 +6,7 @@
     import { t } from "../../../i18n/store";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency, getUnit } from "../../../utils/currencies";
+    import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Select from "../../library/inputs/Select.svelte";
@@ -34,13 +35,7 @@
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
         untrack(() => budgetItem?.type),
     );
-    let amount = $state(
-        untrack(() =>
-            budgetItem?.money.amount
-                ? budgetItem.money.amount / getUnit(budgetItem.money.currency)
-                : 0,
-        ),
-    );
+    let amount = $state(untrack(() => (budgetItem?.money ? toUnitsNumber(budgetItem.money) : 0)));
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
         untrack(() => budgetItem?.deadline || defaultDeadline),
     );

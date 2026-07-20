@@ -29,6 +29,7 @@
         project,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
+    import { getDefaultCurrency } from "../../../utils/consts";
     import { formatCurrency } from "../../../utils/currencies";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
@@ -388,7 +389,7 @@
                 <p class="text-secondary text-3xl font-bold">
                     {formatCurrency(
                         $currentDraft?.wizardForm.budget?.minimum?.money?.amount || 0,
-                        "EUR",
+                        getDefaultCurrency(),
                     )}
                 </p>
             </div>
