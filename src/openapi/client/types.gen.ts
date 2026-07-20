@@ -482,7 +482,14 @@ export type ErrorJsonld = {
  * perform corroboration of funds and store the Transactions into the system.
  */
 export type Gateway = {
+    id?: string;
+    /**
+     * The publicly known name of this payment method.
+     */
     name?: string;
+    /**
+     * The types of GatewayCheckout this Gateway can process.
+     */
     supports?: Array<'single' | 'recurring'>;
 };
 
@@ -501,7 +508,14 @@ export type GatewayJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
+    id?: string;
+    /**
+     * The publicly known name of this payment method.
+     */
     name?: string;
+    /**
+     * The types of GatewayCheckout this Gateway can process.
+     */
     supports?: Array<'single' | 'recurring'>;
 };
 
@@ -559,6 +573,28 @@ export type GatewayChargeChargeUpdationDto = {
      * To ask for a refund, set the status `to_refund`.
      */
     status?: 'to_charge' | 'in_charge' | 'to_refund' | 'refunded' | 'to_wallet' | 'walleted';
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
+export type GatewayChargeChargesTotalsDto = {
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
+export type GatewayChargeChargesTotalsDtoJsonld = {
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
 };
 
 /**
@@ -2087,8 +2123,8 @@ export type ProjectSupport = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2162,8 +2198,8 @@ export type ProjectSupportJsonld = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2320,6 +2356,11 @@ export type Territory = {
      * e.g: ES-GR (Granada, Andalucía, Spain).
      */
     subLvl2?: string | null;
+    /**
+     * Plain-text address.\
+     * e.g: Forn de l’Olivera 22B, 07012 Palma, Illes Balears.
+     */
+    address?: string | null;
 };
 
 export type TerritoryJsonld = {
@@ -2345,6 +2386,11 @@ export type TerritoryJsonld = {
      * e.g: ES-GR (Granada, Andalucía, Spain).
      */
     subLvl2?: string | null;
+    /**
+     * Plain-text address.\
+     * e.g: Forn de l’Olivera 22B, 07012 Palma, Illes Balears.
+     */
+    address?: string | null;
 };
 
 /**
@@ -3062,35 +3108,35 @@ export type ApiGatewaysGetCollectionResponses = {
 
 export type ApiGatewaysGetCollectionResponse = ApiGatewaysGetCollectionResponses[keyof ApiGatewaysGetCollectionResponses];
 
-export type ApiGatewaysNameGetData = {
+export type ApiGatewaysIdGetData = {
     body?: never;
     path: {
         /**
          * Gateway identifier
          */
-        name: string;
+        id: string;
     };
     query?: never;
-    url: '/v4/gateways/{name}';
+    url: '/v4/gateways/{id}';
 };
 
-export type ApiGatewaysNameGetErrors = {
+export type ApiGatewaysIdGetErrors = {
     /**
      * Not found
      */
     404: ErrorJsonld;
 };
 
-export type ApiGatewaysNameGetError = ApiGatewaysNameGetErrors[keyof ApiGatewaysNameGetErrors];
+export type ApiGatewaysIdGetError = ApiGatewaysIdGetErrors[keyof ApiGatewaysIdGetErrors];
 
-export type ApiGatewaysNameGetResponses = {
+export type ApiGatewaysIdGetResponses = {
     /**
      * Gateway resource
      */
     200: Gateway;
 };
 
-export type ApiGatewaysNameGetResponse = ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
+export type ApiGatewaysIdGetResponse = ApiGatewaysIdGetResponses[keyof ApiGatewaysIdGetResponses];
 
 export type ApiGatewayChargesGetCollectionData = {
     body?: never;
@@ -3143,6 +3189,50 @@ export type ApiGatewayChargesGetCollectionResponses = {
 };
 
 export type ApiGatewayChargesGetCollectionResponse = ApiGatewayChargesGetCollectionResponses[keyof ApiGatewayChargesGetCollectionResponses];
+
+export type ApiGatewayChargestotalsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        'checkout.gateway'?: string;
+        'checkout.gateway[]'?: Array<string>;
+        'checkout.trackings.value'?: string;
+        'checkout.trackings.value[]'?: Array<string>;
+        type?: string;
+        'type[]'?: Array<string>;
+        target?: string;
+        'target[]'?: Array<string>;
+        'money.currency'?: string;
+        'money.currency[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
+        'money.amount[between]'?: string;
+        'money.amount[gt]'?: string;
+        'money.amount[gte]'?: string;
+        'money.amount[lt]'?: string;
+        'money.amount[lte]'?: string;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/gateway_charges/totals';
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponses = {
+    /**
+     * Charges totals
+     */
+    200: GatewayChargeChargesTotalsDto;
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponse = ApiGatewayChargestotalsGetCollectionResponses[keyof ApiGatewayChargestotalsGetCollectionResponses];
 
 export type ApiGatewayChargesIdGetData = {
     body?: never;

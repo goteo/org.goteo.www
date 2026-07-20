@@ -1,5 +1,5 @@
 ---
-import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
+import type { ApiGatewaysIdGetResponse } from "../../openapi/client/index";
 import CreditCardIcon from "../icons/payment/CreditCardIcon.astro";
 import PaypalIcon from "../icons/payment/PaypalIcon.astro";
 import StripeIcon from "../icons/payment/StripeIcon.astro";
@@ -13,7 +13,7 @@ const {
     selectedGateway,
 }: {
     hasError?: boolean;
-    paymentGateways?: ApiGatewaysNameGetResponse[];
+    paymentGateways?: ApiGatewaysIdGetResponse[];
     selectedGateway?: string;
 } = Astro.props;
 
@@ -87,6 +87,7 @@ const { accounting } = Astro.props;
 </section>
 <script>
     import { actions, isInputError } from "astro:actions";
+    import type { GatewayLink } from "../../openapi/client/index";
 
     const form = document.getElementById("payment");
     const errorContent = document.getElementById("payment-error-content");
@@ -107,7 +108,9 @@ const { accounting } = Astro.props;
             const { error, data } = await actions.payment(formData);
 
             if (!error) {
-                const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
+                const checkoutLink = data?.checkout?.links?.find(
+                    (link: GatewayLink) => link.type === "payment",
+                );
 
                 if (!checkoutLink) {
                     throw new Error("No payment link found in the response");

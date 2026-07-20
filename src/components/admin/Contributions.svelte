@@ -9,10 +9,10 @@
     import Table, { type ExtendedCharge } from "./Table.svelte";
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
-    import { client } from "../../openapi/client/client.gen";
     import {
         apiAccountingsIdGet,
         apiGatewayChargesGetCollection,
+        apiGatewayChargestotalsGetCollection,
         apiGatewayCheckoutsIdGet,
         apiGatewaysGetCollection,
         apiProjectsIdOrSlugGet,
@@ -20,7 +20,7 @@
         apiUsersIdOrHandleGet,
         type Accounting,
         type ApiGatewayChargesGetCollectionData,
-        type ApiProjectsGetCollectionData,
+        type ApiGatewayChargestotalsGetCollectionData,
         type GatewayCharge,
         type GatewayCheckout,
         type Project,
@@ -82,47 +82,14 @@
         }
     }
 
-    // Preferred source: the /v4/gateway_charges/stats aggregate (may not be deployed yet).
-    // Fallback: scan the filtered collection page by page (same approach as ExportCsv)
-    // and deduplicate targets — only viable for small result sets, hence the cap.
-    // Results are cached per filter set for the session.
-    const CHARGES_SCAN_PAGE_SIZE = 100;
-    const CHARGES_SCAN_CONCURRENCY = 3;
-    const MAX_SCANNABLE_CHARGES = 2000;
-    const PROJECTS_LOOKUP_CHUNK_SIZE = 50;
-    const projectsCountCache = new Map<string, number>();
+    // Distinct count of Projects targeted by the charges matching the current filters.
+    // Served by the /v4/gateway_charges/totals aggregate (same filters as the collection).
     let projectsCountRequestId = 0;
-
-    async function fetchDistinctProjectsFromStats(
-        chargeFilters: ApiGatewayChargesGetCollectionData["query"],
-        headers: HeadersInit,
-    ): Promise<number | null> {
-        try {
-            const { data, response } = await client.get({
-                url: "/v4/gateway_charges/stats",
-                query: chargeFilters as Record<string, unknown>,
-                headers,
-            });
-            if (!response.ok || !data || typeof data !== "object") return null;
-
-            const count = (data as Record<string, unknown>).distinctProjectCount;
-            return typeof count === "number" ? count : null;
-        } catch {
-            return null;
-        }
-    }
 
     async function loadSelectedProjectsCount(
         chargeFilters: ApiGatewayChargesGetCollectionData["query"],
     ) {
         const requestId = ++projectsCountRequestId;
-        const cacheKey = JSON.stringify(chargeFilters ?? {});
-        const cached = projectsCountCache.get(cacheKey);
-        if (cached !== undefined) {
-            selectedProjectsCount = cached;
-            return;
-        }
-
         selectedProjectsCount = "—";
 
         const headers = {
@@ -130,85 +97,19 @@
             ...($session?.token.asHttpHeaders ?? {}),
         };
 
-        const fetchChargesPage = async (page: number) => {
-            const { data, error } = await apiGatewayChargesGetCollection({
-                query: { ...chargeFilters, page, itemsPerPage: CHARGES_SCAN_PAGE_SIZE },
-                headers,
-            });
-            if (error) throw error;
-            return data;
-        };
+        const { data, error } = await apiGatewayChargestotalsGetCollection({
+            query: chargeFilters as ApiGatewayChargestotalsGetCollectionData["query"],
+            headers,
+        });
 
-        try {
-            const statsCount = await fetchDistinctProjectsFromStats(chargeFilters, headers);
-            if (requestId !== projectsCountRequestId) return;
-            if (statsCount !== null) {
-                projectsCountCache.set(cacheKey, statsCount);
-                selectedProjectsCount = statsCount;
-                return;
-            }
+        if (requestId !== projectsCountRequestId) return;
 
-            const targets = new Set<string>();
-            const collectTargets = (collection: unknown) => {
-                for (const charge of toCollectionItems<GatewayCharge>(collection)) {
-                    if (charge.target) targets.add(charge.target);
-                }
-            };
-
-            const firstPage = await fetchChargesPage(1);
-            collectTargets(firstPage);
-
-            // With a single target filter every charge shares it: page 1 is enough.
-            if (!chargeFilters?.target) {
-                const totalCharges = getCollectionTotalItems(firstPage);
-
-                // Without the stats endpoint, big result sets would take minutes to
-                // scan and hammer the API — leave the card empty instead.
-                if (totalCharges > MAX_SCANNABLE_CHARGES) return;
-
-                const totalPages = Math.ceil(totalCharges / CHARGES_SCAN_PAGE_SIZE);
-
-                for (let page = 2; page <= totalPages; page += CHARGES_SCAN_CONCURRENCY) {
-                    if (requestId !== projectsCountRequestId) return;
-
-                    const batch = [];
-                    for (
-                        let p = page;
-                        p < page + CHARGES_SCAN_CONCURRENCY && p <= totalPages;
-                        p++
-                    ) {
-                        batch.push(fetchChargesPage(p));
-                    }
-                    (await Promise.all(batch)).forEach(collectTargets);
-                }
-            }
-
-            if (requestId !== projectsCountRequestId) return;
-
-            // Targets can also be user or tipjar accountings; keep only projects.
-            const targetList = [...targets];
-            let projectCount = 0;
-
-            for (let i = 0; i < targetList.length; i += PROJECTS_LOOKUP_CHUNK_SIZE) {
-                const query: ApiProjectsGetCollectionData["query"] = {
-                    "accounting[]": targetList.slice(i, i + PROJECTS_LOOKUP_CHUNK_SIZE),
-                    itemsPerPage: 1,
-                };
-                const { data, error } = await apiProjectsGetCollection({
-                    query,
-                    headers: { Accept: "application/ld+json" },
-                });
-                if (error) throw error;
-                projectCount += getCollectionTotalItems(data);
-            }
-
-            if (requestId !== projectsCountRequestId) return;
-
-            projectsCountCache.set(cacheKey, projectCount);
-            selectedProjectsCount = projectCount;
-        } catch (error) {
-            console.error("Failed to count projects for filtered charges:", error);
+        if (error || data?.projects === undefined) {
+            console.error("Failed to load selected projects count:", error);
+            return;
         }
+
+        selectedProjectsCount = data.projects;
     }
 
     function buildChargesQuery(
@@ -547,7 +448,7 @@
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name]),
+            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name ?? ""]),
         ];
 
         chargeStatusOptions = Object.entries(
