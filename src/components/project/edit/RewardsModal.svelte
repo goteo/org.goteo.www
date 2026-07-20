@@ -5,7 +5,9 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { type Project, type ProjectReward } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
+    import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
@@ -14,13 +16,14 @@
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
-    import type { Project, ProjectReward } from "../../../openapi/client";
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),
         showToast = $bindable(false),
         project,
         reward,
+        existingFiles = [],
         onSave,
         onDelete,
     }: {
@@ -28,58 +31,62 @@
         showToast: boolean;
         project: Project;
         reward: ProjectReward | null;
-        onSave: (data: ProjectReward | null) => void;
+        existingFiles?: UploadedFile[];
+        onSave: (data: ProjectReward | null, files: UploadedFile[]) => void;
         onDelete?: () => void;
     } = $props();
 
     let title = $state(untrack(() => reward?.title ?? ""));
     let description = $state(untrack(() => reward?.description ?? ""));
-
     let moneyAmount = $state(untrack(() => (reward?.money.amount ? reward.money.amount / 100 : 0)));
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
-    let files = $state<File[]>([]);
+    let files = $state<UploadedFile[]>(untrack(() => existingFiles));
 
     let openDeleteModal = $state(false);
 
-    let titleTouched = $state(false);
-    let descriptionTouched = $state(false);
-    let moneyTouched = $state(false);
+    let formTouched = $state(false);
 
     const isFormValid = $derived(
         title.trim() !== "" && description.trim() !== "" && moneyAmount > 0,
     );
 
     const titleError = $derived(
-        titleTouched && title.trim() === ""
+        formTouched && title.trim() === ""
             ? $t("pages.project.edit.rewards.modal.validation.title")
             : undefined,
     );
     const descriptionError = $derived(
-        descriptionTouched && description.trim() === ""
+        formTouched && description.trim() === ""
             ? $t("pages.project.edit.rewards.modal.validation.description")
             : undefined,
     );
     const moneyError = $derived(
-        moneyTouched && moneyAmount <= 0
+        formTouched && moneyAmount <= 0
             ? $t("pages.project.edit.rewards.modal.validation.amount")
             : undefined,
     );
 
     function handleSaveOrCreate() {
-        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
-
-        onSave({
-            project: projectIri,
-            title,
-            description,
-            money: {
-                amount: moneyAmount * 100,
-                currency: defaultCurrency(),
-            },
-            isFinite: unlimited ? false : true,
-            unitsTotal: unlimited ? null : rewardCount,
+        const projectIri = client.buildUrl({
+            url: apiProjectsIdOrSlugGetUrl,
+            path: { idOrSlug: project.slug },
         });
+
+        onSave(
+            {
+                project: projectIri,
+                title,
+                description,
+                money: {
+                    amount: moneyAmount * 100,
+                    currency: defaultCurrency(),
+                },
+                isFinite: unlimited ? false : true,
+                unitsTotal: unlimited ? null : rewardCount,
+            },
+            files,
+        );
     }
 
     function handleDeleteClick() {
@@ -119,13 +126,13 @@
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
             {$t("pages.project.edit.rewards.modal.description")}
         </p>
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 pt-2">
             <TextInput
                 bind:value={title}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.title")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
                 error={titleError}
-                onBlur={() => (titleTouched = true)}
+                onBlur={() => (formTouched = true)}
             />
             <TextArea
                 id="reward-description"
@@ -134,7 +141,7 @@
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.description")}
                 rows={5}
                 error={descriptionError}
-                onBlur={() => (descriptionTouched = true)}
+                onBlur={() => (formTouched = true)}
             />
             <TextInput
                 bind:value={moneyAmount}
@@ -142,7 +149,7 @@
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
                 error={moneyError}
-                onBlur={() => (moneyTouched = true)}
+                onBlur={() => (formTouched = true)}
             />
             <div class="flex flex-col gap-6">
                 <FileUpload bind:files />
@@ -160,7 +167,7 @@
                     onclick={() => handleDeleteClick()}
                 />
             {/if}
-            <Button onclick={() => handleSaveOrCreate()} class="w-fit">
+            <Button onclick={() => handleSaveOrCreate()} disabled={!isFormValid} class="w-fit">
                 {$t("common.continue")}
             </Button>
         </div>
