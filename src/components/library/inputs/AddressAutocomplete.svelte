@@ -2,9 +2,13 @@
     import { clickOutside } from "flowbite-svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { searchPlace, type NominatimResult } from "../../../services/nominatim";
-    import Close from "../../icons/navigation/Close.svelte";
+    import {
+        searchPlace,
+        extractTerritory,
+        type NominatimResult,
+    } from "../../../services/nominatim";
     import SearchIcon from "../../icons/actions/Search.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
 
     import type { Territory } from "../../../openapi/client";
 
@@ -21,7 +25,7 @@
     let {
         class: classes = undefined,
         value = $bindable(""),
-        placeholder = "Busca una dirección...",
+        placeholder,
         name = "address",
         error = undefined,
         onAddressChange = undefined,
@@ -31,23 +35,6 @@
     let options: NominatimResult[] = $state([]);
     let isOpen = $state(false);
     let lastSelectedAddress = $state("");
-
-    function extractTerritory(result: NominatimResult): Territory {
-        const address = result.address ?? {};
-        const country = address.country_code?.toUpperCase() ?? null;
-
-        const iso3166_2 = Object.entries(address)
-            .filter(([key]) => key.startsWith("ISO3166-2-"))
-            .sort()
-            .map(([, v]) => v);
-
-        return {
-            country,
-            subLvl1: iso3166_2[0] ?? null,
-            subLvl2: iso3166_2[1] ?? null,
-            address: result.display_name ?? null,
-        };
-    }
 
     function handleSelect(result: NominatimResult) {
         value = result.display_name;
@@ -99,10 +86,7 @@
     }
 </script>
 
-<div
-    class={twMerge("relative w-full", classes)}
-    use:clickOutside={handleDropdownClose}
->
+<div class={twMerge("relative w-full", classes)} use:clickOutside={handleDropdownClose}>
     <div
         class="flex w-full items-center gap-2 rounded-md border p-3 {error
             ? 'border-red-500'
@@ -121,12 +105,7 @@
             autocomplete="off"
         />
         {#if value}
-            <button
-                type="button"
-                class="shrink-0 hover:opacity-75"
-                onclick={handleClear}
-                aria-label="Limpiar"
-            >
+            <button type="button" class="shrink-0 hover:opacity-75" onclick={handleClear}>
                 <Close class="size-4" />
             </button>
         {/if}
@@ -140,7 +119,7 @@
                 {#each options as result}
                     <button
                         type="button"
-                        class="cursor-pointer border-b border-gray-100 bg-white p-3 text-start text-sm text-black hover:bg-purple-soft last:border-b-0"
+                        class="hover:bg-purple-soft cursor-pointer border-b border-gray-100 bg-white p-3 text-start text-sm text-black last:border-b-0"
                         onclick={() => handleSelect(result)}
                     >
                         {result.display_name}
