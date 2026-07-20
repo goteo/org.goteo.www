@@ -22,14 +22,16 @@ import type {
 } from "../../openapi/client";
 
 /**
- * Media image data
+ * Uploaded file data
  */
-export interface MediaImage {
+export interface UploadedFile {
     id: string;
-    url: string; // Base64 data URL or API URL
+    url: string; // S3 URL or base64 data URL
+    key?: string; // S3 object key for deletion
     file?: File; // Original file reference
     size: number; // File size in bytes
     name: string; // Original filename
+    type: string; // MIME type
 }
 
 export interface WizardConfiguration {
@@ -38,7 +40,7 @@ export interface WizardConfiguration {
 
 export interface WizardCampaignInfo {
     // Media/**
-    images: MediaImage[];
+    images: UploadedFile[];
     video: string | undefined;
 
     // Rich text content (stored as HTML)
@@ -63,6 +65,7 @@ export type Wizard = {
 
     // Step 3: Rewards
     rewards: ProjectReward[];
+    rewardImages?: Record<number, UploadedFile[]>;
 
     // Step 4: Collaborations
     collaborations: ProjectCollaboration[];
@@ -90,6 +93,7 @@ export interface ProjectDraftResources {
         minimum: ProjectBudgetItem[];
         optimum: ProjectBudgetItem[];
     };
+    images?: UploadedFile[];
 }
 
 export interface Draft {
@@ -276,7 +280,7 @@ export async function createDraft(
                 projectDeadline: "minimum",
             },
             campaignInfo: {
-                images: [],
+                images: resources?.images ?? [],
                 video: "",
                 objectives: "",
                 legacy: "",
@@ -527,8 +531,21 @@ export function deleteReward(index: number) {
     const draft = get(currentDraft);
     if (!draft) return;
 
+    const rewardImages = { ...draft.wizardForm.rewardImages };
+    delete rewardImages[index];
+
     updateWizard({
         rewards: draft.wizardForm.rewards.filter((_, i) => i !== index),
+        rewardImages,
+    });
+}
+
+export function updateRewardFiles(index: number, files: UploadedFile[]) {
+    const draft = get(currentDraft);
+    if (!draft) return;
+
+    updateWizard({
+        rewardImages: { ...draft.wizardForm.rewardImages, [index]: files },
     });
 }
 

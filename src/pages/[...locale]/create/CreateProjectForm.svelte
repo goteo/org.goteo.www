@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import AddressAutocomplete from "../../../components/library/inputs/AddressAutocomplete.svelte";
-    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
     import Button from "../../../components/library/buttons/Button.svelte";
+    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
+    import AddressAutocomplete from "../../../components/library/inputs/AddressAutocomplete.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import DateInput from "../../../components/library/inputs/DateInput.svelte";
     import TextInput from "../../../components/library/inputs/TextInput.svelte";
@@ -32,6 +32,7 @@
         validationErrors,
         type CreateProjectForm,
     } from "../../../stores/drafts/projectDraft";
+    import { getDefaultCurrency } from "../../../utils/consts";
     import { formatCurrency } from "../../../utils/currencies";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
@@ -420,7 +421,7 @@
                 <p class="text-secondary text-3xl font-bold">
                     {formatCurrency(
                         $currentDraft?.wizardForm.budget?.minimum?.money?.amount || 0,
-                        "EUR",
+                        getDefaultCurrency(),
                     )}
                 </p>
             </div>

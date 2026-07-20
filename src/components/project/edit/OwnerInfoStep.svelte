@@ -1,16 +1,17 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import AddressAutocomplete from "../../library/inputs/AddressAutocomplete.svelte";
+    import { currentDraft, updateProject } from "../../../stores/drafts/projectDraft";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import AddressAutocomplete from "../../library/inputs/AddressAutocomplete.svelte";
     import Checkbox from "../../library/inputs/Checkbox.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
 
-    import type { Project, Territory } from "../../../openapi/client";
-    import { currentDraft, updateProject } from "../../../stores/drafts/projectDraft";
+    import type { Project } from "../../../openapi/client";
+    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let { project: _project, onPublish }: { project: Project; onPublish?: () => void } = $props();
 
@@ -30,7 +31,7 @@
     ]);
     let preferredIndex = $state(0);
     let iban = $state("");
-    let bankCertificateFiles = $state<File[]>([]);
+    let bankCertificateFiles = $state<UploadedFile[]>([]);
     // let publicLinks = $state({
     //     website: "",
     //     email: "",

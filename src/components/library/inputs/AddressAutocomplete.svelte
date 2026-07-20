@@ -1,15 +1,15 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import {
         searchPlace,
         extractTerritory,
         type NominatimResult,
     } from "../../../services/nominatim";
+    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
 
-    import type { DropdownOption } from "../dropdown/dropdown.types";
     import type { Territory } from "../../../openapi/client";
+    import type { DropdownOption } from "../dropdown/dropdown.types";
 
     interface Props {
         class?: ClassNameValue;
