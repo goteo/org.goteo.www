@@ -5,13 +5,12 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import { defaultCurrency, getUnit } from "../../../utils/currencies";
-    import { toUnitsNumber } from "../../../utils/money";
     import { type Project, type ProjectReward } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
+    import { getUnit } from "../../../utils/currencies";
+    import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";

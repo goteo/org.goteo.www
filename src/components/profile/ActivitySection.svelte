@@ -16,11 +16,11 @@
         apiMatchCallsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
     import { projectCache } from "../../stores/projectCache";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import { sumMoney } from "../../utils/money";
     import Grid from "../library/layout/Grid.svelte";
-    import { sumMoney, addMoney } from "../../utils/money";
-    import { getDefaultCurrency } from "../../utils/consts";
 
     import type {
         ProjectSupport,

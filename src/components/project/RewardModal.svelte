@@ -4,8 +4,8 @@
 
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import { formatCurrency, getUnit } from "../../utils/currencies";
     import { getDefaultCurrency } from "../../utils/consts";
+    import { formatCurrency, getUnit } from "../../utils/currencies";
     import { lt } from "../../utils/money";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import UnitIcon from "../icons/UnitIcon.svelte";

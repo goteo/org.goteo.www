@@ -1,4 +1,3 @@
-import * as currencies from "dinero.js/currencies";
 import {
     dinero,
     add,
@@ -14,9 +13,11 @@ import {
     toDecimal,
     toSnapshot,
 } from "dinero.js";
+import * as currencies from "dinero.js/currencies";
+
+import { getDefaultCurrency } from "./consts";
 
 import type { Money } from "../openapi/client";
-import { getDefaultCurrency } from "./consts";
 
 type DineroCurrency = {
     readonly code: string;

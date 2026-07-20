@@ -29,8 +29,8 @@
         project,
         validationErrors,
     } from "../../../stores/drafts/projectDraft";
-    import { formatCurrency } from "../../../utils/currencies";
     import { getDefaultCurrency } from "../../../utils/consts";
+    import { formatCurrency } from "../../../utils/currencies";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 

@@ -3,8 +3,8 @@
 
     import { t } from "../../i18n/store";
     import { cart } from "../../stores/cart";
-    import { formatCurrency } from "../../utils/currencies";
     import { getDefaultCurrency } from "../../utils/consts";
+    import { formatCurrency } from "../../utils/currencies";
     import { multiplyMoney, sumMoney, subtractMoney } from "../../utils/money";
 
     const total = derived(cart, ($cart) => {

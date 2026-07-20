@@ -8,9 +8,9 @@
         apiAccountingsIdGet,
         apiProjectsIdOrSlugGet,
     } from "../../openapi/client/sdk.gen.ts";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import { getDefaultCurrency } from "../../utils/consts";
     import { addMoney } from "../../utils/money";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";

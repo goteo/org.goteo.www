@@ -1,9 +1,9 @@
 import murmur from "murmurhash-js";
 import z from "zod";
 
-import { isPositiveMoney } from "../../utils/money";
 import { type Draft, type Wizard } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
+import { isPositiveMoney } from "../../utils/money";
 
 import type {
     ProjectBudgetItem,
