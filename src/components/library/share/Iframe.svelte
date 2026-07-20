@@ -37,10 +37,10 @@
     bind:open={iframeModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent cursor-pointer"
     class="left-1/2! max-w-150 p-4 backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-    title={$t("project.share.iframe-modal.title")}
+    title={$t("pages.project.view.share.iframe-modal.title")}
     headerClass="py-2 text-secondary text-2xl"
 >
-    <p>{$t("project.share.iframe-modal.description")}</p>
+    <p>{$t("pages.project.view.share.iframe-modal.description")}</p>
 
     <div class="flex w-full flex-row items-stretch justify-center gap-4">
         <div class="flex w-1/2 items-center justify-center rounded-lg border p-4">
@@ -79,7 +79,7 @@
         }}
     >
         {copied
-            ? $t("project.share.iframe-modal.btnCopied")
-            : $t("project.share.iframe-modal.btnCopy")}
+            ? $t("pages.project.view.share.iframe-modal.btnCopied")
+            : $t("pages.project.view.share.iframe-modal.btnCopy")}
     </button>
 </Modal>

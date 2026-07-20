@@ -482,7 +482,14 @@ export type ErrorJsonld = {
  * perform corroboration of funds and store the Transactions into the system.
  */
 export type Gateway = {
+    id?: string;
+    /**
+     * The publicly known name of this payment method.
+     */
     name?: string;
+    /**
+     * The types of GatewayCheckout this Gateway can process.
+     */
     supports?: Array<'single' | 'recurring'>;
 };
 
@@ -501,7 +508,14 @@ export type GatewayJsonld = {
     };
     readonly '@id'?: string;
     readonly '@type'?: string;
+    id?: string;
+    /**
+     * The publicly known name of this payment method.
+     */
     name?: string;
+    /**
+     * The types of GatewayCheckout this Gateway can process.
+     */
     supports?: Array<'single' | 'recurring'>;
 };
 
@@ -2320,6 +2334,11 @@ export type Territory = {
      * e.g: ES-GR (Granada, Andalucía, Spain).
      */
     subLvl2?: string | null;
+    /**
+     * Plain-text address.\
+     * e.g: Forn de l’Olivera 22B, 07012 Palma, Illes Balears.
+     */
+    address?: string | null;
 };
 
 export type TerritoryJsonld = {
@@ -2345,6 +2364,11 @@ export type TerritoryJsonld = {
      * e.g: ES-GR (Granada, Andalucía, Spain).
      */
     subLvl2?: string | null;
+    /**
+     * Plain-text address.\
+     * e.g: Forn de l’Olivera 22B, 07012 Palma, Illes Balears.
+     */
+    address?: string | null;
 };
 
 /**
@@ -3062,35 +3086,35 @@ export type ApiGatewaysGetCollectionResponses = {
 
 export type ApiGatewaysGetCollectionResponse = ApiGatewaysGetCollectionResponses[keyof ApiGatewaysGetCollectionResponses];
 
-export type ApiGatewaysNameGetData = {
+export type ApiGatewaysIdGetData = {
     body?: never;
     path: {
         /**
          * Gateway identifier
          */
-        name: string;
+        id: string;
     };
     query?: never;
-    url: '/v4/gateways/{name}';
+    url: '/v4/gateways/{id}';
 };
 
-export type ApiGatewaysNameGetErrors = {
+export type ApiGatewaysIdGetErrors = {
     /**
      * Not found
      */
     404: ErrorJsonld;
 };
 
-export type ApiGatewaysNameGetError = ApiGatewaysNameGetErrors[keyof ApiGatewaysNameGetErrors];
+export type ApiGatewaysIdGetError = ApiGatewaysIdGetErrors[keyof ApiGatewaysIdGetErrors];
 
-export type ApiGatewaysNameGetResponses = {
+export type ApiGatewaysIdGetResponses = {
     /**
      * Gateway resource
      */
     200: Gateway;
 };
 
-export type ApiGatewaysNameGetResponse = ApiGatewaysNameGetResponses[keyof ApiGatewaysNameGetResponses];
+export type ApiGatewaysIdGetResponse = ApiGatewaysIdGetResponses[keyof ApiGatewaysIdGetResponses];
 
 export type ApiGatewayChargesGetCollectionData = {
     body?: never;

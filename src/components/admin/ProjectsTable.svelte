@@ -37,6 +37,7 @@
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import { t } from "../../i18n/store";
+    import { withoutCache } from "../../openapi/cacheInterceptor";
     import { apiUsersIdOrHandleGet, type User } from "../../openapi/client/index.ts";
     import { extractId } from "../../utils/extractId";
     import Edit from "../icons/actions/Edit.svelte";
@@ -54,48 +55,48 @@
     ];
 
     const statusOptions = [
-        { value: "in_draft", label: $t("admin.projects.table.rows.status.in_draft") },
+        { value: "in_draft", label: $t("pages.admin.projects.table.rows.status.in_draft") },
         {
             value: "to_campaign_review",
-            label: $t("admin.projects.table.rows.status.to_campaign_review"),
+            label: $t("pages.admin.projects.table.rows.status.to_campaign_review"),
         },
         {
             value: "in_campaign_review",
-            label: $t("admin.projects.table.rows.status.in_campaign_review"),
+            label: $t("pages.admin.projects.table.rows.status.in_campaign_review"),
         },
         {
             value: "in_campaign_review_request_change",
-            label: $t("admin.projects.table.rows.status.in_campaign_review_request_change"),
+            label: $t("pages.admin.projects.table.rows.status.in_campaign_review_request_change"),
         },
         {
             value: "campaign_review_rejected",
-            label: $t("admin.projects.table.rows.status.campaign_review_rejected"),
+            label: $t("pages.admin.projects.table.rows.status.campaign_review_rejected"),
         },
-        { value: "to_campaign", label: $t("admin.projects.table.rows.status.to_campaign") },
-        { value: "in_campaign", label: $t("admin.projects.table.rows.status.in_campaign") },
+        { value: "to_campaign", label: $t("pages.admin.projects.table.rows.status.to_campaign") },
+        { value: "in_campaign", label: $t("pages.admin.projects.table.rows.status.in_campaign") },
         {
             value: "campaign_failed",
-            label: $t("admin.projects.table.rows.status.campaign_failed"),
+            label: $t("pages.admin.projects.table.rows.status.campaign_failed"),
         },
         {
             value: "to_funding_review",
-            label: $t("admin.projects.table.rows.status.to_funding_review"),
+            label: $t("pages.admin.projects.table.rows.status.to_funding_review"),
         },
         {
             value: "in_funding_review",
-            label: $t("admin.projects.table.rows.status.in_funding_review"),
+            label: $t("pages.admin.projects.table.rows.status.in_funding_review"),
         },
         {
             value: "in_funding_review_request_change",
-            label: $t("admin.projects.table.rows.status.in_funding_review_request_change"),
+            label: $t("pages.admin.projects.table.rows.status.in_funding_review_request_change"),
         },
         {
             value: "funding_review_rejected",
-            label: $t("admin.projects.table.rows.status.funding_review_rejected"),
+            label: $t("pages.admin.projects.table.rows.status.funding_review_rejected"),
         },
-        { value: "to_funding", label: $t("admin.projects.table.rows.status.to_funding") },
-        { value: "in_funding", label: $t("admin.projects.table.rows.status.in_funding") },
-        { value: "funding_paid", label: $t("admin.projects.table.rows.status.funding_paid") },
+        { value: "to_funding", label: $t("pages.admin.projects.table.rows.status.to_funding") },
+        { value: "in_funding", label: $t("pages.admin.projects.table.rows.status.in_funding") },
+        { value: "funding_paid", label: $t("pages.admin.projects.table.rows.status.funding_paid") },
     ];
 
     let {
@@ -147,7 +148,9 @@
             if (!ownerUsers.has(ownerIri)) {
                 const userId = extractId(ownerIri);
                 if (userId) {
-                    apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }).then(({ data }) => {
+                    withoutCache(() =>
+                        apiUsersIdOrHandleGet({ path: { idOrHandle: userId } }),
+                    ).then(({ data }) => {
                         if (data) {
                             ownerUsers = new Map(ownerUsers).set(ownerIri, data as User);
                         }
@@ -198,27 +201,29 @@
     <div class="flex flex-col gap-4">
         <div class="flex justify-between">
             <div class="flex flex-row items-center gap-2">
-                <p class="text-content font-bold">{$t("admin.projects.filters.order.title")}</p>
+                <p class="text-content font-bold">
+                    {$t("pages.admin.projects.filters.order.title")}
+                </p>
                 <select
                     class="border-secondary text-secondary min-w-50 rounded-sm py-1"
                     value={selectedSort}
                     onchange={(e) => onSortChange?.(e.currentTarget.value)}
                 >
-                    {#each Object.entries($t("admin.projects.filters.order.options")) as [value, label]}
+                    {#each Object.entries($t("pages.admin.projects.filters.order.options")) as [value, label]}
                         <option {value}>{label}</option>
                     {/each}
                 </select>
             </div>
             <div class="flex flex-row items-center gap-2">
                 <p class="text-content font-bold">
-                    {$t("admin.projects.filters.itemsPerPage.title")}
+                    {$t("pages.admin.projects.filters.itemsPerPage.title")}
                 </p>
                 <select
                     class="border-secondary text-secondary rounded-sm py-1"
                     value={itemsPerPage}
                     onchange={(e) => onItemsPerPageChange?.(Number(e.currentTarget.value))}
                 >
-                    {#each Object.entries($t("admin.projects.filters.itemsPerPage.options")) as [value, label]}
+                    {#each Object.entries($t("pages.admin.projects.filters.itemsPerPage.options")) as [value, label]}
                         <option value={Number(value)}>{label}</option>
                     {/each}
                 </select>
@@ -248,7 +253,7 @@
                 {:else if projects.length === 0 && !isLoading}
                     <TableBodyRow>
                         <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                            {$t("admin.projects.table.rows.noData") ?? "—"}
+                            {$t("pages.admin.projects.table.rows.noData") ?? "—"}
                         </TableBodyCell>
                     </TableBodyRow>
                 {:else}
@@ -279,7 +284,7 @@
                                     <button
                                         onclick={(e) => openPaidModal(project, e)}
                                         class="text-secondary hover:text-secondary/70 cursor-pointer"
-                                        aria-label={$t("admin.projects.table.headers.paid")}
+                                        aria-label={$t("pages.admin.projects.table.headers.paid")}
                                     >
                                         <Edit width="14" height="14" />
                                     </button>

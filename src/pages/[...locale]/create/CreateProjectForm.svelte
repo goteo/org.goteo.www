@@ -1,11 +1,11 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import BaseCard from "../../../components/BaseCard.svelte";
-    import Button from "../../../components/library/Button.svelte";
-    import CategorySelect from "../../../components/library/CategorySelect.svelte";
-    import DateInput from "../../../components/library/DateInput.svelte";
-    import TextInput from "../../../components/library/TextInput.svelte";
+    import Button from "../../../components/library/buttons/Button.svelte";
+    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
+    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
+    import DateInput from "../../../components/library/inputs/DateInput.svelte";
+    import TextInput from "../../../components/library/inputs/TextInput.svelte";
     import { t } from "../../../i18n/store";
     import {
         apiProjectsPost,
@@ -249,7 +249,7 @@
                 class="rounded-md border-l-4 border-red-500 bg-red-50 p-4"
             >
                 <h2 class="mb-2 text-lg font-semibold text-red-800">
-                    {$t("validation.errors.summary.title")}
+                    {$t("system.validation.errors.summary.title")}
                 </h2>
                 <ul class="list-inside list-disc space-y-1">
                     {#each Object.entries($validationErrors) as [field, error]}

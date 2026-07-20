@@ -1,5 +1,5 @@
 ---
-import type { ApiGatewaysNameGetResponse } from "../../openapi/client/index";
+import type { ApiGatewaysIdGetResponse } from "../../openapi/client/index";
 import CreditCardIcon from "../icons/payment/CreditCardIcon.astro";
 import PaypalIcon from "../icons/payment/PaypalIcon.astro";
 import StripeIcon from "../icons/payment/StripeIcon.astro";
@@ -13,7 +13,7 @@ const {
     selectedGateway,
 }: {
     hasError?: boolean;
-    paymentGateways?: ApiGatewaysNameGetResponse[];
+    paymentGateways?: ApiGatewaysIdGetResponse[];
     selectedGateway?: string;
 } = Astro.props;
 
@@ -41,25 +41,25 @@ const { accounting } = Astro.props;
                     (paymentGateways ?? []).map((gateway) => (
                         <label
                             class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
-                            data-gateway={gateway.name}
+                            data-gateway={gateway.id}
                         >
                             <div class="flex items-center gap-2">
                                 <input
                                     type="radio"
                                     name="paymentMethod"
-                                    value={gateway.name}
-                                    disabled={gateway.name === "wallet"}
+                                    value={gateway.id}
+                                    disabled={gateway.id === "wallet"}
                                     checked={
                                         selectedGateway
-                                            ? gateway.name === selectedGateway
-                                            : gateway.name !== "wallet" &&
-                                              paymentGateways?.[0]?.name === gateway.name
+                                            ? gateway.id === selectedGateway
+                                            : gateway.id !== "wallet" &&
+                                              paymentGateways?.[0]?.name === gateway.id
                                     }
                                     class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
-                                    <span class="font-semibold capitalize">{gateway.name}</span>
-                                    {gateway.name === "wallet" && (
+                                    <span class="font-semibold">{gateway.name}</span>
+                                    {gateway.id === "wallet" && (
                                         <span class="text-sm font-normal">
                                             {t("pages.checkout.wallet.balanceLabel")}
                                             {formatCurrency(accounting.amount, accounting.currency)}
@@ -68,11 +68,11 @@ const { accounting } = Astro.props;
                                 </div>
                             </div>
                             <div>
-                                {gateway.name === "paypal" ? (
+                                {gateway.id === "paypal" ? (
                                     <PaypalIcon />
-                                ) : gateway.name === "stripe" ? (
+                                ) : gateway.id === "stripe" ? (
                                     <StripeIcon />
-                                ) : gateway.name === "wallet" ? (
+                                ) : gateway.id === "wallet" ? (
                                     <CreditCardIcon />
                                 ) : null}
                             </div>

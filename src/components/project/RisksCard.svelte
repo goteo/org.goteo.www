@@ -62,7 +62,7 @@
                     >
                 {/if}
             </div>
-            <Tag variant={tagVariant}>{$t(`reviews.risks-cards.tags.${risk ?? review.risk}`)}</Tag>
+            <Tag variant={tagVariant}>{$t(`domain.review.risks.${risk ?? review.risk}`)}</Tag>
         </div>
         <p class="text-content line-clamp-4 w-full text-base">
             {review.summary}
@@ -71,10 +71,10 @@
     <div class="flex justify-between">
         <!-- TODO: Add functionality to both buttons -->
         <Button kind="ghost">
-            {$t("reviews.risks-cards.btns.seeChat")}
+            {$t("pages.review.btns.seeChat")}
         </Button>
         <Button kind="secondary">
-            {$t("reviews.risks-cards.btns.changeRisk")}
+            {$t("pages.review.btns.changeRisk")}
         </Button>
     </div>
 </article>

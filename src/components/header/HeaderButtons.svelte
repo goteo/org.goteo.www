@@ -15,9 +15,9 @@
 <div class="flex gap-2">
     <Button size="sm" kind="secondary" onclick={openSearch}>
         <SearchIcon width="16" height="16" />
-        {$t("header.search")}
+        {$t("common.header.search")}
     </Button>
     <Button size="sm" kind="primary" onclick={goToCreateProject}>
-        {$t("header.createProject")}
+        {$t("common.header.createProject")}
     </Button>
 </div>

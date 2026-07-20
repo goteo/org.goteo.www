@@ -11,27 +11,23 @@
     import DetailsRow from "./DetailsRow.svelte";
     import Pagination from "./Pagination.svelte";
     import {
-        apiTipjarsGetCollectionUrl,
-        apiUsersGetCollectionUrl,
-        apiProjectsGetCollectionUrl,
-    } from "../../../src/openapi/client/paths.gen";
+        type Accounting,
+        type User,
+        type Project,
+        type ApiGatewayChargesGetCollectionData,
+        type Tipjar,
+        type GatewayCharge,
+        type Link,
+        type Tracking,
+    } from "../../../src/openapi/client/index.ts";
     import { t } from "../../i18n/store";
     import { isLoading, itemsPerPage, sortOptions } from "../../stores/chargesPaginationAndSort.ts";
     import { formatCurrency } from "../../utils/currencies";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
+    import { extractId } from "../../utils/extractId.ts";
     import Chevron from "../icons/navigation/Chevron.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Tag from "../library/tags/Tag.svelte";
-
-    import type {
-        Accounting,
-        User,
-        Project,
-        ApiGatewayChargesGetCollectionData,
-        Tipjar,
-        GatewayCharge,
-        Link,
-        Tracking,
-    } from "../../../src/openapi/client/index.ts";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
@@ -116,28 +112,6 @@
         return "↕️";
     }
 
-    function getDisplayNameFromAccounting(
-        accounting: Accounting | undefined,
-        owners: Map<string, User | Project | Tipjar>,
-    ): string | undefined {
-        const ownerIri = accounting?.owner;
-        if (!ownerIri) return undefined;
-
-        const owner = owners.get(ownerIri);
-        if (!owner) return undefined;
-
-        switch (ownerIri.split("/").slice(0, -1).join("/")) {
-            case apiUsersGetCollectionUrl:
-                return (owner as User).displayName ?? undefined;
-            case apiProjectsGetCollectionUrl:
-                return (owner as Project).title ?? undefined;
-            case apiTipjarsGetCollectionUrl:
-                return (owner as Tipjar).name ?? undefined;
-        }
-
-        return undefined;
-    }
-
     function addChargesMetadata(charges: ExtendedCharge[]) {
         let hasConcept = false;
 
@@ -157,6 +131,7 @@
             charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
             charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
             charge.concept = hasConcept && charge.title ? charge.title : "";
+            charge.paymentMethod = extractId(charge.paymentMethod) || charge.paymentMethod;
         }
     }
 
@@ -314,7 +289,7 @@
                                 >{charge.originDisplayName}</TableBodyCell
                             >
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {$t(`domain.charges.payments.${charge.paymentMethod}`)}
+                                {charge.paymentMethod}
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b">
                                 {getDate(charge.dateCreated).date}

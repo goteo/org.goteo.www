@@ -69,7 +69,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     // Using lookup pattern for consistency with other i18n implementations
     const statusBadgeText = $derived.by(() => {
         const key = hasReachedMinimum ? "minimumReached" : "goForMinimum";
-        return $t(`home.campaigns.status.${key}`);
+        return $t(`pages.home.campaigns.status.${key}`);
     });
 
     // Get first category only (as per review comments)
@@ -223,12 +223,12 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <button
                             class="border-secondary text-secondary hover:bg-secondary flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors hover:text-white"
                         >
-                            {$t("me.ownedProjects.messageToDonatorsButton")}
+                            {$t("pages.me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
                             class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
-                            {$t("me.ownedProjects.uploadNewsButton")}
+                            {$t("pages.me.ownedProjects.uploadNewsButton")}
                         </button>
                     </div>
                 {/if}

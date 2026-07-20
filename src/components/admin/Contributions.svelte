@@ -30,7 +30,6 @@
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
     } from "../../openapi/client/paths.gen";
-    import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen";
     import {
         isLoading,
         itemsPerPage,
@@ -41,15 +40,27 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import {
+        parseQueryFilters,
+        splitOrderParams,
+        syncQueryFiltersToUrl,
+    } from "../../utils/queryParams";
     import { isEnabled, tipjarId } from "../../utils/tipping";
 
-    const initialSearchQuery =
+    const initialParams =
         typeof window !== "undefined"
-            ? (new URLSearchParams(window.location.search).get("search") ?? undefined)
-            : undefined;
+            ? splitOrderParams(
+                  parseQueryFilters(window.location.search, {
+                      exclude: ["page", "itemsPerPage"],
+                  }),
+              )
+            : { filters: {}, order: {} };
 
-    let filters: ApiGatewayChargesGetCollectionData["query"] = $state({});
-    let pendingSearch = $state(!!initialSearchQuery);
+    const initialSort = sortOptions.find(
+        (option) => initialParams.order[option.field] === option.direction,
+    );
+
+    let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
@@ -59,7 +70,7 @@
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
     let ownersMap = $state<Map<string, User | Project | Tipjar>>(new Map());
     let isFirstLoad = $state(true);
-    let selectedSort = $state("date-desc");
+    let selectedSort = $state(initialSort?.key ?? "date-desc");
     let totalTips = $state<string>("—");
 
     async function loadTotalTips() {
@@ -99,8 +110,10 @@
         return query;
     }
 
-    function getCollectionTotalItems(collection: unknown): number {
-        if (Array.isArray(collection)) return collection.length;
+    function getCollectionTotalItems(collection: unknown, response?: Response): number {
+        if (Array.isArray(collection)) {
+            return collection.length;
+        }
         if (!collection || typeof collection !== "object") return 0;
 
         const record = collection as Record<string, unknown>;
@@ -214,9 +227,17 @@
             let items = Number($itemsPerPage);
 
             const query = buildChargesQuery(filters, page, items);
-            const headers = $session?.token.asHttpHeaders as HeadersInit | undefined;
 
-            const { data: collection, error } = await apiGatewayChargesGetCollection({
+            const headers = {
+                Accept: "application/ld+json",
+                ...($session?.token.asHttpHeaders ?? {}),
+            };
+
+            const {
+                data: collection,
+                response,
+                error,
+            } = await apiGatewayChargesGetCollection({
                 query,
                 headers,
             });
@@ -227,7 +248,7 @@
             }
 
             const loadedCharges = toCollectionItems<GatewayCharge>(collection);
-            $totalItems = getCollectionTotalItems(collection);
+            $totalItems = getCollectionTotalItems(collection, response);
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;
@@ -259,7 +280,7 @@
                 return {
                     ...charge,
                     checkoutOrigin: checkout?.origin ?? "—",
-                    paymentMethod: extractId(checkout?.gateway) ?? "—",
+                    paymentMethod: checkout?.gateway,
                     refundToWallet: checkout?.refund
                         ? $t(`domain.charges.refund.${checkout.refund}`)
                         : "—",
@@ -325,29 +346,8 @@
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
         filters = { ...filters, ...newFilters };
+        $currentPage = 1;
     }
-
-    $effect(() => {
-        if (!pendingSearch) return;
-        if (!initialSearchQuery || initialSearchQuery.length < 4) {
-            pendingSearch = false;
-            return;
-        }
-
-        const doResolve = async () => {
-            const { data } = await apiProjectsGetCollection({
-                query: { title: initialSearchQuery },
-                headers: { Accept: "application/ld+json" },
-            });
-            const projects = toCollectionItems<Project>(data);
-            const found = projects[0];
-            if (found?.accounting) {
-                filters = { target: found.accounting };
-            }
-            pendingSearch = false;
-        };
-        doResolve();
-    });
 
     const reloadCharges = async () => {
         charges = [];
@@ -360,15 +360,30 @@
     };
 
     $effect(() => {
-        if (pendingSearch) return;
         reloadCharges();
     });
 
+    $effect(() => {
+        const sort = sortOptions.find((option) => option.key === selectedSort);
+
+        syncQueryFiltersToUrl(filters ?? {}, sort ? { [sort.field]: sort.direction } : undefined);
+    });
+
+    let prevItemsPerPage = $state($itemsPerPage);
+
+    $effect(() => {
+        const current = $itemsPerPage;
+        if (current !== prevItemsPerPage) {
+            prevItemsPerPage = current;
+            $currentPage = 1;
+        }
+    });
+
     let chargeSlides = $derived([
-        { title: $t("admin.charges.totalizers.selected"), amount: $totalItems },
-        { title: $t("admin.charges.totalizers.totalCharges"), amount: "—" },
-        { title: $t("admin.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("admin.charges.totalizers.totalFees"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.selected"), amount: $totalItems },
+        { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     onMount(async () => {
@@ -376,10 +391,7 @@
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [
-                g.name!,
-                $t(`pages.admin.charges.filters.paymentMethod.options.${g.name}`),
-            ]),
+            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
         ];
 
         chargeStatusOptions = Object.entries(
@@ -406,15 +418,16 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
-        {initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
             <FiltersTags
                 onCloseFilter={handleApplyFilters}
-                title={$t("domain.charges.lastContributions")}
+                title={$t("pages.admin.charges.lastContributions")}
                 {filters}
+                {accountingsMap}
+                {ownersMap}
             />
             <ExportCsv {filters} />
         </div>
@@ -429,5 +442,8 @@
     {ownersMap}
     {isFirstLoad}
     bind:selectedSort
-    onSortChange={(value) => (selectedSort = value)}
+    onSortChange={(value) => {
+        selectedSort = value;
+        $currentPage = 1;
+    }}
 />

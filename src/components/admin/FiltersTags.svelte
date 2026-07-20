@@ -2,18 +2,28 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
+    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
     import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
 
     type Filters = ApiGatewayChargesGetCollectionData["query"];
 
-    let { title, filters, onCloseFilter } = $props<{
+    let {
+        title,
+        filters,
+        onCloseFilter,
+        accountingsMap = new Map(),
+        ownersMap = new Map(),
+    } = $props<{
         title: string;
         filters: Filters;
         onCloseFilter: (filters: Filters) => void;
+        accountingsMap?: Map<string, Accounting>;
+        ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
@@ -36,17 +46,18 @@
         }
     }
 
-    function formatTags(tags: FilterTags, locale: Locale) {
+    function formatTags(
+        tags: FilterTags,
+        locale: Locale,
+        accountingsMap: Map<string, Accounting>,
+        ownersMap: Map<string, User | Project | Tipjar>,
+    ) {
         if (tags === undefined) return;
 
         tags.map((tag) => {
             if (tag.values?.from && tag.values?.to) {
                 tag.values.from = formatDate(new Date(tag.values.from), locale);
                 tag.values.to = formatDate(new Date(tag.values.to), locale);
-            }
-
-            if (tag.title === "checkout.gateway") {
-                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
             }
 
             if (tag.title === "status") {
@@ -67,6 +78,14 @@
 
             if (tag.title === "money.amount[gte]")
                 tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
+
+            if (tag.title === "target") {
+                const displayName = getDisplayNameFromAccounting(
+                    accountingsMap.get(tag.value ?? ""),
+                    ownersMap,
+                );
+                if (displayName) tag.value = displayName;
+            }
         });
 
         return tags;
@@ -107,7 +126,7 @@
                 ];
             }
 
-            tags = formatTags([...normalTags], $locale) ?? [];
+            tags = formatTags([...normalTags], $locale, accountingsMap, ownersMap) ?? [];
         }
     });
 </script>

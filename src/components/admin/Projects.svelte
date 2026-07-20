@@ -5,6 +5,7 @@
     import ProjectsTable from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";
+    import { withoutCache } from "../../openapi/cacheInterceptor";
     import {
         apiProjectsGetCollection,
         apiProjectsIdPatch,
@@ -17,15 +18,31 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import {
+        parseQueryFilters,
+        splitOrderParams,
+        syncQueryFiltersToUrl,
+    } from "../../utils/queryParams";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
 
-    let filters: ProjectsQuery = $state({});
+    const initialParams =
+        typeof window !== "undefined"
+            ? splitOrderParams(
+                  parseQueryFilters(window.location.search, {
+                      exclude: ["page", "itemsPerPage"],
+                  }),
+              )
+            : { filters: {}, order: {} };
+
+    let filters: ProjectsQuery = $state(initialParams.filters);
     let selectedSort = $state("date-desc");
-    let searchValue = $state("");
+    let searchValue = $state(
+        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
+    );
 
     let currentPage = $state(1);
     let itemsPerPage = $state(10);
@@ -39,10 +56,10 @@
     let lastQueryKey = $state("");
 
     let projectSlides = $derived([
-        { title: $t("admin.projects.totalizers.selected"), amount: totalItemsCount },
-        { title: $t("admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalUnpaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.selected"), amount: totalItemsCount },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
     ]);
 
     const sortMap: Record<
@@ -52,6 +69,11 @@
         "date-desc": { field: "dateCreated", direction: "desc" },
         "date-asc": { field: "dateCreated", direction: "asc" },
     };
+
+    const initialSortKey = Object.keys(sortMap).find(
+        (key) => initialParams.order[sortMap[key].field] === sortMap[key].direction,
+    );
+    if (initialSortKey) selectedSort = initialSortKey;
 
     function buildProjectsQuery(
         filters: ProjectsQuery,
@@ -89,23 +111,27 @@
             : ((record["hydra:member"] as unknown[])?.length ?? 0);
     }
 
-    async function loadProjects(): Promise<void> {
+    async function loadProjects(bypassCache = false): Promise<void> {
         isLoading = true;
 
-        try {
+        async function fetchProjects() {
             const query = buildProjectsQuery(filters, currentPage, itemsPerPage, selectedSort);
 
-            const {
-                data: collection,
-                response,
-                error,
-            } = await apiProjectsGetCollection({
+            return apiProjectsGetCollection({
                 query,
                 headers: {
                     Accept: "application/ld+json",
                     "Accept-Language": " ",
                 },
             });
+        }
+
+        try {
+            const {
+                data: collection,
+                response,
+                error,
+            } = await (bypassCache ? withoutCache(fetchProjects) : fetchProjects());
 
             if (error) {
                 console.error("Failed to fetch projects:", error);
@@ -194,7 +220,7 @@
         }
     }
 
-    function reloadProjects(): void {
+    function reloadProjects(bypassCache = false): void {
         const queryKey = JSON.stringify({ filters, selectedSort, itemsPerPage });
         if (queryKey !== lastQueryKey) {
             accountingsCache = new Map();
@@ -202,13 +228,22 @@
             lastQueryKey = queryKey;
         }
         projectRows = [];
-        loadProjects();
+        loadProjects(bypassCache);
     }
 
     $effect(() => {
         if (isFirstLoad) {
             reloadProjects();
         }
+    });
+
+    $effect(() => {
+        const sortOption = sortMap[selectedSort];
+
+        syncQueryFiltersToUrl(
+            filters,
+            sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
+        );
     });
 
     function handlePageChange(page: number): void {
@@ -234,6 +269,9 @@
         if (value.length >= 4 || value.length === 0) {
             if (value) {
                 filters = { ...filters, title: value };
+                currentPage = 1;
+                reloadProjects(true);
+                return;
             } else {
                 const { ...rest } = filters;
                 filters = rest;
@@ -277,12 +315,12 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <ProjectsFilters onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
+    <ProjectsFilters {filters} onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
 
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
             <FiltersTags
-                title={$t("admin.projects.lastProjects")}
+                title={$t("pages.admin.projects.lastProjects")}
                 {filters}
                 onCloseFilter={handleCloseFilter}
             />

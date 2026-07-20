@@ -116,7 +116,7 @@
         <!-- Session Error Toast -->
         {#if showSessionErrorToast}
             <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}>
-                {$t("wizard.errors.session.title")}
+                {$t("pages.project.edit.errors.session.title")}
             </Toast>
         {/if}
         <!-- Storage Error Alert -->
@@ -141,13 +141,13 @@
                     </svg>
                     <div class="flex-1">
                         <h3 class="text-secondary text-sm font-semibold">
-                            {$t("wizard.errors.storage.title")}
+                            {$t("pages.project.edit.errors.storage.title")}
                         </h3>
                         <p class="text-tertiary mt-1 text-sm">
                             {#if $persistenceError === "storage_quota_exceeded"}
-                                {$t("wizard.errors.storage.quota_exceeded")}
+                                {$t("pages.project.edit.errors.storage.quota_exceeded")}
                             {:else}
-                                {$t("wizard.errors.storage.save_failed")}
+                                {$t("pages.project.edit.errors.storage.save_failed")}
                             {/if}
                         </p>
                     </div>
@@ -155,7 +155,7 @@
                         type="button"
                         class="text-tertiary hover:text-secondary shrink-0"
                         onclick={() => persistenceError.set(null)}
-                        aria-label={$t("wizard.errors.storage.close")}
+                        aria-label={$t("pages.project.edit.errors.storage.close")}
                     >
                         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                             <path
