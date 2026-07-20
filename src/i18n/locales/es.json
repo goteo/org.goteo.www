@@ -1532,12 +1532,12 @@
       }
     },
     "blog": {
-          "share": {
-            "modal": {
-              "title": "Difunde este blog por el mundo",
-              "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
-            }
-          }
+      "share": {
+        "modal": {
+          "title": "Difunde este blog por el mundo",
+          "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
         }
       }
     }
+  }
+}

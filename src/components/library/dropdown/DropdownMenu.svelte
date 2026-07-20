@@ -123,7 +123,7 @@
             {#if clearable && searchValue}
                 <button
                     type="button"
-                    class="absolute right-14 shrink-0 hover:opacity-75 hover:cursor-pointer"
+                    class="absolute right-14 shrink-0 hover:cursor-pointer hover:opacity-75"
                     onclick={handleClear}
                 >
                     <Close width="20" height="20" />
