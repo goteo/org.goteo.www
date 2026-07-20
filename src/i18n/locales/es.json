@@ -629,7 +629,7 @@
         },
         "address": {
           "title": "¿Cuál es la dirección del proyecto?",
-          "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a geolocalizar tu iniciativa.",
+          "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a ubicar tu iniciativa.",
           "placeholder": "Ej: Calle Gran Vía 28, Madrid"
         },
         "budget": {
