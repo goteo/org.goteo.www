@@ -176,7 +176,12 @@ const postPaymentUrl = checkoutId
                                 </Card>
                             </div>
                         </div>
-                        <script>import {cart} from "../../../stores/cart"; cart.clear();</script>
+                        <div id="checkout-clear" data-user-id={user.id} />
+                        <script>
+                            import {clearForUser} from "../../../stores/checkoutsStore";
+                            clearForUser( document.getElementById("checkout-clear")?.dataset.userId,
+                            );
+                        </script>
                     </>
                 )
             }

@@ -1,7 +1,7 @@
 <script lang="ts">
     import CartItem from "./CartItem.svelte";
     import Tipjar from "./Tipjar.svelte";
-    import { cart, cartByRecipient } from "../../stores/cart";
+    import { cart, cartByRecipient } from "../../stores/checkoutsStore";
     import * as tipping from "../../utils/tipping";
 
     function increment(item: { key: string; quantity: number }) {

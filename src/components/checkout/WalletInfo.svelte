@@ -1,14 +1,7 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
+    import { cartAmount as total } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
-
-    const total = derived(cart, ($cart) => {
-        if (!$cart?.items) return 0;
-        return $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0);
-    });
 
     export let accounting;
     export let defaultCurrency;

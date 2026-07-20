@@ -1,7 +1,7 @@
 <script lang="ts">
     import WarningIcon from "../../components/icons/status/Warning.svelte";
     import { t } from "../../i18n/store";
-    import { cartAmount, cartByRecipient } from "../../stores/cart";
+    import { cartAmount, cartByRecipient } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
