@@ -26,9 +26,7 @@
     </div>
 
     <div class="text-center sm:text-left">
-        <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.amountToUse")}
-        </span>
+        <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.amountToUse")} </span>
         <p id="cart-total" class="text-double font-bold text-red-500">
             {formatCurrency($total)}
         </p>

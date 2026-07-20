@@ -38,20 +38,20 @@
 </script>
 
 <BaseActivityCard
-    titleKey="me.projects.title"
-    leftStatLabel="me.projects.count"
+    titleKey="pages.me.projects.title"
+    leftStatLabel="pages.me.projects.count"
     leftStatValue={projectsData?.count ?? 0}
-    rightStatLabel="me.projects.raised"
+    rightStatLabel="pages.me.projects.raised"
     rightStatValue={formattedTotal}
-    recentTitleKey="me.projects.recent"
+    recentTitleKey="pages.me.projects.recent"
     illustrationPath="/images/profile/ilustration-project.png"
-    primaryActionLabel="me.projects.viewAll"
+    primaryActionLabel="pages.me.projects.viewAll"
     primaryActionHref={lang === "es" ? "/me/projects" : `/${lang}/me/projects`}
-    secondaryActionLabel="me.projects.createNew"
+    secondaryActionLabel="pages.me.projects.createNew"
     secondaryActionHref={lang === "es" ? "/projects/new" : `/${lang}/projects/new`}
     isEmpty={!hasData}
-    emptyMessageKey="me.projects.empty"
-    emptyCtaLabel="me.projects.create"
+    emptyMessageKey="pages.me.projects.empty"
+    emptyCtaLabel="pages.me.projects.create"
     emptyCtaLink={lang === "es" ? "/projects/new" : `/${lang}/projects/new`}
 >
     {#if projectsData?.recentProjects}

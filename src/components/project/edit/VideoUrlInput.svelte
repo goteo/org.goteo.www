@@ -38,7 +38,7 @@
         }
 
         if (!isValidUrl(url)) {
-            validationError = $t("wizard.validation.campaign_info.video.invalid_url");
+            validationError = $t("pages.project.edit.campaignInfo.video.validation.invalid_url");
             return;
         }
 

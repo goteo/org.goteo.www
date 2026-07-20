@@ -46,9 +46,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     } catch (err: any) {
         console.error(err);
 
-        return json(
-            { error: `Bucket responded with error code "${err.Code}"` },
-            err["$metadata"].httpStatusCode || 500,
-        );
+        const message = err?.Code
+            ? `Bucket responded with error code "${err.Code}"`
+            : err?.message || "Unknown upload error";
+
+        return json({ error: message }, err?.$metadata?.httpStatusCode || 500);
     }
 };
