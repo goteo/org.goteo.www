@@ -9,12 +9,11 @@
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
-
-    import type { ProjectBudgetItem } from "../../../openapi/client";
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
+    import type { ProjectBudgetItem } from "../../../openapi/client";
 
     let {
         open = $bindable(false),
