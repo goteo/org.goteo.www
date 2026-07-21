@@ -203,7 +203,7 @@
         aria-expanded={open}
         aria-describedby={error ? `${finalId}-error` : helperText ? `helper-${finalId}` : undefined}
         class={twMerge(
-            "border-secondary text-secondary flex w-full items-center justify-between rounded-md border bg-white p-4 text-base focus:outline-none",
+            "border-secondary text-secondary flex w-full items-center justify-between rounded-md border bg-white p-4 text-base hover:cursor-pointer focus:outline-none",
             disabled && "cursor-not-allowed",
             error && "border-red-500 focus:ring-red-500",
         )}
@@ -247,7 +247,7 @@
             <button
                 type="button"
                 onclick={apply}
-                class="bg-primary text-secondary mt-6 h-14 w-full rounded-3xl text-lg font-bold"
+                class="bg-primary text-secondary mt-6 h-14 w-full rounded-3xl text-lg font-bold hover:cursor-pointer"
             >
                 {$t("common.dateInput.apply")}
             </button>
@@ -302,6 +302,7 @@
         border-radius: 9999px;
         color: var(--color-secondary);
         background: transparent;
+        cursor: pointer;
     }
 
     .datepicker :global(#datepicker-dropdown [role="columnheader"]) {
