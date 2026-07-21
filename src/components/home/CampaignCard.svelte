@@ -10,6 +10,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     import { t } from "../../i18n/store";
     import { client } from "../../openapi/client/client.gen";
     import { formatCurrency } from "../../utils/currencies";
+    import { gte } from "../../utils/money";
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
     import Flames from "../icons/status/Flames.svelte";
     import Tag from "../library/tags/Tag.svelte";
@@ -63,13 +64,15 @@ Converted from CampaignCard.astro to maintain exact functionality
     const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
-    const hasReachedMinimum = $derived((obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0));
+    const hasReachedMinimum = $derived(
+        obtained != null && campaign.minimum != null ? gte(obtained, campaign.minimum) : false,
+    );
 
     // Determine status badge text based on funding level
     // Using lookup pattern for consistency with other i18n implementations
     const statusBadgeText = $derived.by(() => {
         const key = hasReachedMinimum ? "minimumReached" : "goForMinimum";
-        return $t(`home.campaigns.status.${key}`);
+        return $t(`pages.home.campaigns.status.${key}`);
     });
 
     // Get first category only (as per review comments)
@@ -167,7 +170,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             >
                             <span class="text-secondary text-2xl font-bold">
                                 {#if obtained}
-                                    {formatCurrency(obtained.amount, obtained.currency)}
+                                    {formatCurrency(obtained)}
                                 {:else}
                                     <span class="text-content text-sm">{$t("system.loading")}</span>
                                 {/if}
@@ -175,25 +178,19 @@ Converted from CampaignCard.astro to maintain exact functionality
                         </div>
                         <!-- Remaining to Goal -->
                         <div class="flex flex-col gap-1 text-right">
-                            {#if campaign.optimum && (obtained?.amount ?? 0) >= (campaign.minimum.amount ?? 0)}
+                            {#if campaign.optimum && hasReachedMinimum}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.optimum.amount,
-                                        campaign.optimum.currency,
-                                    )}
+                                    {formatCurrency(campaign.optimum)}
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.minimum.amount,
-                                        campaign.minimum.currency,
-                                    )}
+                                    {formatCurrency(campaign.minimum)}
                                 </span>
                             {/if}
                         </div>
@@ -209,10 +206,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
-                            {formatCurrency(
-                                campaign.userDonations.amount,
-                                campaign.userDonations.currency,
-                            )}
+                            {formatCurrency(campaign.userDonations)}
                         </span>
                     </div>
                 {/if}
@@ -223,12 +217,12 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <button
                             class="border-secondary text-secondary hover:bg-secondary flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors hover:text-white"
                         >
-                            {$t("me.ownedProjects.messageToDonatorsButton")}
+                            {$t("pages.me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
                             class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
-                            {$t("me.ownedProjects.uploadNewsButton")}
+                            {$t("pages.me.ownedProjects.uploadNewsButton")}
                         </button>
                     </div>
                 {/if}

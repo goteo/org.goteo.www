@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { twJoin } from "tailwind-merge";
+
     import BudgetModal from "./BudgetModal.svelte";
     import CollabsModal from "./CollabsModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
@@ -17,7 +19,7 @@
         variant: "reward" | "collab" | "budget";
         open: boolean;
         showToast: boolean;
-        onSave: (data: any) => void;
+        onSave: (data: any, files?: any) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
@@ -49,9 +51,10 @@
 </script>
 
 <div
-    class="bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm {disabled
-        ? 'cursor-not-allowed opacity-50 grayscale'
-        : ''}"
+    class={twJoin(
+        "bg-secondary border-variant1 flex h-full min-h-54 w-full max-w-109.25 flex-col items-start justify-between overflow-hidden rounded-4xl border p-6 shadow-sm",
+        disabled && "cursor-not-allowed opacity-50 grayscale",
+    )}
 >
     <div class="flex flex-col gap-4 text-ellipsis">
         <h2
@@ -61,7 +64,7 @@
         >
             {title}
         </h2>
-        <p class="text-variant1 text-base font-normal">
+        <p class="text-variant1 mb-4 text-base font-normal">
             {description}
         </p>
     </div>
@@ -70,7 +73,7 @@
         class="mt-auto flex w-full items-center justify-center gap-2"
         {onclick}
     >
-        <MoreAndLess sign="more" class="p-0.5625" />
+        <MoreAndLess sign="more" class="size-6" />
         {#if variant === "reward"}
             {$t("pages.project.edit.rewards.add.button")}
         {:else if variant === "collab"}

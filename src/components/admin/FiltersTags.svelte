@@ -60,10 +60,6 @@
                 tag.values.to = formatDate(new Date(tag.values.to), locale);
             }
 
-            if (tag.title === "checkout.gateway") {
-                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
-            }
-
             if (tag.title === "status") {
                 const chargeLabel = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
                 tag.value =

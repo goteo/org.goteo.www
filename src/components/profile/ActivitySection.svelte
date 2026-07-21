@@ -16,8 +16,10 @@
         apiMatchCallsGetCollection,
     } from "../../openapi/client/sdk.gen.ts";
     import { projectCache } from "../../stores/projectCache";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
+    import { sumMoney } from "../../utils/money";
     import Grid from "../library/layout/Grid.svelte";
 
     import type {
@@ -25,6 +27,7 @@
         Project,
         MatchCall,
         User,
+        Money,
     } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
 
@@ -239,21 +242,15 @@
                     }),
                 );
 
-                accountingResults.forEach((accounting) => {
-                    const balance = accounting?.balance;
+                const projectBalances = accountingResults
+                    .map((a) => a?.balance)
+                    .filter((b): b is Money => b != null && typeof b.amount === "number");
 
-                    if (!balance) {
-                        return;
-                    }
-
-                    if (typeof balance.amount === "number") {
-                        projectsTotalAmount += balance.amount;
-                    }
-
-                    if (!projectsTotalCurrency && balance.currency) {
-                        projectsTotalCurrency = balance.currency;
-                    }
-                });
+                if (projectBalances.length > 0) {
+                    const total = sumMoney(projectBalances);
+                    projectsTotalAmount = total.amount ?? 0;
+                    projectsTotalCurrency = total.currency ?? getDefaultCurrency();
+                }
             }
 
             const fallbackNow = new Date().toISOString();
@@ -269,16 +266,21 @@
             };
 
             // Calculate total money (either from API or manually)
-            let totalAmount = totalMoney?.amount || 0;
-            let totalCurrency = totalMoney?.currency || "EUR";
+            const totalMoneyValue = totalMoney
+                ? {
+                      amount: totalMoney.amount ?? 0,
+                      currency: totalMoney.currency ?? getDefaultCurrency(),
+                  }
+                : contributions.length > 0
+                  ? sumMoney(
+                        contributions.map(
+                            (s) => s.money ?? { amount: 0, currency: getDefaultCurrency() },
+                        ),
+                    )
+                  : { amount: 0, currency: getDefaultCurrency() };
 
-            if (!totalMoney && contributions.length > 0) {
-                // Calculate manually from contributions
-                totalAmount = contributions.reduce((sum, support) => {
-                    return sum + (support.money?.amount || 0);
-                }, 0);
-                totalCurrency = contributions[0]?.money?.currency || "EUR";
-            }
+            let totalAmount = totalMoneyValue.amount;
+            let totalCurrency = totalMoneyValue.currency;
 
             // Map contributions to recent donations
             const sortedContributions = [...contributions].sort((a, b) => {
@@ -317,7 +319,7 @@
 
                 return {
                     id: support.id?.toString() || idOrSlug || "",
-                    amount: support.money || { amount: 0, currency: "EUR" },
+                    amount: support.money || { amount: 0, currency: getDefaultCurrency() },
                     // Use project title if available, otherwise use a placeholder
                     projectTitle: project?.title || `Project ${idOrSlug || "Unknown"}`,
                     // CRITICAL: Only use slug if it's valid (not a number). Never fall back to ID.
@@ -365,7 +367,7 @@
                           count: projectsCount,
                           totalRaised: {
                               amount: projectsTotalAmount,
-                              currency: projectsTotalCurrency ?? "EUR",
+                              currency: projectsTotalCurrency ?? getDefaultCurrency(),
                           },
                           recentProjects,
                       },
@@ -399,7 +401,11 @@
                             userCalls.map(async (call) => {
                                 const accountingId = extractId(call.accounting);
                                 if (!accountingId)
-                                    return { callId: call.id, amount: 0, currency: "EUR" };
+                                    return {
+                                        callId: call.id,
+                                        amount: 0,
+                                        currency: getDefaultCurrency(),
+                                    };
 
                                 try {
                                     const { data: accounting } = await apiAccountingsIdGet({
@@ -411,20 +417,28 @@
                                     return {
                                         callId: call.id,
                                         amount: accounting?.balance?.amount || 0,
-                                        currency: accounting?.balance?.currency || "EUR",
+                                        currency:
+                                            accounting?.balance?.currency || getDefaultCurrency(),
                                     };
                                 } catch {
-                                    return { callId: call.id, amount: 0, currency: "EUR" };
+                                    return {
+                                        callId: call.id,
+                                        amount: 0,
+                                        currency: getDefaultCurrency(),
+                                    };
                                 }
                             }),
                         );
 
                         // Calculate total donated across all calls
-                        const totalDonated = callAccountings.reduce(
-                            (sum, acc) => sum + acc.amount,
-                            0,
+                        const totalDonatedMoney = sumMoney(
+                            callAccountings.map((acc) => ({
+                                amount: acc.amount,
+                                currency: acc.currency,
+                            })),
                         );
-                        const currency = callAccountings[0]?.currency || "EUR";
+                        const totalDonated = totalDonatedMoney.amount ?? 0;
+                        const currency = totalDonatedMoney.currency ?? getDefaultCurrency();
 
                         // Get recent calls (up to 3)
                         const recentCalls = userCalls.slice(0, 3).map((call, index) => ({
@@ -432,7 +446,7 @@
                             title: call.title || "",
                             donationAmount: {
                                 amount: callAccountings[index]?.amount || 0,
-                                currency: callAccountings[index]?.currency || "EUR",
+                                currency: callAccountings[index]?.currency || getDefaultCurrency(),
                             },
                         }));
 

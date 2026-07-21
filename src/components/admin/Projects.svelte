@@ -18,15 +18,31 @@
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
+    import {
+        parseQueryFilters,
+        splitOrderParams,
+        syncQueryFiltersToUrl,
+    } from "../../utils/queryParams";
 
     import type { ProjectRow } from "./ProjectsTable.svelte";
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
 
-    let filters: ProjectsQuery = $state({});
+    const initialParams =
+        typeof window !== "undefined"
+            ? splitOrderParams(
+                  parseQueryFilters(window.location.search, {
+                      exclude: ["page", "itemsPerPage"],
+                  }),
+              )
+            : { filters: {}, order: {} };
+
+    let filters: ProjectsQuery = $state(initialParams.filters);
     let selectedSort = $state("date-desc");
-    let searchValue = $state("");
+    let searchValue = $state(
+        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
+    );
 
     let currentPage = $state(1);
     let itemsPerPage = $state(10);
@@ -40,10 +56,10 @@
     let lastQueryKey = $state("");
 
     let projectSlides = $derived([
-        { title: $t("admin.projects.totalizers.selected"), amount: totalItemsCount },
-        { title: $t("admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("admin.projects.totalizers.totalUnpaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.selected"), amount: totalItemsCount },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
     ]);
 
     const sortMap: Record<
@@ -53,6 +69,11 @@
         "date-desc": { field: "dateCreated", direction: "desc" },
         "date-asc": { field: "dateCreated", direction: "asc" },
     };
+
+    const initialSortKey = Object.keys(sortMap).find(
+        (key) => initialParams.order[sortMap[key].field] === sortMap[key].direction,
+    );
+    if (initialSortKey) selectedSort = initialSortKey;
 
     function buildProjectsQuery(
         filters: ProjectsQuery,
@@ -216,6 +237,15 @@
         }
     });
 
+    $effect(() => {
+        const sortOption = sortMap[selectedSort];
+
+        syncQueryFiltersToUrl(
+            filters,
+            sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
+        );
+    });
+
     function handlePageChange(page: number): void {
         currentPage = page;
         reloadProjects();
@@ -285,12 +315,12 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <ProjectsFilters onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
+    <ProjectsFilters {filters} onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
 
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
             <FiltersTags
-                title={$t("admin.projects.lastProjects")}
+                title={$t("pages.admin.projects.lastProjects")}
                 {filters}
                 onCloseFilter={handleCloseFilter}
             />
