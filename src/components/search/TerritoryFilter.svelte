@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { searchPlace } from "../../services/nominatim";
+    import { searchPlace, extractTerritory } from "../../services/nominatim";
     import DropdownMenu from "../library/dropdown/DropdownMenu.svelte";
 
     import type { NominatimResult } from "../../services/nominatim";
@@ -81,17 +81,7 @@
         const subLvl2 = new Set<string>();
 
         for (const item of selected) {
-            const address = item.result.address ?? {};
-
-            const country = address.country_code?.toUpperCase();
-
-            const iso3166_2 = Object.entries(address)
-                .filter(([key]) => key.startsWith("ISO3166-2-"))
-                .sort()
-                .map(([, value]) => value);
-
-            const lvl1 = iso3166_2[0];
-            const lvl2 = iso3166_2[1];
+            const { country, subLvl1: lvl1, subLvl2: lvl2 } = extractTerritory(item.result);
 
             if (lvl2) {
                 subLvl2.add(lvl2);

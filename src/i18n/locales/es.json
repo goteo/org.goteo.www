@@ -701,7 +701,8 @@
             "bankCertificateAriaLabel": "Subir certificado de titularidad",
             "ibanInvalid": "El formato del IBAN no es válido"
           },
-          "continue": "Siguiente paso"
+          "continue": "Siguiente paso",
+          "locationPlaceholder": "Ej: Calle Gran Vía 28, Madrid"
         },
         "errors": {
           "session": {
@@ -730,6 +731,11 @@
         "categories": {
           "title": "¿Qué categoría se ajusta a tu campaña?",
           "subtitle": "(Puedes elegir un máximo de 2)"
+        },
+        "address": {
+          "title": "¿Cuál es la dirección del proyecto?",
+          "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a ubicar tu iniciativa.",
+          "placeholder": "Ej: Calle Gran Vía 28, Madrid"
         },
         "budget": {
           "title": "¿Cuánto dinero necesitas?",

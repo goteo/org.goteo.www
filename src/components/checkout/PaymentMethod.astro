@@ -88,6 +88,7 @@ const { accounting } = Astro.props;
 <script>
     import { actions, isInputError } from "astro:actions";
     import type { GatewayLink } from "../../openapi/client/index";
+    import { multiplyMoney, sumMoney } from "../../utils/money";
 
     const form = document.getElementById("payment");
     const errorContent = document.getElementById("payment-error-content");
@@ -173,11 +174,13 @@ const { accounting } = Astro.props;
         if (cartData && walletInput) {
             try {
                 const cart = JSON.parse(cartData);
-                const total = cart.items.reduce(
-                    (sum: number, item: { amount: number; quantity: number }) =>
-                        sum + item.amount * item.quantity,
-                    0,
-                );
+                const items = Object.values(cart.items ?? {}) as Array<{
+                    money: { amount: number; currency?: string };
+                    quantity: number;
+                }>;
+                const total =
+                    sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)))
+                        ?.amount ?? 0;
 
                 const balanceAttr = form?.dataset.balance;
                 const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
