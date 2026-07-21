@@ -6,15 +6,15 @@
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import Toast from "../../library/feedback/Toast.svelte";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
 
     let {
         open = $bindable(false),
