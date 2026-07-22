@@ -1,3 +1,18 @@
+import {
+    suggestGateways,
+    suggestTarget,
+    suggestOwner,
+    suggestCategories,
+    suggestProjects,
+    suggestProjectsBySubtitle,
+    suggestProjectsByDescription,
+    suggestProjectsBySlug,
+} from "./filterSuggestions";
+import { currencySymbols } from "./currencyData";
+import { getDefaultLanguage } from "./consts";
+import { get } from "svelte/store";
+import { locale } from "../i18n/store";
+
 export interface FilterRow {
     id: string;
     subject: FilterSubject;
@@ -20,13 +35,60 @@ export type FilterOperator =
 
 export type FilterResource = "project" | "gateway_charge";
 
+export interface FilterOption {
+    value: string;
+    label: string;
+}
+
 export interface FilterSubject {
     key: string;
     param?: string;
     type: "string" | "date" | "number";
     compatibleOperators: FilterOperator[];
     resources: FilterResource[];
+    options?: FilterOption[];
+    suggest?: (q: string) => Promise<FilterOption[]>;
 }
+
+const gatewayChargeStatuses: FilterOption[] = [
+    { value: "to_charge", label: "To charge" },
+    { value: "in_charge", label: "In charge" },
+    { value: "to_refund", label: "To refund" },
+    { value: "refunded", label: "Refunded" },
+    { value: "to_wallet", label: "To wallet" },
+    { value: "walleted", label: "Wallet" },
+];
+
+const chargeTypes: FilterOption[] = [
+    { value: "single", label: "Single" },
+    { value: "recurring", label: "Recurring" },
+];
+
+const projectStatuses: FilterOption[] = [
+    { value: "in_draft", label: "In draft" },
+    { value: "to_campaign_review", label: "To campaign review" },
+    { value: "in_campaign_review", label: "In campaign review" },
+    { value: "in_campaign_review.request_change", label: "Request change (campaign)" },
+    { value: "campaign_review.rejected", label: "Rejected (campaign)" },
+    { value: "to_campaign", label: "To campaign" },
+    { value: "in_campaign", label: "In campaign" },
+    { value: "campaign.failed", label: "Failed (campaign)" },
+    { value: "to_funding_review", label: "To funding review" },
+    { value: "in_funding_review", label: "In funding review" },
+    { value: "in_funding_review.request_change", label: "Request change (funding)" },
+    { value: "funding_review.rejected", label: "Rejected (funding)" },
+    { value: "to_funding", label: "To funding" },
+    { value: "in_funding", label: "In funding" },
+    { value: "funding.paid", label: "Funding paid" },
+];
+
+const currentLocale = get(locale) || getDefaultLanguage();
+const currencyName = new Intl.DisplayNames([currentLocale], { type: "currency" });
+
+const currencies: FilterOption[] = Object.keys(currencySymbols).map((code) => ({
+    value: code,
+    label: `${currencyName.of(code)} (${code})`,
+}));
 
 const filterSubjects: Record<string, FilterSubject> = {
     title: {
@@ -34,66 +96,62 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["project"],
+        suggest: suggestProjects,
     },
     subtitle: {
         key: "subtitle",
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["project"],
+        suggest: suggestProjectsBySubtitle,
     },
     description: {
         key: "description",
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["project"],
+        suggest: suggestProjectsByDescription,
     },
-    status: {
-        key: "status",
+    projectStatus: {
+        key: "projectStatus",
+        param: "status",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project", "gateway_charge"],
+        resources: ["project"],
+        options: projectStatuses,
+    },
+    chargeStatus: {
+        key: "chargeStatus",
+        param: "status",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["gateway_charge"],
+        options: gatewayChargeStatuses,
     },
     categories: {
         key: "categories",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["project"],
+        suggest: suggestCategories,
     },
     owner: {
         key: "owner",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["project"],
+        suggest: suggestOwner,
     },
     slug: {
         key: "slug",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["project"],
-    },
-    accounting: {
-        key: "accounting",
-        type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        suggest: suggestProjectsBySlug,
     },
     territoryCountry: {
         key: "territoryCountry",
         param: "territory.country",
-        type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
-    },
-    territorySubLvl1: {
-        key: "territorySubLvl1",
-        param: "territory.subLvl1",
-        type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
-    },
-    territorySubLvl2: {
-        key: "territorySubLvl2",
-        param: "territory.subLvl2",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["project"],
@@ -116,18 +174,21 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charge"],
+        suggest: suggestGateways,
     },
     type: {
         key: "type",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charge"],
+        options: chargeTypes,
     },
     target: {
         key: "target",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charge"],
+        suggest: suggestTarget,
     },
     currency: {
         key: "currency",
@@ -135,6 +196,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charge"],
+        options: currencies,
     },
     amount: {
         key: "amount",
