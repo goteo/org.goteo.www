@@ -130,17 +130,18 @@ function createSearchStore() {
                 }));
             }
         } catch (error) {
-            console.error(error);
-            // Only set error if request wasn't cancelled
-            if (!(error instanceof Error) || error.name !== "AbortError") {
-                update((state) => ({
-                    ...state,
-                    isLoading: false,
-                    hasError: true,
-                    errorMessage: error instanceof Error ? error.message : "Search failed",
-                    currentAbortController: undefined,
-                }));
+            // Ignore cancelled requests — a new search aborted this one
+            if (error instanceof Error && error.name === "AbortError") {
+                return;
             }
+            console.error(error);
+            update((state) => ({
+                ...state,
+                isLoading: false,
+                hasError: true,
+                errorMessage: error instanceof Error ? error.message : "Search failed",
+                currentAbortController: undefined,
+            }));
         }
     };
 
