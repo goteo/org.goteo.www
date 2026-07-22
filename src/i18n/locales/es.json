@@ -481,8 +481,7 @@
             "title": "Elige las rondas que tendrá tu campaña",
             "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
             "option1": "1 Ronda",
-            "option2": "2 Rondas",
-            "optimumDisabled": "La opción de 2 rondas no está disponible: la campaña superaría la fecha límite del {{ date }}"
+            "option2": "2 Rondas"
           },
           "continue": "Continuar con info de campaña",
           "geography": {

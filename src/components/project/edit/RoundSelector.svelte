@@ -21,16 +21,9 @@
     interface RoundSelectorProps {
         deadline: Project["deadline"];
         onChange: (selectedDeadline: "minimum" | "optimum") => void;
-        optimumDisabled?: boolean;
-        optimumDisabledReason?: string;
     }
 
-    let {
-        deadline = $bindable("minimum"),
-        onChange,
-        optimumDisabled = false,
-        optimumDisabledReason,
-    }: RoundSelectorProps = $props();
+    let { deadline = $bindable("minimum"), onChange }: RoundSelectorProps = $props();
 
     /**
      * Handle round selection change
@@ -40,31 +33,22 @@
     }
 </script>
 
-<div class="flex flex-col gap-2">
-    <div class="flex gap-4">
-        <!-- 1 Round Option -->
-        <RadioButton
-            bind:group={deadline}
-            name="funding-rounds"
-            value="minimum"
-            onchange={() => handleChange("minimum")}
-            label={$t("pages.project.edit.configuration.rounds.option1")}
-        />
+<div class="flex gap-4">
+    <!-- 1 Round Option -->
+    <RadioButton
+        bind:group={deadline}
+        name="funding-rounds"
+        value="minimum"
+        onchange={() => handleChange("minimum")}
+        label={$t("pages.project.edit.configuration.rounds.option1")}
+    />
 
-        <!-- 2 Rounds Option -->
-        <div class={optimumDisabled ? "opacity-50" : ""}>
-            <RadioButton
-                bind:group={deadline}
-                name="funding-rounds"
-                value="optimum"
-                disabled={optimumDisabled}
-                onchange={() => handleChange("optimum")}
-                label={$t("pages.project.edit.configuration.rounds.option2")}
-            />
-        </div>
-    </div>
-
-    {#if optimumDisabled && optimumDisabledReason}
-        <p class="text-content text-sm">{optimumDisabledReason}</p>
-    {/if}
+    <!-- 2 Rounds Option -->
+    <RadioButton
+        bind:group={deadline}
+        name="funding-rounds"
+        value="optimum"
+        onchange={() => handleChange("optimum")}
+        label={$t("pages.project.edit.configuration.rounds.option2")}
+    />
 </div>

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { getMaxReleaseDate } from "../../../utils/campaign";
+import { maxEndDate } from "../../../utils/campaign";
 
 /**
  * Validation schema for project creation form.
@@ -62,16 +62,15 @@ export const projectCreationSchema = z.object({
         )
         .refine(
             (date) => {
-                // Latest release so the campaign cannot extend past the
-                // platform-wide cutoff (PUBLIC_CAMPAIGN_MAX_END_DATE)
-                const maxDate = getMaxReleaseDate("minimum");
-                if (!maxDate) return true;
+                // Release must not be past the platform-wide cutoff
+                // (PUBLIC_CAMPAIGN_MAX_END_DATE)
+                if (!maxEndDate) return true;
 
                 // Create a copy of the input date to avoid mutation
                 const normalizedDate = new Date(date);
                 normalizedDate.setHours(0, 0, 0, 0);
 
-                return normalizedDate <= maxDate;
+                return normalizedDate <= maxEndDate;
             },
             { message: "system.validation.project.release.max" },
         )
