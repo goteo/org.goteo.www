@@ -427,6 +427,7 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
+        composedFiltersResource={["gateway_charge"]}
         {initialSearchQuery}
         onApplyFilters={handleApplyFilters}
     />
