@@ -20,6 +20,7 @@ export interface SearchState {
     itemsPerPage: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
+    isLoadingMore: boolean;
     currentAbortController?: AbortController;
 }
 
@@ -45,6 +46,7 @@ function getInitialState(): SearchState {
         itemsPerPage: 20,
         hasNextPage: false,
         hasPrevPage: false,
+        isLoadingMore: false,
         currentAbortController: undefined,
     };
 }
@@ -102,6 +104,7 @@ function createSearchStore() {
             update((state) => ({
                 ...state,
                 isLoading: true,
+                isLoadingMore: false,
                 hasError: false,
                 errorMessage: "",
                 currentAbortController: abortController,
@@ -387,6 +390,7 @@ function createSearchStore() {
                 update((state) => ({
                     ...state,
                     isLoading: true,
+                    isLoadingMore: true,
                     hasError: false,
                     errorMessage: "",
                     currentAbortController: abortController,
@@ -410,6 +414,7 @@ function createSearchStore() {
                         hasNextPage: response.hasNextPage,
                         hasPrevPage,
                         isLoading: false,
+                        isLoadingMore: false,
                         hasSearched: true,
                         lastSearchTime: Date.now(),
                         currentAbortController: undefined,
@@ -422,6 +427,7 @@ function createSearchStore() {
                     update((state) => ({
                         ...state,
                         isLoading: false,
+                        isLoadingMore: false,
                         hasError: true,
                         errorMessage:
                             error instanceof Error ? error.message : "Failed to load more results",
@@ -446,6 +452,9 @@ export const searchFilters = derived(searchStore, ($searchStore) => $searchStore
 export const searchResults = derived(searchStore, ($searchStore) => $searchStore.results);
 
 export const isSearching = derived(searchStore, ($searchStore) => $searchStore.isLoading);
+
+// True only while appending more results (Load more) — not during a fresh search
+export const isLoadingMore = derived(searchStore, ($searchStore) => $searchStore.isLoadingMore);
 
 export const searchError = derived(searchStore, ($searchStore) =>
     $searchStore.hasError ? $searchStore.errorMessage : null,
