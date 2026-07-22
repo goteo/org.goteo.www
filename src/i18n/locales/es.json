@@ -26,6 +26,9 @@
       "project": {
         "terms": {
           "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+        },
+        "release": {
+          "max": "La fecha de inicio es demasiado tardía: la campaña no puede extenderse más allá de la fecha límite de la plataforma"
         }
       },
       "errors": {
