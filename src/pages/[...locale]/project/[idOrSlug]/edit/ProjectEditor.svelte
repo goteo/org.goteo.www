@@ -84,7 +84,7 @@
             title: $currentDraft.createProject.title,
             subtitle: $currentDraft.createProject.subtitle,
             categories: $currentDraft.createProject.categories,
-            territory: {} as Project["territory"],
+            territory: $currentDraft.createProject.territory as Project["territory"],
             description: "",
             deadline: $currentDraft.wizardForm.configuration.projectDeadline,
             budget: $currentDraft.wizardForm.budget,
@@ -105,6 +105,18 @@
                     const resources = $session
                         ? await getProjectDraftResources(projectToIri(project), $session)
                         : undefined;
+
+                    const coverUrl = (project as any).cover as string | undefined;
+                    if (coverUrl && resources) {
+                        resources.images = [
+                            {
+                                id: crypto.randomUUID(),
+                                url: coverUrl,
+                                name: "Project cover",
+                                size: 0,
+                            },
+                        ];
+                    }
 
                     await initializeProjectDraft(
                         projectToDraft(project),
