@@ -46,7 +46,7 @@
         { name: "pages.admin.charges.headers.origin", sortable: false },
         { name: "pages.admin.charges.headers.paymentMethod", sortable: false },
         { name: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
-        { name: "pages.admin.charges.headers.chargeStatus", sortable: false, sortKey: "status" },
+        { name: "pages.admin.charges.headers.chargeStatus", sortable: true, sortKey: "status" },
         { name: "pages.admin.charges.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];

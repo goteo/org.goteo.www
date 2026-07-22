@@ -1133,7 +1133,9 @@
               "date-desc": "Fecha (más reciente primero)",
               "date-asc": "Fecha (más antigua primero)",
               "amount-desc": "Importe (mayor a menor)",
-              "amount-asc": "Importe (menor a mayor)"
+              "amount-asc": "Importe (menor a mayor)",
+              "status-asc": "Estado (A-Z)",
+              "status-desc": "Estado (Z-A)"
             }
           },
           "itemsPerPage": {
