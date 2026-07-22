@@ -8,6 +8,7 @@
         type AccountingBalancePoint,
     } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
+    import { gt } from "../../utils/money";
     import Button from "../library/buttons/Button.svelte";
     import Card from "../library/cards/Card.svelte";
     import Grid from "../library/layout/Grid.svelte";
@@ -19,11 +20,7 @@
     export let onScrollToRewards: () => void;
 
     function hasReached(money?: Money) {
-        return (
-            money !== undefined &&
-            accounting.balance?.amount !== undefined &&
-            Number(accounting.balance.amount) - Number(money.amount) > 0
-        );
+        return money !== undefined && accounting.balance != null && gt(accounting.balance, money);
     }
 </script>
 
@@ -51,10 +48,7 @@
             <div>
                 <p class="text-content text-sm">{$t("domain.project.campaign.obtained")}</p>
                 <p class="text-3xl font-bold text-black">
-                    {formatCurrency(
-                        Number(accounting.balance?.amount) || 0,
-                        accounting.balance?.currency ?? undefined,
-                    )}
+                    {formatCurrency(accounting.balance)}
                 </p>
             </div>
             <div>
@@ -68,19 +62,13 @@
             <div>
                 <p class="text-content text-sm">{$t("domain.project.budget.optimum")}</p>
                 <p class="text-3xl font-bold text-black">
-                    {formatCurrency(
-                        project.budget?.optimum?.money?.amount ?? 0,
-                        project.budget?.optimum?.money?.currency ?? undefined,
-                    )}
+                    {formatCurrency(project.budget?.optimum?.money)}
                 </p>
             </div>
             <div>
                 <p class="text-content text-sm">{$t("domain.project.budget.minimum")}</p>
                 <p class="text-2xl font-bold text-black">
-                    {formatCurrency(
-                        project.budget?.minimum?.money?.amount ?? 0,
-                        project.budget?.minimum?.money?.currency ?? undefined,
-                    )}
+                    {formatCurrency(project.budget?.minimum?.money)}
                 </p>
             </div>
         </div>

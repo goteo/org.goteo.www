@@ -49,6 +49,7 @@
     "chart.js": "^4.5.1",
     "csrf": "^3.1.0",
     "dexie": "^4.4.2",
+    "dinero.js": "^2.0.2",
     "dotenv": "^17.4.2",
     "file-type": "^22.0.1",
     "flickity": "^3.0.0",
