@@ -8,11 +8,14 @@ Converted from CampaignCard.astro to maintain exact functionality
 
     import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
+    import { client } from "../../openapi/client/client.gen";
     import { formatCurrency } from "../../utils/currencies";
-    import Flames from "../icons/Flames.svelte";
-    import CampaignStatusBadge from "../library/CampaignStatusBadge.svelte";
-    import Tag from "../library/Tag.svelte";
+    import { gte } from "../../utils/money";
+    import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
+    import Flames from "../icons/status/Flames.svelte";
+    import Tag from "../library/tags/Tag.svelte";
 
+    import type { Accounting, Money } from "../../openapi/client";
     import type { Campaign, CampaignSize } from "../../types/campaign";
 
     interface Props {
@@ -31,6 +34,27 @@ Converted from CampaignCard.astro to maintain exact functionality
         class: className = "",
     }: Props = $props();
 
+    // Balance pre-loaded from server (home page); fetched client-side via Project.accounting IRI when not provided
+    let obtained = $state<Money | undefined>(undefined);
+
+    $effect(() => {
+        if (obtained === undefined) {
+            if (campaign.obtained) {
+                obtained = campaign.obtained;
+            } else if (campaign.accounting) {
+                (
+                    client.get({ url: campaign.accounting }) as unknown as Promise<{
+                        data: Accounting;
+                    }>
+                )
+                    .then(({ data }) => {
+                        if (data?.balance) obtained = data.balance as Money;
+                    })
+                    .catch(() => {});
+            }
+        }
+    });
+
     // Define responsive classes based on size
     // Large cards span 2 columns in lg+ (3-column grid), 2 columns in md (2-column grid), full width on mobile
     const sizeClasses = $derived(
@@ -40,34 +64,15 @@ Converted from CampaignCard.astro to maintain exact functionality
     const imageHeight = "h-53.75"; // More rectangular proportions matching design
 
     // Calculate funding status and remaining amount
-    const hasReachedMinimum = $derived(campaign.obtained.amount >= campaign.minimum.amount);
+    const hasReachedMinimum = $derived(
+        obtained != null && campaign.minimum != null ? gte(obtained, campaign.minimum) : false,
+    );
 
     // Determine status badge text based on funding level
     // Using lookup pattern for consistency with other i18n implementations
     const statusBadgeText = $derived.by(() => {
         const key = hasReachedMinimum ? "minimumReached" : "goForMinimum";
-        return $t(`home.campaigns.status.${key}`);
-    });
-
-    // Calculate remaining amount (to minimum or optimum)
-    const remainingToGoal = $derived(() => {
-        if (hasReachedMinimum && campaign.optimum) {
-            // Show remaining to optimum if minimum is reached
-            const remaining = campaign.optimum.amount - campaign.obtained.amount;
-            return {
-                amount: remaining > 0 ? remaining : 0,
-                label: $t("pages.home.campaigns.remaining.toOptimum"),
-                currency: campaign.optimum.currency,
-            };
-        } else {
-            // Show remaining to minimum
-            const remaining = campaign.minimum.amount - campaign.obtained.amount;
-            return {
-                amount: remaining > 0 ? remaining : 0,
-                label: $t("pages.home.campaigns.remaining.toMinimum"),
-                currency: campaign.minimum.currency,
-            };
-        }
+        return $t(`pages.home.campaigns.status.${key}`);
     });
 
     // Get first category only (as per review comments)
@@ -164,33 +169,28 @@ Converted from CampaignCard.astro to maintain exact functionality
                                 >{$t("pages.home.campaigns.obtained")}</span
                             >
                             <span class="text-secondary text-2xl font-bold">
-                                {formatCurrency(
-                                    campaign.obtained.amount,
-                                    campaign.obtained.currency,
-                                )}
+                                {#if obtained}
+                                    {formatCurrency(obtained)}
+                                {:else}
+                                    <span class="text-content text-sm">{$t("system.loading")}</span>
+                                {/if}
                             </span>
                         </div>
                         <!-- Remaining to Goal -->
                         <div class="flex flex-col gap-1 text-right">
-                            {#if campaign.optimum && campaign.obtained.amount >= campaign.minimum.amount}
+                            {#if campaign.optimum && hasReachedMinimum}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.optimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.optimum.amount,
-                                        campaign.optimum.currency,
-                                    )}
+                                    {formatCurrency(campaign.optimum)}
                                 </span>
                             {:else}
                                 <span class="text-secondary text-base">
                                     {$t("pages.home.campaigns.minimum")}
                                 </span>
                                 <span class="text-secondary text-2xl font-bold">
-                                    {formatCurrency(
-                                        campaign.minimum.amount,
-                                        campaign.minimum.currency,
-                                    )}
+                                    {formatCurrency(campaign.minimum)}
                                 </span>
                             {/if}
                         </div>
@@ -206,10 +206,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                             >{$t("pages.home.campaigns.userDonations")}</span
                         >
                         <span class="text-2xl font-bold text-black">
-                            {formatCurrency(
-                                campaign.userDonations.amount,
-                                campaign.userDonations.currency,
-                            )}
+                            {formatCurrency(campaign.userDonations)}
                         </span>
                     </div>
                 {/if}
@@ -220,12 +217,12 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <button
                             class="border-secondary text-secondary hover:bg-secondary flex-1 rounded-3xl border px-4 py-4 text-base font-bold transition-colors hover:text-white"
                         >
-                            {$t("me.ownedProjects.messageToDonatorsButton")}
+                            {$t("pages.me.ownedProjects.messageToDonatorsButton")}
                         </button>
                         <button
                             class="bg-variant1 text-secondary hover:bg-purple-soft flex-1 rounded-3xl px-4 py-4 text-base font-bold transition-colors"
                         >
-                            {$t("me.ownedProjects.uploadNewsButton")}
+                            {$t("pages.me.ownedProjects.uploadNewsButton")}
                         </button>
                     </div>
                 {/if}

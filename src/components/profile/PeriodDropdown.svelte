@@ -1,6 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import ChevronDown from "../../svgs/ChevronDown.svelte";
+    import Chevron from "../icons/navigation/Chevron.svelte";
 
     interface Props {
         /**
@@ -33,11 +33,11 @@
         style="appearance: none; -webkit-appearance: none; -moz-appearance: none; background-image: none;"
         value={selectedPeriod}
         onchange={handleChange}
-        aria-label={$t("me.period.label")}
+        aria-label={$t("pages.me.period.label")}
     >
         {#each years as year}
             <option value={year.toString()}>
-                {$t("me.period.year", { year })}
+                {$t("pages.me.period.year", { year })}
             </option>
         {/each}
     </select>
@@ -46,11 +46,11 @@
         for="period-select"
         class="pointer-events-none absolute -top-1.25 left-3 bg-white px-1 text-xs leading-none font-medium text-black"
     >
-        {$t("me.period.label")}
+        {$t("pages.me.period.label")}
     </label>
 
     <!-- Dropdown icon -->
     <div class="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2">
-        <ChevronDown />
+        <Chevron direction="down" width="16" height="16" />
     </div>
 </div>

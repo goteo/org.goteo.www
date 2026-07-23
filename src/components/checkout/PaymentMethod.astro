@@ -1,0 +1,215 @@
+---
+import type { ApiGatewaysIdGetResponse } from "../../openapi/client/index";
+import CreditCardIcon from "../icons/payment/CreditCardIcon.astro";
+import PaypalIcon from "../icons/payment/PaypalIcon.astro";
+import StripeIcon from "../icons/payment/StripeIcon.astro";
+import { formatCurrency } from "../../utils/currencies";
+
+const { t } = Astro.locals;
+
+const {
+    hasError,
+    paymentGateways,
+    selectedGateway,
+}: {
+    hasError?: boolean;
+    paymentGateways?: ApiGatewaysIdGetResponse[];
+    selectedGateway?: string;
+} = Astro.props;
+
+const { accounting } = Astro.props;
+---
+
+<section>
+    <div class="flex flex-col gap-6 sm:w-full sm:max-w-md">
+        <p class="text-2xl font-bold">
+            {
+                hasError
+                    ? t("pages.checkout.verify.error.selectMethod")
+                    : t("pages.checkout.payment.selectMethod")
+            }
+        </p>
+
+        <form
+            id="payment"
+            method="POST"
+            class="flex flex-col gap-4"
+            data-balance={accounting.balance.amount}
+        >
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                {
+                    (paymentGateways ?? []).map((gateway) => (
+                        <label
+                            class="border-grey flex cursor-pointer items-center justify-between gap-4 rounded-2xl border px-6 py-4 shadow-sm transition-all hover:shadow-md"
+                            data-gateway={gateway.id}
+                        >
+                            <div class="flex items-center gap-2">
+                                <input
+                                    type="radio"
+                                    name="paymentMethod"
+                                    value={gateway.id}
+                                    disabled={gateway.id === "wallet"}
+                                    checked={
+                                        selectedGateway
+                                            ? gateway.id === selectedGateway
+                                            : gateway.id !== "wallet" &&
+                                              paymentGateways?.[0]?.name === gateway.id
+                                    }
+                                    class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
+                                />
+                                <div class="flex flex-col leading-tight">
+                                    <span class="font-semibold">{gateway.name}</span>
+                                    {gateway.id === "wallet" && (
+                                        <span class="text-sm font-normal">
+                                            {t("pages.checkout.wallet.balanceLabel")}
+                                            {formatCurrency(accounting.amount, accounting.currency)}
+                                        </span>
+                                    )}
+                                </div>
+                            </div>
+                            <div>
+                                {gateway.id === "paypal" ? (
+                                    <PaypalIcon />
+                                ) : gateway.id === "stripe" ? (
+                                    <StripeIcon />
+                                ) : gateway.id === "wallet" ? (
+                                    <CreditCardIcon />
+                                ) : null}
+                            </div>
+                        </label>
+                    ))
+                }
+            </div>
+            <input type="hidden" name="cartData" id="cart-data-input" />
+        </form>
+        <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
+    </div>
+</section>
+<script>
+    import { actions, isInputError } from "astro:actions";
+    import { multiplyMoney, sumMoney } from "../../utils/money";
+
+    const form = document.getElementById("payment");
+    const errorContent = document.getElementById("payment-error-content");
+    const cartDataInput = document.getElementById("cart-data-input");
+
+    if (form instanceof HTMLFormElement) {
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const selectedMethod = formData.get("paymentMethod");
+
+            if (selectedMethod === "wallet") {
+                window.location.href = "/checkout/wallet";
+                return;
+            }
+
+            const { error, data } = await actions.payment(formData);
+
+            if (!error) {
+                const checkoutLink = data?.checkout?.links?.find(
+                    (link: { type: string }) => link.type === "payment",
+                );
+
+                if (!checkoutLink) {
+                    throw new Error("No payment link found in the response");
+                }
+
+                if (checkoutLink.method === "GET") {
+                    window.location.href = checkoutLink.url!;
+                }
+
+                if (checkoutLink.method === "POST") {
+                    const form = document.createElement("form");
+
+                    form.method = "POST";
+                    form.action = checkoutLink.url!;
+
+                    if (checkoutLink.body) {
+                        Object.entries(checkoutLink.body).forEach(([key, value]) => {
+                            const input = document.createElement("input");
+                            input.type = "hidden";
+                            input.name = key;
+                            input.value = value as string;
+                            form.appendChild(input);
+                        });
+                    }
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            }
+
+            if (error && errorContent instanceof HTMLElement) {
+                errorContent.innerHTML = "";
+
+                if (isInputError(error)) {
+                    const ul = document.createElement("ul");
+                    error.issues.forEach((err) => {
+                        const li = document.createElement("li");
+                        li.innerText = err.message;
+                        ul.appendChild(li);
+                    });
+
+                    errorContent.appendChild(ul);
+                    return;
+                }
+                errorContent.innerText = error.message;
+            }
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const labels = document.querySelectorAll("label[data-gateway]");
+        const inputs = document.querySelectorAll("input[name='paymentMethod']");
+        const walletInput = document.querySelector("input[value='wallet']");
+        const cartData = localStorage.getItem("cart");
+
+        if (cartData && cartDataInput) {
+            (cartDataInput as HTMLInputElement).value = cartData;
+        }
+
+        if (cartData && walletInput) {
+            try {
+                const cart = JSON.parse(cartData);
+                const items = Object.values(cart.items ?? {}) as Array<{
+                    money: { amount: number; currency?: string };
+                    quantity: number;
+                }>;
+                const total =
+                    sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)))
+                        ?.amount ?? 0;
+
+                const balanceAttr = form?.dataset.balance;
+                const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
+
+                const shouldDisable = balance < total;
+                (walletInput as HTMLInputElement).disabled = shouldDisable;
+
+                const walletLabel = walletInput.closest("label");
+                if (walletLabel) {
+                    walletLabel.classList.toggle("opacity-50", shouldDisable);
+                    walletLabel.classList.toggle("cursor-not-allowed", shouldDisable);
+                }
+            } catch (e) {
+                console.log("Error parsing cart data:", e);
+            }
+        }
+
+        inputs.forEach((input) => {
+            input.addEventListener("change", () => {
+                labels.forEach((label) => {
+                    label.classList.remove("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
+                    label.classList.add("border-grey");
+                });
+
+                const selectedLabel = input.closest("label");
+                if (selectedLabel) {
+                    selectedLabel.classList.remove("border-grey");
+                    selectedLabel.classList.add("bg-teal-300", "text-[#2f1e2e]", "border-teal-400");
+                }
+            });
+        });
+    });
+</script>

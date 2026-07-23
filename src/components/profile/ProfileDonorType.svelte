@@ -1,6 +1,7 @@
 <script lang="ts">
+    import VerifiedBadge from "./VerifiedBadge.svelte";
     import { t } from "../../i18n/store";
-    import VerifiedBadge from "../../svgs/VerifiedBadge.svelte";
+    import { getDefaultCurrency } from "../../utils/consts";
     import { formatCurrency } from "../../utils/currencies";
 
     interface Props {
@@ -12,7 +13,7 @@
     let {
         projectsDonated = 1,
         moneyDonatedAmount = 500,
-        moneyDonatedCurrency = "EUR",
+        moneyDonatedCurrency = getDefaultCurrency(),
     }: Props = $props();
 
     // Format currency using the project's formatCurrency function
@@ -28,10 +29,10 @@
             <div class="flex items-center justify-between">
                 <div class="text-secondary flex flex-col gap-2">
                     <p class="text-4xl leading-tight font-bold">
-                        {$t("profile.donorType.fan.title")}
+                        {$t("pages.profile.donorType.fan.title")}
                     </p>
                     <p class="text-base leading-normal">
-                        {$t("profile.donorType.fan.description")}
+                        {$t("pages.profile.donorType.fan.description")}
                     </p>
                 </div>
                 <div class="size-25">
@@ -41,7 +42,7 @@
             <div class="flex gap-10">
                 <div class="text-secondary flex flex-col">
                     <p class="text-base leading-normal">
-                        {$t("profile.donorType.fan.projectsDonated")}
+                        {$t("pages.profile.donorType.fan.projectsDonated")}
                     </p>
                     <p class="text-3xl leading-tight font-bold">
                         {projectsDonated.toString().padStart(2, "0")}
@@ -49,7 +50,7 @@
                 </div>
                 <div class="text-secondary flex flex-col">
                     <p class="text-base leading-normal">
-                        {$t("profile.donorType.fan.moneyDonated")}
+                        {$t("pages.profile.donorType.fan.moneyDonated")}
                     </p>
                     <p class="text-3xl leading-tight font-bold">
                         {formattedMoney}
@@ -63,10 +64,10 @@
     <div class="border-grey flex max-h-64 grow flex-col gap-6 rounded-3xl border bg-white p-6">
         <div class="flex flex-col gap-2">
             <p class="text-secondary text-4xl leading-tight font-bold">
-                {$t("profile.donorType.nextLevel.title")}
+                {$t("pages.profile.donorType.nextLevel.title")}
             </p>
             <p class="text-tertiary text-base leading-normal">
-                {$t("profile.donorType.nextLevel.description")}
+                {$t("pages.profile.donorType.nextLevel.description")}
             </p>
         </div>
         <div class="flex w-full items-center justify-between gap-2">

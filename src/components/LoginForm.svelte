@@ -1,17 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import App from "./App.svelte";
-    import BackButton from "./BackButton.svelte";
-    import Steps from "./Checkout/Steps.svelte";
-    import Summary from "./Checkout/Summary.svelte";
-    import Button from "./library/Button.svelte";
-    import Card from "./library/Card.svelte";
-    import Checkbox from "./library/Checkbox.svelte";
-    import TextInput from "./library/TextInput.svelte";
-    import Oauth from "./Oauth.svelte";
-    import Thtml from "../components/Thtml.svelte";
     import { t } from "../i18n/store";
+    import App from "../layouts/App.svelte";
+    import Steps from "./checkout/Steps.svelte";
+    import Summary from "./checkout/Summary.svelte";
+    import BackButton from "./library/buttons/BackButton.svelte";
+    import Button from "./library/buttons/Button.svelte";
+    import Card from "./library/cards/Card.svelte";
+    import Checkbox from "./library/inputs/Checkbox.svelte";
+    import TextInput from "./library/inputs/TextInput.svelte";
+    import Thtml from "./library/typography/Thtml.svelte";
+    import Oauth from "./Oauth.svelte";
 
     import type { Locale } from "../i18n/locales";
 

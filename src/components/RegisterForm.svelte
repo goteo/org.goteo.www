@@ -1,17 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import App from "./App.svelte";
-    import BackButton from "./BackButton.svelte";
-    import Thtml from "../components/Thtml.svelte";
-    import Steps from "./Checkout/Steps.svelte";
-    import Summary from "./Checkout/Summary.svelte";
-    import Button from "./library/Button.svelte";
-    import Card from "./library/Card.svelte";
-    import Checkbox from "./library/Checkbox.svelte";
-    import RadioButton from "./library/RadioButton.svelte";
+    import App from "../layouts/App.svelte";
+    import { t, locale as localeStore } from "./../i18n/store";
+    import Steps from "./checkout/Steps.svelte";
+    import Summary from "./checkout/Summary.svelte";
+    import BackButton from "./library/buttons/BackButton.svelte";
+    import Button from "./library/buttons/Button.svelte";
+    import Card from "./library/cards/Card.svelte";
+    import Checkbox from "./library/inputs/Checkbox.svelte";
+    import RadioButton from "./library/inputs/RadioButton.svelte";
+    import Thtml from "./library/typography/Thtml.svelte";
     import Oauth from "./Oauth.svelte";
-    import { t, locale as localeStore } from "../i18n/store";
 
     import type { Locale } from "../i18n/locales";
 
@@ -163,20 +163,21 @@
                             </div>
                         </div>
                         <div
-                            class="fflex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
+                            class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch"
                         >
                             <Checkbox id="policies" bind:checked={acceptTerms}>
-                                <Thtml
-                                    key="register.form.policiesCheckbox"
-                                    vars={{
-                                        terms: `<a href="/legal/terms" class="text-secondary underline font-bold hover:opacity-80">`,
-                                        _terms: "</a>",
-                                        privacy: `<a href="/legal/privacy" class="text-secondary underline font-bold hover:opacity-80">`,
-                                        _privacy: "</a>",
-                                        cookies: `<a href="/legal/cookies" class="text-secondary underline font-bold hover:opacity-80">`,
-                                        _cookies: "</a>",
-                                    }}
-                                />
+                                <span class="text-content inline text-base leading-6 font-normal">
+                                    <Thtml key="register.form.policiesCheckbox"
+                                        vars={{
+                                            terms: `<a href="/legal/terms" class="inline text-secondary underline font-bold hover:opacity-80">`,
+                                            _terms: "</a>",
+                                            privacy: `<a href="/legal/privacy" class="inline text-secondary underline font-bold hover:opacity-80">`,
+                                            _privacy: "</a>",
+                                            cookies: `<a href="/legal/cookies" class="inline text-secondary underline font-bold hover:opacity-80">`,
+                                            _cookies: "</a>",
+                                        }}
+                                    />
+                                </span>
                             </Checkbox>
                         </div>
                     </form>
@@ -199,7 +200,7 @@
 
                         <Steps step={currentStep} hasError={errorMessage !== ""} />
                         <p
-                            class="text-content font-body self-stretch py-3 text-[14px] leading-4 font-medium"
+                            class="text-content font-body text-body-small self-stretch py-3 leading-4 font-medium"
                         >
                             {$t("checkout.summary.deduct")}
                         </p>
@@ -207,7 +208,7 @@
                         <Button
                             type="submit"
                             form="register"
-                            class="fflex bg-primary text-secondary font-karla items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 text-[14px] leading-4 font-bold"
+                            class="flex bg-primary text-secondary font-karla text-body-small items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 leading-4 font-bold"
                         >
                             {#if isSubmitting}
                                 <span class="italic">{$t("system.loading")}</span>

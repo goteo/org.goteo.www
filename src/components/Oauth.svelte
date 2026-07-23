@@ -1,8 +1,8 @@
 <script lang="ts">
-    import FacebookIcon from "../svgs/FacebookIcon.svelte";
-    import GoogleIcon from "../svgs/GoogleIcon.svelte";
-    import LinkedinIcon from "../svgs/LinkedinIcon.svelte";
-    import XIcon from "../svgs/XIcon.svelte";
+    import FacebookIcon from "./icons/social/FacebookIcon.svelte";
+    import GoogleIcon from "./icons/social/GoogleIcon.svelte";
+    import LinkedinIcon from "./icons/social/LinkedinIcon.svelte";
+    import XIcon from "./icons/social/XIcon.svelte";
 
     const providers = [
         { icon: GoogleIcon, id: "google" },

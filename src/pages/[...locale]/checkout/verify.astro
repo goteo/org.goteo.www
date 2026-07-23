@@ -1,15 +1,15 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import App from "../../../components/App.svelte";
+import App from "../../../layouts/App.svelte";
 import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client/index.ts";
-import FeedbackForm from "../../../components/Checkout/FeedbackForm.svelte";
-import Summary from "../../../components/Checkout/Summary.svelte";
-import ApprovedIcon from "../../../svgs/ApprovedIcon.astro";
-import PaymentErrorIcon from "../../../svgs/PaymentErrorIcon.astro";
-import PaymentMethod from "../../../components/Checkout/PaymentMethod.astro";
+import FeedbackForm from "../../../components/checkout/FeedbackForm.svelte";
+import Summary from "../../../components/checkout/Summary.svelte";
+import PaymentMethod from "../../../components/checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
-import Card from "../../../components/library/Card.svelte";
+import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
+import { sumMoney } from "../../../utils/money";
+import type { Money } from "../../../openapi/client";
 
 const { t, lang, session } = Astro.locals;
 
@@ -57,7 +57,10 @@ try {
         throw new Error("Payment not completed");
     }
 
-    amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
+    amount = response.data?.charges?.length
+        ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
+              .amount
+        : undefined;
 } catch (err) {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";
@@ -82,13 +85,18 @@ const postPaymentUrl = checkoutId
                                         <div class="flex flex-row items-center justify-between gap-6">
                                             <div class="flex w-2/3 flex-col gap-4">
                                                 <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                                                    {t("payment.page-error.title")}
+                                                    {t("pages.checkout.verify.error.title")}
                                                 </h2>
                                                 <p class="text-content">
                                                     {t("pages.checkout.verify.error.description")}
                                                 </p>
                                             </div>
-                                            <PaymentErrorIcon />
+                                            <img
+                                                src="/images/checkout/payment-error.svg"
+                                                alt=""
+                                                width="221"
+                                                height="214"
+                                            />
                                         </div>
 
                                         <PaymentMethod
@@ -129,7 +137,7 @@ const postPaymentUrl = checkoutId
                                             <div class="flex flex-row items-center justify-between gap-6">
                                                 <div class="flex w-2/3 flex-col gap-4">
                                                     <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                                                        {t("payment.page-approved.title")}
+                                                        {t("pages.checkout.verify.approved.title")}
                                                     </h2>
                                                     <p class="text-content">
                                                         {t(
@@ -137,7 +145,12 @@ const postPaymentUrl = checkoutId
                                                         )}
                                                     </p>
                                                 </div>
-                                                <ApprovedIcon />
+                                                <img
+                                                    src="/images/checkout/payment-approved.svg"
+                                                    alt=""
+                                                    width="215"
+                                                    height="190"
+                                                />
                                             </div>
                                             <div>
                                                 <FeedbackForm

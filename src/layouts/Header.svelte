@@ -2,13 +2,13 @@
     import { clickOutside } from "flowbite-svelte";
 
     import { session } from "../auth/store";
-    import CartButton from "../components/CartButton.svelte";
-    import HeaderButtons from "../components/HeaderButtons.svelte";
-    import Hamburger from "../components/icons/Hamburger.svelte";
-    import UserIcon from "../components/icons/User.svelte";
-    import UiLanguages from "../components/UiLanguages.svelte";
+    import CartButton from "../components/checkout/CartButton.svelte";
+    import HeaderButtons from "../components/header/HeaderButtons.svelte";
+    import UiLanguages from "../components/header/UiLanguages.svelte";
+    import Logo from "../components/icons/Logo.svelte";
+    import Hamburger from "../components/icons/navigation/Hamburger.svelte";
+    import UserIcon from "../components/icons/user/User.svelte";
     import { t } from "../i18n/store";
-    import Logo from "../svgs/Logo.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -87,13 +87,13 @@
                                             href="/me"
                                             class="border-grey text-secondary hover:bg-grey block w-full overflow-hidden border-b px-4 py-2 font-bold text-ellipsis"
                                         >
-                                            {$t("header.goToProfile")}
+                                            {$t("common.header.goToProfile")}
                                         </a>
                                         <a
                                             href="/logout"
                                             class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold text-ellipsis"
                                         >
-                                            {$t("logout.label")}
+                                            {$t("pages.logout.label")}
                                         </a>
                                     </div>
                                 </div>

@@ -1,0 +1,27 @@
+<script lang="ts">
+    import TotalizerCard from "./TotalizerCard.svelte";
+    import { t } from "../../i18n/store";
+    import Grid from "../library/layout/Grid.svelte";
+
+    let {
+        selectedCampaigns,
+        totalEarned,
+        totalPaid,
+        totalUnpaid,
+    }: {
+        selectedCampaigns: string;
+        totalEarned: string;
+        totalPaid: string;
+        totalUnpaid: string;
+    } = $props();
+</script>
+
+<Grid class="w-full max-w-340 grid-cols-1 gap-6 self-center md:grid-cols-2 lg:grid-cols-4">
+    <TotalizerCard
+        title={$t("pages.admin.projects.totalizers.selected")}
+        value={selectedCampaigns}
+    />
+    <TotalizerCard title={$t("pages.admin.projects.totalizers.totalEarned")} value={totalEarned} />
+    <TotalizerCard title={$t("pages.admin.projects.totalizers.totalPaid")} value={totalPaid} />
+    <TotalizerCard title={$t("pages.admin.projects.totalizers.totalUnpaid")} value={totalUnpaid} />
+</Grid>

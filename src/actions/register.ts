@@ -1,13 +1,13 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
+import { passwordGrant } from "../auth/grant.ts";
+import { buildSession, setSession } from "../auth/session.ts";
 import {
     apiUsersPost,
-    apiUserTokensPost,
     apiUsersIdpersonPatch,
     apiUsersIdorganizationPatch,
 } from "../openapi/client/index.ts";
-import { extractId } from "../utils/extractId.ts";
 
 export const register = defineAction({
     accept: "form",
@@ -31,7 +31,7 @@ export const register = defineAction({
                 if (!firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: t("register.error.incompletePersonFields"),
+                        message: t("pages.register.error.incompletePersonFields"),
                     });
                 }
             }
@@ -40,7 +40,7 @@ export const register = defineAction({
                 if (!razonSocial?.trim() || !cif?.trim() || !firstname.trim() || !lastname.trim()) {
                     throw new ActionError({
                         code: "BAD_REQUEST",
-                        message: t("register.error.incompleteOrgFields"),
+                        message: t("pages.register.error.incompleteOrgFields"),
                     });
                 }
             }
@@ -53,28 +53,20 @@ export const register = defineAction({
                 },
             });
             const userId = String(createUserResponse.data?.id ?? "");
-            const accountingId = extractId(createUserResponse.data?.accounting);
 
-            const { data: authData } = await apiUserTokensPost({
-                body: {
-                    identifier,
-                    password,
-                },
-            });
+            const auth = await passwordGrant({ identifier, password });
 
-            if (!authData?.id || !authData.token) {
+            if (!auth.access_token) {
                 throw new ActionError({
                     code: "BAD_REQUEST",
-                    message: t("login.error.invalidCredentials"),
+                    message: t("pages.login.error.invalidCredentials"),
                 });
             }
 
             if (input.type === "individual") {
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${authData?.token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         taxId: dni ?? "",
                         firstName: firstname,
@@ -84,9 +76,7 @@ export const register = defineAction({
             } else {
                 await apiUsersIdpersonPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${authData?.token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         firstName: firstname,
                         lastName: lastname,
@@ -95,9 +85,7 @@ export const register = defineAction({
 
                 await apiUsersIdorganizationPatch({
                     path: { id: userId },
-                    headers: {
-                        Authorization: `Bearer ${authData?.token}`,
-                    },
+                    headers: auth.asHttpHeaders,
                     body: {
                         taxId: cif ?? "",
                         legalName: razonSocial ?? "",
@@ -105,27 +93,15 @@ export const register = defineAction({
                 });
             }
 
-            context.cookies.set(
-                "access-token",
-                {
-                    id: authData.id,
-                    token: authData.token,
-                    accountingId,
-                },
-                {
-                    path: "/",
-                    httpOnly: true,
-                    secure: true,
-                    sameSite: "strict",
-                },
-            );
+            const session = await buildSession(auth);
+            setSession(context.cookies, session);
 
             return { success: true };
         } catch (error) {
             console.error("🚨 Error al registrar:", JSON.stringify(error, null, 2));
             throw new ActionError({
                 code: "BAD_REQUEST",
-                message: t("register.error.unexpectedRegistration"),
+                message: t("pages.register.error.unexpectedRegistration"),
             });
         }
     },

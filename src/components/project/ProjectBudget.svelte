@@ -8,7 +8,7 @@
     import { apiProjectBudgetItemsGetCollection } from "../../openapi/client/index";
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
-    import Carousel from "../Carousel.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
 
     import type { Project, ProjectBudgetItem, Accounting } from "../../openapi/client/index";
 
@@ -151,11 +151,15 @@
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-    headerClass="py-2"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    bodyClass="p-0"
 >
     {#if selectedBudgetItem}
-        <div class="flex cursor-pointer flex-col gap-4 bg-white p-4 px-6 py-4">
+        <div
+            class="flex cursor-pointer flex-col gap-4 rounded-3xl bg-white p-8 shadow-lg"
+            onclick={(e) => e.stopPropagation()}
+            role="presentation"
+        >
             <div class="flex flex-row items-center justify-between gap-4">
                 <div class="flex items-center gap-2">
                     <div

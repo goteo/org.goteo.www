@@ -2,7 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import Table from "./Table.svelte";
 import Cell from "./Cell.svelte";
-import Carousel from "../../../components/Carousel.svelte";
+import Carousel from "../../../components/library/layout/Carousel.svelte";
 import handshakeImage from "./img/handshake.png";
 import meetingImage from "./img/meeting.png";
 import calendarImage from "./img/calendar.png";
@@ -29,7 +29,7 @@ const phases = [
 ];
 ---
 
-<Layout title={t("pages.about.title")} description={t("metadata.description")}>
+<Layout title={t("pages.about.title")} description={t("pages.metadata.description")}>
     <div class="flex flex-col gap-18 pb-20">
         <!-- Hero section -->
         <section class="py-20">
