@@ -32,7 +32,7 @@ function getInitialState(): SearchState {
     return {
         filters: {
             page: 1,
-            itemsPerPage: 20,
+            itemsPerPage: 18,
         },
         results: [],
         isLoading: false,
@@ -43,7 +43,7 @@ function getInitialState(): SearchState {
         lastSearchTime: 0,
         // Pagination state
         currentPage: 1,
-        itemsPerPage: 20,
+        itemsPerPage: 18,
         hasNextPage: false,
         hasPrevPage: false,
         isLoadingMore: false,
@@ -229,7 +229,7 @@ function createSearchStore() {
                 ...state,
                 filters: {
                     page: 1,
-                    itemsPerPage: 20,
+                    itemsPerPage: 18,
                 },
             })),
 
