@@ -3153,6 +3153,8 @@ export type ApiGatewayChargesGetCollectionData = {
         'dateUpdated[strictly_before]'?: string;
         'dateUpdated[after]'?: string;
         'dateUpdated[strictly_after]'?: string;
+        'order[money.amount]'?: 'asc' | 'desc';
+        'order[status]'?: 'asc' | 'desc';
         'order[dateCreated]'?: 'asc' | 'desc';
         'order[dateUpdated]'?: 'asc' | 'desc';
     };
@@ -5441,6 +5443,7 @@ export type ApiUsersGetCollectionData = {
         'territory.subLvl1[]'?: Array<string>;
         'territory.subLvl2'?: string;
         'territory.subLvl2[]'?: Array<string>;
+        'order[handle]'?: 'asc' | 'desc';
     };
     url: '/v4/users';
 };
