@@ -1389,6 +1389,80 @@
           "showing": "Mostrando {{ items }} de {{ total }}",
           "itemsPerPage": "{{ count }} por página"
         }
+      },
+      "users": {
+        "title": "Usuarios",
+        "description": "Aquí tienes todos los usuarios de la plataforma, puedes buscarlos y filtrarlos como quieras.",
+        "lastUsers": "Listado de usuarios:",
+        "export": {
+          "csv": "Exportar .csv"
+        },
+        "totalizers": {
+          "selected": "Usuarios seleccionados:"
+        },
+        "filters": {
+          "search": {
+            "placeholder": "Buscar por nombre de usuario...",
+            "btn": "Buscar",
+            "minLength": "Es necesario escribir al menos 4 caracteres"
+          },
+          "btns": {
+            "openFilters": "Filtros",
+            "closeFilters": "Cerrar filtros",
+            "apply": "Aplicar filtros"
+          },
+          "email": {
+            "title": "Email"
+          },
+          "order": {
+            "title": "Ordenar por",
+            "options": {
+              "handle-asc": "Nombre de usuario A–Z",
+              "handle-desc": "Nombre de usuario Z–A",
+              "email-asc": "Email A–Z",
+              "email-desc": "Email Z–A"
+            }
+          },
+          "itemsPerPage": {
+            "title": "Líneas por página",
+            "options": {
+              "10": "10",
+              "25": "25",
+              "50": "50"
+            }
+          }
+        },
+        "table": {
+          "headers": {
+            "handle": "Usuario",
+            "email": "Email",
+            "displayName": "Nombre",
+            "type": "Tipo",
+            "active": "Activo",
+            "roles": "Roles"
+          },
+          "rows": {
+            "noData": "No hay datos disponibles",
+            "active": "Activo",
+            "inactive": "Inactivo",
+            "type": {
+              "individual": "Individual",
+              "organization": "Organización"
+            },
+            "details": {
+              "id": "ID",
+              "handle": "Usuario",
+              "email": "Email",
+              "type": "Tipo",
+              "territory": "País",
+              "active": "Activo"
+            }
+          }
+        },
+        "pagination": {
+          "showing": "Mostrando {{ items }} de {{ total }}",
+          "itemsPerPage": "{{ count }} por página"
+        }
       }
     },
     "static": {
