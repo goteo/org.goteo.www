@@ -1,40 +1,38 @@
 {
-  "common": {
-    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
-    "dateInput": {
-      "apply": "Aplicar",
-      "previousMonth": "Mes anterior",
-      "nextMonth": "Mes siguiente",
-      "close": "Cerrar"
+  "system": {
+    "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
+    "loading": "Cargando...",
+    "error": {
+      "unknown": "Ha ocurrido un error desconocido",
+      "payment": {
+        "missingMethod": "Se debe seleccionar un método de pago",
+        "missingCartData": "La cesta está vacía",
+        "unprocessableCartData": "No se puede procesar la cesta, por favor vacíala y vuelve a intentarlo",
+        "badAPIResponse": "Ha ocurrido un error al comunicarse con la pasarela de pago"
+      },
+      "file": {
+        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
+        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
+      }
     },
-    "greeting": "Hola",
-    "farewell": "Adiós",
-    "donate": "Donar",
-    "donateAmount": "Dona {{ amount }}",
-    "save": "Guardar",
-    "edit": "Editar",
-    "delete": "Borrar",
-    "continue": "Continuar",
-    "back": "Volver",
-    "cancel": "Cancelar",
-    "publish": "Publicar",
-    "preview": "Vista previa",
-    "select": "Elige una opción",
-    "remove": "Eliminar",
-    "textPlaceholder": "Escribe aquí",
-    "remember": "Recordar",
-    "search": "Buscar",
-    "searchEtc": "Buscar...",
-    "countdown": {
-      "remaining": "Quedan",
-      "expired": "Campaña finalizada"
+    "constraint": {
+      "file": {
+        "maxAllowedSize": "Tamaño máximo permitido 10MB",
+        "supportedTypes": "Archivos compatibles: {{ types }}"
+      }
     },
-    "login": "Iniciar Sesión",
-    "goHome": "Volver a inicio",
-    "viewAll": "Ver todo",
-    "noData": "No hay datos disponibles",
-    "tooltip": {
-      "copied": "¡Copiado!"
+    "validation": {
+      "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
+      "project": {
+        "terms": {
+          "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+        }
+      },
+      "errors": {
+        "summary": {
+          "title": "Corrige los siguientes errores:"
+        }
+      }
     }
   },
   "domain": {
@@ -66,10 +64,14 @@
       },
       "reward": {
         "byAtLeast": "Por {{ amount }}",
+        "byAtLeastOrMore": "Por {{ amount }} o más",
         "unitsTotal": {
           "single": "Hay una unidad",
           "multiple": "Hay {{ units }} unidades"
         },
+        "unitsAvailable": "Quedan {{ units }} unidades",
+        "donators": "{{ donators }} donantes",
+        "noUnits": "No quedan unidades",
         "isInfinite": "Sin límite de unidades"
       },
       "status": {
@@ -80,13 +82,7 @@
       }
     },
     "gatewayCheckout": {
-      "paymentMethod": "Método",
-      "payments": {
-        "tpv": "Tarjeta",
-        "paypal": "Paypal",
-        "stripe": "Stripe",
-        "wallet": "Monedero"
-      }
+      "paymentMethod": "Método"
     },
     "charges": {
       "status": {
@@ -105,13 +101,7 @@
         "projects": "Proyectos",
         "users": "Usuarios",
         "tipjars": "Botes de propina",
-        "tipjar-id": "ID del bote de propina"
-      },
-      "lastContributions": "Últimos aportes:",
-      "totalizers": {
-        "totalCharges": "Total aportes:",
-        "totalTips": "Total propinas:",
-        "totalFees": "Comisiones totales:"
+        "tipjarId": "ID del bote de propina"
       }
     },
     "review": {
@@ -120,16 +110,136 @@
         "medium": "Riesgo medio",
         "high": "Riesgo alto"
       }
+    },
+    "tipping": {
+      "title": "Deja una propina"
+    },
+    "navigation": {
+      "search": {
+        "placeholder": "Busca tu campaña"
+      }
     }
   },
+  "common": {
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    "dateInput": {
+      "apply": "Aplicar",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "close": "Cerrar"
+    },
+    "greeting": "Hola",
+    "farewell": "Adiós",
+    "donate": "Donar",
+    "donateAmount": "Dona {{ amount }}",
+    "save": "Guardar",
+    "edit": "Editar",
+    "delete": "Borrar",
+    "continue": "Continuar",
+    "back": "Volver",
+    "cancel": "Cancelar",
+    "publish": "Publicar",
+    "preview": "Vista previa",
+    "select": "Elige una opción",
+    "remove": "Eliminar",
+    "textPlaceholder": "Escribe aquí",
+    "remember": "Recordar",
+    "search": "Buscar",
+    "countdown": {
+      "remaining": "Quedan",
+      "expired": "Campaña finalizada"
+    },
+    "login": "Iniciar Sesión",
+    "goHome": "Volver a inicio",
+    "viewAll": "Ver todo",
+    "viewMore": "Ver más",
+    "viewLess": "Ver menos",
+    "share": "Compartir",
+    "noData": "No hay datos disponibles",
+    "tooltip": {
+      "copied": "¡Copiado!"
+    },
+    "header": {
+      "search": "Buscar",
+      "createProject": "Crea tu proyecto",
+      "goToProfile": "Ir a Perfil"
+    },
+    "footer": {
+      "funding": {
+        "title": "Financia:",
+        "partOf": "Somos parte de:"
+      },
+      "navigation": {
+        "collaborate": {
+          "title": "Colabora",
+          "createProject": "Crea un proyecto",
+          "matchfunding": "Matchfunding",
+          "workshops": "Talleres"
+        },
+        "help": {
+          "title": "Ayuda",
+          "faqs": "FAQs",
+          "contact": "Contacto",
+          "taxCalculator": "Calculadora fiscal"
+        },
+        "aboutGoteo": {
+          "title": "Sobre Goteo",
+          "whoWeAre": "¿Quiénes somos?",
+          "goteoBenefits": "Ventajas de Goteo",
+          "foundationImpact": "Impacto de la fundación",
+          "platoniqFoundation": "Fundación Platoniq"
+        },
+        "forUsers": {
+          "title": "Para usuarias",
+          "rechargeWallet": "Recarga tu monedero",
+          "downloadCertificate": "Descarga certificado",
+          "accessComplementaryFunds": "Accede a fondos complementarios",
+          "designFundingProgram": "Diseña un programa de financiación"
+        }
+      },
+      "legal": {
+        "termsOfUse": "Condiciones de uso",
+        "privacyPolicy": "Política de privacidad",
+        "licenses": "Licencias",
+        "stats": "Stats"
+      },
+      "platoniq": {
+        "foundation": "Fundación"
+      }
+    },
+    "saved": "Guardado"
+  },
   "pages": {
+    "403": {
+      "title": "No tienes permisos suficientes para continuar",
+      "subtitle": "Por favor, vuelve por donde has venido.",
+      "meta": {
+        "title": "Acceso prohibido",
+        "description": "Sin permisos suficientes."
+      }
+    },
+    "404": {
+      "title": "No queda ni gota de la página que estás buscando",
+      "subtitle": "Por favor, vuelve al inicio.",
+      "meta": {
+        "title": "Página no encontrada",
+        "description": "La página que buscas no existe o ha sido movida."
+      }
+    },
+    "500": {
+      "title": "Algo ha salido terriblemente mal",
+      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
+      "meta": {
+        "title": "Condición inesperada para la solicitud",
+        "description": "Error interno del servidor."
+      }
+    },
     "_": "Contenido específico de páginas (/home, /search, /project/[id], etc.)",
     "home": {
       "banner": {
         "title": "¡Renovamos Goteo!",
         "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
         "ctaText": "Súmate a nuestra historia",
-        "ctaLink": "/about",
         "closeAriaLabel": "Cerrar banner"
       },
       "campaigns": {
@@ -149,10 +259,6 @@
         "status": {
           "minimumReached": "¡Mínimo conseguido!",
           "goForMinimum": "¡A por el mínimo!"
-        },
-        "remaining": {
-          "toOptimum": "Falta para óptimo",
-          "toMinimum": "Falta para mínimo"
         },
         "userDonations": "Tus donaciones:"
       },
@@ -178,10 +284,7 @@
         "cards": {
           "grant": "Dotación convocatoria",
           "inscription": "Fecha de inscripción",
-          "participants": "Proyectos participantes",
-          "apply": "Inscríbete en la convocatoria",
-          "viewCampaigns": "Ver las campañas de la convocatoria",
-          "finished": "Finalizada {{date}}"
+          "participants": "Proyectos participantes"
         }
       },
       "stats": {
@@ -254,30 +357,6 @@
     "index": {
       "title": "Goteo"
     },
-    "403": {
-      "title": "No tienes permisos suficientes para continuar",
-      "subtitle": "Por favor, vuelve por donde has venido.",
-      "meta": {
-        "title": "Acceso prohibido",
-        "description": "Sin permisos suficientes."
-      }
-    },
-    "404": {
-      "title": "No queda ni gota de la página que estás buscando",
-      "subtitle": "Por favor, vuelve al inicio.",
-      "meta": {
-        "title": "Página no encontrada",
-        "description": "La página que buscas no existe o ha sido movida."
-      }
-    },
-    "500": {
-      "title": "Algo ha salido terriblemente mal",
-      "subtitle": "Por favor, espera unos segundos antes de volver a intentarlo.",
-      "meta": {
-        "title": "Condición inesperada para la solicitud",
-        "description": "Error interno del servidor."
-      }
-    },
     "checkout": {
       "metadata": {
         "title": "Checkout",
@@ -301,25 +380,13 @@
       "summary": {
         "toRecipient": "{{ amount }} a {{ name }}",
         "total": {
-          "title": "Total que vas a donar",
-          "description": "Descripción del total"
+          "title": "Total que vas a donar"
         },
         "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
-        "resume": {
-          "donationsPrefix": "de donaciones",
-          "foundationPrefix": "de aporte a la fundación"
-        },
         "showDetails": "Ver detalle",
         "hideDetails": "Ocultar desglose",
         "showMore": "Ver más",
-        "hide": "Ocultar",
-        "donations": "de donaciones",
-        "foundation": "de aporte a "
-      },
-      "cart": {
-        "freeDonation": {
-          "title": "Donación libre"
-        }
+        "hide": "Ocultar"
       },
       "steps": {
         "reward": {
@@ -361,19 +428,13 @@
           },
           "formReview": {
             "title": "Deja un mensaje en los proyectos a los que has apoyado",
-            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. ",
-            "labels": {
-              "name": "Label",
-              "anonymous": "Dejar un mensaje de forma anónima",
-              "leave-a-message": "Dejar un mensaje de forma pública"
-            }
+            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. "
           }
         },
         "error": {
           "title": "Algo ha fallado... Vuelve a intentarlo para poder donar.",
           "description": "Vaya, quizá sea error nuestro, del medio de pago o simplemente un malvado duende informático. Vamos a probar de nuevo.",
-          "selectMethod": "Selecciona de nuevo un método de pago:",
-          "btnContinue": "Volver a intentarlo"
+          "selectMethod": "Selecciona de nuevo un método de pago:"
         }
       },
       "postPayment": {
@@ -384,19 +445,12 @@
           "description": "El certificado se genera de forma automática al final del año fiscal (diciembre). Te mandaremos un correo una vez hayamos presentado la documentación a Hacienda. En caso de que encontremos algún problema te contactaremos por correo."
         },
         "donatedProjects": {
-          "title": "Has donado a los siguientes proyectos",
-          "empty": "No se encontraron proyectos donados"
+          "title": "Has donado a los siguientes proyectos"
         },
         "suggestedProjects": {
           "title": "Otros proyectos que requieren de tu ayuda",
           "empty": "No hay proyectos disponibles en este momento"
         }
-      },
-      "error": {
-        "unexpectedPayment": "Error al procesar el pago. Por favor, inténtalo de nuevo más tarde.",
-        "paymentFailed": "El pago ha fallado. Por favor, revisa los datos introducidos y vuelve a intentarlo.",
-        "paymentCancelled": "El pago ha sido cancelado. Por favor, vuelve a intentarlo.",
-        "missingAccountingId": "No se ha encontrado todos los datos. Por favor, vuelve a iniciar sesión."
       }
     },
     "project": {
@@ -426,7 +480,19 @@
             "option1": "1 Ronda",
             "option2": "2 Rondas"
           },
-          "continue": "Continuar con info de campaña"
+          "continue": "Continuar con info de campaña",
+          "geography": {
+            "scopeLabel": "Ámbito de actuación",
+            "scopePlaceholder": "Selecciona el ámbito",
+            "options": {
+              "local": "Local",
+              "estatal": "Estatal",
+              "internacional": "Internacional"
+            },
+            "localitiesLabel": "Localidades",
+            "localitiesPlaceholder": "Selecciona las localidades",
+            "localitiesHelper": "Indica las localidades donde se desarrolla el proyecto"
+          }
         },
         "campaignInfo": {
           "title": "Información de campaña",
@@ -435,7 +501,18 @@
             "title": "Imágen y vídeo de presentación",
             "description": "Añade una imagen o vídeo que represente tu proyecto. Será lo primero que vean los futuros donantes de tu campaña",
             "addImage": "Añadir imagen",
-            "addVideo": "Añadir vídeo"
+            "addVideo": "Añadir vídeo",
+            "uploading": "Subiendo…",
+            "processing": "Procesando…",
+            "maxImagesReached": "Has alcanzado el máximo de imágenes",
+            "removeVideo": "Eliminar vídeo",
+            "videoPlaceholder": "Pega aquí la URL del vídeo",
+            "validation": {
+              "image_too_large": "La imagen supera el tamaño máximo permitido",
+              "invalid_image": "Formato de imagen no válido",
+              "max_images": "Número máximo de imágenes alcanzado",
+              "upload_failed": "Error al subir el archivo"
+            }
           },
           "goals": {
             "title": "Objetivos y propósito de tu campaña",
@@ -453,7 +530,12 @@
             "title": "¿Con qué equipo cuentas?",
             "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
           },
-          "continue": "Continuar con recompensas"
+          "continue": "Continuar con recompensas",
+          "video": {
+            "validation": {
+              "invalid_url": "La URL del vídeo no es válida"
+            }
+          }
         },
         "rewards": {
           "title": "Recompensas",
@@ -473,6 +555,11 @@
               "description": "Descripción de la recompensa",
               "moneyAmount": "Precio",
               "files": "Haz click o arrastra aquí tu archivo para subirlo"
+            },
+            "validation": {
+              "title": "El título no puede estar vacío",
+              "description": "La descripción no puede estar vacía",
+              "amount": "El importe debe ser mayor que cero"
             }
           },
           "deleteModal": {
@@ -607,7 +694,19 @@
             "bankCertificateAriaLabel": "Subir certificado de titularidad",
             "ibanInvalid": "El formato del IBAN no es válido"
           },
-          "continue": "Siguiente paso"
+          "continue": "Siguiente paso",
+          "locationPlaceholder": "Ej: Calle Gran Vía 28, Madrid"
+        },
+        "errors": {
+          "session": {
+            "title": "Sesión expirada"
+          },
+          "storage": {
+            "title": "Error de almacenamiento",
+            "save_failed": "No se pudieron guardar los cambios",
+            "quota_exceeded": "Almacenamiento local lleno",
+            "close": "Cerrar"
+          }
         }
       },
       "create": {
@@ -626,10 +725,14 @@
           "title": "¿Qué categoría se ajusta a tu campaña?",
           "subtitle": "(Puedes elegir un máximo de 2)"
         },
+        "address": {
+          "title": "¿Cuál es la dirección del proyecto?",
+          "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a ubicar tu iniciativa.",
+          "placeholder": "Ej: Calle Gran Vía 28, Madrid"
+        },
         "budget": {
           "title": "¿Cuánto dinero necesitas?",
-          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto.",
-          "amountPrompt": "Indica la cantidad que necesitas"
+          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto."
         },
         "release": {
           "title": "Fecha salida de campaña",
@@ -638,7 +741,9 @@
         "terms": {
           "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
         },
-        "submit": "Proponer campaña"
+        "submit": "Proponer campaña",
+        "submitting": "Enviando…",
+        "submitSuccess": "¡Campaña propuesta correctamente!"
       },
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
@@ -647,6 +752,7 @@
           "rewards": "Recompensas",
           "budget": {
             "title": "Presupuesto",
+            "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
             "minimum": "Mínimo",
             "optimal": "Óptimo",
             "raised": "Obtenido",
@@ -697,13 +803,20 @@
           "trending": "Recompensas más populares",
           "showAll": "Ver todas",
           "title": "Selecciona tus recompensas",
+          "headline": "Selecciona tu recompensa",
+          "thanksMessage": "Gracias por cooperar",
+          "ivaMessage": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
+          "addToCart": "Añadir al carro y continuar",
+          "unavailable": "No hay recompensas disponibles.",
+          "loading": "Cargando recompensas...",
           "donationFree": {
             "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
             "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
             "placeholder": "Seleccione el aporte  Ej.20€"
           },
           "error": {
-            "amount": "Por favor, ingresa una monto válido"
+            "amount": "Por favor, ingresa una monto válido",
+            "invalidAmount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa"
           }
         },
         "banner": {
@@ -717,7 +830,25 @@
           }
         },
         "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible.",
-        "outOfCampaign": "Este proyecto está fuera de campaña y ya no admite pagos."
+        "outOfCampaign": "Este proyecto está fuera de campaña y ya no admite pagos.",
+        "share": {
+          "modal": {
+            "title": "Difunde este proyecto por el mundo",
+            "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X.  Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!"
+          },
+          "iframe-modal": {
+            "title": "Así es como se verá en tu plataforma",
+            "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
+            "btnCopy": "Copiar código",
+            "btnCopied": "¡Código copiado!"
+          }
+        },
+        "video": {
+          "title": "Vídeo de la campaña",
+          "poster": "Imagen del vídeo",
+          "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
+          "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
+        }
       }
     },
     "about": {
@@ -807,6 +938,9 @@
       "btns": {
         "seeChat": "Ver conversación",
         "changeRisk": "Cambiar riesgo"
+      },
+      "chat": {
+        "placeholder": "Escribe un mensaje…"
       }
     },
     "search": {
@@ -818,16 +952,15 @@
       "showingTopResults": "Mostrando las {{count}} campañas más populares",
       "loading": "Buscando campañas...",
       "input": {
+        "placeholder": "Buscar",
         "label": "Buscar campañas",
         "clear": "Limpiar búsqueda",
         "button": "Buscar"
       },
       "filters": {
         "show": "Mostrar filtros",
-        "hide": "Ocultar filtros",
         "close": "Cerrar filtros",
         "apply": "Aplicar filtros",
-        "clear": "Limpiar filtros",
         "categoryLabel": "Elige una categoría",
         "territoryLabel": "Territorio",
         "selectCategory": "Seleccionar categoría",
@@ -843,14 +976,7 @@
       "empty": {
         "title": "No se encontraron campañas",
         "description": "No hay campañas que coincidan con tu búsqueda actual. Verifica la ortografía o prueba con palabras clave diferentes o términos más generales.",
-        "clearFilters": "Limpiar filtros",
-        "suggestions": {
-          "title": "Sugerencias para mejorar tu búsqueda:",
-          "checkSpelling": "Verifica la ortografía de tus palabras clave",
-          "tryDifferentKeywords": "Prueba con palabras clave diferentes",
-          "removeFilters": "Quita algunos filtros para ampliar la búsqueda",
-          "broadenSearch": "Usa términos más generales"
-        }
+        "clearFilters": "Limpiar filtros"
       },
       "initial": {
         "title": "Busca tu campaña ideal",
@@ -859,7 +985,6 @@
       "results": {
         "count": "{{count}} resultados encontrados",
         "found": "{{count}} resultados encontrados",
-        "noResults": "No se encontraron resultados",
         "regionLabel": "Resultados de búsqueda",
         "showing": "Mostrando {{count}} resultados",
         "empty": {
@@ -879,10 +1004,6 @@
           "title": "La búsqueda está tardando demasiado",
           "description": "El servidor no responde. Inténtalo de nuevo o usa los datos locales."
         },
-        "server": {
-          "title": "Error del servidor",
-          "description": "Hay un problema con el servidor. Inténtalo más tarde o usa los datos locales."
-        },
         "unknown": {
           "title": "Error inesperado",
           "description": "Ha ocurrido un error inesperado. Inténtalo de nuevo."
@@ -890,15 +1011,11 @@
         "actions": {
           "retry": "Reintentar",
           "showHelp": "Mostrar ayuda"
-        },
-        "technicalDetails": "Detalles técnicos"
+        }
       },
       "errors": {
         "searchFailed": "No se pudo realizar la búsqueda. Intenta de nuevo.",
         "api": {
-          "invalidToken": "Autenticación fallida. Por favor, verifica tus credenciales.",
-          "expiredToken": "Tu sesión ha expirado. Por favor, inicia sesión de nuevo.",
-          "missingToken": "Se requiere autenticación. Por favor, inicia sesión.",
           "networkError": "Error de conexión. Verifica tu conexión a internet.",
           "serverError": "Error del servidor. Por favor, inténtalo de nuevo más tarde."
         }
@@ -912,19 +1029,61 @@
         "announcement": "Se cargaron {{count}} resultados más. Mostrando {{loaded}} resultados en total."
       },
       "pagination": {
-        "summary": "Página {{page}} de {{totalPages}} ({{totalCount}} resultados en total)",
-        "ariaLabel": "Navegación de páginas de resultados",
         "page": "Página {{page}}",
         "currentPage": "Página {{page}}",
         "previous": "Anterior",
         "next": "Siguiente",
-        "loading": "Cargando...",
-        "loadMore": "Cargar más resultados",
-        "noMoreResults": "No hay más resultados"
+        "loading": "Cargando..."
       }
     },
     "register": {
-      "title": "Registro"
+      "title": "Registro",
+      "page": {
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Regístrate o",
+        "loginBtnLabel": "Entra con tu cuenta"
+      },
+      "form": {
+        "userType": {
+          "individual": "Persona física",
+          "organization": "Persona jurídica (empresas)"
+        },
+        "btnSubmit": "Registrarse",
+        "termsCheckbox": "Acepto las condiciones legales",
+        "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+        "validation": {
+          "password": {
+            "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+          }
+        }
+      },
+      "individual": {
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
+        "taxId": {
+          "label": "DNI*",
+          "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
+        }
+      },
+      "organization": {
+        "legalName": "Razón social",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxId": "CIF*",
+        "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
+        "representativeTitle": "Datos del representante de la empresa.",
+        "firstName": "Nombre",
+        "lastName": "Apellidos"
+      },
+      "error": {
+        "incompletePersonFields": "Por favor, completa todos los campos obligatorios para persona física.",
+        "incompleteOrgFields": "Por favor, completa todos los campos obligatorios para persona jurídica.",
+        "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
+      }
     },
     "admin": {
       "charges": {
@@ -974,9 +1133,7 @@
               "date-desc": "Fecha (más reciente primero)",
               "date-asc": "Fecha (más antigua primero)",
               "amount-desc": "Importe (mayor a menor)",
-              "amount-asc": "Importe (menor a mayor)",
-              "status-desc": "Estado (Z-A)",
-              "status-asc": "Estado (A-Z)"
+              "amount-asc": "Importe (menor a mayor)"
             }
           },
           "itemsPerPage": {
@@ -990,7 +1147,6 @@
           },
           "search": {
             "placeholder": "Buscar...",
-            "btnLabel": "Buscar",
             "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
             "noResults": "No se han encontrado resultados"
           },
@@ -1017,10 +1173,7 @@
           "dateRange": {
             "initDate": "Fecha Inicio",
             "endDate": "Fecha Fin",
-            "from": "Desde",
-            "to": "Hasta",
             "errors": {
-              "invalidDate": "Fecha no válida",
               "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
             }
           },
@@ -1036,19 +1189,9 @@
               "walleted": "Reembolsado a monedero"
             }
           },
-          "projectStatus": {
-            "title": "Estado de la campaña",
-            "options": {
-              "all": "Todas",
-              "active": "Activas",
-              "finished": "Finalizadas",
-              "cancelled": "Canceladas"
-            }
-          },
           "btns": {
             "openFilters": "Filtros",
             "closeFilters": "Cerrar filtros",
-            "reset": "Reiniciar filtros",
             "apply": "Aplicar filtros"
           },
           "composer": {
@@ -1100,611 +1243,339 @@
           "csv": "Exportar CSV",
           "exporting": "Exportando...",
           "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
-          "errorAuth": "Error de autenticación. Por favor, inicia sesión de nuevo.",
           "filename": "gateway-charges",
           "itemsText": "items",
           "noData": "No se encontraron datos para exportar"
         },
         "downloadButtons": {
-          "details": "Descarga detalle",
           "certificates": "Descarga certificados",
           "pdf": "Descarga PDF"
         },
         "lastEdited": "Última modificación: {{date}} {{time}}",
-        "annotations": "{{annotations}} Anotaciones"
+        "annotations": "{{annotations}} Anotaciones",
+        "lastContributions": "Últimos aportes:",
+        "totalizers": {
+          "selected": "Aportes seleccionados:",
+          "totalCharges": "Total aportes:",
+          "totalTips": "Total propinas:",
+          "totalFees": "Comisiones totales:"
+        }
       },
       "projects": {
-        "title": "Panel Gestoría"
+        "title": "Proyectos",
+        "description": "Busca proyectos y gestiónalos de la manera más rápida posible gracias al buscador",
+        "lastProjects": "Listado de campañas:",
+        "export": {
+          "csv": "Exportar .csv"
+        },
+        "totalizers": {
+          "selected": "Campañas seleccionadas:",
+          "totalEarned": "Total conseguido:",
+          "totalPaid": "Total pagado:",
+          "totalUnpaid": "Falta por pagar:"
+        },
+        "filters": {
+          "search": {
+            "placeholder": "Búsqueda",
+            "btn": "Buscar",
+            "minLength": "Es necesario meter más de 4 caracteres"
+          },
+          "btns": {
+            "openFilters": "Filtros",
+            "closeFilters": "Cerrar filtros",
+            "apply": "Aplicar filtros"
+          },
+          "campaignStatus": {
+            "title": "Estado de campaña",
+            "options": {
+              "completed": "Completada",
+              "active": "Activa",
+              "failed": "Fallida"
+            }
+          },
+          "status": {
+            "title": "Estado de proyecto",
+            "options": {
+              "in_draft": "Borrador",
+              "to_campaign_review": "Pendiente revisión campaña",
+              "in_campaign_review": "En revisión campaña",
+              "to_campaign": "Pendiente campaña",
+              "in_campaign": "En campaña",
+              "campaign_failed": "Campaña fallida",
+              "to_funding_review": "Pendiente revisión cobro",
+              "in_funding_review": "En revisión cobro",
+              "to_funding": "Pendiente cobro",
+              "in_funding": "En cobro",
+              "funding_paid": "Cobro pagado"
+            }
+          },
+          "dateRange": {
+            "initDate": "Fecha de inicio",
+            "endDate": "Fecha fin"
+          },
+          "order": {
+            "title": "Ordenar por",
+            "options": {
+              "date-desc": "Fecha (más reciente primero)",
+              "date-asc": "Fecha (más antiguo primero)",
+              "title-asc": "Título A–Z",
+              "title-desc": "Título Z–A"
+            }
+          },
+          "itemsPerPage": {
+            "title": "Líneas por página",
+            "options": {
+              "10": "10",
+              "25": "25",
+              "50": "50"
+            }
+          }
+        },
+        "table": {
+          "headers": {
+            "name": "Proyecto",
+            "promoter": "Impulsor",
+            "contractNumber": "Número de contrato",
+            "achieved": "Conseguido",
+            "paid": "Pagado",
+            "process": "Estado"
+          },
+          "rows": {
+            "status": {
+              "in_draft": "Borrador",
+              "to_campaign_review": "Pendiente revisión campaña",
+              "in_campaign_review": "En revisión campaña",
+              "in_campaign_review_request_change": "Revisión campaña: cambios",
+              "campaign_review_rejected": "Campaña rechazada",
+              "to_campaign": "Pendiente campaña",
+              "in_campaign": "En campaña",
+              "campaign_failed": "Campaña fallida",
+              "to_funding_review": "Pendiente revisión cobro",
+              "in_funding_review": "En revisión cobro",
+              "in_funding_review_request_change": "Revisión cobro: cambios",
+              "funding_review_rejected": "Cobro rechazado",
+              "to_funding": "Pendiente cobro",
+              "in_funding": "En cobro",
+              "funding_paid": "Cobro pagado"
+            },
+            "details": {
+              "datePublished": "Publicado",
+              "dateEnd1": "Fin primera ronda",
+              "dateEnd2": "Fin segunda ronda",
+              "minOptim": "Mínimo - Óptimo",
+              "email": "Email",
+              "phone": "Teléfono",
+              "contractExpiry": "Vencimiento del contrato",
+              "remaining": "Falta por pagar",
+              "btns": {
+                "changeStatus": "Cambiar cuentas",
+                "createContract": "Formulario de contrato",
+                "promoter": "Impulsor",
+                "contributions": "Aportes",
+                "donors": "Donantes de campaña",
+                "financialReport": "Informe financiación",
+                "certificates": "Certificados",
+                "contractPdf": "Contrato PDF",
+                "annotations": "Anotaciones"
+              }
+            },
+            "noData": "No hay datos disponibles"
+          }
+        },
+        "modals": {
+          "paid": {
+            "title": "Pagado",
+            "description": "Esta cantidad refleja el total de lo aportado a la campaña por todos los medios de pago posibles.",
+            "input": "Pago",
+            "matchfunding": "Pago matchfunding",
+            "save": "Guardar"
+          },
+          "annotations": {
+            "title": "Anotaciones",
+            "placeholder": "Escribe tu anotación",
+            "empty": "Sin registro",
+            "add": "Añadir anotación",
+            "modify": "Modificar anotación"
+          }
+        },
+        "informe": {
+          "title": "Informe de financiación del proyecto",
+          "subtitle": "Revisa los datos antes de actuar",
+          "description": "Edite lo necesario, descárguelo en formato PDF o envíe el informe final.",
+          "fields": {
+            "invoiceNumber": "Número de factura",
+            "transferDate": "Fecha de transferencia",
+            "platformFee": "Comisión de plataforma",
+            "email": "Correo para envío"
+          },
+          "btns": {
+            "edit": "Editar datos",
+            "pdf": "Descargar PDF",
+            "send": "Enviar informe"
+          },
+          "modal": {
+            "title": "Edita los datos antes de enviar",
+            "fields": {
+              "invoiceNumber": "Número de factura",
+              "transferDate": "Fecha de nueva transferencia",
+              "platformFee": "Comisión de plataforma",
+              "email": "Correo destinatario"
+            },
+            "save": "Guardar"
+          }
+        },
+        "pagination": {
+          "showing": "Mostrando {{ items }} de {{ total }}",
+          "itemsPerPage": "{{ count }} por página"
+        }
       }
     },
     "static": {
       "title": "Goteo"
     },
     "profile": {
-      "title": "Goteo"
-    }
-  },
-  "system": {
-    "_": "Mensajes del sistema (errores, notificaciones, validación, etc.)",
-    "loading": "Cargando...",
-    "notImplemented": "Esta funcionalidad aún no está implementada. Estamos trabajando en ello, ¡gracias por tu paciencia!",
-    "error": {
-      "unknown": "Ha ocurrido un error desconocido",
-      "payment": {
-        "missingMethod": "Se debe seleccionar un método de pago",
-        "missingCartData": "La cesta está vacía",
-        "unprocessableCartData": "No se puede procesar la cesta, por favor vacíala y vuelve a intentarlo",
-        "badAPIResponse": "Ha ocurrido un error al comunicarse con la pasarela de pago"
-      },
-      "file": {
-        "sizeTooLarge": "El archivo {{ file }} supera el tamaño máximo ({{ max }})",
-        "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
-      }
-    },
-    "constraint": {
-      "file": {
-        "maxAllowedSize": "Tamaño máximo permitido 10MB",
-        "supportedTypes": "Archivos compatibles: {{ types }}"
-      }
-    },
-    "validation": {
-      "missingRequiredFields": "Uno o más campos obligatorios están vacíos"
-    }
-  },
-  "reward": {
-    "donors": "donates",
-    "units": "Quedan {{units}} unidades",
-    "noUnits": "No quedan unidades",
-    "headline": "Selecciona tu recompensa",
-    "addAndContinue": "Añadir al carro y continuar",
-    "input": "Seleccione el aporte  Ej.20€",
-    "btnFreeDonationLabel": "Donación libre"
-  },
-  "budget": {
-    "headline": "Conoce las necesidades clave de esta campaña y descubre cómo tu apoyo puede hacer realidad este proyecto.",
-    "chart": {
-      "minimum": "Mínimo",
-      "optimal": "Óptimo",
-      "progress": "Estado de la campaña"
-    }
-  },
-  "project": {
-    "actions": {
       "share": "Compartir",
-      "viewAll": "Ver todas",
-      "viewMore": "Ver más",
-      "viewLess": "Ver menos"
-    },
-    "impact": {
-      "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-      "learnMore": "Saber más."
-    },
-    "share": {
-      "modal": {
-        "title": "Difunde este proyecto por el mundo",
-        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X.  Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!"
+      "shareModal": {
+        "title": "Comparte este perfil"
       },
-      "iframe-modal": {
-        "title": "Así es como se verá en tu plataforma",
-        "description": "Copia este fragmento de código y pégalo en el código de tu página. Así conseguirás que la campaña llegue a más gente",
-        "btnCopy": "Copiar código",
-        "btnCopied": "¡Código copiado!"
-      }
-    },
-    "video": {
-      "title": "Vídeo de la campaña",
-      "description": "Aquí puedes ver el vídeo de presentación de la campaña. ¡Dale al play!",
-      "poster": "Imagen del vídeo",
-      "not-found": "Disculpa, esta campaña no tiene vídeo de presentación",
-      "not-supported": "No ha sido posible cargar el vídeo. Por favor, revisa el enlace o contacta con el administrador de la campaña."
-    }
-  },
-  "navigation": {
-    "search": {
-      "placeholder": "Busca tu campaña"
-    },
-    "categories": "Categorías"
-  },
-  "ShareButton": {
-    "title": "Difunde este proyecto por el mundo",
-    "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X. Incluso copiar un fragmento de código, para insertar en otra web un banner de la campaña. ¡Haz que llegue más lejos!",
-    "global": "compartir global",
-    "facebook": "compartir en facebook",
-    "twitter": "compartir en X",
-    "code": "compartir como código",
-    "copied": "¡Enlace copiado al portapapeles!"
-  },
-  "register": {
-    "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Regístrate o",
-      "loginBtnLabel": "Entra con tu cuenta",
-      "goteoUserInfo": "Si ya eres usuario de Goteo no necesitas registrarte de nuevo.",
-      "otherAccessMethods": "También puedes acceder a través de:"
-    },
-    "form": {
-      "userType": {
-        "individual": "Persona física",
-        "organization": "Persona jurídica (empresas)"
+      "subscribe": "Subscríbete",
+      "tabs": {
+        "about": "Sobre el perfil",
+        "projects": "Proyectos impulsados",
+        "donorType": "Tipo de donante"
       },
-      "btnSubmit": "Registrarse",
-      "termsCheckbox": "Acepto las condiciones legales",
-      "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
-      "zod": {
-        "taxId.custom": "El CIF/DNI debe tener al menos 8 caracteres",
-        "legalName.custom": "La razón social es obligatoria para empresas"
-      },
-      "validation": {
-        "password": {
-          "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
-        }
-      }
-    },
-    "individual": {
-      "firstName": "Nombre",
-      "lastName": "Apellidos",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
-      "taxId": {
-        "label": "DNI*",
-        "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
-      }
-    },
-    "organization": {
-      "legalName": "Razón social",
-      "email": "Correo electrónico",
-      "password": "Contraseña",
-      "taxId": "CIF*",
-      "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-      "representativeTitle": "Datos del representante de la empresa.",
-      "firstName": "Nombre",
-      "lastName": "Apellidos"
-    },
-    "error": {
-      "incompletePersonFields ": "Por favor, completa todos los campos obligatorios para persona física.",
-      "incompleteOrgFields ": "Por favor, completa todos los campos obligatorios para persona jurídica.",
-      "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
-    }
-  },
-  "login": {
-    "page": {
-      "title": "Indícanos tus datos personales",
-      "description": "Necesitamos saber quién eres antes de pagar.",
-      "registerOr": "Entra en tu cuenta o",
-      "registerBtnLabel": "Regístrate",
-      "otherAccessMethods": "También puedes acceder a través de:",
-      "forgotPassword": "¿Olvidaste tu contraseña?",
-      "welcome": {
-        "title": "Bienvenid@ al nuevo Goteo.",
-        "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
-      }
-    },
-    "form": {
-      "email": "Email o nombre de usuario",
-      "password": "Contraseña",
-      "btnSubmit": "Iniciar sesión"
-    },
-    "error": {
-      "invalidCredentials": "Correo electrónico o contraseña inválidos.",
-      "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
-      "invalidEmail": "El correo electrónico no es válido.",
-      "maxCharacters": "El correo electrónico no puede exceder los 255 caracteres."
-    }
-  },
-  "logout": {
-    "label": "Cerrar sesión",
-    "error": {
-      "cookieNotFound": "No se ha encontrado la cookie de sesión.",
-      "invalidToken": "La sesión no es válida. Por favor, vuelve a iniciar sesión.",
-      "logoutSuccess": "Has cerrado sesión correctamente.",
-      "unexpectedLogout": "Error al cerrar sesión. Por favor, inténtalo de nuevo más tarde."
-    }
-  },
-  "zod": {
-    "required": "Este campo es obligatorio",
-    "invalid_type": "Se esperaba {expected} pero se recibió {received}",
-    "string": {
-      "too_small": "Debe tener al menos {min} carácter(es)",
-      "too_big": "No debe exceder los {max} caracteres",
-      "invalid": "Formato de texto no válido"
-    },
-    "number": {
-      "too_small": "Debe ser al menos {min}",
-      "too_big": "No debe exceder {max}"
-    },
-    "too_small": "Debe ser al menos {min}",
-    "too_big": "No debe exceder {max}",
-    "email": {
-      "invalid": "Correo electrónico no válido"
-    },
-    "url": {
-      "invalid": "Formato de URL no válido"
-    },
-    "enum": {
-      "invalid": "Opción no válida. Las opciones válidas son: {options}"
-    },
-    "invalid": "Entrada no válida"
-  },
-  "countdown": {
-    "error": {
-      "not-found": "No se ha encontrado la fecha de finalización de la campaña."
-    }
-  },
-  "rewards": {
-    "unavailable": "No hay recompensas disponibles.",
-    "donators": "{{donators}} donantes",
-    "units-available": "Quedan {{units}} unidades",
-    "by-amount-or-more": "Por {{amount}} o más",
-    "thanks-message": "Gracias por cooperar",
-    "reward-iva-message": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
-    "reward-donate-close": "Añadir al carro y continuar",
-    "error-invalid-amount": "Por favor, ingresa una cantidad válida mayor o igual al monto de la recompensa",
-    "error-amount": "Por favor, ingresa una monto válido",
-    "loading": "Cargando recompensas..."
-  },
-  "updates": {
-    "heading": "No pierdas detalle de los avances de esta campaña",
-    "empty": "No existen más actualizaciones previstas."
-  },
-  "updateCard": {
-    "readMore": "Seguir leyendo"
-  },
-  "metadata": {
-    "title": "Inicio",
-    "description": "Página de inicio"
-  },
-  "hero": {
-    "title": "Financia el cambio que el mundo necesita",
-    "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!"
-  },
-  "renovationBanner": {
-    "title": "¡Renovamos Goteo!",
-    "description": "Goteo ha construido una historia única en el mundo del micromecenazgo. ¿Quieres seguir formando parte de ella?",
-    "ctaButton": "Súmate a nuestra historia"
-  },
-  "title": "Hola!",
-  "header": {
-    "btnCart": "Ir al checkout",
-    "search": "Buscar",
-    "createProject": "Crea tu proyecto",
-    "goToProfile": "Ir a Perfil"
-  },
-  "admin": {
-    "projects": {
-      "title": "Panel Gestoría",
-      "description": "Busca proyectos y gestiónalos de la manera más rápida posible gracias al buscador",
-      "lastProjects": "Listado de campañas:",
-      "export": {
-        "csv": "Exportar .csv"
-      },
-      "totalizers": {
-        "selected": "Campañas seleccionadas:",
-        "totalEarned": "Total conseguido:",
-        "totalPaid": "Total pagado:",
-        "totalUnpaid": "Falta por pagar:"
-      },
-      "filters": {
-        "search": {
-          "placeholder": "Búsqueda",
-          "btn": "Buscar",
-          "minLength": "Es necesario meter más de 4 caracteres"
+      "noProjects": "No hay proyectos impulsados aún.",
+      "noBio": "Todavía no hay información sobre este perfil.",
+      "donorType": {
+        "fan": {
+          "title": "Fan",
+          "description": "Este donante ha invertido más de 25€",
+          "projectsDonated": "Proyectos donados",
+          "moneyDonated": "Dinero donado"
         },
-        "btns": {
-          "openFilters": "Filtros",
-          "closeFilters": "Cerrar filtros",
-          "apply": "Aplicar filtros"
-        },
-        "campaignStatus": {
-          "title": "Estado de campaña",
-          "options": {
-            "completed": "Completada",
-            "active": "Activa",
-            "failed": "Fallida"
-          }
-        },
-        "status": {
-          "title": "Estado de proyecto",
-          "options": {
-            "in_draft": "Borrador",
-            "to_campaign_review": "Pendiente revisión campaña",
-            "in_campaign_review": "En revisión campaña",
-            "to_campaign": "Pendiente campaña",
-            "in_campaign": "En campaña",
-            "campaign_failed": "Campaña fallida",
-            "to_funding_review": "Pendiente revisión cobro",
-            "in_funding_review": "En revisión cobro",
-            "to_funding": "Pendiente cobro",
-            "in_funding": "En cobro",
-            "funding_paid": "Cobro pagado"
-          }
-        },
-        "dateRange": {
-          "initDate": "Fecha de inicio",
-          "endDate": "Fecha fin"
-        },
-        "order": {
-          "title": "Ordenar por",
-          "options": {
-            "date-desc": "Fecha (más reciente primero)",
-            "date-asc": "Fecha (más antiguo primero)",
-            "title-asc": "Título A–Z",
-            "title-desc": "Título Z–A"
-          }
-        },
-        "itemsPerPage": {
-          "title": "Líneas por página",
-          "options": {
-            "10": "10",
-            "25": "25",
-            "50": "50"
-          }
+        "nextLevel": {
+          "title": "Próximo nivel",
+          "description": "Sigue donando para subir de nivel"
         }
       },
-      "table": {
-        "headers": {
-          "name": "Proyecto",
-          "promoter": "Impulsor",
-          "contractNumber": "Número de contrato",
-          "achieved": "Conseguido",
-          "paid": "Pagado",
-          "process": "Estado"
-        },
-        "rows": {
-          "status": {
-            "in_draft": "Borrador",
-            "to_campaign_review": "Pendiente revisión campaña",
-            "in_campaign_review": "En revisión campaña",
-            "in_campaign_review_request_change": "Revisión campaña: cambios",
-            "campaign_review_rejected": "Campaña rechazada",
-            "to_campaign": "Pendiente campaña",
-            "in_campaign": "En campaña",
-            "campaign_failed": "Campaña fallida",
-            "to_funding_review": "Pendiente revisión cobro",
-            "in_funding_review": "En revisión cobro",
-            "in_funding_review_request_change": "Revisión cobro: cambios",
-            "funding_review_rejected": "Cobro rechazado",
-            "to_funding": "Pendiente cobro",
-            "in_funding": "En cobro",
-            "funding_paid": "Cobro pagado"
-          },
-          "details": {
-            "datePublished": "Publicado",
-            "dateEnd1": "Fin primera ronda",
-            "dateEnd2": "Fin segunda ronda",
-            "minOptim": "Mínimo - Óptimo",
-            "email": "Email",
-            "phone": "Teléfono",
-            "contractExpiry": "Vencimiento del contrato",
-            "remaining": "Falta por pagar",
-            "btns": {
-              "changeStatus": "Cambiar cuentas",
-              "createContract": "Formulario de contrato",
-              "promoter": "Impulsor",
-              "contributions": "Aportes",
-              "donors": "Donantes de campaña",
-              "financialReport": "Informe financiación",
-              "certificates": "Certificados",
-              "contractPdf": "Contrato PDF",
-              "annotations": "Anotaciones"
-            }
-          }
+      "title": "Goteo",
+      "notFound": "Usuario no encontrado"
+    },
+    "login": {
+      "page": {
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Entra en tu cuenta o",
+        "registerBtnLabel": "Regístrate",
+        "otherAccessMethods": "También puedes acceder a través de:",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "welcome": {
+          "title": "Bienvenid@ al nuevo Goteo.",
+          "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
         }
       },
-      "modals": {
-        "paid": {
-          "title": "Pagado",
-          "description": "Esta cantidad refleja el total de lo aportado a la campaña por todos los medios de pago posibles.",
-          "input": "Pago",
-          "matchfunding": "Pago matchfunding",
-          "save": "Guardar"
+      "form": {
+        "email": "Email o nombre de usuario",
+        "password": "Contraseña"
+      },
+      "error": {
+        "invalidCredentials": "Correo electrónico o contraseña inválidos.",
+        "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
+        "invalidEmail": "El correo electrónico no es válido."
+      }
+    },
+    "logout": {
+      "label": "Cerrar sesión"
+    },
+    "metadata": {
+      "description": "Página de inicio"
+    },
+    "hero": {
+      "title": "Financia el cambio que el mundo necesita",
+      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!",
+      "buttons": {
+        "discover": "Descubre campañas",
+        "impulse": "Impulsa un proyecto"
+      }
+    },
+    "me": {
+      "page": {
+        "title": "Actividad",
+        "subtitle": "Consulta tu actividad en Goteo"
+      },
+      "period": {
+        "label": "Periodo",
+        "year": "Año {{year}}"
+      },
+      "donations": {
+        "title": "Mis donaciones",
+        "empty": "Aún no has donado a ningún proyecto",
+        "explore": "Explora proyectos",
+        "count": "Donaciones",
+        "total": "Total donado",
+        "recent": "Últimas donaciones",
+        "viewAll": "Ver todas",
+        "certificate": "Solicitar certificado"
+      },
+      "projects": {
+        "title": "Proyectos impulsados",
+        "empty": "Aún no has impulsado ningún proyecto",
+        "create": "Impulsa tu proyecto",
+        "count": "Proyectos",
+        "raised": "Recaudado",
+        "recent": "Últimos proyectos impulsados",
+        "viewAll": "Ver todos",
+        "createNew": "Crear un proyecto"
+      },
+      "ownedProjects": {
+        "title": "Tus Proyectos Activos",
+        "messageToDonatorsButton": "Mensaje a donantes",
+        "uploadNewsButton": "Subir novedad"
+      },
+      "donatedProjects": {
+        "title": "Proyectos activos donde donaste"
+      },
+      "cta": {
+        "discover": {
+          "title": "Descubre, conecta y dona",
+          "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
+          "button": "Dona a un proyecto"
         },
-        "annotations": {
-          "title": "Anotaciones",
-          "placeholder": "Escribe tu anotación",
-          "empty": "Sin registro",
-          "add": "Añadir anotación",
-          "modify": "Modificar anotación"
+        "matchfunding": {
+          "title": "Donaciones que brillan. Proyectos que inspiran.",
+          "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
+          "learnMore": "Descubre cómo funciona el matchfunding",
+          "becomeMatcher": "Hazte Matcher"
         }
-      },
-      "informe": {
-        "title": "Informe de financiación del proyecto",
-        "subtitle": "Revisa los datos antes de actuar",
-        "description": "Edite lo necesario, descárguelo en formato PDF o envíe el informe final.",
-        "fields": {
-          "invoiceNumber": "Número de factura",
-          "transferDate": "Fecha de transferencia",
-          "platformFee": "Comisión de plataforma",
-          "email": "Correo para envío"
-        },
-        "btns": {
-          "edit": "Editar datos",
-          "pdf": "Descargar PDF",
-          "send": "Enviar informe"
-        },
-        "modal": {
-          "title": "Edita los datos antes de enviar",
-          "fields": {
-            "invoiceNumber": "Número de factura",
-            "transferDate": "Fecha de nueva transferencia",
-            "platformFee": "Comisión de plataforma",
-            "email": "Correo destinatario"
-          },
-          "save": "Guardar"
-        }
-      },
-      "pagination": {
-        "showing": "Mostrando {{ items }} de {{ total }}",
-        "itemsPerPage": "{{ count }} por página"
-      }
-    }
-  },
-  "footer": {
-    "funding": {
-      "title": "Financia:",
-      "partOf": "Somos parte de:"
-    },
-    "navigation": {
-      "collaborate": {
-        "title": "Colabora",
-        "createProject": "Crea un proyecto",
-        "matchfunding": "Matchfunding",
-        "workshops": "Talleres"
-      },
-      "help": {
-        "title": "Ayuda",
-        "faqs": "FAQs",
-        "contact": "Contacto",
-        "taxCalculator": "Calculadora fiscal"
-      },
-      "aboutGoteo": {
-        "title": "Sobre Goteo",
-        "whoWeAre": "¿Quiénes somos?",
-        "goteoBenefits": "Ventajas de Goteo",
-        "foundationImpact": "Impacto de la fundación",
-        "platoniqFoundation": "Fundación Platoniq"
-      },
-      "forUsers": {
-        "title": "Para usuarias",
-        "rechargeWallet": "Recarga tu monedero",
-        "downloadCertificate": "Descarga certificado",
-        "accessComplementaryFunds": "Accede a fondos complementarios",
-        "designFundingProgram": "Diseña un programa de financiación"
-      }
-    },
-    "legal": {
-      "termsOfUse": "Condiciones de uso",
-      "privacyPolicy": "Política de privacidad",
-      "licenses": "Licencias",
-      "stats": "Stats"
-    },
-    "platoniq": {
-      "foundation": "Fundación",
-      "name": "Platoniq"
-    }
-  },
-  "profile": {
-    "share": "Compartir",
-    "shareModal": {
-      "title": "Comparte este perfil",
-      "description": "Puedes copiar el enlace para enviarlo y también compartirlo en Facebook o X."
-    },
-    "subscribe": "Subscríbete",
-    "tabs": {
-      "about": "Sobre el perfil",
-      "projects": "Proyectos impulsados",
-      "donorType": "Tipo de donante"
-    },
-    "notFound": "Usuario no encontrado",
-    "location": "Ubicación",
-    "userIntro": "Miembro activo de la comunidad Goteo",
-    "organizationIntro": "Organización comprometida con el cambio social",
-    "bioSample": "Con una trayectoria dedicada al ecosistema de crowdfunding y financiación colectiva, {{name}} se ha consolidado como un referente en la creación de proyectos colaborativos y la movilización de recursos. Su visión se centra en potenciar iniciativas que transforman realidades locales, combinando estrategias innovadoras con un profundo compromiso por la participación ciudadana y la equidad social.",
-    "noProjects": "No hay proyectos impulsados aún.",
-    "noBio": "Todavía no hay información sobre este perfil.",
-    "donorType": {
-      "fan": {
-        "title": "Fan",
-        "description": "Este donante ha invertido más de 25€",
-        "projectsDonated": "Proyectos donados",
-        "moneyDonated": "Dinero donado"
-      },
-      "nextLevel": {
-        "title": "Próximo nivel",
-        "description": "Sigue donando para subir de nivel"
-      }
-    }
-  },
-  "me": {
-    "page": {
-      "title": "Actividad",
-      "subtitle": "Consulta tu actividad en Goteo"
-    },
-    "period": {
-      "label": "Periodo",
-      "year": "Año {{year}}"
-    },
-    "donations": {
-      "title": "Mis donaciones",
-      "empty": "Aún no has donado a ningún proyecto",
-      "explore": "Explora proyectos",
-      "illustration": "/images/profile/ilustration-donations.png",
-      "ctaLink": "/projects",
-      "count": "Donaciones",
-      "total": "Total donado",
-      "recent": "Últimas donaciones",
-      "viewAll": "Ver todas",
-      "certificate": "Solicitar certificado"
-    },
-    "projects": {
-      "title": "Proyectos impulsados",
-      "empty": "Aún no has impulsado ningún proyecto",
-      "create": "Impulsa tu proyecto",
-      "illustration": "/images/profile/ilustration-project.png",
-      "ctaLink": "/projects/new",
-      "count": "Proyectos",
-      "raised": "Recaudado",
-      "recent": "Últimos proyectos impulsados",
-      "viewAll": "Ver todos",
-      "createNew": "Crear un proyecto"
-    },
-    "ownedProjects": {
-      "title": "Tus Proyectos Activos",
-      "messageToDonatorsButton": "Mensaje a donantes",
-      "uploadNewsButton": "Subir novedad"
-    },
-    "donatedProjects": {
-      "title": "Proyectos activos donde donaste"
-    },
-    "cta": {
-      "discover": {
-        "title": "Descubre, conecta y dona",
-        "description": "Imagina un lugar donde cientos de proyectos sociales esperan tu apoyo. En nuestra plataforma, explorar es fácil: navega por causas comunitarias, ambientales o educativas. Porque aquí, tú decides qué historias se escriben.",
-        "button": "Dona a un proyecto"
       },
       "matchfunding": {
-        "title": "Donaciones que brillan. Proyectos que inspiran.",
-        "description": "Goteo es pionera en matchfunding. Ya seas un donante que buscas potenciar tu contribución a proyectos, un impulsor que quiere aumentar su presupuesto o una entidad que busca apoyar a proyectos e impulsores a través de refuerzos en el donativo... nuestro programa de matchfunding te permite multiplicar el impulso para el cambio",
-        "learnMore": "Descubre cómo funciona el matchfunding",
-        "becomeMatcher": "Hazte Matcher"
+        "card": {
+          "title": "Matchfunding",
+          "calls": "Convocatorias",
+          "donated": "Donado",
+          "recent": "Últimas convocatorias",
+          "viewAll": "Ver convocatorias",
+          "create": "Crear convocatoria"
+        },
+        "section": {
+          "title": "Tus convocatorias de Matchfunding activas",
+          "error": "Error al cargar las convocatorias"
+        },
+        "callCard": {
+          "donationCall": "Dotación convocatoria",
+          "participatingProjects": "Proyectos participantes",
+          "successfulProjects": "Proyectos acogidos con éxito",
+          "projects": "proyectos",
+          "viewCall": "Ir a la convocatoria"
+        }
       }
     },
-    "matchfunding": {
-      "card": {
-        "title": "Matchfunding",
-        "calls": "Convocatorias",
-        "donated": "Donado",
-        "recent": "Últimas convocatorias",
-        "viewAll": "Ver convocatorias",
-        "create": "Crear convocatoria"
-      },
-      "section": {
-        "title": "Tus convocatorias de Matchfunding activas",
-        "empty": "No tienes convocatorias activas",
-        "error": "Error al cargar las convocatorias"
-      },
-      "callCard": {
-        "donationCall": "Dotación convocatoria",
-        "participatingProjects": "Proyectos participantes",
-        "successfulProjects": "Proyectos acogidos con éxito",
-        "projects": "proyectos",
-        "viewCall": "Ir a la convocatoria"
-      }
-    }
-  },
-  "blog": {
-    "share": {
-      "modal": {
-        "title": "Difunde este blog por el mundo",
-        "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
-      }
-    }
-  },
-  "validation": {
-    "project": {
-      "terms": {
-        "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
+    "blog": {
+      "share": {
+        "modal": {
+          "title": "Difunde este blog por el mundo",
+          "description": "Puedes copiar el enlace para enviarlo y también compartirla en Facebook o X."
+        }
       }
     }
   }

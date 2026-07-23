@@ -18,6 +18,7 @@ import {
 import type { User } from "../../../openapi/client/types.gen";
 import type { Campaign } from "../../../types/campaign";
 import { getLanguage } from "../../../middleware/utils";
+import { getDefaultCurrency } from "../../../utils/consts";
 import { client } from "../../../openapi/client/client.gen";
 
 const { idOrHandle } = Astro.params;
@@ -43,7 +44,7 @@ try {
     user = userResponse.data;
 } catch (error) {
     console.error("Error fetching user:", error);
-    errorMessage = t("profile.notFound");
+    errorMessage = t("pages.profile.notFound");
 }
 
 // Prepare profile data with proper fallbacks
@@ -58,14 +59,17 @@ const location = undefined;
 const bio = undefined;
 
 const tabs = [
-    { id: "about", label: t("profile.tabs.about") },
-    { id: "projects", label: t("profile.tabs.projects") },
-    { id: "donorType", label: t("profile.tabs.donorType") },
+    { id: "about", label: t("pages.profile.tabs.about") },
+    { id: "projects", label: t("pages.profile.tabs.projects") },
+    { id: "donorType", label: t("pages.profile.tabs.donorType") },
 ];
 
 // Fetch user's backed/supported projects from API
 let userSupports: ProjectSupport[] = [];
-let totalDonated: { amount: number; currency: string } = { amount: 0, currency: "EUR" };
+let totalDonated: { amount: number; currency: string } = {
+    amount: 0,
+    currency: getDefaultCurrency(),
+};
 let projectsDonatedCount = 0;
 
 // Users are guaranteed to have an accounting resource
@@ -163,7 +167,7 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
 
 <Layout
     title={`${displayName} - ${t("pages.profile.title")}`}
-    description={`${t("profile.tabs.about")} ${displayName}`}
+    description={`${t("pages.profile.tabs.about")} ${displayName}`}
 >
     <App client:load locale={lang} session={session} class="mb-20">
         {
@@ -209,7 +213,9 @@ const avatarImage = user?.avatar || undefined; // Use user avatar or default pla
                             </div>
                         ) : (
                             <div class="mx-auto mt-10 w-full max-w-224.5 px-4 text-center">
-                                <p class="text-tertiary text-base">{t("profile.noProjects")}</p>
+                                <p class="text-tertiary text-base">
+                                    {t("pages.profile.noProjects")}
+                                </p>
                             </div>
                         )}
                     </div>

@@ -6,15 +6,15 @@ import AdminProjects from "../../../components/admin/Projects.svelte";
 const { t, lang, session } = Astro.locals;
 ---
 
-<Layout title={t("pages.admin.projects.title")} description={t("metadata.description")}>
+<Layout title={t("pages.admin.projects.title")} description={t("pages.metadata.description")}>
     <App client:load locale={lang} session={session}>
         <div class="wrapper">
             <div class="flex w-full flex-col gap-10 py-10">
                 <div class="flex flex-col gap-4">
                     <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                        {t("admin.projects.title")}
+                        {t("pages.admin.projects.title")}
                     </h2>
-                    <p class="text-content">{t("admin.projects.description")}</p>
+                    <p class="text-content">{t("pages.admin.projects.description")}</p>
                 </div>
 
                 <AdminProjects client:load />

@@ -6,6 +6,7 @@
     import { t } from "../../../i18n/store";
     import SearchIcon from "../../icons/actions/Search.svelte";
     import Chevron from "../../icons/navigation/Chevron.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
 
     import type { DropdownOption, DropdownVariant } from "./dropdown.types";
 
@@ -18,7 +19,13 @@
         onChange?: (option: DropdownOption) => void;
         hasSearch?: boolean;
         searchPlaceholder?: string;
+        searchValue?: string;
         onSearch?: (value: string) => void;
+        clearable?: boolean;
+        onClear?: () => void;
+        singleSelect?: boolean;
+        inputName?: string;
+        onInputBlur?: (e?: FocusEvent) => void;
         chevronLabel?: string;
         /** Build the list with selected options at the top. */
         selectedFirst?: boolean;
@@ -34,7 +41,13 @@
         onChange,
         hasSearch = false,
         searchPlaceholder = $t("domain.search.bar.placeholder"),
+        searchValue = $bindable(""),
         onSearch = undefined,
+        clearable = false,
+        onClear = undefined,
+        singleSelect = false,
+        inputName = undefined,
+        onInputBlur = undefined,
         chevronLabel = undefined,
         selectedFirst = false,
         isOpen = false,
@@ -68,6 +81,25 @@
     function isSelected(option: DropdownOption): boolean {
         return selected.length > 0 && selected.some((s) => s.id === option.id);
     }
+
+    function handleClear() {
+        searchValue = "";
+        selected = [];
+        isOpen = false;
+        onClear?.();
+    }
+
+    function handleItemChange(option: DropdownOption) {
+        if (singleSelect) {
+            selected = [{ ...option, selected: true }];
+            isOpen = false;
+        } else if (option.selected && !isSelected(option)) {
+            selected = [...selected, option];
+        } else if (!option.selected && isSelected(option)) {
+            selected = selected.filter((s) => s.id !== option.id);
+        }
+        onChange?.(option);
+    }
 </script>
 
 <div
@@ -84,12 +116,24 @@
             <input
                 class="max-h-6 w-full border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                 type="text"
+                name={inputName}
                 placeholder={searchPlaceholder}
+                bind:value={searchValue}
                 oninput={(e) => onSearch?.(e.currentTarget.value)}
+                onblur={onInputBlur}
                 onclick={() => {
                     if (!isOpen) isOpen = true;
                 }}
             />
+            {#if clearable && searchValue}
+                <button
+                    type="button"
+                    class="absolute right-14 shrink-0 hover:cursor-pointer hover:opacity-75"
+                    onclick={handleClear}
+                >
+                    <Close width="20" height="20" />
+                </button>
+            {/if}
             <SearchIcon class="absolute right-4" width="32" height="32" />
         </div>
     {:else if chevronLabel}
@@ -117,15 +161,7 @@
                     <DropdownItem
                         {variant}
                         option={item}
-                        onChange={(option) => {
-                            if (option.selected && !isSelected(option)) {
-                                selected = [...selected, option];
-                            }
-                            if (!option.selected && isSelected(option)) {
-                                selected = selected.filter((s) => s.id !== option.id);
-                            }
-                            onChange?.(option);
-                        }}
+                        onChange={handleItemChange}
                         class={twJoin(
                             item.position === "start" && "rounded-t-lg",
                             item.position === "end" && "rounded-b-lg",

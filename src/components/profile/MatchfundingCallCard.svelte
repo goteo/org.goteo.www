@@ -70,7 +70,7 @@
                     <!-- Donation Amount -->
                     <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
-                            {$t("me.matchfunding.callCard.donationCall")}
+                            {$t("pages.me.matchfunding.callCard.donationCall")}
                         </p>
                         <p class="text-2xl leading-snug font-bold md:text-3xl">
                             {formattedDonation}
@@ -80,22 +80,22 @@
                     <!-- Participating Projects -->
                     <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
-                            {$t("me.matchfunding.callCard.participatingProjects")}
+                            {$t("pages.me.matchfunding.callCard.participatingProjects")}
                         </p>
                         <p class="text-2xl leading-snug font-bold md:text-3xl">
                             {call.participatingProjects}
-                            {$t("me.matchfunding.callCard.projects")}
+                            {$t("pages.me.matchfunding.callCard.projects")}
                         </p>
                     </div>
 
                     <!-- Successful Projects -->
                     <div class="flex flex-col items-start text-white">
                         <p class="text-base leading-normal font-normal">
-                            {$t("me.matchfunding.callCard.successfulProjects")}
+                            {$t("pages.me.matchfunding.callCard.successfulProjects")}
                         </p>
                         <p class="text-2xl leading-snug font-bold md:text-3xl">
                             {call.successfulProjects}
-                            {$t("me.matchfunding.callCard.projects")}
+                            {$t("pages.me.matchfunding.callCard.projects")}
                         </p>
                     </div>
                 </div>
@@ -106,7 +106,7 @@
                 href={callUrl}
                 class="bg-variant1 text-secondary focus:ring-primary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-base leading-normal font-bold no-underline transition-all duration-200 hover:opacity-90 focus:ring-2 focus:outline-none"
             >
-                {$t("me.matchfunding.callCard.viewCall")}
+                {$t("pages.me.matchfunding.callCard.viewCall")}
             </a>
         </div>
 

@@ -6,12 +6,12 @@
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
+    import { formatCurrency } from "../../utils/currencies";
     import ActionableButton from "../library/buttons/ActionableButton.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Grid from "../library/layout/Grid.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
-    import { formatCurrency } from "../../utils/currencies";
 
     let {
         project,

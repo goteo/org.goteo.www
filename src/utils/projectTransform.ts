@@ -1,3 +1,4 @@
+import { getDefaultCurrency } from "./consts";
 import { extractId } from "./extractId";
 import { apiAccountingsIdGet, type Money } from "../openapi/client";
 
@@ -23,13 +24,16 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     const image = (project as any).cover || project.video?.thumbnail || "";
 
     // Get minimum budget
-    const minimum: Money = project.budget?.minimum?.money || { amount: 0, currency: "EUR" };
+    const minimum: Money = project.budget?.minimum?.money || {
+        amount: 0,
+        currency: getDefaultCurrency(),
+    };
 
     // Get optimum budget
     const optimum: ApiMoney | undefined = project.budget?.optimum?.money;
 
     // Get raised amount from fetched accounting data
-    const obtained: Money = accounting?.balance || { amount: 0, currency: "EUR" };
+    const obtained: Money = accounting?.balance || { amount: 0, currency: getDefaultCurrency() };
 
     return {
         id: project.slug || String(project.id || "unknown"),

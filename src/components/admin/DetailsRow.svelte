@@ -141,7 +141,7 @@
                                                 {item.value}
                                             </div>
                                             <Tooltip
-                                                text={$t("common.tooltip.coved")}
+                                                text={$t("common.tooltip.copied")}
                                                 tooltipClass="bg-secondary -translate-x-[90%]"
                                                 className="size-5 cursor-copy shrink-0"
                                             >
@@ -239,7 +239,7 @@
                                                 </a>
                                             </div>
                                             <Tooltip
-                                                text={$t("common.tooltip.coved")}
+                                                text={$t("common.tooltip.copied")}
                                                 tooltipClass="bg-secondary"
                                                 className="size-5 cursor-copy shrink-0"
                                             >

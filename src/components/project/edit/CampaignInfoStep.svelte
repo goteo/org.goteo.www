@@ -23,10 +23,10 @@
         currentDraft,
         navigateToStep,
         updateCampaignInfo,
-        type MediaImage,
+        type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
+    import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import Grid from "../../library/layout/Grid.svelte";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -34,7 +34,6 @@
 
     let { onContinue }: CampaignInfoStepProps = $props();
 
-    // Reactive values from store
     const campaignInfo = $derived(
         $currentDraft?.wizardForm.campaignInfo ?? {
             images: [],
@@ -46,10 +45,12 @@
         },
     );
 
-    /**
-     * Handle Continue button
-     * Simple navigation to next step - validation happens on save/submit
-     */
+    function formatFileSize(bytes: number): string {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+    }
+
     function handleContinue() {
         if (!$currentDraft) return;
         const errors = validateCampaignInfo($currentDraft.wizardForm);
@@ -68,64 +69,56 @@
         }
     }
 
-    /**
-     * Handle image upload
-     */
-    function handleImageUpload(image: MediaImage) {
+    function handleImageUpload(image: UploadedFile) {
         if (!campaignInfo) return;
         updateCampaignInfo({
             images: [...campaignInfo.images, image],
         });
     }
 
-    /**
-     * Handle image removal
-     */
-    function handleImageRemove(id: string) {
+    async function handleImageRemove(id: string) {
+        const image = campaignInfo.images.find((img) => img.id === id);
+        if (image?.key) {
+            try {
+                await fetch("/api/upload/delete", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ key: image.key }),
+                });
+            } catch (err) {
+                console.error("Failed to delete image from bucket:", err);
+            }
+        }
+
         updateCampaignInfo({
             images: campaignInfo.images.filter((img) => img.id !== id),
         });
     }
 
-    /**
-     * Handle video change
-     */
     function handleVideoChange(video: string | null) {
         updateCampaignInfo({
             video: video ?? "",
         });
     }
 
-    /**
-     * Handle objectives change
-     */
     function handleObjectivesChange(html: string) {
         updateCampaignInfo({
             objectives: html,
         });
     }
 
-    /**
-     * Handle legacy change
-     */
     function handleLegacyChange(html: string) {
         updateCampaignInfo({
             legacy: html,
         });
     }
 
-    /**
-     * Handle target audience change
-     */
     function handleTargetAudienceChange(html: string) {
         updateCampaignInfo({
             targetAudience: html,
         });
     }
 
-    /**
-     * Handle team change
-     */
     function handleTeamChange(html: string) {
         updateCampaignInfo({ team: html });
     }
@@ -153,15 +146,43 @@
                 </p>
             </div>
 
-            <Grid class="grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
-                <MediaUploader
-                    images={campaignInfo.images}
-                    onUpload={handleImageUpload}
-                    onRemove={handleImageRemove}
-                />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <MediaUploader images={campaignInfo.images} onUpload={handleImageUpload} />
 
                 <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
-            </Grid>
+            </div>
+
+            {#if campaignInfo.images.length > 0}
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2" role="list">
+                    {#each campaignInfo.images as image (image.id)}
+                        <div
+                            class="group relative aspect-4/3 overflow-hidden rounded-lg"
+                            role="listitem"
+                        >
+                            <img
+                                src={image.url}
+                                alt={image.name}
+                                class="h-full w-full object-cover"
+                            />
+
+                            <button
+                                type="button"
+                                onclick={() => handleImageRemove(image.id)}
+                                aria-label={$t("common.remove", { name: image.name })}
+                                class="bg-variant1/90 hover:ring-secondary absolute top-2 right-2 z-10 flex size-8 cursor-pointer items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:ring-1 hover:ring-offset-2 hover:outline-none"
+                            >
+                                <CloseIcon width="16" height="16" class="text-secondary" />
+                            </button>
+
+                            <div
+                                class="bg-variant1/90 text-secondary absolute right-0 bottom-0 left-0 px-2 py-1 text-xs"
+                            >
+                                {formatFileSize(image.size)}
+                            </div>
+                        </div>
+                    {/each}
+                </div>
+            {/if}
         </section>
 
         <!-- Objectives Section -->

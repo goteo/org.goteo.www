@@ -31,6 +31,7 @@ export const STORAGE_ALLOWEDTYPES = [
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "video/mp4",
     "video/webm",
+    "video/quicktime",
 ];
 
 export const client = new S3Client({
