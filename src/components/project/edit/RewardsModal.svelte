@@ -5,7 +5,6 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
-    import { type Project, type ProjectReward } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
@@ -17,6 +16,7 @@
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
+    import type { Project, ProjectReward } from "../../../openapi/client";
     import type { UploadedFile } from "../../../stores/drafts/projectDraft";
 
     let {
