@@ -60,6 +60,16 @@ export class ProjectsService {
                 hasNextPage,
             };
         } catch (error) {
+            // Re-throw aborted requests as-is so callers can detect cancellation.
+            // The fetch client may not preserve the DOMException name, so also
+            // check the signal directly.
+            if (
+                options?.abortSignal?.aborted ||
+                (error instanceof Error && error.name === "AbortError")
+            ) {
+                throw new DOMException("Aborted", "AbortError");
+            }
+
             // Re-throw auth errors as-is for component handling
             if (error && typeof error === "object" && "type" in error) {
                 throw error as AuthError;

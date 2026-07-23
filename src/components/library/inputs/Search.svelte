@@ -41,7 +41,7 @@
     )}
 >
     {#if label !== undefined && value}
-        <label for={id} class="absolute -top-3 left-3 bg-white px-1 text-sm text-black">
+        <label for={id} class="absolute -top-2.5 left-6 bg-white px-1 text-sm text-black">
             {label}
         </label>
     {/if}
@@ -55,7 +55,7 @@
         {oninput}
         {onkeydown}
         data-testid={dataTestId}
-        class="flex-1 border-none bg-white text-black outline-none focus:ring-0"
+        class="flex-1 border-none bg-white text-black outline-none autofill:shadow-[inset_0_0_0_1000px_var(--color-white)] autofill:[-webkit-text-fill-color:var(--color-black)] focus:ring-0"
     />
 
     {#if value && onclear}
