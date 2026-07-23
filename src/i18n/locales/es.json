@@ -372,6 +372,7 @@
         "title": "Checkout",
         "description": "Página de checkout"
       },
+      "btnContinue": "Continuar",
       "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
       "reward": {
         "claimed": "{{ units }} personas ya han reclamado esta recompensa",
@@ -392,6 +393,7 @@
         "total": {
           "title": "Total que vas a donar"
         },
+        "breakdown": "{{projectsAmount}} de donaciones + {{foundationAmount}} de aporte a la fundación",
         "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
         "showDetails": "Ver detalle",
         "hideDetails": "Ocultar desglose",
@@ -1052,7 +1054,9 @@
         "title": "Indícanos tus datos personales",
         "description": "Necesitamos saber quién eres antes de pagar.",
         "registerOr": "Regístrate o",
-        "loginBtnLabel": "Entra con tu cuenta"
+        "loginBtnLabel": "Entra con tu cuenta",
+        "existUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones. ",
+        "loginEmailUser": "Email o nombre de usuario"
       },
       "form": {
         "userType": {
@@ -1061,7 +1065,7 @@
         },
         "btnSubmit": "Registrarse",
         "termsCheckbox": "Acepto las condiciones legales",
-        "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
+        "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros {{terms}}términos de uso{{_terms}}, {{privacy}}política de privacidad{{_privacy}} y {{cookies}}política de cookies{{_cookies}}.",
         "validation": {
           "password": {
             "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"

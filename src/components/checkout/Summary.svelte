@@ -6,11 +6,9 @@
     import { cartAmount, cartByRecipient } from "../../stores/cart";
     import { formatCurrency } from "../../utils/currencies";
     import { multiplyMoney, sumMoney } from "../../utils/money";
-    import FileUpload from "../library/inputs/FileUpload.svelte";
 
     let { hasError = false }: { hasError?: boolean } = $props();
 
-    // 1. Calculamos el total de proyectos (donaciones)
     const projectsTotal = $derived.by(() => {
         const data = $cartByRecipient;
         const projectItems = Object.entries(data)
@@ -20,7 +18,6 @@
         return sumMoney(projectItems.map((i) => multiplyMoney(i.money, i.quantity)));
     });
 
-    // 2. Calculamos el total dedicado a la fundación
     const foundationTotal = $derived.by(() => {
         const foundationItems = $cartByRecipient["foundation"] || [];
         return sumMoney(foundationItems.map((i) => multiplyMoney(i.money, i.quantity)));
@@ -53,14 +50,14 @@
         {/snippet}
 
         {#snippet content()}
-            <hr class="my-4 h-px w-full bg-secondary/20" />
+            <hr class="bg-secondary/20 my-4 h-px w-full" />
             <div>
                 <p class="text-sm">
                     <Thtml
                         key="pages.checkout.summary.breakdown"
                         vars={{
                             projectsAmount: `<strong>${formatCurrency(projectsTotal)}</strong>`,
-                            foundationAmount: `<strong>${formatCurrency(foundationTotal)}</strong>`
+                            foundationAmount: `<strong>${formatCurrency(foundationTotal)}</strong>`,
                         }}
                     />
                 </p>

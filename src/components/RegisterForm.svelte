@@ -51,30 +51,30 @@
 
                     <div class="flex flex-col items-start gap-10 self-stretch">
                         <h1 class="text-secondary font-body text-[40px] leading-5 font-bold">
-                            {$t("register.page.title")}
+                            {$t("pages.register.title")}
                         </h1>
                         <p
                             class="text-content font-body self-stretch text-base leading-6 font-normal"
                         >
-                            {$t("register.page.description")}
+                            {$t("pages.register.page.description")}
                         </p>
                     </div>
 
                     <div class="flex items-center gap-4">
                         <h2 class="text-secondary font-body text-2xl leading-8 font-bold">
-                            {$t("register.page.registerOr")}
+                            {$t("pages.register.page.registerOr")}
                         </h2>
                         <a
                             href="/login?checkout=true"
                             class="bg-variant1 text-secondary font-body line-clamp-1 flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-2 text-base leading-6 font-bold text-ellipsis"
                         >
-                            {$t("register.page.loginBtnLabel")}
+                            {$t("pages.register.page.loginBtnLabel")}
                         </a>
                     </div>
 
                     <div>
                         <p class="text-content font-body w-109 text-base leading-6 font-normal">
-                            {$t("register.page.goteoUserInfo")}
+                            {$t("pages.register.page.existUserInfo")}
                         </p>
                     </div>
                     <form id="register" onsubmit={handleSubmit} class="flex w-full flex-col gap-8">
@@ -83,14 +83,14 @@
                                 name="uType"
                                 value="individual"
                                 bind:group={userType}
-                                label={$t("register.form.userType.individual")}
+                                label={$t("pages.register.form.userType.individual")}
                                 class="text-content font-body h-6 w-6 text-base leading-6 font-normal tabular-nums"
                             />
                             <RadioButton
                                 name="uType"
                                 value="organization"
                                 bind:group={userType}
-                                label={$t("register.form.userType.organization")}
+                                label={$t("pages.register.form.userType.organization")}
                                 class="text-content font-body h-6 w-6 text-base leading-6 font-normal tabular-nums"
                             />
                         </div>
@@ -102,20 +102,20 @@
                                 {#if userType === "individual"}
                                     <input
                                         type="text"
-                                        placeholder={$t("register.individual.firstName")}
+                                        placeholder={$t("pages.register.individual.firstName")}
                                         class={inputClass}
                                         required
                                     />
                                     <input
                                         type="text"
-                                        placeholder={$t("register.individual.lastName")}
+                                        placeholder={$t("pages.register.individual.lastName")}
                                         class={inputClass}
                                         required
                                     />
                                 {:else}
                                     <input
                                         type="text"
-                                        placeholder={$t("register.organization.legalName")}
+                                        placeholder={$t("pages.register.organization.legalName")}
                                         class="md:col-span-2 {inputClass}"
                                         required
                                     />
@@ -123,7 +123,7 @@
 
                                 <input
                                     type="email"
-                                    placeholder={$t("register.individual.email")}
+                                    placeholder={$t("pages.register.individual.email")}
                                     class="md:col-span-2 {inputClass}"
                                     required
                                 />
@@ -131,7 +131,7 @@
                                 <div class="flex flex-col gap-2 md:col-span-2">
                                     <input
                                         type="password"
-                                        placeholder={$t("register.individual.password")}
+                                        placeholder={$t("pages.register.individual.password")}
                                         class={inputClass}
                                         required
                                     />
@@ -139,7 +139,7 @@
                                     <span
                                         class="text-content font-body w-109 text-[12px] leading-4 font-medium italic opacity-80"
                                     >
-                                        {$t("register.form.validation.password.minLength")}
+                                        {$t("pages.register.form.validation.password.minLength")}
                                     </span>
                                 </div>
                             </div>
@@ -149,11 +149,11 @@
                                 <Checkbox
                                     id="tax-deduction"
                                     bind:checked={showDniField}
-                                    label={$t("register.individual.taxId.msgDeduction")}
+                                    label={$t("pages.register.individual.taxId.msgDeduction")}
                                 />
                                 <input
                                     type="text"
-                                    placeholder={$t("register.individual.taxId.label")}
+                                    placeholder={$t("pages.register.individual.taxId.label")}
                                     class="{inputClass} {showDniField
                                         ? 'opacity-100'
                                         : 'opacity-40'}"
@@ -167,7 +167,8 @@
                         >
                             <Checkbox id="policies" bind:checked={acceptTerms}>
                                 <span class="text-content inline text-base leading-6 font-normal">
-                                    <Thtml key="register.form.policiesCheckbox"
+                                    <Thtml
+                                        key="pages.register.form.policiesCheckbox"
                                         vars={{
                                             terms: `<a href="/legal/terms" class="inline text-secondary underline font-bold hover:opacity-80">`,
                                             _terms: "</a>",
@@ -183,7 +184,7 @@
                     </form>
                     <div class="flex flex-col items-start">
                         <p class="text-content font-body w-109.25 text-base leading-8 font-normal">
-                            {$t("register.page.otherAccessMethods")}
+                            {$t("pages.login.page.otherAccessMethods")}
                         </p>
 
                         <Oauth />
@@ -202,18 +203,18 @@
                         <p
                             class="text-content font-body text-body-small self-stretch py-3 leading-4 font-medium"
                         >
-                            {$t("checkout.summary.deduct")}
+                            {$t("pages.checkout.summary.deduct")}
                         </p>
 
                         <Button
                             type="submit"
                             form="register"
-                            class="flex bg-primary text-secondary font-karla text-body-small items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 leading-4 font-bold"
+                            class="bg-primary text-secondary font-karla text-body-small flex items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 leading-4 font-bold"
                         >
                             {#if isSubmitting}
                                 <span class="italic">{$t("system.loading")}</span>
                             {:else}
-                                {$t("checkout.btnContinue.label")}
+                                {$t("pages.checkout.btnContinue")}
                             {/if}
                         </Button>
                     </Card>

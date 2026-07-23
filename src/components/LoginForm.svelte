@@ -46,28 +46,28 @@
 
                     <div class="flex flex-col items-start gap-10 self-stretch">
                         <h1 class="self-stretch text-[40px] leading-12 font-bold text-black">
-                            {$t("register.page.title")}
+                            {$t("pages.login.page.title")}
                         </h1>
                         <p class="text-content self-stretch text-base leading-6 font-normal">
-                            {$t("register.page.description")}
+                            {$t("pages.login.page.description")}
                         </p>
                     </div>
 
                     <div class="flex items-center gap-4">
                         <h2 class="text-secondary text-2xl leading-8 font-bold">
-                            {$t("register.page.registerOr")}
+                            {$t("pages.register.page.registerOr")}
                         </h2>
                         <a
                             href="/register?checkout=true"
                             class="bg-variant1 text-secondary line-clamp-1 flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-2 text-base leading-6 font-bold text-ellipsis"
                         >
-                            {$t("register.page.loginBtnLabel")}
+                            {$t("pages.register.page.loginBtnLabel")}
                         </a>
                     </div>
 
                     <div>
                         <p class="text-content w-109 text-base leading-6 font-normal">
-                            {$t("register.page.goteoUserInfo")}
+                            {$t("pages.register.page.existUserInfo")}
                         </p>
                     </div>
 
@@ -78,7 +78,7 @@
                             <div class="grid w-full grid-cols-1 gap-4">
                                 <TextInput
                                     type="text"
-                                    placeholder={$t("login.form.email")}
+                                    placeholder={$t("pages.login.form.email")}
                                     bind:value={email}
                                     required
                                 />
@@ -86,7 +86,7 @@
                                 <div class="flex flex-col gap-2">
                                     <TextInput
                                         type="password"
-                                        placeholder={$t("register.individual.password")}
+                                        placeholder={$t("pages.register.individual.password")}
                                         bind:value={password}
                                         required
                                     />
@@ -96,7 +96,7 @@
                                             href="/password/recover"
                                             class="text-secondary text-sm font-bold underline hover:opacity-80"
                                         >
-                                            {$t("login.page.forgotPassword")}
+                                            {$t("pages.login.page.forgotPassword")}
                                         </a>
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@
                         >
                             <Checkbox id="policies" bind:checked={acceptTerms}>
                                 <Thtml
-                                    key="register.form.termsCheckbox"
+                                    key="pages.register.form.termsCheckbox"
                                     vars={{
                                         legal: `<a href="condiciones/legales" class="text-secondary underline font-bold hover:opacity-80">`,
                                         _legal: "</a>",
@@ -120,7 +120,7 @@
 
                     <div class="flex flex-col items-start">
                         <p class="text-content w-109.25 text-base leading-8 font-normal">
-                            {$t("register.page.otherAccessMethods")}
+                            {$t("pages.login.page.otherAccessMethods")}
                         </p>
                         <Oauth />
                     </div>
@@ -137,7 +137,7 @@
                         <Steps step={currentStep} hasError={errorMessage !== ""} />
 
                         <p class="text-content self-stretch py-3 text-sm font-medium">
-                            {$t("checkout.summary.deduct")}
+                            {$t("pages.checkout.summary.deduct")}
                         </p>
 
                         <Button
@@ -148,7 +148,7 @@
                             {#if isSubmitting}
                                 <span class="italic">{$t("system.loading")}</span>
                             {:else}
-                                {$t("checkout.btnContinue.label")}
+                                {$t("pages.checkout.btnContinue")}
                             {/if}
                         </Button>
                     </Card>
