@@ -578,6 +578,28 @@ export type GatewayChargeChargeUpdationDto = {
 /**
  * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
  */
+export type GatewayChargeChargesTotalsDto = {
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
+export type GatewayChargeChargesTotalsDtoJsonld = {
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
 export type GatewayChargeJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -2101,8 +2123,8 @@ export type ProjectSupport = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2176,8 +2198,8 @@ export type ProjectSupportJsonld = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -3169,6 +3191,50 @@ export type ApiGatewayChargesGetCollectionResponses = {
 };
 
 export type ApiGatewayChargesGetCollectionResponse = ApiGatewayChargesGetCollectionResponses[keyof ApiGatewayChargesGetCollectionResponses];
+
+export type ApiGatewayChargestotalsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        'checkout.gateway'?: string;
+        'checkout.gateway[]'?: Array<string>;
+        'checkout.trackings.value'?: string;
+        'checkout.trackings.value[]'?: Array<string>;
+        type?: string;
+        'type[]'?: Array<string>;
+        target?: string;
+        'target[]'?: Array<string>;
+        'money.currency'?: string;
+        'money.currency[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
+        'money.amount[between]'?: string;
+        'money.amount[gt]'?: string;
+        'money.amount[gte]'?: string;
+        'money.amount[lt]'?: string;
+        'money.amount[lte]'?: string;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/gateway_charges/totals';
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponses = {
+    /**
+     * Charges totals
+     */
+    200: GatewayChargeChargesTotalsDto;
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponse = ApiGatewayChargestotalsGetCollectionResponses[keyof ApiGatewayChargestotalsGetCollectionResponses];
 
 export type ApiGatewayChargesIdGetData = {
     body?: never;
