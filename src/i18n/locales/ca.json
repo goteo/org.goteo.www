@@ -126,7 +126,7 @@
     },
     "navigation": {
       "search": {
-        "placeholder": "Busca la teva campanya"
+        "placeholder": "Busca el teu projecte"
       }
     }
   },
@@ -954,16 +954,16 @@
       }
     },
     "search": {
-      "title": "Buscar campanyes - Goteo",
-      "description": "Explora el nostre catàleg de campanyes i troba la que més t'inspiri per fer la teva donació",
-      "heading": "Troba la campanya que busques",
-      "subtitle": "Explora el nostre catàleg de campanyes i tria la que més t'inspiri per fer la teva donació",
-      "topResults": "Campanyes més buscades",
-      "showingTopResults": "Mostrant les {{count}} campanyes més populars",
-      "loading": "Buscant campanyes...",
+      "title": "Cercar projectes - Goteo",
+      "description": "Explora el nostre catàleg de projectes i troba el que més t'inspiri per fer la teva donació",
+      "heading": "Troba els projectes que cerques",
+      "subtitle": "Explora el nostre catàleg de projectes i tria el que més t'inspiri per fer la teva donació",
+      "topResults": "Projectes més cercats",
+      "showingTopResults": "Es mostren els {{count}} projectes més populars",
+      "loading": "Cercant projectes...",
       "input": {
-        "placeholder": "Cercar",
-        "label": "Buscar campanyes",
+        "placeholder": "Cercar projectes...",
+        "label": "Cercar projectes",
         "clear": "Netejar cerca",
         "button": "Cercar"
       },
@@ -977,20 +977,20 @@
         "deselectCategory": "Desseleccionar categoria",
         "selectedCategories": "{{count}} categories seleccionades",
         "status": {
-          "label": "Estat de la campanya"
+          "label": "Estat del projecte"
         },
         "territory": {
           "label": "Àmbit d'actuació"
         }
       },
       "empty": {
-        "title": "No s'han trobat campanyes",
-        "description": "No hi ha campanyes que coincideixin amb la teva cerca actual. Verifica l'ortografia o prova amb paraules clau diferents o termes més generals.",
+        "title": "No s'han trobat projectes",
+        "description": "No hi ha projectes que coincideixin amb la teva cerca actual. Verifica l'ortografia o prova amb paraules clau diferents o termes més generals.",
         "clearFilters": "Netejar filtres"
       },
       "initial": {
         "title": "Busca la teva campanya ideal",
-        "description": "Utilitza els filtres de dalt per trobar campanyes que t'inspirin."
+        "description": "Utilitza els filtres de dalt per trobar projectes que t'inspirin."
       },
       "results": {
         "count": "{{count}} resultats trobats",
@@ -999,7 +999,7 @@
         "showing": "Mostrant {{count}} resultats",
         "empty": {
           "title": "No s'han trobat resultats",
-          "description": "No hi ha campanyes que coincideixin amb la teva cerca actual.",
+          "description": "No hi ha projectes que coincideixin amb la teva cerca actual.",
           "clearFilters": "Netejar filtres"
         }
       },
@@ -1031,7 +1031,7 @@
         }
       },
       "accessibility": {
-        "resultsFound": "S'han trobat {{count}} campanyes"
+        "resultsFound": "S'han trobat {{count}} projectes"
       },
       "loadMore": {
         "button": "Carregar més",
