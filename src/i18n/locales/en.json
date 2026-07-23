@@ -126,7 +126,7 @@
     },
     "navigation": {
       "search": {
-        "placeholder": "Search for your campaign"
+        "placeholder": "Search for your project"
       }
     }
   },
@@ -954,16 +954,16 @@
       }
     },
     "search": {
-      "title": "Search campaigns - Goteo",
-      "description": "Explore our campaign catalog and find the one that inspires you most to make your donation",
-      "heading": "Find the campaign you're looking for",
-      "subtitle": "Explore our campaign catalog and choose the one that inspires you most to make your donation",
-      "topResults": "Most searched campaigns",
-      "showingTopResults": "Showing the {{count}} most popular campaigns",
-      "loading": "Searching campaigns...",
+      "title": "Search Projects - Goteo",
+      "description": "Explore our catalog of projects and find the one that inspires you most to make your donation",
+      "heading": "Find the Projects you're looking for",
+      "subtitle": "Explore our catalog of projects and choose the one that inspires you most to make your donation",
+      "topResults": "Most searched projects",
+      "showingTopResults": "Showing the {{count}} most popular projects",
+      "loading": "Searching for projects...",
       "input": {
-        "placeholder": "Search",
-        "label": "Search campaigns",
+        "placeholder": "Search projects...",
+        "label": "Search projects",
         "clear": "Clear search",
         "button": "Search"
       },
@@ -977,20 +977,20 @@
         "deselectCategory": "Deselect category",
         "selectedCategories": "{{count}} categories selected",
         "status": {
-          "label": "Campaign status"
+          "label": "Project status"
         },
         "territory": {
           "label": "Scope of action"
         }
       },
       "empty": {
-        "title": "No campaigns found",
-        "description": "There are no campaigns matching your current search. Check the spelling or try different keywords or more general terms.",
+        "title": "No projects found",
+        "description": "There are no projects matching your current search. Check the spelling or try different keywords or more general terms.",
         "clearFilters": "Clear filters"
       },
       "initial": {
         "title": "Find your ideal campaign",
-        "description": "Use the filters above to find campaigns that inspire you."
+        "description": "Use the filters above to find projects that inspire you."
       },
       "results": {
         "count": "{{count}} results found",
@@ -999,7 +999,7 @@
         "showing": "Showing {{count}} results",
         "empty": {
           "title": "No results found",
-          "description": "There are no campaigns matching your current search.",
+          "description": "There are no projects matching your current search.",
           "clearFilters": "Clear filters"
         }
       },
@@ -1031,7 +1031,7 @@
         }
       },
       "accessibility": {
-        "resultsFound": "{{count}} campaigns found"
+        "resultsFound": "{{count}} projects found"
       },
       "loadMore": {
         "button": "Load more",
