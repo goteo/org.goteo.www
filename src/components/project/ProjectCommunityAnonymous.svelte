@@ -27,9 +27,9 @@
 </script>
 
 <div
-    class="border-grey flex cursor-pointer overflow-hidden rounded-4xl border bg-white shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
+    class="border-grey flex h-58 w-full cursor-pointer overflow-hidden rounded-4xl border bg-white shadow-sm transition-shadow duration-200 ease-in-out hover:shadow-lg md:flex-row"
 >
-    <div class="flex h-48 w-full shrink-0 overflow-hidden md:h-auto md:w-2/5">
+    <div class="flex h-full w-2/5 shrink-0 overflow-hidden">
         <img
             src="/images/home/card-comunidad.png"
             alt="Community donation"
