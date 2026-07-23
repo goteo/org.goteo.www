@@ -77,10 +77,10 @@ export class ProjectsService {
 
             // Wrap other errors with context
             if (error instanceof Error) {
-                throw new Error(`Project search failed: ${error.message}`);
+                throw new Error(`Project search failed: ${error.message}`, { cause: error });
             }
 
-            throw new Error("Project search failed");
+            throw new Error("Project search failed", { cause: error });
         }
     }
 

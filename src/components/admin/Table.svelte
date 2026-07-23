@@ -113,20 +113,15 @@
     }
 
     function addChargesMetadata(charges: ExtendedCharge[]) {
-        let hasConcept = false;
-
         for (const charge of charges) {
             const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
             const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as
-                | Accounting
-                | undefined;
+                Accounting | undefined;
 
             const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
             const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
 
-            hasConcept = false;
-
-            if (targetName === originName) hasConcept = true;
+            const hasConcept = targetName === originName;
 
             charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
             charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
