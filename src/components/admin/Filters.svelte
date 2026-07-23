@@ -8,6 +8,7 @@
     import DateInput from "../library/inputs/DateInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
     import FilterComposer from "../library/filters/FilterComposer.svelte";
+    import type { FilterResource } from "../../utils/filterComposer";
 
     let {
         filters,
@@ -23,7 +24,7 @@
         paymentMethodOptions: [string, string][];
         chargeStatusOptions: [string, string][];
         rangeAmountOptions: [string, string][];
-        composedFiltersResource: string[];
+        composedFiltersResource: FilterResource[];
         initialSearchQuery?: string;
     }>();
 
