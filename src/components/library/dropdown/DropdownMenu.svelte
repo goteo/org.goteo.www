@@ -12,6 +12,7 @@
 
     interface Props {
         class?: ClassNameValue;
+        searchClasses?: ClassNameValue;
         variant: DropdownVariant;
         options: DropdownOption[];
         selected?: DropdownOption[];
@@ -33,6 +34,7 @@
 
     let {
         class: classes = undefined,
+        searchClasses = undefined,
         variant,
         options = $bindable([]),
         selected = $bindable([]),
@@ -106,7 +108,10 @@
 >
     {#if hasSearch}
         <div
-            class="group flex w-full items-center justify-between rounded-lg border border-gray-100 bg-white p-4 shadow-sm outline-none focus:outline-none"
+            class={twMerge(
+                "group flex w-full items-center justify-between rounded-lg border border-gray-100 bg-white p-4 shadow-sm outline-none focus:outline-none",
+                searchClasses,
+            )}
         >
             <input
                 class="max-h-6 w-full border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"

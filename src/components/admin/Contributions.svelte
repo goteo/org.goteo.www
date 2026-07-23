@@ -418,6 +418,7 @@
         {paymentMethodOptions}
         {chargeStatusOptions}
         {rangeAmountOptions}
+        composedFiltersResource={["gateway_charge"]}
         onApplyFilters={handleApplyFilters}
     />
     <div class="flex flex-col">
