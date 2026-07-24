@@ -73,6 +73,31 @@ export interface NominatimResult {
     extratags?: Record<string, string>;
 }
 
+export interface ExtractedTerritory {
+    country: string | null;
+    subLvl1: string | null;
+    subLvl2: string | null;
+    address: string | null;
+}
+
+export function extractTerritory(result: NominatimResult): ExtractedTerritory {
+    const address = result.address ?? {};
+
+    const country = address.country_code?.toUpperCase() ?? null;
+
+    const iso3166_2 = Object.entries(address)
+        .filter(([key]) => key.startsWith("ISO3166-2-"))
+        .sort()
+        .map(([, v]) => v);
+
+    return {
+        country,
+        subLvl1: iso3166_2[0] ?? null,
+        subLvl2: iso3166_2[1] ?? null,
+        address: result.display_name ?? null,
+    };
+}
+
 export async function searchPlace(
     value: string,
     limit: number = 6,

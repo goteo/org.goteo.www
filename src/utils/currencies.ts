@@ -1,6 +1,8 @@
 import { getDefaultCurrency, getDefaultLanguage } from "./consts";
 import { currencySymbols } from "./currencyData";
 
+import type { Money } from "../openapi/client";
+
 function getSeparators(currency: string) {
     const locale = getDefaultLanguage();
     const example = new Intl.NumberFormat(locale, {
@@ -47,10 +49,39 @@ export function parseCurrency(value: string, currency?: string): number {
     return parseInt(result, 10);
 }
 
+export type FormatOptions = {
+    asLocaleString?: boolean;
+    locale?: string;
+};
+
+export function formatCurrency(money: Money | undefined | null, options?: FormatOptions): string;
 export function formatCurrency(
     amount?: number,
     currency?: string | null,
-    options: { asLocaleString?: boolean; locale?: string } = {},
+    options?: FormatOptions,
+): string;
+export function formatCurrency(
+    amountOrMoney?: number | Money | null,
+    currencyOrOptions?: string | null | FormatOptions,
+    options?: FormatOptions,
+): string {
+    if (amountOrMoney == null) return "";
+    if (typeof amountOrMoney === "object" && "currency" in amountOrMoney) {
+        const money = amountOrMoney as Money;
+        const opts = currencyOrOptions as FormatOptions | undefined;
+        return formatUnits(money.amount ?? 0, money.currency ?? getDefaultCurrency(), opts);
+    }
+    return formatUnits(
+        amountOrMoney as number | undefined,
+        (currencyOrOptions as string | null | undefined) ?? null,
+        options,
+    );
+}
+
+function formatUnits(
+    amount?: number,
+    currency?: string | null,
+    options: FormatOptions = {},
 ): string {
     if (amount === undefined) return "";
     if (currency === undefined || currency === null) currency = getDefaultCurrency();

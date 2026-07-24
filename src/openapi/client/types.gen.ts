@@ -578,6 +578,36 @@ export type GatewayChargeChargeUpdationDto = {
 /**
  * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
  */
+export type GatewayChargeChargesTotalsDto = {
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
+    /**
+     * The aggregated monetary value in the charges.
+     */
+    money?: TotalizedMoney;
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
+export type GatewayChargeChargesTotalsDtoJsonld = {
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    /**
+     * The number of distinct Projects targeted by the charges matching the filter set.
+     */
+    projects?: number;
+    /**
+     * The aggregated monetary value in the charges.
+     */
+    money?: TotalizedMoneyJsonld;
+};
+
+/**
+ * A Charge represents a payment item to be included in a Checkout for payment at a Gateway.
+ */
 export type GatewayChargeJsonld = {
     '@context'?: string | {
         '@vocab': string;
@@ -1510,7 +1540,7 @@ export type Project = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1558,11 +1588,10 @@ export type ProjectProjectCreationDto = {
      */
     categories: Array<string>;
     /**
-     * Desired date-time of release for the created Project.\
-     * By default 28 days from now, at minimum 14 days from now.
+     * Deadlines and important Project dates.
      */
-    release?: string;
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    calendar?: ProjectCalendar;
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1582,11 +1611,10 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     categories: Array<string>;
     /**
-     * Desired date-time of release for the created Project.\
-     * By default 28 days from now, at minimum 14 days from now.
+     * Deadlines and important Project dates.
      */
-    release?: string;
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    calendar?: ProjectCalendarJsonld;
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1621,13 +1649,17 @@ export type ProjectProjectUpdationDto = {
      */
     deadline?: 'minimum' | 'optimum';
     /**
+     * Deadlines and important Project dates.
+     */
+    calendar?: ProjectCalendar;
+    /**
      * A URL to a video showcasing the Project.
      */
     video?: string;
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
 /**
@@ -1691,7 +1723,7 @@ export type ProjectJsonld = {
     /**
      * The status of a Project represents how far it is in it's life-cycle.
      */
-    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.request_change' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.request_change' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
+    status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
     /**
      * List of the ProjectRewards this Project offers.
      */
@@ -1799,21 +1831,17 @@ export type ProjectBudgetItemJsonld = {
 
 export type ProjectCalendar = {
     /**
-     * The date at which the Project started campaigning.
+     * Public campaign start date.
      */
-    release?: string | null;
+    release: string | null;
     /**
-     * 40 days after the date of release.\
-     * \
-     * The minimum budget must be raised by the end of this date.\
-     * Failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
+     * The minimum budget must be raised by the end of this date,
+     * failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
      */
     minimum?: string | null;
     /**
-     * 40 days after the minimum deadline. Optional.\
-     * \
      * If the Project achieved their minimum budget by the minimum deadline,
-     * and this deadline is defined, it may still remain in campaign to raise the optimum.
+     * and this deadline is defined, it may still remain `in_campaign` to raise the optimum.
      */
     optimum?: string | null;
 };
@@ -1827,21 +1855,17 @@ export type ProjectCalendarJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     /**
-     * The date at which the Project started campaigning.
+     * Public campaign start date.
      */
-    release?: string | null;
+    release: string | null;
     /**
-     * 40 days after the date of release.\
-     * \
-     * The minimum budget must be raised by the end of this date.\
-     * Failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
+     * The minimum budget must be raised by the end of this date,
+     * failure to do so will move the Project out of status `in_campaign` into status `unfunded`.
      */
     minimum?: string | null;
     /**
-     * 40 days after the minimum deadline. Optional.\
-     * \
      * If the Project achieved their minimum budget by the minimum deadline,
-     * and this deadline is defined, it may still remain in campaign to raise the optimum.
+     * and this deadline is defined, it may still remain `in_campaign` to raise the optimum.
      */
     optimum?: string | null;
 };
@@ -2101,8 +2125,8 @@ export type ProjectSupport = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2176,8 +2200,8 @@ export type ProjectSupportJsonld = {
      * When `anonymous` is *true* the origin will only be public to admins and the User.
      */
     readonly origin?: string | null;
-    readonly displayName?: string;
-    readonly displayImage?: string;
+    readonly displayName?: string | null;
+    readonly displayImage?: string | null;
     /**
      * The Transactions that were issued to the Project by the origin.
      */
@@ -2404,6 +2428,25 @@ export type TipjarJsonld = {
      * Human readable, non white space, unique string.
      */
     name: string;
+};
+
+export type TotalizedMoney = {
+    amount?: number;
+    currency?: string;
+    length?: number;
+};
+
+export type TotalizedMoneyJsonld = {
+    '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown | string | 'http://www.w3.org/ns/hydra/core#';
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    amount?: number;
+    currency?: string;
+    length?: number;
 };
 
 export type Tracking = {
@@ -3145,6 +3188,10 @@ export type ApiGatewayChargesGetCollectionData = {
         'money.amount[gte]'?: string;
         'money.amount[lt]'?: string;
         'money.amount[lte]'?: string;
+        'order[money.amount]'?: 'asc' | 'desc';
+        'order[status]'?: 'asc' | 'desc';
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
         'dateCreated[before]'?: string;
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
@@ -3153,8 +3200,6 @@ export type ApiGatewayChargesGetCollectionData = {
         'dateUpdated[strictly_before]'?: string;
         'dateUpdated[after]'?: string;
         'dateUpdated[strictly_after]'?: string;
-        'order[dateCreated]'?: 'asc' | 'desc';
-        'order[dateUpdated]'?: 'asc' | 'desc';
     };
     url: '/v4/gateway_charges';
 };
@@ -3167,6 +3212,52 @@ export type ApiGatewayChargesGetCollectionResponses = {
 };
 
 export type ApiGatewayChargesGetCollectionResponse = ApiGatewayChargesGetCollectionResponses[keyof ApiGatewayChargesGetCollectionResponses];
+
+export type ApiGatewayChargestotalsGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        'checkout.gateway'?: string;
+        'checkout.gateway[]'?: Array<string>;
+        'checkout.trackings.value'?: string;
+        'checkout.trackings.value[]'?: Array<string>;
+        type?: string;
+        'type[]'?: Array<string>;
+        target?: string;
+        'target[]'?: Array<string>;
+        'money.currency'?: string;
+        'money.currency[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
+        'money.amount[between]'?: string;
+        'money.amount[gt]'?: string;
+        'money.amount[gte]'?: string;
+        'money.amount[lt]'?: string;
+        'money.amount[lte]'?: string;
+        'order[money.amount]'?: 'asc' | 'desc';
+        'order[status]'?: 'asc' | 'desc';
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
+    };
+    url: '/v4/gateway_charges/totals';
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponses = {
+    /**
+     * Charges totals
+     */
+    200: GatewayChargeChargesTotalsDto;
+};
+
+export type ApiGatewayChargestotalsGetCollectionResponse = ApiGatewayChargestotalsGetCollectionResponses[keyof ApiGatewayChargestotalsGetCollectionResponses];
 
 export type ApiGatewayChargesIdGetData = {
     body?: never;
@@ -4176,6 +4267,18 @@ export type ApiProjectsGetCollectionData = {
         description?: string;
         status?: string;
         'status[]'?: Array<string>;
+        'calendar.release[before]'?: string;
+        'calendar.release[strictly_before]'?: string;
+        'calendar.release[after]'?: string;
+        'calendar.release[strictly_after]'?: string;
+        'calendar.minimum[before]'?: string;
+        'calendar.minimum[strictly_before]'?: string;
+        'calendar.minimum[after]'?: string;
+        'calendar.minimum[strictly_after]'?: string;
+        'calendar.optimum[before]'?: string;
+        'calendar.optimum[strictly_before]'?: string;
+        'calendar.optimum[after]'?: string;
+        'calendar.optimum[strictly_after]'?: string;
         'dateCreated[before]'?: string;
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
@@ -5432,6 +5535,7 @@ export type ApiUsersGetCollectionData = {
          */
         itemsPerPage?: number;
         handle?: string;
+        'order[handle]'?: 'asc' | 'desc';
         email?: string;
         accounting?: string;
         'accounting[]'?: Array<string>;

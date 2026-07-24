@@ -5,7 +5,7 @@
     import { budgetTypeColors } from "../../utils/budgetColors";
     import { formatCurrency } from "../../utils/currencies";
 
-    import type { Project, Accounting } from "../../openapi/client/index";
+    import type { Money, Project, Accounting } from "../../openapi/client/index";
 
     let {
         project,
@@ -15,18 +15,30 @@
         accounting: Accounting;
     } = $props();
 
-    const minimumTotal = $derived(project.budget?.minimum?.money?.amount ?? 0);
-    const optimumTotal = $derived(project.budget?.optimum?.money?.amount ?? 0);
+    const minimumMoney: Money | undefined = $derived(project.budget?.minimum?.money);
+    const optimumMoney: Money | undefined = $derived(project.budget?.optimum?.money);
+    const balanceMoney: Money | undefined = $derived(accounting.balance);
+
+    const minimumTotal = $derived(minimumMoney?.amount ?? 0);
+    const optimumTotal = $derived(optimumMoney?.amount ?? 0);
     const totalBudget = $derived(minimumTotal + optimumTotal);
-    const balanceAmount = $derived(accounting.balance?.amount ?? 0);
+    const balanceAmount = $derived(balanceMoney?.amount ?? 0);
 
-    const minInfra = $derived(project.budget?.minimum?.infra?.amount ?? 0);
-    const minMaterial = $derived(project.budget?.minimum?.material?.amount ?? 0);
-    const minTask = $derived(project.budget?.minimum?.task?.amount ?? 0);
+    const minInfraMoney: Money | undefined = $derived(project.budget?.minimum?.infra);
+    const minMaterialMoney: Money | undefined = $derived(project.budget?.minimum?.material);
+    const minTaskMoney: Money | undefined = $derived(project.budget?.minimum?.task);
 
-    const optInfra = $derived(project.budget?.optimum?.infra?.amount ?? 0);
-    const optMaterial = $derived(project.budget?.optimum?.material?.amount ?? 0);
-    const optTask = $derived(project.budget?.optimum?.task?.amount ?? 0);
+    const optInfraMoney: Money | undefined = $derived(project.budget?.optimum?.infra);
+    const optMaterialMoney: Money | undefined = $derived(project.budget?.optimum?.material);
+    const optTaskMoney: Money | undefined = $derived(project.budget?.optimum?.task);
+
+    const minInfra = $derived(minInfraMoney?.amount ?? 0);
+    const minMaterial = $derived(minMaterialMoney?.amount ?? 0);
+    const minTask = $derived(minTaskMoney?.amount ?? 0);
+
+    const optInfra = $derived(optInfraMoney?.amount ?? 0);
+    const optMaterial = $derived(optMaterialMoney?.amount ?? 0);
+    const optTask = $derived(optTaskMoney?.amount ?? 0);
 
     const dividerWidthPct = 1.5;
 
@@ -93,7 +105,7 @@
                     : 'ml-4'}"
             >
                 <span>{$t("pages.project.view.tabs.budget.raised")}:</span>
-                <span class="font-bold">{formatCurrency(balanceAmount)}</span>
+                <span class="font-bold">{formatCurrency(balanceMoney)}</span>
             </div>
         </div>
 
@@ -169,11 +181,11 @@
     <div class="flex gap-2">
         <div class="text-secondary min-w-fit text-base" style="width: {leftSectionWidth}%">
             <span>{$t("pages.project.view.tabs.budget.minimum")}:</span>
-            <span class="font-bold">{formatCurrency(minimumTotal)}</span>
+            <span class="font-bold">{formatCurrency(minimumMoney)}</span>
         </div>
         <div class="text-secondary flex-none text-base">
             <span>{$t("pages.project.view.tabs.budget.optimal")}:</span>
-            <span class="font-bold">{formatCurrency(optimumTotal)}</span>
+            <span class="font-bold">{formatCurrency(optimumMoney)}</span>
         </div>
     </div>
 </div>

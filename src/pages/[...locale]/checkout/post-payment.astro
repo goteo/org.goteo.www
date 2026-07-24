@@ -11,6 +11,7 @@ import {
 } from "../../../openapi/client";
 import type { Project } from "../../../openapi/client";
 import { extractId } from "../../../utils/extractId";
+import { getDefaultCurrency } from "../../../utils/consts";
 import type { Campaign } from "../../../types/campaign";
 
 const { t, lang, session } = Astro.locals;
@@ -23,8 +24,8 @@ const mapProjectToCard = (project: Project) =>
         subtitle: project.subtitle || "",
         description: project.description || "",
         image: project.video?.thumbnail || "/images/placeholder-project.jpg",
-        obtained: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
-        minimum: project.budget?.minimum?.money || { amount: 0, currency: "EUR" },
+        obtained: project.budget?.minimum?.money || { amount: 0, currency: getDefaultCurrency() },
+        minimum: project.budget?.minimum?.money || { amount: 0, currency: getDefaultCurrency() },
         categories: project.categories || [],
         territory: project.territory || "",
         size: "small",

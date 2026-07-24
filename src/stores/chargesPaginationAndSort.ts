@@ -37,4 +37,16 @@ export const sortOptions: SortOption[] = [
         direction: "asc",
         label: "pages.admin.charges.filters.order.options.amount-asc",
     },
+    {
+        key: "status-asc",
+        field: "status",
+        direction: "asc",
+        label: "pages.admin.charges.filters.order.options.status-asc",
+    },
+    {
+        key: "status-desc",
+        field: "status",
+        direction: "desc",
+        label: "pages.admin.charges.filters.order.options.status-desc",
+    },
 ];

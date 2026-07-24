@@ -4,6 +4,8 @@ import { session } from "../auth/store";
 import { apiProjectRewardsIdGetUrl } from "../openapi/client/paths.gen";
 import { migrateLegacyCart } from "../utils/checkouts/migrate";
 import { checkoutRepo } from "../utils/checkouts/repository";
+import { getDefaultCurrency } from "../utils/consts";
+import { multiplyMoney, sumMoney } from "../utils/money";
 
 import type { GatewayCharge, ProjectReward } from "../openapi/client";
 
@@ -294,12 +296,11 @@ export const cartCount = derived(cart, ($cart) =>
     Object.values($cart.items).reduce((total, item) => total + item.quantity, 0),
 );
 
-export const cartAmount = derived(cart, ($cart) =>
-    Object.values($cart.items).reduce(
-        (total, item) => total + item.money.amount * item.quantity,
-        0,
-    ),
-);
+export const cartAmount = derived(cart, ($cart) => {
+    const items = Object.values($cart.items);
+    if (items.length === 0) return { amount: 0, currency: getDefaultCurrency() };
+    return sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)));
+});
 
 export const cartByTarget = derived(cart, ($cart) => {
     const grouped: Record<string, CheckoutItem[]> = {};

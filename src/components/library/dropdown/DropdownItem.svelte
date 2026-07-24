@@ -24,12 +24,12 @@
 
 <div
     class={twMerge(
-        "border-grey hover:bg-purple-soft hover:border-variant1 cursor-pointer border bg-white p-4 text-start",
+        "border-grey hover:bg-purple-soft hover:border-variant1 cursor-pointer border bg-white text-start",
         classes,
     )}
 >
     {#if variant === "multiselect"}
-        <label class="flex cursor-pointer justify-between">
+        <label class="flex cursor-pointer justify-between p-4">
             <span class="text-base text-black">{option.label}</span>
             <input
                 type="checkbox"
@@ -40,7 +40,7 @@
         </label>
     {:else if variant === "basic"}
         <button
-            class="w-full cursor-pointer text-base text-black"
+            class="w-full cursor-pointer p-4 text-base text-black"
             onclick={() => handleChange(option)}
         >
             {option.label}

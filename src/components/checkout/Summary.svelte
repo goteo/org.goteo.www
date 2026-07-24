@@ -3,6 +3,7 @@
     import { t } from "../../i18n/store";
     import { cartAmount, cartByRecipient } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
+    import { multiplyMoney, sumMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
 
@@ -47,7 +48,7 @@
             <div>
                 {#each recipients as [_, items]}
                     {@const name = items[0].recipientDisplayName}
-                    {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
+                    {@const amount = sumMoney(items.map((i) => multiplyMoney(i.money, i.quantity)))}
                     <p>
                         <Thtml
                             key="pages.checkout.summary.toRecipient"

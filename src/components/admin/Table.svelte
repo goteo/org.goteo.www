@@ -46,7 +46,7 @@
         { name: "pages.admin.charges.headers.origin", sortable: false },
         { name: "pages.admin.charges.headers.paymentMethod", sortable: false },
         { name: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
-        { name: "pages.admin.charges.headers.chargeStatus", sortable: false, sortKey: "status" },
+        { name: "pages.admin.charges.headers.chargeStatus", sortable: true, sortKey: "status" },
         { name: "pages.admin.charges.headers.refundToWallet", sortable: false },
         { name: "", sortable: false }, // For the empty expand/collapse button at the end of the table
     ];
@@ -113,20 +113,15 @@
     }
 
     function addChargesMetadata(charges: ExtendedCharge[]) {
-        let hasConcept = false;
-
         for (const charge of charges) {
             const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
             const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as
-                | Accounting
-                | undefined;
+                Accounting | undefined;
 
             const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
             const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
 
-            hasConcept = false;
-
-            if (targetName === originName) hasConcept = true;
+            const hasConcept = targetName === originName;
 
             charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
             charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;

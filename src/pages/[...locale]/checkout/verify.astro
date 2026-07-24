@@ -8,6 +8,8 @@ import PaymentMethod from "../../../components/checkout/PaymentMethod.astro";
 import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
+import { sumMoney } from "../../../utils/money";
+import type { Money } from "../../../openapi/client";
 
 const { t, lang, session } = Astro.locals;
 
@@ -55,7 +57,10 @@ try {
         throw new Error("Payment not completed");
     }
 
-    amount = response.data?.charges?.reduce((sum, charge) => sum + (charge.money.amount ?? 0), 0);
+    amount = response.data?.charges?.length
+        ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
+              .amount
+        : undefined;
 } catch (err) {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";

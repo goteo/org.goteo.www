@@ -87,6 +87,8 @@ const { accounting } = Astro.props;
 </section>
 <script>
     import { actions, isInputError } from "astro:actions";
+    import type { GatewayLink } from "../../openapi/client/index";
+    import { multiplyMoney, sumMoney } from "../../utils/money";
 
     import { cart } from "../../stores/checkoutsStore";
 
@@ -109,7 +111,9 @@ const { accounting } = Astro.props;
             const { error, data } = await actions.payment(formData);
 
             if (!error) {
-                const checkoutLink = data?.checkout?.links?.find((link) => link.type === "payment");
+                const checkoutLink = data?.checkout?.links?.find(
+                    (link: GatewayLink) => link.type === "payment",
+                );
 
                 if (!checkoutLink) {
                     throw new Error("No payment link found in the response");
@@ -171,10 +175,12 @@ const { accounting } = Astro.props;
 
             if (!walletInput) return;
 
-            const total = Object.values(state.items).reduce(
-                (sum, item) => sum + item.money.amount * item.quantity,
-                0,
-            );
+            const total =
+                sumMoney(
+                    Object.values(state.items).map((item) =>
+                        multiplyMoney(item.money, item.quantity),
+                    ),
+                )?.amount ?? 0;
 
             const balanceAttr = form?.dataset.balance;
             const balance = balanceAttr ? parseFloat(balanceAttr) : 0;

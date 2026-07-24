@@ -3,12 +3,10 @@ import WalletInfo from "./WalletInfo.svelte";
 
 const { t } = Astro.locals;
 const { accounting } = Astro.props;
-
-const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 ---
 
 <section>
-    <WalletInfo client:load {accounting} {defaultCurrency} />
+    <WalletInfo client:load {accounting} />
 
     <form
         id="payment"
