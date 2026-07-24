@@ -3,10 +3,12 @@
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
     import { getAllFilterSubjects } from "../../utils/filterComposer";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
+    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
     import type { Locale } from "../../i18n/locales";
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
@@ -16,11 +18,15 @@
         filters,
         onCloseFilter,
         resource = undefined,
+        accountingsMap = new Map(),
+        ownersMap = new Map(),
     } = $props<{
         title: string;
         filters: Record<string, any>;
         onCloseFilter: (filters: Record<string, any>) => void;
         resource?: FilterResource;
+        accountingsMap?: Map<string, Accounting>;
+        ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
     let tags: FilterTag[] = $state([]);
@@ -58,7 +64,16 @@
 
             const subject = subjectByParam.get(tag.title);
             if (subject && tag.value) {
-                tag.value = formatSubjectValue(subject, tag.value);
+                const formatted = formatSubjectValue(subject, tag.value);
+                if (formatted !== tag.value) {
+                    tag.value = formatted;
+                } else if (tag.title === "target") {
+                    const displayName = getDisplayNameFromAccounting(
+                        accountingsMap.get(tag.value),
+                        ownersMap,
+                    );
+                    if (displayName) tag.value = displayName;
+                }
             }
 
             return tag;
