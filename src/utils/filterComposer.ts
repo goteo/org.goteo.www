@@ -33,7 +33,7 @@ export type FilterOperator =
     | "lte"
     | "lt";
 
-export type FilterResource = "project" | "gateway_charge";
+export type FilterResource = "projects" | "gateway_charges" | "users";
 
 export interface FilterOption {
     value: string;
@@ -95,21 +95,21 @@ const filterSubjects: Record<string, FilterSubject> = {
         key: "title",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjects,
     },
     subtitle: {
         key: "subtitle",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsBySubtitle,
     },
     description: {
         key: "description",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsByDescription,
     },
     projectStatus: {
@@ -117,7 +117,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "status",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         options: projectStatuses,
     },
     chargeStatus: {
@@ -125,28 +125,28 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "status",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: gatewayChargeStatuses,
     },
     categories: {
         key: "categories",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestCategories,
     },
     owner: {
         key: "owner",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestOwner,
     },
     slug: {
         key: "slug",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsBySlug,
     },
     territoryCountry: {
@@ -154,40 +154,34 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "territory.country",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
-    },
-    dateUpdated: {
-        key: "dateUpdated",
-        type: "date",
-        compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
-        resources: ["project", "gateway_charge"],
+        resources: ["projects"],
     },
     budgetAmount: {
         key: "budgetAmount",
         type: "number",
         compatibleOperators: ["gte", "gt", "lte", "lt"],
-        resources: ["project"],
+        resources: ["projects"],
     },
     gateway: {
         key: "gateway",
         param: "checkout.gateway",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         suggest: suggestGateways,
     },
     type: {
         key: "type",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: chargeTypes,
     },
     target: {
         key: "target",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         suggest: suggestTarget,
     },
     currency: {
@@ -195,7 +189,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "money.currency",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: currencies,
     },
     amount: {
@@ -203,13 +197,73 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "money.amount",
         type: "number",
         compatibleOperators: ["gte", "gt", "lte", "lt"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
     },
     dateCreated: {
         key: "dateCreated",
         type: "date",
         compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
-        resources: ["gateway_charge"],
+        resources: ["projects", "gateway_charges", "users"],
+    },
+    dateUpdated: {
+        key: "dateUpdated",
+        type: "date",
+        compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
+        resources: ["projects", "gateway_charges", "users"],
+    },
+    handle: {
+        key: "handle",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
+    },
+    email: {
+        key: "email",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
+    },
+    displayName: {
+        key: "displayName",
+        param: "displayName",
+        type: "string",
+        compatibleOperators: ["equals"],
+        resources: ["users"],
+    },
+    userType: {
+        key: "userType",
+        param: "type",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
+        options: [
+            { value: "individual", label: "Individual" },
+            { value: "organization", label: "Organization" },
+        ],
+    },
+    active: {
+        key: "active",
+        type: "string",
+        compatibleOperators: ["equals"],
+        resources: ["users"],
+        options: [
+            { value: "true", label: "Active" },
+            { value: "false", label: "Inactive" },
+        ],
+    },
+    userRoles: {
+        key: "userRoles",
+        param: "roles",
+        type: "string",
+        compatibleOperators: ["is_any_of"],
+        resources: ["users"],
+    },
+    userTerritoryCountry: {
+        key: "userTerritoryCountry",
+        param: "territory.country",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
     },
 };
 
