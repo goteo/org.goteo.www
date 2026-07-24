@@ -42,6 +42,7 @@
             legacy: "",
             targetAudience: "",
             team: "",
+            communicationStrategy: "",
         },
     );
 
@@ -121,6 +122,10 @@
 
     function handleTeamChange(html: string) {
         updateCampaignInfo({ team: html });
+    }
+
+    function handleCommunicationStrategyChange(html: string) {
+        updateCampaignInfo({ communicationStrategy: html });
     }
 </script>
 
@@ -274,6 +279,31 @@
                 minLength={50}
                 maxLength={5000}
                 ariaDescribedBy="team-help"
+            />
+        </section>
+
+        <!-- Communication Strategy Section -->
+        <section data-field="communicationStrategy" class="space-y-4">
+            <div>
+                <label
+                    for="communication-strategy"
+                    class="mb-1 block text-2xl font-bold text-black"
+                >
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.title")}
+                </label>
+                <p class="text-content text-base" id="communication-strategy-help">
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.description")}
+                </p>
+            </div>
+
+            <RichTextEditor
+                id="communication-strategy"
+                value={campaignInfo.communicationStrategy}
+                onChange={handleCommunicationStrategyChange}
+                placeholder={$t("common.textPlaceholder")}
+                minLength={30}
+                maxLength={5000}
+                ariaDescribedBy="communication-strategy-help"
             />
         </section>
     </div>

@@ -48,6 +48,9 @@ export interface WizardCampaignInfo {
     legacy: string;
     targetAudience: string;
     team: string;
+
+    // Plain text
+    communicationStrategy: string;
 }
 
 export type Wizard = {
@@ -139,6 +142,7 @@ export const wizard = derived(
                 legacy: "",
                 targetAudience: "",
                 team: "",
+                communicationStrategy: "",
             },
             rewards: [],
             collaborations: [],
@@ -286,6 +290,7 @@ export async function createDraft(
                 legacy: "",
                 targetAudience: "",
                 team: "",
+                communicationStrategy: "",
             },
             rewards: resources?.rewards ?? [],
             collaborations: resources?.collaborations ?? [],

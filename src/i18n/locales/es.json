@@ -540,6 +540,10 @@
             "title": "¿Con qué equipo cuentas?",
             "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
           },
+          "communicationStrategy": {
+            "title": "Cuéntanos tu plan de difusión",
+            "description": "En el caso de que tu campaña sea aprobada, ¿cuál será tu plan de difusión?"
+          },
           "continue": "Continuar con recompensas",
           "video": {
             "validation": {
