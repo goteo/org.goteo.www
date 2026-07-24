@@ -53,9 +53,9 @@ if (authCookie && checkoutId) {
         });
 
         if (checkout?.charges) {
-            const targetAccountingUrls = checkout.charges
-                .map((charge: any) => charge.target)
-                .filter(Boolean);
+            const targetAccountingUrls = [
+                ...new Set(checkout.charges.map((charge: any) => charge.target).filter(Boolean)),
+            ];
 
             const projectPromises = targetAccountingUrls.map(async (accountingUrl: string) => {
                 try {
@@ -80,7 +80,9 @@ if (authCookie && checkoutId) {
                 }
             });
 
-            const projectIds = (await Promise.all(projectPromises)).filter(Boolean) as string[];
+            const projectIds = [
+                ...new Set((await Promise.all(projectPromises)).filter(Boolean) as string[]),
+            ];
 
             const projectDataPromises = projectIds.map(async (projectId) => {
                 try {
