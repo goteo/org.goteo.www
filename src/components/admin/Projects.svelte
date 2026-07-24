@@ -1,7 +1,7 @@
 <script lang="ts">
     import FiltersTags from "./FiltersTags.svelte";
     import ProjectsExportCsv from "./ProjectsExportCsv.svelte";
-    import ProjectsFilters from "./ProjectsFilters.svelte";
+    import Filters from "./Filters.svelte";
     import ProjectsTable from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";
@@ -241,7 +241,7 @@
         const sortOption = sortMap[selectedSort];
 
         syncQueryFiltersToUrl(
-            filters,
+            filters as Record<string, unknown>,
             sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
         );
     });
@@ -287,7 +287,7 @@
         reloadProjects();
     }
 
-    function handleCloseFilter(newFilters: ProjectsQuery): void {
+    function handleCloseFilter(newFilters: any): void {
         filters = { ...newFilters };
         currentPage = 1;
         reloadProjects();
@@ -315,7 +315,13 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <ProjectsFilters {filters} onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
+    <Filters
+        resource="projects"
+        {filters}
+        onApplyFilters={handleApplyFilters}
+        searchPlaceholder={$t("pages.admin.projects.filters.search.placeholder")}
+        onSearch={handleSearch}
+    />
 
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
@@ -323,6 +329,7 @@
                 title={$t("pages.admin.projects.lastProjects")}
                 {filters}
                 onCloseFilter={handleCloseFilter}
+                resource="projects"
             />
             <ProjectsExportCsv />
         </div>

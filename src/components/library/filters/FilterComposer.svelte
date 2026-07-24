@@ -75,7 +75,7 @@
     <div>
         <Button class="" kind="ghost" onclick={addRow}>
             <PlusIcon />
-            {$t("pages.admin.charges.filters.composer.addFilter")}
+            {$t("pages.admin.filter.composer.addFilter")}
         </Button>
     </div>
 </div>
