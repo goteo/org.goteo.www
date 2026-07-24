@@ -2,132 +2,109 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
-    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
+    import { getAllFilterSubjects } from "../../utils/filterComposer";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
+    import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
     import type { Locale } from "../../i18n/locales";
-    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
-    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
 
-    type Filters = ApiGatewayChargesGetCollectionData["query"];
+    type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
 
     let {
         title,
         filters,
         onCloseFilter,
-        accountingsMap = new Map(),
-        ownersMap = new Map(),
+        resource = undefined,
     } = $props<{
         title: string;
-        filters: Filters;
-        onCloseFilter: (filters: Filters) => void;
-        accountingsMap?: Map<string, Accounting>;
-        ownersMap?: Map<string, User | Project | Tipjar>;
+        filters: Record<string, any>;
+        onCloseFilter: (filters: Record<string, any>) => void;
+        resource?: FilterResource;
     }>();
 
-    type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
-    type FilterTags = FilterTag[];
+    let tags: FilterTag[] = $state([]);
 
-    let tags: FilterTags = $state([]);
+    let subjects = $derived(getAllFilterSubjects(resource));
+    let subjectByParam = $derived(
+        new Map(subjects.map((s) => [s.param ?? s.key, s] as const)),
+    );
 
     function closeTag(tag: FilterTag) {
+        const result = { ...filters };
         if (tag.values?.from && tag.values?.to) {
-            onCloseFilter({
-                ...filters,
-                ["dateCreated[after]"]: undefined,
-                ["dateCreated[before]"]: undefined,
-            });
+            result["dateCreated[after]"] = undefined;
+            result["dateCreated[before]"] = undefined;
         } else {
-            onCloseFilter({
-                ...filters,
-                [tag.title]: undefined,
-            });
+            result[tag.title] = undefined;
         }
+        onCloseFilter(result);
     }
 
-    function formatTags(
-        tags: FilterTags,
-        locale: Locale,
-        accountingsMap: Map<string, Accounting>,
-        ownersMap: Map<string, User | Project | Tipjar>,
-    ) {
-        if (tags === undefined) return;
+    function formatSubjectValue(subject: FilterSubject, value: string): string {
+        if (subject.options) {
+            const option = subject.options.find((o) => o.value === value);
+            if (option) return option.label;
+        }
+        return value;
+    }
 
-        tags.map((tag) => {
+    function formatTags(tags: FilterTag[], loc: Locale): FilterTag[] {
+        return tags.map((tag) => {
             if (tag.values?.from && tag.values?.to) {
-                tag.values.from = formatDate(new Date(tag.values.from), locale);
-                tag.values.to = formatDate(new Date(tag.values.to), locale);
+                tag.values.from = formatDate(new Date(tag.values.from), loc);
+                tag.values.to = formatDate(new Date(tag.values.to), loc);
             }
 
-            if (tag.title === "status") {
-                const chargeLabel = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
-                tag.value =
-                    chargeLabel !== tag.value
-                        ? chargeLabel
-                        : $t(`admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
+            const subject = subjectByParam.get(tag.title);
+            if (subject && tag.value) {
+                tag.value = formatSubjectValue(subject, tag.value);
             }
 
-            if (tag.title === "status[]" && Array.isArray(tag.value)) {
-                tag.value = tag.value
-                    .map((s: string) =>
-                        $t(`admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
-                    )
-                    .join(", ");
-            }
-
-            if (tag.title === "money.amount[gte]")
-                tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
-
-            if (tag.title === "target") {
-                const displayName = getDisplayNameFromAccounting(
-                    accountingsMap.get(tag.value ?? ""),
-                    ownersMap,
-                );
-                if (displayName) tag.value = displayName;
-            }
+            return tag;
         });
-
-        return tags;
     }
 
     $effect(() => {
-        if (filters !== undefined) {
-            let dateFrom = "dateCreated[after]";
-            let dateTo = "dateCreated[before]";
-
-            let normalTags: FilterTags | undefined = Object.keys(filters)
-                .map((filter) => {
-                    if (filter === dateFrom || filter === dateTo) return { title: filter };
-                    else return { title: filter, value: filters[filter] as string | undefined };
-                })
-                .filter((filter) => {
-                    if (filter.title === dateFrom || filter.title === dateTo) return false;
-                    if (filter.value === undefined) return filter.value !== undefined;
-                    if (filter.value === "all") return false;
-                    else return filter.value !== "";
-                });
-
-            if (
-                filters[dateFrom] !== "" &&
-                filters[dateTo] !== "" &&
-                typeof filters[dateFrom] !== "undefined" &&
-                typeof filters[dateTo] !== "undefined"
-            ) {
-                normalTags = [
-                    ...normalTags,
-                    {
-                        title: "date",
-                        values: {
-                            from: filters[dateFrom] as string | undefined,
-                            to: filters[dateTo] as string | undefined,
-                        },
-                    },
-                ];
-            }
-
-            tags = formatTags([...normalTags], $locale, accountingsMap, ownersMap) ?? [];
+        if (!filters) {
+            tags = [];
+            return;
         }
+
+        const dateFrom = "dateCreated[after]";
+        const dateTo = "dateCreated[before]";
+
+        let normalTags: FilterTag[] = Object.keys(filters)
+            .map((key) => {
+                if (key === dateFrom || key === dateTo) return { title: key };
+                return { title: key, value: String(filters[key] ?? "") };
+            })
+            .filter((tag) => {
+                if (tag.title === dateFrom || tag.title === dateTo) return false;
+                if (tag.value === undefined || tag.value === "") return false;
+                if (tag.value === "all") return false;
+                return true;
+            });
+
+        if (
+            filters[dateFrom] !== "" &&
+            filters[dateTo] !== "" &&
+            typeof filters[dateFrom] !== "undefined" &&
+            typeof filters[dateTo] !== "undefined"
+        ) {
+            normalTags = [
+                ...normalTags,
+                {
+                    title: "date",
+                    values: {
+                        from: filters[dateFrom] as string | undefined,
+                        to: filters[dateTo] as string | undefined,
+                    },
+                },
+            ];
+        }
+
+        tags = formatTags(normalTags, $locale);
     });
 </script>
 
