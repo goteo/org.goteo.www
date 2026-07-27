@@ -32,9 +32,7 @@
     let tags: FilterTag[] = $state([]);
 
     let subjects = $derived(getAllFilterSubjects(resource));
-    let subjectByParam = $derived(
-        new Map(subjects.map((s) => [s.param ?? s.key, s] as const)),
-    );
+    let subjectByParam = $derived(new Map(subjects.map((s) => [s.param ?? s.key, s] as const)));
 
     function closeTag(tag: FilterTag) {
         const result = { ...filters };
@@ -50,7 +48,7 @@
     function formatSubjectValue(subject: FilterSubject, value: string): string {
         if (subject.options) {
             const option = subject.options.find((o) => o.value === value);
-            if (option) return option.label;
+            if (option) return $t(option.label);
         }
         return value;
     }

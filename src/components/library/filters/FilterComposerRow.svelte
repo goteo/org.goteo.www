@@ -55,7 +55,7 @@
         }
         dropdownOptions = subject.options.map((o) => ({
             id: o.value,
-            label: o.label,
+            label: $t(o.label),
             selected: false,
         }));
         dropdownSelected = [];
@@ -137,10 +137,9 @@
     <div class="flex-1">
         <Select
             bind:value={subjectKey}
-                labelText={$t("pages.admin.filter.composer.subjectPlaceholder")}
-            >
-                <option value="">{$t("pages.admin.filter.composer.subjectPlaceholder")}</option
-            >
+            labelText={$t("pages.admin.filter.composer.subjectPlaceholder")}
+        >
+            <option value="">{$t("pages.admin.filter.composer.subjectPlaceholder")}</option>
             {#each subjects as subject}
                 <option value={subject.key}>{subjectLabel(subject.key)}</option>
             {/each}
@@ -153,9 +152,7 @@
             disabled={!subjectKey}
             labelText={$t("pages.admin.filter.composer.operatorPlaceholder")}
         >
-            <option value=""
-                >{$t("pages.admin.filter.composer.operatorPlaceholder")}</option
-            >
+            <option value="">{$t("pages.admin.filter.composer.operatorPlaceholder")}</option>
             {#each compatibleOperators as op}
                 <option value={op}>{operatorLabel(op)}</option>
             {/each}
@@ -169,11 +166,9 @@
                 disabled={!operator}
                 labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
             >
-                <option value=""
-                    >{$t("pages.admin.filter.composer.referentPlaceholder")}</option
-                >
+                <option value="">{$t("pages.admin.filter.composer.referentPlaceholder")}</option>
                 {#each currentSubject.options as opt}
-                    <option value={opt.value}>{opt.label}</option>
+                    <option value={opt.value}>{$t(opt.label)}</option>
                 {/each}
             </Select>
         {:else if currentSubject?.options && operator === "is_any_of" && subjectKey}
@@ -186,7 +181,9 @@
                     onkeydown={(e) => e.key === "Enter" && (showStaticDropdown = true)}
                 >
                     {#each dropdownSelected as item}
-                        <span class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm">
+                        <span
+                            class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
+                        >
                             {item.label}
                             <button
                                 type="button"

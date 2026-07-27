@@ -1131,6 +1131,16 @@
             "gt": "Mayor que",
             "lte": "Menor o igual que",
             "lt": "Menor que"
+          },
+          "subjectOption": {
+            "userType": {
+              "individual": "Persona física",
+              "organization": "Persona jurídica (empresas)"
+            },
+            "active": {
+              "true": "Activo",
+              "false": "Inactivo"
+            }
           }
         },
         "btns": {
