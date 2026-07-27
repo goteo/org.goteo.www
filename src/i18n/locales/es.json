@@ -1114,11 +1114,11 @@
             "dateCreated": "Fecha de creación",
             "handle": "Nombre de usuario",
             "email": "Email",
-            "displayName": "Nombre",
+            "displayName": "Nombre público",
             "userType": "Tipo de usuario",
             "active": "Activo",
             "userRoles": "Roles",
-            "userTerritoryCountry": "País"
+            "userTerritoryCountry": "Ubicación"
           },
           "operator": {
             "equals": "Igual a",
@@ -1507,7 +1507,7 @@
               "handle": "Usuario",
               "email": "Email",
               "type": "Tipo",
-              "territory": "País",
+              "territory": "Ubicación",
               "active": "Activo"
             }
           }
