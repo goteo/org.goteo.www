@@ -87,6 +87,7 @@ const { accounting } = Astro.props;
 </section>
 <script>
     import { actions, isInputError } from "astro:actions";
+    import type { GatewayLink } from "../../openapi/client/index";
     import { multiplyMoney, sumMoney } from "../../utils/money";
 
     const form = document.getElementById("payment");
@@ -109,7 +110,7 @@ const { accounting } = Astro.props;
 
             if (!error) {
                 const checkoutLink = data?.checkout?.links?.find(
-                    (link: { type: string }) => link.type === "payment",
+                    (link: GatewayLink) => link.type === "payment",
                 );
 
                 if (!checkoutLink) {

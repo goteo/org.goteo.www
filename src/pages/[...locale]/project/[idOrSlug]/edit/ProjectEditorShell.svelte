@@ -203,8 +203,8 @@
 
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-4">
-                <Button kind="ghost" size="md" disabled={true}>
-                    <Eye />
+                <Button class="whitespace-nowrap" kind="ghost" size="md" disabled={true}>
+                    <Eye class="size-5" />
                     {$t("common.preview")}
                 </Button>
                 <ActionableButton

@@ -12,6 +12,7 @@
     import {
         apiAccountingsIdGet,
         apiGatewayChargesGetCollection,
+        apiGatewayChargestotalsGetCollection,
         apiGatewayCheckoutsIdGet,
         apiGatewaysGetCollection,
         apiProjectsIdOrSlugGet,
@@ -19,6 +20,7 @@
         apiUsersIdOrHandleGet,
         type Accounting,
         type ApiGatewayChargesGetCollectionData,
+        type ApiGatewayChargestotalsGetCollectionData,
         type GatewayCharge,
         type GatewayCheckout,
         type Project,
@@ -70,6 +72,7 @@
     let isFirstLoad = $state(true);
     let selectedSort = $state(initialSort?.key ?? "date-desc");
     let totalTips = $state<string>("—");
+    let selectedProjectsCount = $state<number | string>("—");
 
     async function loadTotalTips() {
         if (!isEnabled || !$session) return;
@@ -86,6 +89,36 @@
         if (accounting?.balance) {
             totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
         }
+    }
+
+    // Distinct count of Projects targeted by the charges matching the current filters.
+    // Served by the /v4/gateway_charges/totals aggregate (same filters as the collection).
+    let projectsCountRequestId = 0;
+
+    async function loadSelectedProjectsCount(
+        chargeFilters: ApiGatewayChargesGetCollectionData["query"],
+    ) {
+        const requestId = ++projectsCountRequestId;
+        selectedProjectsCount = "—";
+
+        const headers = {
+            Accept: "application/ld+json",
+            ...($session?.token.asHttpHeaders ?? {}),
+        };
+
+        const { data, error } = await apiGatewayChargestotalsGetCollection({
+            query: chargeFilters as ApiGatewayChargestotalsGetCollectionData["query"],
+            headers,
+        });
+
+        if (requestId !== projectsCountRequestId) return;
+
+        if (error || data?.projects === undefined) {
+            console.error("Failed to load selected projects count:", error);
+            return;
+        }
+
+        selectedProjectsCount = data.projects;
     }
 
     function buildChargesQuery(
@@ -361,6 +394,23 @@
         reloadCharges();
     });
 
+    // Plain (non-reactive) bookkeeping: avoids re-triggering the effect below on write.
+    let prevProjectsCountKey: string | undefined;
+
+    $effect(() => {
+        const currentFilters = Object.fromEntries(
+            Object.entries(filters ?? {}).filter(
+                ([, value]) => value !== undefined && value !== "",
+            ),
+        ) as ApiGatewayChargesGetCollectionData["query"];
+        const key = JSON.stringify(currentFilters);
+
+        if (key === prevProjectsCountKey) return;
+
+        prevProjectsCountKey = key;
+        loadSelectedProjectsCount(currentFilters);
+    });
+
     $effect(() => {
         const sort = sortOptions.find((option) => option.key === selectedSort);
 
@@ -378,10 +428,10 @@
     });
 
     let chargeSlides = $derived([
-        { title: $t("pages.admin.charges.totalizers.selected"), amount: $totalItems },
-        { title: $t("pages.admin.charges.totalizers.totalCharges"), amount: "—" },
-        { title: $t("pages.admin.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("pages.admin.charges.totalizers.totalFees"), amount: "—" },
+        { title: $t("domain.charges.totalizers.selected"), amount: selectedProjectsCount },
+        { title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
+        { title: $t("domain.charges.totalizers.totalTips"), amount: totalTips },
+        { title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     function handleSelectTarget(accounting: string): void {
@@ -393,7 +443,7 @@
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
+            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name ?? ""]),
         ];
 
         loadTotalTips();

@@ -1,24 +1,24 @@
 import { defineMiddleware } from "astro:middleware";
 
 import { checkAuth } from "./firewall";
-import { getLanguage, getUserLangPreferences, parsePathLang } from "./utils";
+import { getLanguage, getUserLangPreferences } from "./utils";
 import { getSession } from "../auth/session";
 import { useTranslations } from "../i18n/utils";
+import { goto } from "../utils/navigation";
 
 import type { Locale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
 
 export const onRequest = defineMiddleware(async (context: APIContext, next) => {
-    const defaultLang = import.meta.env.PUBLIC_DEFAULT_LANGUAGE;
-    const pathLang = parsePathLang(context.url.pathname);
-    const locale = pathLang ?? defaultLang;
-
     const auth = await checkAuth(context);
     switch (auth.type) {
         case "basic-auth":
             return auth.response;
-        case "unauthorized":
-            return context.rewrite(`/${locale}/login`);
+        case "unauthorized": {
+            const callback = context.url.pathname + context.url.search;
+
+            return goto("/login", { query: { callback } });
+        }
         case "forbidden":
             return context.rewrite("/403");
     }

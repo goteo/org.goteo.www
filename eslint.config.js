@@ -140,6 +140,9 @@ export default [
             "svelte/prefer-svelte-reactivity": "off",
             "svelte/no-unused-props": "warn",
             "svelte/no-useless-children-snippet": "warn",
+            // False positives on $bindable/$props defaults used only in the template:
+            // the core rule analyses the JS AST and can't see Svelte template usage.
+            "no-useless-assignment": "off",
         },
     },
     ...storybook.configs["flat/recommended"],

@@ -56,5 +56,5 @@
     onsubmit={() => onEnter?.() || onSearch?.(searchQuery)}
     onclear={clearSearch}
     data-testid={dataTestId}
-    class="transition-colors focus-within:border-[#855a96] {className}"
+    class=" {className}"
 />

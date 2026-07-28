@@ -14,10 +14,12 @@
         territory,
         lang: initialLang = undefined,
         class: classes = "",
+        iconSize = "32",
     }: {
         territory: Territory;
         lang?: Locale;
         class?: ClassNameValue;
+        iconSize?: string | number;
     } = $props();
 
     const lang = initialLang || $locale;
@@ -44,6 +46,6 @@
 </script>
 
 <Tag class={classes}>
-    <MapIcon />
+    <MapIcon width={iconSize} height={iconSize} />
     <span>{displayName(territory)}</span>
 </Tag>

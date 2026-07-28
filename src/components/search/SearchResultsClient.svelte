@@ -15,6 +15,7 @@ Manages real-time filtering of campaigns without page reloads
         searchError,
         searchResults,
         isSearching,
+        isLoadingMore,
         hasSearchResults,
         hasActualSearchResults,
         isEmpty,
@@ -200,14 +201,25 @@ Manages real-time filtering of campaigns without page reloads
 
         <!-- Results Grid (keep visible during load more) -->
         {#if campaigns.length > 0}
-            <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {#each campaigns as campaign}
-                    <!-- Render campaign cards using the Svelte CampaignCard component -->
-                    <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size={campaign.size!} {campaign} />
+            <div class="relative">
+                <!-- Overlay spinner while re-searching (filters/input changed), not on load more -->
+                {#if $isSearching && !$isLoadingMore}
+                    <div
+                        class="absolute inset-0 z-10 flex items-start justify-center rounded-2xl bg-white/60 pt-12 backdrop-blur-[1px]"
+                        data-testid="results-loading-overlay"
+                    >
+                        <LoadingSpinner />
                     </div>
-                {/each}
-            </Grid>
+                {/if}
+                <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {#each campaigns as campaign}
+                        <!-- Render campaign cards using the Svelte CampaignCard component -->
+                        <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
+                            <CampaignCard size={campaign.size!} {campaign} />
+                        </div>
+                    {/each}
+                </Grid>
+            </div>
         {/if}
     </div>
 
