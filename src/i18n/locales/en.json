@@ -1205,6 +1205,45 @@
             "openFilters": "Filters",
             "closeFilters": "Close filters",
             "apply": "Apply filters"
+          },
+          "composer": {
+            "title": "Custom filters",
+            "addFilter": "Add filter",
+            "removeFilter": "Remove",
+            "subjectPlaceholder": "Select field",
+            "operatorPlaceholder": "Select condition",
+            "referentPlaceholder": "Value",
+            "subject": {
+              "title": "Title",
+              "subtitle": "Subtitle",
+              "description": "Description",
+              "projectStatus": "Project status",
+              "chargeStatus": "Charge status",
+              "categories": "Category",
+              "owner": "Owner",
+              "slug": "ID",
+              "territoryCountry": "Territory",
+              "dateUpdated": "Last updated",
+              "budgetAmount": "Amount",
+              "gateway": "Gateway",
+              "type": "Type",
+              "target": "Target",
+              "currency": "Currency",
+              "amount": "Amount",
+              "dateCreated": "Creation date"
+            },
+            "operator": {
+              "equals": "Equal to",
+              "is_any_of": "Included in",
+              "before": "Before",
+              "after": "After",
+              "strictly_before": "Strictly before",
+              "strictly_after": "Strictly after",
+              "gte": "Greater than or equal to",
+              "gt": "Greater than",
+              "lte": "Less than or equal to",
+              "lt": "Less than"
+            }
           }
         },
         "pagination": {
