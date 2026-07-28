@@ -414,7 +414,10 @@
     $effect(() => {
         const sort = sortOptions.find((option) => option.key === selectedSort);
 
-        syncQueryFiltersToUrl(filters ?? {} as Record<string, unknown>, sort ? { [sort.field]: sort.direction } : undefined);
+        syncQueryFiltersToUrl(
+            filters ?? ({} as Record<string, unknown>),
+            sort ? { [sort.field]: sort.direction } : undefined,
+        );
     });
 
     let prevItemsPerPage = $state($itemsPerPage);

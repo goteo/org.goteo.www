@@ -1,29 +1,23 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import FilterComposer from "../library/filters/FilterComposer.svelte";
-    import FiltersIcon from "../icons/filters/Filters.svelte";
-    import Bullet from "../icons/Bullet.svelte";
-    import Button from "../library/buttons/Button.svelte";
-    import Search from "../library/inputs/Search.svelte";
     import AdminSearch from "./Search.svelte";
+    import { t } from "../../i18n/store";
+    import Bullet from "../icons/Bullet.svelte";
+    import FiltersIcon from "../icons/filters/Filters.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
+    import Search from "../library/inputs/Search.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
 
-    let {
-        resource,
-        filters,
-        onApplyFilters,
-        searchPlaceholder,
-        onSearch,
-        onSelectTarget,
-    } = $props<{
-        resource: FilterResource;
-        filters: any;
-        onApplyFilters: (filters: any) => void;
-        searchPlaceholder?: string;
-        onSearch?: (value: string) => void;
-        onSelectTarget?: (accounting: string) => void;
-    }>();
+    let { resource, filters, onApplyFilters, searchPlaceholder, onSearch, onSelectTarget } =
+        $props<{
+            resource: FilterResource;
+            filters: any;
+            onApplyFilters: (filters: any) => void;
+            searchPlaceholder?: string;
+            onSearch?: (value: string) => void;
+            onSelectTarget?: (accounting: string) => void;
+        }>();
 
     let showFilterComposer = $state(false);
     let composerParams = $state<Record<string, string | string[]>>({});
@@ -36,10 +30,7 @@
 
     function applyComposerFilters() {
         const result = { ...filters };
-        const allComposerKeys = new Set([
-            ...previousComposerKeys,
-            ...Object.keys(composerParams),
-        ]);
+        const allComposerKeys = new Set([...previousComposerKeys, ...Object.keys(composerParams)]);
 
         for (const key of allComposerKeys) {
             result[key] = undefined;
@@ -82,11 +73,7 @@
         {#if onSelectTarget}
             <AdminSearch {onSelectTarget} />
         {:else if searchPlaceholder && onSearch}
-            <Search
-                placeholder={searchPlaceholder}
-                onsubmit={onSearch}
-                class="flex-1"
-            />
+            <Search placeholder={searchPlaceholder} onsubmit={onSearch} class="flex-1" />
         {/if}
 
         <Button
@@ -113,10 +100,7 @@
 
     {#if showFilterComposer}
         <div class="flex flex-col gap-4">
-            <FilterComposer
-                {resource}
-                onParamsChange={handleComposerParamsChange}
-            />
+            <FilterComposer {resource} onParamsChange={handleComposerParamsChange} />
 
             <div class="flex justify-end">
                 <Button type="button" kind="primary" onclick={applyComposerFilters}>

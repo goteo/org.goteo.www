@@ -2,14 +2,14 @@
     import { locale } from "../../i18n/store";
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
-    import { getAllFilterSubjects } from "../../utils/filterComposer";
     import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
+    import { getAllFilterSubjects } from "../../utils/filterComposer";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
-    import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
-    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
     import type { Locale } from "../../i18n/locales";
+    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
+    import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
 

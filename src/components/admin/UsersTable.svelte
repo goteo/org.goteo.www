@@ -153,10 +153,9 @@
                                     class:bg-blue-100={user.type === "organization"}
                                     class:text-blue-800={user.type === "organization"}
                                 >
-                                    {$t(
-                                        `pages.admin.users.table.rows.type.${user.type}`,
-                                        { default: user.type },
-                                    )}
+                                    {$t(`pages.admin.users.table.rows.type.${user.type}`, {
+                                        default: user.type,
+                                    })}
                                 </span>
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
@@ -235,7 +234,9 @@
                                         </div>
                                         <div>
                                             <span class="font-bold text-black">
-                                                {$t("pages.admin.users.table.rows.details.territory")}:
+                                                {$t(
+                                                    "pages.admin.users.table.rows.details.territory",
+                                                )}:
                                             </span>
                                             <span class="text-content ml-2">{user.territory}</span>
                                         </div>

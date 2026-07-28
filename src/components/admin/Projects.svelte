@@ -1,7 +1,7 @@
 <script lang="ts">
+    import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
     import ProjectsExportCsv from "./ProjectsExportCsv.svelte";
-    import Filters from "./Filters.svelte";
     import ProjectsTable from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";

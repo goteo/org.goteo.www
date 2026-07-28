@@ -1,17 +1,19 @@
 <script lang="ts">
+    import { clickOutside } from "flowbite-svelte";
+
+    import { t } from "../../../i18n/store";
+    import Close from "../../icons/navigation/Close.svelte";
+    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
+    import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
     import TextInput from "../inputs/TextInput.svelte";
-    import DateInput from "../inputs/DateInput.svelte";
-    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
-    import { clickOutside } from "flowbite-svelte";
-    import { t } from "../../../i18n/store";
+
     import type {
         FilterSubject,
         FilterOperator,
         FilterOption,
     } from "../../../utils/filterComposer";
     import type { DropdownOption } from "../dropdown/dropdown.types";
-    import Close from "../../icons/navigation/Close.svelte";
 
     interface Props {
         subjects: FilterSubject[];
@@ -199,7 +201,6 @@
                     {/each}
                 </div>
             {:else}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div use:clickOutside={() => (showStaticDropdown = false)}>
                     <DropdownMenu
                         searchClasses="border-secondary"
@@ -271,7 +272,6 @@
                     {/each}
                 </div>
             {:else}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div use:clickOutside={() => (showSuggestSearch = false)}>
                     <DropdownMenu
                         searchClasses="border-secondary"

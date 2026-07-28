@@ -5,6 +5,7 @@ import {
     apiUsersGetCollection,
     apiCategoriesGetCollection,
 } from "../openapi/client";
+
 import type { FilterOption } from "./filterComposer";
 
 type CollectionResponse<T> = { totalItems: number; member: T[] };
@@ -18,8 +19,8 @@ export async function suggestGateways(q: string): Promise<FilterOption[]> {
     return gateways
         .filter((g) => !q || ((g.name as string) ?? "").toLowerCase().includes(q.toLowerCase()))
         .map((g) => ({
-            value: (g.id) as string,
-            label: (g.name) as string,
+            value: g.id as string,
+            label: g.name as string,
         }));
 }
 

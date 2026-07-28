@@ -1,7 +1,8 @@
 <script lang="ts">
+    import ExportCsv from "./ExportCsv.svelte";
+    import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
     import Slider from "./Slider.svelte";
-    import Filters from "./Filters.svelte";
     import UsersTable from "./UsersTable.svelte";
     import { t } from "../../i18n/store";
     import { withoutCache } from "../../openapi/cacheInterceptor";
@@ -15,7 +16,6 @@
 
     import type { UserRow } from "./UsersTable.svelte";
     import type { ApiUsersGetCollectionData } from "../../openapi/client/types.gen";
-    import ExportCsv from "./ExportCsv.svelte";
 
     type UsersQuery = Partial<NonNullable<ApiUsersGetCollectionData["query"]>>;
 
