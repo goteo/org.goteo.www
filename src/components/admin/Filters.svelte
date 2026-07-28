@@ -7,15 +7,26 @@
     import Button from "../library/buttons/Button.svelte";
     import DateInput from "../library/inputs/DateInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
+    import type { FilterResource } from "../../utils/filterComposer";
 
-    let { filters, onApplyFilters, paymentMethodOptions, chargeStatusOptions, rangeAmountOptions } =
-        $props<{
-            filters: ApiGatewayChargesGetCollectionData["query"];
-            onApplyFilters: (filters: any) => void;
-            paymentMethodOptions: [string, string][];
-            chargeStatusOptions: [string, string][];
-            rangeAmountOptions: [string, string][];
-        }>();
+    let {
+        filters,
+        onApplyFilters,
+        paymentMethodOptions,
+        chargeStatusOptions,
+        rangeAmountOptions,
+        composedFiltersResource,
+        initialSearchQuery = "",
+    } = $props<{
+        filters: ApiGatewayChargesGetCollectionData["query"];
+        onApplyFilters: (filters: any) => void;
+        paymentMethodOptions: [string, string][];
+        chargeStatusOptions: [string, string][];
+        rangeAmountOptions: [string, string][];
+        composedFiltersResource: FilterResource[];
+        initialSearchQuery?: string;
+    }>();
 
     let showFilters = $state(false);
 
@@ -24,6 +35,8 @@
     let selectedRangeAmount = $state("");
     let dateFrom = $state("");
     let dateTo = $state("");
+
+    let composerParams = $state<Record<string, string | string[]>>({});
 
     // Debounce auto-applied filter changes so they don't fire one API request per change
     let autoApplyTimeout: ReturnType<typeof setTimeout>;
@@ -35,6 +48,7 @@
     function applyFilters() {
         onApplyFilters({
             ...filters,
+            ...composerParams,
             "checkout.gateway": selectedPaymentMethod || undefined,
             status: selectedChargeStatus || undefined,
             "money.amount[gte]": selectedRangeAmount || undefined,
@@ -179,5 +193,12 @@
                 </Button>
             </div>
         </form>
+
+        <div class="border-secondary border-t pt-4">
+            <h4 class="text-secondary mb-3 text-sm font-medium">
+                {$t("pages.admin.charges.filters.composer.title")}
+            </h4>
+            <FilterComposer resource={composedFiltersResource} onParamsChange={(params) => (composerParams = params)} />
+        </div>
     {/if}
 </div>
