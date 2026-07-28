@@ -37,7 +37,7 @@
             </span>
         {:else if hasReached(project.budget?.minimum?.money)}
             <span
-                class="border-secondary absolute top-3 right-3 rounded-4xl border bg-white px-2 py-1 text-xs text-nowrap"
+                class="border-secondary absolute top-3 left-3 rounded-4xl border bg-white px-2 py-1 text-xs text-nowrap"
             >
                 {$t("domain.project.campaign.minimumReached")}
             </span>
