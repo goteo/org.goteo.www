@@ -34,6 +34,7 @@ export default [
             ".github/**",
             "env.d.ts",
             "storybook-static/**",
+            "graphify-out/**",
         ],
     },
     {
