@@ -1096,6 +1096,10 @@
       }
     },
     "admin": {
+      "nav": {
+        "charges": "Cobros",
+        "projects": "Proyectos"
+      },
       "charges": {
         "title": "Aportes",
         "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",

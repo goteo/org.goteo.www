@@ -12,7 +12,7 @@
 
     import type { Snippet } from "svelte";
 
-    let { children }: { children?: Snippet } = $props();
+    let { children, nav }: { children?: Snippet; nav?: Snippet } = $props();
 
     let menuOpen = $state(false);
 
@@ -38,8 +38,7 @@
             id="header-container"
         >
             <div
-                class="flex w-full items-center justify-between px-2 py-3 md:px-4 md:py-6"
-                id="header-main"
+                class="flex flex-col"
                 {@attach (el) => {
                     const observer = new ResizeObserver(() => {
                         document.documentElement.style.setProperty(
@@ -51,73 +50,80 @@
                     return () => observer.disconnect();
                 }}
             >
-                <div class="flex items-center gap-2 md:gap-4">
-                    <a href="/" class="shrink-0"><Logo /></a>
-                    <div class="hidden sm:block">
-                        <HeaderButtons />
+                <div
+                    class="flex w-full items-center justify-between px-2 py-3 md:px-4 md:py-6"
+                    id="header-main"
+                >
+                    <div class="flex items-center gap-2 md:gap-4">
+                        <a href="/" class="shrink-0"><Logo /></a>
+                        <div class="hidden sm:block">
+                            <HeaderButtons />
+                        </div>
                     </div>
-                </div>
-                <nav>
-                    <ul class="flex items-center gap-1 md:gap-4">
-                        {#if $session}
-                            <li class="flex items-center pr-2">
-                                <CartButton />
-                            </li>
-                        {/if}
-                        <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
+                    <nav>
+                        <ul class="flex items-center gap-1 md:gap-4">
                             {#if $session}
-                                <div class="relative inline-block w-full">
-                                    <button
-                                        onclick={userDropdownToggle}
-                                        use:clickOutside={userDropdownClose}
-                                        class="flex w-full cursor-pointer items-center gap-1"
-                                    >
-                                        <UserIcon />
-                                        <span class="hidden sm:inline">
-                                            {$t("common.greeting")}, {$session.user.displayName}
-                                        </span>
-                                    </button>
-
-                                    <div
-                                        class="absolute top-full left-0 mt-2 w-full min-w-30 flex-col rounded-lg bg-white p-2 shadow-lg"
-                                        class:hidden={!userDropdownOpen}
-                                        class:flex={userDropdownOpen}
-                                    >
-                                        <a
-                                            href="/me"
-                                            class="border-grey text-secondary hover:bg-grey block w-full overflow-hidden border-b px-4 py-2 font-bold text-ellipsis"
-                                        >
-                                            {$t("common.header.goToProfile")}
-                                        </a>
-                                        <a
-                                            href="/logout"
-                                            class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold text-ellipsis"
-                                        >
-                                            {$t("pages.logout.label")}
-                                        </a>
-                                    </div>
-                                </div>
-                            {:else}
-                                <a href="/login" class="flex w-full items-center gap-1">
-                                    <UserIcon />
-                                    <span class="hidden sm:inline">{$t("common.login")}</span>
-                                </a>
+                                <li class="flex items-center pr-2">
+                                    <CartButton />
+                                </li>
                             {/if}
-                        </li>
-                        <li class="hidden items-center pr-2 md:flex">
-                            <UiLanguages />
-                        </li>
-                        <li class="flex items-center {children ? '' : 'sm:hidden'}">
-                            <button class="p-1" onclick={menuToggle}>
-                                <Hamburger
-                                    close={menuOpen}
-                                    class="text-primary"
-                                    barClass="fill-secondary"
-                                />
-                            </button>
-                        </li>
-                    </ul>
-                </nav>
+                            <li class="flex items-center gap-1 pr-2 text-sm md:text-base">
+                                {#if $session}
+                                    <div class="relative inline-block w-full">
+                                        <button
+                                            onclick={userDropdownToggle}
+                                            use:clickOutside={userDropdownClose}
+                                            class="flex w-full cursor-pointer items-center gap-1"
+                                        >
+                                            <UserIcon />
+                                            <span class="hidden sm:inline">
+                                                {$t("common.greeting")}, {$session.user.displayName}
+                                            </span>
+                                        </button>
+
+                                        <div
+                                            class="absolute top-full left-0 mt-2 w-full min-w-30 flex-col rounded-lg bg-white p-2 shadow-lg"
+                                            class:hidden={!userDropdownOpen}
+                                            class:flex={userDropdownOpen}
+                                        >
+                                            <a
+                                                href="/me"
+                                                class="border-grey text-secondary hover:bg-grey block w-full overflow-hidden border-b px-4 py-2 font-bold text-ellipsis"
+                                            >
+                                                {$t("common.header.goToProfile")}
+                                            </a>
+                                            <a
+                                                href="/logout"
+                                                class="text-secondary hover:bg-grey block w-full cursor-pointer overflow-hidden px-4 py-2 font-bold text-ellipsis"
+                                            >
+                                                {$t("pages.logout.label")}
+                                            </a>
+                                        </div>
+                                    </div>
+                                {:else}
+                                    <a href="/login" class="flex w-full items-center gap-1">
+                                        <UserIcon />
+                                        <span class="hidden sm:inline">{$t("common.login")}</span>
+                                    </a>
+                                {/if}
+                            </li>
+                            <li class="hidden items-center pr-2 md:flex">
+                                <UiLanguages />
+                            </li>
+                            <li class="flex items-center {children ? '' : 'sm:hidden'}">
+                                <button class="p-1" onclick={menuToggle}>
+                                    <Hamburger
+                                        close={menuOpen}
+                                        class="text-primary"
+                                        barClass="fill-secondary"
+                                    />
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                {@render nav?.()}
             </div>
 
             <div
