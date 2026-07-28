@@ -1205,6 +1205,45 @@
             "openFilters": "Filtres",
             "closeFilters": "Tancar filtres",
             "apply": "Aplicar filtres"
+          },
+          "composer": {
+            "title": "Filtres personalitzats",
+            "addFilter": "Afegir filtre",
+            "removeFilter": "Elimina",
+            "subjectPlaceholder": "Seleccionar camp",
+            "operatorPlaceholder": "Seleccionar condició",
+            "referentPlaceholder": "Valor",
+            "subject": {
+              "title": "Títol",
+              "subtitle": "Subtítol",
+              "description": "Descripció",
+              "projectStatus": "Estat del projecte",
+              "chargeStatus": "Estat de l'aportació",
+              "categories": "Categoria",
+              "owner": "Propietari",
+              "slug": "ID",
+              "territoryCountry": "Territori",
+              "dateUpdated": "Última actualització",
+              "budgetAmount": "Import",
+              "gateway": "Passarel·la",
+              "type": "Tipus",
+              "target": "Destí",
+              "currency": "Moneda",
+              "amount": "Import",
+              "dateCreated": "Data de creació"
+            },
+            "operator": {
+              "equals": "Igual a",
+              "is_any_of": "Inclòs en",
+              "before": "Anterior a",
+              "after": "Posterior a",
+              "strictly_before": "Estrictament anterior",
+              "strictly_after": "Estrictament posterior",
+              "gte": "Més gran o igual que",
+              "gt": "Més gran que",
+              "lte": "Menor o igual que",
+              "lt": "Menor que"
+            }
           }
         },
         "pagination": {
