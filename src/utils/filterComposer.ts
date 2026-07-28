@@ -237,8 +237,14 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["users"],
         options: [
-            { value: "individual", label: "Individual" },
-            { value: "organization", label: "Organization" },
+            {
+                value: "individual",
+                label: "pages.admin.filter.composer.subjectOption.userType.individual",
+            },
+            {
+                value: "organization",
+                label: "pages.admin.filter.composer.subjectOption.userType.organization",
+            },
         ],
     },
     active: {
@@ -247,8 +253,8 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals"],
         resources: ["users"],
         options: [
-            { value: "true", label: "Active" },
-            { value: "false", label: "Inactive" },
+            { value: "true", label: "pages.admin.filter.composer.subjectOption.active.true" },
+            { value: "false", label: "pages.admin.filter.composer.subjectOption.active.false" },
         ],
     },
     userRoles: {

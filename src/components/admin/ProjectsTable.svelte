@@ -45,12 +45,12 @@
     import Loader from "../library/feedback/Loader.svelte";
 
     const tableHeaders = [
-        "admin.projects.table.headers.name",
-        "admin.projects.table.headers.promoter",
-        "admin.projects.table.headers.contractNumber",
-        "admin.projects.table.headers.achieved",
-        "admin.projects.table.headers.paid",
-        "admin.projects.table.headers.process",
+        "pages.admin.projects.table.headers.name",
+        "pages.admin.projects.table.headers.promoter",
+        "pages.admin.projects.table.headers.contractNumber",
+        "pages.admin.projects.table.headers.achieved",
+        "pages.admin.projects.table.headers.paid",
+        "pages.admin.projects.table.headers.process",
         "",
     ];
 

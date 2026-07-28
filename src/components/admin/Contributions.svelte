@@ -413,6 +413,8 @@
                 onCloseFilter={handleApplyFilters}
                 title={$t("pages.admin.charges.lastContributions")}
                 {filters}
+                {accountingsMap}
+                {ownersMap}
                 resource="gateway_charges"
             />
             <ExportCsv {filters} />

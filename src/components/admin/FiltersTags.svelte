@@ -3,10 +3,12 @@
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
     import { getAllFilterSubjects } from "../../utils/filterComposer";
+    import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
+    import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
     import type { Locale } from "../../i18n/locales";
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
@@ -16,19 +18,21 @@
         filters,
         onCloseFilter,
         resource = undefined,
+        accountingsMap = new Map(),
+        ownersMap = new Map(),
     } = $props<{
         title: string;
         filters: Record<string, any>;
         onCloseFilter: (filters: Record<string, any>) => void;
         resource?: FilterResource;
+        accountingsMap?: Map<string, Accounting>;
+        ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
     let tags: FilterTag[] = $state([]);
 
     let subjects = $derived(getAllFilterSubjects(resource));
-    let subjectByParam = $derived(
-        new Map(subjects.map((s) => [s.param ?? s.key, s] as const)),
-    );
+    let subjectByParam = $derived(new Map(subjects.map((s) => [s.param ?? s.key, s] as const)));
 
     function closeTag(tag: FilterTag) {
         const result = { ...filters };
@@ -44,7 +48,7 @@
     function formatSubjectValue(subject: FilterSubject, value: string): string {
         if (subject.options) {
             const option = subject.options.find((o) => o.value === value);
-            if (option) return option.label;
+            if (option) return $t(option.label);
         }
         return value;
     }
@@ -58,7 +62,16 @@
 
             const subject = subjectByParam.get(tag.title);
             if (subject && tag.value) {
-                tag.value = formatSubjectValue(subject, tag.value);
+                const formatted = formatSubjectValue(subject, tag.value);
+                if (formatted !== tag.value) {
+                    tag.value = formatted;
+                } else if (tag.title === "target") {
+                    const displayName = getDisplayNameFromAccounting(
+                        accountingsMap.get(tag.value),
+                        ownersMap,
+                    );
+                    if (displayName) tag.value = displayName;
+                }
             }
 
             return tag;
