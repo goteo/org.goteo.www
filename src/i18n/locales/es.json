@@ -138,6 +138,16 @@
       "nextMonth": "Mes siguiente",
       "close": "Cerrar"
     },
+    "richTextEditor": {
+      "toolbar": "Barra de formato de texto",
+      "fontSize": "Tamaño de letra",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "alignLeft": "Alinear a la izquierda",
+      "alignCenter": "Centrar",
+      "alignRight": "Alinear a la derecha",
+      "characterCount": "{{ current }} / {{ max }} caracteres"
+    },
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
