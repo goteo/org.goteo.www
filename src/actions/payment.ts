@@ -45,7 +45,7 @@ export const payment = defineAction({
 
             const charges: GatewayCharge[] = Object.values(cart.items);
 
-            const response = await apiGatewayCheckoutsPost({
+            const { data, error } = await apiGatewayCheckoutsPost({
                 headers: session.token.asHttpHeaders,
                 body: {
                     origin: session.user.accounting!,
@@ -58,8 +58,8 @@ export const payment = defineAction({
                 },
             });
 
-            if (response.error) {
-                console.log(response);
+            if (error) {
+                console.error(error);
 
                 throw new ActionError({
                     code: "BAD_REQUEST",
@@ -67,7 +67,7 @@ export const payment = defineAction({
                 });
             }
 
-            return { success: true, checkout: response.data };
+            return { success: true, checkout: data };
         } catch (err) {
             console.error(err);
 
