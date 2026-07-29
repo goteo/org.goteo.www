@@ -1096,6 +1096,10 @@
       }
     },
     "admin": {
+      "nav": {
+        "charges": "Cobraments",
+        "projects": "Projectes"
+      },
       "charges": {
         "title": "Aportacions",
         "description": "Aquí tens les últimes contribucions a campanyes, pots ordenar-les i filtrar-les com vulguis.",
