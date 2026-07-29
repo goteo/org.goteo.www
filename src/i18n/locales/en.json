@@ -1096,6 +1096,10 @@
       }
     },
     "admin": {
+      "nav": {
+        "charges": "Charges",
+        "projects": "Projects"
+      },
       "charges": {
         "title": "Contributions",
         "description": "Here are the latest contributions to campaigns; you can sort and filter them however you like.",
