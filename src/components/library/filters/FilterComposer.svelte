@@ -1,6 +1,6 @@
 <script lang="ts">
     import FilterComposerRow from "./FilterComposerRow.svelte";
-    import Button from "../buttons/Button.svelte";
+    import { t } from "../../../i18n/store";
     import {
         getAllFilterSubjects,
         createFilterRow,
@@ -8,8 +8,8 @@
         type FilterOperator,
         type FilterResource,
     } from "../../../utils/filterComposer";
-    import { t } from "../../../i18n/store";
     import PlusIcon from "../../icons/actions/PlusIcon.svelte";
+    import Button from "../buttons/Button.svelte";
 
     interface RowState {
         subjectKey: string;

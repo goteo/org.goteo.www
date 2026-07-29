@@ -1,3 +1,7 @@
+import { get } from "svelte/store";
+
+import { getDefaultLanguage } from "./consts";
+import { currencySymbols } from "./currencyData";
 import {
     suggestGateways,
     suggestTarget,
@@ -8,9 +12,6 @@ import {
     suggestProjectsByDescription,
     suggestProjectsBySlug,
 } from "./filterSuggestions";
-import { currencySymbols } from "./currencyData";
-import { getDefaultLanguage } from "./consts";
-import { get } from "svelte/store";
 import { locale } from "../i18n/store";
 
 export interface FilterRow {
