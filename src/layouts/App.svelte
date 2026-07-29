@@ -3,6 +3,7 @@
     import { get } from "svelte/store";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import AdminHeader from "./AdminHeader.svelte";
     import Footer from "./Footer.svelte";
     import Header from "./Header.svelte";
     import HeaderSubmenu from "./HeaderSubmenu.svelte";
@@ -19,9 +20,16 @@
         session?: Session;
         children?: Snippet;
         class?: ClassNameValue;
+        admin?: boolean;
     }
 
-    let { locale: localeProp, session: sessionProp, children, class: classes }: AppState = $props();
+    let {
+        locale: localeProp,
+        session: sessionProp,
+        children,
+        class: classes,
+        admin = false,
+    }: AppState = $props();
 
     onMount(() => {
         client.interceptors.request.use(async (request) => {
@@ -53,9 +61,13 @@
     });
 </script>
 
-<Header>
-    <HeaderSubmenu />
-</Header>
+{#if admin}
+    <AdminHeader />
+{:else}
+    <Header>
+        <HeaderSubmenu />
+    </Header>
+{/if}
 <main
     class={twMerge(
         "mt-(--sticky-top) flex w-full max-w-screen flex-1 flex-col lg:max-h-none",
