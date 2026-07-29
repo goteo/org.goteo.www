@@ -44,22 +44,24 @@ export const payment = defineAction({
             }
 
             const charges: GatewayCharge[] = Object.values(cart.items);
+            const payload = {
+                origin: session.user.accounting!,
+                gateway: client.buildUrl({
+                    url: apiGatewaysIdGetUrl,
+                    path: { id: paymentMethod },
+                }),
+                returnUrl: `${context.url.origin}/checkout/verify`,
+                charges,
+            };
 
             const { data, error } = await apiGatewayCheckoutsPost({
                 headers: session.token.asHttpHeaders,
-                body: {
-                    origin: session.user.accounting!,
-                    gateway: client.buildUrl({
-                        url: apiGatewaysIdGetUrl,
-                        path: { id: paymentMethod },
-                    }),
-                    returnUrl: `${context.url.origin}/checkout/verify`,
-                    charges,
-                },
+                body: payload,
             });
 
             if (error) {
                 console.error(error);
+                console.log(payload);
 
                 throw new ActionError({
                     code: "BAD_REQUEST",
