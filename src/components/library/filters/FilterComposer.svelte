@@ -42,7 +42,14 @@
                 row.referent,
             );
 
-            Object.assign(result, filterRow.serialize());
+            const serialized = filterRow.serialize();
+            for (const [key, value] of Object.entries(serialized)) {
+                if (key.endsWith("[]") && Array.isArray(value) && result[key]) {
+                    result[key] = [...(result[key] as string[]), ...value];
+                } else {
+                    result[key] = value;
+                }
+            }
         }
 
         return result;
