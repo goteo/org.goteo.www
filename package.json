@@ -13,7 +13,6 @@
     "db:migrate": "wrangler d1 migrations apply goteo-db --local",
     "db:seed": "wrangler d1 execute goteo-db --local --file=./db/seed.sql",
     "dev": "astro dev",
-    "dev:worker": "npx astro build && npx wrangler dev --port 4321 --ip 0.0.0.0",
     "format": "eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
     "format:prettier": "prettier --write .",
