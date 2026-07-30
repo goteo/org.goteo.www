@@ -1,27 +1,37 @@
 <!--
     Tiptap rich text editor with a bold / italic / alignment / font-size toolbar.
 
-    Content flows one way: `value` renders into the editor and edits are reported through
-    `onChange` — there is no two-way binding. `minLength`/`maxLength` only colour the
+    `format` picks the shape of `value` and of what `onChange` reports: Tiptap JSON (the default
+    and the canonical one), HTML, Markdown or plain text. The editor always works in JSON
+    internally, so any format other than "json" is a lossy projection of the document.
+
+    Content flows one way — there is no two-way binding. `minLength`/`maxLength` only colour the
     character counter; enforcement lives in stores/drafts/draftValidation.ts.
 -->
-<script lang="ts">
+<script lang="ts" generics="F extends RichTextFormat = 'json'">
     import { Editor } from "@tiptap/core";
-    import TextAlign from "@tiptap/extension-text-align";
-    import { FontSize, TextStyle } from "@tiptap/extension-text-style";
-    import { CharacterCount, Placeholder } from "@tiptap/extensions";
-    import StarterKit from "@tiptap/starter-kit";
+    import { Placeholder } from "@tiptap/extensions";
     import { untrack } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
+    import {
+        ALIGNMENTS as ALIGNMENT_VALUES,
+        loadMarkdown,
+        parseRichText,
+        richTextExtensions,
+        serializeRichText,
+    } from "../../../utils/richText";
     import Align from "../../icons/Align.svelte";
     import Chevron from "../../icons/navigation/Chevron.svelte";
 
+    import type { Alignment, RichTextFormat, RichTextValue } from "../../../utils/richText";
+
     interface RichTextEditorProps {
         id: string;
-        value: string;
-        onChange: (html: string) => void;
+        value: RichTextValue<F>;
+        onChange: (value: RichTextValue<F>) => void;
+        format?: F;
         placeholder?: string;
         error?: string;
         ariaDescribedBy?: string;
@@ -29,8 +39,6 @@
         minLength?: number;
         maxLength?: number;
     }
-
-    type Alignment = "left" | "center" | "right";
 
     interface ToolbarButton {
         id: string;
@@ -43,8 +51,9 @@
 
     let {
         id,
-        value = "",
+        value,
         onChange,
+        format = "json" as F,
         placeholder = "",
         error,
         ariaDescribedBy,
@@ -53,17 +62,21 @@
         maxLength,
     }: RichTextEditorProps = $props();
 
-    const ALIGNMENTS = [
-        { value: "left", labelKey: "common.richTextEditor.alignLeft" },
-        { value: "center", labelKey: "common.richTextEditor.alignCenter" },
-        { value: "right", labelKey: "common.richTextEditor.alignRight" },
-    ] as const satisfies readonly { value: Alignment; labelKey: string }[];
+    const ALIGNMENT_LABEL_KEYS: Record<Alignment, string> = {
+        left: "common.richTextEditor.alignLeft",
+        center: "common.richTextEditor.alignCenter",
+        right: "common.richTextEditor.alignRight",
+    };
 
     const FONT_SIZES = ["12px", "14px", "16px", "18px", "20px", "24px"];
     const DEFAULT_FONT_SIZE = "16px";
 
     let editorElement = $state<HTMLDivElement>();
     let editor = $state<Editor | null>(null);
+
+    // The markdown converters are loaded on demand, so the editor waits for them before mounting.
+    let markdownReady = $state(false);
+    const canConvert = $derived(format !== "markdown" || markdownReady);
 
     let toolbar = $state({
         bold: false,
@@ -91,9 +104,9 @@
     ]);
 
     const alignButtons: ToolbarButton[] = $derived(
-        ALIGNMENTS.map(({ value: alignment, labelKey }) => ({
+        ALIGNMENT_VALUES.map((alignment) => ({
             id: alignment,
-            labelKey,
+            labelKey: ALIGNMENT_LABEL_KEYS[alignment],
             active: toolbar.alignment === alignment,
             run: () => editor?.chain().focus().setTextAlign(alignment).run(),
             align: alignment,
@@ -118,8 +131,8 @@
         toolbar.bold = instance.isActive("bold");
         toolbar.italic = instance.isActive("italic");
         toolbar.alignment =
-            ALIGNMENTS.find(({ value: alignment }) => instance.isActive({ textAlign: alignment }))
-                ?.value ?? "left";
+            ALIGNMENT_VALUES.find((alignment) => instance.isActive({ textAlign: alignment })) ??
+            "left";
         toolbar.fontSize = instance.getAttributes("textStyle").fontSize ?? DEFAULT_FONT_SIZE;
         toolbar.characters = instance.storage.characterCount.characters();
     }
@@ -127,38 +140,31 @@
     function createEditor(element: HTMLDivElement) {
         return new Editor({
             element,
-            extensions: [
-                StarterKit.configure({
-                    heading: false,
-                    bulletList: false,
-                    orderedList: false,
-                    listItem: false,
-                    strike: false,
-                    code: false,
-                    codeBlock: false,
-                    link: false,
-                    underline: false,
-                }),
-                TextAlign.configure({
-                    types: ["paragraph"],
-                    alignments: ALIGNMENTS.map(({ value: alignment }) => alignment),
-                    defaultAlignment: "left",
-                }),
-                Placeholder.configure({ placeholder }),
-                TextStyle,
-                FontSize,
-                CharacterCount,
-            ],
-            content: value,
+            extensions: [...richTextExtensions, Placeholder.configure({ placeholder })],
+            content: parseRichText(value, format),
             editorProps: { attributes: editorAttributes },
-            onUpdate: ({ editor: instance }) => onChange(instance.getHTML()),
+            onUpdate: ({ editor: instance }) =>
+                onChange(serializeRichText(instance.getJSON(), format)),
             onTransaction: ({ editor: instance }) => syncToolbar(instance),
         });
     }
 
     $effect(() => {
+        if (format !== "markdown") return;
+
+        let active = true;
+        loadMarkdown().then(() => {
+            if (active) markdownReady = true;
+        });
+
+        return () => {
+            active = false;
+        };
+    });
+
+    $effect(() => {
         const element = editorElement;
-        if (!element) return;
+        if (!element || !canConvert) return;
 
         const instance = untrack(() => createEditor(element));
         editor = instance;
@@ -171,9 +177,19 @@
     });
 
     $effect(() => {
-        const html = value;
-        if (editor && html !== editor.getHTML()) {
-            editor.commands.setContent(html, { emitUpdate: false });
+        const incoming = value;
+        if (!editor) return;
+
+        // Compare in the caller's format: what the editor last reported is what the caller holds,
+        // so a re-render with an unchanged value must not reset the document (and the selection).
+        const current = serializeRichText(editor.getJSON(), format);
+        const isSame =
+            format === "json"
+                ? JSON.stringify(current) === JSON.stringify(incoming)
+                : current === incoming;
+
+        if (!isSame) {
+            editor.commands.setContent(parseRichText(incoming, format), { emitUpdate: false });
         }
     });
 

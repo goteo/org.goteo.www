@@ -25,8 +25,11 @@
         updateCampaignInfo,
         type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
+    import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+
+    import type { JSONContent } from "@tiptap/core";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -38,10 +41,10 @@
         $currentDraft?.wizardForm.campaignInfo ?? {
             images: [],
             video: undefined,
-            objectives: "",
-            legacy: "",
-            targetAudience: "",
-            team: "",
+            objectives: emptyRichText(),
+            legacy: emptyRichText(),
+            targetAudience: emptyRichText(),
+            team: emptyRichText(),
         },
     );
 
@@ -101,26 +104,26 @@
         });
     }
 
-    function handleObjectivesChange(html: string) {
+    function handleObjectivesChange(doc: JSONContent) {
         updateCampaignInfo({
-            objectives: html,
+            objectives: doc,
         });
     }
 
-    function handleLegacyChange(html: string) {
+    function handleLegacyChange(doc: JSONContent) {
         updateCampaignInfo({
-            legacy: html,
+            legacy: doc,
         });
     }
 
-    function handleTargetAudienceChange(html: string) {
+    function handleTargetAudienceChange(doc: JSONContent) {
         updateCampaignInfo({
-            targetAudience: html,
+            targetAudience: doc,
         });
     }
 
-    function handleTeamChange(html: string) {
-        updateCampaignInfo({ team: html });
+    function handleTeamChange(doc: JSONContent) {
+        updateCampaignInfo({ team: doc });
     }
 </script>
 

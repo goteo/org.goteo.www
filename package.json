@@ -42,6 +42,7 @@
     "@tiptap/extensions": "^3.28.0",
     "@tiptap/pm": "^3.28.0",
     "@tiptap/starter-kit": "^3.28.0",
+    "@tiptap/static-renderer": "3.28.0",
     "@types/iso-3166-2": "^1.0.4",
     "astro": "^5.18.2",
     "bits-ui": "^2.18.1",
