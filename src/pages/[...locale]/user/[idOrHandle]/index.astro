@@ -14,7 +14,7 @@ import type { Campaign } from "../../../../types/campaign";
 import { client } from "../../../../openapi/client/client.gen";
 
 const { idOrHandle } = Astro.params;
-const { lang, session } = Astro.locals;
+const { lang } = Astro.locals;
 
 if (!idOrHandle) {
     return Astro.redirect("/404");
@@ -103,7 +103,7 @@ if (slugs.length > 0) {
 ---
 
 <Layout title={user.displayName ?? user.handle} description={user.handle}>
-    <App client:load locale={lang} session={session} class="mt-0 pb-20">
+    <App client:load locale={lang} class="mt-0 pb-20">
         <User
             {user}
             {campaigns}

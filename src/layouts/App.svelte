@@ -23,6 +23,27 @@
 
     let { locale: localeProp, session: sessionProp, children, class: classes }: AppState = $props();
 
+    /**
+     * Loads the session from the API instead of receiving it as a prop.
+     *
+     * Props of a hydrated island are serialized into the HTML document, so passing the
+     * session down that way would write the access and refresh tokens into every page.
+     * Pages that can be cached must not carry them, and fetch them from here instead.
+     */
+    async function loadSession() {
+        try {
+            const response = await fetch("/api/session");
+
+            if (!response.ok) return;
+
+            const data = (await response.json()) as Session | null;
+
+            session.set(data ? { ...data, expires_at: new Date(data.expires_at) } : undefined);
+        } catch (e) {
+            console.error("Session fetch failed:", e);
+        }
+    }
+
     onMount(() => {
         client.interceptors.request.use(async (request) => {
             try {
@@ -42,14 +63,17 @@
         });
 
         initCacheInterceptor();
+
+        if (sessionProp) {
+            session.set(sessionProp);
+            return;
+        }
+
+        loadSession();
     });
 
     $effect(() => {
         locale.set(localeProp);
-    });
-
-    $effect(() => {
-        session.set(sessionProp);
     });
 </script>
 
