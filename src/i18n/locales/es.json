@@ -1097,6 +1097,11 @@
     },
     "admin": {
       "filter": {
+        "btns": {
+            "openFilters": "Filtros",
+            "closeFilters": "Cerrar filtros",
+            "apply": "Aplicar filtros"
+          },
         "composer": {
           "title": "Filtros personalizados",
           "addFilter": "Añadir filtro",
@@ -1263,50 +1268,6 @@
               "to_wallet": "Por reembolsar a monedero",
               "walleted": "Reembolsado a monedero"
             }
-          },
-          "btns": {
-            "openFilters": "Filtros",
-            "closeFilters": "Cerrar filtros",
-            "apply": "Aplicar filtros"
-          },
-          "composer": {
-            "title": "Filtros personalizados",
-            "addFilter": "Añadir filtro",
-            "removeFilter": "Eliminar",
-            "subjectPlaceholder": "Seleccionar campo",
-            "operatorPlaceholder": "Seleccionar condición",
-            "referentPlaceholder": "Valor",
-            "subject": {
-              "title": "Título",
-              "subtitle": "Subtítulo",
-              "description": "Descripción",
-              "projectStatus": "Estado de proyecto",
-              "chargeStatus": "Estado de aporte",
-              "categories": "Categoría",
-              "owner": "Propietario",
-              "slug": "ID",
-              "territoryCountry": "Territorio",
-              "dateUpdated": "Última actualización",
-              "budgetAmount": "Importe",
-              "gateway": "Pasarela",
-              "type": "Tipo",
-              "target": "Destino",
-              "currency": "Moneda",
-              "amount": "Importe",
-              "dateCreated": "Fecha de creación"
-            },
-            "operator": {
-              "equals": "Igual a",
-              "is_any_of": "Incluido en",
-              "before": "Anterior a",
-              "after": "Posterior a",
-              "strictly_before": "Estrictamente anterior",
-              "strictly_after": "Estrictamente posterior",
-              "gte": "Mayor o igual que",
-              "gt": "Mayor que",
-              "lte": "Menor o igual que",
-              "lt": "Menor que"
-            }
           }
         },
         "pagination": {
@@ -1354,11 +1315,6 @@
             "placeholder": "Búsqueda",
             "btn": "Buscar",
             "minLength": "Es necesario meter más de 4 caracteres"
-          },
-          "btns": {
-            "openFilters": "Filtros",
-            "closeFilters": "Cerrar filtros",
-            "apply": "Aplicar filtros"
           },
           "campaignStatus": {
             "title": "Estado de campaña",
