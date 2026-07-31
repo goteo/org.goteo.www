@@ -116,8 +116,7 @@
         for (const charge of charges) {
             const targetAcc = accountingsMap.get(charge.target ?? "") as Accounting | undefined;
             const originAcc = accountingsMap.get(charge.checkoutOrigin ?? "") as
-                | Accounting
-                | undefined;
+                Accounting | undefined;
 
             const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
             const originName = getDisplayNameFromAccounting(originAcc, ownersMap);

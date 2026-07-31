@@ -121,9 +121,7 @@
                         return {
                             title: filter,
                             value: filters[filter as keyof Filters] as
-                                | string
-                                | string[]
-                                | undefined,
+                                string | string[] | undefined,
                         };
                 })
                 .filter((filter) => {

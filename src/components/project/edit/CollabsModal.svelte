@@ -87,8 +87,7 @@
             <textarea
                 placeholder={$t("pages.project.edit.collaborations.modal.placeholders.description")}
                 bind:value={description}
-                class={`h-32 resize-none ${INPUTS_CLASSES}`}
-            ></textarea>
+                class={`h-32 resize-none ${INPUTS_CLASSES}`}></textarea>
         </div>
         <div class="flex items-center justify-end gap-4">
             {#if collab !== null && onDelete}
