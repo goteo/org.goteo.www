@@ -1,20 +1,18 @@
 ---
 import Layout from "../../../../../layouts/Layout.astro";
 import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../openapi/client";
-import { getSession } from "../../../../../auth/session";
 import App from "../../../../../layouts/App.svelte";
 import ProjectEditor from "../../../../../components/project/edit/ProjectEditor.svelte";
 import { goto } from "../../../../../utils/navigation";
 
-const { t } = Astro.locals;
-const locale = Astro.locals.lang;
+const { t, lang: locale } = Astro.locals;
 
 const { idOrSlug } = Astro.params;
 if (!idOrSlug) {
-    return Astro.redirect("/");
+    return Astro.redirect("/500");
 }
 
-const session = await getSession(Astro.cookies);
+const { session } = Astro.locals;
 if (!session) {
     const requestUrl = new URL(Astro.request.url);
     const callbackURL = requestUrl.pathname + requestUrl.search;

@@ -18,6 +18,7 @@ import {
 import type { User } from "../../../openapi/client/types.gen";
 import type { Campaign } from "../../../types/campaign";
 import { getLanguage } from "../../../middleware/utils";
+import { getDefaultCurrency } from "../../../utils/consts";
 import { client } from "../../../openapi/client/client.gen";
 
 const { idOrHandle } = Astro.params;
@@ -65,7 +66,10 @@ const tabs = [
 
 // Fetch user's backed/supported projects from API
 let userSupports: ProjectSupport[] = [];
-let totalDonated: { amount: number; currency: string } = { amount: 0, currency: "EUR" };
+let totalDonated: { amount: number; currency: string } = {
+    amount: 0,
+    currency: getDefaultCurrency(),
+};
 let projectsDonatedCount = 0;
 
 // Users are guaranteed to have an accounting resource
