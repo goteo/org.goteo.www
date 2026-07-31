@@ -48,6 +48,7 @@
         syncQueryFiltersToUrl,
     } from "../../utils/queryParams";
     import { isEnabled, tipjarId } from "../../utils/tipping";
+    import { withoutCache } from "../../openapi/cacheInterceptor.ts";
 
     const initialParams =
         typeof window !== "undefined"
@@ -437,11 +438,13 @@
     ]);
 
     onMount(async () => {
-        const { data: paymentGateways } = await apiGatewaysGetCollection();
+        const { data: gateways } = await withoutCache(() => apiGatewaysGetCollection({
+            baseUrl: '/api/relay',
+        }));
 
         paymentMethodOptions = [
             ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name ?? ""]),
+            ...(gateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
         ];
 
         chargeStatusOptions = Object.entries(
