@@ -1,10 +1,10 @@
 <script lang="ts">
-    import AdminSearch from "./Search.svelte";
     import { t } from "../../i18n/store";
-    import Bullet from "../icons/Bullet.svelte";
-    import FiltersIcon from "../icons/filters/Filters.svelte";
-    import Button from "../library/buttons/Button.svelte";
     import FilterComposer from "../library/filters/FilterComposer.svelte";
+    import FiltersIcon from "../icons/filters/Filters.svelte";
+    import Bullet from "../icons/Bullet.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import AdminSearch from "./Search.svelte";
     import Search from "../library/inputs/Search.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
@@ -67,7 +67,7 @@
 </script>
 
 <div
-    class="border-variant1 relative flex flex-col gap-6 rounded-[40px] border p-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-variant1 relative flex flex-col rounded-[40px] border bg-white p-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class="flex items-center gap-4">
         {#if onSelectTarget}
@@ -98,15 +98,34 @@
         </Button>
     </div>
 
-    {#if showFilterComposer}
-        <div class="flex flex-col gap-4">
-            <FilterComposer {resource} onParamsChange={handleComposerParamsChange} />
+    <div class="filter-panel" class:open={showFilterComposer}>
+        <div class="filter-panel-inner">
+            <div class="flex flex-col gap-4 pt-5">
+                <FilterComposer {resource} onParamsChange={handleComposerParamsChange} />
 
-            <div class="flex justify-end">
-                <Button type="button" kind="primary" onclick={applyComposerFilters}>
-                    {$t("pages.admin.filter.btns.apply")}
-                </Button>
+                <div class="flex justify-end">
+                    <Button type="button" kind="primary" onclick={applyComposerFilters}>
+                        {$t("pages.admin.filter.btns.apply")}
+                    </Button>
+                </div>
             </div>
         </div>
-    {/if}
+    </div>
 </div>
+
+<style>
+    .filter-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.25s ease;
+    }
+
+    .filter-panel.open {
+        grid-template-rows: 1fr;
+    }
+
+    .filter-panel-inner {
+        overflow: hidden;
+        min-height: 0;
+    }
+</style>
