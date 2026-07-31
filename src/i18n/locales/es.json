@@ -1517,6 +1517,11 @@
               "individual": "Individual",
               "organization": "Organización"
             },
+            "roles": {
+              "ROLE_USER": "Usuario",
+              "ROLE_ADMIN": "Administrador",
+              "ROLE_SUPER_ADMIN": "Super Admin"
+            },
             "details": {
               "id": "ID",
               "handle": "Usuario",
