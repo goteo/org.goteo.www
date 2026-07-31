@@ -59,7 +59,7 @@
         autoApplyTimeout = setTimeout(() => {
             if (hasInvalidDateRange()) return;
             applyFilters();
-        }, 400);
+        }, 500);
     }
 
     function handleSubmit(event: SubmitEvent) {
