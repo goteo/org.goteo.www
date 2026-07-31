@@ -31,7 +31,6 @@
     "@astrojs/svelte": "^9.0.1",
     "@aws-sdk/client-s3": "^3.1090.0",
     "@aws-sdk/s3-request-presigner": "^3.1090.0",
-    "@fontsource/karla": "^5.3.0",
     "@hey-api/client-fetch": "^0.11.0",
     "@internationalized/date": "^3.12.2",
     "@tailwindcss/vite": "^4.3.3",

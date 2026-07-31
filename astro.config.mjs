@@ -2,7 +2,7 @@ import cloudflare from "@astrojs/cloudflare";
 import { cacheCloudflare } from "@astrojs/cloudflare/cache";
 import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig } from "astro/config";
+import { defineConfig, fontProviders } from "astro/config";
 
 const locales = ["es", "en", "ca"];
 
@@ -48,6 +48,28 @@ export default defineConfig({
     },
 
     routeRules,
+
+    /**
+     * Karla is downloaded from Google at build time and served from our own origin, so no
+     * request reaches a third party while a visitor reads a page.
+     *
+     * Karla is a variable font: the whole `200 800` range travels in a single file, which is
+     * why asking for every weight the interface uses costs no extra request. The previous
+     * `@fontsource/karla` import only shipped weight 400, so the ~360 `font-bold`,
+     * `font-medium` and `font-semibold` usages were being faked by the browser.
+     *
+     * `latin-ext` is not optional here: Catalan needs U+0140 (`ŀ`) for the geminate `l·l`.
+     */
+    fonts: [
+        {
+            provider: fontProviders.google(),
+            name: "Karla",
+            cssVariable: "--font-karla",
+            weights: ["200 800"],
+            styles: ["normal", "italic"],
+            subsets: ["latin", "latin-ext"],
+        },
+    ],
 
     vite: {
         plugins: [tailwindcss()],
