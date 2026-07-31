@@ -73,6 +73,24 @@ export default defineConfig({
 
     vite: {
         plugins: [tailwindcss()],
+
+        /**
+         * These are only ever reached through Astro's virtual modules, so Vite does not see
+         * them while scanning and discovers them mid-session instead. Each discovery
+         * re-optimizes and reloads the dev server, and reloading it a second time while
+         * workerd already holds a module graph kills the runtime with
+         * `Cannot read properties of null (reading 'function')`.
+         *
+         * Naming them up front gets them into the first optimize pass, so no reload happens.
+         */
+        optimizeDeps: {
+            include: [
+                "@astrojs/cloudflare/cache/provider",
+                "@astrojs/svelte/server.js",
+                "astro/actions/runtime/entrypoints/route.js",
+                "astro/assets/services/noop",
+            ],
+        },
     },
 
     i18n: {
