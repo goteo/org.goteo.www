@@ -13,6 +13,7 @@
     import Grid from "../library/layout/Grid.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
+    import GatewaysSelect from "./GatewaysSelect.svelte";
 
     let {
         filters,
@@ -34,7 +35,6 @@
 
     let showFilters = $state(false);
 
-    let selectedPaymentMethod = $state("");
     let selectedChargeStatus = $state("");
     let selectedRangeAmount = $state("");
     let dateFrom = $state("");
@@ -50,44 +50,7 @@
     }
 
     function applyFilters() {
-        const nextFilters = { ...filters };
-
-        //(checkout.gateway)
-        if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
-            nextFilters["checkout.gateway"] = selectedPaymentMethod;
-        } else {
-            delete nextFilters["checkout.gateway"];
-        }
-
-        // (status)
-        if (selectedChargeStatus && selectedChargeStatus !== "all") {
-            nextFilters.status = selectedChargeStatus;
-        } else {
-            delete nextFilters.status;
-        }
-
-        //(money.amount[gte])
-        if (selectedRangeAmount && selectedRangeAmount !== "all") {
-            nextFilters["money.amount[gte]"] = selectedRangeAmount;
-        } else {
-            delete nextFilters["money.amount[gte]"];
-            delete nextFilters["money.amount[between]"];
-        }
-
-        // (dateCreated)
-        if (dateFrom) {
-            nextFilters["dateCreated[after]"] = new Date(dateFrom).toISOString();
-        } else {
-            delete nextFilters["dateCreated[after]"];
-        }
-
-        if (dateTo) {
-            nextFilters["dateCreated[before]"] = new Date(dateTo).toISOString();
-        } else {
-            delete nextFilters["dateCreated[before]"];
-        }
-
-        onApplyFilters(nextFilters);
+        onApplyFilters({ ...filters, ...composerParams });
     }
 
     // Auto-apply filter changes; skip silently while the date range is incomplete/invalid
@@ -114,7 +77,6 @@
     }
 
     $effect(() => {
-        selectedPaymentMethod = filters["checkout.gateway"] ?? "";
         selectedChargeStatus = filters.status ?? "";
         selectedRangeAmount =
             filters["money.amount[gte]"] ?? filters["money.amount[between]"] ?? "";
@@ -138,7 +100,7 @@
             >
                 <span class="relative">
                     <FiltersIcon />
-                    {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
+                    {#if Object.entries(filters).length > 0}
                         <span class="absolute -top-1 -right-1">
                             <Bullet />
                         </span>
@@ -156,19 +118,12 @@
     {#if showFilters}
         <form onsubmit={handleSubmit} class="flex flex-col gap-6">
             <Grid class="grid-cols-3 gap-4">
-                <select
-                    class="border-secondary w-full rounded-lg border p-4"
-                    bind:value={selectedPaymentMethod}
-                    onchange={scheduleApply}
-                >
-                    <option value="" disabled selected
-                        >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
-                    >
-                    {#each gateways as [value, label]}
-                        <option {value}>{label}</option>
-                    {/each}
-                </select>
-
+                <GatewaysSelect
+                    {gateways}
+                    onChange={(selected) => {
+                        filters["checkout.gateway[]"] = selected?.map((g) => g.id);
+                    }}
+                />
                 <select
                     class="border-secondary w-full rounded-lg border p-4"
                     bind:value={selectedChargeStatus}
