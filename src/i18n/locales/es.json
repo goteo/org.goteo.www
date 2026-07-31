@@ -1167,14 +1167,8 @@
             "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
             "noResults": "No se han encontrado resultados"
           },
-          "paymentMethod": {
-            "title": "Método de pago",
-            "options": {
-              "all": "Todos",
-              "paypal": "Paypal",
-              "stripe": "Stripe",
-              "wallet": "Monedero"
-            }
+          "gateway": {
+            "label": "Pasarelas de pago"
           },
           "rangeAmount": {
             "title": "Selecciona importe",
