@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
 
-    import Sidebar from "../components/admin/Sidebar.svelte";
+    import Sidebar from "../components/admin/AdminSidebar.svelte";
 
-    import type { AdminSidebarItem } from "../components/admin/Sidebar.svelte";
+    import type { AdminSidebarItem } from "../components/admin/AdminSidebar.svelte";
 
     interface Props {
         navItems: AdminSidebarItem[];

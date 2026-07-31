@@ -5,6 +5,7 @@
     import type { Component } from "svelte";
 
     import Chevron from "../icons/navigation/Chevron.svelte";
+    import Button from "../library/buttons/Button.svelte";
     import { locale, t } from "../../i18n/store";
 
     export interface AdminSidebarItem {
@@ -22,31 +23,25 @@
     let { navItems, activePath, class: classes = "" }: Props = $props();
 
     let hoverOpen = $state(false);
-    let mobileOpen = $state(false);
-
-    function handleNavClick() {
-        hoverOpen = false;
-    }
+    let isMobileOpen = $state(false);
 
     function toggleMobile() {
-        mobileOpen = !mobileOpen;
+        isMobileOpen = !isMobileOpen;
     }
 
     function closeMobile() {
-        mobileOpen = false;
+        isMobileOpen = false;
     }
 
     function isActive(item: AdminSidebarItem): boolean {
         return item.href === activePath;
     }
 
-    function navItemClass(item: AdminSidebarItem): string {
-        return (
-            twMerge(
-                "hover:bg-variant1 flex content-center items-center w-fit gap-2 rounded-lg px-4 py-2 text-base font-bold transition-colors duration-300 text-secondary",
-                isActive(item) && "bg-variant2 hover:bg-variant3",
-                !hoverOpen && "justify-center mx-1 w-auto",
-            ) || ""
+    function navItemClass(item: AdminSidebarItem): ClassNameValue {
+        return twMerge(
+            "hover:bg-variant1 flex content-center items-center w-fit gap-2 rounded-lg px-4 py-2 text-base font-bold transition-colors duration-300 text-secondary",
+            isActive(item) && "bg-variant2 hover:bg-variant3",
+            !hoverOpen && "justify-center mx-1 w-auto",
         );
     }
 </script>
@@ -67,7 +62,7 @@
 
     <nav class="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto">
         {#each navItems as item}
-            <a href={`/${$locale}${item.href}`} class={navItemClass(item)} onclick={handleNavClick}>
+            <a href={`/${$locale}${item.href}`} class={navItemClass(item) || ""}>
                 {#if hoverOpen}
                     {#if item.icon}
                         <item.icon class="size-5 shrink-0" />
@@ -86,18 +81,18 @@
 </aside>
 
 <!-- Mobile backdrop -->
-{#if mobileOpen}
-    <button
-        type="button"
-        class="fixed inset-0 z-30 bg-black/30 lg:hidden"
+{#if isMobileOpen}
+    <dialog
+        open
+        class="fixed inset-0 z-30 m-0 h-full max-h-none w-full max-w-none border-none bg-black/30 p-0 lg:hidden"
         onclick={closeMobile}
         aria-label={$t("pages.admin.sidebar.aria.close")}
         transition:fade={{ duration: 200 }}
-    ></button>
+    ></dialog>
 {/if}
 
 <!-- Mobile sidebar overlay -->
-{#if mobileOpen}
+{#if isMobileOpen}
     <aside
         class="bg-purple-soft fixed top-(--sticky-top) left-0 z-40 flex h-[calc(100vh-var(--sticky-top)-1rem)] w-56.75 flex-col gap-2 rounded-r-2xl py-10 pr-10 pl-5 shadow-xl lg:hidden"
         transition:slide={{ duration: 300, axis: "x" }}
@@ -123,11 +118,14 @@
 {/if}
 
 <!-- Mobile floating toggle -->
-<button
-    type="button"
+<Button
+    kind="secondary"
     onclick={toggleMobile}
-    class="bg-purple-soft border-secondary/10 fixed bottom-10 left-4 z-50 flex h-12 w-12 cursor-pointer items-center justify-center rounded-full border shadow-lg transition-all duration-300 lg:hidden"
+    class={twMerge(
+        "bg-purple-soft border-secondary/10 fixed top-1/2 z-50 h-12 w-12 -translate-y-1/2 cursor-pointer rounded-full border p-0 shadow-lg transition-all duration-300 lg:hidden",
+        isMobileOpen ? "left-57" : "left-1",
+    )}
     aria-label={$t("pages.admin.sidebar.aria.open")}
 >
-    <Chevron direction={mobileOpen ? "left" : "right"} width="22" height="22" />
-</button>
+    <Chevron direction={isMobileOpen ? "left" : "right"} width="22" height="22" />
+</Button>
