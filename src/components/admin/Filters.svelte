@@ -47,19 +47,44 @@
     }
 
     function applyFilters() {
-        onApplyFilters({
-            ...filters,
-            ...composerParams,
-            "checkout.gateway": selectedPaymentMethod || undefined,
-            status: selectedChargeStatus || undefined,
-            "money.amount[gte]": selectedRangeAmount || undefined,
-            "dateCreated[after]": dateFrom
-                ? new Date(new Date(dateFrom).getTime()).toISOString()
-                : undefined,
-            "dateCreated[before]": dateTo
-                ? new Date(new Date(dateTo).getTime()).toISOString()
-                : undefined,
-        });
+        const nextFilters = { ...filters };
+
+        //(checkout.gateway)
+        if (selectedPaymentMethod && selectedPaymentMethod !== "all") {
+            nextFilters["checkout.gateway"] = selectedPaymentMethod;
+        } else {
+            delete nextFilters["checkout.gateway"];
+        }
+
+        // (status)
+        if (selectedChargeStatus && selectedChargeStatus !== "all") {
+            nextFilters.status = selectedChargeStatus;
+        } else {
+            delete nextFilters.status;
+        }
+
+        //(money.amount[gte])
+        if (selectedRangeAmount && selectedRangeAmount !== "all") {
+            nextFilters["money.amount[gte]"] = selectedRangeAmount;
+        } else {
+            delete nextFilters["money.amount[gte]"];
+            delete nextFilters["money.amount[between]"];
+        }
+
+        // (dateCreated)
+        if (dateFrom) {
+            nextFilters["dateCreated[after]"] = new Date(dateFrom).toISOString();
+        } else {
+            delete nextFilters["dateCreated[after]"];
+        }
+
+        if (dateTo) {
+            nextFilters["dateCreated[before]"] = new Date(dateTo).toISOString();
+        } else {
+            delete nextFilters["dateCreated[before]"];
+        }
+
+        onApplyFilters(nextFilters);
     }
 
     // Auto-apply filter changes; skip silently while the date range is incomplete/invalid
@@ -170,9 +195,9 @@
                 <DateInput
                     id="dateFrom"
                     labelText={$t("pages.admin.charges.filters.dateRange.initDate")}
-                    value={dateFrom ? new Date(dateFrom) : new Date(NaN)}
-                    onInput={(date) => {
-                        dateFrom = date;
+                    value={dateFrom ? new Date(dateFrom) : undefined}
+                    onApply={(d) => {
+                        dateFrom = d ? d.toISOString().slice(0, 10) : "";
                         scheduleApply();
                     }}
                 />
@@ -180,9 +205,9 @@
                 <DateInput
                     id="dateTo"
                     labelText={$t("pages.admin.charges.filters.dateRange.endDate")}
-                    value={dateTo ? new Date(dateTo) : new Date(NaN)}
-                    onInput={(date) => {
-                        dateTo = date;
+                    value={dateTo ? new Date(dateTo) : undefined}
+                    onApply={(d) => {
+                        dateTo = d ? d.toISOString().slice(0, 10) : "";
                         scheduleApply();
                     }}
                 />

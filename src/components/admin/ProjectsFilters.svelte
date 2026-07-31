@@ -2,6 +2,7 @@
     import { t } from "../../i18n/store";
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import DateInput from "../library/inputs/DateInput.svelte";
     import Search from "../library/inputs/Search.svelte";
 
     import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
@@ -22,11 +23,93 @@
     let dateFrom = $state("");
     let dateTo = $state("");
 
+    let dateFromObj = $derived(dateFrom ? new Date(dateFrom) : undefined);
+    let dateToObj = $derived(dateTo ? new Date(dateTo) : undefined);
+
     const CAMPAIGN_STATUS_MAP: Record<string, string[]> = {
         active: ["in_campaign"],
         completed: ["funding.paid"],
         failed: ["campaign.failed"],
     };
+
+    const campaignStatusOptions = [
+        {
+            value: "active",
+            label: $t("pages.admin.projects.filters.campaignStatus.options.active"),
+        },
+        {
+            value: "completed",
+            label: $t("pages.admin.projects.filters.campaignStatus.options.completed"),
+        },
+        {
+            value: "failed",
+            label: $t("pages.admin.projects.filters.campaignStatus.options.failed"),
+        },
+    ];
+
+    const projectStatusOptions = [
+        { value: "in_draft", label: $t("pages.admin.projects.filters.status.options.in_draft") },
+        {
+            value: "to_campaign_review",
+            label: $t("pages.admin.projects.filters.status.options.to_campaign_review"),
+        },
+        {
+            value: "in_campaign_review",
+            label: $t("pages.admin.projects.filters.status.options.in_campaign_review"),
+        },
+        {
+            value: "in_campaign_review_request_change",
+            label: $t(
+                "pages.admin.projects.filters.status.options.in_campaign_review_request_change",
+            ),
+        },
+        {
+            value: "campaign_review_rejected",
+            label: $t("pages.admin.projects.filters.status.options.campaign_review_rejected"),
+        },
+        {
+            value: "to_campaign",
+            label: $t("pages.admin.projects.filters.status.options.to_campaign"),
+        },
+        {
+            value: "in_campaign",
+            label: $t("pages.admin.projects.filters.status.options.in_campaign"),
+        },
+        {
+            value: "campaign_failed",
+            label: $t("pages.admin.projects.filters.status.options.campaign_failed"),
+        },
+        {
+            value: "to_funding_review",
+            label: $t("pages.admin.projects.filters.status.options.to_funding_review"),
+        },
+        {
+            value: "in_funding_review",
+            label: $t("pages.admin.projects.filters.status.options.in_funding_review"),
+        },
+        {
+            value: "in_funding_review_request_change",
+            label: $t(
+                "pages.admin.projects.filters.status.options.in_funding_review_request_change",
+            ),
+        },
+        {
+            value: "funding_review_rejected",
+            label: $t("pages.admin.projects.filters.status.options.funding_review_rejected"),
+        },
+        {
+            value: "to_funding",
+            label: $t("pages.admin.projects.filters.status.options.to_funding"),
+        },
+        {
+            value: "in_funding",
+            label: $t("pages.admin.projects.filters.status.options.in_funding"),
+        },
+        {
+            value: "funding_paid",
+            label: $t("pages.admin.projects.filters.status.options.funding_paid"),
+        },
+    ];
 
     // Debounce auto-applied changes so typing in the search input
     // doesn't fire one API request per keystroke
@@ -174,8 +257,8 @@
                         onchange={scheduleApply}
                     >
                         <option value=""></option>
-                        {#each Object.entries($t("pages.admin.projects.filters.campaignStatus.options")) as [value, label]}
-                            <option {value}>{label}</option>
+                        {#each campaignStatusOptions as option}
+                            <option value={option.value}>{option.label}</option>
                         {/each}
                     </select>
                 </div>
@@ -191,37 +274,31 @@
                         onchange={scheduleApply}
                     >
                         <option value=""></option>
-                        {#each Object.entries($t("pages.admin.projects.filters.status.options")) as [value, label]}
-                            <option {value}>{label}</option>
+                        {#each projectStatusOptions as option}
+                            <option value={option.value}>{option.label}</option>
                         {/each}
                     </select>
                 </div>
 
                 <div class="relative">
-                    <label for="dateFrom" class="text-content absolute top-0.5 left-4 text-xs">
-                        {$t("pages.admin.projects.filters.dateRange.initDate")}
-                    </label>
-                    <input
-                        id="dateFrom"
-                        type="date"
-                        bind:value={dateFrom}
-                        onchange={scheduleApply}
-                        onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
-                        class="border-secondary w-full rounded-lg border p-4 pt-6"
+                    <DateInput
+                        labelText={$t("pages.admin.projects.filters.dateRange.initDate")}
+                        value={dateFromObj}
+                        onApply={(d) => {
+                            dateFrom = d ? d.toISOString().slice(0, 10) : "";
+                            scheduleApply();
+                        }}
                     />
                 </div>
 
                 <div class="relative">
-                    <label for="dateTo" class="text-content absolute top-0.5 left-4 text-xs">
-                        {$t("pages.admin.projects.filters.dateRange.endDate")}
-                    </label>
-                    <input
-                        id="dateTo"
-                        type="date"
-                        bind:value={dateTo}
-                        onchange={scheduleApply}
-                        onclick={(e) => (e.currentTarget as HTMLInputElement).showPicker?.()}
-                        class="border-secondary w-full rounded-lg border p-4 pt-6"
+                    <DateInput
+                        labelText={$t("pages.admin.projects.filters.dateRange.endDate")}
+                        value={dateToObj}
+                        onApply={(d) => {
+                            dateTo = d ? d.toISOString().slice(0, 10) : "";
+                            scheduleApply();
+                        }}
                     />
                 </div>
             </div>

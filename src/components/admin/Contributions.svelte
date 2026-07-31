@@ -378,7 +378,7 @@
     }
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
-        filters = { ...filters, ...newFilters };
+        filters = { ...newFilters };
         $currentPage = 1;
     }
 

@@ -65,7 +65,8 @@
         onfocus={onFocus}
         oninput={onInput}
         bind:value
-        class={textareaClasses}></textarea>
+        class={textareaClasses}
+    ></textarea>
     {#if helperText && !error}
         <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
             {helperText}
