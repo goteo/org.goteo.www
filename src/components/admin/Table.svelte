@@ -223,11 +223,12 @@
             </div>
         </div>
 
-        <Table class="w-full border-separate border-spacing-y-2">
+        <div class="overflow-x-auto">
+        <Table class="w-full table-fixed border-separate border-spacing-y-2">
             <TableHead>
-                {#each tableHeaders as header}
+                {#each tableHeaders as header, i}
                     <TableHeadCell
-                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg
+                        class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {i === tableHeaders.length - 1 ? 'w-12' : ''}
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
                         onclick={() => handleHeaderClick(header)}
                     >
@@ -352,6 +353,7 @@
                 {/if}
             </TableBody>
         </Table>
+        </div>
     </div>
 
     <Pagination />

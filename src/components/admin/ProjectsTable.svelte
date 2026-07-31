@@ -230,11 +230,12 @@
             </div>
         </div>
 
-        <Table class="w-full border-separate border-spacing-y-2">
+        <div class="overflow-x-auto">
+        <Table class="w-full table-fixed border-separate border-spacing-y-2">
             <TableHead>
-                {#each tableHeaders as header}
+                {#each tableHeaders as header, i}
                     <TableHeadCell
-                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg"
+                        class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {i === tableHeaders.length - 1 ? 'w-12' : ''}"
                     >
                         <span class="normal-case">{$t(header)}</span>
                     </TableHeadCell>
@@ -270,10 +271,10 @@
                                 <p class="truncate font-medium text-black">{project.name}</p>
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
-                                {project.promoter}
+                                <span class="truncate block">{project.promoter}</span>
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
-                                {project.contractNumber}
+                                <span class="truncate block">{project.contractNumber}</span>
                             </TableBodyCell>
                             <TableBodyCell class="border-variant1 border-t border-b p-4">
                                 {project.achieved}
@@ -345,6 +346,7 @@
                 {/if}
             </TableBody>
         </Table>
+        </div>
 
         <Pagination
             {currentPage}
