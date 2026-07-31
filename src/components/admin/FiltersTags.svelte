@@ -26,7 +26,11 @@
         ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
-    type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
+    type FilterTag = {
+        title: string;
+        value?: string | string[];
+        values?: { from?: string; to?: string };
+    };
     type FilterTags = FilterTag[];
 
     let tags: FilterTags = $state([]);
@@ -60,28 +64,42 @@
                 tag.values.to = formatDate(new Date(tag.values.to), locale);
             }
 
-            if (tag.title === "status") {
-                const chargeLabel = $t(`contributions.filters.chargeStatus.options.${tag.value}`);
-                tag.value =
-                    chargeLabel !== tag.value
-                        ? chargeLabel
-                        : $t(`admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
+            if (tag.title === "status" && typeof tag.value === "string") {
+                const chargeKey = `pages.admin.charges.filters.chargeStatus.options.${tag.value}`;
+                const projectKey = `pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`;
+
+                const chargeLabel = $t(chargeKey);
+
+                if (chargeLabel !== chargeKey) {
+                    tag.value = chargeLabel;
+                } else {
+                    tag.value = $t(projectKey);
+                }
             }
 
             if (tag.title === "status[]" && Array.isArray(tag.value)) {
                 tag.value = tag.value
-                    .map((s: string) =>
-                        $t(`admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
-                    )
+                    .map((s: string) => {
+                        const chargeKey = `pages.admin.charges.filters.chargeStatus.options.${s}`;
+                        const projectKey = `pages.admin.projects.table.rows.status.${s.replace(/\./g, "_")}`;
+
+                        const chargeLabel = $t(chargeKey);
+
+                        return chargeLabel !== chargeKey ? chargeLabel : $t(projectKey);
+                    })
                     .join(", ");
+            }
+
+            if (tag.title === "paymentMethod") {
+                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
             }
 
             if (tag.title === "money.amount[gte]")
                 tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
 
-            if (tag.title === "target") {
+            if (tag.title === "target" && typeof tag.value === "string") {
                 const displayName = getDisplayNameFromAccounting(
-                    accountingsMap.get(tag.value ?? ""),
+                    accountingsMap.get(tag.value),
                     ownersMap,
                 );
                 if (displayName) tag.value = displayName;
@@ -99,11 +117,18 @@
             let normalTags: FilterTags | undefined = Object.keys(filters)
                 .map((filter) => {
                     if (filter === dateFrom || filter === dateTo) return { title: filter };
-                    else return { title: filter, value: filters[filter] as string | undefined };
+                    else
+                        return {
+                            title: filter,
+                            value: filters[filter as keyof Filters] as
+                                | string
+                                | string[]
+                                | undefined,
+                        };
                 })
                 .filter((filter) => {
                     if (filter.title === dateFrom || filter.title === dateTo) return false;
-                    if (filter.value === undefined) return filter.value !== undefined;
+                    if (filter.value === undefined) return false;
                     if (filter.value === "all") return false;
                     else return filter.value !== "";
                 });

@@ -94,7 +94,8 @@
         "to_refund": "Por reembolsar",
         "refunded": "Reembolsado",
         "to_wallet": "Por reembolsar a monedero",
-        "walleted": "Reembolsado a monedero"
+        "walleted": "Reembolsado a monedero",
+        "funding_paid": "Cobro pagado"
       },
       "refund": {
         "to_wallet": "Sí",
@@ -1176,10 +1177,10 @@
             "options": {
               "500000": "+ 5.000€",
               "all": "Todos",
-              "000..10000": "0€ - 100€",
-              "10000..50000": "100€ - 500€",
-              "50000..100000": "500€ - 1.000€",
-              "100000..500000": "1.000€ - 5.000€"
+              "000-10000": "0€ - 100€",
+              "10000-50000": "100€ - 500€",
+              "50000-100000": "500€ - 1.000€",
+              "100000-500000": "1.000€ - 5.000€"
             }
           },
           "dateRange": {
@@ -1198,7 +1199,8 @@
               "to_refund": "Por reembolsar",
               "refunded": "Reembolsado",
               "to_wallet": "Por reembolsar a monedero",
-              "walleted": "Reembolsado a monedero"
+              "walleted": "Reembolsado a monedero",
+              "funding_paid": "Cobro pagado"
             }
           },
           "btns": {
@@ -1272,11 +1274,18 @@
               "in_draft": "Borrador",
               "to_campaign_review": "Pendiente revisión campaña",
               "in_campaign_review": "En revisión campaña",
+              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
+              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
+              "campaign_review_rejected": "Campaña rechazada",
               "to_campaign": "Pendiente campaña",
               "in_campaign": "En campaña",
               "campaign_failed": "Campaña fallida",
+              "campaign_cancelled": "Campaña cancelada",
               "to_funding_review": "Pendiente revisión cobro",
               "in_funding_review": "En revisión cobro",
+              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
+              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
+              "funding_review_rejected": "Cobro rechazado",
               "to_funding": "Pendiente cobro",
               "in_funding": "En cobro",
               "funding_paid": "Cobro pagado"
@@ -1318,14 +1327,17 @@
               "in_draft": "Borrador",
               "to_campaign_review": "Pendiente revisión campaña",
               "in_campaign_review": "En revisión campaña",
-              "in_campaign_review_request_change": "Revisión campaña: cambios",
+              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
+              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
               "campaign_review_rejected": "Campaña rechazada",
               "to_campaign": "Pendiente campaña",
               "in_campaign": "En campaña",
               "campaign_failed": "Campaña fallida",
+              "campaign_cancelled": "Campaña cancelada",
               "to_funding_review": "Pendiente revisión cobro",
               "in_funding_review": "En revisión cobro",
-              "in_funding_review_request_change": "Revisión cobro: cambios",
+              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
+              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
               "funding_review_rejected": "Cobro rechazado",
               "to_funding": "Pendiente cobro",
               "in_funding": "En cobro",
