@@ -26,8 +26,8 @@
         singleSelect?: boolean;
         inputName?: string;
         onInputBlur?: (e?: FocusEvent) => void;
-        chevronLabel?: string;
         /** Build the list with selected options at the top. */
+        label?: string;
         selectedFirst?: boolean;
         isOpen?: boolean;
     }
@@ -48,12 +48,12 @@
         singleSelect = false,
         inputName = undefined,
         onInputBlur = undefined,
-        chevronLabel = undefined,
+        label = undefined,
         selectedFirst = false,
         isOpen = false,
     }: Props = $props();
 
-    const hasHeader = $derived(hasSearch || !!chevronLabel);
+    const hasHeader = $derived(hasSearch || !!label);
 
     const renderedItems = $derived.by(() => {
         const selectedIds = new Set(selected.map((s) => s.id));
@@ -100,6 +100,12 @@
         }
         onChange?.(option);
     }
+
+    let chevronLabel = $derived(
+        selected.length && selected.length < options.length
+            ? selected.map((option) => option.label).join(", ")
+            : label,
+    );
 </script>
 
 <div
@@ -136,7 +142,7 @@
             {/if}
             <SearchIcon class="absolute right-4" width="32" height="32" />
         </div>
-    {:else if chevronLabel}
+    {:else}
         <button
             type="button"
             class="group flex w-full items-center justify-between rounded-lg border border-gray-100 bg-white p-4 text-base/6 font-normal text-black shadow-sm outline-none focus:outline-none"
