@@ -2,7 +2,10 @@
     import Search from "./Search.svelte";
     import Bullet from "../../components/icons/Bullet.svelte";
     import { t } from "../../i18n/store";
-    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import {
+        type ApiGatewayChargesGetCollectionData,
+        type Gateway,
+    } from "../../openapi/client/index";
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
     import FilterComposer from "../library/filters/FilterComposer.svelte";
@@ -14,7 +17,7 @@
     let {
         filters,
         onApplyFilters,
-        paymentMethodOptions,
+        gateways,
         chargeStatusOptions,
         rangeAmountOptions,
         composedFiltersResource,
@@ -22,7 +25,7 @@
     } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
         onApplyFilters: (filters: any) => void;
-        paymentMethodOptions: [string, string][];
+        gateways: Gateway[];
         chargeStatusOptions: [string, string][];
         rangeAmountOptions: [string, string][];
         composedFiltersResource: FilterResource[];
@@ -161,7 +164,7 @@
                     <option value="" disabled selected
                         >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
                     >
-                    {#each paymentMethodOptions as [value, label]}
+                    {#each gateways as [value, label]}
                         <option {value}>{label}</option>
                     {/each}
                 </select>

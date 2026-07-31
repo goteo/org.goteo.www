@@ -1,14 +1,15 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import Categories from "./Categories.svelte";
     import ExportCsv from "./ExportCsv.svelte";
     import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
+    import GatewaysSummary from "./GatewaysSummary.svelte";
     import Slider from "./Slider.svelte";
     import Table, { type ExtendedCharge } from "./Table.svelte";
     import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
+    import { withoutCache } from "../../openapi/cacheInterceptor.ts";
     import {
         apiAccountingsIdGet,
         apiGatewayChargesGetCollection,
@@ -21,6 +22,7 @@
         type Accounting,
         type ApiGatewayChargesGetCollectionData,
         type ApiGatewayChargestotalsGetCollectionData,
+        type Gateway,
         type GatewayCharge,
         type GatewayCheckout,
         type Project,
@@ -48,7 +50,6 @@
         syncQueryFiltersToUrl,
     } from "../../utils/queryParams";
     import { isEnabled, tipjarId } from "../../utils/tipping";
-    import { withoutCache } from "../../openapi/cacheInterceptor.ts";
 
     const initialParams =
         typeof window !== "undefined"
@@ -65,7 +66,7 @@
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
-    let paymentMethodOptions = $state<[string, string][]>([]);
+    let gateways = $state<Gateway[]>([]);
     let chargeStatusOptions = $state<[string, string][]>([]);
     let rangeAmountOptions = $state<[string, string][]>([]);
 
@@ -438,14 +439,13 @@
     ]);
 
     onMount(async () => {
-        const { data: gateways } = await withoutCache(() => apiGatewaysGetCollection({
-            baseUrl: '/api/relay',
-        }));
+        const { data: availableGateways } = await withoutCache(() =>
+            apiGatewaysGetCollection({
+                baseUrl: "/api/relay",
+            }),
+        );
 
-        paymentMethodOptions = [
-            ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(gateways ?? []).map((g): [string, string] => [g.id!, g.name!]),
-        ];
+        gateways = availableGateways || [];
 
         chargeStatusOptions = Object.entries(
             $t("pages.admin.charges.filters.chargeStatus.options"),
@@ -468,7 +468,7 @@
 <div class="flex flex-col gap-10">
     <Filters
         {filters}
-        {paymentMethodOptions}
+        {gateways}
         {chargeStatusOptions}
         {rangeAmountOptions}
         composedFiltersResource={["gateway_charge"]}
@@ -485,7 +485,7 @@
             />
             <ExportCsv {filters} />
         </div>
-        <Categories {paymentMethodOptions} />
+        <GatewaysSummary {gateways} />
         <Slider slides={chargeSlides} isLoading={$isLoading} />
     </div>
 </div>
