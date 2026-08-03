@@ -2,7 +2,7 @@ import cloudflare from "@astrojs/cloudflare";
 import { cacheCloudflare } from "@astrojs/cloudflare/cache";
 import svelte from "@astrojs/svelte";
 import tailwindcss from "@tailwindcss/vite";
-import { defineConfig, fontProviders } from "astro/config";
+import { defineConfig, fontProviders, logHandlers } from "astro/config";
 import dotenv from "dotenv";
 
 const locales = ["es", "en", "ca"];
@@ -73,6 +73,18 @@ export default defineConfig({
     cache: {
         provider: cacheCloudflare(),
     },
+
+    /**
+     * One JSON object per line instead of prose, so Cloudflare Workers Logs indexes `level`,
+     * `label` and `message` as fields — `wrangler tail` and the dashboard can then filter on
+     * them, which a formatted string does not allow. Pairs with `[observability.logs]` in
+     * `wrangler.toml`.
+     *
+     * Only for builds. `astro dev` already runs its own JSON logger internally to carry logs
+     * from the daemon to `astro dev logs`, and it prints them back as prose for a human to
+     * read; overriding the handler there would take that away for no gain.
+     */
+    logger: process.env.NODE_ENV === "production" ? logHandlers.json({ level: "info" }) : undefined,
 
     routeRules,
 
