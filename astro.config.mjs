@@ -179,6 +179,31 @@ export default defineConfig({
     vite: {
         plugins: [tailwindcss()],
 
+        ssr: {
+            resolve: {
+                /**
+                 * Keeps the AWS SDK from being assembled out of two incompatible halves.
+                 *
+                 * `@aws-sdk/core` ships `exports` with a `browser` condition, and the
+                 * Cloudflare adapter asks for that condition, so it resolves to
+                 * `submodules/client/index.browser.js` — where `emitWarningIfUnsupportedVersion`
+                 * is deliberately `Symbol.for("node-only")` rather than a function.
+                 *
+                 * `@aws-sdk/client-s3` has no `exports` at all. It redirects the same file
+                 * through the legacy top-level `browser` field, which Vite only honours when
+                 * `browser` appears in `mainFields` — and the SSR default leaves it out. So it
+                 * kept the Node `runtimeConfig`, which calls that symbol as a function.
+                 *
+                 * `new S3Client()` runs at module scope in `src/utils/objectStorage.ts`, so the
+                 * mismatch took down every upload endpoint with
+                 * `TypeError: emitWarningIfUnsupportedVersion$1 is not a function` before any
+                 * handler code ran. The browser build is the right half to keep: it is the one
+                 * written against `fetch` and WebCrypto, which is what a Worker offers.
+                 */
+                mainFields: ["browser", "module", "jsnext:main", "jsnext"],
+            },
+        },
+
         /**
          * These are only ever reached through Astro's virtual modules, so Vite does not see
          * them while scanning and discovers them mid-session instead. Each discovery
