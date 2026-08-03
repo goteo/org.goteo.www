@@ -1548,6 +1548,12 @@ export const apiUsersGetCollection = <ThrowOnError extends boolean = false>(opti
                 type: 'http'
             }
         ],
+        querySerializer: {
+            array: {
+                explode: false,
+                style: 'form'
+            }
+        },
         url: '/v4/users',
         ...options
     });
