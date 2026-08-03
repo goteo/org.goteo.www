@@ -3,12 +3,12 @@
     import { formatCurrency } from "../../utils/currencies";
     import MoreAndLess from "../icons/filters/MoreAndLess.svelte";
 
-    import type { CartItem } from "../../stores/cart";
+    import type { CheckoutItem } from "../../stores/checkoutsStore";
 
-    export let item: CartItem;
-    export let onIncrement: (item: CartItem) => void;
-    export let onDecrement: (item: CartItem) => void;
-    export let onRemove: (item: CartItem) => void;
+    export let item: CheckoutItem;
+    export let onIncrement: (item: CheckoutItem) => void;
+    export let onDecrement: (item: CheckoutItem) => void;
+    export let onRemove: (item: CheckoutItem) => void;
 
     function handleDecrement() {
         if (item.quantity === 1) {
