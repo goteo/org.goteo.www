@@ -1096,9 +1096,79 @@
       }
     },
     "admin": {
+      "filter": {
+        "btns": {
+          "openFilters": "Filtres",
+          "closeFilters": "Tanca filtres",
+          "apply": "Aplica filtres"
+        },
+        "composer": {
+          "title": "Filtres personalitzats",
+          "addFilter": "Afegeix un filtre",
+          "removeFilter": "Elimina",
+          "subjectPlaceholder": "Selecciona un camp",
+          "operatorPlaceholder": "Selecciona una condició",
+          "referentPlaceholder": "Valor",
+          "subject": {
+            "title": "Títol",
+            "subtitle": "Subtítol",
+            "description": "Descripció",
+            "projectStatus": "Estat del projecte",
+            "chargeStatus": "Estat de l'aportació",
+            "categories": "Categoria",
+            "owner": "Propietari",
+            "slug": "ID",
+            "territoryCountry": "Territori",
+            "dateUpdated": "Última actualització",
+            "budgetAmount": "Import",
+            "gateway": "Passarel·la",
+            "type": "Tipus",
+            "target": "Destí",
+            "currency": "Moneda",
+            "amount": "Import",
+            "dateCreated": "Data de creació",
+            "handle": "Nom d'usuari",
+            "email": "Correu electrònic",
+            "displayName": "Nom públic",
+            "userType": "Tipus d'usuari",
+            "active": "Actiu",
+            "userRoles": "Rols",
+            "userTerritoryCountry": "Ubicació"
+          },
+          "operator": {
+            "equals": "Igual a",
+            "is_any_of": "Inclòs en",
+            "before": "Anterior a",
+            "after": "Posterior a",
+            "strictly_before": "Estrictament anterior",
+            "strictly_after": "Estrictament posterior",
+            "gte": "Major o igual que",
+            "gt": "Major que",
+            "lte": "Menor o igual que",
+            "lt": "Menor que"
+          },
+          "subjectOption": {
+            "userType": {
+              "individual": "Persona física",
+              "organization": "Persona jurídica (empreses)"
+            },
+            "active": {
+              "true": "Actiu",
+              "false": "Inactiu"
+            }
+          }
+        }
+      },
       "nav": {
         "charges": "Cobraments",
-        "projects": "Projectes"
+        "projects": "Projectes",
+        "users": "Usuaris"
+      },
+      "sidebar": {
+        "aria": {
+          "close": "Tanca el menú",
+          "open": "Obre el menú d'administració"
+        }
       },
       "charges": {
         "title": "Aportacions",
@@ -1204,50 +1274,6 @@
               "to_wallet": "Per reemborsar a moneder",
               "walleted": "Reemborsat a moneder"
             }
-          },
-          "btns": {
-            "openFilters": "Filtres",
-            "closeFilters": "Tancar filtres",
-            "apply": "Aplicar filtres"
-          },
-          "composer": {
-            "title": "Filtres personalitzats",
-            "addFilter": "Afegir filtre",
-            "removeFilter": "Elimina",
-            "subjectPlaceholder": "Seleccionar camp",
-            "operatorPlaceholder": "Seleccionar condició",
-            "referentPlaceholder": "Valor",
-            "subject": {
-              "title": "Títol",
-              "subtitle": "Subtítol",
-              "description": "Descripció",
-              "projectStatus": "Estat del projecte",
-              "chargeStatus": "Estat de l'aportació",
-              "categories": "Categoria",
-              "owner": "Propietari",
-              "slug": "ID",
-              "territoryCountry": "Territori",
-              "dateUpdated": "Última actualització",
-              "budgetAmount": "Import",
-              "gateway": "Passarel·la",
-              "type": "Tipus",
-              "target": "Destí",
-              "currency": "Moneda",
-              "amount": "Import",
-              "dateCreated": "Data de creació"
-            },
-            "operator": {
-              "equals": "Igual a",
-              "is_any_of": "Inclòs en",
-              "before": "Anterior a",
-              "after": "Posterior a",
-              "strictly_before": "Estrictament anterior",
-              "strictly_after": "Estrictament posterior",
-              "gte": "Més gran o igual que",
-              "gt": "Més gran que",
-              "lte": "Menor o igual que",
-              "lt": "Menor que"
-            }
           }
         },
         "pagination": {
@@ -1295,11 +1321,6 @@
             "placeholder": "Cerca",
             "btn": "Cercar",
             "minLength": "Cal introduir més de 4 caràcters"
-          },
-          "btns": {
-            "openFilters": "Filtres",
-            "closeFilters": "Tancar filtres",
-            "apply": "Aplicar filtres"
           },
           "campaignStatus": {
             "title": "Estat de campanya",
@@ -1438,6 +1459,78 @@
               "email": "Correu destinatari"
             },
             "save": "Desa"
+          }
+        },
+        "pagination": {
+          "showing": "Mostrant {{ items }} de {{ total }}",
+          "itemsPerPage": "{{ count }} per pàgina"
+        }
+      },
+      "users": {
+        "title": "Usuaris",
+        "description": "Aquí tens tots els usuaris de la plataforma; pots cercar-los i filtrar-los com vulguis.",
+        "lastUsers": "Llistat d'usuaris:",
+        "export": {
+          "csv": "Exporta .csv"
+        },
+        "totalizers": {
+          "selected": "Usuaris seleccionats:"
+        },
+        "filters": {
+          "search": {
+            "placeholder": "Cerca per nom d'usuari...",
+            "btn": "Cerca",
+            "minLength": "Cal escriure almenys 4 caràcters"
+          },
+          "btns": {
+            "openFilters": "Filtres",
+            "closeFilters": "Tanca filtres",
+            "apply": "Aplica filtres"
+          },
+          "email": {
+            "title": "Correu electrònic"
+          },
+          "order": {
+            "title": "Ordena per",
+            "options": {
+              "handle-asc": "Nom d'usuari A–Z",
+              "handle-desc": "Nom d'usuari Z–A"
+            }
+          },
+          "itemsPerPage": {
+            "title": "Línies per pàgina",
+            "options": {
+              "10": "10",
+              "25": "25",
+              "50": "50"
+            }
+          }
+        },
+        "table": {
+          "headers": {
+            "handle": "Usuari",
+            "email": "Correu electrònic",
+            "displayName": "Nom",
+            "type": "Tipus",
+            "active": "Actiu",
+            "roles": "Rols"
+          },
+          "rows": {
+            "noData": "No hi ha dades disponibles",
+            "active": "Actiu",
+            "inactive": "Inactiu",
+            "type": {
+              "individual": "Individual",
+              "organization": "Organització"
+            },
+            "details": {
+              "id": "ID",
+              "handle": "Usuari",
+              "email": "Correu electrònic",
+              "type": "Tipus",
+              "territory": "Ubicació",
+              "active": "Actiu"
+            }
           }
         },
         "pagination": {
