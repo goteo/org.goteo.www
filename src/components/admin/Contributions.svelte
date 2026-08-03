@@ -78,15 +78,17 @@
 
     async function loadTotalTips() {
         if (!isEnabled || !$session) return;
-        const headers = $session.token.asHttpHeaders;
 
-        const { data: tipjar } = await apiTipjarsIdGet({ path: { id: tipjarId }, headers });
+        const { data: tipjar } = await apiTipjarsIdGet({
+            baseUrl: "/api/relay",
+            path: { id: tipjarId },
+        });
         const accountingId = tipjar?.accounting ? extractId(tipjar.accounting) : null;
         if (!accountingId) return;
 
         const { data: accounting } = await apiAccountingsIdGet({
+            baseUrl: "/api/relay",
             path: { id: accountingId },
-            headers,
         });
         if (accounting?.balance) {
             totalTips = formatCurrency(accounting.balance.amount, accounting.balance.currency);
@@ -109,6 +111,7 @@
         };
 
         const { data, error } = await apiGatewayChargestotalsGetCollection({
+            baseUrl: "/api/relay",
             query: chargeFilters as ApiGatewayChargestotalsGetCollectionData["query"],
             headers,
         });
@@ -127,17 +130,17 @@
         filters: ApiGatewayChargesGetCollectionData["query"],
         page: number,
         itemsPerPage: number,
-    ) {
+    ): ApiGatewayChargesGetCollectionData["query"] {
         const sort = sortOptions.find((option) => option.key === selectedSort);
 
-        const query: Record<string, any> = {
+        const query: ApiGatewayChargesGetCollectionData["query"] = {
             page,
             itemsPerPage,
             ...filters,
         };
 
         if (sort) {
-            query[`order[${sort.field}]`] = sort.direction;
+            (query as any)[`order[${sort.field}]`] = sort.direction;
         }
 
         return query;
@@ -157,13 +160,13 @@
             : toCollectionItems<GatewayCharge>(collection).length;
     }
 
-    async function fetchCheckout(iri: string | undefined, headers: HeadersInit | undefined) {
+    async function fetchCheckout(iri: string | undefined) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiGatewayCheckoutsIdGet({
+            baseUrl: "/api/relay",
             path: { id },
-            headers,
         });
 
         if (error) {
@@ -174,13 +177,13 @@
         return data;
     }
 
-    async function fetchAccounting(iri: string | undefined, headers: HeadersInit | undefined) {
+    async function fetchAccounting(iri: string | undefined) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiAccountingsIdGet({
+            baseUrl: "/api/relay",
             path: { id },
-            headers,
         });
 
         if (error) {
@@ -191,13 +194,13 @@
         return data;
     }
 
-    async function fetchUser(iri: string | undefined, headers: HeadersInit | undefined) {
+    async function fetchUser(iri: string | undefined) {
         const idOrHandle = extractId(iri);
         if (!idOrHandle) return;
 
         const { data, error } = await apiUsersIdOrHandleGet({
+            baseUrl: "/api/relay",
             path: { idOrHandle },
-            headers,
         });
 
         if (error) {
@@ -208,13 +211,13 @@
         return data;
     }
 
-    async function fetchProject(iri: string | undefined, headers: HeadersInit | undefined) {
+    async function fetchProject(iri: string | undefined) {
         const idOrSlug = extractId(iri);
         if (!idOrSlug) return;
 
         const { data, error } = await apiProjectsIdOrSlugGet({
+            baseUrl: "/api/relay",
             path: { idOrSlug },
-            headers,
         });
 
         if (error) {
@@ -225,13 +228,13 @@
         return data;
     }
 
-    async function fetchTipjar(iri: string | undefined, headers: HeadersInit | undefined) {
+    async function fetchTipjar(iri: string | undefined) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiTipjarsIdGet({
+            baseUrl: "/api/relay",
             path: { id },
-            headers,
         });
 
         if (error) {
@@ -271,7 +274,8 @@
                 response,
                 error,
             } = await apiGatewayChargesGetCollection({
-                query,
+                baseUrl: "/api/relay",
+                query: query as any,
                 headers,
             });
 
@@ -288,22 +292,17 @@
                 const targetAccountingIri = charge.target;
 
                 if (checkoutIri && !checkouts.has(checkoutIri)) {
-                    checkouts.set(checkoutIri, await fetchCheckout(checkoutIri, headers));
+                    checkouts.set(checkoutIri, await fetchCheckout(checkoutIri));
 
                     const originAccountingIri = checkouts.get(checkoutIri)?.origin;
 
                     if (originAccountingIri && !accountings.has(originAccountingIri)) {
-                        await preloadAccountingData(
-                            originAccountingIri,
-                            headers,
-                            accountings,
-                            owners,
-                        );
+                        await preloadAccountingData(originAccountingIri, accountings, owners);
                     }
                 }
 
                 if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(targetAccountingIri, headers, accountings, owners);
+                    await preloadAccountingData(targetAccountingIri, accountings, owners);
                 }
             }
 
@@ -343,30 +342,25 @@
         },
     ];
 
-    async function resolveOwner(
-        ownerIri: string,
-        headers: HeadersInit | undefined,
-        owners: Map<string, User | Project | Tipjar>,
-    ) {
+    async function resolveOwner(ownerIri: string, owners: Map<string, User | Project | Tipjar>) {
         if (owners.has(ownerIri)) return;
 
         const handler = OWNER_HANDLERS.find(({ prefix }) => ownerIri.startsWith(prefix));
 
         if (!handler) return;
 
-        const entity = await handler.fetcher(ownerIri, headers);
+        const entity = await handler.fetcher(ownerIri);
         if (entity) owners.set(ownerIri, entity);
     }
 
     async function preloadAccountingData(
         accountingIri: string | null,
-        headers: HeadersInit | undefined,
         accountings: Map<string, Accounting>,
         owners: Map<string, User | Project | Tipjar>,
     ) {
         if (!accountingIri || accountings.has(accountingIri)) return;
 
-        const accounting = await fetchAccounting(accountingIri, headers);
+        const accounting = await fetchAccounting(accountingIri);
         if (!accounting) return;
 
         accountings.set(accountingIri, accounting);
@@ -374,11 +368,11 @@
         const ownerIri = accounting.owner;
         if (!ownerIri) return;
 
-        await resolveOwner(ownerIri, headers, owners);
+        await resolveOwner(ownerIri, owners);
     }
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
-        filters = { ...filters, ...newFilters };
+        filters = { ...newFilters };
         $currentPage = 1;
     }
 
@@ -480,7 +474,11 @@
                 {accountingsMap}
                 {ownersMap}
             />
-            <ExportCsv {filters} />
+            <ExportCsv
+                endpoint="/v4/charges"
+                queryParams={filters}
+                filenamePrefix="gateway-charges"
+            />
         </div>
         <Categories {paymentMethodOptions} />
         <Slider slides={chargeSlides} isLoading={$isLoading} />
