@@ -87,7 +87,10 @@ const { accounting } = Astro.props;
 </section>
 <script>
     import { actions, isInputError } from "astro:actions";
+    import type { GatewayLink } from "../../openapi/client/index";
     import { multiplyMoney, sumMoney } from "../../utils/money";
+
+    import { cart } from "../../stores/checkoutsStore";
 
     const form = document.getElementById("payment");
     const errorContent = document.getElementById("payment-error-content");
@@ -109,7 +112,7 @@ const { accounting } = Astro.props;
 
             if (!error) {
                 const checkoutLink = data?.checkout?.links?.find(
-                    (link: { type: string }) => link.type === "payment",
+                    (link: GatewayLink) => link.type === "payment",
                 );
 
                 if (!checkoutLink) {
@@ -164,38 +167,33 @@ const { accounting } = Astro.props;
         const labels = document.querySelectorAll("label[data-gateway]");
         const inputs = document.querySelectorAll("input[name='paymentMethod']");
         const walletInput = document.querySelector("input[value='wallet']");
-        const cartData = localStorage.getItem("cart");
 
-        if (cartData && cartDataInput) {
-            (cartDataInput as HTMLInputElement).value = cartData;
-        }
-
-        if (cartData && walletInput) {
-            try {
-                const cart = JSON.parse(cartData);
-                const items = Object.values(cart.items ?? {}) as Array<{
-                    money: { amount: number; currency?: string };
-                    quantity: number;
-                }>;
-                const total =
-                    sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)))
-                        ?.amount ?? 0;
-
-                const balanceAttr = form?.dataset.balance;
-                const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
-
-                const shouldDisable = balance < total;
-                (walletInput as HTMLInputElement).disabled = shouldDisable;
-
-                const walletLabel = walletInput.closest("label");
-                if (walletLabel) {
-                    walletLabel.classList.toggle("opacity-50", shouldDisable);
-                    walletLabel.classList.toggle("cursor-not-allowed", shouldDisable);
-                }
-            } catch (e) {
-                console.log("Error parsing cart data:", e);
+        cart.subscribe((state) => {
+            if (cartDataInput instanceof HTMLInputElement) {
+                cartDataInput.value = JSON.stringify(state);
             }
-        }
+
+            if (!walletInput) return;
+
+            const total =
+                sumMoney(
+                    Object.values(state.items).map((item) =>
+                        multiplyMoney(item.money, item.quantity),
+                    ),
+                )?.amount ?? 0;
+
+            const balanceAttr = form?.dataset.balance;
+            const balance = balanceAttr ? parseFloat(balanceAttr) : 0;
+
+            const shouldDisable = balance < total;
+            (walletInput as HTMLInputElement).disabled = shouldDisable;
+
+            const walletLabel = walletInput.closest("label");
+            if (walletLabel) {
+                walletLabel.classList.toggle("opacity-50", shouldDisable);
+                walletLabel.classList.toggle("cursor-not-allowed", shouldDisable);
+            }
+        });
 
         inputs.forEach((input) => {
             input.addEventListener("change", () => {

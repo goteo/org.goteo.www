@@ -28,6 +28,8 @@ export const apiGatewaysIdGetUrl = '/v4/gateways/{id}';
 
 export const apiGatewayChargesGetCollectionUrl = '/v4/gateway_charges';
 
+export const apiGatewayChargestotalsGetCollectionUrl = '/v4/gateway_charges/totals';
+
 export const apiGatewayChargesIdGetUrl = '/v4/gateway_charges/{id}';
 
 export const apiGatewayChargesIdPatchUrl = '/v4/gateway_charges/{id}';

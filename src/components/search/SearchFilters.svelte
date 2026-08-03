@@ -71,7 +71,6 @@ Integrated with searchStore for state management and URL synchronization
                     onSearch={(title) => updateFilters({ title })}
                     onEnter={handleSearch}
                     onClear={handleSearch}
-                    placeholder={$t("domain.search.bar.placeholder")}
                     data-testid="search-input"
                 />
             </div>

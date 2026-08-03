@@ -4,6 +4,7 @@ import { checkAuth } from "./firewall";
 import { getLanguage, getUserLangPreferences, persistLanguage } from "./utils";
 import { getSession } from "../auth/session";
 import { useTranslations } from "../i18n/utils";
+import { goto } from "../utils/navigation";
 
 import type { Locale } from "../i18n/locales/index";
 import type { APIContext } from "astro";
@@ -13,8 +14,11 @@ export const onRequest = defineMiddleware(async (context: APIContext, next) => {
     switch (auth.type) {
         case "basic-auth":
             return auth.response;
-        case "unauthorized":
-            return context.rewrite("/login");
+        case "unauthorized": {
+            const callback = context.url.pathname + context.url.search;
+
+            return goto("/login", { query: { callback } });
+        }
         case "forbidden":
             return context.rewrite("/403");
     }

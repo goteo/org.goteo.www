@@ -26,6 +26,7 @@
         validationErrors,
         type CreateProjectForm,
     } from "../../stores/drafts/projectDraft";
+    import { maxEndDate } from "../../utils/campaign";
     import { getDefaultCurrency } from "../../utils/consts";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/buttons/Button.svelte";
@@ -373,6 +374,7 @@
                 name="release"
                 bind:value={releaseDate}
                 min={getMinDate()}
+                max={maxEndDate}
                 error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
                 onBlur={() => handleFieldBlur("release")}
                 onInput={(date: any) => handleFieldChange("release", date)}

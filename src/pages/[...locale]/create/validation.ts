@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { maxEndDate } from "../../../utils/campaign";
+
 const territorySchema = z
     .object({
         country: z.string().nullable().optional(),
@@ -66,6 +68,20 @@ export const projectCreationSchema = z.object({
                 return normalizedDate >= minDate;
             },
             { message: "system.validation.project.release.min" },
+        )
+        .refine(
+            (date) => {
+                // Release must not be past the platform-wide cutoff
+                // (PUBLIC_CAMPAIGN_MAX_END_DATE)
+                if (!maxEndDate) return true;
+
+                // Create a copy of the input date to avoid mutation
+                const normalizedDate = new Date(date);
+                normalizedDate.setHours(0, 0, 0, 0);
+
+                return normalizedDate <= maxEndDate;
+            },
+            { message: "system.validation.project.release.max" },
         )
         .default(() => {
             const defaultDate = new Date();

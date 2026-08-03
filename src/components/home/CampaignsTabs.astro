@@ -31,7 +31,7 @@ const { data: projects } = await apiProjectsGetCollection({
 });
 
 const campaigns: Campaign[] = await Promise.all(
-    projects!.map(async (project) => {
+    (projects ?? []).map(async (project) => {
         const { data: accounting } = (await client.get({
             url: client.buildUrl({ url: project.accounting! }),
         })) as { data: Accounting };
