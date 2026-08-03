@@ -5,14 +5,14 @@ import RegisterForm from "../../components/auth/RegisterForm.astro";
 import AuthSummary from "../../components/auth/AuthSummary.svelte";
 import Button from "../../components/library/buttons/Button.svelte";
 import BackButton from "../../components/library/buttons/BackButton.svelte";
-import { cartCount } from "../../stores/cart";
+import { cartCount } from "../../stores/checkoutsStore";
 import Summary from "../../components/checkout/Summary.svelte";
 
 const { t, lang, session } = Astro.locals;
 
 let hasCart = false;
 cartCount.subscribe((count) => {
-    hasCart = count > 1;
+    hasCart = count > 0;
 });
 ---
 

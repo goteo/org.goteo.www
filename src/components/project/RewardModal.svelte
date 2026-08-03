@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
 
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
+    import { cart, checkoutReady } from "../../stores/checkoutsStore";
     import { getDefaultCurrency } from "../../utils/consts";
     import { formatCurrency, getUnit } from "../../utils/currencies";
     import { lt } from "../../utils/money";
@@ -61,6 +61,7 @@
         });
 
         if (action === "checkout") {
+            await checkoutReady();
             window.location.href = "/checkout";
         } else {
             open = false;
