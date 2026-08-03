@@ -1096,9 +1096,79 @@
       }
     },
     "admin": {
+      "filter": {
+        "btns": {
+          "openFilters": "Filters",
+          "closeFilters": "Close filters",
+          "apply": "Apply filters"
+        },
+        "composer": {
+          "title": "Custom filters",
+          "addFilter": "Add filter",
+          "removeFilter": "Remove",
+          "subjectPlaceholder": "Select field",
+          "operatorPlaceholder": "Select condition",
+          "referentPlaceholder": "Value",
+          "subject": {
+            "title": "Title",
+            "subtitle": "Subtitle",
+            "description": "Description",
+            "projectStatus": "Project status",
+            "chargeStatus": "Contribution status",
+            "categories": "Category",
+            "owner": "Owner",
+            "slug": "ID",
+            "territoryCountry": "Territory",
+            "dateUpdated": "Last updated",
+            "budgetAmount": "Amount",
+            "gateway": "Gateway",
+            "type": "Type",
+            "target": "Target",
+            "currency": "Currency",
+            "amount": "Amount",
+            "dateCreated": "Creation date",
+            "handle": "Username",
+            "email": "Email",
+            "displayName": "Public name",
+            "userType": "User type",
+            "active": "Active",
+            "userRoles": "Roles",
+            "userTerritoryCountry": "Location"
+          },
+          "operator": {
+            "equals": "Equal to",
+            "is_any_of": "Included in",
+            "before": "Before",
+            "after": "After",
+            "strictly_before": "Strictly before",
+            "strictly_after": "Strictly after",
+            "gte": "Greater than or equal to",
+            "gt": "Greater than",
+            "lte": "Less than or equal to",
+            "lt": "Less than"
+          },
+          "subjectOption": {
+            "userType": {
+              "individual": "Natural person",
+              "organization": "Legal person (companies)"
+            },
+            "active": {
+              "true": "Active",
+              "false": "Inactive"
+            }
+          }
+        }
+      },
       "nav": {
         "charges": "Charges",
-        "projects": "Projects"
+        "projects": "Projects",
+        "users": "Users"
+      },
+      "sidebar": {
+        "aria": {
+          "close": "Close menu",
+          "open": "Open admin menu"
+        }
       },
       "charges": {
         "title": "Contributions",
@@ -1204,50 +1274,6 @@
               "to_wallet": "Pending refund to wallet",
               "walleted": "Refunded to wallet"
             }
-          },
-          "btns": {
-            "openFilters": "Filters",
-            "closeFilters": "Close filters",
-            "apply": "Apply filters"
-          },
-          "composer": {
-            "title": "Custom filters",
-            "addFilter": "Add filter",
-            "removeFilter": "Remove",
-            "subjectPlaceholder": "Select field",
-            "operatorPlaceholder": "Select condition",
-            "referentPlaceholder": "Value",
-            "subject": {
-              "title": "Title",
-              "subtitle": "Subtitle",
-              "description": "Description",
-              "projectStatus": "Project status",
-              "chargeStatus": "Charge status",
-              "categories": "Category",
-              "owner": "Owner",
-              "slug": "ID",
-              "territoryCountry": "Territory",
-              "dateUpdated": "Last updated",
-              "budgetAmount": "Amount",
-              "gateway": "Gateway",
-              "type": "Type",
-              "target": "Target",
-              "currency": "Currency",
-              "amount": "Amount",
-              "dateCreated": "Creation date"
-            },
-            "operator": {
-              "equals": "Equal to",
-              "is_any_of": "Included in",
-              "before": "Before",
-              "after": "After",
-              "strictly_before": "Strictly before",
-              "strictly_after": "Strictly after",
-              "gte": "Greater than or equal to",
-              "gt": "Greater than",
-              "lte": "Less than or equal to",
-              "lt": "Less than"
-            }
           }
         },
         "pagination": {
@@ -1295,11 +1321,6 @@
             "placeholder": "Search",
             "btn": "Search",
             "minLength": "You need to enter more than 4 characters"
-          },
-          "btns": {
-            "openFilters": "Filters",
-            "closeFilters": "Close filters",
-            "apply": "Apply filters"
           },
           "campaignStatus": {
             "title": "Campaign status",
@@ -1438,6 +1459,78 @@
               "email": "Recipient email"
             },
             "save": "Save"
+          }
+        },
+        "pagination": {
+          "showing": "Showing {{ items }} of {{ total }}",
+          "itemsPerPage": "{{ count }} per page"
+        }
+      },
+      "users": {
+        "title": "Users",
+        "description": "Here are all the users on the platform. You can search and filter them however you want.",
+        "lastUsers": "User list:",
+        "export": {
+          "csv": "Export .csv"
+        },
+        "totalizers": {
+          "selected": "Selected users:"
+        },
+        "filters": {
+          "search": {
+            "placeholder": "Search by username...",
+            "btn": "Search",
+            "minLength": "You must enter at least 4 characters"
+          },
+          "btns": {
+            "openFilters": "Filters",
+            "closeFilters": "Close filters",
+            "apply": "Apply filters"
+          },
+          "email": {
+            "title": "Email"
+          },
+          "order": {
+            "title": "Order by",
+            "options": {
+              "handle-asc": "Username A–Z",
+              "handle-desc": "Username Z–A"
+            }
+          },
+          "itemsPerPage": {
+            "title": "Items per page",
+            "options": {
+              "10": "10",
+              "25": "25",
+              "50": "50"
+            }
+          }
+        },
+        "table": {
+          "headers": {
+            "handle": "User",
+            "email": "Email",
+            "displayName": "Name",
+            "type": "Type",
+            "active": "Active",
+            "roles": "Roles"
+          },
+          "rows": {
+            "noData": "No data available",
+            "active": "Active",
+            "inactive": "Inactive",
+            "type": {
+              "individual": "Individual",
+              "organization": "Organization"
+            },
+            "details": {
+              "id": "ID",
+              "handle": "User",
+              "email": "Email",
+              "type": "Type",
+              "territory": "Location",
+              "active": "Active"
+            }
           }
         },
         "pagination": {
