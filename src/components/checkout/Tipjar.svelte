@@ -3,7 +3,7 @@
 
     import { t } from "../../i18n/store";
     import { apiTipjarsIdGet } from "../../openapi/client";
-    import { cart, cartByRecipient, type CartItem } from "../../stores/cart";
+    import { cart, cartByRecipient, type CheckoutItem } from "../../stores/checkoutsStore";
     import { getUnit } from "../../utils/currencies";
     import * as tipping from "../../utils/tipping";
 
@@ -23,7 +23,7 @@
         };
     }
 
-    async function getTip(): Promise<Omit<CartItem, "key">> {
+    async function getTip(): Promise<Omit<CheckoutItem, "key">> {
         if ($cartByRecipient[tipping.tipjarIri]) {
             return $cartByRecipient[tipping.tipjarIri][0];
         }
@@ -64,11 +64,11 @@
 
     function toggleTip() {
         if (!isChecked) {
-            if ($cartByRecipient[tipping.tipjarIri].length < 1) {
+            const tip = $cartByRecipient[tipping.tipjarIri]?.[0];
+            if (!tip) {
                 return;
             }
 
-            const tip = $cartByRecipient[tipping.tipjarIri][0];
             cart.removeItem(tip.key);
         } else {
             setTip(amount * getUnit());
