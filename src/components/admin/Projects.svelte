@@ -320,7 +320,11 @@
         {filters}
         onApplyFilters={handleApplyFilters}
         searchPlaceholder={$t("pages.admin.projects.filters.search.placeholder")}
-        onSearch={handleSearch}
+        onSelectProject={(p) => {
+            filters = { ...filters, title: p.title };
+            currentPage = 1;
+            reloadProjects();
+        }}
     />
 
     <div class="flex flex-col">

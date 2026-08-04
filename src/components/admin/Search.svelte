@@ -8,6 +8,7 @@
     import { highlightMatch } from "../../utils/highlights";
     import SearchIcon from "../icons/actions/Search.svelte";
     import CloseIcon from "../icons/navigation/Close.svelte";
+    import Spinner from "../icons/status/Spinner.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
@@ -21,14 +22,31 @@
         member: T[];
     };
 
-    let { onSelectTarget }: { onSelectTarget: (accounting: string) => void } = $props();
+    let {
+        onSelectTarget,
+        searchPlaceholder,
+        onSelectProject,
+        onSelectUser,
+        resource,
+    }: {
+        onSelectTarget?: (accounting: string) => void;
+        searchPlaceholder?: string;
+        onSelectProject?: (project: ProjectJsonld) => void;
+        onSelectUser?: (user: UserJsonld) => void;
+        resource?: "projects" | "gateway_charges" | "users";
+    } = $props();
 
     let query = $state("");
     let results = $state<ResultItem[]>([]);
     let totalItems = $state(0);
     let searched = $state(false);
+    let isLoading = $state(false);
 
     let debounceTimeout: ReturnType<typeof setTimeout>;
+
+    const showProjects = $derived(!resource || resource === "gateway_charges" || resource === "projects");
+    const showTipjars = $derived(!resource || resource === "gateway_charges");
+    const showUsers = $derived(!resource || resource === "gateway_charges" || resource === "users");
 
     async function fetchResults(text: string) {
         const trimmed = text.trim();
@@ -40,32 +58,63 @@
         }
 
         searched = true;
+        isLoading = true;
 
-        const [{ data: projectDataRaw }, { data: tipjarDataRaw }, { data: userDataRaw }] =
-            await Promise.all([
+        const fetches: Promise<any>[] = [];
+        if (showProjects) {
+            fetches.push(
                 apiProjectsGetCollection({
                     query: { title: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
+            );
+        }
+        if (showTipjars) {
+            fetches.push(
                 apiTipjarsGetCollection({
                     query: { name: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
+            );
+        }
+        if (showUsers) {
+            fetches.push(
                 apiUsersGetCollection({
                     query: { handle: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
-            ]);
+            );
+        }
 
-        const projectData = projectDataRaw as unknown as CollectionResponse<ProjectJsonld>;
-        const tipjarData = tipjarDataRaw as unknown as CollectionResponse<TipjarJsonld>;
-        const userData = userDataRaw as unknown as CollectionResponse<UserJsonld>;
+        const responses = await Promise.all(fetches);
 
-        const projectItems = projectData.member;
-        const tipjarItems = tipjarData.member;
-        const userItems = userData.member;
+        let idx = 0;
+        let projectItems: ProjectJsonld[] = [];
+        let tipjarItems: TipjarJsonld[] = [];
+        let userItems: UserJsonld[] = [];
+        let total = 0;
 
-        totalItems = projectData.totalItems + tipjarData.totalItems + userData.totalItems;
+        if (showProjects) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<ProjectJsonld>;
+            projectItems = data.member;
+            total += data.totalItems;
+        }
+        if (showTipjars) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<TipjarJsonld>;
+            tipjarItems = data.member;
+            total += data.totalItems;
+        }
+        if (showUsers) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<UserJsonld>;
+            userItems = data.member;
+            total += data.totalItems;
+        }
+
+        totalItems = total;
+        isLoading = false;
 
         results = [
             ...projectItems.map((p): ResultItem => ({ type: "project", data: p })),
@@ -80,8 +129,8 @@
         if (!text.trim()) {
             results = [];
             totalItems = 0;
-            onSelectTarget("");
             searched = false;
+            isLoading = false;
             return;
         }
 
@@ -100,7 +149,7 @@
                 bind:value={query}
                 oninput={(e) =>
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
-                placeholder={$t("pages.admin.charges.filters.search.placeholder")}
+                placeholder={searchPlaceholder ?? $t("pages.admin.charges.filters.search.placeholder")}
                 class="border-secondary w-full rounded-3xl border p-4"
                 minlength="4"
             />
@@ -113,6 +162,7 @@
                         results = [];
                         totalItems = 0;
                         searched = false;
+                        isLoading = false;
                     }}
                 >
                     <CloseIcon />
@@ -126,19 +176,23 @@
     </div>
 
     {#if searched}
-        <div class="absolute top-full z-10 my-8 w-full space-y-4 rounded-lg bg-gray-200 p-4">
-            <p class="text-sm text-gray-500">
-                {@html $t(
-                    "pages.admin.charges.filters.search.resultsFound",
-                    {
-                        totalItems: totalItems,
-                        query: `<span class="font-bold">${query}</span>`,
-                    },
-                    { allowHTML: true },
-                )}
-            </p>
+        <div class="absolute top-full z-10 my-8 w-full space-y-4 rounded-lg bg-gray-200 p-4 max-h-96 overflow-y-auto">
+            {#if isLoading}
+                <div class="flex justify-center py-6">
+                    <Spinner />
+                </div>
+            {:else if results.length > 0}
+                <p class="text-sm text-gray-500">
+                    {@html $t(
+                        "pages.admin.charges.filters.search.resultsFound",
+                        {
+                            totalItems: totalItems,
+                            query: `<span class="font-bold">${query}</span>`,
+                        },
+                        { allowHTML: true },
+                    )}
+                </p>
 
-            {#if results.length > 0}
                 {#if results.some((r) => r.type === "project")}
                     <div>
                         <h3 class="mb-2 text-sm font-bold text-gray-700 uppercase">
@@ -150,7 +204,8 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectProject?.(item.data);
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -186,7 +241,8 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectProject?.(item.data);
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -219,7 +275,8 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectUser?.(item.data);
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;

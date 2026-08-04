@@ -221,7 +221,11 @@
         {filters}
         onApplyFilters={handleApplyFilters}
         searchPlaceholder={$t("pages.admin.users.filters.search.placeholder")}
-        onSearch={handleSearch}
+        onSelectUser={(u) => {
+            filters = { ...filters, handle: u.handle };
+            currentPage = 1;
+            reloadUsers();
+        }}
     />
 
     <div class="flex flex-col">

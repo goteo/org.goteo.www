@@ -5,19 +5,26 @@
     import Bullet from "../icons/Bullet.svelte";
     import Button from "../library/buttons/Button.svelte";
     import AdminSearch from "./Search.svelte";
-    import Search from "../library/inputs/Search.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
 
-    let { resource, filters, onApplyFilters, searchPlaceholder, onSearch, onSelectTarget } =
-        $props<{
-            resource: FilterResource;
-            filters: any;
-            onApplyFilters: (filters: any) => void;
-            searchPlaceholder?: string;
-            onSearch?: (value: string) => void;
-            onSelectTarget?: (accounting: string) => void;
-        }>();
+    let {
+        resource,
+        filters,
+        onApplyFilters,
+        searchPlaceholder,
+        onSelectTarget,
+        onSelectProject,
+        onSelectUser,
+    }: {
+        resource: FilterResource;
+        filters: any;
+        onApplyFilters: (filters: any) => void;
+        searchPlaceholder?: string;
+        onSelectTarget?: (accounting: string) => void;
+        onSelectProject?: (project: any) => void;
+        onSelectUser?: (user: any) => void;
+    } = $props();
 
     let showFilterComposer = $state(false);
     let composerParams = $state<Record<string, string | string[]>>({});
@@ -70,10 +77,14 @@
     class="border-variant1 relative flex flex-col rounded-[40px] border bg-white p-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
     <div class="flex items-center gap-4">
-        {#if onSelectTarget}
-            <AdminSearch {onSelectTarget} />
-        {:else if searchPlaceholder && onSearch}
-            <Search placeholder={searchPlaceholder} onsubmit={onSearch} class="flex-1" />
+        {#if onSelectTarget || onSelectProject || onSelectUser}
+            <AdminSearch
+                {searchPlaceholder}
+                {onSelectTarget}
+                {onSelectProject}
+                {onSelectUser}
+                {resource}
+            />
         {/if}
 
         <Button
@@ -117,15 +128,17 @@
     .filter-panel {
         display: grid;
         grid-template-rows: 0fr;
+        overflow: hidden;
         transition: grid-template-rows 0.25s ease;
     }
 
     .filter-panel.open {
         grid-template-rows: 1fr;
+        overflow: visible;
     }
 
     .filter-panel-inner {
-        overflow: hidden;
         min-height: 0;
+        overflow: visible;
     }
 </style>
