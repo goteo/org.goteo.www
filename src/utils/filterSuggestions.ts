@@ -1,3 +1,4 @@
+import { withoutCache } from "../openapi/cacheInterceptor";
 import {
     apiGatewaysGetCollection,
     apiProjectsGetCollection,
@@ -11,10 +12,13 @@ import type { FilterOption } from "./filterComposer";
 type CollectionResponse<T> = { totalItems: number; member: T[] };
 
 export async function suggestGateways(q: string): Promise<FilterOption[]> {
-    const { data } = await apiGatewaysGetCollection({
+    const { data } = await withoutCache(() => apiGatewaysGetCollection({
         headers: { Accept: "application/ld+json" },
-    });
+        baseUrl: '/api/relay'
+    }));
+
     if (!data) return [];
+
     const gateways = (data as unknown as CollectionResponse<Record<string, unknown>>).member ?? [];
     return gateways
         .filter((g) => !q || ((g.name as string) ?? "").toLowerCase().includes(q.toLowerCase()))
