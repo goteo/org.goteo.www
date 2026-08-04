@@ -14,7 +14,7 @@ const GUEST_KEY = "user:guest";
 export async function migrateLegacyCart(): Promise<void> {
     if (typeof window === "undefined") return;
 
-    let raw: string | null = null;
+    let raw: string | null;
     try {
         raw = localStorage.getItem(LEGACY_STORAGE_KEY);
         if (raw === null) return;
