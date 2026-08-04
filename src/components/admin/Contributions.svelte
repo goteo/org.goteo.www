@@ -65,8 +65,6 @@
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
-    let chargeStatusOptions = $state<[string, string][]>([]);
-    let rangeAmountOptions = $state<[string, string][]>([]);
 
     let charges = $state<ExtendedCharge[] | undefined>([]);
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
@@ -377,7 +375,7 @@
         await resolveOwner(ownerIri, headers, owners);
     }
 
-    function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
+    function handleApplyFilters(newFilters: any) {
         filters = { ...filters, ...newFilters };
         $currentPage = 1;
     }
@@ -416,7 +414,10 @@
     $effect(() => {
         const sort = sortOptions.find((option) => option.key === selectedSort);
 
-        syncQueryFiltersToUrl(filters ?? {}, sort ? { [sort.field]: sort.direction } : undefined);
+        syncQueryFiltersToUrl(
+            filters ?? ({} as Record<string, unknown>),
+            sort ? { [sort.field]: sort.direction } : undefined,
+        );
     });
 
     let prevItemsPerPage = $state($itemsPerPage);
@@ -436,6 +437,10 @@
         { title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
+    function handleSelectTarget(accounting: string): void {
+        handleApplyFilters({ target: accounting });
+    }
+
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
@@ -444,32 +449,16 @@
             ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name ?? ""]),
         ];
 
-        chargeStatusOptions = Object.entries(
-            $t("pages.admin.charges.filters.chargeStatus.options"),
-        );
-
-        rangeAmountOptions = Object.entries(
-            $t("pages.admin.charges.filters.rangeAmount.options"),
-        ).sort(([a], [b]) => {
-            const parseMin = (val: string) =>
-                val.includes("..") ? parseInt(val.split("..")[0]) : parseInt(val);
-            if (a === "all") return -1;
-            if (b === "all") return 1;
-            return parseMin(a) - parseMin(b);
-        });
-
         loadTotalTips();
     });
 </script>
 
 <div class="flex flex-col gap-10">
     <Filters
+        resource="gateway_charges"
         {filters}
-        {paymentMethodOptions}
-        {chargeStatusOptions}
-        {rangeAmountOptions}
-        composedFiltersResource={["gateway_charge"]}
         onApplyFilters={handleApplyFilters}
+        onSelectTarget={handleSelectTarget}
     />
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
@@ -479,6 +468,7 @@
                 {filters}
                 {accountingsMap}
                 {ownersMap}
+                resource="gateway_charges"
             />
             <ExportCsv {filters} />
         </div>

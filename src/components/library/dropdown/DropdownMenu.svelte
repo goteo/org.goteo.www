@@ -50,7 +50,7 @@
         onInputBlur = undefined,
         chevronLabel = undefined,
         selectedFirst = false,
-        isOpen = false,
+        isOpen = $bindable(false),
     }: Props = $props();
 
     const hasHeader = $derived(hasSearch || !!chevronLabel);

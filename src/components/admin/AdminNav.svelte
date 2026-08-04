@@ -12,6 +12,7 @@
     const sections = [
         { path: "/admin/charges", key: "pages.admin.nav.charges" },
         { path: "/admin/projects", key: "pages.admin.nav.projects" },
+        { path: "/admin/users", key: "pages.admin.nav.users" },
     ];
 
     let pathname = $state("");

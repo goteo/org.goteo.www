@@ -1118,7 +1118,7 @@
             "categories": "Categoría",
             "owner": "Propietario",
             "slug": "ID",
-            "territoryCountry": "Territorio",
+            "territory": "Territorio",
             "dateUpdated": "Última actualización",
             "budgetAmount": "Importe",
             "gateway": "Pasarela",
@@ -1146,6 +1146,16 @@
             "gt": "Mayor que",
             "lte": "Menor o igual que",
             "lt": "Menor que"
+          },
+          "datePrefix": {
+            "dateCreated": "Creado",
+            "dateUpdated": "Actualizado"
+          },
+          "dateSuffix": {
+            "after": "después de",
+            "before": "antes de",
+            "strictly_after": "estrictamente después de",
+            "strictly_before": "estrictamente antes de"
           },
           "subjectOption": {
             "userType": {
@@ -1232,7 +1242,7 @@
             }
           },
           "search": {
-            "placeholder": "Buscar...",
+            "placeholder": "Buscar por destino...",
             "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
             "noResults": "No se han encontrado resultados"
           },
@@ -1318,7 +1328,7 @@
         },
         "filters": {
           "search": {
-            "placeholder": "Búsqueda",
+            "placeholder": "Buscar por título...",
             "btn": "Buscar",
             "minLength": "Es necesario meter más de 4 caracteres"
           },
@@ -1522,6 +1532,11 @@
             "type": {
               "individual": "Individual",
               "organization": "Organización"
+            },
+            "roles": {
+              "ROLE_USER": "Usuario",
+              "ROLE_ADMIN": "Administrador",
+              "ROLE_SUPER_ADMIN": "Super Admin"
             },
             "details": {
               "id": "ID",
