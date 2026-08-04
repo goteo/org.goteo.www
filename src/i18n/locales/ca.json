@@ -94,7 +94,8 @@
         "to_refund": "Per reemborsar",
         "refunded": "Reemborsat",
         "to_wallet": "Per reemborsar a moneder",
-        "walleted": "Reemborsat a moneder"
+        "walleted": "Reemborsat a moneder",
+        "funding_paid": "Cobrament pagat"
       },
       "refund": {
         "to_wallet": "Sí",
@@ -1118,7 +1119,7 @@
             "categories": "Categoria",
             "owner": "Propietari",
             "slug": "ID",
-            "territoryCountry": "Territori",
+            "territory": "Territori",
             "dateUpdated": "Última actualització",
             "budgetAmount": "Import",
             "gateway": "Passarel·la",
@@ -1146,6 +1147,16 @@
             "gt": "Major que",
             "lte": "Menor o igual que",
             "lt": "Menor que"
+          },
+          "datePrefix": {
+            "dateCreated": "Creat",
+            "dateUpdated": "Actualitzat"
+          },
+          "dateSuffix": {
+            "after": "després de",
+            "before": "abans de",
+            "strictly_after": "estrictament després de",
+            "strictly_before": "estrictament abans de"
           },
           "subjectOption": {
             "userType": {
@@ -1232,28 +1243,22 @@
             }
           },
           "search": {
-            "placeholder": "Cercar...",
+            "placeholder": "Cerca per destinació...",
             "resultsFound": "{{totalItems}} resultats per \"{{query}}\"",
             "noResults": "No s'han trobat resultats"
           },
-          "paymentMethod": {
-            "title": "Mètode de pagament",
-            "options": {
-              "all": "Tots",
-              "paypal": "PayPal",
-              "stripe": "Stripe",
-              "wallet": "Moneder"
-            }
+          "gateway": {
+            "label": "Passarel·les de pagament"
           },
           "rangeAmount": {
             "title": "Selecciona import",
             "options": {
               "500000": "+ 5.000 €",
               "all": "Tots",
-              "000..10000": "0 € - 100 €",
-              "10000..50000": "100 € - 500 €",
-              "50000..100000": "500 € - 1.000 €",
-              "100000..500000": "1.000 € - 5.000 €"
+              "000-10000": "0 € - 100 €",
+              "10000-50000": "100 € - 500 €",
+              "50000-100000": "500 € - 1.000 €",
+              "100000-500000": "1.000 € - 5.000 €"
             }
           },
           "dateRange": {
@@ -1272,7 +1277,8 @@
               "to_refund": "Per reemborsar",
               "refunded": "Reemborsat",
               "to_wallet": "Per reemborsar a moneder",
-              "walleted": "Reemborsat a moneder"
+              "walleted": "Reemborsat a moneder",
+              "funding_paid": "Cobrament pagat"
             }
           }
         },
@@ -1318,7 +1324,7 @@
         },
         "filters": {
           "search": {
-            "placeholder": "Cerca",
+            "placeholder": "Cerca per títol...",
             "btn": "Cercar",
             "minLength": "Cal introduir més de 4 caràcters"
           },
@@ -1336,11 +1342,18 @@
               "in_draft": "Esborrany",
               "to_campaign_review": "Pendent de revisió de campanya",
               "in_campaign_review": "En revisió de campanya",
+              "in_campaign_review_to_change": "Revisió de la campanya: requereix canvis",
+              "in_campaign_review_to_review": "Revisió de la campanya: pendent de revisió",
+              "campaign_review_rejected": "Campanya rebutjada",
               "to_campaign": "Pendent de campanya",
               "in_campaign": "En campanya",
               "campaign_failed": "Campanya fallida",
+              "campaign_cancelled": "Campanya cancel·lada",
               "to_funding_review": "Pendent de revisió de cobrament",
               "in_funding_review": "En revisió de cobrament",
+              "in_funding_review_to_change": "Revisió del cobrament: requereix canvis",
+              "in_funding_review_to_review": "Revisió del cobrament: pendent de revisió",
+              "funding_review_rejected": "Cobrament rebutjat",
               "to_funding": "Pendent de cobrament",
               "in_funding": "En cobrament",
               "funding_paid": "Cobrament pagat"
@@ -1382,14 +1395,17 @@
               "in_draft": "Esborrany",
               "to_campaign_review": "Pendent de revisió de campanya",
               "in_campaign_review": "En revisió de campanya",
-              "in_campaign_review_request_change": "Revisió de campanya: canvis",
+              "in_campaign_review_to_change": "Revisió de la campanya: requereix canvis",
+              "in_campaign_review_to_review": "Revisió de la campanya: pendent de revisió",
               "campaign_review_rejected": "Campanya rebutjada",
               "to_campaign": "Pendent de campanya",
               "in_campaign": "En campanya",
               "campaign_failed": "Campanya fallida",
+              "campaign_cancelled": "Campanya cancel·lada",
               "to_funding_review": "Pendent de revisió de cobrament",
               "in_funding_review": "En revisió de cobrament",
-              "in_funding_review_request_change": "Revisió de cobrament: canvis",
+              "in_funding_review_to_change": "Revisió del cobrament: requereix canvis",
+              "in_funding_review_to_review": "Revisió del cobrament: pendent de revisió",
               "funding_review_rejected": "Cobrament rebutjat",
               "to_funding": "Pendent de cobrament",
               "in_funding": "En cobrament",
@@ -1522,6 +1538,11 @@
             "type": {
               "individual": "Individual",
               "organization": "Organització"
+            },
+            "roles": {
+              "ROLE_USER": "Usuari",
+              "ROLE_ADMIN": "Administrador",
+              "ROLE_SUPER_ADMIN": "Superadministrador"
             },
             "details": {
               "id": "ID",
