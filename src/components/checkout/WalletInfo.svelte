@@ -1,17 +1,8 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
-    import { getDefaultCurrency } from "../../utils/consts";
+    import { cartAmount as total } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
-    import { multiplyMoney, sumMoney, subtractMoney } from "../../utils/money";
-
-    const total = derived(cart, ($cart) => {
-        const items = Object.values($cart?.items ?? {});
-        if (items.length === 0) return { amount: 0, currency: getDefaultCurrency() };
-        return sumMoney(items.map((item) => multiplyMoney(item.money, item.quantity)));
-    });
+    import { subtractMoney } from "../../utils/money";
 
     export let accounting;
 </script>

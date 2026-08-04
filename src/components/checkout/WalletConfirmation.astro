@@ -3,12 +3,10 @@ import WalletInfo from "./WalletInfo.svelte";
 
 const { t } = Astro.locals;
 const { accounting } = Astro.props;
-
-const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 ---
 
 <section>
-    <WalletInfo client:load {accounting} {defaultCurrency} />
+    <WalletInfo client:load {accounting} />
 
     <form
         id="payment"
@@ -35,6 +33,8 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 <script>
     import { actions, isInputError } from "astro:actions";
 
+    import { cart } from "../../stores/checkoutsStore";
+
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("payment");
         const errorContent = document.getElementById("payment-error-content");
@@ -43,15 +43,9 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
         if (!(form instanceof HTMLFormElement) || !(cartDataInput instanceof HTMLInputElement))
             return;
 
-        const cartData = localStorage.getItem("cart");
-        if (cartData) {
-            try {
-                JSON.parse(cartData);
-                cartDataInput.value = cartData;
-            } catch (e) {
-                console.error("Error parsing cart data:", e);
-            }
-        }
+        cart.subscribe((state) => {
+            cartDataInput.value = JSON.stringify(state);
+        });
 
         form.addEventListener("submit", async (event) => {
             event.preventDefault();

@@ -1098,10 +1098,10 @@
     "admin": {
       "filter": {
         "btns": {
-            "openFilters": "Filtros",
-            "closeFilters": "Cerrar filtros",
-            "apply": "Aplicar filtros"
-          },
+          "openFilters": "Filtros",
+          "closeFilters": "Cerrar filtros",
+          "apply": "Aplicar filtros"
+        },
         "composer": {
           "title": "Filtros personalizados",
           "addFilter": "Añadir filtro",
@@ -1129,9 +1129,11 @@
             "dateCreated": "Fecha de creación",
             "handle": "Nombre de usuario",
             "email": "Email",
+            "displayName": "Nombre público",
             "userType": "Tipo de usuario",
             "active": "Activo",
-            "userRoles": "Roles"
+            "userRoles": "Roles",
+            "userTerritoryCountry": "Ubicación"
           },
           "operator": {
             "equals": "Igual a",
@@ -1171,6 +1173,12 @@
         "charges": "Cobros",
         "projects": "Proyectos",
         "users": "Usuarios"
+      },
+      "sidebar": {
+        "aria": {
+          "close": "Cerrar menú",
+          "open": "Abrir menú de administración"
+        }
       },
       "charges": {
         "title": "Aportes",
