@@ -42,7 +42,14 @@
                 row.referent,
             );
 
-            Object.assign(result, filterRow.serialize());
+            const serialized = filterRow.serialize();
+            for (const [key, value] of Object.entries(serialized)) {
+                if (Array.isArray(value) && result[key]) {
+                    result[key] = [...(result[key] as string[]), ...value];
+                } else {
+                    result[key] = value;
+                }
+            }
         }
 
         return result;
@@ -75,7 +82,7 @@
     <div>
         <Button class="" kind="ghost" onclick={addRow}>
             <PlusIcon />
-            {$t("pages.admin.charges.filters.composer.addFilter")}
+            {$t("pages.admin.filter.composer.addFilter")}
         </Button>
     </div>
 </div>

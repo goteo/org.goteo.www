@@ -3,154 +3,196 @@
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
     import { getDisplayNameFromAccounting } from "../../utils/displayNameFromAccounting";
+    import { getAllFilterSubjects } from "../../utils/filterComposer";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Locale } from "../../i18n/locales";
     import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
-    import type { ApiGatewayChargesGetCollectionData } from "../../openapi/client/types.gen";
+    import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
 
-    type Filters = ApiGatewayChargesGetCollectionData["query"];
+    type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
+    const dateRegex =
+        /^(dateCreated|dateUpdated)\[(after|before|strictly_after|strictly_before)\]$/;
 
     let {
         title,
         filters,
         onCloseFilter,
+        resource = undefined,
         accountingsMap = new Map(),
         ownersMap = new Map(),
     } = $props<{
         title: string;
-        filters: Filters;
-        onCloseFilter: (filters: Filters) => void;
+        filters: Record<string, any>;
+        onCloseFilter: (filters: Record<string, any>) => void;
+        resource?: FilterResource;
         accountingsMap?: Map<string, Accounting>;
         ownersMap?: Map<string, User | Project | Tipjar>;
     }>();
 
-    type FilterTag = {
-        title: string;
-        value?: string | string[];
-        values?: { from?: string; to?: string };
-    };
-    type FilterTags = FilterTag[];
+    let tags: FilterTag[] = $state([]);
 
-    let tags: FilterTags = $state([]);
+    let subjects = $derived(getAllFilterSubjects(resource));
+    let subjectByParam = $derived(new Map(subjects.map((s) => [s.param ?? s.key, s] as const)));
 
     function closeTag(tag: FilterTag) {
+        const result = { ...filters };
         if (tag.values?.from && tag.values?.to) {
-            onCloseFilter({
-                ...filters,
-                ["dateCreated[after]"]: undefined,
-                ["dateCreated[before]"]: undefined,
-            });
+            const prefix = tag.title;
+            result[`${prefix}[after]`] = undefined;
+            result[`${prefix}[before]`] = undefined;
+            result[`${prefix}[strictly_after]`] = undefined;
+            result[`${prefix}[strictly_before]`] = undefined;
+        } else if (tag.title === "territory") {
+            result["territory.country[]"] = undefined;
+            result["territory.subLvl1[]"] = undefined;
+            result["territory.subLvl2[]"] = undefined;
+        } else if (tag.title.startsWith("date")) {
+            result[tag.title] = undefined;
         } else {
-            onCloseFilter({
-                ...filters,
-                [tag.title]: undefined,
-            });
+            result[tag.title] = undefined;
         }
+        onCloseFilter(result);
     }
 
-    function formatTags(
-        tags: FilterTags,
-        locale: Locale,
-        accountingsMap: Map<string, Accounting>,
-        ownersMap: Map<string, User | Project | Tipjar>,
-    ) {
-        if (tags === undefined) return;
+    function formatSubjectValue(subject: FilterSubject, value: string): string {
+        if (subject.options) {
+            const parts = value.split(",").map((v) => v.trim());
+            const translated = parts
+                .map((p) => {
+                    const option = subject.options.find((o) => o.value === p);
+                    return option ? $t(option.label) : p;
+                })
+                .join(", ");
+            if (translated !== value) return translated;
+        }
+        return value;
+    }
 
-        tags.map((tag) => {
+    function formatTerritoryCodes(raw: string, loc: Locale): string {
+        let names: Intl.DisplayNames | null = null;
+        try {
+            names = new Intl.DisplayNames([loc], { type: "region" });
+        } catch {
+            return raw;
+        }
+        return raw
+            .split(",")
+            .map((code) => {
+                const trimmed = code.trim();
+                if (!trimmed) return "";
+                try {
+                    const name = names!.of(trimmed);
+                    return name ?? trimmed;
+                } catch {
+                    return trimmed;
+                }
+            })
+            .filter(Boolean)
+            .join(", ");
+    }
+
+    function formatTags(tags: FilterTag[], loc: Locale): FilterTag[] {
+        return tags.map((tag) => {
             if (tag.values?.from && tag.values?.to) {
-                tag.values.from = formatDate(new Date(tag.values.from), locale);
-                tag.values.to = formatDate(new Date(tag.values.to), locale);
-            }
-
-            if (tag.title === "status" && typeof tag.value === "string") {
-                const chargeKey = `pages.admin.charges.filters.chargeStatus.options.${tag.value}`;
-                const projectKey = `pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`;
-
-                const chargeLabel = $t(chargeKey);
-
-                if (chargeLabel !== chargeKey) {
-                    tag.value = chargeLabel;
-                } else {
-                    tag.value = $t(projectKey);
+                tag.values.from = formatDate(new Date(tag.values.from), loc);
+                tag.values.to = formatDate(new Date(tag.values.to), loc);
+                if (tag.title.startsWith("date")) {
+                    tag.values.from = `${$t(`pages.admin.filter.composer.datePrefix.${tag.title}`)}: ${tag.values.from}`;
                 }
             }
 
-            if (tag.title === "status[]" && Array.isArray(tag.value)) {
-                tag.value = tag.value
-                    .map((s: string) => {
-                        const chargeKey = `pages.admin.charges.filters.chargeStatus.options.${s}`;
-                        const projectKey = `pages.admin.projects.table.rows.status.${s.replace(/\./g, "_")}`;
-
-                        const chargeLabel = $t(chargeKey);
-
-                        return chargeLabel !== chargeKey ? chargeLabel : $t(projectKey);
-                    })
-                    .join(", ");
+            if (tag.title === "territory" && tag.value) {
+                tag.value = formatTerritoryCodes(tag.value, loc);
             }
 
-            if (tag.title === "paymentMethod") {
-                tag.value = $t(`pages.admin.charges.filters.paymentMethod.options.${tag.value}`);
+            const dateMatch = tag.title.match(dateRegex);
+            if (dateMatch && tag.value) {
+                const [, base, op] = dateMatch;
+                tag.value = `${$t(`pages.admin.filter.composer.datePrefix.${base}`)} ${$t(`pages.admin.filter.composer.dateSuffix.${op}`)}: ${formatDate(new Date(tag.value), loc)}`;
             }
 
-            if (tag.title === "money.amount[gte]")
-                tag.value = $t(`pages.admin.charges.filters.rangeAmount.options.${tag.value}`);
-
-            if (tag.title === "target" && typeof tag.value === "string") {
-                const displayName = getDisplayNameFromAccounting(
-                    accountingsMap.get(tag.value),
-                    ownersMap,
-                );
-                if (displayName) tag.value = displayName;
+            const subject =
+                subjectByParam.get(tag.title.replace(/\[\]$/, "")) ?? subjectByParam.get(tag.title);
+            if (subject && tag.value && tag.title !== "territory") {
+                const formatted = formatSubjectValue(subject, tag.value);
+                if (formatted !== tag.value) {
+                    tag.value = formatted;
+                } else if (tag.title === "target") {
+                    const displayName = getDisplayNameFromAccounting(
+                        accountingsMap.get(tag.value),
+                        ownersMap,
+                    );
+                    if (displayName) tag.value = displayName;
+                }
             }
+
+            return tag;
         });
-
-        return tags;
     }
 
     $effect(() => {
-        if (filters !== undefined) {
-            let dateFrom = "dateCreated[after]";
-            let dateTo = "dateCreated[before]";
-
-            let normalTags: FilterTags | undefined = Object.keys(filters)
-                .map((filter) => {
-                    if (filter === dateFrom || filter === dateTo) return { title: filter };
-                    else
-                        return {
-                            title: filter,
-                            value: filters[filter as keyof Filters] as
-                                string | string[] | undefined,
-                        };
-                })
-                .filter((filter) => {
-                    if (filter.title === dateFrom || filter.title === dateTo) return false;
-                    if (filter.value === undefined) return false;
-                    if (filter.value === "all") return false;
-                    else return filter.value !== "";
-                });
-
-            if (
-                filters[dateFrom] !== "" &&
-                filters[dateTo] !== "" &&
-                typeof filters[dateFrom] !== "undefined" &&
-                typeof filters[dateTo] !== "undefined"
-            ) {
-                normalTags = [
-                    ...normalTags,
-                    {
-                        title: "date",
-                        values: {
-                            from: filters[dateFrom] as string | undefined,
-                            to: filters[dateTo] as string | undefined,
-                        },
-                    },
-                ];
-            }
-
-            tags = formatTags([...normalTags], $locale, accountingsMap, ownersMap) ?? [];
+        if (!filters) {
+            tags = [];
+            return;
         }
+
+        const territoryKeys = ["territory.country[]", "territory.subLvl1[]", "territory.subLvl2[]"];
+
+        const allKeys = Object.keys(filters);
+        const dateKeys = allKeys.filter((k) => dateRegex.test(k));
+        const normalKeys = allKeys.filter(
+            (k) => !k.startsWith("territory.") && !dateKeys.includes(k),
+        );
+
+        let normalTags: FilterTag[] = normalKeys
+            .map((key) => ({ title: key, value: String(filters[key] ?? "") }))
+            .filter((tag) => tag.value !== undefined && tag.value !== "" && tag.value !== "all");
+
+        const dateBaseKeys = new Map<string, Array<{ key: string; value: string }>>();
+        for (const dk of dateKeys) {
+            const val = String(filters[dk] ?? "");
+            if (!val) continue;
+            const match = dk.match(dateRegex);
+            if (!match) continue;
+            const base = match[1];
+            if (!dateBaseKeys.has(base)) dateBaseKeys.set(base, []);
+            dateBaseKeys.get(base)!.push({ key: dk, value: val });
+        }
+
+        for (const [base, entries] of dateBaseKeys) {
+            if (entries.length >= 2) {
+                const from = entries.find(
+                    (e) => e.key.endsWith("[after]") || e.key.endsWith("[strictly_after]"),
+                );
+                const to = entries.find(
+                    (e) => e.key.endsWith("[before]") || e.key.endsWith("[strictly_before]"),
+                );
+                if (from && to) {
+                    normalTags.push({
+                        title: base,
+                        values: { from: from.value, to: to.value },
+                    });
+                    continue;
+                }
+            }
+            for (const entry of entries) {
+                normalTags.push({ title: entry.key, value: entry.value });
+            }
+        }
+
+        const territoryCodes = territoryKeys
+            .map((k) => (filters[k] as string[])?.filter(Boolean) ?? [])
+            .flat();
+        if (territoryCodes.length > 0) {
+            normalTags.push({
+                title: "territory",
+                value: territoryCodes.join(", "),
+            });
+        }
+
+        tags = formatTags(normalTags, $locale);
     });
 </script>
 
