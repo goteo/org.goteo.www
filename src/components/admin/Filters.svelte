@@ -7,7 +7,6 @@
     import FilterComposer from "../library/filters/FilterComposer.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
-    import GatewaysSelect from "./GatewaysSelect.svelte";
 
     let {
         resource,

@@ -1,8 +1,9 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import DropdownMenu from "../library/dropdown/DropdownMenu.svelte";
+
     import type { Gateway } from "../../openapi/client";
     import type { DropdownOption } from "../library/dropdown/dropdown.types";
-    import DropdownMenu from "../library/dropdown/DropdownMenu.svelte";
 
     let {
         gateways,
