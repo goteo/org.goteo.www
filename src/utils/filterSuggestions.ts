@@ -12,10 +12,12 @@ import type { FilterOption } from "./filterComposer";
 type CollectionResponse<T> = { totalItems: number; member: T[] };
 
 export async function suggestGateways(q: string): Promise<FilterOption[]> {
-    const { data } = await withoutCache(() => apiGatewaysGetCollection({
-        headers: { Accept: "application/ld+json" },
-        baseUrl: '/api/relay'
-    }));
+    const { data } = await withoutCache(() =>
+        apiGatewaysGetCollection({
+            headers: { Accept: "application/ld+json" },
+            baseUrl: "/api/relay",
+        }),
+    );
 
     if (!data) return [];
 
