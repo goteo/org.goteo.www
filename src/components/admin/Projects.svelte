@@ -238,7 +238,7 @@
         const sortOption = sortMap[selectedSort];
 
         syncQueryFiltersToUrl(
-            filters,
+            filters ?? {},
             sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
         );
     });

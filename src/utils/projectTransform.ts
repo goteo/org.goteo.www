@@ -30,7 +30,7 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     };
 
     // Get optimum budget
-    const optimum: ApiMoney | undefined = project.budget?.optimum?.money;
+    const optimum: Money | undefined = project.budget?.optimum?.money;
 
     // Get raised amount from fetched accounting data
     const obtained: Money = accounting?.balance || { amount: 0, currency: getDefaultCurrency() };

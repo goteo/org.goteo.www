@@ -1,5 +1,5 @@
 <script lang="ts">
-    let { direction = "right" }: { direction: "left" | "right" } = $props();
+    let { direction = "right" }: { direction?: "left" | "right" } = $props();
 
     const transformValue = direction === "right" ? "translate(100, 100) rotate(180)" : "";
 </script>

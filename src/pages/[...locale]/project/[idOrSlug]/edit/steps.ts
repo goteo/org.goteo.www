@@ -1,21 +1,17 @@
-//@ts-expect-error svelte components do not export as ts
 import BudgetStep from "../../../../../components/project/edit/BudgetStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import CampaignInfoStep from "../../../../../components/project/edit/CampaignInfoStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import CollaborationsStep from "../../../../../components/project/edit/CollaborationsStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import ConfigurationStep from "../../../../../components/project/edit/ConfigurationStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import OwnerInfoStep from "../../../../../components/project/edit/OwnerInfoStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import RewardsStep from "../../../../../components/project/edit/RewardsStep.svelte";
 
-import type { Snippet } from "svelte";
+import type { Component } from "svelte";
 
 export type ProjectEditorStep = {
     id: number;
-    component: Snippet;
+    // Steps declare different prop shapes (project required/optional, onContinue,
+    // onPublish), so the array is only typed as "some Svelte component".
+    component: Component<any>;
 };
 
 export const steps: ProjectEditorStep[] = [
@@ -27,7 +23,7 @@ export const steps: ProjectEditorStep[] = [
     { id: 6, component: OwnerInfoStep },
 ];
 
-export function getStepComponent(id: number): Snippet {
+export function getStepComponent(id: number): Component<any> {
     const step = steps.find((s) => s.id === id) || steps[0];
 
     return step.component;
