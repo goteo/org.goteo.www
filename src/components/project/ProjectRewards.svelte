@@ -5,7 +5,7 @@
         apiAccountingsIdGet,
         apiProjectRewardsGetCollection,
     } from "../../openapi/client/index";
-    import { cart } from "../../stores/cart";
+    import { cart, checkoutReady } from "../../stores/checkoutsStore";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import Button from "../library/buttons/Button.svelte";
@@ -75,6 +75,7 @@
             },
         });
 
+        await checkoutReady();
         window.location.href = "/checkout";
     }
 </script>

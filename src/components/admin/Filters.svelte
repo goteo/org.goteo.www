@@ -5,9 +5,10 @@
     import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
     import DateInput from "../library/inputs/DateInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
-    import FilterComposer from "../library/filters/FilterComposer.svelte";
+
     import type { FilterResource } from "../../utils/filterComposer";
 
     let {
@@ -198,7 +199,10 @@
             <h4 class="text-secondary mb-3 text-sm font-medium">
                 {$t("pages.admin.charges.filters.composer.title")}
             </h4>
-            <FilterComposer resource={composedFiltersResource} onParamsChange={(params) => (composerParams = params)} />
+            <FilterComposer
+                resource={composedFiltersResource}
+                onParamsChange={(params) => (composerParams = params)}
+            />
         </div>
     {/if}
 </div>

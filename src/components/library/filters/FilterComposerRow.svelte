@@ -1,17 +1,19 @@
 <script lang="ts">
+    import { clickOutside } from "flowbite-svelte";
+
+    import { t } from "../../../i18n/store";
+    import Close from "../../icons/navigation/Close.svelte";
+    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
+    import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
     import TextInput from "../inputs/TextInput.svelte";
-    import DateInput from "../inputs/DateInput.svelte";
-    import DropdownMenu from "../dropdown/DropdownMenu.svelte";
-    import { clickOutside } from "flowbite-svelte";
-    import { t } from "../../../i18n/store";
+
     import type {
         FilterSubject,
         FilterOperator,
         FilterOption,
     } from "../../../utils/filterComposer";
     import type { DropdownOption } from "../dropdown/dropdown.types";
-    import Close from "../../icons/navigation/Close.svelte";
 
     interface Props {
         subjects: FilterSubject[];
@@ -186,7 +188,9 @@
                     onkeydown={(e) => e.key === "Enter" && (showStaticDropdown = true)}
                 >
                     {#each dropdownSelected as item}
-                        <span class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm">
+                        <span
+                            class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
+                        >
                             {item.label}
                             <button
                                 type="button"
@@ -202,7 +206,6 @@
                     {/each}
                 </div>
             {:else}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div use:clickOutside={() => (showStaticDropdown = false)}>
                     <DropdownMenu
                         searchClasses="border-secondary"
@@ -210,7 +213,9 @@
                         options={dropdownOptions}
                         bind:selected={dropdownSelected}
                         onChange={handleStaticChange}
-                        chevronLabel={$t("pages.admin.charges.filters.composer.referentPlaceholder")}
+                        chevronLabel={$t(
+                            "pages.admin.charges.filters.composer.referentPlaceholder",
+                        )}
                     />
                 </div>
             {/if}
@@ -274,7 +279,6 @@
                     {/each}
                 </div>
             {:else}
-                <!-- svelte-ignore a11y_no_static_element_interactions -->
                 <div use:clickOutside={() => (showSuggestSearch = false)}>
                     <DropdownMenu
                         searchClasses="border-secondary"
