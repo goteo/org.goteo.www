@@ -224,135 +224,139 @@
         </div>
 
         <div class="overflow-x-auto">
-        <Table class="w-full table-fixed border-separate border-spacing-y-2">
-            <TableHead>
-                {#each tableHeaders as header, i}
-                    <TableHeadCell
-                        class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {i === tableHeaders.length - 1 ? 'w-12' : ''}
+            <Table class="w-full table-fixed border-separate border-spacing-y-2">
+                <TableHead>
+                    {#each tableHeaders as header, i}
+                        <TableHeadCell
+                            class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {i ===
+                            tableHeaders.length - 1
+                                ? 'w-12'
+                                : ''}
                        {header.sortable ? 'hover:bg-opacity-80 cursor-pointer select-none' : ''}"
-                        onclick={() => handleHeaderClick(header)}
-                    >
-                        <div
-                            class="flex items-center justify-between {header.name ===
-                            'pages.admin.charges.headers.chargeStatus'
-                                ? 'justify-center'
-                                : ''}"
+                            onclick={() => handleHeaderClick(header)}
                         >
-                            <span class="normal-case">{$t(header.name)}</span>
-                            {#if header.sortable}
-                                <span class="ml-2 text-sm opacity-70">
-                                    {getSortIndicator(header)}
-                                </span>
-                            {/if}
-                        </div>
-                    </TableHeadCell>
-                {/each}
-            </TableHead>
-
-            <TableBody class="text-base">
-                {#if isFirstLoad}
-                    <TableBodyRow>
-                        <TableBodyCell colspan={tableHeaders.length}>
-                            <div class="flex justify-center py-6">
-                                <Loader />
+                            <div
+                                class="flex items-center justify-between {header.name ===
+                                'pages.admin.charges.headers.chargeStatus'
+                                    ? 'justify-center'
+                                    : ''}"
+                            >
+                                <span class="normal-case">{$t(header.name)}</span>
+                                {#if header.sortable}
+                                    <span class="ml-2 text-sm opacity-70">
+                                        {getSortIndicator(header)}
+                                    </span>
+                                {/if}
                             </div>
-                        </TableBodyCell>
-                    </TableBodyRow>
-                {:else if charges.length === 0 && !$isLoading}
-                    <TableBodyRow>
-                        <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                            {$t("pages.admin.charges.noData")}
-                        </TableBodyCell>
-                    </TableBodyRow>
-                {:else}
-                    {#each charges as charge, i}
-                        <TableBodyRow
-                            onclick={() => toggleRow(i)}
-                            class="{openRow === i
-                                ? 'bg-purple-soft'
-                                : 'bg-white'} border-variant1 hover:bg-purple-soft text-content border transition-colors"
-                        >
-                            <TableBodyCell
-                                class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
-                                >{charge.targetDisplayName}</TableBodyCell
-                            >
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {charge.money.amount && charge.money.currency
-                                    ? formatCurrency(charge.money.amount, charge.money.currency)
-                                    : "—"}
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 truncate border-t border-b p-4"
-                                >{charge.originDisplayName}</TableBodyCell
-                            >
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {charge.paymentMethod}
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b">
-                                {getDate(charge.dateCreated).date}
-                                <p
-                                    class="text-secondary decoration-secondary/64 max-w-25 cursor-pointer truncate text-xs/4 whitespace-nowrap underline opacity-64"
-                                    title={charge.trackingCodes[0]?.value || "—"}
-                                >
-                                    {charge.trackingCodes[0]?.value || "—"}
-                                </p>
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                <div class="flex justify-center">
-                                    <Tag>
-                                        {$t(`domain.charges.status.${charge.status}`)}
-                                    </Tag>
-                                </div>
-                            </TableBodyCell>
-
-                            <TableBodyCell class="border-variant1 border-t border-b p-4"
-                                >{charge.refundToWallet}</TableBodyCell
-                            >
-                            <TableBodyCell
-                                class="border-variant1 rounded-r-md border-t border-r border-b p-4"
-                                ><Chevron
-                                    direction={openRow === i ? "up" : "down"}
-                                    width="24"
-                                    height="24"
-                                    class="text-black transition-transform"
-                                /></TableBodyCell
-                            >
-                        </TableBodyRow>
-                        {#if openRow === i}
-                            <TableBodyRow>
-                                <TableBodyCell
-                                    colspan={tableHeaders.length}
-                                    class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
-                                >
-                                    <div class="detail-expand">
-                                        <div class="detail-expand-content">
-                                            <DetailsRow
-                                                platformLinks={charge.platformLinks}
-                                                trackingCodes={charge.trackingCodes}
-                                                dataTimeCreated={getDate(charge.dateCreated)}
-                                                dataTimeUpdated={getDate(charge.dateUpdated)}
-                                                id={charge.id ? String(charge.id) : "-"}
-                                                refundToWallet={charge.refundToWallet}
-                                                concept={charge.concept}
-                                            />
-                                        </div>
-                                    </div>
-                                </TableBodyCell>
-                            </TableBodyRow>
-                        {/if}
+                        </TableHeadCell>
                     {/each}
+                </TableHead>
 
-                    {#if $isLoading}
+                <TableBody class="text-base">
+                    {#if isFirstLoad}
                         <TableBodyRow>
                             <TableBodyCell colspan={tableHeaders.length}>
-                                <div class="flex justify-center py-4">
+                                <div class="flex justify-center py-6">
                                     <Loader />
                                 </div>
                             </TableBodyCell>
                         </TableBodyRow>
+                    {:else if charges.length === 0 && !$isLoading}
+                        <TableBodyRow>
+                            <TableBodyCell colspan={tableHeaders.length} class="text-center">
+                                {$t("pages.admin.charges.noData")}
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {:else}
+                        {#each charges as charge, i}
+                            <TableBodyRow
+                                onclick={() => toggleRow(i)}
+                                class="{openRow === i
+                                    ? 'bg-purple-soft'
+                                    : 'bg-white'} border-variant1 hover:bg-purple-soft text-content border transition-colors"
+                            >
+                                <TableBodyCell
+                                    class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
+                                    >{charge.targetDisplayName}</TableBodyCell
+                                >
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    {charge.money.amount && charge.money.currency
+                                        ? formatCurrency(charge.money.amount, charge.money.currency)
+                                        : "—"}
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="border-variant1 truncate border-t border-b p-4"
+                                    >{charge.originDisplayName}</TableBodyCell
+                                >
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    {charge.paymentMethod}
+                                </TableBodyCell>
+                                <TableBodyCell class="border-variant1 border-t border-b">
+                                    {getDate(charge.dateCreated).date}
+                                    <p
+                                        class="text-secondary decoration-secondary/64 max-w-25 cursor-pointer truncate text-xs/4 whitespace-nowrap underline opacity-64"
+                                        title={charge.trackingCodes[0]?.value || "—"}
+                                    >
+                                        {charge.trackingCodes[0]?.value || "—"}
+                                    </p>
+                                </TableBodyCell>
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    <div class="flex justify-center">
+                                        <Tag>
+                                            {$t(`domain.charges.status.${charge.status}`)}
+                                        </Tag>
+                                    </div>
+                                </TableBodyCell>
+
+                                <TableBodyCell class="border-variant1 border-t border-b p-4"
+                                    >{charge.refundToWallet}</TableBodyCell
+                                >
+                                <TableBodyCell
+                                    class="border-variant1 rounded-r-md border-t border-r border-b p-4"
+                                    ><Chevron
+                                        direction={openRow === i ? "up" : "down"}
+                                        width="24"
+                                        height="24"
+                                        class="text-black transition-transform"
+                                    /></TableBodyCell
+                                >
+                            </TableBodyRow>
+                            {#if openRow === i}
+                                <TableBodyRow>
+                                    <TableBodyCell
+                                        colspan={tableHeaders.length}
+                                        class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    >
+                                        <div class="detail-expand">
+                                            <div class="detail-expand-content">
+                                                <DetailsRow
+                                                    platformLinks={charge.platformLinks}
+                                                    trackingCodes={charge.trackingCodes}
+                                                    dataTimeCreated={getDate(charge.dateCreated)}
+                                                    dataTimeUpdated={getDate(charge.dateUpdated)}
+                                                    id={charge.id ? String(charge.id) : "-"}
+                                                    refundToWallet={charge.refundToWallet}
+                                                    concept={charge.concept}
+                                                />
+                                            </div>
+                                        </div>
+                                    </TableBodyCell>
+                                </TableBodyRow>
+                            {/if}
+                        {/each}
+
+                        {#if $isLoading}
+                            <TableBodyRow>
+                                <TableBodyCell colspan={tableHeaders.length}>
+                                    <div class="flex justify-center py-4">
+                                        <Loader />
+                                    </div>
+                                </TableBodyCell>
+                            </TableBodyRow>
+                        {/if}
                     {/if}
-                {/if}
-            </TableBody>
-        </Table>
+                </TableBody>
+            </Table>
         </div>
     </div>
 

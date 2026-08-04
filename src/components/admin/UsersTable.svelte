@@ -202,7 +202,9 @@
                                     <div class="flex flex-wrap gap-1">
                                         {#each user.roles as role}
                                             <span
-                                                class="rounded-full px-2 py-0.5 text-xs font-medium {roleStyles[role] ?? roleStyles.default}"
+                                                class="rounded-full px-2 py-0.5 text-xs font-medium {roleStyles[
+                                                    role
+                                                ] ?? roleStyles.default}"
                                             >
                                                 {roleLabel(role)}
                                             </span>

@@ -13,7 +13,6 @@ import {
     suggestProjectsBySlug,
     suggestUserHandle,
     suggestUserEmail,
-    suggestCountry,
 } from "./filterSuggestions";
 import { locale } from "../i18n/store";
 

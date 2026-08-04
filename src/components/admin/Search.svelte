@@ -44,7 +44,9 @@
 
     let debounceTimeout: ReturnType<typeof setTimeout>;
 
-    const showProjects = $derived(!resource || resource === "gateway_charges" || resource === "projects");
+    const showProjects = $derived(
+        !resource || resource === "gateway_charges" || resource === "projects",
+    );
     const showTipjars = $derived(!resource || resource === "gateway_charges");
     const showUsers = $derived(!resource || resource === "gateway_charges" || resource === "users");
 
@@ -149,7 +151,8 @@
                 bind:value={query}
                 oninput={(e) =>
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
-                placeholder={searchPlaceholder ?? $t("pages.admin.charges.filters.search.placeholder")}
+                placeholder={searchPlaceholder ??
+                    $t("pages.admin.charges.filters.search.placeholder")}
                 class="border-secondary w-full rounded-3xl border p-4"
                 minlength="4"
             />
@@ -176,7 +179,9 @@
     </div>
 
     {#if searched}
-        <div class="absolute top-full z-10 my-8 w-full space-y-4 rounded-lg bg-gray-200 p-4 max-h-96 overflow-y-auto">
+        <div
+            class="absolute top-full z-10 my-8 max-h-96 w-full space-y-4 overflow-y-auto rounded-lg bg-gray-200 p-4"
+        >
             {#if isLoading}
                 <div class="flex justify-center py-6">
                     <Spinner />

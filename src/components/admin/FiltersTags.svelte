@@ -12,7 +12,8 @@
     import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
-    const dateRegex = /^(dateCreated|dateUpdated)\[(after|before|strictly_after|strictly_before)\]$/;
+    const dateRegex =
+        /^(dateCreated|dateUpdated)\[(after|before|strictly_after|strictly_before)\]$/;
 
     let {
         title,
@@ -112,7 +113,8 @@
                 tag.value = `${$t(`pages.admin.filter.composer.datePrefix.${base}`)} ${$t(`pages.admin.filter.composer.dateSuffix.${op}`)}: ${formatDate(new Date(tag.value), loc)}`;
             }
 
-            const subject = subjectByParam.get(tag.title.replace(/\[\]$/, "")) ?? subjectByParam.get(tag.title);
+            const subject =
+                subjectByParam.get(tag.title.replace(/\[\]$/, "")) ?? subjectByParam.get(tag.title);
             if (subject && tag.value && tag.title !== "territory") {
                 const formatted = formatSubjectValue(subject, tag.value);
                 if (formatted !== tag.value) {
@@ -161,8 +163,12 @@
 
         for (const [base, entries] of dateBaseKeys) {
             if (entries.length >= 2) {
-                const from = entries.find((e) => e.key.endsWith("[after]") || e.key.endsWith("[strictly_after]"));
-                const to = entries.find((e) => e.key.endsWith("[before]") || e.key.endsWith("[strictly_before]"));
+                const from = entries.find(
+                    (e) => e.key.endsWith("[after]") || e.key.endsWith("[strictly_after]"),
+                );
+                const to = entries.find(
+                    (e) => e.key.endsWith("[before]") || e.key.endsWith("[strictly_before]"),
+                );
                 if (from && to) {
                     normalTags.push({
                         title: base,

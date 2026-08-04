@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
-    import FilterComposer from "../library/filters/FilterComposer.svelte";
-    import FiltersIcon from "../icons/filters/Filters.svelte";
-    import Bullet from "../icons/Bullet.svelte";
-    import Button from "../library/buttons/Button.svelte";
     import AdminSearch from "./Search.svelte";
+    import { t } from "../../i18n/store";
+    import Bullet from "../icons/Bullet.svelte";
+    import FiltersIcon from "../icons/filters/Filters.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
 

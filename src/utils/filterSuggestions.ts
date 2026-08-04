@@ -150,15 +150,50 @@ export async function suggestUserEmail(q: string): Promise<FilterOption[]> {
 }
 
 export async function suggestCountry(q: string): Promise<FilterOption[]> {
-    const currentLocaleStr =
-        typeof window !== "undefined" ? navigator.language : "es";
+    const currentLocaleStr = typeof window !== "undefined" ? navigator.language : "es";
     const names = new Intl.DisplayNames([currentLocaleStr], { type: "region" });
 
     const codes = [
-        "ES", "FR", "DE", "IT", "PT", "GB", "US", "MX", "AR", "CO",
-        "CL", "PE", "BR", "NL", "BE", "CH", "AT", "SE", "NO", "DK",
-        "FI", "IE", "PL", "CZ", "HU", "RO", "GR", "TR", "JP", "CN",
-        "IN", "AU", "CA", "ZA", "EG", "NG", "KE", "MA", "TN", "DZ",
+        "ES",
+        "FR",
+        "DE",
+        "IT",
+        "PT",
+        "GB",
+        "US",
+        "MX",
+        "AR",
+        "CO",
+        "CL",
+        "PE",
+        "BR",
+        "NL",
+        "BE",
+        "CH",
+        "AT",
+        "SE",
+        "NO",
+        "DK",
+        "FI",
+        "IE",
+        "PL",
+        "CZ",
+        "HU",
+        "RO",
+        "GR",
+        "TR",
+        "JP",
+        "CN",
+        "IN",
+        "AU",
+        "CA",
+        "ZA",
+        "EG",
+        "NG",
+        "KE",
+        "MA",
+        "TN",
+        "DZ",
     ];
 
     const lower = q.toLowerCase();

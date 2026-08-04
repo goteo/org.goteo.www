@@ -3,6 +3,7 @@
 
     import { t } from "../../../i18n/store";
     import Close from "../../icons/navigation/Close.svelte";
+    import TerritoryFilter from "../../search/TerritoryFilter.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
@@ -14,7 +15,6 @@
         FilterOption,
     } from "../../../utils/filterComposer";
     import type { DropdownOption } from "../dropdown/dropdown.types";
-    import TerritoryFilter from "../../search/TerritoryFilter.svelte";
 
     interface Props {
         subjects: FilterSubject[];
@@ -157,10 +157,13 @@
         return $t(`pages.admin.filter.composer.operator.${op}`);
     }
 
-    function handleTerritoryChange(t: { countries: string[]; subLvl1: string[]; subLvl2: string[] }) {
+    function handleTerritoryChange(t: {
+        countries: string[];
+        subLvl1: string[];
+        subLvl2: string[];
+    }) {
         referent = JSON.stringify(t);
-        const hasSelection =
-            t.countries.length > 0 || t.subLvl1.length > 0 || t.subLvl2.length > 0;
+        const hasSelection = t.countries.length > 0 || t.subLvl1.length > 0 || t.subLvl2.length > 0;
         if (hasSelection) {
             showTerritoryDropdown = false;
         }
@@ -223,7 +226,9 @@
             {#if !showStaticDropdown && dropdownSelected.length > 0}
                 <div
                     class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => { setTimeout(() => (showStaticDropdown = true)); }}
+                    onclick={() => {
+                        setTimeout(() => (showStaticDropdown = true));
+                    }}
                     role="button"
                     tabindex="0"
                     onkeydown={(e) => e.key === "Enter" && (showStaticDropdown = true)}
@@ -306,7 +311,9 @@
             {#if !showSuggestSearch && dropdownSelected.length > 0}
                 <div
                     class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => { setTimeout(() => (showSuggestSearch = true)); }}
+                    onclick={() => {
+                        setTimeout(() => (showSuggestSearch = true));
+                    }}
                     role="button"
                     tabindex="0"
                     onkeydown={(e) => e.key === "Enter" && (showSuggestSearch = true)}
@@ -349,13 +356,17 @@
                 {#if codes.length > 0}
                     <div
                         class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                        onclick={() => { setTimeout(() => (showTerritoryDropdown = true)); }}
+                        onclick={() => {
+                            setTimeout(() => (showTerritoryDropdown = true));
+                        }}
                         role="button"
                         tabindex="0"
                         onkeydown={(e) => e.key === "Enter" && (showTerritoryDropdown = true)}
                     >
                         {#each codes as code}
-                            <span class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm">
+                            <span
+                                class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
+                            >
                                 {code}
                             </span>
                         {/each}
