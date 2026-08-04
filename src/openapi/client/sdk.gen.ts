@@ -263,12 +263,6 @@ export const apiGatewayChargesGetCollection = <ThrowOnError extends boolean = fa
                 type: 'http'
             }
         ],
-        querySerializer: {
-            array: {
-                explode: false,
-                style: 'form'
-            }
-        },
         url: '/v4/gateway_charges',
         ...options
     });
@@ -286,12 +280,6 @@ export const apiGatewayChargestotalsGetCollection = <ThrowOnError extends boolea
                 type: 'http'
             }
         ],
-        querySerializer: {
-            array: {
-                explode: false,
-                style: 'form'
-            }
-        },
         url: '/v4/gateway_charges/totals',
         ...options
     });

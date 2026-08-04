@@ -1,7 +1,6 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import Categories from "./Categories.svelte";
     import ExportCsv from "./ExportCsv.svelte";
     import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
@@ -432,9 +431,9 @@
 
     let chargeSlides = $derived([
         { title: $t("domain.charges.totalizers.selected"), amount: selectedProjectsCount },
-        { title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
+        //{ title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
         { title: $t("domain.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
+        //{ title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     function handleSelectTarget(accounting: string): void {
@@ -472,7 +471,6 @@
             />
             <ExportCsv {filters} />
         </div>
-        <Categories {paymentMethodOptions} />
         <Slider slides={chargeSlides} isLoading={$isLoading} />
     </div>
 </div>

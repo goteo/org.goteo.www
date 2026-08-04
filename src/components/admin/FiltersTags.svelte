@@ -24,7 +24,7 @@
         ownersMap = new Map(),
     } = $props<{
         title: string;
-        filters: Record<string, any>;
+        filters?: Record<string, any>;
         onCloseFilter: (filters: Record<string, any>) => void;
         resource?: FilterResource;
         accountingsMap?: Map<string, Accounting>;
@@ -61,7 +61,7 @@
             const parts = value.split(",").map((v) => v.trim());
             const translated = parts
                 .map((p) => {
-                    const option = subject.options.find((o) => o.value === p);
+                    const option = subject.options?.find((o) => o.value === p);
                     return option ? $t(option.label) : p;
                 })
                 .join(", ");

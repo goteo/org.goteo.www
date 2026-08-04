@@ -259,7 +259,7 @@
                         options={dropdownOptions}
                         bind:selected={dropdownSelected}
                         onChange={handleStaticChange}
-                        chevronLabel={$t("pages.admin.filter.composer.referentPlaceholder")}
+                        label={$t("pages.admin.filter.composer.referentPlaceholder")}
                         bind:isOpen={showStaticDropdown}
                     />
                 </div>
