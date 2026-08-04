@@ -27,8 +27,6 @@
     import { publishDraft } from "../../../../../utils/projectPublisher";
     import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
 
-    import type { Session } from "../../../../../auth/types";
-
     let {
         idOrSlug,
         project = null,
@@ -40,7 +38,6 @@
     let resolvedProject = $state<Project | null>(project);
     let isInitialized = $state(false);
     let showSessionErrorToast = $state(false);
-    const user = $derived(($session: Session | null) => $session?.user);
 
     function getInitialStep() {
         let initialStep = 1;
@@ -206,7 +203,6 @@
 {#if isInitialized && resolvedProject}
     <ProjectEditorShell
         {errorMessage}
-        project={resolvedProject}
         {showSessionErrorToast}
         onSave={saveToAPI}
         onPublish={handlePublish}

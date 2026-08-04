@@ -29,8 +29,6 @@
     - error?: string - Validation error message
     - ariaDescribedBy?: string - ARIA describedby attribute
     - class?: ClassNameValue - Additional Tailwind classes
-    - minLength?: number - Minimum character length
-    - maxLength?: number - Maximum character length
 
     Usage:
     ```svelte
@@ -72,19 +70,16 @@
         error?: string;
         ariaDescribedBy?: string;
         class?: ClassNameValue;
-        minLength?: number;
-        maxLength?: number;
     }
 
     let {
+        id,
         value = $bindable(""),
         onChange,
         placeholder = "",
         error,
         ariaDescribedBy,
         class: className = "",
-        minLength,
-        maxLength,
     }: RichTextEditorProps = $props();
 
     let editorElement: HTMLDivElement;
@@ -363,6 +358,7 @@
 
     <!-- Editor Content -->
     <div
+        {id}
         bind:this={editorElement}
         class="editor-content h-60 rounded-lg border {error
             ? 'border-red-500'

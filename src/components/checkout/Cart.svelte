@@ -30,7 +30,7 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    {#each getItems() as [target, items]}
+    {#each getItems() as [_target, items]}
         <div class="flex flex-col gap-6">
             <h2 class="text-2xl font-bold text-black">
                 {items[0].recipientDisplayName}

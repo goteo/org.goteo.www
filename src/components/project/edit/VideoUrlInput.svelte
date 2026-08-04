@@ -72,10 +72,8 @@
                 onclick={handleShowInput}
                 aria-label={$t("pages.project.edit.campaignInfo.media.addVideo")}
             >
-                {#snippet children()}
-                    <VideoIcon />
-                    {$t("pages.project.edit.campaignInfo.media.addVideo")}
-                {/snippet}
+                <VideoIcon />
+                {$t("pages.project.edit.campaignInfo.media.addVideo")}
             </Button>
 
             {#if showInput}
@@ -103,13 +101,11 @@
                 aria-label={$t("pages.project.edit.campaignInfo.media.removeVideo")}
                 class="border-secondary text-secondary hover:bg-light-surface self-start border-2 bg-white"
             >
-                {#snippet children()}
-                    <span class="h-4 w-4">
-                        <CloseIcon />
-                    </span>
+                <span class="h-4 w-4">
+                    <CloseIcon />
+                </span>
 
-                    {$t("pages.project.edit.campaignInfo.media.removeVideo")}
-                {/snippet}
+                {$t("pages.project.edit.campaignInfo.media.removeVideo")}
             </Button>
         </div>
     {/if}

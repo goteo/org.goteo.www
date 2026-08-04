@@ -15,15 +15,14 @@
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
 
-    import type { Money, GatewayCharge, User } from "../../openapi/client/types.gen.ts";
+    import type { Money, GatewayCharge } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
 
     interface Props {
         lang: string;
-        user: User;
     }
 
-    let { lang, user }: Props = $props();
+    let { lang }: Props = $props();
 
     let donatedCampaigns = $state<Campaign[]>([]);
     let loading = $state(true);

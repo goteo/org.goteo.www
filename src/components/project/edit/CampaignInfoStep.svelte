@@ -202,8 +202,6 @@
                 value={campaignInfo.objectives}
                 onChange={handleObjectivesChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="objectives-help"
             />
         </section>
@@ -225,8 +223,6 @@
                 value={campaignInfo.legacy}
                 onChange={handleLegacyChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="legacy-help"
             />
         </section>
@@ -248,8 +244,6 @@
                 value={campaignInfo.targetAudience}
                 onChange={handleTargetAudienceChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={30}
-                maxLength={5000}
                 ariaDescribedBy="target-help"
             />
         </section>
@@ -271,8 +265,6 @@
                 value={campaignInfo.team}
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="team-help"
             />
         </section>
@@ -281,9 +273,7 @@
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
         <Button kind="secondary" size="md" onclick={handleContinue}>
-            {#snippet children()}
-                {$t("pages.project.edit.campaignInfo.continue")}
-            {/snippet}
+            {$t("pages.project.edit.campaignInfo.continue")}
         </Button>
     </div>
 </div>

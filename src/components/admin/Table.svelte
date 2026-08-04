@@ -328,7 +328,6 @@
                                                 platformLinks={charge.platformLinks}
                                                 trackingCodes={charge.trackingCodes}
                                                 dataTimeCreated={getDate(charge.dateCreated)}
-                                                dataTimeUpdated={getDate(charge.dateUpdated)}
                                                 id={charge.id ? String(charge.id) : "-"}
                                                 refundToWallet={charge.refundToWallet}
                                                 concept={charge.concept}

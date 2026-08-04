@@ -18,7 +18,6 @@
         chargeStatusOptions,
         rangeAmountOptions,
         composedFiltersResource,
-        initialSearchQuery = "",
     } = $props<{
         filters: ApiGatewayChargesGetCollectionData["query"];
         onApplyFilters: (filters: any) => void;
@@ -26,7 +25,6 @@
         chargeStatusOptions: [string, string][];
         rangeAmountOptions: [string, string][];
         composedFiltersResource: FilterResource[];
-        initialSearchQuery?: string;
     }>();
 
     let showFilters = $state(false);

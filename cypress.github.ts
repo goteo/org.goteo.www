@@ -13,7 +13,7 @@ export default defineConfig({
             openMode: 0,
         },
         setupNodeEvents(
-            on: Cypress.PluginEvents,
+            _on: Cypress.PluginEvents,
             config: Cypress.PluginConfigOptions,
         ): Cypress.PluginConfigOptions {
             console.log("Ejecutando Cypress en GitHub Actions");

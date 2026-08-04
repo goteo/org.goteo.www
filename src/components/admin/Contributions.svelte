@@ -143,7 +143,7 @@
         return query;
     }
 
-    function getCollectionTotalItems(collection: unknown, response?: Response): number {
+    function getCollectionTotalItems(collection: unknown): number {
         if (Array.isArray(collection)) {
             return collection.length;
         }
@@ -266,11 +266,7 @@
                 ...($session?.token.asHttpHeaders ?? {}),
             };
 
-            const {
-                data: collection,
-                response,
-                error,
-            } = await apiGatewayChargesGetCollection({
+            const { data: collection, error } = await apiGatewayChargesGetCollection({
                 query,
                 headers,
             });
@@ -281,7 +277,7 @@
             }
 
             const loadedCharges = toCollectionItems<GatewayCharge>(collection);
-            $totalItems = getCollectionTotalItems(collection, response);
+            $totalItems = getCollectionTotalItems(collection);
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;

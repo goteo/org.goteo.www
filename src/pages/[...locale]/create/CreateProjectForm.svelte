@@ -215,7 +215,7 @@
                 // Redirect to project page
                 window.location.href = `/project/${data.id}/edit`;
             }
-        } catch (err) {
+        } catch {
             // Handle unexpected errors
             apiError = "An unexpected error occurred. Please try again.";
         } finally {

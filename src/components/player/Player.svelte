@@ -62,7 +62,7 @@
             });
 
             return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-        } catch (err) {
+        } catch {
             console.warn("Invalid YouTube URL", original);
             return original;
         }

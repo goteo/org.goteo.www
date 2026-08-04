@@ -3,7 +3,6 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import ArrowSliderIcon from "../../icons/navigation/ArrowSliderIcon.svelte";
-    import ProjectUpdate from "../../project/ProjectUpdate.svelte";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -21,7 +20,6 @@
         navButtonTop = "50%",
         centerNavButtons = true,
         children = null,
-        onSelect = null,
         activeCard = $bindable(0),
         active,
     }: {
@@ -37,7 +35,6 @@
         navButtonTop?: string;
         centerNavButtons?: boolean;
         children?: any;
-        onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
         active?: Snippet;
     } = $props();
@@ -52,7 +49,6 @@
 
     let totalGroups = $state(0);
     let totalItems = $state(0);
-    let activeGroup = $state(0);
     let isAtStart = $state(true);
     let isAtEnd = $state(false);
     let isScrollable = $state(false);
@@ -175,7 +171,6 @@
 
     function updateNavState(position: number) {
         activeCard = position;
-        activeGroup = position;
         isAtStart = position === 0;
         isAtEnd = position === getPositionCount() - 1;
     }

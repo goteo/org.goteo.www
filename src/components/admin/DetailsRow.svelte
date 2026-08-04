@@ -28,7 +28,6 @@
         id = "-",
         trackingCodes = [],
         dataTimeCreated = fallbackDate,
-        dataTimeUpdated = fallbackDate,
         platformLinks = [],
         refundToWallet = "—",
         concept = "",
@@ -39,11 +38,6 @@
         id?: string;
         trackingCodes?: Tracking[];
         dataTimeCreated?: {
-            date: string;
-            time: string;
-            fulltime: string;
-        };
-        dataTimeUpdated?: {
             date: string;
             time: string;
             fulltime: string;
