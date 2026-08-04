@@ -1,5 +1,4 @@
 <script lang="ts">
-
     import Sidebar from "../components/admin/AdminSidebar.svelte";
 
     import type { AdminSidebarItem } from "../components/admin/AdminSidebar.svelte";

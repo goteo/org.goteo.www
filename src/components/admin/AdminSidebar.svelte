@@ -8,7 +8,6 @@
 
     import type { Component } from "svelte";
 
-
     export interface AdminSidebarItem {
         label: string;
         href: string;
