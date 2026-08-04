@@ -61,11 +61,15 @@
             }
 
             if (tag.title === "status") {
-                const chargeLabel = $t(`pages.admin.charges.filters.chargeStatus.options.${tag.value}`);
+                const chargeLabel = $t(
+                    `pages.admin.charges.filters.chargeStatus.options.${tag.value}`,
+                );
                 tag.value =
                     chargeLabel !== tag.value
                         ? chargeLabel
-                        : $t(`pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`);
+                        : $t(
+                              `pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`,
+                          );
             }
 
             if (tag.title === "status[]" && Array.isArray(tag.value)) {

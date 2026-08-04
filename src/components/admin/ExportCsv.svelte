@@ -120,9 +120,7 @@
                 );
             }
         } catch (error) {
-            const message = (
-                error instanceof Error ? error.message : String(error)
-            ).toLowerCase();
+            const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
 
             if (
                 message.includes("session") ||

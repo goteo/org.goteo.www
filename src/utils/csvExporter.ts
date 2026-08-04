@@ -33,9 +33,7 @@ export function flattenObject(obj: unknown, prefix = ""): Record<string, unknown
         } else if (Array.isArray(value)) {
             result[pre] = value
                 .map((item) =>
-                    typeof item === "object" && item !== null
-                        ? JSON.stringify(item)
-                        : String(item),
+                    typeof item === "object" && item !== null ? JSON.stringify(item) : String(item),
                 )
                 .join(", ");
         } else if (typeof value === "object") {
@@ -50,7 +48,7 @@ export function flattenObject(obj: unknown, prefix = ""): Record<string, unknown
 
 function sanitizeCsvField(value: unknown): string {
     if (value === null || value === undefined) return '""';
-    
+
     let str = String(value);
 
     if (/^[=+\-@\t\r]/.test(str)) {
@@ -60,9 +58,7 @@ function sanitizeCsvField(value: unknown): string {
     return `"${str.replace(/"/g, '""')}"`;
 }
 
-export async function exportCollectionAsCSV(
-    options: ExportCsvOptions,
-): Promise<ExportCsvResult> {
+export async function exportCollectionAsCSV(options: ExportCsvOptions): Promise<ExportCsvResult> {
     const {
         filename,
         abortSignal,
@@ -112,15 +108,13 @@ export async function exportCollectionAsCSV(
 
     const csvContent = [
         headers.map((h) => sanitizeCsvField(h)).join(","),
-        ...allRows.map((row) =>
-            headers.map((header) => sanitizeCsvField(row[header])).join(","),
-        ),
+        ...allRows.map((row) => headers.map((header) => sanitizeCsvField(row[header])).join(",")),
     ].join("\n");
 
     const blob = new Blob(["\ufeff" + csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
-    
+
     link.href = url;
     link.setAttribute("download", `${filename}.csv`);
     document.body.appendChild(link);
@@ -131,8 +125,6 @@ export async function exportCollectionAsCSV(
     return {
         status: allRows.length >= maxTotalRows ? "partial" : "success",
         message:
-            allRows.length >= maxTotalRows
-                ? `Export limited to ${maxTotalRows} rows.`
-                : undefined,
+            allRows.length >= maxTotalRows ? `Export limited to ${maxTotalRows} rows.` : undefined,
     };
 }

@@ -1,12 +1,12 @@
 <script lang="ts">
+    import { fade, slide } from "svelte/transition";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { fade, slide } from "svelte/transition";
-    import type { Component } from "svelte";
-
+    import { locale, t } from "../../i18n/store";
     import Chevron from "../icons/navigation/Chevron.svelte";
     import Button from "../library/buttons/Button.svelte";
-    import { locale, t } from "../../i18n/store";
+
+    import type { Component } from "svelte";
 
     export interface AdminSidebarItem {
         label: string;
