@@ -431,9 +431,9 @@
 
     let chargeSlides = $derived([
         { title: $t("domain.charges.totalizers.selected"), amount: selectedProjectsCount },
-        { title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
+        //{ title: $t("domain.charges.totalizers.totalCharges"), amount: "—" },
         { title: $t("domain.charges.totalizers.totalTips"), amount: totalTips },
-        { title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
+        //{ title: $t("domain.charges.totalizers.totalFees"), amount: "—" },
     ]);
 
     function handleSelectTarget(accounting: string): void {
