@@ -1,26 +1,22 @@
 <script lang="ts">
-    import { createClient } from "@hey-api/client-fetch";
-
+    import { session } from "../../auth/store";
     import { t } from "../../i18n/store";
-    import {
-        apiGatewayChargesGetCollection,
-        type ApiGatewayChargesGetCollectionData,
-    } from "../../openapi/client";
+    import { exportCollectionAsCSV } from "../../utils/csvExporter";
+    import { toCollectionItems } from "../../utils/hydra";
     import Download from "../icons/actions/Download.svelte";
     import Close from "../icons/navigation/Close.svelte";
     import Spinner from "../icons/status/Spinner.svelte";
     import Button from "../library/buttons/Button.svelte";
-    import { exportCollectionAsCSV } from "./../../utils/csvExporter";
 
-    type ChargesFilters = ApiGatewayChargesGetCollectionData["query"];
-
-    let { filters } = $props<{
-        filters?: ChargesFilters;
+    let {
+        endpoint = "/v4/gateway_charges",
+        queryParams = {},
+        filenamePrefix = "export",
+    } = $props<{
+        endpoint?: string;
+        queryParams?: Record<string, unknown>;
+        filenamePrefix?: string;
     }>();
-
-    const relayClient = createClient({
-        baseUrl: "/api/relay",
-    });
 
     let abortController = $state<AbortController | null>(null);
     let isExporting = $state(false);
@@ -38,42 +34,24 @@
     }
 
     function buildFilename(): string {
-        const filenameParams: Record<string, string> = {};
-
-        if (filters?.status && filters.status !== "all") {
-            filenameParams.status = filters.status;
-        }
-
-        if (filters?.["money.amount[gte]"]) {
-            filenameParams.amount = `gte${filters["money.amount[gte]"]}`;
-        } else if (filters?.["money.amount[between]"]) {
-            filenameParams.amount = (filters["money.amount[between]"] as string).replace("..", "-");
-        }
-
-        if (filters?.["checkout.gateway"]) {
-            const gateway = String(filters["checkout.gateway"]).split("/").pop();
-            filenameParams.gateway = gateway || "";
-        }
-
-        if (filters?.target) {
-            filenameParams.target = String(filters.target);
-        }
-
-        if (filters?.["dateCreated[after]"]) {
-            filenameParams.from = String(filters["dateCreated[after]"]);
-        }
-
-        if (filters?.["dateCreated[before]"]) {
-            filenameParams.to = String(filters["dateCreated[before]"]);
-        }
-
         const timestamp = new Date().toISOString().split("T")[0];
-        const filterParts = Object.entries(filenameParams)
-            .map(([key, value]) => `${key}-${value}`)
-            .join("_");
+        const baseFilename =
+            filenamePrefix || $t("pages.admin.charges.export.filename") || "export";
+        return `${baseFilename}_${timestamp}`;
+    }
 
-        const baseFilename = $t("pages.admin.charges.export.filename") || "gateway-charges";
-        return `${baseFilename}_${timestamp}${filterParts ? "_" + filterParts : ""}`;
+    function appendQueryParam(params: URLSearchParams, key: string, value: unknown) {
+        if (value === undefined || value === null || value === "") return;
+
+        if (Array.isArray(value)) {
+            value.forEach((v) => appendQueryParam(params, key, v));
+        } else if (typeof value === "object" && !(value instanceof Date)) {
+            Object.entries(value as Record<string, unknown>).forEach(([subKey, subVal]) => {
+                appendQueryParam(params, `${key}[${subKey}]`, subVal);
+            });
+        } else {
+            params.append(key, String(value));
+        }
     }
 
     async function handleExportCSV() {
@@ -83,53 +61,54 @@
         rowsExported = 0;
 
         try {
-            const queryParams = { ...filters };
-
             const result = await exportCollectionAsCSV({
                 filename: buildFilename(),
                 abortSignal: abortController?.signal,
-                fetcher: async (page, itemsPerPage) => {
+                fetcher: async (page: number, itemsPerPage: number) => {
                     if (abortController?.signal.aborted) throw new Error("cancelled");
 
-                    try {
-                        const response = await apiGatewayChargesGetCollection({
-                            client: relayClient,
-                            query: {
-                                ...queryParams,
-                                page,
-                                itemsPerPage,
-                            } as any,
-                            signal: abortController?.signal,
-                        });
+                    const cleanPath = endpoint.replace(/^\/+/, "");
+                    const fullPath = cleanPath.startsWith("api/relay")
+                        ? `/${cleanPath}`
+                        : `/api/relay/${cleanPath}`;
 
-                        const data = response?.data || [];
-                        return data;
-                    } catch (err) {
-                        const errMessage = err instanceof Error ? err.message : String(err);
-                        if (
-                            errMessage.includes("aborted") ||
-                            errMessage.includes("abort") ||
-                            abortController?.signal.aborted
-                        ) {
-                            throw new Error("cancelled", { cause: err });
-                        }
-                        throw err;
+                    const url = new URL(fullPath, window.location.origin);
+
+                    if (queryParams) {
+                        Object.entries(queryParams).forEach(([key, value]) => {
+                            appendQueryParam(url.searchParams, key, value);
+                        });
                     }
-                },
-                transformer: (item) => {
-                    const { money, ...rest } = item as any;
-                    return {
-                        ...rest,
-                        "money.amount": money?.amount ?? "",
-                        currency: money?.currency ?? "",
+
+                    url.searchParams.set("page", String(page));
+                    url.searchParams.set("itemsPerPage", String(itemsPerPage));
+
+                    const authHeaders = ($session?.token?.asHttpHeaders ?? {}) as Record<
+                        string,
+                        string
+                    >;
+                    const headers: Record<string, string> = {
+                        Accept: "application/ld+json, application/json",
+                        ...authHeaders,
                     };
+
+                    const response = await fetch(url.toString(), {
+                        headers,
+                        signal: abortController?.signal,
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return toCollectionItems(data);
                 },
                 pagination: {
                     itemsPerPage: 100,
                     maxTotalRows: 10_000,
-                    timeoutMs: 240_000,
                 },
-                onProgress: (current, total) => {
+                onProgress: (current: number, total: number) => {
                     rowsExported = current;
                     exportProgress = total > 0 ? Math.round((current / total) * 100) : 0;
                 },
@@ -141,7 +120,9 @@
                 );
             }
         } catch (error) {
-            const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
+            const message = (
+                error instanceof Error ? error.message : String(error)
+            ).toLowerCase();
 
             if (
                 message.includes("session") ||
@@ -151,11 +132,6 @@
                 alert($t("auth.sessionExpired") || "Session expired. Please log in again.");
             } else if (message.includes("no data")) {
                 alert($t("pages.admin.charges.export.noData") || "No data found to export");
-            } else if (message.includes("timeout")) {
-                alert(
-                    $t("pages.admin.charges.export.timeout") ||
-                        "Export took too long. Try with more specific filters.",
-                );
             } else if (
                 message.includes("cancelled") ||
                 message.includes("abort") ||

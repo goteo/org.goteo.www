@@ -105,10 +105,10 @@
         const requestId = ++projectsCountRequestId;
         selectedProjectsCount = "—";
 
-        const headers = {
-            Accept: "application/ld+json",
-            ...($session?.token.asHttpHeaders ?? {}),
-        };
+        const headers: Record<string, string> = Object.assign(
+            { Accept: "application/ld+json" },
+            ($session?.token.asHttpHeaders as Record<string, string>) ?? {},
+        );
 
         const { data, error } = await apiGatewayChargestotalsGetCollection({
             baseUrl: "/api/relay",
@@ -160,13 +160,14 @@
             : toCollectionItems<GatewayCharge>(collection).length;
     }
 
-    async function fetchCheckout(iri: string | undefined) {
+    async function fetchCheckout(iri: string | undefined, headers?: Record<string, string>) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiGatewayCheckoutsIdGet({
             baseUrl: "/api/relay",
             path: { id },
+            headers,
         });
 
         if (error) {
@@ -177,13 +178,14 @@
         return data;
     }
 
-    async function fetchAccounting(iri: string | undefined) {
+    async function fetchAccounting(iri: string | undefined, headers?: Record<string, string>) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiAccountingsIdGet({
             baseUrl: "/api/relay",
             path: { id },
+            headers,
         });
 
         if (error) {
@@ -194,13 +196,14 @@
         return data;
     }
 
-    async function fetchUser(iri: string | undefined) {
+    async function fetchUser(iri: string | undefined, headers?: Record<string, string>) {
         const idOrHandle = extractId(iri);
         if (!idOrHandle) return;
 
         const { data, error } = await apiUsersIdOrHandleGet({
             baseUrl: "/api/relay",
             path: { idOrHandle },
+            headers,
         });
 
         if (error) {
@@ -211,13 +214,14 @@
         return data;
     }
 
-    async function fetchProject(iri: string | undefined) {
+    async function fetchProject(iri: string | undefined, headers?: Record<string, string>) {
         const idOrSlug = extractId(iri);
         if (!idOrSlug) return;
 
         const { data, error } = await apiProjectsIdOrSlugGet({
             baseUrl: "/api/relay",
             path: { idOrSlug },
+            headers,
         });
 
         if (error) {
@@ -228,13 +232,14 @@
         return data;
     }
 
-    async function fetchTipjar(iri: string | undefined) {
+    async function fetchTipjar(iri: string | undefined, headers?: Record<string, string>) {
         const id = extractId(iri);
         if (!id) return;
 
         const { data, error } = await apiTipjarsIdGet({
             baseUrl: "/api/relay",
             path: { id },
+            headers,
         });
 
         if (error) {
@@ -264,10 +269,10 @@
 
             const query = buildChargesQuery(filters, page, items);
 
-            const headers = {
-                Accept: "application/ld+json",
-                ...($session?.token.asHttpHeaders ?? {}),
-            };
+            const headers: Record<string, string> = Object.assign(
+                { Accept: "application/ld+json" },
+                ($session?.token.asHttpHeaders as Record<string, string>) ?? {},
+            );
 
             const {
                 data: collection,
@@ -292,17 +297,22 @@
                 const targetAccountingIri = charge.target;
 
                 if (checkoutIri && !checkouts.has(checkoutIri)) {
-                    checkouts.set(checkoutIri, await fetchCheckout(checkoutIri));
+                    checkouts.set(checkoutIri, await fetchCheckout(checkoutIri, headers));
 
                     const originAccountingIri = checkouts.get(checkoutIri)?.origin;
 
                     if (originAccountingIri && !accountings.has(originAccountingIri)) {
-                        await preloadAccountingData(originAccountingIri, accountings, owners);
+                        await preloadAccountingData(
+                            originAccountingIri,
+                            accountings,
+                            owners,
+                            headers,
+                        );
                     }
                 }
 
                 if (targetAccountingIri && !accountings.has(targetAccountingIri)) {
-                    await preloadAccountingData(targetAccountingIri, accountings, owners);
+                    await preloadAccountingData(targetAccountingIri, accountings, owners, headers);
                 }
             }
 
@@ -342,14 +352,18 @@
         },
     ];
 
-    async function resolveOwner(ownerIri: string, owners: Map<string, User | Project | Tipjar>) {
+    async function resolveOwner(
+        ownerIri: string,
+        owners: Map<string, User | Project | Tipjar>,
+        headers?: Record<string, string>,
+    ) {
         if (owners.has(ownerIri)) return;
 
         const handler = OWNER_HANDLERS.find(({ prefix }) => ownerIri.startsWith(prefix));
 
         if (!handler) return;
 
-        const entity = await handler.fetcher(ownerIri);
+        const entity = await handler.fetcher(ownerIri, headers);
         if (entity) owners.set(ownerIri, entity);
     }
 
@@ -357,10 +371,11 @@
         accountingIri: string | null,
         accountings: Map<string, Accounting>,
         owners: Map<string, User | Project | Tipjar>,
+        headers?: Record<string, string>,
     ) {
         if (!accountingIri || accountings.has(accountingIri)) return;
 
-        const accounting = await fetchAccounting(accountingIri);
+        const accounting = await fetchAccounting(accountingIri, headers);
         if (!accounting) return;
 
         accountings.set(accountingIri, accounting);
@@ -368,7 +383,7 @@
         const ownerIri = accounting.owner;
         if (!ownerIri) return;
 
-        await resolveOwner(ownerIri, owners);
+        await resolveOwner(ownerIri, owners, headers);
     }
 
     function handleApplyFilters(newFilters: ApiGatewayChargesGetCollectionData["query"]) {
@@ -475,7 +490,7 @@
                 {ownersMap}
             />
             <ExportCsv
-                endpoint="/v4/charges"
+                endpoint="/v4/gateway_charges"
                 queryParams={filters}
                 filenamePrefix="gateway-charges"
             />
