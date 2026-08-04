@@ -128,15 +128,6 @@
       "search": {
         "placeholder": "Busca tu proyecto"
       }
-    }
-  },
-  "common": {
-    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
-    "dateInput": {
-      "apply": "Aplicar",
-      "previousMonth": "Mes anterior",
-      "nextMonth": "Mes siguiente",
-      "close": "Cerrar"
     },
     "richTextEditor": {
       "toolbar": "Barra de formato de texto",
@@ -147,6 +138,15 @@
       "alignCenter": "Centrar",
       "alignRight": "Alinear a la derecha",
       "characterCount": "{{ current }} / {{ max }} caracteres"
+    }
+  },
+  "common": {
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    "dateInput": {
+      "apply": "Aplicar",
+      "previousMonth": "Mes anterior",
+      "nextMonth": "Mes siguiente",
+      "close": "Cerrar"
     },
     "greeting": "Hola",
     "farewell": "Adiós",

@@ -12,7 +12,7 @@
     import { Editor } from "@tiptap/core";
     import { Placeholder } from "@tiptap/extensions";
     import { untrack } from "svelte";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
     import {
@@ -63,9 +63,9 @@
     }: RichTextEditorProps = $props();
 
     const ALIGNMENT_LABEL_KEYS: Record<Alignment, string> = {
-        left: "common.richTextEditor.alignLeft",
-        center: "common.richTextEditor.alignCenter",
-        right: "common.richTextEditor.alignRight",
+        left: "domain.richTextEditor.alignLeft",
+        center: "domain.richTextEditor.alignCenter",
+        right: "domain.richTextEditor.alignRight",
     };
 
     const FONT_SIZES = ["12px", "14px", "16px", "18px", "20px", "24px"];
@@ -89,14 +89,14 @@
     const markButtons: ToolbarButton[] = $derived([
         {
             id: "bold",
-            labelKey: "common.richTextEditor.bold",
+            labelKey: "domain.richTextEditor.bold",
             active: toolbar.bold,
             run: () => editor?.chain().focus().toggleBold().run(),
             glyph: { text: "B", class: "font-bold" },
         },
         {
             id: "italic",
-            labelKey: "common.richTextEditor.italic",
+            labelKey: "domain.richTextEditor.italic",
             active: toolbar.italic,
             run: () => editor?.chain().focus().toggleItalic().run(),
             glyph: { text: "I", class: "font-serif italic" },
@@ -202,7 +202,7 @@
     <button
         type="button"
         onclick={run}
-        class={twMerge(
+        class={twJoin(
             "flex size-10 cursor-pointer items-center justify-center rounded-lg border bg-white shadow-sm",
             active ? "border-secondary" : "border-grey",
         )}
@@ -227,7 +227,7 @@
     <div
         class="flex items-center justify-between"
         role="toolbar"
-        aria-label={$t("common.richTextEditor.toolbar")}
+        aria-label={$t("domain.richTextEditor.toolbar")}
     >
         <div class="flex items-center gap-2">
             <div class="relative flex">
@@ -235,8 +235,8 @@
                     value={toolbar.fontSize}
                     onchange={(event) =>
                         editor?.chain().focus().setFontSize(event.currentTarget.value).run()}
-                    aria-label={$t("common.richTextEditor.fontSize")}
-                    title={$t("common.richTextEditor.fontSize")}
+                    aria-label={$t("domain.richTextEditor.fontSize")}
+                    title={$t("domain.richTextEditor.fontSize")}
                     class="border-grey text-secondary flex h-10 w-auto max-w-27.5 cursor-pointer appearance-none items-center justify-center rounded-lg border bg-white bg-none px-2 py-1 pr-8 text-sm shadow-sm ring-0"
                 >
                     {#each FONT_SIZES as size (size)}
@@ -265,20 +265,15 @@
 
     <div
         bind:this={editorElement}
-        class={twMerge(
+        class={twJoin(
             "max-h-100 overflow-y-auto rounded-lg border",
             error ? "border-tertiary" : "border-secondary",
         )}
     ></div>
 
     {#if maxLength !== undefined}
-        <p
-            class={twMerge(
-                "text-right text-sm",
-                isCountOutOfRange ? "text-tertiary" : "text-black",
-            )}
-        >
-            {$t("common.richTextEditor.characterCount", {
+        <p class={twJoin("text-right text-sm", isCountOutOfRange ? "text-tertiary" : "text-black")}>
+            {$t("domain.richTextEditor.characterCount", {
                 current: toolbar.characters,
                 max: maxLength,
             })}
