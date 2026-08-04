@@ -12,6 +12,7 @@
     import type { FilterResource, FilterSubject } from "../../utils/filterComposer";
 
     type FilterTag = { title: string; value?: string; values?: { from?: string; to?: string } };
+    const dateRegex = /^(dateCreated|dateUpdated)\[(after|before|strictly_after|strictly_before)\]$/;
 
     let {
         title,
@@ -37,8 +38,17 @@
     function closeTag(tag: FilterTag) {
         const result = { ...filters };
         if (tag.values?.from && tag.values?.to) {
-            result["dateCreated[after]"] = undefined;
-            result["dateCreated[before]"] = undefined;
+            const prefix = tag.title;
+            result[`${prefix}[after]`] = undefined;
+            result[`${prefix}[before]`] = undefined;
+            result[`${prefix}[strictly_after]`] = undefined;
+            result[`${prefix}[strictly_before]`] = undefined;
+        } else if (tag.title === "territory") {
+            result["territory.country[]"] = undefined;
+            result["territory.subLvl1[]"] = undefined;
+            result["territory.subLvl2[]"] = undefined;
+        } else if (tag.title.startsWith("date")) {
+            result[tag.title] = undefined;
         } else {
             result[tag.title] = undefined;
         }
@@ -47,10 +57,39 @@
 
     function formatSubjectValue(subject: FilterSubject, value: string): string {
         if (subject.options) {
-            const option = subject.options.find((o) => o.value === value);
-            if (option) return $t(option.label);
+            const parts = value.split(",").map((v) => v.trim());
+            const translated = parts
+                .map((p) => {
+                    const option = subject.options.find((o) => o.value === p);
+                    return option ? $t(option.label) : p;
+                })
+                .join(", ");
+            if (translated !== value) return translated;
         }
         return value;
+    }
+
+    function formatTerritoryCodes(raw: string, loc: Locale): string {
+        let names: Intl.DisplayNames | null = null;
+        try {
+            names = new Intl.DisplayNames([loc], { type: "region" });
+        } catch {
+            return raw;
+        }
+        return raw
+            .split(",")
+            .map((code) => {
+                const trimmed = code.trim();
+                if (!trimmed) return "";
+                try {
+                    const name = names!.of(trimmed);
+                    return name ?? trimmed;
+                } catch {
+                    return trimmed;
+                }
+            })
+            .filter(Boolean)
+            .join(", ");
     }
 
     function formatTags(tags: FilterTag[], loc: Locale): FilterTag[] {
@@ -58,10 +97,23 @@
             if (tag.values?.from && tag.values?.to) {
                 tag.values.from = formatDate(new Date(tag.values.from), loc);
                 tag.values.to = formatDate(new Date(tag.values.to), loc);
+                if (tag.title.startsWith("date")) {
+                    tag.values.from = `${$t(`pages.admin.filter.composer.datePrefix.${tag.title}`)}: ${tag.values.from}`;
+                }
             }
 
-            const subject = subjectByParam.get(tag.title);
-            if (subject && tag.value) {
+            if (tag.title === "territory" && tag.value) {
+                tag.value = formatTerritoryCodes(tag.value, loc);
+            }
+
+            const dateMatch = tag.title.match(dateRegex);
+            if (dateMatch && tag.value) {
+                const [, base, op] = dateMatch;
+                tag.value = `${$t(`pages.admin.filter.composer.datePrefix.${base}`)} ${$t(`pages.admin.filter.composer.dateSuffix.${op}`)}: ${formatDate(new Date(tag.value), loc)}`;
+            }
+
+            const subject = subjectByParam.get(tag.title.replace(/\[\]$/, "")) ?? subjectByParam.get(tag.title);
+            if (subject && tag.value && tag.title !== "territory") {
                 const formatted = formatSubjectValue(subject, tag.value);
                 if (formatted !== tag.value) {
                     tag.value = formatted;
@@ -84,37 +136,54 @@
             return;
         }
 
-        const dateFrom = "dateCreated[after]";
-        const dateTo = "dateCreated[before]";
+        const territoryKeys = ["territory.country[]", "territory.subLvl1[]", "territory.subLvl2[]"];
 
-        let normalTags: FilterTag[] = Object.keys(filters)
-            .map((key) => {
-                if (key === dateFrom || key === dateTo) return { title: key };
-                return { title: key, value: String(filters[key] ?? "") };
-            })
-            .filter((tag) => {
-                if (tag.title === dateFrom || tag.title === dateTo) return false;
-                if (tag.value === undefined || tag.value === "") return false;
-                if (tag.value === "all") return false;
-                return true;
+        const allKeys = Object.keys(filters);
+        const dateKeys = allKeys.filter((k) => dateRegex.test(k));
+        const normalKeys = allKeys.filter(
+            (k) => !k.startsWith("territory.") && !dateKeys.includes(k),
+        );
+
+        let normalTags: FilterTag[] = normalKeys
+            .map((key) => ({ title: key, value: String(filters[key] ?? "") }))
+            .filter((tag) => tag.value !== undefined && tag.value !== "" && tag.value !== "all");
+
+        const dateBaseKeys = new Map<string, Array<{ key: string; value: string }>>();
+        for (const dk of dateKeys) {
+            const val = String(filters[dk] ?? "");
+            if (!val) continue;
+            const match = dk.match(dateRegex);
+            if (!match) continue;
+            const base = match[1];
+            if (!dateBaseKeys.has(base)) dateBaseKeys.set(base, []);
+            dateBaseKeys.get(base)!.push({ key: dk, value: val });
+        }
+
+        for (const [base, entries] of dateBaseKeys) {
+            if (entries.length >= 2) {
+                const from = entries.find((e) => e.key.endsWith("[after]") || e.key.endsWith("[strictly_after]"));
+                const to = entries.find((e) => e.key.endsWith("[before]") || e.key.endsWith("[strictly_before]"));
+                if (from && to) {
+                    normalTags.push({
+                        title: base,
+                        values: { from: from.value, to: to.value },
+                    });
+                    continue;
+                }
+            }
+            for (const entry of entries) {
+                normalTags.push({ title: entry.key, value: entry.value });
+            }
+        }
+
+        const territoryCodes = territoryKeys
+            .map((k) => (filters[k] as string[])?.filter(Boolean) ?? [])
+            .flat();
+        if (territoryCodes.length > 0) {
+            normalTags.push({
+                title: "territory",
+                value: territoryCodes.join(", "),
             });
-
-        if (
-            filters[dateFrom] !== "" &&
-            filters[dateTo] !== "" &&
-            typeof filters[dateFrom] !== "undefined" &&
-            typeof filters[dateTo] !== "undefined"
-        ) {
-            normalTags = [
-                ...normalTags,
-                {
-                    title: "date",
-                    values: {
-                        from: filters[dateFrom] as string | undefined,
-                        to: filters[dateTo] as string | undefined,
-                    },
-                },
-            ];
         }
 
         tags = formatTags(normalTags, $locale);

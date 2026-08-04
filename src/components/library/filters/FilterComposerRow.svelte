@@ -14,6 +14,7 @@
         FilterOption,
     } from "../../../utils/filterComposer";
     import type { DropdownOption } from "../dropdown/dropdown.types";
+    import TerritoryFilter from "../../search/TerritoryFilter.svelte";
 
     interface Props {
         subjects: FilterSubject[];
@@ -39,18 +40,40 @@
 
     let dropdownOptions = $state<DropdownOption[]>([]);
     let dropdownSelected = $state<DropdownOption[]>([]);
-    let showSuggestSearch = $state(true);
-    let showStaticDropdown = $state(true);
+    let showStaticDropdown = $state(false);
+    let showSuggestSearch = $state(false);
+    let showTerritoryDropdown = $state(false);
 
     let previousSubjectKey = $state("");
+    let territoryInit = $state<{
+        countries: string[];
+        subLvl1: string[];
+        subLvl2: string[];
+    }>({ countries: [], subLvl1: [], subLvl2: [] });
 
     $effect(() => {
         if (subjectKey === previousSubjectKey) return;
         previousSubjectKey = subjectKey;
         operator = "";
+        referent = "";
 
         const subject = subjects.find((s) => s.key === subjectKey);
-        if (!subject || !subject.options) {
+        if (!subject) {
+            dropdownOptions = [];
+            dropdownSelected = [];
+            territoryInit = { countries: [], subLvl1: [], subLvl2: [] };
+            return;
+        }
+
+        if (subject.customReferent) {
+            territoryInit = parseTerritoryRef(referent as string);
+            showTerritoryDropdown = true;
+            dropdownOptions = [];
+            dropdownSelected = [];
+            return;
+        }
+
+        if (!subject.options) {
             dropdownOptions = [];
             dropdownSelected = [];
             return;
@@ -89,7 +112,7 @@
     }
 
     function handleSuggestChange(option: DropdownOption) {
-        if (operator === "equals") {
+        if (operator === "equals" && !currentSubject?.allowsMultipleEquals) {
             if (option.selected) {
                 dropdownSelected = [option];
                 referent = option.id;
@@ -133,6 +156,40 @@
     function operatorLabel(op: FilterOperator): string {
         return $t(`pages.admin.filter.composer.operator.${op}`);
     }
+
+    function handleTerritoryChange(t: { countries: string[]; subLvl1: string[]; subLvl2: string[] }) {
+        referent = JSON.stringify(t);
+        const hasSelection =
+            t.countries.length > 0 || t.subLvl1.length > 0 || t.subLvl2.length > 0;
+        if (hasSelection) {
+            showTerritoryDropdown = false;
+        }
+    }
+
+    function getTerritoryCodes(raw: string): string[] {
+        try {
+            const t = JSON.parse(raw);
+            return [...(t.countries || []), ...(t.subLvl1 || []), ...(t.subLvl2 || [])];
+        } catch {
+            return [];
+        }
+    }
+    function parseTerritoryRef(raw: string): {
+        countries: string[];
+        subLvl1: string[];
+        subLvl2: string[];
+    } {
+        try {
+            const parsed = JSON.parse(raw);
+            return {
+                countries: parsed.countries || [],
+                subLvl1: parsed.subLvl1 || [],
+                subLvl2: parsed.subLvl2 || [],
+            };
+        } catch {
+            return { countries: [], subLvl1: [], subLvl2: [] };
+        }
+    }
 </script>
 
 <div class="flex items-center gap-3">
@@ -162,22 +219,11 @@
     </div>
 
     <div class="flex-1">
-        {#if currentSubject?.options && operator === "equals" && subjectKey}
-            <Select
-                bind:value={referent as string}
-                disabled={!operator}
-                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
-            >
-                <option value="">{$t("pages.admin.filter.composer.referentPlaceholder")}</option>
-                {#each currentSubject.options as opt}
-                    <option value={opt.value}>{$t(opt.label)}</option>
-                {/each}
-            </Select>
-        {:else if currentSubject?.options && operator === "is_any_of" && subjectKey}
+        {#if currentSubject?.options && operator && subjectKey && (operator === "is_any_of" || (operator === "equals" && currentSubject.allowsMultipleEquals))}
             {#if !showStaticDropdown && dropdownSelected.length > 0}
                 <div
                     class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => (showStaticDropdown = true)}
+                    onclick={() => { setTimeout(() => (showStaticDropdown = true)); }}
                     role="button"
                     tabindex="0"
                     onkeydown={(e) => e.key === "Enter" && (showStaticDropdown = true)}
@@ -209,10 +255,22 @@
                         bind:selected={dropdownSelected}
                         onChange={handleStaticChange}
                         chevronLabel={$t("pages.admin.filter.composer.referentPlaceholder")}
+                        bind:isOpen={showStaticDropdown}
                     />
                 </div>
             {/if}
-        {:else if currentSubject?.suggest && subjectKey && operator === "equals"}
+        {:else if currentSubject?.options && operator === "equals" && subjectKey}
+            <Select
+                bind:value={referent as string}
+                disabled={!operator}
+                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
+            >
+                <option value="">{$t("pages.admin.filter.composer.referentPlaceholder")}</option>
+                {#each currentSubject.options as opt}
+                    <option value={opt.value}>{$t(opt.label)}</option>
+                {/each}
+            </Select>
+        {:else if currentSubject?.suggest && subjectKey && operator === "equals" && !currentSubject.allowsMultipleEquals}
             {#if referent && !Array.isArray(referent) && !showSuggestSearch}
                 <div
                     class="border-secondary flex items-center justify-between rounded-lg border bg-white p-4"
@@ -244,11 +302,11 @@
                     onChange={handleSuggestChange}
                 />
             {/if}
-        {:else if currentSubject?.suggest && subjectKey && operator}
+        {:else if currentSubject?.suggest && subjectKey && operator && (operator !== "equals" || currentSubject.allowsMultipleEquals)}
             {#if !showSuggestSearch && dropdownSelected.length > 0}
                 <div
                     class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => (showSuggestSearch = true)}
+                    onclick={() => { setTimeout(() => (showSuggestSearch = true)); }}
                     role="button"
                     tabindex="0"
                     onkeydown={(e) => e.key === "Enter" && (showSuggestSearch = true)}
@@ -281,14 +339,45 @@
                         hasSearch
                         onSearch={handleSuggest}
                         onChange={handleSuggestChange}
+                        bind:isOpen={showSuggestSearch}
                     />
                 </div>
+            {/if}
+        {:else if currentSubject?.customReferent && subjectKey && operator}
+            {#if !showTerritoryDropdown}
+                {@const codes = getTerritoryCodes(referent as string)}
+                {#if codes.length > 0}
+                    <div
+                        class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
+                        onclick={() => { setTimeout(() => (showTerritoryDropdown = true)); }}
+                        role="button"
+                        tabindex="0"
+                        onkeydown={(e) => e.key === "Enter" && (showTerritoryDropdown = true)}
+                    >
+                        {#each codes as code}
+                            <span class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm">
+                                {code}
+                            </span>
+                        {/each}
+                    </div>
+                {:else}
+                    <TerritoryFilter
+                        selectedTerritory={territoryInit}
+                        onTerritoryChange={handleTerritoryChange}
+                    />
+                {/if}
+            {:else}
+                <TerritoryFilter
+                    selectedTerritory={territoryInit}
+                    onTerritoryChange={handleTerritoryChange}
+                />
             {/if}
         {:else if currentSubject?.type === "date"}
             <DateInput
                 value={typeof referent === "string" && referent ? new Date(referent) : new Date()}
                 disabled={!subjectKey || !operator}
                 onInput={(date) => (referent = date)}
+                hasValue={!!(typeof referent === "string" && referent)}
                 labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
             />
         {:else if currentSubject?.type === "number"}
