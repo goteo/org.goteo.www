@@ -94,7 +94,8 @@
         "to_refund": "Pending refund",
         "refunded": "Refunded",
         "to_wallet": "Pending refund to wallet",
-        "walleted": "Refunded to wallet"
+        "walleted": "Refunded to wallet",
+        "funding_paid": "Charge paid"
       },
       "refund": {
         "to_wallet": "Yes",
@@ -1118,7 +1119,7 @@
             "categories": "Category",
             "owner": "Owner",
             "slug": "ID",
-            "territoryCountry": "Territory",
+            "territory": "Territory",
             "dateUpdated": "Last updated",
             "budgetAmount": "Amount",
             "gateway": "Gateway",
@@ -1146,6 +1147,16 @@
             "gt": "Greater than",
             "lte": "Less than or equal to",
             "lt": "Less than"
+          },
+          "datePrefix": {
+            "dateCreated": "Created",
+            "dateUpdated": "Updated"
+          },
+          "dateSuffix": {
+            "after": "after",
+            "before": "before",
+            "strictly_after": "strictly after",
+            "strictly_before": "strictly before"
           },
           "subjectOption": {
             "userType": {
@@ -1232,28 +1243,22 @@
             }
           },
           "search": {
-            "placeholder": "Search...",
+            "placeholder": "Search by destination...",
             "resultsFound": "{{totalItems}} results for \"{{query}}\"",
             "noResults": "No results found"
           },
-          "paymentMethod": {
-            "title": "Payment method",
-            "options": {
-              "all": "All",
-              "paypal": "PayPal",
-              "stripe": "Stripe",
-              "wallet": "Wallet"
-            }
+          "gateway": {
+            "label": "Payment gateways"
           },
           "rangeAmount": {
             "title": "Select amount",
             "options": {
               "500000": "€5,000+",
               "all": "All",
-              "000..10000": "€0 - €100",
-              "10000..50000": "€100 - €500",
-              "50000..100000": "€500 - €1,000",
-              "100000..500000": "€1,000 - €5,000"
+              "000-10000": "€0 - €100",
+              "10000-50000": "€100 - €500",
+              "50000-100000": "€500 - €1,000",
+              "100000-500000": "€1,000 - €5,000"
             }
           },
           "dateRange": {
@@ -1272,7 +1277,8 @@
               "to_refund": "Pending refund",
               "refunded": "Refunded",
               "to_wallet": "Pending refund to wallet",
-              "walleted": "Refunded to wallet"
+              "walleted": "Refunded to wallet",
+              "funding_paid": "Charge paid"
             }
           }
         },
@@ -1318,7 +1324,7 @@
         },
         "filters": {
           "search": {
-            "placeholder": "Search",
+            "placeholder": "Search by title...",
             "btn": "Search",
             "minLength": "You need to enter more than 4 characters"
           },
@@ -1336,11 +1342,18 @@
               "in_draft": "Draft",
               "to_campaign_review": "Pending campaign review",
               "in_campaign_review": "In campaign review",
+              "in_campaign_review_to_change": "Campaign review: changes required",
+              "in_campaign_review_to_review": "Campaign review: pending review",
+              "campaign_review_rejected": "Campaign rejected",
               "to_campaign": "Pending campaign",
               "in_campaign": "In campaign",
               "campaign_failed": "Failed campaign",
+              "campaign_cancelled": "Campaign cancelled",
               "to_funding_review": "Pending payment review",
               "in_funding_review": "In payment review",
+              "in_funding_review_to_change": "Funding review: changes required",
+              "in_funding_review_to_review": "Funding review: pending review",
+              "funding_review_rejected": "Funding rejected",
               "to_funding": "Pending payment",
               "in_funding": "In payment",
               "funding_paid": "Payment paid"
@@ -1382,14 +1395,17 @@
               "in_draft": "Draft",
               "to_campaign_review": "Pending campaign review",
               "in_campaign_review": "In campaign review",
-              "in_campaign_review_request_change": "Campaign review: changes",
+              "in_campaign_review_to_change": "Campaign review: changes required",
+              "in_campaign_review_to_review": "Campaign review: pending review",
               "campaign_review_rejected": "Campaign rejected",
               "to_campaign": "Pending campaign",
               "in_campaign": "In campaign",
               "campaign_failed": "Failed campaign",
+              "campaign_cancelled": "Campaign cancelled",
               "to_funding_review": "Pending payment review",
               "in_funding_review": "In payment review",
-              "in_funding_review_request_change": "Payment review: changes",
+              "in_funding_review_to_change": "Funding review: changes required",
+              "in_funding_review_to_review": "Funding review: pending review",
               "funding_review_rejected": "Payment rejected",
               "to_funding": "Pending payment",
               "in_funding": "In payment",
@@ -1522,6 +1538,11 @@
             "type": {
               "individual": "Individual",
               "organization": "Organization"
+            },
+            "roles": {
+              "ROLE_USER": "User",
+              "ROLE_ADMIN": "Administrator",
+              "ROLE_SUPER_ADMIN": "Super Administrator"
             },
             "details": {
               "id": "ID",
