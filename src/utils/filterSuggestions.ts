@@ -79,7 +79,7 @@ export async function suggestProjects(q: string): Promise<FilterOption[]> {
     if (!data) return [];
 
     return data.map((p) => ({
-        value: p.slug ?? "",
+        value: p.title ?? "",
         label: p.title ?? p.slug ?? "",
     }));
 }
@@ -92,7 +92,7 @@ export async function suggestProjectsBySubtitle(q: string): Promise<FilterOption
     if (!data) return [];
 
     return data.map((p) => ({
-        value: p.slug ?? "",
+        value: p.subtitle ?? "",
         label: p.title ?? p.slug ?? "",
     }));
 }
@@ -105,7 +105,7 @@ export async function suggestProjectsByDescription(q: string): Promise<FilterOpt
     if (!data) return [];
 
     return data.map((p) => ({
-        value: p.slug ?? "",
+        value: p.description ?? "",
         label: p.title ?? p.slug ?? "",
     }));
 }
@@ -121,4 +121,55 @@ export async function suggestProjectsBySlug(q: string): Promise<FilterOption[]> 
         value: p.slug ?? "",
         label: p.title ?? p.slug ?? "",
     }));
+}
+
+export async function suggestUserHandle(q: string): Promise<FilterOption[]> {
+    const trimmed = q.trim();
+    if (trimmed.length < 2) return [];
+
+    const { data } = await apiUsersGetCollection({ query: { handle: trimmed } });
+    if (!data) return [];
+
+    return data.map((u) => ({
+        value: u.handle ?? "",
+        label: u.handle ?? "",
+    }));
+}
+
+export async function suggestUserEmail(q: string): Promise<FilterOption[]> {
+    const trimmed = q.trim();
+    if (trimmed.length < 2) return [];
+
+    const { data } = await apiUsersGetCollection({ query: { email: trimmed } });
+    if (!data) return [];
+
+    return data.map((u) => ({
+        value: u.email ?? "",
+        label: u.email ?? "",
+    }));
+}
+
+export async function suggestCountry(q: string): Promise<FilterOption[]> {
+    const currentLocaleStr =
+        typeof window !== "undefined" ? navigator.language : "es";
+    const names = new Intl.DisplayNames([currentLocaleStr], { type: "region" });
+
+    const codes = [
+        "ES", "FR", "DE", "IT", "PT", "GB", "US", "MX", "AR", "CO",
+        "CL", "PE", "BR", "NL", "BE", "CH", "AT", "SE", "NO", "DK",
+        "FI", "IE", "PL", "CZ", "HU", "RO", "GR", "TR", "JP", "CN",
+        "IN", "AU", "CA", "ZA", "EG", "NG", "KE", "MA", "TN", "DZ",
+    ];
+
+    const lower = q.toLowerCase();
+    return codes
+        .filter((code) => {
+            if (!q) return true;
+            const name = names.of(code) ?? "";
+            return name.toLowerCase().includes(lower) || code.toLowerCase().includes(lower);
+        })
+        .map((code) => ({
+            value: code,
+            label: `${names.of(code) ?? code} (${code})`,
+        }));
 }

@@ -11,6 +11,9 @@ import {
     suggestProjectsBySubtitle,
     suggestProjectsByDescription,
     suggestProjectsBySlug,
+    suggestUserHandle,
+    suggestUserEmail,
+    suggestCountry,
 } from "./filterSuggestions";
 import { locale } from "../i18n/store";
 
@@ -49,6 +52,8 @@ export interface FilterSubject {
     resources: FilterResource[];
     options?: FilterOption[];
     suggest?: (q: string) => Promise<FilterOption[]>;
+    customReferent?: boolean;
+    allowsMultipleEquals?: boolean;
 }
 
 const gatewayChargeStatuses: FilterOption[] = [
@@ -120,6 +125,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
         options: projectStatuses,
+        allowsMultipleEquals: true,
     },
     chargeStatus: {
         key: "chargeStatus",
@@ -128,6 +134,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         options: gatewayChargeStatuses,
+        allowsMultipleEquals: true,
     },
     categories: {
         key: "categories",
@@ -135,6 +142,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
         suggest: suggestCategories,
+        allowsMultipleEquals: true,
     },
     owner: {
         key: "owner",
@@ -142,6 +150,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
         suggest: suggestOwner,
+        allowsMultipleEquals: true,
     },
     slug: {
         key: "slug",
@@ -149,13 +158,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
         suggest: suggestProjectsBySlug,
-    },
-    territoryCountry: {
-        key: "territoryCountry",
-        param: "territory.country",
-        type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["projects"],
+        allowsMultipleEquals: true,
     },
     budgetAmount: {
         key: "budgetAmount",
@@ -170,6 +173,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         suggest: suggestGateways,
+        allowsMultipleEquals: true,
     },
     type: {
         key: "type",
@@ -177,6 +181,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         options: chargeTypes,
+        allowsMultipleEquals: true,
     },
     target: {
         key: "target",
@@ -184,6 +189,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         suggest: suggestTarget,
+        allowsMultipleEquals: true,
     },
     currency: {
         key: "currency",
@@ -192,6 +198,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         options: currencies,
+        allowsMultipleEquals: true,
     },
     amount: {
         key: "amount",
@@ -215,21 +222,16 @@ const filterSubjects: Record<string, FilterSubject> = {
     handle: {
         key: "handle",
         type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
+        compatibleOperators: ["equals"],
         resources: ["users"],
+        suggest: suggestUserHandle,
     },
     email: {
         key: "email",
         type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["users"],
-    },
-    displayName: {
-        key: "displayName",
-        param: "displayName",
-        type: "string",
         compatibleOperators: ["equals"],
         resources: ["users"],
+        suggest: suggestUserEmail,
     },
     userType: {
         key: "userType",
@@ -238,15 +240,10 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["users"],
         options: [
-            {
-                value: "individual",
-                label: "pages.admin.filter.composer.subjectOption.userType.individual",
-            },
-            {
-                value: "organization",
-                label: "pages.admin.filter.composer.subjectOption.userType.organization",
-            },
+            { value: "individual", label: "Individual" },
+            { value: "organization", label: "Organización" },
         ],
+        allowsMultipleEquals: true,
     },
     active: {
         key: "active",
@@ -254,23 +251,24 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals"],
         resources: ["users"],
         options: [
-            { value: "true", label: "pages.admin.filter.composer.subjectOption.active.true" },
-            { value: "false", label: "pages.admin.filter.composer.subjectOption.active.false" },
+            { value: "true", label: "Activo" },
+            { value: "false", label: "Inactivo" },
         ],
     },
     userRoles: {
         key: "userRoles",
         param: "roles",
         type: "string",
-        compatibleOperators: ["is_any_of"],
-        resources: ["users"],
-    },
-    userTerritoryCountry: {
-        key: "userTerritoryCountry",
-        param: "territory.country",
-        type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["users"],
+        allowsMultipleEquals: true,
+    },
+    territory: {
+        key: "territory",
+        type: "string",
+        compatibleOperators: ["is_any_of"],
+        resources: ["projects", "users"],
+        customReferent: true,
     },
 };
 
@@ -287,13 +285,25 @@ export function createFilterRow(
         operator,
         referent,
         serialize: () => {
+            if (subject.customReferent) {
+                const t = JSON.parse(referent as string);
+                const result: Record<string, string[]> = {};
+                if (t.countries?.length) result["territory.country[]"] = t.countries;
+                if (t.subLvl1?.length) result["territory.subLvl1[]"] = t.subLvl1;
+                if (t.subLvl2?.length) result["territory.subLvl2[]"] = t.subLvl2;
+                return result;
+            }
+
             const key = subject.param ?? subject.key;
 
             switch (operator) {
                 case "equals":
+                    if (Array.isArray(referent)) {
+                        return { [`${key}[]`]: referent as string[] };
+                    }
                     return { [key]: String(referent) };
                 case "is_any_of":
-                    return { [`${key}[]`]: referent as string[] };
+                    return { [key]: referent as string[] };
                 case "before":
                 case "after":
                 case "strictly_before":
