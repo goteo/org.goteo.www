@@ -121,6 +121,8 @@
                         $t(`pages.admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
                     )
                     .join(", ");
+            }
+
             if (tag.title === "territory" && tag.value) {
                 tag.value = formatTerritoryCodes(tag.value, loc);
             }
