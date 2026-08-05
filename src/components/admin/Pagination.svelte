@@ -28,6 +28,8 @@
 
     const totalPages = $derived(Math.ceil(total / perPage));
 
+    let shownItems = $derived(Math.min(perPage, total - (page - 1) * perPage));
+
     function goToPage(p: number) {
         if (p < 1 || p > totalPages) return;
         if (onPageChange) {
@@ -119,7 +121,7 @@
         <span class="text-content text-sm font-bold">
             {@html $t(
                 "pages.admin.charges.pagination.showing",
-                { items: perPage, total },
+                { items: shownItems, total },
                 { allowHTML: true },
             )}
         </span>
