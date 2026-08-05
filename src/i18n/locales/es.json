@@ -1552,6 +1552,35 @@
           "showing": "Mostrando {{ items }} de {{ total }}",
           "itemsPerPage": "{{ count }} por página"
         }
+      },
+      "comm": {
+        "title": "Comunicación",
+        "description": "Administra la comunicación de la plataforma",
+        "tabs": {
+          "banners": "Anuncios"
+        },
+        "banners": {
+          "title": "Anuncios",
+          "description": "Aquí puedes crear y gestionar los banners de la plataforma",
+          "tabs": {
+            "fields": "Nuevos",
+            "history": "Histórico"
+          },
+          "fields": {
+            "dataTitle": "Datos del anuncio",
+            "titlePlaceholder": "Título del anuncio",
+            "descriptionPlaceholder": "Breve descripción del anuncio",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programa el anuncio",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin"
+          },
+          "history": {
+            "title": "Histórico de anuncios",
+            "description": "Aquí puedes ver el histórico de anuncios publicados"
+          }
+        }
       }
     },
     "static": {
