@@ -94,7 +94,8 @@
         "to_refund": "Por reembolsar",
         "refunded": "Reembolsado",
         "to_wallet": "Por reembolsar a monedero",
-        "walleted": "Reembolsado a monedero"
+        "walleted": "Reembolsado a monedero",
+        "funding_paid": "Cobro pagado"
       },
       "refund": {
         "to_wallet": "Sí",
@@ -1096,6 +1097,79 @@
       }
     },
     "admin": {
+      "filter": {
+        "btns": {
+          "openFilters": "Filtros",
+          "closeFilters": "Cerrar filtros",
+          "apply": "Aplicar filtros"
+        },
+        "composer": {
+          "title": "Filtros personalizados",
+          "addFilter": "Añadir filtro",
+          "removeFilter": "Eliminar",
+          "subjectPlaceholder": "Seleccionar campo",
+          "operatorPlaceholder": "Seleccionar condición",
+          "referentPlaceholder": "Valor",
+          "subject": {
+            "title": "Título",
+            "subtitle": "Subtítulo",
+            "description": "Descripción",
+            "projectStatus": "Estado de proyecto",
+            "chargeStatus": "Estado de aporte",
+            "categories": "Categoría",
+            "owner": "Propietario",
+            "slug": "ID",
+            "territory": "Territorio",
+            "dateUpdated": "Última actualización",
+            "budgetAmount": "Importe",
+            "gateway": "Pasarela",
+            "type": "Tipo",
+            "target": "Destino",
+            "currency": "Moneda",
+            "amount": "Importe",
+            "dateCreated": "Fecha de creación",
+            "handle": "Nombre de usuario",
+            "email": "Email",
+            "displayName": "Nombre público",
+            "userType": "Tipo de usuario",
+            "active": "Activo",
+            "userRoles": "Roles",
+            "userTerritoryCountry": "Ubicación"
+          },
+          "operator": {
+            "equals": "Igual a",
+            "is_any_of": "Incluido en",
+            "before": "Anterior a",
+            "after": "Posterior a",
+            "strictly_before": "Estrictamente anterior",
+            "strictly_after": "Estrictamente posterior",
+            "gte": "Mayor o igual que",
+            "gt": "Mayor que",
+            "lte": "Menor o igual que",
+            "lt": "Menor que"
+          },
+          "datePrefix": {
+            "dateCreated": "Creado",
+            "dateUpdated": "Actualizado"
+          },
+          "dateSuffix": {
+            "after": "después de",
+            "before": "antes de",
+            "strictly_after": "estrictamente después de",
+            "strictly_before": "estrictamente antes de"
+          },
+          "subjectOption": {
+            "userType": {
+              "individual": "Persona física",
+              "organization": "Persona jurídica (empresas)"
+            },
+            "active": {
+              "true": "Activo",
+              "false": "Inactivo"
+            }
+          }
+        }
+      },
       "nav": {
         "charges": "Cobros",
         "projects": "Proyectos",
@@ -1230,18 +1304,12 @@
             }
           },
           "search": {
-            "placeholder": "Buscar...",
+            "placeholder": "Buscar por destino...",
             "resultsFound": "{{totalItems}} resultados para \"{{query}}\"",
             "noResults": "No se han encontrado resultados"
           },
-          "paymentMethod": {
-            "title": "Método de pago",
-            "options": {
-              "all": "Todos",
-              "paypal": "Paypal",
-              "stripe": "Stripe",
-              "wallet": "Monedero"
-            }
+          "gateway": {
+            "label": "Pasarelas de pago"
           },
           "rangeAmount": {
             "title": "Selecciona importe",
@@ -1270,7 +1338,8 @@
               "to_refund": "Por reembolsar",
               "refunded": "Reembolsado",
               "to_wallet": "Por reembolsar a monedero",
-              "walleted": "Reembolsado a monedero"
+              "walleted": "Reembolsado a monedero",
+              "funding_paid": "Cobro pagado"
             }
           }
         },
@@ -1316,7 +1385,7 @@
         },
         "filters": {
           "search": {
-            "placeholder": "Búsqueda",
+            "placeholder": "Buscar por título...",
             "btn": "Buscar",
             "minLength": "Es necesario meter más de 4 caracteres"
           },
@@ -1334,11 +1403,18 @@
               "in_draft": "Borrador",
               "to_campaign_review": "Pendiente revisión campaña",
               "in_campaign_review": "En revisión campaña",
+              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
+              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
+              "campaign_review_rejected": "Campaña rechazada",
               "to_campaign": "Pendiente campaña",
               "in_campaign": "En campaña",
               "campaign_failed": "Campaña fallida",
+              "campaign_cancelled": "Campaña cancelada",
               "to_funding_review": "Pendiente revisión cobro",
               "in_funding_review": "En revisión cobro",
+              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
+              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
+              "funding_review_rejected": "Cobro rechazado",
               "to_funding": "Pendiente cobro",
               "in_funding": "En cobro",
               "funding_paid": "Cobro pagado"
@@ -1380,14 +1456,17 @@
               "in_draft": "Borrador",
               "to_campaign_review": "Pendiente revisión campaña",
               "in_campaign_review": "En revisión campaña",
-              "in_campaign_review_request_change": "Revisión campaña: cambios",
+              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
+              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
               "campaign_review_rejected": "Campaña rechazada",
               "to_campaign": "Pendiente campaña",
               "in_campaign": "En campaña",
               "campaign_failed": "Campaña fallida",
+              "campaign_cancelled": "Campaña cancelada",
               "to_funding_review": "Pendiente revisión cobro",
               "in_funding_review": "En revisión cobro",
-              "in_funding_review_request_change": "Revisión cobro: cambios",
+              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
+              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
               "funding_review_rejected": "Cobro rechazado",
               "to_funding": "Pendiente cobro",
               "in_funding": "En cobro",
@@ -1520,6 +1599,11 @@
             "type": {
               "individual": "Individual",
               "organization": "Organización"
+            },
+            "roles": {
+              "ROLE_USER": "Usuario",
+              "ROLE_ADMIN": "Administrador",
+              "ROLE_SUPER_ADMIN": "Super Admin"
             },
             "details": {
               "id": "ID",

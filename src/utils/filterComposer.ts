@@ -11,6 +11,8 @@ import {
     suggestProjectsBySubtitle,
     suggestProjectsByDescription,
     suggestProjectsBySlug,
+    suggestUserHandle,
+    suggestUserEmail,
 } from "./filterSuggestions";
 import { locale } from "../i18n/store";
 
@@ -34,7 +36,7 @@ export type FilterOperator =
     | "lte"
     | "lt";
 
-export type FilterResource = "project" | "gateway_charge";
+export type FilterResource = "projects" | "gateway_charges" | "users";
 
 export interface FilterOption {
     value: string;
@@ -49,6 +51,8 @@ export interface FilterSubject {
     resources: FilterResource[];
     options?: FilterOption[];
     suggest?: (q: string) => Promise<FilterOption[]>;
+    customReferent?: boolean;
+    allowsMultipleEquals?: boolean;
 }
 
 const gatewayChargeStatuses: FilterOption[] = [
@@ -96,21 +100,21 @@ const filterSubjects: Record<string, FilterSubject> = {
         key: "title",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjects,
     },
     subtitle: {
         key: "subtitle",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsBySubtitle,
     },
     description: {
         key: "description",
         type: "string",
         compatibleOperators: ["equals"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsByDescription,
     },
     projectStatus: {
@@ -118,99 +122,152 @@ const filterSubjects: Record<string, FilterSubject> = {
         param: "status",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         options: projectStatuses,
+        allowsMultipleEquals: true,
     },
     chargeStatus: {
         key: "chargeStatus",
         param: "status",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: gatewayChargeStatuses,
+        allowsMultipleEquals: true,
     },
     categories: {
         key: "categories",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestCategories,
+        allowsMultipleEquals: true,
     },
     owner: {
         key: "owner",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestOwner,
+        allowsMultipleEquals: true,
     },
     slug: {
         key: "slug",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
+        resources: ["projects"],
         suggest: suggestProjectsBySlug,
-    },
-    territoryCountry: {
-        key: "territoryCountry",
-        param: "territory.country",
-        type: "string",
-        compatibleOperators: ["equals", "is_any_of"],
-        resources: ["project"],
-    },
-    dateUpdated: {
-        key: "dateUpdated",
-        type: "date",
-        compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
-        resources: ["project", "gateway_charge"],
+        allowsMultipleEquals: true,
     },
     budgetAmount: {
         key: "budgetAmount",
         type: "number",
         compatibleOperators: ["gte", "gt", "lte", "lt"],
-        resources: ["project"],
+        resources: ["projects"],
     },
     gateway: {
         key: "gateway",
         param: "checkout.gateway",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         suggest: suggestGateways,
+        allowsMultipleEquals: true,
     },
     type: {
         key: "type",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: chargeTypes,
+        allowsMultipleEquals: true,
     },
     target: {
         key: "target",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         suggest: suggestTarget,
+        allowsMultipleEquals: true,
     },
     currency: {
         key: "currency",
         param: "money.currency",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
         options: currencies,
+        allowsMultipleEquals: true,
     },
     amount: {
         key: "amount",
         param: "money.amount",
         type: "number",
         compatibleOperators: ["gte", "gt", "lte", "lt"],
-        resources: ["gateway_charge"],
+        resources: ["gateway_charges"],
     },
     dateCreated: {
         key: "dateCreated",
         type: "date",
         compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
-        resources: ["gateway_charge"],
+        resources: ["projects", "gateway_charges", "users"],
+    },
+    dateUpdated: {
+        key: "dateUpdated",
+        type: "date",
+        compatibleOperators: ["before", "after", "strictly_before", "strictly_after"],
+        resources: ["projects", "gateway_charges", "users"],
+    },
+    handle: {
+        key: "handle",
+        type: "string",
+        compatibleOperators: ["equals"],
+        resources: ["users"],
+        suggest: suggestUserHandle,
+    },
+    email: {
+        key: "email",
+        type: "string",
+        compatibleOperators: ["equals"],
+        resources: ["users"],
+        suggest: suggestUserEmail,
+    },
+    userType: {
+        key: "userType",
+        param: "type",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
+        options: [
+            { value: "individual", label: "Individual" },
+            { value: "organization", label: "Organización" },
+        ],
+        allowsMultipleEquals: true,
+    },
+    active: {
+        key: "active",
+        type: "string",
+        compatibleOperators: ["equals"],
+        resources: ["users"],
+        options: [
+            { value: "true", label: "Activo" },
+            { value: "false", label: "Inactivo" },
+        ],
+    },
+    userRoles: {
+        key: "userRoles",
+        param: "roles",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["users"],
+        allowsMultipleEquals: true,
+    },
+    territory: {
+        key: "territory",
+        type: "string",
+        compatibleOperators: ["is_any_of"],
+        resources: ["projects", "users"],
+        customReferent: true,
     },
 };
 
@@ -227,13 +284,25 @@ export function createFilterRow(
         operator,
         referent,
         serialize: () => {
+            if (subject.customReferent) {
+                const t = JSON.parse(referent as string);
+                const result: Record<string, string[]> = {};
+                if (t.countries?.length) result["territory.country[]"] = t.countries;
+                if (t.subLvl1?.length) result["territory.subLvl1[]"] = t.subLvl1;
+                if (t.subLvl2?.length) result["territory.subLvl2[]"] = t.subLvl2;
+                return result;
+            }
+
             const key = subject.param ?? subject.key;
 
             switch (operator) {
                 case "equals":
+                    if (Array.isArray(referent)) {
+                        return { [`${key}[]`]: referent as string[] };
+                    }
                     return { [key]: String(referent) };
                 case "is_any_of":
-                    return { [`${key}[]`]: referent as string[] };
+                    return { [key]: referent as string[] };
                 case "before":
                 case "after":
                 case "strictly_before":

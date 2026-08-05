@@ -32,12 +32,6 @@
 
     let selected = $derived(options.filter((option) => option.selected));
 
-    let chevronLabel = $derived(
-        selected.length && selected.length < ALL_PUBLIC_STATUSES.length
-            ? selected.map((option) => option.label).join(", ")
-            : $t("domain.project.status.all"),
-    );
-
     function handleChange(option: DropdownOption) {
         const id = option.id as ProjectPublicStatus;
         const next = option.selected
@@ -57,7 +51,7 @@
     {selected}
     class="border"
     variant="multiselect"
-    {chevronLabel}
+    label={$t("domain.project.status.all")}
     isOpen={false}
     onChange={handleChange}
 />
