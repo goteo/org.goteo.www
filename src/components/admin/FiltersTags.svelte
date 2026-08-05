@@ -103,6 +103,26 @@
                 }
             }
 
+            if (tag.title === "status") {
+                const chargeLabel = $t(
+                    `pages.admin.charges.filters.chargeStatus.options.${tag.value}`,
+                );
+                tag.value =
+                    chargeLabel !== tag.value
+                        ? chargeLabel
+                        : $t(
+                              `pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`,
+                          );
+            }
+
+            if (tag.title === "status[]" && Array.isArray(tag.value)) {
+                tag.value = tag.value
+                    .map((s: string) =>
+                        $t(`pages.admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
+                    )
+                    .join(", ");
+            }
+
             if (tag.title === "territory" && tag.value) {
                 tag.value = formatTerritoryCodes(tag.value, loc);
             }

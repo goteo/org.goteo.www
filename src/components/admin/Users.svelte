@@ -7,6 +7,7 @@
     import { t } from "../../i18n/store";
     import { withoutCache } from "../../openapi/cacheInterceptor";
     import { apiUsersGetCollection, type User } from "../../openapi/client/index.ts";
+    import { apiUsersGetCollectionUrl } from "../../openapi/client/paths.gen.ts";
     import { toCollectionItems } from "../../utils/hydra";
     import {
         parseQueryFilters,
@@ -236,7 +237,12 @@
                 onCloseFilter={handleCloseFilter}
                 resource="users"
             />
-            <ExportCsv {filters} />
+            <ExportCsv
+                endpoint={apiUsersGetCollectionUrl}
+                queryParams={filters}
+                filenamePrefix="users"
+                totalItems={totalItemsCount}
+            />
         </div>
         <Slider slides={userSlides} {isLoading} />
     </div>
