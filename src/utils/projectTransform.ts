@@ -36,7 +36,8 @@ export async function transformProjectToCampaign(project: Project): Promise<Camp
     const obtained: Money = accounting?.balance || { amount: 0, currency: getDefaultCurrency() };
 
     return {
-        id: project.slug || String(project.id || "unknown"),
+        ...project,
+        slug: project.slug!,
         title: project.title || "",
         image,
         obtained,

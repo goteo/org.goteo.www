@@ -1,7 +1,7 @@
 <script lang="ts">
     let { direction = "right" }: { direction?: "left" | "right" } = $props();
 
-    const transformValue = direction === "right" ? "translate(100, 100) rotate(180)" : "";
+    let transformValue = $derived(direction === "right" ? "translate(100, 100) rotate(180)" : "");
 </script>
 
 <svg class="flickity-button-icon" viewBox="0 0 100 100" fill="currentColor">

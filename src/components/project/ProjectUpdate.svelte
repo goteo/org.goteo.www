@@ -22,7 +22,7 @@
         project: Project;
     } = $props();
 
-    const projectId = project.id!.toString();
+    let projectId = $derived(project.id!.toString());
 
     let projectUpdates: ProjectUpdate[] = $state([]);
 

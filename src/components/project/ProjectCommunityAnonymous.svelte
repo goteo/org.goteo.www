@@ -11,7 +11,7 @@
         currency: string;
     } = $props();
 
-    const projectId = String(project.id!);
+    let projectId = $derived(String(project.id!));
 
     let money = $state(0);
     let length = $state(0);

@@ -22,6 +22,8 @@
     - Transition: 200ms ease
 -->
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import type { Snippet, Component } from "svelte";
 
     interface Tab {
@@ -46,7 +48,8 @@
         useDataAttributes = true,
     }: Props = $props();
 
-    let currentTab = $state(activeTab);
+    // Seeds the local state once; later tab changes are owned by this component.
+    let currentTab = $state(untrack(() => activeTab));
 
     function handleTabClick(tabId: string) {
         currentTab = tabId;

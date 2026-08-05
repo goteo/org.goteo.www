@@ -84,6 +84,12 @@ export interface CreateProjectForm extends ProjectProjectCreationDto {
     budget?: Budget;
     address?: string;
     territory?: Territory;
+    /**
+     * Campaign start date, held flat so it can be validated and tracked as a
+     * single form field. The API nests it under `calendar.release`, so it is
+     * mapped on the way in and out of `ProjectProjectCreationDto`.
+     */
+    release?: string;
 }
 
 export interface ProjectDraftResources {
@@ -261,7 +267,7 @@ export function setDraftsStore(userId: number) {
 }
 
 export async function createDraft(
-    project?: ProjectProjectCreationDto,
+    project?: CreateProjectForm,
     draftId = createDraftId(),
     isDirty = true,
     resources?: ProjectDraftResources,
@@ -316,7 +322,7 @@ export async function loadDraft(draftId: string) {
 }
 
 export async function initializeProjectDraft(
-    project: ProjectProjectCreationDto,
+    project: CreateProjectForm,
     draftId: string,
     resources?: ProjectDraftResources,
 ) {

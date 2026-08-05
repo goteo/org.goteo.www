@@ -167,7 +167,7 @@
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
                     categories: $currentDraft.createProject.categories,
-                    release: $currentDraft.createProject.release,
+                    calendar: { release: $currentDraft.createProject.release ?? null },
                 },
             });
 

@@ -15,7 +15,7 @@
     import { t } from "../../i18n/store";
     import Copy from "../icons/actions/Copy.svelte";
 
-    import type { Tracking, Link } from "../../../src/openapi/client/index.ts";
+    import type { Tracking, GatewayLink } from "../../../src/openapi/client/index.ts";
     import type { Snippet } from "svelte";
 
     const fallbackDate = {
@@ -42,7 +42,7 @@
             time: string;
             fulltime: string;
         };
-        platformLinks?: Link[];
+        platformLinks?: GatewayLink[];
         refundToWallet?: string;
         concept?: string;
         details?: Snippet;
@@ -168,14 +168,14 @@
                 <button
                     class="text-secondary flex cursor-pointer items-start truncate whitespace-nowrap underline"
                     title={platformLinks
-                        .map((pl: Link) => pl.href ?? "")
+                        .map((pl: GatewayLink) => pl.url ?? "")
                         .filter(Boolean)
                         .join(", ")}
                     onclick={() => (linksModal = true)}
                 >
                     <span class="truncate">
-                        {platformLinks.find((pl: Link) => pl.type === "payment")?.href ??
-                            platformLinks[0]?.href ??
+                        {platformLinks.find((pl: GatewayLink) => pl.type === "payment")?.url ??
+                            platformLinks[0]?.url ??
                             "—"}
                     </span>
                     <span> ({platformLinks.length})</span>
@@ -226,10 +226,10 @@
                                                 style="word-break: break-word; text-decoration-line: underline;"
                                             >
                                                 <a
-                                                    href={item.href}
+                                                    href={item.url}
                                                     class=" text-secondary"
                                                     target="_blank"
-                                                    >{item.href}
+                                                    >{item.url}
                                                 </a>
                                             </div>
                                             <Tooltip
@@ -238,10 +238,12 @@
                                                 className="size-5 cursor-copy shrink-0"
                                             >
                                                 <button
-                                                    id={`copy-${item.href}`}
+                                                    id={`copy-${item.url}`}
                                                     type="button"
                                                     onclick={() =>
-                                                        navigator.clipboard.writeText(item.href)}
+                                                        navigator.clipboard.writeText(
+                                                            item.url ?? "",
+                                                        )}
                                                 >
                                                     <Copy />
                                                 </button>

@@ -27,15 +27,12 @@
             <div
                 class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-3xl bg-orange-200 md:h-40 md:w-40"
             >
-                {#if item.kind === "reward"}
-                    <img
-                        src={item.reward.image}
-                        alt={item.title}
-                        class="h-20 w-20 object-cover md:h-40 md:w-40"
-                    />
-                {:else}
-                    <span class="text-xl md:text-2xl">🙂</span>
-                {/if}
+                <!--
+                    ProjectReward carries no image in the API — reward images only
+                    exist as wizard-local draft state — so every item falls back to
+                    the placeholder until the API exposes one.
+                -->
+                <span class="text-xl md:text-2xl">🙂</span>
             </div>
             <div class="flex flex-col gap-2 md:gap-4">
                 <p class="text-secondary md:text-double text-lg font-bold">

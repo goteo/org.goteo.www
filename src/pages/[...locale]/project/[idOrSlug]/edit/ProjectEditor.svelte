@@ -8,14 +8,15 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
     import { session } from "../../../../../auth/store";
-    import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
+    import { type Project } from "../../../../../openapi/client";
     import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
     import {
+        type CreateProjectForm,
         currentDraft,
         deleteCurrentDraft,
         hasUnsavedChanges,
@@ -35,7 +36,8 @@
         project?: Project | null;
     } = $props();
 
-    let resolvedProject = $state<Project | null>(project);
+    // Seeded from the server-rendered prop; refreshed on mount from the draft.
+    let resolvedProject = $state<Project | null>(untrack(() => project));
     let isInitialized = $state(false);
     let showSessionErrorToast = $state(false);
 
@@ -56,7 +58,7 @@
         return initialStep;
     }
 
-    function projectToDraft(project: Project): ProjectProjectCreationDto {
+    function projectToDraft(project: Project): CreateProjectForm {
         return {
             title: project.title || "",
             subtitle: project.subtitle || "",
@@ -64,6 +66,27 @@
             release: project.calendar?.release ?? undefined,
             status: project.status || "in_draft",
         };
+    }
+
+    /**
+     * The cover comes back as a bare URL, but `UploadedFile` needs a MIME type
+     * for the uploader to recognise it as an image and render its preview.
+     */
+    function guessImageMimeType(url: string): string {
+        const extension = url.split("?")[0].split(".").pop()?.toLowerCase();
+
+        switch (extension) {
+            case "png":
+                return "image/png";
+            case "webp":
+                return "image/webp";
+            case "gif":
+                return "image/gif";
+            case "svg":
+                return "image/svg+xml";
+            default:
+                return "image/jpeg";
+        }
     }
 
     function projectToIri(project: Project) {
@@ -111,6 +134,7 @@
                                 url: coverUrl,
                                 name: "Project cover",
                                 size: 0,
+                                type: guessImageMimeType(coverUrl),
                             },
                         ];
                     }

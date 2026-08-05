@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { untrack } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import CloseIcon from "../../../components/icons/navigation/Close.svelte";
@@ -15,9 +16,10 @@
 
     let { video, onChange, class: className = "" }: VideoUrlInputProps = $props();
 
-    let videoUrl = $state(video || "");
+    // Seed the field once; the input owns it afterwards.
+    let videoUrl = $state(untrack(() => video || ""));
     let validationError = $state("");
-    let showInput = $state(!!video);
+    let showInput = $state(untrack(() => !!video));
 
     function isValidUrl(url: string): boolean {
         try {

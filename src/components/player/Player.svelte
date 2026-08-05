@@ -28,7 +28,7 @@
     let isLoading = $state(false);
     let iframeEl: HTMLIFrameElement | null = $state(null);
 
-    const previewImage = poster.src || thumbnails;
+    let previewImage = $derived(poster.src || thumbnails);
 
     $effect(() => {
         noVideoSrc = !src;

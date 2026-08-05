@@ -950,6 +950,9 @@
         "seeChat": "Ver conversación",
         "changeRisk": "Cambiar riesgo"
       },
+      "card": {
+        "activity": "{{ count }} chats. Última actividad {{ date }}"
+      },
       "chat": {
         "placeholder": "Escribe un mensaje…"
       }

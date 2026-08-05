@@ -17,7 +17,7 @@
         type ApiGatewayChargesGetCollectionData,
         type Tipjar,
         type GatewayCharge,
-        type Link,
+        type GatewayLink,
         type Tracking,
     } from "../../../src/openapi/client/index.ts";
     import { t } from "../../i18n/store";
@@ -35,7 +35,7 @@
         checkoutOrigin?: string;
         paymentMethod?: string;
         refundToWallet?: string;
-        platformLinks?: Link[];
+        platformLinks?: GatewayLink[];
         trackingCodes?: Tracking[];
         concept?: string;
     };
