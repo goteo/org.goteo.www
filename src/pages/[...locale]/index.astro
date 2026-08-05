@@ -5,9 +5,7 @@ import Hero from "../../components/hero/Hero.astro";
 import Campaigns from "../../components/home/Campaigns.astro";
 import CampaignsTabs from "../../components/home/CampaignsTabs.astro";
 import Stats from "../../components/home/Stats.astro";
-import Stories from "../../components/home/Stories.svelte";
 import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
-import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
 import HomeBanner from "../../components/home/HomeBanner.svelte";
@@ -40,6 +38,7 @@ const { t, lang, session } = Astro.locals;
         <Stats />
         <CampaignsTabs />
         <Matchfunding />
+        <!-- Re-add the matching import when enabling either of these. -->
         <!-- <Stories client:load /> -->
         <FeaturedPromoters />
         <!-- <Resources /> -->
