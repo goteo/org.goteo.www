@@ -129,6 +129,13 @@
       "search": {
         "placeholder": "Search for your project"
       }
+    },
+    "export": {
+      "csv": "Export CSV",
+      "exporting": "Exporting...",
+      "error": "Error exporting CSV file. Please try again.",
+      "itemsText": "Items",
+      "noData": "No data found to export"
     }
   },
   "common": {
@@ -1222,6 +1229,67 @@
           "manageReward": "Manage reward"
         },
         "filters": {
+          "btns": {
+            "openFilters": "Filters",
+            "closeFilters": "Close filters",
+            "apply": "Apply filters"
+          },
+          "composer": {
+            "title": "Custom filters",
+            "addFilter": "Add filter",
+            "removeFilter": "Remove",
+            "subjectPlaceholder": "Select field",
+            "operatorPlaceholder": "Select condition",
+            "referentPlaceholder": "Value",
+            "subject": {
+              "title": "Title",
+              "subtitle": "Subtitle",
+              "description": "Description",
+              "projectStatus": "Project status",
+              "chargeStatus": "Charge status",
+              "categories": "Category",
+              "owner": "Owner",
+              "slug": "ID",
+              "territoryCountry": "Territory",
+              "dateUpdated": "Last updated",
+              "budgetAmount": "Amount",
+              "gateway": "Gateway",
+              "type": "Type",
+              "target": "Target",
+              "currency": "Currency",
+              "amount": "Amount",
+              "dateCreated": "Creation date",
+              "handle": "Username",
+              "email": "Email",
+              "displayName": "Display name",
+              "userType": "User type",
+              "active": "Active",
+              "userRoles": "Roles",
+              "userTerritoryCountry": "Location"
+            },
+            "operator": {
+              "equals": "Equal to",
+              "is_any_of": "Included in",
+              "before": "Before",
+              "after": "After",
+              "strictly_before": "Strictly before",
+              "strictly_after": "Strictly after",
+              "gte": "Greater than or equal to",
+              "gt": "Greater than",
+              "lte": "Less than or equal to",
+              "lt": "Less than"
+            },
+            "subjectOption": {
+              "userType": {
+                "individual": "Natural person",
+                "organization": "Legal person (companies)"
+              },
+              "active": {
+                "true": "Active",
+                "false": "Inactive"
+              }
+            }
+          },
           "order": {
             "title": "Sort by:",
             "options": {
@@ -1255,10 +1323,10 @@
             "options": {
               "500000": "€5,000+",
               "all": "All",
-              "000-10000": "€0 - €100",
-              "10000-50000": "€100 - €500",
-              "50000-100000": "€500 - €1,000",
-              "100000-500000": "€1,000 - €5,000"
+              "000 - 10000": "€0 - €100",
+              "10000 - 50000": "€100 - €500",
+              "50000 - 100000": "€500 - €1,000",
+              "100000 - 500000": "€1,000 - €5,000"
             }
           },
           "dateRange": {
@@ -1287,14 +1355,6 @@
           "unloaded": "Showing...",
           "noResults": "No results"
         },
-        "export": {
-          "csv": "Export CSV",
-          "exporting": "Exporting...",
-          "error": "Error exporting the CSV file. Please try again.",
-          "filename": "gateway-charges",
-          "itemsText": "items",
-          "noData": "No data found to export"
-        },
         "downloadButtons": {
           "certificates": "Download certificates",
           "pdf": "Download PDF"
@@ -1313,9 +1373,6 @@
         "title": "Projects",
         "description": "Search for projects and manage them as quickly as possible thanks to the search tool",
         "lastProjects": "Campaign list:",
-        "export": {
-          "csv": "Export .csv"
-        },
         "totalizers": {
           "selected": "Selected campaigns:",
           "totalEarned": "Total raised:",
@@ -1486,9 +1543,6 @@
         "title": "Users",
         "description": "Here are all the users on the platform. You can search and filter them however you want.",
         "lastUsers": "User list:",
-        "export": {
-          "csv": "Export .csv"
-        },
         "totalizers": {
           "selected": "Selected users:"
         },

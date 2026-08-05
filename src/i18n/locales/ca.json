@@ -129,6 +129,13 @@
       "search": {
         "placeholder": "Busca el teu projecte"
       }
+    },
+    "export": {
+      "csv": "Exporta CSV",
+      "exporting": "Exportant...",
+      "error": "Error en exportar el fitxer CSV. Si us plau, torna-ho a intentar.",
+      "itemsText": "elements",
+      "noData": "No s'han trobat dades per exportar"
     }
   },
   "common": {
@@ -1222,6 +1229,67 @@
           "manageReward": "Gestiona la recompensa"
         },
         "filters": {
+          "btns": {
+            "openFilters": "Filtres",
+            "closeFilters": "Tanca filtres",
+            "apply": "Aplica filtres"
+          },
+          "composer": {
+            "title": "Filtres personalitzats",
+            "addFilter": "Afegeix un filtre",
+            "removeFilter": "Elimina",
+            "subjectPlaceholder": "Selecciona un camp",
+            "operatorPlaceholder": "Selecciona una condició",
+            "referentPlaceholder": "Valor",
+            "subject": {
+              "title": "Títol",
+              "subtitle": "Subtítol",
+              "description": "Descripció",
+              "projectStatus": "Estat del projecte",
+              "chargeStatus": "Estat de l'aportació",
+              "categories": "Categoria",
+              "owner": "Propietari",
+              "slug": "Identificador",
+              "territoryCountry": "Territori",
+              "dateUpdated": "Última actualització",
+              "budgetAmount": "Import",
+              "gateway": "Passarel·la",
+              "type": "Tipus",
+              "target": "Destí",
+              "currency": "Divisa",
+              "amount": "Import",
+              "dateCreated": "Data de creació",
+              "handle": "Nom d'usuari",
+              "email": "Correu electrònic",
+              "displayName": "Nom públic",
+              "userType": "Tipus d'usuari",
+              "active": "Actiu",
+              "userRoles": "Rols",
+              "userTerritoryCountry": "Ubicació"
+            },
+            "operator": {
+              "equals": "És igual a",
+              "is_any_of": "Inclòs a",
+              "before": "Abans de",
+              "after": "Després de",
+              "strictly_before": "Estrictament anterior",
+              "strictly_after": "Estrictament posterior",
+              "gte": "Major o igual que",
+              "gt": "Major que",
+              "lte": "Inferior o igual a",
+              "lt": "Inferior a"
+            },
+            "subjectOption": {
+              "userType": {
+                "individual": "Particular",
+                "organization": "Persona jurídica (empreses)"
+              },
+              "active": {
+                "true": "Actiu",
+                "false": "Inactiu"
+              }
+            }
+          },
           "order": {
             "title": "Ordenar per:",
             "options": {
@@ -1255,10 +1323,10 @@
             "options": {
               "500000": "+ 5.000 €",
               "all": "Tots",
-              "000-10000": "0 € - 100 €",
-              "10000-50000": "100 € - 500 €",
-              "50000-100000": "500 € - 1.000 €",
-              "100000-500000": "1.000 € - 5.000 €"
+              "000 - 10000": "0 € - 100 €",
+              "10000 - 50000": "100 € - 500 €",
+              "50000 - 100000": "500 € - 1.000 €",
+              "100000 - 500000": "1.000 € - 5.000 €"
             }
           },
           "dateRange": {
@@ -1287,14 +1355,6 @@
           "unloaded": "Mostrant...",
           "noResults": "No hi ha resultats"
         },
-        "export": {
-          "csv": "Exporta CSV",
-          "exporting": "Exportant...",
-          "error": "Error en exportar el fitxer CSV. Si us plau, torna-ho a intentar.",
-          "filename": "gateway-charges",
-          "itemsText": "elements",
-          "noData": "No s'han trobat dades per exportar"
-        },
         "downloadButtons": {
           "certificates": "Descarrega certificats",
           "pdf": "Descarrega PDF"
@@ -1313,9 +1373,6 @@
         "title": "Projectes",
         "description": "Busca projectes i gestiona'ls de la manera més ràpida possible gràcies al cercador",
         "lastProjects": "Llistat de campanyes:",
-        "export": {
-          "csv": "Exporta .csv"
-        },
         "totalizers": {
           "selected": "Campanyes seleccionades:",
           "totalEarned": "Total aconseguit:",
@@ -1486,9 +1543,6 @@
         "title": "Usuaris",
         "description": "Aquí tens tots els usuaris de la plataforma; pots cercar-los i filtrar-los com vulguis.",
         "lastUsers": "Llistat d'usuaris:",
-        "export": {
-          "csv": "Exporta .csv"
-        },
         "totalizers": {
           "selected": "Usuaris seleccionats:"
         },
