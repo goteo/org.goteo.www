@@ -1,49 +1,23 @@
-import { checkoutRepo } from "./repository";
-
-import type { CheckoutItem } from "../../stores/checkoutsStore";
-
 const LEGACY_STORAGE_KEY = "cart";
-const GUEST_KEY = "user:guest";
 
 /**
- * One-time migration of the legacy localStorage cart blob into the guest
- * IndexedDB record. The old store re-seeded the "cart" key on every page
- * load, so the key is removed unconditionally — even on unparseable data —
- * to guarantee the migration runs at most once per browser. Never throws.
+ * Discards the checkout the previous `localStorage` store left behind.
+ *
+ * The blob is dropped rather than carried over. It has no owner recorded in it, and the
+ * session is not yet known when this runs — `/api/session` is fetched after hydration, so an
+ * empty session store means "anonymous" and "still loading" alike. Moving it into the guest
+ * record would therefore hand it to whoever signs in next, which on a shared browser is not
+ * necessarily the person who filled it.
+ *
+ * The cost is one lost checkout per browser, the once. The old store re-seeded the key on
+ * every page load, so removing it unconditionally is what stops it coming back. Never throws.
  */
-export async function migrateLegacyCart(): Promise<void> {
+export function dropLegacyCart(): void {
     if (typeof window === "undefined") return;
 
-    let raw: string | null;
     try {
-        raw = localStorage.getItem(LEGACY_STORAGE_KEY);
-        if (raw === null) return;
-
         localStorage.removeItem(LEGACY_STORAGE_KEY);
     } catch {
-        return;
-    }
-
-    try {
-        const parsed = JSON.parse(raw) as { items?: Record<string, CheckoutItem> };
-        const legacyItems = Object.fromEntries(
-            Object.entries(parsed?.items ?? {}).filter(
-                ([key, item]) =>
-                    typeof key === "string" &&
-                    item != null &&
-                    typeof item.quantity === "number" &&
-                    item.quantity > 0,
-            ),
-        );
-
-        if (Object.keys(legacyItems).length === 0) return;
-
-        // An existing guest record is newer than the legacy blob — it wins on conflicts
-        const existing = await checkoutRepo.get(GUEST_KEY);
-        await checkoutRepo.update(GUEST_KEY, {
-            items: { ...legacyItems, ...existing?.items },
-        });
-    } catch (e) {
-        console.warn("⚠️ Error migrating legacy cart from localStorage:", e);
+        // Storage can be unavailable (private mode, blocked cookies); nothing to clean up then.
     }
 }

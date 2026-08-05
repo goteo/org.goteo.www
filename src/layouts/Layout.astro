@@ -1,8 +1,19 @@
 ---
+import { Font } from "astro:assets";
+
 import "../styles/global.css";
 import Metatags from "./Metatags.svelte";
 
+import type { FontPreloadFilter } from "astro:assets";
+
 const { title, description, keywords } = Astro.props;
+
+/**
+ * Only the upright latin face is worth preloading — it is the one every page needs before
+ * first paint. Italic and latin-ext are declared all the same, and the browser fetches them
+ * when a glyph on the page actually calls for them.
+ */
+const preloadedFaces: FontPreloadFilter = [{ style: "normal", subset: "latin" }];
 ---
 
 <!doctype html>
@@ -12,6 +23,7 @@ const { title, description, keywords } = Astro.props;
         <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
         <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml" />
         <title>{title}</title>
+        <Font cssVariable="--font-karla" preload={preloadedFaces} />
         <Metatags client:load {title} {description} {keywords} />
     </head>
     <body>

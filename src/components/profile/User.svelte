@@ -1,18 +1,18 @@
 <script lang="ts">
-    import CampaignCard from "../../../../components/home/CampaignCard.svelte";
-    import DefaultAvatar from "../../../../components/icons/DefaultAvatar.svelte";
-    import Grid from "../../../../components/library/layout/Grid.svelte";
-    import Tabs from "../../../../components/library/layout/Tabs.svelte";
-    import ShareButton from "../../../../components/library/share/ShareButton.svelte";
-    import ProfileDonorType from "../../../../components/profile/ProfileDonorType.svelte";
-    import ProfileInfo from "../../../../components/profile/ProfileInfo.svelte";
-    import VerifiedBadge from "../../../../components/profile/VerifiedBadge.svelte";
-    import { t } from "../../../../i18n/store";
-    import { getDefaultCurrency } from "../../../../utils/consts";
-    import { renderMarkdown } from "../../../../utils/renderMarkdown";
+    import ProfileDonorType from "./ProfileDonorType.svelte";
+    import ProfileInfo from "./ProfileInfo.svelte";
+    import VerifiedBadge from "./VerifiedBadge.svelte";
+    import { t } from "../../i18n/store";
+    import { getDefaultCurrency } from "../../utils/consts";
+    import { renderMarkdown } from "../../utils/renderMarkdown";
+    import CampaignCard from "../home/CampaignCard.svelte";
+    import DefaultAvatar from "../icons/DefaultAvatar.svelte";
+    import Grid from "../library/layout/Grid.svelte";
+    import Tabs from "../library/layout/Tabs.svelte";
+    import ShareButton from "../library/share/ShareButton.svelte";
 
-    import type { User } from "../../../../openapi/client/types.gen";
-    import type { Campaign } from "../../../../types/campaign";
+    import type { User } from "../../openapi/client/types.gen";
+    import type { Campaign } from "../../types/campaign";
 
     interface Props {
         user: User;
