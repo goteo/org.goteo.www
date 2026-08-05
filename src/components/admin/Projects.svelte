@@ -340,6 +340,7 @@
                 endpoint={apiProjectsGetCollectionUrl}
                 queryParams={filters}
                 filenamePrefix="projects"
+                totalItems={totalItemsCount}
             />
         </div>
         <Slider slides={projectSlides} {isLoading} />

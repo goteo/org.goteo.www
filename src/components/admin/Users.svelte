@@ -241,6 +241,7 @@
                 endpoint={apiUsersGetCollectionUrl}
                 queryParams={filters}
                 filenamePrefix="users"
+                totalItems={totalItemsCount}
             />
         </div>
         <Slider slides={userSlides} {isLoading} />

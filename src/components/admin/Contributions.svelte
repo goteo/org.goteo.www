@@ -483,6 +483,7 @@
                 endpoint={apiGatewayChargesGetCollectionUrl}
                 queryParams={filters}
                 filenamePrefix="gateway-charges"
+                totalItems={$totalItems}
             />
         </div>
         <Slider slides={chargeSlides} isLoading={$isLoading} />

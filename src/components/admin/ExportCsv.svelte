@@ -12,10 +12,12 @@
         endpoint = "/v4/gateway_charges",
         queryParams = {},
         filenamePrefix = "export",
+        totalItems = undefined,
     } = $props<{
         endpoint?: string;
         queryParams?: Record<string, unknown>;
         filenamePrefix?: string;
+        totalItems?: number;
     }>();
 
     let abortController = $state<AbortController | null>(null);
@@ -28,6 +30,7 @@
             abortController.abort();
             abortController = null;
         }
+
         isExporting = false;
         exportProgress = 0;
         rowsExported = 0;
@@ -104,7 +107,7 @@
                 },
                 pagination: {
                     itemsPerPage: 100,
-                    maxTotalRows: 10_000,
+                    maxTotalRows: totalItems || 10_000,
                 },
                 onProgress: (current: number, total: number) => {
                     rowsExported = current;
@@ -157,7 +160,7 @@
             <Spinner width="16px" height="16px" class="text-secondary" />
             <span class="text-secondary font-bold">
                 {exportProgress > 0
-                    ? `${rowsExported} (${exportProgress}%)`
+                    ? `${rowsExported} / ${totalItems} (${exportProgress}%)`
                     : $t("domain.export.exporting")}
             </span>
         {:else}
