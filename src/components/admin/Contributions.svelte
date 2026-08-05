@@ -27,6 +27,7 @@
         type User,
     } from "../../openapi/client/index.ts";
     import {
+        apiGatewayChargesGetCollectionUrl,
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
@@ -479,7 +480,7 @@
                 resource="gateway_charges"
             />
             <ExportCsv
-                endpoint="/v4/gateway_charges"
+                endpoint={apiGatewayChargesGetCollectionUrl}
                 queryParams={filters}
                 filenamePrefix="gateway-charges"
             />
