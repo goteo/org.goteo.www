@@ -35,9 +35,7 @@
 
     function buildFilename(): string {
         const timestamp = new Date().toISOString().split("T")[0];
-        const baseFilename =
-            filenamePrefix || $t("pages.admin.charges.export.filename") || "export";
-        return `${baseFilename}_${timestamp}`;
+        return `${filenamePrefix}_${timestamp}`;
     }
 
     function appendQueryParam(params: URLSearchParams, key: string, value: unknown) {
@@ -115,9 +113,7 @@
             });
 
             if (result.status === "partial") {
-                alert(
-                    `${$t("pages.admin.charges.export.success") || "Export completed"}\n${result.message}`,
-                );
+                alert(`${$t("domain.export.success") || "Export completed"}\n${result.message}`);
             }
         } catch (error) {
             const message = (error instanceof Error ? error.message : String(error)).toLowerCase();
@@ -129,7 +125,7 @@
             ) {
                 alert($t("auth.sessionExpired") || "Session expired. Please log in again.");
             } else if (message.includes("no data")) {
-                alert($t("pages.admin.charges.export.noData") || "No data found to export");
+                alert($t("domain.export.noData") || "No data found to export");
             } else if (
                 message.includes("cancelled") ||
                 message.includes("abort") ||
@@ -138,7 +134,7 @@
                 console.log("Export cancelled by user");
             } else {
                 console.error("Error exporting CSV:", error);
-                alert($t("pages.admin.charges.export.error") || "Error exporting data");
+                alert($t("domain.export.error") || "Error exporting data");
             }
         } finally {
             abortController = null;
@@ -155,19 +151,19 @@
         kind="secondary"
         onclick={handleExportCSV}
         disabled={isExporting}
-        aria-label={$t("pages.admin.charges.export.csv")}
+        aria-label={$t("domain.export.csv")}
     >
         {#if isExporting}
             <Spinner width="16px" height="16px" class="text-secondary" />
             <span class="text-secondary font-bold">
                 {exportProgress > 0
                     ? `${rowsExported} (${exportProgress}%)`
-                    : $t("pages.admin.charges.export.exporting")}
+                    : $t("domain.export.exporting")}
             </span>
         {:else}
             <Download width="16" height="16" class="text-secondary" />
             <span class="text-secondary font-bold">
-                {$t("pages.admin.charges.export.csv")}
+                {$t("domain.export.csv")}
             </span>
         {/if}
     </Button>

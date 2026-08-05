@@ -129,6 +129,13 @@
       "search": {
         "placeholder": "Busca tu proyecto"
       }
+    },
+    "export": {
+      "csv": "Exportar CSV",
+      "exporting": "Exportando...",
+      "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
+      "itemsText": "items",
+      "noData": "No se encontraron datos para exportar"
     }
   },
   "common": {
@@ -1348,14 +1355,6 @@
           "unloaded": "Mostrando...",
           "noResults": "No hay resultados"
         },
-        "export": {
-          "csv": "Exportar CSV",
-          "exporting": "Exportando...",
-          "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
-          "filename": "gateway-charges",
-          "itemsText": "items",
-          "noData": "No se encontraron datos para exportar"
-        },
         "downloadButtons": {
           "certificates": "Descarga certificados",
           "pdf": "Descarga PDF"
@@ -1374,9 +1373,6 @@
         "title": "Proyectos",
         "description": "Busca proyectos y gestiónalos de la manera más rápida posible gracias al buscador",
         "lastProjects": "Listado de campañas:",
-        "export": {
-          "csv": "Exportar .csv"
-        },
         "totalizers": {
           "selected": "Campañas seleccionadas:",
           "totalEarned": "Total conseguido:",
@@ -1547,9 +1543,6 @@
         "title": "Usuarios",
         "description": "Aquí tienes todos los usuarios de la plataforma, puedes buscarlos y filtrarlos como quieras.",
         "lastUsers": "Listado de usuarios:",
-        "export": {
-          "csv": "Exportar .csv"
-        },
         "totalizers": {
           "selected": "Usuarios seleccionados:"
         },
