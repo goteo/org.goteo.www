@@ -123,8 +123,8 @@ export async function exportCollectionAsCSV(options: ExportCsvOptions): Promise<
     URL.revokeObjectURL(url);
 
     return {
-        status: allRows.length >= maxTotalRows ? "partial" : "success",
+        status: allRows.length < maxTotalRows ? "partial" : "success",
         message:
-            allRows.length >= maxTotalRows ? `Export limited to ${maxTotalRows} rows.` : undefined,
+            allRows.length < maxTotalRows ? `Export limited to ${maxTotalRows} rows.` : undefined,
     };
 }
