@@ -1112,6 +1112,29 @@
           "templates": "Plantillas",
           "communications": "Comunicaciones"
         },
+        "send": {
+          "templateSection": "Selecciona una plantilla masiva",
+          "recipientsSection": "Seleccionar destinatarios",
+          "optionsSection": "Opciones de envío",
+          "addMore": "Añadir más",
+          "startAction": "Iniciar envío",
+          "placeholders": {
+            "selectTemplate": "Selecciona una plantilla",
+            "selectRecipient": "Selecciona un destinatario"
+          },
+          "options": {
+            "isTest": "Es una prueba (se envia a los destinatarios de pruebas)",
+            "onlySpanish": "Solo en español (no tener en cuenta idioma preferido de usuario)"
+          },
+          "errors": {
+            "noTemplate": "Por favor, selecciona una plantilla."
+          },
+          "recipients": {
+            "all": "Todos",
+            "promoters": "Promotores",
+            "donors": "Cofinanciadores"
+          }
+        },
         "filters": {
           "search": "Buscar",
           "apply": "Filtros"
@@ -1120,6 +1143,24 @@
           "headers": {
             "template": "Plantilla",
             "description": "Descripción"
+          }
+        },
+        "communications": {
+          "searchTitle": "Busca destinatarios",
+          "searchAction": "Buscar destinatarios",
+          "fields": {
+            "directedTo": "A quién va dirigido",
+            "newsletterLanguage": "Idioma del boletín",
+            "projectName": "De proyectos que el nombre contenga",
+            "status": "Estado",
+            "paymentMethod": "Método de aporte",
+            "dates": "Fechas",
+            "interest": "Interés",
+            "nameEmail": "Que el nombre o email contenga",
+            "certificate": "Certificado",
+            "location": "Localización",
+            "preferredLanguage": "Idioma preferente",
+            "profile": "Perfil que sea..."
           }
         }
       },
@@ -1199,7 +1240,8 @@
       "nav": {
         "charges": "Cobros",
         "projects": "Proyectos",
-        "users": "Usuarios"
+        "users": "Usuarios",
+        "communications": "Comunicaciones"
       },
       "sidebar": {
         "aria": {

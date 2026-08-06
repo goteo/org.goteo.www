@@ -6,7 +6,6 @@ import AdminNewsletter from "../../../components/admin/Newsletter.svelte";
 
 const { t, lang, session } = Astro.locals;
 
-// Definimos los ítems de la barra lateral de administración
 const navItems: AdminSidebarItem[] = [
     { label: t("pages.admin.newsletter.title"), href: "/admin/newsletter" }
 ];
@@ -18,10 +17,8 @@ const activePath = "/admin/newsletter";
     <App client:load locale={lang} session={session} admin>
         <div class="wrapper">
             <div class="flex w-full gap-8 py-10">
-                <!-- Sidebar de administración lateral -->
                 <AdminSidebar {navItems} {activePath} client:load />
 
-                <!-- Contenido principal -->
                 <main class="min-w-0 flex-1">
                     <AdminNewsletter client:load />
                 </main>
