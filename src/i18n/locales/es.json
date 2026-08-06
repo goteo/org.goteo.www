@@ -138,16 +138,16 @@
       "alignCenter": "Centrar",
       "alignRight": "Alinear a la derecha",
       "characterCount": "{{ current }} / {{ max }} caracteres"
-    }
-  },
-  "common": {
-    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    },
     "dateInput": {
       "apply": "Aplicar",
       "previousMonth": "Mes anterior",
       "nextMonth": "Mes siguiente",
       "close": "Cerrar"
-    },
+    }
+  },
+  "common": {
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
