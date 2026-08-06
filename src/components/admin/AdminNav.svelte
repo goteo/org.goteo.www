@@ -27,7 +27,7 @@
     }
 </script>
 
-<nav class={twMerge("overflow-x-auto px-2 pb-3 md:px-4 md:pb-4 touch-pan-x", classes)}>
+<nav class={twMerge("touch-pan-x overflow-x-auto px-2 pb-3 md:px-4 md:pb-4", classes)}>
     <ul class="flex min-w-max items-center gap-2">
         {#each sections as section (section.path)}
             {@const active = isActive(section.path)}
