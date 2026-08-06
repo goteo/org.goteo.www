@@ -17,10 +17,12 @@
         <h2 class="overflow-hidden text-[2.5rem] leading-12 font-bold text-ellipsis text-black">
             {$t("pages.admin.comm.banners.title")}
         </h2>
-        <p class="text-content text-base font-normal">{$t("pages.admin.comm.banners.description")}</p>
+        <p class="text-content text-base font-normal">
+            {$t("pages.admin.comm.banners.description")}
+        </p>
     </div>
     {#if currentSubtab === "fields"}
-        <Button class="w-fit h-fit self-top" kind="primary">
+        <Button class="self-top h-fit w-fit" kind="primary">
             {$t("common.save")}
         </Button>
     {/if}
@@ -31,6 +33,6 @@
     {#if currentSubtab === "fields"}
         <BannersFields />
     {:else if currentSubtab === "history"}
-        <BannersHistory />
+        <BannersHistory rows={[]} /> // TODO: Replace with actual D1 data
     {/if}
 </div>

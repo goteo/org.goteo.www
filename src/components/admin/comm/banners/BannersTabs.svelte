@@ -19,17 +19,21 @@
 
 <div class="flex gap-0">
     <button
-        class="hover:bg-primary-dark flex w-fit cursor-pointer items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 font-bold text-base {tabClass("fields")}"
+        class="hover:bg-primary-dark flex w-fit cursor-pointer items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 text-base font-bold {tabClass(
+            'fields',
+        )}"
         onclick={() => onTabChange("fields")}
     >
-        <Calendar class="size-4 text-secondary" />
+        <Calendar class="text-secondary size-4" />
         {$t("pages.admin.comm.banners.tabs.fields")}
     </button>
     <button
-        class="hover:bg-primary-dark flex w-fit cursor-pointer items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 font-bold text-base {tabClass("history")}"
+        class="hover:bg-primary-dark flex w-fit cursor-pointer items-center gap-2 rounded-t-lg border-b-2 px-6 py-2 text-base font-bold {tabClass(
+            'history',
+        )}"
         onclick={() => onTabChange("history")}
     >
-        <Clock class="size-4 text-secondary" />
+        <Clock class="text-secondary size-4" />
         {$t("pages.admin.comm.banners.tabs.history")}
     </button>
 </div>

@@ -77,8 +77,12 @@
     }
 
     const hasSort = $derived(!!sortOptions && sortOptions.length > 0 && !!onSort);
-    const hasPagination = $derived(currentPage !== undefined && totalItems !== undefined && !!onPageChange);
-    const hasItemsPerPage = $derived(!!itemsPerPageLabel && !!onItemsPerPageChange && !!itemsPerPageOptions);
+    const hasPagination = $derived(
+        currentPage !== undefined && totalItems !== undefined && !!onPageChange,
+    );
+    const hasItemsPerPage = $derived(
+        !!itemsPerPageLabel && !!onItemsPerPageChange && !!itemsPerPageOptions,
+    );
 </script>
 
 {#if hasSort}
@@ -122,8 +126,7 @@
         <TableHead>
             {#each headers as header, i}
                 <TableHeadCell
-                    class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {header
-                        .sortable
+                    class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {header.sortable
                         ? 'hover:bg-opacity-80 cursor-pointer select-none'
                         : ''} {header.class ?? ''}"
                     onclick={() => header.sortable && onHeaderSort?.(header.sortKey ?? header.key)}
@@ -158,7 +161,7 @@
             {:else}
                 {#each rows as row, index}
                     <TableBodyRow
-                        class="bg-white border-variant1 hover:bg-purple-soft text-content border transition-colors"
+                        class="border-variant1 hover:bg-purple-soft text-content border bg-white transition-colors"
                     >
                         {@render children(row, index)}
                     </TableBodyRow>
@@ -174,6 +177,6 @@
         {totalItems}
         {itemsPerPage}
         i18nPrefix={paginationPrefix}
-        onPageChange={onPageChange}
+        {onPageChange}
     />
 {/if}
