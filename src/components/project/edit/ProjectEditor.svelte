@@ -12,9 +12,9 @@
 
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
-    import { session } from "../../../../../auth/store";
-    import { type Project } from "../../../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
+    import { session } from "../../../auth/store";
+    import { type Project } from "../../../openapi/client";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
         type CreateProjectForm,
         currentDraft,
@@ -24,9 +24,9 @@
         loadDraft,
         markCurrentDraftClean,
         updateWizard,
-    } from "../../../../../stores/drafts/projectDraft";
-    import { publishDraft } from "../../../../../utils/projectPublisher";
-    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
+    } from "../../../stores/drafts/projectDraft";
+    import { publishDraft } from "../../../utils/projectPublisher";
+    import { getProjectDraftResources } from "../../../utils/projectSubmissionApi";
 
     let {
         idOrSlug,

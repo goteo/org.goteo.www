@@ -48,7 +48,9 @@
         useDataAttributes = true,
     }: Props = $props();
 
-    // Seeds the local state once; later tab changes are owned by this component.
+    // `activeTab` names the tab to open with, not the tab currently open — from then on the
+    // selection belongs to this component. Reading it untracked says so, and stops a later
+    // change to the prop from yanking the tab out from under whoever is clicking around.
     let currentTab = $state(untrack(() => activeTab));
 
     function handleTabClick(tabId: string) {

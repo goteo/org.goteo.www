@@ -18,11 +18,11 @@ if (locale && !isSupportedLocale(locale)) {
     return NotFound;
 }
 
-const { t, lang, session } = Astro.locals;
+const { t, lang } = Astro.locals;
 ---
 
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
-    <App client:load locale={lang} session={session} class="mb-20 gap-18">
+    <App client:load locale={lang} class="mb-20 gap-18">
         <Hero />
         <div class="wrapper">
             <HomeBanner

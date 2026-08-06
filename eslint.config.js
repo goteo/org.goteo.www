@@ -18,6 +18,11 @@ export default [
     ...sveltePlugin.configs.recommended,
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
+    // Root config files run in Node at build time, not in the browser.
+    {
+        files: ["*.config.{js,mjs,cjs,ts}"],
+        languageOptions: { globals: globals.node },
+    },
     {
         ignores: [
             "node_modules/**",

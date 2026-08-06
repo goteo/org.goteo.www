@@ -4,11 +4,11 @@ import App from "../layouts/App.svelte";
 import EyeInLaptop from "../components/errorpage/EyeInLaptop.svelte";
 import ErrorPage from "../components/errorpage/ErrorPage.svelte";
 
-const { t, lang, session } = Astro.locals;
+const { t, lang } = Astro.locals;
 ---
 
 <Layout title={t("pages.403.meta.title")} description={t("pages.403.meta.description")}>
-    <App locale={lang} session={session} client:load>
+    <App locale={lang} client:load>
         <ErrorPage
             code={403}
             title={t("pages.403.title")}

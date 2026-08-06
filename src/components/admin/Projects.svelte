@@ -1,7 +1,7 @@
 <script lang="ts">
+    import ExportCsv from "./ExportCsv.svelte";
+    import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
-    import ProjectsExportCsv from "./ProjectsExportCsv.svelte";
-    import ProjectsFilters from "./ProjectsFilters.svelte";
     import ProjectsTable from "./ProjectsTable.svelte";
     import Slider from "./Slider.svelte";
     import { t } from "../../i18n/store";
@@ -15,6 +15,7 @@
         type Accounting,
         type User,
     } from "../../openapi/client/index.ts";
+    import { apiProjectsGetCollectionUrl } from "../../openapi/client/paths.gen.ts";
     import { formatCurrency } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra";
@@ -238,7 +239,7 @@
         const sortOption = sortMap[selectedSort];
 
         syncQueryFiltersToUrl(
-            filters ?? {},
+            (filters ?? {}) as Record<string, unknown>,
             sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
         );
     });
@@ -282,7 +283,7 @@
         reloadProjects();
     }
 
-    function handleCloseFilter(newFilters: ProjectsQuery): void {
+    function handleCloseFilter(newFilters: any): void {
         filters = { ...newFilters };
         currentPage = 1;
         reloadProjects();
@@ -310,7 +311,17 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <ProjectsFilters {filters} onSearch={handleSearch} onApplyFilters={handleApplyFilters} />
+    <Filters
+        resource="projects"
+        {filters}
+        onApplyFilters={handleApplyFilters}
+        searchPlaceholder={$t("pages.admin.projects.filters.search.placeholder")}
+        onSelectProject={(p) => {
+            filters = { ...filters, title: p.title };
+            currentPage = 1;
+            reloadProjects();
+        }}
+    />
 
     <div class="flex flex-col">
         <div class="mb-8 flex justify-between">
@@ -318,8 +329,14 @@
                 title={$t("pages.admin.projects.lastProjects")}
                 {filters}
                 onCloseFilter={handleCloseFilter}
+                resource="projects"
             />
-            <ProjectsExportCsv />
+            <ExportCsv
+                endpoint={apiProjectsGetCollectionUrl}
+                queryParams={filters}
+                filenamePrefix="projects"
+                totalItems={totalItemsCount}
+            />
         </div>
         <Slider slides={projectSlides} {isLoading} />
     </div>

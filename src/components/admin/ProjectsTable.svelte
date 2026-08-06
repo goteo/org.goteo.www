@@ -45,12 +45,12 @@
     import Loader from "../library/feedback/Loader.svelte";
 
     const tableHeaders = [
-        "admin.projects.table.headers.name",
-        "admin.projects.table.headers.promoter",
-        "admin.projects.table.headers.contractNumber",
-        "admin.projects.table.headers.achieved",
-        "admin.projects.table.headers.paid",
-        "admin.projects.table.headers.process",
+        "pages.admin.projects.table.headers.name",
+        "pages.admin.projects.table.headers.promoter",
+        "pages.admin.projects.table.headers.contractNumber",
+        "pages.admin.projects.table.headers.achieved",
+        "pages.admin.projects.table.headers.paid",
+        "pages.admin.projects.table.headers.process",
         "",
     ];
 
@@ -231,121 +231,135 @@
             </div>
         </div>
 
-        <Table class="w-full border-separate border-spacing-y-2">
-            <TableHead>
-                {#each tableHeaders as header}
-                    <TableHeadCell
-                        class="bg-black p-4 text-base whitespace-nowrap text-white first:rounded-l-lg last:rounded-r-lg"
-                    >
-                        <span class="normal-case">{$t(header)}</span>
-                    </TableHeadCell>
-                {/each}
-            </TableHead>
-
-            <TableBody class="text-base">
-                {#if isFirstLoad}
-                    <TableBodyRow>
-                        <TableBodyCell colspan={tableHeaders.length}>
-                            <div class="flex justify-center py-6">
-                                <Loader />
-                            </div>
-                        </TableBodyCell>
-                    </TableBodyRow>
-                {:else if projects.length === 0 && !isLoading}
-                    <TableBodyRow>
-                        <TableBodyCell colspan={tableHeaders.length} class="text-center">
-                            {$t("pages.admin.projects.table.rows.noData") ?? "—"}
-                        </TableBodyCell>
-                    </TableBodyRow>
-                {:else}
-                    {#each projects as project, i}
-                        <TableBodyRow
-                            onclick={() => toggleRow(i)}
-                            class="{openRow === i
-                                ? 'bg-purple-soft'
-                                : 'bg-white'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
+        <div class="overflow-x-auto">
+            <Table class="w-full table-fixed border-separate border-spacing-y-2">
+                <TableHead>
+                    {#each tableHeaders as header, i}
+                        <TableHeadCell
+                            class="bg-black p-4 text-base text-white first:rounded-l-lg last:rounded-r-lg {i ===
+                            tableHeaders.length - 1
+                                ? 'w-12'
+                                : ''}"
                         >
-                            <TableBodyCell
-                                class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4"
-                            >
-                                <p class="truncate font-medium text-black">{project.name}</p>
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
-                                {project.promoter}
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
-                                {project.contractNumber}
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                {project.achieved}
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                <div class="flex items-center gap-2">
-                                    <span>{project.paid}</span>
-                                    <button
-                                        onclick={(e) => openPaidModal(project, e)}
-                                        class="text-secondary hover:text-secondary/70 cursor-pointer"
-                                        aria-label={$t("pages.admin.projects.table.headers.paid")}
-                                    >
-                                        <Edit width="14" height="14" />
-                                    </button>
-                                </div>
-                            </TableBodyCell>
-                            <TableBodyCell class="border-variant1 border-t border-b p-4">
-                                <div onclick={(e) => e.stopPropagation()} role="presentation">
-                                    <select
-                                        class="border-secondary text-secondary rounded-sm border py-1 text-sm"
-                                        value={project.status}
-                                        onchange={(e) =>
-                                            handleStatusChange(project, e.currentTarget.value)}
-                                    >
-                                        {#each statusOptions as opt}
-                                            <option value={opt.value}>{opt.label}</option>
-                                        {/each}
-                                    </select>
-                                </div>
-                            </TableBodyCell>
-                            <TableBodyCell
-                                class="border-variant1 rounded-r-md border-t border-r border-b p-4"
-                            >
-                                <Chevron
-                                    direction={openRow === i ? "up" : "down"}
-                                    width="24"
-                                    height="24"
-                                    class="text-black transition-transform"
-                                />
-                            </TableBodyCell>
-                        </TableBodyRow>
-
-                        {#if openRow === i}
-                            <TableBodyRow>
-                                <TableBodyCell
-                                    colspan={tableHeaders.length}
-                                    class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
-                                >
-                                    <ProjectsDetailsRow
-                                        {project}
-                                        onOpenAnnotationsModal={() =>
-                                            openAnnotationsModal(project, new MouseEvent("click"))}
-                                        userEmail={ownerUsers.get(project.owner)?.email}
-                                    />
-                                </TableBodyCell>
-                            </TableBodyRow>
-                        {/if}
+                            <span class="normal-case">{$t(header)}</span>
+                        </TableHeadCell>
                     {/each}
+                </TableHead>
 
-                    {#if isLoading}
+                <TableBody class="text-base">
+                    {#if isFirstLoad}
                         <TableBodyRow>
                             <TableBodyCell colspan={tableHeaders.length}>
-                                <div class="flex justify-center py-4">
+                                <div class="flex justify-center py-6">
                                     <Loader />
                                 </div>
                             </TableBodyCell>
                         </TableBodyRow>
+                    {:else if projects.length === 0 && !isLoading}
+                        <TableBodyRow>
+                            <TableBodyCell colspan={tableHeaders.length} class="text-center">
+                                {$t("pages.admin.projects.table.rows.noData") ?? "—"}
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {:else}
+                        {#each projects as project, i}
+                            <TableBodyRow
+                                onclick={() => toggleRow(i)}
+                                class="{openRow === i
+                                    ? 'bg-purple-soft'
+                                    : 'bg-white'} border-variant1 hover:bg-purple-soft text-content cursor-pointer border transition-colors"
+                            >
+                                <TableBodyCell
+                                    class="border-variant1 max-w-60 rounded-l-md border-t border-b border-l p-4"
+                                >
+                                    <p class="truncate font-medium text-black">{project.name}</p>
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="border-variant1 border-t border-b p-4 text-sm"
+                                >
+                                    <span class="block truncate">{project.promoter}</span>
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="border-variant1 border-t border-b p-4 text-sm"
+                                >
+                                    <span class="block truncate">{project.contractNumber}</span>
+                                </TableBodyCell>
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    {project.achieved}
+                                </TableBodyCell>
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    <div class="flex items-center gap-2">
+                                        <span>{project.paid}</span>
+                                        <button
+                                            onclick={(e) => openPaidModal(project, e)}
+                                            class="text-secondary hover:text-secondary/70 cursor-pointer"
+                                            aria-label={$t(
+                                                "pages.admin.projects.table.headers.paid",
+                                            )}
+                                        >
+                                            <Edit width="14" height="14" />
+                                        </button>
+                                    </div>
+                                </TableBodyCell>
+                                <TableBodyCell class="border-variant1 border-t border-b p-4">
+                                    <div onclick={(e) => e.stopPropagation()} role="presentation">
+                                        <select
+                                            class="border-secondary text-secondary rounded-sm border py-1 text-sm"
+                                            value={project.status}
+                                            onchange={(e) =>
+                                                handleStatusChange(project, e.currentTarget.value)}
+                                        >
+                                            {#each statusOptions as opt}
+                                                <option value={opt.value}>{opt.label}</option>
+                                            {/each}
+                                        </select>
+                                    </div>
+                                </TableBodyCell>
+                                <TableBodyCell
+                                    class="border-variant1 rounded-r-md border-t border-r border-b p-4"
+                                >
+                                    <Chevron
+                                        direction={openRow === i ? "up" : "down"}
+                                        width="24"
+                                        height="24"
+                                        class="text-black transition-transform"
+                                    />
+                                </TableBodyCell>
+                            </TableBodyRow>
+
+                            {#if openRow === i}
+                                <TableBodyRow>
+                                    <TableBodyCell
+                                        colspan={tableHeaders.length}
+                                        class="border-variant1 bg-purple-soft rounded-lg border p-0 shadow-[0px_1px_3px_0px_#0000001A]"
+                                    >
+                                        <ProjectsDetailsRow
+                                            {project}
+                                            onOpenAnnotationsModal={() =>
+                                                openAnnotationsModal(
+                                                    project,
+                                                    new MouseEvent("click"),
+                                                )}
+                                            userEmail={ownerUsers.get(project.owner)?.email}
+                                        />
+                                    </TableBodyCell>
+                                </TableBodyRow>
+                            {/if}
+                        {/each}
+
+                        {#if isLoading}
+                            <TableBodyRow>
+                                <TableBodyCell colspan={tableHeaders.length}>
+                                    <div class="flex justify-center py-4">
+                                        <Loader />
+                                    </div>
+                                </TableBodyCell>
+                            </TableBodyRow>
+                        {/if}
                     {/if}
-                {/if}
-            </TableBody>
-        </Table>
+                </TableBody>
+            </Table>
+        </div>
 
         <Pagination
             {currentPage}

@@ -1,9 +1,9 @@
-import BudgetStep from "../../../../../components/project/edit/BudgetStep.svelte";
-import CampaignInfoStep from "../../../../../components/project/edit/CampaignInfoStep.svelte";
-import CollaborationsStep from "../../../../../components/project/edit/CollaborationsStep.svelte";
-import ConfigurationStep from "../../../../../components/project/edit/ConfigurationStep.svelte";
-import OwnerInfoStep from "../../../../../components/project/edit/OwnerInfoStep.svelte";
-import RewardsStep from "../../../../../components/project/edit/RewardsStep.svelte";
+import BudgetStep from "./BudgetStep.svelte";
+import CampaignInfoStep from "./CampaignInfoStep.svelte";
+import CollaborationsStep from "./CollaborationsStep.svelte";
+import ConfigurationStep from "./ConfigurationStep.svelte";
+import OwnerInfoStep from "./OwnerInfoStep.svelte";
+import RewardsStep from "./RewardsStep.svelte";
 
 import type { Component } from "svelte";
 
