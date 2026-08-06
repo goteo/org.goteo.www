@@ -1,0 +1,370 @@
+<script lang="ts">
+    import {
+        Table,
+        TableBody,
+        TableBodyCell,
+        TableBodyRow,
+        TableHead,
+        TableHeadCell,
+    } from "flowbite-svelte";
+    
+    import Pagination from "./Pagination.svelte";
+    import { t } from "../../i18n/store";
+    import PlusIcon from "../icons/actions/PlusIcon.svelte";
+    import FiltersIcon from "../icons/filters/Filters.svelte";
+    import Button from "../library/buttons/Button.svelte";
+    import Checkbox from "../library/inputs/Checkbox.svelte";
+    import Search from "../library/inputs/Search.svelte";
+    import Select from "../library/inputs/Select.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
+    import Grid from "../library/layout/Grid.svelte";
+    import TabNavigation from "../library/layout/TabNavigation.svelte";
+
+    export interface NewsletterTemplateItem {
+        id: number | string;
+        name: string;
+        description: string;
+    }
+
+    interface Props {
+        templates?: NewsletterTemplateItem[];
+        onSendNewsletter?: (payload: Record<string, unknown>) => void;
+        onSearchCommunications?: (filters: Record<string, unknown>) => void;
+        onEditTemplate?: (id: number | string) => void;
+        onCreateTemplate?: () => void;
+    }
+
+    let {
+        templates = [],
+        onSendNewsletter,
+        onSearchCommunications,
+        onEditTemplate,
+        onCreateTemplate
+    }: Props = $props();
+
+    let activeTab = $state("templates");
+    const navTabs = $derived([
+        { id: "send", label: $t("pages.admin.newsletter.tabs.send") },
+        { id: "templates", label: $t("pages.admin.newsletter.tabs.templates") },
+        { id: "communications", label: $t("pages.admin.newsletter.tabs.communications") }
+    ]);
+
+    let selectedTemplate = $state("");
+    let recipientBlocks = $state([0]);
+    let selectedRecipients = $state<Record<number, string>>({});
+    let isTest = $state(false);
+    let onlySpanish = $state(false);
+
+    function addRecipientBlock() {
+        recipientBlocks = [...recipientBlocks, recipientBlocks.length];
+    }
+
+    let searchQuery = $state("");
+    let currentPage = $state(1);
+    let itemsPerPage = 10;
+
+    let filteredTemplates = $derived(
+        templates.filter(
+            (tmpl) =>
+                tmpl.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                tmpl.description.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+    );
+
+    let filterDirectedTo = $state("");
+    let filterProjectName = $state("");
+    let filterPaymentMethod = $state("");
+    let filterInterest = $state("");
+    let filterCertificate = $state("");
+    let filterPreferredLanguage = $state("");
+    let filterNewsletterLanguage = $state("");
+    let filterStatus = $state("");
+    let filterDates = $state("");
+    let filterNameEmail = $state("");
+    let filterLocation = $state("");
+    let filterProfile = $state("");
+
+    let isSubmitting = $state(false);
+
+    const recipientOptions = $derived([
+        { value: "all", label: $t("pages.admin.newsletter.send.recipients.all") },
+        { value: "promoters", label: $t("pages.admin.newsletter.send.recipients.promoters") },
+        { value: "donors", label: $t("pages.admin.newsletter.send.recipients.donors") }
+    ]);
+
+    function handleSendSubmit(e: SubmitEvent) {
+        e.preventDefault();
+        if (!selectedTemplate) {
+            alert($t("pages.admin.newsletter.send.errors.noTemplate"));
+            return;
+        }
+
+        isSubmitting = true;
+        onSendNewsletter?.({
+            templateId: selectedTemplate,
+            recipients: selectedRecipients,
+            isTest,
+            onlySpanish
+        });
+        isSubmitting = false;
+    }
+
+    function handleSearchSubmit(e: SubmitEvent) {
+        e.preventDefault();
+        isSubmitting = true;
+        onSearchCommunications?.({
+            directedTo: filterDirectedTo,
+            projectName: filterProjectName,
+            paymentMethod: filterPaymentMethod,
+            interest: filterInterest,
+            certificate: filterCertificate,
+            preferredLanguage: filterPreferredLanguage,
+            newsletterLanguage: filterNewsletterLanguage,
+            status: filterStatus,
+            dates: filterDates,
+            nameEmail: filterNameEmail,
+            location: filterLocation,
+            profile: filterProfile
+        });
+        isSubmitting = false;
+    }
+</script>
+
+<div class="flex flex-col gap-8">
+    <header class="flex flex-col gap-2">
+        <h1 class="text-3xl font-bold text-black">{$t("pages.admin.newsletter.title")}</h1>
+        <p class="text-content">{$t("pages.admin.newsletter.description")}</p>
+    </header>
+
+    <TabNavigation
+        tabs={navTabs}
+        currentTab={activeTab}
+        onTabClick={(id: string | number) => { activeTab = String(id); }}
+    />
+
+    {#if activeTab === "send"}
+        <form onsubmit={handleSendSubmit} class="flex flex-col gap-10">
+            <section class="flex flex-col gap-4">
+                <h2 class="text-xl font-bold text-black">{$t("pages.admin.newsletter.send.templateSection")}</h2>
+                <div class="max-w-md">
+                    <Select
+                        id="template-select"
+                        labelText=""
+                        bind:value={selectedTemplate}
+                    >
+                        <option value="" disabled selected>{$t("pages.admin.newsletter.send.placeholders.selectTemplate")}</option>
+                        {#each templates as item (item.id)}
+                            <option value={item.id}>{item.name}</option>
+                        {/each}
+                    </Select>
+                </div>
+            </section>
+
+            <section class="flex flex-col gap-4">
+                <h2 class="text-xl font-bold text-black">{$t("pages.admin.newsletter.send.recipientsSection")}</h2>
+                <div class="flex flex-col gap-4">
+                    <div class="flex flex-wrap items-center gap-4">
+                        {#each recipientBlocks as blockId (blockId)}
+                            <div class="w-72">
+                                <Select
+                                    id={`recipients-filter-${blockId}`}
+                                    labelText=""
+                                    bind:value={selectedRecipients[blockId]}
+                                >
+                                    <option value="" disabled selected>{$t("pages.admin.newsletter.send.placeholders.selectRecipient")}</option>
+                                    {#each recipientOptions as opt}
+                                        <option value={opt.value}>{opt.label}</option>
+                                    {/each}
+                                </Select>
+                            </div>
+                        {/each}
+                    </div>
+                    <div>
+                        <button 
+                            type="button" 
+                            onclick={addRecipientBlock}
+                            class="flex items-center gap-2 font-bold text-secondary cursor-pointer hover:opacity-80 transition-opacity"
+                        >
+                            <PlusIcon />
+                            <span>{$t("pages.admin.newsletter.send.addMore")}</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="flex flex-col gap-4 border-t border-gray-200 pt-8">
+                <h2 class="text-xl font-bold text-black">{$t("pages.admin.newsletter.send.optionsSection")}</h2>
+                <div class="flex flex-col gap-3">
+                    <Checkbox
+                        id="is-test"
+                        bind:checked={isTest}
+                        label={$t("pages.admin.newsletter.send.options.isTest")}
+                    />
+                    <Checkbox
+                        id="only-spanish"
+                        bind:checked={onlySpanish}
+                        label={$t("pages.admin.newsletter.send.options.onlySpanish")}
+                    />
+                </div>
+            </section>
+
+            <div class="flex justify-start">
+                <Button 
+                    type="submit" 
+                    disabled={isSubmitting} 
+                    kind="primary" 
+                    class="bg-primary hover:bg-primary-dark rounded-full px-10 py-4 text-lg font-bold"
+                >
+                    {isSubmitting ? $t("system.loading") : $t("pages.admin.newsletter.send.startAction")}
+                </Button>
+            </div>
+        </form>
+
+    {:else if activeTab === "templates"}
+        <div class="flex flex-col gap-6">
+            <form onsubmit={(e) => e.preventDefault()} class="border-variant1 flex flex-col gap-4 rounded-[40px] border bg-white px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A] md:flex-row md:items-center md:justify-between">
+                <div class="flex flex-1">
+                    <Search
+                        id="search-templates"
+                        bind:value={searchQuery}
+                        placeholder={$t("pages.admin.newsletter.filters.search")}
+                        class="w-full"
+                    />
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <Button 
+                        type="submit" 
+                        kind="ghost" 
+                        class="flex items-center justify-center gap-2 rounded-[24px] bg-variant1 px-6 py-4 font-bold text-secondary hover:bg-variant1/80 transition-colors"
+                    >
+                        {$t("common.search")}
+                    </Button>
+
+                    <Button type="button" kind="ghost" class="rounded-[24px] border border-variant1 px-6 py-4 font-bold text-secondary bg-white flex items-center justify-center gap-2">
+                        <FiltersIcon />
+                        {$t("pages.admin.newsletter.filters.apply")}
+                    </Button>
+                </div>
+            </form>
+
+            <Table class="w-full border-separate border-spacing-y-2">
+                <TableHead>
+                    <TableHeadCell class="bg-secondary p-4 text-base text-white first:rounded-l-lg">
+                        <span class="normal-case">{$t("pages.admin.newsletter.table.headers.template")}</span>
+                    </TableHeadCell>
+                    <TableHeadCell class="bg-secondary p-4 text-base text-white last:rounded-r-lg">
+                        <span class="normal-case">{$t("pages.admin.newsletter.table.headers.description")}</span>
+                    </TableHeadCell>
+                </TableHead>
+                <TableBody class="text-base">
+                    {#each filteredTemplates as item (item.id)}
+                        <TableBodyRow class="bg-white">
+                            <TableBodyCell class="border-variant1 rounded-l-md border-t border-b border-l p-4 font-semibold text-black">
+                                {item.name}
+                            </TableBodyCell>
+                            <TableBodyCell class="border-variant1 rounded-r-md border-t border-r border-b p-4 text-gray-500 flex items-center justify-between">
+                                <span>{item.description}</span>
+                                <Button 
+                                    type="button" 
+                                    kind="ghost" 
+                                    class="font-bold text-secondary underline p-0" 
+                                    onclick={() => onEditTemplate?.(item.id)}
+                                >
+                                    {$t("common.edit")}
+                                </Button>
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {:else}
+                        <TableBodyRow class="bg-white">
+                            <TableBodyCell colspan={2} class="p-8 text-center text-gray-500">
+                                {$t("common.noData")}
+                            </TableBodyCell>
+                        </TableBodyRow>
+                    {/each}
+                </TableBody>
+            </Table>
+
+            <Pagination 
+                currentPage={currentPage} 
+                totalItems={filteredTemplates.length} 
+                itemsPerPage={itemsPerPage} 
+            />
+        </div>
+
+    {:else if activeTab === "communications"}
+        <form onsubmit={handleSearchSubmit} class="flex flex-col gap-8">
+            <h2 class="text-xl font-bold text-black">{$t("pages.admin.newsletter.communications.searchTitle")}</h2>
+            
+            <Grid class="grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                <Select id="directed-to" labelText="" bind:value={filterDirectedTo}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.directedTo")}</option>
+                </Select>
+
+                <Select id="newsletter-lang" labelText="" bind:value={filterNewsletterLanguage}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.newsletterLanguage")}</option>
+                </Select>
+
+                <TextInput
+                    id="project-name"
+                    labelText=""
+                    placeholder={$t("pages.admin.newsletter.communications.fields.projectName")}
+                    bind:value={filterProjectName}
+                />
+
+                <Select id="status" labelText="" bind:value={filterStatus}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.status")}</option>
+                </Select>
+
+                <Select id="payment-method" labelText="" bind:value={filterPaymentMethod}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.paymentMethod")}</option>
+                </Select>
+
+                <Select id="dates" labelText="" bind:value={filterDates}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.dates")}</option>
+                </Select>
+
+                <Select id="interest" labelText="" bind:value={filterInterest}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.interest")}</option>
+                </Select>
+
+                <TextInput
+                    id="name-email"
+                    labelText=""
+                    placeholder={$t("pages.admin.newsletter.communications.fields.nameEmail")}
+                    bind:value={filterNameEmail}
+                />
+
+                <Select id="certificate" labelText="" bind:value={filterCertificate}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.certificate")}</option>
+                </Select>
+
+                <TextInput
+                    id="location"
+                    labelText=""
+                    placeholder={$t("pages.admin.newsletter.communications.fields.location")}
+                    bind:value={filterLocation}
+                />
+
+                <Select id="pref-lang" labelText="" bind:value={filterPreferredLanguage}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.preferredLanguage")}</option>
+                </Select>
+
+                <Select id="profile" labelText="" bind:value={filterProfile}>
+                    <option value="" disabled selected>{$t("pages.admin.newsletter.communications.fields.profile")}</option>
+                </Select>
+            </Grid>
+
+            <div class="flex justify-start pt-4">
+                <Button 
+                    type="submit" 
+                    disabled={isSubmitting} 
+                    kind="primary" 
+                    class="bg-primary hover:bg-primary-dark rounded-full px-10 py-4 font-bold"
+                >
+                    {isSubmitting ? $t("system.loading") : $t("pages.admin.newsletter.communications.searchAction")}
+                </Button>
+            </div>
+        </form>
+    {/if}
+</div>

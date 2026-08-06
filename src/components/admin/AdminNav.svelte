@@ -12,6 +12,7 @@
     const sections = [
         { path: "/admin/charges", key: "pages.admin.nav.charges" },
         { path: "/admin/projects", key: "pages.admin.nav.projects" },
+        { path: "/admin/newsletter", key: "pages.admin.nav.communications" },
     ];
 
     let pathname = $state("");
@@ -25,7 +26,7 @@
     }
 </script>
 
-<nav class={twMerge("admin-nav overflow-x-auto px-2 pb-3 md:px-4 md:pb-4", classes)}>
+<nav class={twMerge("overflow-x-auto px-2 pb-3 md:px-4 md:pb-4 touch-pan-x", classes)}>
     <ul class="flex min-w-max items-center gap-2">
         {#each sections as section (section.path)}
             {@const active = isActive(section.path)}
@@ -43,11 +44,3 @@
         {/each}
     </ul>
 </nav>
-
-<style>
-    @media (max-width: 768px) {
-        .admin-nav {
-            -webkit-overflow-scrolling: touch;
-        }
-    }
-</style>

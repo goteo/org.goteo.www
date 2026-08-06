@@ -1097,6 +1097,25 @@
       }
     },
     "admin": {
+      "newsletter": {
+        "title": "Boletín",
+        "description": "Recibe en tu buzón las últimas noticias, análisis detallados y recursos exclusivos de Goteo. Entérate de todo sobre crowdfunding, innovación social y tecnología.",
+        "tabs": {
+          "send": "Enviar boletín",
+          "templates": "Plantillas",
+          "communications": "Comunicaciones"
+        },
+        "filters": {
+          "search": "Buscar",
+          "apply": "Filtros"
+        },
+        "table": {
+          "headers": {
+            "template": "Plantilla",
+            "description": "Descripción"
+          }
+        }
+      },
       "filter": {
         "btns": {
           "openFilters": "Filtros",
