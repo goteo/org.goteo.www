@@ -1,26 +1,20 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import Button from "../../../components/library/buttons/Button.svelte";
-    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
-    import AddressAutocomplete from "../../../components/library/inputs/AddressAutocomplete.svelte";
-    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
-    import DateInput from "../../../components/library/inputs/DateInput.svelte";
-    import TextInput from "../../../components/library/inputs/TextInput.svelte";
-    import { t } from "../../../i18n/store";
+    import { t } from "../../i18n/store";
     import {
         apiProjectsPost,
         apiProjectsIdPatch,
         type Category,
         type ProjectProjectCreationDto,
-    } from "../../../openapi/client";
-    import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
+    } from "../../openapi/client";
+    import { client } from "../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../openapi/client/paths.gen";
     import {
         validateCreateForm,
         validateField,
         type ValidationErrors,
-    } from "../../../stores/drafts/draftValidation";
+    } from "../../stores/drafts/draftValidation";
     import {
         createDraft,
         currentDraft,
@@ -31,10 +25,16 @@
         project,
         validationErrors,
         type CreateProjectForm,
-    } from "../../../stores/drafts/projectDraft";
-    import { maxEndDate } from "../../../utils/campaign";
-    import { getDefaultCurrency } from "../../../utils/consts";
-    import { formatCurrency } from "../../../utils/currencies";
+    } from "../../stores/drafts/projectDraft";
+    import { maxEndDate } from "../../utils/campaign";
+    import { getDefaultCurrency } from "../../utils/consts";
+    import { formatCurrency } from "../../utils/currencies";
+    import Button from "../library/buttons/Button.svelte";
+    import BaseCard from "../library/cards/BaseCard.svelte";
+    import AddressAutocomplete from "../library/inputs/AddressAutocomplete.svelte";
+    import CategorySelect from "../library/inputs/CategorySelect.svelte";
+    import DateInput from "../library/inputs/DateInput.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 

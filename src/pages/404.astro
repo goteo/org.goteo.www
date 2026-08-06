@@ -4,11 +4,11 @@ import ErrorPage from "../components/errorpage/ErrorPage.svelte";
 import App from "../layouts/App.svelte";
 import Layout from "../layouts/Layout.astro";
 
-const { t, lang, session } = Astro.locals;
+const { t, lang } = Astro.locals;
 ---
 
 <Layout title={t("pages.404.meta.title")} description={t("pages.404.meta.description")}>
-    <App locale={lang} session={session} client:load>
+    <App locale={lang} client:load>
         <ErrorPage
             code={404}
             title={t("pages.404.title")}

@@ -26,7 +26,7 @@
         {#each [{ key: "datePublished", value: project.datePublished }, { key: "dateEnd1", value: project.dateEnd1 }, { key: "dateEnd2", value: project.dateEnd2 }, { key: "minOptim", value: project.minOptim }] as item}
             <div class="flex flex-col gap-1">
                 <span class="text-content font-bold">
-                    {$t(`admin.projects.table.rows.details.${item.key}`)}:
+                    {$t(`pages.admin.projects.table.rows.details.${item.key}`)}:
                 </span>
                 <span class="text-black"
                     >{item.value === "—" ? "—" : formatDate(new Date(item.value), $locale)}</span
@@ -76,7 +76,7 @@
                     if (key === "contributions") navigateToCharges();
                 }}
             >
-                {$t(`admin.projects.table.rows.details.btns.${key}`)}
+                {$t(`pages.admin.projects.table.rows.details.btns.${key}`)}
             </button>
         {/each}
     </div>

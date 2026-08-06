@@ -2,7 +2,7 @@ import { derived, get, writable } from "svelte/store";
 
 import { session } from "../auth/store";
 import { apiProjectRewardsIdGetUrl } from "../openapi/client/paths.gen";
-import { migrateLegacyCart } from "../utils/checkouts/migrate";
+import { dropLegacyCart } from "../utils/checkouts/migrate";
 import { checkoutRepo } from "../utils/checkouts/repository";
 import { getDefaultCurrency } from "../utils/consts";
 import { multiplyMoney, sumMoney } from "../utils/money";
@@ -123,21 +123,13 @@ function schedulePersist() {
     });
 }
 
-function removeLegacyStorageKey() {
-    try {
-        localStorage.removeItem("cart");
-    } catch {
-        // ignore storage access errors
-    }
-}
-
 if (isBrowser) {
     enqueue(async () => {
         // Snapshot the key: `activeKey` can flip mid-flight when the session
         // store resolves (guest → user), and writing the guest-derived items
         // back under the user key would wipe their stored checkout.
         const key = activeKey;
-        await migrateLegacyCart();
+        dropLegacyCart();
 
         const record = await checkoutRepo.get(key);
         const loaded = record?.items ?? {};
@@ -255,7 +247,7 @@ export const cart: CheckoutStore = {
 
         const key = activeKey;
         enqueue(() => checkoutRepo.remove(key));
-        removeLegacyStorageKey();
+        dropLegacyCart();
     },
 
     clearTarget: (target: string) => {
@@ -283,7 +275,7 @@ export const cart: CheckoutStore = {
                 await checkoutRepo.remove(key);
             }
         });
-        removeLegacyStorageKey();
+        dropLegacyCart();
     },
 };
 

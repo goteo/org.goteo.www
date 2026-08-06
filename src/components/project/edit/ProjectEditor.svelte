@@ -12,9 +12,9 @@
 
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
-    import { session } from "../../../../../auth/store";
-    import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
+    import { session } from "../../../auth/store";
+    import { type Project, type ProjectProjectCreationDto } from "../../../openapi/client";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
         currentDraft,
         deleteCurrentDraft,
@@ -23,11 +23,11 @@
         loadDraft,
         markCurrentDraftClean,
         updateWizard,
-    } from "../../../../../stores/drafts/projectDraft";
-    import { publishDraft } from "../../../../../utils/projectPublisher";
-    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
+    } from "../../../stores/drafts/projectDraft";
+    import { publishDraft } from "../../../utils/projectPublisher";
+    import { getProjectDraftResources } from "../../../utils/projectSubmissionApi";
 
-    import type { Session } from "../../../../../auth/types";
+    import type { Session } from "../../../auth/types";
 
     let {
         idOrSlug,

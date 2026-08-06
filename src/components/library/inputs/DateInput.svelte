@@ -9,6 +9,8 @@
 
     let {
         value = $bindable(new Date()),
+        placeholder = undefined,
+        hasValue = $bindable(false),
         id = undefined,
         name = undefined,
         required = false,
@@ -24,6 +26,8 @@
         onApply = undefined,
     }: {
         value?: Date;
+        placeholder?: string;
+        hasValue?: boolean;
         id?: string;
         name?: string;
         required?: boolean;
@@ -49,9 +53,10 @@
 
     let open = $state(false);
     let container: HTMLDivElement;
+    let hasSelection = $state(hasValue);
 
     const displayValue = $derived(
-        value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
+        hasSelection && value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
     );
 
     function dateToString(date: Date): string {
@@ -78,6 +83,8 @@
             return;
         }
         lastValid = selected;
+        hasSelection = true;
+        hasValue = true;
         onInput?.(dateToString(selected));
     }
 
@@ -208,7 +215,7 @@
             error && "border-red-500 focus:ring-red-500",
         )}
     >
-        <span class={displayValue ? "" : "text-gray-400"}>{displayValue}</span>
+        <span class={displayValue ? "" : "text-gray-400"}>{displayValue || placeholder || ""}</span>
         <Calendar class="text-secondary size-5" />
     </button>
 
