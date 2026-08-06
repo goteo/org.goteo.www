@@ -1559,6 +1559,11 @@
         "tabs": {
           "banners": "Anuncios"
         },
+        "pagination": {
+          "showing": "{{ items }} de {{ total }} resultados",
+          "noResults": "No se han encontrado resultados",
+          "unloaded": "Cargando..."
+        },
         "banners": {
           "title": "Anuncios",
           "description": "Aquí puedes crear y gestionar los banners de la plataforma",
@@ -1578,7 +1583,21 @@
           },
           "history": {
             "title": "Histórico de anuncios",
-            "description": "Aquí puedes ver el histórico de anuncios publicados"
+            "description": "Aquí puedes ver el histórico de anuncios publicados",
+            "noData": "No hay anuncios en el histórico",
+            "headers": {
+              "title": "Título",
+              "content": "Contenido",
+              "publishedAt": "Fecha de publicación",
+              "endAt": "Fecha de finalización"
+            },
+            "actions": {
+              "view": "Ver"
+            },
+            "modal": {
+              "title": "Anuncio publicado el {{date}}",
+              "description": "Aquí puedes ver como fue el anuncio"
+            }
           }
         }
       }
