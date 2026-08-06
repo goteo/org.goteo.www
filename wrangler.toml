@@ -1,5 +1,5 @@
 name = "goteo-v4-frontend"
-main = "./dist/_worker.js/index.js"
+main = "@astrojs/cloudflare/entrypoints/server"
 compatibility_date = "2025-06-26"
 compatibility_flags = ["nodejs_compat"]
 workers_dev = false

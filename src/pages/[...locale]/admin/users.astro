@@ -1,0 +1,24 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../layouts/App.svelte";
+import AdminUsers from "../../../components/admin/Users.svelte";
+
+const { t, lang, session } = Astro.locals;
+---
+
+<Layout title={t("pages.admin.users.title")} description={t("pages.metadata.description")}>
+    <App client:load locale={lang} session={session} admin>
+        <div class="wrapper">
+            <div class="flex w-full flex-col gap-10 py-10">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
+                        {t("pages.admin.users.title")}
+                    </h2>
+                    <p class="text-content">{t("pages.admin.users.description")}</p>
+                </div>
+
+                <AdminUsers client:load />
+            </div>
+        </div>
+    </App>
+</Layout>

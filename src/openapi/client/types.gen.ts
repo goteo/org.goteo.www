@@ -2539,6 +2539,8 @@ export type User = {
      * Free-form rich text description for the User.
      */
     description?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -2647,6 +2649,8 @@ export type UserJsonld = {
      * Free-form rich text description for the User.
      */
     description?: string;
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
 };
 
 /**
@@ -4283,6 +4287,10 @@ export type ApiProjectsGetCollectionData = {
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
         'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
         'order[dateCreated]'?: 'asc' | 'desc';
         'order[dateUpdated]'?: 'asc' | 'desc';
     };
@@ -4622,6 +4630,10 @@ export type ApiProjectCollaborationsGetCollectionData = {
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
         'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
         'order[dateCreated]'?: 'asc' | 'desc';
         'order[dateUpdated]'?: 'asc' | 'desc';
     };
@@ -4794,6 +4806,10 @@ export type ApiProjectRewardsGetCollectionData = {
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
         'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
     };
     url: '/v4/project_rewards';
 };
@@ -5215,6 +5231,10 @@ export type ApiProjectUpdatesGetCollectionData = {
         'dateCreated[strictly_before]'?: string;
         'dateCreated[after]'?: string;
         'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
     };
     url: '/v4/project_updates';
 };
@@ -5536,7 +5556,11 @@ export type ApiUsersGetCollectionData = {
         itemsPerPage?: number;
         handle?: string;
         'order[handle]'?: 'asc' | 'desc';
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
         email?: string;
+        type?: string;
+        'type[]'?: Array<string>;
         accounting?: string;
         'accounting[]'?: Array<string>;
         'territory.country'?: string;
@@ -5545,6 +5569,17 @@ export type ApiUsersGetCollectionData = {
         'territory.subLvl1[]'?: Array<string>;
         'territory.subLvl2'?: string;
         'territory.subLvl2[]'?: Array<string>;
+        roles?: string;
+        'roles[]'?: Array<string>;
+        active?: boolean;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
     };
     url: '/v4/users';
 };
