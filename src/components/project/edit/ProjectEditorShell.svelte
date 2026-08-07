@@ -32,7 +32,6 @@
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
-    import Title from "../../library/typography/Title.svelte";
 
     import type { Project } from "../../../openapi/client";
     import type { Snippet } from "svelte";
@@ -139,9 +138,9 @@
                         />
                     </svg>
                     <div class="flex-1">
-                        <Title level={3} variant="subsection" color="secondary" class="text-sm">
+                        <span class="text-secondary text-sm font-semibold">
                             {$t("pages.project.edit.errors.storage.title")}
-                        </Title>
+                        </span>
                         <p class="text-tertiary mt-1 text-sm">
                             {#if $persistenceError === "storage_quota_exceeded"}
                                 {$t("pages.project.edit.errors.storage.quota_exceeded")}
