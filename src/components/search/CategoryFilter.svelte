@@ -17,15 +17,9 @@ Implements active/inactive pill states matching Figma design
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
         showLabel?: boolean;
-        "data-testid"?: string;
     }
 
-    let {
-        selectedCategories = [],
-        onCategoryChange,
-        showLabel = true,
-        "data-testid": dataTestid,
-    }: Props = $props();
+    let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
 
     let categories = getAvailableCategories();
     let selected = $state<Category[]>([]);
@@ -56,7 +50,7 @@ Implements active/inactive pill states matching Figma design
     }
 </script>
 
-<div class="w-full" data-testid={dataTestid}>
+<div class="w-full">
     {#if showLabel}
         <h3 class="font-body mb-6 text-base font-bold text-black">
             {$t("pages.search.filters.categoryLabel")}

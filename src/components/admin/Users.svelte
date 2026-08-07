@@ -48,11 +48,9 @@
         { title: $t("pages.admin.users.totalizers.selected"), amount: totalItemsCount },
     ]);
 
-    const sortMap: Record<string, { field: "handle" | "email"; direction: "asc" | "desc" }> = {
+    const sortMap: Record<string, { field: "handle"; direction: "asc" | "desc" }> = {
         "handle-asc": { field: "handle", direction: "asc" },
         "handle-desc": { field: "handle", direction: "desc" },
-        "email-asc": { field: "email", direction: "asc" },
-        "email-desc": { field: "email", direction: "desc" },
     };
 
     const initialSortKey = Object.keys(sortMap).find(
@@ -74,9 +72,7 @@
 
         const sortOption = sortMap[sort];
         if (sortOption) {
-            // The spec only declares `order[handle]`, so the email variant is written
-            // through a record view of the query.
-            (query as Record<string, unknown>)[`order[${sortOption.field}]`] = sortOption.direction;
+            query[`order[${sortOption.field}]`] = sortOption.direction;
         }
 
         return query;

@@ -69,24 +69,28 @@
     }
 
     /**
+     * Image MIME types accepted by the uploader, mirroring the image entries of
+     * `STORAGE_ALLOWEDTYPES` in `src/utils/objectStorage.ts`. That module cannot be
+     * imported here because it instantiates a server-side S3 client.
+     */
+    const COVER_MIME_TYPES: Record<string, string> = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        webp: "image/webp",
+        png: "image/png",
+        gif: "image/gif",
+    };
+
+    /**
      * The cover comes back as a bare URL, but `UploadedFile` needs a MIME type
      * for the uploader to recognise it as an image and render its preview.
      */
     function guessImageMimeType(url: string): string {
-        const extension = url.split("?")[0].split(".").pop()?.toLowerCase();
+        const basename = url.split("?")[0].split(/[\\/]/).pop() ?? "";
+        const dotIndex = basename.lastIndexOf(".");
+        const extension = dotIndex < 1 ? "" : basename.slice(dotIndex + 1).toLowerCase();
 
-        switch (extension) {
-            case "png":
-                return "image/png";
-            case "webp":
-                return "image/webp";
-            case "gif":
-                return "image/gif";
-            case "svg":
-                return "image/svg+xml";
-            default:
-                return "image/jpeg";
-        }
+        return COVER_MIME_TYPES[extension] ?? "image/jpeg";
     }
 
     function projectToIri(project: Project) {

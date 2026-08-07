@@ -9,6 +9,9 @@ import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
 import HomeBanner from "../../components/home/HomeBanner.svelte";
+// Disabled sections, re-enable the import along with the component below:
+// import Stories from "../../components/home/Stories.svelte";
+// import Resources from "../../components/home/Resources.astro";
 import { isSupportedLocale } from "../../i18n/locales";
 import { NotFound } from "../../utils/responses";
 
@@ -38,7 +41,7 @@ const { t, lang } = Astro.locals;
         <Stats />
         <CampaignsTabs />
         <Matchfunding />
-        <!-- Re-add the matching import when enabling either of these. -->
+        <!-- Uncomment the matching import at the top when enabling either of these. -->
         <!-- <Stories client:load /> -->
         <FeaturedPromoters />
         <!-- <Resources /> -->
