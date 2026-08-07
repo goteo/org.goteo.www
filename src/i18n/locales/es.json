@@ -1185,7 +1185,8 @@
       "nav": {
         "charges": "Cobros",
         "projects": "Proyectos",
-        "users": "Usuarios"
+        "users": "Usuarios",
+        "comm": "Comunicación"
       },
       "sidebar": {
         "aria": {
