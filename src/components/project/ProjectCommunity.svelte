@@ -67,7 +67,7 @@
             ? groupedItems.default
             : groupedItems.default?.slice(
                   0,
-                  PAGE_SIZE - 2 + Math.max(0, (currentPage - 1) * PAGE_SIZE),
+                  PAGE_SIZE - 1 + Math.max(0, (currentPage - 1) * PAGE_SIZE),
               ),
     );
 
@@ -114,12 +114,10 @@
             {#if groupedItems.default?.length}
                 <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#if !hasMatchfunding}
-                        <div class="row-span-2 h-full">
-                            <ProjectCommunityAnonymous
-                                {project}
-                                currency={accounting.balance?.currency!}
-                            />
-                        </div>
+                        <ProjectCommunityAnonymous
+                            {project}
+                            currency={accounting.balance?.currency!}
+                        />
                     {/if}
                     {#each visibleDefaultItems as item (item.id)}
                         <ProjectCommunityMessage
@@ -145,7 +143,7 @@
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
     bodyClass="p-0"
 >
     {#if selectedProjectSupport}

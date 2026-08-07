@@ -183,12 +183,21 @@
                         fill: "start",
                         tension: 0.25,
                         pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointHoverBorderWidth: 2,
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "#59E9D3",
                     },
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                interaction: {
+                    mode: "index",
+                    intersect: false,
+                    axis: "x",
+                },
                 scales: {
                     x: {
                         type: "linear",
@@ -210,6 +219,9 @@
                 plugins: {
                     legend: { display: false },
                     tooltip: {
+                        mode: "index",
+                        intersect: false,
+                        position: "nearest",
                         callbacks: {
                             title: (items) => {
                                 const dataIndex = items[0].dataIndex;

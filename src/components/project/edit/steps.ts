@@ -1,15 +1,15 @@
 //@ts-expect-error svelte components do not export as ts
-import BudgetStep from "../../../../../components/project/edit/BudgetStep.svelte";
+import BudgetStep from "./BudgetStep.svelte";
 //@ts-expect-error svelte components do not export as ts
-import CampaignInfoStep from "../../../../../components/project/edit/CampaignInfoStep.svelte";
+import CampaignInfoStep from "./CampaignInfoStep.svelte";
 //@ts-expect-error svelte components do not export as ts
-import CollaborationsStep from "../../../../../components/project/edit/CollaborationsStep.svelte";
+import CollaborationsStep from "./CollaborationsStep.svelte";
 //@ts-expect-error svelte components do not export as ts
-import ConfigurationStep from "../../../../../components/project/edit/ConfigurationStep.svelte";
+import ConfigurationStep from "./ConfigurationStep.svelte";
 //@ts-expect-error svelte components do not export as ts
-import OwnerInfoStep from "../../../../../components/project/edit/OwnerInfoStep.svelte";
+import OwnerInfoStep from "./OwnerInfoStep.svelte";
 //@ts-expect-error svelte components do not export as ts
-import RewardsStep from "../../../../../components/project/edit/RewardsStep.svelte";
+import RewardsStep from "./RewardsStep.svelte";
 
 import type { Snippet } from "svelte";
 

@@ -18,6 +18,11 @@ export default [
     ...sveltePlugin.configs.recommended,
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
+    // Root config files run in Node at build time, not in the browser.
+    {
+        files: ["*.config.{js,mjs,cjs,ts}"],
+        languageOptions: { globals: globals.node },
+    },
     {
         ignores: [
             "node_modules/**",
@@ -34,6 +39,7 @@ export default [
             ".github/**",
             "env.d.ts",
             "storybook-static/**",
+            "graphify-out/**",
         ],
     },
     {
@@ -140,6 +146,9 @@ export default [
             "svelte/prefer-svelte-reactivity": "off",
             "svelte/no-unused-props": "warn",
             "svelte/no-useless-children-snippet": "warn",
+            // False positives on $bindable/$props defaults used only in the template:
+            // the core rule analyses the JS AST and can't see Svelte template usage.
+            "no-useless-assignment": "off",
         },
     },
     ...storybook.configs["flat/recommended"],

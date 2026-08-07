@@ -11,5 +11,5 @@
     {#each project.categories as category}
         <CategoryTag iri={category} />
     {/each}
-    <TerritoryTag territory={project.territory} />
+    <TerritoryTag territory={project.territory} iconSize="24" />
 </div>

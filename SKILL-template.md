@@ -7,7 +7,7 @@ description: Provides a web GUI to interact with the Goteo v4 API and adds tools
 
 ## Stack
 
-Astro 5 + Svelte 5 + TailwindCSS 4 + TypeScript 5, deployed on Cloudflare Workers (also supports Node adapter).
+Astro 7 + Svelte 5 + TailwindCSS 4 + TypeScript 5, deployed on Cloudflare Workers (also supports Node adapter). Requires Node 22.12+.
 
 ## Folder structure
 

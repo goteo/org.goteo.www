@@ -83,10 +83,9 @@
 
     <div
         bind:this={tabsContainer}
-        class="wrapper no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
+        class="wrapper mx-8 flex scrollbar-none overflow-x-auto [-ms-overflow-style:none] lg:mx-0 lg:space-x-6 [&::-webkit-scrollbar]:hidden"
         role="tablist"
         aria-label="Project tabs"
-        style="scrollbar-width: none;"
         onscroll={updateScrollButtons}
     >
         {#each tabs as tab}
@@ -113,16 +112,6 @@
     >
         <ArrowSliderIcon direction="right" />
     </button>
-    <style>
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-
     <div class="bg-variant1 flex w-full justify-center py-10 lg:py-20">
         <div class="wrapper flex items-center justify-center">
             {#if activeTab === "rewards"}

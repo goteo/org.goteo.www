@@ -1,11 +1,15 @@
-import dotenv from "dotenv";
-
-let isDotenvLoaded = false;
-if (typeof process !== "undefined" && !isDotenvLoaded) {
-    dotenv.config();
-    isDotenvLoaded = true;
-}
-
+/**
+ * Reads configuration from whichever environment this module ends up in.
+ *
+ * Nothing is loaded from disk here. This file travels into the browser bundle — components
+ * call `getDefaultCurrency()` and friends — and it also runs on Cloudflare Workers, where
+ * there is no filesystem to read a `.env` from. Calling `dotenv.config()` from here used to
+ * throw `process.cwd is not a function` in the browser, which killed hydration for every
+ * island that reached this module.
+ *
+ * Astro loads `.env` into `import.meta.env` on its own. The one caller that runs outside
+ * Astro is `openapi-ts.config.ts`, and it loads `.env` itself.
+ */
 let runtimeEnv: Record<string, string>;
 
 if (typeof import.meta !== "undefined" && import.meta.env) {

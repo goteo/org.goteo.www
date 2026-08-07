@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@fontsource/karla";
 @import "svelte-range-slider-pips/dist/range-slider-pips.css";
 
 @plugin "flowbite/plugin";
@@ -38,7 +37,8 @@
     --color-semantic-notification: #c2eeff;
     --color-semantic-warning: #ffffc2;
 
-    --font-body: "Karla", sans-serif;
+    /* Declared by the `<Font>` component in Layout.astro; already carries its own fallbacks. */
+    --font-body: var(--font-karla);
     --text-body-small: 0.875rem;
     --text-double: 2rem;
 }

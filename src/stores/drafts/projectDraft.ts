@@ -11,6 +11,7 @@ import {
 import { session } from "../../auth/store";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
+import { emptyRichText } from "../../utils/richText";
 
 import type {
     Budget,
@@ -20,6 +21,7 @@ import type {
     ProjectReward,
     Territory,
 } from "../../openapi/client";
+import type { JSONContent } from "@tiptap/core";
 
 /**
  * Uploaded file data
@@ -43,14 +45,12 @@ export interface WizardCampaignInfo {
     images: UploadedFile[];
     video: string | undefined;
 
-    // Rich text content (stored as HTML)
-    objectives: string;
-    legacy: string;
-    targetAudience: string;
-    team: string;
-
-    // Plain text
-    communicationStrategy: string;
+    // Rich text content (stored as Tiptap JSON)
+    objectives: JSONContent;
+    legacy: JSONContent;
+    targetAudience: JSONContent;
+    team: JSONContent;
+    communicationStrategy: JSONContent;
 }
 
 export type Wizard = {
@@ -138,11 +138,11 @@ export const wizard = derived(
             campaignInfo: {
                 images: [],
                 video: "",
-                objectives: "",
-                legacy: "",
-                targetAudience: "",
-                team: "",
-                communicationStrategy: "",
+                objectives: emptyRichText(),
+                legacy: emptyRichText(),
+                targetAudience: emptyRichText(),
+                team: emptyRichText(),
+                communicationStrategy: emptyRichText(),
             },
             rewards: [],
             collaborations: [],
@@ -286,11 +286,11 @@ export async function createDraft(
             campaignInfo: {
                 images: resources?.images ?? [],
                 video: "",
-                objectives: "",
-                legacy: "",
-                targetAudience: "",
-                team: "",
-                communicationStrategy: "",
+                objectives: emptyRichText(),
+                legacy: emptyRichText(),
+                targetAudience: emptyRichText(),
+                team: emptyRichText(),
+                communicationStrategy: emptyRichText(),
             },
             rewards: resources?.rewards ?? [],
             collaborations: resources?.collaborations ?? [],

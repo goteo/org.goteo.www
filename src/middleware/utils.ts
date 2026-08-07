@@ -58,17 +58,34 @@ export function getLanguage(context: APIContext): string {
 
     for (const lang of userPreferredLangs) {
         if (isSupportedLocale(lang)) {
-            context.cookies.set(PREFERRED_LANGUAGE_COOKIE, lang, {
-                path: "/",
-                httpOnly: false,
-                maxAge: 60 * 60 * 24 * 365,
-            });
-
             return lang;
         }
     }
 
     return defaultLang;
+}
+
+/**
+ * Remembers the working language so that unprefixed URLs keep serving it on later visits.
+ *
+ * Writes nothing when the cookie already holds this language: a response carrying a
+ * `Set-Cookie` belongs to the visitor it was built for and must never be stored at the
+ * edge, so rewriting an unchanged value would make every response uncacheable.
+ *
+ * @returns Whether a `Set-Cookie` was queued for this response.
+ */
+export function persistLanguage(context: APIContext, lang: string): boolean {
+    if (context.cookies.get(PREFERRED_LANGUAGE_COOKIE)?.value === lang) {
+        return false;
+    }
+
+    context.cookies.set(PREFERRED_LANGUAGE_COOKIE, lang, {
+        path: "/",
+        httpOnly: false,
+        maxAge: 60 * 60 * 24 * 365,
+    });
+
+    return true;
 }
 
 /**

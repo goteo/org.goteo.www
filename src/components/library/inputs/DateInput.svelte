@@ -9,6 +9,8 @@
 
     let {
         value = $bindable(new Date()),
+        placeholder = undefined,
+        hasValue = $bindable(false),
         id = undefined,
         name = undefined,
         required = false,
@@ -24,6 +26,8 @@
         onApply = undefined,
     }: {
         value?: Date;
+        placeholder?: string;
+        hasValue?: boolean;
         id?: string;
         name?: string;
         required?: boolean;
@@ -49,9 +53,10 @@
 
     let open = $state(false);
     let container: HTMLDivElement;
+    let hasSelection = $state(hasValue);
 
     const displayValue = $derived(
-        value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
+        hasSelection && value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
     );
 
     function dateToString(date: Date): string {
@@ -78,6 +83,8 @@
             return;
         }
         lastValid = selected;
+        hasSelection = true;
+        hasValue = true;
         onInput?.(dateToString(selected));
     }
 
@@ -203,12 +210,12 @@
         aria-expanded={open}
         aria-describedby={error ? `${finalId}-error` : helperText ? `helper-${finalId}` : undefined}
         class={twMerge(
-            "border-secondary text-secondary flex w-full items-center justify-between rounded-md border bg-white p-4 text-base focus:outline-none",
+            "border-secondary text-secondary flex w-full items-center justify-between rounded-md border bg-white p-4 text-base hover:cursor-pointer focus:outline-none",
             disabled && "cursor-not-allowed",
             error && "border-red-500 focus:ring-red-500",
         )}
     >
-        <span class={displayValue ? "" : "text-gray-400"}>{displayValue}</span>
+        <span class={displayValue ? "" : "text-gray-400"}>{displayValue || placeholder || ""}</span>
         <Calendar class="text-secondary size-5" />
     </button>
 
@@ -227,7 +234,7 @@
                 <button
                     type="button"
                     onclick={() => (open = false)}
-                    aria-label={$t("common.dateInput.close")}
+                    aria-label={$t("domain.dateInput.close")}
                 >
                     <Close class="size-5 text-black" />
                 </button>
@@ -247,9 +254,9 @@
             <button
                 type="button"
                 onclick={apply}
-                class="bg-primary text-secondary mt-6 h-14 w-full rounded-3xl text-lg font-bold"
+                class="bg-primary text-secondary mt-6 h-14 w-full rounded-3xl text-lg font-bold hover:cursor-pointer"
             >
-                {$t("common.dateInput.apply")}
+                {$t("domain.dateInput.apply")}
             </button>
         </div>
     {/if}
@@ -302,6 +309,7 @@
         border-radius: 9999px;
         color: var(--color-secondary);
         background: transparent;
+        cursor: pointer;
     }
 
     .datepicker :global(#datepicker-dropdown [role="columnheader"]) {
