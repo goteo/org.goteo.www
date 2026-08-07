@@ -7,6 +7,7 @@
     import Linkedin from "../components/icons/social/Linkedin.svelte";
     import X from "../components/icons/social/X.svelte";
     import { t } from "../i18n/store";
+    import Title from "../components/library/typography/Title.svelte";
 </script>
 
 <footer class="text-variant1" aria-labelledby="footer-heading">
@@ -21,12 +22,14 @@
             >
                 <!-- Funding Partners -->
                 <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
-                    <h3
+                    <Title
+                        level={3}
+                        variant="field"
+                        color="secondary"
                         id="funding-partners-heading"
-                        class="text-secondary text-sm font-bold sm:text-base"
                     >
                         {$t("common.footer.funding.title")}
-                    </h3>
+                    </Title>
                     <div
                         class="flex items-center gap-4"
                         role="list"
@@ -51,9 +54,9 @@
 
                 <!-- Part Of Section -->
                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-                    <h3 class="text-secondary text-sm font-medium sm:text-base">
+                    <Title level={3} variant="field" color="secondary" weight="medium">
                         {$t("common.footer.funding.partOf")}
-                    </h3>
+                    </Title>
                     <div
                         class="flex items-center gap-2 sm:gap-3"
                         role="list"
@@ -113,9 +116,9 @@
 
                         <!-- Collaborate -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
                                 {$t("common.footer.navigation.collaborate.title")}
-                            </h4>
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/create-project">
@@ -137,9 +140,9 @@
 
                         <!-- Help -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
                                 {$t("common.footer.navigation.help.title")}
-                            </h4>
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/faqs">
@@ -161,9 +164,9 @@
 
                         <!-- About Goteo -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
                                 {$t("common.footer.navigation.aboutGoteo.title")}
-                            </h4>
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/about">
@@ -192,9 +195,9 @@
 
                         <!-- For Users -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
                                 {$t("common.footer.navigation.forUsers.title")}
-                            </h4>
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/wallet">
