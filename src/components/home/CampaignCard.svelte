@@ -34,24 +34,24 @@ Converted from CampaignCard.astro to maintain exact functionality
         class: className = "",
     }: Props = $props();
 
-    // Balance pre-loaded from server (home page); fetched client-side via Project.accounting IRI when not provided
-    let obtained = $state<Money | undefined>(undefined);
+    // Falls back to fetching the balance from the accounting IRI when the caller pre-loads no
+    // `obtained`. Derived, not assigned in the effect, because effects don't run during SSR: a card
+    // rendered statically (no `client:*` of its own) would ignore the pre-loaded value and show
+    // "loading" forever — those callers must pre-load it.
+    let fetched = $state<Money | undefined>(undefined);
+    const obtained = $derived(campaign.obtained ?? fetched);
 
     $effect(() => {
-        if (obtained === undefined) {
-            if (campaign.obtained) {
-                obtained = campaign.obtained;
-            } else if (campaign.accounting) {
-                (
-                    client.get({ url: campaign.accounting }) as unknown as Promise<{
-                        data: Accounting;
-                    }>
-                )
-                    .then(({ data }) => {
-                        if (data?.balance) obtained = data.balance as Money;
-                    })
-                    .catch(() => {});
-            }
+        if (fetched === undefined && !campaign.obtained && campaign.accounting) {
+            (
+                client.get({ url: campaign.accounting }) as unknown as Promise<{
+                    data: Accounting;
+                }>
+            )
+                .then(({ data }) => {
+                    if (data?.balance) fetched = data.balance as Money;
+                })
+                .catch((error) => console.error("Error fetching campaign balance:", error));
         }
     });
 
