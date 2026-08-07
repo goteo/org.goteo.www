@@ -13,6 +13,9 @@ export function getCacheInterceptorId() {
 }
 
 export function initCacheInterceptor() {
+    if (import.meta.env.PUBLIC_DISABLE_CACHE === "true") {
+        return null;
+    }
     _interceptor = createBrowserCacheInterceptor();
     _interceptorId = client.interceptors.request.use(_interceptor);
     return _interceptorId;
