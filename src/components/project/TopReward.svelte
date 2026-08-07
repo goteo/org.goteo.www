@@ -4,6 +4,7 @@
     import { formatCurrency } from "../../utils/currencies";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";
 
@@ -37,9 +38,16 @@
     class:cursor-not-allowed={!isAvailable}
 >
     <div class="flex flex-col gap-4">
-        <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-semibold">
+        <Title
+            level={3}
+            variant="subsection"
+            color="secondary"
+            weight="bold"
+            truncate={2}
+            class="w-full text-left"
+        >
             {reward.title}
-        </h3>
+        </Title>
 
         {#if reward.description}
             <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">

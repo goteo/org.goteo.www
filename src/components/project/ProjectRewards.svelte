@@ -10,6 +10,7 @@
     import { extractId } from "../../utils/extractId";
     import Button from "../library/buttons/Button.svelte";
     import Grid from "../library/layout/Grid.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
 
@@ -82,9 +83,9 @@
 
 <section>
     <div class="flex flex-col gap-12">
-        <h2 class="text-secondary text-4xl font-bold">
+        <Title level={2} variant="headline" color="secondary">
             {$t("pages.project.view.rewards.title")}
-        </h2>
+        </Title>
         <Grid>
             <div
                 class:opacity-50={!isAvailable}
@@ -92,9 +93,15 @@
                 class="border-grey flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <div class="flex flex-col gap-6">
-                    <h3 class="text-secondary w-full text-left text-2xl font-semibold">
+                    <Title
+                        level={3}
+                        variant="subsection"
+                        color="secondary"
+                        weight="bold"
+                        class="w-full text-left"
+                    >
                         {$t("pages.project.view.rewards.donationFree.title")}
-                    </h3>
+                    </Title>
                     <p class="text-sm whitespace-pre-line text-gray-800">
                         {$t("pages.project.view.rewards.donationFree.description")}
                     </p>

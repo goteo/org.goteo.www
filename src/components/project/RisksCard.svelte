@@ -2,6 +2,7 @@
     import { t } from "../../i18n/store";
     import Button from "../library/buttons/Button.svelte";
     import Tag from "../library/tags/Tag.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReviewArea } from "../../openapi/client";
 
@@ -49,15 +50,15 @@
             <div class="flex flex-col gap-1">
                 <!-- TODO: Messages reactivity functionality (new messages styling and handling + future chatbox logic) -->
                 {#if newMessage}
-                    <h2 class="text-secondary text-2xl font-bold">
+                    <Title level={2} variant="subsection" color="secondary">
                         {review.title}
-                    </h2>
+                    </Title>
                     <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
                     >
                 {:else}
-                    <h2 class="text-secondary text-2xl font-bold">
+                    <Title level={2} variant="subsection" color="secondary">
                         {review.title}
-                    </h2>
+                    </Title>
                     <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
                     >
                 {/if}

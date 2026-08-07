@@ -7,6 +7,7 @@
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
@@ -71,9 +72,9 @@
                 {$t("system.validation.missingRequiredFields")}
             </Toast>
         {/if}
-        <h2 class="text-xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t("pages.project.edit.collaborations.modal.title")}
-        </h2>
+        </Title>
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
             {$t("pages.project.edit.collaborations.modal.description")}
         </p>

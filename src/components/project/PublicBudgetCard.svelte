@@ -2,6 +2,7 @@
     import { t } from "../../i18n/store";
     import { budgetTypeClasses } from "../../utils/budgetColors";
     import { formatCurrency } from "../../utils/currencies";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectBudgetItem } from "../../openapi/client";
 
@@ -32,7 +33,9 @@
     }}
 >
     <div class="flex flex-col gap-4">
-        <h2 class="text-secondary line-clamp-1 text-2xl">{item.title}</h2>
+        <Title level={2} variant="subsection" color="secondary" truncate={1}>
+            {item.title}
+        </Title>
         <p class="text-content line-clamp-3 font-normal">
             {item.description}
         </p>

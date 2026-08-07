@@ -5,6 +5,7 @@
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
@@ -36,9 +37,9 @@
 
 <div class="w-full space-y-10">
     <div class="flex w-full flex-col gap-4">
-        <h2 class="text-[2.5rem] leading-12 font-bold text-black">
+        <Title level={2} variant="headline">
             {$t("pages.project.edit.collaborations.title")}
-        </h2>
+        </Title>
         <p class="text-content text-base font-normal">
             {$t("pages.project.edit.collaborations.subtitle")}
         </p>
