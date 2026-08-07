@@ -70,7 +70,7 @@
     {currentPage}
     totalItems={rows.length}
     {itemsPerPage}
-    paginationPrefix="pages.admin.comm.pagination"
+    paginationPrefix="common.pagination"
     onPageChange={(page) => (currentPage = page)}
 >
     {#snippet children(row)}

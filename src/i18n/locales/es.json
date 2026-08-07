@@ -162,6 +162,11 @@
     "login": "Iniciar Sesión",
     "goHome": "Volver a inicio",
     "viewAll": "Ver todo",
+    "pagination": {
+      "showing": "Mostrando {{ items }} de {{ total }}",
+      "unloaded": "Mostrando...",
+      "noResults": "No hay resultados"
+    },
     "viewMore": "Ver más",
     "viewLess": "Ver menos",
     "share": "Compartir",
@@ -1286,11 +1291,6 @@
             }
           }
         },
-        "pagination": {
-          "showing": "Mostrando {{items}} de {{total}}",
-          "unloaded": "Mostrando...",
-          "noResults": "No hay resultados"
-        },
         "export": {
           "csv": "Exportar CSV",
           "exporting": "Exportando...",
@@ -1470,10 +1470,6 @@
             },
             "save": "Guardar"
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
         }
       },
       "users": {
@@ -1547,10 +1543,6 @@
               "active": "Activo"
             }
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
         }
       },
       "comm": {
@@ -1558,11 +1550,6 @@
         "description": "Administra la comunicación de la plataforma",
         "tabs": {
           "banners": "Anuncios"
-        },
-        "pagination": {
-          "showing": "{{ items }} de {{ total }} resultados",
-          "noResults": "No se han encontrado resultados",
-          "unloaded": "Cargando..."
         },
         "banners": {
           "title": "Anuncios",
