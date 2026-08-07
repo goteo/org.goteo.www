@@ -2,7 +2,7 @@
 import Layout from "../../../../../layouts/Layout.astro";
 import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../openapi/client";
 import App from "../../../../../layouts/App.svelte";
-import ProjectEditor from "./ProjectEditor.svelte";
+import ProjectEditor from "../../../../../components/project/edit/ProjectEditor.svelte";
 import { goto } from "../../../../../utils/navigation";
 
 const { t, lang: locale } = Astro.locals;
