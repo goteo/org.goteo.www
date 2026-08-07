@@ -33,6 +33,7 @@
     {#if currentSubtab === "fields"}
         <BannersFields />
     {:else if currentSubtab === "history"}
-        <BannersHistory rows={[]} /> // TODO: Replace with actual D1 data
+        <!-- TODO: Replace this with actual D1 data -->
+        <BannersHistory rows={[]} />
     {/if}
 </div>
