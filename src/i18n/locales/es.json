@@ -130,22 +130,32 @@
         "placeholder": "Busca tu proyecto"
       }
     },
+    "richTextEditor": {
+      "toolbar": "Barra de formato de texto",
+      "fontSize": "Tamaño de letra",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "alignLeft": "Alinear a la izquierda",
+      "alignCenter": "Centrar",
+      "alignRight": "Alinear a la derecha",
+      "characterCount": "{{ current }} / {{ max }} caracteres"
+    },
     "export": {
       "csv": "Exportar CSV",
       "exporting": "Exportando...",
       "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
       "itemsText": "items",
       "noData": "No se encontraron datos para exportar"
-    }
-  },
-  "common": {
-    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    },
     "dateInput": {
       "apply": "Aplicar",
       "previousMonth": "Mes anterior",
       "nextMonth": "Mes siguiente",
       "close": "Cerrar"
-    },
+    }
+  },
+  "common": {
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
@@ -547,6 +557,10 @@
           "team": {
             "title": "¿Con qué equipo cuentas?",
             "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
+          },
+          "communicationStrategy": {
+            "title": "Cuéntanos tu plan de difusión",
+            "description": "En el caso de que tu campaña sea aprobada, ¿cuál será tu plan de difusión?"
           },
           "continue": "Continuar con recompensas",
           "video": {
