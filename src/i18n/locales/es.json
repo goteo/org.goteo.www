@@ -1567,6 +1567,11 @@
         "banners": {
           "title": "Anuncios",
           "description": "Aquí puedes crear y gestionar los banners de la plataforma",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar anuncios",
+            "invalidUrl": "La URL del anuncio no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
           "tabs": {
             "fields": "Nuevos",
             "history": "Histórico"
