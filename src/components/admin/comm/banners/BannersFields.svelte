@@ -18,6 +18,7 @@
             />
             <TextArea
                 class="flex-1"
+                name="description"
                 placeholder={$t("pages.admin.comm.banners.fields.descriptionPlaceholder")}
             />
             <div class="flex gap-6">

@@ -1,10 +1,17 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import type { Component } from "svelte";
-
     import Banners from "./banners/Banners.svelte";
     import { t } from "../../../i18n/store";
+
+    import type { BannerRow } from "./banners/BannersHistory.svelte";
+    import type { Component } from "svelte";
+
+    interface Props {
+        banners: BannerRow[];
+    }
+
+    let { banners }: Props = $props();
 
     interface CommTab {
         id: string;
@@ -47,6 +54,6 @@
 
 {#each tabs as tab}
     {#if tab.id === activeTab}
-        <tab.component />
+        <tab.component {banners} />
     {/if}
 {/each}

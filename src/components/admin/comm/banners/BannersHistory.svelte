@@ -1,17 +1,18 @@
 <script lang="ts">
     import { Modal, TableBodyCell } from "flowbite-svelte";
 
-    import DataTable from "../../DataTable.svelte";
-    import type { DataTableHeader } from "../../DataTable.svelte";
     import { t } from "../../../../i18n/store";
-    import Chevron from "../../../icons/navigation/Chevron.svelte";
     import HomeBanner from "../../../home/HomeBanner.svelte";
+    import Chevron from "../../../icons/navigation/Chevron.svelte";
+    import DataTable from "../../DataTable.svelte";
+
+    import type { DataTableHeader } from "../../DataTable.svelte";
 
     interface Props {
         rows: BannerRow[];
     }
 
-    interface BannerRow {
+    export interface BannerRow {
         title: string;
         content: string;
         ctaText: string;

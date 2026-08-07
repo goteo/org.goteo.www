@@ -3,19 +3,30 @@ import Layout from "../../../layouts/Layout.astro";
 import App from "../../../layouts/App.svelte";
 import WithSidebar from "../../../layouts/WithSidebar.svelte";
 import Comm from "../../../components/admin/comm/Comm.svelte";
+import { listBanners } from "../../../utils/banners";
+import { formatDate } from "../../../utils/dates";
 
-const { t, lang, session } = Astro.locals;
+const { t, lang, session, runtime } = Astro.locals;
 const activePath = "/admin/comm";
 
 const navItems: { label: string; href: string }[] = [
     { label: t("pages.admin.comm.tabs.banners"), href: "/admin/comm#banners" },
 ];
+
+const banners = (await listBanners(runtime.env.DB)).map((banner) => ({
+    title: banner.title,
+    content: banner.description,
+    ctaText: banner.cta_text,
+    ctaLink: banner.cta_link,
+    publishedAt: formatDate(new Date(banner.starts_at * 1000), lang),
+    endAt: formatDate(new Date(banner.ends_at * 1000), lang),
+}));
 ---
 
 <Layout title={t("pages.admin.comm.title")} description={t("pages.metadata.description")}>
     <App client:load locale={lang} session={session} admin>
         <WithSidebar client:load {navItems} {activePath}>
-            <Comm client:load />
+            <Comm client:load {banners} />
         </WithSidebar>
     </App>
 </Layout>

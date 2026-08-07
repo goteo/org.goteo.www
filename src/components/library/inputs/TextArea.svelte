@@ -4,6 +4,7 @@
     let {
         value = $bindable(""),
         id = undefined,
+        name = undefined,
         placeholder = undefined,
         labelText = undefined,
         helperText = undefined,
@@ -17,6 +18,7 @@
     }: {
         value?: string;
         id?: string;
+        name?: string;
         placeholder?: string;
         labelText?: string;
         helperText?: string;
@@ -58,6 +60,7 @@
     {/if}
     <textarea
         {id}
+        {name}
         {disabled}
         {placeholder}
         {rows}
