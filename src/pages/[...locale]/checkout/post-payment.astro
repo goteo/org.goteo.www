@@ -9,14 +9,15 @@ import {
     apiAccountingsIdGet,
     apiProjectsIdOrSlugGet,
 } from "../../../openapi/client";
-import type { Project } from "../../../openapi/client";
+import type { Money, Project } from "../../../openapi/client";
 import { extractId } from "../../../utils/extractId";
 import { getDefaultCurrency } from "../../../utils/consts";
 import type { Campaign } from "../../../types/campaign";
 
 const { t, lang, session } = Astro.locals;
 
-const mapProjectToCard = (project: Project) =>
+// These cards render statically, so they never run CampaignCard's client-side balance fallback.
+const mapProjectToCard = (project: Project, obtained?: Money) =>
     ({
         id: project.slug || "",
         slug: project.slug || "",
@@ -24,24 +25,37 @@ const mapProjectToCard = (project: Project) =>
         subtitle: project.subtitle || "",
         description: project.description || "",
         image: project.video?.thumbnail || "/images/placeholder-project.jpg",
-        obtained: project.budget?.minimum?.money || { amount: 0, currency: getDefaultCurrency() },
+        obtained: obtained || { amount: 0, currency: getDefaultCurrency() },
         minimum: project.budget?.minimum?.money || { amount: 0, currency: getDefaultCurrency() },
         categories: project.categories || [],
         territory: project.territory || "",
         size: "small",
     }) as unknown as Campaign;
 
+/** Reads a project's raised amount from its Accounting balance. */
+const fetchBalance = async (accountingIri?: string): Promise<Money | undefined> => {
+    const id = extractId(accountingIri);
+    if (!id) return undefined;
+
+    try {
+        const { data } = await apiAccountingsIdGet({ path: { id } });
+        return data?.balance as Money | undefined;
+    } catch (error) {
+        console.error("Error fetching accounting balance:", error);
+        return undefined;
+    }
+};
+
 let donatedProjects: Campaign[] = [];
 let suggestedProjects: Campaign[] = [];
 let userEmail = "";
 
-const authCookie = Astro.cookies.get("auth");
 const checkoutId = Astro.url.searchParams.get("checkoutId");
 
-if (authCookie && checkoutId) {
+if (session && checkoutId) {
     try {
-        const cookieData = authCookie.json();
-        const { token, user } = cookieData;
+        const { token, user } = session;
+        const authHeaders = token.asHttpHeaders;
 
         if (user?.email) {
             userEmail = user.email;
@@ -49,13 +63,14 @@ if (authCookie && checkoutId) {
 
         const { data: checkout } = await apiGatewayCheckoutsIdGet({
             path: { id: checkoutId },
-            headers: { Authorization: `Bearer ${token}` },
+            headers: authHeaders,
         });
 
         if (checkout?.charges) {
-            const targetAccountingUrls = checkout.charges
-                .map((charge: any) => charge.target)
-                .filter(Boolean);
+            // Several charges can target the same accounting (one per reward), so dedupe the targets.
+            const targetAccountingUrls = [
+                ...new Set(checkout.charges.map((charge: any) => charge.target).filter(Boolean)),
+            ] as string[];
 
             const projectPromises = targetAccountingUrls.map(async (accountingUrl: string) => {
                 try {
@@ -64,40 +79,43 @@ if (authCookie && checkoutId) {
 
                     const { data: accounting } = await apiAccountingsIdGet({
                         path: { id: accountingId },
-                        headers: { Authorization: `Bearer ${token}` },
+                        headers: authHeaders,
                     });
 
                     if (!accounting) return null;
 
-                    if (accounting.owner?.includes("/v4/projects/")) {
-                        return extractId(accounting.owner);
-                    }
+                    // Skips non-project recipients, such as the tipjar.
+                    if (!accounting.owner?.includes("/v4/projects/")) return null;
 
-                    return null;
+                    const projectId = extractId(accounting.owner);
+
+                    // This is the project's own accounting, so its balance is the raised amount.
+                    return projectId
+                        ? { projectId, obtained: accounting.balance as Money | undefined }
+                        : null;
                 } catch (error) {
                     console.error("Error fetching accounting or extracting project ID:", error);
                     return null;
                 }
             });
 
-            const projectIds = (await Promise.all(projectPromises)).filter(Boolean) as string[];
+            const targets = (await Promise.all(projectPromises)).filter((t) => t !== null);
 
-            const projectDataPromises = projectIds.map(async (projectId) => {
+            const projectDataPromises = targets.map(async ({ projectId, obtained }) => {
                 try {
                     const { data: project } = await apiProjectsIdOrSlugGet({
                         path: { idOrSlug: projectId },
-                        headers: { Authorization: `Bearer ${token}` },
+                        headers: authHeaders,
                     });
 
-                    return project || null;
+                    return project ? mapProjectToCard(project, obtained) : null;
                 } catch (error) {
                     console.error("Error fetching project data:", error);
                     return null;
                 }
             });
 
-            const projects = (await Promise.all(projectDataPromises)).filter(Boolean) as Project[];
-            donatedProjects = projects.map(mapProjectToCard);
+            donatedProjects = (await Promise.all(projectDataPromises)).filter(Boolean) as Campaign[];
         }
     } catch (error) {
         console.error("Error loading donated projects:", error);
@@ -114,7 +132,11 @@ try {
     });
 
     if (projects) {
-        suggestedProjects = projects.map(mapProjectToCard);
+        suggestedProjects = await Promise.all(
+            projects.map(async (project) =>
+                mapProjectToCard(project, await fetchBalance(project.accounting)),
+            ),
+        );
     }
 } catch (error) {
     console.error("Error loading suggested projects:", error);
