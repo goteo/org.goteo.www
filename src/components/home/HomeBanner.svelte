@@ -1,6 +1,7 @@
 <script lang="ts">
     import Close from "../icons/navigation/Close.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         title: string;
@@ -45,9 +46,9 @@
             class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
         >
             <div class="flex-1 space-y-3">
-                <h2 class="text-2xl font-bold tracking-tight sm:text-3xl md:text-4xl">
+                <Title level={2} variant="section" class="tracking-tight">
                     {title}
-                </h2>
+                </Title>
                 <p class="text-variant1 max-w-3xl text-sm opacity-90 sm:text-base md:text-lg">
                     {description}
                 </p>

@@ -29,9 +29,9 @@
             {@render children?.()}
         </div>
         <div class="flex flex-col gap-4">
-            <h1 class="text-center text-3xl leading-tight font-bold text-black sm:text-6xl">
+            <Title level={1} variant="display" align="center">
                 {title}
-            </h1>
+            </Title>
             <p class="text-content text-center text-sm sm:text-base">
                 {subtitle}
             </p>

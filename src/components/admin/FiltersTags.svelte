@@ -6,6 +6,7 @@
     import { getAllFilterSubjects } from "../../utils/filterComposer";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Locale } from "../../i18n/locales";
     import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
@@ -217,9 +218,9 @@
 </script>
 
 <div class="flex gap-4">
-    <h1 class="text-2xl/8 font-bold text-black">
+    <Title level={1} variant="subsection">
         {title}
-    </h1>
+    </Title>
 
     {#each tags as tag}
         <Tag variant="bold">

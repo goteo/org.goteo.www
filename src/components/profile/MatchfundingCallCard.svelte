@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import { formatAmountWithSymbol } from "../../utils/currencies";
+    import Title from "../library/typography/Title.svelte";
 
     import type { MatchfundingCall } from "../../types/me-page";
 
@@ -58,11 +59,14 @@
             <div class="flex w-full flex-col gap-4">
                 <!-- Title -->
                 <div class="flex w-full flex-col gap-2">
-                    <h3
-                        class="min-w-full text-3xl leading-tight font-bold text-white md:text-4xl lg:text-5xl"
+                    <Title
+                        level={3}
+                        variant="section"
+                        color="white"
+                        class="min-w-full leading-tight"
                     >
                         {call.title}
-                    </h3>
+                    </Title>
                 </div>
 
                 <!-- Stats Row (Horizontal on desktop, vertical on mobile) -->

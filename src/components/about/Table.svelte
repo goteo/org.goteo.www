@@ -164,7 +164,9 @@
     </svg>
 
     {#if title}
-        <h2 class="text-secondary text-center text-2xl font-bold lg:text-3xl">{title}</h2>
+        <Title level={2} variant="subsection" color="secondary" align="center">
+            {title}
+        </Title>
     {/if}
     <div class="grid gap-4" style="grid-template-columns: repeat({cols}, minmax(0, 1fr));">
         {@render children?.()}

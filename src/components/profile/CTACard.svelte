@@ -22,6 +22,8 @@
      * ```
      */
 
+    import Title from "../library/typography/Title.svelte";
+
     interface Button {
         label: string;
         href: string;
@@ -63,12 +65,14 @@
 >
     <!-- Content -->
     <div class="flex flex-col gap-4">
-        <h2
-            class="text-3xl leading-tight font-bold md:text-4xl"
+        <Title
+            level={2}
+            variant="section"
+            class="leading-tight"
             style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;"
         >
             {title}
-        </h2>
+        </Title>
         <p class="text-sm leading-tight md:text-base md:leading-normal">
             {description}
         </p>
