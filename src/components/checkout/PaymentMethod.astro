@@ -18,6 +18,9 @@ const {
 } = Astro.props;
 
 const { accounting } = Astro.props;
+
+// Wallet is rendered disabled until the balance covers the cart, so it can never be the default.
+const defaultGateway = selectedGateway ?? (paymentGateways ?? []).find((g) => g.id !== "wallet")?.id;
 ---
 
 <section>
@@ -48,13 +51,9 @@ const { accounting } = Astro.props;
                                     type="radio"
                                     name="paymentMethod"
                                     value={gateway.id}
+                                    required
                                     disabled={gateway.id === "wallet"}
-                                    checked={
-                                        selectedGateway
-                                            ? gateway.id === selectedGateway
-                                            : gateway.id !== "wallet" &&
-                                              paymentGateways?.[0]?.name === gateway.id
-                                    }
+                                    checked={gateway.id === defaultGateway}
                                     class="after:bg-primary border-secondary checked:border-secondary checked:bg-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:content-[''] checked:after:block"
                                 />
                                 <div class="flex flex-col leading-tight">
@@ -111,9 +110,10 @@ const { accounting } = Astro.props;
             const { error, data } = await actions.payment(formData);
 
             if (!error) {
+                // Form-based gateways send the fields to POST, which the spec omits from GatewayLink.
                 const checkoutLink = data?.checkout?.links?.find(
                     (link: GatewayLink) => link.type === "payment",
-                );
+                ) as (GatewayLink & { body?: Record<string, unknown> }) | undefined;
 
                 if (!checkoutLink) {
                     throw new Error("No payment link found in the response");

@@ -3,7 +3,6 @@ import { defineAction, ActionError } from "astro:actions";
 import { apiGatewayCheckoutsPost, type GatewayCharge } from "../openapi/client";
 import { client } from "../openapi/client/client.gen";
 import { apiGatewaysIdGetUrl } from "../openapi/client/paths.gen";
-import { Unauthorized } from "../utils/responses";
 
 export const payment = defineAction({
     accept: "form",
@@ -11,7 +10,10 @@ export const payment = defineAction({
         const { t, session } = context.locals;
 
         if (!session) {
-            return Unauthorized;
+            throw new ActionError({
+                code: "UNAUTHORIZED",
+                message: t("system.error.payment.unauthorized"),
+            });
         }
 
         try {

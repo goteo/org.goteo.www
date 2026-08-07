@@ -29,7 +29,7 @@ const { data: accounting } = await apiAccountingsIdGet({
 });
 
 let error = null;
-let amount: number | undefined = undefined;
+let total: Money | undefined = undefined;
 let selectedGateway: string | undefined = undefined;
 
 try {
@@ -43,7 +43,7 @@ try {
     const response = await apiGatewayCheckoutsIdGet({
         path: { id: checkoutId },
         headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `${token.token_type} ${token.access_token}`,
         },
     });
 
@@ -57,9 +57,8 @@ try {
         throw new Error("Payment not completed");
     }
 
-    amount = response.data?.charges?.length
+    total = response.data?.charges?.length
         ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
-              .amount
         : undefined;
 } catch (err) {
     console.error("Error trying to get payment status", err);
@@ -102,6 +101,7 @@ const postPaymentUrl = checkoutId
                                         <PaymentMethod
                                             {paymentGateways}
                                             {accounting}
+                                            {selectedGateway}
                                             hasError={!!error}
                                         />
                                     </div>
@@ -162,7 +162,7 @@ const postPaymentUrl = checkoutId
                                     </div>
                                 </div>
                                 <Card class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6">
-                                    <Summary client:load hasError={!!error} />
+                                    <Summary client:load hasError={!!error} {total} />
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">
                                             <p class="text-content text-sm">

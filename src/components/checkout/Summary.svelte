@@ -6,8 +6,10 @@
     import { multiplyMoney, sumMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
+    import type { Money } from "../../openapi/client/types.gen";
 
-    let { hasError = false }: { hasError?: boolean } = $props();
+    // `total` is the settled amount; without it fall back to the cart, which may already be cleared.
+    let { hasError = false, total }: { hasError?: boolean; total?: Money } = $props();
 
     const recipients = $derived(
         Object.entries($cartByRecipient).sort((a, b) => {
@@ -39,7 +41,7 @@
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency($cartAmount)}
+                {formatCurrency(total ?? $cartAmount)}
             </p>
         {/snippet}
 

@@ -5,6 +5,7 @@
     "error": {
       "unknown": "Ha ocurrido un error desconocido",
       "payment": {
+        "unauthorized": "Debes iniciar sesión para completar el pago",
         "missingMethod": "Se debe seleccionar un método de pago",
         "missingCartData": "La cesta está vacía",
         "unprocessableCartData": "No se puede procesar la cesta, por favor vacíala y vuelve a intentarlo",
