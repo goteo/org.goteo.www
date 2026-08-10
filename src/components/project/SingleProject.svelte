@@ -25,6 +25,7 @@
     import Toast from "../library/feedback/Toast.svelte";
     import Sharebutton from "../library/share/ShareButton.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
+    import Title from "../library/typography/Title.svelte";
     import Player from "../player/Player.svelte";
 
     let {
@@ -150,17 +151,17 @@
     <div class="my-10 flex w-full flex-col-reverse gap-5 lg:flex-row lg:justify-between">
         <div class="flex w-full flex-col gap-2.5 lg:w-[70%]">
             <div class="flex flex-col gap-2">
-                <h3 class="text-content text-xl font-bold lg:text-2xl">
+                <p class="text-content text-xl font-bold lg:text-2xl">
                     <Thtml
                         key="pages.project.view.owner"
                         vars={{
                             owner: `<span class="font-bold text-black underline">${owner.displayName}</span>`,
                         }}
                     />
-                </h3>
-                <h1 class="text-content text-3xl font-bold lg:text-4xl">
+                </p>
+                <Title level={1} variant="section" class="text-content">
                     {project.title}
-                </h1>
+                </Title>
             </div>
 
             <div>
@@ -220,9 +221,9 @@
     </div>
     <div class="flex flex-col gap-8">
         <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.view.rewards.trending")}
-            </h2>
+            </Title>
             <Button kind="secondary" class="hidden lg:flex" onclick={scrollToRewards}>
                 <Arrow />{$t("pages.project.view.rewards.showAll")}
             </Button>

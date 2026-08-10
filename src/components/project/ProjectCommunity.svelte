@@ -10,6 +10,7 @@
     import ActionableButton from "../library/buttons/ActionableButton.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Grid from "../library/layout/Grid.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
@@ -92,9 +93,9 @@
             <Loader />
         </div>
     {:else}
-        <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
+        <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
             {$t("pages.project.view.tabs.community.content.title")}
-        </h2>
+        </Title>
         <div class="flex flex-col gap-6">
             {#if hasMatchfunding}
                 <Grid

@@ -12,6 +12,7 @@
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Grid from "../../library/layout/Grid.svelte";
+    import Title from "../../library/typography/Title.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {
@@ -84,9 +85,9 @@
         {/each}
     {/if}
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.budget.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 

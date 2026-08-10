@@ -28,6 +28,7 @@
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { JSONContent } from "@tiptap/core";
 
@@ -135,9 +136,9 @@
 <div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.campaignInfo.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>
     </div>
 
@@ -145,10 +146,10 @@
         <!-- Media Section -->
         <section data-field="media" class="space-y-4">
             <div>
-                <h2 class="mb-1 text-2xl font-bold text-black">
+                <Title level={2} variant="subsection" class="mb-1">
                     {$t("pages.project.edit.campaignInfo.media.title")}
                     <span aria-label="required">*</span>
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.campaignInfo.media.description")}
                 </p>

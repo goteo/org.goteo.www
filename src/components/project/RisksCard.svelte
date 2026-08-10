@@ -3,6 +3,7 @@
     import { formatDate } from "../../utils/dates";
     import Button from "../library/buttons/Button.svelte";
     import Tag from "../library/tags/Tag.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReviewArea, ProjectReviewRisk } from "../../types/projectReview";
 
@@ -45,9 +46,9 @@
         <div class="flex justify-between">
             <div class="flex flex-col gap-1">
                 <!-- TODO: Messages reactivity functionality (new messages styling and handling + future chatbox logic) -->
-                <h2 class="text-secondary text-2xl font-bold">
+                <Title level={2} variant="subsection" color="secondary">
                     {review.title}
-                </h2>
+                </Title>
                 {#if activity}
                     <span class="text-content text-sm/4">{activity}</span>
                 {/if}

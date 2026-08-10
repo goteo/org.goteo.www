@@ -6,6 +6,7 @@
     import { multiplyMoney, sumMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Money } from "../../openapi/client";
 
@@ -40,8 +41,12 @@
         buttonTextHide={$t("pages.checkout.summary.hideDetails")}
     >
         {#snippet header()}
-            <h2
-                class={`lg:text-double flex items-center gap-2 text-base font-semibold ${hasError ? "text-tertiary" : "text-secondary"}`}
+            <Title
+                level={2}
+                variant="subsection"
+                color={hasError ? "default" : "secondary"}
+                class={`flex items-center gap-2 ${hasError ? "text-tertiary lg:text-double" : "lg:text-double"}`}
+                weight="semibold"
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -49,7 +54,7 @@
                     </span>
                 {/if}
                 {$t("pages.checkout.summary.total.title")}
-            </h2>
+            </Title>
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import SearchCategoryLabel from "./SearchCategoryLabel.svelte";
     import { t } from "../../i18n/store";
     import {
         apiProjectsGetCollection,
@@ -153,7 +154,7 @@
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
                 placeholder={searchPlaceholder ??
                     $t("pages.admin.charges.filters.search.placeholder")}
-                class="border-secondary w-full rounded-3xl border p-4"
+                class="border-secondary w-full rounded-3xl border p-4 focus:ring-0"
                 minlength="4"
             />
             {#if query}
@@ -200,9 +201,9 @@
 
                 {#if results.some((r) => r.type === "project")}
                     <div>
-                        <h3 class="mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mb-2">
                             {$t("domain.charges.entityLabels.projects")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "project") as item}
                                 <button
@@ -237,9 +238,9 @@
 
                 {#if results.some((r) => r.type === "tipjar")}
                     <div>
-                        <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mt-6 mb-2">
                             {$t("domain.charges.entityLabels.tipjars")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "tipjar") as item}
                                 <button
@@ -270,9 +271,9 @@
 
                 {#if results.some((r) => r.type === "user")}
                     <div>
-                        <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mt-6 mb-2">
                             {$t("domain.charges.entityLabels.users")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "user") as item}
                                 <button

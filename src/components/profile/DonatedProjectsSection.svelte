@@ -14,6 +14,7 @@
     import { addMoney } from "../../utils/money";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Money, GatewayCharge } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
@@ -185,9 +186,9 @@
 
 {#if !loading && donatedCampaigns.length > 0}
     <div class="flex flex-col gap-6">
-        <h2 class="text-3xl font-bold text-black md:text-4xl">
+        <Title level={2} variant="section">
             {$t("pages.me.donatedProjects.title")}
-        </h2>
+        </Title>
         <Carousel itemsPerGroup={3} gap={24} showDots={false}>
             {#each donatedCampaigns as campaign, index (campaign.id)}
                 <CampaignCard

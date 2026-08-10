@@ -8,6 +8,7 @@
     import { toCollectionItems } from "../../utils/hydra.ts";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Money, Project, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
@@ -124,9 +125,9 @@
 
 {#if !loading && ownedProjects.length > 0}
     <div class="flex flex-col gap-6">
-        <h2 class="text-3xl font-bold text-black md:text-4xl">
+        <Title level={2} variant="section">
             {$t("pages.me.ownedProjects.title")}
-        </h2>
+        </Title>
         <Carousel itemsPerGroup={3} gap={24} showDots={false}>
             {#each ownedProjects as campaign, index (campaign.id)}
                 <CampaignCard

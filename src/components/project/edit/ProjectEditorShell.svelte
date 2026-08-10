@@ -135,9 +135,9 @@
                         />
                     </svg>
                     <div class="flex-1">
-                        <h3 class="text-secondary text-sm font-semibold">
+                        <span class="text-secondary text-sm font-semibold">
                             {$t("pages.project.edit.errors.storage.title")}
-                        </h3>
+                        </span>
                         <p class="text-tertiary mt-1 text-sm">
                             {#if $persistenceError === "storage_quota_exceeded"}
                                 {$t("pages.project.edit.errors.storage.quota_exceeded")}
