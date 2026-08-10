@@ -105,13 +105,7 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <Title
-        level={2}
-        variant="headline"
-        color="secondary"
-        truncate={2}
-        class="flex max-w-2xl"
-    >
+    <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
         {$t("pages.project.view.tabs.updates.content.title")}
     </Title>
     <Carousel

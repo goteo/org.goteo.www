@@ -12,7 +12,6 @@
 -->
 <script lang="ts">
     import { onMount } from "svelte";
-    import Title from "../../library/typography/Title.svelte";
 
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
@@ -29,6 +28,7 @@
     } from "../../../stores/drafts/projectDraft";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
 

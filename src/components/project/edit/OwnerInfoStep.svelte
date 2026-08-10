@@ -203,9 +203,9 @@
         <!-- Private contacts data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
-            <Title level={2} variant="subsection">
-                {$t("pages.project.edit.aboutYou.privateContacts")}
-            </Title>
+                <Title level={2} variant="subsection">
+                    {$t("pages.project.edit.aboutYou.privateContacts")}
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.aboutYou.privateContactsHelper")}
                 </p>

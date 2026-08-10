@@ -18,12 +18,12 @@
     import { getLanguageDisplayName } from "../../utils/lang";
     import LanguagesDropdown from "../header/LanguagesDropdown.svelte";
     import RememberIcon from "../icons/actions/RememberIcon.svelte";
-    import Title from "../library/typography/Title.svelte";
     import Arrow from "../icons/navigation/Arrow.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Toast from "../library/feedback/Toast.svelte";
     import Sharebutton from "../library/share/ShareButton.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
+    import Title from "../library/typography/Title.svelte";
     import Player from "../player/Player.svelte";
 
     let {

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import SearchCategoryLabel from "./SearchCategoryLabel.svelte";
     import { t } from "../../i18n/store";
     import {
         apiProjectsGetCollection,
@@ -9,8 +10,6 @@
     import SearchIcon from "../icons/actions/Search.svelte";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Spinner from "../icons/status/Spinner.svelte";
-
-    import SearchCategoryLabel from "./SearchCategoryLabel.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 

@@ -12,11 +12,11 @@ Integrated with searchStore for state management and URL synchronization
     import SearchInput from "./SearchInput.svelte";
     import StatusFilter from "./StatusFilter.svelte";
     import TerritoryFilter from "./TerritoryFilter.svelte";
-    import Title from "../library/typography/Title.svelte";
     import { t } from "../../i18n/store";
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../icons/filters/FilterIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;

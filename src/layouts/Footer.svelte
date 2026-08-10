@@ -6,8 +6,8 @@
     import Instagram from "../components/icons/social/Instagram.svelte";
     import Linkedin from "../components/icons/social/Linkedin.svelte";
     import X from "../components/icons/social/X.svelte";
-    import { t } from "../i18n/store";
     import Title from "../components/library/typography/Title.svelte";
+    import { t } from "../i18n/store";
 </script>
 
 <footer class="text-variant1" aria-labelledby="footer-heading">

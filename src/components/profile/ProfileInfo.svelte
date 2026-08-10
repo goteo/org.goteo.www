@@ -5,8 +5,8 @@
     import LinkedinIcon from "../icons/social/LinkedinIcon.svelte";
     import MediumIcon from "../icons/social/MediumIcon.svelte";
     import XIcon from "../icons/social/XIcon.svelte";
-    import TerritoryTag from "../project/TerritoryTag.svelte";
     import Title from "../library/typography/Title.svelte";
+    import TerritoryTag from "../project/TerritoryTag.svelte";
 
     import type { Link, Territory } from "../../openapi/client/types.gen";
 

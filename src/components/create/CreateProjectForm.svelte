@@ -28,7 +28,6 @@
     } from "../../stores/drafts/projectDraft";
     import { maxEndDate } from "../../utils/campaign";
     import { getDefaultCurrency } from "../../utils/consts";
-    import Title from "../library/typography/Title.svelte";
     import { formatCurrency } from "../../utils/currencies";
     import Button from "../library/buttons/Button.svelte";
     import BaseCard from "../library/cards/BaseCard.svelte";
@@ -36,6 +35,7 @@
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
     import DateInput from "../library/inputs/DateInput.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 

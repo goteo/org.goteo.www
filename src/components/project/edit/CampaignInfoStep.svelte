@@ -14,8 +14,6 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import Title from "../../library/typography/Title.svelte";
-
     import MediaUploader from "./MediaUploader.svelte";
     import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
@@ -29,6 +27,7 @@
     } from "../../../stores/drafts/projectDraft";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;

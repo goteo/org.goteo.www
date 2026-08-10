@@ -12,21 +12,12 @@
             <!-- Text Content -->
             <div class="flex min-h-87 max-w-132.25 flex-col gap-4">
                 <!-- Main Headline -->
-                <Title
-                    level={2}
-                    variant="section"
-                    color="secondary"
-                    class="leading-tight"
-                >
+                <Title level={2} variant="section" color="secondary" class="leading-tight">
                     {$t("pages.home.stories.title")}
                 </Title>
 
                 <!-- Subtitle -->
-                <Title
-                    level={3}
-                    variant="subsection"
-                    color="secondary"
-                >
+                <Title level={3} variant="subsection" color="secondary">
                     {$t("pages.home.stories.subtitle")}
                 </Title>
 

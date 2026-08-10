@@ -1,5 +1,6 @@
 <script lang="ts">
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Snippet } from "svelte";
 

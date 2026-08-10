@@ -4,8 +4,9 @@
     (Projects, Tipjars, Users).
 -->
 <script lang="ts">
-    import type { Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
+
+    import type { Snippet } from "svelte";
 
     interface Props {
         children: Snippet;

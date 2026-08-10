@@ -4,8 +4,8 @@
     import { currentDraft, navigateToStep } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
-    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
     import Title from "../../library/typography/Title.svelte";
+    import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
 

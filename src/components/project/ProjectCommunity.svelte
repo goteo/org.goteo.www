@@ -93,13 +93,7 @@
             <Loader />
         </div>
     {:else}
-        <Title
-            level={2}
-            variant="headline"
-            color="secondary"
-            truncate={2}
-            class="flex max-w-2xl"
-        >
+        <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
             {$t("pages.project.view.tabs.community.content.title")}
         </Title>
         <div class="flex flex-col gap-6">

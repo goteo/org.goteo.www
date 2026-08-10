@@ -13,8 +13,8 @@
     import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
     import Close from "../../icons/navigation/Close.svelte";
-    import Title from "../../library/typography/Title.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
 

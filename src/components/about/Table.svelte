@@ -1,6 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
+    import Title from "../library/typography/Title.svelte";
+
     import type { Snippet } from "svelte";
 
     interface Props {
