@@ -20,7 +20,8 @@ const {
 const { accounting } = Astro.props;
 
 // Wallet is rendered disabled until the balance covers the cart, so it can never be the default.
-const defaultGateway = selectedGateway ?? (paymentGateways ?? []).find((g) => g.id !== "wallet")?.id;
+const defaultGateway =
+    selectedGateway ?? (paymentGateways ?? []).find((g) => g.id !== "wallet")?.id;
 ---
 
 <section>

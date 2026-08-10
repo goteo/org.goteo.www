@@ -115,7 +115,9 @@ if (session && checkoutId) {
                 }
             });
 
-            donatedProjects = (await Promise.all(projectDataPromises)).filter(Boolean) as Campaign[];
+            donatedProjects = (await Promise.all(projectDataPromises)).filter(
+                Boolean,
+            ) as Campaign[];
         }
     } catch (error) {
         console.error("Error loading donated projects:", error);
