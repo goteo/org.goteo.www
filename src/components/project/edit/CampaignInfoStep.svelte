@@ -27,8 +27,8 @@
     import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import Title from "../../library/typography/Title.svelte";
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { JSONContent } from "@tiptap/core";
 
