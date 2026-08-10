@@ -1,33 +1,39 @@
-//@ts-expect-error svelte components do not export as ts
 import BudgetStep from "./BudgetStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import CampaignInfoStep from "./CampaignInfoStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import CollaborationsStep from "./CollaborationsStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import ConfigurationStep from "./ConfigurationStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import OwnerInfoStep from "./OwnerInfoStep.svelte";
-//@ts-expect-error svelte components do not export as ts
 import RewardsStep from "./RewardsStep.svelte";
 
-import type { Snippet } from "svelte";
+import type { Component } from "svelte";
 
 export type ProjectEditorStep = {
     id: number;
-    component: Snippet;
+    // Steps declare different prop shapes (project required/optional, onContinue,
+    // onPublish), so the array is only typed as "some Svelte component".
+    component: Component<any>;
 };
 
+/**
+ * `astro check` and `svelte-check` model an imported `.svelte` module with
+ * different types — Astro wraps it as `(props) => any`, Svelte types it as
+ * `Component<Props>` — so no single annotation satisfies both tools. The cast
+ * is confined here so consumers still see one shared component type.
+ */
+function toStep(id: number, component: unknown): ProjectEditorStep {
+    return { id, component: component as Component<any> };
+}
+
 export const steps: ProjectEditorStep[] = [
-    { id: 1, component: ConfigurationStep },
-    { id: 2, component: CampaignInfoStep },
-    { id: 3, component: RewardsStep },
-    { id: 4, component: CollaborationsStep },
-    { id: 5, component: BudgetStep },
-    { id: 6, component: OwnerInfoStep },
+    toStep(1, ConfigurationStep),
+    toStep(2, CampaignInfoStep),
+    toStep(3, RewardsStep),
+    toStep(4, CollaborationsStep),
+    toStep(5, BudgetStep),
+    toStep(6, OwnerInfoStep),
 ];
 
-export function getStepComponent(id: number): Snippet {
+export function getStepComponent(id: number): Component<any> {
     const step = steps.find((s) => s.id === id) || steps[0];
 
     return step.component;

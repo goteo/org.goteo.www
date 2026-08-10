@@ -110,7 +110,7 @@
                 type="checkbox"
                 class="accent-primary h-6 w-6 rounded"
                 bind:checked={isChecked}
-                onchange={(e) => toggleTip()}
+                onchange={() => toggleTip()}
             />
             <label for="donation-checkbox" class="text-secondary">
                 {$t("pages.checkout.tipjar.checkboxLabel")}

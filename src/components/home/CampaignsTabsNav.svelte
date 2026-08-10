@@ -1,8 +1,6 @@
 <script lang="ts">
-    import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
     import Flash from "../icons/media/Flash.svelte";
-    import Flames from "../icons/status/Flames.svelte";
     import Tabs from "../library/layout/Tabs.svelte";
 
     interface Props {
@@ -17,13 +15,8 @@
     <Flash />
 {/snippet}
 
-{#snippet clockIconSnippet()}
-    <Clock />
-{/snippet}
-
-{#snippet matchFundingIconSnippet()}
-    <Flames />
-{/snippet}
+<!-- The "ending soon" and "matchfunding" tabs below are disabled; re-add their
+     icon snippets (Clock / Flames) together with the tab entries. -->
 
 <Tabs
     tabs={[

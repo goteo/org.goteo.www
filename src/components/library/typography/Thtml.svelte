@@ -3,6 +3,8 @@
     Use this component whenever you need to render a translation with HTML inside of it
 -->
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import { t } from "../../../i18n/store";
 
     import type { TranslationOptions } from "../../../i18n/utils";
@@ -22,7 +24,7 @@
     // Without the next lines Svelte won't reload the rendered markup on locale changes
     // https://svelte.dev/docs/svelte/runtime-warnings#Client-warnings-hydration_html_changed
     if (typeof window !== "undefined") {
-        const initial = markup;
+        const initial = untrack(() => markup);
         markup = undefined;
 
         $effect(() => {

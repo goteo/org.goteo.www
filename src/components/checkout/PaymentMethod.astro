@@ -129,8 +129,14 @@ const { accounting } = Astro.props;
                     form.method = "POST";
                     form.action = checkoutLink.url!;
 
-                    if (checkoutLink.body) {
-                        Object.entries(checkoutLink.body).forEach(([key, value]) => {
+                    // `body` is not part of the documented GatewayLink shape, but a
+                    // gateway may still return a POST payload, so it is read defensively.
+                    const linkBody = (
+                        checkoutLink as GatewayLink & { body?: Record<string, unknown> }
+                    ).body;
+
+                    if (linkBody) {
+                        Object.entries(linkBody).forEach(([key, value]) => {
                             const input = document.createElement("input");
                             input.type = "hidden";
                             input.name = key;

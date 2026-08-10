@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import Banner from "./Banner.svelte";
     import Card from "./Card.svelte";
     import Countdown from "./Countdown.svelte";
@@ -61,7 +63,8 @@
         return undefined;
     }
 
-    let projectLanguage = $state(guessProjectLanguage(project.locales!));
+    // Seeds the initial pick; the language selector owns it from then on.
+    let projectLanguage = $state(untrack(() => guessProjectLanguage(project.locales!)));
 
     function guessProjectLanguage(pLangs: string[]): string {
         if (typeof navigator === "undefined" || !navigator.languages) {

@@ -379,7 +379,9 @@
         <div class="flex items-center gap-2">
             <Checkbox bind:checked={termsAccepted}>
                 <span class="text-secondary">
-                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
+                    <a href="/src/pages/[...locale]/about/legal/terms" class="underline"
+                        >{$t("pages.project.create.terms.label")}</a
+                    >
                 </span>
             </Checkbox>
         </div>

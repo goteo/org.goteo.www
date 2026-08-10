@@ -15,7 +15,6 @@
 -->
 <script lang="ts">
     import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
@@ -28,6 +27,7 @@
     import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
 
     import type { JSONContent } from "@tiptap/core";
 
@@ -210,8 +210,6 @@
                 value={campaignInfo.objectives}
                 onChange={handleObjectivesChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="objectives-help"
             />
         </section>
@@ -233,8 +231,6 @@
                 value={campaignInfo.legacy}
                 onChange={handleLegacyChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="legacy-help"
             />
         </section>
@@ -256,8 +252,6 @@
                 value={campaignInfo.targetAudience}
                 onChange={handleTargetAudienceChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={30}
-                maxLength={5000}
                 ariaDescribedBy="target-help"
             />
         </section>
@@ -279,8 +273,6 @@
                 value={campaignInfo.team}
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="team-help"
             />
         </section>
@@ -314,9 +306,7 @@
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
         <Button kind="secondary" size="md" onclick={handleContinue}>
-            {#snippet children()}
-                {$t("pages.project.edit.campaignInfo.continue")}
-            {/snippet}
+            {$t("pages.project.edit.campaignInfo.continue")}
         </Button>
     </div>
 </div>

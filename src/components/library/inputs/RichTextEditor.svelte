@@ -264,6 +264,7 @@
     </div>
 
     <div
+        {id}
         bind:this={editorElement}
         class={twJoin(
             "max-h-100 overflow-y-auto rounded-lg border",

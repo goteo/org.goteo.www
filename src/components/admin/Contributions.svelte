@@ -144,7 +144,7 @@
         return query;
     }
 
-    function getCollectionTotalItems(collection: unknown, response?: Response): number {
+    function getCollectionTotalItems(collection: unknown): number {
         if (Array.isArray(collection)) {
             return collection.length;
         }
@@ -272,11 +272,7 @@
                 ($session?.token.asHttpHeaders as Record<string, string>) ?? {},
             );
 
-            const {
-                data: collection,
-                response,
-                error,
-            } = await apiGatewayChargesGetCollection({
+            const { data: collection, error } = await apiGatewayChargesGetCollection({
                 baseUrl: "/api/relay",
                 query: query as any,
                 headers,
@@ -288,7 +284,7 @@
             }
 
             const loadedCharges = toCollectionItems<GatewayCharge>(collection);
-            $totalItems = getCollectionTotalItems(collection, response);
+            $totalItems = getCollectionTotalItems(collection);
 
             for (const charge of loadedCharges) {
                 const checkoutIri = charge.checkout;

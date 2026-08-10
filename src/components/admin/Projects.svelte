@@ -41,9 +41,6 @@
 
     let filters: ProjectsQuery = $state(initialParams.filters);
     let selectedSort = $state("date-desc");
-    let searchValue = $state(
-        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
-    );
 
     let currentPage = $state(1);
     let itemsPerPage = $state(10);
@@ -242,7 +239,7 @@
         const sortOption = sortMap[selectedSort];
 
         syncQueryFiltersToUrl(
-            filters as Record<string, unknown>,
+            (filters ?? {}) as Record<string, unknown>,
             sortOption ? { [sortOption.field]: sortOption.direction } : undefined,
         );
     });
@@ -265,8 +262,6 @@
     }
 
     function handleSearch(value: string): void {
-        searchValue = value;
-
         if (value.length >= 4 || value.length === 0) {
             if (value) {
                 filters = { ...filters, title: value };

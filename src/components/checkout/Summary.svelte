@@ -7,7 +7,21 @@
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
 
-    let { hasError = false }: { hasError?: boolean } = $props();
+    import type { Money } from "../../openapi/client";
+
+    interface Props {
+        hasError?: boolean;
+        /**
+         * Overrides the cart total. Once a payment is settled the cart is no
+         * longer the source of truth — and is about to be cleared — so the
+         * caller passes the total actually charged.
+         */
+        total?: Money;
+    }
+
+    let { hasError = false, total }: Props = $props();
+
+    const displayTotal = $derived(total ?? $cartAmount);
 
     const recipients = $derived(
         Object.entries($cartByRecipient).sort((a, b) => {
@@ -39,7 +53,7 @@
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency($cartAmount)}
+                {formatCurrency(displayTotal)}
             </p>
         {/snippet}
 

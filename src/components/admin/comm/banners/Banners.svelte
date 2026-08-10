@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { t } from "../../../../i18n/store";
     import BannersForm from "./BannersForm.svelte";
     import BannersHistory from "./BannersHistory.svelte";
     import BannersTabs from "./BannersTabs.svelte";
+    import { t } from "../../../../i18n/store";
 
     let currentSubtab = $state("fields");
 

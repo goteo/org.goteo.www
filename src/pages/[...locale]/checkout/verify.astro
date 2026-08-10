@@ -9,6 +9,7 @@ import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
 import { sumMoney } from "../../../utils/money";
+import { goto } from "../../../utils/navigation";
 import type { Money } from "../../../openapi/client";
 
 const { t, lang, session } = Astro.locals;
@@ -16,7 +17,7 @@ const { t, lang, session } = Astro.locals;
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 if (!session) {
-    return Astro.redirect("/login?callback=/checkout/verify" + Astro.url.searchParams);
+    return goto("/login", { query: { callback: Astro.url.pathname + Astro.url.search } });
 }
 
 const { token, user } = session;
@@ -29,7 +30,7 @@ const { data: accounting } = await apiAccountingsIdGet({
 });
 
 let error = null;
-let amount: number | undefined = undefined;
+let paidTotal: Money | undefined = undefined;
 let selectedGateway: string | undefined = undefined;
 
 try {
@@ -57,9 +58,8 @@ try {
         throw new Error("Payment not completed");
     }
 
-    amount = response.data?.charges?.length
+    paidTotal = response.data?.charges?.length
         ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
-              .amount
         : undefined;
 } catch (err) {
     console.error("Error trying to get payment status", err);
@@ -162,7 +162,7 @@ const postPaymentUrl = checkoutId
                                     </div>
                                 </div>
                                 <Card class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6">
-                                    <Summary client:load hasError={!!error} />
+                                    <Summary client:load hasError={!!error} total={paidTotal} />
                                     <div class="w-full lg:block" id="checkout-details">
                                         <div class="flex flex-col">
                                             <p class="text-content text-sm">

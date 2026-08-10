@@ -17,7 +17,6 @@ Implements active/inactive pill states matching Figma design
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
         showLabel?: boolean;
-        "data-testid"?: string;
     }
 
     let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();

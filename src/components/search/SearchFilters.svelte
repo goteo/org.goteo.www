@@ -136,7 +136,6 @@ Integrated with searchStore for state management and URL synchronization
                 <CategoryFilter
                     selectedCategories={$searchFilters["categories[]"] || []}
                     onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
-                    data-testid="category-filter"
                 />
             </div>
         </div>

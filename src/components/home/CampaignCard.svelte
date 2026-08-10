@@ -92,8 +92,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     )}
     data-testid="campaign-card"
 >
-    <!-- Note: campaign.id is actually the project slug, not a numeric ID -->
-    <a href="/project/{campaign.id}">
+    <a href="/project/{campaign.slug}">
         <div class="flex flex-col gap-4 md:gap-6">
             <!-- Project Image -->
             <div

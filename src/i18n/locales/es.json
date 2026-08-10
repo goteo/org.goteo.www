@@ -4,6 +4,7 @@
     "loading": "Cargando...",
     "error": {
       "unknown": "Ha ocurrido un error desconocido",
+      "unauthorized": "Debes iniciar sesión para completar esta acción",
       "payment": {
         "missingMethod": "Se debe seleccionar un método de pago",
         "missingCartData": "La cesta está vacía",
@@ -975,6 +976,9 @@
       "btns": {
         "seeChat": "Ver conversación",
         "changeRisk": "Cambiar riesgo"
+      },
+      "card": {
+        "activity": "{{ count }} chats. Última actividad {{ date }}"
       },
       "chat": {
         "placeholder": "Escribe un mensaje…"

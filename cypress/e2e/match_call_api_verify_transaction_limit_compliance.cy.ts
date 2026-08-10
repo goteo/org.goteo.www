@@ -255,9 +255,9 @@ describe("MatchCall API - Verify Transaction Limit Compliance", () => {
             );
         } else {
             expect(response.status).to.be.oneOf([200, 201]);
-            testData.largeDonationCheckoutId = response.body.id;
+            testData.largeDonationCheckoutId = response.body.id!;
 
-            const actualAmount = response.body.charges[0].money.amount;
+            const actualAmount = response.body.charges![0].money.amount;
             cy.log(
                 `Large donation created with amount: ${actualAmount} cents (${actualAmount / 100}€)`,
             );

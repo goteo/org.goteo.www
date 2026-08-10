@@ -11,7 +11,7 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
@@ -38,15 +38,18 @@
 
     let { project, onContinue }: ConfigurationStepProps = $props();
     let allCategories = $state<Category[]>([]);
+    // Both seed the form once; the bound inputs own them afterwards.
     let selectedCategoryIds = $state<(number | string)[]>(
-        (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? ""),
+        untrack(() => (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? "")),
     );
     let releaseDate = $state(
-        $currentDraft?.createProject.release
-            ? new Date($currentDraft.createProject.release)
-            : project?.calendar?.release
-              ? new Date(project.calendar.release)
-              : new Date(),
+        untrack(() =>
+            $currentDraft?.createProject.release
+                ? new Date($currentDraft.createProject.release)
+                : project?.calendar?.release
+                  ? new Date(project.calendar.release)
+                  : new Date(),
+        ),
     );
 
     onMount(async () => {
