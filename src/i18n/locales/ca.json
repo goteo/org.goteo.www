@@ -180,6 +180,11 @@
     "login": "Iniciar sessió",
     "goHome": "Tornar a l'inici",
     "viewAll": "Veure-ho tot",
+    "pagination": {
+      "showing": "Mostrant {{ items }} de {{ total }}",
+      "unloaded": "Mostrant...",
+      "noResults": "No hi ha resultats"
+    },
     "viewMore": "Veure més",
     "viewLess": "Veure menys",
     "share": "Comparteix",
@@ -1194,7 +1199,8 @@
       "nav": {
         "charges": "Cobraments",
         "projects": "Projectes",
-        "users": "Usuaris"
+        "users": "Usuaris",
+        "comm": "Comunicació"
       },
       "sidebar": {
         "aria": {
@@ -1363,11 +1369,6 @@
               "funding_paid": "Cobrament pagat"
             }
           }
-        },
-        "pagination": {
-          "showing": "Mostrant {{items}} de {{total}}",
-          "unloaded": "Mostrant...",
-          "noResults": "No hi ha resultats"
         },
         "downloadButtons": {
           "certificates": "Descarrega certificats",
@@ -1547,10 +1548,6 @@
             },
             "save": "Desa"
           }
-        },
-        "pagination": {
-          "showing": "Mostrant {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} per pàgina"
         }
       },
       "users": {
@@ -1621,10 +1618,49 @@
               "active": "Actiu"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Comunicació",
+        "description": "Administra la comunicació de la plataforma",
+        "tabs": {
+          "banners": "Anuncis"
         },
-        "pagination": {
-          "showing": "Mostrant {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} per pàgina"
+        "banners": {
+          "title": "Anuncis",
+          "description": "Aquí pots crear i gestionar els bàners de la plataforma",
+          "tabs": {
+            "fields": "Nous",
+            "history": "Històric"
+          },
+          "fields": {
+            "dataTitle": "Dades de l'anunci",
+            "titlePlaceholder": "Títol de l'anunci",
+            "descriptionPlaceholder": "Breu descripció de l'anunci",
+            "ctaPlaceholder": "Crida a l'acció",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programa l'anunci",
+            "startDatePlaceholder": "Indica la data d'inici",
+            "endDatePlaceholder": "Indica la data de fi"
+          },
+          "history": {
+            "title": "Històric d'anuncis",
+            "description": "Aquí pots veure l'històric d'anuncis publicats",
+            "noData": "No hi ha anuncis a l'històric",
+            "headers": {
+              "title": "Títol",
+              "content": "Contingut",
+              "publishedAt": "Data de publicació",
+              "endAt": "Data de finalització"
+            },
+            "actions": {
+              "view": "Veure"
+            },
+            "modal": {
+              "title": "Anunci publicat el {{date}}",
+              "description": "Aquí pots veure com era l'anunci"
+            }
+          }
         }
       }
     },
