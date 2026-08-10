@@ -31,7 +31,7 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    {#each getItems() as [target, items]}
+    {#each getItems() as [_target, items]}
         <div class="flex flex-col gap-6">
             <Title level={2} variant="subsection">
                 {items[0].recipientDisplayName}

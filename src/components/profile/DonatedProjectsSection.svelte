@@ -16,15 +16,20 @@
     import Carousel from "../library/layout/Carousel.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    import type { Money, GatewayCharge, User } from "../../openapi/client/types.gen.ts";
+    import type { Money, GatewayCharge } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
 
     interface Props {
         lang: string;
-        user: User;
     }
 
-    let { lang, user }: Props = $props();
+    let { lang }: Props = $props();
+
+    /**
+     * Charge statuses where the money actually left the payer. Excludes
+     * `to_charge` (not collected yet) and the refund states.
+     */
+    const CHARGED_STATUSES: GatewayCharge["status"][] = ["in_charge", "to_wallet", "walleted"];
 
     let donatedCampaigns = $state<Campaign[]>([]);
     let loading = $state(true);
@@ -60,7 +65,10 @@
                 const projectAccountingIRIs = [
                     ...new Set(
                         chargeItems
-                            .filter((charge) => charge.target && charge.status === "charged")
+                            .filter(
+                                (charge) =>
+                                    charge.target && CHARGED_STATUSES.includes(charge.status),
+                            )
                             .map((charge) => charge.target)
                             .filter(Boolean),
                     ),
@@ -69,7 +77,11 @@
                 // Calculate total donations per project
                 const projectDonations = new Map<string, Money>();
                 chargeItems.forEach((charge) => {
-                    if (charge.target && charge.status === "charged" && charge.money?.amount) {
+                    if (
+                        charge.target &&
+                        CHARGED_STATUSES.includes(charge.status) &&
+                        charge.money?.amount
+                    ) {
                         const current = projectDonations.get(charge.target) ?? {
                             amount: 0,
                             currency: charge.money.currency ?? getDefaultCurrency(),
@@ -131,20 +143,20 @@
                                     daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                                 }
                                 return {
-                                    id: project.slug!,
+                                    ...project,
+                                    slug: project.slug!,
                                     title: project.title!,
                                     image: project.video?.thumbnail!,
                                     minimum: project.budget?.minimum?.money!,
                                     optimum: project.budget?.optimum?.money,
                                     obtained: accounting.balance as Money,
-                                    status: project.status,
                                     category: project.categories?.[0], // Get first category
                                     daysRemaining,
                                     userDonations: projectDonations.get(accountingIRI) ?? {
                                         amount: 0,
                                         currency: getDefaultCurrency(),
                                     },
-                                } as Campaign;
+                                } satisfies Campaign;
                             } catch (error) {
                                 console.error(
                                     `Error fetching project for accounting ${accountingIRI}:`,

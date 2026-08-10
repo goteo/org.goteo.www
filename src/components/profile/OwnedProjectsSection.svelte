@@ -86,16 +86,16 @@
                                 }
 
                                 return {
-                                    id: project.slug!,
+                                    ...project,
+                                    slug: project.slug!,
                                     title: project.title!,
                                     image: project.video?.thumbnail!,
                                     minimum: project.budget?.minimum?.money!,
                                     optimum: project.budget?.optimum?.money,
                                     obtained: accounting.balance as Money,
-                                    status: project.status,
                                     category: project.categories?.[0], // Get first category
                                     daysRemaining,
-                                } as Campaign;
+                                } satisfies Campaign;
                             } catch (error) {
                                 console.error(
                                     `Error fetching accounting for project ${project.slug}:`,

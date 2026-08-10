@@ -247,7 +247,6 @@
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectProject?.(item.data);
                                         onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];

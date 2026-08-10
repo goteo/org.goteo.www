@@ -1,10 +1,11 @@
 <script lang="ts">
-    import { t } from "../../i18n/store";
+    import { locale, t } from "../../i18n/store";
+    import { formatDate } from "../../utils/dates";
     import Button from "../library/buttons/Button.svelte";
     import Tag from "../library/tags/Tag.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    import type { ProjectReviewArea } from "../../openapi/client";
+    import type { ProjectReviewArea, ProjectReviewRisk } from "../../types/projectReview";
 
     let {
         review,
@@ -12,58 +13,49 @@
         newMessage = false,
     }: {
         review: ProjectReviewArea;
-        risk: "low" | "mid" | "high";
+        risk?: ProjectReviewRisk;
         newMessage?: boolean;
     } = $props();
 
-    let newMsgCardShadow =
-        "0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10)";
-
-    const riskStyles: { [key in "low" | "mid" | "high"]: "success" | "warning" | "error" } = {
+    const riskStyles: Record<ProjectReviewRisk, "success" | "warning" | "error"> = {
         low: "success",
-        mid: "warning",
+        medium: "warning",
         high: "error",
     };
-    let tagVariant: "success" | "warning" | "error" = $state(
-        risk ? riskStyles[risk] : review.risk ? riskStyles[review.risk] : "success",
-    );
 
-    $effect(() => {
-        if (risk) {
-            tagVariant = riskStyles[risk];
-            return;
-        }
+    // An explicit `risk` prop overrides the one stored on the review.
+    let currentRisk = $derived(risk ?? review.risk);
+    let tagVariant = $derived(currentRisk ? riskStyles[currentRisk] : "success");
 
-        if (review.risk) {
-            tagVariant = riskStyles[review.risk];
-        }
+    let activity = $derived.by(() => {
+        if (review.chatCount === undefined || !review.lastActivity) return undefined;
+
+        return $t("pages.review.card.activity", {
+            count: review.chatCount,
+            date: formatDate(new Date(review.lastActivity), $locale),
+        });
     });
 </script>
 
 <article
     class="border-variant1 bg-purple-soft flex w-full max-w-109.25 flex-col gap-8 rounded-2xl border p-6 {newMessage
-        ? `shadow-[${newMsgCardShadow}]`
+        ? 'shadow-[0_1px_3px_0_#0000001A,0_6px_6px_0_#00000017,0_13px_8px_0_#0000000D,0_22px_9px_0_#00000003,0_35px_10px_0_#00000000]'
         : ''}"
 >
     <div class="flex flex-col gap-4">
         <div class="flex justify-between">
             <div class="flex flex-col gap-1">
                 <!-- TODO: Messages reactivity functionality (new messages styling and handling + future chatbox logic) -->
-                {#if newMessage}
-                    <Title level={2} variant="subsection" color="secondary">
-                        {review.title}
-                    </Title>
-                    <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
-                    >
-                {:else}
-                    <Title level={2} variant="subsection" color="secondary">
-                        {review.title}
-                    </Title>
-                    <span class="text-content text-sm/4">32 chats. Última actividad 12/11/2025</span
-                    >
+                <Title level={2} variant="subsection" color="secondary">
+                    {review.title}
+                </Title>
+                {#if activity}
+                    <span class="text-content text-sm/4">{activity}</span>
                 {/if}
             </div>
-            <Tag variant={tagVariant}>{$t(`domain.review.risks.${risk ?? review.risk}`)}</Tag>
+            {#if currentRisk}
+                <Tag variant={tagVariant}>{$t(`domain.review.risks.${currentRisk}`)}</Tag>
+            {/if}
         </div>
         <p class="text-content line-clamp-4 w-full text-base">
             {review.summary}

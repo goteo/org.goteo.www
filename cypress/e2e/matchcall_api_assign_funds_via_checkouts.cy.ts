@@ -197,9 +197,9 @@ describe("MatchCall API - Assign Funds via Checkouts", () => {
         expect(response.status).to.be.oneOf([200, 201, 400, 422, 500]);
 
         if (response.status === 200 || response.status === 201) {
-            expect(response.body.charges[0].money.amount).to.eq(100000);
+            expect(response.body.charges![0].money.amount).to.eq(100000);
             cy.log("✅ High amount checkout accepted");
-            cy.log(`Amount: ${response.body.charges[0].money.amount / 100}€`);
+            cy.log(`Amount: ${response.body.charges![0].money.amount / 100}€`);
         } else {
             cy.log(`⚠️ High amount checkout rejected: ${response.status}`);
         }

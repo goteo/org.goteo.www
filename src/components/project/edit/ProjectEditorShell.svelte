@@ -33,18 +33,15 @@
     import Toast from "../../library/feedback/Toast.svelte";
     import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
-    import type { Project } from "../../../openapi/client";
     import type { Snippet } from "svelte";
 
     let {
-        project,
         children,
         showSessionErrorToast = $bindable(false),
         onSave,
         onPublish,
         errorMessage = $bindable(""),
     }: {
-        project: Project;
         children: Snippet;
         showSessionErrorToast?: boolean;
         onSave: () => void;
@@ -212,9 +209,7 @@
                     action={handleSave}
                     disabled={!$hasUnsavedChanges || $isSavingDraft}
                 >
-                    {#snippet children()}
-                        {$t("common.save")}
-                    {/snippet}
+                    {$t("common.save")}
                     {#snippet actionedChildren()}
                         {$t("common.saved")}
                     {/snippet}

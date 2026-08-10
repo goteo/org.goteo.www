@@ -73,7 +73,7 @@
     <Button
         kind="secondary"
         class="mt-auto flex w-full items-center justify-center gap-2"
-        {onclick}
+        onclick={handleClick}
     >
         <MoreAndLess sign="more" class="size-6" />
         {#if variant === "reward"}

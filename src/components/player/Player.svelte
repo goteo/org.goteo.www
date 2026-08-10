@@ -28,7 +28,7 @@
     let isLoading = $state(false);
     let iframeEl: HTMLIFrameElement | null = $state(null);
 
-    const previewImage = poster.src || thumbnails;
+    let previewImage = $derived(poster.src || thumbnails);
 
     $effect(() => {
         noVideoSrc = !src;
@@ -62,7 +62,7 @@
             });
 
             return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-        } catch (err) {
+        } catch {
             console.warn("Invalid YouTube URL", original);
             return original;
         }

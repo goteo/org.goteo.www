@@ -168,7 +168,7 @@
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
                     categories: $currentDraft.createProject.categories,
-                    release: $currentDraft.createProject.release,
+                    calendar: { release: $currentDraft.createProject.release ?? null },
                 },
             });
 
@@ -216,7 +216,7 @@
                 // Redirect to project page
                 window.location.href = `/project/${data.id}/edit`;
             }
-        } catch (err) {
+        } catch {
             // Handle unexpected errors
             apiError = "An unexpected error occurred. Please try again.";
         } finally {
