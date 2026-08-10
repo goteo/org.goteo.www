@@ -13,7 +13,7 @@
     "db:migrate": "wrangler d1 migrations apply goteo-db --local",
     "db:seed": "wrangler d1 execute goteo-db --local --file=./db/seed.sql",
     "dev": "astro dev",
-    "format": "eslint --fix . && prettier --write .",
+    "format": "NODE_OPTIONS=\"--max-old-space-size=4096\" eslint --fix . && prettier --write .",
     "format:eslint": "eslint --fix . ",
     "format:prettier": "prettier --write .",
     "openapi": "openapi-ts",
