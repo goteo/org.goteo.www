@@ -4,6 +4,7 @@ import z from "zod";
 import { type Draft, type Wizard, type CreateProjectForm } from "./projectDraft";
 import { projectCreationSchema } from "../../pages/[...locale]/create/validation";
 import { isPositiveMoney } from "../../utils/money";
+import { richTextToPlainText } from "../../utils/richText";
 
 import type {
     ProjectBudgetItem,
@@ -68,15 +69,6 @@ export function validateDraftToPublish(draft: Draft): ValidationErrors {
     Object.assign(errors, validateBudgetAmount(draft));
 
     return errors;
-}
-
-export function stripHtml(html: string): string {
-    if (typeof document === "undefined") {
-        return html.replace(/<[^>]*>/g, "").trim();
-    }
-    const div = document.createElement("div");
-    div.innerHTML = html;
-    return div.textContent || div.innerText || "";
 }
 
 /**
@@ -145,7 +137,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Objectives validation
-    const objectivesPlainText = stripHtml(data.objectives).trim();
+    const objectivesPlainText = richTextToPlainText(data.objectives).trim();
     if (objectivesPlainText.length === 0) {
         errors.objectives = "pages.project.edit.rewards.validation_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
@@ -157,7 +149,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Legacy validation
-    const legacyPlainText = stripHtml(data.legacy).trim();
+    const legacyPlainText = richTextToPlainText(data.legacy).trim();
     if (legacyPlainText.length === 0) {
         errors.legacy = "pages.project.edit.rewards.validation_info.reward.legacy.required";
     } else if (legacyPlainText.length < 50) {
@@ -167,7 +159,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Target audience validation
-    const targetPlainText = stripHtml(data.targetAudience).trim();
+    const targetPlainText = richTextToPlainText(data.targetAudience).trim();
     if (targetPlainText.length === 0) {
         errors.targetAudience = "pages.project.edit.rewards.validation_info.reward.target.required";
     } else if (targetPlainText.length < 30) {
@@ -179,7 +171,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Team validation
-    const teamPlainText = stripHtml(data.team).trim();
+    const teamPlainText = richTextToPlainText(data.team).trim();
     if (teamPlainText.length === 0) {
         errors.team = "pages.project.edit.rewards.validation_info.reward.team.required";
     } else if (teamPlainText.length < 50) {

@@ -15,12 +15,16 @@
         totalItems: totalItemsProp,
         itemsPerPage: itemsPerPageProp,
         onPageChange,
+        i18nPrefix,
     } = $props<{
         currentPage?: number;
         totalItems?: number;
         itemsPerPage?: number;
         onPageChange?: (page: number) => void;
+        i18nPrefix?: string;
     }>();
+
+    const paginationPrefix = $derived(i18nPrefix ?? "common.pagination");
 
     let page = $derived(currentPageProp ?? $storeCurrentPage);
     let total = $derived(totalItemsProp ?? $storeTotalItems);
@@ -120,18 +124,18 @@
     {#if total > 0}
         <span class="text-content text-sm font-bold">
             {@html $t(
-                "pages.admin.charges.pagination.showing",
+                `${paginationPrefix}.showing`,
                 { items: shownItems, total },
                 { allowHTML: true },
             )}
         </span>
     {:else if total === 0 && !$isLoading}
         <span class="text-content text-sm font-bold">
-            {@html $t("pages.admin.charges.pagination.noResults")}
+            {@html $t(`${paginationPrefix}.noResults`)}
         </span>
     {:else}
         <span class="text-content text-sm font-bold">
-            {@html $t("pages.admin.charges.pagination.unloaded")}
+            {@html $t(`${paginationPrefix}.unloaded`)}
         </span>
     {/if}
 </section>

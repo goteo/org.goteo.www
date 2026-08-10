@@ -25,8 +25,11 @@
         updateCampaignInfo,
         type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
+    import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+
+    import type { JSONContent } from "@tiptap/core";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -38,10 +41,11 @@
         $currentDraft?.wizardForm.campaignInfo ?? {
             images: [],
             video: undefined,
-            objectives: "",
-            legacy: "",
-            targetAudience: "",
-            team: "",
+            objectives: emptyRichText(),
+            legacy: emptyRichText(),
+            targetAudience: emptyRichText(),
+            team: emptyRichText(),
+            communicationStrategy: emptyRichText(),
         },
     );
 
@@ -101,26 +105,30 @@
         });
     }
 
-    function handleObjectivesChange(html: string) {
+    function handleObjectivesChange(doc: JSONContent) {
         updateCampaignInfo({
-            objectives: html,
+            objectives: doc,
         });
     }
 
-    function handleLegacyChange(html: string) {
+    function handleLegacyChange(doc: JSONContent) {
         updateCampaignInfo({
-            legacy: html,
+            legacy: doc,
         });
     }
 
-    function handleTargetAudienceChange(html: string) {
+    function handleTargetAudienceChange(doc: JSONContent) {
         updateCampaignInfo({
-            targetAudience: html,
+            targetAudience: doc,
         });
     }
 
-    function handleTeamChange(html: string) {
-        updateCampaignInfo({ team: html });
+    function handleTeamChange(doc: JSONContent) {
+        updateCampaignInfo({ team: doc });
+    }
+
+    function handleCommunicationStrategyChange(doc: JSONContent) {
+        updateCampaignInfo({ communicationStrategy: doc });
     }
 </script>
 
@@ -266,6 +274,31 @@
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
                 ariaDescribedBy="team-help"
+            />
+        </section>
+
+        <!-- Communication Strategy Section -->
+        <section data-field="communicationStrategy" class="space-y-4">
+            <div>
+                <label
+                    for="communication-strategy"
+                    class="mb-1 block text-2xl font-bold text-black"
+                >
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.title")}
+                </label>
+                <p class="text-content text-base" id="communication-strategy-help">
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.description")}
+                </p>
+            </div>
+
+            <RichTextEditor
+                id="communication-strategy"
+                value={campaignInfo.communicationStrategy}
+                onChange={handleCommunicationStrategyChange}
+                placeholder={$t("common.textPlaceholder")}
+                minLength={30}
+                maxLength={5000}
+                ariaDescribedBy="communication-strategy-help"
             />
         </section>
     </div>

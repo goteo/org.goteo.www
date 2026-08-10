@@ -53,6 +53,9 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
 
 export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
     return async (request: Request, opts: RequestOptions): Promise<Request> => {
+        if (import.meta.env.PUBLIC_DISABLE_CACHE === "true") {
+            return request;
+        }
         const originalFetch = opts.fetch ?? globalThis.fetch;
 
         opts.fetch = async (req: Request) => {

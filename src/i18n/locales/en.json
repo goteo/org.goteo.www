@@ -130,22 +130,32 @@
         "placeholder": "Search for your project"
       }
     },
+    "richTextEditor": {
+      "toolbar": "Text formatting toolbar",
+      "fontSize": "Font size",
+      "bold": "Bold",
+      "italic": "Italic",
+      "alignLeft": "Align left",
+      "alignCenter": "Center",
+      "alignRight": "Align right",
+      "characterCount": "{{ current }} / {{ max }} characters"
+    },
     "export": {
       "csv": "Export CSV",
       "exporting": "Exporting...",
       "error": "Error exporting CSV file. Please try again.",
       "itemsText": "Items",
       "noData": "No data found to export"
-    }
-  },
-  "common": {
-    "_": "Global UI translations (buttons, labels, etc.)",
+    },
     "dateInput": {
       "apply": "Apply",
       "previousMonth": "Previous month",
       "nextMonth": "Next month",
       "close": "Close"
-    },
+    }
+  },
+  "common": {
+    "_": "Global UI translations (buttons, labels, etc.)",
     "greeting": "Hello",
     "farewell": "Goodbye",
     "donate": "Donate",
@@ -547,6 +557,10 @@
           "team": {
             "title": "What team do you have?",
             "description": "Describe your team and any previous experiences with similar projects"
+          },
+          "communicationStrategy": {
+            "title": "Tell us about your outreach plan",
+            "description": "If your campaign is approved, what will your outreach plan be?"
           },
           "continue": "Continue with rewards",
           "video": {
