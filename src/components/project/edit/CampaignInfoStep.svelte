@@ -15,7 +15,7 @@
 -->
 <script lang="ts">
     import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
