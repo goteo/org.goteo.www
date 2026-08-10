@@ -4,6 +4,7 @@
     "loading": "Carregant...",
     "error": {
       "unknown": "S'ha produït un error desconegut",
+      "unauthorized": "Has d'iniciar sessió per completar aquesta acció",
       "payment": {
         "missingMethod": "S'ha de seleccionar un mètode de pagament",
         "missingCartData": "La cistella és buida",
@@ -975,6 +976,9 @@
       "btns": {
         "seeChat": "Veure conversa",
         "changeRisk": "Canviar risc"
+      },
+      "card": {
+        "activity": "{{ count }} xats. Darrera activitat {{ date }}"
       },
       "chat": {
         "placeholder": "Escriu un missatge…"
