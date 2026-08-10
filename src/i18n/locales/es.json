@@ -130,22 +130,32 @@
         "placeholder": "Busca tu proyecto"
       }
     },
+    "richTextEditor": {
+      "toolbar": "Barra de formato de texto",
+      "fontSize": "Tamaño de letra",
+      "bold": "Negrita",
+      "italic": "Cursiva",
+      "alignLeft": "Alinear a la izquierda",
+      "alignCenter": "Centrar",
+      "alignRight": "Alinear a la derecha",
+      "characterCount": "{{ current }} / {{ max }} caracteres"
+    },
     "export": {
       "csv": "Exportar CSV",
       "exporting": "Exportando...",
       "error": "Error al exportar el archivo CSV. Por favor, inténtalo de nuevo.",
       "itemsText": "items",
       "noData": "No se encontraron datos para exportar"
-    }
-  },
-  "common": {
-    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
+    },
     "dateInput": {
       "apply": "Aplicar",
       "previousMonth": "Mes anterior",
       "nextMonth": "Mes siguiente",
       "close": "Cerrar"
-    },
+    }
+  },
+  "common": {
+    "_": "Traducciones globales de la interfaz (botones, etiquetas, etc.)",
     "greeting": "Hola",
     "farewell": "Adiós",
     "donate": "Donar",
@@ -170,6 +180,11 @@
     "login": "Iniciar Sesión",
     "goHome": "Volver a inicio",
     "viewAll": "Ver todo",
+    "pagination": {
+      "showing": "Mostrando {{ items }} de {{ total }}",
+      "unloaded": "Mostrando...",
+      "noResults": "No hay resultados"
+    },
     "viewMore": "Ver más",
     "viewLess": "Ver menos",
     "share": "Compartir",
@@ -547,6 +562,10 @@
           "team": {
             "title": "¿Con qué equipo cuentas?",
             "description": "Describe con qué equipo cuentas y si habéis tenido experiencias previas realizando proyectos como este"
+          },
+          "communicationStrategy": {
+            "title": "Cuéntanos tu plan de difusión",
+            "description": "En el caso de que tu campaña sea aprobada, ¿cuál será tu plan de difusión?"
           },
           "continue": "Continuar con recompensas",
           "video": {
@@ -1241,7 +1260,7 @@
         "charges": "Cobros",
         "projects": "Proyectos",
         "users": "Usuarios",
-        "communications": "Comunicaciones"
+        "comm": "Comunicación"
       },
       "sidebar": {
         "aria": {
@@ -1410,11 +1429,6 @@
               "funding_paid": "Cobro pagado"
             }
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{items}} de {{total}}",
-          "unloaded": "Mostrando...",
-          "noResults": "No hay resultados"
         },
         "downloadButtons": {
           "certificates": "Descarga certificados",
@@ -1594,10 +1608,6 @@
             },
             "save": "Guardar"
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
         }
       },
       "users": {
@@ -1668,10 +1678,49 @@
               "active": "Activo"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Comunicación",
+        "description": "Administra la comunicación de la plataforma",
+        "tabs": {
+          "banners": "Anuncios"
         },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
+        "banners": {
+          "title": "Anuncios",
+          "description": "Aquí puedes crear y gestionar los banners de la plataforma",
+          "tabs": {
+            "fields": "Nuevos",
+            "history": "Histórico"
+          },
+          "fields": {
+            "dataTitle": "Datos del anuncio",
+            "titlePlaceholder": "Título del anuncio",
+            "descriptionPlaceholder": "Breve descripción del anuncio",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programa el anuncio",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin"
+          },
+          "history": {
+            "title": "Histórico de anuncios",
+            "description": "Aquí puedes ver el histórico de anuncios publicados",
+            "noData": "No hay anuncios en el histórico",
+            "headers": {
+              "title": "Título",
+              "content": "Contenido",
+              "publishedAt": "Fecha de publicación",
+              "endAt": "Fecha de finalización"
+            },
+            "actions": {
+              "view": "Ver"
+            },
+            "modal": {
+              "title": "Anuncio publicado el {{date}}",
+              "description": "Aquí puedes ver como fue el anuncio"
+            }
+          }
         }
       }
     },

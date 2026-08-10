@@ -10,6 +10,7 @@ import {
     updateCollaboration,
     updateReward,
 } from "./projectSubmissionApi";
+import { isRichTextEmpty, richTextToHtml } from "./richText";
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
@@ -150,7 +151,8 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
         wizard.campaignInfo.targetAudience,
         wizard.campaignInfo.team,
     ]
-        .filter(Boolean)
+        .filter((doc) => !isRichTextEmpty(doc))
+        .map(richTextToHtml)
         .join("\n\n");
 
     const firstImage = wizard.campaignInfo.images[0];
