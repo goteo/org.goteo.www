@@ -180,6 +180,11 @@
     "login": "Iniciar Sesión",
     "goHome": "Volver a inicio",
     "viewAll": "Ver todo",
+    "pagination": {
+      "showing": "Mostrando {{ items }} de {{ total }}",
+      "unloaded": "Mostrando...",
+      "noResults": "No hay resultados"
+    },
     "viewMore": "Ver más",
     "viewLess": "Ver menos",
     "share": "Compartir",
@@ -1194,7 +1199,8 @@
       "nav": {
         "charges": "Cobros",
         "projects": "Proyectos",
-        "users": "Usuarios"
+        "users": "Usuarios",
+        "comm": "Comunicación"
       },
       "sidebar": {
         "aria": {
@@ -1363,11 +1369,6 @@
               "funding_paid": "Cobro pagado"
             }
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{items}} de {{total}}",
-          "unloaded": "Mostrando...",
-          "noResults": "No hay resultados"
         },
         "downloadButtons": {
           "certificates": "Descarga certificados",
@@ -1547,10 +1548,6 @@
             },
             "save": "Guardar"
           }
-        },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
         }
       },
       "users": {
@@ -1621,10 +1618,49 @@
               "active": "Activo"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Comunicación",
+        "description": "Administra la comunicación de la plataforma",
+        "tabs": {
+          "banners": "Anuncios"
         },
-        "pagination": {
-          "showing": "Mostrando {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} por página"
+        "banners": {
+          "title": "Anuncios",
+          "description": "Aquí puedes crear y gestionar los banners de la plataforma",
+          "tabs": {
+            "fields": "Nuevos",
+            "history": "Histórico"
+          },
+          "fields": {
+            "dataTitle": "Datos del anuncio",
+            "titlePlaceholder": "Título del anuncio",
+            "descriptionPlaceholder": "Breve descripción del anuncio",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programa el anuncio",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin"
+          },
+          "history": {
+            "title": "Histórico de anuncios",
+            "description": "Aquí puedes ver el histórico de anuncios publicados",
+            "noData": "No hay anuncios en el histórico",
+            "headers": {
+              "title": "Título",
+              "content": "Contenido",
+              "publishedAt": "Fecha de publicación",
+              "endAt": "Fecha de finalización"
+            },
+            "actions": {
+              "view": "Ver"
+            },
+            "modal": {
+              "title": "Anuncio publicado el {{date}}",
+              "description": "Aquí puedes ver como fue el anuncio"
+            }
+          }
         }
       }
     },
