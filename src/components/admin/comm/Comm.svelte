@@ -1,10 +1,10 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    import type { Component } from "svelte";
-
     import Banners from "./banners/Banners.svelte";
     import { t } from "../../../i18n/store";
+
+    import type { Component } from "svelte";
 
     interface CommTab {
         id: string;

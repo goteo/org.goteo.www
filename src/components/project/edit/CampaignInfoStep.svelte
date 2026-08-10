@@ -15,7 +15,6 @@
 -->
 <script lang="ts">
     import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
@@ -28,6 +27,7 @@
     import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
 
     import type { JSONContent } from "@tiptap/core";
 
