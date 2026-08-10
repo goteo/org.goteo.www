@@ -11,9 +11,9 @@
 
     const legendEntries = Object.entries(budgetTypeColors) as [ProjectBudgetItem["type"], string][];
 
-    const minimumTotal = project.budget?.minimum?.money?.amount ?? 0;
-    const optimumTotal = project.budget?.optimum?.money?.amount ?? 0;
-    const totalBudget = minimumTotal + optimumTotal;
+    let minimumTotal = $derived(project.budget?.minimum?.money?.amount ?? 0);
+    let optimumTotal = $derived(project.budget?.optimum?.money?.amount ?? 0);
+    let totalBudget = $derived(minimumTotal + optimumTotal);
 </script>
 
 <div class="flex flex-row flex-wrap items-center justify-between gap-6">

@@ -9,6 +9,7 @@ import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
 import { sumMoney } from "../../../utils/money";
+import { goto } from "../../../utils/navigation";
 import type { Money } from "../../../openapi/client";
 
 const { t, lang, session } = Astro.locals;
@@ -16,7 +17,7 @@ const { t, lang, session } = Astro.locals;
 const { data: paymentGateways } = await apiGatewaysGetCollection();
 
 if (!session) {
-    return Astro.redirect("/login?callback=/checkout/verify" + Astro.url.searchParams);
+    return goto("/login", { query: { callback: Astro.url.pathname + Astro.url.search } });
 }
 
 const { token, user } = session;

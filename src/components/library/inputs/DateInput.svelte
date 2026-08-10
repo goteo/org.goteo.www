@@ -234,7 +234,7 @@
                 <button
                     type="button"
                     onclick={() => (open = false)}
-                    aria-label={$t("common.dateInput.close")}
+                    aria-label={$t("domain.dateInput.close")}
                 >
                     <Close class="size-5 text-black" />
                 </button>
@@ -256,7 +256,7 @@
                 onclick={apply}
                 class="bg-primary text-secondary mt-6 h-14 w-full rounded-3xl text-lg font-bold hover:cursor-pointer"
             >
-                {$t("common.dateInput.apply")}
+                {$t("domain.dateInput.apply")}
             </button>
         </div>
     {/if}

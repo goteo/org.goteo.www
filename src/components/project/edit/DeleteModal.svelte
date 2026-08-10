@@ -3,6 +3,7 @@
 
     import { t } from "../../../i18n/store";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     let {
         open = $bindable(false),
@@ -24,9 +25,9 @@
     footerClass="md:p-0 p-0 flex items-center justify-end gap-4"
 >
     {#snippet header()}
-        <h2 class="text-xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t(`pages.project.edit.${variant}.deleteModal.title`)}
-        </h2>
+        </Title>
     {/snippet}
     <p class="text-content text-base font-normal">
         {$t(`pages.project.edit.${variant}.deleteModal.description`)}

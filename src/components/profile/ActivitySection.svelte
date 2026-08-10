@@ -27,7 +27,7 @@
         Project,
         MatchCall,
         User,
-        Money,
+        MoneyOutput,
     } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
 
@@ -244,7 +244,7 @@
 
                 const projectBalances = accountingResults
                     .map((a) => a?.balance)
-                    .filter((b): b is Money => b != null && typeof b.amount === "number");
+                    .filter((b): b is MoneyOutput => b != null && typeof b.amount === "number");
 
                 if (projectBalances.length > 0) {
                     const total = sumMoney(projectBalances);

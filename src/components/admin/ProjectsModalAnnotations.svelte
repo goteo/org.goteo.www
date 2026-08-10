@@ -26,7 +26,7 @@
         <TextArea
             id="annotations-input"
             bind:value={annotationText}
-            label={$t("pages.admin.projects.modals.annotations.placeholder")}
+            labelText={$t("pages.admin.projects.modals.annotations.placeholder")}
         />
         {#if !annotationText}
             <p class="text-content text-sm">

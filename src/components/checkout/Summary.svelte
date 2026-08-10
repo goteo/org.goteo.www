@@ -6,10 +6,23 @@
     import { multiplyMoney, sumMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
-    import type { Money } from "../../openapi/client/types.gen";
+    import Title from "../library/typography/Title.svelte";
 
-    // `total` is the settled amount; without it fall back to the cart, which may already be cleared.
-    let { hasError = false, total }: { hasError?: boolean; total?: Money } = $props();
+    import type { Money } from "../../openapi/client";
+
+    interface Props {
+        hasError?: boolean;
+        /**
+         * Overrides the cart total. Once a payment is settled the cart is no
+         * longer the source of truth — and is about to be cleared — so the
+         * caller passes the total actually charged.
+         */
+        total?: Money;
+    }
+
+    let { hasError = false, total }: Props = $props();
+
+    const displayTotal = $derived(total ?? $cartAmount);
 
     const recipients = $derived(
         Object.entries($cartByRecipient).sort((a, b) => {
@@ -28,8 +41,12 @@
         buttonTextHide={$t("pages.checkout.summary.hideDetails")}
     >
         {#snippet header()}
-            <h2
-                class={`lg:text-double flex items-center gap-2 text-base font-semibold ${hasError ? "text-tertiary" : "text-secondary"}`}
+            <Title
+                level={2}
+                variant="subsection"
+                color={hasError ? "default" : "secondary"}
+                class={`flex items-center gap-2 ${hasError ? "text-tertiary lg:text-double" : "lg:text-double"}`}
+                weight="semibold"
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -37,11 +54,11 @@
                     </span>
                 {/if}
                 {$t("pages.checkout.summary.total.title")}
-            </h2>
+            </Title>
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency(total ?? $cartAmount)}
+                {formatCurrency(displayTotal)}
             </p>
         {/snippet}
 

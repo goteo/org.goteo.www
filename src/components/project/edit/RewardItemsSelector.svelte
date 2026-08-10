@@ -2,6 +2,7 @@
     import { t } from "../../../i18n/store";
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import InfinityIcon from "../../icons/Infinity.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     let {
         value = $bindable(1),
@@ -23,9 +24,9 @@
 </script>
 
 <div class="flex flex-col gap-4">
-    <h3 class="text-secondary text-base font-bold">
+    <Title level={3} variant="field" color="secondary">
         {$t("pages.project.edit.rewards.modal.unitsExisting")}
-    </h3>
+    </Title>
 
     <div class="flex items-center gap-10">
         <div class="flex gap-4">

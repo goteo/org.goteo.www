@@ -12,7 +12,7 @@ export const payment = defineAction({
         if (!session) {
             throw new ActionError({
                 code: "UNAUTHORIZED",
-                message: t("system.error.payment.unauthorized"),
+                message: t("system.error.unauthorized"),
             });
         }
 

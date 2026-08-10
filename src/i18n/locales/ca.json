@@ -130,22 +130,32 @@
         "placeholder": "Busca el teu projecte"
       }
     },
+    "richTextEditor": {
+      "toolbar": "Barra de format de text",
+      "fontSize": "Mida de la lletra",
+      "bold": "Negreta",
+      "italic": "Cursiva",
+      "alignLeft": "Alinea a l'esquerra",
+      "alignCenter": "Centra",
+      "alignRight": "Alinea a la dreta",
+      "characterCount": "{{ current }} / {{ max }} caràcters"
+    },
     "export": {
       "csv": "Exporta CSV",
       "exporting": "Exportant...",
       "error": "Error en exportar el fitxer CSV. Si us plau, torna-ho a intentar.",
       "itemsText": "elements",
       "noData": "No s'han trobat dades per exportar"
-    }
-  },
-  "common": {
-    "_": "Traduccions de la interfície global (botons, etiquetes, etc.)",
+    },
     "dateInput": {
       "apply": "Aplica",
       "previousMonth": "Mes anterior",
       "nextMonth": "Mes següent",
-      "close": "Tancar"
-    },
+      "close": "Tanca"
+    }
+  },
+  "common": {
+    "_": "Traduccions de la interfície global (botons, etiquetes, etc.)",
     "greeting": "Hola",
     "farewell": "Adéu",
     "donate": "Dona",
@@ -547,6 +557,10 @@
           "team": {
             "title": "Amb quin equip comptes?",
             "description": "Descriu amb quin equip comptes i si heu tingut experiències prèvies realitzant projectes com aquest"
+          },
+          "communicationStrategy": {
+            "title": "Explica'ns el teu pla de difusió",
+            "description": "En cas que la teva campanya sigui aprovada, quin serà el teu pla de difusió?"
           },
           "continue": "Continuar amb recompenses",
           "video": {

@@ -22,7 +22,7 @@
         iconSize?: string | number;
     } = $props();
 
-    const lang = initialLang || $locale;
+    let lang = $derived(initialLang || $locale);
 
     function displayName(territory: Territory) {
         const countryNames = new Intl.DisplayNames(lang, { type: "region" });

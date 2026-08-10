@@ -8,6 +8,7 @@
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project } from "../../../openapi/client";
 
@@ -57,13 +58,14 @@
     )}
 >
     <div class="flex flex-col gap-4 text-ellipsis">
-        <h2
-            class="text-purple-soft font-bold {variant === 'budget'
-                ? 'text-2xl leading-8'
-                : 'text-4xl leading-12'}"
+        <Title
+            level={2}
+            variant={variant === "budget" ? "subsection" : "headline"}
+            color="purple-soft"
+            class={variant === "budget" ? "leading-8" : "leading-12"}
         >
             {title}
-        </h2>
+        </Title>
         <p class="text-variant1 mb-4 text-base font-normal">
             {description}
         </p>
@@ -71,7 +73,7 @@
     <Button
         kind="secondary"
         class="mt-auto flex w-full items-center justify-center gap-2"
-        {onclick}
+        onclick={handleClick}
     >
         <MoreAndLess sign="more" class="size-6" />
         {#if variant === "reward"}

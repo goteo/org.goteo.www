@@ -13,6 +13,7 @@
         { path: "/admin/charges", key: "pages.admin.nav.charges" },
         { path: "/admin/projects", key: "pages.admin.nav.projects" },
         { path: "/admin/users", key: "pages.admin.nav.users" },
+        { path: "/admin/comm", key: "pages.admin.nav.comm" },
     ];
 
     let pathname = $state("");

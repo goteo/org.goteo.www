@@ -9,6 +9,7 @@
     import RadioButton from "../../library/inputs/RadioButton.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project } from "../../../openapi/client";
     import type { UploadedFile } from "../../../stores/drafts/projectDraft";
@@ -100,9 +101,9 @@
     <div class="flex flex-col gap-10">
         <!-- Header -->
         <div class="space-y-4">
-            <h1 class="text-[2.5rem] leading-12 font-bold text-black lg:text-[2.5rem]">
+            <Title level={1} variant="headline">
                 {$t("pages.project.edit.aboutYou.title")}
-            </h1>
+            </Title>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.subtitle")}</p>
         </div>
 
@@ -116,9 +117,9 @@
 
         <!-- Legal Entity -->
         <div class="flex flex-col gap-3">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.aboutYou.legalEntity")}
-            </h2>
+            </Title>
             <p class="text-content text-base">
                 {$t("pages.project.edit.aboutYou.legalEntityHelper")}
             </p>
@@ -136,9 +137,9 @@
 
         <!-- Name -->
         <div class="flex flex-col gap-2">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.aboutYou.name")}
-            </h2>
+            </Title>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.nameHelper")}</p>
             <div onfocusout={() => touch("name")}>
                 <TextInput
@@ -152,9 +153,9 @@
 
         <!-- NIF -->
         <div class="flex flex-col gap-2">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.aboutYou.taxId")}
-            </h2>
+            </Title>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.taxIdHelper")}</p>
             <div onfocusout={() => touch("taxId")}>
                 <TextInput
@@ -168,9 +169,9 @@
 
         <!-- Location/Territory -->
         <div class="flex flex-col gap-2">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.aboutYou.location")}
-            </h2>
+            </Title>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.locationHelper")}</p>
             <AddressAutocomplete
                 name="address"
@@ -202,9 +203,9 @@
         <!-- Private contacts data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
-                <h2 class="text-2xl font-bold text-black">
+                <Title level={2} variant="subsection">
                     {$t("pages.project.edit.aboutYou.privateContacts")}
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.aboutYou.privateContactsHelper")}
                 </p>
@@ -339,9 +340,9 @@
         <!-- Payment Data -->
         <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-1">
-                <h2 class="text-2xl font-bold text-black">
+                <Title level={2} variant="subsection">
                     {$t("pages.project.edit.aboutYou.paymentData.title")}
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.aboutYou.paymentData.subtitle")}
                 </p>
@@ -379,7 +380,9 @@
         <div class="flex items-center gap-2">
             <Checkbox bind:checked={termsAccepted}>
                 <span class="text-secondary">
-                    <a href="#" class="underline">{$t("pages.project.create.terms.label")}</a>
+                    <a href="/src/pages/[...locale]/about/legal/terms" class="underline"
+                        >{$t("pages.project.create.terms.label")}</a
+                    >
                 </span>
             </Checkbox>
         </div>
