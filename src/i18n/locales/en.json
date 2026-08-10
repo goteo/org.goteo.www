@@ -4,6 +4,7 @@
     "loading": "Loading...",
     "error": {
       "unknown": "An unknown error has occurred",
+      "unauthorized": "You must sign in to complete this action",
       "payment": {
         "missingMethod": "A payment method must be selected",
         "missingCartData": "The cart is empty",
@@ -975,6 +976,9 @@
       "btns": {
         "seeChat": "View conversation",
         "changeRisk": "Change risk"
+      },
+      "card": {
+        "activity": "{{ count }} chats. Last activity {{ date }}"
       },
       "chat": {
         "placeholder": "Write a message…"
