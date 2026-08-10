@@ -180,6 +180,11 @@
     "login": "Log in",
     "goHome": "Back to home",
     "viewAll": "View all",
+    "pagination": {
+      "showing": "Showing {{ items }} of {{ total }}",
+      "unloaded": "Showing...",
+      "noResults": "No results"
+    },
     "viewMore": "See more",
     "viewLess": "See less",
     "share": "Share",
@@ -1194,7 +1199,8 @@
       "nav": {
         "charges": "Charges",
         "projects": "Projects",
-        "users": "Users"
+        "users": "Users",
+        "comm": "Communication"
       },
       "sidebar": {
         "aria": {
@@ -1363,11 +1369,6 @@
               "funding_paid": "Charge paid"
             }
           }
-        },
-        "pagination": {
-          "showing": "Showing {{items}} of {{total}}",
-          "unloaded": "Showing...",
-          "noResults": "No results"
         },
         "downloadButtons": {
           "certificates": "Download certificates",
@@ -1547,10 +1548,6 @@
             },
             "save": "Save"
           }
-        },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
         }
       },
       "users": {
@@ -1621,10 +1618,49 @@
               "active": "Active"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Communication",
+        "description": "Manage platform communication",
+        "tabs": {
+          "banners": "Announcements"
         },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
+        "banners": {
+          "title": "Announcements",
+          "description": "Here you can create and manage the platform banners",
+          "tabs": {
+            "fields": "New",
+            "history": "History"
+          },
+          "fields": {
+            "dataTitle": "Announcement details",
+            "titlePlaceholder": "Announcement title",
+            "descriptionPlaceholder": "Brief announcement description",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Schedule the announcement",
+            "startDatePlaceholder": "Enter the start date",
+            "endDatePlaceholder": "Enter the end date"
+          },
+          "history": {
+            "title": "Announcement history",
+            "description": "Here you can view the history of published announcements",
+            "noData": "There are no announcements in the history",
+            "headers": {
+              "title": "Title",
+              "content": "Content",
+              "publishedAt": "Publication date",
+              "endAt": "End date"
+            },
+            "actions": {
+              "view": "View"
+            },
+            "modal": {
+              "title": "Announcement published on {{date}}",
+              "description": "Here you can see what the announcement looked like"
+            }
+          }
         }
       }
     },
