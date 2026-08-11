@@ -33,8 +33,7 @@
         }
 
         const iso = iso3166.subdivision(tag!);
-
-        if (!iso) {
+        if (!iso || !iso.name) {
             return country!;
         }
 
