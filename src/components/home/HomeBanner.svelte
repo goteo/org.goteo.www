@@ -46,7 +46,7 @@
             class="relative z-10 flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
         >
             <div class="flex-1 space-y-3">
-                <Title level={2} variant="section" class="tracking-tight">
+                <Title level={2} variant="section" class="text-variant1 tracking-tight">
                     {title}
                 </Title>
                 <p class="text-variant1 max-w-3xl text-sm opacity-90 sm:text-base md:text-lg">
