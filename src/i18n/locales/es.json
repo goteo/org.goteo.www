@@ -18,6 +18,9 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "El texto no puede estar vacío"
+      },
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido 10MB",
         "supportedTypes": "Archivos compatibles: {{ types }}"
