@@ -1653,7 +1653,7 @@
           "fields": {
             "dataTitle": "Datos del anuncio",
             "titlePlaceholder": "Título del anuncio",
-            "descriptionPlaceholder": "Breve descripción del anuncio",
+            "contentPlaceholder": "Breve descripción del anuncio",
             "ctaPlaceholder": "Call to action",
             "urlPlaceholder": "URL",
             "scheduleTitle": "Programa el anuncio",

@@ -16,7 +16,7 @@
 
     let formElement: HTMLFormElement;
 
-    type FieldName = "title" | "description" | "ctaText" | "ctaLink" | "startsAt" | "endsAt";
+    type FieldName = "title" | "content" | "ctaText" | "ctaLink" | "startsAt" | "endsAt";
 
     type FieldErrors = Partial<Record<FieldName, string>>;
 
@@ -67,9 +67,9 @@
 
             <TextArea
                 class="flex-1"
-                name="description"
-                placeholder={$t("pages.admin.comm.banners.fields.descriptionPlaceholder")}
-                error={fieldErrors.description && $t(fieldErrors.description)}
+                name="content"
+                placeholder={$t("pages.admin.comm.banners.fields.contentPlaceholder")}
+                error={fieldErrors.content && $t(fieldErrors.content)}
             />
 
             <div class="flex gap-6">
@@ -102,14 +102,16 @@
                 class="flex-1"
                 name="startsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
-                error={fieldErrors.startsAt && $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
+                error={fieldErrors.startsAt &&
+                    $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
             />
 
             <DateInput
                 class="flex-1"
                 name="endsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
-                error={fieldErrors.endsAt && $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
+                error={fieldErrors.endsAt &&
+                    $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
             />
         </div>
     </div>

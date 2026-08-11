@@ -2,7 +2,7 @@ import { env } from "cloudflare:workers";
 
 export interface BannerRecord {
     title: string;
-    description: string;
+    content: string;
     ctaText: string;
     ctaLink: string;
     startsAt: Date;
@@ -22,7 +22,7 @@ class BannerRepository {
             .prepare(
                 `SELECT
                     title,
-                    description,
+                    content,
                     cta_text AS ctaText,
                     cta_link AS ctaLink,
                     starts_at AS startsAt,
@@ -49,12 +49,12 @@ class BannerRepository {
     public async create(banner: BannerRecord): Promise<BannerRecord> {
         const result = await this.db
             .prepare(
-                `INSERT INTO banners (title, description, cta_text, cta_link, starts_at, ends_at, date_created)
+                `INSERT INTO banners (title, content, cta_text, cta_link, starts_at, ends_at, date_created)
              VALUES (?, ?, ?, ?, ?, ?, ?)`,
             )
             .bind(
                 banner.title,
-                banner.description,
+                banner.content,
                 banner.ctaText,
                 banner.ctaLink,
                 banner.startsAt.getTime(),

@@ -2,7 +2,7 @@
 CREATE TABLE IF NOT EXISTS banners (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     title       TEXT    NOT NULL,
-    description TEXT    NOT NULL,
+    content     TEXT    NOT NULL,
     cta_text    TEXT    NOT NULL,
     cta_link    TEXT    NOT NULL,
     starts_at   INTEGER NOT NULL,

@@ -77,10 +77,10 @@
             {row.content}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {row.publishedAt}
+            {formatDate(row.startsAt, $locale)}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {row.endAt}
+            {formatDate(row.endsAt, $locale)}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 w-25 rounded-r-md border-t border-r border-b p-4">
             <button class="flex cursor-pointer items-center gap-2" onclick={() => openModal(row)}>
@@ -119,7 +119,7 @@
     {#if selectedRow}
         <HomeBanner
             title={selectedRow.title}
-            description={selectedRow.description}
+            description={selectedRow.content}
             ctaText={selectedRow.ctaText}
             ctaLink={selectedRow.ctaLink}
             closeAriaLabel={$t("pages.home.banner.closeAriaLabel")}
