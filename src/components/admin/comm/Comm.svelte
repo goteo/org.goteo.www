@@ -7,7 +7,6 @@
 
     import type { Component } from "svelte";
 
-
     interface CommTab {
         id: string;
         hash: string;
@@ -53,10 +52,10 @@
     });
 </script>
 
-<nav class="flex gap-4 mb-6">
+<nav class="mb-6 flex gap-4">
     {#each tabs as tab}
-        <a 
-            href={tab.hash} 
+        <a
+            href={tab.hash}
             class:font-bold={activeTab === tab.id}
             class:text-secondary={activeTab === tab.id}
             class="text-content hover:text-secondary"
