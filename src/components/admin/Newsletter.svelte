@@ -13,11 +13,10 @@
     import PlusIcon from "../icons/actions/PlusIcon.svelte";
     import FiltersIcon from "../icons/filters/Filters.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
     import Checkbox from "../library/inputs/Checkbox.svelte";
     import Search from "../library/inputs/Search.svelte";
     import Select from "../library/inputs/Select.svelte";
-    import TextInput from "../library/inputs/TextInput.svelte";
-    import Grid from "../library/layout/Grid.svelte";
     import TabNavigation from "../library/layout/TabNavigation.svelte";
 
     export interface NewsletterTemplateItem {
@@ -107,23 +106,31 @@
         isSubmitting = false;
     }
 
-    function handleSearchSubmit(e: SubmitEvent) {
-        e.preventDefault();
+    function handleSearchSubmit(e?: SubmitEvent | Record<string, unknown>) {
+        if (e && typeof e === "object" && "preventDefault" in e) {
+            (e as SubmitEvent).preventDefault();
+        }
+
+        const payload =
+            e && typeof e === "object" && !("preventDefault" in e)
+                ? e
+                : {
+                      directedTo: filterDirectedTo,
+                      projectName: filterProjectName,
+                      paymentMethod: filterPaymentMethod,
+                      interest: filterInterest,
+                      certificate: filterCertificate,
+                      preferredLanguage: filterPreferredLanguage,
+                      newsletterLanguage: filterNewsletterLanguage,
+                      status: filterStatus,
+                      dates: filterDates,
+                      nameEmail: filterNameEmail,
+                      location: filterLocation,
+                      profile: filterProfile,
+                  };
+
         isSubmitting = true;
-        onSearchCommunications?.({
-            directedTo: filterDirectedTo,
-            projectName: filterProjectName,
-            paymentMethod: filterPaymentMethod,
-            interest: filterInterest,
-            certificate: filterCertificate,
-            preferredLanguage: filterPreferredLanguage,
-            newsletterLanguage: filterNewsletterLanguage,
-            status: filterStatus,
-            dates: filterDates,
-            nameEmail: filterNameEmail,
-            location: filterLocation,
-            profile: filterProfile,
-        });
+        onSearchCommunications?.(payload);
         isSubmitting = false;
     }
 </script>
@@ -314,112 +321,18 @@
             <Pagination {currentPage} totalItems={filteredTemplates.length} {itemsPerPage} />
         </div>
     {:else if activeTab === "communications"}
-        <form onsubmit={handleSearchSubmit} class="flex flex-col gap-8">
+        <div class="flex flex-col gap-8">
             <h2 class="text-2xl font-bold text-black">
                 {$t("pages.admin.newsletter.communications.searchTitle")}
             </h2>
 
-            <Grid class="grid-cols-1 gap-x-8 gap-y-4 md:grid-cols-2">
-                <div class="flex flex-col gap-4">
-                    <Select id="directed-to" labelText="" bind:value={filterDirectedTo}>
-                        <option value="" disabled selected
-                            >{$t("pages.admin.newsletter.communications.fields.directedTo")}</option
-                        >
-                    </Select>
-
-                    <TextInput
-                        id="project-name"
-                        labelText=""
-                        placeholder={$t("pages.admin.newsletter.communications.fields.projectName")}
-                        bind:value={filterProjectName}
-                    />
-
-                    <Select id="payment-method" labelText="" bind:value={filterPaymentMethod}>
-                        <option value="" disabled selected
-                            >{$t(
-                                "pages.admin.newsletter.communications.fields.paymentMethod",
-                            )}</option
-                        >
-                    </Select>
-
-                    <Select id="interest" labelText="" bind:value={filterInterest}>
-                        <option value="" disabled selected
-                            >{$t("pages.admin.newsletter.communications.fields.interest")}</option
-                        >
-                    </Select>
-
-                    <Select id="certificate" labelText="" bind:value={filterCertificate}>
-                        <option value="" disabled selected
-                            >{$t(
-                                "pages.admin.newsletter.communications.fields.certificate",
-                            )}</option
-                        >
-                    </Select>
-
-                    <Select id="pref-lang" labelText="" bind:value={filterPreferredLanguage}>
-                        <option value="" disabled selected
-                            >{$t(
-                                "pages.admin.newsletter.communications.fields.preferredLanguage",
-                            )}</option
-                        >
-                    </Select>
-                </div>
-
-                <div class="flex flex-col gap-4">
-                    <Select id="newsletter-lang" labelText="" bind:value={filterNewsletterLanguage}>
-                        <option value="" disabled selected
-                            >{$t(
-                                "pages.admin.newsletter.communications.fields.newsletterLanguage",
-                            )}</option
-                        >
-                    </Select>
-
-                    <Select id="status" labelText="" bind:value={filterStatus}>
-                        <option value="" disabled selected
-                            >{$t("pages.admin.newsletter.communications.fields.status")}</option
-                        >
-                    </Select>
-
-                    <Select id="dates" labelText="" bind:value={filterDates}>
-                        <option value="" disabled selected
-                            >{$t("pages.admin.newsletter.communications.fields.dates")}</option
-                        >
-                    </Select>
-
-                    <TextInput
-                        id="name-email"
-                        labelText=""
-                        placeholder={$t("pages.admin.newsletter.communications.fields.nameEmail")}
-                        bind:value={filterNameEmail}
-                    />
-
-                    <TextInput
-                        id="location"
-                        labelText=""
-                        placeholder={$t("pages.admin.newsletter.communications.fields.location")}
-                        bind:value={filterLocation}
-                    />
-
-                    <Select id="profile" labelText="" bind:value={filterProfile}>
-                        <option value="" disabled selected
-                            >{$t("pages.admin.newsletter.communications.fields.profile")}</option
-                        >
-                    </Select>
-                </div>
-            </Grid>
-
-            <div class="flex justify-start pt-4">
-                <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    kind="primary"
-                    class="bg-primary hover:bg-primary-dark text-secondary rounded-full px-10 py-4 font-bold"
-                >
-                    {isSubmitting
-                        ? $t("system.loading")
-                        : $t("pages.admin.newsletter.communications.searchAction")}
-                </Button>
-            </div>
-        </form>
+            <!-- Integración del compositor de filtros -->
+            <FilterComposer
+                resource="users"
+                onParamsChange={(params) => {
+                    handleSearchSubmit(params);
+                }}
+            />
+        </div>
     {/if}
 </div>

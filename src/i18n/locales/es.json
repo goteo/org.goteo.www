@@ -1165,22 +1165,7 @@
           }
         },
         "communications": {
-          "searchTitle": "Busca destinatarios",
-          "searchAction": "Buscar destinatarios",
-          "fields": {
-            "directedTo": "A quién va dirigido",
-            "newsletterLanguage": "Idioma del boletín",
-            "projectName": "De proyectos que el nombre contenga",
-            "status": "Estado",
-            "paymentMethod": "Método de aporte",
-            "dates": "Fechas",
-            "interest": "Interés",
-            "nameEmail": "Que el nombre o email contenga",
-            "certificate": "Certificado",
-            "location": "Localización",
-            "preferredLanguage": "Idioma preferente",
-            "profile": "Perfil que sea..."
-          }
+          "searchTitle": "Busca destinatarios"
         }
       },
       "filter": {
@@ -1684,7 +1669,8 @@
         "title": "Comunicación",
         "description": "Administra la comunicación de la plataforma",
         "tabs": {
-          "banners": "Anuncios"
+          "banners": "Anuncios",
+          "newsletter": "Boletín"
         },
         "banners": {
           "title": "Anuncios",

@@ -7,13 +7,13 @@
         TableHead,
         TableHeadCell,
     } from "flowbite-svelte";
-    import type { Snippet } from "svelte";
 
     import Pagination from "./Pagination.svelte";
-    import Loader from "../library/feedback/Loader.svelte";
     import { t } from "../../i18n/store";
+    import Loader from "../library/feedback/Loader.svelte";
 
     import type { SortOption } from "../../stores/chargesPaginationAndSort";
+    import type { Snippet } from "svelte";
 
     export interface DataTableHeader {
         key: string;
