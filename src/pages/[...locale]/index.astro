@@ -5,12 +5,13 @@ import Hero from "../../components/hero/Hero.astro";
 import Campaigns from "../../components/home/Campaigns.astro";
 import CampaignsTabs from "../../components/home/CampaignsTabs.astro";
 import Stats from "../../components/home/Stats.astro";
-import Stories from "../../components/home/Stories.svelte";
 import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
-import Resources from "../../components/home/Resources.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
 import HomeBanner from "../../components/home/HomeBanner.svelte";
+// Disabled sections, re-enable the import along with the component below:
+// import Stories from "../../components/home/Stories.svelte";
+// import Resources from "../../components/home/Resources.astro";
 import { isSupportedLocale } from "../../i18n/locales";
 import { NotFound } from "../../utils/responses";
 
@@ -20,11 +21,11 @@ if (locale && !isSupportedLocale(locale)) {
     return NotFound;
 }
 
-const { t, lang, session } = Astro.locals;
+const { t, lang } = Astro.locals;
 ---
 
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
-    <App client:load locale={lang} session={session} class="mb-20 gap-18">
+    <App client:load locale={lang} class="mb-20 gap-18">
         <Hero />
         <div class="wrapper">
             <HomeBanner
@@ -40,6 +41,7 @@ const { t, lang, session } = Astro.locals;
         <Stats />
         <CampaignsTabs />
         <Matchfunding />
+        <!-- Uncomment the matching import at the top when enabling either of these. -->
         <!-- <Stories client:load /> -->
         <FeaturedPromoters />
         <!-- <Resources /> -->

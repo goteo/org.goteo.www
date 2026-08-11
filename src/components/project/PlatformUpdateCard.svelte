@@ -5,6 +5,7 @@
     import { locale } from "../../i18n/store";
     import { type ProjectUpdate } from "../../openapi/client/index";
     import { formatDate } from "../../utils/dates.ts";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectUpdateCardType } from "./ProjectUpdateCard.svelte";
 
@@ -72,9 +73,14 @@
                 />
             </svg>
 
-            <h2 class={twMerge("relative z-10 font-bold text-white", titleStyles[type])}>
+            <Title
+                level={2}
+                variant="subsection"
+                color="white"
+                class={`relative z-10 ${titleStyles[type]}`}
+            >
                 {update.title}
-            </h2>
+            </Title>
         </div>
     </div>
 </div>

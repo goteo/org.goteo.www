@@ -34,8 +34,9 @@ const campaigns: Campaign[] = await Promise.all(
         })) as { data: Accounting };
 
         return {
+            ...project,
             size: index < 1 ? "large" : "small",
-            id: project.slug!,
+            slug: project.slug!,
             title: project.title!,
             image:
                 highlightedProjects[project.slug! as keyof typeof highlightedProjects] ||
@@ -43,7 +44,7 @@ const campaigns: Campaign[] = await Promise.all(
             minimum: project.budget?.minimum?.money!,
             obtained: accounting!.balance as Money,
             optimum: project.budget?.optimum?.money,
-        };
+        } satisfies Campaign;
     }),
 );
 
@@ -97,7 +98,7 @@ const displayCampaigns = selectCampaignsForGrid(campaigns);
     <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" client:load>
         {
             displayCampaigns.map((campaign) => (
-                <CampaignCard size={campaign.size} campaign={campaign} client:load />
+                <CampaignCard size={campaign.size ?? "small"} campaign={campaign} client:load />
             ))
         }
     </Grid>

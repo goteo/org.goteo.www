@@ -8,14 +8,15 @@
     - URL query parameter sync
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     import ProjectEditorShell from "./ProjectEditorShell.svelte";
     import { getStepComponent } from "./steps";
-    import { session } from "../../../../../auth/store";
-    import { type Project, type ProjectProjectCreationDto } from "../../../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../../../openapi/client/paths.gen";
+    import { session } from "../../../auth/store";
+    import { type Project } from "../../../openapi/client";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
     import {
+        type CreateProjectForm,
         currentDraft,
         deleteCurrentDraft,
         hasUnsavedChanges,
@@ -23,11 +24,9 @@
         loadDraft,
         markCurrentDraftClean,
         updateWizard,
-    } from "../../../../../stores/drafts/projectDraft";
-    import { publishDraft } from "../../../../../utils/projectPublisher";
-    import { getProjectDraftResources } from "../../../../../utils/projectSubmissionApi";
-
-    import type { Session } from "../../../../../auth/types";
+    } from "../../../stores/drafts/projectDraft";
+    import { publishDraft } from "../../../utils/projectPublisher";
+    import { getProjectDraftResources } from "../../../utils/projectSubmissionApi";
 
     let {
         idOrSlug,
@@ -37,10 +36,10 @@
         project?: Project | null;
     } = $props();
 
-    let resolvedProject = $state<Project | null>(project);
+    // Seeded from the server-rendered prop; refreshed on mount from the draft.
+    let resolvedProject = $state<Project | null>(untrack(() => project));
     let isInitialized = $state(false);
     let showSessionErrorToast = $state(false);
-    const user = $derived(($session: Session | null) => $session?.user);
 
     function getInitialStep() {
         let initialStep = 1;
@@ -59,7 +58,7 @@
         return initialStep;
     }
 
-    function projectToDraft(project: Project): ProjectProjectCreationDto {
+    function projectToDraft(project: Project): CreateProjectForm {
         return {
             title: project.title || "",
             subtitle: project.subtitle || "",
@@ -67,6 +66,31 @@
             release: project.calendar?.release ?? undefined,
             status: project.status || "in_draft",
         };
+    }
+
+    /**
+     * Image MIME types accepted by the uploader, mirroring the image entries of
+     * `STORAGE_ALLOWEDTYPES` in `src/utils/objectStorage.ts`. That module cannot be
+     * imported here because it instantiates a server-side S3 client.
+     */
+    const COVER_MIME_TYPES: Record<string, string> = {
+        jpg: "image/jpeg",
+        jpeg: "image/jpeg",
+        webp: "image/webp",
+        png: "image/png",
+        gif: "image/gif",
+    };
+
+    /**
+     * The cover comes back as a bare URL, but `UploadedFile` needs a MIME type
+     * for the uploader to recognise it as an image and render its preview.
+     */
+    function guessImageMimeType(url: string): string {
+        const basename = url.split("?")[0].split(/[\\/]/).pop() ?? "";
+        const dotIndex = basename.lastIndexOf(".");
+        const extension = dotIndex < 1 ? "" : basename.slice(dotIndex + 1).toLowerCase();
+
+        return COVER_MIME_TYPES[extension] ?? "image/jpeg";
     }
 
     function projectToIri(project: Project) {
@@ -114,6 +138,7 @@
                                 url: coverUrl,
                                 name: "Project cover",
                                 size: 0,
+                                type: guessImageMimeType(coverUrl),
                             },
                         ];
                     }
@@ -206,7 +231,6 @@
 {#if isInitialized && resolvedProject}
     <ProjectEditorShell
         {errorMessage}
-        project={resolvedProject}
         {showSessionErrorToast}
         onSave={saveToAPI}
         onPublish={handlePublish}

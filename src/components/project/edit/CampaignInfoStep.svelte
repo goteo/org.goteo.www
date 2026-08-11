@@ -15,7 +15,6 @@
 -->
 <script lang="ts">
     import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
@@ -25,8 +24,13 @@
         updateCampaignInfo,
         type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
+    import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
+    import Title from "../../library/typography/Title.svelte";
+
+    import type { JSONContent } from "@tiptap/core";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;
@@ -38,10 +42,11 @@
         $currentDraft?.wizardForm.campaignInfo ?? {
             images: [],
             video: undefined,
-            objectives: "",
-            legacy: "",
-            targetAudience: "",
-            team: "",
+            objectives: emptyRichText(),
+            legacy: emptyRichText(),
+            targetAudience: emptyRichText(),
+            team: emptyRichText(),
+            communicationStrategy: emptyRichText(),
         },
     );
 
@@ -101,35 +106,39 @@
         });
     }
 
-    function handleObjectivesChange(html: string) {
+    function handleObjectivesChange(doc: JSONContent) {
         updateCampaignInfo({
-            objectives: html,
+            objectives: doc,
         });
     }
 
-    function handleLegacyChange(html: string) {
+    function handleLegacyChange(doc: JSONContent) {
         updateCampaignInfo({
-            legacy: html,
+            legacy: doc,
         });
     }
 
-    function handleTargetAudienceChange(html: string) {
+    function handleTargetAudienceChange(doc: JSONContent) {
         updateCampaignInfo({
-            targetAudience: html,
+            targetAudience: doc,
         });
     }
 
-    function handleTeamChange(html: string) {
-        updateCampaignInfo({ team: html });
+    function handleTeamChange(doc: JSONContent) {
+        updateCampaignInfo({ team: doc });
+    }
+
+    function handleCommunicationStrategyChange(doc: JSONContent) {
+        updateCampaignInfo({ communicationStrategy: doc });
     }
 </script>
 
 <div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.campaignInfo.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>
     </div>
 
@@ -137,10 +146,10 @@
         <!-- Media Section -->
         <section data-field="media" class="space-y-4">
             <div>
-                <h2 class="mb-1 text-2xl font-bold text-black">
+                <Title level={2} variant="subsection" class="mb-1">
                     {$t("pages.project.edit.campaignInfo.media.title")}
                     <span aria-label="required">*</span>
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.campaignInfo.media.description")}
                 </p>
@@ -202,8 +211,6 @@
                 value={campaignInfo.objectives}
                 onChange={handleObjectivesChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="objectives-help"
             />
         </section>
@@ -225,8 +232,6 @@
                 value={campaignInfo.legacy}
                 onChange={handleLegacyChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="legacy-help"
             />
         </section>
@@ -248,8 +253,6 @@
                 value={campaignInfo.targetAudience}
                 onChange={handleTargetAudienceChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={30}
-                maxLength={5000}
                 ariaDescribedBy="target-help"
             />
         </section>
@@ -271,9 +274,32 @@
                 value={campaignInfo.team}
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="team-help"
+            />
+        </section>
+
+        <!-- Communication Strategy Section -->
+        <section data-field="communicationStrategy" class="space-y-4">
+            <div>
+                <label
+                    for="communication-strategy"
+                    class="mb-1 block text-2xl font-bold text-black"
+                >
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.title")}
+                </label>
+                <p class="text-content text-base" id="communication-strategy-help">
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.description")}
+                </p>
+            </div>
+
+            <RichTextEditor
+                id="communication-strategy"
+                value={campaignInfo.communicationStrategy}
+                onChange={handleCommunicationStrategyChange}
+                placeholder={$t("common.textPlaceholder")}
+                minLength={30}
+                maxLength={5000}
+                ariaDescribedBy="communication-strategy-help"
             />
         </section>
     </div>
@@ -281,9 +307,7 @@
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
         <Button kind="secondary" size="md" onclick={handleContinue}>
-            {#snippet children()}
-                {$t("pages.project.edit.campaignInfo.continue")}
-            {/snippet}
+            {$t("pages.project.edit.campaignInfo.continue")}
         </Button>
     </div>
 </div>

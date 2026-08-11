@@ -13,6 +13,7 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { MatchCall, MatchCallSubmission, User } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";
@@ -163,18 +164,18 @@
 {#if loading}
     <!-- Loading State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
+        <Title level={2} variant="subsection">
             {$t("pages.me.matchfunding.section.title")}
-        </h2>
+        </Title>
         <!-- Single hero card skeleton matching actual dimensions -->
         <div class="bg-grey h-64 w-full animate-pulse rounded-4xl md:h-80 lg:h-96"></div>
     </div>
 {:else if error}
     <!-- Error State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
+        <Title level={2} variant="subsection">
             {$t("pages.me.matchfunding.section.title")}
-        </h2>
+        </Title>
         <p class="text-content text-base leading-normal">
             {$t("pages.me.matchfunding.section.error")}
         </p>
@@ -182,9 +183,9 @@
 {:else if matchfundingCalls.length > 0}
     <!-- Filled State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
+        <Title level={2} variant="subsection">
             {$t("pages.me.matchfunding.section.title")}
-        </h2>
+        </Title>
         <Carousel itemsPerGroup={1} gap={24} showDots={false}>
             {#each matchfundingCalls as call (call.id)}
                 <MatchfundingCallCard {lang} {call} />

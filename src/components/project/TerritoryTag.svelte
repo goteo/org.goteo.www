@@ -3,7 +3,6 @@
     import { type ClassNameValue } from "tailwind-merge";
 
     import { locale } from "../../i18n/store";
-    import { getTerritoryTag } from "../../utils/getTerritoryTag";
     import MapIcon from "../icons/Location.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
@@ -22,21 +21,20 @@
         iconSize?: string | number;
     } = $props();
 
-    const lang = initialLang || $locale;
+    let lang = $derived(initialLang || $locale);
 
-    function displayName(territory: Territory) {
+    function displayName(territory: Territory): string {
         const countryNames = new Intl.DisplayNames(lang, { type: "region" });
         const country = countryNames.of(territory.country!);
 
-        const tag = getTerritoryTag(territory);
-        if (!tag || tag === territory.country) {
-            return country;
+        const tag = territory.subLvl2 ?? territory.subLvl1;
+        if (!tag) {
+            return country!;
         }
 
         const iso = iso3166.subdivision(tag!);
-
-        if (!iso) {
-            return country;
+        if (!iso || !iso.name) {
+            return country!;
         }
 
         const subdivision = iso.name.split(",")[0];

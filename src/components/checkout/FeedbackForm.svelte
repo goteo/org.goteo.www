@@ -1,6 +1,7 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
     import RadioButton from "../library/inputs/RadioButton.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         paymentMethod?: string;
@@ -17,9 +18,9 @@
         <form id="feedback" method="POST" class="flex flex-col gap-4">
             <div class="flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-2xl font-bold text-black">
+                    <Title level={2} variant="subsection">
                         {$t("pages.checkout.verify.approved.formGoal.title")}
-                    </h2>
+                    </Title>
                 </div>
             </div>
             <fieldset class="flex flex-col gap-6">
@@ -35,9 +36,9 @@
 
             <div class="mt-6 flex flex-col gap-4">
                 <div class="flex flex-row items-center gap-2">
-                    <h2 class="text-2xl font-bold text-black">
+                    <Title level={2} variant="subsection">
                         {$t("pages.checkout.verify.approved.formReview.title")}
-                    </h2>
+                    </Title>
                 </div>
                 <p class="text-content">
                     {$t("pages.checkout.verify.approved.formReview.description")}

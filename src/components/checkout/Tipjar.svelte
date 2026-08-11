@@ -6,6 +6,7 @@
     import { cart, cartByRecipient, type CheckoutItem } from "../../stores/checkoutsStore";
     import { getUnit } from "../../utils/currencies";
     import * as tipping from "../../utils/tipping";
+    import Title from "../library/typography/Title.svelte";
 
     let amount = $state(tipping.defaultAmount / getUnit());
     let hasError = $state(false);
@@ -78,9 +79,9 @@
 
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-2">
-        <h2 class="text-2xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t("pages.checkout.tipjar.community")}
-        </h2>
+        </Title>
 
         <input
             class="w-full rounded border border-gray-300 p-2
@@ -110,7 +111,7 @@
                 type="checkbox"
                 class="accent-primary h-6 w-6 rounded"
                 bind:checked={isChecked}
-                onchange={(e) => toggleTip()}
+                onchange={() => toggleTip()}
             />
             <label for="donation-checkbox" class="text-secondary">
                 {$t("pages.checkout.tipjar.checkboxLabel")}

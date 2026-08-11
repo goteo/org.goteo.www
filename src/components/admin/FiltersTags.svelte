@@ -6,6 +6,7 @@
     import { getAllFilterSubjects } from "../../utils/filterComposer";
     import CloseIcon from "../icons/navigation/Close.svelte";
     import Tag from "../library/tags/Tag.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Locale } from "../../i18n/locales";
     import type { Accounting, User, Project, Tipjar } from "../../openapi/client/index.ts";
@@ -24,7 +25,7 @@
         ownersMap = new Map(),
     } = $props<{
         title: string;
-        filters: Record<string, any>;
+        filters?: Record<string, any>;
         onCloseFilter: (filters: Record<string, any>) => void;
         resource?: FilterResource;
         accountingsMap?: Map<string, Accounting>;
@@ -61,7 +62,7 @@
             const parts = value.split(",").map((v) => v.trim());
             const translated = parts
                 .map((p) => {
-                    const option = subject.options.find((o) => o.value === p);
+                    const option = subject.options?.find((o) => o.value === p);
                     return option ? $t(option.label) : p;
                 })
                 .join(", ");
@@ -101,6 +102,26 @@
                 if (tag.title.startsWith("date")) {
                     tag.values.from = `${$t(`pages.admin.filter.composer.datePrefix.${tag.title}`)}: ${tag.values.from}`;
                 }
+            }
+
+            if (tag.title === "status") {
+                const chargeLabel = $t(
+                    `pages.admin.charges.filters.chargeStatus.options.${tag.value}`,
+                );
+                tag.value =
+                    chargeLabel !== tag.value
+                        ? chargeLabel
+                        : $t(
+                              `pages.admin.projects.table.rows.status.${tag.value.replace(/\./g, "_")}`,
+                          );
+            }
+
+            if (tag.title === "status[]" && Array.isArray(tag.value)) {
+                tag.value = tag.value
+                    .map((s: string) =>
+                        $t(`pages.admin.projects.table.rows.status.${s.replace(/\./g, "_")}`),
+                    )
+                    .join(", ");
             }
 
             if (tag.title === "territory" && tag.value) {
@@ -197,9 +218,9 @@
 </script>
 
 <div class="flex gap-4">
-    <h1 class="text-2xl/8 font-bold text-black">
+    <Title level={1} variant="subsection">
         {title}
-    </h1>
+    </Title>
 
     {#each tags as tag}
         <Tag variant="bold">

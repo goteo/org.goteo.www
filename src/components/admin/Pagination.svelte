@@ -24,7 +24,7 @@
         i18nPrefix?: string;
     }>();
 
-    const paginationPrefix = $derived(i18nPrefix ?? "pages.admin.charges.pagination");
+    const paginationPrefix = $derived(i18nPrefix ?? "common.pagination");
 
     let page = $derived(currentPageProp ?? $storeCurrentPage);
     let total = $derived(totalItemsProp ?? $storeTotalItems);

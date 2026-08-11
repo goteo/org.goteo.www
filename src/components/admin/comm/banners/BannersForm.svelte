@@ -1,11 +1,12 @@
 <script lang="ts">
     import { t } from "../../../../i18n/store";
+    import Button from "../../../library/buttons/Button.svelte";
     import DateInput from "../../../library/inputs/DateInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
     import TextInput from "../../../library/inputs/TextInput.svelte";
 </script>
 
-<div class="max-w-167 space-y-10">
+<form class="max-w-167 space-y-10">
     <div class="flex flex-col gap-6">
         <h3 class="text-2xl leading-8 font-bold text-black">
             {$t("pages.admin.comm.banners.fields.dataTitle")}
@@ -54,4 +55,7 @@
             />
         </div>
     </div>
-</div>
+    <Button type="submit" size="md" kind="primary">
+        {$t("common.save")}
+    </Button>
+</form>

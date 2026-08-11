@@ -1,5 +1,6 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+    import { untrack } from "svelte";
 
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
@@ -7,6 +8,7 @@
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
     import type { ClassNameValue } from "tailwind-merge";
@@ -27,8 +29,9 @@
         onDelete?: () => void;
     } = $props();
 
-    let title = $state(collab?.title ?? "");
-    let description = $state(collab?.description ?? "");
+    // Seed the form fields once; the inputs own them afterwards.
+    let title = $state(untrack(() => collab?.title ?? ""));
+    let description = $state(untrack(() => collab?.description ?? ""));
     let openDeleteModal = $state(false);
 
     const INPUTS_CLASSES: ClassNameValue =
@@ -56,6 +59,13 @@
     class="fixed top-1/2 left-1/2 mx-2 flex w-full max-w-225 -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px] sm:mx-4 lg:mx-0"
     bodyClass="p-0"
 >
+    <!--
+        The handler only stops clicks inside the modal body from reaching the
+        backdrop, so this is not an interactive control: it has no keyboard
+        equivalent and no ARIA role to expose.
+    -->
+    <!-- svelte-ignore a11y_click_events_have_key_events -->
+    <!-- svelte-ignore a11y_no_static_element_interactions -->
     <div
         class="flex flex-col gap-8 rounded-3xl bg-white p-6 shadow-lg"
         onclick={(e) => e.stopPropagation()}
@@ -71,9 +81,9 @@
                 {$t("system.validation.missingRequiredFields")}
             </Toast>
         {/if}
-        <h2 class="text-xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t("pages.project.edit.collaborations.modal.title")}
-        </h2>
+        </Title>
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
             {$t("pages.project.edit.collaborations.modal.description")}
         </p>

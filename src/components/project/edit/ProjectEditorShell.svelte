@@ -16,15 +16,7 @@
     - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import EditIcon from "../../../../../components/icons/actions/Edit.svelte";
-    import Eye from "../../../../../components/icons/media/Eye.svelte";
-    import ActionableButton from "../../../../../components/library/buttons/ActionableButton.svelte";
-    import Button from "../../../../../components/library/buttons/Button.svelte";
-    import Toast from "../../../../../components/library/feedback/Toast.svelte";
-    import TabNavigation, {
-        type Tab,
-    } from "../../../../../components/library/layout/TabNavigation.svelte";
-    import { t } from "../../../../../i18n/store";
+    import { t } from "../../../i18n/store";
     import {
         currentDraft,
         hasUnsavedChanges,
@@ -33,20 +25,23 @@
         navigateToStep,
         persistenceError,
         updateProject,
-    } from "../../../../../stores/drafts/projectDraft";
+    } from "../../../stores/drafts/projectDraft";
+    import EditIcon from "../../icons/actions/Edit.svelte";
+    import Eye from "../../icons/media/Eye.svelte";
+    import ActionableButton from "../../library/buttons/ActionableButton.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
+    import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
-    import type { Project } from "../../../../../openapi/client";
     import type { Snippet } from "svelte";
 
     let {
-        project,
         children,
         showSessionErrorToast = $bindable(false),
         onSave,
         onPublish,
         errorMessage = $bindable(""),
     }: {
-        project: Project;
         children: Snippet;
         showSessionErrorToast?: boolean;
         onSave: () => void;
@@ -140,9 +135,9 @@
                         />
                     </svg>
                     <div class="flex-1">
-                        <h3 class="text-secondary text-sm font-semibold">
+                        <span class="text-secondary text-sm font-semibold">
                             {$t("pages.project.edit.errors.storage.title")}
-                        </h3>
+                        </span>
                         <p class="text-tertiary mt-1 text-sm">
                             {#if $persistenceError === "storage_quota_exceeded"}
                                 {$t("pages.project.edit.errors.storage.quota_exceeded")}
@@ -214,9 +209,7 @@
                     action={handleSave}
                     disabled={!$hasUnsavedChanges || $isSavingDraft}
                 >
-                    {#snippet children()}
-                        {$t("common.save")}
-                    {/snippet}
+                    {$t("common.save")}
                     {#snippet actionedChildren()}
                         {$t("common.saved")}
                     {/snippet}

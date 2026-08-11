@@ -1,26 +1,20 @@
 <script lang="ts">
     import { onDestroy } from "svelte";
 
-    import Button from "../../../components/library/buttons/Button.svelte";
-    import BaseCard from "../../../components/library/cards/BaseCard.svelte";
-    import AddressAutocomplete from "../../../components/library/inputs/AddressAutocomplete.svelte";
-    import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
-    import DateInput from "../../../components/library/inputs/DateInput.svelte";
-    import TextInput from "../../../components/library/inputs/TextInput.svelte";
-    import { t } from "../../../i18n/store";
+    import { t } from "../../i18n/store";
     import {
         apiProjectsPost,
         apiProjectsIdPatch,
         type Category,
         type ProjectProjectCreationDto,
-    } from "../../../openapi/client";
-    import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
+    } from "../../openapi/client";
+    import { client } from "../../openapi/client/client.gen";
+    import { apiCategoriesIdGetUrl } from "../../openapi/client/paths.gen";
     import {
         validateCreateForm,
         validateField,
         type ValidationErrors,
-    } from "../../../stores/drafts/draftValidation";
+    } from "../../stores/drafts/draftValidation";
     import {
         createDraft,
         currentDraft,
@@ -31,10 +25,17 @@
         project,
         validationErrors,
         type CreateProjectForm,
-    } from "../../../stores/drafts/projectDraft";
-    import { maxEndDate } from "../../../utils/campaign";
-    import { getDefaultCurrency } from "../../../utils/consts";
-    import { formatCurrency } from "../../../utils/currencies";
+    } from "../../stores/drafts/projectDraft";
+    import { maxEndDate } from "../../utils/campaign";
+    import { getDefaultCurrency } from "../../utils/consts";
+    import { formatCurrency } from "../../utils/currencies";
+    import Button from "../library/buttons/Button.svelte";
+    import BaseCard from "../library/cards/BaseCard.svelte";
+    import AddressAutocomplete from "../library/inputs/AddressAutocomplete.svelte";
+    import CategorySelect from "../library/inputs/CategorySelect.svelte";
+    import DateInput from "../library/inputs/DateInput.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 
@@ -167,7 +168,7 @@
                     title: $currentDraft.createProject.title,
                     subtitle: $currentDraft.createProject.subtitle,
                     categories: $currentDraft.createProject.categories,
-                    release: $currentDraft.createProject.release,
+                    calendar: { release: $currentDraft.createProject.release ?? null },
                 },
             });
 
@@ -215,7 +216,7 @@
                 // Redirect to project page
                 window.location.href = `/project/${data.id}/edit`;
             }
-        } catch (err) {
+        } catch {
             // Handle unexpected errors
             apiError = "An unexpected error occurred. Please try again.";
         } finally {
@@ -250,9 +251,9 @@
 <section class="wrapper md:flex md:flex-row">
     <div class="mb-20 flex max-w-167 flex-col gap-10">
         <div class="flex flex-col gap-4">
-            <h1 class="text-3xl font-bold text-black lg:text-4xl">
+            <Title level={1} variant="section">
                 {$t("pages.project.create.title")}
-            </h1>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.subtitle")}
             </p>
@@ -263,9 +264,9 @@
                 aria-live="polite"
                 class="rounded-md border-l-4 border-red-500 bg-red-50 p-4"
             >
-                <h2 class="mb-2 text-lg font-semibold text-red-800">
+                <p class="mb-2 text-lg font-semibold text-red-800">
                     {$t("system.validation.errors.summary.title")}
-                </h2>
+                </p>
                 <ul class="list-inside list-disc space-y-1">
                     {#each Object.entries($validationErrors) as [field, error]}
                         <li class="text-sm text-red-700">
@@ -292,9 +293,9 @@
             </div>
         {/if}
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.description.title")}
-            </h2>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.description.subtitle")}
             </p>
@@ -331,9 +332,9 @@
             </div>
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.categories.title")}
-            </h2>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.categories.subtitle")}
             </p>
@@ -345,9 +346,9 @@
             />
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.address.title")}
-            </h2>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.address.subtitle")}
             </p>
@@ -364,9 +365,9 @@
             />
         </div>
         <div class="flex flex-col gap-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.release.title")}
-            </h2>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.release.subtitle")}
             </p>
@@ -405,13 +406,15 @@
             class="border-grey flex h-full max-h-126.5 w-full max-w-109.25 flex-col bg-white"
             style="box-shadow: 0 35px 10px 0 rgba(0, 0, 0, 0.00), 0 22px 9px 0 rgba(0, 0, 0, 0.01), 0 13px 8px 0 rgba(0, 0, 0, 0.05), 0 6px 6px 0 rgba(0, 0, 0, 0.09), 0 1px 3px 0 rgba(0, 0, 0, 0.10);"
         >
-            <h1
-                class="text-secondary text-double mb-2 leading-10 font-bold {$currentDraft
-                    ?.createProject.title || 'opacity-24'}"
+            <Title
+                level={2}
+                variant="section"
+                color="secondary"
+                class="mb-2 {!$currentDraft?.createProject.title ? 'opacity-24' : ''}"
             >
                 {$currentDraft?.createProject.title ||
                     $t("pages.project.create.description.titlePlaceholder")}
-            </h1>
+            </Title>
             <p
                 class="text-content overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
             >

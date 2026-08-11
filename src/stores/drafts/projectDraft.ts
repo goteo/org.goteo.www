@@ -11,6 +11,7 @@ import {
 import { session } from "../../auth/store";
 import { db } from "../../utils/drafts/db";
 import { draftRepo } from "../../utils/drafts/repository";
+import { emptyRichText } from "../../utils/richText";
 
 import type {
     Budget,
@@ -20,6 +21,7 @@ import type {
     ProjectReward,
     Territory,
 } from "../../openapi/client";
+import type { JSONContent } from "@tiptap/core";
 
 /**
  * Uploaded file data
@@ -43,11 +45,12 @@ export interface WizardCampaignInfo {
     images: UploadedFile[];
     video: string | undefined;
 
-    // Rich text content (stored as HTML)
-    objectives: string;
-    legacy: string;
-    targetAudience: string;
-    team: string;
+    // Rich text content (stored as Tiptap JSON)
+    objectives: JSONContent;
+    legacy: JSONContent;
+    targetAudience: JSONContent;
+    team: JSONContent;
+    communicationStrategy: JSONContent;
 }
 
 export type Wizard = {
@@ -84,6 +87,12 @@ export interface CreateProjectForm extends ProjectProjectCreationDto {
     budget?: Budget;
     address?: string;
     territory?: Territory;
+    /**
+     * Campaign start date, held flat so it can be validated and tracked as a
+     * single form field. The API nests it under `calendar.release`, so it is
+     * mapped on the way in and out of `ProjectProjectCreationDto`.
+     */
+    release?: string;
 }
 
 export interface ProjectDraftResources {
@@ -135,10 +144,11 @@ export const wizard = derived(
             campaignInfo: {
                 images: [],
                 video: "",
-                objectives: "",
-                legacy: "",
-                targetAudience: "",
-                team: "",
+                objectives: emptyRichText(),
+                legacy: emptyRichText(),
+                targetAudience: emptyRichText(),
+                team: emptyRichText(),
+                communicationStrategy: emptyRichText(),
             },
             rewards: [],
             collaborations: [],
@@ -261,7 +271,7 @@ export function setDraftsStore(userId: number) {
 }
 
 export async function createDraft(
-    project?: ProjectProjectCreationDto,
+    project?: CreateProjectForm,
     draftId = createDraftId(),
     isDirty = true,
     resources?: ProjectDraftResources,
@@ -282,10 +292,11 @@ export async function createDraft(
             campaignInfo: {
                 images: resources?.images ?? [],
                 video: "",
-                objectives: "",
-                legacy: "",
-                targetAudience: "",
-                team: "",
+                objectives: emptyRichText(),
+                legacy: emptyRichText(),
+                targetAudience: emptyRichText(),
+                team: emptyRichText(),
+                communicationStrategy: emptyRichText(),
             },
             rewards: resources?.rewards ?? [],
             collaborations: resources?.collaborations ?? [],
@@ -316,7 +327,7 @@ export async function loadDraft(draftId: string) {
 }
 
 export async function initializeProjectDraft(
-    project: ProjectProjectCreationDto,
+    project: CreateProjectForm,
     draftId: string,
     resources?: ProjectDraftResources,
 ) {

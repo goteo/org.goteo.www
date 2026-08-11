@@ -17,7 +17,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const { session } = locals;
     if (!session) return Unauthorized;
 
-    const { contentType } = await request.json();
+    const { contentType } = (await request.json()) as { contentType?: string };
     if (!contentType) {
         return json({ error: `Missing key "contentType" in request body` }, 400);
     }

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { actions } from "astro:actions";
 
-    import BannersFields from "./BannersFields.svelte";
+    import BannersForm from "./BannersForm.svelte";
     import BannersHistory from "./BannersHistory.svelte";
     import BannersTabs from "./BannersTabs.svelte";
     import { t } from "../../../../i18n/store";
@@ -74,7 +74,7 @@
     <BannersTabs currentTab={currentSubtab} onTabChange={handleTabChange} />
     {#if currentSubtab === "fields"}
         <form id={formId} onsubmit={handleSubmit}>
-            <BannersFields />
+            <BannersForm />
         </form>
     {:else if currentSubtab === "history"}
         <BannersHistory rows={banners} />

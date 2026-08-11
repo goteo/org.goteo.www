@@ -239,9 +239,9 @@ Manages real-time filtering of campaigns without page reloads
         <!-- Empty State -->
         <div class="flex flex-col items-center py-12 text-center" data-testid="search-empty">
             <SearchIcon class="mb-4 h-16 w-16 text-gray-400" />
-            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+            <span class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.empty.title")}
-            </h3>
+            </span>
             <p class="mb-6 text-gray-600">
                 {$t("pages.search.empty.description")}
             </p>
@@ -254,9 +254,9 @@ Manages real-time filtering of campaigns without page reloads
     {#if !$hasSearchResults && !$isEmpty && !$isSearching && !isTransforming}
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
-            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+            <span class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.initial.title")}
-            </h3>
+            </span>
             <p class="text-gray-600">{$t("pages.search.initial.description")}</p>
         </div>
     {/if}

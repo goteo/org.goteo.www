@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -126,9 +127,9 @@
 
         <!-- Content - centered and takes up available space -->
         <div class="relative z-10 flex grow flex-col items-center justify-center gap-1 text-center">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t(titleKey)}
-            </h2>
+            </Title>
             {#if emptyMessageKey}
                 <p class="text-content text-base">
                     {$t(emptyMessageKey)}
@@ -195,9 +196,9 @@
 
         <!-- Recent items list -->
         <div class="relative z-10 mb-4 flex min-h-30 flex-grow flex-col gap-3">
-            <h3 class="text-base font-bold text-black">
+            <Title level={3} variant="field">
                 {$t(recentTitleKey)}
-            </h3>
+            </Title>
             <ul class="flex flex-col gap-2">
                 {@render children?.()}
             </ul>

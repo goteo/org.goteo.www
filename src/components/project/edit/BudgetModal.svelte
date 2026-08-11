@@ -12,6 +12,7 @@
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
 
@@ -125,9 +126,9 @@
                 {$t("system.validation.missingRequiredFields")}
             </Toast>
         {/if}
-        <h2 class="text-xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t("pages.project.edit.budget.modal.title")}
-        </h2>
+        </Title>
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
             {$t("pages.project.edit.budget.modal.description")}
         </p>

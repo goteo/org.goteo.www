@@ -3,7 +3,6 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import ArrowSliderIcon from "../../icons/navigation/ArrowSliderIcon.svelte";
-    import ProjectUpdate from "../../project/ProjectUpdate.svelte";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -21,7 +20,6 @@
         navButtonTop = "50%",
         centerNavButtons = true,
         children = null,
-        onSelect = null,
         activeCard = $bindable(0),
         active,
     }: {
@@ -37,22 +35,22 @@
         navButtonTop?: string;
         centerNavButtons?: boolean;
         children?: any;
-        onSelect?: ((card: ProjectUpdate) => void) | null;
         activeCard?: number;
         active?: Snippet;
     } = $props();
 
-    const wrapperClasses = twMerge("relative w-full", classes);
-    const navButtonClasses: ClassNameValue = twMerge(
-        "bg-variant1 absolute z-10 hidden h-10 w-10 rounded-full p-2 shadow-md disabled:opacity-50 lg:block",
-        centerNavButtons ? "-translate-y-1/2" : "",
+    const wrapperClasses = $derived(twMerge("relative w-full", classes));
+    const navButtonClasses: ClassNameValue = $derived(
+        twMerge(
+            "bg-variant1 absolute z-10 hidden h-10 w-10 rounded-full p-2 shadow-md disabled:opacity-50 lg:block",
+            centerNavButtons ? "-translate-y-1/2" : "",
+        ),
     );
 
     let container: HTMLDivElement;
 
     let totalGroups = $state(0);
     let totalItems = $state(0);
-    let activeGroup = $state(0);
     let isAtStart = $state(true);
     let isAtEnd = $state(false);
     let isScrollable = $state(false);
@@ -175,7 +173,6 @@
 
     function updateNavState(position: number) {
         activeCard = position;
-        activeGroup = position;
         isAtStart = position === 0;
         isAtEnd = position === getPositionCount() - 1;
     }

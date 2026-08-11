@@ -12,6 +12,7 @@
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
 
@@ -91,9 +92,15 @@
             <Close class="size-5" />
         </button>
         <div class="flex flex-col">
-            <h3 class="text-secondary line-clamp-2 w-full text-left text-2xl font-bold">
+            <Title
+                level={3}
+                variant="subsection"
+                color="secondary"
+                truncate={2}
+                class="w-full text-left"
+            >
                 {collab.title}
-            </h3>
+            </Title>
 
             {#if collab.description}
                 <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">

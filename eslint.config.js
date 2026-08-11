@@ -18,6 +18,11 @@ export default [
     ...sveltePlugin.configs.recommended,
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
+    // Root config files run in Node at build time, not in the browser.
+    {
+        files: ["*.config.{js,mjs,cjs,ts}"],
+        languageOptions: { globals: globals.node },
+    },
     {
         ignores: [
             "node_modules/**",
@@ -62,6 +67,18 @@ export default [
             ],
             "@typescript-eslint/no-explicit-any": "off",
             "unused-imports/no-unused-imports": "error",
+            // An `_` prefix marks a binding that exists only to satisfy a
+            // signature or a destructuring position — never a leftover.
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                },
+            ],
         },
     },
     // Cypress configuration
@@ -132,7 +149,16 @@ export default [
             ],
             "no-unsafe-finally": "off",
             "unused-imports/no-unused-imports": "error",
-            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                },
+            ],
             "@typescript-eslint/no-unused-expressions": "off",
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
             "svelte/require-each-key": "off",
