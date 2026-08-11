@@ -7,10 +7,6 @@
     "**/*",
     "worker-configuration.d.ts"
   ],
-  "exclude": [
-    "dist",
-    "node_modules",
-    "graphify-out"
-  ],
+  "exclude": ["dist", "node_modules", "graphify-out"],
   "compilerOptions": {}
 }
