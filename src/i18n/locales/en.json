@@ -6,6 +6,7 @@
       "unknown": "An unknown error has occurred",
       "unauthorized": "You must sign in to complete this action",
       "payment": {
+        "unauthorized": "You must log in to complete the payment",
         "missingMethod": "A payment method must be selected",
         "missingCartData": "The cart is empty",
         "unprocessableCartData": "The cart cannot be processed; please empty it and try again",
