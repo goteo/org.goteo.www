@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
         value = $bindable(""),
@@ -33,28 +33,18 @@
 
     const generatedId = $props.id();
     const finalId = $derived(id ?? generatedId);
-
-    const textareaClasses = $derived(
-        twMerge(
-            "border-secondary w-full min-h-30 resize-none rounded-lg border bg-white p-4 text-base text-content placeholder:text-gray-400 transition-all outline-none focus:ring-0",
-            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
-            disabled && "border-transparent bg-grey cursor-not-allowed",
-            classes,
-        ),
-    );
-
-    const labelClasses = $derived(
-        twMerge(
-            "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
-            error && "text-tertiary",
-            disabled && "opacity-70",
-        ),
-    );
 </script>
 
-<div class={twMerge("relative", disabled && "opacity-50")}>
+<div class={twJoin("relative", disabled && "opacity-50")}>
     {#if labelText}
-        <label for={finalId} class={labelClasses}>
+        <label
+            for={finalId}
+            class={twJoin(
+                "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
+                error && "text-tertiary",
+                disabled && "opacity-70",
+            )}
+        >
             {labelText}
         </label>
     {/if}
@@ -68,10 +58,18 @@
         onfocus={onFocus}
         oninput={onInput}
         bind:value
-        class={textareaClasses}></textarea>
-    {#if helperText && !error}
-        <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
-            {helperText}
+        class={twMerge(
+            "border-secondary text-content min-h-30 w-full resize-none rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus:ring-0",
+            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
+            disabled && "bg-grey cursor-not-allowed border-transparent",
+            classes,
+        )}></textarea>
+    {#if error || helperText}
+        <span
+            id={`helper-${finalId}`}
+            class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+        >
+            {error || helperText}
         </span>
     {/if}
 </div>
