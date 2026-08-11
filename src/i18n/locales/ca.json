@@ -6,6 +6,7 @@
       "unknown": "S'ha produït un error desconegut",
       "unauthorized": "Has d'iniciar sessió per completar aquesta acció",
       "payment": {
+        "unauthorized": "Has d'iniciar sessió per completar el pagament",
         "missingMethod": "S'ha de seleccionar un mètode de pagament",
         "missingCartData": "La cistella és buida",
         "unprocessableCartData": "No es pot processar la cistella, si us plau buida-la i torna-ho a intentar",
