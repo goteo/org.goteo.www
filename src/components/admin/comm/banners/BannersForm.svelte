@@ -1,11 +1,12 @@
 <script lang="ts">
     import { actions } from "astro:actions";
 
-    import { t } from "../../../../i18n/store";
+    import { locale, t } from "../../../../i18n/store";
     import ActionableButton from "../../../library/buttons/ActionableButton.svelte";
     import DateInput from "../../../library/inputs/DateInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
     import TextInput from "../../../library/inputs/TextInput.svelte";
+    import { formatDate } from "../../../../utils/dates";
 
     interface Props {
         onSubmit?: (event: SubmitEvent) => void;
@@ -24,7 +25,7 @@
     async function submit() {
         fieldErrors = {};
 
-        const { data, error } = await actions.createBanner(new FormData(formElement));
+        const { error } = await actions.createBanner(new FormData(formElement));
 
         if (error) {
             // @ts-expect-error fields does exist but astro typing sucks
@@ -33,8 +34,6 @@
             fieldErrors = Object.fromEntries(
                 Object.entries(errors ?? {}).map(([field, issues]) => [field, issues?.[0]]),
             ) as FieldErrors;
-
-            console.log(fieldErrors);
 
             return;
         }
@@ -70,7 +69,7 @@
                 class="flex-1"
                 name="description"
                 placeholder={$t("pages.admin.comm.banners.fields.descriptionPlaceholder")}
-                error={fieldErrors.description}
+                error={fieldErrors.description && $t(fieldErrors.description)}
             />
 
             <div class="flex gap-6">
@@ -78,7 +77,7 @@
                     <TextInput
                         name="ctaText"
                         placeholder={$t("pages.admin.comm.banners.fields.ctaPlaceholder")}
-                        error={fieldErrors.ctaText}
+                        error={fieldErrors.ctaText && $t(fieldErrors.ctaText)}
                     />
                 </div>
 
@@ -86,7 +85,7 @@
                     <TextInput
                         name="ctaLink"
                         placeholder={$t("pages.admin.comm.banners.fields.urlPlaceholder")}
-                        error={fieldErrors.ctaLink}
+                        error={fieldErrors.ctaLink && $t(fieldErrors.ctaLink)}
                     />
                 </div>
             </div>
@@ -103,14 +102,14 @@
                 class="flex-1"
                 name="startsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
-                error={fieldErrors.startsAt}
+                error={fieldErrors.startsAt && $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
             />
 
             <DateInput
                 class="flex-1"
                 name="endsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
-                error={fieldErrors.endsAt}
+                error={fieldErrors.endsAt && $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
             />
         </div>
     </div>

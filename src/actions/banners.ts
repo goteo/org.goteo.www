@@ -7,11 +7,11 @@ export const createBanner = defineAction({
     accept: "form",
     input: z.object({
         title: z.string("system.constraint.text.notEmpty").min(1),
-        description: z.string().min(1),
-        ctaText: z.string().min(1),
-        ctaLink: z.url(),
-        startsAt: z.coerce.date().min(new Date()),
-        endsAt: z.coerce.date().min(new Date()),
+        description: z.string("system.constraint.text.notEmpty").min(1),
+        ctaText: z.string("system.constraint.text.notEmpty").min(1),
+        ctaLink: z.url("system.constraint.text.expectedUrl"),
+        startsAt: z.coerce.date().min(new Date(), "system.constraint.date.greaterThan"),
+        endsAt: z.coerce.date().min(new Date(), "system.constraint.date.greaterThan"),
     }),
     handler: async (input, context) => {
         const { session, t } = context.locals;
