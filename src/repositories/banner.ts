@@ -18,33 +18,54 @@ class BannerRepository {
     }
 
     public async getAll(): Promise<BannerRecord[]> {
-        const { results } = await this.db
+        return await this.db
             .prepare(
-                `SELECT *
+                `SELECT
+                    title,
+                    description,
+                    cta_text AS ctaText,
+                    cta_link AS ctaLink,
+                    starts_at AS startsAt,
+                    ends_at AS endsAt,
+                    date_created AS dateCreated
              FROM banners
-             ORDER BY created_at DESC`,
+             ORDER BY date_created DESC`,
             )
-            .all<BannerRecord>();
+            .all<BannerRecord>()
+            .then((data) =>
+                data.results.map((r) => {
+                    console.log(r);
 
-        return results;
+                    return {
+                        ...r,
+                        startsAt: new Date(r.startsAt),
+                        endsAt: new Date(r.endsAt),
+                        dateCreated: new Date(r.dateCreated),
+                    };
+                }),
+            );
     }
 
-    public async create(banner: BannerRecord): Promise<void> {
-        await this.db
+    public async create(banner: BannerRecord): Promise<BannerRecord> {
+        const result = await this.db
             .prepare(
-                `INSERT INTO banners (title, description, cta_text, cta_link, starts_at, ends_at)
-             VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO banners (title, description, cta_text, cta_link, starts_at, ends_at, date_created)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
             )
             .bind(
                 banner.title,
                 banner.description,
                 banner.ctaText,
                 banner.ctaLink,
-                banner.startsAt,
-                banner.endsAt,
-                banner.dateCreated,
+                banner.startsAt.getTime(),
+                banner.endsAt.getTime(),
+                banner.dateCreated.getTime(),
             )
             .run();
+
+        console.log(result);
+
+        return banner;
     }
 }
 

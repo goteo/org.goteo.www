@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS banners (
     cta_link    TEXT    NOT NULL,
     starts_at   INTEGER NOT NULL,
     ends_at     INTEGER NOT NULL,
-    created_at  INTEGER NOT NULL DEFAULT (unixepoch())
+    date_created  INTEGER NOT NULL DEFAULT (unixepoch())
 );
 
 -- Per-column, per-locale overrides for any table. The base row always holds the
