@@ -1,20 +1,20 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { createBanner as insertBanner, toEpoch } from "../utils/banners.ts";
+import { bannerRepository } from "../repositories/banner";
 
 export const createBanner = defineAction({
     accept: "form",
     input: z.object({
-        title: z.string().min(1),
+        title: z.string("system.constraint.text.notEmpty").min(1),
         description: z.string().min(1),
-        callToAction: z.string().min(1),
-        link: z.string().min(1),
-        startDate: z.string().min(1),
-        endDate: z.string().min(1),
+        ctaText: z.string().min(1),
+        ctaLink: z.url(),
+        startsAt: z.coerce.date().min(new Date()),
+        endsAt: z.coerce.date().min(new Date()),
     }),
     handler: async (input, context) => {
-        const { session, t, runtime } = context.locals;
+        const { session, t } = context.locals;
 
         // Actions are posted to /_actions/*, which the /admin firewall rule does not
         // match, so the role has to be checked here.
@@ -25,32 +25,13 @@ export const createBanner = defineAction({
             });
         }
 
-        try {
-            new URL(input.link);
-        } catch {
-            throw new ActionError({
-                code: "BAD_REQUEST",
-                message: t("pages.admin.comm.banners.errors.invalidUrl"),
-            });
-        }
-
-        const startsAt = toEpoch(input.startDate);
-        const endsAt = toEpoch(input.endDate);
-
-        if (endsAt < startsAt) {
+        if (input.endsAt < input.startsAt) {
             throw new ActionError({
                 code: "BAD_REQUEST",
                 message: t("pages.admin.comm.banners.errors.invalidDateRange"),
             });
         }
 
-        await insertBanner(runtime.env.DB, {
-            title: input.title,
-            description: input.description,
-            ctaText: input.callToAction,
-            ctaLink: input.link,
-            startsAt,
-            endsAt,
-        });
+        await bannerRepository.create({ ...input, dateCreated: new Date() });
     },
 });
