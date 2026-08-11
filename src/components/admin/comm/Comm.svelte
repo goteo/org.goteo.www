@@ -4,11 +4,11 @@
     import Banners from "./banners/Banners.svelte";
     import { t } from "../../../i18n/store";
 
-    import type { BannerRow } from "./banners/BannersHistory.svelte";
+    import type { BannerRecord } from "../../../repositories/banner";
     import type { Component } from "svelte";
 
     interface Props {
-        banners: BannerRow[];
+        banners: BannerRecord[];
     }
 
     let { banners }: Props = $props();

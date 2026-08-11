@@ -1,24 +1,17 @@
 <script lang="ts">
     import { Modal, TableBodyCell } from "flowbite-svelte";
 
-    import { t } from "../../../../i18n/store";
+    import { locale, t } from "../../../../i18n/store";
+    import { formatDate } from "../../../../utils/dates";
     import HomeBanner from "../../../home/HomeBanner.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
     import DataTable from "../../DataTable.svelte";
 
+    import type { BannerRecord } from "../../../../repositories/banner";
     import type { DataTableHeader } from "../../DataTable.svelte";
 
     interface Props {
-        rows: BannerRow[];
-    }
-
-    export interface BannerRow {
-        title: string;
-        content: string;
-        ctaText: string;
-        ctaLink: string;
-        publishedAt: string;
-        endAt: string;
+        rows: BannerRecord[];
     }
 
     let { rows }: Props = $props();
@@ -43,9 +36,9 @@
 
     let isLoading = $state(false);
     let isModalOpen = $state(false);
-    let selectedRow = $state<BannerRow | null>(null);
+    let selectedRow = $state<BannerRecord | null>(null);
 
-    function openModal(row: BannerRow) {
+    function openModal(row: BannerRecord) {
         selectedRow = row;
         isModalOpen = true;
     }
@@ -114,7 +107,7 @@
             <div class="flex flex-col justify-start gap-4">
                 <h2 class="text-xl font-bold text-black">
                     {$t("pages.admin.comm.banners.history.modal.title", {
-                        date: selectedRow.publishedAt,
+                        date: formatDate(selectedRow.dateCreated, $locale),
                     })}
                 </h2>
                 <p class="text-content text-base font-normal">
@@ -126,7 +119,7 @@
     {#if selectedRow}
         <HomeBanner
             title={selectedRow.title}
-            description={selectedRow.content}
+            description={selectedRow.description}
             ctaText={selectedRow.ctaText}
             ctaLink={selectedRow.ctaLink}
             closeAriaLabel={$t("pages.home.banner.closeAriaLabel")}
