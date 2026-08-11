@@ -5,37 +5,105 @@ compatibility_flags = ["nodejs_compat"]
 workers_dev = false
 keep_vars = true
 
+
+# ============================================================================
+# LOCAL DEVELOPMENT
+# ============================================================================
+
 [[d1_databases]]
 binding = "DB"
 database_name = "goteo-db"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "4821e336-e0cf-4660-b8e9-0ea34019546c"
 migrations_dir = "db/migrations"
+
 
 [assets]
 binding = "ASSETS"
 directory = "./dist"
 
+
 [observability.logs]
 enabled = true
 
+
+# ============================================================================
+# TESTING
+# ============================================================================
+
 [env.testing]
+
 routes = [
     { pattern = "testing.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
 ]
 
+[[env.testing.d1_databases]]
+binding = "DB"
+database_name = "goteo-db-testing"
+database_id = "TESTING-DATABASE-UUID"
+migrations_dir = "db/migrations"
+
+
+# ============================================================================
+# STAGING
+# ============================================================================
+
 [env.staging]
+
 routes = [
     { pattern = "staging.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
 ]
 
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "goteo-db-staging"
+database_id = "STAGING-DATABASE-UUID"
+migrations_dir = "db/migrations"
+
+
+# ============================================================================
+# BETA
+# ============================================================================
+
 [env.beta]
+
 routes = [
     { pattern = "new.goteo.org", zone_name = "goteo.org", custom_domain = true },
 ]
 
+[[env.beta.d1_databases]]
+binding = "DB"
+database_name = "goteo-db-beta"
+database_id = "BETA-DATABASE-UUID"
+migrations_dir = "db/migrations"
+
+
+# ============================================================================
+# PRODUCTION
+# ============================================================================
+
 [env.prod]
+
 routes = [
     { pattern = "v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
 ]
+
+[[env.prod.d1_databases]]
+binding = "DB"
+database_name = "goteo-db-prod"
+database_id = "PROD-DATABASE-UUID"
+migrations_dir = "db/migrations"
+
+
+# ============================================================================
+# PREVIEW
+# ============================================================================
+
 [env.preview]
+
 workers_dev = true
+
+[[env.preview.d1_databases]]
+binding = "DB"
+database_name = "goteo-db-preview"
+database_id = "PREVIEW-DATABASE-UUID"
+migrations_dir = "db/migrations"

@@ -5,15 +5,16 @@ import WithSidebar from "../../../layouts/WithSidebar.svelte";
 import Comm from "../../../components/admin/comm/Comm.svelte";
 import { listBanners } from "../../../utils/banners";
 import { formatDate } from "../../../utils/dates";
+import { env } from "cloudflare:workers";
 
-const { t, lang, session, runtime } = Astro.locals;
+const { t, lang, session } = Astro.locals;
 const activePath = "/admin/comm";
 
 const navItems: { label: string; href: string }[] = [
     { label: t("pages.admin.comm.tabs.banners"), href: "/admin/comm#banners" },
 ];
 
-const banners = (await listBanners(runtime.env.DB)).map((banner) => ({
+const banners = (await listBanners(env.DB)).map((banner) => ({
     title: banner.title,
     content: banner.description,
     ctaText: banner.cta_text,
