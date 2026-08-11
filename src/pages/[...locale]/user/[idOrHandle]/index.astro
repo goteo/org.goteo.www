@@ -17,7 +17,7 @@ const { idOrHandle } = Astro.params;
 const { lang } = Astro.locals;
 
 if (!idOrHandle) {
-    return Astro.redirect("/404");
+    return Astro.rewrite("/404");
 }
 
 const { data: user, error } = await apiUsersIdOrHandleGet({
@@ -25,7 +25,7 @@ const { data: user, error } = await apiUsersIdOrHandleGet({
 });
 
 if (error || !user) {
-    return Astro.redirect("/404");
+    return Astro.rewrite("/404");
 }
 
 if (!user.accounting) {

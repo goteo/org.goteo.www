@@ -13,8 +13,8 @@
                 key="pages.project.view.banner.donator.description"
                 vars={{ owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` }}
             />
-            <a href="#" class="text-secondary font-bold"
-                >{$t("pages.project.view.banner.donator.learnMore")}
+            <a href="/src/pages/[...locale]/about/certificate" class="text-secondary font-bold"
+                >{$t("pages.project.view.banner.certificate.learnMore")}
             </a>
         </div>
     </div>
@@ -23,7 +23,7 @@
         <div>
             <div class="text-content">
                 {$t("pages.project.view.banner.certificate.description")}
-                <a href="#" class="text-secondary font-bold"
+                <a href="/src/pages/[...locale]/about/certificate" class="text-secondary font-bold"
                     >{$t("pages.project.view.banner.certificate.learnMore")}
                 </a>
             </div>

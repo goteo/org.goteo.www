@@ -15,7 +15,6 @@
 -->
 <script lang="ts">
     import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
@@ -28,6 +27,8 @@
     import { emptyRichText } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { JSONContent } from "@tiptap/core";
 
@@ -135,9 +136,9 @@
 <div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.campaignInfo.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>
     </div>
 
@@ -145,10 +146,10 @@
         <!-- Media Section -->
         <section data-field="media" class="space-y-4">
             <div>
-                <h2 class="mb-1 text-2xl font-bold text-black">
+                <Title level={2} variant="subsection" class="mb-1">
                     {$t("pages.project.edit.campaignInfo.media.title")}
                     <span aria-label="required">*</span>
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.campaignInfo.media.description")}
                 </p>
@@ -210,8 +211,6 @@
                 value={campaignInfo.objectives}
                 onChange={handleObjectivesChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="objectives-help"
             />
         </section>
@@ -233,8 +232,6 @@
                 value={campaignInfo.legacy}
                 onChange={handleLegacyChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="legacy-help"
             />
         </section>
@@ -256,8 +253,6 @@
                 value={campaignInfo.targetAudience}
                 onChange={handleTargetAudienceChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={30}
-                maxLength={5000}
                 ariaDescribedBy="target-help"
             />
         </section>
@@ -279,8 +274,6 @@
                 value={campaignInfo.team}
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
                 ariaDescribedBy="team-help"
             />
         </section>
@@ -314,9 +307,7 @@
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
         <Button kind="secondary" size="md" onclick={handleContinue}>
-            {#snippet children()}
-                {$t("pages.project.edit.campaignInfo.continue")}
-            {/snippet}
+            {$t("pages.project.edit.campaignInfo.continue")}
         </Button>
     </div>
 </div>

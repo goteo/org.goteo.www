@@ -3,6 +3,8 @@ Load More Button Component
 Allows accumulative pagination for search results
 -->
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import LoadingSpinner from "./LoadingSpinner.svelte";
     import { t } from "../../i18n/store";
     import Button from "../library/buttons/Button.svelte";
@@ -24,7 +26,7 @@ Allows accumulative pagination for search results
     }: Props = $props();
 
     // Track when new results are loaded for accessibility announcements
-    let previousLoadedCount = $state(loadedCount);
+    let previousLoadedCount = $state(untrack(() => loadedCount));
     let justLoaded = $state(false);
     let newResultsCount = $state(0);
 

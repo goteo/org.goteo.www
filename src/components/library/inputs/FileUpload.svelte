@@ -181,6 +181,7 @@
             class="hidden"
             id="fileInput"
             accept={accept.join(",")}
+            aria-label={ariaLabel}
             onchange={onInputChange}
         />
 

@@ -3,6 +3,7 @@
     import Tipjar from "./Tipjar.svelte";
     import { cart, cartByRecipient } from "../../stores/checkoutsStore";
     import * as tipping from "../../utils/tipping";
+    import Title from "../library/typography/Title.svelte";
 
     function increment(item: { key: string; quantity: number }) {
         cart.updateQuantity(item.key, item.quantity + 1);
@@ -30,11 +31,11 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    {#each getItems() as [target, items]}
+    {#each getItems() as [_target, items]}
         <div class="flex flex-col gap-6">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {items[0].recipientDisplayName}
-            </h2>
+            </Title>
 
             {#each items as item (item.key)}
                 <CartItem

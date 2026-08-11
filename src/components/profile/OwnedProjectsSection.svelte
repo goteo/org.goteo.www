@@ -8,6 +8,7 @@
     import { toCollectionItems } from "../../utils/hydra.ts";
     import CampaignCard from "../home/CampaignCard.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Money, Project, User } from "../../openapi/client/types.gen.ts";
     import type { Campaign } from "../../types/campaign";
@@ -85,16 +86,16 @@
                                 }
 
                                 return {
-                                    id: project.slug!,
+                                    ...project,
+                                    slug: project.slug!,
                                     title: project.title!,
                                     image: project.video?.thumbnail!,
                                     minimum: project.budget?.minimum?.money!,
                                     optimum: project.budget?.optimum?.money,
                                     obtained: accounting.balance as Money,
-                                    status: project.status,
                                     category: project.categories?.[0], // Get first category
                                     daysRemaining,
-                                } as Campaign;
+                                } satisfies Campaign;
                             } catch (error) {
                                 console.error(
                                     `Error fetching accounting for project ${project.slug}:`,
@@ -124,9 +125,9 @@
 
 {#if !loading && ownedProjects.length > 0}
     <div class="flex flex-col gap-6">
-        <h2 class="text-3xl font-bold text-black md:text-4xl">
+        <Title level={2} variant="section">
             {$t("pages.me.ownedProjects.title")}
-        </h2>
+        </Title>
         <Carousel itemsPerGroup={3} gap={24} showDots={false}>
             {#each ownedProjects as campaign, index (campaign.id)}
                 <CampaignCard

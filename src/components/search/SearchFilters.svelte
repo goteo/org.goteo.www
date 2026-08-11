@@ -16,6 +16,7 @@ Integrated with searchStore for state management and URL synchronization
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../icons/filters/FilterIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         initialFilters?: SearchFilters;
@@ -103,18 +104,18 @@ Integrated with searchStore for state management and URL synchronization
             <!-- Status + territory filters -->
             <div class="flex flex-col items-start gap-6 lg:flex-row">
                 <div class="w-full">
-                    <h3 class="font-body mb-2 text-base font-bold text-black">
+                    <Title level={3} variant="field" class="font-body mb-2">
                         {$t("pages.search.filters.status.label")}
-                    </h3>
+                    </Title>
                     <StatusFilter
                         statuses={$searchFilters["status[]"] || []}
                         onStatusesChange={(statuses) => updateFilters({ "status[]": statuses })}
                     />
                 </div>
                 <div class="w-full">
-                    <h3 class="font-body mb-2 text-base font-bold text-black">
+                    <Title level={3} variant="field" class="font-body mb-2">
                         {$t("pages.search.filters.territoryLabel")}
-                    </h3>
+                    </Title>
                     <TerritoryFilter
                         selectedTerritory={{
                             countries: $searchFilters["territory.country[]"] || [],
@@ -136,7 +137,6 @@ Integrated with searchStore for state management and URL synchronization
                 <CategoryFilter
                     selectedCategories={$searchFilters["categories[]"] || []}
                     onCategoryChange={(categories) => updateFilters({ "categories[]": categories })}
-                    data-testid="category-filter"
                 />
             </div>
         </div>

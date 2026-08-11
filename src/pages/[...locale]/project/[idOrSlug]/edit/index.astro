@@ -33,7 +33,7 @@ if (project?.id) {
 
     if (error) {
         console.error({ error, request });
-        return Astro.redirect("/404");
+        return Astro.rewrite("/404");
     }
 }
 ---

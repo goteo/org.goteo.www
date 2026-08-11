@@ -15,6 +15,8 @@
     - Error states with red border and message
 -->
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import { t } from "../../../i18n/store";
     import {
         touchedFields,
@@ -39,9 +41,9 @@
     // Available languages - using translations
     const availableLanguages: LanguageOption[] = getSupportedLocales();
 
-    // Local state for language selection
-    let primaryLanguage = $state(languages[0] || "");
-    let secondaryLanguages = $state<string[]>(languages.slice(1));
+    // Local state for language selection, seeded once from the prop
+    let primaryLanguage = $state(untrack(() => languages[0] || ""));
+    let secondaryLanguages = $state<string[]>(untrack(() => languages.slice(1)));
 
     // Reactive validation errors
     const errors = $derived($validationErrors);
