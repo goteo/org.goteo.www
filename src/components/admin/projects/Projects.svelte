@@ -1,11 +1,10 @@
 <script lang="ts">
-    import ExportCsv from "./ExportCsv.svelte";
-    import Filters from "./Filters.svelte";
-    import FiltersTags from "./FiltersTags.svelte";
-    import ProjectsTable from "./ProjectsTable.svelte";
-    import Slider from "./Slider.svelte";
-    import { t } from "../../i18n/store";
-    import { withoutCache } from "../../openapi/cacheInterceptor";
+    import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
+    import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
+    import ProjectsTable, { type ProjectRow, type ProjectSortKey } from "./ProjectsTable.svelte";
+    import AdminLayout from "../../../layouts/AdminLayout.svelte";
+    import { t } from "../../../i18n/store";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
     import {
         apiProjectsGetCollection,
         apiProjectsIdPatch,
@@ -14,19 +13,19 @@
         type Project,
         type Accounting,
         type User,
-    } from "../../openapi/client/index.ts";
-    import { apiProjectsGetCollectionUrl } from "../../openapi/client/paths.gen.ts";
-    import { formatCurrency } from "../../utils/currencies";
-    import { extractId } from "../../utils/extractId";
-    import { toCollectionItems } from "../../utils/hydra";
+    } from "../../../openapi/client/index.ts";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen.ts";
+    import { useAdminTableState } from "../../../utils/adminTableState.svelte";
+    import { formatCurrency } from "../../../utils/currencies";
+    import { extractId } from "../../../utils/extractId";
+    import { toCollectionItems } from "../../../utils/hydra";
     import {
         parseQueryFilters,
         splitOrderParams,
         syncQueryFiltersToUrl,
-    } from "../../utils/queryParams";
+    } from "../../../utils/queryParams";
 
-    import type { ProjectRow } from "./ProjectsTable.svelte";
-    import type { ApiProjectsGetCollectionData } from "../../openapi/client/types.gen";
+    import type { ApiProjectsGetCollectionData } from "../../../openapi/client/types.gen";
 
     type ProjectsQuery = Partial<ApiProjectsGetCollectionData["query"]>;
 
@@ -39,45 +38,61 @@
               )
             : { filters: {}, order: {} };
 
-    let filters: ProjectsQuery = $state(initialParams.filters);
-    let selectedSort = $state("date-desc");
-
-    let currentPage = $state(1);
-    let itemsPerPage = $state(10);
-    let totalItemsCount = $state(0);
-    let projectRows = $state<ProjectRow[]>([]);
-    let isLoading = $state(false);
-    let isFirstLoad = $state(true);
-
-    let accountingsCache = $state(new Map<string, Accounting>());
-    let ownersCache = $state(new Map<string, User>());
-    let lastQueryKey = $state("");
-
-    let projectSlides = $derived([
-        { title: $t("pages.admin.projects.totalizers.selected"), amount: totalItemsCount },
-        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
-    ]);
-
-    const sortMap: Record<
-        string,
+    const sortFieldMap: Record<
+        ProjectSortKey,
         { field: "dateCreated" | "dateUpdated"; direction: "asc" | "desc" }
     > = {
         "date-desc": { field: "dateCreated", direction: "desc" },
         "date-asc": { field: "dateCreated", direction: "asc" },
     };
 
-    const initialSortKey = Object.keys(sortMap).find(
-        (key) => initialParams.order[sortMap[key].field] === sortMap[key].direction,
+    const initialSort = ((Object.keys(sortFieldMap) as ProjectSortKey[]).find(
+        (key) => initialParams.order[sortFieldMap[key].field] === sortFieldMap[key].direction,
+    ) ?? "date-desc") as ProjectSortKey;
+
+    const table = useAdminTableState<ProjectSortKey>(initialSort);
+
+    let filters: ProjectsQuery = $state(initialParams.filters);
+    let searchValue = $state(
+        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
     );
-    if (initialSortKey) selectedSort = initialSortKey;
+
+    let projectRows = $state<ProjectRow[]>([]);
+
+    let accountingsCache = $state(new Map<string, Accounting>());
+    let ownersCache = $state(new Map<string, User>());
+    let lastQueryKey = $state("");
+
+    let userEmailById = $derived.by(() => {
+        const map = new Map<number, string>();
+        for (const project of projectRows) {
+            const owner = ownersCache.get(project.owner);
+            if (owner?.email && project.id) {
+                map.set(project.id, owner.email);
+            }
+        }
+        return map;
+    });
+    let annotationsCache = $state(new Map<number, string>());
+    let paidModalOpen = $state(false);
+    let annotationsModalOpen = $state(false);
+    let paidValue = $state("");
+    let paidMatchfundingValue = $state("");
+    let annotationText = $state("");
+    let selectedProjectId = $state(0);
+
+    let projectSlides = $derived([
+        { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
+    ]);
 
     function buildProjectsQuery(
         filters: ProjectsQuery,
         page: number,
         perPage: number,
-        sort: string,
+        sort: ProjectSortKey,
     ): ProjectsQuery {
         const query: ProjectsQuery = {
             page,
@@ -85,7 +100,7 @@
             ...filters,
         };
 
-        const sortOption = sortMap[sort];
+        const sortOption = sortFieldMap[sort];
         if (sortOption) {
             query[`order[${sortOption.field}]`] = sortOption.direction;
         }
@@ -110,10 +125,15 @@
     }
 
     async function loadProjects(bypassCache = false): Promise<void> {
-        isLoading = true;
+        table.isLoading = true;
 
         async function fetchProjects() {
-            const query = buildProjectsQuery(filters, currentPage, itemsPerPage, selectedSort);
+            const query = buildProjectsQuery(
+                filters,
+                table.currentPage,
+                table.itemsPerPage,
+                table.selectedSort,
+            );
 
             return apiProjectsGetCollection({
                 query,
@@ -137,7 +157,7 @@
             }
 
             const loadedProjects = toCollectionItems<Project>(collection);
-            totalItemsCount = getCollectionTotalItems(collection, response);
+            table.totalItems = getCollectionTotalItems(collection, response);
 
             const uniqueAccountingIris = [
                 ...new Set(loadedProjects.map((p) => p.accounting).filter(Boolean)),
@@ -213,13 +233,17 @@
                 };
             });
         } finally {
-            isLoading = false;
-            isFirstLoad = false;
+            table.isLoading = false;
+            table.isFirstLoad = false;
         }
     }
 
     function reloadProjects(bypassCache = false): void {
-        const queryKey = JSON.stringify({ filters, selectedSort, itemsPerPage });
+        const queryKey = JSON.stringify({
+            filters,
+            selectedSort: table.selectedSort,
+            itemsPerPage: table.itemsPerPage,
+        });
         if (queryKey !== lastQueryKey) {
             accountingsCache = new Map();
             ownersCache = new Map();
@@ -230,13 +254,13 @@
     }
 
     $effect(() => {
-        if (isFirstLoad) {
+        if (table.isFirstLoad) {
             reloadProjects();
         }
     });
 
     $effect(() => {
-        const sortOption = sortMap[selectedSort];
+        const sortOption = sortFieldMap[table.selectedSort];
 
         syncQueryFiltersToUrl(
             (filters ?? {}) as Record<string, unknown>,
@@ -244,48 +268,31 @@
         );
     });
 
-    function handlePageChange(page: number): void {
-        currentPage = page;
-        reloadProjects();
-    }
-
-    function handleItemsPerPageChange(perPage: number): void {
-        itemsPerPage = perPage;
-        currentPage = 1;
-        reloadProjects();
-    }
-
-    function handleSortChange(sort: string): void {
-        selectedSort = sort;
-        currentPage = 1;
-        reloadProjects();
-    }
-
     function handleSearch(value: string): void {
         if (value.length >= 4 || value.length === 0) {
             if (value) {
                 filters = { ...filters, title: value };
-                currentPage = 1;
+                table.currentPage = 1;
                 reloadProjects(true);
                 return;
             } else {
                 const { ...rest } = filters;
                 filters = rest;
             }
-            currentPage = 1;
+            table.currentPage = 1;
             reloadProjects();
         }
     }
 
-    function handleApplyFilters(newFilters: ProjectsQuery): void {
+    async function handleApplyFilters(newFilters: ProjectsQuery): Promise<void> {
         filters = { ...filters, ...newFilters };
-        currentPage = 1;
+        table.currentPage = 1;
         reloadProjects();
     }
 
     function handleCloseFilter(newFilters: any): void {
         filters = { ...newFilters };
-        currentPage = 1;
+        table.currentPage = 1;
         reloadProjects();
     }
 
@@ -297,62 +304,93 @@
         if (error) console.error("Failed to update project status:", error);
     }
 
-    async function handleSavePaid(
-        _projectId: number,
-        _paidValue: string,
-        _paidMatchfundingValue: string,
-    ): Promise<void> {
-        reloadProjects();
+    function openPaidModal(project: ProjectRow, e: MouseEvent) {
+        e.stopPropagation();
+        selectedProjectId = project.id;
+        paidValue = project.paid !== "—" ? project.paid : "";
+        paidMatchfundingValue = project.paidMatchfunding !== "—" ? project.paidMatchfunding : "";
+        paidModalOpen = true;
     }
 
-    async function handleSaveAnnotations(_projectId: number, _text: string): Promise<void> {
+    function openAnnotationsModal(project: ProjectRow, e: MouseEvent) {
+        e.stopPropagation();
+        selectedProjectId = project.id;
+        annotationText = annotationsCache.get(project.id) ?? project.annotations;
+        annotationsModalOpen = true;
+    }
+
+    function handleSavePaid() {
         reloadProjects();
+        paidModalOpen = false;
+    }
+
+    function handleSaveAnnotations() {
+        annotationsCache = new Map(annotationsCache).set(selectedProjectId, annotationText);
+        const project = projectRows.find((p) => p.id === selectedProjectId);
+        if (project) {
+            project.annotations = annotationText;
+            project.annotationsCount = annotationText ? 1 : 0;
+        }
+        annotationsModalOpen = false;
     }
 </script>
 
-<div class="flex flex-col gap-10">
-    <Filters
-        resource="projects"
-        {filters}
-        onApplyFilters={handleApplyFilters}
-        searchPlaceholder={$t("pages.admin.projects.filters.search.placeholder")}
-        onSelectProject={(p) => {
+<AdminLayout
+    title={$t("pages.admin.projects.title")}
+    description={$t("pages.admin.projects.description")}
+    filters={{
+        resource: "projects",
+        filters: filters,
+        onApplyFilters: handleApplyFilters,
+        searchPlaceholder: $t("pages.admin.projects.filters.search.placeholder"),
+        onSelectProject: (p: Project) => {
             filters = { ...filters, title: p.title };
-            currentPage = 1;
+            table.currentPage = 1;
             reloadProjects();
-        }}
+        },
+    }}
+    filterTags={{
+        title: $t("pages.admin.projects.lastProjects"),
+        filters: filters,
+        onCloseFilter: handleCloseFilter,
+        resource: "projects",
+    }}
+    csv={{
+        endpoint: apiProjectsGetCollectionUrl,
+        filenamePrefix: "projects",
+        queryParams: filters,
+        totalItems: table.totalItems,
+    }}
+    slider={{
+        slides: projectSlides,
+        isLoading: table.isLoading,
+    }}
+>
+    <ProjectsTable
+        projects={projectRows}
+        currentPage={table.currentPage}
+        itemsPerPage={table.itemsPerPage}
+        selectedSort={table.selectedSort}
+        totalItems={table.totalItems}
+        isLoading={table.isLoading}
+        {userEmailById}
+        onPageChange={table.handlePageChange}
+        onItemsPerPageChange={table.handleItemsPerPageChange}
+        onSortChange={table.handleSortChange}
+        onStatusChange={handleStatusChange}
+        onOpenPaidModal={openPaidModal}
+        onOpenAnnotationsModal={openAnnotationsModal}
     />
+</AdminLayout>
 
-    <div class="flex flex-col">
-        <div class="mb-8 flex justify-between">
-            <FiltersTags
-                title={$t("pages.admin.projects.lastProjects")}
-                {filters}
-                onCloseFilter={handleCloseFilter}
-                resource="projects"
-            />
-            <ExportCsv
-                endpoint={apiProjectsGetCollectionUrl}
-                queryParams={filters}
-                filenamePrefix="projects"
-                totalItems={totalItemsCount}
-            />
-        </div>
-        <Slider slides={projectSlides} {isLoading} />
-    </div>
-</div>
-<ProjectsTable
-    projects={projectRows}
-    {currentPage}
-    totalItems={totalItemsCount}
-    {itemsPerPage}
-    bind:selectedSort
-    {isLoading}
-    {isFirstLoad}
-    onPageChange={handlePageChange}
-    onSortChange={handleSortChange}
-    onItemsPerPageChange={handleItemsPerPageChange}
-    onStatusChange={handleStatusChange}
-    onSavePaid={handleSavePaid}
-    onSaveAnnotations={handleSaveAnnotations}
+<ProjectsModalPaid
+    bind:open={paidModalOpen}
+    bind:paidValue
+    bind:paidMatchfundingValue
+    onsave={handleSavePaid}
+/>
+<ProjectsModalAnnotations
+    bind:open={annotationsModalOpen}
+    bind:annotationText
+    onsave={handleSaveAnnotations}
 />

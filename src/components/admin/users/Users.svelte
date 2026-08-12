@@ -52,6 +52,16 @@
         { title: $t("pages.admin.users.totalizers.selected"), amount: table.totalItems },
     ]);
 
+    const sortMap: Record<string, { field: "handle"; direction: "asc" | "desc" }> = {
+        "handle-asc": { field: "handle", direction: "asc" },
+        "handle-desc": { field: "handle", direction: "desc" },
+    };
+
+    const initialSortKey = Object.keys(sortMap).find(
+        (key) => initialParams.order[sortMap[key].field] === sortMap[key].direction,
+    ) as UserSortKey | undefined;
+    if (initialSortKey) table.selectedSort = initialSortKey;
+
     function buildUsersQuery(
         filters: UsersQuery,
         page: number,
