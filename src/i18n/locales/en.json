@@ -4,7 +4,9 @@
     "loading": "Loading...",
     "error": {
       "unknown": "An unknown error has occurred",
+      "unauthorized": "You must sign in to complete this action",
       "payment": {
+        "unauthorized": "You must log in to complete the payment",
         "missingMethod": "A payment method must be selected",
         "missingCartData": "The cart is empty",
         "unprocessableCartData": "The cart cannot be processed; please empty it and try again",
@@ -16,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "The text cannot be empty",
+        "expectedUrl": "Not a URL"
+      },
+      "date": {
+        "greaterThan": "The date must be greater than {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Maximum allowed size 10MB",
         "supportedTypes": "Supported files: .png, .jpg"
@@ -180,6 +189,11 @@
     "login": "Log in",
     "goHome": "Back to home",
     "viewAll": "View all",
+    "pagination": {
+      "showing": "Showing {{ items }} of {{ total }}",
+      "unloaded": "Showing...",
+      "noResults": "No results"
+    },
     "viewMore": "See more",
     "viewLess": "See less",
     "share": "Share",
@@ -971,6 +985,9 @@
         "seeChat": "View conversation",
         "changeRisk": "Change risk"
       },
+      "card": {
+        "activity": "{{ count }} chats. Last activity {{ date }}"
+      },
       "chat": {
         "placeholder": "Write a message…"
       }
@@ -1194,7 +1211,8 @@
       "nav": {
         "charges": "Charges",
         "projects": "Projects",
-        "users": "Users"
+        "users": "Users",
+        "comm": "Communication"
       },
       "sidebar": {
         "aria": {
@@ -1363,11 +1381,6 @@
               "funding_paid": "Charge paid"
             }
           }
-        },
-        "pagination": {
-          "showing": "Showing {{items}} of {{total}}",
-          "unloaded": "Showing...",
-          "noResults": "No results"
         },
         "downloadButtons": {
           "certificates": "Download certificates",
@@ -1547,10 +1560,6 @@
             },
             "save": "Save"
           }
-        },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
         }
       },
       "users": {
@@ -1621,10 +1630,54 @@
               "active": "Active"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Communication",
+        "description": "Manage platform communication",
+        "tabs": {
+          "banners": "Announcements"
         },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
+        "banners": {
+          "title": "Announcements",
+          "description": "Here you can create and manage the platform banners",
+          "errors": {
+            "forbidden": "You do not have permission to manage ads",
+            "invalidUrl": "The ad URL is invalid",
+            "invalidDateRange": "The end date cannot be earlier than the start date"
+          },
+          "tabs": {
+            "fields": "New",
+            "history": "History"
+          },
+          "fields": {
+            "dataTitle": "Announcement details",
+            "titlePlaceholder": "Announcement title",
+            "contentPlaceholder": "Brief description of the ad",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Schedule the announcement",
+            "startDatePlaceholder": "Enter the start date",
+            "endDatePlaceholder": "Enter the end date"
+          },
+          "history": {
+            "title": "Announcement history",
+            "description": "Here you can view the history of published announcements",
+            "noData": "There are no announcements in the history",
+            "headers": {
+              "title": "Title",
+              "content": "Content",
+              "publishedAt": "Publication date",
+              "endAt": "End date"
+            },
+            "actions": {
+              "view": "View"
+            },
+            "modal": {
+              "title": "Announcement published on {{date}}",
+              "description": "Here you can see what the announcement looked like"
+            }
+          }
         }
       }
     },
