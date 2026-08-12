@@ -1372,13 +1372,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página:",
-            "options": {
-              "10": "10",
-              "20": "20",
-              "30": "30",
-              "50": "50"
-            }
+            "title": "Líneas por página:"
           },
           "search": {
             "placeholder": "Buscar por destino...",
@@ -1495,12 +1489,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Líneas por página"
           }
         },
         "table": {
@@ -1629,12 +1618,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Líneas por página"
           }
         },
         "table": {
