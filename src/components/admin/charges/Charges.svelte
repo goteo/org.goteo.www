@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import ChargesTable, { type ChargeSortKey, type ExtendedCharge } from "./ChargesTable.svelte";
-    import AdminLayout from "../../../layouts/AdminLayout.svelte";
+    import Dashboard from "../AdminDashboard.svelte";
     import { session } from "../../../auth/store";
     import { t } from "../../../i18n/store";
     import {
@@ -454,7 +454,7 @@
     });
 </script>
 
-<AdminLayout
+<Dashboard
     title={$t("pages.admin.charges.title")}
     description={$t("pages.admin.charges.description")}
     filters={{
@@ -493,4 +493,4 @@
         onItemsPerPageChange={table.handleItemsPerPageChange}
         onSortChange={table.handleSortChange}
     />
-</AdminLayout>
+</Dashboard>

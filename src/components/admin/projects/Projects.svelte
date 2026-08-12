@@ -2,7 +2,7 @@
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import ProjectsTable, { type ProjectRow, type ProjectSortKey } from "./ProjectsTable.svelte";
-    import AdminLayout from "../../../layouts/AdminLayout.svelte";
+    import Dashboard from "../AdminDashboard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import {
@@ -335,7 +335,7 @@
     }
 </script>
 
-<AdminLayout
+<Dashboard
     title={$t("pages.admin.projects.title")}
     description={$t("pages.admin.projects.description")}
     filters={{
@@ -381,7 +381,7 @@
         onOpenPaidModal={openPaidModal}
         onOpenAnnotationsModal={openAnnotationsModal}
     />
-</AdminLayout>
+</Dashboard>
 
 <ProjectsModalPaid
     bind:open={paidModalOpen}

@@ -1,12 +1,12 @@
 <script lang="ts">
     import type { Snippet } from "svelte";
 
-    import ExportCsv from "../components/admin/ExportCsv.svelte";
-    import Filters from "../components/admin/Filters.svelte";
-    import FiltersTags from "../components/admin/FiltersTags.svelte";
-    import Slider from "../components/admin/Slider.svelte";
+    import ExportCsv from "./ExportCsv.svelte";
+    import Filters from "./Filters.svelte";
+    import FiltersTags from "./FiltersTags.svelte";
+    import Slider from "./Slider.svelte";
 
-    import type { FilterResource } from "../utils/filterComposer";
+    import type { FilterResource } from "../../utils/filterComposer";
 
     interface FiltersConfig {
         resource: FilterResource;
