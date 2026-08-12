@@ -18,7 +18,7 @@ export async function authorizationCode(args: {
         body: params,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
     })
-        .then((res) => res.json())
+        .then((res) => res.json() as Promise<OAuthToken>)
         .then((token) => withHttpHeaders(token));
 
     if (oauth.error!) {
@@ -45,7 +45,7 @@ export async function passwordGrant(args: {
         body: params,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
     })
-        .then((res) => res.json())
+        .then((res) => res.json() as Promise<OAuthToken>)
         .then((token) => withHttpHeaders(token));
 
     if (oauth.error!) {
@@ -72,7 +72,7 @@ export async function refreshToken(token: OAuthToken): Promise<OAuthToken> {
         body: params,
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
     })
-        .then((res) => res.json())
+        .then((res) => res.json() as Promise<OAuthToken>)
         .then((token) => withHttpHeaders(token));
 
     if (oauth.error!) {

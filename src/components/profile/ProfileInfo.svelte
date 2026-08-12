@@ -5,6 +5,7 @@
     import LinkedinIcon from "../icons/social/LinkedinIcon.svelte";
     import MediumIcon from "../icons/social/MediumIcon.svelte";
     import XIcon from "../icons/social/XIcon.svelte";
+    import Title from "../library/typography/Title.svelte";
     import TerritoryTag from "../project/TerritoryTag.svelte";
 
     import type { Link, Territory } from "../../openapi/client/types.gen";
@@ -67,9 +68,9 @@
 
 <div class="mt-28 flex w-full flex-col items-center gap-4">
     <!-- Name -->
-    <h1 class="text-secondary text-2xl leading-tight font-bold">
+    <Title level={1} variant="subsection" color="secondary" class="leading-tight">
         {displayName}
-    </h1>
+    </Title>
 
     <!-- Location -->
     {#if territory}

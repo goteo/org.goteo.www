@@ -13,7 +13,6 @@
     }: { slides?: { title: string; amount: string | number }[]; isLoading?: boolean } = $props();
 
     let mainCarousel: HTMLDivElement;
-    let isSliderLoaded = $state(false);
 
     let options: Options = {
         cellAlign: "left",
@@ -34,7 +33,6 @@
         try {
             const { default: FlickityClass } = await import("flickity");
             new FlickityClass(elem, options);
-            isSliderLoaded = true;
         } catch (err) {
             console.error("Flickity failed to load:", err);
         }

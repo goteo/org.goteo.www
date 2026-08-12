@@ -193,6 +193,7 @@
             project.annotations = annotationText;
             project.annotationsCount = annotationText ? 1 : 0;
         }
+        onSaveAnnotations?.(selectedProjectId, annotationText);
         annotationsModalOpen = false;
     }
 </script>

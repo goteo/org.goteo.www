@@ -12,7 +12,7 @@ const markdownFiles = import.meta.glob<{ default: any }>("../../../../static/*md
 const fileKey = Object.keys(markdownFiles).find((path) => path.endsWith(`${fileName}.md`));
 
 if (!fileKey) {
-    return Astro.redirect("/404");
+    return Astro.rewrite("/404");
 }
 
 const file = await markdownFiles[fileKey]();

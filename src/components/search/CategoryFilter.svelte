@@ -12,12 +12,12 @@ Implements active/inactive pill states matching Figma design
     } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
         showLabel?: boolean;
-        "data-testid"?: string;
     }
 
     let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
@@ -53,9 +53,9 @@ Implements active/inactive pill states matching Figma design
 
 <div class="w-full">
     {#if showLabel}
-        <h3 class="font-body mb-6 text-base font-bold text-black">
+        <Title level={3} variant="field" class="font-body mb-6">
             {$t("pages.search.filters.categoryLabel")}
-        </h3>
+        </Title>
     {/if}
 
     {#await categories then categories}

@@ -11,6 +11,7 @@
     import AlertIcon from "../icons/status/AlertIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
 
@@ -104,9 +105,9 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
+    <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
         {$t("pages.project.view.tabs.updates.content.title")}
-    </h2>
+    </Title>
     <Carousel
         bind:activeCard
         gap={24}
@@ -156,9 +157,9 @@
                     {$t("pages.project.view.tabs.updates.modalTitle")}
                 </div>
             {/if}
-            <h3 class="text-secondary text-3xl font-bold">
+            <Title level={3} variant="section" color="secondary">
                 {selected?.title}
-            </h3>
+            </Title>
             <div class="marked-content text-content flex flex-col gap-4">
                 {#await renderMarkdown(selected.body) then content}
                     {@html content}

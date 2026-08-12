@@ -47,7 +47,7 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
             <OwnedProjectsSection {lang} {user} client:load />
 
             <!-- Donated Projects Section (client-side data fetching) -->
-            <DonatedProjectsSection {lang} {user} client:load />
+            <DonatedProjectsSection {lang} client:load />
 
             <!-- CTA cards -->
             <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-[446px_1fr]" client:load>

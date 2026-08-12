@@ -7,6 +7,8 @@
 
     import type { Component } from "svelte";
 
+    import type { Component } from "svelte";
+
     interface CommTab {
         id: string;
         hash: string;

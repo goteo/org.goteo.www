@@ -12,6 +12,7 @@
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Grid from "../../library/layout/Grid.svelte";
+    import Title from "../../library/typography/Title.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     let {
@@ -77,16 +78,16 @@
 
 <div class="flex flex-col gap-10">
     {#if Object.keys($validationErrors).length > 0}
-        {#each Object.entries($validationErrors) as [key, message]}
+        {#each Object.entries($validationErrors) as [_key, message]}
             <Toast class="absolute z-999 self-end" variant="error" bind:showToast={showErrorToast}>
                 {message}
             </Toast>
         {/each}
     {/if}
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.budget.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.budget.subtitle")}</p>
     </div>
 

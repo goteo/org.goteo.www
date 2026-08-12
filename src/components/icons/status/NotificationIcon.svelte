@@ -8,7 +8,7 @@
 
     let { class: classes, iconColor }: Props = $props();
 
-    const variantColor = `text-${iconColor ? `[${iconColor}]` : "secondary"}`;
+    let variantColor = $derived(`text-${iconColor ? `[${iconColor}]` : "secondary"}`);
 </script>
 
 <svg

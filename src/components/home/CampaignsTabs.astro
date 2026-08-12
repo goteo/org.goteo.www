@@ -3,12 +3,7 @@ import CampaignCard from "./CampaignCard.svelte";
 import Carousel from "../library/layout/Carousel.svelte";
 import CampaignsTabsNav from "./CampaignsTabsNav.svelte";
 import type { Campaign } from "../../types/campaign";
-import {
-    apiProjectsGetCollection,
-    type Accounting,
-    type ApiAccountingsIdGetData,
-    type Money,
-} from "../../openapi/client";
+import { apiProjectsGetCollection, type Accounting, type Money } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import { client } from "../../openapi/client/client.gen";
 
@@ -37,8 +32,9 @@ const campaigns: Campaign[] = await Promise.all(
         })) as { data: Accounting };
 
         return {
+            ...project,
             size: "small",
-            id: project.slug!,
+            slug: project.slug!,
             title: project.title!,
             image:
                 chosenProjects[project.slug! as keyof typeof chosenProjects] ||
@@ -46,7 +42,7 @@ const campaigns: Campaign[] = await Promise.all(
             minimum: project.budget?.minimum?.money!,
             optimum: project.budget?.optimum?.money,
             obtained: accounting!.balance as Money,
-        };
+        } satisfies Campaign;
     }),
 );
 

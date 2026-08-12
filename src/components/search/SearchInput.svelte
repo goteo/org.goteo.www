@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import { t } from "../../i18n/store";
     import Search from "../library/inputs/Search.svelte";
 
@@ -22,7 +24,8 @@
         placeholder = "",
     }: Props = $props();
 
-    let searchQuery = $state(value);
+    // Seeds the initial render; the effect below keeps it in sync afterwards.
+    let searchQuery = $state(untrack(() => value));
 
     $effect(() => {
         searchQuery = value;

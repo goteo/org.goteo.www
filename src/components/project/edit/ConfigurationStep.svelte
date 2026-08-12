@@ -11,7 +11,7 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
@@ -28,6 +28,7 @@
     } from "../../../stores/drafts/projectDraft";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
 
@@ -38,15 +39,18 @@
 
     let { project, onContinue }: ConfigurationStepProps = $props();
     let allCategories = $state<Category[]>([]);
+    // Both seed the form once; the bound inputs own them afterwards.
     let selectedCategoryIds = $state<(number | string)[]>(
-        (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? ""),
+        untrack(() => (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? "")),
     );
     let releaseDate = $state(
-        $currentDraft?.createProject.release
-            ? new Date($currentDraft.createProject.release)
-            : project?.calendar?.release
-              ? new Date(project.calendar.release)
-              : new Date(),
+        untrack(() =>
+            $currentDraft?.createProject.release
+                ? new Date($currentDraft.createProject.release)
+                : project?.calendar?.release
+                  ? new Date(project.calendar.release)
+                  : new Date(),
+        ),
     );
 
     onMount(async () => {
@@ -109,9 +113,9 @@
 <div class="space-y-8">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-[2.5rem]/12 font-bold text-black">
+        <Title level={1} variant="headline">
             {$t("pages.project.edit.configuration.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base font-normal">
             {$t("pages.project.edit.configuration.subtitle")}
         </p>
@@ -120,9 +124,9 @@
     <!-- Categories Section -->
     <div class="space-y-4">
         <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.categories.title")}
-            </h2>
+            </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.categories.subtitle")}
             </p>
@@ -138,9 +142,9 @@
     <!-- Release Date Section -->
     <div class="space-y-4">
         <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.create.release.title")}
-            </h2>
+            </Title>
             <p class="text-content text-base font-normal">
                 {$t("pages.project.create.release.subtitle")}
             </p>
@@ -157,9 +161,9 @@
     <!-- Funding Rounds Section -->
     <div class="space-y-6">
         <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.configuration.rounds.title")}
-            </h2>
+            </Title>
             <p class="text-content text-base font-normal">
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>

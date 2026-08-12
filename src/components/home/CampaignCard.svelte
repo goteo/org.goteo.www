@@ -14,6 +14,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
     import Flames from "../icons/status/Flames.svelte";
     import Tag from "../library/tags/Tag.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Accounting, Money } from "../../openapi/client";
     import type { Campaign, CampaignSize } from "../../types/campaign";
@@ -34,24 +35,24 @@ Converted from CampaignCard.astro to maintain exact functionality
         class: className = "",
     }: Props = $props();
 
-    // Balance pre-loaded from server (home page); fetched client-side via Project.accounting IRI when not provided
-    let obtained = $state<Money | undefined>(undefined);
+    // Falls back to fetching the balance from the accounting IRI when the caller pre-loads no
+    // `obtained`. Derived, not assigned in the effect, because effects don't run during SSR: a card
+    // rendered statically (no `client:*` of its own) would ignore the pre-loaded value and show
+    // "loading" forever — those callers must pre-load it.
+    let fetched = $state<Money | undefined>(undefined);
+    const obtained = $derived(campaign.obtained ?? fetched);
 
     $effect(() => {
-        if (obtained === undefined) {
-            if (campaign.obtained) {
-                obtained = campaign.obtained;
-            } else if (campaign.accounting) {
-                (
-                    client.get({ url: campaign.accounting }) as unknown as Promise<{
-                        data: Accounting;
-                    }>
-                )
-                    .then(({ data }) => {
-                        if (data?.balance) obtained = data.balance as Money;
-                    })
-                    .catch(() => {});
-            }
+        if (fetched === undefined && !campaign.obtained && campaign.accounting) {
+            (
+                client.get({ url: campaign.accounting }) as unknown as Promise<{
+                    data: Accounting;
+                }>
+            )
+                .then(({ data }) => {
+                    if (data?.balance) fetched = data.balance as Money;
+                })
+                .catch((error) => console.error("Error fetching campaign balance:", error));
         }
     });
 
@@ -92,8 +93,7 @@ Converted from CampaignCard.astro to maintain exact functionality
     )}
     data-testid="campaign-card"
 >
-    <!-- Note: campaign.id is actually the project slug, not a numeric ID -->
-    <a href="/project/{campaign.id}">
+    <a href="/project/{campaign.slug}">
         <div class="flex flex-col gap-4 md:gap-6">
             <!-- Project Image -->
             <div
@@ -156,9 +156,14 @@ Converted from CampaignCard.astro to maintain exact functionality
                 </div>
 
                 <!-- Title -->
-                <h3 class="text-secondary h-16 overflow-hidden text-2xl leading-8 font-bold">
+                <Title
+                    level={3}
+                    variant="subsection"
+                    color="secondary"
+                    class="h-16 overflow-hidden leading-8"
+                >
                     {campaign.title}
-                </h3>
+                </Title>
 
                 <!-- Funding Information -->
                 <div class="flex flex-col gap-2">
