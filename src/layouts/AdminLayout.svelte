@@ -46,7 +46,6 @@
         filterTags,
         csv,
         slider,
-        actions,
         children,
     }: {
         title: string;
@@ -55,7 +54,6 @@
         filterTags: FilterTagsConfig;
         csv: CsvConfig;
         slider: SliderConfig;
-        actions?: Snippet;
         children?: Snippet;
     } = $props();
 </script>
@@ -63,21 +61,12 @@
 <div class="wrapper">
     <div class="flex w-full flex-col gap-10 py-10">
         <header class="flex flex-col gap-4">
-            <div class="flex flex-wrap items-start justify-between gap-4">
-                <div class="flex flex-col gap-4">
-                    <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                        {title}
-                    </h2>
-                    {#if description}
-                        <p class="text-content">{description}</p>
-                    {/if}
-                </div>
-                {#if actions}
-                    <div class="flex items-center gap-2">
-                        {@render actions()}
-                    </div>
-                {/if}
-            </div>
+            <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
+                {title}
+            </h2>
+            {#if description}
+                <p class="text-content">{description}</p>
+            {/if}
         </header>
 
         <Filters
