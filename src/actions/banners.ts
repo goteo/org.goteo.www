@@ -9,7 +9,7 @@ export const createBanner = defineAction({
         title: z.string("system.constraint.text.notEmpty").min(1),
         content: z.string("system.constraint.text.notEmpty").min(1),
         ctaText: z.string("system.constraint.text.notEmpty").min(1),
-        ctaLink: z.url("system.constraint.text.expectedUrl"),
+        ctaLink: z.url("pages.admin.comm.banners.errors.invalidUrl"),
         startsAt: z.coerce.date().min(new Date(), "system.constraint.date.greaterThan"),
         endsAt: z.coerce.date().min(new Date(), "system.constraint.date.greaterThan"),
     }),
