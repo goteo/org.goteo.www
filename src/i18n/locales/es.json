@@ -18,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "El texto no puede estar vacío",
+        "expectedUrl": "No es una URL"
+      },
+      "date": {
+        "greaterThan": "La fecha debe ser mayor que {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido 10MB",
         "supportedTypes": "Archivos compatibles: {{ types }}"
@@ -1634,6 +1641,11 @@
         "banners": {
           "title": "Anuncios",
           "description": "Aquí puedes crear y gestionar los banners de la plataforma",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar anuncios",
+            "invalidUrl": "La URL del anuncio no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
           "tabs": {
             "fields": "Nuevos",
             "history": "Histórico"
@@ -1641,7 +1653,7 @@
           "fields": {
             "dataTitle": "Datos del anuncio",
             "titlePlaceholder": "Título del anuncio",
-            "descriptionPlaceholder": "Breve descripción del anuncio",
+            "contentPlaceholder": "Breve descripción del anuncio",
             "ctaPlaceholder": "Call to action",
             "urlPlaceholder": "URL",
             "scheduleTitle": "Programa el anuncio",

@@ -40,6 +40,7 @@ export default [
             "env.d.ts",
             "storybook-static/**",
             "graphify-out/**",
+            "worker-configuration.d.ts",
         ],
     },
     {

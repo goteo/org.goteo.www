@@ -1,60 +1,123 @@
 <script lang="ts">
-    import { t } from "../../../../i18n/store";
-    import Button from "../../../library/buttons/Button.svelte";
+    import { actions } from "astro:actions";
+
+    import { locale, t } from "../../../../i18n/store";
+    import { formatDate } from "../../../../utils/dates";
+    import ActionableButton from "../../../library/buttons/ActionableButton.svelte";
     import DateInput from "../../../library/inputs/DateInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
     import TextInput from "../../../library/inputs/TextInput.svelte";
+    import Title from "../../../library/typography/Title.svelte";
+
+    interface Props {
+        onSubmit?: (event: SubmitEvent) => void;
+    }
+
+    let { onSubmit }: Props = $props();
+
+    let formElement: HTMLFormElement;
+
+    type FieldName = "title" | "content" | "ctaText" | "ctaLink" | "startsAt" | "endsAt";
+
+    type FieldErrors = Partial<Record<FieldName, string>>;
+
+    let fieldErrors: FieldErrors = $state({});
+
+    async function submit() {
+        fieldErrors = {};
+
+        const { error } = await actions.createBanner(new FormData(formElement));
+
+        if (error) {
+            // @ts-expect-error fields does exist but astro typing sucks
+            const errors: Record<string, string[]> = error.fields;
+
+            fieldErrors = Object.fromEntries(
+                Object.entries(errors ?? {}).map(([field, issues]) => [field, issues?.[0]]),
+            ) as FieldErrors;
+
+            return;
+        }
+    }
+
+    async function handleSubmit(event: SubmitEvent) {
+        if (onSubmit) {
+            onSubmit(event);
+            return;
+        }
+
+        event.preventDefault();
+        await submit();
+    }
 </script>
 
-<form class="max-w-167 space-y-10">
+<form bind:this={formElement} onsubmit={handleSubmit} class="max-w-167 space-y-10">
     <div class="flex flex-col gap-6">
-        <h3 class="text-2xl leading-8 font-bold text-black">
+        <Title level={3} variant="subsection">
             {$t("pages.admin.comm.banners.fields.dataTitle")}
-        </h3>
+        </Title>
+
         <div class="space-y-4">
             <TextInput
                 class="flex-1"
                 name="title"
+                required={true}
                 placeholder={$t("pages.admin.comm.banners.fields.titlePlaceholder")}
+                error={fieldErrors.title && $t(fieldErrors.title)}
             />
+
             <TextArea
                 class="flex-1"
-                placeholder={$t("pages.admin.comm.banners.fields.descriptionPlaceholder")}
+                name="content"
+                placeholder={$t("pages.admin.comm.banners.fields.contentPlaceholder")}
+                error={fieldErrors.content && $t(fieldErrors.content)}
             />
+
             <div class="flex gap-6">
                 <div class="flex-1">
                     <TextInput
-                        name="callToAction"
+                        name="ctaText"
                         placeholder={$t("pages.admin.comm.banners.fields.ctaPlaceholder")}
+                        error={fieldErrors.ctaText && $t(fieldErrors.ctaText)}
                     />
                 </div>
+
                 <div class="flex-1">
                     <TextInput
-                        name="link"
+                        name="ctaLink"
                         placeholder={$t("pages.admin.comm.banners.fields.urlPlaceholder")}
+                        error={fieldErrors.ctaLink && $t(fieldErrors.ctaLink)}
                     />
                 </div>
             </div>
         </div>
     </div>
+
     <div class="space-y-6">
-        <h3 class="text-2xl leading-8 font-bold text-black">
+        <Title level={3} variant="subsection">
             {$t("pages.admin.comm.banners.fields.scheduleTitle")}
-        </h3>
+        </Title>
+
         <div class="flex gap-6">
             <DateInput
                 class="flex-1"
-                name="startDate"
+                name="startsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
+                error={fieldErrors.startsAt &&
+                    $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
             />
+
             <DateInput
                 class="flex-1"
-                name="endDate"
+                name="endsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
+                error={fieldErrors.endsAt &&
+                    $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
             />
         </div>
     </div>
-    <Button type="submit" size="md" kind="primary">
+
+    <ActionableButton action={submit} autoreset={2000}>
         {$t("common.save")}
-    </Button>
+    </ActionableButton>
 </form>

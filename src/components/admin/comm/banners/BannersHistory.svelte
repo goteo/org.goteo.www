@@ -1,24 +1,18 @@
 <script lang="ts">
     import { Modal, TableBodyCell } from "flowbite-svelte";
 
-    import { t } from "../../../../i18n/store";
+    import { locale, t } from "../../../../i18n/store";
+    import { formatDate } from "../../../../utils/dates";
     import HomeBanner from "../../../home/HomeBanner.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
+    import Title from "../../../library/typography/Title.svelte";
     import DataTable from "../../DataTable.svelte";
 
+    import type { BannerRecord } from "../../../../repositories/banner";
     import type { DataTableHeader } from "../../DataTable.svelte";
 
     interface Props {
-        rows: BannerRow[];
-    }
-
-    interface BannerRow {
-        title: string;
-        content: string;
-        ctaText: string;
-        ctaLink: string;
-        publishedAt: string;
-        endAt: string;
+        rows: BannerRecord[];
     }
 
     let { rows }: Props = $props();
@@ -43,9 +37,9 @@
 
     let isLoading = $state(false);
     let isModalOpen = $state(false);
-    let selectedRow = $state<BannerRow | null>(null);
+    let selectedRow = $state<BannerRecord | null>(null);
 
-    function openModal(row: BannerRow) {
+    function openModal(row: BannerRecord) {
         selectedRow = row;
         isModalOpen = true;
     }
@@ -57,9 +51,9 @@
 </script>
 
 <div class="flex flex-col gap-4">
-    <h3 class="text-2xl leading-8 font-bold text-black">
+    <Title level={3} variant="subsection">
         {$t("pages.admin.comm.banners.history.title")}
-    </h3>
+    </Title>
     <p class="text-content">{$t("pages.admin.comm.banners.history.description")}</p>
 </div>
 
@@ -84,10 +78,10 @@
             {row.content}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {row.publishedAt}
+            {formatDate(row.startsAt, $locale)}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {row.endAt}
+            {formatDate(row.endsAt, $locale)}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 w-25 rounded-r-md border-t border-r border-b p-4">
             <button class="flex cursor-pointer items-center gap-2" onclick={() => openModal(row)}>
@@ -112,11 +106,11 @@
     {#snippet header()}
         {#if selectedRow}
             <div class="flex flex-col justify-start gap-4">
-                <h2 class="text-xl font-bold text-black">
+                <Title level={2} variant="subsection">
                     {$t("pages.admin.comm.banners.history.modal.title", {
-                        date: selectedRow.publishedAt,
+                        date: formatDate(selectedRow.dateCreated, $locale),
                     })}
-                </h2>
+                </Title>
                 <p class="text-content text-base font-normal">
                     {$t("pages.admin.comm.banners.history.modal.description")}
                 </p>
