@@ -7,7 +7,14 @@
 
     import type { Component } from "svelte";
 
+    import type { BannerRecord } from "../../../repositories/banner";
     import type { Component } from "svelte";
+
+    interface Props {
+        banners: BannerRecord[];
+    }
+
+    let { banners }: Props = $props();
 
     interface CommTab {
         id: string;
@@ -69,6 +76,6 @@
 
 {#each tabs as tab}
     {#if tab.id === activeTab}
-        <tab.component />
+        <tab.component {banners} />
     {/if}
 {/each}

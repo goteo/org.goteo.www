@@ -43,7 +43,21 @@ export const onRequest = defineMiddleware(async (context: APIContext, next) => {
         throw e;
     }
 
-    const response = await next();
+    let response: Response;
+
+    try {
+        response = await next();
+    } catch (error) {
+        console.error("[middleware] Unhandled request error");
+
+        if (error instanceof Error) {
+            console.error(error.stack ?? error.message);
+        } else {
+            console.error(error);
+        }
+
+        throw error;
+    }
 
     /**
      * Which routes may be cached is declared in `astro.config.mjs`, but whether this

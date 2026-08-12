@@ -18,7 +18,7 @@
         kind?: "primary" | "secondary" | "ghost" | "invert";
         action: () => Promise<void>;
         state?: ActionableState;
-        /* Time from actioned to reset */
+        /* Time, in milliseconds, from actioned to reset */
         autoreset?: number;
     }
 

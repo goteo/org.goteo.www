@@ -2,7 +2,7 @@ import type { RequestOptions } from "@hey-api/client-fetch";
 
 export const CACHE_NAME = "goteo-v4-api";
 
-const DEFAULT_MAX_AGE_MS = 10_000;
+const DEFAULT_MAX_AGE = import.meta.env.PUBLIC_CSCACHE_TTL;
 
 /**
  * Whether a response may be written to the cache at all.
@@ -17,7 +17,7 @@ function isStorable(response: Response): boolean {
     return !cacheControl.includes("no-store") && !cacheControl.includes("private");
 }
 
-function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AGE_MS): boolean {
+function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AGE): boolean {
     const cacheControl = cached.headers.get("Cache-Control")?.toLowerCase() ?? "";
 
     if (
@@ -29,7 +29,7 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
     }
 
     const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
-    const maxAge = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) * 1000 : defaultMaxAgeMs;
+    const maxAge = (maxAgeMatch ? parseInt(maxAgeMatch[1], 10) : defaultMaxAgeMs) * 1000;
 
     if (!maxAgeMatch) {
         const expires = cached.headers.get("Expires");
@@ -53,9 +53,10 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
 
 export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
     return async (request: Request, opts: RequestOptions): Promise<Request> => {
-        if (import.meta.env.PUBLIC_DISABLE_CACHE === "true") {
+        if (import.meta.env.PUBLIC_CSCACHE !== "true") {
             return request;
         }
+
         const originalFetch = opts.fetch ?? globalThis.fetch;
 
         opts.fetch = async (req: Request) => {

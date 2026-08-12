@@ -34,6 +34,7 @@ const { t, lang } = Astro.locals;
                 ctaText={t("pages.home.banner.ctaText")}
                 ctaLink={"/about"}
                 closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
+                client:load
             />
         </div>
         <Campaigns />
