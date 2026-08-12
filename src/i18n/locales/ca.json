@@ -18,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "El text no pot estar buit",
+        "expectedUrl": "No és una URL"
+      },
+      "date": {
+        "greaterThan": "La data ha de ser posterior a {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Mida màxima permesa 10MB",
         "supportedTypes": "Arxius compatibles: .png, .jpg"
@@ -1634,6 +1641,11 @@
         "banners": {
           "title": "Anuncis",
           "description": "Aquí pots crear i gestionar els bàners de la plataforma",
+          "errors": {
+            "forbidden": "No tens permisos per gestionar anuncis",
+            "invalidUrl": "L'URL de l'anunci no és vàlida",
+            "invalidDateRange": "La data de fi no pot ser anterior a la d'inici"
+          },
           "tabs": {
             "fields": "Nous",
             "history": "Històric"
@@ -1641,7 +1653,7 @@
           "fields": {
             "dataTitle": "Dades de l'anunci",
             "titlePlaceholder": "Títol de l'anunci",
-            "descriptionPlaceholder": "Breu descripció de l'anunci",
+            "contentPlaceholder": "Breu descripció de l'anunci",
             "ctaPlaceholder": "Crida a l'acció",
             "urlPlaceholder": "URL",
             "scheduleTitle": "Programa l'anunci",
