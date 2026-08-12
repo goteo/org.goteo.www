@@ -4,6 +4,7 @@
     import BannersTabs from "./BannersTabs.svelte";
     import { t } from "../../../../i18n/store";
     import Toast from "../../../library/feedback/Toast.svelte";
+    import Title from "../../../library/typography/Title.svelte";
 
     import type { BannerRecord } from "../../../../repositories/banner";
 
@@ -14,7 +15,6 @@
     let { banners }: Props = $props();
 
     let currentSubtab = $state("fields");
-    let saving = $state(false);
     let showError = $state(false);
     let errorMessage = $state("");
 
@@ -24,9 +24,9 @@
 </script>
 
 <div class="flex flex-col gap-4">
-    <h2 class="overflow-hidden text-[2.5rem] leading-12 font-bold text-ellipsis text-black">
+    <Title level={2} variant="headline">
         {$t("pages.admin.comm.banners.title")}
-    </h2>
+    </Title>
     <p class="text-content text-base font-normal">
         {$t("pages.admin.comm.banners.description")}
     </p>

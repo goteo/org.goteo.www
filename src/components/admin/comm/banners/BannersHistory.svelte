@@ -5,6 +5,7 @@
     import { formatDate } from "../../../../utils/dates";
     import HomeBanner from "../../../home/HomeBanner.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
+    import Title from "../../../library/typography/Title.svelte";
     import DataTable from "../../DataTable.svelte";
 
     import type { BannerRecord } from "../../../../repositories/banner";
@@ -50,9 +51,9 @@
 </script>
 
 <div class="flex flex-col gap-4">
-    <h3 class="text-2xl leading-8 font-bold text-black">
+    <Title level={3} variant="subsection">
         {$t("pages.admin.comm.banners.history.title")}
-    </h3>
+    </Title>
     <p class="text-content">{$t("pages.admin.comm.banners.history.description")}</p>
 </div>
 
@@ -105,11 +106,11 @@
     {#snippet header()}
         {#if selectedRow}
             <div class="flex flex-col justify-start gap-4">
-                <h2 class="text-xl font-bold text-black">
+                <Title level={2} variant="subsection">
                     {$t("pages.admin.comm.banners.history.modal.title", {
                         date: formatDate(selectedRow.dateCreated, $locale),
                     })}
-                </h2>
+                </Title>
                 <p class="text-content text-base font-normal">
                     {$t("pages.admin.comm.banners.history.modal.description")}
                 </p>

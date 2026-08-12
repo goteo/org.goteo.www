@@ -2,11 +2,12 @@
     import { actions } from "astro:actions";
 
     import { locale, t } from "../../../../i18n/store";
+    import { formatDate } from "../../../../utils/dates";
     import ActionableButton from "../../../library/buttons/ActionableButton.svelte";
     import DateInput from "../../../library/inputs/DateInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
     import TextInput from "../../../library/inputs/TextInput.svelte";
-    import { formatDate } from "../../../../utils/dates";
+    import Title from "../../../library/typography/Title.svelte";
 
     interface Props {
         onSubmit?: (event: SubmitEvent) => void;
@@ -52,9 +53,9 @@
 
 <form bind:this={formElement} onsubmit={handleSubmit} class="max-w-167 space-y-10">
     <div class="flex flex-col gap-6">
-        <h3 class="text-2xl leading-8 font-bold text-black">
+        <Title level={3} variant="subsection">
             {$t("pages.admin.comm.banners.fields.dataTitle")}
-        </h3>
+        </Title>
 
         <div class="space-y-4">
             <TextInput
@@ -93,9 +94,9 @@
     </div>
 
     <div class="space-y-6">
-        <h3 class="text-2xl leading-8 font-bold text-black">
+        <Title level={3} variant="subsection">
             {$t("pages.admin.comm.banners.fields.scheduleTitle")}
-        </h3>
+        </Title>
 
         <div class="flex gap-6">
             <DateInput
