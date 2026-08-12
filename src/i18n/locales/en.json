@@ -18,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "The text cannot be empty",
+        "expectedUrl": "Not a URL"
+      },
+      "date": {
+        "greaterThan": "The date must be greater than {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Maximum allowed size 10MB",
         "supportedTypes": "Supported files: .png, .jpg"
@@ -1634,6 +1641,11 @@
         "banners": {
           "title": "Announcements",
           "description": "Here you can create and manage the platform banners",
+          "errors": {
+            "forbidden": "You do not have permission to manage ads",
+            "invalidUrl": "The ad URL is invalid",
+            "invalidDateRange": "The end date cannot be earlier than the start date"
+          },
           "tabs": {
             "fields": "New",
             "history": "History"
@@ -1641,7 +1653,7 @@
           "fields": {
             "dataTitle": "Announcement details",
             "titlePlaceholder": "Announcement title",
-            "descriptionPlaceholder": "Brief announcement description",
+            "contentPlaceholder": "Brief description of the ad",
             "ctaPlaceholder": "Call to action",
             "urlPlaceholder": "URL",
             "scheduleTitle": "Schedule the announcement",
