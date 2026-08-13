@@ -51,14 +51,11 @@
         </div>
     </div>
 </article>
-<div class="flex items-center gap-2">
-    <Checkbox
-        bind:checked={isAnonymous}
-        id={`anonymous-toggle-${index}`}
-        label={$t("pages.checkout.verify.approved.formReview.anonymous")}
-        class="gap-2"
-    />
-</div>
+<Checkbox
+    bind:checked={isAnonymous}
+    label={$t("pages.checkout.verify.approved.formReview.anonymous")}
+    class="gap-2"
+/>
 <CommentModal
     bind:open
     bind:isAnonymous
