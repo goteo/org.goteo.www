@@ -1,7 +1,12 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../layouts/App.svelte";
-import { apiAccountingsIdGet, apiGatewayCheckoutsIdGet } from "../../../openapi/client/index.ts";
+import {
+    apiAccountingsIdGet,
+    apiGatewayCheckoutsIdGet,
+    apiProjectSupportsGetCollection,
+    apiProjectsIdOrSlugGet,
+} from "../../../openapi/client/index.ts";
 import FeedbackForm from "../../../components/checkout/FeedbackForm.svelte";
 import Summary from "../../../components/checkout/Summary.svelte";
 import PaymentMethod from "../../../components/checkout/PaymentMethod.astro";
@@ -10,7 +15,7 @@ import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
 import { sumMoney } from "../../../utils/money";
 import { goto } from "../../../utils/navigation";
-import type { Money } from "../../../openapi/client";
+import type { Money, Project, ProjectSupport } from "../../../openapi/client";
 
 const { t, lang, session } = Astro.locals;
 
@@ -32,6 +37,8 @@ const { data: accounting } = await apiAccountingsIdGet({
 let error = null;
 let total: Money | undefined = undefined;
 let selectedGateway: string | undefined = undefined;
+let projects: Project[] = [];
+let projectSupports: ProjectSupport[] = [];
 
 try {
     const url = new URL(Astro.request.url);
@@ -61,6 +68,57 @@ try {
     total = response.data?.charges?.length
         ? sumMoney(response.data.charges.filter((c) => c.money).map((c) => c.money! as Money))
         : undefined;
+
+    const targetAccountingUrls = [
+        ...new Set(response.data.charges.map((charge) => charge.target).filter(Boolean)),
+    ] as string[];
+
+    const authHeaders = {
+        Authorization: `${token.token_type} ${token.access_token}`,
+    };
+
+    const donatedProjects = (
+        await Promise.all(
+            targetAccountingUrls.map(async (accountingUrl) => {
+                try {
+                    const accountingId = extractId(accountingUrl);
+                    if (!accountingId) return null;
+
+                    const { data: targetAccounting } = await apiAccountingsIdGet({
+                        path: { id: accountingId },
+                        headers: authHeaders,
+                    });
+
+                    if (!targetAccounting?.owner?.includes("/v4/projects/")) return null;
+
+                    const projectId = extractId(targetAccounting.owner);
+                    if (!projectId) return null;
+
+                    const { data: project } = await apiProjectsIdOrSlugGet({
+                        path: { idOrSlug: projectId },
+                        headers: authHeaders,
+                    });
+
+                    return project;
+                } catch (err) {
+                    console.error("Error fetching project from charge target", err);
+                    return null;
+                }
+            }),
+        )
+    ).filter((project): project is Project => Boolean(project));
+
+    projects = donatedProjects;
+
+    const { data: supports } = await apiProjectSupportsGetCollection({
+        query: { origin: user.accounting },
+        headers: authHeaders,
+    });
+
+    projectSupports =
+        supports?.filter((support) =>
+            projects.some((project) => support.project === `/v4/projects/${project.id}`),
+        ) ?? [];
 } catch (err) {
     console.error("Error trying to get payment status", err);
     error = err instanceof Error ? err.message : "Unknown error";
@@ -157,6 +215,9 @@ const postPaymentUrl = checkoutId
                                                 <FeedbackForm
                                                     client:load
                                                     paymentMethod={selectedGateway}
+                                                    {projects}
+                                                    {projectSupports}
+                                                    token={token.access_token}
                                                 />
                                             </div>
                                         </div>

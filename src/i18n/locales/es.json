@@ -464,13 +464,20 @@
           "formGoal": {
             "title": "Si la campaña no logra su objetivo",
             "options": {
-              "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+              "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos.",
               "2": "Devolverlo a mi medio de pago"
             }
           },
           "formReview": {
             "title": "Deja un mensaje en los proyectos a los que has apoyado",
-            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. "
+            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato.",
+            "crowdfundingProject": "Proyecto de crowdfunding:",
+            "donated": "Has donado",
+            "commentBtn": {
+              "leaveComment": "Dejar un comentario",
+              "editComment": "Editar comentario"
+            },
+            "anonymous": "Quiero que mi comentario sea anónimo"
           }
         },
         "error": {
