@@ -65,7 +65,7 @@
                 </p>
             </div>
 
-            <div class="flex flex-col gap-7 mb-10">
+            <div class="mb-10 flex flex-col gap-7">
                 {#each feedbackItems() as { project, support }, index}
                     <div class="flex flex-col gap-3">
                         <h1 class="text-lg font-bold text-black">

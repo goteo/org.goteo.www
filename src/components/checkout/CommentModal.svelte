@@ -70,8 +70,7 @@
             class="border-secondary text-content h-30 w-full resize-none rounded-lg border bg-white p-4 text-base/6 font-normal"
             id="comment"
             bind:value={message}
-            placeholder={$t("payment.page-approved.form-review.comment-modal.label")}
-        ></textarea>
+            placeholder={$t("payment.page-approved.form-review.comment-modal.label")}></textarea>
     </div>
     <Button onclick={handleSubmit} type={"submit"} class="w-full self-center md:w-fit md:self-end"
         >{$t("payment.page-approved.form-review.comment-modal.btn")}</Button
