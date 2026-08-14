@@ -1,6 +1,10 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
-    import type { Project, ProjectSupport } from "../../openapi/client";
+    import {
+        apiProjectSupportsIdPatch,
+        type Project,
+        type ProjectSupport,
+    } from "../../openapi/client";
     import AnnotationIcon from "../icons/status/AnnotationIcon.svelte";
     import EditIcon from "../icons/actions/Edit.svelte";
     import { formatCurrency } from "../../utils/currencies";
@@ -10,13 +14,26 @@
 
     interface Props {
         project: Project;
-        support: ProjectSupport | undefined;
+        support: ProjectSupport;
         onUpdate?: (support: ProjectSupport) => void;
     }
 
     let { project, support, onUpdate }: Props = $props();
     let open = $state(false);
     let isAnonymous = $state(false);
+
+    $effect(() => {
+        apiProjectSupportsIdPatch({
+            baseUrl: "/api/relay",
+            path: { id: String(support.id!) },
+            headers: {
+                "Content-Type": "application/merge-patch+json",
+            },
+            body: {
+                anonymous: isAnonymous,
+            },
+        });
+    });
 </script>
 
 <article class="border-grey w-full items-center rounded-4xl border bg-white p-6 shadow/10">
@@ -34,7 +51,7 @@
                     >{$t("pages.checkout.verify.approved.formReview.donated")}</span
                 >
                 <h3 class="text-secondary text-2xl/8 font-bold">
-                    {formatCurrency(support?.money?.amount)}
+                    {formatCurrency(support.money)}
                 </h3>
             </div>
             <Button onclick={() => (open = true)} size={"md"} kind={"secondary"}>

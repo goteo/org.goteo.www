@@ -4,6 +4,8 @@
     import RadioButton from "../library/inputs/RadioButton.svelte";
     import CommentCard from "./CommentCard.svelte";
     import Title from "../library/typography/Title.svelte";
+    import { client } from "../../openapi/client/client.gen";
+    import { apiProjectsIdOrSlugGetUrl } from "../../openapi/client/paths.gen";
 
     interface Props {
         paymentMethod?: string;
@@ -15,12 +17,14 @@
 
     let type = $state<"organization" | "individual">("organization");
 
-    let supports = $derived(projectSupports);
-
     let feedbackItems = $derived(() =>
         projects.map((project) => {
-            const iri = `/v4/projects/${project.id}`;
-            const support = supports?.find((ps) => ps.project === iri);
+            const iri = client.buildUrl({
+                url: apiProjectsIdOrSlugGetUrl,
+                path: { idOrSlug: project.id },
+            });
+
+            const support = projectSupports.find((ps) => ps.project === iri)!;
 
             return { project, support };
         }),
@@ -79,7 +83,7 @@
                             {project}
                             {support}
                             onUpdate={(updatedSupport) => {
-                                supports = supports.map((s) =>
+                                projectSupports = projectSupports.map((s) =>
                                     s.id === updatedSupport.id ? updatedSupport : s,
                                 );
                             }}
