@@ -131,10 +131,10 @@
         "tipjars": "Botes de propina",
         "tipjarId": "ID del bote de propina"
       },
-      "lastContributions": "Últimos aportes:",
+      "lastContributions": "Últimos cobros:",
       "totalizers": {
         "selected": "Proyectos seleccionados:",
-        "totalCharges": "Total aportes:",
+        "totalCharges": "Total cobros:",
         "totalTips": "Total propinas:",
         "totalFees": "Comisiones totales:"
       }
@@ -1282,8 +1282,8 @@
         }
       },
       "charges": {
-        "title": "Aportes",
-        "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
+        "title": "Cobros",
+        "description": "Aquí tienes los últimos cobros, puedes ordenarlos y filtrarlos como quieras.",
         "headers": {
           "target": "Destino",
           "amount": "Importe",
@@ -1440,10 +1440,10 @@
         },
         "lastEdited": "Última modificación: {{date}} {{time}}",
         "annotations": "{{annotations}} Anotaciones",
-        "lastContributions": "Últimos aportes:",
+        "lastContributions": "Últimos cobros:",
         "totalizers": {
-          "selected": "Aportes seleccionados:",
-          "totalCharges": "Total aportes:",
+          "selected": "Cobros seleccionados:",
+          "totalCharges": "Total cobros:",
           "totalTips": "Total propinas:",
           "totalFees": "Comisiones totales:"
         },
@@ -1500,7 +1500,7 @@
             "unexpected": "Ha ocurrido un error inesperado. Revisa la consola para más detalles."
           },
           "success": {
-            "title": "Aporte creado correctamente",
+            "title": "Cobro creado correctamente",
             "description": "El usuario {{email}} ya puede iniciar sesión y se ha creado el cargo por {{amount}}."
           }
         }
