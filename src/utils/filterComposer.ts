@@ -5,6 +5,7 @@ import { currencySymbols } from "./currencyData";
 import {
     suggestGateways,
     suggestTarget,
+    suggestOrigin,
     suggestOwner,
     suggestCategories,
     suggestProjects,
@@ -188,6 +189,14 @@ const filterSubjects: Record<string, FilterSubject> = {
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
         suggest: suggestTarget,
+        allowsMultipleEquals: true,
+    },
+    origin: {
+        key: "origin",
+        type: "string",
+        compatibleOperators: ["equals", "is_any_of"],
+        resources: ["gateway_charges"],
+        suggest: suggestOrigin,
         allowsMultipleEquals: true,
     },
     currency: {

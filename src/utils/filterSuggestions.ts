@@ -55,6 +55,10 @@ export async function suggestTarget(q: string): Promise<FilterOption[]> {
     return options;
 }
 
+export async function suggestOrigin(q: string): Promise<FilterOption[]> {
+    return suggestTarget(q);
+}
+
 export async function suggestOwner(q: string): Promise<FilterOption[]> {
     const trimmed = q.trim();
     if (trimmed.length < 2) return [];
