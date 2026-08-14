@@ -10,16 +10,17 @@
     import ArrowSliderIcon from "../icons/navigation/ArrowSliderIcon.svelte";
 
     import type { Project, Accounting } from "../../openapi/client/index";
+    import Title from "../library/typography/Title.svelte";
 
     let {
         lang = $bindable(),
         project = $bindable(),
         accounting,
-    } = $props<{
+    }: {
         lang: string;
         project: Project;
         accounting: Accounting;
-    }>();
+    } = $props();
 
     let activeTab = $state("project");
     let tabsContainer: HTMLDivElement;
@@ -27,7 +28,7 @@
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "project", label: $t("pages.project.view.tabs.project") },
+        { id: "project", label: $t("pages.project.view.tabs.project.title") },
         { id: "rewards", label: $t("pages.project.view.tabs.rewards") },
         { id: "budget", label: $t("pages.project.view.tabs.budget.title") },
         { id: "updates", label: $t("pages.project.view.tabs.updates.title") },
@@ -131,7 +132,25 @@
                     class="marked-content flex w-full max-w-4xl flex-col gap-6 overflow-hidden"
                     style="overflow-wrap: break-word; word-wrap: break-word; word-break: break-word;"
                 >
-                    {#await renderMarkdown(project.description) then content}
+                    {#await renderMarkdown(project.descBrief!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descAbout")}
+                    </Title>
+                    {#await renderMarkdown(project.descAbout!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descGoal")}
+                    </Title>
+                    {#await renderMarkdown(project.descGoal!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descTeam")}
+                    </Title>
+                    {#await renderMarkdown(project.descTeam!) then content}
                         {@html content}
                     {/await}
                 </div>
