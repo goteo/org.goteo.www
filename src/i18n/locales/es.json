@@ -57,6 +57,21 @@
         "placeholder": "Buscar..."
       }
     },
+    "users": {
+      "type": {
+        "individual": "Persona física",
+        "organization": "Persona jurídica (empresas)"
+      },
+      "attributes": {
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxId": "DNI*",
+        "legalName": "Razón social",
+        "orgTaxId": "CIF*"
+      }
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
@@ -1110,10 +1125,6 @@
         "loginBtnLabel": "Entra con tu cuenta"
       },
       "form": {
-        "userType": {
-          "individual": "Persona física",
-          "organization": "Persona jurídica (empresas)"
-        },
         "btnSubmit": "Registrarse",
         "termsCheckbox": "Acepto las condiciones legales",
         "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
@@ -1124,25 +1135,14 @@
         }
       },
       "individual": {
-        "firstName": "Nombre",
-        "lastName": "Apellidos",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
         "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
         "taxId": {
-          "label": "DNI*",
           "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
         }
       },
       "organization": {
-        "legalName": "Razón social",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
-        "taxId": "CIF*",
         "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-        "representativeTitle": "Datos del representante de la empresa.",
-        "firstName": "Nombre",
-        "lastName": "Apellidos"
+        "representativeTitle": "Datos del representante de la empresa."
       },
       "error": {
         "incompletePersonFields": "Por favor, completa todos los campos obligatorios para persona física.",
@@ -1449,6 +1449,63 @@
           "totalCharges": "Total aportes:",
           "totalTips": "Total propinas:",
           "totalFees": "Comisiones totales:"
+        },
+        "create": {
+          "trigger": "Crear cargo manual",
+          "title": "Crear cargo manual",
+          "steps": {
+            "user": {
+              "title": "Cuenta del donante",
+              "description": "Busca un usuario existente por email o, si no existe, crea uno nuevo."
+            },
+            "charge": {
+              "title": "Datos del cargo",
+              "description": "Define a qué proyecto se destina el cargo, el importe y el método."
+            },
+            "fiscal": {
+              "title": "Datos fiscales",
+              "description": "Revisa los datos fiscales del donante. El NIF/CIF no se puede modificar."
+            }
+          },
+          "fields": {
+            "userTypeLabel": "Tipo:",
+            "emailSearchPlaceholder": "Buscar por email...",
+            "userSearchError": "Error al buscar usuarios.",
+            "userNoAccounting": "Este usuario no tiene una accounting asociada y no puede recibir cargos.",
+            "userSearchResults": "Resultados:",
+            "noUserFound": "No se han encontrado usuarios con ese email.",
+            "createNewUserInstead": "Crear uno nuevo en su lugar",
+            "createUserWithEmail": "Crear usuario nuevo",
+            "selectedUserLabel": "Usuario seleccionado",
+            "newUserLabel": "Nuevo usuario",
+            "generatePassword": "Generar",
+            "taxIdHint": "El NIF/CIF no se puede modificar desde aquí.",
+            "target": "Proyecto / Tipjar de destino",
+            "targetSearchPlaceholder": "Buscar proyecto o tipjar...",
+            "gatewayPlaceholder": "Selecciona un método",
+            "currency": "Moneda",
+            "amountHelper": "Introduce el importe con su moneda (ej. 10,50)",
+            "chargeTitle": "Concepto del cargo",
+            "chargeDescription": "Descripción interna (opcional)"
+          },
+          "fiscal": {
+            "loadError": "No se pudieron cargar los datos fiscales. Puedes rellenarlos manualmente."
+          },
+          "actions": {
+            "next": "Siguiente",
+            "submit": "Crear cargo",
+            "submitting": "Creando cargo...",
+            "changeUser": "Cambiar"
+          },
+          "errors": {
+            "userExists": "Ya existe un usuario con ese email.",
+            "unauthorized": "No tienes permisos para crear este cargo.",
+            "unexpected": "Ha ocurrido un error inesperado. Revisa la consola para más detalles."
+          },
+          "success": {
+            "title": "Aporte creado correctamente",
+            "description": "El usuario {{email}} ya puede iniciar sesión y se ha creado el cargo por {{amount}}."
+          }
         }
       },
       "projects": {

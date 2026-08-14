@@ -15,7 +15,7 @@ const { t } = Astro.locals;
                         class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
                     <span class="text-gray-700">
-                        {t("pages.register.form.userType.individual")}</span
+                        {t("domain.users.type.individual")}</span
                     >
                 </label>
 
@@ -27,7 +27,7 @@ const { t } = Astro.locals;
                         class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
                     <span class="text-gray-700"
-                        >{t("pages.register.form.userType.organization")}</span
+                        >{t("domain.users.type.organization")}</span
                     >
                 </label>
             </fieldset>
@@ -47,7 +47,7 @@ const { t } = Astro.locals;
                         for="firstname"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("pages.register.individual.firstName")}
+                        {t("domain.users.attributes.firstName")}
                     </label>
                 </div>
 
@@ -65,7 +65,7 @@ const { t } = Astro.locals;
                         for="lastname"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("pages.register.individual.lastName")}
+                        {t("domain.users.attributes.lastName")}
                     </label>
                 </div>
             </div>
@@ -83,7 +83,7 @@ const { t } = Astro.locals;
                     for="identifier"
                     class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
-                    {t("pages.register.individual.email")}:
+                    {t("domain.users.attributes.email")}:
                 </label>
             </div>
 
@@ -101,7 +101,7 @@ const { t } = Astro.locals;
                     for="password"
                     class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                 >
-                    {t("pages.register.individual.password")}
+                    {t("domain.users.attributes.password")}
                 </label>
             </div>
 
@@ -136,7 +136,7 @@ const { t } = Astro.locals;
                         for="dni"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("pages.register.individual.taxId.label")}
+                        {t("domain.users.attributes.taxId")}
                     </label>
                 </div>
             </div>
@@ -156,7 +156,7 @@ const { t } = Astro.locals;
                         for="razonSocial"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("pages.register.organization.legalName")}
+                        {t("domain.users.attributes.legalName")}
                     </label>
                 </div>
 
@@ -174,7 +174,7 @@ const { t } = Astro.locals;
                         for="cif"
                         class="absolute top-1 left-4 text-[0.625rem] font-medium text-gray-500 transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-focus:top-1 peer-focus:text-[0.625rem] peer-focus:text-gray-500"
                     >
-                        {t("pages.register.organization.taxId")}
+                        {t("domain.users.attributes.orgTaxId")}
                     </label>
                 </div>
             </div>
