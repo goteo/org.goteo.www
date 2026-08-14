@@ -479,6 +479,10 @@
               "leaveComment": "Dejar un comentario",
               "editComment": "Editar comentario"
             },
+            "commentModal": {
+              "title": "Deja un comentario",
+              "label": "Escribe aquí tu comentario"
+            },
             "anonymous": "Quiero que mi comentario sea anónimo"
           }
         },
