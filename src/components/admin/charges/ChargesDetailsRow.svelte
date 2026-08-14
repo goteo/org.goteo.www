@@ -15,6 +15,7 @@
     import Copy from "../../icons/actions/Copy.svelte";
 
     import type { ExtendedCharge } from "./ChargesTable.svelte";
+    import { chargeStatusStyles } from "./ChargesTable.svelte";
     import type { Link, Tracking } from "../../../openapi/client/index.ts";
 
     let { charge }: { charge: ExtendedCharge } = $props();
@@ -54,6 +55,9 @@
     const dataTimeUpdated = $derived(getDate(charge.dateUpdated));
     const trackingCodes = $derived(charge.trackingCodes ?? []);
     const platformLinks = $derived(charge.platformLinks ?? []);
+    const statusBadgeClasses = $derived(
+        chargeStatusStyles[charge.status ?? ""] ?? chargeStatusStyles.default,
+    );
 
     const fields: DetailsField[] = $derived([
         {
@@ -111,6 +115,14 @@
         <div
             class="text-content grid grid-cols-1 gap-x-10 gap-y-8 text-base leading-5 sm:grid-cols-2 xl:grid-cols-4"
         >
+            <div class="flex min-w-0 flex-col gap-2">
+                <p class="font-bold">{$t("pages.admin.charges.details.status")}</p>
+                <span
+                    class="rounded-full px-3 py-1 text-xs font-medium w-fit {statusBadgeClasses}"
+                >
+                    {$t(`domain.charges.status.${charge.status}`)}
+                </span>
+            </div>
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.operationTime")}</p>
                 <span title={dataTimeCreated.fulltime}>{dataTimeCreated.time}</span>

@@ -1295,6 +1295,7 @@
         "noData": "No hay datos disponibles",
         "details": {
           "operationTime": "Hora de la operación",
+          "status": "Estado",
           "trackingCodes": {
             "title": "Códigos de seguimiento",
             "headers": {

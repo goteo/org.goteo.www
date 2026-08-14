@@ -65,6 +65,17 @@
         { key: "pages.admin.charges.headers.status", sortable: true, sortKey: "status" },
         { key: "", class: "w-12" },
     ];
+
+    export const chargeStatusStyles: Record<string, string> = {
+        to_charge: "bg-gray-100 text-gray-700",
+        in_charge: "bg-green-100 text-green-800",
+        funding_paid: "bg-green-100 text-green-800",
+        to_refund: "bg-yellow-100 text-yellow-800",
+        to_wallet: "bg-yellow-100 text-yellow-800",
+        refunded: "bg-blue-100 text-blue-800",
+        walleted: "bg-blue-100 text-blue-800",
+        default: "bg-gray-100 text-gray-700",
+    };
 </script>
 
 <script lang="ts">
@@ -210,8 +221,12 @@
             </p>
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            <div class="flex justify-center">
-                <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium">
+            <div class="flex justify-start">
+                <span
+                    class="rounded-full px-3 py-1 text-xs font-medium {chargeStatusStyles[
+                        charge.status ?? ''
+                    ] ?? chargeStatusStyles.default}"
+                >
                     {$t(`domain.charges.status.${charge.status}`)}
                 </span>
             </div>
