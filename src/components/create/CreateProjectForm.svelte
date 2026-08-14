@@ -9,7 +9,6 @@
         type ProjectProjectCreationDto,
     } from "../../openapi/client";
     import { client } from "../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../openapi/client/paths.gen";
     import {
         validateCreateForm,
         validateField,
@@ -36,6 +35,7 @@
     import DateInput from "../library/inputs/DateInput.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Title from "../library/typography/Title.svelte";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/paths.gen";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 
@@ -120,7 +120,7 @@
 
     function handleCategoryChange(selected: Category[]) {
         const categoryIris = selected.map((s) => {
-            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
+            return client.buildUrl({ url: apiCategoriesIdOrSlugGetUrl, path: { idOrSlug: s.id } });
         });
 
         handleFieldChange("categories", categoryIris);

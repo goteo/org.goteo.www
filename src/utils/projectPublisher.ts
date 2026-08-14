@@ -10,7 +10,7 @@ import {
     updateCollaboration,
     updateReward,
 } from "./projectSubmissionApi";
-import { isRichTextEmpty, richTextToHtml } from "./richText";
+import { isRichTextEmpty, richTextToHtml, richTextToMarkdown } from "./richText";
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
@@ -145,16 +145,6 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
         },
     };
 
-    const description = [
-        wizard.campaignInfo.objectives,
-        wizard.campaignInfo.legacy,
-        wizard.campaignInfo.targetAudience,
-        wizard.campaignInfo.team,
-    ]
-        .filter((doc) => !isRichTextEmpty(doc))
-        .map(richTextToHtml)
-        .join("\n\n");
-
     const firstImage = wizard.campaignInfo.images[0];
 
     const result = await patchProject(
@@ -164,7 +154,10 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
             subtitle: draft.createProject.subtitle,
             categories: draft.createProject.categories,
             video: wizard.campaignInfo.video,
-            description,
+            descBrief: richTextToMarkdown(wizard.campaignInfo.brief),
+            descAbout: richTextToMarkdown(wizard.campaignInfo.about),
+            descGoal: richTextToMarkdown(wizard.campaignInfo.goal),
+            descTeam: richTextToMarkdown(wizard.campaignInfo.team),
             deadline: wizard.configuration.projectDeadline,
             territory: draft.createProject.territory,
             cover: firstImage?.url ?? "",
