@@ -14,6 +14,8 @@ const SAFE_RESPONSE_HEADERS = [
     "vary",
 ];
 
+const UNSAFE_REQUEST_HEADERS = ["host", "content-length", "connection", "transfer-encoding"];
+
 /**
  * API Relay Endpoint
  *
@@ -36,7 +38,9 @@ export const ALL: APIRoute = async ({ request, cookies, params }) => {
         const url = `${import.meta.env.PUBLIC_API_URL}/${params.path}${query}`;
 
         const reqHeaders = new Headers(request.headers);
-        reqHeaders.delete("host");
+        for (const header of UNSAFE_REQUEST_HEADERS) {
+            reqHeaders.delete(header);
+        }
 
         const session = await getSession(cookies);
         if (session && session.token.asHttpHeaders) {
