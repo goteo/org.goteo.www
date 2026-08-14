@@ -9,14 +9,13 @@
         paymentMethod?: string;
         projects: Project[];
         projectSupports: ProjectSupport[];
-        token: string;
     }
 
-    let { paymentMethod = undefined, projects, projectSupports, token }: Props = $props();
+    let { paymentMethod = undefined, projects, projectSupports }: Props = $props();
 
     let type = $state<"organization" | "individual">("organization");
 
-    let supports = $state<ProjectSupport[]>(projectSupports);
+    let supports = $derived(projectSupports);
 
     let feedbackItems = $derived(() =>
         projects.map((project) => {
@@ -79,8 +78,6 @@
                         <CommentCard
                             {project}
                             {support}
-                            {index}
-                            {token}
                             onUpdate={(updatedSupport) => {
                                 supports = supports.map((s) =>
                                     s.id === updatedSupport.id ? updatedSupport : s,

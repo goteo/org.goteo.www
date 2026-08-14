@@ -14,8 +14,8 @@ import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/cards/Card.svelte";
 import { extractId } from "../../../utils/extractId.ts";
 import { sumMoney } from "../../../utils/money";
-import { goto } from "../../../utils/navigation";
 import type { Money, Project, ProjectSupport } from "../../../openapi/client";
+import { goto } from "../../../utils/navigation";
 
 const { t, lang, session } = Astro.locals;
 
@@ -29,9 +29,7 @@ const { token, user } = session;
 
 const { data: accounting } = await apiAccountingsIdGet({
     path: { id: extractId(user.accounting)! },
-    headers: {
-        Authorization: `${token.token_type} ${token.access_token}`,
-    },
+    headers: token.asHttpHeaders,
 });
 
 let error = null;
@@ -50,9 +48,7 @@ try {
 
     const response = await apiGatewayCheckoutsIdGet({
         path: { id: checkoutId },
-        headers: {
-            Authorization: `${token.token_type} ${token.access_token}`,
-        },
+        headers: token.asHttpHeaders,
     });
 
     if (!response.data) {
@@ -73,10 +69,6 @@ try {
         ...new Set(response.data.charges.map((charge) => charge.target).filter(Boolean)),
     ] as string[];
 
-    const authHeaders = {
-        Authorization: `${token.token_type} ${token.access_token}`,
-    };
-
     const donatedProjects = (
         await Promise.all(
             targetAccountingUrls.map(async (accountingUrl) => {
@@ -86,7 +78,7 @@ try {
 
                     const { data: targetAccounting } = await apiAccountingsIdGet({
                         path: { id: accountingId },
-                        headers: authHeaders,
+                        headers: token.asHttpHeaders,
                     });
 
                     if (!targetAccounting?.owner?.includes("/v4/projects/")) return null;
@@ -96,7 +88,7 @@ try {
 
                     const { data: project } = await apiProjectsIdOrSlugGet({
                         path: { idOrSlug: projectId },
-                        headers: authHeaders,
+                        headers: token.asHttpHeaders,
                     });
 
                     return project;
@@ -112,7 +104,7 @@ try {
 
     const { data: supports } = await apiProjectSupportsGetCollection({
         query: { origin: user.accounting },
-        headers: authHeaders,
+        headers: token.asHttpHeaders,
     });
 
     projectSupports =
@@ -217,7 +209,6 @@ const postPaymentUrl = checkoutId
                                                     paymentMethod={selectedGateway}
                                                     {projects}
                                                     {projectSupports}
-                                                    token={token.access_token}
                                                 />
                                             </div>
                                         </div>

@@ -11,12 +11,10 @@
     interface Props {
         project: Project;
         support: ProjectSupport | undefined;
-        index: number;
-        token: string;
         onUpdate?: (support: ProjectSupport) => void;
     }
 
-    let { project, support, index, token, onUpdate }: Props = $props();
+    let { project, support, onUpdate }: Props = $props();
     let open = $state(false);
     let isAnonymous = $state(false);
 </script>
@@ -60,7 +58,6 @@
     bind:open
     bind:isAnonymous
     {support}
-    {token}
     onSubmit={(message, anonymous) => {
         onUpdate?.({
             ...support,

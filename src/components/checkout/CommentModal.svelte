@@ -8,16 +8,16 @@
         open: boolean;
         isAnonymous: boolean;
         support: ProjectSupport | undefined;
-        token: string;
         onSubmit?: (message: string, anonymous: boolean) => void;
     }
+
     let {
         open = $bindable(false),
         isAnonymous = $bindable(false),
         support,
-        token,
         onSubmit,
     }: Props = $props();
+
     let message = $state("");
 
     async function handleSubmit() {
@@ -28,9 +28,9 @@
 
         try {
             await apiProjectSupportsIdPatch({
+                baseUrl: "/api/relay",
                 path: { id: projectSupportPath },
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     "Content-Type": "application/merge-patch+json",
                 },
                 body: {
