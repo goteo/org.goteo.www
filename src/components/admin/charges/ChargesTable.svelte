@@ -7,7 +7,6 @@
         originDisplayName?: string;
         checkoutOrigin?: string;
         paymentMethod?: string;
-        refundToWallet?: string;
         platformLinks?: Link[];
         trackingCodes?: Tracking[];
         concept?: string;
@@ -64,7 +63,6 @@
         { key: "pages.admin.charges.headers.paymentMethod" },
         { key: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
         { key: "pages.admin.charges.headers.chargeStatus", sortable: true, sortKey: "status" },
-        { key: "pages.admin.charges.headers.refundToWallet" },
         { key: "", class: "w-12" },
     ];
 </script>
@@ -208,9 +206,6 @@
                     {$t(`domain.charges.status.${charge.status}`)}
                 </span>
             </div>
-        </TableBodyCell>
-        <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {charge.refundToWallet}
         </TableBodyCell>
         <TableBodyCell
             class="border-variant1 text-content rounded-r-md border-t border-r border-b p-4 text-sm"

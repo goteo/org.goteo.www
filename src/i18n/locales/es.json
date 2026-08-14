@@ -1290,8 +1290,7 @@
           "origin": "Origen",
           "paymentMethod": "Método",
           "date": "Fecha",
-          "chargeStatus": "Estado de la operación",
-          "refundToWallet": "A Monedero"
+          "chargeStatus": "Estado de la operación"
         },
         "noData": "No hay datos disponibles",
         "details": {
@@ -1303,7 +1302,6 @@
               "trackingCode": "Código de seguimiento"
             }
           },
-          "toWallet": "A monedero",
           "platformLinks": {
             "title": "Enlace a la plataforma",
             "headers": {
@@ -1316,7 +1314,6 @@
           "concept": "Concepto"
         },
         "actions": {
-          "refundToWallet": "Devolución a monedero",
           "refundToUser": "Devolución a usuario",
           "changeUser": "Cambiar de usuario",
           "manageReward": "Gestionar recompensa"

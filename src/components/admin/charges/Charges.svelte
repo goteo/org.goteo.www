@@ -360,9 +360,6 @@
                     ...charge,
                     checkoutOrigin: checkout?.origin ?? "—",
                     paymentMethod: checkout?.gateway,
-                    refundToWallet: checkout?.refund
-                        ? $t(`domain.charges.refund.${checkout.refund}`)
-                        : "—",
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
                 };

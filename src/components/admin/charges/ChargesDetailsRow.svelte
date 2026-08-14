@@ -64,10 +64,6 @@
             value: trackingCodes[0]?.value ?? "—",
         },
         {
-            label: $t("pages.admin.charges.details.toWallet"),
-            value: charge.refundToWallet ?? "—",
-        },
-        {
             label: $t("pages.admin.charges.details.platformLinks.title"),
             value: platformLinks[0]?.url ?? "—",
         },
@@ -193,11 +189,6 @@
                     </Table>
                 </Modal>
             </div>
-            <div class="flex min-w-0 flex-col gap-2">
-                <p class="font-bold">{$t("pages.admin.charges.details.toWallet")}</p>
-                <p>{charge.refundToWallet ?? "—"}</p>
-            </div>
-            <div class="hidden xl:block"></div>
 
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.platformLinks.title")}</p>
