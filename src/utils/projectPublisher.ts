@@ -10,7 +10,7 @@ import {
     updateCollaboration,
     updateReward,
 } from "./projectSubmissionApi";
-import { isRichTextEmpty, richTextToHtml, richTextToMarkdown } from "./richText";
+import { richTextToMarkdown } from "./richText";
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";

@@ -19,6 +19,7 @@
     import { locale, t } from "../../../i18n/store";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import {
         currentDraft,
         navigateToStep,
@@ -30,7 +31,6 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
-    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
 
     interface ConfigurationStepProps {
         project?: Project;

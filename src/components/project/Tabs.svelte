@@ -8,9 +8,9 @@
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ArrowSliderIcon from "../icons/navigation/ArrowSliderIcon.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Project, Accounting } from "../../openapi/client/index";
-    import Title from "../library/typography/Title.svelte";
 
     let {
         lang = $bindable(),
