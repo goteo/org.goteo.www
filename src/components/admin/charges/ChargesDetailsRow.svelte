@@ -194,21 +194,25 @@
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.platformLinks.title")}</p>
 
-                <button
-                    class="text-secondary flex cursor-pointer items-start truncate whitespace-nowrap underline"
-                    title={platformLinks
-                        .map((pl: Link) => pl.url ?? "")
-                        .filter(Boolean)
-                        .join(", ")}
-                    onclick={openLinksModal}
-                >
-                    <span class="truncate">
-                        {platformLinks.find((pl: Link) => pl.rel === "payment")?.url ??
-                            platformLinks[0]?.url ??
-                            "—"}
-                    </span>
-                    <span> ({platformLinks.length})</span>
-                </button>
+                {#if platformLinks.length > 0}
+                    <button
+                        class="text-secondary flex cursor-pointer items-start truncate whitespace-nowrap underline"
+                        title={platformLinks
+                            .map((pl: Link) => pl.url ?? "")
+                            .filter(Boolean)
+                            .join(", ")}
+                        onclick={openLinksModal}
+                    >
+                        <span class="truncate">
+                            {platformLinks.find((pl: Link) => pl.rel === "payment")?.url ??
+                                platformLinks[0]?.url ??
+                                "—"}
+                        </span>
+                        <span> ({platformLinks.length})</span>
+                    </button>
+                {:else}
+                    <p class="truncate">—</p>
+                {/if}
 
                 <Modal
                     bind:open={linksModal}
