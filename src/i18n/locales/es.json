@@ -794,7 +794,12 @@
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
         "tabs": {
-          "project": "Información de campaña",
+          "project": {
+            "title": "Información de campaña",
+            "descAbout": "Descripción del proyecto. Características, fortalezas y diferencias.",
+            "descGoal": "Motivación y a quién va dirigido el proyecto.",
+            "descTeam": "Experiencia previa y equipo."
+          },
           "rewards": "Recompensas",
           "budget": {
             "title": "Presupuesto",

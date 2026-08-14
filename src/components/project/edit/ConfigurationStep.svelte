@@ -19,7 +19,7 @@
     import { locale, t } from "../../../i18n/store";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
     import {
         currentDraft,
         navigateToStep,
@@ -103,7 +103,7 @@
      */
     function handleCategoryChange(selected: Category[]) {
         const categoryIris = selected.map((s) => {
-            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
+            return client.buildUrl({ url: apiCategoriesIdOrSlugGetUrl, path: { idOrSlug: s.id } });
         });
 
         updateProject({ categories: categoryIris });
