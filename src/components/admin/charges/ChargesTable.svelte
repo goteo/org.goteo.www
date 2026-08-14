@@ -124,11 +124,12 @@
         const day = String(d.getDate()).padStart(2, "0");
         const hour = String(d.getHours()).padStart(2, "0");
         const minute = String(d.getMinutes()).padStart(2, "0");
+        const second = String(d.getSeconds()).padStart(2, "0");
 
         return {
             date: `${year}-${month}-${day}`,
-            time: `${hour}:${minute}h`,
-            fulltime: `${year}-${month}-${day} ${hour}:${minute}`,
+            time: `${hour}:${minute}:${second}h`,
+            fulltime: `${year}-${month}-${day} ${hour}:${minute}:${second}`,
         };
     }
 
