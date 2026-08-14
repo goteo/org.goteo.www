@@ -1214,7 +1214,7 @@
             "subtitle": "Subtítulo",
             "description": "Descripción",
             "projectStatus": "Estado de proyecto",
-            "chargeStatus": "Estado de aporte",
+            "status": "Estado",
             "categories": "Categoría",
             "owner": "Propietario",
             "slug": "ID",
@@ -1290,7 +1290,7 @@
           "origin": "Origen",
           "paymentGateway": "Pasarela de pago",
           "date": "Fecha",
-          "chargeStatus": "Estado de la operación"
+          "status": "Estado"
         },
         "noData": "No hay datos disponibles",
         "details": {
@@ -1336,7 +1336,7 @@
               "subtitle": "Subtítulo",
               "description": "Descripción",
               "projectStatus": "Estado de proyecto",
-              "chargeStatus": "Estado de aporte",
+              "status": "Estado",
               "categories": "Categoría",
               "owner": "Propietario",
               "slug": "ID",
@@ -1420,8 +1420,8 @@
               "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
             }
           },
-          "chargeStatus": {
-            "title": "Estado de Aporte",
+          "status": {
+            "title": "Estado",
             "options": {
               "all": "Todos",
               "to_charge": "Por cobrar",

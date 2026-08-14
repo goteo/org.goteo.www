@@ -62,7 +62,7 @@
         { key: "pages.admin.charges.headers.origin" },
         { key: "pages.admin.charges.headers.paymentGateway" },
         { key: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
-        { key: "pages.admin.charges.headers.chargeStatus", sortable: true, sortKey: "status" },
+        { key: "pages.admin.charges.headers.status", sortable: true, sortKey: "status" },
         { key: "", class: "w-12" },
     ];
 </script>
