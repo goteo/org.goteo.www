@@ -84,6 +84,7 @@
         itemsPerPage = ADMIN_ITEMS_PER_PAGE_OPTIONS[0],
         isLoading = false,
         selectedSort = $bindable<ChargeSortKey>("date-desc"),
+        paymentGatewayById = new Map<string, string>(),
         onPageChange,
         onItemsPerPageChange,
         onSortChange,
@@ -94,6 +95,7 @@
         itemsPerPage: number;
         isLoading: boolean;
         selectedSort: ChargeSortKey;
+        paymentGatewayById?: Map<string, string>;
         onPageChange?: (page: number) => void;
         onItemsPerPageChange?: (perPage: number) => void;
         onSortChange?: (sort: ChargeSortKey) => void;
@@ -131,6 +133,12 @@
             time: `${hour}:${minute}:${second}h`,
             fulltime: `${year}-${month}-${day} ${hour}:${minute}:${second}`,
         };
+    }
+
+    function resolvePaymentGatewayLabel(raw: string | null | undefined): string {
+        if (!raw) return "—";
+        const id = raw.includes("/") ? (raw.split("/").filter(Boolean)[2] ?? raw) : raw;
+        return paymentGatewayById.get(id) ?? raw;
     }
 
     function handleHeaderSort(field: string): void {
@@ -190,7 +198,7 @@
             {charge.originDisplayName}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
-            {charge.paymentMethod}
+            {resolvePaymentGatewayLabel(charge.paymentGateway)}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b">
             {getDate(charge.dateCreated).date}

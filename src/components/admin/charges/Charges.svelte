@@ -71,7 +71,7 @@
 
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
-    let paymentMethodOptions = $state<[string, string][]>([]);
+    let paymentGatewayById = $state<Map<string, string>>(new Map());
 
     let createOpen = $state(false);
     let createSubmitting = $state(false);
@@ -385,7 +385,6 @@
             charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
             charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
             charge.concept = hasConcept && charge.title ? charge.title : "";
-            charge.paymentMethod = extractId(charge.paymentMethod) || charge.paymentMethod;
         }
     }
 
@@ -447,10 +446,11 @@
     onMount(async () => {
         const { data: paymentGateways } = await apiGatewaysGetCollection();
 
-        paymentMethodOptions = [
-            ["all", $t("pages.admin.charges.filters.paymentMethod.options.all")],
-            ...(paymentGateways ?? []).map((g): [string, string] => [g.id!, g.name ?? ""]),
-        ];
+        const map = new Map<string, string>();
+        for (const g of paymentGateways ?? []) {
+            if (g.id) map.set(String(g.id), g.name ?? "");
+        }
+        paymentGatewayById = map;
 
         loadTotalTips();
     });
@@ -501,6 +501,7 @@
         selectedSort={table.selectedSort}
         totalItems={table.totalItems}
         isLoading={table.isLoading}
+        {paymentGatewayById}
         onPageChange={table.handlePageChange}
         onItemsPerPageChange={table.handleItemsPerPageChange}
         onSortChange={table.handleSortChange}
