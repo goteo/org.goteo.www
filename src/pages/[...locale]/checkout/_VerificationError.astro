@@ -1,24 +1,7 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import App from "../../../layouts/App.svelte";
-import {
-    apiAccountingsIdGet,
-    apiGatewayCheckoutsIdGet,
-    apiProjectSupportsGetCollection,
-    apiProjectsGetCollection,
-    apiProjectsIdOrSlugGet,
-} from "../../../openapi/client/index.ts";
-import FeedbackForm from "../../../components/checkout/FeedbackForm.svelte";
 import Summary from "../../../components/checkout/Summary.svelte";
 import PaymentMethod from "../../../components/checkout/PaymentMethod.astro";
-import { apiGatewaysGetCollection } from "../../../openapi/client/index";
 import Card from "../../../components/library/cards/Card.svelte";
-import { extractId } from "../../../utils/extractId.ts";
-import { sumMoney } from "../../../utils/money";
-import type { Money, Project, ProjectSupport } from "../../../openapi/client";
-import { goto } from "../../../utils/navigation";
-import { client } from "../../../openapi/client/client.gen";
-import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
 
 const { t } = Astro.locals;
 

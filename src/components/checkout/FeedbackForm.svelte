@@ -1,11 +1,11 @@
 <script lang="ts">
+    import CommentCard from "./CommentCard.svelte";
     import { t } from "../../i18n/store";
     import { type Project, type ProjectSupport } from "../../openapi/client";
-    import RadioButton from "../library/inputs/RadioButton.svelte";
-    import CommentCard from "./CommentCard.svelte";
-    import Title from "../library/typography/Title.svelte";
     import { client } from "../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../openapi/client/paths.gen";
+    import RadioButton from "../library/inputs/RadioButton.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         paymentMethod?: string;

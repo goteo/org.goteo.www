@@ -1,16 +1,16 @@
 <script lang="ts">
+    import CommentModal from "./CommentModal.svelte";
     import { t } from "../../i18n/store";
     import {
         apiProjectSupportsIdPatch,
         type Project,
         type ProjectSupport,
     } from "../../openapi/client";
-    import AnnotationIcon from "../icons/status/AnnotationIcon.svelte";
-    import EditIcon from "../icons/actions/Edit.svelte";
     import { formatCurrency } from "../../utils/currencies";
+    import EditIcon from "../icons/actions/Edit.svelte";
+    import AnnotationIcon from "../icons/status/AnnotationIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Checkbox from "../library/inputs/Checkbox.svelte";
-    import CommentModal from "./CommentModal.svelte";
 
     interface Props {
         project: Project;
@@ -54,7 +54,7 @@
                     {formatCurrency(support.money)}
                 </h3>
             </div>
-            <Button onclick={() => (open = true)} size={"md"} kind={"secondary"}>
+            <Button onclick={() => (open = true)} size="md" kind="secondary">
                 {#if support?.message}
                     <EditIcon class="size-3.75" />
                     {$t("pages.checkout.verify.approved.formReview.commentBtn.editComment")}

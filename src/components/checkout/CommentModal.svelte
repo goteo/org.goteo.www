@@ -1,8 +1,9 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
+
     import { t } from "../../i18n/store";
-    import Button from "../library/buttons/Button.svelte";
     import { apiProjectSupportsIdPatch, type ProjectSupport } from "../../openapi/client";
+    import Button from "../library/buttons/Button.svelte";
     import TextArea from "../library/inputs/TextArea.svelte";
 
     interface Props {
