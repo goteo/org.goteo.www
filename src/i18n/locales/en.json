@@ -794,7 +794,12 @@
       "view": {
         "owner": "Crowdfunding campaign by {{ owner }}",
         "tabs": {
-          "project": "Campaign information",
+          "project": {
+            "title": "Campaign information",
+            "descAbout": "Project description. Features, strengths, and differentiators.",
+            "descGoal": "Motivation and who the project is aimed at.",
+            "descTeam": "Previous experience and team."
+          },
           "rewards": "Rewards",
           "budget": {
             "title": "Budget",
