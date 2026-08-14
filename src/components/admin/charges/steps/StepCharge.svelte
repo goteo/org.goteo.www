@@ -281,7 +281,7 @@
     </div>
 
     <Select
-        labelText={$t("pages.admin.charges.headers.paymentMethod")}
+        labelText={$t("pages.admin.charges.headers.paymentGateway")}
         required={true}
         disabled={gatewaysLoading}
         value={""}

@@ -1288,7 +1288,7 @@
           "target": "Destino",
           "amount": "Importe",
           "origin": "Origen",
-          "paymentMethod": "Método",
+          "paymentGateway": "Pasarela de pago",
           "date": "Fecha",
           "chargeStatus": "Estado de la operación"
         },
@@ -1479,7 +1479,7 @@
             "taxIdHint": "El NIF/CIF no se puede modificar desde aquí.",
             "target": "Proyecto / Tipjar de destino",
             "targetSearchPlaceholder": "Buscar proyecto o tipjar...",
-            "gatewayPlaceholder": "Selecciona un método",
+            "gatewayPlaceholder": "Selecciona una pasarela de pago",
             "currency": "Moneda",
             "amountHelper": "Introduce el importe con su moneda (ej. 10,50)",
             "chargeTitle": "Concepto del cargo",

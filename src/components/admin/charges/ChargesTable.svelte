@@ -6,7 +6,7 @@
         targetDisplayName?: string;
         originDisplayName?: string;
         checkoutOrigin?: string;
-        paymentMethod?: string;
+        paymentGateway?: string;
         platformLinks?: Link[];
         trackingCodes?: Tracking[];
         concept?: string;
@@ -60,7 +60,7 @@
         { key: "pages.admin.charges.headers.target" },
         { key: "pages.admin.charges.headers.amount", sortable: true, sortKey: "amount" },
         { key: "pages.admin.charges.headers.origin" },
-        { key: "pages.admin.charges.headers.paymentMethod" },
+        { key: "pages.admin.charges.headers.paymentGateway" },
         { key: "pages.admin.charges.headers.date", sortable: true, sortKey: "date" },
         { key: "pages.admin.charges.headers.chargeStatus", sortable: true, sortKey: "status" },
         { key: "", class: "w-12" },

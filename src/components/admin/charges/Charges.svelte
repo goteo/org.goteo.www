@@ -359,7 +359,7 @@
                 return {
                     ...charge,
                     checkoutOrigin: checkout?.origin ?? "—",
-                    paymentMethod: checkout?.gateway,
+                    paymentGateway: checkout?.gateway,
                     platformLinks: checkout?.links ?? [],
                     trackingCodes: checkout?.trackings ?? [],
                 };
