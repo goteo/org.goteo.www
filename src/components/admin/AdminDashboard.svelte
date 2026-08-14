@@ -5,6 +5,7 @@
     import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
     import Slider from "./Slider.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
 
@@ -46,6 +47,7 @@
         filterTags,
         csv,
         slider,
+        actions,
         children,
     }: {
         title: string;
@@ -54,18 +56,26 @@
         filterTags: FilterTagsConfig;
         csv: CsvConfig;
         slider: SliderConfig;
+        actions?: Snippet;
         children?: Snippet;
     } = $props();
 </script>
 
 <div class="wrapper">
     <div class="flex w-full flex-col gap-10 py-10">
-        <header class="flex flex-col gap-4">
-            <h2 class="text-[2.5rem]/12 font-bold tracking-[0%] text-black">
-                {title}
-            </h2>
-            {#if description}
-                <p class="text-content">{description}</p>
+        <header class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
+            <div class="flex flex-col gap-4">
+                <Title level={2} variant="headline" weight="bold" color="default">
+                    {title}
+                </Title>
+                {#if description}
+                    <p class="text-content">{description}</p>
+                {/if}
+            </div>
+            {#if actions}
+                <div class="flex shrink-0 items-center gap-2">
+                    {@render actions()}
+                </div>
             {/if}
         </header>
 
