@@ -248,7 +248,11 @@ export type Category = {
     /**
      * This value will identify this Category in relationships with other resources.
      */
-    id: string;
+    id?: string;
+    /**
+     * A unique, non white space, string identifier for this Category.
+     */
+    readonly slug?: string;
     /**
      * A human-readable self-descriptive string of what this Category is about.
      */
@@ -278,7 +282,11 @@ export type CategoryJsonld = {
     /**
      * This value will identify this Category in relationships with other resources.
      */
-    id: string;
+    id?: string;
+    /**
+     * A unique, non white space, string identifier for this Category.
+     */
+    readonly slug?: string;
     /**
      * A human-readable self-descriptive string of what this Category is about.
      */
@@ -1530,9 +1538,21 @@ export type Project = {
      */
     territory: Territory;
     /**
-     * Free-form rich text description for the Project.
+     * Rich-text (markdown) introduction to the project.
      */
-    description: string;
+    descBrief?: string;
+    /**
+     * Rich-text (markdown) description on the main features of the project.
+     */
+    descAbout?: string;
+    /**
+     * Rich-text (markdown) about why this project is important.
+     */
+    descGoal?: string;
+    /**
+     * Rich-text (markdown) about team and previous experience.
+     */
+    descTeam?: string;
     /**
      * Extracted embedding data from the Project's video.
      */
@@ -1639,9 +1659,21 @@ export type ProjectProjectUpdationDto = {
      */
     territory?: Territory;
     /**
-     * Free-form rich text description for the Project.
+     * Rich-text (markdown allowed) introduction to the project.
      */
-    description?: string;
+    descBrief?: string;
+    /**
+     * Rich-text (markdown allowed) description on the main features of the project.
+     */
+    descAbout?: string;
+    /**
+     * Rich-text (markdown allowed) about why this project is important.
+     */
+    descGoal?: string;
+    /**
+     * Rich-text (markdown allowed) about team and previous experience.
+     */
+    descTeam?: string;
     /**
      * On `minimum`, Project will campaign until the minimum deadline.\
      * On `optimum`, Project will campaing until the minimum deadline,
@@ -1713,9 +1745,21 @@ export type ProjectJsonld = {
      */
     territory: TerritoryJsonld;
     /**
-     * Free-form rich text description for the Project.
+     * Rich-text (markdown) introduction to the project.
      */
-    description: string;
+    descBrief?: string;
+    /**
+     * Rich-text (markdown) description on the main features of the project.
+     */
+    descAbout?: string;
+    /**
+     * Rich-text (markdown) about why this project is important.
+     */
+    descGoal?: string;
+    /**
+     * Rich-text (markdown) about team and previous experience.
+     */
+    descTeam?: string;
     /**
      * Extracted embedding data from the Project's video.
      */
@@ -2487,6 +2531,9 @@ export type User = {
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    /**
+     * The User's given email address. Only available to themselves and platform administrators.
+     */
     email: string;
     /**
      * Has this User confirmed their email address?
@@ -2507,7 +2554,8 @@ export type User = {
     readonly displayName?: string;
     /**
      * For `individual` User types: personal data about the User themselves.\
-     * For `organization` User types: data for the organization representative or person managing the User.
+     * For `organization` User types: data for the organization representative or person managing the User.\
+     * Only available to themselves and platform administrators.
      */
     readonly person?: string;
     /**
@@ -2597,6 +2645,9 @@ export type UserJsonld = {
      * A unique, non white space, byte-safe string identifier for this User.
      */
     handle: string;
+    /**
+     * The User's given email address. Only available to themselves and platform administrators.
+     */
     email: string;
     /**
      * Has this User confirmed their email address?
@@ -2617,7 +2668,8 @@ export type UserJsonld = {
     readonly displayName?: string;
     /**
      * For `individual` User types: personal data about the User themselves.\
-     * For `organization` User types: data for the organization representative or person managing the User.
+     * For `organization` User types: data for the organization representative or person managing the User.\
+     * Only available to themselves and platform administrators.
      */
     readonly person?: string;
     /**
@@ -2950,6 +3002,9 @@ export type ApiCategoriesGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        slug?: string;
+        'slug[]'?: Array<string>;
+        name?: string;
     };
     url: '/v4/categories';
 };
@@ -2999,6 +3054,36 @@ export type ApiCategoriesPostResponses = {
 
 export type ApiCategoriesPostResponse = ApiCategoriesPostResponses[keyof ApiCategoriesPostResponses];
 
+export type ApiCategoriesIdOrSlugGetData = {
+    body?: never;
+    path: {
+        /**
+         * Category identifier or slug
+         */
+        idOrSlug: string;
+    };
+    query?: never;
+    url: '/v4/categories/{idOrSlug}';
+};
+
+export type ApiCategoriesIdOrSlugGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiCategoriesIdOrSlugGetError = ApiCategoriesIdOrSlugGetErrors[keyof ApiCategoriesIdOrSlugGetErrors];
+
+export type ApiCategoriesIdOrSlugGetResponses = {
+    /**
+     * Category resource
+     */
+    200: Category;
+};
+
+export type ApiCategoriesIdOrSlugGetResponse = ApiCategoriesIdOrSlugGetResponses[keyof ApiCategoriesIdOrSlugGetResponses];
+
 export type ApiCategoriesIdDeleteData = {
     body?: never;
     path: {
@@ -3032,36 +3117,6 @@ export type ApiCategoriesIdDeleteResponses = {
 };
 
 export type ApiCategoriesIdDeleteResponse = ApiCategoriesIdDeleteResponses[keyof ApiCategoriesIdDeleteResponses];
-
-export type ApiCategoriesIdGetData = {
-    body?: never;
-    path: {
-        /**
-         * Category identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/categories/{id}';
-};
-
-export type ApiCategoriesIdGetErrors = {
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-};
-
-export type ApiCategoriesIdGetError = ApiCategoriesIdGetErrors[keyof ApiCategoriesIdGetErrors];
-
-export type ApiCategoriesIdGetResponses = {
-    /**
-     * Category resource
-     */
-    200: Category;
-};
-
-export type ApiCategoriesIdGetResponse = ApiCategoriesIdGetResponses[keyof ApiCategoriesIdGetResponses];
 
 export type ApiCategoriesIdPatchData = {
     /**
@@ -3177,10 +3232,14 @@ export type ApiGatewayChargesGetCollectionData = {
         itemsPerPage?: number;
         'checkout.gateway'?: string;
         'checkout.gateway[]'?: Array<string>;
+        'checkout.origin'?: string;
+        'checkout.origin[]'?: Array<string>;
         'checkout.trackings.value'?: string;
         'checkout.trackings.value[]'?: Array<string>;
         type?: string;
         'type[]'?: Array<string>;
+        title?: string;
+        'title[]'?: Array<string>;
         target?: string;
         'target[]'?: Array<string>;
         'money.currency'?: string;
@@ -3223,10 +3282,14 @@ export type ApiGatewayChargestotalsGetCollectionData = {
     query?: {
         'checkout.gateway'?: string;
         'checkout.gateway[]'?: Array<string>;
+        'checkout.origin'?: string;
+        'checkout.origin[]'?: Array<string>;
         'checkout.trackings.value'?: string;
         'checkout.trackings.value[]'?: Array<string>;
         type?: string;
         'type[]'?: Array<string>;
+        title?: string;
+        'title[]'?: Array<string>;
         target?: string;
         'target[]'?: Array<string>;
         'money.currency'?: string;
@@ -3346,6 +3409,14 @@ export type ApiGatewayCheckoutsGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        gateway?: string;
+        'gateway[]'?: Array<string>;
+        origin?: string;
+        'origin[]'?: Array<string>;
+        status?: string;
+        'status[]'?: Array<string>;
+        'trackings.value'?: string;
+        'trackings.value[]'?: Array<string>;
     };
     url: '/v4/gateway_checkouts';
 };
@@ -4268,7 +4339,7 @@ export type ApiProjectsGetCollectionData = {
         'territory.subLvl1[]'?: Array<string>;
         'territory.subLvl2'?: string;
         'territory.subLvl2[]'?: Array<string>;
-        description?: string;
+        descBrief?: string;
         status?: string;
         'status[]'?: Array<string>;
         'calendar.release[before]'?: string;
@@ -5554,6 +5625,10 @@ export type ApiUsersGetCollectionData = {
          * The number of items per page
          */
         itemsPerPage?: number;
+        /**
+         * Searches on `email`, `person.firstName`, `person.lastName`, `organization.legalName`, `organization.businessName`
+         */
+        q?: string;
         handle?: string;
         'order[handle]'?: 'asc' | 'desc';
         'order[dateCreated]'?: 'asc' | 'desc';
@@ -5571,6 +5646,22 @@ export type ApiUsersGetCollectionData = {
         'territory.subLvl2[]'?: Array<string>;
         roles?: string;
         'roles[]'?: Array<string>;
+        /**
+         * Secured by `is_granted("ROLE_ADMIN")`
+         */
+        'person.taxId'?: string;
+        /**
+         * Secured by `is_granted("ROLE_ADMIN")`
+         */
+        'person.taxId[]'?: Array<string>;
+        /**
+         * Secured by `is_granted("ROLE_ADMIN")`
+         */
+        'organization.taxId'?: string;
+        /**
+         * Secured by `is_granted("ROLE_ADMIN")`
+         */
+        'organization.taxId[]'?: Array<string>;
         active?: boolean;
         'dateCreated[before]'?: string;
         'dateCreated[strictly_before]'?: string;
@@ -5599,12 +5690,7 @@ export type ApiUsersPostData = {
      */
     body: UserUserSignupDto;
     path?: never;
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
+    query?: never;
     url: '/v4/users';
 };
 
@@ -5638,12 +5724,7 @@ export type ApiUsersIdOrHandleGetData = {
          */
         idOrHandle: string;
     };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
+    query?: never;
     url: '/v4/users/{idOrHandle}';
 };
 
@@ -5673,12 +5754,7 @@ export type ApiUsersIdDeleteData = {
          */
         id: string;
     };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
+    query?: never;
     url: '/v4/users/{id}';
 };
 
@@ -5711,12 +5787,7 @@ export type ApiUsersIdPatchData = {
          */
         id: string;
     };
-    query?: {
-        /**
-         * Only available to admin users
-         */
-        email?: string;
-    };
+    query?: never;
     url: '/v4/users/{id}';
 };
 
