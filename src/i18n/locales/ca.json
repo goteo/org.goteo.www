@@ -174,6 +174,7 @@
     "delete": "Esborrar",
     "continue": "Continua",
     "back": "Tornar",
+    "learnMore": "Saber més",
     "cancel": "Cancel·lar",
     "publish": "Publica",
     "preview": "Previsualitzar",
@@ -458,19 +459,31 @@
         "remainingBalance": "Saldo que et quedarà"
       },
       "verify": {
+        "title": "Estat del pagament",
         "approved": {
           "title": "El teu mitjà de pagament s'ha processat amb un èxit aclaparador",
           "description": "Bé! Estàs a un pas d'acabar i de fer el món una mica millor.",
           "formGoal": {
             "title": "Si la campanya no assoleix el seu objectiu",
             "options": {
-              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes. Saber-ne més",
+              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes.",
               "2": "Retornar-ho al meu mitjà de pagament"
             }
           },
           "formReview": {
             "title": "Deixa un missatge als projectes que has donat suport",
-            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat. "
+            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat.",
+            "crowdfundingProject": "Projecte de micromecenatge:",
+            "donated": "Has donat",
+            "commentBtn": {
+              "leaveComment": "Deixar un comentari",
+              "editComment": "Editar el comentari"
+            },
+            "commentModal": {
+              "title": "Deixa un comentari",
+              "label": "Escriu aquí el teu comentari"
+            },
+            "anonymous": "Vull que el meu comentari sigui anònim"
           }
         },
         "error": {
@@ -872,12 +885,10 @@
         },
         "banner": {
           "donator": {
-            "description": "Goteo pertany a la Fundació Platoniq. En col·laborar en una campanya, els teus diners seran custodiats per Platoniq i donats a {{owner}} en cas d'arribar als objectius d'èxit marcats.",
-            "learnMore": "Saber-ne més."
+            "description": "Goteo pertany a la Fundació Platoniq. En col·laborar en una campanya, els teus diners seran custodiats per Platoniq i donats a {{owner}} en cas d'arribar als objectius d'èxit marcats."
           },
           "certificate": {
-            "description": "En col·laborar amb un projecte impulsat a Goteo pots sol·licitar un certificat de donació. Així, et dedueixes fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda.",
-            "learnMore": "Saber-ne més."
+            "description": "En col·laborar amb un projecte impulsat a Goteo pots sol·licitar un certificat de donació. Així, et dedueixes fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda."
           }
         },
         "langNotAvailable": "L'idioma seleccionat \"{{lang}}\" no està disponible per a aquest projecte. Es mostra contingut en l'idioma disponible.",
