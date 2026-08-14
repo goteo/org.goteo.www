@@ -2,6 +2,8 @@
     import { onMount } from "svelte";
 
     import ChargesTable, { type ChargeSortKey, type ExtendedCharge } from "./ChargesTable.svelte";
+    import CreateChargeModal from "./CreateChargeModal.svelte";
+    import Button from "../../library/buttons/Button.svelte";
     import Dashboard from "../AdminDashboard.svelte";
     import { session } from "../../../auth/store";
     import { t } from "../../../i18n/store";
@@ -70,6 +72,9 @@
     let filters: ApiGatewayChargesGetCollectionData["query"] = $state(initialParams.filters);
 
     let paymentMethodOptions = $state<[string, string][]>([]);
+
+    let createOpen = $state(false);
+    let createSubmitting = $state(false);
 
     let charges = $state<ExtendedCharge[]>([]);
     let accountingsMap = $state<Map<string, Accounting>>(new Map());
@@ -482,6 +487,16 @@
         isLoading: table.isLoading,
     }}
 >
+    {#snippet actions()}
+        <Button
+            kind="primary"
+            size="md"
+            onclick={() => (createOpen = true)}
+            disabled={createSubmitting}
+        >
+            {$t("pages.admin.charges.create.trigger")}
+        </Button>
+    {/snippet}
     <ChargesTable
         {charges}
         currentPage={table.currentPage}
@@ -494,3 +509,9 @@
         onSortChange={table.handleSortChange}
     />
 </Dashboard>
+
+<CreateChargeModal
+    bind:open={createOpen}
+    bind:submitting={createSubmitting}
+    onCreated={reloadCharges}
+/>
