@@ -1,6 +1,4 @@
 <script lang="ts">
-    import type { Snippet } from "svelte";
-
     import ExportCsv from "./ExportCsv.svelte";
     import Filters from "./Filters.svelte";
     import FiltersTags from "./FiltersTags.svelte";
@@ -8,6 +6,7 @@
     import Title from "../library/typography/Title.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
+    import type { Snippet } from "svelte";
 
     interface FiltersConfig {
         resource: FilterResource;

@@ -1,6 +1,6 @@
 <script lang="ts" module>
-    import type { DataTableHeader, SortOption } from "../../library/tables/DataTable.svelte";
     import type { GatewayCharge, GatewayLink, Tracking } from "../../../openapi/client/index.ts";
+    import type { DataTableHeader, SortOption } from "../../library/tables/DataTable.svelte";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
@@ -81,11 +81,11 @@
     import { TableBodyCell } from "flowbite-svelte";
 
     import ChargesDetailsRow from "./ChargesDetailsRow.svelte";
-    import DataTable from "../../library/tables/DataTable.svelte";
     import { t } from "../../../i18n/store";
     import { ADMIN_ITEMS_PER_PAGE_OPTIONS } from "../../../utils/adminTable";
     import { formatCurrency } from "../../../utils/currencies";
     import Chevron from "../../icons/navigation/Chevron.svelte";
+    import DataTable from "../../library/tables/DataTable.svelte";
 
     let {
         charges = [],

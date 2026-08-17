@@ -1,6 +1,6 @@
 <script lang="ts">
-    import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
     import { t } from "../../../i18n/store";
+    import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
 
     import type { UserRow } from "./UsersTable.svelte";
 

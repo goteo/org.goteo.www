@@ -1,8 +1,10 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
 
+    import StepCharge from "./steps/StepCharge.svelte";
+    import StepFiscal from "./steps/StepFiscal.svelte";
+    import StepUser from "./steps/StepUser.svelte";
     import { t } from "../../../i18n/store";
-    import Title from "../../library/typography/Title.svelte";
     import {
         apiGatewayCheckoutsPost,
         apiUsersPost,
@@ -10,18 +12,14 @@
         apiUsersIdpersonPatch,
         apiUsersIdorganizationPatch,
     } from "../../../openapi/client";
-    import Button from "../../library/buttons/Button.svelte";
-
-    import StepUser from "./steps/StepUser.svelte";
-    import StepCharge from "./steps/StepCharge.svelte";
-    import StepFiscal from "./steps/StepFiscal.svelte";
-
     import {
         initialFormState,
         initialFiscal,
         type CreateChargeForm,
         type DonorType,
     } from "../../../types/admin-charge";
+    import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     type StepKey = "user" | "charge" | "fiscal";
 

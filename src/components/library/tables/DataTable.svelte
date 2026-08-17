@@ -25,15 +25,16 @@
         TableHead,
         TableHeadCell,
     } from "flowbite-svelte";
-    import type { Snippet } from "svelte";
 
-    import Pagination from "../paginations/Pagination.svelte";
-    import Loader from "../feedback/Loader.svelte";
     import { t } from "../../../i18n/store";
+    import Loader from "../feedback/Loader.svelte";
+    import Pagination from "../paginations/Pagination.svelte";
+
+    import type { AdminItemsPerPage } from "../../../utils/adminTable";
     import type { ChargeSortKey } from "../../admin/charges/ChargesTable.svelte";
     import type { ProjectSortKey } from "../../admin/projects/ProjectsTable.svelte";
     import type { UserSortKey } from "../../admin/users/UsersTable.svelte";
-    import type { AdminItemsPerPage } from "../../../utils/adminTable";
+    import type { Snippet } from "svelte";
 
     export type SupportedSortKeys = ChargeSortKey | ProjectSortKey | UserSortKey;
 

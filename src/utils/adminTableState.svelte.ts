@@ -1,10 +1,10 @@
-import { getCookie, setCookie } from "./cookies";
 import {
     ADMIN_ITEMS_PER_PAGE_COOKIE,
     DEFAULT_ITEMS_PER_PAGE,
     isValidItemsPerPage,
     type AdminItemsPerPage,
 } from "./adminTable";
+import { getCookie, setCookie } from "./cookies";
 
 function getInitialItemsPerPage(): AdminItemsPerPage {
     if (typeof document === "undefined") return DEFAULT_ITEMS_PER_PAGE;

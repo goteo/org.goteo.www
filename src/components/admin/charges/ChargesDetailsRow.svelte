@@ -9,16 +9,16 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
-    import Tooltip from "../Tooltip.svelte";
     import { t } from "../../../i18n/store.ts";
     import Copy from "../../icons/actions/Copy.svelte";
-
-    import type { ExtendedCharge } from "./ChargesTable.svelte";
+    import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
+    import Tooltip from "../Tooltip.svelte";
     import { chargeStatusStyles } from "./ChargesTable.svelte";
-    import type { Link, Tracking } from "../../../openapi/client/index.ts";
     import { formatCurrency } from "../../../utils/currencies.ts";
     import { extractId } from "../../../utils/extractId.ts";
+
+    import type { ExtendedCharge } from "./ChargesTable.svelte";
+    import type { Link, Tracking } from "../../../openapi/client/index.ts";
 
     let { charge }: { charge: ExtendedCharge } = $props();
 

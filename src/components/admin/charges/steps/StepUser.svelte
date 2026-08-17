@@ -2,14 +2,14 @@
     import { t } from "../../../../i18n/store";
     import { apiUsersGetCollection, type User } from "../../../../openapi/client";
     import { highlightMatch } from "../../../../utils/highlights";
-    import TextInput from "../../../library/inputs/TextInput.svelte";
+    import CloseIcon from "../../../icons/navigation/Close.svelte";
+    import Spinner from "../../../icons/status/Spinner.svelte";
+    import Button from "../../../library/buttons/Button.svelte";
     import PasswordInput from "../../../library/inputs/PasswordInput.svelte";
     import RadioButton from "../../../library/inputs/RadioButton.svelte";
-    import Button from "../../../library/buttons/Button.svelte";
-    import Spinner from "../../../icons/status/Spinner.svelte";
-    import CloseIcon from "../../../icons/navigation/Close.svelte";
+    import TextInput from "../../../library/inputs/TextInput.svelte";
 
-    import type { CreateChargeForm, DonorType, ExistingUser } from "../../../../types/admin-charge";
+    import type { CreateChargeForm, DonorType } from "../../../../types/admin-charge";
 
     let { form = $bindable() }: { form: CreateChargeForm } = $props();
 

@@ -5,8 +5,8 @@
     import { formatDate } from "../../../../utils/dates";
     import HomeBanner from "../../../home/HomeBanner.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
-    import Title from "../../../library/typography/Title.svelte";
     import DataTable from "../../../library/tables/DataTable.svelte";
+    import Title from "../../../library/typography/Title.svelte";
 
     import type { BannerRecord } from "../../../../repositories/banner";
     import type { DataTableHeader } from "../../../library/tables/DataTable.svelte";

@@ -58,11 +58,11 @@
 <script lang="ts">
     import { TableBodyCell } from "flowbite-svelte";
 
-    import DataTable from "../../library/tables/DataTable.svelte";
     import ProjectsDetailsRow from "./ProjectsDetailsRow.svelte";
     import { t } from "../../../i18n/store";
     import { ADMIN_ITEMS_PER_PAGE_OPTIONS } from "../../../utils/adminTable";
     import Chevron from "../../icons/navigation/Chevron.svelte";
+    import DataTable from "../../library/tables/DataTable.svelte";
 
     let {
         projects = [],

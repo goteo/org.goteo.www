@@ -1,6 +1,5 @@
 <script lang="ts">
     import UsersTable, { type UserRow, type UserSortKey } from "./UsersTable.svelte";
-    import Dashboard from "../AdminDashboard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiUsersGetCollection, type User } from "../../../openapi/client/index.ts";
@@ -12,6 +11,7 @@
         splitOrderParams,
         syncQueryFiltersToUrl,
     } from "../../../utils/queryParams";
+    import Dashboard from "../AdminDashboard.svelte";
 
     import type { ApiUsersGetCollectionData } from "../../../openapi/client/types.gen";
 

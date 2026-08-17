@@ -6,21 +6,20 @@
         apiTipjarsGetCollection,
         type Gateway,
     } from "../../../../openapi/client";
-    import { apiGatewaysIdGetUrl } from "../../../../openapi/client/paths.gen";
     import { client } from "../../../../openapi/client/client.gen";
-    import SearchCategoryLabel from "../../SearchCategoryLabel.svelte";
-    import CloseIcon from "../../../icons/navigation/Close.svelte";
-    import SearchIcon from "../../../icons/actions/Search.svelte";
-    import Spinner from "../../../icons/status/Spinner.svelte";
+    import { apiGatewaysIdGetUrl } from "../../../../openapi/client/paths.gen";
+    import { defaultCurrency, formatCurrency, parseCurrency } from "../../../../utils/currencies";
     import { highlightMatch } from "../../../../utils/highlights";
     import { toCollectionItems } from "../../../../utils/hydra";
-
+    import SearchIcon from "../../../icons/actions/Search.svelte";
+    import CloseIcon from "../../../icons/navigation/Close.svelte";
+    import Spinner from "../../../icons/status/Spinner.svelte";
     import Select from "../../../library/inputs/Select.svelte";
-    import TextInput from "../../../library/inputs/TextInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
+    import TextInput from "../../../library/inputs/TextInput.svelte";
+    import SearchCategoryLabel from "../../SearchCategoryLabel.svelte";
 
     import type { CreateChargeForm } from "../../../../types/admin-charge";
-    import { defaultCurrency, formatCurrency, parseCurrency } from "../../../../utils/currencies";
 
     let { form = $bindable() }: { form: CreateChargeForm } = $props();
 
@@ -280,7 +279,7 @@
         labelText={$t("pages.admin.charges.headers.paymentGateway")}
         required={true}
         disabled={gatewaysLoading}
-        value={""}
+        value=""
         onChange={onGatewayChange}
     >
         <option value="" disabled selected={!form.charge.gatewayIri}>

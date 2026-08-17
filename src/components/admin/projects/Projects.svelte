@@ -2,7 +2,6 @@
     import ProjectsModalAnnotations from "./ProjectsModalAnnotations.svelte";
     import ProjectsModalPaid from "./ProjectsModalPaid.svelte";
     import ProjectsTable, { type ProjectRow, type ProjectSortKey } from "./ProjectsTable.svelte";
-    import Dashboard from "../AdminDashboard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import {
@@ -24,6 +23,7 @@
         splitOrderParams,
         syncQueryFiltersToUrl,
     } from "../../../utils/queryParams";
+    import Dashboard from "../AdminDashboard.svelte";
 
     import type { ApiProjectsGetCollectionData } from "../../../openapi/client/types.gen";
 
