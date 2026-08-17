@@ -20,11 +20,7 @@
     import TextArea from "../../../library/inputs/TextArea.svelte";
 
     import type { CreateChargeForm } from "../../../../types/admin-charge";
-    import {
-        defaultCurrency,
-        formatCurrency,
-        parseCurrency,
-    } from "../../../../utils/currencies";
+    import { defaultCurrency, formatCurrency, parseCurrency } from "../../../../utils/currencies";
 
     let { form = $bindable() }: { form: CreateChargeForm } = $props();
 

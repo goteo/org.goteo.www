@@ -117,9 +117,7 @@
         >
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.status")}</p>
-                <span
-                    class="rounded-full px-3 py-1 text-xs font-medium w-fit {statusBadgeClasses}"
-                >
+                <span class="w-fit rounded-full px-3 py-1 text-xs font-medium {statusBadgeClasses}">
                     {$t(`domain.charges.status.${charge.status}`)}
                 </span>
             </div>

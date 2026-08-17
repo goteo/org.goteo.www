@@ -105,9 +105,7 @@
             }
 
             if (tag.title === "status") {
-                const chargeLabel = $t(
-                    `pages.admin.charges.filters.status.options.${tag.value}`,
-                );
+                const chargeLabel = $t(`pages.admin.charges.filters.status.options.${tag.value}`);
                 tag.value =
                     chargeLabel !== tag.value
                         ? chargeLabel

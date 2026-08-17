@@ -14,9 +14,7 @@ const { t } = Astro.locals;
                         checked
                         class="relative h-6 w-6 appearance-none rounded-full border border-purple-600 after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
-                    <span class="text-gray-700">
-                        {t("domain.users.type.individual")}</span
-                    >
+                    <span class="text-gray-700"> {t("domain.users.type.individual")}</span>
                 </label>
 
                 <label class="flex cursor-pointer items-center gap-2">
@@ -26,9 +24,7 @@ const { t } = Astro.locals;
                         value="organization"
                         class="border-secondary relative h-6 w-6 appearance-none rounded-full border after:absolute after:top-1/2 after:left-1/2 after:hidden after:h-2 after:w-2 after:-translate-x-1/2 after:-translate-y-1/2 after:transform after:rounded-full after:bg-purple-900 after:content-[''] checked:border-teal-400 checked:bg-teal-400 checked:after:block"
                     />
-                    <span class="text-gray-700"
-                        >{t("domain.users.type.organization")}</span
-                    >
+                    <span class="text-gray-700">{t("domain.users.type.organization")}</span>
                 </label>
             </fieldset>
 

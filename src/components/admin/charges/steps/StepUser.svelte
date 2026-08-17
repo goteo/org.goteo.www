@@ -9,11 +9,7 @@
     import Spinner from "../../../icons/status/Spinner.svelte";
     import CloseIcon from "../../../icons/navigation/Close.svelte";
 
-    import type {
-        CreateChargeForm,
-        DonorType,
-        ExistingUser,
-    } from "../../../../types/admin-charge";
+    import type { CreateChargeForm, DonorType, ExistingUser } from "../../../../types/admin-charge";
 
     let { form = $bindable() }: { form: CreateChargeForm } = $props();
 
@@ -125,10 +121,10 @@
         if (form.existingUser) return true;
         return Boolean(
             showCreateForm &&
-                form.user.type &&
-                form.user.email &&
-                emailRegex.test(form.user.email) &&
-                form.user.password.length >= 8,
+            form.user.type &&
+            form.user.email &&
+            emailRegex.test(form.user.email) &&
+            form.user.password.length >= 8,
         );
     }
 </script>
@@ -161,9 +157,7 @@
             <Spinner />
         </div>
     {:else if form.existingUser}
-        <div
-            class="flex flex-col gap-3 rounded-lg border border-primary bg-purple-soft/30 p-4"
-        >
+        <div class="border-primary bg-purple-soft/30 flex flex-col gap-3 rounded-lg border p-4">
             <p class="text-content text-xs font-bold tracking-wide uppercase">
                 {$t("pages.admin.charges.create.fields.selectedUserLabel")}
             </p>
@@ -196,7 +190,7 @@
                 <button
                     type="button"
                     onclick={() => selectUser(u)}
-                    class="cursor-pointer rounded-lg border border-secondary bg-white p-4 text-left shadow-sm transition hover:bg-purple-soft/30 hover:shadow-md"
+                    class="border-secondary hover:bg-purple-soft/30 cursor-pointer rounded-lg border bg-white p-4 text-left shadow-sm transition hover:shadow-md"
                 >
                     <div class="text-secondary text-base font-bold">
                         {@html highlightMatch(
@@ -250,9 +244,7 @@
     {/if}
 
     {#if showCreateForm && !form.existingUser}
-        <div
-            class="flex flex-col gap-6 rounded-lg border border-secondary bg-purple-soft/20 p-4"
-        >
+        <div class="border-secondary bg-purple-soft/20 flex flex-col gap-6 rounded-lg border p-4">
             <div class="flex items-center justify-between">
                 <p class="text-content text-xs font-bold tracking-wide uppercase">
                     {$t("pages.admin.charges.create.fields.newUserLabel")}

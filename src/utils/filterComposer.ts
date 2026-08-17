@@ -300,7 +300,7 @@ export function createFilterRow(
         referent,
         serialize: () => {
             if (typeof subject.serialize !== "undefined") {
-                return subject.serialize(referent)
+                return subject.serialize(referent);
             }
 
             const key = subject.param ?? subject.key;

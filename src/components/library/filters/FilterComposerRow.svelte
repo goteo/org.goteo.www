@@ -197,10 +197,7 @@
 
 <div class="flex items-center gap-3">
     <div class="flex-1">
-        <Select
-            bind:value={subjectKey}
-            labelText={$t("domain.filterComposer.subjectPlaceholder")}
-        >
+        <Select bind:value={subjectKey} labelText={$t("domain.filterComposer.subjectPlaceholder")}>
             <option value="">{$t("domain.filterComposer.subjectPlaceholder")}</option>
             {#each subjects as subject}
                 <option value={subject.key}>{subjectLabel(subject.key)}</option>
@@ -237,7 +234,7 @@
                         <span
                             class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
                         >
-                            {item.label}
+                            {@html item.label}
                             <button
                                 type="button"
                                 class="text-tertiary hover:text-tertiary/80 cursor-pointer"
@@ -322,7 +319,7 @@
                         <span
                             class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
                         >
-                            {item.label}
+                            {@html item.label}
                             <button
                                 type="button"
                                 class="text-tertiary hover:text-tertiary/80 cursor-pointer"

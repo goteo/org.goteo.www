@@ -34,8 +34,7 @@ export interface CreateChargeFormFiscalOrganization {
 }
 
 export type CreateChargeFormFiscal =
-    | CreateChargeFormFiscalIndividual
-    | CreateChargeFormFiscalOrganization;
+    CreateChargeFormFiscalIndividual | CreateChargeFormFiscalOrganization;
 
 export interface CreateChargeFormCharge {
     targetIri: string;
