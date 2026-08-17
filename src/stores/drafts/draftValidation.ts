@@ -137,7 +137,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Objectives validation
-    const objectivesPlainText = richTextToPlainText(data.objectives).trim();
+    const objectivesPlainText = richTextToPlainText(data.brief).trim();
     if (objectivesPlainText.length === 0) {
         errors.objectives = "pages.project.edit.rewards.validation_info.reward.objectives.required";
     } else if (objectivesPlainText.length < 50) {
@@ -149,7 +149,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Legacy validation
-    const legacyPlainText = richTextToPlainText(data.legacy).trim();
+    const legacyPlainText = richTextToPlainText(data.about).trim();
     if (legacyPlainText.length === 0) {
         errors.legacy = "pages.project.edit.rewards.validation_info.reward.legacy.required";
     } else if (legacyPlainText.length < 50) {
@@ -159,7 +159,7 @@ export function validateCampaignInfo(wizard: Wizard): ValidationErrors {
     }
 
     // Target audience validation
-    const targetPlainText = richTextToPlainText(data.targetAudience).trim();
+    const targetPlainText = richTextToPlainText(data.goal).trim();
     if (targetPlainText.length === 0) {
         errors.targetAudience = "pages.project.edit.rewards.validation_info.reward.target.required";
     } else if (targetPlainText.length < 30) {

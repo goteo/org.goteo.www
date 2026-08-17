@@ -7,7 +7,7 @@ Implements active/inactive pill states matching Figma design
     import { locale, t } from "../../i18n/store";
     import {
         apiCategoriesGetCollection,
-        apiCategoriesIdGet,
+        apiCategoriesIdOrSlugGet,
         type Category,
     } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
@@ -42,9 +42,9 @@ Implements active/inactive pill states matching Figma design
     }
 
     async function getCategory(iri: string): Promise<Category> {
-        const { data: category } = await apiCategoriesIdGet({
+        const { data: category } = await apiCategoriesIdOrSlugGet({
             headers: { "Accept-Language": $locale },
-            path: { id: extractId(iri) || iri },
+            path: { idOrSlug: extractId(iri) || iri },
         });
 
         return category!;
@@ -61,7 +61,7 @@ Implements active/inactive pill states matching Figma design
     {#await categories then categories}
         <CategorySelect
             bind:selected
-            selectedIds={selected.map((s) => s.id)}
+            selectedIds={selected.map((s) => s.id!)}
             options={categories}
             onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
         />
