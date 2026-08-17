@@ -1,13 +1,13 @@
 <script lang="ts" module>
     import type { DataTableHeader, SortOption } from "../../library/tables/DataTable.svelte";
-    import type { GatewayCharge, Link, Tracking } from "../../../openapi/client/index.ts";
+    import type { GatewayCharge, GatewayLink, Tracking } from "../../../openapi/client/index.ts";
 
     export type ExtendedCharge = GatewayCharge & {
         targetDisplayName?: string;
         originDisplayName?: string;
         checkoutOrigin?: string;
         paymentGateway?: string;
-        platformLinks?: Link[];
+        platformLinks?: GatewayLink[];
         trackingCodes?: Tracking[];
     };
 

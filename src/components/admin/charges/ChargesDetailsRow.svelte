@@ -255,6 +255,9 @@
                             {#each platformLinks as item (item.url)}
                                 <TableBodyRow class=" bg-white">
                                     <TableBodyCell class="border-variant1 border-t border-b">
+                                        {item.type}
+                                    </TableBodyCell>
+                                    <TableBodyCell class="border-variant1 border-t border-b">
                                         {item.rel}
                                     </TableBodyCell>
                                     <TableBodyCell
@@ -306,6 +309,12 @@
                 <p class="font-bold">{$t("pages.admin.charges.details.concept")}</p>
                 <p class="truncate" title={charge.title}>
                     {charge.title ? charge.title : "—"}
+                </p>
+            </div>
+            <div class="flex min-w-0 flex-col gap-2">
+                <p class="font-bold">{$t("pages.admin.charges.details.selfId")}</p>
+                <p class="truncate" title={String(charge.id)}>
+                    {charge.id}
                 </p>
             </div>
             <div class="flex min-w-0 flex-col gap-2">

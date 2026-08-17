@@ -1316,7 +1316,8 @@
           },
           "estimatedFee": "Comisión estimada",
           "concept": "Concepto",
-          "checkout": "Sesión de pago"
+          "checkout": "Sesión de pago",
+          "selfId": "Identificador"
         },
         "actions": {
           "refundToUser": "Devolución a usuario",
