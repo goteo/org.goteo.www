@@ -46,8 +46,8 @@
 
         return {
             date: `${year}-${month}-${day}`,
-            time: `${hour}:${minute}:${second}h`,
-            fulltime: `${year}-${month}-${day} ${hour}:${minute}:${second}`,
+            time: `${hour}:${minute}:${second}`,
+            fulltime: d.toISOString(),
         };
     }
 
