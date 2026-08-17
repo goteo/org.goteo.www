@@ -57,6 +57,73 @@
         "placeholder": "Buscar..."
       }
     },
+    "filterComposer": {
+      "title": "Filtros personalizados",
+      "addFilter": "Añadir filtro",
+      "removeFilter": "Eliminar",
+      "subjectPlaceholder": "Seleccionar campo",
+      "operatorPlaceholder": "Seleccionar condición",
+      "referentPlaceholder": "Valor",
+      "subject": {
+        "title": "Título",
+        "subtitle": "Subtítulo",
+        "description": "Descripción",
+        "projectStatus": "Estado de proyecto",
+        "chargeStatus": "Estado",
+        "categories": "Categoría",
+        "owner": "Propietario",
+        "slug": "ID",
+        "territory": "Territorio",
+        "dateUpdated": "Última actualización",
+        "budgetAmount": "Importe",
+        "gateway": "Pasarela",
+        "type": "Tipo",
+        "origin": "Origen",
+        "target": "Destino",
+        "currency": "Moneda",
+        "amount": "Importe",
+        "dateCreated": "Fecha de creación",
+        "handle": "Nombre de usuario",
+        "email": "Email",
+        "displayName": "Nombre público",
+        "userType": "Tipo de usuario",
+        "active": "Activo",
+        "userRoles": "Roles",
+        "userTerritoryCountry": "Ubicación"
+      },
+      "operator": {
+        "equals": "Igual a",
+        "is_any_of": "Incluido en",
+        "before": "Anterior a",
+        "after": "Posterior a",
+        "strictly_before": "Estrictamente anterior",
+        "strictly_after": "Estrictamente posterior",
+        "gte": "Mayor o igual que",
+        "gt": "Mayor que",
+        "lte": "Menor o igual que",
+        "lt": "Menor que"
+      },
+      "datePrefix": {
+        "dateCreated": "Creado",
+        "dateUpdated": "Actualizado"
+      },
+      "dateSuffix": {
+        "after": "después de",
+        "before": "antes de",
+        "strictly_after": "estrictamente después de",
+        "strictly_before": "estrictamente antes de"
+      },
+      "subjectOption": {
+        "userType": {
+          "individual": "Persona física",
+          "organization": "Persona jurídica (empresas)"
+        },
+        "active": {
+          "true": "Activo",
+          "false": "Inactivo"
+        }
+      }
+    },
     "users": {
       "type": {
         "individual": "Persona física",
@@ -1201,72 +1268,6 @@
           "openFilters": "Filtros",
           "closeFilters": "Cerrar filtros",
           "apply": "Aplicar filtros"
-        },
-        "composer": {
-          "title": "Filtros personalizados",
-          "addFilter": "Añadir filtro",
-          "removeFilter": "Eliminar",
-          "subjectPlaceholder": "Seleccionar campo",
-          "operatorPlaceholder": "Seleccionar condición",
-          "referentPlaceholder": "Valor",
-          "subject": {
-            "title": "Título",
-            "subtitle": "Subtítulo",
-            "description": "Descripción",
-            "projectStatus": "Estado de proyecto",
-            "status": "Estado",
-            "categories": "Categoría",
-            "owner": "Propietario",
-            "slug": "ID",
-            "territory": "Territorio",
-            "dateUpdated": "Última actualización",
-            "budgetAmount": "Importe",
-            "gateway": "Pasarela",
-            "type": "Tipo",
-            "target": "Destino",
-            "currency": "Moneda",
-            "amount": "Importe",
-            "dateCreated": "Fecha de creación",
-            "handle": "Nombre de usuario",
-            "email": "Email",
-            "displayName": "Nombre público",
-            "userType": "Tipo de usuario",
-            "active": "Activo",
-            "userRoles": "Roles",
-            "userTerritoryCountry": "Ubicación"
-          },
-          "operator": {
-            "equals": "Igual a",
-            "is_any_of": "Incluido en",
-            "before": "Anterior a",
-            "after": "Posterior a",
-            "strictly_before": "Estrictamente anterior",
-            "strictly_after": "Estrictamente posterior",
-            "gte": "Mayor o igual que",
-            "gt": "Mayor que",
-            "lte": "Menor o igual que",
-            "lt": "Menor que"
-          },
-          "datePrefix": {
-            "dateCreated": "Creado",
-            "dateUpdated": "Actualizado"
-          },
-          "dateSuffix": {
-            "after": "después de",
-            "before": "antes de",
-            "strictly_after": "estrictamente después de",
-            "strictly_before": "estrictamente antes de"
-          },
-          "subjectOption": {
-            "userType": {
-              "individual": "Persona física",
-              "organization": "Persona jurídica (empresas)"
-            },
-            "active": {
-              "true": "Activo",
-              "false": "Inactivo"
-            }
-          }
         }
       },
       "nav": {

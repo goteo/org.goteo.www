@@ -150,11 +150,11 @@
     }
 
     function subjectLabel(key: string): string {
-        return $t(`pages.admin.filter.composer.subject.${key}`);
+        return $t(`domain.filterComposer.subject.${key}`);
     }
 
     function operatorLabel(op: FilterOperator): string {
-        return $t(`pages.admin.filter.composer.operator.${op}`);
+        return $t(`domain.filterComposer.operator.${op}`);
     }
 
     function handleTerritoryChange(t: {
@@ -199,9 +199,9 @@
     <div class="flex-1">
         <Select
             bind:value={subjectKey}
-            labelText={$t("pages.admin.filter.composer.subjectPlaceholder")}
+            labelText={$t("domain.filterComposer.subjectPlaceholder")}
         >
-            <option value="">{$t("pages.admin.filter.composer.subjectPlaceholder")}</option>
+            <option value="">{$t("domain.filterComposer.subjectPlaceholder")}</option>
             {#each subjects as subject}
                 <option value={subject.key}>{subjectLabel(subject.key)}</option>
             {/each}
@@ -212,9 +212,9 @@
         <Select
             bind:value={operator}
             disabled={!subjectKey}
-            labelText={$t("pages.admin.filter.composer.operatorPlaceholder")}
+            labelText={$t("domain.filterComposer.operatorPlaceholder")}
         >
-            <option value="">{$t("pages.admin.filter.composer.operatorPlaceholder")}</option>
+            <option value="">{$t("domain.filterComposer.operatorPlaceholder")}</option>
             {#each compatibleOperators as op}
                 <option value={op}>{operatorLabel(op)}</option>
             {/each}
@@ -259,7 +259,7 @@
                         options={dropdownOptions}
                         bind:selected={dropdownSelected}
                         onChange={handleStaticChange}
-                        label={$t("pages.admin.filter.composer.referentPlaceholder")}
+                        label={$t("domain.filterComposer.referentPlaceholder")}
                         bind:isOpen={showStaticDropdown}
                     />
                 </div>
@@ -268,9 +268,9 @@
             <Select
                 bind:value={referent as string}
                 disabled={!operator}
-                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
+                labelText={$t("domain.filterComposer.referentPlaceholder")}
             >
-                <option value="">{$t("pages.admin.filter.composer.referentPlaceholder")}</option>
+                <option value="">{$t("domain.filterComposer.referentPlaceholder")}</option>
                 {#each currentSubject.options as opt}
                     <option value={opt.value}>{$t(opt.label)}</option>
                 {/each}
@@ -291,7 +291,7 @@
                         type="button"
                         onclick={handleClearSuggestTag}
                         class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                        aria-label={$t("pages.admin.filter.composer.removeFilter")}
+                        aria-label={$t("domain.filterComposer.removeFilter")}
                     >
                         <Close width="16" height="16" />
                     </button>
@@ -389,20 +389,20 @@
                 disabled={!subjectKey || !operator}
                 onInput={(date) => (referent = date)}
                 hasValue={!!(typeof referent === "string" && referent)}
-                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
+                labelText={$t("domain.filterComposer.referentPlaceholder")}
             />
         {:else if currentSubject?.type === "number"}
             <TextInput
                 bind:value={referent as number}
                 disabled={!subjectKey || !operator}
                 type="number"
-                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
+                labelText={$t("domain.filterComposer.referentPlaceholder")}
             />
         {:else}
             <TextInput
                 bind:value={referent as string}
                 disabled={!subjectKey || !operator}
-                labelText={$t("pages.admin.filter.composer.referentPlaceholder")}
+                labelText={$t("domain.filterComposer.referentPlaceholder")}
             />
         {/if}
     </div>
@@ -411,7 +411,7 @@
         type="button"
         onclick={onremove}
         class="mb-0.5 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-lg text-white"
-        aria-label={$t("pages.admin.filter.composer.removeFilter")}
+        aria-label={$t("domain.filterComposer.removeFilter")}
     >
         <Close />
     </button>

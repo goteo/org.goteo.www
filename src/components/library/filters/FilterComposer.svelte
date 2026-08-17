@@ -82,7 +82,7 @@
     <div>
         <Button class="" kind="ghost" onclick={addRow}>
             <PlusIcon />
-            {$t("pages.admin.filter.composer.addFilter")}
+            {$t("domain.filterComposer.addFilter")}
         </Button>
     </div>
 </div>
