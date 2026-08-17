@@ -111,11 +111,11 @@ export async function suggestProjectsByDescription(q: string): Promise<FilterOpt
     const trimmed = q.trim();
     if (trimmed.length < 2) return [];
 
-    const { data } = await apiProjectsGetCollection({ query: { description: trimmed } });
+    const { data } = await apiProjectsGetCollection({ query: { descBrief: trimmed } });
     if (!data) return [];
 
     return data.map((p) => ({
-        value: p.description ?? "",
+        value: p.descBrief ?? "",
         label: p.title ?? p.slug ?? "",
     }));
 }
