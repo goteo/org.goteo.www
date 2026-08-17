@@ -8,16 +8,16 @@
         TableHeadCell,
     } from "flowbite-svelte";
 
-    import { t } from "../../i18n/store";
-    import PlusIcon from "../icons/actions/PlusIcon.svelte";
-    import FiltersIcon from "../icons/filters/Filters.svelte";
-    import Button from "../library/buttons/Button.svelte";
-    import FilterComposer from "../library/filters/FilterComposer.svelte";
-    import Checkbox from "../library/inputs/Checkbox.svelte";
-    import Search from "../library/inputs/Search.svelte";
-    import Select from "../library/inputs/Select.svelte";
-    import TabNavigation from "../library/layout/TabNavigation.svelte";
-    import Pagination from "../library/paginations/Pagination.svelte";
+    import { t } from "../../../i18n/store";
+    import PlusIcon from "../../icons/actions/PlusIcon.svelte";
+    import FiltersIcon from "../../icons/filters/Filters.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import FilterComposer from "../../library/filters/FilterComposer.svelte";
+    import Checkbox from "../../library/inputs/Checkbox.svelte";
+    import Search from "../../library/inputs/Search.svelte";
+    import Select from "../../library/inputs/Select.svelte";
+    import TabNavigation from "../../library/layout/TabNavigation.svelte";
+    import Pagination from "../../library/paginations/Pagination.svelte";
 
     export interface NewsletterTemplateItem {
         id: number | string;
