@@ -57,6 +57,90 @@
         "placeholder": "Buscar..."
       }
     },
+    "filterComposer": {
+      "title": "Filtros personalizados",
+      "addFilter": "Añadir filtro",
+      "removeFilter": "Eliminar",
+      "subjectPlaceholder": "Seleccionar campo",
+      "operatorPlaceholder": "Seleccionar condición",
+      "referentPlaceholder": "Valor",
+      "subject": {
+        "title": "Título",
+        "subtitle": "Subtítulo",
+        "description": "Descripción",
+        "projectStatus": "Estado de proyecto",
+        "chargeStatus": "Estado",
+        "categories": "Categoría",
+        "owner": "Propietario",
+        "slug": "ID",
+        "territory": "Territorio",
+        "dateUpdated": "Última actualización",
+        "budgetAmount": "Importe",
+        "gateway": "Pasarela",
+        "type": "Tipo",
+        "checkout": {
+          "origin": "Origen"
+        },
+        "target": "Destino",
+        "currency": "Moneda",
+        "amount": "Importe",
+        "dateCreated": "Fecha de creación",
+        "handle": "Nombre de usuario",
+        "email": "Email",
+        "displayName": "Nombre público",
+        "userType": "Tipo de usuario",
+        "active": "Activo",
+        "userRoles": "Roles",
+        "userTerritoryCountry": "Ubicación"
+      },
+      "operator": {
+        "equals": "Igual a",
+        "is_any_of": "Incluido en",
+        "before": "Anterior a",
+        "after": "Posterior a",
+        "strictly_before": "Estrictamente anterior",
+        "strictly_after": "Estrictamente posterior",
+        "gte": "Mayor o igual que",
+        "gt": "Mayor que",
+        "lte": "Menor o igual que",
+        "lt": "Menor que"
+      },
+      "datePrefix": {
+        "dateCreated": "Creado",
+        "dateUpdated": "Actualizado"
+      },
+      "dateSuffix": {
+        "after": "después de",
+        "before": "antes de",
+        "strictly_after": "estrictamente después de",
+        "strictly_before": "estrictamente antes de"
+      },
+      "subjectOption": {
+        "userType": {
+          "individual": "Persona física",
+          "organization": "Persona jurídica (empresas)"
+        },
+        "active": {
+          "true": "Activo",
+          "false": "Inactivo"
+        }
+      }
+    },
+    "users": {
+      "type": {
+        "individual": "Persona física",
+        "organization": "Persona jurídica (empresas)"
+      },
+      "attributes": {
+        "firstName": "Nombre",
+        "lastName": "Apellidos",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "taxId": "DNI*",
+        "legalName": "Razón social",
+        "orgTaxId": "CIF*"
+      }
+    },
     "project": {
       "campaign": {
         "minimumReached": "¡Mínimo conseguido!",
@@ -116,10 +200,10 @@
         "tipjars": "Botes de propina",
         "tipjarId": "ID del bote de propina"
       },
-      "lastContributions": "Últimos aportes:",
+      "lastContributions": "Últimos cobros:",
       "totalizers": {
         "selected": "Proyectos seleccionados:",
-        "totalCharges": "Total aportes:",
+        "totalCharges": "Total cobros:",
         "totalTips": "Total propinas:",
         "totalFees": "Comisiones totales:"
       }
@@ -1110,10 +1194,6 @@
         "loginBtnLabel": "Entra con tu cuenta"
       },
       "form": {
-        "userType": {
-          "individual": "Persona física",
-          "organization": "Persona jurídica (empresas)"
-        },
         "btnSubmit": "Registrarse",
         "termsCheckbox": "Acepto las condiciones legales",
         "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
@@ -1124,25 +1204,14 @@
         }
       },
       "individual": {
-        "firstName": "Nombre",
-        "lastName": "Apellidos",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
         "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
         "taxId": {
-          "label": "DNI*",
           "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
         }
       },
       "organization": {
-        "legalName": "Razón social",
-        "email": "Correo electrónico",
-        "password": "Contraseña",
-        "taxId": "CIF*",
         "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-        "representativeTitle": "Datos del representante de la empresa.",
-        "firstName": "Nombre",
-        "lastName": "Apellidos"
+        "representativeTitle": "Datos del representante de la empresa."
       },
       "error": {
         "incompletePersonFields": "Por favor, completa todos los campos obligatorios para persona física.",
@@ -1151,77 +1220,56 @@
       }
     },
     "admin": {
+      "newsletter": {
+        "title": "Boletín",
+        "description": "Recibe en tu buzón las últimas noticias, análisis detallados y recursos exclusivos de Goteo. Entérate de todo sobre crowdfunding, innovación social y tecnología.",
+        "tabs": {
+          "send": "Enviar boletín",
+          "templates": "Plantillas",
+          "communications": "Comunicaciones"
+        },
+        "send": {
+          "templateSection": "Selecciona una plantilla masiva",
+          "recipientsSection": "Seleccionar destinatarios",
+          "optionsSection": "Opciones de envío",
+          "addMore": "Añadir más",
+          "startAction": "Iniciar envío",
+          "placeholders": {
+            "selectTemplate": "Selecciona una plantilla",
+            "selectRecipient": "Selecciona un destinatario"
+          },
+          "options": {
+            "isTest": "Es una prueba (se envia a los destinatarios de pruebas)",
+            "onlySpanish": "Solo en español (no tener en cuenta idioma preferido de usuario)"
+          },
+          "errors": {
+            "noTemplate": "Por favor, selecciona una plantilla."
+          },
+          "recipients": {
+            "all": "Todos",
+            "promoters": "Promotores",
+            "donors": "Cofinanciadores"
+          }
+        },
+        "filters": {
+          "search": "Buscar",
+          "apply": "Filtros"
+        },
+        "table": {
+          "headers": {
+            "template": "Plantilla",
+            "description": "Descripción"
+          }
+        },
+        "communications": {
+          "searchTitle": "Busca destinatarios"
+        }
+      },
       "filter": {
         "btns": {
           "openFilters": "Filtros",
           "closeFilters": "Cerrar filtros",
           "apply": "Aplicar filtros"
-        },
-        "composer": {
-          "title": "Filtros personalizados",
-          "addFilter": "Añadir filtro",
-          "removeFilter": "Eliminar",
-          "subjectPlaceholder": "Seleccionar campo",
-          "operatorPlaceholder": "Seleccionar condición",
-          "referentPlaceholder": "Valor",
-          "subject": {
-            "title": "Título",
-            "subtitle": "Subtítulo",
-            "description": "Descripción",
-            "projectStatus": "Estado de proyecto",
-            "chargeStatus": "Estado de aporte",
-            "categories": "Categoría",
-            "owner": "Propietario",
-            "slug": "ID",
-            "territory": "Territorio",
-            "dateUpdated": "Última actualización",
-            "budgetAmount": "Importe",
-            "gateway": "Pasarela",
-            "type": "Tipo",
-            "target": "Destino",
-            "currency": "Moneda",
-            "amount": "Importe",
-            "dateCreated": "Fecha de creación",
-            "handle": "Nombre de usuario",
-            "email": "Email",
-            "displayName": "Nombre público",
-            "userType": "Tipo de usuario",
-            "active": "Activo",
-            "userRoles": "Roles",
-            "userTerritoryCountry": "Ubicación"
-          },
-          "operator": {
-            "equals": "Igual a",
-            "is_any_of": "Incluido en",
-            "before": "Anterior a",
-            "after": "Posterior a",
-            "strictly_before": "Estrictamente anterior",
-            "strictly_after": "Estrictamente posterior",
-            "gte": "Mayor o igual que",
-            "gt": "Mayor que",
-            "lte": "Menor o igual que",
-            "lt": "Menor que"
-          },
-          "datePrefix": {
-            "dateCreated": "Creado",
-            "dateUpdated": "Actualizado"
-          },
-          "dateSuffix": {
-            "after": "después de",
-            "before": "antes de",
-            "strictly_after": "estrictamente después de",
-            "strictly_before": "estrictamente antes de"
-          },
-          "subjectOption": {
-            "userType": {
-              "individual": "Persona física",
-              "organization": "Persona jurídica (empresas)"
-            },
-            "active": {
-              "true": "Activo",
-              "false": "Inactivo"
-            }
-          }
         }
       },
       "nav": {
@@ -1237,20 +1285,20 @@
         }
       },
       "charges": {
-        "title": "Aportes",
-        "description": "Aquí tienes las últimas contribuciones a campañas, puedes ordenarlas y filtrarlas como quieras.",
+        "title": "Cobros",
+        "description": "Aquí tienes los últimos cobros, puedes ordenarlos y filtrarlos como quieras.",
         "headers": {
           "target": "Destino",
           "amount": "Importe",
           "origin": "Origen",
-          "paymentMethod": "Método",
+          "paymentGateway": "Pasarela de pago",
           "date": "Fecha",
-          "chargeStatus": "Estado de la operación",
-          "refundToWallet": "A Monedero"
+          "status": "Estado"
         },
         "noData": "No hay datos disponibles",
         "details": {
           "operationTime": "Hora de la operación",
+          "status": "Estado",
           "trackingCodes": {
             "title": "Códigos de seguimiento",
             "headers": {
@@ -1258,7 +1306,6 @@
               "trackingCode": "Código de seguimiento"
             }
           },
-          "toWallet": "A monedero",
           "platformLinks": {
             "title": "Enlace a la plataforma",
             "headers": {
@@ -1268,10 +1315,11 @@
             }
           },
           "estimatedFee": "Comisión estimada",
-          "concept": "Concepto"
+          "concept": "Concepto",
+          "checkout": "Sesión de pago",
+          "selfId": "Identificador"
         },
         "actions": {
-          "refundToWallet": "Devolución a monedero",
           "refundToUser": "Devolución a usuario",
           "changeUser": "Cambiar de usuario",
           "manageReward": "Gestionar recompensa"
@@ -1294,7 +1342,7 @@
               "subtitle": "Subtítulo",
               "description": "Descripción",
               "projectStatus": "Estado de proyecto",
-              "chargeStatus": "Estado de aporte",
+              "status": "Estado",
               "categories": "Categoría",
               "owner": "Propietario",
               "slug": "ID",
@@ -1350,13 +1398,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página:",
-            "options": {
-              "10": "10",
-              "20": "20",
-              "30": "30",
-              "50": "50"
-            }
+            "title": "Líneas por página:"
           },
           "search": {
             "placeholder": "Buscar por destino...",
@@ -1384,8 +1426,8 @@
               "invalidRange": "La fecha de inicio no puede ser mayor que la fecha fin."
             }
           },
-          "chargeStatus": {
-            "title": "Estado de Aporte",
+          "status": {
+            "title": "Estado",
             "options": {
               "all": "Todos",
               "to_charge": "Por cobrar",
@@ -1404,12 +1446,69 @@
         },
         "lastEdited": "Última modificación: {{date}} {{time}}",
         "annotations": "{{annotations}} Anotaciones",
-        "lastContributions": "Últimos aportes:",
+        "lastContributions": "Últimos cobros:",
         "totalizers": {
-          "selected": "Aportes seleccionados:",
-          "totalCharges": "Total aportes:",
+          "selected": "Cobros seleccionados:",
+          "totalCharges": "Total cobros:",
           "totalTips": "Total propinas:",
           "totalFees": "Comisiones totales:"
+        },
+        "create": {
+          "trigger": "Crear cargo manual",
+          "title": "Crear cargo manual",
+          "steps": {
+            "user": {
+              "title": "Cuenta del donante",
+              "description": "Busca un usuario existente por email o, si no existe, crea uno nuevo."
+            },
+            "charge": {
+              "title": "Datos del cargo",
+              "description": "Define a qué proyecto se destina el cargo, el importe y el método."
+            },
+            "fiscal": {
+              "title": "Datos fiscales",
+              "description": "Revisa los datos fiscales del donante. El NIF/CIF no se puede modificar."
+            }
+          },
+          "fields": {
+            "userTypeLabel": "Tipo:",
+            "emailSearchPlaceholder": "Buscar por email...",
+            "userSearchError": "Error al buscar usuarios.",
+            "userNoAccounting": "Este usuario no tiene una accounting asociada y no puede recibir cargos.",
+            "userSearchResults": "Resultados:",
+            "noUserFound": "No se han encontrado usuarios con ese email.",
+            "createNewUserInstead": "Crear uno nuevo en su lugar",
+            "createUserWithEmail": "Crear usuario nuevo",
+            "selectedUserLabel": "Usuario seleccionado",
+            "newUserLabel": "Nuevo usuario",
+            "generatePassword": "Generar",
+            "taxIdHint": "El NIF/CIF no se puede modificar desde aquí.",
+            "target": "Proyecto / Tipjar de destino",
+            "targetSearchPlaceholder": "Buscar proyecto o tipjar...",
+            "gatewayPlaceholder": "Selecciona una pasarela de pago",
+            "currency": "Moneda",
+            "amountHelper": "Introduce el importe con su moneda (ej. 10,50)",
+            "chargeTitle": "Concepto del cargo",
+            "chargeDescription": "Descripción interna (opcional)"
+          },
+          "fiscal": {
+            "loadError": "No se pudieron cargar los datos fiscales. Puedes rellenarlos manualmente."
+          },
+          "actions": {
+            "next": "Siguiente",
+            "submit": "Crear cargo",
+            "submitting": "Creando cargo...",
+            "changeUser": "Cambiar"
+          },
+          "errors": {
+            "userExists": "Ya existe un usuario con ese email.",
+            "unauthorized": "No tienes permisos para crear este cargo.",
+            "unexpected": "Ha ocurrido un error inesperado. Revisa la consola para más detalles."
+          },
+          "success": {
+            "title": "Cobro creado correctamente",
+            "description": "El usuario {{email}} ya puede iniciar sesión y se ha creado el cargo por {{amount}}."
+          }
         }
       },
       "projects": {
@@ -1473,12 +1572,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Líneas por página"
           }
         },
         "table": {
@@ -1607,12 +1701,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Líneas por página",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Líneas por página"
           }
         },
         "table": {
@@ -1652,7 +1741,8 @@
         "title": "Comunicación",
         "description": "Administra la comunicación de la plataforma",
         "tabs": {
-          "banners": "Anuncios"
+          "banners": "Anuncios",
+          "newsletter": "Boletín"
         },
         "banners": {
           "title": "Anuncios",

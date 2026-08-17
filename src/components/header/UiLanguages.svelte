@@ -3,6 +3,7 @@
 
     import { languagesList } from "../../i18n/locales";
     import { locale } from "../../i18n/store";
+    import { setCookie } from "../../utils/cookies";
     import { getLanguageDisplayName } from "../../utils/lang";
     import Chevron from "../icons/navigation/Chevron.svelte";
 
@@ -18,7 +19,7 @@
             return;
         }
 
-        document.cookie = `preferred-lang=${encodeURIComponent(lang)}; Path=/; Max-Age=31536000; SameSite=Strict`;
+        setCookie("preferred-lang", lang);
 
         let pathParts = window.location.pathname.split("/").filter(Boolean);
         if (languages.includes(pathParts[0] as keyof typeof languagesList)) {

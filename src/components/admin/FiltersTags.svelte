@@ -100,14 +100,12 @@
                 tag.values.from = formatDate(new Date(tag.values.from), loc);
                 tag.values.to = formatDate(new Date(tag.values.to), loc);
                 if (tag.title.startsWith("date")) {
-                    tag.values.from = `${$t(`pages.admin.filter.composer.datePrefix.${tag.title}`)}: ${tag.values.from}`;
+                    tag.values.from = `${$t(`domain.filterComposer.datePrefix.${tag.title}`)}: ${tag.values.from}`;
                 }
             }
 
             if (tag.title === "status") {
-                const chargeLabel = $t(
-                    `pages.admin.charges.filters.chargeStatus.options.${tag.value}`,
-                );
+                const chargeLabel = $t(`pages.admin.charges.filters.status.options.${tag.value}`);
                 tag.value =
                     chargeLabel !== tag.value
                         ? chargeLabel
@@ -131,7 +129,7 @@
             const dateMatch = tag.title.match(dateRegex);
             if (dateMatch && tag.value) {
                 const [, base, op] = dateMatch;
-                tag.value = `${$t(`pages.admin.filter.composer.datePrefix.${base}`)} ${$t(`pages.admin.filter.composer.dateSuffix.${op}`)}: ${formatDate(new Date(tag.value), loc)}`;
+                tag.value = `${$t(`domain.filterComposer.datePrefix.${base}`)} ${$t(`domain.filterComposer.dateSuffix.${op}`)}: ${formatDate(new Date(tag.value), loc)}`;
             }
 
             const subject =

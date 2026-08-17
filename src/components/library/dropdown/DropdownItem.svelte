@@ -30,7 +30,7 @@
 >
     {#if variant === "multiselect"}
         <label class="flex cursor-pointer justify-between p-4">
-            <span class="text-base text-black">{option.label}</span>
+            <span class="text-base text-black">{@html option.label}</span>
             <input
                 type="checkbox"
                 checked={option.selected}
@@ -43,7 +43,7 @@
             class="w-full cursor-pointer p-4 text-base text-black"
             onclick={() => handleChange(option)}
         >
-            {option.label}
+            {@html option.label}
         </button>
     {/if}
 </div>

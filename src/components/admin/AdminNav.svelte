@@ -23,11 +23,11 @@
     });
 
     function isActive(path: string): boolean {
-        return pathname.endsWith(path);
+        return pathname === path || pathname.startsWith(path + "/");
     }
 </script>
 
-<nav class={twMerge("admin-nav overflow-x-auto px-2 pb-3 md:px-4 md:pb-4", classes)}>
+<nav class={twMerge("touch-pan-x overflow-x-auto px-2 pb-3 md:px-4 md:pb-4", classes)}>
     <ul class="flex min-w-max items-center gap-2">
         {#each sections as section (section.path)}
             {@const active = isActive(section.path)}
@@ -45,11 +45,3 @@
         {/each}
     </ul>
 </nav>
-
-<style>
-    @media (max-width: 768px) {
-        .admin-nav {
-            -webkit-overflow-scrolling: touch;
-        }
-    }
-</style>

@@ -67,12 +67,12 @@
                     {#if item.icon}
                         <item.icon class="size-5 shrink-0" />
                     {/if}
-                    <span>{item.label}</span>
+                    <span>{$t(item.label)}</span>
                 {:else if item.icon}
                     <item.icon class="size-5" />
                 {:else}
-                    <span class="text-secondary truncate text-sm font-bold" title={item.label}>
-                        {item.label.charAt(0)}
+                    <span class="text-secondary truncate text-sm font-bold" title={$t(item.label)}>
+                        {$t(item.label).charAt(0)}
                     </span>
                 {/if}
             </a>
@@ -110,7 +110,7 @@
                     {#if item.icon}
                         <item.icon class="size-5 shrink-0" />
                     {/if}
-                    <span>{item.label}</span>
+                    <span>{$t(item.label)}</span>
                 </a>
             {/each}
         </nav>
