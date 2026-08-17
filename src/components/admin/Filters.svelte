@@ -3,10 +3,15 @@
     import { t } from "../../i18n/store";
     import Bullet from "../icons/Bullet.svelte";
     import FiltersIcon from "../icons/filters/Filters.svelte";
+    import ActionableButton, {
+        type ActionableState,
+    } from "../library/buttons/ActionableButton.svelte";
     import Button from "../library/buttons/Button.svelte";
     import FilterComposer from "../library/filters/FilterComposer.svelte";
 
     import type { FilterResource } from "../../utils/filterComposer";
+
+    const APPLY_AUTORESET_MS = 2000;
 
     let {
         resource,
@@ -19,7 +24,7 @@
     }: {
         resource: FilterResource;
         filters: any;
-        onApplyFilters: (filters: any) => void;
+        onApplyFilters: (filters: any) => Promise<void> | void;
         searchPlaceholder?: string;
         onSelectTarget?: (accounting: string) => void;
         onSelectProject?: (project: any) => void;
@@ -31,11 +36,15 @@
     let previousComposerKeys = $state<string[]>([]);
     let previousComposerParams = $state("");
 
+    let applyButtonState = $state<ActionableState>("actionable");
+
     function handleComposerParamsChange(params: Record<string, string | string[]>) {
         composerParams = params;
     }
 
-    function applyComposerFilters() {
+    async function applyComposerFilters() {
+        if (applyButtonState !== "actionable") return;
+
         const result = { ...filters };
         const allComposerKeys = new Set([...previousComposerKeys, ...Object.keys(composerParams)]);
 
@@ -48,7 +57,17 @@
 
         previousComposerKeys = Object.keys(composerParams);
 
-        onApplyFilters(result);
+        applyButtonState = "loading";
+        try {
+            await onApplyFilters(result);
+        } finally {
+            applyButtonState = "actioned";
+            setTimeout(() => {
+                if (applyButtonState === "actioned") {
+                    applyButtonState = "actionable";
+                }
+            }, APPLY_AUTORESET_MS);
+        }
     }
 
     function hasActiveFilters() {
@@ -115,9 +134,16 @@
                 <FilterComposer {resource} onParamsChange={handleComposerParamsChange} />
 
                 <div class="flex justify-end">
-                    <Button type="button" kind="primary" onclick={applyComposerFilters}>
+                    <ActionableButton
+                        type="button"
+                        kind="primary"
+                        class="w-fit"
+                        action={applyComposerFilters}
+                        bind:state={applyButtonState}
+                        autoreset={APPLY_AUTORESET_MS}
+                    >
                         {$t("pages.admin.filter.btns.apply")}
-                    </Button>
+                    </ActionableButton>
                 </div>
             </div>
         </div>

@@ -23,7 +23,7 @@
     });
 
     function isActive(path: string): boolean {
-        return pathname.endsWith(path);
+        return pathname === path || pathname.startsWith(path + "/");
     }
 </script>
 
