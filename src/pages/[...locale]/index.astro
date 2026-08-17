@@ -13,12 +13,11 @@ import HomeBanner from "../../components/home/HomeBanner.svelte";
 // import Stories from "../../components/home/Stories.svelte";
 // import Resources from "../../components/home/Resources.astro";
 import { isSupportedLocale } from "../../i18n/locales";
-import { NotFound } from "../../utils/responses";
 
 const { locale } = Astro.params;
 
 if (locale && !isSupportedLocale(locale)) {
-    return NotFound;
+    return Astro.rewrite("/404");
 }
 
 const { t, lang } = Astro.locals;
