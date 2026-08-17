@@ -42,9 +42,9 @@
         $currentDraft?.wizardForm.campaignInfo ?? {
             images: [],
             video: undefined,
-            objectives: emptyRichText(),
-            legacy: emptyRichText(),
-            targetAudience: emptyRichText(),
+            brief: emptyRichText(),
+            about: emptyRichText(),
+            goal: emptyRichText(),
             team: emptyRichText(),
             communicationStrategy: emptyRichText(),
         },
@@ -106,21 +106,21 @@
         });
     }
 
-    function handleObjectivesChange(doc: JSONContent) {
+    function handleBriefChange(doc: JSONContent) {
         updateCampaignInfo({
-            objectives: doc,
+            brief: doc,
         });
     }
 
-    function handleLegacyChange(doc: JSONContent) {
+    function handleAboutChange(doc: JSONContent) {
         updateCampaignInfo({
-            legacy: doc,
+            about: doc,
         });
     }
 
-    function handleTargetAudienceChange(doc: JSONContent) {
+    function handleGoalChange(doc: JSONContent) {
         updateCampaignInfo({
-            targetAudience: doc,
+            goal: doc,
         });
     }
 
@@ -208,8 +208,8 @@
 
             <RichTextEditor
                 id="objectives"
-                value={campaignInfo.objectives}
-                onChange={handleObjectivesChange}
+                value={campaignInfo.brief}
+                onChange={handleBriefChange}
                 placeholder={$t("common.textPlaceholder")}
                 ariaDescribedBy="objectives-help"
             />
@@ -229,8 +229,8 @@
 
             <RichTextEditor
                 id="legacy"
-                value={campaignInfo.legacy}
-                onChange={handleLegacyChange}
+                value={campaignInfo.about}
+                onChange={handleAboutChange}
                 placeholder={$t("common.textPlaceholder")}
                 ariaDescribedBy="legacy-help"
             />
@@ -250,8 +250,8 @@
 
             <RichTextEditor
                 id="target-audience"
-                value={campaignInfo.targetAudience}
-                onChange={handleTargetAudienceChange}
+                value={campaignInfo.goal}
+                onChange={handleGoalChange}
                 placeholder={$t("common.textPlaceholder")}
                 ariaDescribedBy="target-help"
             />

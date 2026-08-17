@@ -174,6 +174,7 @@
     "delete": "Borrar",
     "continue": "Continuar",
     "back": "Volver",
+    "learnMore": "Saber más",
     "cancel": "Cancelar",
     "publish": "Publicar",
     "preview": "Vista previa",
@@ -458,19 +459,31 @@
         "remainingBalance": "Saldo que te quedará"
       },
       "verify": {
+        "title": "Estado del pago",
         "approved": {
           "title": "Tu medio de pago se ha procesado con un éxito apabullante",
           "description": "¡Bien! Estás a un paso de terminar y de hacer el mundo un poco mejor.",
           "formGoal": {
             "title": "Si la campaña no logra su objetivo",
             "options": {
-              "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos. Saber más",
+              "1": "Ingresar en mi monedero de Goteo para poder destinarlo a otros proyectos.",
               "2": "Devolverlo a mi medio de pago"
             }
           },
           "formReview": {
             "title": "Deja un mensaje en los proyectos a los que has apoyado",
-            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato. "
+            "description": "Tu donación se verá reflejada en los proyectos que has apoyado. Puedes dejar un mensaje o permanecer en el anonimato.",
+            "crowdfundingProject": "Proyecto de crowdfunding:",
+            "donated": "Has donado",
+            "commentBtn": {
+              "leaveComment": "Dejar un comentario",
+              "editComment": "Editar comentario"
+            },
+            "commentModal": {
+              "title": "Deja un comentario",
+              "label": "Escribe aquí tu comentario"
+            },
+            "anonymous": "Quiero que mi comentario sea anónimo"
           }
         },
         "error": {
@@ -794,7 +807,12 @@
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
         "tabs": {
-          "project": "Información de campaña",
+          "project": {
+            "title": "Información de campaña",
+            "descAbout": "Descripción del proyecto. Características, fortalezas y diferencias.",
+            "descGoal": "Motivación y a quién va dirigido el proyecto.",
+            "descTeam": "Experiencia previa y equipo."
+          },
           "rewards": "Recompensas",
           "budget": {
             "title": "Presupuesto",
@@ -867,12 +885,10 @@
         },
         "banner": {
           "donator": {
-            "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados.",
-            "learnMore": "Saber más."
+            "description": "Goteo pertenece a la Fundación Platoniq. Al colaborar en una campaña tu dinero será custodiado por Platoniq y donado a {{owner}} en caso de llegar a los objetivos de éxito marcados."
           },
           "certificate": {
-            "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta.",
-            "learnMore": "Saber más."
+            "description": "Al colaborar con un proyecto impulsado en Goteo puedes solicitar un certificado de donación. Así, te deduces hasta un 80% de lo que hayas aportado en tu próxima declaración de la renta."
           }
         },
         "langNotAvailable": "El idioma seleccionado \"{{lang}}\" no está disponible para este proyecto. Mostrando contenido en el idioma disponible.",

@@ -16,7 +16,7 @@
     let { group = $bindable(), label, class: classes, children, ...rest }: Props = $props();
 </script>
 
-<label for={id} class="flex cursor-pointer items-center gap-2">
+<label for={id} class="flex cursor-pointer items-start gap-2">
     <div class="w-6">
         <input
             {id}

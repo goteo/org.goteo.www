@@ -16,9 +16,9 @@ export const apiCategoriesGetCollectionUrl = '/v4/categories';
 
 export const apiCategoriesPostUrl = '/v4/categories';
 
-export const apiCategoriesIdDeleteUrl = '/v4/categories/{id}';
+export const apiCategoriesIdOrSlugGetUrl = '/v4/categories/{idOrSlug}';
 
-export const apiCategoriesIdGetUrl = '/v4/categories/{id}';
+export const apiCategoriesIdDeleteUrl = '/v4/categories/{id}';
 
 export const apiCategoriesIdPatchUrl = '/v4/categories/{id}';
 
