@@ -65,7 +65,7 @@
             return;
         }
 
-        if (subject.customReferent) {
+        if (subject.serialize) {
             territoryInit = parseTerritoryRef(referent as string);
             showTerritoryDropdown = true;
             dropdownOptions = [];
@@ -350,7 +350,7 @@
                     />
                 </div>
             {/if}
-        {:else if currentSubject?.customReferent && subjectKey && operator}
+        {:else if currentSubject?.serialize && subjectKey && operator}
             {#if !showTerritoryDropdown}
                 {@const codes = getTerritoryCodes(referent as string)}
                 {#if codes.length > 0}
