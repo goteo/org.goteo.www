@@ -271,8 +271,8 @@
       "remaining": "Quedan",
       "expired": "Campaña finalizada"
     },
-    "login": "Iniciar Sesión",
-    "goHome": "Volver a inicio",
+    "login": "Iniciar sesión",
+    "goHome": "Ir a la página de inicio",
     "viewAll": "Ver todo",
     "pagination": {
       "showing": "Mostrando {{ items }} de {{ total }}",
@@ -347,7 +347,7 @@
     },
     "404": {
       "title": "No queda ni gota de la página que estás buscando",
-      "subtitle": "Por favor, vuelve al inicio.",
+      "subtitle": "Tal vez nunca existiera.",
       "meta": {
         "title": "Página no encontrada",
         "description": "La página que buscas no existe o ha sido movida."
