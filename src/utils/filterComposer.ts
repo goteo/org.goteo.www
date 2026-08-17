@@ -52,7 +52,7 @@ export interface FilterSubject {
     resources: FilterResource[];
     options?: FilterOption[];
     suggest?: (q: string) => Promise<FilterOption[]>;
-    customReferent?: boolean;
+    serialize?: (referent: unknown) => Record<string, string | string[]>;
     allowsMultipleEquals?: boolean;
 }
 
@@ -276,7 +276,14 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["is_any_of"],
         resources: ["projects", "users"],
-        customReferent: true,
+        serialize(referent) {
+            const t = JSON.parse(referent as string);
+            const result: Record<string, string[]> = {};
+            if (t.countries?.length) result["territory.country[]"] = t.countries;
+            if (t.subLvl1?.length) result["territory.subLvl1[]"] = t.subLvl1;
+            if (t.subLvl2?.length) result["territory.subLvl2[]"] = t.subLvl2;
+            return result;
+        },
     },
 };
 
@@ -293,13 +300,8 @@ export function createFilterRow(
         operator,
         referent,
         serialize: () => {
-            if (subject.customReferent) {
-                const t = JSON.parse(referent as string);
-                const result: Record<string, string[]> = {};
-                if (t.countries?.length) result["territory.country[]"] = t.countries;
-                if (t.subLvl1?.length) result["territory.subLvl1[]"] = t.subLvl1;
-                if (t.subLvl2?.length) result["territory.subLvl2[]"] = t.subLvl2;
-                return result;
+            if (typeof subject.serialize !== "undefined") {
+                return subject.serialize(referent)
             }
 
             const key = subject.param ?? subject.key;
