@@ -4,8 +4,7 @@ import { getDefaultLanguage } from "./consts";
 import { currencySymbols } from "./currencyData";
 import {
     suggestGateways,
-    suggestTarget,
-    suggestOrigin,
+    suggestAccounting,
     suggestOwner,
     suggestCategories,
     suggestProjects,
@@ -188,15 +187,15 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
-        suggest: suggestTarget,
+        suggest: suggestAccounting,
         allowsMultipleEquals: true,
     },
     origin: {
-        key: "origin",
+        key: "checkout.origin",
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
-        suggest: suggestOrigin,
+        suggest: suggestAccounting,
         allowsMultipleEquals: true,
     },
     currency: {

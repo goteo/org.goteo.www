@@ -78,7 +78,9 @@
         "budgetAmount": "Importe",
         "gateway": "Pasarela",
         "type": "Tipo",
-        "origin": "Origen",
+        "checkout": {
+          "origin": "Origen"
+        },
         "target": "Destino",
         "currency": "Moneda",
         "amount": "Importe",
