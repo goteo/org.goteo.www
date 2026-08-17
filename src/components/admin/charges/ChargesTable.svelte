@@ -9,7 +9,6 @@
         paymentGateway?: string;
         platformLinks?: Link[];
         trackingCodes?: Tracking[];
-        concept?: string;
     };
 
     export type ChargeSortKey =

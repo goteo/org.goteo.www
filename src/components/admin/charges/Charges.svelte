@@ -380,11 +380,8 @@
             const targetName = getDisplayNameFromAccounting(targetAcc, ownersMap);
             const originName = getDisplayNameFromAccounting(originAcc, ownersMap);
 
-            const hasConcept = targetName === originName;
-
             charge.targetDisplayName = typeof targetName === "undefined" ? "—" : targetName;
             charge.originDisplayName = typeof originName === "undefined" ? "—" : originName;
-            charge.concept = hasConcept && charge.title ? charge.title : "";
         }
     }
 

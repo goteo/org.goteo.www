@@ -17,6 +17,8 @@
     import type { ExtendedCharge } from "./ChargesTable.svelte";
     import { chargeStatusStyles } from "./ChargesTable.svelte";
     import type { Link, Tracking } from "../../../openapi/client/index.ts";
+    import { formatCurrency } from "../../../utils/currencies.ts";
+    import { extractId } from "../../../utils/extractId.ts";
 
     let { charge }: { charge: ExtendedCharge } = $props();
 
@@ -78,7 +80,7 @@
         },
         {
             label: $t("pages.admin.charges.details.concept"),
-            value: charge.concept ?? "—",
+            value: charge.title ?? "—",
         },
     ]);
 
@@ -298,12 +300,18 @@
 
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.estimatedFee")}</p>
-                <p>—</p>
+                <p>{formatCurrency(0)}</p>
             </div>
             <div class="flex min-w-0 flex-col gap-2">
                 <p class="font-bold">{$t("pages.admin.charges.details.concept")}</p>
-                <p class="truncate" title={charge.concept}>
-                    {charge.concept ? charge.concept : "—"}
+                <p class="truncate" title={charge.title}>
+                    {charge.title ? charge.title : "—"}
+                </p>
+            </div>
+            <div class="flex min-w-0 flex-col gap-2">
+                <p class="font-bold">{$t("pages.admin.charges.details.checkout")}</p>
+                <p class="truncate" title={charge.checkout}>
+                    {extractId(charge.checkout)}
                 </p>
             </div>
         </div>
