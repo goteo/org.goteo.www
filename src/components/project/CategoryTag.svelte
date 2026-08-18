@@ -1,6 +1,6 @@
 <script lang="ts">
     import { locale } from "../../i18n/store";
-    import { apiCategoriesIdGet, type Category } from "../../openapi/client";
+    import { apiCategoriesIdOrSlugGet, type Category } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import BookmarkIcon from "../icons/actions/Bookmark.svelte";
     import Tag from "../library/tags/Tag.svelte";
@@ -12,9 +12,9 @@
     let { iri }: Props = $props();
 
     async function getCategory(iri: string): Promise<Category> {
-        const { data: category } = await apiCategoriesIdGet({
+        const { data: category } = await apiCategoriesIdOrSlugGet({
             headers: { "Accept-Language": $locale },
-            path: { id: extractId(iri)! },
+            path: { idOrSlug: extractId(iri)! },
         });
 
         return category!;

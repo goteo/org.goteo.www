@@ -14,7 +14,7 @@
                 vars={{ owner: `<a href="#" class="font-bold  text-secondary">${ownerName}</a>` }}
             />
             <a href="/src/pages/[...locale]/about/certificate" class="text-secondary font-bold"
-                >{$t("pages.project.view.banner.certificate.learnMore")}
+                >{$t("common.learnMore")}
             </a>
         </div>
     </div>
@@ -24,7 +24,7 @@
             <div class="text-content">
                 {$t("pages.project.view.banner.certificate.description")}
                 <a href="/src/pages/[...locale]/about/certificate" class="text-secondary font-bold"
-                    >{$t("pages.project.view.banner.certificate.learnMore")}
+                    >{$t("common.learnMore")}
                 </a>
             </div>
         </div>

@@ -24,13 +24,11 @@ declare namespace App {
          * The detected session.
          */
         session: import("./src/auth/types").Session | undefined;
+    }
+}
 
-        /**
-         * Cloudflare runtime bindings, including D1.
-         * Available in server mode thanks to `@astrojs/cloudflare`.
-         */
-        runtime: import("@astrojs/cloudflare").AdvancedRuntime<{
-            DB: D1Database;
-        }>;
+declare namespace Cloudflare {
+    interface Env {
+        DB: D1Database;
     }
 }

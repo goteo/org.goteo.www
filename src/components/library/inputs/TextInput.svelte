@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
         value = $bindable<string | number>(""),
@@ -35,6 +35,7 @@
 
     const generatedId = $props.id();
     const finalId = $derived(id ?? generatedId);
+<<<<<<< HEAD
 
     const inputClasses = $derived(
         twMerge(
@@ -52,11 +53,20 @@
             disabled && "opacity-70",
         ),
     );
+=======
+>>>>>>> origin/develop
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-50")}>
     {#if labelText}
-        <label for={finalId} class={labelClasses}>
+        <label
+            for={finalId}
+            class={twJoin(
+                "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
+                error && "text-tertiary",
+                disabled && "opacity-70",
+            )}
+        >
             {labelText}
         </label>
     {/if}
@@ -71,11 +81,19 @@
         {required}
         {disabled}
         {placeholder}
-        class={inputClasses}
+        class={twMerge(
+            "border-secondary text-content w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus:ring-0",
+            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
+            disabled && "cursor-not-allowed",
+            classes,
+        )}
     />
-    {#if helperText && !error}
-        <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
-            {helperText}
+    {#if error || helperText}
+        <span
+            id={`helper-${finalId}`}
+            class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+        >
+            {error || helperText}
         </span>
     {/if}
 </div>

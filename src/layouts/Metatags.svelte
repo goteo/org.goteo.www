@@ -1,5 +1,15 @@
 <script lang="ts">
-    const { title, description, keywords, url = "" } = $props();
+    const {
+        title,
+        description,
+        keywords = "",
+        url = "",
+    }: {
+        title: string;
+        description: string;
+        keywords?: string;
+        url?: string;
+    } = $props();
 </script>
 
 <svelte:head>

@@ -18,9 +18,9 @@ function normalizeRichText(draft: Draft): Draft {
             ...draft.wizardForm,
             campaignInfo: {
                 ...campaignInfo,
-                objectives: toRichText(campaignInfo.objectives),
-                legacy: toRichText(campaignInfo.legacy),
-                targetAudience: toRichText(campaignInfo.targetAudience),
+                brief: toRichText(campaignInfo.brief),
+                about: toRichText(campaignInfo.about),
+                goal: toRichText(campaignInfo.goal),
                 team: toRichText(campaignInfo.team),
                 communicationStrategy: toRichText(campaignInfo.communicationStrategy),
             },

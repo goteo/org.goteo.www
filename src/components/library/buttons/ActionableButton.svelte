@@ -8,7 +8,7 @@
     import type { Snippet } from "svelte";
     import type { HTMLButtonAttributes } from "svelte/elements";
 
-    type ActionableState = "actionable" | "loading" | "actioned";
+    export type ActionableState = "actionable" | "loading" | "actioned";
 
     interface Props extends Omit<HTMLButtonAttributes, "class" | "onclick"> {
         children: Snippet;
@@ -18,7 +18,7 @@
         kind?: "primary" | "secondary" | "ghost" | "invert";
         action: () => Promise<void>;
         state?: ActionableState;
-        /* Time from actioned to reset */
+        /* Time, in milliseconds, from actioned to reset */
         autoreset?: number;
     }
 

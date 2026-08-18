@@ -4,7 +4,9 @@
     "loading": "Loading...",
     "error": {
       "unknown": "An unknown error has occurred",
+      "unauthorized": "You must sign in to complete this action",
       "payment": {
+        "unauthorized": "You must log in to complete the payment",
         "missingMethod": "A payment method must be selected",
         "missingCartData": "The cart is empty",
         "unprocessableCartData": "The cart cannot be processed; please empty it and try again",
@@ -16,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "The text cannot be empty",
+        "expectedUrl": "Not a URL"
+      },
+      "date": {
+        "greaterThan": "The date must be greater than {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Maximum allowed size 10MB",
         "supportedTypes": "Supported files: .png, .jpg"
@@ -46,6 +55,90 @@
     "search": {
       "bar": {
         "placeholder": "Search..."
+      }
+    },
+    "filterComposer": {
+      "title": "Custom filters",
+      "addFilter": "Add filter",
+      "removeFilter": "Remove",
+      "subjectPlaceholder": "Select field",
+      "operatorPlaceholder": "Select condition",
+      "referentPlaceholder": "Value",
+      "subject": {
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "description": "Description",
+        "projectStatus": "Project status",
+        "chargeStatus": "Status",
+        "categories": "Category",
+        "owner": "Owner",
+        "slug": "ID",
+        "territory": "Territory",
+        "dateUpdated": "Last updated",
+        "budgetAmount": "Amount",
+        "gateway": "Gateway",
+        "type": "Type",
+        "checkout": {
+          "origin": "Source"
+        },
+        "target": "Target",
+        "currency": "Currency",
+        "amount": "Amount",
+        "dateCreated": "Creation date",
+        "handle": "Username",
+        "email": "Email",
+        "displayName": "Public name",
+        "userType": "User type",
+        "active": "Active",
+        "userRoles": "Roles",
+        "userTerritoryCountry": "Location"
+      },
+      "operator": {
+        "equals": "Equals",
+        "is_any_of": "Is any of",
+        "before": "Before",
+        "after": "After",
+        "strictly_before": "Strictly before",
+        "strictly_after": "Strictly after",
+        "gte": "Greater than or equal to",
+        "gt": "Greater than",
+        "lte": "Less than or equal to",
+        "lt": "Less than"
+      },
+      "datePrefix": {
+        "dateCreated": "Created",
+        "dateUpdated": "Updated"
+      },
+      "dateSuffix": {
+        "after": "after",
+        "before": "before",
+        "strictly_after": "strictly after",
+        "strictly_before": "strictly before"
+      },
+      "subjectOption": {
+        "userType": {
+          "individual": "Natural person",
+          "organization": "Legal person (companies)"
+        },
+        "active": {
+          "true": "Active",
+          "false": "Inactive"
+        }
+      }
+    },
+    "users": {
+      "type": {
+        "individual": "Natural person",
+        "organization": "Legal person (companies)"
+      },
+      "attributes": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "password": "Password",
+        "taxId": "ID*",
+        "legalName": "Company name",
+        "orgTaxId": "ID*"
       }
     },
     "project": {
@@ -107,10 +200,10 @@
         "tipjars": "Tip jars",
         "tipjarId": "Tip jar ID"
       },
-      "lastContributions": "Latest contributions:",
+      "lastContributions": "Latest charges:",
       "totalizers": {
         "selected": "Selected projects:",
-        "totalCharges": "Total contributions:",
+        "totalCharges": "Total charges:",
         "totalTips": "Total tips:",
         "totalFees": "Total fees:"
       }
@@ -165,6 +258,7 @@
     "delete": "Delete",
     "continue": "Continue",
     "back": "Back",
+    "learnMore": "Learn more",
     "cancel": "Cancel",
     "publish": "Publish",
     "preview": "Preview",
@@ -177,9 +271,14 @@
       "remaining": "Remaining",
       "expired": "Campaign ended"
     },
-    "login": "Log in",
-    "goHome": "Back to home",
+    "login": "Login",
+    "goHome": "Go to the home page",
     "viewAll": "View all",
+    "pagination": {
+      "showing": "Showing {{ items }} of {{ total }}",
+      "unloaded": "Showing...",
+      "noResults": "No results"
+    },
     "viewMore": "See more",
     "viewLess": "See less",
     "share": "Share",
@@ -248,7 +347,7 @@
     },
     "404": {
       "title": "There isn't a drop left of the page you're looking for",
-      "subtitle": "Please go back home.",
+      "subtitle": "Maybe it never existed.",
       "meta": {
         "title": "Page not found",
         "description": "The page you are looking for does not exist or has been moved."
@@ -444,19 +543,31 @@
         "remainingBalance": "Balance you will have left"
       },
       "verify": {
+        "title": "Payment status",
         "approved": {
           "title": "Your payment method has been processed with overwhelming success",
           "description": "Great! You're one step away from finishing and making the world a little better.",
           "formGoal": {
             "title": "If the campaign does not reach its goal",
             "options": {
-              "1": "Deposit it into my Goteo wallet so I can allocate it to other projects. Learn more",
+              "1": "Add it to my Goteo wallet so I can allocate it to other projects.",
               "2": "Return it to my payment method"
             }
           },
           "formReview": {
             "title": "Leave a message on the projects you have supported",
-            "description": "Your donation will be reflected in the projects you have supported. You can leave a message or remain anonymous. "
+            "description": "Your donation will be reflected in the projects you have supported. You can leave a message or remain anonymous.",
+            "crowdfundingProject": "Crowdfunding project:",
+            "donated": "You have donated",
+            "commentBtn": {
+              "leaveComment": "Leave a comment",
+              "editComment": "Edit comment"
+            },
+            "commentModal": {
+              "title": "Leave a comment",
+              "label": "Write your comment here"
+            },
+            "anonymous": "I want my comment to be anonymous"
           }
         },
         "error": {
@@ -780,7 +891,12 @@
       "view": {
         "owner": "Crowdfunding campaign by {{ owner }}",
         "tabs": {
-          "project": "Campaign information",
+          "project": {
+            "title": "Campaign information",
+            "descAbout": "Project description. Features, strengths, and differentiators.",
+            "descGoal": "Motivation and who the project is aimed at.",
+            "descTeam": "Previous experience and team."
+          },
           "rewards": "Rewards",
           "budget": {
             "title": "Budget",
@@ -853,12 +969,10 @@
         },
         "banner": {
           "donator": {
-            "description": "Goteo belongs to the Platoniq Foundation. When you contribute to a campaign, your money will be held by Platoniq and donated to {{owner}} if the stated success goals are reached.",
-            "learnMore": "Learn more."
+            "description": "Goteo belongs to the Platoniq Foundation. When you contribute to a campaign, your money will be held by Platoniq and donated to {{owner}} if the stated success goals are reached."
           },
           "certificate": {
-            "description": "When you support a project promoted on Goteo, you can request a donation certificate. This way, you can deduct up to 80% of what you have contributed on your next income tax return.",
-            "learnMore": "Learn more."
+            "description": "When you support a project promoted on Goteo, you can request a donation certificate. This way, you can deduct up to 80% of what you have contributed on your next income tax return."
           }
         },
         "langNotAvailable": "The selected language \"{{lang}}\" is not available for this project. Showing content in the available language.",
@@ -971,6 +1085,9 @@
         "seeChat": "View conversation",
         "changeRisk": "Change risk"
       },
+      "card": {
+        "activity": "{{ count }} chats. Last activity {{ date }}"
+      },
       "chat": {
         "placeholder": "Write a message…"
       }
@@ -1077,10 +1194,6 @@
         "loginBtnLabel": "Log in with your account"
       },
       "form": {
-        "userType": {
-          "individual": "Individual",
-          "organization": "Legal entity (companies)"
-        },
         "btnSubmit": "Register",
         "termsCheckbox": "I accept the legal terms",
         "policiesCheckbox": "By registering, I confirm my acceptance of your terms of use, privacy policy, and cookie policy.",
@@ -1091,25 +1204,14 @@
         }
       },
       "individual": {
-        "firstName": "First name",
-        "lastName": "Last name",
-        "email": "Email",
-        "password": "Password",
         "taxIdCheckbox": "I want to deduct my donations. You must provide your DNI number so we can report it to the tax authorities.",
         "taxId": {
-          "label": "ID*",
           "msgDeduction": "I want to deduct my donations. You must provide your DNI number so we can report it to the tax authorities."
         }
       },
       "organization": {
-        "legalName": "Legal name",
-        "email": "Email",
-        "password": "Password",
-        "taxId": "ID*",
         "taxIdDescription": "*With the CIF, we will notify the tax agency for your income tax return.",
-        "representativeTitle": "Company representative details.",
-        "firstName": "First name",
-        "lastName": "Last name"
+        "representativeTitle": "Company representative details."
       },
       "error": {
         "incompletePersonFields": "Please complete all required fields for individuals.",
@@ -1118,83 +1220,63 @@
       }
     },
     "admin": {
+      "newsletter": {
+        "title": "Newsletter",
+        "description": "Get the latest news, in-depth analysis and exclusive Goteo resources in your inbox. Find out all about crowdfunding, social innovation and technology.",
+        "tabs": {
+          "send": "Send newsletter",
+          "templates": "Templates",
+          "communications": "Communications"
+        },
+        "send": {
+          "templateSection": "Select a bulk template",
+          "recipientsSection": "Select recipients",
+          "optionsSection": "Sending options",
+          "addMore": "Add more",
+          "startAction": "Start sending",
+          "placeholders": {
+            "selectTemplate": "Select a template",
+            "selectRecipient": "Select a recipient"
+          },
+          "options": {
+            "isTest": "This is a test (sent to test recipients)",
+            "onlySpanish": "Spanish only (do not take the user's preferred language into account)"
+          },
+          "errors": {
+            "noTemplate": "Please select a template."
+          },
+          "recipients": {
+            "all": "All",
+            "promoters": "Promoters",
+            "donors": "Co-financiers"
+          }
+        },
+        "filters": {
+          "search": "Search",
+          "apply": "Filters"
+        },
+        "table": {
+          "headers": {
+            "template": "Template",
+            "description": "Description"
+          }
+        },
+        "communications": {
+          "searchTitle": "Search recipients"
+        }
+      },
       "filter": {
         "btns": {
           "openFilters": "Filters",
           "closeFilters": "Close filters",
           "apply": "Apply filters"
-        },
-        "composer": {
-          "title": "Custom filters",
-          "addFilter": "Add filter",
-          "removeFilter": "Remove",
-          "subjectPlaceholder": "Select field",
-          "operatorPlaceholder": "Select condition",
-          "referentPlaceholder": "Value",
-          "subject": {
-            "title": "Title",
-            "subtitle": "Subtitle",
-            "description": "Description",
-            "projectStatus": "Project status",
-            "chargeStatus": "Contribution status",
-            "categories": "Category",
-            "owner": "Owner",
-            "slug": "ID",
-            "territory": "Territory",
-            "dateUpdated": "Last updated",
-            "budgetAmount": "Amount",
-            "gateway": "Gateway",
-            "type": "Type",
-            "target": "Target",
-            "currency": "Currency",
-            "amount": "Amount",
-            "dateCreated": "Creation date",
-            "handle": "Username",
-            "email": "Email",
-            "displayName": "Public name",
-            "userType": "User type",
-            "active": "Active",
-            "userRoles": "Roles",
-            "userTerritoryCountry": "Location"
-          },
-          "operator": {
-            "equals": "Equal to",
-            "is_any_of": "Included in",
-            "before": "Before",
-            "after": "After",
-            "strictly_before": "Strictly before",
-            "strictly_after": "Strictly after",
-            "gte": "Greater than or equal to",
-            "gt": "Greater than",
-            "lte": "Less than or equal to",
-            "lt": "Less than"
-          },
-          "datePrefix": {
-            "dateCreated": "Created",
-            "dateUpdated": "Updated"
-          },
-          "dateSuffix": {
-            "after": "after",
-            "before": "before",
-            "strictly_after": "strictly after",
-            "strictly_before": "strictly before"
-          },
-          "subjectOption": {
-            "userType": {
-              "individual": "Natural person",
-              "organization": "Legal person (companies)"
-            },
-            "active": {
-              "true": "Active",
-              "false": "Inactive"
-            }
-          }
         }
       },
       "nav": {
         "charges": "Charges",
         "projects": "Projects",
-        "users": "Users"
+        "users": "Users",
+        "comm": "Communication"
       },
       "sidebar": {
         "aria": {
@@ -1203,20 +1285,20 @@
         }
       },
       "charges": {
-        "title": "Contributions",
-        "description": "Here are the latest contributions to campaigns; you can sort and filter them however you like.",
+        "title": "Charges",
+        "description": "Here are the latest charges; you can sort and filter them however you like.",
         "headers": {
           "target": "Destination",
           "amount": "Amount",
           "origin": "Source",
-          "paymentMethod": "Method",
+          "paymentGateway": "Payment gateway",
           "date": "Date",
-          "chargeStatus": "Operation status",
-          "refundToWallet": "To wallet"
+          "status": "Status"
         },
         "noData": "No data available",
         "details": {
           "operationTime": "Operation time",
+          "status": "Status",
           "trackingCodes": {
             "title": "Tracking codes",
             "headers": {
@@ -1224,7 +1306,6 @@
               "trackingCode": "Tracking code"
             }
           },
-          "toWallet": "To wallet",
           "platformLinks": {
             "title": "Platform link",
             "headers": {
@@ -1234,10 +1315,11 @@
             }
           },
           "estimatedFee": "Estimated fee",
-          "concept": "Concept"
+          "concept": "Concept",
+          "checkout": "Payment session",
+          "selfId": "Identifier"
         },
         "actions": {
-          "refundToWallet": "Refund to wallet",
           "refundToUser": "Refund to user",
           "changeUser": "Change user",
           "manageReward": "Manage reward"
@@ -1260,7 +1342,7 @@
               "subtitle": "Subtitle",
               "description": "Description",
               "projectStatus": "Project status",
-              "chargeStatus": "Charge status",
+              "status": "Status",
               "categories": "Category",
               "owner": "Owner",
               "slug": "ID",
@@ -1316,13 +1398,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Rows per page:",
-            "options": {
-              "10": "10",
-              "20": "20",
-              "30": "30",
-              "50": "50"
-            }
+            "title": "Rows per page:"
           },
           "search": {
             "placeholder": "Search by destination...",
@@ -1350,24 +1426,19 @@
               "invalidRange": "The start date cannot be later than the end date."
             }
           },
-          "chargeStatus": {
-            "title": "Contribution status",
+          "status": {
+            "title": "Status",
             "options": {
               "all": "All",
               "to_charge": "Pending charge",
               "in_charge": "Charged",
-              "to_refund": "Pending refund",
+              "to_refund": "To be refunded",
               "refunded": "Refunded",
-              "to_wallet": "Pending refund to wallet",
+              "to_wallet": "To be refunded to wallet",
               "walleted": "Refunded to wallet",
               "funding_paid": "Charge paid"
             }
           }
-        },
-        "pagination": {
-          "showing": "Showing {{items}} of {{total}}",
-          "unloaded": "Showing...",
-          "noResults": "No results"
         },
         "downloadButtons": {
           "certificates": "Download certificates",
@@ -1375,12 +1446,69 @@
         },
         "lastEdited": "Last modified: {{date}} {{time}}",
         "annotations": "{{annotations}} annotations",
-        "lastContributions": "Latest contributions:",
+        "lastContributions": "Latest charges:",
         "totalizers": {
-          "selected": "Selected contributions:",
-          "totalCharges": "Total contributions:",
+          "selected": "Selected charges:",
+          "totalCharges": "Total charges:",
           "totalTips": "Total tips:",
           "totalFees": "Total fees:"
+        },
+        "create": {
+          "trigger": "Create manual charge",
+          "title": "Create manual charge",
+          "steps": {
+            "user": {
+              "title": "Donor account",
+              "description": "Search for an existing user by email or, if none exists, create a new one."
+            },
+            "charge": {
+              "title": "Charge details",
+              "description": "Define which project the charge is for, the amount and the method."
+            },
+            "fiscal": {
+              "title": "Tax details",
+              "description": "Review the donor's tax details. The NIF/CIF cannot be changed."
+            }
+          },
+          "fields": {
+            "userTypeLabel": "Type:",
+            "emailSearchPlaceholder": "Search by email...",
+            "userSearchError": "Error searching for users.",
+            "userNoAccounting": "This user does not have an associated accounting record and cannot receive charges.",
+            "userSearchResults": "Results:",
+            "noUserFound": "No users found with that email.",
+            "createNewUserInstead": "Create a new one instead",
+            "createUserWithEmail": "Create new user",
+            "selectedUserLabel": "Selected user",
+            "newUserLabel": "New user",
+            "generatePassword": "Generate",
+            "taxIdHint": "The NIF/CIF cannot be changed from here.",
+            "target": "Destination project / Tipjar",
+            "targetSearchPlaceholder": "Search for a project or tipjar...",
+            "gatewayPlaceholder": "Select a payment gateway",
+            "currency": "Currency",
+            "amountHelper": "Enter the amount with its currency (e.g. 10.50)",
+            "chargeTitle": "Charge concept",
+            "chargeDescription": "Internal description (optional)"
+          },
+          "fiscal": {
+            "loadError": "Tax details could not be loaded. You can fill them in manually."
+          },
+          "actions": {
+            "next": "Next",
+            "submit": "Create charge",
+            "submitting": "Creating charge...",
+            "changeUser": "Change"
+          },
+          "errors": {
+            "userExists": "A user with that email already exists.",
+            "unauthorized": "You do not have permission to create this charge.",
+            "unexpected": "An unexpected error occurred. Check the console for more details."
+          },
+          "success": {
+            "title": "Charge created successfully",
+            "description": "The user {{email}} can now log in and the charge for {{amount}} has been created."
+          }
         }
       },
       "projects": {
@@ -1444,12 +1572,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Rows per page",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Rows per page"
           }
         },
         "table": {
@@ -1547,10 +1670,6 @@
             },
             "save": "Save"
           }
-        },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
         }
       },
       "users": {
@@ -1582,12 +1701,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Items per page",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Items per page"
           }
         },
         "table": {
@@ -1621,10 +1735,55 @@
               "active": "Active"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Communication",
+        "description": "Manage platform communication",
+        "tabs": {
+          "banners": "Announcements",
+          "newsletter": "Newsletter"
         },
-        "pagination": {
-          "showing": "Showing {{ items }} of {{ total }}",
-          "itemsPerPage": "{{ count }} per page"
+        "banners": {
+          "title": "Announcements",
+          "description": "Here you can create and manage the platform banners",
+          "errors": {
+            "forbidden": "You do not have permission to manage ads",
+            "invalidUrl": "The ad URL is invalid",
+            "invalidDateRange": "The end date cannot be earlier than the start date"
+          },
+          "tabs": {
+            "fields": "New",
+            "history": "History"
+          },
+          "fields": {
+            "dataTitle": "Announcement details",
+            "titlePlaceholder": "Announcement title",
+            "contentPlaceholder": "Brief description of the ad",
+            "ctaPlaceholder": "Call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Schedule the announcement",
+            "startDatePlaceholder": "Enter the start date",
+            "endDatePlaceholder": "Enter the end date"
+          },
+          "history": {
+            "title": "Announcement history",
+            "description": "Here you can view the history of published announcements",
+            "noData": "There are no announcements in the history",
+            "headers": {
+              "title": "Title",
+              "content": "Content",
+              "publishedAt": "Publication date",
+              "endAt": "End date"
+            },
+            "actions": {
+              "view": "View"
+            },
+            "modal": {
+              "title": "Announcement published on {{date}}",
+              "description": "Here you can see what the announcement looked like"
+            }
+          }
         }
       }
     },

@@ -46,9 +46,9 @@ export interface WizardCampaignInfo {
     video: string | undefined;
 
     // Rich text content (stored as Tiptap JSON)
-    objectives: JSONContent;
-    legacy: JSONContent;
-    targetAudience: JSONContent;
+    brief: JSONContent;
+    about: JSONContent;
+    goal: JSONContent;
     team: JSONContent;
     communicationStrategy: JSONContent;
 }
@@ -144,9 +144,9 @@ export const wizard = derived(
             campaignInfo: {
                 images: [],
                 video: "",
-                objectives: emptyRichText(),
-                legacy: emptyRichText(),
-                targetAudience: emptyRichText(),
+                brief: emptyRichText(),
+                about: emptyRichText(),
+                goal: emptyRichText(),
                 team: emptyRichText(),
                 communicationStrategy: emptyRichText(),
             },
@@ -292,9 +292,9 @@ export async function createDraft(
             campaignInfo: {
                 images: resources?.images ?? [],
                 video: "",
-                objectives: emptyRichText(),
-                legacy: emptyRichText(),
-                targetAudience: emptyRichText(),
+                brief: emptyRichText(),
+                about: emptyRichText(),
+                goal: emptyRichText(),
                 team: emptyRichText(),
                 communicationStrategy: emptyRichText(),
             },

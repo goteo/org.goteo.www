@@ -4,7 +4,9 @@
     "loading": "Carregant...",
     "error": {
       "unknown": "S'ha produït un error desconegut",
+      "unauthorized": "Has d'iniciar sessió per completar aquesta acció",
       "payment": {
+        "unauthorized": "Has d'iniciar sessió per completar el pagament",
         "missingMethod": "S'ha de seleccionar un mètode de pagament",
         "missingCartData": "La cistella és buida",
         "unprocessableCartData": "No es pot processar la cistella, si us plau buida-la i torna-ho a intentar",
@@ -16,6 +18,13 @@
       }
     },
     "constraint": {
+      "text": {
+        "notEmpty": "El text no pot estar buit",
+        "expectedUrl": "No és una URL"
+      },
+      "date": {
+        "greaterThan": "La data ha de ser posterior a {{ date }}"
+      },
       "file": {
         "maxAllowedSize": "Mida màxima permesa 10MB",
         "supportedTypes": "Arxius compatibles: .png, .jpg"
@@ -46,6 +55,90 @@
     "search": {
       "bar": {
         "placeholder": "Cercar..."
+      }
+    },
+    "filterComposer": {
+      "title": "Filtres personalitzats",
+      "addFilter": "Afegir filtre",
+      "removeFilter": "Suprimeix",
+      "subjectPlaceholder": "Seleccionar camp",
+      "operatorPlaceholder": "Seleccionar condició",
+      "referentPlaceholder": "Valor",
+      "subject": {
+        "title": "Títol",
+        "subtitle": "Subtítol",
+        "description": "Descripció",
+        "projectStatus": "Estat del projecte",
+        "chargeStatus": "Estat",
+        "categories": "Categoria",
+        "owner": "Propietari",
+        "slug": "ID",
+        "territory": "Territori",
+        "dateUpdated": "Última actualització",
+        "budgetAmount": "Import",
+        "gateway": "Passarel·la",
+        "type": "Tipus",
+        "checkout": {
+          "origin": "Origen"
+        },
+        "target": "Destí",
+        "currency": "Moneda",
+        "amount": "Import",
+        "dateCreated": "Data de creació",
+        "handle": "Nom d'usuari",
+        "email": "Correu electrònic",
+        "displayName": "Nom públic",
+        "userType": "Tipus d'usuari",
+        "active": "Actiu",
+        "userRoles": "Rols",
+        "userTerritoryCountry": "Ubicació"
+      },
+      "operator": {
+        "equals": "Igual a",
+        "is_any_of": "Inclòs a",
+        "before": "Anterior a",
+        "after": "Posterior a",
+        "strictly_before": "Estrictament anterior",
+        "strictly_after": "Estrictament posterior",
+        "gte": "Major o igual que",
+        "gt": "Major que",
+        "lte": "Menor o igual que",
+        "lt": "Menor que"
+      },
+      "datePrefix": {
+        "dateCreated": "Creat",
+        "dateUpdated": "Actualitzat"
+      },
+      "dateSuffix": {
+        "after": "després de",
+        "before": "abans de",
+        "strictly_after": "estrictament després de",
+        "strictly_before": "estrictament abans de"
+      },
+      "subjectOption": {
+        "userType": {
+          "individual": "Persona física",
+          "organization": "Persona jurídica (empreses)"
+        },
+        "active": {
+          "true": "Actiu",
+          "false": "Inactiu"
+        }
+      }
+    },
+    "users": {
+      "type": {
+        "individual": "Persona física",
+        "organization": "Persona jurídica (empreses)"
+      },
+      "attributes": {
+        "firstName": "Nom",
+        "lastName": "Cognoms",
+        "email": "Correu electrònic",
+        "password": "Contrasenya",
+        "taxId": "DNI*",
+        "legalName": "Raó social",
+        "orgTaxId": "CIF*"
       }
     },
     "project": {
@@ -107,10 +200,10 @@
         "tipjars": "Bots de propina",
         "tipjarId": "ID del bot de propina"
       },
-      "lastContributions": "Últimes aportacions:",
+      "lastContributions": "Últims cobraments:",
       "totalizers": {
         "selected": "Projectes seleccionats:",
-        "totalCharges": "Total d'aportacions:",
+        "totalCharges": "Total cobraments:",
         "totalTips": "Total de propines:",
         "totalFees": "Comissions totals:"
       }
@@ -165,6 +258,7 @@
     "delete": "Esborrar",
     "continue": "Continua",
     "back": "Tornar",
+    "learnMore": "Saber més",
     "cancel": "Cancel·lar",
     "publish": "Publica",
     "preview": "Previsualitzar",
@@ -178,8 +272,13 @@
       "expired": "Campanya finalitzada"
     },
     "login": "Iniciar sessió",
-    "goHome": "Tornar a l'inici",
+    "goHome": "Ves a la pàgina d'inici",
     "viewAll": "Veure-ho tot",
+    "pagination": {
+      "showing": "Mostrant {{ items }} de {{ total }}",
+      "unloaded": "Mostrant...",
+      "noResults": "No hi ha resultats"
+    },
     "viewMore": "Veure més",
     "viewLess": "Veure menys",
     "share": "Comparteix",
@@ -248,7 +347,7 @@
     },
     "404": {
       "title": "No queda ni gota de la pàgina que estàs buscant",
-      "subtitle": "Si us plau, torna a l'inici.",
+      "subtitle": "Potser no ha existit mai.",
       "meta": {
         "title": "Pàgina no trobada",
         "description": "La pàgina que busques no existeix o ha estat moguda."
@@ -444,19 +543,31 @@
         "remainingBalance": "Saldo que et quedarà"
       },
       "verify": {
+        "title": "Estat del pagament",
         "approved": {
           "title": "El teu mitjà de pagament s'ha processat amb un èxit aclaparador",
           "description": "Bé! Estàs a un pas d'acabar i de fer el món una mica millor.",
           "formGoal": {
             "title": "Si la campanya no assoleix el seu objectiu",
             "options": {
-              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes. Saber-ne més",
+              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes.",
               "2": "Retornar-ho al meu mitjà de pagament"
             }
           },
           "formReview": {
             "title": "Deixa un missatge als projectes que has donat suport",
-            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat. "
+            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat.",
+            "crowdfundingProject": "Projecte de micromecenatge:",
+            "donated": "Has donat",
+            "commentBtn": {
+              "leaveComment": "Deixar un comentari",
+              "editComment": "Editar el comentari"
+            },
+            "commentModal": {
+              "title": "Deixa un comentari",
+              "label": "Escriu aquí el teu comentari"
+            },
+            "anonymous": "Vull que el meu comentari sigui anònim"
           }
         },
         "error": {
@@ -780,7 +891,12 @@
       "view": {
         "owner": "Campanya de crowdfunding impulsada per {{ owner }}",
         "tabs": {
-          "project": "Informació de campanya",
+          "project": {
+            "title": "Informació de campanya",
+            "descAbout": "Descripció del projecte. Característiques, fortaleses i diferències.",
+            "descGoal": "Motivació i a qui va dirigit el projecte.",
+            "descTeam": "Experiència prèvia i equip."
+          },
           "rewards": "Recompenses",
           "budget": {
             "title": "Pressupost",
@@ -853,12 +969,10 @@
         },
         "banner": {
           "donator": {
-            "description": "Goteo pertany a la Fundació Platoniq. En col·laborar en una campanya, els teus diners seran custodiats per Platoniq i donats a {{owner}} en cas d'arribar als objectius d'èxit marcats.",
-            "learnMore": "Saber-ne més."
+            "description": "Goteo pertany a la Fundació Platoniq. En col·laborar en una campanya, els teus diners seran custodiats per Platoniq i donats a {{owner}} en cas d'arribar als objectius d'èxit marcats."
           },
           "certificate": {
-            "description": "En col·laborar amb un projecte impulsat a Goteo pots sol·licitar un certificat de donació. Així, et dedueixes fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda.",
-            "learnMore": "Saber-ne més."
+            "description": "En col·laborar amb un projecte impulsat a Goteo pots sol·licitar un certificat de donació. Així, et dedueixes fins a un 80% del que hagis aportat en la teva pròxima declaració de la renda."
           }
         },
         "langNotAvailable": "L'idioma seleccionat \"{{lang}}\" no està disponible per a aquest projecte. Es mostra contingut en l'idioma disponible.",
@@ -971,6 +1085,9 @@
         "seeChat": "Veure conversa",
         "changeRisk": "Canviar risc"
       },
+      "card": {
+        "activity": "{{ count }} xats. Darrera activitat {{ date }}"
+      },
       "chat": {
         "placeholder": "Escriu un missatge…"
       }
@@ -1077,10 +1194,6 @@
         "loginBtnLabel": "Entra amb el teu compte"
       },
       "form": {
-        "userType": {
-          "individual": "Persona física",
-          "organization": "Persona jurídica (empreses)"
-        },
         "btnSubmit": "Registrar-se",
         "termsCheckbox": "Accepto les condicions legals",
         "policiesCheckbox": "En registrar-me confirmo la meva acceptació dels vostres termes d'ús, política de privacitat i política de cookies.",
@@ -1091,25 +1204,14 @@
         }
       },
       "individual": {
-        "firstName": "Nom",
-        "lastName": "Cognoms",
-        "email": "Correu electrònic",
-        "password": "Contrasenya",
         "taxIdCheckbox": "Desitjo desgravar les meves donacions. És necessari indicar el número de DNI per comunicar-ho a Hisenda.",
         "taxId": {
-          "label": "DNI*",
           "msgDeduction": "Desitjo desgravar les meves donacions. És necessari indicar el número de DNI per comunicar-ho a Hisenda."
         }
       },
       "organization": {
-        "legalName": "Raó social",
-        "email": "Correu electrònic",
-        "password": "Contrasenya",
-        "taxId": "CIF*",
         "taxIdDescription": "*Amb el CIF avisarem l'agència tributària per a la teva declaració de la renda.",
-        "representativeTitle": "Dades del representant de l'empresa.",
-        "firstName": "Nom",
-        "lastName": "Cognoms"
+        "representativeTitle": "Dades del representant de l'empresa."
       },
       "error": {
         "incompletePersonFields": "Si us plau, completa tots els camps obligatoris per a persona física.",
@@ -1118,83 +1220,63 @@
       }
     },
     "admin": {
+      "newsletter": {
+        "title": "Butlletí",
+        "description": "Rep a la teva bústia les últimes notícies, anàlisis detallades i recursos exclusius de Goteo. Assabenta't de tot sobre micromecenatge, innovació social i tecnologia.",
+        "tabs": {
+          "send": "Enviar butlletí",
+          "templates": "Plantilles",
+          "communications": "Comunicacions"
+        },
+        "send": {
+          "templateSection": "Selecciona una plantilla massiva",
+          "recipientsSection": "Seleccionar destinataris",
+          "optionsSection": "Opcions d'enviament",
+          "addMore": "Afegir-ne més",
+          "startAction": "Iniciar enviament",
+          "placeholders": {
+            "selectTemplate": "Selecciona una plantilla",
+            "selectRecipient": "Selecciona un destinatari"
+          },
+          "options": {
+            "isTest": "És una prova (s'envia als destinataris de proves)",
+            "onlySpanish": "Només en espanyol (no tenir en compte l'idioma preferit de l'usuari)"
+          },
+          "errors": {
+            "noTemplate": "Si us plau, selecciona una plantilla."
+          },
+          "recipients": {
+            "all": "Tots",
+            "promoters": "Promotors",
+            "donors": "Cofinançadors"
+          }
+        },
+        "filters": {
+          "search": "Cerca",
+          "apply": "Filtres"
+        },
+        "table": {
+          "headers": {
+            "template": "Plantilla",
+            "description": "Descripció"
+          }
+        },
+        "communications": {
+          "searchTitle": "Busca destinataris"
+        }
+      },
       "filter": {
         "btns": {
           "openFilters": "Filtres",
           "closeFilters": "Tanca filtres",
           "apply": "Aplica filtres"
-        },
-        "composer": {
-          "title": "Filtres personalitzats",
-          "addFilter": "Afegeix un filtre",
-          "removeFilter": "Elimina",
-          "subjectPlaceholder": "Selecciona un camp",
-          "operatorPlaceholder": "Selecciona una condició",
-          "referentPlaceholder": "Valor",
-          "subject": {
-            "title": "Títol",
-            "subtitle": "Subtítol",
-            "description": "Descripció",
-            "projectStatus": "Estat del projecte",
-            "chargeStatus": "Estat de l'aportació",
-            "categories": "Categoria",
-            "owner": "Propietari",
-            "slug": "ID",
-            "territory": "Territori",
-            "dateUpdated": "Última actualització",
-            "budgetAmount": "Import",
-            "gateway": "Passarel·la",
-            "type": "Tipus",
-            "target": "Destí",
-            "currency": "Moneda",
-            "amount": "Import",
-            "dateCreated": "Data de creació",
-            "handle": "Nom d'usuari",
-            "email": "Correu electrònic",
-            "displayName": "Nom públic",
-            "userType": "Tipus d'usuari",
-            "active": "Actiu",
-            "userRoles": "Rols",
-            "userTerritoryCountry": "Ubicació"
-          },
-          "operator": {
-            "equals": "Igual a",
-            "is_any_of": "Inclòs en",
-            "before": "Anterior a",
-            "after": "Posterior a",
-            "strictly_before": "Estrictament anterior",
-            "strictly_after": "Estrictament posterior",
-            "gte": "Major o igual que",
-            "gt": "Major que",
-            "lte": "Menor o igual que",
-            "lt": "Menor que"
-          },
-          "datePrefix": {
-            "dateCreated": "Creat",
-            "dateUpdated": "Actualitzat"
-          },
-          "dateSuffix": {
-            "after": "després de",
-            "before": "abans de",
-            "strictly_after": "estrictament després de",
-            "strictly_before": "estrictament abans de"
-          },
-          "subjectOption": {
-            "userType": {
-              "individual": "Persona física",
-              "organization": "Persona jurídica (empreses)"
-            },
-            "active": {
-              "true": "Actiu",
-              "false": "Inactiu"
-            }
-          }
         }
       },
       "nav": {
         "charges": "Cobraments",
         "projects": "Projectes",
-        "users": "Usuaris"
+        "users": "Usuaris",
+        "comm": "Comunicació"
       },
       "sidebar": {
         "aria": {
@@ -1203,20 +1285,20 @@
         }
       },
       "charges": {
-        "title": "Aportacions",
-        "description": "Aquí tens les últimes contribucions a campanyes, pots ordenar-les i filtrar-les com vulguis.",
+        "title": "Cobraments",
+        "description": "Aquí tens els últims cobraments, pots ordenar-los i filtrar-los com vulguis.",
         "headers": {
           "target": "Destí",
           "amount": "Import",
           "origin": "Origen",
-          "paymentMethod": "Mètode",
+          "paymentGateway": "Passarel·la de pagament",
           "date": "Data",
-          "chargeStatus": "Estat de l'operació",
-          "refundToWallet": "A moneder"
+          "status": "Estat"
         },
         "noData": "No hi ha dades disponibles",
         "details": {
           "operationTime": "Hora de l'operació",
+          "status": "Estat",
           "trackingCodes": {
             "title": "Codis de seguiment",
             "headers": {
@@ -1224,7 +1306,6 @@
               "trackingCode": "Codi de seguiment"
             }
           },
-          "toWallet": "A moneder",
           "platformLinks": {
             "title": "Enllaç a la plataforma",
             "headers": {
@@ -1234,10 +1315,11 @@
             }
           },
           "estimatedFee": "Comissió estimada",
-          "concept": "Concepte"
+          "concept": "Concepte",
+          "checkout": "Sessió de pagament",
+          "selfId": "Identificador"
         },
         "actions": {
-          "refundToWallet": "Reemborsament a moneder",
           "refundToUser": "Reemborsament a l'usuari",
           "changeUser": "Canviar d'usuari",
           "manageReward": "Gestiona la recompensa"
@@ -1260,7 +1342,7 @@
               "subtitle": "Subtítol",
               "description": "Descripció",
               "projectStatus": "Estat del projecte",
-              "chargeStatus": "Estat de l'aportació",
+              "status": "Estat",
               "categories": "Categoria",
               "owner": "Propietari",
               "slug": "Identificador",
@@ -1316,13 +1398,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Línies per pàgina:",
-            "options": {
-              "10": "10",
-              "20": "20",
-              "30": "30",
-              "50": "50"
-            }
+            "title": "Línies per pàgina:"
           },
           "search": {
             "placeholder": "Cerca per destinació...",
@@ -1350,24 +1426,19 @@
               "invalidRange": "La data d'inici no pot ser posterior a la data de fi."
             }
           },
-          "chargeStatus": {
-            "title": "Estat de l'aportació",
+          "status": {
+            "title": "Estat",
             "options": {
               "all": "Tots",
               "to_charge": "Per cobrar",
               "in_charge": "Cobrat",
               "to_refund": "Per reemborsar",
               "refunded": "Reemborsat",
-              "to_wallet": "Per reemborsar a moneder",
-              "walleted": "Reemborsat a moneder",
+              "to_wallet": "Per reemborsar al moneder",
+              "walleted": "Reemborsat al moneder",
               "funding_paid": "Cobrament pagat"
             }
           }
-        },
-        "pagination": {
-          "showing": "Mostrant {{items}} de {{total}}",
-          "unloaded": "Mostrant...",
-          "noResults": "No hi ha resultats"
         },
         "downloadButtons": {
           "certificates": "Descarrega certificats",
@@ -1375,12 +1446,69 @@
         },
         "lastEdited": "Última modificació: {{date}} {{time}}",
         "annotations": "{{annotations}} anotacions",
-        "lastContributions": "Últimes aportacions:",
+        "lastContributions": "Últims cobraments:",
         "totalizers": {
-          "selected": "Aportacions seleccionades:",
-          "totalCharges": "Total aportacions:",
+          "selected": "Cobraments seleccionats:",
+          "totalCharges": "Total cobraments:",
           "totalTips": "Total propines:",
           "totalFees": "Comissions totals:"
+        },
+        "create": {
+          "trigger": "Crear càrrec manual",
+          "title": "Crear càrrec manual",
+          "steps": {
+            "user": {
+              "title": "Compte del donant",
+              "description": "Busca un usuari existent per email o, si no existeix, crea'n un de nou."
+            },
+            "charge": {
+              "title": "Dades del càrrec",
+              "description": "Defineix a quin projecte es destina el càrrec, l'import i el mètode."
+            },
+            "fiscal": {
+              "title": "Dades fiscals",
+              "description": "Revisa les dades fiscals del donant. El NIF/CIF no es pot modificar."
+            }
+          },
+          "fields": {
+            "userTypeLabel": "Tipus:",
+            "emailSearchPlaceholder": "Buscar per email...",
+            "userSearchError": "Error en buscar usuaris.",
+            "userNoAccounting": "Aquest usuari no té una comptabilitat associada i no pot rebre càrrecs.",
+            "userSearchResults": "Resultats:",
+            "noUserFound": "No s'han trobat usuaris amb aquest email.",
+            "createNewUserInstead": "Crear-ne un de nou en el seu lloc",
+            "createUserWithEmail": "Crear usuari nou",
+            "selectedUserLabel": "Usuari seleccionat",
+            "newUserLabel": "Usuari nou",
+            "generatePassword": "Genera",
+            "taxIdHint": "El NIF/CIF no es pot modificar des d'aquí.",
+            "target": "Projecte / Tipjar de destinació",
+            "targetSearchPlaceholder": "Buscar projecte o tipjar...",
+            "gatewayPlaceholder": "Selecciona una passarel·la de pagament",
+            "currency": "Moneda",
+            "amountHelper": "Introdueix l'import amb la seva moneda (p. ex. 10,50)",
+            "chargeTitle": "Concepte del càrrec",
+            "chargeDescription": "Descripció interna (opcional)"
+          },
+          "fiscal": {
+            "loadError": "No s'han pogut carregar les dades fiscals. Pots emplenar-les manualment."
+          },
+          "actions": {
+            "next": "Següent",
+            "submit": "Crear càrrec",
+            "submitting": "Creant càrrec...",
+            "changeUser": "Canviar"
+          },
+          "errors": {
+            "userExists": "Ja existeix un usuari amb aquest email.",
+            "unauthorized": "No tens permisos per crear aquest càrrec.",
+            "unexpected": "S'ha produït un error inesperat. Revisa la consola per a més detalls."
+          },
+          "success": {
+            "title": "Cobrament creat correctament",
+            "description": "L'usuari {{email}} ja pot iniciar sessió i s'ha creat el càrrec per {{amount}}."
+          }
         }
       },
       "projects": {
@@ -1444,12 +1572,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Línies per pàgina",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Línies per pàgina"
           }
         },
         "table": {
@@ -1547,10 +1670,6 @@
             },
             "save": "Desa"
           }
-        },
-        "pagination": {
-          "showing": "Mostrant {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} per pàgina"
         }
       },
       "users": {
@@ -1582,12 +1701,7 @@
             }
           },
           "itemsPerPage": {
-            "title": "Línies per pàgina",
-            "options": {
-              "10": "10",
-              "25": "25",
-              "50": "50"
-            }
+            "title": "Línies per pàgina"
           }
         },
         "table": {
@@ -1621,10 +1735,55 @@
               "active": "Actiu"
             }
           }
+        }
+      },
+      "comm": {
+        "title": "Comunicació",
+        "description": "Administra la comunicació de la plataforma",
+        "tabs": {
+          "banners": "Anuncis",
+          "newsletter": "Butlletí"
         },
-        "pagination": {
-          "showing": "Mostrant {{ items }} de {{ total }}",
-          "itemsPerPage": "{{ count }} per pàgina"
+        "banners": {
+          "title": "Anuncis",
+          "description": "Aquí pots crear i gestionar els bàners de la plataforma",
+          "errors": {
+            "forbidden": "No tens permisos per gestionar anuncis",
+            "invalidUrl": "L'URL de l'anunci no és vàlida",
+            "invalidDateRange": "La data de fi no pot ser anterior a la d'inici"
+          },
+          "tabs": {
+            "fields": "Nous",
+            "history": "Històric"
+          },
+          "fields": {
+            "dataTitle": "Dades de l'anunci",
+            "titlePlaceholder": "Títol de l'anunci",
+            "contentPlaceholder": "Breu descripció de l'anunci",
+            "ctaPlaceholder": "Crida a l'acció",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programa l'anunci",
+            "startDatePlaceholder": "Indica la data d'inici",
+            "endDatePlaceholder": "Indica la data de fi"
+          },
+          "history": {
+            "title": "Històric d'anuncis",
+            "description": "Aquí pots veure l'històric d'anuncis publicats",
+            "noData": "No hi ha anuncis a l'històric",
+            "headers": {
+              "title": "Títol",
+              "content": "Contingut",
+              "publishedAt": "Data de publicació",
+              "endAt": "Data de finalització"
+            },
+            "actions": {
+              "view": "Veure"
+            },
+            "modal": {
+              "title": "Anunci publicat el {{date}}",
+              "description": "Aquí pots veure com era l'anunci"
+            }
+          }
         }
       }
     },

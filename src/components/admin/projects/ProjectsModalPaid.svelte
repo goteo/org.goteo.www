@@ -1,9 +1,9 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
 
-    import { t } from "../../i18n/store";
-    import Button from "../library/buttons/Button.svelte";
-    import TextInput from "../library/inputs/TextInput.svelte";
+    import { t } from "../../../i18n/store";
+    import Button from "../../library/buttons/Button.svelte";
+    import TextInput from "../../library/inputs/TextInput.svelte";
 
     let {
         open = $bindable(false),
