@@ -14,6 +14,7 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
+    import MediaUploader from "./MediaUploader.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
     import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
@@ -28,9 +29,8 @@
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { JSONContent } from "@tiptap/core";
-    import MediaUploader from "./MediaUploader.svelte";
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
+    import type { JSONContent } from "@tiptap/core";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;

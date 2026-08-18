@@ -17,13 +17,13 @@
 
     import { t } from "../../../i18n/store";
     import { uploadImage } from "../../../utils/media/imageUpload";
-    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
-    import Button from "../../library/buttons/Button.svelte";
-    import Loader from "../../library/feedback/Loader.svelte";
     import {
         STORAGE_ALLOWEDTYPES,
         type UploadedObject,
     } from "../../../utils/media/objectStorage.types";
+    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Loader from "../../library/feedback/Loader.svelte";
 
     interface MediaUploaderProps {
         onUpload: (image: UploadedObject) => void;

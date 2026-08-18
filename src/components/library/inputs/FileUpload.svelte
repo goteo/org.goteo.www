@@ -2,12 +2,12 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
+    import { uploadImage } from "../../../utils/media/imageUpload";
     import UploadFileIcon from "../../icons/actions/UploadFile.svelte";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import WarningIcon from "../../icons/status/Warning.svelte";
     import Button from "../buttons/Button.svelte";
 
-    import { uploadImage } from "../../../utils/media/imageUpload";
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     let {

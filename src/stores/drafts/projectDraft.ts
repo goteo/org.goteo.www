@@ -21,8 +21,8 @@ import type {
     ProjectReward,
     Territory,
 } from "../../openapi/client";
-import type { JSONContent } from "@tiptap/core";
 import type { UploadedObject } from "../../utils/media/objectStorage.types";
+import type { JSONContent } from "@tiptap/core";
 
 export interface WizardConfiguration {
     /**

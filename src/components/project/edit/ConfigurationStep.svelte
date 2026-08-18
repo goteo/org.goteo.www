@@ -17,6 +17,7 @@
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import DateInput from "../../../components/library/inputs/DateInput.svelte";
     import { locale, t } from "../../../i18n/store";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
@@ -32,7 +33,6 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
-    import { withoutCache } from "../../../openapi/cacheInterceptor";
 
     interface ConfigurationStepProps {
         project?: Project;

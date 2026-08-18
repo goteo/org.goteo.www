@@ -2,10 +2,13 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 import { createClient } from "../../../utils/media/objectStorage";
+import {
+    STORAGE_ALLOWEDTYPES,
+    STORAGE_PREFIX_TEMP,
+} from "../../../utils/media/objectStorage.types";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
-import { STORAGE_ALLOWEDTYPES, STORAGE_PREFIX_TEMP } from "../../../utils/media/objectStorage.types";
 
 function json(data: unknown, status = 200) {
     return new Response(JSON.stringify(data), {
