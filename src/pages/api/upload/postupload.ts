@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { fileTypeFromBuffer } from "file-type";
 
-import { client } from "../../../utils/media/objectStorage";
+import { createClient } from "../../../utils/media/objectStorage";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
@@ -37,6 +37,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     }
 
     try {
+        const client = createClient();
         const res = await client.send(
             new GetObjectCommand({
                 Bucket: import.meta.env.OBJECT_STORAGE_BUCKET,

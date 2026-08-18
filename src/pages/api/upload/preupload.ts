@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { client } from "../../../utils/media/objectStorage";
+import { createClient } from "../../../utils/media/objectStorage";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
@@ -39,6 +39,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             ContentType: contentType,
         });
 
+        const client = createClient();
         const signedUrl = await getSignedUrl(client, command, {
             expiresIn: 120,
         });

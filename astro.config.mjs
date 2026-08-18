@@ -238,6 +238,27 @@ export default defineConfig({
                 "astro/actions/runtime/entrypoints/route.js",
                 "astro/assets/services/noop",
             ],
+            exclude: [
+                /**
+                 * The AWS SDK v3 packages must not be SSR-prebundled by Vite.
+                 *
+                 * Vite's SSR dependency optimizer produces an invalid CJS/ESM
+                 * interop wrapper for @aws-sdk/client-s3 under the Cloudflare
+                 * Worker runtime. The resulting bundle fails while constructing
+                 * S3Client with:
+                 *
+                 *   __vite_ssr_import_7__.n is not a function
+                 *
+                 * This happens while evaluating the module, before the API route
+                 * handler runs, and Astro consequently surfaces the failure as
+                 * its 404 page. Fuck JavaScript, I hate it with all of my soul,
+                 * over 20 years of development and this stupid language still can't
+                 * get a single fucking simple way to resolve and bundle modules,
+                 * something universal in every other fucking language. Even vba can.
+                 */
+                "@aws-sdk/client-s3",
+                "@aws-sdk/s3-request-presigner",
+            ],
         },
     },
 
