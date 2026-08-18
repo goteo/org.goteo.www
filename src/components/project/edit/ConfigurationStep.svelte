@@ -25,6 +25,7 @@
         navigateToStep,
         updateConfiguration,
         updateProject,
+        type WizardConfiguration,
     } from "../../../stores/drafts/projectDraft";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
@@ -65,9 +66,7 @@
         allCategories = toCollectionItems<Category>(data);
     });
 
-    let projectDeadline = $derived(
-        $currentDraft?.wizardForm.configuration.projectDeadline ?? "minimum",
-    );
+    let deadline = $derived($currentDraft?.wizardForm.configuration.deadline ?? "minimum");
 
     /**
      * Handle Continue button
@@ -97,8 +96,8 @@
     /**
      * Handle funding rounds change
      */
-    function handleRoundsChange(projectDeadline: "minimum" | "optimum") {
-        updateConfiguration({ projectDeadline });
+    function handleRoundsChange(deadline: WizardConfiguration["deadline"]) {
+        updateConfiguration({ deadline });
     }
 
     /**
@@ -172,7 +171,7 @@
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector bind:deadline={projectDeadline} onChange={handleRoundsChange} />
+        <RoundSelector bind:deadline onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->

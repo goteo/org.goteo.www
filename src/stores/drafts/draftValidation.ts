@@ -75,7 +75,7 @@ export function validateDraftToPublish(draft: Draft): ValidationErrors {
  * Validation schema for Configuration step
  */
 export const configurationSchema = z.object({
-    projectDeadline: z.enum(["minimum", "optimum"]),
+    deadline: z.enum(["minimum", "optimum"]),
 });
 
 /**

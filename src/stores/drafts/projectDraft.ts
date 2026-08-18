@@ -25,7 +25,10 @@ import type { JSONContent } from "@tiptap/core";
 import type { UploadedObject } from "../../utils/objectStorage";
 
 export interface WizardConfiguration {
-    projectDeadline: "minimum" | "optimum"; // Default: minimum
+    /**
+     * Defaults to "minimum"
+     */
+    deadline: "minimum" | "optimum";
 }
 
 export interface WizardCampaignInfo {
@@ -127,7 +130,7 @@ export const wizard = derived(
         ({
             currentStep: 1,
             configuration: {
-                projectDeadline: "minimum",
+                deadline: "minimum",
             },
             campaignInfo: {
                 images: [],
@@ -275,7 +278,7 @@ export async function createDraft(
         wizardForm: {
             currentStep: 1,
             configuration: {
-                projectDeadline: "minimum",
+                deadline: "minimum",
             },
             campaignInfo: {
                 images: resources?.images ?? [],

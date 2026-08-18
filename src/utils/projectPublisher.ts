@@ -158,7 +158,7 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
             descAbout: richTextToMarkdown(wizard.campaignInfo.about),
             descGoal: richTextToMarkdown(wizard.campaignInfo.goal),
             descTeam: richTextToMarkdown(wizard.campaignInfo.team),
-            deadline: wizard.configuration.projectDeadline,
+            deadline: wizard.configuration.deadline,
             territory: draft.createProject.territory,
             cover: firstImage?.url ?? "",
         } as ProjectProjectUpdationDto & { cover?: string },

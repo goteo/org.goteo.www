@@ -110,7 +110,7 @@
             categories: $currentDraft.createProject.categories,
             territory: $currentDraft.createProject.territory as Project["territory"],
             description: "",
-            deadline: $currentDraft.wizardForm.configuration.projectDeadline,
+            deadline: $currentDraft.wizardForm.configuration.deadline,
             budget: $currentDraft.wizardForm.budget,
             status: $currentDraft.createProject.status,
         };
