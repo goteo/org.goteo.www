@@ -1,6 +1,43 @@
 import { S3Client } from "@aws-sdk/client-s3";
 
 /**
+ * Uploaded file data
+ */
+export interface UploadedObject {
+    id: string;
+
+    /**
+     * Full URL to the object.
+     */
+    url: string;
+
+    /**
+     * Object Key.
+     */
+    key?: string;
+
+    /**
+     * Original file reference
+     */
+    file?: File;
+
+    /**
+     * MIME type.
+     */
+    type: string;
+
+    /**
+     * Object size in bytes
+     */
+    size: number;
+
+    /**
+     * Original filename
+     */
+    name: string;
+}
+
+/**
  * Stable pre-fix for processed files.
  */
 export const STORAGE_PREFIX_STABLE = "uploads/public";
