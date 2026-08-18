@@ -13,8 +13,8 @@
     - Full keyboard accessibility
 
     Props:
-     - images: UploadedFile[] - Array of uploaded images
-     - onUpload: (image: UploadedFile) => void - Callback when image uploaded successfully
+     - images: UploadedObject[] - Array of uploaded images
+     - onUpload: (image: UploadedObject) => void - Callback when image uploaded successfully
      - maxFiles?: number - Maximum number of files allowed (default: 3)
      - maxFileSize?: number - Maximum file size in bytes (default: 5MB)
      - accept?: string - Accepted file types (default: "image/*")
@@ -29,13 +29,11 @@
     import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
-
-    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
+    import type { UploadedObject } from "../../../utils/objectStorage";
 
     interface MediaUploaderProps {
-        images: UploadedFile[];
-        onUpload: (image: UploadedFile) => void;
-        maxFiles?: number;
+        images: UploadedObject[];
+        onUpload: (image: UploadedObject) => void;
         maxFileSize?: number;
         accept?: string;
         error?: string;
@@ -45,8 +43,7 @@
     let {
         images,
         onUpload,
-        maxFiles = 3,
-        maxFileSize = 5 * 1024 * 1024,
+        maxFileSize = import.meta.env.PUBLIC_DEFAULT_MAXSIZE,
         accept = "image/*",
         error = undefined,
         class: className = "",
@@ -65,12 +62,6 @@
         if (!files || files.length === 0) return;
 
         validationError = null;
-
-        if (images.length >= maxFiles) {
-            validationError = $t("pages.project.edit.campaignInfo.media.validation.max_images");
-            resetInput();
-            return;
-        }
 
         const file = files[0];
 
@@ -94,7 +85,7 @@
         try {
             const { url, key } = await uploadImage(file);
 
-            const newImage: UploadedFile = {
+            const newImage: UploadedObject = {
                 id: crypto.randomUUID(),
                 url,
                 key,
@@ -130,13 +121,11 @@
         type="button"
         kind="secondary"
         size="md"
-        disabled={images.length >= maxFiles || isUploading}
+        disabled={isUploading}
         onclick={() => fileInput?.click()}
         aria-label={isUploading
             ? $t("pages.project.edit.campaignInfo.media.uploading")
-            : images.length >= maxFiles
-              ? $t("pages.project.edit.campaignInfo.media.maxImagesReached", { max: maxFiles })
-              : $t("pages.project.edit.campaignInfo.media.addImage")}
+            : $t("pages.project.edit.campaignInfo.media.addImage")}
         aria-busy={isUploading}
     >
         {#if isUploading}
@@ -155,7 +144,7 @@
         {accept}
         onchange={handleFileSelect}
         class="hidden"
-        disabled={images.length >= maxFiles || isUploading}
+        disabled={isUploading}
     />
 
     {#if errorMessage}
@@ -168,11 +157,5 @@
         <div role="status" aria-live="polite" class="text-content mt-1 text-xs">
             {$t("pages.project.edit.campaignInfo.media.processing", { name: uploadProgress })}
         </div>
-    {/if}
-
-    {#if images.length >= maxFiles}
-        <p class="text-content mt-1 text-xs" role="status" aria-live="polite">
-            {$t("pages.project.edit.campaignInfo.media.maxImagesReached", { max: maxFiles })}
-        </p>
     {/if}
 </div>

@@ -649,7 +649,6 @@
             "validation": {
               "image_too_large": "La imagen supera el tamaño máximo permitido",
               "invalid_image": "Formato de imagen no válido",
-              "max_images": "Número máximo de imágenes alcanzado",
               "upload_failed": "Error al subir el archivo"
             }
           },
