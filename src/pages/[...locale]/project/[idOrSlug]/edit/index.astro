@@ -25,6 +25,7 @@ const { data: project, error: getError } = await apiProjectsIdOrSlugGet({
 });
 
 if (getError) {
+    console.error(getError);
     if (getError.status === NotFound.status) {
         return Astro.rewrite("/404");
     }
@@ -40,6 +41,7 @@ const { request, error: patchError } = await apiProjectsIdPatch({
 });
 
 if (patchError) {
+    console.error(patchError);
     if (patchError.status === NotFound.status) {
         return Astro.rewrite("/404");
     }

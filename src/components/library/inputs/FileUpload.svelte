@@ -2,24 +2,24 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import { uploadImage } from "../../../utils/imageUpload";
     import UploadFileIcon from "../../icons/actions/UploadFile.svelte";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import WarningIcon from "../../icons/status/Warning.svelte";
     import Button from "../buttons/Button.svelte";
 
-    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
+    import { uploadImage } from "../../../utils/media/imageUpload";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     let {
         maxSizeMB = 20,
         accept = ["image/png", "image/jpeg", "video/mp4", "video/quicktime"],
-        files = $bindable<UploadedFile[]>([]),
+        files = $bindable<UploadedObject[]>([]),
         ariaLabel = "Upload files",
         class: className = "",
     } = $props<{
         maxSizeMB?: number;
         accept?: string[];
-        files?: UploadedFile[];
+        files?: UploadedObject[];
         ariaLabel?: string;
         class?: ClassNameValue;
     }>();
@@ -72,7 +72,7 @@
                 },
             });
 
-            const uploaded: UploadedFile = {
+            const uploaded: UploadedObject = {
                 id: crypto.randomUUID(),
                 url,
                 key,
@@ -129,7 +129,7 @@
     async function handleRemove(id: string) {
         deleting = new Set(deleting).add(id);
 
-        const file = files.find((f: UploadedFile) => f.id === id);
+        const file = files.find((f: UploadedObject) => f.id === id);
         if (file?.key) {
             try {
                 await fetch("/api/upload/delete", {
@@ -148,7 +148,7 @@
         next.delete(id);
         deleting = next;
 
-        files = files.filter((f: UploadedFile) => f.id !== id);
+        files = files.filter((f: UploadedObject) => f.id !== id);
     }
 
     function formatFileSize(bytes: number): string {

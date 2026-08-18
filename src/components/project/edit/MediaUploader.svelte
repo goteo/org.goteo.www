@@ -25,11 +25,11 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
-    import { uploadImage } from "../../../utils/imageUpload";
+    import { uploadImage } from "../../../utils/media/imageUpload";
     import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
-    import type { UploadedObject } from "../../../utils/objectStorage";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     interface MediaUploaderProps {
         images: UploadedObject[];

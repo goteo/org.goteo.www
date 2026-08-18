@@ -30,7 +30,7 @@
 
     import type { JSONContent } from "@tiptap/core";
     import MediaUploader from "./MediaUploader.svelte";
-    import type { UploadedObject } from "../../../utils/objectStorage";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     interface CampaignInfoStepProps {
         onContinue?: () => void;

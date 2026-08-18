@@ -1,16 +1,11 @@
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { fileTypeFromBuffer } from "file-type";
 
-import {
-    STORAGE_ALLOWEDTYPES,
-    STORAGE_MAXSIZE,
-    STORAGE_PREFIX_STABLE,
-    STORAGE_PREFIX_TEMP,
-    client,
-} from "../../../utils/objectStorage";
+import { client } from "../../../utils/media/objectStorage";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
+import { STORAGE_ALLOWEDTYPES, STORAGE_MAXSIZE, STORAGE_PREFIX_STABLE, STORAGE_PREFIX_TEMP } from "../../../utils/media/objectStorage.types";
 
 function json(data: unknown, status = 200): Response {
     return new Response(JSON.stringify(data), {
