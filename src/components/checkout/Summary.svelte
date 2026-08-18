@@ -3,7 +3,7 @@
     import { t } from "../../i18n/store";
     import { cartAmount, cartByRecipient } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
-    import { multiplyMoney, sumMoney } from "../../utils/money";
+    import { multiplyMoney, sumMoney, subtractMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
     import Title from "../library/typography/Title.svelte";
@@ -31,6 +31,12 @@
             return 0;
         }),
     );
+
+    const totalDonations = $derived(
+        sumMoney(Object.values($cartByRecipient).flat().map((i) => multiplyMoney(i.money, i.quantity)))
+    );
+
+    const contributionToFoundation = $derived(subtractMoney(displayTotal, totalDonations));
 </script>
 
 <div class="flex w-full flex-col gap-6">
@@ -63,8 +69,14 @@
         {/snippet}
 
         {#snippet content()}
-            <hr class="bg-secondary h-px border-none" />
-            <div>
+            <hr class="bg-secondary h-px border-none my-0" />
+
+            <div class="text-content text-sm font-normal mb-4">
+                <span class="font-bold text-black">{formatCurrency(totalDonations)}</span> {$t("pages.checkout.summary.donationsText")}
+                + <span class="font-bold text-black">{formatCurrency(contributionToFoundation)}</span> {$t("pages.checkout.summary.contributionText")}
+            </div>
+
+            <div class="flex flex-col gap-2">
                 {#each recipients as [_, items]}
                     {@const name = items[0].recipientDisplayName}
                     {@const amount = sumMoney(items.map((i) => multiplyMoney(i.money, i.quantity)))}

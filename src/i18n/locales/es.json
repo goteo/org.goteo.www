@@ -17,6 +17,15 @@
         "unsupportedType": "Tipo de archivo no permitido: {{ file }}"
       }
     },
+    "OAuth": {
+      "client": {
+        "error": "Correo electrónico o contraseña inválidos.",
+        "invalidGrant": "Las credenciales proporcionadas son inválidas o han expirado.",
+        "unauthorizedClient": "El cliente no está autorizado para utilizar este método de autorización.",
+        "invalidRequest": "La petición carece de un parámetro obligatorio o incluye un parámetro no soportado.",
+        "serverError": "El servidor de autorización ha encontrado una situación inesperada."
+      }
+    },
     "constraint": {
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido 10MB",
@@ -393,6 +402,7 @@
       "title": "Goteo"
     },
     "checkout": {
+      "btnContinue": "Continuar",
       "metadata": {
         "title": "Checkout",
         "description": "Página de checkout"
@@ -415,13 +425,15 @@
       "summary": {
         "toRecipient": "{{ amount }} a {{ name }}",
         "total": {
-          "title": "Total que vas a donar"
+          "title": "Total que vas a donar:"
         },
         "deduct": "Puedes desgravarte hasta 100€ en tu declaración de la renta si realizas esta donación.",
         "showDetails": "Ver detalle",
         "hideDetails": "Ocultar desglose",
         "showMore": "Ver más",
-        "hide": "Ocultar"
+        "hide": "Ocultar",
+        "donationsText": "de donaciones",
+        "contributionText": "de aporte a la fundación"
       },
       "steps": {
         "reward": {
@@ -1084,7 +1096,8 @@
         "title": "Indícanos tus datos personales",
         "description": "Necesitamos saber quién eres antes de pagar.",
         "registerOr": "Regístrate o",
-        "loginBtnLabel": "Entra con tu cuenta"
+        "loginBtnLabel": "Entra con tu cuenta",
+        "existUserInfo": "Si ya eres usuario de Goteo identificate. Podrás hacer uso de tu monedero para realizar estas donaciones."
       },
       "form": {
         "userType": {
@@ -1092,7 +1105,7 @@
           "organization": "Persona jurídica (empresas)"
         },
         "btnSubmit": "Registrarse",
-        "termsCheckbox": "Acepto las condiciones legales",
+        "termsCheckbox": "Acepto las nuevas {{ legal }}condiciones legales{{ _legal }}",
         "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
         "validation": {
           "password": {

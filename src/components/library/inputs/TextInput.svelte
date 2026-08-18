@@ -38,7 +38,7 @@
 
     const inputClasses = $derived(
         twMerge(
-            "border-secondary w-full rounded-lg border bg-white p-4 text-base text-content placeholder:text-gray-400 transition-all outline-none focus:ring-0",
+            "border-secondary w-full rounded-lg border bg-transparent p-4 text-base text-content placeholder:text-gray-400 transition-all outline-none focus:ring-0",
             error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
             disabled && "cursor-not-allowed",
             classes,
