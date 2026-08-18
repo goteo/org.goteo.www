@@ -26,7 +26,7 @@
         "greaterThan": "La fecha debe ser mayor que {{ date }}"
       },
       "file": {
-        "maxAllowedSize": "Tamaño máximo permitido 10MB",
+        "maxAllowedSize": "Tamaño máximo permitido {{ size }}",
         "supportedTypes": "Archivos compatibles: {{ types }}"
       }
     },

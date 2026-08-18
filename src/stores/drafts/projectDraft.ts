@@ -59,7 +59,6 @@ export type Wizard = {
 
     // Step 3: Rewards
     rewards: ProjectReward[];
-    rewardImages?: Record<number, UploadedObject[]>;
 
     // Step 4: Collaborations
     collaborations: ProjectCollaboration[];
@@ -531,21 +530,8 @@ export function deleteReward(index: number) {
     const draft = get(currentDraft);
     if (!draft) return;
 
-    const rewardImages = { ...draft.wizardForm.rewardImages };
-    delete rewardImages[index];
-
     updateWizard({
         rewards: draft.wizardForm.rewards.filter((_, i) => i !== index),
-        rewardImages,
-    });
-}
-
-export function updateRewardFiles(index: number, files: UploadedObject[]) {
-    const draft = get(currentDraft);
-    if (!draft) return;
-
-    updateWizard({
-        rewardImages: { ...draft.wizardForm.rewardImages, [index]: files },
     });
 }
 

@@ -11,15 +11,15 @@
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     let {
-        maxSizeMB = 20,
         accept = ["image/png", "image/jpeg", "video/mp4", "video/quicktime"],
         files = $bindable<UploadedObject[]>([]),
+        onUpload,
         ariaLabel = "Upload files",
         class: className = "",
     } = $props<{
-        maxSizeMB?: number;
         accept?: string[];
         files?: UploadedObject[];
+        onUpload: (file: UploadedObject) => void;
         ariaLabel?: string;
         class?: ClassNameValue;
     }>();
@@ -29,7 +29,7 @@
     let uploading = $state<Map<string, number>>(new Map());
     let deleting = $state<Set<string>>(new Set());
 
-    const maxSizeBytes = $derived(maxSizeMB * 1024 * 1024);
+    const maxSize = import.meta.env.PUBLIC_DEFAULT_MAXSIZE;
 
     const mimeExtensions: Record<string, string> = {
         "image/png": ".png",
@@ -46,8 +46,8 @@
     const hasUploading = $derived(uploading.size > 0);
 
     function validate(file: File) {
-        if (file.size > maxSizeBytes) {
-            error = `${$t("system.error.file.sizeTooLarge", { file: file.name, max: maxSizeMB })}`;
+        if (file.size > maxSize) {
+            error = `${$t("system.error.file.sizeTooLarge", { file: file.name, max: maxSize })}`;
             return false;
         }
 
@@ -102,6 +102,7 @@
 
         for (const file of validFiles) {
             await uploadFile(file);
+            onUpload?.(file);
         }
     }
 
@@ -272,7 +273,9 @@
             <WarningIcon width="16" height="16" />
             <span>{$t("system.constraint.file.supportedTypes", { types: supportedTypes })}</span>
         </div>
-        <span>{$t("system.constraint.file.maxAllowedSize", { maxSizeMB })}</span>
+        <span>
+            {$t("system.constraint.file.maxAllowedSize", { size: formatFileSize(maxSize) })}
+        </span>
     </div>
 
     {#if error}

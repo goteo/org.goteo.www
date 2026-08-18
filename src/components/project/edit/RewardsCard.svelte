@@ -5,12 +5,9 @@
     import { t } from "../../../i18n/store";
     import {
         addReward,
-        currentDraft,
         deleteReward,
         updateReward,
-        updateRewardFiles,
         validationErrors,
-        type UploadedFile,
     } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
@@ -40,11 +37,7 @@
     let openDeleteModal = $state(false);
     let showModalErrorToast = $state(false);
 
-    const existingFiles = $derived(
-        index !== undefined ? ($currentDraft?.wizardForm.rewardImages?.[index] ?? []) : [],
-    );
-
-    function handleSaveReward(data: ProjectReward | null, files: UploadedFile[]) {
+    function handleSaveReward(data: ProjectReward | null) {
         if (!data) return;
         let errors;
 
@@ -64,12 +57,6 @@
             return;
         }
 
-        if (index !== undefined) {
-            updateRewardFiles(index, files);
-        } else if ($currentDraft) {
-            updateRewardFiles($currentDraft.wizardForm.rewards.length - 1, files);
-        }
-
         validationErrors.set({});
         openModal = false;
     }
@@ -82,8 +69,6 @@
         openDeleteModal = false;
         validationErrors.set({});
     }
-
-    const rewardImage = $derived(existingFiles.length > 0 ? existingFiles[0] : null);
 </script>
 
 {#if isCreateCard}
@@ -110,9 +95,9 @@
             <Close class="size-5" />
         </button>
 
-        {#if rewardImage}
+        {#if reward.cover}
             <div class="aspect-4/3 w-full overflow-hidden rounded-lg">
-                <img src={rewardImage.url} alt={reward.title} class="h-full w-full object-cover" />
+                <img src={reward.cover} alt={reward.title} class="h-full w-full object-cover" />
             </div>
         {/if}
 
@@ -172,7 +157,6 @@
             bind:showToast={showModalErrorToast}
             {project}
             {reward}
-            existingFiles={rewardImage ? [rewardImage] : []}
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
         />

@@ -18,14 +18,13 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
-    import type { UploadedFile } from "../../../stores/drafts/projectDraft";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     let {
         open = $bindable(false),
         showToast = $bindable(false),
         project,
         reward,
-        existingFiles = [],
         onSave,
         onDelete,
     }: {
@@ -33,8 +32,7 @@
         showToast: boolean;
         project: Project;
         reward: ProjectReward | null;
-        existingFiles?: UploadedFile[];
-        onSave: (data: ProjectReward | null, files: UploadedFile[]) => void;
+        onSave: (data: ProjectReward | null) => void;
         onDelete?: () => void;
     } = $props();
 
@@ -46,7 +44,7 @@
     );
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
-    let files = $state<UploadedFile[]>(untrack(() => existingFiles));
+    let cover = $state<UploadedObject>();
 
     let openDeleteModal = $state(false);
 
@@ -78,20 +76,20 @@
             path: { idOrSlug: project.slug },
         });
 
-        onSave(
-            {
-                project: projectIri,
-                title,
-                description,
-                money: {
-                    amount: Math.round(moneyAmount * getUnit(reward!.money?.currency)),
-                    currency: reward!.money.currency,
-                },
-                isFinite: unlimited ? false : true,
-                unitsTotal: unlimited ? null : rewardCount,
+        const currency = reward?.money.currency || import.meta.env.PUBLIC_DEFAULT_CURRENCY;
+
+        onSave({
+            project: projectIri,
+            title,
+            description,
+            cover: cover?.url,
+            money: {
+                amount: Math.round(moneyAmount * getUnit(currency)),
+                currency: currency,
             },
-            files,
-        );
+            isFinite: unlimited ? false : true,
+            unitsTotal: unlimited ? null : rewardCount,
+        });
     }
 
     function handleDeleteClick() {
@@ -157,7 +155,7 @@
                 onBlur={() => (formTouched = true)}
             />
             <div class="flex flex-col gap-6">
-                <FileUpload bind:files />
+                <FileUpload onUpload={(file) => (cover = file)} />
                 <RewardItemsSelector bind:value={rewardCount} bind:unlimited />
             </div>
         </div>
