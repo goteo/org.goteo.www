@@ -1520,6 +1520,10 @@ export type Project = {
      */
     subtitle: string;
     /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
+    /**
      * On `minimum`, Project will campaign until the minimum deadline.\
      * On `optimum`, Project will campaing until the minimum deadline,
      * and then until the optimum deadline if it did raise the minimum.
@@ -1604,6 +1608,10 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
+    /**
      * List of Categories.
      */
     categories: Array<string>;
@@ -1626,6 +1634,10 @@ export type ProjectProjectCreationDtoJsonld = {
      * Secondary headline for the Project.
      */
     subtitle: string;
+    /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
     /**
      * List of Categories.
      */
@@ -1650,6 +1662,10 @@ export type ProjectProjectUpdationDto = {
      * Secondary headline for the Project.
      */
     subtitle?: string;
+    /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
     /**
      * List of Categories.
      */
@@ -1726,6 +1742,10 @@ export type ProjectJsonld = {
      * Secondary headline for the Project.
      */
     subtitle: string;
+    /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
     /**
      * On `minimum`, Project will campaign until the minimum deadline.\
      * On `optimum`, Project will campaing until the minimum deadline,
@@ -1997,6 +2017,10 @@ export type ProjectReward = {
      */
     description: string | null;
     /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
+    /**
      * The minimal monetary sum to be able to claim this reward.
      */
     money: MoneyInput;
@@ -2049,6 +2073,10 @@ export type ProjectRewardJsonld = {
      * Information about this reward. More detailed than the title.
      */
     description: string | null;
+    /**
+     * URL to an image resource to be displayed as header.
+     */
+    cover?: string;
     /**
      * The minimal monetary sum to be able to claim this reward.
      */
@@ -2840,51 +2868,6 @@ export type ApiAccountingsIdGetResponses = {
 };
 
 export type ApiAccountingsIdGetResponse = ApiAccountingsIdGetResponses[keyof ApiAccountingsIdGetResponses];
-
-export type ApiAccountingsIdPatchData = {
-    /**
-     * The updated Accounting resource
-     */
-    body: Accounting;
-    path: {
-        /**
-         * Accounting identifier
-         */
-        id: string;
-    };
-    query?: never;
-    url: '/v4/accountings/{id}';
-};
-
-export type ApiAccountingsIdPatchErrors = {
-    /**
-     * Invalid input
-     */
-    400: ErrorJsonld;
-    /**
-     * Forbidden
-     */
-    403: ErrorJsonld;
-    /**
-     * Not found
-     */
-    404: ErrorJsonld;
-    /**
-     * An error occurred
-     */
-    422: ConstraintViolationJsonldJsonld;
-};
-
-export type ApiAccountingsIdPatchError = ApiAccountingsIdPatchErrors[keyof ApiAccountingsIdPatchErrors];
-
-export type ApiAccountingsIdPatchResponses = {
-    /**
-     * Accounting resource updated
-     */
-    200: Accounting;
-};
-
-export type ApiAccountingsIdPatchResponse = ApiAccountingsIdPatchResponses[keyof ApiAccountingsIdPatchResponses];
 
 export type ApiAccountingBalancePointsGetCollectionData = {
     body?: never;
