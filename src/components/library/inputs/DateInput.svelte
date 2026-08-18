@@ -56,7 +56,7 @@
     let hasSelection = $state(hasValue);
 
     const displayValue = $derived(
-        hasSelection && value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
+        value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
     );
 
     function dateToString(date: Date): string {
