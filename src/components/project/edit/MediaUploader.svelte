@@ -11,15 +11,6 @@
     - Inline error messages with visual feedback
     - Loading states with progress indicator
     - Full keyboard accessibility
-
-    Props:
-     - images: UploadedObject[] - Array of uploaded images
-     - onUpload: (image: UploadedObject) => void - Callback when image uploaded successfully
-     - maxFiles?: number - Maximum number of files allowed (default: 3)
-     - maxFileSize?: number - Maximum file size in bytes (default: 5MB)
-     - accept?: string - Accepted file types (default: "image/*")
-     - error?: string - External validation error message
-     - class?: ClassNameValue - Additional Tailwind classes
 -->
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
@@ -29,22 +20,23 @@
     import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Loader from "../../library/feedback/Loader.svelte";
-    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
+    import {
+        STORAGE_ALLOWEDTYPES,
+        type UploadedObject,
+    } from "../../../utils/media/objectStorage.types";
 
     interface MediaUploaderProps {
-        images: UploadedObject[];
         onUpload: (image: UploadedObject) => void;
         maxFileSize?: number;
-        accept?: string;
+        accept?: string[];
         error?: string;
         class?: ClassNameValue;
     }
 
     let {
-        images,
         onUpload,
         maxFileSize = import.meta.env.PUBLIC_DEFAULT_MAXSIZE,
-        accept = "image/*",
+        accept,
         error = undefined,
         class: className = "",
     }: MediaUploaderProps = $props();
@@ -53,6 +45,10 @@
     let validationError = $state<string | null>(null);
     let isUploading = $state(false);
     let uploadProgress = $state<string | null>(null);
+
+    const allowedTypes = $derived(
+        accept || STORAGE_ALLOWEDTYPES.filter((t) => t.startsWith("image/")),
+    );
 
     const generatedId = $props.id();
     const uploaderId = $derived(generatedId);
@@ -141,7 +137,7 @@
     <input
         bind:this={fileInput}
         type="file"
-        {accept}
+        accept={allowedTypes?.join(", ")}
         onchange={handleFileSelect}
         class="hidden"
         disabled={isUploading}

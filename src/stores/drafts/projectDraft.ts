@@ -33,15 +33,15 @@ export interface WizardConfiguration {
 
 export interface WizardCampaignInfo {
     // Media/**
-    images: UploadedObject[];
-    video: string | undefined;
+    cover?: UploadedObject;
+    video?: string;
 
     // Rich text content (stored as Tiptap JSON)
     brief: JSONContent;
     about: JSONContent;
     goal: JSONContent;
     team: JSONContent;
-    communicationStrategy: JSONContent;
+    strategy: JSONContent;
 }
 
 export type Wizard = {
@@ -87,13 +87,13 @@ export interface CreateProjectForm extends ProjectProjectCreationDto {
 }
 
 export interface ProjectDraftResources {
+    cover?: UploadedObject;
     rewards: ProjectReward[];
     collaborations: ProjectCollaboration[];
     budgetItems: {
         minimum: ProjectBudgetItem[];
         optimum: ProjectBudgetItem[];
     };
-    images?: UploadedObject[];
 }
 
 export interface Draft {
@@ -133,13 +133,11 @@ export const wizard = derived(
                 deadline: "minimum",
             },
             campaignInfo: {
-                images: [],
-                video: "",
                 brief: emptyRichText(),
                 about: emptyRichText(),
                 goal: emptyRichText(),
                 team: emptyRichText(),
-                communicationStrategy: emptyRichText(),
+                strategy: emptyRichText(),
             },
             rewards: [],
             collaborations: [],
@@ -281,13 +279,13 @@ export async function createDraft(
                 deadline: "minimum",
             },
             campaignInfo: {
-                images: resources?.images ?? [],
+                cover: resources?.cover,
                 video: "",
                 brief: emptyRichText(),
                 about: emptyRichText(),
                 goal: emptyRichText(),
                 team: emptyRichText(),
-                communicationStrategy: emptyRichText(),
+                strategy: emptyRichText(),
             },
             rewards: resources?.rewards ?? [],
             collaborations: resources?.collaborations ?? [],
