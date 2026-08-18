@@ -17,7 +17,7 @@ import { NotFound } from "../../../../utils/responses";
 const { idOrSlug } = Astro.params;
 
 if (!idOrSlug) {
-    return Astro.rewrite("/404");
+    return Astro.rewrite("/500");
 }
 
 const { lang } = Astro.locals;
@@ -27,11 +27,11 @@ const { data: project, error } = await apiProjectsIdOrSlugGet({
     headers: { "Accept-Language": lang },
 });
 
-if (error?.status === NotFound.status) {
-    return Astro.rewrite("/404");
-}
+if (error) {
+    if (error.status === NotFound.status) {
+        return Astro.rewrite("/404");
+    }
 
-if (error || !project) {
     console.error({ project, error });
     return Astro.rewrite("/500");
 }

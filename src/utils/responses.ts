@@ -5,6 +5,12 @@
 export const Unauthorized = new Response(null, { status: 401 });
 
 /**
+ * An HTTP response with 403 status
+ * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/403
+ */
+export const Forbidden = new Response(null, { status: 403 });
+
+/**
  * An HTTP response with 404 status
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/404
  */

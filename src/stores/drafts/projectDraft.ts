@@ -24,7 +24,6 @@ import type {
 import type { JSONContent } from "@tiptap/core";
 import type { UploadedObject } from "../../utils/objectStorage";
 
-
 export interface WizardConfiguration {
     projectDeadline: "minimum" | "optimum"; // Default: minimum
 }

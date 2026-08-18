@@ -4,6 +4,7 @@ import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../opena
 import App from "../../../../../layouts/App.svelte";
 import ProjectEditor from "../../../../../components/project/edit/ProjectEditor.svelte";
 import { goto } from "../../../../../utils/navigation";
+import { NotFound, Unauthorized, Forbidden } from "../../../../../utils/responses";
 
 const { t, lang: locale } = Astro.locals;
 
@@ -15,26 +16,40 @@ if (!idOrSlug) {
 const { session } = Astro.locals;
 if (!session) {
     const requestUrl = new URL(Astro.request.url);
-    const callbackURL = requestUrl.pathname + requestUrl.search;
-    return goto("/login", { query: { callback: callbackURL } });
+    return goto("/login", { query: { callback: requestUrl.pathname + requestUrl.search } });
 }
 
-const { data: project } = await apiProjectsIdOrSlugGet({
-    path: { idOrSlug },
+const { data: project, error: getError } = await apiProjectsIdOrSlugGet({
     headers: session.token.asHttpHeaders,
+    path: { idOrSlug },
 });
 
-if (project?.id) {
-    const { error, request } = await apiProjectsIdPatch({
-        path: { id: String(project.id) },
-        body: { id: project.id },
-        headers: session.token.asHttpHeaders,
-    });
-
-    if (error) {
-        console.error({ error, request });
+if (getError) {
+    if (getError.status === NotFound.status) {
         return Astro.rewrite("/404");
     }
+
+    console.error({ project, error: getError });
+    return Astro.rewrite("/500");
+}
+
+const { request, error: patchError } = await apiProjectsIdPatch({
+    headers: session.token.asHttpHeaders,
+    path: { id: String(project.id) },
+    body: { id: project.id },
+});
+
+if (patchError) {
+    if (patchError.status === NotFound.status) {
+        return Astro.rewrite("/404");
+    }
+
+    if ([Unauthorized.status, Forbidden.status].includes(patchError.status!)) {
+        return Astro.rewrite("/403");
+    }
+
+    console.error({ request, error: patchError });
+    return Astro.rewrite("/500");
 }
 ---
 
