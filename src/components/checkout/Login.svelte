@@ -6,7 +6,6 @@
     import Checkbox from "../library/inputs/Checkbox.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
-    
 
     interface Props {
         formId?: string;
@@ -19,7 +18,7 @@
     let acceptTerms = $state(false);
     let isSubmitting = $state(false);
     let errorMessage = $state("");
-    let showToast = $state(false); 
+    let showToast = $state(false);
 
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
@@ -31,7 +30,7 @@
         }
 
         isSubmitting = true;
-        showToast = false; 
+        showToast = false;
         errorMessage = "";
 
         try {
@@ -54,10 +53,9 @@
 
             const targetUrl = callbackUrl || "/";
             navigate(targetUrl);
-        
         } catch (err: any) {
             errorMessage = err.message || $t("pages.login.error.unexpectedLogin");
-            showToast = true; 
+            showToast = true;
         } finally {
             isSubmitting = false;
         }
@@ -92,12 +90,7 @@
         </p>
     </div>
     <form id={formId} onsubmit={handleSubmit} class="flex w-full flex-col gap-8">
-        
-        <Toast 
-            variant="error" 
-            bind:showToast 
-            class="w-full max-w-121"
-        >
+        <Toast variant="error" bind:showToast class="w-full max-w-121">
             {errorMessage}
         </Toast>
 
@@ -127,7 +120,7 @@
                 </a>
 
                 <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
-                    <Checkbox id="policies" bind:checked={acceptTerms} disabled={isSubmitting} >
+                    <Checkbox id="policies" bind:checked={acceptTerms} disabled={isSubmitting}>
                         <span>
                             <Thtml
                                 key="pages.register.form.termsCheckbox"

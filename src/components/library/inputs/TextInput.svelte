@@ -35,7 +35,6 @@
 
     const generatedId = $props.id();
     const finalId = $derived(id ?? generatedId);
-    
 </script>
 
 <div class={twMerge("relative", disabled && "opacity-50")}>

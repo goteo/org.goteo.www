@@ -33,7 +33,11 @@
     );
 
     const totalDonations = $derived(
-        sumMoney(Object.values($cartByRecipient).flat().map((i) => multiplyMoney(i.money, i.quantity)))
+        sumMoney(
+            Object.values($cartByRecipient)
+                .flat()
+                .map((i) => multiplyMoney(i.money, i.quantity)),
+        ),
     );
 
     const contributionToFoundation = $derived(subtractMoney(displayTotal, totalDonations));
@@ -69,11 +73,14 @@
         {/snippet}
 
         {#snippet content()}
-            <hr class="bg-secondary h-px border-none my-0" />
+            <hr class="bg-secondary my-0 h-px border-none" />
 
-            <div class="text-content text-sm font-normal mb-4">
-                <span class="font-bold text-black">{formatCurrency(totalDonations)}</span> {$t("pages.checkout.summary.donationsText")}
-                + <span class="font-bold text-black">{formatCurrency(contributionToFoundation)}</span> {$t("pages.checkout.summary.contributionText")}
+            <div class="text-content mb-4 text-sm font-normal">
+                <span class="font-bold text-black">{formatCurrency(totalDonations)}</span>
+                {$t("pages.checkout.summary.donationsText")}
+                +
+                <span class="font-bold text-black">{formatCurrency(contributionToFoundation)}</span>
+                {$t("pages.checkout.summary.contributionText")}
             </div>
 
             <div class="flex flex-col gap-2">

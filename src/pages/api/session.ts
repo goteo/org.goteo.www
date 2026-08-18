@@ -39,13 +39,13 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
         });
     } catch (err: any) {
         return new Response(
-            JSON.stringify({ 
-                error_description: err.message || locals.t("system.OAuth.client.error") 
+            JSON.stringify({
+                error_description: err.message || locals.t("system.OAuth.client.error"),
             }),
             {
                 status: 400,
                 headers: { "Content-Type": "application/json" },
-            }
+            },
         );
     }
 };
