@@ -37,6 +37,7 @@ function getDb(): ProjectDraftDatabase {
 export class ProjectDraftRepository {
     public async create(draft: ProjectDraft) {
         await getDb().drafts.put(draft);
+
         return draft;
     }
 
@@ -59,8 +60,9 @@ export class ProjectDraftRepository {
         return getDb().drafts.get(key);
     }
 
-    public async getForProject(project: Project) {
-        const key = generateDraftKey(project);
+    public async getOrCreateForProject(project: Project) {
+        const plainProject = structuredClone(project);
+        const key = generateDraftKey(plainProject);
 
         const existing = await this.get(key);
 
@@ -68,10 +70,14 @@ export class ProjectDraftRepository {
             return existing;
         }
 
-        return {
+        const draft = {
             key,
-            ...project,
+            ...plainProject,
         };
+
+        await this.create(draft);
+
+        return draft;
     }
 
     public async update(draft: Partial<ProjectDraft>) {

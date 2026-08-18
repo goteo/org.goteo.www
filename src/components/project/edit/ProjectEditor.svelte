@@ -15,7 +15,7 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import type { ProjectDraft } from "../../../repositories/projectDraft";
+    import { draftsRepository, type ProjectDraft } from "../../../repositories/projectDraft";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Eye from "../../icons/media/Eye.svelte";
     import ActionableButton from "../../library/buttons/ActionableButton.svelte";
@@ -46,15 +46,23 @@
         { id: 5, label: $t("pages.project.edit.tabs.budget") },
         { id: 6, label: $t("pages.project.edit.tabs.aboutYou") },
     ]);
+
+    function handleTitleChange(title: string) {
+        draftsRepository.update({ ...$state.snapshot(draft), title });
+    }
+
+    function handleSubtitleChange(subtitle: string) {
+        draftsRepository.update({ ...$state.snapshot(draft), subtitle });
+    }
 </script>
 
 <div class="wrapper">
     <div class="p-10 pb-20">
         <!-- Session Error Toast -->
         <!-- {#if showSessionErrorToast} -->
-            <!-- <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}> -->
-                <!-- {$t("pages.project.edit.errors.session.title")} -->
-            <!-- </Toast> -->
+        <!-- <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}> -->
+        <!-- {$t("pages.project.edit.errors.session.title")} -->
+        <!-- </Toast> -->
         <!-- {/if} -->
         <!-- Storage Error Alert -->
         <!-- {#if $persistenceError}
@@ -124,14 +132,14 @@
                     <input
                         type="text"
                         value={draft.title}
-                        //oninput={(e) => handleTitleChange(e.currentTarget.value)}
+                        oninput={(e) => handleTitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
                         value={draft.subtitle}
-                        //oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
+                        oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
                     />

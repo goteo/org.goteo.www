@@ -12,11 +12,7 @@
 
     let draft = $derived.by(async () => {
         if (project) {
-            return draftsRepository.getForProject(project).then((draft) => {
-                draftsRepository.update(draft);
-
-                return draft;
-            });
+            return draftsRepository.getOrCreateForProject($state.snapshot(project));
         }
 
         return draftsRepository.get(idOrSlug);

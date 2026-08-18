@@ -21,41 +21,22 @@
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
-    import {
-        currentDraft,
-        navigateToStep,
-        updateConfiguration,
-        updateProject,
-        type WizardConfiguration,
-    } from "../../../stores/drafts/projectDraft";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
+    import { extractId } from "../../../utils/extractId";
+    import { draftsRepository, type ProjectDraft } from "../../../repositories/projectDraft";
 
     interface ConfigurationStepProps {
-        project?: Project;
+        project: ProjectDraft;
         onContinue?: () => void;
     }
 
     let { project, onContinue }: ConfigurationStepProps = $props();
-    let allCategories = $state<Category[]>([]);
-    // Both seed the form once; the bound inputs own them afterwards.
-    let selectedCategoryIds = $state<(number | string)[]>(
-        untrack(() => (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? "")),
-    );
-    let releaseDate = $state(
-        untrack(() =>
-            $currentDraft?.createProject.release
-                ? new Date($currentDraft.createProject.release)
-                : project?.calendar?.release
-                  ? new Date(project.calendar.release)
-                  : new Date(),
-        ),
-    );
 
-    onMount(async () => {
+    let allCategories = $derived.by(async () => {
         const { data } = await withoutCache(() =>
             apiCategoriesGetCollection({
                 baseUrl: "/api/relay",
@@ -63,17 +44,33 @@
             }),
         );
 
-        allCategories = toCollectionItems<Category>(data);
+        return toCollectionItems<Category>(data);
     });
 
-    let deadline = $derived($currentDraft?.wizardForm.configuration.deadline ?? "minimum");
+    let categories = $derived(project.categories.map((c) => extractId(c)!));
+
+    function handleCategoryChange(selected: Category[]) {
+        draftsRepository.update({
+            ...project,
+            categories: selected.map((s) => {
+                return client.buildUrl({
+                    url: apiCategoriesIdOrSlugGetUrl,
+                    path: { idOrSlug: s.id },
+                });
+            }),
+        });
+    }
+
+    let release = $derived(new Date(project.calendar?.release || new Date()));
+
+    let deadline = $derived(project.deadline || "minimum");
 
     /**
      * Handle Continue button
      * Simple navigation to next step (2) - validation happens on save/submit
      */
     function handleContinue() {
-        navigateToStep(2);
+        // navigateToStep(2);
         if (onContinue) {
             onContinue();
         }
@@ -90,26 +87,14 @@
      * Handle release date change
      */
     function handleReleaseChange(date: string) {
-        updateProject({ release: date });
+        draftsRepository.update({ ...project, calendar: { release: date } });
     }
 
     /**
      * Handle funding rounds change
      */
-    function handleRoundsChange(deadline: WizardConfiguration["deadline"]) {
-        updateConfiguration({ deadline });
-    }
-
-    /**
-     * Handle category selection change
-     *
-     */
-    function handleCategoryChange(selected: Category[]) {
-        const categoryIris = selected.map((s) => {
-            return client.buildUrl({ url: apiCategoriesIdOrSlugGetUrl, path: { idOrSlug: s.id } });
-        });
-
-        updateProject({ categories: categoryIris });
+    function handleRoundsChange(deadline: Project["deadline"]) {
+        draftsRepository.update({ ...project, deadline });
     }
 </script>
 
@@ -125,22 +110,24 @@
     </div>
 
     <!-- Categories Section -->
-    <div class="space-y-4">
+    {#await allCategories then options}
         <div class="space-y-4">
-            <Title level={2} variant="subsection">
-                {$t("pages.project.create.categories.title")}
-            </Title>
-            <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("pages.project.create.categories.subtitle")}
-            </p>
+            <div class="space-y-4">
+                <Title level={2} variant="subsection">
+                    {$t("pages.project.create.categories.title")}
+                </Title>
+                <p class="text-black transition-all duration-300 ease-in-out">
+                    {$t("pages.project.create.categories.subtitle")}
+                </p>
+            </div>
+            <CategorySelect
+                max={2}
+                {options}
+                bind:selectedIds={categories}
+                onchange={handleCategoryChange}
+            />
         </div>
-        <CategorySelect
-            max={2}
-            options={allCategories}
-            bind:selectedIds={selectedCategoryIds}
-            onchange={handleCategoryChange}
-        />
-    </div>
+    {/await}
 
     <!-- Release Date Section -->
     <div class="space-y-4">
@@ -155,7 +142,7 @@
         <DateInput
             name="release"
             class="max-w-167"
-            bind:value={releaseDate}
+            bind:value={release}
             min={getMinDate()}
             onInput={handleReleaseChange}
         />
