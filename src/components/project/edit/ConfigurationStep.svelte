@@ -31,6 +31,7 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
 
     interface ConfigurationStepProps {
         project?: Project;
@@ -54,10 +55,13 @@
     );
 
     onMount(async () => {
-        const { data } = await apiCategoriesGetCollection({
-            baseUrl: "/api/relay",
-            headers: { "Accept-Language": $locale },
-        });
+        const { data } = await withoutCache(() =>
+            apiCategoriesGetCollection({
+                baseUrl: "/api/relay",
+                headers: { "Accept-Language": $locale },
+            }),
+        );
+
         allCategories = toCollectionItems<Category>(data);
     });
 
