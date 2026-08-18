@@ -9,6 +9,7 @@
     import Hamburger from "../components/icons/navigation/Hamburger.svelte";
     import UserIcon from "../components/icons/user/User.svelte";
     import { t } from "../i18n/store";
+    import { cartCount } from "../stores/checkoutsStore";
 
     import type { Snippet } from "svelte";
 
@@ -62,7 +63,7 @@
                     </div>
                     <nav>
                         <ul class="flex items-center gap-1 md:gap-4">
-                            {#if $session}
+                            {#if $session || $cartCount > 0}
                                 <li class="flex items-center pr-2">
                                     <CartButton />
                                 </li>
