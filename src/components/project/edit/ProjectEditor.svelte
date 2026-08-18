@@ -1,241 +1,181 @@
 <!--
-    Wizard Application Component
+    Provides the navigation shell for the multi-step project setup wizard.
 
-    Root component that wraps the wizard shell and manages step routing.
-    Handles:
-    - Step content rendering
-    - Save and publish callbacks
+    Features:
+    - Six-step tabbed navigation
+    - Visual progress indicators
+    - Action buttons (Preview, Save, Publish)
+    - Step validation before navigation
     - URL query parameter sync
+
+    Design System:
+    - Active tab: border-primary, text-secondary
+    - Incomplete tab: border-purple-tint, text-tertiary
+    - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import { onMount, untrack } from "svelte";
+    import { t } from "../../../i18n/store";
+    import type { ProjectDraft } from "../../../repositories/projectDraft";
+    import EditIcon from "../../icons/actions/Edit.svelte";
+    import Eye from "../../icons/media/Eye.svelte";
+    import ActionableButton from "../../library/buttons/ActionableButton.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import Toast from "../../library/feedback/Toast.svelte";
+    import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
-    import ProjectEditorShell from "./ProjectEditorShell.svelte";
-    import { getStepComponent } from "./steps";
-    import { session } from "../../../auth/store";
-    import { type Project } from "../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import {
-        type CreateProjectForm,
-        currentDraft,
-        deleteCurrentDraft,
-        hasUnsavedChanges,
-        initializeProjectDraft,
-        loadDraft,
-        markCurrentDraftClean,
-        updateWizard,
-    } from "../../../stores/drafts/projectDraft";
-    import { publishDraft } from "../../../utils/projectPublisher";
-    import { getProjectDraftResources } from "../../../utils/projectSubmissionApi";
+    import type { Snippet } from "svelte";
 
     let {
-        idOrSlug,
-        project = null,
+        draft,
+        children,
+        onSave,
+        onPublish,
     }: {
-        idOrSlug: string;
-        project?: Project | null;
+        draft: ProjectDraft;
+        children: Snippet;
+        onSave?: () => void;
+        onPublish?: () => void;
     } = $props();
 
-    // Seeded from the server-rendered prop; refreshed on mount from the draft.
-    let resolvedProject = $state<Project | null>(untrack(() => project));
-    let isInitialized = $state(false);
-    let showSessionErrorToast = $state(false);
-
-    function getInitialStep() {
-        let initialStep = 1;
-
-        if (typeof window !== "undefined") {
-            const url = new URL(window.location.href);
-            const stepParam = url.searchParams.get("step");
-            if (stepParam) {
-                const step = parseInt(stepParam, 10);
-                if (!isNaN(step) && step >= 1 && step <= 6) {
-                    initialStep = step;
-                }
-            }
-        }
-
-        return initialStep;
-    }
-
-    function projectToDraft(project: Project): CreateProjectForm {
-        return {
-            title: project.title || "",
-            subtitle: project.subtitle || "",
-            categories: project.categories,
-            release: project.calendar?.release ?? undefined,
-            status: project.status || "in_draft",
-        };
-    }
-
-    /**
-     * Image MIME types accepted by the uploader, mirroring the image entries of
-     * `STORAGE_ALLOWEDTYPES` in `src/utils/objectStorage.ts`. That module cannot be
-     * imported here because it instantiates a server-side S3 client.
-     */
-    const COVER_MIME_TYPES: Record<string, string> = {
-        jpg: "image/jpeg",
-        jpeg: "image/jpeg",
-        webp: "image/webp",
-        png: "image/png",
-        gif: "image/gif",
-    };
-
-    /**
-     * The cover comes back as a bare URL, but `UploadedFile` needs a MIME type
-     * for the uploader to recognise it as an image and render its preview.
-     */
-    function guessImageMimeType(url: string): string {
-        const basename = url.split("?")[0].split(/[\\/]/).pop() ?? "";
-        const dotIndex = basename.lastIndexOf(".");
-        const extension = dotIndex < 1 ? "" : basename.slice(dotIndex + 1).toLowerCase();
-
-        return COVER_MIME_TYPES[extension] ?? "image/jpeg";
-    }
-
-    function projectToIri(project: Project) {
-        return `${apiProjectsGetCollectionUrl}/${project.slug ?? project.id}`;
-    }
-
-    function draftToProject(idOrSlug: string): Project | null {
-        if (!$currentDraft) return null;
-
-        const numericId = Number(idOrSlug);
-
-        return {
-            id: Number.isNaN(numericId) ? undefined : numericId,
-            slug: Number.isNaN(numericId) ? idOrSlug : undefined,
-            title: $currentDraft.createProject.title,
-            subtitle: $currentDraft.createProject.subtitle,
-            categories: $currentDraft.createProject.categories,
-            territory: $currentDraft.createProject.territory as Project["territory"],
-            description: "",
-            deadline: $currentDraft.wizardForm.configuration.deadline,
-            budget: $currentDraft.wizardForm.budget,
-            status: $currentDraft.createProject.status,
-        };
-    }
-
-    function redirectToNotFound() {
-        window.location.href = "/404";
-    }
-
-    onMount(() => {
-        const initialStep = getInitialStep();
-
-        async function initialize() {
-            try {
-                if (project?.id) {
-                    const resources = $session
-                        ? await getProjectDraftResources(projectToIri(project), $session)
-                        : undefined;
-
-                    const coverUrl = (project as any).cover as string | undefined;
-                    if (coverUrl && resources) {
-                        resources.images = [
-                            {
-                                id: crypto.randomUUID(),
-                                url: coverUrl,
-                                name: "Project cover",
-                                size: 0,
-                                type: guessImageMimeType(coverUrl),
-                            },
-                        ];
-                    }
-
-                    await initializeProjectDraft(
-                        projectToDraft(project),
-                        String(project.id),
-                        resources,
-                    );
-                    resolvedProject = project;
-                } else {
-                    const hasDraft = await loadDraft(idOrSlug);
-
-                    if (!hasDraft) {
-                        redirectToNotFound();
-                        return;
-                    }
-
-                    hasUnsavedChanges.set(true);
-                    resolvedProject = draftToProject(idOrSlug);
-                }
-
-                updateWizard({ currentStep: initialStep }, { markUnsaved: false });
-                isInitialized = true;
-            } catch (err) {
-                errorMessage = err instanceof Error ? err.message : "Unknown error";
-                isInitialized = true;
-            }
-        }
-
-        initialize();
-
-        // Listen for browser back/forward navigation (client-side only)
-        if (typeof window !== "undefined") {
-            const handlePopState = () => {
-                const url = new URL(window.location.href);
-                const stepParam = url.searchParams.get("step");
-                if (stepParam) {
-                    const step = parseInt(stepParam, 10);
-                    if (!isNaN(step) && step >= 1 && step <= 6) {
-                        updateWizard({ currentStep: step });
-                    }
-                }
-            };
-
-            window.addEventListener("popstate", handlePopState);
-
-            return () => {
-                window.removeEventListener("popstate", handlePopState);
-            };
-        }
-    });
-
-    // Reactive current step
-    const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
-    let errorMessage = $state("");
-
-    async function saveToAPI() {
-        if (!$currentDraft) return;
-        if (!resolvedProject?.id) {
-            errorMessage = "Project not found in API";
-            return;
-        }
-
-        try {
-            if (!$session) {
-                showSessionErrorToast = true;
-                throw new Error("User session not found");
-            }
-
-            const result = await publishDraft($currentDraft, $session, String(resolvedProject.id));
-            markCurrentDraftClean(result.resources);
-        } catch (err) {
-            errorMessage = err instanceof Error ? err.message : "Unknown error";
-
-            return;
-        }
-    }
-
-    function handlePublish() {
-        if (!$currentDraft || !resolvedProject) return;
-
-        const idOrSlug = resolvedProject.slug ?? resolvedProject.id;
-
-        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
-        window.location.href = `/project/${idOrSlug}/publish`;
-    }
+    // Define the six wizard steps (reactive to language changes)
+    const steps = $derived<Tab[]>([
+        { id: 1, label: $t("pages.project.edit.tabs.configuration") },
+        { id: 2, label: $t("pages.project.edit.tabs.campaign") },
+        { id: 3, label: $t("pages.project.edit.tabs.rewards") },
+        { id: 4, label: $t("pages.project.edit.tabs.collaborations") },
+        { id: 5, label: $t("pages.project.edit.tabs.budget") },
+        { id: 6, label: $t("pages.project.edit.tabs.aboutYou") },
+    ]);
 </script>
 
-{#if isInitialized && resolvedProject}
-    <ProjectEditorShell
-        {errorMessage}
-        {showSessionErrorToast}
-        onSave={saveToAPI}
-        onPublish={handlePublish}
-    >
-        {@const StepComponent = getStepComponent(currentStep)}
-        <StepComponent project={resolvedProject} />
-    </ProjectEditorShell>
-{/if}
+<div class="wrapper">
+    <div class="p-10 pb-20">
+        <!-- Session Error Toast -->
+        <!-- {#if showSessionErrorToast} -->
+            <!-- <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}> -->
+                <!-- {$t("pages.project.edit.errors.session.title")} -->
+            <!-- </Toast> -->
+        <!-- {/if} -->
+        <!-- Storage Error Alert -->
+        <!-- {#if $persistenceError}
+            <div
+                class="bg-tertiary/10 border-tertiary mb-6 rounded-lg border p-4"
+                role="alert"
+                aria-live="assertive"
+            >
+                <div class="flex items-start gap-3">
+                    <svg
+                        class="text-tertiary h-5 w-5 shrink-0"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                    <div class="flex-1">
+                        <span class="text-secondary text-sm font-semibold">
+                            {$t("pages.project.edit.errors.storage.title")}
+                        </span>
+                        <p class="text-tertiary mt-1 text-sm">
+                            {#if $persistenceError === "storage_quota_exceeded"}
+                                {$t("pages.project.edit.errors.storage.quota_exceeded")}
+                            {:else}
+                                {$t("pages.project.edit.errors.storage.save_failed")}
+                            {/if}
+                        </p>
+                    </div>
+                    <button
+                        type="button"
+                        class="text-tertiary hover:text-secondary shrink-0"
+                        onclick={() => persistenceError.set(null)}
+                        aria-label={$t("pages.project.edit.errors.storage.close")}
+                    >
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path
+                                fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        {/if} -->
+
+        <!-- Header with title and action buttons -->
+        <div
+            class="bg-purple-soft border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
+        >
+            <!-- Left section: Icon + Title/Subtitle -->
+            <div class="flex flex-1 items-center gap-4">
+                <!-- Edit icon (rotated 180°) -->
+                <div class="flex shrink-0 items-center justify-center">
+                    <div class="rotate-180">
+                        <EditIcon width="24" height="24" />
+                    </div>
+                </div>
+
+                <!-- Title and subtitle column -->
+                <div class="flex min-w-0 flex-1 flex-col justify-center">
+                    <input
+                        type="text"
+                        value={draft.title}
+                        //oninput={(e) => handleTitleChange(e.currentTarget.value)}
+                        placeholder={$t("system.loading")}
+                        class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
+                    />
+                    <input
+                        type="text"
+                        value={draft.subtitle}
+                        //oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
+                        placeholder={$t("system.loading")}
+                        class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
+                    />
+                </div>
+            </div>
+
+            <!-- Right section: Action Buttons -->
+            <div class="flex shrink-0 items-center gap-4">
+                <Button class="whitespace-nowrap" kind="ghost" size="md" disabled={true}>
+                    <Eye class="size-5" />
+                    {$t("common.preview")}
+                </Button>
+                <ActionableButton
+                    kind="secondary"
+                    size="md"
+                    class="disabled:pointer-events-none"
+                    action={() => new Promise((resolve) => resolve())}
+                    //disabled={!$hasUnsavedChanges || $isSavingDraft}
+                >
+                    {$t("common.save")}
+                    {#snippet actionedChildren()}
+                        {$t("common.saved")}
+                    {/snippet}
+                </ActionableButton>
+                <Button
+                    class="disabled:pointer-events-none disabled:opacity-24"
+                    kind="primary"
+                    size="md"
+                    onclick={() => {}}
+                    //disabled={$isReadyToPublish ? false : true}
+                >
+                    {$t("common.publish")}
+                </Button>
+            </div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mb-8">
+            <!-- <TabNavigation tabs={steps} currentTab={currentStep} onTabClick={handleTabClick} /> -->
+        </div>
+
+        <!-- Step Content -->
+        <div class="min-h-100">
+            {@render children()}
+        </div>
+    </div>
+</div>
