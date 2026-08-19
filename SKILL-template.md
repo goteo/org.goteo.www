@@ -369,12 +369,12 @@ Example: `feat/add-project-filters`, `fix/checkout-redirect`, `chore/update-open
 
 Injected by `src/middleware/index.ts` on every request. Available in Astro pages and server actions via `context.locals`:
 
-| Field     | Type                            | Description                                             |
-| --------- | ------------------------------- | ------------------------------------------------------- |
-| `lang`    | `Locale` (`"es"\|"en"\|"ca"`)   | Current locale derived from URL                         |
-| `langs`   | `string[]`                      | User language preferences from `Accept-Language` header |
-| `t`       | `(key, vars?, opts?) => string` | Translation function for current locale                 |
-| `session` | `Session \| undefined`          | Authenticated session, or `undefined` if not logged in  |
+| Field     | Type                            | Description                                                              |
+| --------- | ------------------------------- | ------------------------------------------------------------------------ |
+| `lang`    | `Locale` (`"es"\|"en"\|"ca"`)   | Current interface language, derived from user preferences or app default |
+| `langs`   | `string[]`                      | Full list of detected user preferred languages                           |
+| `t`       | `(key, vars?, opts?) => string` | Translation function for current locale                                  |
+| `session` | `Session \| undefined`          | Authenticated session, or `undefined` if not logged in                   |
 
 ```astro
 ---
