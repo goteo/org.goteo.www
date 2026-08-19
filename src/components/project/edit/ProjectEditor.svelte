@@ -2,7 +2,7 @@
     Provides the navigation shell for the multi-step project setup wizard.
 
     Features:
-    - Six-step tabbed navigation
+    - Step tabbed navigation
     - Visual progress indicators
     - Action buttons (Preview, Save, Publish)
     - Step validation before navigation
@@ -15,8 +15,10 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
     import { type ProjectDraft } from "../../../repositories/drafts";
     import { draftStore } from "../../../stores/drafts/draftsStore";
+    import { validate } from "../../../utils/validation";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Bullet from "../../icons/Bullet.svelte";
     import Eye from "../../icons/media/Eye.svelte";
@@ -48,8 +50,25 @@
         { id: 6, label: $t("pages.project.edit.tabs.aboutYou") },
     ]);
 
+    let errorMessage: string | undefined = $state();
+
     function handleTitleChange(title: string) {
-        draftStore.update({ title });
+        const [error] = validate(title, zProjectProjectUpdationDto.shape.title);
+
+        if (!error) {
+            draftStore.update({ title });
+            errorMessage = undefined;
+            return;
+        }
+
+        switch (error.issue.code) {
+            case "invalid_format":
+                errorMessage = $t("pages.project.edit.validation.titleBadFormat", error.params);
+                break;
+            default:
+                errorMessage = $t(error.message, error.params);
+                break;
+        }
     }
 
     function handleSubtitleChange(subtitle: string) {
@@ -59,62 +78,6 @@
 
 <div class="wrapper">
     <div class="p-10 pb-20">
-        <!-- Session Error Toast -->
-        <!-- {#if showSessionErrorToast} -->
-        <!-- <Toast variant="error" class="mb-6" bind:showToast={showSessionErrorToast}> -->
-        <!-- {$t("pages.project.edit.errors.session.title")} -->
-        <!-- </Toast> -->
-        <!-- {/if} -->
-        <!-- Storage Error Alert -->
-        <!-- {#if $persistenceError}
-            <div
-                class="bg-tertiary/10 border-tertiary mb-6 rounded-lg border p-4"
-                role="alert"
-                aria-live="assertive"
-            >
-                <div class="flex items-start gap-3">
-                    <svg
-                        class="text-tertiary h-5 w-5 shrink-0"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        aria-hidden="true"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <div class="flex-1">
-                        <span class="text-secondary text-sm font-semibold">
-                            {$t("pages.project.edit.errors.storage.title")}
-                        </span>
-                        <p class="text-tertiary mt-1 text-sm">
-                            {#if $persistenceError === "storage_quota_exceeded"}
-                                {$t("pages.project.edit.errors.storage.quota_exceeded")}
-                            {:else}
-                                {$t("pages.project.edit.errors.storage.save_failed")}
-                            {/if}
-                        </p>
-                    </div>
-                    <button
-                        type="button"
-                        class="text-tertiary hover:text-secondary shrink-0"
-                        onclick={() => persistenceError.set(null)}
-                        aria-label={$t("pages.project.edit.errors.storage.close")}
-                    >
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path
-                                fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"
-                            />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-        {/if} -->
-
         <!-- Header with title and action buttons -->
         <div
             class="bg-purple-soft border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
@@ -132,14 +95,14 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={draft.title}
+                        value={$draftStore?.title}
                         oninput={(e) => handleTitleChange(e.currentTarget.value)}
-                        placeholder={$t("system.loading")}
+                        placeholder={$t("pages.project.edit.header.titlePlaceholder")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={draft.subtitle}
+                        value={$draftStore?.subtitle}
                         oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
@@ -182,6 +145,15 @@
                     {$t("common.publish")}
                 </Button>
             </div>
+        </div>
+
+        <!-- Header validation message -->
+        <div class="h-4 px-6">
+            <p class="text-semantic-error">
+                {#if errorMessage}
+                    {errorMessage}
+                {/if}
+            </p>
         </div>
 
         <!-- Tab Navigation -->

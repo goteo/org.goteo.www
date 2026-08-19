@@ -31,6 +31,16 @@
       }
     },
     "validation": {
+      "_invalid_type": "",
+      "_too_big": "",
+      "too_small": "\"{{ value }}\" es demasiado corto: se esperan {{ min }} o más caracteres.",
+      "invalid_format": "\"{{ value }}\" tiene formato incorrecto: no se ajusta al patrón regex `{{ pattern }}`.",
+      "_not_multiple_of": "",
+      "_unrecognized_keys": "",
+      "_invalid_union": "",
+      "_invalid_key": "",
+      "_invalid_element": "",
+      "_invalid_value": "",
       "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
       "project": {
         "terms": {
@@ -595,7 +605,11 @@
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
+        "validation": {
+          "titleBadFormat": "El título debe contener al menos una letra."
+        },
         "header": {
+          "titlePlaceholder": "Título de proyecto",
           "unsentChanges": "Hay cambios sin enviar"
         },
         "tabs": {
@@ -846,17 +860,6 @@
           },
           "continue": "Siguiente paso",
           "locationPlaceholder": "Ej: Calle Gran Vía 28, Madrid"
-        },
-        "errors": {
-          "session": {
-            "title": "Sesión expirada"
-          },
-          "storage": {
-            "title": "Error de almacenamiento",
-            "save_failed": "No se pudieron guardar los cambios",
-            "quota_exceeded": "Almacenamiento local lleno",
-            "close": "Cerrar"
-          }
         }
       },
       "create": {
