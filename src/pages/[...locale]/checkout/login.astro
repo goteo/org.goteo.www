@@ -38,11 +38,11 @@ if (session) {
                             <p class="text-content text-sm">{t("pages.checkout.summary.deduct")}</p>
                         </div>
                     </div>
-                    <div class="flex flex-col items-start w-full">
+                    <div class="flex w-full flex-col items-start">
                         <button
                             type="button"
                             onclick="document.querySelector('form')?.requestSubmit()"
-                            class="bg-primary text-secondary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-4 font-bold cursor-pointer w-fit"
+                            class="bg-primary text-secondary flex w-fit cursor-pointer items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-4 font-bold"
                         >
                             {t("common.continue")}
                         </button>
