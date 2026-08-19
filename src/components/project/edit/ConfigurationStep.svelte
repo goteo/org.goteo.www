@@ -34,6 +34,17 @@
 
     let { project, onContinue }: ConfigurationStepProps = $props();
 
+    /**
+     * Handle Continue button
+     * Simple navigation to next step (2) - validation happens on save/submit
+     */
+    function handleContinue() {
+        // navigateToStep(2);
+        if (onContinue) {
+            onContinue();
+        }
+    }
+
     let allCategories = $derived.by(async () => {
         const { data } = await withoutCache(() =>
             apiCategoriesGetCollection({
@@ -61,32 +72,29 @@
 
     let release = $derived(new Date(project.calendar?.release || new Date()));
 
-    let deadline = $derived(project.deadline || "minimum");
+    const releaseDisabled = $derived.by(() => {
+        return !["in_draft", "in_campaign_review.to_change"].includes(project.status!);
+    });
 
-    /**
-     * Handle Continue button
-     * Simple navigation to next step (2) - validation happens on save/submit
-     */
-    function handleContinue() {
-        // navigateToStep(2);
-        if (onContinue) {
-            onContinue();
+    const releaseMinimum = $derived.by(() => {
+        if (releaseDisabled) {
+            return;
         }
-    }
 
-    // Calculate minimum date (14 days from now) for date input
-    function getMinDate(): Date {
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 14);
-        return minDate;
-    }
+        const dateMin = new Date();
+        dateMin.setDate(dateMin.getDate() + 14);
+
+        return dateMin;
+    });
 
     /**
      * Handle release date change
      */
-    function handleReleaseChange(date: string) {
-        draftsRepository.update({ ...project, calendar: { release: date } });
+    function handleReleaseChange(date: Date) {
+        draftsRepository.update({ ...project, calendar: { release: date.toISOString() } });
     }
+
+    let deadline = $derived(project.deadline || "minimum");
 
     /**
      * Handle funding rounds change
@@ -131,17 +139,22 @@
     <div class="space-y-4">
         <div class="space-y-4">
             <Title level={2} variant="subsection">
-                {$t("pages.project.create.release.title")}
+                {$t("pages.project.edit.configuration.release.title")}
             </Title>
             <p class="text-content text-base font-normal">
-                {$t("pages.project.create.release.subtitle")}
+                {#if releaseDisabled}
+                    {$t("pages.project.edit.configuration.release.passed")}
+                {:else}
+                    {$t("pages.project.edit.configuration.release.subtitle")}
+                {/if}
             </p>
         </div>
         <DateInput
             name="release"
             class="max-w-167"
             bind:value={release}
-            min={getMinDate()}
+            min={releaseMinimum}
+            disabled={releaseDisabled}
             onInput={handleReleaseChange}
         />
     </div>

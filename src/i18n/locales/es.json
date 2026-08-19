@@ -613,6 +613,11 @@
             "secondaryLabel": "Idioma secundario del contenido",
             "addButton": "Añadir idioma"
           },
+          "release": {
+            "title": "Fecha de salida a campaña",
+            "subtitle": "Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días",
+            "passed": "Este proyecto ya salió a campaña y no se puede modificar su fecha de salida"
+          },
           "rounds": {
             "title": "Elige las rondas que tendrá tu campaña",
             "description": "La configuración predeterminada son 40 días cada ronda, puedes solicitar modificaciones a tu asesor si tu proyecto es seleccionado",
