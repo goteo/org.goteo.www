@@ -86,7 +86,6 @@ export class ProjectDraftRepository {
         await getDb().drafts.put({
             ...existing,
             ...draft,
-            dateUpdated: new Date().toISOString(),
         });
     }
 

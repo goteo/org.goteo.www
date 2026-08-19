@@ -1,5 +1,5 @@
 import { derived, writable, type Readable } from "svelte/store";
-import type { ProjectDraft } from "../../repositories/drafts";
+import { draftsRepository, type ProjectDraft } from "../../repositories/drafts";
 import type { Project } from "../../openapi/client";
 
 export type ProjectDraftState = ProjectDraft & {
@@ -7,7 +7,7 @@ export type ProjectDraftState = ProjectDraft & {
 };
 
 export interface ProjectDraftStore extends Readable<ProjectDraftState | null> {
-    setDraft(draft: ProjectDraft): void;
+    setDraft(draft?: ProjectDraft): void;
     setActual(actual?: Project): void;
     update(update: Partial<ProjectDraft>): void;
 }
@@ -18,18 +18,24 @@ function haveDrifted(draft: ProjectDraft, actual?: Project): boolean {
     return draft.dateUpdated !== actual.dateUpdated;
 }
 
+/**
+ * Store to sync changes in a ProjectDraft.
+ *
+ * @param draft The client-side living ProjectDraft record, a work-in-progress.
+ * @param actual The Project as it is in the API.
+ */
 export function createProjectDraftStore(draft?: ProjectDraft, actual?: Project): ProjectDraftStore {
-    const wip = writable<ProjectDraft | undefined>(draft);
-    const final = writable<Project | undefined>(actual);
+    const draftState = writable<ProjectDraft | undefined>(draft);
+    const actualState = writable<Project | undefined>(actual);
 
     const state = derived(
-        [wip, final],
-        ([$wip, $final]): ProjectDraftState | null => {
-            if (!$wip) return null;
+        [draftState, actualState],
+        ([$draftState, $actualState]): ProjectDraftState | null => {
+            if (!$draftState) return null;
 
             return {
-                ...$wip,
-                isDirty: haveDrifted($wip, $final),
+                ...$draftState,
+                isDirty: haveDrifted($draftState, $actualState),
             };
         },
     );
@@ -38,22 +44,27 @@ export function createProjectDraftStore(draft?: ProjectDraft, actual?: Project):
         subscribe: state.subscribe,
 
         setDraft(draft) {
-            wip.set(draft);
+            draftState.set(draft);
         },
 
         setActual(actual) {
-            final.set(actual);
+            actualState.set(actual);
         },
 
         update(update) {
-            wip.update((draft) =>
-                draft
-                    ? {
-                        ...draft,
-                        ...update,
-                    }
-                    : undefined,
-            );
+            draftState.update((draft) => {
+                if (!draft) return draft;
+
+                const next = {
+                    ...draft,
+                    ...update,
+                    dateUpdated: new Date().toISOString(),
+                };
+
+                void draftsRepository.update(next);
+
+                return next;
+            });
         },
     };
 }
