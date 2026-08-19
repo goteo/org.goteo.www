@@ -1,12 +1,13 @@
-import { definePluginConfig } from '@hey-api/openapi-ts';
+import { definePluginConfig } from "@hey-api/openapi-ts";
 
-import { handler } from './plugin';
-import type { OperationPathsPlugin } from './types';
+import { handler } from "./plugin";
 
-export const defaultConfig: OperationPathsPlugin['Config'] = {
+import type { OperationPathsPlugin } from "./types";
+
+export const defaultConfig: OperationPathsPlugin["Config"] = {
     config: {},
     handler,
-    name: 'operation-paths',
+    name: "operation-paths",
 };
 
 /**

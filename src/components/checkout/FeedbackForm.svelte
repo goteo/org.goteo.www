@@ -2,10 +2,10 @@
     import CommentCard from "./CommentCard.svelte";
     import { t } from "../../i18n/store";
     import { type Project, type ProjectSupport } from "../../openapi/client";
+    import { client } from "../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../openapi/client/operation-paths.gen";
     import RadioButton from "../library/inputs/RadioButton.svelte";
     import Title from "../library/typography/Title.svelte";
-    import { client } from "../../openapi/client/client.gen";
 
     interface Props {
         paymentMethod?: string;

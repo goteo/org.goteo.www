@@ -5,6 +5,7 @@
     import MatchfundingCard from "./MatchfundingCard.svelte";
     import ProjectsCard from "./ProjectsCard.svelte";
     import { client } from "../../openapi/client/client.gen.ts";
+    import { apiUsersIdOrHandleGetUrl } from "../../openapi/client/operation-paths.gen.ts";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
@@ -28,7 +29,6 @@
         MoneyOutput,
     } from "../../openapi/client/types.gen.ts";
     import type { ActivityData, MatchfundingCardData } from "../../types/me-page";
-    import { apiUsersIdOrHandleGetUrl } from "../../openapi/client/operation-paths.gen.ts";
 
     interface Props {
         lang: string;

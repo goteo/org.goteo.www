@@ -8,6 +8,7 @@
         type Category,
         type ProjectProjectCreationDto,
     } from "../../openapi/client";
+    import { client } from "../../openapi/client/client.gen";
     import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/operation-paths.gen";
     import {
         validateCreateForm,
@@ -35,7 +36,6 @@
     import DateInput from "../library/inputs/DateInput.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Title from "../library/typography/Title.svelte";
-    import { client } from "../../openapi/client/client.gen";
 
     let releaseDate = $state($project.release ? new Date($project.release) : new Date());
 

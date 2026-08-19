@@ -11,8 +11,6 @@
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import { onMount, untrack } from "svelte";
-
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
     import DateInput from "../../../components/library/inputs/DateInput.svelte";
@@ -21,13 +19,13 @@
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
+    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
+    import { extractId } from "../../../utils/extractId";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
-    import { extractId } from "../../../utils/extractId";
-    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
 
     interface ConfigurationStepProps {
         project: ProjectDraft;

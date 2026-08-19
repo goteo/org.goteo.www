@@ -4,11 +4,7 @@ import Carousel from "../library/layout/Carousel.svelte";
 import CampaignsTabsNav from "./CampaignsTabsNav.svelte";
 import type { Campaign } from "../../types/campaign";
 import { getLanguage } from "../../middleware/utils";
-import {
-    apiAccountingsIdGet,
-    apiProjectsGetCollection,
-    type Money,
-} from "../../openapi/client";
+import { apiAccountingsIdGet, apiProjectsGetCollection, type Money } from "../../openapi/client";
 import { extractId } from "../../utils/extractId";
 
 const { t } = Astro.locals;

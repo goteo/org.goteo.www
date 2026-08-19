@@ -20,8 +20,7 @@
     import Eye from "../../icons/media/Eye.svelte";
     import ActionableButton from "../../library/buttons/ActionableButton.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import Toast from "../../library/feedback/Toast.svelte";
-    import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
+    import { type Tab } from "../../library/layout/TabNavigation.svelte";
 
     import type { Snippet } from "svelte";
 

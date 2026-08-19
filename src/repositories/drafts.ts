@@ -1,16 +1,16 @@
-import type { Project } from "../openapi/client";
 import { Dexie, type EntityTable } from "dexie";
+
 import { client } from "../openapi/client/client.gen";
 import { apiUsersIdOrHandleGetUrl } from "../openapi/client/operation-paths.gen";
+
+import type { Project } from "../openapi/client";
 
 export interface ProjectDraft extends Project {
     key: string;
 }
 
 export function generateDraftKey(project?: Project): string {
-    return project?.id
-        ? `project_${project.id}`
-        : `draft_${crypto.randomUUID()}`;
+    return project?.id ? `project_${project.id}` : `draft_${crypto.randomUUID()}`;
 }
 
 type ProjectDraftDatabase = Dexie & {
@@ -49,11 +49,7 @@ export class ProjectDraftRepository {
             },
         });
 
-        return getDb()
-            .drafts
-            .where({ owner })
-            .reverse()
-            .sortBy("dateUpdated");
+        return getDb().drafts.where({ owner }).reverse().sortBy("dateUpdated");
     }
 
     public async get(key: string) {

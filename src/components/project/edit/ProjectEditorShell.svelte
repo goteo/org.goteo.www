@@ -1,12 +1,13 @@
 <script lang="ts">
-    import type { Project } from "../../../openapi/client";
-    import { draftsRepository } from "../../../repositories/drafts";
-    import ErrorPage from "../../errorpage/ErrorPage.svelte";
-    import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
-    import { t } from "../../../i18n/store";
-    import Spinner from "../../icons/status/Spinner.svelte";
     import ProjectEditor from "./ProjectEditor.svelte";
     import { getStepComponent } from "./steps";
+    import { t } from "../../../i18n/store";
+    import { draftsRepository } from "../../../repositories/drafts";
+    import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
+    import ErrorPage from "../../errorpage/ErrorPage.svelte";
+    import Spinner from "../../icons/status/Spinner.svelte";
+
+    import type { Project } from "../../../openapi/client";
 
     let { project, idOrSlug }: { project?: Project; idOrSlug: string } = $props();
 

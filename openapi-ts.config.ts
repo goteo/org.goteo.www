@@ -29,8 +29,8 @@ export default defineConfig({
     parser: {
         transforms: {
             readWrite: {
-                enabled: false
-            }
-        }
-    }
+                enabled: false,
+            },
+        },
+    },
 });

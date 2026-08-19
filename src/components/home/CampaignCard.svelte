@@ -8,16 +8,16 @@ Converted from CampaignCard.astro to maintain exact functionality
 
     import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
+    import { apiAccountingsIdGet, type Money } from "../../openapi/client";
     import { formatCurrency } from "../../utils/currencies";
+    import { extractId } from "../../utils/extractId";
     import { gte } from "../../utils/money";
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
     import Flames from "../icons/status/Flames.svelte";
     import Tag from "../library/tags/Tag.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    import { apiAccountingsIdGet, type Accounting, type Money } from "../../openapi/client";
     import type { Campaign, CampaignSize } from "../../types/campaign";
-    import { extractId } from "../../utils/extractId";
 
     interface Props {
         size: CampaignSize;
