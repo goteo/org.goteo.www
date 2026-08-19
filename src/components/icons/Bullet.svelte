@@ -3,20 +3,18 @@
 
     interface Props {
         class?: ClassNameValue;
-        width?: string | number;
-        height?: string | number;
+        size?: number;
     }
 
-    let { class: classes = "", width = "24", height = "24" }: Props = $props();
+    let { class: classes = "", size = 12 }: Props = $props();
 </script>
 
 <svg
-    {width}
-    {height}
-    viewBox="0 0 32 32"
+    width={size}
+    height={size}
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
     class={twMerge("text-tertiary", classes)}
 >
-    <circle cx="3" cy="3" r="3" />
+    <circle cx={size / 2} cy={size / 2} r={size / 2} />
 </svg>
