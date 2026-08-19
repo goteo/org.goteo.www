@@ -25,6 +25,10 @@ export default defineConfig({
             name: "@hey-api/typescript",
             enums: "javascript",
         },
+        {
+            name: "zod",
+            requests: true
+        }
     ],
     parser: {
         transforms: {
