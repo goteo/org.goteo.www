@@ -5,15 +5,15 @@
     import type { HTMLInputAttributes } from "svelte/elements";
 
     interface Props extends Omit<HTMLInputAttributes, "class"> {
+        id?: string;
         checked?: boolean;
         label?: string;
         class?: ClassNameValue;
         children?: Snippet;
     }
 
-    let idFromProps = $props.id();
     let {
-        id = idFromProps,
+        id = crypto.randomUUID(),
         checked = $bindable(false),
         label,
         class: classes,

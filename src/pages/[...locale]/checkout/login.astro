@@ -5,54 +5,49 @@ import Login from "../../../components/checkout/Login.svelte";
 import Summary from "../../../components/checkout/Summary.svelte";
 import Steps from "../../../components/checkout/Steps.svelte";
 import BackButton from "../../../components/library/buttons/BackButton.svelte";
-import Button from "../../../components/library/buttons/Button.svelte";
 import Card from "../../../components/library/cards/Card.svelte";
-import { getSession } from "../../../auth/session";
 
 const { lang, session, t } = Astro.locals;
-const currentSession = session || (await getSession(Astro.cookies));
-const callback = Astro.url.searchParams.get("callback");
 
-if (currentSession) {
-    return Astro.redirect(callback || "/");
+if (session) {
+    return Astro.redirect("/checkout/payment");
 }
 ---
 
-<Layout title={t("pages.login.metadata.title")}>
-    <App client:load locale={lang} session={session}>
-        <div class="min-h-screen py-4">
-            <div class="mx-auto max-w-353 px-6 lg:px-2">
-                <div class="flex flex-col gap-10 lg:flex-row lg:items-start">
-                    <div class="flex flex-[0_0_1] flex-col items-start gap-10">
-                        <BackButton client:load />
-
-                        <Login client:load formId="login" />
-                    </div>
-
-                    <aside
-                        class="flex w-full items-start gap-10 self-start pt-10 lg:sticky lg:top-(--sticky-top) lg:ml-auto lg:w-[50%] lg:max-w-[45%]"
-                    >
-                        <Card
-                            class="border-secondary flex h-fit w-full flex-col gap-4 rounded-[40px] border bg-white p-8 shadow-sm lg:p-6"
-                        >
-                            <Summary client:load />
-
-                            <Steps step={2} hasError={false} client:load />
-
-                            <p class="text-content self-stretch py-3 text-sm font-medium">
-                                {t("pages.checkout.summary.deduct")}
-                            </p>
-
-                            <Button
-                                type="submit"
-                                form="login"
-                                class="bg-primary text-secondary flex items-center justify-center gap-2 self-start rounded-3xl px-6 py-4 text-sm leading-4 font-bold"
-                            >
-                                {t("pages.checkout.btnContinue")}
-                            </Button>
-                        </Card>
-                    </aside>
+<Layout
+    title={t("pages.checkout.metadata.title")}
+    description={t("pages.checkout.metadata.description")}
+>
+    <App client:load locale={lang} session={session} class="mb-20">
+        <div class="wrapper max-md:px-0">
+            <BackButton client:load />
+            <div class="flex flex-col gap-8 pt-6 lg:flex-row">
+                <div class="flex w-full flex-col gap-10 px-4 lg:w-1/2 lg:px-0">
+                    <Login client:load />
                 </div>
+
+                <Card
+                    class="lg: sticky -bottom-6 flex h-fit w-full flex-col items-start gap-6 rounded-3xl border-black pr-4 pb-10 pl-4 lg:top-(--sticky-top) lg:bottom-auto lg:w-1/2 lg:gap-6 lg:rounded-[40px] lg:p-6"
+                >
+                    <Summary client:load />
+                    <div class="w-full lg:block" id="checkout-details">
+                        <div class="w-full">
+                            <Steps step={2} hasError={false} client:load />
+                        </div>
+                        <div class="flex flex-col">
+                            <p class="text-content text-sm">{t("pages.checkout.summary.deduct")}</p>
+                        </div>
+                    </div>
+                    <div class="flex flex-col items-start w-full">
+                        <button
+                            type="button"
+                            onclick="document.querySelector('form')?.requestSubmit()"
+                            class="bg-primary text-secondary flex items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-4 font-bold cursor-pointer w-fit"
+                        >
+                            {t("common.continue")}
+                        </button>
+                    </div>
+                </Card>
             </div>
         </div>
     </App>

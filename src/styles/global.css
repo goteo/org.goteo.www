@@ -90,11 +90,6 @@ body.grid {
     overflow: hidden !important;
 }
 
-:focus-visible {
-    outline: auto;
-    outline-offset: 2px;
-}
-
 @media only screen and (max-width: 768px) {
     .wrapper {
         padding: 0 1rem;

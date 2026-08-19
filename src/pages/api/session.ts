@@ -24,7 +24,7 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
         const { username, password } = body;
 
         if (typeof username !== "string" || typeof password !== "string") {
-            throw new Error(locals.t("system.OAuth.client.error"));
+            throw new Error(locals.t("system.OAuth.user.invalidCredentials"));
         }
 
         const token = await passwordGrant({ identifier: username, password });
@@ -38,9 +38,11 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
             headers: { "Content-Type": "application/json" },
         });
     } catch (err: any) {
+        console.error(err);
+
         return new Response(
             JSON.stringify({
-                error_description: err.message || locals.t("system.OAuth.client.error"),
+                error_description: err.message || locals.t("system.OAuth.user.invalidCredentials"),
             }),
             {
                 status: 400,
