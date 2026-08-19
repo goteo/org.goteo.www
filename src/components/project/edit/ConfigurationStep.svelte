@@ -117,22 +117,24 @@
 
     <!-- Categories Section -->
     {#await allCategories then options}
-        <div class="space-y-4">
+        {#if options.length > 0}
             <div class="space-y-4">
-                <Title level={2} variant="subsection">
-                    {$t("pages.project.create.categories.title")}
-                </Title>
-                <p class="text-black transition-all duration-300 ease-in-out">
-                    {$t("pages.project.create.categories.subtitle")}
-                </p>
+                <div class="space-y-4">
+                    <Title level={2} variant="subsection">
+                        {$t("pages.project.create.categories.title")}
+                    </Title>
+                    <p class="text-black transition-all duration-300 ease-in-out">
+                        {$t("pages.project.create.categories.subtitle")}
+                    </p>
+                </div>
+                <CategorySelect
+                    max={2}
+                    {options}
+                    bind:selectedIds={categories}
+                    onchange={handleCategoryChange}
+                />
             </div>
-            <CategorySelect
-                max={2}
-                {options}
-                bind:selectedIds={categories}
-                onchange={handleCategoryChange}
-            />
-        </div>
+        {/if}
     {/await}
 
     <!-- Release Date Section -->
