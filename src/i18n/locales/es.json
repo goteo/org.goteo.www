@@ -595,6 +595,9 @@
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
+        "header": {
+          "unsentChanges": "Hay cambios sin enviar"
+        },
         "tabs": {
           "configuration": "Configuración",
           "campaign": "Información de campaña",

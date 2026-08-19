@@ -16,7 +16,9 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
+    import { draftStore } from "../../../stores/drafts/draftsStore";
     import EditIcon from "../../icons/actions/Edit.svelte";
+    import Bullet from "../../icons/Bullet.svelte";
     import Eye from "../../icons/media/Eye.svelte";
     import ActionableButton from "../../library/buttons/ActionableButton.svelte";
     import Button from "../../library/buttons/Button.svelte";
@@ -151,24 +153,30 @@
                     <Eye class="size-5" />
                     {$t("common.preview")}
                 </Button>
-                <ActionableButton
-                    kind="secondary"
-                    size="md"
-                    class="disabled:pointer-events-none"
-                    action={() => new Promise((resolve) => resolve())}
-                    //disabled={!$hasUnsavedChanges || $isSavingDraft}
-                >
-                    {$t("common.save")}
-                    {#snippet actionedChildren()}
-                        {$t("common.saved")}
-                    {/snippet}
-                </ActionableButton>
+                <div class="relative">
+                    <ActionableButton
+                        kind="secondary"
+                        size="md"
+                        class="disabled:pointer-events-none"
+                        action={() => new Promise((resolve) => resolve())}
+                        title={$draftStore?.isDirty
+                            ? $t("pages.project.edit.header.unsentChanges")
+                            : $t("common.save")}
+                    >
+                        {$t("common.save")}
+                        {#snippet actionedChildren()}
+                            {$t("common.saved")}
+                        {/snippet}
+                    </ActionableButton>
+                    {#if $draftStore?.isDirty}
+                        <Bullet class="absolute top-0 right-0" />
+                    {/if}
+                </div>
                 <Button
                     class="disabled:pointer-events-none disabled:opacity-24"
                     kind="primary"
                     size="md"
                     onclick={() => {}}
-                    //disabled={$isReadyToPublish ? false : true}
                 >
                     {$t("common.publish")}
                 </Button>

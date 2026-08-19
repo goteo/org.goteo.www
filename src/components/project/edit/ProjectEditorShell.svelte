@@ -8,15 +8,29 @@
     import Spinner from "../../icons/status/Spinner.svelte";
 
     import type { Project } from "../../../openapi/client";
+    import { draftStore } from "../../../stores/drafts/draftsStore";
 
     let { project, idOrSlug }: { project?: Project; idOrSlug: string } = $props();
 
     let draft = $derived.by(async () => {
         if (project) {
-            return draftsRepository.getOrCreateForProject($state.snapshot(project));
+            const actual = $state.snapshot(project);
+            const wip = await draftsRepository.getOrCreateForProject(actual);
+
+            draftStore.setActual(actual);
+            draftStore.setDraft(wip);
+
+            return wip;
         }
 
-        return draftsRepository.get(idOrSlug);
+        const wip = await draftsRepository.get(idOrSlug);
+
+        if (wip) {
+            draftStore.setDraft(wip);
+            draftStore.setActual(undefined);
+        }
+
+        return wip;
     });
 
     let step = $derived.by(() => {
