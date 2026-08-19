@@ -510,7 +510,7 @@ From package `@hey-api/openapi-ts`, using the `@hey-api/client-fetch` for runtim
 | `src/openapi/client/client.gen.ts`          | No    | Singleton `client` instance                                                                             |
 | `src/openapi/api.ts`                        | Yes   | `createClientConfig` (sets `baseUrl`), `AuthErrorType`, `createAuthError()`, `getErrorTranslationKey()` |
 | `src/openapi/cacheFetch.ts`                 | Yes   | Browser Cache API interceptor for GET requests                                                          |
-| `src/openapi/plugins/operation-paths/`      | Yes   | Custom codegen plugin for URL path strings                                                       |
+| `src/openapi/plugins/operation-paths/`      | Yes   | Custom codegen plugin for URL path strings                                                              |
 | `openapi-ts.config.ts`                      | Yes   | Codegen config — input spec URL, output dir, plugins                                                    |
 
 ### Naming convention of generated functions

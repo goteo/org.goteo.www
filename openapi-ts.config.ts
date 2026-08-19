@@ -27,8 +27,8 @@ export default defineConfig({
         },
         {
             name: "zod",
-            requests: true
-        }
+            requests: true,
+        },
     ],
     parser: {
         transforms: {
