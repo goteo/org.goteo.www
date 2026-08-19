@@ -8,7 +8,6 @@ Converted from CampaignCard.astro to maintain exact functionality
 
     import Clock from "../../components/icons/Clock.svelte";
     import { t } from "../../i18n/store";
-    import { client } from "../../openapi/client/client.gen";
     import { formatCurrency } from "../../utils/currencies";
     import { gte } from "../../utils/money";
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
@@ -16,8 +15,9 @@ Converted from CampaignCard.astro to maintain exact functionality
     import Tag from "../library/tags/Tag.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    import type { Accounting, Money } from "../../openapi/client";
+    import { apiAccountingsIdGet, type Accounting, type Money } from "../../openapi/client";
     import type { Campaign, CampaignSize } from "../../types/campaign";
+    import { extractId } from "../../utils/extractId";
 
     interface Props {
         size: CampaignSize;
@@ -44,11 +44,7 @@ Converted from CampaignCard.astro to maintain exact functionality
 
     $effect(() => {
         if (fetched === undefined && !campaign.obtained && campaign.accounting) {
-            (
-                client.get({ url: campaign.accounting }) as unknown as Promise<{
-                    data: Accounting;
-                }>
-            )
+            apiAccountingsIdGet({ path: { id: extractId(campaign.accounting)! } })
                 .then(({ data }) => {
                     if (data?.balance) fetched = data.balance as Money;
                 })

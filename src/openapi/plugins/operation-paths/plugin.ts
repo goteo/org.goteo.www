@@ -1,15 +1,14 @@
-import type { Config } from "./types";
-import type { Plugin } from "@hey-api/openapi-ts";
+import { $ } from '@hey-api/openapi-ts';
 
-export const handler: Plugin.Handler<Config> = ({ context, plugin }) => {
-    const file = context.createFile({
-        id: plugin.name,
-        path: plugin.output,
+import type { OperationPathsPlugin } from './types';
+
+export const handler: OperationPathsPlugin['Handler'] = ({ plugin }) => {
+    plugin.forEach('operation', (event) => {
+        const symbolName = plugin.symbol(`${event.operation.id}Url`);
+        const node = $.const(symbolName)
+            .export()
+            .assign($.literal(event.operation.path));
+        plugin.node(node);
     });
 
-    context.subscribe("operation", ({ operation }) => {
-        const node = `export const ${operation.id}Url = '${operation.path}';`;
-
-        file.add(node);
-    });
 };

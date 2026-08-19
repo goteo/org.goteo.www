@@ -1,17 +1,15 @@
-import { handler } from "./plugin";
+import { definePluginConfig } from '@hey-api/openapi-ts';
 
-import type { Config } from "./types";
-import type { Plugin } from "@hey-api/openapi-ts";
+import { handler } from './plugin';
+import type { OperationPathsPlugin } from './types';
 
-export const defaultConfig: Plugin.Config<Config> = {
-    _dependencies: ["@hey-api/typescript"],
-    _handler: handler,
-    _handlerLegacy: () => {},
-    name: "operation-paths",
-    output: "paths",
+export const defaultConfig: OperationPathsPlugin['Config'] = {
+    config: {},
+    handler,
+    name: 'operation-paths',
 };
 
-export const defineConfig: Plugin.DefineConfig<Config> = (config) => ({
-    ...defaultConfig,
-    ...config,
-});
+/**
+ * Type helper for `operation-paths` plugin, returns {@link Plugin.Config} object
+ */
+export const defineConfig = definePluginConfig(defaultConfig);

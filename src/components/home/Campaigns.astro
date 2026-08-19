@@ -2,11 +2,11 @@
 import CampaignCard from "./CampaignCard.svelte";
 import type { Campaign } from "../../types/campaign";
 import Arrow from "../../components/icons/navigation/Arrow.svelte";
-import { apiProjectsGetCollection, type Accounting, type Money } from "../../openapi/client";
+import { apiAccountingsIdGet, apiProjectsGetCollection, type Money } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
-import { client } from "../../openapi/client/client.gen";
 import Grid from "../library/layout/Grid.svelte";
 import Button from "../library/buttons/Button.svelte";
+import { extractId } from "../../utils/extractId";
 
 const { t } = Astro.locals;
 
@@ -28,10 +28,8 @@ const { data: projects } = await apiProjectsGetCollection({
 });
 
 const campaigns: Campaign[] = await Promise.all(
-    (projects ?? []).map(async (project, index) => {
-        const { data: accounting } = (await client.get({
-            url: client.buildUrl({ url: project.accounting! }),
-        })) as { data: Accounting };
+    projects!.map(async (project, index) => {
+        const { data: accounting } = await apiAccountingsIdGet({ path: { id: extractId(project.accounting)! } });
 
         return {
             ...project,

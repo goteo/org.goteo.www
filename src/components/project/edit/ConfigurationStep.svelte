@@ -20,7 +20,7 @@
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/paths.gen";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
     import Title from "../../library/typography/Title.svelte";

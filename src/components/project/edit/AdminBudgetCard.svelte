@@ -3,7 +3,7 @@
     import CreateCard from "./CreateCard.svelte";
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen";
     import {
         addBudgetItem,
         deleteBudgetItem,

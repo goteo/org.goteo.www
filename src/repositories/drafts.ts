@@ -1,7 +1,7 @@
 import type { Project } from "../openapi/client";
 import { Dexie, type EntityTable } from "dexie";
 import { client } from "../openapi/client/client.gen";
-import { apiUsersIdOrHandleGetUrl } from "../openapi/client/paths.gen";
+import { apiUsersIdOrHandleGetUrl } from "../openapi/client/operation-paths.gen";
 
 export interface ProjectDraft extends Project {
     key: string;

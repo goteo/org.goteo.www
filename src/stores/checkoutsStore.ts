@@ -1,7 +1,7 @@
 import { derived, get, writable } from "svelte/store";
 
 import { session } from "../auth/store";
-import { apiProjectRewardsIdGetUrl } from "../openapi/client/paths.gen";
+import { apiProjectRewardsIdGetUrl } from "../openapi/client/operation-paths.gen";
 import { dropLegacyCart } from "../utils/checkouts/migrate";
 import { checkoutRepo } from "../utils/checkouts/repository";
 import { getDefaultCurrency } from "../utils/consts";

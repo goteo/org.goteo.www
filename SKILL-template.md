@@ -506,7 +506,7 @@ Two packages: `@hey-api/openapi-ts` (codegen, dev dependency) and `@hey-api/clie
 | -------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------- |
 | `src/openapi/client/sdk.gen.ts`        | No    | Typed API functions — one per API operation                                                             |
 | `src/openapi/client/types.gen.ts`      | No    | TypeScript types for all API resources                                                                  |
-| `src/openapi/client/paths.gen.ts`      | No    | URL path string constants per operation                                                                 |
+| `src/openapi/client/operation-paths.gen.ts`      | No    | URL path string constants per operation                                                                 |
 | `src/openapi/client/client.gen.ts`     | No    | Singleton `client` instance                                                                             |
 | `src/openapi/api.ts`                   | Yes   | `createClientConfig` (sets `baseUrl`), `AuthErrorType`, `createAuthError()`, `getErrorTranslationKey()` |
 | `src/openapi/cacheFetch.ts`            | Yes   | Browser Cache API interceptor for GET requests                                                          |
@@ -562,7 +562,7 @@ Use when you need the URL string (e.g. for manual `fetch` calls or cache keys):
 
 ```typescript
 import { client } from "../openapi/client/client.gen";
-import { apiProjectsIdOrSlugGetUrl } from "../openapi/client/paths.gen";
+import { apiProjectsIdOrSlugGetUrl } from "../openapi/client/operation-paths.gen";
 
 const url = client.buildUrl({
     url: apiProjectsIdOrSlugGetUrl,

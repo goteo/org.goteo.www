@@ -3,7 +3,7 @@
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiUsersGetCollection, type User } from "../../../openapi/client/index.ts";
-    import { apiUsersGetCollectionUrl } from "../../../openapi/client/paths.gen.ts";
+    import { apiUsersGetCollectionUrl } from "../../../openapi/client/operation-paths.gen.ts";
     import { useAdminTableState } from "../../../utils/adminTableState.svelte";
     import { toCollectionItems } from "../../../utils/hydra";
     import {

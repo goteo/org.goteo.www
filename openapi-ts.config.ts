@@ -24,7 +24,13 @@ export default defineConfig({
         {
             name: "@hey-api/typescript",
             enums: "javascript",
-            readOnlyWriteOnlyBehavior: "off",
         },
     ],
+    parser: {
+        transforms: {
+            readWrite: {
+                enabled: false
+            }
+        }
+    }
 });
