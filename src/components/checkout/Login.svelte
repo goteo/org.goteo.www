@@ -60,22 +60,22 @@
 <div class="flex w-full flex-col items-start gap-10 self-stretch">
     <div class="flex flex-col items-start gap-10 self-stretch">
         <Title level={1} variant="headline" class="self-stretch">
-            {$t("pages.checkout.login.page.title")}
+            {$t("pages.checkout.login.sheet.headerLogin")}
         </Title>
         <p class="text-content self-stretch text-base leading-6 font-normal">
-            {$t("pages.checkout.login.page.description")}
+            {$t("pages.checkout.login.sheet.description")}
         </p>
     </div>
 
     <div class="flex items-center gap-4">
         <h2 class="text-secondary text-2xl leading-8 font-bold">
-            {$t("pages.checkout.login.page.registerOr")}
+            {$t("pages.checkout.login.sheet.registerOr")}
         </h2>
         <a
             href="/checkout/register?callback=/checkout/payment"
             class="bg-variant1 text-secondary line-clamp-1 flex items-center justify-center gap-2 overflow-hidden rounded-2xl px-4 py-2 text-base leading-6 font-bold text-ellipsis"
         >
-            {$t("pages.checkout.login.page.registerBtnLabel")}
+            {$t("pages.checkout.login.sheet.registerBtnLabel")}
         </a>
     </div>
 
@@ -106,7 +106,7 @@
                     href="/password/recover"
                     class="text-secondary text-sm font-bold underline hover:opacity-80"
                 >
-                    {$t("pages.checkout.login.page.forgotPassword")}
+                    {$t("pages.checkout.login.sheet.forgotPassword")}
                 </a>
 
                 <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">

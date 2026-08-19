@@ -484,8 +484,8 @@
       },
       "register": {
         "title": "Registro",
-        "page": {
-          "title": "Indícanos tus datos personales",
+        "sheet": {
+          "headerRegister": "Indícanos tus datos personales",
           "description": "Necesitamos saber quién eres antes de pagar.",
           "registerOr": "Regístrate o",
           "loginBtnLabel": "Entra con tu cuenta",
@@ -519,8 +519,8 @@
         }
       },
       "login": {
-        "page": {
-          "title": "Indícanos tus datos personales",
+        "sheet": {
+          "headerLogin": "Indícanos tus datos personales",
           "description": "Necesitamos saber quién eres antes de pagar.",
           "registerOr": "Entra en tu cuenta o",
           "registerBtnLabel": "Regístrate",
@@ -1856,6 +1856,29 @@
       },
       "title": "Goteo",
       "notFound": "Usuario no encontrado"
+    },
+    "login": {
+      "sheet": {
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Entra en tu cuenta o",
+        "registerBtnLabel": "Regístrate",
+        "otherAccessMethods": "También puedes acceder a través de:",
+        "forgotPassword": "¿Olvidaste tu contraseña?",
+        "welcome": {
+          "title": "Bienvenid@ al nuevo Goteo.",
+          "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
+        }
+      },
+      "form": {
+        "email": "Email o nombre de usuario",
+        "password": "Contraseña"
+      },
+      "error": {
+        "invalidCredentials": "Correo electrónico o contraseña inválidos.",
+        "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
+        "invalidEmail": "El correo electrónico no es válido."
+      }
     },
     "logout": {
       "label": "Cerrar sesión"
