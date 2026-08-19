@@ -3,12 +3,12 @@
     import { getStepComponent } from "./steps";
     import { t } from "../../../i18n/store";
     import { draftsRepository } from "../../../repositories/drafts";
+    import { draftStore } from "../../../stores/drafts/draftsStore";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import Spinner from "../../icons/status/Spinner.svelte";
 
     import type { Project } from "../../../openapi/client";
-    import { draftStore } from "../../../stores/drafts/draftsStore";
 
     let { project, idOrSlug }: { project?: Project; idOrSlug: string } = $props();
 

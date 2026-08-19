@@ -1,5 +1,7 @@
 import { derived, writable, type Readable } from "svelte/store";
+
 import { draftsRepository, type ProjectDraft } from "../../repositories/drafts";
+
 import type { Project } from "../../openapi/client";
 
 export type ProjectDraftState = ProjectDraft & {
