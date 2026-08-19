@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Project } from "../../../openapi/client";
-    import { draftsRepository } from "../../../repositories/projectDraft";
+    import { draftsRepository } from "../../../repositories/drafts";
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
     import { t } from "../../../i18n/store";
@@ -21,14 +21,16 @@
     let step = $derived.by(() => {
         let currentStep = 1;
 
-        if (typeof window !== "undefined") {
-            const url = new URL(window.location.href);
-            const stepParam = url.searchParams.get("step");
-            if (stepParam) {
-                const step = parseInt(stepParam, 10);
-                if (!isNaN(step) && step >= 1 && step <= 6) {
-                    currentStep = step;
-                }
+        if (typeof window == "undefined") {
+            return currentStep;
+        }
+
+        const url = new URL(window.location.href);
+        const stepParam = url.searchParams.get("step");
+        if (stepParam) {
+            const step = parseInt(stepParam, 10);
+            if (!isNaN(step) && step >= 1 && step <= 6) {
+                currentStep = step;
             }
         }
 

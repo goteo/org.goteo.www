@@ -15,7 +15,7 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import { draftsRepository, type ProjectDraft } from "../../../repositories/projectDraft";
+    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Eye from "../../icons/media/Eye.svelte";
     import ActionableButton from "../../library/buttons/ActionableButton.svelte";

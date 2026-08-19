@@ -27,7 +27,7 @@
 
     import type { Category, Project } from "../../../openapi/client";
     import { extractId } from "../../../utils/extractId";
-    import { draftsRepository, type ProjectDraft } from "../../../repositories/projectDraft";
+    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
 
     interface ConfigurationStepProps {
         project: ProjectDraft;
