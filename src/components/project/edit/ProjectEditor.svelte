@@ -15,7 +15,7 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
-    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
+    import { type ProjectDraft } from "../../../repositories/drafts";
     import { draftStore } from "../../../stores/drafts/draftsStore";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Bullet from "../../icons/Bullet.svelte";
@@ -49,11 +49,11 @@
     ]);
 
     function handleTitleChange(title: string) {
-        draftsRepository.update({ ...$state.snapshot(draft), title });
+        draftStore.update({ title });
     }
 
     function handleSubtitleChange(subtitle: string) {
-        draftsRepository.update({ ...$state.snapshot(draft), subtitle });
+        draftStore.update({ subtitle });
     }
 </script>
 
@@ -159,6 +159,7 @@
                         size="md"
                         class="disabled:pointer-events-none"
                         action={() => new Promise((resolve) => resolve())}
+                        autoreset={1000}
                         title={$draftStore?.isDirty
                             ? $t("pages.project.edit.header.unsentChanges")
                             : $t("common.save")}
