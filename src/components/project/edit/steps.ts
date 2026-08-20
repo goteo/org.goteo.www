@@ -1,4 +1,3 @@
-import CampaignInfoStep from "./CampaignInfoStep.svelte";
 import ConfigurationStep from "./ConfigurationStep.svelte";
 
 import type { Component } from "svelte";
@@ -22,7 +21,7 @@ function toStep(id: string, component: unknown): ProjectEditorStep {
 
 export const steps: ProjectEditorStep[] = [
     toStep("1", ConfigurationStep),
-    toStep("2", CampaignInfoStep),
+    // toStep("2", CampaignInfoStep),
     // toStep("3", RewardsStep),
     // toStep("4", CollaborationsStep),
     // toStep("5", BudgetStep),

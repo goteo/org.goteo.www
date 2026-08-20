@@ -60,7 +60,7 @@
         const [error] = validate(title, zProjectProjectUpdationDto.shape.title);
 
         if (!error) {
-            draft.update({ title });
+            draft.patch({ title });
             errorMessage = undefined;
             return;
         }
@@ -76,15 +76,17 @@
     }
 
     function handleSubtitleChange(subtitle: string) {
-        draft.update({ subtitle });
+        draft.patch({ subtitle });
     }
 
     async function handleSave() {
         const { data: project } = await apiProjectsIdPatch({
             baseUrl: "/api/relay",
-            path: { id: String($draft.id) },
-            body: { ...$draft, video: $draft.video?.src! },
+            path: { id: String($draft.project.id) },
+            body: $draft.patch,
         });
+
+        draft.update({ project, patch: {} });
     }
 </script>
 
@@ -107,14 +109,14 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={$draft.title}
+                        value={$draft.project.title}
                         oninput={(e) => handleTitleChange(e.currentTarget.value)}
                         placeholder={$t("pages.project.edit.header.titlePlaceholder")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={$draft.subtitle}
+                        value={$draft.project.subtitle}
                         oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"

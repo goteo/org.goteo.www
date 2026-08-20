@@ -49,6 +49,6 @@ if (projectFromApi) {
 
 <Layout title={t("pages.project.edit.title", { project: projectFromApi?.title! })}>
     <App locale={locale} session={session} client:load>
-        <ProjectEditorShell project={projectFromApi} {idOrSlug} client:load />
+        <ProjectEditorShell key={idOrSlug} actor={session.user} project={projectFromApi} client:load />
     </App>
 </Layout>

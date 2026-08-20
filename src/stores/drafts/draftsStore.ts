@@ -4,12 +4,6 @@ import { draftsRepository, type ProjectDraft } from "../../repositories/drafts";
 
 import type { Project } from "../../openapi/client";
 
-function haveDrifted(draft: ProjectDraft, actual?: Project): boolean {
-    if (!actual) return false;
-
-    return draft.dateUpdated !== actual.dateUpdated;
-}
-
 export type ProjectDraftState = ProjectDraft & {
     readonly isDirty: boolean;
 };
@@ -18,6 +12,7 @@ export interface ProjectDraftStore extends Readable<ProjectDraftState> {
     setDraft(draft: ProjectDraft): void;
     setActual(actual?: Project): void;
     update(update: Partial<ProjectDraft>): void;
+    patch(patch: ProjectDraft["patch"]): void;
 }
 
 /**
@@ -34,7 +29,7 @@ export function createProjectDraftStore(draft: ProjectDraft, actual?: Project): 
         [draftState, actualState],
         ([$draftState, $actualState]): ProjectDraftState => ({
             ...$draftState,
-            isDirty: haveDrifted($draftState, $actualState),
+            isDirty: Object.entries($draftState.patch).length > 0,
         }),
     );
 
@@ -54,6 +49,20 @@ export function createProjectDraftStore(draft: ProjectDraft, actual?: Project): 
                 const next = {
                     ...draft,
                     ...update,
+                    dateUpdated: new Date().toISOString(),
+                };
+
+                void draftsRepository.update(next);
+
+                return next;
+            });
+        },
+
+        patch(patch) {
+            draftState.update((draft) => {
+                const next = {
+                    ...draft,
+                    patch: { ...draft.patch, ...patch },
                     dateUpdated: new Date().toISOString(),
                 };
 

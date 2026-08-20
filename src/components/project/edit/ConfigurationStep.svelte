@@ -57,11 +57,10 @@
         return toCollectionItems<Category>(data);
     });
 
-    let categories = $derived($draft.categories.map((c) => extractId(c)!));
+    let categories = $derived($draft.project.categories.map((c) => extractId(c)!));
 
     function handleCategoryChange(selected: Category[]) {
-        draftsRepository.update({
-            ...$draft,
+        draft.patch({
             categories: selected.map((s) => {
                 return client.buildUrl({
                     url: apiCategoriesIdOrSlugGetUrl,
@@ -71,10 +70,10 @@
         });
     }
 
-    let release = $derived(new Date($draft.calendar?.release || new Date()));
+    let release = $derived(new Date($draft.project.calendar?.release || new Date()));
 
     const releaseDisabled = $derived.by(() => {
-        return !["in_draft", "in_campaign_review.to_change"].includes($draft.status!);
+        return !["in_draft", "in_campaign_review.to_change"].includes($draft.project.status!);
     });
 
     const releaseMinimum = $derived.by(() => {
@@ -92,16 +91,16 @@
      * Handle release date change
      */
     function handleReleaseChange(date: Date) {
-        draftsRepository.update({ ...$draft, calendar: { release: date.toISOString() } });
+        draft.patch({ calendar: { release: date.toISOString() } });
     }
 
-    let deadline = $derived($draft.deadline || "minimum");
+    let deadline = $derived($draft.project.deadline || "minimum");
 
     /**
      * Handle funding rounds change
      */
     function handleRoundsChange(deadline: Project["deadline"]) {
-        draftsRepository.update({ ...$draft, deadline });
+        draft.patch({ deadline });
     }
 </script>
 

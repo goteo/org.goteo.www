@@ -7,21 +7,38 @@
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import Spinner from "../../icons/status/Spinner.svelte";
 
-    import type { Project } from "../../../openapi/client";
+    import type { Project, User } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import { t } from "../../../i18n/store";
 
-    let { project, idOrSlug }: { project?: Project; idOrSlug: string } = $props();
+    interface Props {
+        /**
+         * Project's idOrSlug or Draft's key
+         */
+        key: string;
+
+        /**
+         * User operating the edition
+         */
+        actor: User;
+
+        /**
+         * Project being edited
+         */
+        project?: Project;
+    }
+
+    let { key, actor, project }: Props = $props();
 
     let editor = $derived.by(async (): Promise<ProjectDraftStore | undefined> => {
         if (project) {
             const actual = $state.snapshot(project);
-            const draft = await draftsRepository.getOrCreateForProject(actual);
+            const draft = await draftsRepository.getOrCreateFor(actor, actual);
 
             return createProjectDraftStore(draft, actual);
         }
 
-        const draft = await draftsRepository.get(idOrSlug);
+        const draft = await draftsRepository.get(key);
 
         if (!draft) {
             return undefined;
