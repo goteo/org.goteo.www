@@ -18,15 +18,8 @@
       }
     },
     "OAuth": {
-      "user": {
-        "invalidCredentials": "Correo electrónico o contraseña inválidos."
-      },
-      "client": {
-        "unauthorizedFlow": "Las credenciales proporcionadas son inválidas o han expirado.",
-        "unauthorizedClient": "El cliente no está autorizado para utilizar este método de autorización.",
-        "invalidRequest": "La petición carece de un parámetro obligatorio o incluye un parámetro no soportado.",
-        "serverError": "El servidor de autorización ha encontrado una situación inesperada."
-      }
+      "Client authentication failed": "La aplicación no pudo ser autorizada como un cliente válido.",
+      "The user credentials were incorrect": "Las credenciales de usuario son incorrectas."
     },
     "constraint": {
       "text": {
@@ -489,18 +482,19 @@
       "login": {
         "title": "Indícanos tus datos personales",
         "description": "Necesitamos saber quién eres antes de pagar.",
-        "registerOr": "Entra en tu cuenta o",
+        "loginOr": "Entra en tu cuenta o",
         "registerBtnLabel": "Regístrate",
-        "otherAccessMethods": "También puedes acceder a través de:",
         "forgotPassword": "¿Olvidaste tu contraseña?",
         "welcome": {
           "title": "Bienvenid@ al nuevo Goteo.",
           "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
         },
+        "formDescription": "Si ya eres usuario identifíciate.",
         "form": {
-          "email": "Email",
+          "idPlaceholder": "johndoe@example.com",
           "emailOrUsername": "Email o nombre de usuario",
           "password": "Contraseña",
+          "passwordPlaceholder": "TrustNo1",
           "termsCheckbox": "Acepto las {{ link }}condiciones legales{{ _link }}"
         },
         "error": {

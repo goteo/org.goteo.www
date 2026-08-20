@@ -37,12 +37,12 @@ export const POST: APIRoute = async ({ request, cookies, locals }) => {
             status: 200,
             headers: { "Content-Type": "application/json" },
         });
-    } catch (err: any) {
+    } catch (err) {
         console.error(err);
 
         return new Response(
             JSON.stringify({
-                error_description: err.message || locals.t("system.OAuth.user.invalidCredentials"),
+                error: err instanceof Error ? err.message : String(err),
             }),
             {
                 status: 400,
