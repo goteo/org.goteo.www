@@ -19,7 +19,6 @@
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
     import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
-    import { draftsRepository, type ProjectDraft } from "../../../repositories/drafts";
     import { extractId } from "../../../utils/extractId";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
@@ -57,7 +56,7 @@
         return toCollectionItems<Category>(data);
     });
 
-    let categories = $derived($draft.project.categories.map((c) => extractId(c)!));
+    let categories = $derived($draft.latest.categories.map((c) => extractId(c)!));
 
     function handleCategoryChange(selected: Category[]) {
         draft.patch({
@@ -70,10 +69,10 @@
         });
     }
 
-    let release = $derived(new Date($draft.project.calendar?.release || new Date()));
+    let release = $derived(new Date($draft.latest.calendar?.release || new Date()));
 
     const releaseDisabled = $derived.by(() => {
-        return !["in_draft", "in_campaign_review.to_change"].includes($draft.project.status!);
+        return !["in_draft", "in_campaign_review.to_change"].includes($draft.latest.status!);
     });
 
     const releaseMinimum = $derived.by(() => {
@@ -94,7 +93,7 @@
         draft.patch({ calendar: { release: date.toISOString() } });
     }
 
-    let deadline = $derived($draft.project.deadline || "minimum");
+    let deadline = $derived($draft.latest.deadline || "minimum");
 
     /**
      * Handle funding rounds change

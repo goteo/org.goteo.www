@@ -5,43 +5,52 @@ import { draftsRepository, type ProjectDraft } from "../../repositories/drafts";
 import type { Project } from "../../openapi/client";
 
 export type ProjectDraftState = ProjectDraft & {
+    /**
+     * Latest Project's shape. From merged Draft's remote actual with local patch
+     */
+    readonly latest: Project;
+
+    /**
+     * If `true` it means there are unsent local changes to remote.
+     */
     readonly isDirty: boolean;
 };
 
 export interface ProjectDraftStore extends Readable<ProjectDraftState> {
     setDraft(draft: ProjectDraft): void;
-    setActual(actual?: Project): void;
     update(update: Partial<ProjectDraft>): void;
     patch(patch: ProjectDraft["patch"]): void;
+}
+
+function merge(actual: Project, patch: ProjectDraft["patch"]): Project {
+    const { video, ...rest } = patch;
+
+    return {
+        ...actual,
+        ...rest,
+        ...(video ? { video: { src: video } } : {}),
+    };
 }
 
 /**
  * Store to sync changes in a ProjectDraft.
  *
  * @param draft The client-side living ProjectDraft record, a work-in-progress.
- * @param actual The Project as it is in the API.
  */
-export function createProjectDraftStore(draft: ProjectDraft, actual?: Project): ProjectDraftStore {
+export function createProjectDraftStore(draft: ProjectDraft): ProjectDraftStore {
     const draftState = writable(draft);
-    const actualState = writable<Project | undefined>(actual);
 
-    const state = derived(
-        [draftState, actualState],
-        ([$draftState, $actualState]): ProjectDraftState => ({
-            ...$draftState,
-            isDirty: Object.entries($draftState.patch).length > 0,
-        }),
-    );
+    const state = derived(draftState, ($draftState): ProjectDraftState => ({
+        ...$draftState,
+        latest: merge($draftState.actual, $draftState.patch),
+        isDirty: Object.entries($draftState.patch).length > 0,
+    }));
 
     return {
         subscribe: state.subscribe,
 
         setDraft(draft) {
             draftState.set(draft);
-        },
-
-        setActual(actual) {
-            actualState.set(actual);
         },
 
         update(update) {

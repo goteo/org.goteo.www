@@ -10,22 +10,22 @@ import type { ApiProjectsIdPatchData, Project, User } from "../openapi/client";
  */
 export interface ProjectDraft {
     /**
-     * Client-side identifier, might not be related to remote Project.
+     * Local identifier.
      */
     key: string;
 
     /**
-     * Client-side editing User IRI, might not be related to remote Project owner.
+     * IRI of the user operating this Draft locally.
      */
     actor: string;
 
     /**
-     * The remote Project resource.
+     * Remote, actual Project resource.
      */
-    project: Project;
+    actual: Project;
 
     /**
-     * The current change-set in the draft.
+     * Local, current change-set in the Draft not sent to remote.
      */
     patch: ApiProjectsIdPatchData["body"];
 
@@ -40,10 +40,10 @@ export interface ProjectDraft {
     dateUpdated: string;
 }
 
-function generateKey(owner: User, project?: Project): string {
+function generateKey(actor: User, actual?: Project): string {
     const pieces = {
-        owner: owner.id,
-        project: project?.id,
+        user: actor.id,
+        project: actual?.id,
     };
 
     return Object.entries(pieces)
@@ -90,28 +90,36 @@ export class ProjectDraftRepository {
     }
 
     public async getAllByActor(userIdOrHandle: string | number) {
-
-        return getDb().drafts.where({ actor: buildUserIri(userIdOrHandle) }).reverse().sortBy("dateUpdated");
+        return getDb()
+            .drafts.where({ actor: buildUserIri(userIdOrHandle) })
+            .reverse()
+            .sortBy("dateUpdated");
     }
 
     public async get(key: string) {
         return getDb().drafts.get(key);
     }
 
-    public async getOrCreateFor(user: User, project: Project) {
-        const plainProject = structuredClone(project);
-        const key = generateKey(user, plainProject);
+    public async getOrCreateFor(actor: User, actual: Project) {
+        const plainProject = structuredClone(actual);
+        const key = generateKey(actor, plainProject);
 
         const existing = await this.get(key);
-        if (existing) return existing;
+        if (existing) {
+            // Remote project might have changed, so we overwrite to avoid drift
+            const current: ProjectDraft = { ...existing, actual: plainProject };
+            this.update(current);
+
+            return current;
+        }
 
         return await this.create({
             key,
-            actor: buildUserIri(user),
-            project: plainProject,
+            actor: buildUserIri(actor),
+            actual: plainProject,
             patch: {},
-            dateCreated: (new Date()).toISOString(),
-            dateUpdated: (new Date()).toISOString(),
+            dateCreated: new Date().toISOString(),
+            dateUpdated: new Date().toISOString(),
         });
     }
 

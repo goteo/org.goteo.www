@@ -17,7 +17,6 @@
     import { t } from "../../../i18n/store";
     import { apiProjectsIdPatch } from "../../../openapi/client";
     import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
-    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import { validate } from "../../../utils/validation";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Bullet from "../../icons/Bullet.svelte";
@@ -26,6 +25,7 @@
     import Button from "../../library/buttons/Button.svelte";
     import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import type { Snippet } from "svelte";
 
     let {
@@ -82,11 +82,11 @@
     async function handleSave() {
         const { data: project } = await apiProjectsIdPatch({
             baseUrl: "/api/relay",
-            path: { id: String($draft.project.id) },
+            path: { id: String($draft.actual.id) },
             body: $draft.patch,
         });
 
-        draft.update({ project, patch: {} });
+        draft.update({ actual: project, patch: {} });
     }
 </script>
 
@@ -109,14 +109,14 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={$draft.project.title}
+                        value={$draft.latest.title}
                         oninput={(e) => handleTitleChange(e.currentTarget.value)}
                         placeholder={$t("pages.project.edit.header.titlePlaceholder")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={$draft.project.subtitle}
+                        value={$draft.latest.subtitle}
                         oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"

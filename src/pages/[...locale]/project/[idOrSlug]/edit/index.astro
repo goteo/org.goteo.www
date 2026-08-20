@@ -31,7 +31,7 @@ if (getError && getError.status !== NotFound.status) {
 
 if (projectFromApi) {
     const { request, error: patchError } = await apiProjectsIdPatch({
-        headers: { ...session.token.asHttpHeaders, "Accept-Language": locale },
+        headers: { ...session.token.asHttpHeaders, "Content-Language": locale },
         path: { id: String(projectFromApi.id) },
         body: { id: projectFromApi.id },
     });
@@ -49,6 +49,11 @@ if (projectFromApi) {
 
 <Layout title={t("pages.project.edit.title", { project: projectFromApi?.title! })}>
     <App locale={locale} session={session} client:load>
-        <ProjectEditorShell key={idOrSlug} actor={session.user} project={projectFromApi} client:load />
+        <ProjectEditorShell
+            key={idOrSlug}
+            actor={session.user}
+            project={projectFromApi}
+            client:load
+        />
     </App>
 </Layout>

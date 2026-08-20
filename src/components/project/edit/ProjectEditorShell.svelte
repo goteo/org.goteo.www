@@ -1,6 +1,7 @@
 <script lang="ts">
     import ProjectEditor from "./ProjectEditor.svelte";
     import { getStepComponent } from "./steps";
+    import { t } from "../../../i18n/store";
     import { draftsRepository } from "../../../repositories/drafts";
     import { createProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
@@ -9,7 +10,6 @@
 
     import type { Project, User } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import { t } from "../../../i18n/store";
 
     interface Props {
         /**
@@ -32,10 +32,9 @@
 
     let editor = $derived.by(async (): Promise<ProjectDraftStore | undefined> => {
         if (project) {
-            const actual = $state.snapshot(project);
-            const draft = await draftsRepository.getOrCreateFor(actor, actual);
+            const draft = await draftsRepository.getOrCreateFor(actor, $state.snapshot(project));
 
-            return createProjectDraftStore(draft, actual);
+            return createProjectDraftStore(draft);
         }
 
         const draft = await draftsRepository.get(key);
