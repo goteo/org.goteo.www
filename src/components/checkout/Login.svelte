@@ -7,6 +7,7 @@
     import TextInput from "../library/inputs/TextInput.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
     import Title from "../library/typography/Title.svelte";
+    import PasswordInput from "../library/inputs/PasswordInput.svelte";
 
     let email = $state("");
     let password = $state("");
@@ -94,8 +95,7 @@
                     required
                 />
 
-                <TextInput
-                    type="password"
+                <PasswordInput
                     placeholder={$t("pages.checkout.login.form.password")}
                     bind:value={password}
                     disabled={isSubmitting}
