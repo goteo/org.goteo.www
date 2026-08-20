@@ -63,8 +63,9 @@
         {/snippet}
 
         {#snippet content()}
-            <hr class="bg-secondary h-px border-none" />
-            <div>
+            <hr class="bg-secondary my-0 h-px border-none" />
+
+            <div class="flex flex-col gap-2 pt-4">
                 {#each recipients as [_, items]}
                     {@const name = items[0].recipientDisplayName}
                     {@const amount = sumMoney(items.map((i) => multiplyMoney(i.money, i.quantity)))}

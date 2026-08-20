@@ -25,7 +25,7 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("pages.login.form.password"),
+        placeholder,
         name = "password",
         id = "password",
         label = undefined,
@@ -55,10 +55,10 @@
     const helperId = $derived(`${finalId}-helper`);
 </script>
 
-<div class={twMerge("flex w-full flex-col", classes)}>
+<div class={twMerge("relative", classes)}>
     <div
         class={twMerge(
-            "border-secondary relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4 transition-all",
+            "border-secondary relative flex h-14 w-full items-center justify-between rounded-lg border bg-white p-4 transition-all",
             !error && "focus-within:ring-secondary focus-within:ring-1",
             error && "border-tertiary ring-tertiary ring-1",
             disabled && "bg-grey cursor-not-allowed opacity-50",
@@ -91,7 +91,7 @@
             onfocus={onFocus}
             aria-invalid={error ? "true" : "false"}
             aria-describedby={error ? errorId : helperText ? helperId : undefined}
-            class="flex-1 rounded-lg border-none bg-white text-black outline-none focus:ring-0 disabled:cursor-not-allowed"
+            class="text-content m-0 flex-1 rounded-lg border-none bg-white p-0 outline-none focus:ring-0 disabled:cursor-not-allowed"
         />
 
         <button
@@ -100,23 +100,19 @@
             class="text-secondary cursor-pointer"
             {disabled}
             aria-label={showPassword
-                ? $t("pages.login.form.hidePassword", { default: "Ocultar contraseña" })
-                : $t("pages.login.form.showPassword", { default: "Mostrar contraseña" })}
+                ? $t("domain.passwordInput.hide")
+                : $t("domain.passwordInput.show")}
         >
             <Eye class="pointer-events-none h-6 w-6" closed={!showPassword} />
         </button>
     </div>
 
-    {#if error || helperText}
-        <span
-            id={error ? errorId : helperId}
-            class={twJoin(
-                "mt-1 pl-4 text-xs",
-                error && "text-tertiary",
-                helperText && "text-gray-500",
-            )}
-        >
+    <span
+        id={error ? errorId : helperId}
+        class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+    >
+        {#if error || helperText}
             {error || helperText}
-        </span>
-    {/if}
+        {/if}
+    </span>
 </div>
