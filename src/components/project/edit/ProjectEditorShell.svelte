@@ -34,9 +34,9 @@
     });
 
     let step = $derived.by(() => {
-        let currentStep = 1;
+        let currentStep = "1";
 
-        if (typeof window == "undefined") {
+        if (typeof window === "undefined") {
             return currentStep;
         }
 
@@ -45,12 +45,27 @@
         if (stepParam) {
             const step = parseInt(stepParam, 10);
             if (!isNaN(step) && step >= 1 && step <= 6) {
-                currentStep = step;
+                currentStep = String(step);
             }
         }
 
         return currentStep;
     });
+
+    function handleStepChange(newStep: string) {
+        step = newStep;
+
+        if (typeof window === "undefined") {
+            return;
+        }
+
+        const url = new URL(window.location.href);
+        const params = url.searchParams;
+
+        params.set("step", newStep);
+
+        window.history.replaceState(window.history.state, "", `${url.pathname}?${params}`);
+    }
 </script>
 
 {#await draft}
@@ -61,7 +76,7 @@
     </div>
 {:then draft}
     {#if draft}
-        <ProjectEditor {draft}>
+        <ProjectEditor {draft} {step} onStepChange={handleStepChange}>
             {@const StepComponent = getStepComponent(step)}
             <StepComponent project={draft} />
         </ProjectEditor>

@@ -24,30 +24,34 @@
     import Eye from "../../icons/media/Eye.svelte";
     import ActionableButton from "../../library/buttons/ActionableButton.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import { type Tab } from "../../library/layout/TabNavigation.svelte";
+    import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
     import type { Snippet } from "svelte";
 
     let {
         draft,
+        step,
         children,
         onSave,
         onPublish,
+        onStepChange,
     }: {
         draft: ProjectDraft;
+        step: string;
         children: Snippet;
         onSave?: () => void;
         onPublish?: () => void;
+        onStepChange?: (step: string) => void;
     } = $props();
 
     // Define the six wizard steps (reactive to language changes)
     const steps = $derived<Tab[]>([
-        { id: 1, label: $t("pages.project.edit.tabs.configuration") },
-        { id: 2, label: $t("pages.project.edit.tabs.campaign") },
-        { id: 3, label: $t("pages.project.edit.tabs.rewards") },
-        { id: 4, label: $t("pages.project.edit.tabs.collaborations") },
-        { id: 5, label: $t("pages.project.edit.tabs.budget") },
-        { id: 6, label: $t("pages.project.edit.tabs.aboutYou") },
+        { id: "1", label: $t("pages.project.edit.tabs.configuration") },
+        { id: "2", label: $t("pages.project.edit.tabs.campaign") },
+        { id: "3", label: $t("pages.project.edit.tabs.rewards") },
+        { id: "4", label: $t("pages.project.edit.tabs.collaborations") },
+        { id: "5", label: $t("pages.project.edit.tabs.budget") },
+        { id: "6", label: $t("pages.project.edit.tabs.aboutYou") },
     ]);
 
     let errorMessage: string | undefined = $state();
@@ -158,7 +162,7 @@
 
         <!-- Tab Navigation -->
         <div class="mb-8">
-            <!-- <TabNavigation tabs={steps} currentTab={currentStep} onTabClick={handleTabClick} /> -->
+            <TabNavigation tabs={steps} currentTab={step} onTabClick={(s) => onStepChange?.(s)} />
         </div>
 
         <!-- Step Content -->
