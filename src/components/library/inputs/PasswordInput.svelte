@@ -91,7 +91,7 @@
             onfocus={onFocus}
             aria-invalid={error ? "true" : "false"}
             aria-describedby={error ? errorId : helperText ? helperId : undefined}
-            class="flex-1 rounded-lg border-none bg-white text-black outline-none focus:ring-0 disabled:cursor-not-allowed"
+            class="p-0 m-0 flex-1 rounded-lg border-none bg-white text-content outline-none focus:ring-0 disabled:cursor-not-allowed"
         />
 
         <button
