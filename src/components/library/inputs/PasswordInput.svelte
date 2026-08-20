@@ -25,7 +25,7 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("pages.login.form.password"),
+        placeholder,
         name = "password",
         id = "password",
         label = undefined,
@@ -100,8 +100,8 @@
             class="text-secondary cursor-pointer"
             {disabled}
             aria-label={showPassword
-                ? $t("pages.login.form.hidePassword", { default: "Ocultar contraseña" })
-                : $t("pages.login.form.showPassword", { default: "Mostrar contraseña" })}
+                ? $t("domain.passwordInput.hide")
+                : $t("domain.passwordInput.show")}
         >
             <Eye class="pointer-events-none h-6 w-6" closed={!showPassword} />
         </button>
