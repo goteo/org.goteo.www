@@ -110,7 +110,7 @@
                 </a>
 
                 <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
-                    <Checkbox id="policies" bind:checked={acceptTerms} disabled={isSubmitting}>
+                    <Checkbox id="policies" bind:checked={acceptTerms} disabled={isSubmitting} required>
                         <span>
                             <Thtml
                                 key="pages.checkout.login.form.termsCheckbox"
