@@ -113,10 +113,10 @@
                     <Checkbox id="policies" bind:checked={acceptTerms} disabled={isSubmitting}>
                         <span>
                             <Thtml
-                                key="pages.checkout.register.form.termsCheckbox"
+                                key="pages.checkout.login.form.termsCheckbox"
                                 vars={{
-                                    legal: '<a href="/condiciones/legales" class="text-secondary underline font-bold hover:opacity-80">',
-                                    _legal: "</a>",
+                                    link: '<a href="/terms" class="text-secondary underline font-bold hover:opacity-80">',
+                                    _link: "</a>",
                                 }}
                             />
                         </span>

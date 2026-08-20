@@ -486,42 +486,6 @@
           "empty": "No hay proyectos disponibles en este momento"
         }
       },
-      "register": {
-        "title": "Registro",
-        "sheet": {
-          "headerRegister": "Indícanos tus datos personales",
-          "description": "Necesitamos saber quién eres antes de pagar.",
-          "registerOr": "Regístrate o",
-          "loginBtnLabel": "Entra con tu cuenta",
-          "existUserInfo": "Si ya eres usuario identifícate."
-        },
-        "form": {
-          "btnSubmit": "Registrarse",
-          "termsCheckbox": "Acepto las {{ legal }}condiciones legales{{_legal}}",
-          "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros términos de uso, política de privacidad y política de cookies.",
-          "validation": {
-            "password": {
-              "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
-            }
-          }
-        },
-        "individual": {
-          "password": "Contraseña",
-          "taxIdCheckbox": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda.",
-          "taxId": {
-            "msgDeduction": "Deseo desgravar mis donaciones. Es necesario indicar el número de DNI para comunicárselo a Hacienda."
-          }
-        },
-        "organization": {
-          "taxIdDescription": "*Con el CIF avisaremos a la agencia tributaria para la tu declaración de la renta.",
-          "representativeTitle": "Datos del representante de la empresa."
-        },
-        "error": {
-          "incompletePersonFields": "Por favor, completa todos los campos obligatorios para persona física.",
-          "incompleteOrgFields": "Por favor, completa todos los campos obligatorios para persona jurídica.",
-          "unexpectedRegistration": "Error al registrarse. Por favor, inténtalo de nuevo más tarde."
-        }
-      },
       "login": {
         "sheet": {
           "headerLogin": "Indícanos tus datos personales",
@@ -538,7 +502,8 @@
         "form": {
           "email": "Email",
           "emailOrUsername": "Email o nombre de usuario",
-          "password": "Contraseña"
+          "password": "Contraseña",
+          "termsCheckbox": "Acepto las {{ link }}condiciones legales{{ _link }}"
         },
         "error": {
           "invalidCredentials": "Correo electrónico o contraseña inválidos.",
