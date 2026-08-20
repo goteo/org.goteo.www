@@ -26,13 +26,14 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     interface ConfigurationStepProps {
-        project: ProjectDraft;
+        draft: ProjectDraftStore;
         onContinue?: () => void;
     }
 
-    let { project, onContinue }: ConfigurationStepProps = $props();
+    let { draft, onContinue }: ConfigurationStepProps = $props();
 
     /**
      * Handle Continue button
@@ -56,11 +57,11 @@
         return toCollectionItems<Category>(data);
     });
 
-    let categories = $derived(project.categories.map((c) => extractId(c)!));
+    let categories = $derived($draft.categories.map((c) => extractId(c)!));
 
     function handleCategoryChange(selected: Category[]) {
         draftsRepository.update({
-            ...project,
+            ...$draft,
             categories: selected.map((s) => {
                 return client.buildUrl({
                     url: apiCategoriesIdOrSlugGetUrl,
@@ -70,10 +71,10 @@
         });
     }
 
-    let release = $derived(new Date(project.calendar?.release || new Date()));
+    let release = $derived(new Date($draft.calendar?.release || new Date()));
 
     const releaseDisabled = $derived.by(() => {
-        return !["in_draft", "in_campaign_review.to_change"].includes(project.status!);
+        return !["in_draft", "in_campaign_review.to_change"].includes($draft.status!);
     });
 
     const releaseMinimum = $derived.by(() => {
@@ -91,16 +92,16 @@
      * Handle release date change
      */
     function handleReleaseChange(date: Date) {
-        draftsRepository.update({ ...project, calendar: { release: date.toISOString() } });
+        draftsRepository.update({ ...$draft, calendar: { release: date.toISOString() } });
     }
 
-    let deadline = $derived(project.deadline || "minimum");
+    let deadline = $derived($draft.deadline || "minimum");
 
     /**
      * Handle funding rounds change
      */
     function handleRoundsChange(deadline: Project["deadline"]) {
-        draftsRepository.update({ ...project, deadline });
+        draftsRepository.update({ ...$draft, deadline });
     }
 </script>
 

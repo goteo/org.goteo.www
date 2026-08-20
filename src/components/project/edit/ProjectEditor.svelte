@@ -15,9 +15,9 @@
 -->
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import { apiProjectsIdPatch } from "../../../openapi/client";
     import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
-    import { type ProjectDraft } from "../../../repositories/drafts";
-    import { draftStore } from "../../../stores/drafts/draftsStore";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import { validate } from "../../../utils/validation";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Bullet from "../../icons/Bullet.svelte";
@@ -36,7 +36,7 @@
         onPublish,
         onStepChange,
     }: {
-        draft: ProjectDraft;
+        draft: ProjectDraftStore;
         step: string;
         children: Snippet;
         onSave?: () => void;
@@ -60,7 +60,7 @@
         const [error] = validate(title, zProjectProjectUpdationDto.shape.title);
 
         if (!error) {
-            draftStore.update({ title });
+            draft.update({ title });
             errorMessage = undefined;
             return;
         }
@@ -76,7 +76,15 @@
     }
 
     function handleSubtitleChange(subtitle: string) {
-        draftStore.update({ subtitle });
+        draft.update({ subtitle });
+    }
+
+    async function handleSave() {
+        const { data: project } = await apiProjectsIdPatch({
+            baseUrl: "/api/relay",
+            path: { id: String($draft.id) },
+            body: { ...$draft, video: $draft.video?.src! },
+        });
     }
 </script>
 
@@ -99,14 +107,14 @@
                 <div class="flex min-w-0 flex-1 flex-col justify-center">
                     <input
                         type="text"
-                        value={$draftStore?.title}
+                        value={$draft.title}
                         oninput={(e) => handleTitleChange(e.currentTarget.value)}
                         placeholder={$t("pages.project.edit.header.titlePlaceholder")}
                         class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
                     />
                     <input
                         type="text"
-                        value={$draftStore?.subtitle}
+                        value={$draft.subtitle}
                         oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
                         placeholder={$t("system.loading")}
                         class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
@@ -125,9 +133,9 @@
                         kind="secondary"
                         size="md"
                         class="disabled:pointer-events-none"
-                        action={() => new Promise((resolve) => resolve())}
+                        action={handleSave}
                         autoreset={1000}
-                        title={$draftStore?.isDirty
+                        title={$draft.isDirty
                             ? $t("pages.project.edit.header.unsentChanges")
                             : $t("common.save")}
                     >
@@ -136,7 +144,7 @@
                             {$t("common.saved")}
                         {/snippet}
                     </ActionableButton>
-                    {#if $draftStore?.isDirty}
+                    {#if $draft.isDirty}
                         <Bullet class="absolute top-0 right-0" />
                     {/if}
                 </div>

@@ -1,36 +1,33 @@
 <script lang="ts">
     import ProjectEditor from "./ProjectEditor.svelte";
     import { getStepComponent } from "./steps";
-    import { t } from "../../../i18n/store";
     import { draftsRepository } from "../../../repositories/drafts";
-    import { draftStore } from "../../../stores/drafts/draftsStore";
+    import { createProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import Spinner from "../../icons/status/Spinner.svelte";
 
     import type { Project } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import { t } from "../../../i18n/store";
 
     let { project, idOrSlug }: { project?: Project; idOrSlug: string } = $props();
 
-    let draft = $derived.by(async () => {
+    let editor = $derived.by(async (): Promise<ProjectDraftStore | undefined> => {
         if (project) {
             const actual = $state.snapshot(project);
-            const wip = await draftsRepository.getOrCreateForProject(actual);
+            const draft = await draftsRepository.getOrCreateForProject(actual);
 
-            draftStore.setActual(actual);
-            draftStore.setDraft(wip);
-
-            return wip;
+            return createProjectDraftStore(draft, actual);
         }
 
-        const wip = await draftsRepository.get(idOrSlug);
+        const draft = await draftsRepository.get(idOrSlug);
 
-        if (wip) {
-            draftStore.setDraft(wip);
-            draftStore.setActual(undefined);
+        if (!draft) {
+            return undefined;
         }
 
-        return wip;
+        return createProjectDraftStore(draft);
     });
 
     let step = $derived.by(() => {
@@ -42,10 +39,12 @@
 
         const url = new URL(window.location.href);
         const stepParam = url.searchParams.get("step");
+
         if (stepParam) {
-            const step = parseInt(stepParam, 10);
-            if (!isNaN(step) && step >= 1 && step <= 6) {
-                currentStep = String(step);
+            const parsedStep = parseInt(stepParam, 10);
+
+            if (!isNaN(parsedStep) && parsedStep >= 1 && parsedStep <= 6) {
+                currentStep = String(parsedStep);
             }
         }
 
@@ -60,15 +59,17 @@
         }
 
         const url = new URL(window.location.href);
-        const params = url.searchParams;
+        url.searchParams.set("step", newStep);
 
-        params.set("step", newStep);
-
-        window.history.replaceState(window.history.state, "", `${url.pathname}?${params}`);
+        window.history.replaceState(
+            window.history.state,
+            "",
+            `${url.pathname}?${url.searchParams}`,
+        );
     }
 </script>
 
-{#await draft}
+{#await editor}
     <div class="wrapper">
         <span class="absolute inset-0 flex items-center justify-center">
             <Spinner />
@@ -76,9 +77,9 @@
     </div>
 {:then draft}
     {#if draft}
+        {@const StepComponent = getStepComponent(step)}
         <ProjectEditor {draft} {step} onStepChange={handleStepChange}>
-            {@const StepComponent = getStepComponent(step)}
-            <StepComponent project={draft} />
+            <StepComponent {draft} />
         </ProjectEditor>
     {:else}
         <ErrorPage
