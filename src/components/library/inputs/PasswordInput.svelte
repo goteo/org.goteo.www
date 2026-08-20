@@ -58,7 +58,7 @@
 <div class={twMerge("flex w-full flex-col", classes)}>
     <div
         class={twMerge(
-            "border-secondary relative flex h-14 w-full items-center justify-between rounded-3xl border bg-white p-4 transition-all",
+            "border-secondary relative flex h-14 w-full items-center justify-between rounded-lg border bg-white p-4 transition-all",
             !error && "focus-within:ring-secondary focus-within:ring-1",
             error && "border-tertiary ring-tertiary ring-1",
             disabled && "bg-grey cursor-not-allowed opacity-50",

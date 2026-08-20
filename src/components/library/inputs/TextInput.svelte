@@ -62,7 +62,7 @@
         {disabled}
         {placeholder}
         class={twMerge(
-            "border-secondary text-content w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus:ring-0",
+            "border-secondary text-content w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus-within:ring-secondary",
             error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
             disabled && "cursor-not-allowed",
             classes,
