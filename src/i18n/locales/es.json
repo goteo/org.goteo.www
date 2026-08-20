@@ -489,12 +489,12 @@
           "title": "Bienvenid@ al nuevo Goteo.",
           "subtitle": "Estamos estrenando una nueva etapa y queremos compartirla contigo desde el principio. La plataforma irá creciendo poco a poco: activaremos secciones y funcionalidades a medida que estén listas y validadas con nuestra comunidad. De momento puedes acceder con tu mismo correo y contraseña y explorar el archivo de proyectos. Gracias por acompañarnos en este camino."
         },
-        "formDescription": "Si ya eres usuario identifíciate.",
+        "formDescription": "Si ya eres usuario identifícate.",
         "form": {
           "idPlaceholder": "johndoe@example.com",
-          "emailOrUsername": "Email o nombre de usuario",
-          "password": "Contraseña",
-          "passwordPlaceholder": "TrustNo1",
+          "idHelper": "Email o nombre de usuario",
+          "passwordPlaceholder": "TRUSTNO1",
+          "passwordHelper": "Contraseña",
           "termsCheckbox": "Acepto las {{ link }}condiciones legales{{ _link }}"
         },
         "error": {

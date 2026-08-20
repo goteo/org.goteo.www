@@ -20,14 +20,14 @@ export const GET: APIRoute = ({ locals }) => {
  */
 export const POST: APIRoute = async ({ request, cookies, locals }) => {
     try {
-        const body = (await request.json()) as { username?: string; password?: string };
-        const { username, password } = body;
+        const body = (await request.json()) as { identifier?: string; password?: string };
+        const { identifier, password } = body;
 
-        if (typeof username !== "string" || typeof password !== "string") {
-            throw new Error(locals.t("system.OAuth.user.invalidCredentials"));
+        if (typeof identifier !== "string" || typeof password !== "string") {
+            throw new Error(locals.t("system.OAuth.The user credentials were incorrect"));
         }
 
-        const token = await passwordGrant({ identifier: username, password });
+        const token = await passwordGrant({ identifier, password });
 
         const session = await buildSession(token);
 

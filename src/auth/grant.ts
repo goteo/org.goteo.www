@@ -1,5 +1,4 @@
 import { withHttpHeaders } from "./token";
-
 import { type OAuthToken } from "./types";
 
 export async function authorizationCode(args: {

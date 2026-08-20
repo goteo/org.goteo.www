@@ -1,15 +1,15 @@
 <script lang="ts">
     import { navigate } from "astro:transitions/client";
+    import { twJoin } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
     import Checkbox from "../library/inputs/Checkbox.svelte";
+    import PasswordInput from "../library/inputs/PasswordInput.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
     import Title from "../library/typography/Title.svelte";
-    import PasswordInput from "../library/inputs/PasswordInput.svelte";
-    import { twJoin } from "tailwind-merge";
 
-    let email = $state("");
+    let identifier = $state("");
     let password = $state("");
     let acceptTerms = $state(false);
     let isSubmitting = $state(false);
@@ -30,7 +30,7 @@
             const response = await fetch("/api/session", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ username: email, password }),
+                body: JSON.stringify({ identifier, password }),
             });
 
             if (!response.ok) {
@@ -62,7 +62,7 @@
         </p>
     </div>
 
-    <div class="flex flex-col gap-4 text-content">
+    <div class="text-content flex flex-col gap-4">
         <div class="flex items-center gap-4">
             <h2 class="text-secondary text-2xl leading-8 font-bold">
                 {$t("pages.checkout.login.loginOr")}
@@ -90,28 +90,30 @@
                 <TextInput
                     type="text"
                     placeholder={$t("pages.checkout.login.form.idPlaceholder")}
-                    helperText={$t("pages.checkout.login.form.emailOrUsername")}
+                    helperText={$t("pages.checkout.login.form.idHelper")}
                     error={errorMessage}
-                    bind:value={email}
+                    bind:value={identifier}
                     disabled={isSubmitting}
                     required
                 />
 
                 <PasswordInput
                     placeholder={$t("pages.checkout.login.form.passwordPlaceholder")}
-                    helperText={$t("pages.checkout.login.form.password")}
+                    helperText={$t("pages.checkout.login.form.passwordHelper")}
                     error={errorMessage}
                     bind:value={password}
                     disabled={isSubmitting}
                     required
                 />
 
-                <a
-                    href="/password/recover"
-                    class="text-secondary text-sm font-bold underline hover:opacity-80"
-                >
-                    {$t("pages.checkout.login.forgotPassword")}
-                </a>
+                <p>
+                    <a
+                        href="/password_recovery"
+                        class="text-secondary text-sm font-bold underline hover:opacity-80"
+                    >
+                        {$t("pages.checkout.login.forgotPassword")}
+                    </a>
+                </p>
 
                 <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
                     <Checkbox
