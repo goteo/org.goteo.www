@@ -26,7 +26,7 @@
         "greaterThan": "La data ha de ser posterior a {{ date }}"
       },
       "file": {
-        "maxAllowedSize": "Mida màxima permesa 10MB",
+        "maxAllowedSize": "Mida màxima permesa {{ size }}",
         "supportedTypes": "Arxius compatibles: .png, .jpg"
       }
     },
@@ -649,7 +649,6 @@
             "validation": {
               "image_too_large": "La imatge supera la mida màxima permesa",
               "invalid_image": "Format d'imatge no vàlid",
-              "max_images": "Nombre màxim d'imatges assolit",
               "upload_failed": "Error en pujar el fitxer"
             }
           },

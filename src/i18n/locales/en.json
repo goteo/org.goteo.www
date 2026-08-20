@@ -26,7 +26,7 @@
         "greaterThan": "The date must be greater than {{ date }}"
       },
       "file": {
-        "maxAllowedSize": "Maximum allowed size 10MB",
+        "maxAllowedSize": "Maximum allowed size {{ size }}",
         "supportedTypes": "Supported files: .png, .jpg"
       }
     },
@@ -649,7 +649,6 @@
             "validation": {
               "image_too_large": "The image exceeds the maximum allowed size",
               "invalid_image": "Invalid image format",
-              "max_images": "Maximum number of images reached",
               "upload_failed": "Error uploading file"
             }
           },
