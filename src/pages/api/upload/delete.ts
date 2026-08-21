@@ -1,7 +1,7 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import { createClient, parseStorageKey } from "../../../utils/media/objectStorage";
-import { STORAGE_PREFIX_STABLE } from "../../../utils/media/objectStorage.types";
+import { STORAGE_ADDRESS, STORAGE_PREFIX_STABLE } from "../../../utils/media/objectStorage.types";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
@@ -18,10 +18,12 @@ export const POST: APIRoute = async ({ request, locals }) => {
     if (!session) return Unauthorized;
 
     const body = await request.json();
-    const { key } = body as { key?: unknown };
-    if (!key || typeof key !== "string") {
-        return json({ error: `Missing key "key" in request body` }, 400);
+    const { keyOrUrl } = body as { keyOrUrl?: unknown };
+    if (!keyOrUrl || typeof keyOrUrl !== "string") {
+        return json({ error: `Missing key "keyOrUrl" in request body` }, 400);
     }
+
+    const key = keyOrUrl.replace(`${STORAGE_ADDRESS}/`, '');
 
     const { owner } = parseStorageKey(key);
     if (owner !== String(session.user.id)) {

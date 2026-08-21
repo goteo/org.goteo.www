@@ -3,6 +3,7 @@ import { fileTypeFromBuffer } from "file-type";
 
 import { createClient, generateStorageKey, getFileStorableData } from "../../../utils/media/objectStorage";
 import {
+    STORAGE_ADDRESS,
     STORAGE_ALLOWEDTYPES,
     STORAGE_MAXSIZE,
     STORAGE_PREFIX_STABLE,
@@ -84,10 +85,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
             }),
         );
 
-        const base = new URL(import.meta.env.OBJECT_STORAGE_ENDPOINT).toString().replace(/\/$/, "");
-        const url = `${base}/${import.meta.env.OBJECT_STORAGE_BUCKET}/${stableKey}`;
+        const stableUrl = `${STORAGE_ADDRESS}/${stableKey}`;
 
-        return json({ url, key: stableKey });
+        return json({ url: stableUrl, key: stableKey });
     } catch (err: any) {
         console.error(err);
 

@@ -47,9 +47,8 @@ export const STORAGE_PREFIX_TEMP = "uploads/temp";
 
 /**
  * Default maximum file size for single objects.
- * 8MBs based on upper normal limit of files in Goteo 3 assets bucket.
  */
-export const STORAGE_MAXSIZE = 8388608;
+export const STORAGE_MAXSIZE = import.meta.env.PUBLIC_DEFAULT_MAXSIZE;
 
 /**
  * Allowed MIME types of single objects.
@@ -68,3 +67,9 @@ export const STORAGE_ALLOWEDTYPES = [
     "video/webm",
     "video/quicktime",
 ];
+
+/**
+ * Path to the storage bucket.
+ * Derived from: `OBJECT_STORAGE_ENDPOINT/OBJECT_STORAGE_BUCKET` (no trailing slash)
+ */
+export const STORAGE_ADDRESS = new URL(import.meta.env.OBJECT_STORAGE_ENDPOINT).toString().replace(/\/$/, "") + `/${import.meta.env.OBJECT_STORAGE_BUCKET}`;
