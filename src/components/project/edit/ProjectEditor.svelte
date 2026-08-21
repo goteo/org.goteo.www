@@ -17,7 +17,9 @@
     import { t } from "../../../i18n/store";
     import { apiProjectsIdPatch } from "../../../openapi/client";
     import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
+    import { iso639_1Codes } from "../../../utils/lang.types";
     import { validate } from "../../../utils/validation";
+    import LanguagesDropdown from "../../header/LanguagesDropdown.svelte";
     import EditIcon from "../../icons/actions/Edit.svelte";
     import Bullet from "../../icons/Bullet.svelte";
     import Eye from "../../icons/media/Eye.svelte";
@@ -27,8 +29,6 @@
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import type { Snippet } from "svelte";
-    import LanguagesDropdown from "../../header/LanguagesDropdown.svelte";
-    import { iso639_1Codes } from "../../../utils/lang.types";
 
     let {
         draft,

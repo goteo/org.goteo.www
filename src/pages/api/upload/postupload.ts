@@ -1,7 +1,10 @@
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { fileTypeFromBuffer } from "file-type";
 
-import { createClient, generateStorageKey, getFileStorableData } from "../../../utils/media/objectStorage";
+import {
+    createClient,
+    generateStorageKey,
+    getFileStorableData,
+} from "../../../utils/media/objectStorage";
 import {
     STORAGE_ALLOWEDTYPES,
     STORAGE_MAXSIZE,
@@ -16,7 +19,9 @@ import type { APIRoute } from "astro";
  * Path to the storage bucket.
  * Derived from: `OBJECT_STORAGE_ENDPOINT/OBJECT_STORAGE_BUCKET` (no trailing slash)
  */
-export const STORAGE_ADDRESS = import.meta.env.OBJECT_STORAGE_ENDPOINT.replace(/\/$/, "") + `/${import.meta.env.OBJECT_STORAGE_BUCKET}`;
+export const STORAGE_ADDRESS =
+    import.meta.env.OBJECT_STORAGE_ENDPOINT.replace(/\/$/, "") +
+    `/${import.meta.env.OBJECT_STORAGE_BUCKET}`;
 
 function json(data: unknown, status = 200): Response {
     return new Response(JSON.stringify(data), {

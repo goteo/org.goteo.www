@@ -22,8 +22,8 @@
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     interface CampaignInfoStepProps {
         draft: ProjectDraftStore;

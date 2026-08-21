@@ -2,15 +2,15 @@
     import ProjectEditor from "./ProjectEditor.svelte";
     import { getStepComponent } from "./steps";
     import { locale, t } from "../../../i18n/store";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
+    import { apiProjectsIdOrSlugGet, type Project, type User } from "../../../openapi/client";
     import { draftsRepository } from "../../../repositories/drafts";
     import { createProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import Spinner from "../../icons/status/Spinner.svelte";
 
-    import { apiProjectsIdOrSlugGet, type Project, type User } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import { withoutCache } from "../../../openapi/cacheInterceptor";
 
     interface Props {
         /**

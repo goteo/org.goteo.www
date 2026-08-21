@@ -1,11 +1,11 @@
 import { Dexie, type EntityTable } from "dexie";
+import { get } from "svelte/store";
 
+import { locale } from "../i18n/store";
 import { client } from "../openapi/client/client.gen";
 import { apiUsersIdOrHandleGetUrl } from "../openapi/client/operation-paths.gen";
 
 import type { ApiProjectsIdPatchData, Project, User } from "../openapi/client";
-import { get } from "svelte/store";
-import { locale } from "../i18n/store";
 
 /**
  * A ProjectDraft is a client-side record that stores the work-in-progress during a Project's edition.
@@ -126,7 +126,11 @@ export class ProjectDraftRepository {
             actor: buildUserIri(actor),
             actual: plainProject,
             patch: {},
-            lang: lang || actual.locales?.[0] || get(locale) || import.meta.env.PUBLIC_DEFAULT_LANGUAGE,
+            lang:
+                lang ||
+                actual.locales?.[0] ||
+                get(locale) ||
+                import.meta.env.PUBLIC_DEFAULT_LANGUAGE,
             dateCreated: new Date().toISOString(),
             dateUpdated: new Date().toISOString(),
         });

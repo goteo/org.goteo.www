@@ -8,7 +8,7 @@
     interface LanguagesDropdownProps {
         /**
          * List of available ISO 639-1 language codes for selection
-        */
+         */
         languages: string[];
         /**
          * Language code of the selected language
@@ -49,7 +49,9 @@
     </button>
 
     {#if open}
-        <div class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-md max-h-96 overflow-scroll">
+        <div
+            class="absolute z-10 mt-1 max-h-96 w-full overflow-scroll rounded-md border border-gray-200 bg-white shadow-md"
+        >
             {#each languages as lang (lang)}
                 <button
                     type="button"

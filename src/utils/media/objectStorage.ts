@@ -1,5 +1,4 @@
 import { S3Client, type S3ClientConfig } from "@aws-sdk/client-s3";
-import { STORAGE_PREFIX_STABLE } from "./objectStorage.types";
 import { fileTypeFromBuffer, type FileTypeResult } from "file-type";
 
 export function createClient(options?: S3ClientConfig): S3Client {
@@ -25,7 +24,9 @@ export interface StorableObjectData {
     hash: string;
 }
 
-export async function getFileStorableData(buffer: StorableObjectData["buffer"]): Promise<StorableObjectData> {
+export async function getFileStorableData(
+    buffer: StorableObjectData["buffer"],
+): Promise<StorableObjectData> {
     const type = await fileTypeFromBuffer(buffer);
     if (!type) {
         throw new Error("Unknown or invalid file in given buffer");
@@ -42,10 +43,14 @@ export async function getFileStorableData(buffer: StorableObjectData["buffer"]):
 export interface StorageKey {
     prefix: string;
     owner: string;
-    file: string
-};
+    file: string;
+}
 
-export function generateStorageKey(prefix: string, owner: string | number, data?: StorableObjectData): string {
+export function generateStorageKey(
+    prefix: string,
+    owner: string | number,
+    data?: StorableObjectData,
+): string {
     const file = data ? `${data.hash}.${data.type.ext}` : crypto.randomUUID();
     return `${prefix}/${owner}/${file}`;
 }
