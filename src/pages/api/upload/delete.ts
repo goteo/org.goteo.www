@@ -1,6 +1,6 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
-import { createClient } from "../../../utils/media/objectStorage";
+import { createClient, parseStorageKey } from "../../../utils/media/objectStorage";
 import { STORAGE_PREFIX_STABLE } from "../../../utils/media/objectStorage.types";
 import { Unauthorized } from "../../../utils/responses";
 
@@ -23,8 +23,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
         return json({ error: `Missing key "key" in request body` }, 400);
     }
 
-    const userPrefix = `${STORAGE_PREFIX_STABLE}/${session.user.id}/`;
-    if (!key.startsWith(userPrefix)) {
+    const { owner } = parseStorageKey(key);
+    if (owner !== String(session.user.id)) {
         return json({ error: `Given key "${key}" does not belong to current user` }, 403);
     }
 

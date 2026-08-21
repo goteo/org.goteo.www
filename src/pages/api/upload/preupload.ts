@@ -1,7 +1,7 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { createClient } from "../../../utils/media/objectStorage";
+import { createClient, generateStorageKey } from "../../../utils/media/objectStorage";
 import {
     STORAGE_ALLOWEDTYPES,
     STORAGE_PREFIX_TEMP,
@@ -33,7 +33,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         );
     }
 
-    const tempKey = `${STORAGE_PREFIX_TEMP}/${session.user.id}/${crypto.randomUUID()}`;
+    const tempKey = generateStorageKey(STORAGE_PREFIX_TEMP, session.user.id!);
 
     try {
         const command = new PutObjectCommand({

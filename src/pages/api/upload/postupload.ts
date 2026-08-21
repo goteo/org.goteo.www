@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { fileTypeFromBuffer } from "file-type";
 
-import { createClient } from "../../../utils/media/objectStorage";
+import { createClient, generateStorageKey, getFileStorableData } from "../../../utils/media/objectStorage";
 import {
     STORAGE_ALLOWEDTYPES,
     STORAGE_MAXSIZE,
@@ -17,14 +17,6 @@ function json(data: unknown, status = 200): Response {
         status,
         headers: { "Content-Type": "application/json" },
     });
-}
-
-async function getHexHash(buffer: Uint8Array<ArrayBuffer>): Promise<string> {
-    const digest = await crypto.subtle.digest("SHA-256", buffer);
-
-    return Array.from(new Uint8Array(digest))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -65,28 +57,23 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }
 
         const buffer = new Uint8Array(await res.Body.transformToByteArray());
+        const file = await getFileStorableData(buffer);
 
-        const detected = await fileTypeFromBuffer(buffer);
-        if (!detected) {
-            return json({ error: "Unknown or invalid file" }, 400);
-        }
-
-        if (!STORAGE_ALLOWEDTYPES.includes(detected.mime)) {
+        if (!STORAGE_ALLOWEDTYPES.includes(file.type.mime)) {
             return json(
                 { error: `Invalid type. Allowed types are: ${STORAGE_ALLOWEDTYPES.join(",")}` },
                 400,
             );
         }
 
-        const hash = await getHexHash(buffer);
-        const stableKey = `${STORAGE_PREFIX_STABLE}/${session.user.id}/${hash}.${detected.ext}`;
+        const stableKey = generateStorageKey(STORAGE_PREFIX_STABLE, session.user.id!, file);
 
         await client.send(
             new PutObjectCommand({
                 Bucket: import.meta.env.OBJECT_STORAGE_BUCKET,
                 Key: stableKey,
                 Body: buffer,
-                ContentType: detected.mime,
+                ContentType: file.type.mime,
             }),
         );
 
