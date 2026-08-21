@@ -17,13 +17,7 @@
     import MediaUploader from "./MediaUploader.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
-    import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
-    import {
-        currentDraft,
-        navigateToStep,
-        updateCampaignInfo,
-    } from "../../../stores/drafts/projectDraft";
-    import { emptyRichText } from "../../../utils/richText";
+    import { emptyRichText, richTextToMarkdown } from "../../../utils/richText";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
@@ -31,52 +25,19 @@
 
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
     import type { JSONContent } from "@tiptap/core";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     interface CampaignInfoStepProps {
+        draft: ProjectDraftStore;
         onContinue?: () => void;
     }
 
-    let { onContinue }: CampaignInfoStepProps = $props();
+    let { draft, onContinue }: CampaignInfoStepProps = $props();
 
-    const campaignInfo = $derived(
-        $currentDraft?.wizardForm.campaignInfo ?? {
-            cover: undefined,
-            video: undefined,
-            brief: emptyRichText(),
-            about: emptyRichText(),
-            goal: emptyRichText(),
-            team: emptyRichText(),
-            strategy: emptyRichText(),
-        },
-    );
-
-    function formatFileSize(bytes: number): string {
-        if (bytes < 1024) return bytes + " B";
-        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
-        return (bytes / (1024 * 1024)).toFixed(1) + " MB";
-    }
-
-    function handleContinue() {
-        if (!$currentDraft) return;
-        const errors = validateCampaignInfo($currentDraft.wizardForm);
-
-        if (Object.keys(errors).length === 0) {
-            navigateToStep(3);
-            if (onContinue) {
-                onContinue();
-            }
-        } else {
-            const firstErrorField = Object.keys(errors)[0];
-            const element = document.querySelector(`[data-field="${firstErrorField}"]`);
-            element?.scrollIntoView({ behavior: "smooth", block: "center" });
-
-            console.warn("Validation errors:", errors);
-        }
-    }
+    function handleContinue() {}
 
     function handleImageUpload(image: UploadedObject) {
-        if (!campaignInfo) return;
-        updateCampaignInfo({ cover: image });
+        draft.patch({ cover: image.url });
     }
 
     async function handleImageRemove(image: UploadedObject) {
@@ -90,39 +51,32 @@
             console.error("Failed to delete image from bucket:", err);
         }
 
-        updateCampaignInfo({ cover: undefined });
+        draft.patch({ cover: undefined });
     }
 
-    function handleVideoChange(video: string | null) {
-        updateCampaignInfo({
-            video: video ?? "",
-        });
+    function handleVideoChange(video?: string) {
+        draft.patch({ video: video });
     }
 
     function handleBriefChange(doc: JSONContent) {
-        updateCampaignInfo({
-            brief: doc,
-        });
+        draft.patch({ descBrief: richTextToMarkdown(doc) });
     }
 
     function handleAboutChange(doc: JSONContent) {
-        updateCampaignInfo({
-            about: doc,
-        });
+        draft.patch({ descAbout: richTextToMarkdown(doc) });
     }
 
     function handleGoalChange(doc: JSONContent) {
-        updateCampaignInfo({
-            goal: doc,
-        });
+        draft.patch({ descGoal: richTextToMarkdown(doc) });
     }
 
     function handleTeamChange(doc: JSONContent) {
-        updateCampaignInfo({ team: doc });
+        draft.patch({ descTeam: richTextToMarkdown(doc) });
     }
 
     function handleCommunicationStrategyChange(doc: JSONContent) {
-        updateCampaignInfo({ strategy: doc });
+        // TO-DO: Add descStart to Project resource
+        // draft.patch({ descStrat: richTextToMarkdown(doc) });
     }
 </script>
 
