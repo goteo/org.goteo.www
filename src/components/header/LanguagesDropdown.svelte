@@ -5,7 +5,19 @@
     import LanguageIcon from "../icons/LanguageIcon.svelte";
     import Chevron from "../icons/navigation/Chevron.svelte";
 
-    let { languages, selected, onSelect } = $props();
+    interface LanguagesDropdownProps {
+        /**
+         * List of available ISO 639-1 language codes for selection
+        */
+        languages: string[];
+        /**
+         * Language code of the selected language
+         */
+        selected: string;
+        onSelect?: (language: string) => void;
+    }
+
+    let { languages, selected, onSelect }: LanguagesDropdownProps = $props();
 
     let open = $state(false);
 
@@ -13,7 +25,7 @@
         open = false;
         selected = code;
 
-        onSelect(code);
+        onSelect?.(code);
     }
     function toggleDropdown() {
         open = !open;

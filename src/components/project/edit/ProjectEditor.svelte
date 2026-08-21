@@ -27,6 +27,8 @@
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import type { Snippet } from "svelte";
+    import LanguagesDropdown from "../../header/LanguagesDropdown.svelte";
+    import { iso639_1Codes } from "../../../utils/lang.types";
 
     let {
         draft,
@@ -35,6 +37,7 @@
         onSave,
         onPublish,
         onStepChange,
+        onLangChange,
     }: {
         draft: ProjectDraftStore;
         step: string;
@@ -42,6 +45,7 @@
         onSave?: () => void;
         onPublish?: () => void;
         onStepChange?: (step: string) => void;
+        onLangChange?: (lang: string) => void;
     } = $props();
 
     // Define the six wizard steps (reactive to language changes)
@@ -83,6 +87,7 @@
         const { data: project } = await apiProjectsIdPatch({
             baseUrl: "/api/relay",
             path: { id: String($draft.actual.id) },
+            headers: { "Content-Language": $draft.lang },
             body: $draft.patch,
         });
 
@@ -126,6 +131,11 @@
 
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-4">
+                <LanguagesDropdown
+                    languages={iso639_1Codes}
+                    selected={$draft.lang}
+                    onSelect={onLangChange}
+                />
                 <Button class="whitespace-nowrap" kind="ghost" size="md" disabled={true}>
                     <Eye class="size-5" />
                     {$t("common.preview")}

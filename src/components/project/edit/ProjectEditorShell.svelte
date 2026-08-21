@@ -1,15 +1,16 @@
 <script lang="ts">
     import ProjectEditor from "./ProjectEditor.svelte";
     import { getStepComponent } from "./steps";
-    import { t } from "../../../i18n/store";
+    import { locale, t } from "../../../i18n/store";
     import { draftsRepository } from "../../../repositories/drafts";
     import { createProjectDraftStore } from "../../../stores/drafts/draftsStore";
     import BrokenRobot from "../../errorpage/BrokenRobot.svelte";
     import ErrorPage from "../../errorpage/ErrorPage.svelte";
     import Spinner from "../../icons/status/Spinner.svelte";
 
-    import type { Project, User } from "../../../openapi/client";
+    import { apiProjectsIdOrSlugGet, type Project, type User } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
 
     interface Props {
         /**
@@ -30,9 +31,30 @@
 
     let { key, actor, project }: Props = $props();
 
+    let language: string = $derived.by(() => {
+        if (project && project.locales && project.locales.length > 0) {
+            return project.locales[0];
+        }
+
+        return $locale;
+    });
+
     let editor = $derived.by(async (): Promise<ProjectDraftStore | undefined> => {
         if (project) {
-            const draft = await draftsRepository.getOrCreateFor(actor, $state.snapshot(project));
+            let actual = $state.snapshot(project);
+
+            if (project.locales?.includes(language)) {
+                const { data } = await withoutCache(() =>
+                    apiProjectsIdOrSlugGet({
+                        path: { idOrSlug: String(project.id) },
+                        headers: { "Accept-Language": language },
+                    }),
+                );
+
+                actual = data!;
+            }
+
+            const draft = await draftsRepository.getOrCreateFor(actor, actual, language);
 
             return createProjectDraftStore(draft);
         }
@@ -94,7 +116,12 @@
 {:then draft}
     {#if draft}
         {@const StepComponent = getStepComponent(step)}
-        <ProjectEditor {draft} {step} onStepChange={handleStepChange}>
+        <ProjectEditor
+            {draft}
+            {step}
+            onStepChange={handleStepChange}
+            onLangChange={(lang) => (language = lang)}
+        >
             <StepComponent {draft} />
         </ProjectEditor>
     {:else}

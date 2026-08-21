@@ -4,6 +4,8 @@ import { client } from "../openapi/client/client.gen";
 import { apiUsersIdOrHandleGetUrl } from "../openapi/client/operation-paths.gen";
 
 import type { ApiProjectsIdPatchData, Project, User } from "../openapi/client";
+import { get } from "svelte/store";
+import { locale } from "../i18n/store";
 
 /**
  * A ProjectDraft is a client-side record that stores the work-in-progress during a Project's edition.
@@ -30,6 +32,11 @@ export interface ProjectDraft {
     patch: ApiProjectsIdPatchData["body"];
 
     /**
+     * ISO 639-1 language code for the content language.
+     */
+    lang: string;
+
+    /**
      * ISO format datetime string for Draft's creation.
      */
     dateCreated: string;
@@ -40,10 +47,11 @@ export interface ProjectDraft {
     dateUpdated: string;
 }
 
-function generateKey(actor: User, actual?: Project): string {
+function generateKey(actor: User, actual?: Project, lang?: string): string {
     const pieces = {
         user: actor.id,
         project: actual?.id,
+        lang,
     };
 
     return Object.entries(pieces)
@@ -89,9 +97,9 @@ export class ProjectDraftRepository {
         return draft;
     }
 
-    public async getAllByActor(userIdOrHandle: string | number) {
+    public async getAllByActor(userId: string | number) {
         return getDb()
-            .drafts.where({ actor: buildUserIri(userIdOrHandle) })
+            .drafts.where({ actor: buildUserIri(userId) })
             .reverse()
             .sortBy("dateUpdated");
     }
@@ -100,9 +108,9 @@ export class ProjectDraftRepository {
         return getDb().drafts.get(key);
     }
 
-    public async getOrCreateFor(actor: User, actual: Project) {
+    public async getOrCreateFor(actor: User, actual: Project, lang?: string) {
         const plainProject = structuredClone(actual);
-        const key = generateKey(actor, plainProject);
+        const key = generateKey(actor, plainProject, lang);
 
         const existing = await this.get(key);
         if (existing) {
@@ -118,6 +126,7 @@ export class ProjectDraftRepository {
             actor: buildUserIri(actor),
             actual: plainProject,
             patch: {},
+            lang: lang || actual.locales?.[0] || get(locale) || import.meta.env.PUBLIC_DEFAULT_LANGUAGE,
             dateCreated: new Date().toISOString(),
             dateUpdated: new Date().toISOString(),
         });
