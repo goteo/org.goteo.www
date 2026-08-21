@@ -17,6 +17,10 @@
         "unsupportedType": "Tipus de fitxer no permès: {{ file }}"
       }
     },
+    "OAuth": {
+      "Client authentication failed": "L'aplicació no s'ha pogut autoritzar com a client vàlid.",
+      "The user credentials were incorrect": "Les credencials d'usuari són incorrectes."
+    },
     "constraint": {
       "text": {
         "notEmpty": "El text no pot estar buit",
@@ -26,7 +30,7 @@
         "greaterThan": "La data ha de ser posterior a {{ date }}"
       },
       "file": {
-        "maxAllowedSize": "Mida màxima permesa 10MB",
+        "maxAllowedSize": "Mida màxima permesa {{ size }}",
         "supportedTypes": "Arxius compatibles: .png, .jpg"
       }
     },
@@ -125,6 +129,10 @@
           "false": "Inactiu"
         }
       }
+    },
+    "passwordInput": {
+      "show": "Mostra la contrasenya",
+      "hide": "Oculta la contrasenya"
     },
     "users": {
       "type": {
@@ -362,6 +370,140 @@
       }
     },
     "_": "Contingut especifíc de la pàgina (/home, /search, /project/[id], etc.)",
+    "checkout": {
+      "metadata": {
+        "title": "Pagament",
+        "description": "Pàgina de checkout"
+      },
+      "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
+      "reward": {
+        "claimed": "{{ units }} persones ja han reclamat aquesta recompensa",
+        "unclaimed": "Encara ningú ha reclamat aquesta recompensa. Fes-ho tu primer!"
+      },
+      "tipjar": {
+        "community": "Vull donar suport a la Fundació Platoniq",
+        "checkboxLabel": "Impulsar una societat més justa i solidària",
+        "input": "Introdueix import lliure",
+        "error": {
+          "invalidAmount": "La quantitat mínima és d'1 €"
+        }
+      },
+      "changeAddressLabel": "Enviar aquesta recompensa a una adreça diferent de la meva.",
+      "title": "Caixa",
+      "summary": {
+        "toRecipient": "{{ amount }} a {{ name }}",
+        "total": {
+          "title": "Total que donaràs:"
+        },
+        "deduct": "Pots desgravar-te fins a 100 € en la teva declaració de la renda si fas aquesta donació.",
+        "showDetails": "Veure detall",
+        "hideDetails": "Amagar desglossament",
+        "showMore": "Veure més",
+        "hide": "Amagar",
+        "donationsText": "de donacions",
+        "contributionText": "d'aportació a la fundació"
+      },
+      "steps": {
+        "reward": {
+          "title": "Recompensa"
+        },
+        "data": {
+          "title": "Les teves dades"
+        },
+        "payment": {
+          "title": "Mètode de pagament"
+        },
+        "confirmation": {
+          "title": "Confirma"
+        }
+      },
+      "payment": {
+        "title": "Indica'ns les teves dades de pagament",
+        "description": "Ara necessitem que ens diguis com vols pagar.",
+        "selectMethod": "Selecciona mètode de pagament:"
+      },
+      "wallet": {
+        "title": "El teu moneder virtual",
+        "description": "Bé, pagaràs amb el saldo acumulat al teu moneder. Recorda que si tens saldo i en dos anys no el gastes, es transferirà a la fundació.",
+        "balanceLabel": "Saldo: ",
+        "currentBalance": "Saldo actual",
+        "amountToUse": "Quant usaràs",
+        "remainingBalance": "Saldo que et quedarà"
+      },
+      "verify": {
+        "title": "Estat del pagament",
+        "approved": {
+          "title": "El teu mitjà de pagament s'ha processat amb un èxit aclaparador",
+          "description": "Bé! Estàs a un pas d'acabar i de fer el món una mica millor.",
+          "formGoal": {
+            "title": "Si la campanya no assoleix el seu objectiu",
+            "options": {
+              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes.",
+              "2": "Retornar-ho al meu mitjà de pagament"
+            }
+          },
+          "formReview": {
+            "title": "Deixa un missatge als projectes que has donat suport",
+            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat.",
+            "crowdfundingProject": "Projecte de micromecenatge:",
+            "donated": "Has donat",
+            "commentBtn": {
+              "leaveComment": "Deixar un comentari",
+              "editComment": "Editar el comentari"
+            },
+            "commentModal": {
+              "title": "Deixa un comentari",
+              "label": "Escriu aquí el teu comentari"
+            },
+            "anonymous": "Vull que el meu comentari sigui anònim"
+          }
+        },
+        "error": {
+          "title": "Alguna cosa ha fallat... Torna-ho a intentar per poder donar.",
+          "description": "Vaja, potser és error nostre, del mitjà de pagament o simplement d'un malvat follet informàtic. Provem-ho de nou.",
+          "selectMethod": "Selecciona de nou un mètode de pagament:"
+        }
+      },
+      "postPayment": {
+        "title": "Enhorabona! Gràcies per la teva donació",
+        "emailSent": "T'hem enviat un resum a:",
+        "certificate": {
+          "title": "Com sol·licito el meu certificat?",
+          "description": "El certificat es genera de forma automàtica al final de l'any fiscal (desembre). T'enviarem un correu un cop hàgim presentat la documentació a Hisenda. En cas que trobem algun problema, contactarem amb tu per correu."
+        },
+        "donatedProjects": {
+          "title": "Has donat als projectes següents"
+        },
+        "suggestedProjects": {
+          "title": "Altres projectes que requereixen la teva ajuda",
+          "empty": "No hi ha projectes disponibles en aquest moment"
+        }
+      },
+      "login": {
+        "title": "Indica'ns les teves dades personals",
+        "description": "Necessitem saber qui ets abans de pagar.",
+        "loginOr": "Entra al teu compte o",
+        "registerBtnLabel": "Registra't",
+        "forgotPassword": "Has oblidat la teva contrasenya?",
+        "welcome": {
+          "title": "Benvingut/da al nou Goteo.",
+          "subtitle": "Estem estrenant una nova etapa i volem compartir-la amb tu des del començament. La plataforma creixerà a poc a poc: activarem seccions i funcionalitats a mesura que estiguin llestes i validades amb la nostra comunitat. De moment pots accedir amb el mateix correu i contrasenya i explorar l'arxiu de projectes. Gràcies per acompanyar-nos en aquest camí."
+        },
+        "formDescription": "Si ja ets usuari, identifica't.",
+        "form": {
+          "idPlaceholder": "johndoe@example.com",
+          "idHelper": "Correu electrònic o nom d'usuari",
+          "passwordPlaceholder": "TRUSTNO1",
+          "passwordHelper": "Contrasenya",
+          "termsCheckbox": "Accepto les {{ link }}condicions legals{{ _link }}"
+        },
+        "error": {
+          "invalidCredentials": "Correu electrònic o contrasenya invàlids.",
+          "unexpectedLogin": "Error en iniciar sessió. Si us plau, intenta-ho de nou més tard.",
+          "invalidEmail": "El correu electrònic no és vàlid."
+        }
+      }
+    },
     "home": {
       "banner": {
         "title": "Renovem Goteo!",
@@ -484,114 +626,6 @@
     "index": {
       "title": "Goteo"
     },
-    "checkout": {
-      "metadata": {
-        "title": "Pagament",
-        "description": "Pàgina de checkout"
-      },
-      "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
-      "reward": {
-        "claimed": "{{ units }} persones ja han reclamat aquesta recompensa",
-        "unclaimed": "Encara ningú ha reclamat aquesta recompensa. Fes-ho tu primer!"
-      },
-      "tipjar": {
-        "community": "Vull donar suport a la Fundació Platoniq",
-        "checkboxLabel": "Impulsar una societat més justa i solidària",
-        "input": "Introdueix import lliure",
-        "error": {
-          "invalidAmount": "La quantitat mínima és d'1 €"
-        }
-      },
-      "changeAddressLabel": "Enviar aquesta recompensa a una adreça diferent de la meva.",
-      "title": "Caixa",
-      "summary": {
-        "toRecipient": "{{ amount }} a {{ name }}",
-        "total": {
-          "title": "Total que donaràs"
-        },
-        "deduct": "Pots desgravar-te fins a 100 € en la teva declaració de la renda si fas aquesta donació.",
-        "showDetails": "Veure detall",
-        "hideDetails": "Amagar desglossament",
-        "showMore": "Veure més",
-        "hide": "Amagar"
-      },
-      "steps": {
-        "reward": {
-          "title": "Recompensa"
-        },
-        "data": {
-          "title": "Les teves dades"
-        },
-        "payment": {
-          "title": "Mètode de pagament"
-        },
-        "confirmation": {
-          "title": "Confirma"
-        }
-      },
-      "payment": {
-        "title": "Indica'ns les teves dades de pagament",
-        "description": "Ara necessitem que ens diguis com vols pagar.",
-        "selectMethod": "Selecciona mètode de pagament:"
-      },
-      "wallet": {
-        "title": "El teu moneder virtual",
-        "description": "Bé, pagaràs amb el saldo acumulat al teu moneder. Recorda que si tens saldo i en dos anys no el gastes, es transferirà a la fundació.",
-        "balanceLabel": "Saldo: ",
-        "currentBalance": "Saldo actual",
-        "amountToUse": "Quant usaràs",
-        "remainingBalance": "Saldo que et quedarà"
-      },
-      "verify": {
-        "title": "Estat del pagament",
-        "approved": {
-          "title": "El teu mitjà de pagament s'ha processat amb un èxit aclaparador",
-          "description": "Bé! Estàs a un pas d'acabar i de fer el món una mica millor.",
-          "formGoal": {
-            "title": "Si la campanya no assoleix el seu objectiu",
-            "options": {
-              "1": "Ingressar-ho al meu moneder de Goteo per poder destinar-ho a altres projectes.",
-              "2": "Retornar-ho al meu mitjà de pagament"
-            }
-          },
-          "formReview": {
-            "title": "Deixa un missatge als projectes que has donat suport",
-            "description": "La teva donació es veurà reflectida en els projectes que has donat suport. Pots deixar un missatge o romandre en l'anonimat.",
-            "crowdfundingProject": "Projecte de micromecenatge:",
-            "donated": "Has donat",
-            "commentBtn": {
-              "leaveComment": "Deixar un comentari",
-              "editComment": "Editar el comentari"
-            },
-            "commentModal": {
-              "title": "Deixa un comentari",
-              "label": "Escriu aquí el teu comentari"
-            },
-            "anonymous": "Vull que el meu comentari sigui anònim"
-          }
-        },
-        "error": {
-          "title": "Alguna cosa ha fallat... Torna-ho a intentar per poder donar.",
-          "description": "Vaja, potser és error nostre, del mitjà de pagament o simplement d'un malvat follet informàtic. Provem-ho de nou.",
-          "selectMethod": "Selecciona de nou un mètode de pagament:"
-        }
-      },
-      "postPayment": {
-        "title": "Enhorabona! Gràcies per la teva donació",
-        "emailSent": "T'hem enviat un resum a:",
-        "certificate": {
-          "title": "Com sol·licito el meu certificat?",
-          "description": "El certificat es genera de forma automàtica al final de l'any fiscal (desembre). T'enviarem un correu un cop hàgim presentat la documentació a Hisenda. En cas que trobem algun problema, contactarem amb tu per correu."
-        },
-        "donatedProjects": {
-          "title": "Has donat als projectes següents"
-        },
-        "suggestedProjects": {
-          "title": "Altres projectes que requereixen la teva ajuda",
-          "empty": "No hi ha projectes disponibles en aquest moment"
-        }
-      }
-    },
     "project": {
       "edit": {
         "title": "Editant projecte: {{ project }}",
@@ -649,7 +683,6 @@
             "validation": {
               "image_too_large": "La imatge supera la mida màxima permesa",
               "invalid_image": "Format d'imatge no vàlid",
-              "max_images": "Nombre màxim d'imatges assolit",
               "upload_failed": "Error en pujar el fitxer"
             }
           },
@@ -1183,40 +1216,6 @@
         "previous": "Anterior",
         "next": "Següent",
         "loading": "Carregant..."
-      }
-    },
-    "register": {
-      "title": "Registre",
-      "page": {
-        "title": "Indica'ns les teves dades personals",
-        "description": "Necessitem saber qui ets abans de pagar.",
-        "registerOr": "Registra't o",
-        "loginBtnLabel": "Entra amb el teu compte"
-      },
-      "form": {
-        "btnSubmit": "Registrar-se",
-        "termsCheckbox": "Accepto les condicions legals",
-        "policiesCheckbox": "En registrar-me confirmo la meva acceptació dels vostres termes d'ús, política de privacitat i política de cookies.",
-        "validation": {
-          "password": {
-            "minLength": "*Requisits de la contrasenya: ha de tenir 8 caràcters"
-          }
-        }
-      },
-      "individual": {
-        "taxIdCheckbox": "Desitjo desgravar les meves donacions. És necessari indicar el número de DNI per comunicar-ho a Hisenda.",
-        "taxId": {
-          "msgDeduction": "Desitjo desgravar les meves donacions. És necessari indicar el número de DNI per comunicar-ho a Hisenda."
-        }
-      },
-      "organization": {
-        "taxIdDescription": "*Amb el CIF avisarem l'agència tributària per a la teva declaració de la renda.",
-        "representativeTitle": "Dades del representant de l'empresa."
-      },
-      "error": {
-        "incompletePersonFields": "Si us plau, completa tots els camps obligatoris per a persona física.",
-        "incompleteOrgFields": "Si us plau, completa tots els camps obligatoris per a persona jurídica.",
-        "unexpectedRegistration": "Error en registrar-se. Si us plau, torna-ho a intentar més tard."
       }
     },
     "admin": {
@@ -1819,22 +1818,6 @@
       "notFound": "Usuari no trobat"
     },
     "login": {
-      "page": {
-        "title": "Indica'ns les teves dades personals",
-        "description": "Necessitem saber qui ets abans de pagar.",
-        "registerOr": "Entra al teu compte o",
-        "registerBtnLabel": "Registra't",
-        "otherAccessMethods": "També pots accedir a través de:",
-        "forgotPassword": "Has oblidat la teva contrasenya?",
-        "welcome": {
-          "title": "Benvingut/da al nou Goteo.",
-          "subtitle": "Estem estrenant una nova etapa i volem compartir-la amb tu des del principi. La plataforma anirà creixent a poc a poc: activarem seccions i funcionalitats a mesura que estiguin llestes i validades amb la nostra comunitat. De moment pots accedir-hi amb el teu mateix correu i contrasenya i explorar l'arxiu de projectes. Gràcies per acompanyar-nos en aquest camí."
-        }
-      },
-      "form": {
-        "email": "Correu electrònic o nom d'usuari",
-        "password": "Contrasenya"
-      },
       "error": {
         "invalidCredentials": "Correu electrònic o contrasenya invàlids.",
         "unexpectedLogin": "Error en iniciar sessió. Si us plau, torna-ho a intentar més tard.",

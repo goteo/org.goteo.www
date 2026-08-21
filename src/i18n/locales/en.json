@@ -17,6 +17,10 @@
         "unsupportedType": "Unsupported file type: {{ file }}"
       }
     },
+    "OAuth": {
+      "Client authentication failed": "The application could not be authorized as a valid client.",
+      "The user credentials were incorrect": "The user credentials are incorrect."
+    },
     "constraint": {
       "text": {
         "notEmpty": "The text cannot be empty",
@@ -26,7 +30,7 @@
         "greaterThan": "The date must be greater than {{ date }}"
       },
       "file": {
-        "maxAllowedSize": "Maximum allowed size 10MB",
+        "maxAllowedSize": "Maximum allowed size {{ size }}",
         "supportedTypes": "Supported files: .png, .jpg"
       }
     },
@@ -125,6 +129,10 @@
           "false": "Inactive"
         }
       }
+    },
+    "passwordInput": {
+      "show": "Show password",
+      "hide": "Hide password"
     },
     "users": {
       "type": {
@@ -362,6 +370,140 @@
       }
     },
     "_": "Page-specific content (/home, /search, /project/[id], etc.)",
+    "checkout": {
+      "metadata": {
+        "title": "Checkout",
+        "description": "Checkout page"
+      },
+      "subtitle": "We'll show you the ones you've selected; click the \"continue\" button to pay.",
+      "reward": {
+        "claimed": "{{ units }} people have already claimed this reward",
+        "unclaimed": "No one has claimed this reward yet. Be the first!"
+      },
+      "tipjar": {
+        "community": "I want to support the Platoniq Foundation",
+        "checkboxLabel": "Promote a fairer and more caring society",
+        "input": "Enter a custom amount",
+        "error": {
+          "invalidAmount": "The minimum amount is €1"
+        }
+      },
+      "changeAddressLabel": "Send this reward to an address different from mine.",
+      "title": "Checkout",
+      "summary": {
+        "toRecipient": "{{ amount }} to {{ name }}",
+        "total": {
+          "title": "Total you will donate:"
+        },
+        "deduct": "You can deduct up to €100 on your income tax return if you make this donation.",
+        "showDetails": "View details",
+        "hideDetails": "Hide breakdown",
+        "showMore": "See more",
+        "hide": "Hide",
+        "donationsText": "from donations",
+        "contributionText": "as a contribution to the foundation"
+      },
+      "steps": {
+        "reward": {
+          "title": "Reward"
+        },
+        "data": {
+          "title": "Your details"
+        },
+        "payment": {
+          "title": "Payment method"
+        },
+        "confirmation": {
+          "title": "Confirm"
+        }
+      },
+      "payment": {
+        "title": "Tell us your payment details",
+        "description": "Now we need you to tell us how you want to pay.",
+        "selectMethod": "Select payment method:"
+      },
+      "wallet": {
+        "title": "Your virtual wallet",
+        "description": "Great, you're going to pay with the accumulated balance in your wallet. Remember that if you have a balance and don't spend it within two years, it will be transferred to the foundation.",
+        "balanceLabel": "Balance: ",
+        "currentBalance": "Current balance",
+        "amountToUse": "How much you are going to use",
+        "remainingBalance": "Balance you will have left"
+      },
+      "verify": {
+        "title": "Payment status",
+        "approved": {
+          "title": "Your payment method has been processed with overwhelming success",
+          "description": "Great! You're one step away from finishing and making the world a little better.",
+          "formGoal": {
+            "title": "If the campaign does not reach its goal",
+            "options": {
+              "1": "Add it to my Goteo wallet so I can allocate it to other projects.",
+              "2": "Return it to my payment method"
+            }
+          },
+          "formReview": {
+            "title": "Leave a message on the projects you have supported",
+            "description": "Your donation will be reflected in the projects you have supported. You can leave a message or remain anonymous.",
+            "crowdfundingProject": "Crowdfunding project:",
+            "donated": "You have donated",
+            "commentBtn": {
+              "leaveComment": "Leave a comment",
+              "editComment": "Edit comment"
+            },
+            "commentModal": {
+              "title": "Leave a comment",
+              "label": "Write your comment here"
+            },
+            "anonymous": "I want my comment to be anonymous"
+          }
+        },
+        "error": {
+          "title": "Something went wrong... Try again so you can donate.",
+          "description": "Oops, maybe it's our fault, the payment method, or just a mischievous computer goblin. Let's try again.",
+          "selectMethod": "Select a payment method again:"
+        }
+      },
+      "postPayment": {
+        "title": "Congratulations! Thank you for your donation",
+        "emailSent": "We have sent a summary to:",
+        "certificate": {
+          "title": "How do I request my certificate?",
+          "description": "The certificate is generated automatically at the end of the fiscal year (December). We will send you an email once we have submitted the documentation to the tax authorities. If we encounter any issues, we will contact you by email."
+        },
+        "donatedProjects": {
+          "title": "You have donated to the following projects"
+        },
+        "suggestedProjects": {
+          "title": "Other projects that need your help",
+          "empty": "There are no projects available at this time"
+        }
+      },
+      "login": {
+        "title": "Tell us your personal details",
+        "description": "We need to know who you are before you pay.",
+        "loginOr": "Log in to your account or",
+        "registerBtnLabel": "Sign up",
+        "forgotPassword": "Forgot your password?",
+        "welcome": {
+          "title": "Welcome to the new Goteo.",
+          "subtitle": "We are starting a new stage and we want to share it with you from the beginning. The platform will grow little by little: we will activate sections and features as they are ready and validated with our community. For now, you can log in with your same email and password and explore the project archive. Thank you for joining us on this journey."
+        },
+        "formDescription": "If you are already a user, please log in.",
+        "form": {
+          "idPlaceholder": "johndoe@example.com",
+          "idHelper": "Email or username",
+          "passwordPlaceholder": "TRUSTNO1",
+          "passwordHelper": "Password",
+          "termsCheckbox": "I accept the {{ link }}legal terms{{ _link }}"
+        },
+        "error": {
+          "invalidCredentials": "Invalid email or password.",
+          "unexpectedLogin": "Error logging in. Please try again later.",
+          "invalidEmail": "The email address is not valid."
+        }
+      }
+    },
     "home": {
       "banner": {
         "title": "We've renewed Goteo!",
@@ -484,114 +626,6 @@
     "index": {
       "title": "Goteo"
     },
-    "checkout": {
-      "metadata": {
-        "title": "Checkout",
-        "description": "Checkout page"
-      },
-      "subtitle": "We'll show you the ones you've selected; click the \"continue\" button to pay.",
-      "reward": {
-        "claimed": "{{ units }} people have already claimed this reward",
-        "unclaimed": "No one has claimed this reward yet. Be the first!"
-      },
-      "tipjar": {
-        "community": "I want to support the Platoniq Foundation",
-        "checkboxLabel": "Promote a fairer and more caring society",
-        "input": "Enter a custom amount",
-        "error": {
-          "invalidAmount": "The minimum amount is €1"
-        }
-      },
-      "changeAddressLabel": "Send this reward to an address different from mine.",
-      "title": "Checkout",
-      "summary": {
-        "toRecipient": "{{ amount }} to {{ name }}",
-        "total": {
-          "title": "Total you are going to donate"
-        },
-        "deduct": "You can deduct up to €100 on your income tax return if you make this donation.",
-        "showDetails": "View details",
-        "hideDetails": "Hide breakdown",
-        "showMore": "See more",
-        "hide": "Hide"
-      },
-      "steps": {
-        "reward": {
-          "title": "Reward"
-        },
-        "data": {
-          "title": "Your details"
-        },
-        "payment": {
-          "title": "Payment method"
-        },
-        "confirmation": {
-          "title": "Confirm"
-        }
-      },
-      "payment": {
-        "title": "Tell us your payment details",
-        "description": "Now we need you to tell us how you want to pay.",
-        "selectMethod": "Select payment method:"
-      },
-      "wallet": {
-        "title": "Your virtual wallet",
-        "description": "Great, you're going to pay with the accumulated balance in your wallet. Remember that if you have a balance and don't spend it within two years, it will be transferred to the foundation.",
-        "balanceLabel": "Balance: ",
-        "currentBalance": "Current balance",
-        "amountToUse": "How much you are going to use",
-        "remainingBalance": "Balance you will have left"
-      },
-      "verify": {
-        "title": "Payment status",
-        "approved": {
-          "title": "Your payment method has been processed with overwhelming success",
-          "description": "Great! You're one step away from finishing and making the world a little better.",
-          "formGoal": {
-            "title": "If the campaign does not reach its goal",
-            "options": {
-              "1": "Add it to my Goteo wallet so I can allocate it to other projects.",
-              "2": "Return it to my payment method"
-            }
-          },
-          "formReview": {
-            "title": "Leave a message on the projects you have supported",
-            "description": "Your donation will be reflected in the projects you have supported. You can leave a message or remain anonymous.",
-            "crowdfundingProject": "Crowdfunding project:",
-            "donated": "You have donated",
-            "commentBtn": {
-              "leaveComment": "Leave a comment",
-              "editComment": "Edit comment"
-            },
-            "commentModal": {
-              "title": "Leave a comment",
-              "label": "Write your comment here"
-            },
-            "anonymous": "I want my comment to be anonymous"
-          }
-        },
-        "error": {
-          "title": "Something went wrong... Try again so you can donate.",
-          "description": "Oops, maybe it's our fault, the payment method, or just a mischievous computer goblin. Let's try again.",
-          "selectMethod": "Select a payment method again:"
-        }
-      },
-      "postPayment": {
-        "title": "Congratulations! Thank you for your donation",
-        "emailSent": "We have sent a summary to:",
-        "certificate": {
-          "title": "How do I request my certificate?",
-          "description": "The certificate is generated automatically at the end of the fiscal year (December). We will send you an email once we have submitted the documentation to the tax authorities. If we encounter any issues, we will contact you by email."
-        },
-        "donatedProjects": {
-          "title": "You have donated to the following projects"
-        },
-        "suggestedProjects": {
-          "title": "Other projects that need your help",
-          "empty": "There are no projects available at this time"
-        }
-      }
-    },
     "project": {
       "edit": {
         "title": "Editing project: {{ project }}",
@@ -649,7 +683,6 @@
             "validation": {
               "image_too_large": "The image exceeds the maximum allowed size",
               "invalid_image": "Invalid image format",
-              "max_images": "Maximum number of images reached",
               "upload_failed": "Error uploading file"
             }
           },
@@ -1183,40 +1216,6 @@
         "previous": "Previous",
         "next": "Next",
         "loading": "Loading..."
-      }
-    },
-    "register": {
-      "title": "Register",
-      "page": {
-        "title": "Tell us your personal details",
-        "description": "We need to know who you are before you pay.",
-        "registerOr": "Register or",
-        "loginBtnLabel": "Log in with your account"
-      },
-      "form": {
-        "btnSubmit": "Register",
-        "termsCheckbox": "I accept the legal terms",
-        "policiesCheckbox": "By registering, I confirm my acceptance of your terms of use, privacy policy, and cookie policy.",
-        "validation": {
-          "password": {
-            "minLength": "*Password requirement: it must be 8 characters long"
-          }
-        }
-      },
-      "individual": {
-        "taxIdCheckbox": "I want to deduct my donations. You must provide your DNI number so we can report it to the tax authorities.",
-        "taxId": {
-          "msgDeduction": "I want to deduct my donations. You must provide your DNI number so we can report it to the tax authorities."
-        }
-      },
-      "organization": {
-        "taxIdDescription": "*With the CIF, we will notify the tax agency for your income tax return.",
-        "representativeTitle": "Company representative details."
-      },
-      "error": {
-        "incompletePersonFields": "Please complete all required fields for individuals.",
-        "incompleteOrgFields": "Please complete all required fields for legal entities.",
-        "unexpectedRegistration": "Registration error. Please try again later."
       }
     },
     "admin": {
@@ -1819,22 +1818,6 @@
       "notFound": "User not found"
     },
     "login": {
-      "page": {
-        "title": "Tell us your personal details",
-        "description": "We need to know who you are before you pay.",
-        "registerOr": "Log in to your account or",
-        "registerBtnLabel": "Sign up",
-        "otherAccessMethods": "You can also log in through:",
-        "forgotPassword": "Forgot your password?",
-        "welcome": {
-          "title": "Welcome to the new Goteo.",
-          "subtitle": "We are starting a new stage and we want to share it with you from the beginning. The platform will grow little by little: we will activate sections and features as they are ready and validated with our community. For now, you can log in with your same email and password and explore the project archive. Thank you for joining us on this journey."
-        }
-      },
-      "form": {
-        "email": "Email or username",
-        "password": "Password"
-      },
       "error": {
         "invalidCredentials": "Invalid email or password.",
         "unexpectedLogin": "Error logging in. Please try again later.",

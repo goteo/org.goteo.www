@@ -19,10 +19,10 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("pages.login.form.email"),
+        placeholder,
         name = "email",
         id = "email",
-        label = undefined,
+        label,
         errorMessage = $t("pages.login.error.invalidEmail"),
         isValid = $bindable(true),
         validate = true,

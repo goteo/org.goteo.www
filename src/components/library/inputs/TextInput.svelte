@@ -62,18 +62,18 @@
         {disabled}
         {placeholder}
         class={twMerge(
-            "border-secondary text-content w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus:ring-0",
+            "border-secondary text-content focus-within:ring-secondary w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400",
             error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
             disabled && "cursor-not-allowed",
             classes,
         )}
     />
-    {#if error || helperText}
-        <span
-            id={`helper-${finalId}`}
-            class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
-        >
+    <span
+        id={`helper-${finalId}`}
+        class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+    >
+        {#if error || helperText}
             {error || helperText}
-        </span>
-    {/if}
+        {/if}
+    </span>
 </div>
