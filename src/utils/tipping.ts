@@ -1,5 +1,5 @@
 import { client } from "../openapi/client/client.gen";
-import { apiTipjarsIdGetUrl } from "../openapi/client/paths.gen";
+import { apiTipjarsIdGetUrl } from "../openapi/client/operation-paths.gen";
 
 /**
  * Is tipping to the platform owner possible?

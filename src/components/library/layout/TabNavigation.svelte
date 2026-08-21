@@ -18,14 +18,14 @@
 -->
 <script lang="ts">
     export interface Tab {
-        id: number | string;
+        id: string;
         label: string;
     }
 
     interface TabNavigationProps {
         tabs: Tab[];
-        currentTab: number | string;
-        onTabClick: (tabId: number | string) => void;
+        currentTab: string;
+        onTabClick: (tabId: string) => void;
     }
 
     let { tabs, currentTab, onTabClick }: TabNavigationProps = $props();

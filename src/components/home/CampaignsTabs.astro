@@ -3,9 +3,9 @@ import CampaignCard from "./CampaignCard.svelte";
 import Carousel from "../library/layout/Carousel.svelte";
 import CampaignsTabsNav from "./CampaignsTabsNav.svelte";
 import type { Campaign } from "../../types/campaign";
-import { apiProjectsGetCollection, type Accounting, type Money } from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
-import { client } from "../../openapi/client/client.gen";
+import { apiAccountingsIdGet, apiProjectsGetCollection, type Money } from "../../openapi/client";
+import { extractId } from "../../utils/extractId";
 
 const { t } = Astro.locals;
 const chosenProjects = {
@@ -26,10 +26,10 @@ const { data: projects } = await apiProjectsGetCollection({
 });
 
 const campaigns: Campaign[] = await Promise.all(
-    (projects ?? []).map(async (project) => {
-        const { data: accounting } = (await client.get({
-            url: client.buildUrl({ url: project.accounting! }),
-        })) as { data: Accounting };
+    projects!.map(async (project) => {
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: extractId(project.accounting) },
+        });
 
         return {
             ...project,

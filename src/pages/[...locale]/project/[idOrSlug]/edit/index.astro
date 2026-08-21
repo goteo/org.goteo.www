@@ -2,7 +2,7 @@
 import Layout from "../../../../../layouts/Layout.astro";
 import { apiProjectsIdOrSlugGet, apiProjectsIdPatch } from "../../../../../openapi/client";
 import App from "../../../../../layouts/App.svelte";
-import ProjectEditor from "../../../../../components/project/edit/ProjectEditor.svelte";
+import ProjectEditorShell from "../../../../../components/project/edit/ProjectEditorShell.svelte";
 import { goto } from "../../../../../utils/navigation";
 import { NotFound, Unauthorized, Forbidden } from "../../../../../utils/responses";
 
@@ -19,44 +19,41 @@ if (!session) {
     return goto("/login", { query: { callback: requestUrl.pathname + requestUrl.search } });
 }
 
-const { data: project, error: getError } = await apiProjectsIdOrSlugGet({
-    headers: session.token.asHttpHeaders,
+const { data: projectFromApi, error: getError } = await apiProjectsIdOrSlugGet({
+    headers: { ...session.token.asHttpHeaders, "Accept-Language": locale },
     path: { idOrSlug },
 });
 
-if (getError) {
-    console.error(getError);
-    if (getError.status === NotFound.status) {
-        return Astro.rewrite("/404");
-    }
-
-    console.error({ project, error: getError });
+if (getError && getError.status !== NotFound.status) {
+    console.error({ project: projectFromApi, error: getError });
     return Astro.rewrite("/500");
 }
 
-const { request, error: patchError } = await apiProjectsIdPatch({
-    headers: session.token.asHttpHeaders,
-    path: { id: String(project.id) },
-    body: { id: project.id },
-});
+if (projectFromApi) {
+    const { request, error: patchError } = await apiProjectsIdPatch({
+        headers: { ...session.token.asHttpHeaders, "Content-Language": locale },
+        path: { id: String(projectFromApi.id) },
+        body: { id: projectFromApi.id },
+    });
 
-if (patchError) {
-    console.error(patchError);
-    if (patchError.status === NotFound.status) {
-        return Astro.rewrite("/404");
+    if (patchError) {
+        if ([Unauthorized.status, Forbidden.status].includes(patchError.status!)) {
+            return Astro.rewrite("/403");
+        }
+
+        console.error({ request, error: patchError });
+        return Astro.rewrite("/500");
     }
-
-    if ([Unauthorized.status, Forbidden.status].includes(patchError.status!)) {
-        return Astro.rewrite("/403");
-    }
-
-    console.error({ request, error: patchError });
-    return Astro.rewrite("/500");
 }
 ---
 
-<Layout title={t("pages.project.edit.title", { project: project?.title ?? "" })}>
+<Layout title={t("pages.project.edit.title", { project: projectFromApi?.title! })}>
     <App locale={locale} session={session} client:load>
-        <ProjectEditor idOrSlug={idOrSlug} project={project} client:load />
+        <ProjectEditorShell
+            key={idOrSlug}
+            actor={session.user}
+            project={projectFromApi}
+            client:load
+        />
     </App>
 </Layout>

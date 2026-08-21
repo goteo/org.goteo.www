@@ -369,12 +369,12 @@ Example: `feat/add-project-filters`, `fix/checkout-redirect`, `chore/update-open
 
 Injected by `src/middleware/index.ts` on every request. Available in Astro pages and server actions via `context.locals`:
 
-| Field     | Type                            | Description                                             |
-| --------- | ------------------------------- | ------------------------------------------------------- |
-| `lang`    | `Locale` (`"es"\|"en"\|"ca"`)   | Current locale derived from URL                         |
-| `langs`   | `string[]`                      | User language preferences from `Accept-Language` header |
-| `t`       | `(key, vars?, opts?) => string` | Translation function for current locale                 |
-| `session` | `Session \| undefined`          | Authenticated session, or `undefined` if not logged in  |
+| Field     | Type                            | Description                                                              |
+| --------- | ------------------------------- | ------------------------------------------------------------------------ |
+| `lang`    | `Locale` (`"es"\|"en"\|"ca"`)   | Current interface language, derived from user preferences or app default |
+| `langs`   | `string[]`                      | Full list of detected user preferred languages                           |
+| `t`       | `(key, vars?, opts?) => string` | Translation function for current locale                                  |
+| `session` | `Session \| undefined`          | Authenticated session, or `undefined` if not logged in                   |
 
 ```astro
 ---
@@ -498,20 +498,20 @@ Build-time code (config files, scripts, plugins) may use Node.js APIs freely.
 
 ## SDK (`@hey-api`)
 
-Two packages: `@hey-api/openapi-ts` (codegen, dev dependency) and `@hey-api/client-fetch` (runtime HTTP client).
+From package `@hey-api/openapi-ts`, using the `@hey-api/client-fetch` for runtime HTTP client.
 
 ### Files overview
 
-| File                                   | Edit? | Contents                                                                                                |
-| -------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------- |
-| `src/openapi/client/sdk.gen.ts`        | No    | Typed API functions — one per API operation                                                             |
-| `src/openapi/client/types.gen.ts`      | No    | TypeScript types for all API resources                                                                  |
-| `src/openapi/client/paths.gen.ts`      | No    | URL path string constants per operation                                                                 |
-| `src/openapi/client/client.gen.ts`     | No    | Singleton `client` instance                                                                             |
-| `src/openapi/api.ts`                   | Yes   | `createClientConfig` (sets `baseUrl`), `AuthErrorType`, `createAuthError()`, `getErrorTranslationKey()` |
-| `src/openapi/cacheFetch.ts`            | Yes   | Browser Cache API interceptor for GET requests                                                          |
-| `src/openapi/plugins/operation-paths/` | Yes   | Custom codegen plugin that writes `paths.gen.ts`                                                        |
-| `openapi-ts.config.ts`                 | Yes   | Codegen config — input spec URL, output dir, plugins                                                    |
+| File                                        | Edit? | Contents                                                                                                |
+| ------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------- |
+| `src/openapi/client/sdk.gen.ts`             | No    | Typed API functions — one per API operation                                                             |
+| `src/openapi/client/types.gen.ts`           | No    | TypeScript types for all API resources                                                                  |
+| `src/openapi/client/operation-paths.gen.ts` | No    | URL path string constants per operation                                                                 |
+| `src/openapi/client/client.gen.ts`          | No    | Singleton `client` instance                                                                             |
+| `src/openapi/api.ts`                        | Yes   | `createClientConfig` (sets `baseUrl`), `AuthErrorType`, `createAuthError()`, `getErrorTranslationKey()` |
+| `src/openapi/cacheFetch.ts`                 | Yes   | Browser Cache API interceptor for GET requests                                                          |
+| `src/openapi/plugins/operation-paths/`      | Yes   | Custom codegen plugin for URL path strings                                                              |
+| `openapi-ts.config.ts`                      | Yes   | Codegen config — input spec URL, output dir, plugins                                                    |
 
 ### Naming convention of generated functions
 
@@ -524,7 +524,7 @@ apiUsersPost()                   → POST /v4/users
 apiUsersIdpersonPatch()          → PATCH /v4/users/{id}/person
 ```
 
-Path constants (from `paths.gen.ts`) follow the same pattern with `Url` suffix:
+Path constants (from `operation-paths`) follow the same pattern with `Url` suffix:
 
 ```bash
 apiProjectsIdOrSlugGetUrl        → '/v4/projects/{idOrSlug}'
@@ -546,12 +546,12 @@ const projects = (response.data as Project[]) || [];
 
 Pass `path`, `query`, `body`, `headers` as named keys. All are typed from the OpenAPI spec.
 
-For authenticated requests, pass the Bearer token via `headers`:
+For authenticated requests, pass the token via `headers`:
 
 ```typescript
 await apiUsersIdpersonPatch({
     path: { id: userId },
-    headers: { Authorization: `Bearer ${token}` },
+    headers: { ...token.asHttpHeaders },
     body: { firstName: "Ada" },
 });
 ```
@@ -562,7 +562,7 @@ Use when you need the URL string (e.g. for manual `fetch` calls or cache keys):
 
 ```typescript
 import { client } from "../openapi/client/client.gen";
-import { apiProjectsIdOrSlugGetUrl } from "../openapi/client/paths.gen";
+import { apiProjectsIdOrSlugGetUrl } from "../openapi/client/operation-paths.gen";
 
 const url = client.buildUrl({
     url: apiProjectsIdOrSlugGetUrl,

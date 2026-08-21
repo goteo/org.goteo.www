@@ -7,7 +7,7 @@
         type Gateway,
     } from "../../../../openapi/client";
     import { client } from "../../../../openapi/client/client.gen";
-    import { apiGatewaysIdGetUrl } from "../../../../openapi/client/paths.gen";
+    import { apiGatewaysIdGetUrl } from "../../../../openapi/client/operation-paths.gen";
     import { defaultCurrency, formatCurrency, parseCurrency } from "../../../../utils/currencies";
     import { highlightMatch } from "../../../../utils/highlights";
     import { toCollectionItems } from "../../../../utils/hydra";

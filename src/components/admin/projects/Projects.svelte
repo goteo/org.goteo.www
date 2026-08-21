@@ -13,7 +13,7 @@
         type Accounting,
         type User,
     } from "../../../openapi/client/index.ts";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen.ts";
+    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen.ts";
     import { useAdminTableState } from "../../../utils/adminTableState.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { extractId } from "../../../utils/extractId";

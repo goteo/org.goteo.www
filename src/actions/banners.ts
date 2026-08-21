@@ -1,7 +1,7 @@
 import { z } from "astro/zod";
 import { ActionError, defineAction } from "astro:actions";
 
-import { bannerRepository } from "../repositories/banner";
+import { bannerRepository } from "../repositories/banners";
 
 export const createBanner = defineAction({
     accept: "form",

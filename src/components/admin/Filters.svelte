@@ -115,9 +115,7 @@
             <span class="relative">
                 <FiltersIcon />
                 {#if hasActiveFilters()}
-                    <span class="absolute -top-1 -right-1">
-                        <Bullet />
-                    </span>
+                    <Bullet class="absolute top-0 right-0" size={6} />
                 {/if}
             </span>
             {#if showFilterComposer}

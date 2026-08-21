@@ -35,6 +35,16 @@
       }
     },
     "validation": {
+      "_invalid_type": "",
+      "_too_big": "",
+      "too_small": "\"{{ value }}\" es demasiado corto: se esperan {{ min }} o más caracteres.",
+      "invalid_format": "\"{{ value }}\" tiene formato incorrecto: no se ajusta al patrón regex `{{ pattern }}`.",
+      "_not_multiple_of": "",
+      "_unrecognized_keys": "",
+      "_invalid_union": "",
+      "_invalid_key": "",
+      "_invalid_element": "",
+      "_invalid_value": "",
       "missingRequiredFields": "Uno o más campos obligatorios están vacíos",
       "project": {
         "terms": {
@@ -629,6 +639,13 @@
     "project": {
       "edit": {
         "title": "Editando proyecto: {{ project }}",
+        "validation": {
+          "titleBadFormat": "El título debe contener al menos una letra."
+        },
+        "header": {
+          "titlePlaceholder": "Título de proyecto",
+          "unsentChanges": "Hay cambios sin enviar"
+        },
         "tabs": {
           "configuration": "Configuración",
           "campaign": "Información de campaña",
@@ -646,6 +663,11 @@
             "primaryLabel": "Idioma principal del contenido",
             "secondaryLabel": "Idioma secundario del contenido",
             "addButton": "Añadir idioma"
+          },
+          "release": {
+            "title": "Fecha de salida a campaña",
+            "subtitle": "Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días",
+            "passed": "Este proyecto ya salió a campaña y no se puede modificar su fecha de salida"
           },
           "rounds": {
             "title": "Elige las rondas que tendrá tu campaña",
@@ -872,17 +894,6 @@
           },
           "continue": "Siguiente paso",
           "locationPlaceholder": "Ej: Calle Gran Vía 28, Madrid"
-        },
-        "errors": {
-          "session": {
-            "title": "Sesión expirada"
-          },
-          "storage": {
-            "title": "Error de almacenamiento",
-            "save_failed": "No se pudieron guardar los cambios",
-            "quota_exceeded": "Almacenamiento local lleno",
-            "close": "Cerrar"
-          }
         }
       },
       "create": {

@@ -48,9 +48,7 @@
         {#if update.date}
             {formatDate(new Date(update.date), $locale)}
         {/if}
-        <div class="pt-0.5">
-            <Bullet />
-        </div>
+        <Bullet size={6} />
     </div>
 
     <div class="mt-3 flex min-h-0 flex-1">

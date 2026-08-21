@@ -2,7 +2,7 @@ import {
     apiTipjarsGetCollectionUrl,
     apiUsersGetCollectionUrl,
     apiProjectsGetCollectionUrl,
-} from "../openapi/client/paths.gen";
+} from "../openapi/client/operation-paths.gen";
 
 import type { Accounting, User, Project, Tipjar } from "../openapi/client/index.ts";
 

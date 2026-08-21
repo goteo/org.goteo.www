@@ -24,7 +24,17 @@ export default defineConfig({
         {
             name: "@hey-api/typescript",
             enums: "javascript",
-            readOnlyWriteOnlyBehavior: "off",
+        },
+        {
+            name: "zod",
+            requests: true,
         },
     ],
+    parser: {
+        transforms: {
+            readWrite: {
+                enabled: false,
+            },
+        },
+    },
 });

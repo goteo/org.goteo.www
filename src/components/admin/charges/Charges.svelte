@@ -28,7 +28,7 @@
         apiProjectsGetCollectionUrl,
         apiTipjarsGetCollectionUrl,
         apiUsersGetCollectionUrl,
-    } from "../../../openapi/client/paths.gen";
+    } from "../../../openapi/client/operation-paths.gen";
     import { useAdminTableState } from "../../../utils/adminTableState.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { getDisplayNameFromAccounting } from "../../../utils/displayNameFromAccounting";

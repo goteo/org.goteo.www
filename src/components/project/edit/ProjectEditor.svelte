@@ -1,241 +1,193 @@
 <!--
-    Wizard Application Component
+    Provides the navigation shell for the multi-step project setup wizard.
 
-    Root component that wraps the wizard shell and manages step routing.
-    Handles:
-    - Step content rendering
-    - Save and publish callbacks
+    Features:
+    - Step tabbed navigation
+    - Visual progress indicators
+    - Action buttons (Preview, Save, Publish)
+    - Step validation before navigation
     - URL query parameter sync
+
+    Design System:
+    - Active tab: border-primary, text-secondary
+    - Incomplete tab: border-purple-tint, text-tertiary
+    - Disabled tab: border-light-muted, text-light-muted
 -->
 <script lang="ts">
-    import { onMount, untrack } from "svelte";
+    import { t } from "../../../i18n/store";
+    import { apiProjectsIdPatch } from "../../../openapi/client";
+    import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
+    import { iso639_1Codes } from "../../../utils/lang.types";
+    import { validate } from "../../../utils/validation";
+    import LanguagesDropdown from "../../header/LanguagesDropdown.svelte";
+    import EditIcon from "../../icons/actions/Edit.svelte";
+    import Bullet from "../../icons/Bullet.svelte";
+    import Eye from "../../icons/media/Eye.svelte";
+    import ActionableButton from "../../library/buttons/ActionableButton.svelte";
+    import Button from "../../library/buttons/Button.svelte";
+    import TabNavigation, { type Tab } from "../../library/layout/TabNavigation.svelte";
 
-    import ProjectEditorShell from "./ProjectEditorShell.svelte";
-    import { getStepComponent } from "./steps";
-    import { session } from "../../../auth/store";
-    import { type Project } from "../../../openapi/client";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/paths.gen";
-    import {
-        type CreateProjectForm,
-        currentDraft,
-        deleteCurrentDraft,
-        hasUnsavedChanges,
-        initializeProjectDraft,
-        loadDraft,
-        markCurrentDraftClean,
-        updateWizard,
-    } from "../../../stores/drafts/projectDraft";
-    import { publishDraft } from "../../../utils/projectPublisher";
-    import { getProjectDraftResources } from "../../../utils/projectSubmissionApi";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import type { Snippet } from "svelte";
 
     let {
-        idOrSlug,
-        project = null,
+        draft,
+        step,
+        children,
+        onSave,
+        onPublish,
+        onStepChange,
+        onLangChange,
     }: {
-        idOrSlug: string;
-        project?: Project | null;
+        draft: ProjectDraftStore;
+        step: string;
+        children: Snippet;
+        onSave?: () => void;
+        onPublish?: () => void;
+        onStepChange?: (step: string) => void;
+        onLangChange?: (lang: string) => void;
     } = $props();
 
-    // Seeded from the server-rendered prop; refreshed on mount from the draft.
-    let resolvedProject = $state<Project | null>(untrack(() => project));
-    let isInitialized = $state(false);
-    let showSessionErrorToast = $state(false);
+    // Define the six wizard steps (reactive to language changes)
+    const steps = $derived<Tab[]>([
+        { id: "1", label: $t("pages.project.edit.tabs.configuration") },
+        { id: "2", label: $t("pages.project.edit.tabs.campaign") },
+        { id: "3", label: $t("pages.project.edit.tabs.rewards") },
+        { id: "4", label: $t("pages.project.edit.tabs.collaborations") },
+        { id: "5", label: $t("pages.project.edit.tabs.budget") },
+        { id: "6", label: $t("pages.project.edit.tabs.aboutYou") },
+    ]);
 
-    function getInitialStep() {
-        let initialStep = 1;
+    let errorMessage: string | undefined = $state();
 
-        if (typeof window !== "undefined") {
-            const url = new URL(window.location.href);
-            const stepParam = url.searchParams.get("step");
-            if (stepParam) {
-                const step = parseInt(stepParam, 10);
-                if (!isNaN(step) && step >= 1 && step <= 6) {
-                    initialStep = step;
-                }
-            }
-        }
+    function handleTitleChange(title: string) {
+        const [error] = validate(title, zProjectProjectUpdationDto.shape.title);
 
-        return initialStep;
-    }
-
-    function projectToDraft(project: Project): CreateProjectForm {
-        return {
-            title: project.title || "",
-            subtitle: project.subtitle || "",
-            categories: project.categories,
-            release: project.calendar?.release ?? undefined,
-            status: project.status || "in_draft",
-        };
-    }
-
-    /**
-     * Image MIME types accepted by the uploader, mirroring the image entries of
-     * `STORAGE_ALLOWEDTYPES` in `src/utils/objectStorage.ts`. That module cannot be
-     * imported here because it instantiates a server-side S3 client.
-     */
-    const COVER_MIME_TYPES: Record<string, string> = {
-        jpg: "image/jpeg",
-        jpeg: "image/jpeg",
-        webp: "image/webp",
-        png: "image/png",
-        gif: "image/gif",
-    };
-
-    /**
-     * The cover comes back as a bare URL, but `UploadedFile` needs a MIME type
-     * for the uploader to recognise it as an image and render its preview.
-     */
-    function guessImageMimeType(url: string): string {
-        const basename = url.split("?")[0].split(/[\\/]/).pop() ?? "";
-        const dotIndex = basename.lastIndexOf(".");
-        const extension = dotIndex < 1 ? "" : basename.slice(dotIndex + 1).toLowerCase();
-
-        return COVER_MIME_TYPES[extension] ?? "image/jpeg";
-    }
-
-    function projectToIri(project: Project) {
-        return `${apiProjectsGetCollectionUrl}/${project.slug ?? project.id}`;
-    }
-
-    function draftToProject(idOrSlug: string): Project | null {
-        if (!$currentDraft) return null;
-
-        const numericId = Number(idOrSlug);
-
-        return {
-            id: Number.isNaN(numericId) ? undefined : numericId,
-            slug: Number.isNaN(numericId) ? idOrSlug : undefined,
-            title: $currentDraft.createProject.title,
-            subtitle: $currentDraft.createProject.subtitle,
-            categories: $currentDraft.createProject.categories,
-            territory: $currentDraft.createProject.territory as Project["territory"],
-            description: "",
-            deadline: $currentDraft.wizardForm.configuration.deadline,
-            budget: $currentDraft.wizardForm.budget,
-            status: $currentDraft.createProject.status,
-        };
-    }
-
-    function redirectToNotFound() {
-        window.location.href = "/404";
-    }
-
-    onMount(() => {
-        const initialStep = getInitialStep();
-
-        async function initialize() {
-            try {
-                if (project?.id) {
-                    const resources = $session
-                        ? await getProjectDraftResources(projectToIri(project), $session)
-                        : undefined;
-
-                    const coverUrl = (project as any).cover as string | undefined;
-                    if (coverUrl && resources) {
-                        resources.images = [
-                            {
-                                id: crypto.randomUUID(),
-                                url: coverUrl,
-                                name: "Project cover",
-                                size: 0,
-                                type: guessImageMimeType(coverUrl),
-                            },
-                        ];
-                    }
-
-                    await initializeProjectDraft(
-                        projectToDraft(project),
-                        String(project.id),
-                        resources,
-                    );
-                    resolvedProject = project;
-                } else {
-                    const hasDraft = await loadDraft(idOrSlug);
-
-                    if (!hasDraft) {
-                        redirectToNotFound();
-                        return;
-                    }
-
-                    hasUnsavedChanges.set(true);
-                    resolvedProject = draftToProject(idOrSlug);
-                }
-
-                updateWizard({ currentStep: initialStep }, { markUnsaved: false });
-                isInitialized = true;
-            } catch (err) {
-                errorMessage = err instanceof Error ? err.message : "Unknown error";
-                isInitialized = true;
-            }
-        }
-
-        initialize();
-
-        // Listen for browser back/forward navigation (client-side only)
-        if (typeof window !== "undefined") {
-            const handlePopState = () => {
-                const url = new URL(window.location.href);
-                const stepParam = url.searchParams.get("step");
-                if (stepParam) {
-                    const step = parseInt(stepParam, 10);
-                    if (!isNaN(step) && step >= 1 && step <= 6) {
-                        updateWizard({ currentStep: step });
-                    }
-                }
-            };
-
-            window.addEventListener("popstate", handlePopState);
-
-            return () => {
-                window.removeEventListener("popstate", handlePopState);
-            };
-        }
-    });
-
-    // Reactive current step
-    const currentStep = $derived($currentDraft?.wizardForm.currentStep ?? 1);
-    let errorMessage = $state("");
-
-    async function saveToAPI() {
-        if (!$currentDraft) return;
-        if (!resolvedProject?.id) {
-            errorMessage = "Project not found in API";
+        if (!error) {
+            draft.patch({ title });
+            errorMessage = undefined;
             return;
         }
 
-        try {
-            if (!$session) {
-                showSessionErrorToast = true;
-                throw new Error("User session not found");
-            }
-
-            const result = await publishDraft($currentDraft, $session, String(resolvedProject.id));
-            markCurrentDraftClean(result.resources);
-        } catch (err) {
-            errorMessage = err instanceof Error ? err.message : "Unknown error";
-
-            return;
+        switch (error.issue.code) {
+            case "invalid_format":
+                errorMessage = $t("pages.project.edit.validation.titleBadFormat", error.params);
+                break;
+            default:
+                errorMessage = $t(error.message, error.params);
+                break;
         }
     }
 
-    function handlePublish() {
-        if (!$currentDraft || !resolvedProject) return;
+    function handleSubtitleChange(subtitle: string) {
+        draft.patch({ subtitle });
+    }
 
-        const idOrSlug = resolvedProject.slug ?? resolvedProject.id;
+    async function handleSave() {
+        const { data: project } = await apiProjectsIdPatch({
+            baseUrl: "/api/relay",
+            path: { id: String($draft.actual.id) },
+            headers: { "Content-Language": $draft.lang },
+            body: $draft.patch,
+        });
 
-        deleteCurrentDraft($currentDraft.draftId, $currentDraft.userId);
-        window.location.href = `/project/${idOrSlug}/publish`;
+        draft.update({ actual: project, patch: {} });
     }
 </script>
 
-{#if isInitialized && resolvedProject}
-    <ProjectEditorShell
-        {errorMessage}
-        {showSessionErrorToast}
-        onSave={saveToAPI}
-        onPublish={handlePublish}
-    >
-        {@const StepComponent = getStepComponent(currentStep)}
-        <StepComponent project={resolvedProject} />
-    </ProjectEditorShell>
-{/if}
+<div class="wrapper">
+    <div class="p-10 pb-20">
+        <!-- Header with title and action buttons -->
+        <div
+            class="bg-purple-soft border-variant1 mb-6 flex items-center justify-between gap-4 rounded-3xl border px-6 py-4 shadow-sm"
+        >
+            <!-- Left section: Icon + Title/Subtitle -->
+            <div class="flex flex-1 items-center gap-4">
+                <!-- Edit icon (rotated 180°) -->
+                <div class="flex shrink-0 items-center justify-center">
+                    <div class="rotate-180">
+                        <EditIcon width="24" height="24" />
+                    </div>
+                </div>
+
+                <!-- Title and subtitle column -->
+                <div class="flex min-w-0 flex-1 flex-col justify-center">
+                    <input
+                        type="text"
+                        value={$draft.latest.title}
+                        oninput={(e) => handleTitleChange(e.currentTarget.value)}
+                        placeholder={$t("pages.project.edit.header.titlePlaceholder")}
+                        class="w-full border-0 bg-transparent pb-0 text-2xl leading-8 font-bold text-black focus:ring-0 focus:outline-none"
+                    />
+                    <input
+                        type="text"
+                        value={$draft.latest.subtitle}
+                        oninput={(e) => handleSubtitleChange(e.currentTarget.value)}
+                        placeholder={$t("system.loading")}
+                        class="w-full border-0 bg-transparent pt-0 text-sm leading-6 font-normal text-black focus:ring-0 focus:outline-none"
+                    />
+                </div>
+            </div>
+
+            <!-- Right section: Action Buttons -->
+            <div class="flex shrink-0 items-center gap-4">
+                <LanguagesDropdown
+                    languages={iso639_1Codes}
+                    selected={$draft.lang}
+                    onSelect={onLangChange}
+                />
+                <Button class="whitespace-nowrap" kind="ghost" size="md" disabled={true}>
+                    <Eye class="size-5" />
+                    {$t("common.preview")}
+                </Button>
+                <div class="relative">
+                    <ActionableButton
+                        kind="secondary"
+                        size="md"
+                        class="disabled:pointer-events-none"
+                        action={handleSave}
+                        autoreset={1000}
+                        title={$draft.isDirty
+                            ? $t("pages.project.edit.header.unsentChanges")
+                            : $t("common.save")}
+                    >
+                        {$t("common.save")}
+                        {#snippet actionedChildren()}
+                            {$t("common.saved")}
+                        {/snippet}
+                    </ActionableButton>
+                    {#if $draft.isDirty}
+                        <Bullet class="absolute top-0 right-0" />
+                    {/if}
+                </div>
+                <Button
+                    class="disabled:pointer-events-none disabled:opacity-24"
+                    kind="primary"
+                    size="md"
+                    onclick={() => {}}
+                >
+                    {$t("common.publish")}
+                </Button>
+            </div>
+        </div>
+
+        <!-- Header validation message -->
+        <div class="h-4 px-6">
+            <p class="text-semantic-error">
+                {#if errorMessage}
+                    {errorMessage}
+                {/if}
+            </p>
+        </div>
+
+        <!-- Tab Navigation -->
+        <div class="mb-8">
+            <TabNavigation tabs={steps} currentTab={step} onTabClick={(s) => onStepChange?.(s)} />
+        </div>
+
+        <!-- Step Content -->
+        <div class="min-h-100">
+            {@render children()}
+        </div>
+    </div>
+</div>

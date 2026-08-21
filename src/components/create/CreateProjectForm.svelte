@@ -9,7 +9,7 @@
         type ProjectProjectCreationDto,
     } from "../../openapi/client";
     import { client } from "../../openapi/client/client.gen";
-    import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/paths.gen";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/operation-paths.gen";
     import {
         validateCreateForm,
         validateField,

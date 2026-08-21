@@ -1,7 +1,10 @@
 import { GetObjectCommand, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { fileTypeFromBuffer } from "file-type";
 
-import { createClient } from "../../../utils/media/objectStorage";
+import {
+    createClient,
+    generateStorageKey,
+    getFileStorableData,
+} from "../../../utils/media/objectStorage";
 import {
     STORAGE_ALLOWEDTYPES,
     STORAGE_MAXSIZE,
@@ -12,19 +15,19 @@ import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
 
+/**
+ * Path to the storage bucket.
+ * Derived from: `OBJECT_STORAGE_ENDPOINT/OBJECT_STORAGE_BUCKET` (no trailing slash)
+ */
+export const STORAGE_ADDRESS =
+    import.meta.env.OBJECT_STORAGE_ENDPOINT.replace(/\/$/, "") +
+    `/${import.meta.env.OBJECT_STORAGE_BUCKET}`;
+
 function json(data: unknown, status = 200): Response {
     return new Response(JSON.stringify(data), {
         status,
         headers: { "Content-Type": "application/json" },
     });
-}
-
-async function getHexHash(buffer: Uint8Array<ArrayBuffer>): Promise<string> {
-    const digest = await crypto.subtle.digest("SHA-256", buffer);
-
-    return Array.from(new Uint8Array(digest))
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join("");
 }
 
 export const POST: APIRoute = async ({ request, locals }) => {
@@ -65,28 +68,23 @@ export const POST: APIRoute = async ({ request, locals }) => {
         }
 
         const buffer = new Uint8Array(await res.Body.transformToByteArray());
+        const file = await getFileStorableData(buffer);
 
-        const detected = await fileTypeFromBuffer(buffer);
-        if (!detected) {
-            return json({ error: "Unknown or invalid file" }, 400);
-        }
-
-        if (!STORAGE_ALLOWEDTYPES.includes(detected.mime)) {
+        if (!STORAGE_ALLOWEDTYPES.includes(file.type.mime)) {
             return json(
                 { error: `Invalid type. Allowed types are: ${STORAGE_ALLOWEDTYPES.join(",")}` },
                 400,
             );
         }
 
-        const hash = await getHexHash(buffer);
-        const stableKey = `${STORAGE_PREFIX_STABLE}/${session.user.id}/${hash}.${detected.ext}`;
+        const stableKey = generateStorageKey(STORAGE_PREFIX_STABLE, session.user.id!, file);
 
         await client.send(
             new PutObjectCommand({
                 Bucket: import.meta.env.OBJECT_STORAGE_BUCKET,
                 Key: stableKey,
                 Body: buffer,
-                ContentType: detected.mime,
+                ContentType: file.type.mime,
             }),
         );
 
@@ -97,10 +95,9 @@ export const POST: APIRoute = async ({ request, locals }) => {
             }),
         );
 
-        const base = new URL(import.meta.env.OBJECT_STORAGE_ENDPOINT).toString().replace(/\/$/, "");
-        const url = `${base}/${import.meta.env.OBJECT_STORAGE_BUCKET}/${stableKey}`;
+        const stableUrl = `${STORAGE_ADDRESS}/${stableKey}`;
 
-        return json({ url, key: stableKey });
+        return json({ url: stableUrl, key: stableKey });
     } catch (err: any) {
         console.error(err);
 

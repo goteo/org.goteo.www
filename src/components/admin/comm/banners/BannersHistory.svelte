@@ -8,7 +8,7 @@
     import DataTable from "../../../library/tables/DataTable.svelte";
     import Title from "../../../library/typography/Title.svelte";
 
-    import type { BannerRecord } from "../../../../repositories/banner";
+    import type { BannerRecord } from "../../../../repositories/banners";
     import type { DataTableHeader } from "../../../library/tables/DataTable.svelte";
 
     interface Props {

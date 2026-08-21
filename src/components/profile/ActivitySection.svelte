@@ -1,12 +1,11 @@
 <script lang="ts">
-    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
 
     import DonationsCard from "./DonationsCard.svelte";
     import MatchfundingCard from "./MatchfundingCard.svelte";
     import ProjectsCard from "./ProjectsCard.svelte";
     import { client } from "../../openapi/client/client.gen.ts";
-    import { apiUsersIdOrHandleGetUrl } from "../../openapi/client/paths.gen.ts";
+    import { apiUsersIdOrHandleGetUrl } from "../../openapi/client/operation-paths.gen.ts";
     import {
         apiAccountingsIdGet,
         apiProjectSupportsGetCollection,
@@ -44,12 +43,6 @@
     let loading = $state(true);
     let error = $state<string | null>(null);
 
-    // Create a client instance configured to use the API relay
-    // This ensures all authenticated requests go through the server-side proxy
-    const relayClient = createClient({
-        baseUrl: "/api/relay",
-    });
-
     async function fetchActivityData() {
         loading = true;
         error = null;
@@ -68,7 +61,7 @@
             // Fetch user's contributions (donations) - using accounting IRI as origin
             const { data: supportsResponse, error: supportsError } =
                 await apiProjectSupportsGetCollection({
-                    client: relayClient,
+                    baseUrl: "/api/relay",
                     query: {
                         origin: user.accounting,
                         itemsPerPage: 100,
@@ -83,7 +76,7 @@
 
             try {
                 const response = await apiProjectSupportsmoneyTotalGetCollection({
-                    client: relayClient,
+                    baseUrl: "/api/relay",
                     query: {
                         origin: user.accounting,
                     },
@@ -112,7 +105,7 @@
 
             const { data: projectsResponse, error: projectsError } = await apiProjectsGetCollection(
                 {
-                    client: relayClient,
+                    baseUrl: "/api/relay",
                     query: {
                         owner: userIri,
                         itemsPerPage: 3,
@@ -169,7 +162,7 @@
                     slugsToFetch.map(async (idOrSlug) => {
                         try {
                             const { data, error } = await apiProjectsIdOrSlugGet({
-                                client: relayClient,
+                                baseUrl: "/api/relay",
                                 path: { idOrSlug },
                                 headers,
                             });
@@ -218,7 +211,7 @@
                     accountingIds.map(async (accountingId) => {
                         try {
                             const { data, error } = await apiAccountingsIdGet({
-                                client: relayClient,
+                                baseUrl: "/api/relay",
                                 path: { id: accountingId },
                                 headers,
                             });
@@ -376,7 +369,7 @@
             // Fetch matchfunding data
             try {
                 const { data: callsData, error: callsError } = await apiMatchCallsGetCollection({
-                    client: relayClient,
+                    baseUrl: "/api/relay",
                     query: {
                         itemsPerPage: 100,
                     },
@@ -409,7 +402,7 @@
 
                                 try {
                                     const { data: accounting } = await apiAccountingsIdGet({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         path: { id: accountingId },
                                         headers,
                                     });

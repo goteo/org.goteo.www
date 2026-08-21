@@ -39,7 +39,7 @@
         helperText?: string;
         error?: string;
         onBlur?: () => void;
-        onInput?: (date: string) => void;
+        onInput?: (date: Date) => void;
         onApply?: (date: Date) => void;
     } = $props();
 
@@ -56,7 +56,7 @@
     let hasSelection = $state(hasValue);
 
     const displayValue = $derived(
-        hasSelection && value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
+        value && !isNaN(value.getTime()) ? formatDate(value, $locale) : "",
     );
 
     function dateToString(date: Date): string {
@@ -85,7 +85,7 @@
         lastValid = selected;
         hasSelection = true;
         hasValue = true;
-        onInput?.(dateToString(selected));
+        onInput?.(selected);
     }
 
     function toggle() {

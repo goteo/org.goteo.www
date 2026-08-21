@@ -47,9 +47,8 @@ export const STORAGE_PREFIX_TEMP = "uploads/temp";
 
 /**
  * Default maximum file size for single objects.
- * 8MBs based on upper normal limit of files in Goteo 3 assets bucket.
  */
-export const STORAGE_MAXSIZE = 8388608;
+export const STORAGE_MAXSIZE = import.meta.env.PUBLIC_DEFAULT_MAXSIZE;
 
 /**
  * Allowed MIME types of single objects.

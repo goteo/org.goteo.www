@@ -9,8 +9,8 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
 
     interface VideoUrlInputProps {
-        video?: string;
-        onChange: (video: string | null) => void;
+        video?: string | null;
+        onChange?: (video?: string) => void;
         class?: ClassNameValue;
     }
 
@@ -35,7 +35,7 @@
 
         if (!url.trim()) {
             validationError = "";
-            onChange(null);
+            onChange?.();
             return;
         }
 
@@ -45,14 +45,14 @@
         }
 
         validationError = "";
-        onChange(url);
+        onChange?.(url);
     }
 
     function handleRemove() {
         videoUrl = "";
         validationError = "";
         showInput = false;
-        onChange(null);
+        onChange?.();
     }
 
     function handleShowInput() {

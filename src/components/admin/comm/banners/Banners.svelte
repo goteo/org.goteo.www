@@ -6,7 +6,7 @@
     import Toast from "../../../library/feedback/Toast.svelte";
     import Title from "../../../library/typography/Title.svelte";
 
-    import type { BannerRecord } from "../../../../repositories/banner";
+    import type { BannerRecord } from "../../../../repositories/banners";
 
     interface Props {
         banners: BannerRecord[];

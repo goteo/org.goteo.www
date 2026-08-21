@@ -2,7 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 
 import { apiGatewayCheckoutsPost, type GatewayCharge } from "../openapi/client";
 import { client } from "../openapi/client/client.gen";
-import { apiGatewaysIdGetUrl } from "../openapi/client/paths.gen";
+import { apiGatewaysIdGetUrl } from "../openapi/client/operation-paths.gen";
 
 export const payment = defineAction({
     accept: "form",
