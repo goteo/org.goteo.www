@@ -44,10 +44,6 @@
             value: "—",
         },
         {
-            label: $t("pages.admin.projects.table.rows.details.contractExpiry"),
-            value: project.contractExpiry,
-        },
-        {
             label: $t("pages.admin.projects.table.rows.details.remaining"),
             value: project.remaining,
         },
@@ -60,7 +56,6 @@
 
     const actionKeys = [
         "changeStatus",
-        "createContract",
         "promoter",
         "contributions",
         "donors",
@@ -97,11 +92,6 @@
                     class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
                 >
                     {$t("pages.admin.projects.table.rows.details.btns.certificates")}
-                </button>
-                <button
-                    class="text-secondary cursor-pointer border-0 bg-transparent font-bold outline-none"
-                >
-                    {$t("pages.admin.projects.table.rows.details.btns.contractPdf")}
                 </button>
                 <button
                     onclick={onOpenAnnotationsModal}

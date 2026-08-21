@@ -9,6 +9,7 @@
         apiProjectsIdPatch,
         apiAccountingsIdGet,
         apiUsersIdOrHandleGet,
+        apiProjectSupportsmoneyTotalGetCollection,
         type Project,
         type Accounting,
         type User,
@@ -53,11 +54,8 @@
     const table = useAdminTableState<ProjectSortKey>(initialSort);
 
     let filters: ProjectsQuery = $state(initialParams.filters);
-    let searchValue = $state(
-        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
-    );
-
     let projectRows = $state<ProjectRow[]>([]);
+    let totalEarnedAmount = $state("—");
 
     let accountingsCache = $state(new Map<string, Accounting>());
     let ownersCache = $state(new Map<string, User>());
@@ -73,20 +71,46 @@
         }
         return map;
     });
+
     let annotationsCache = $state(new Map<number, string>());
     let paidModalOpen = $state(false);
     let annotationsModalOpen = $state(false);
     let paidValue = $state("");
-    let paidMatchfundingValue = $state("");
+    let maxAchievedValue = $state("");
     let annotationText = $state("");
     let selectedProjectId = $state(0);
 
     let projectSlides = $derived([
         { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
-        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: totalEarnedAmount },
     ]);
+
+    async function fetchTotalEarned(ids: number[]) {
+        if (ids.length === 0) {
+            totalEarnedAmount = formatCurrency(0, "EUR");
+            return;
+        }
+        try {
+            const { data, error } = await apiProjectSupportsmoneyTotalGetCollection({
+                query: {
+                    'project[]': ids.map((id) => `/v4/projects/${id}`),
+                },
+            });
+
+            if (error) {
+                console.error("Failed to fetch money total:", error);
+                return;
+            }
+
+            if (data) {
+                const total = data.amount ?? 0;
+                const currency = data.currency ?? "EUR";
+                totalEarnedAmount = formatCurrency(total, currency);
+            }
+        } catch (e) {
+            console.error("Failed to fetch money total", e);
+        }
+    }
 
     function buildProjectsQuery(
         filters: ProjectsQuery,
@@ -159,6 +183,9 @@
             const loadedProjects = toCollectionItems<Project>(collection);
             table.totalItems = getCollectionTotalItems(collection, response);
 
+            const projectIds = loadedProjects.map((p) => p.id).filter(Boolean) as number[];
+            fetchTotalEarned(projectIds);
+
             const uniqueAccountingIris = [
                 ...new Set(loadedProjects.map((p) => p.accounting).filter(Boolean)),
             ] as string[];
@@ -215,7 +242,6 @@
                     name: project.title,
                     slug: project.slug ?? "",
                     promoter: owner?.displayName ?? owner?.email ?? "—",
-                    contractNumber: "—",
                     achieved: balance ? formatCurrency(balance.amount, balance.currency) : "—",
                     paid: "—",
                     paidMatchfunding: "—",
@@ -224,7 +250,6 @@
                     dateEnd1: calendar?.minimum ?? "—",
                     dateEnd2: calendar?.optimum ?? "—",
                     minOptim: "—",
-                    contractExpiry: "—",
                     remaining: "—",
                     annotationsCount: 0,
                     annotations: "",
@@ -268,22 +293,6 @@
         );
     });
 
-    function handleSearch(value: string): void {
-        if (value.length >= 4 || value.length === 0) {
-            if (value) {
-                filters = { ...filters, title: value };
-                table.currentPage = 1;
-                reloadProjects(true);
-                return;
-            } else {
-                const { ...rest } = filters;
-                filters = rest;
-            }
-            table.currentPage = 1;
-            reloadProjects();
-        }
-    }
-
     async function handleApplyFilters(newFilters: ProjectsQuery): Promise<void> {
         filters = { ...filters, ...newFilters };
         table.currentPage = 1;
@@ -308,7 +317,7 @@
         e.stopPropagation();
         selectedProjectId = project.id;
         paidValue = project.paid !== "—" ? project.paid : "";
-        paidMatchfundingValue = project.paidMatchfunding !== "—" ? project.paidMatchfunding : "";
+        maxAchievedValue = project.achieved !== "—" ? project.achieved : "";
         paidModalOpen = true;
     }
 
@@ -386,7 +395,7 @@
 <ProjectsModalPaid
     bind:open={paidModalOpen}
     bind:paidValue
-    bind:paidMatchfundingValue
+    maxAchieved={maxAchievedValue}
     onsave={handleSavePaid}
 />
 <ProjectsModalAnnotations

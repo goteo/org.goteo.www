@@ -6,7 +6,6 @@
         name: string;
         slug: string;
         promoter: string;
-        contractNumber: string;
         achieved: string;
         paid: string;
         paidMatchfunding: string;
@@ -15,7 +14,6 @@
         dateEnd1: string;
         dateEnd2: string;
         minOptim: string;
-        contractExpiry: string;
         remaining: string;
         annotationsCount: number;
         annotations: string;
@@ -47,7 +45,6 @@
     export const projectTableHeaders: DataTableHeader[] = [
         { key: "pages.admin.projects.table.headers.name" },
         { key: "pages.admin.projects.table.headers.promoter" },
-        { key: "pages.admin.projects.table.headers.contractNumber" },
         { key: "pages.admin.projects.table.headers.achieved" },
         { key: "pages.admin.projects.table.headers.paid" },
         { key: "pages.admin.projects.table.headers.process" },
@@ -100,44 +97,20 @@
 
     const statusOptions = [
         { value: "in_draft", label: $t("pages.admin.projects.table.rows.status.in_draft") },
-        {
-            value: "to_campaign_review",
-            label: $t("pages.admin.projects.table.rows.status.to_campaign_review"),
-        },
-        {
-            value: "in_campaign_review",
-            label: $t("pages.admin.projects.table.rows.status.in_campaign_review"),
-        },
-        {
-            value: "in_campaign_review_request_change",
-            label: $t("pages.admin.projects.table.rows.status.in_campaign_review_request_change"),
-        },
-        {
-            value: "campaign_review_rejected",
-            label: $t("pages.admin.projects.table.rows.status.campaign_review_rejected"),
-        },
+        { value: "to_campaign_review", label: $t("pages.admin.projects.table.rows.status.to_campaign_review") },
+        { value: "in_campaign_review", label: $t("pages.admin.projects.table.rows.status.in_campaign_review") },
+        { value: "in_campaign_review_to_change", label: $t("pages.admin.projects.table.rows.status.in_campaign_review_to_change") },
+        { value: "in_campaign_review_to_review", label: $t("pages.admin.projects.table.rows.status.in_campaign_review_to_review") },
+        { value: "campaign_review_rejected", label: $t("pages.admin.projects.table.rows.status.campaign_review_rejected") },
         { value: "to_campaign", label: $t("pages.admin.projects.table.rows.status.to_campaign") },
         { value: "in_campaign", label: $t("pages.admin.projects.table.rows.status.in_campaign") },
-        {
-            value: "campaign_failed",
-            label: $t("pages.admin.projects.table.rows.status.campaign_failed"),
-        },
-        {
-            value: "to_funding_review",
-            label: $t("pages.admin.projects.table.rows.status.to_funding_review"),
-        },
-        {
-            value: "in_funding_review",
-            label: $t("pages.admin.projects.table.rows.status.in_funding_review"),
-        },
-        {
-            value: "in_funding_review_request_change",
-            label: $t("pages.admin.projects.table.rows.status.in_funding_review_request_change"),
-        },
-        {
-            value: "funding_review_rejected",
-            label: $t("pages.admin.projects.table.rows.status.funding_review_rejected"),
-        },
+        { value: "campaign_failed", label: $t("pages.admin.projects.table.rows.status.campaign_failed") },
+        { value: "campaign_cancelled", label: $t("pages.admin.projects.table.rows.status.campaign_cancelled") },
+        { value: "to_funding_review", label: $t("pages.admin.projects.table.rows.status.to_funding_review") },
+        { value: "in_funding_review", label: $t("pages.admin.projects.table.rows.status.in_funding_review") },
+        { value: "in_funding_review_to_change", label: $t("pages.admin.projects.table.rows.status.in_funding_review_to_change") },
+        { value: "in_funding_review_to_review", label: $t("pages.admin.projects.table.rows.status.in_funding_review_to_review") },
+        { value: "funding_review_rejected", label: $t("pages.admin.projects.table.rows.status.funding_review_rejected") },
         { value: "to_funding", label: $t("pages.admin.projects.table.rows.status.to_funding") },
         { value: "in_funding", label: $t("pages.admin.projects.table.rows.status.in_funding") },
         { value: "funding_paid", label: $t("pages.admin.projects.table.rows.status.funding_paid") },
@@ -179,9 +152,6 @@
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
             <span class="block truncate">{project.promoter}</span>
-        </TableBodyCell>
-        <TableBodyCell class="border-variant1 border-t border-b p-4 text-sm">
-            <span class="block truncate">{project.contractNumber}</span>
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
             {project.achieved}
