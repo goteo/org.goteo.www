@@ -93,7 +93,7 @@
         try {
             const { data, error } = await apiProjectSupportsmoneyTotalGetCollection({
                 query: {
-                    'project[]': ids.map((id) => `/v4/projects/${id}`),
+                    "project[]": ids.map((id) => `/v4/projects/${id}`),
                 },
             });
 
