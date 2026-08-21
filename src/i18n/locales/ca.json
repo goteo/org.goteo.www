@@ -35,6 +35,16 @@
       }
     },
     "validation": {
+      "_invalid_type": "",
+      "_too_big": "",
+      "too_small": "\"{{ value }}\" és massa curt: s'esperen {{ min }} caràcters o més.",
+      "invalid_format": "\"{{ value }}\" té un format incorrecte: no s'ajusta al patró regex `{{ pattern }}`.",
+      "_not_multiple_of": "",
+      "_unrecognized_keys": "",
+      "_invalid_union": "",
+      "_invalid_key": "",
+      "_invalid_element": "",
+      "_invalid_value": "",
       "missingRequiredFields": "Un o més camps obligatoris estan buits",
       "project": {
         "terms": {
@@ -629,6 +639,13 @@
     "project": {
       "edit": {
         "title": "Editant projecte: {{ project }}",
+        "validation": {
+          "titleBadFormat": "El títol ha de contenir almenys una lletra."
+        },
+        "header": {
+          "titlePlaceholder": "Títol del projecte",
+          "unsentChanges": "Hi ha canvis no enviats"
+        },
         "tabs": {
           "configuration": "Configuració",
           "campaign": "Informació de campanya",
@@ -646,6 +663,11 @@
             "primaryLabel": "Idioma principal del contingut",
             "secondaryLabel": "Idioma secundari del contingut",
             "addButton": "Afegir idioma"
+          },
+          "release": {
+            "title": "Data de sortida a campanya",
+            "subtitle": "Tingues en compte que les campanyes de micromecenatge tenen una durada mínima de 40 dies",
+            "passed": "Aquest projecte ja ha sortit a campanya i no es pot modificar la seva data de sortida"
           },
           "rounds": {
             "title": "Tria les rondes que tindrà la teva campanya",
@@ -872,17 +894,6 @@
           },
           "continue": "Pas següent",
           "locationPlaceholder": "Ex.: Carrer Gran Via 28, Madrid"
-        },
-        "errors": {
-          "session": {
-            "title": "Sessió expirada"
-          },
-          "storage": {
-            "title": "Error d'emmagatzematge",
-            "save_failed": "No s'han pogut desar els canvis",
-            "quota_exceeded": "Emmagatzematge local ple",
-            "close": "Tancar"
-          }
         }
       },
       "create": {
