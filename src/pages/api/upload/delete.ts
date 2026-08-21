@@ -1,10 +1,10 @@
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 import { createClient, parseStorageKey } from "../../../utils/media/objectStorage";
-import { STORAGE_ADDRESS, STORAGE_PREFIX_STABLE } from "../../../utils/media/objectStorage.types";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
+import { STORAGE_ADDRESS } from "./postupload";
 
 function json(data: unknown, status = 200): Response {
     return new Response(JSON.stringify(data), {

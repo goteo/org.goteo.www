@@ -67,9 +67,3 @@ export const STORAGE_ALLOWEDTYPES = [
     "video/webm",
     "video/quicktime",
 ];
-
-/**
- * Path to the storage bucket.
- * Derived from: `OBJECT_STORAGE_ENDPOINT/OBJECT_STORAGE_BUCKET` (no trailing slash)
- */
-export const STORAGE_ADDRESS = new URL(import.meta.env.OBJECT_STORAGE_ENDPOINT).toString().replace(/\/$/, "") + `/${import.meta.env.OBJECT_STORAGE_BUCKET}`;
