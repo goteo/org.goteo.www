@@ -10,6 +10,7 @@
         active: boolean;
         roles: string[];
         territory: string;
+        accounting?: string;
     };
 
     export type UserSortKey = "handle-asc" | "handle-desc";

@@ -143,6 +143,7 @@
                     active: user.active ?? false,
                     roles: user.roles ?? [],
                     territory: user.territory?.country ?? "—",
+                    accounting: user.accounting ?? "—",
                 };
             });
         } finally {
@@ -184,12 +185,12 @@
 
         if (value.length >= 4 || value.length === 0) {
             if (value) {
-                filters = { ...filters, handle: value };
+                filters = { ...filters, q: value };
                 table.currentPage = 1;
                 reloadUsers(true);
                 return;
             } else {
-                const { handle, ...rest } = filters;
+                const { q, ...rest } = filters;
                 filters = rest;
             }
             table.currentPage = 1;
