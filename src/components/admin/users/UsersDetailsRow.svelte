@@ -1,12 +1,43 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
+    import { 
+        apiGatewayChargestotalsGetCollection, 
+        apiGatewayChargesGetCollection 
+    } from "../../../openapi/client/index.ts";
     import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
 
     import type { UserRow } from "./UsersTable.svelte";
 
     let { user }: { user: UserRow } = $props();
 
+    let totalCollected = $state<number | string>("—");
+    let recentCharges = $state<any[]>([]);
+
+    $effect(() => {
+        if (user.accounting) {
+            loadUserFinancials(user.accounting);
+        }
+    });
+
+    async function loadUserFinancials(accounting: string) {
+        const { data: totalsData } = await apiGatewayChargestotalsGetCollection({
+            baseUrl: "/api/relay",
+            query: { 'checkout.origin': accounting, status: 'in_charge' }
+        });
+        totalCollected = (totalsData as any)?.total ?? (totalsData as any)?.amount ?? 0;
+
+        const { data: chargesData } = await apiGatewayChargesGetCollection({
+            baseUrl: "/api/relay",
+            query: { 'checkout.origin': accounting, itemsPerPage: 6 }
+        });
+        recentCharges = (chargesData as any)?.member ?? [];
+    }
+
     const fields: DetailsField[] = $derived([
+        {
+            label: $t("pages.admin.users.table.rows.details.totalCollected", { default: "Total collected" }),
+            value: totalCollected,
+        },
         {
             label: $t("pages.admin.users.table.rows.details.id"),
             value: user.id,
@@ -38,4 +69,24 @@
     ]);
 </script>
 
-<DetailsRow {fields} columns={2} />
+<DetailsRow {fields} columns={2}>
+        <div class="col-span-2 mt-4">
+            <h4 class="font-bold mb-2">
+                {$t("pages.admin.users.table.rows.details.recentCharges", { default: "Recent charges" })}
+            </h4>
+            <div class="flex flex-col gap-2">
+                {#each recentCharges as charge}
+                    <div class="text-sm bg-gray-50 p-2 rounded border flex justify-between">
+                        <span>{charge.title || $t("common.untitled", { default: "Untitled charge" })}</span>
+                        <span class="font-semibold">
+                            {charge.money?.amount} {charge.money?.currency}
+                        </span>
+                    </div>
+                {:else}
+                    <p class="text-sm text-gray-400">
+                        {$t("pages.admin.users.table.rows.details.noRecentCharges", { default: "No recent charges found" })}
+                    </p>
+                {/each}
+            </div>
+        </div>
+</DetailsRow>
