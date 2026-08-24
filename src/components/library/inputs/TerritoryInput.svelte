@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import {
         searchPlace,
@@ -15,9 +15,10 @@
         class?: ClassNameValue;
         value?: string;
         placeholder?: string;
+        helperText?: string;
         name?: string;
         error?: string;
-        onAddressChange?: (address: string, territory: Territory) => void;
+        onInput?: (territory: Territory) => void;
         onBlur?: () => void;
     }
 
@@ -25,9 +26,10 @@
         class: classes = undefined,
         value = $bindable(""),
         placeholder,
+        helperText,
         name = "address",
         error = undefined,
-        onAddressChange = undefined,
+        onInput = undefined,
         onBlur = undefined,
     }: Props = $props();
 
@@ -63,14 +65,14 @@
 
         value = result.display_name;
         const territory = extractTerritory(result);
-        onAddressChange?.(result.display_name, territory);
+        onInput?.(territory);
     }
 
     function handleClear() {
         value = "";
         results = [];
         selected = [];
-        onAddressChange?.("", {
+        onInput?.({
             country: null,
             subLvl1: null,
             subLvl2: null,
@@ -83,6 +85,7 @@
     <DropdownMenu
         variant="basic"
         hasSearch
+        searchClasses={error && "border-tertiary border"}
         singleSelect
         clearable
         bind:searchValue={value}
@@ -95,7 +98,9 @@
         onClear={handleClear}
         onInputBlur={() => onBlur?.()}
     />
-    {#if error}
-        <p class="mt-1 ml-4 text-xs text-red-600" role="alert">{error}</p>
-    {/if}
+    <p class={twJoin("mt-1 ml-4 text-xs", !error && "text-content", error && "text-tertiary")}>
+        {#if error || helperText}
+            {error || helperText}
+        {/if}
+    </p>
 </div>
