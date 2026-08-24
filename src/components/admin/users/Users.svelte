@@ -42,7 +42,7 @@
 
     let filters: UsersQuery = $state(initialParams.filters ?? {});
     let searchValue = $state(
-        typeof initialParams.filters.handle === "string" ? initialParams.filters.handle : "",
+        typeof initialParams.filters.q === "string" ? initialParams.filters.q : "",
     );
 
     let userRows = $state<UserRow[]>([]);
@@ -220,7 +220,7 @@
         onApplyFilters: handleApplyFilters,
         searchPlaceholder: $t("pages.admin.users.filters.search.placeholder"),
         onSelectUser: (u: User) => {
-            filters = { ...filters, handle: u.handle };
+            filters = { ...filters, q: u.handle };
             table.currentPage = 1;
             reloadUsers();
         },
