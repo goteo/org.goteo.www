@@ -73,11 +73,7 @@
         </p>
 
         <div class="flex gap-2">
-            <Button
-                kind={mode === "total" ? "primary" : "secondary"}
-                size="sm"
-                onclick={setTotal}
-            >
+            <Button kind={mode === "total" ? "primary" : "secondary"} size="sm" onclick={setTotal}>
                 {$t("pages.admin.projects.modals.paid.total")}
             </Button>
             <Button
