@@ -131,16 +131,18 @@
                     if (!isOpen) isOpen = true;
                 }}
             />
-            {#if clearable && searchValue}
-                <button
-                    type="button"
-                    class="absolute right-14 shrink-0 hover:cursor-pointer hover:opacity-75"
-                    onclick={handleClear}
-                >
-                    <Close width="20" height="20" />
-                </button>
-            {/if}
-            <SearchIcon class="absolute right-4" width="32" height="32" />
+            <div class="absolute right-4 gap-1 flex flex-row bg-white">
+                {#if clearable && searchValue}
+                    <button
+                        type="button"
+                        class="shrink-0 hover:cursor-pointer hover:opacity-75"
+                        onclick={handleClear}
+                    >
+                        <Close width="20" height="20" />
+                    </button>
+                {/if}
+                <SearchIcon width="32" height="32" />
+            </div>
         </div>
     {:else}
         <button
