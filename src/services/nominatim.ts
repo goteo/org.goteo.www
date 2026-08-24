@@ -1,3 +1,5 @@
+import type { Territory } from "../openapi/client";
+
 export const NOMINATIM_ADDRESS = "https://nominatim.openstreetmap.org";
 
 /**
@@ -73,14 +75,7 @@ export interface NominatimResult {
     extratags?: Record<string, string>;
 }
 
-export interface ExtractedTerritory {
-    country: string | null;
-    subLvl1: string | null;
-    subLvl2: string | null;
-    address: string | null;
-}
-
-export function extractTerritory(result: NominatimResult): ExtractedTerritory {
+export function extractTerritory(result: NominatimResult): Territory {
     const address = result.address ?? {};
 
     const country = address.country_code?.toUpperCase() ?? null;
@@ -98,6 +93,14 @@ export function extractTerritory(result: NominatimResult): ExtractedTerritory {
     };
 }
 
+/**
+ * Perform a free-form search query against Nominatim. Requests are locally cached.
+ * @param value 
+ * @param limit 
+ * @param extratags 
+ * @see https://nominatim.org/release-docs/develop/api/Search/
+ * @returns 
+ */
 export async function searchPlace(
     value: string,
     limit: number = 6,
@@ -105,13 +108,13 @@ export async function searchPlace(
 ): Promise<NominatimResult[]> {
     const url = new URL(
         "/search?" +
-            new URLSearchParams({
-                q: value,
-                limit: limit.toString(),
-                format: "json",
-                addressdetails: "1",
-                extratags: extratags ? "1" : "0",
-            }),
+        new URLSearchParams({
+            q: value,
+            limit: limit.toString(),
+            format: "json",
+            addressdetails: "1",
+            extratags: extratags ? "1" : "0",
+        }),
         NOMINATIM_ADDRESS,
     );
 
