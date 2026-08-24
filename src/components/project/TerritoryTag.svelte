@@ -2,11 +2,11 @@
     import { type ClassNameValue } from "tailwind-merge";
 
     import { locale } from "../../i18n/store";
+    import { getTerritoryDisplayName } from "../../utils/territory";
     import MapIcon from "../icons/Location.svelte";
     import Tag from "../library/tags/Tag.svelte";
 
     import type { Territory } from "../../openapi/client";
-    import { getTerritoryDisplayName } from "../../utils/territory";
 
     let {
         territory,
@@ -17,7 +17,6 @@
         class?: ClassNameValue;
         iconSize?: string | number;
     } = $props();
-
 </script>
 
 <Tag class={classes}>

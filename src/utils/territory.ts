@@ -1,5 +1,6 @@
-import type { Territory } from "../openapi/client";
 import iso3166 from "iso-3166-2";
+
+import type { Territory } from "../openapi/client";
 
 export function getTerritoryDisplayName(territory: Territory, lang: Intl.LocalesArgument): string {
     const countryNames = new Intl.DisplayNames(lang, { type: "region" });

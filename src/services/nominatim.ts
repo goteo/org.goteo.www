@@ -95,11 +95,11 @@ export function extractTerritory(result: NominatimResult): Territory {
 
 /**
  * Perform a free-form search query against Nominatim. Requests are locally cached.
- * @param value 
- * @param limit 
- * @param extratags 
+ * @param value
+ * @param limit
+ * @param extratags
  * @see https://nominatim.org/release-docs/develop/api/Search/
- * @returns 
+ * @returns
  */
 export async function searchPlace(
     value: string,
@@ -108,13 +108,13 @@ export async function searchPlace(
 ): Promise<NominatimResult[]> {
     const url = new URL(
         "/search?" +
-        new URLSearchParams({
-            q: value,
-            limit: limit.toString(),
-            format: "json",
-            addressdetails: "1",
-            extratags: extratags ? "1" : "0",
-        }),
+            new URLSearchParams({
+                q: value,
+                limit: limit.toString(),
+                format: "json",
+                addressdetails: "1",
+                extratags: extratags ? "1" : "0",
+            }),
         NOMINATIM_ADDRESS,
     );
 

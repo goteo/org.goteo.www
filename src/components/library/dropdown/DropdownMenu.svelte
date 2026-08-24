@@ -128,7 +128,7 @@
                     if (!isOpen) isOpen = true;
                 }}
             />
-            <div class="absolute right-4 gap-1 flex flex-row bg-white">
+            <div class="absolute right-4 flex flex-row gap-1 bg-white">
                 {#if clearable && searchValue}
                     <button
                         type="button"

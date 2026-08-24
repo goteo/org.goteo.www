@@ -1,30 +1,19 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    import { twJoin } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
-    import {
-        apiProjectsPost,
-        apiProjectsIdPatch,
-        type Category,
-        type ProjectProjectCreationDto,
-        type ApiProjectsPostData,
-    } from "../../openapi/client";
-    import { client } from "../../openapi/client/client.gen";
-    import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/operation-paths.gen";
-    import { maxEndDate } from "../../utils/campaign";
-    import { getDefaultCurrency } from "../../utils/consts";
-    import { formatCurrency } from "../../utils/currencies";
+    import { type Category, type ApiProjectsPostData } from "../../openapi/client";
+    import { zProjectProjectCreationDto } from "../../openapi/client/zod.gen";
     import Button from "../library/buttons/Button.svelte";
     import BaseCard from "../library/cards/BaseCard.svelte";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
     import DateInput from "../library/inputs/DateInput.svelte";
+    import TerritoryInput from "../library/inputs/TerritoryInput.svelte";
+    import TextArea from "../library/inputs/TextArea.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Title from "../library/typography/Title.svelte";
-    import TextArea from "../library/inputs/TextArea.svelte";
-    import TerritoryInput from "../library/inputs/TerritoryInput.svelte";
-    import { twJoin } from "tailwind-merge";
+
     import type z from "zod";
-    import { zProjectProjectCreationDto } from "../../openapi/client/zod.gen";
 
     let { categories }: { categories: Category[] } = $props();
 
@@ -35,6 +24,9 @@
     });
 
     let validation: Partial<Record<keyof typeof form, z.core.$ZodIssue[]>> = $state({});
+    let isValid = $derived.by(() => {
+        return Object.entries(validation).filter(([, issues]) => issues?.length > 0).length > 0;
+    });
 
     function validate(field: keyof typeof form) {
         const result = zProjectProjectCreationDto.shape[field].safeParse(form[field]);
@@ -55,10 +47,21 @@
 
         return $t(`system.validation.${issue.code}`);
     }
+
+    function handleSubmit(e: SubmitEvent) {
+        e.preventDefault();
+
+        const result = zProjectProjectCreationDto.safeParse(form);
+
+        Object.entries(result.error?.issues || {}).map(([, issue]) => {
+            const field = issue.path[0] as keyof typeof form;
+            validation[field] = [...(validation[field] || []), issue];
+        });
+    }
 </script>
 
 <section class="wrapper md:flex md:flex-row">
-    <div class="mb-20 flex max-w-167 flex-col gap-10">
+    <form class="mb-20 flex max-w-167 flex-col gap-10" onsubmit={handleSubmit}>
         <div class="flex flex-col gap-4">
             <Title level={1} variant="section">
                 {$t("pages.project.create.title")}
@@ -81,6 +84,7 @@
                 helperText={$t("pages.project.create.description.titlePrompt")}
                 placeholder={$t("pages.project.create.description.titlePlaceholder")}
                 error={getValidationMessage("title")}
+                required
             />
             <div class="relative">
                 <TextArea
@@ -117,10 +121,10 @@
             </p>
             <DateInput />
         </div>
-        <Button>
+        <Button type="submit" disabled={isValid}>
             {$t("pages.project.create.submit")}
         </Button>
-    </div>
+    </form>
     <div class="ml-auto">
         <BaseCard
             class="border-grey flex h-full max-h-126.5 w-full max-w-109.25 flex-col bg-white"
