@@ -16,7 +16,6 @@
         value?: string;
         placeholder?: string;
         helperText?: string;
-        name?: string;
         error?: string;
         onInput?: (territory: Territory) => void;
         onBlur?: () => void;
@@ -27,7 +26,6 @@
         value = $bindable(""),
         placeholder,
         helperText,
-        name = "address",
         error = undefined,
         onInput = undefined,
         onBlur = undefined,
@@ -89,7 +87,6 @@
         singleSelect
         clearable
         bind:searchValue={value}
-        inputName={name}
         searchPlaceholder={placeholder}
         {options}
         bind:selected

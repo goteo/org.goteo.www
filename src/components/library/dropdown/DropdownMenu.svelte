@@ -24,7 +24,6 @@
         clearable?: boolean;
         onClear?: () => void;
         singleSelect?: boolean;
-        inputName?: string;
         onInputBlur?: (e?: FocusEvent) => void;
         /** Build the list with selected options at the top. */
         label?: string;
@@ -46,7 +45,6 @@
         clearable = false,
         onClear = undefined,
         singleSelect = false,
-        inputName = undefined,
         onInputBlur = undefined,
         label = undefined,
         selectedFirst = false,
@@ -122,7 +120,6 @@
             <input
                 class="max-h-6 w-full border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                 type="text"
-                name={inputName}
                 placeholder={searchPlaceholder}
                 bind:value={searchValue}
                 oninput={(e) => onSearch?.(e.currentTarget.value)}
