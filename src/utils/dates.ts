@@ -24,9 +24,9 @@ export function getDateInFuture(offset: number): Date {
 
 /**
  * Parses an ISO-like date string. Replaces partial values and wildcards `*` with the appropriate current value.
- * @param raw 
- * @param now 
- * @returns 
+ * @param raw
+ * @param now
+ * @returns
  */
 export function parseDate(raw: string | undefined, now: Date = new Date()): Date | undefined {
     if (!raw) return undefined;
@@ -43,17 +43,12 @@ export function parseDate(raw: string | undefined, now: Date = new Date()): Date
         return undefined;
     }
 
-    const year = parts[0] === "*"
-        ? now.getFullYear()
-        : Number(parts[0]);
+    const year = parts[0] === "*" ? now.getFullYear() : Number(parts[0]);
 
-    const month = parts[1] === undefined || parts[1] === "*"
-        ? now.getMonth() + 1
-        : Number(parts[1]);
+    const month =
+        parts[1] === undefined || parts[1] === "*" ? now.getMonth() + 1 : Number(parts[1]);
 
-    const day = parts[2] === undefined || parts[2] === "*"
-        ? now.getDate()
-        : Number(parts[2]);
+    const day = parts[2] === undefined || parts[2] === "*" ? now.getDate() : Number(parts[2]);
 
     return new Date(year, month - 1, day);
 }
@@ -68,4 +63,6 @@ export const CAMPAIGN_MAX_END_DATE = parseDate(import.meta.env.PUBLIC_CAMPAIGN_M
  * Earliest date a project may start its campaign, as calculated from the platform's minimum review days.
  * Calculated from `PUBLIC_CAMPAIGN_MIN_REV_DAYS`. When empty will default to 1 day from now.
  */
-export const CAMPAIGN_MIN_START_DATE = getDateInFuture(86400000 * parseInt(import.meta.env.PUBLIC_CAMPAIGN_MIN_REV_DAYS || 1));
+export const CAMPAIGN_MIN_START_DATE = getDateInFuture(
+    86400000 * parseInt(import.meta.env.PUBLIC_CAMPAIGN_MIN_REV_DAYS || 1),
+);

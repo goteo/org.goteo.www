@@ -3,6 +3,11 @@
 
     import { t } from "../../i18n/store";
     import { type Category, type ApiProjectsPostData } from "../../openapi/client";
+    import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
+    import {
+        zCreateProjectForm,
+        zProjectCampaignRelease,
+    } from "../../validation/projectValidation";
     import Button from "../library/buttons/Button.svelte";
     import BaseCard from "../library/cards/BaseCard.svelte";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
@@ -13,11 +18,6 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
-    import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
-    import {
-        zCreateProjectForm,
-        zProjectCampaignRelease,
-    } from "../../validation/projectValidation";
 
     let { categories }: { categories: Category[] } = $props();
 
