@@ -3,7 +3,6 @@
 
     import { t } from "../../i18n/store";
     import { type Category, type ApiProjectsPostData } from "../../openapi/client";
-    import { zProjectProjectCreationDto } from "../../openapi/client/zod.gen";
     import Button from "../library/buttons/Button.svelte";
     import BaseCard from "../library/cards/BaseCard.svelte";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
@@ -14,6 +13,11 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
+    import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
+    import {
+        zCreateProjectForm,
+        zProjectCampaignRelease,
+    } from "../../validation/projectValidation";
 
     let { categories }: { categories: Category[] } = $props();
 
@@ -24,12 +28,10 @@
     });
 
     let validation: Partial<Record<keyof typeof form, z.core.$ZodIssue[]>> = $state({});
-    let isValid = $derived.by(() => {
-        return Object.entries(validation).filter(([, issues]) => issues?.length > 0).length > 0;
-    });
+    let isValid = $derived(Object.values(validation).every((issues) => !issues?.length));
 
     function validate(field: keyof typeof form) {
-        const result = zProjectProjectCreationDto.shape[field].safeParse(form[field]);
+        const result = zCreateProjectForm.shape[field].safeParse(form[field]);
 
         validation[field] = result.error?.issues;
     }
@@ -41,6 +43,10 @@
             return "";
         }
 
+        if (issue.code === "custom") {
+            return $t(issue.message, issue.params);
+        }
+
         if (issue.code === "invalid_format" && field === "title") {
             return $t("pages.project.create.validation.titleBadFormat");
         }
@@ -48,15 +54,30 @@
         return $t(`system.validation.${issue.code}`);
     }
 
+    function handleRelease(release: Date) {
+        form.calendar = { ...form.calendar, release: release.toISOString() };
+
+        const result = zProjectCampaignRelease.safeParse(new Date(release));
+
+        validation["calendar"] = result.error?.issues ?? [];
+    }
+
     function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
-        const result = zProjectProjectCreationDto.safeParse(form);
+        validation = {};
 
-        Object.entries(result.error?.issues || {}).map(([, issue]) => {
-            const field = issue.path[0] as keyof typeof form;
-            validation[field] = [...(validation[field] || []), issue];
-        });
+        const result = zCreateProjectForm.safeParse(form);
+
+        if (!result.success) {
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as keyof typeof form;
+
+                validation[field] = [...(validation[field] ?? []), issue];
+            }
+
+            return;
+        }
     }
 </script>
 
@@ -119,9 +140,15 @@
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.release.subtitle")}
             </p>
-            <DateInput />
+            <DateInput
+                min={CAMPAIGN_MIN_START_DATE}
+                max={CAMPAIGN_MAX_END_DATE}
+                value={CAMPAIGN_MIN_START_DATE}
+                onInput={handleRelease}
+                error={getValidationMessage("calendar")}
+            />
         </div>
-        <Button type="submit" disabled={isValid}>
+        <Button type="submit" disabled={!isValid}>
             {$t("pages.project.create.submit")}
         </Button>
     </form>
