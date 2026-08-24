@@ -925,7 +925,10 @@
         },
         "submit": "Crear proyecto",
         "submitting": "Enviando…",
-        "submitSuccess": "Proyecto creado"
+        "submitSuccess": "Proyecto creado",
+        "validation": {
+          "titleBadFormat": "El título debe contener al menos una letra."
+        }
       },
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",

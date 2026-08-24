@@ -23,14 +23,38 @@
     import TextArea from "../library/inputs/TextArea.svelte";
     import TerritoryInput from "../library/inputs/TerritoryInput.svelte";
     import { twJoin } from "tailwind-merge";
+    import type z from "zod";
+    import { zProjectProjectCreationDto } from "../../openapi/client/zod.gen";
 
     let { categories }: { categories: Category[] } = $props();
 
-    let form = $state<ApiProjectsPostData["body"]>({
+    let form: ApiProjectsPostData["body"] = $state({
         title: "",
         subtitle: "",
         categories: [],
     });
+
+    let validation: Partial<Record<keyof typeof form, z.core.$ZodIssue[]>> = $state({});
+
+    function validate(field: keyof typeof form) {
+        const result = zProjectProjectCreationDto.shape[field].safeParse(form[field]);
+
+        validation[field] = result.error?.issues;
+    }
+
+    function getValidationMessage(field: keyof typeof form) {
+        const issue = validation[field]?.[0];
+
+        if (!issue) {
+            return "";
+        }
+
+        if (issue.code === "invalid_format" && field === "title") {
+            return $t("pages.project.create.validation.titleBadFormat");
+        }
+
+        return $t(`system.validation.${issue.code}`);
+    }
 </script>
 
 <section class="wrapper md:flex md:flex-row">
@@ -53,8 +77,10 @@
             </p>
             <TextInput
                 bind:value={form.title}
+                onInput={() => validate("title")}
                 helperText={$t("pages.project.create.description.titlePrompt")}
                 placeholder={$t("pages.project.create.description.titlePlaceholder")}
+                error={getValidationMessage("title")}
             />
             <div class="relative">
                 <TextArea
@@ -109,7 +135,7 @@
                 {form.title || $t("pages.project.create.description.titlePlaceholder")}
             </Title>
             <p
-                class="text-content overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
+                class="text-content w-full overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
             >
                 {form.subtitle || $t("pages.project.create.description.subtitlePlaceholder")}
             </p>
