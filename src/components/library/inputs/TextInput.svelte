@@ -28,7 +28,7 @@
         labelText?: string;
         helperText?: string;
         error?: string;
-        onInput?: (event: Event) => void;
+        onInput?: (value: string | number) => void;
         onBlur?: (event?: FocusEvent) => void;
         onFocus?: (event?: FocusEvent) => void;
     } = $props();
@@ -55,7 +55,7 @@
         id={finalId}
         onblur={onBlur}
         onfocus={onFocus}
-        oninput={onInput}
+        oninput={() => onInput?.(value)}
         {name}
         {type}
         {required}

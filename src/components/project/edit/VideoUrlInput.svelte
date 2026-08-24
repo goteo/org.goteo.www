@@ -85,7 +85,7 @@
                     placeholder={$t("pages.project.edit.campaignInfo.media.videoPlaceholder")}
                     bind:value={videoUrl}
                     error={validationError}
-                    onInput={(e) => handleUrlChange((e.target as HTMLInputElement).value)}
+                    onInput={(value) => handleUrlChange(value.toString())}
                 />
             {/if}
         </div>
