@@ -10,11 +10,12 @@
         apiAccountingsIdGet,
         apiUsersIdOrHandleGet,
         apiProjectSupportsmoneyTotalGetCollection,
+        apiProjectsIdOrSlugGetUrl,
+        apiProjectsGetCollectionUrl,
         type Project,
         type Accounting,
         type User,
     } from "../../../openapi/client/index.ts";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen.ts";
     import { useAdminTableState } from "../../../utils/adminTableState.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { extractId } from "../../../utils/extractId";
@@ -55,7 +56,7 @@
 
     let filters: ProjectsQuery = $state(initialParams.filters);
     let projectRows = $state<ProjectRow[]>([]);
-    let totalEarnedAmount = $state("—");
+    let totalEarned = $state("—");
 
     let accountingsCache = $state(new Map<string, Accounting>());
     let ownersCache = $state(new Map<string, User>());
@@ -83,18 +84,24 @@
 
     let projectSlides = $derived([
         { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
-        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: totalEarnedAmount },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: totalEarned },
     ]);
 
+    /**
+     * Fetches the total money earned for a given list of project IDs.
+     * @param ids - Array of project IDs
+     */
     async function fetchTotalEarned(ids: number[]) {
         if (ids.length === 0) {
-            totalEarnedAmount = formatCurrency(0, currentCurrency);
+            totalEarned = formatCurrency(0, currentCurrency);
             return;
         }
         try {
             const { data, error } = await apiProjectSupportsmoneyTotalGetCollection({
                 query: {
-                    "project[]": ids.map((id) => `/v4/projects/${id}`),
+                    "project[]": ids.map((id) =>
+                        apiProjectsIdOrSlugGetUrl.replace("{idOrSlug}", String(id)),
+                    ),
                 },
             });
 
@@ -106,7 +113,7 @@
             if (data) {
                 const total = data.amount ?? 0;
                 const currency = data.currency ?? currentCurrency;
-                totalEarnedAmount = formatCurrency(total, currency);
+                totalEarned = formatCurrency(total, currency);
             }
         } catch (e) {
             console.error("Failed to fetch money total", e);
@@ -319,7 +326,9 @@
         selectedProjectId = project.id;
         paidValue = project.paid !== "—" ? project.paid : "";
         maxAchievedValue = project.achieved !== "—" ? project.achieved : "";
-        const accounting = project.accounting ? accountingsCache.get(project.accounting) : undefined;
+        const accounting = project.accounting
+            ? accountingsCache.get(project.accounting)
+            : undefined;
         currentCurrency = accounting?.balance?.currency ?? "EUR";
         paidModalOpen = true;
     }
@@ -398,6 +407,7 @@
 <ProjectsModalPaid
     bind:open={paidModalOpen}
     bind:paidValue
+    currency={currentCurrency}
     maxAchieved={maxAchievedValue}
     onsave={handleSavePaid}
 />
