@@ -16,6 +16,7 @@
         open: boolean;
         paidValue: string;
         maxAchieved?: string;
+        currency?: string;
         onsave?: (paidValue: string) => void;
     }>();
 

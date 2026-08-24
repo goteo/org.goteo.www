@@ -79,6 +79,7 @@
     let maxAchievedValue = $state("");
     let annotationText = $state("");
     let selectedProjectId = $state(0);
+    let currentCurrency = $state("EUR");
 
     let projectSlides = $derived([
         { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
@@ -87,7 +88,7 @@
 
     async function fetchTotalEarned(ids: number[]) {
         if (ids.length === 0) {
-            totalEarnedAmount = formatCurrency(0, "EUR");
+            totalEarnedAmount = formatCurrency(0, currentCurrency);
             return;
         }
         try {
@@ -104,7 +105,7 @@
 
             if (data) {
                 const total = data.amount ?? 0;
-                const currency = data.currency ?? "EUR";
+                const currency = data.currency ?? currentCurrency;
                 totalEarnedAmount = formatCurrency(total, currency);
             }
         } catch (e) {
@@ -318,6 +319,8 @@
         selectedProjectId = project.id;
         paidValue = project.paid !== "—" ? project.paid : "";
         maxAchievedValue = project.achieved !== "—" ? project.achieved : "";
+        const accounting = project.accounting ? accountingsCache.get(project.accounting) : undefined;
+        currentCurrency = accounting?.balance?.currency ?? "EUR";
         paidModalOpen = true;
     }
 
