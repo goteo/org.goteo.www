@@ -294,6 +294,7 @@
     "delete": "Borrar",
     "continue": "Continuar",
     "back": "Volver",
+    "close": "Cerrar",
     "learnMore": "Saber más",
     "cancel": "Cancelar",
     "publish": "Publicar",
@@ -1616,7 +1617,7 @@
             "description": "Esta cantidad refleja el total de lo aportado a la campaña por todos los medios de pago posibles.",
             "total": "Total",
             "partial": "Parcial",
-            "input": "Pago",
+            "inputLabel": "Pago",
             "matchfunding": "Pago matchfunding",
             "save": "Guardar"
           },

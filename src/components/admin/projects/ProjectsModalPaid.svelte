@@ -10,6 +10,7 @@
         open = $bindable(false),
         paidValue = $bindable(""),
         maxAchieved = "",
+        currency = "EUR",
         onsave,
     } = $props<{
         open: boolean;
@@ -18,7 +19,7 @@
         onsave?: (paidValue: string) => void;
     }>();
 
-    let mode = $state<"total" | "parcial">("total");
+    let mode = $state<"total" | "partial">("total");
 
     $effect(() => {
         if (open && mode === "total") {
@@ -26,13 +27,27 @@
         }
     });
 
+    function getCurrencySymbol(curr: string): string {
+        try {
+            const parts = new Intl.NumberFormat("es-ES", {
+                style: "currency",
+                currency: curr,
+            }).formatToParts(0);
+            return parts.find((part) => part.type === "currency")?.value || curr;
+        } catch {
+            return "€";
+        }
+    }
+
     function setTotal() {
         mode = "total";
         paidValue = maxAchieved;
     }
 
     function setPartial() {
-        mode = "parcial";
+        mode = "partial";
+        paidValue = "";
+        paidValue = getCurrencySymbol(currency);
     }
 </script>
 
@@ -46,7 +61,7 @@
         type="button"
         class="text-secondary absolute inset-e-4 top-4 cursor-pointer bg-transparent p-1 shadow-none hover:opacity-80 focus:ring-0"
         onclick={() => (open = false)}
-        aria-label={$t("domain.dateInput.close")}
+        aria-label={$t("common.close")}
     >
         <Close width="24" height="24" />
     </button>
@@ -57,33 +72,25 @@
         </p>
 
         <div class="flex gap-2">
-            <button
-                type="button"
-                class={`cursor-pointer rounded-xl border px-4 py-2 text-sm font-bold ${
-                    mode === "total"
-                        ? "bg-primary text-secondary border-primary"
-                        : "text-content border-variant1 bg-white"
-                }`}
+            <Button
+                kind={mode === "total" ? "primary" : "secondary"}
+                size="sm"
                 onclick={setTotal}
             >
                 {$t("pages.admin.projects.modals.paid.total")}
-            </button>
-            <button
-                type="button"
-                class={`cursor-pointer rounded-xl border px-4 py-2 text-sm font-bold ${
-                    mode === "parcial"
-                        ? "bg-primary text-secondary border-primary"
-                        : "text-content border-variant1 bg-white"
-                }`}
+            </Button>
+            <Button
+                kind={mode === "partial" ? "primary" : "secondary"}
+                size="sm"
                 onclick={setPartial}
             >
                 {$t("pages.admin.projects.modals.paid.partial")}
-            </button>
+            </Button>
         </div>
 
         <TextInput
             bind:value={paidValue}
-            labelText={$t("pages.admin.projects.modals.paid.input")}
+            labelText={$t("pages.admin.projects.modals.paid.inputLabel")}
             disabled={mode === "total"}
         />
 
