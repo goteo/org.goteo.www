@@ -897,40 +897,35 @@
         }
       },
       "create": {
-        "title": "Propón una campaña",
-        "subtitle": "Describe brevemete el proyecto y la campaña de crowdfunding.",
-        "budgetPreview": "Dinero necesario",
+        "title": "Crea un proyecto",
+        "subtitle": "Describe brevemete tu proyecto de crowdfunding.",
         "description": {
           "title": "Describe brevemente tu propuesta",
-          "titlePrompt": "Indica el nombre de tu campaña",
-          "titlePlaceholder": "Nombre de campaña",
-          "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación.",
+          "description": "Indica el nombre de tu proyecto y describe brevemente lo que realizarás si consigues la financiación.",
+          "titlePrompt": "Indica el nombre de tu proyecto",
+          "titlePlaceholder": "Mi proyecto",
           "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
-          "subtitlePlaceholder": "Sin descripción"
+          "subtitlePlaceholder": "Un proyecto para hacer el mundo un poquito mejor"
         },
         "categories": {
-          "title": "¿Qué categoría se ajusta a tu campaña?",
+          "title": "¿Qué categoría se ajusta a tu proyecto?",
           "subtitle": "(Puedes elegir un máximo de 2)"
         },
         "address": {
           "title": "¿Cuál es la dirección del proyecto?",
           "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a ubicar tu iniciativa.",
-          "placeholder": "Ej: Calle Gran Vía 28, Madrid"
-        },
-        "budget": {
-          "title": "¿Cuánto dinero necesitas?",
-          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto."
+          "placeholder": "Forn de l'Olivera 22, Palma"
         },
         "release": {
-          "title": "Fecha salida de campaña",
+          "title": "Fecha de salida a campaña",
           "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
         },
         "terms": {
           "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
         },
-        "submit": "Proponer campaña",
+        "submit": "Crear proyecto",
         "submitting": "Enviando…",
-        "submitSuccess": "¡Campaña propuesta correctamente!"
+        "submitSuccess": "Proyecto creado"
       },
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",

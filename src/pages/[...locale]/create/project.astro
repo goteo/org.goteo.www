@@ -24,6 +24,6 @@ const categories = toCollectionItems<Category>(categoriesRaw);
 
 <Layout title={t("pages.project.create.title")}>
     <App client:load locale={lang} session={session}>
-        <!-- CreateProjectForm client:load categories={categories || []} /-->
+        <CreateProjectForm client:load {categories} />
     </App>
 </Layout>
