@@ -5,21 +5,25 @@ import CreateProjectForm from "../../../components/create/CreateProjectForm.svel
 import { apiCategoriesGetCollection } from "../../../openapi/client";
 import { toCollectionItems } from "../../../utils/hydra";
 import type { Category } from "../../../openapi/client";
+import { goto } from "../../../utils/navigation";
+import { withoutCache } from "../../../openapi/cacheInterceptor";
 
 const { t, lang, langs, session } = Astro.locals;
 
 if (!session) {
-    return Astro.redirect("/login");
+    return goto("/login", { query: { callback: "/create/project" } });
 }
 
-const { data: categoriesRaw } = await apiCategoriesGetCollection({
-    headers: { "Accept-Language": langs },
-});
+const { data: categoriesRaw } = await withoutCache(() =>
+    apiCategoriesGetCollection({
+        headers: { "Accept-Language": langs },
+    }),
+);
 const categories = toCollectionItems<Category>(categoriesRaw);
 ---
 
 <Layout title={t("pages.project.create.title")}>
     <App client:load locale={lang} session={session}>
-        <CreateProjectForm client:load categories={categories || []} />
+        <!-- CreateProjectForm client:load categories={categories || []} /-->
     </App>
 </Layout>
