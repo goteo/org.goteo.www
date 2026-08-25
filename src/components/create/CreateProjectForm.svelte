@@ -2,7 +2,7 @@
     import { twJoin } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
-    import { type Category, type ApiProjectsPostData, type Territory } from "../../openapi/client";
+    import { type Category, type ApiProjectsPostData, type Territory, apiCategoriesIdOrSlugGetUrl } from "../../openapi/client";
     import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
     import { getValidationParams } from "../../utils/validation";
     import {
@@ -19,6 +19,7 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
+    import { client } from "../../openapi/client/client.gen";
 
     let { categories }: { categories: Category[] } = $props();
 
@@ -38,6 +39,10 @@
         const result = zCreateProjectForm.shape[field].safeParse(form[field]);
 
         validation[field] = result.error?.issues;
+    }
+
+    function hasError(field: keyof typeof form) {
+        return validation[field] && validation[field].length > 0;
     }
 
     function getValidationMessage(field: keyof typeof form) {
@@ -75,8 +80,21 @@
         });
     }
 
-    function hasError(field: keyof typeof form) {
-        return validation[field] && validation[field].length > 0;
+    function handleCategories(categories: Category[]) {
+        form.categories = categories.map((c) => {
+            return client.buildUrl({
+                url: apiCategoriesIdOrSlugGetUrl,
+                path: { idOrSlug: String(c.id) }
+            })
+        });
+
+        validate("categories");
+    }
+
+    function handleTerritory(territory: Territory) {
+        form.territory = territory;
+
+        validate("territory");
     }
 
     function handleRelease(release: Date) {
@@ -85,12 +103,6 @@
         const result = zProjectCampaignRelease.safeParse(new Date(release));
 
         validation["calendar"] = result.error?.issues ?? [];
-    }
-
-    function handleTerritory(territory: Territory) {
-        form.territory = territory;
-
-        validate("territory");
     }
 
     function handleSubmit(e: SubmitEvent) {
@@ -159,10 +171,10 @@
                 {#if hasError("categories")}
                     {getValidationMessage("categories")}
                 {:else}
-                    {$t("pages.project.create.address.subtitle")}
+                    {$t("pages.project.create.categories.subtitle")}
                 {/if}
             </p>
-            <CategorySelect max={2} options={categories} />
+            <CategorySelect max={2} options={categories} onChange={handleCategories} />
         </div>
         <div class="flex flex-col gap-4">
             <Title level={2} variant="subsection">

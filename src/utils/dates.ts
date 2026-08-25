@@ -59,10 +59,18 @@ export function parseDate(raw: string | undefined, now: Date = new Date()): Date
  */
 export const CAMPAIGN_MAX_END_DATE = parseDate(import.meta.env.PUBLIC_CAMPAIGN_MAX_END_DATE);
 
+function getMinStartDate() {
+    const minStartDate = getDateInFuture(
+        86400000 * parseInt(import.meta.env.PUBLIC_CAMPAIGN_MIN_REV_DAYS || 1),
+    );
+
+    minStartDate.setHours(0, 0, 0);
+
+    return minStartDate;
+}
+
 /**
  * Earliest date a project may start its campaign, as calculated from the platform's minimum review days.
  * Calculated from `PUBLIC_CAMPAIGN_MIN_REV_DAYS`. When empty will default to 1 day from now.
  */
-export const CAMPAIGN_MIN_START_DATE = getDateInFuture(
-    86400000 * parseInt(import.meta.env.PUBLIC_CAMPAIGN_MIN_REV_DAYS || 1),
-);
+export const CAMPAIGN_MIN_START_DATE = getMinStartDate();
