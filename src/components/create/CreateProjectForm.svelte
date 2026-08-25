@@ -1,8 +1,14 @@
 <script lang="ts">
     import { twJoin } from "tailwind-merge";
 
-    import { t } from "../../i18n/store";
-    import { type Category, type ApiProjectsPostData, type Territory, apiCategoriesIdOrSlugGetUrl } from "../../openapi/client";
+    import { locale, t } from "../../i18n/store";
+    import {
+        type Category,
+        type ApiProjectsPostData,
+        type Territory,
+        apiCategoriesIdOrSlugGetUrl,
+        apiProjectsPost,
+    } from "../../openapi/client";
     import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
     import { getValidationParams } from "../../utils/validation";
     import {
@@ -84,8 +90,8 @@
         form.categories = categories.map((c) => {
             return client.buildUrl({
                 url: apiCategoriesIdOrSlugGetUrl,
-                path: { idOrSlug: String(c.id) }
-            })
+                path: { idOrSlug: String(c.id) },
+            });
         });
 
         validate("categories");
@@ -105,7 +111,7 @@
         validation["calendar"] = result.error?.issues ?? [];
     }
 
-    function handleSubmit(e: SubmitEvent) {
+    async function handleSubmit(e: SubmitEvent) {
         e.preventDefault();
 
         validation = {};
@@ -121,6 +127,20 @@
 
             return;
         }
+
+        const { data: project, error } = await apiProjectsPost({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $locale },
+            // @ts-expect-error form is declared as Partial, but at this point has been validated
+            body: form,
+        });
+
+        if (error) {
+            console.error(error);
+            return;
+        }
+
+        window.location.href = `/project/${project.id}/edit`;
     }
 </script>
 
