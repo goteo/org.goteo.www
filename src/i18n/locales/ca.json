@@ -51,7 +51,8 @@
           "required": "Has d'acceptar les condicions de l'impulsor i les bases de la convocatòria"
         },
         "release": {
-          "max": "La data d'inici és massa tardana: la campanya no es pot estendre més enllà de la data límit de la plataforma"
+          "min": "La data de llançament no pot ser anterior a {{ min }}",
+          "max": "La data de llançament no pot ser posterior a {{ max }}"
         }
       },
       "errors": {
@@ -897,40 +898,42 @@
         }
       },
       "create": {
-        "title": "Proposa una campanya",
-        "subtitle": "Descriu breument el projecte i la campanya de crowdfunding.",
-        "budgetPreview": "Diners necessaris",
+        "title": "Crea un projecte",
+        "subtitle": "Descriu breument el teu projecte de micromecenatge.",
         "description": {
           "title": "Descriu breument la teva proposta",
-          "titlePrompt": "Indica el nom de la teva campanya",
-          "titlePlaceholder": "Nom de campanya",
-          "subtitle": "Indica el nom de la teva campanya i descriu breument el projecte que duràs a terme si aconsegueixes el finançament.",
+          "description": "Indica el nom del teu projecte i descriu breument què duràs a terme si aconsegueixes el finançament.",
+          "titlePrompt": "Indica el nom del teu projecte",
+          "titlePlaceholder": "El meu projecte",
           "subtitlePrompt": "Indica breument la descripció del teu projecte.",
-          "subtitlePlaceholder": "Sense descripció"
+          "subtitlePlaceholder": "Un projecte per fer que el món sigui una miqueta millor"
         },
         "categories": {
-          "title": "Quina categoria s'ajusta a la teva campanya?",
+          "title": "Quina categoria s'ajusta al teu projecte?",
           "subtitle": "(Pots triar un màxim de 2)"
         },
         "address": {
           "title": "Quina és l'adreça del projecte?",
           "subtitle": "Cerca i selecciona l'adreça completa del projecte. Això ens ajuda a ubicar la teva iniciativa.",
-          "placeholder": "Ex.: Carrer Gran Via 28, Madrid"
-        },
-        "budget": {
-          "title": "Quants diners necessites?",
-          "subtitle": "Selecciona la quantitat que necessites per dur a terme el teu projecte."
+          "placeholder": "Forn de l'Olivera 22, Palma"
         },
         "release": {
-          "title": "Data de sortida de la campanya",
-          "subtitle": "(Tingues en compte que les campanyes de crowdfunding tenen una durada mínima de 40 dies)"
+          "title": "Data de llançament de la campanya",
+          "subtitle": "(Tingues en compte que les campanyes de crowdfunding tenen una durada mínima de 40 dies)",
+          "label": "Data de llançament aproximada"
         },
         "terms": {
           "label": "Accepto les condicions de l'impulsor i les bases de la convocatòria"
         },
-        "submit": "Proposar campanya",
+        "submit": "Crear projecte",
         "submitting": "Enviant…",
-        "submitSuccess": "Campanya proposada correctament!"
+        "submitSuccess": "Projecte creat",
+        "validation": {
+          "titleBadFormat": "El títol ha de contenir almenys una lletra.",
+          "categoriesNotEnough": "Has de seleccionar almenys {{ min }} categoria/es.",
+          "territoryMissing": "Has d'especificar un lloc.",
+          "releaseMissing": "Has d'especificar una data de llançament aproximada"
+        }
       },
       "view": {
         "owner": "Campanya de crowdfunding impulsada per {{ owner }}",
