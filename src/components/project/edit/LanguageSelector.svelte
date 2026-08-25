@@ -1,29 +1,25 @@
 <!--
     Language Selector Component
 
-    Allows users to select one primary language and optionally add secondary languages.
+    Lists the content languages (locales) a Project is published in.
 
     Features:
-    - Primary language dropdown (required)
-    - Add secondary languages with "Añadir outro" button
-    - Remove secondary languages
-    - Excludes already-selected languages from dropdowns
-    - Validation on blur
+    - Registered languages are shown locked: the API has no "change language"
+      operation, only add and remove, so editing a saved slot is not offered
+    - New languages are added through an empty slot
+    - Removing a language asks for confirmation — it deletes that translation
+    - Already-registered languages are excluded from the dropdown
 
     Design System:
     - Uses Select component from library
-    - Error states with red border and message
 -->
 <script lang="ts">
-    import { untrack } from "svelte";
-
+    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
-    import {
-        touchedFields,
-        markFieldAsTouched,
-        validationErrors,
-    } from "../../../stores/drafts/projectDraft";
     import { getLanguageDisplayName } from "../../../utils/lang";
+    import { iso639_1Codes } from "../../../utils/lang.types";
+    import PlusIcon from "../../icons/actions/PlusIcon.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
     import Select from "../../library/inputs/Select.svelte";
 
     interface LanguageOption {
@@ -32,180 +28,236 @@
     }
 
     interface LanguageSelectorProps {
+        /**
+         * Locales already registered for the Project, first one is the primary.
+         */
         languages: string[];
-        onChange: (languages: string[]) => void;
+        /**
+         * Locale the editor is currently working on. It cannot be removed.
+         */
+        current: string;
+        /**
+         * Registers a language. Must resolve once `languages` reflects the change.
+         */
+        onAdd: (language: string) => Promise<void> | void;
+        /**
+         * Removes a language and all its content.
+         */
+        onRemove: (language: string) => Promise<void> | void;
+        /**
+         * Moves the content of a registered language over to another one.
+         */
+        onReplace: (from: string, to: string) => Promise<void> | void;
     }
 
-    let { languages = [], onChange }: LanguageSelectorProps = $props();
+    let { languages = [], current, onAdd, onRemove, onReplace }: LanguageSelectorProps = $props();
 
-    // Available languages - using translations
-    const availableLanguages: LanguageOption[] = getSupportedLocales();
+    // Codes without a display name in the current UI locale are not offerable
+    const availableLanguages: LanguageOption[] = iso639_1Codes
+        .map((code) => ({ code, name: getLanguageDisplayName(code) }))
+        .filter((lang): lang is LanguageOption => lang.name !== undefined);
 
-    // Local state for language selection, seeded once from the prop
-    let primaryLanguage = $state(untrack(() => languages[0] || ""));
-    let secondaryLanguages = $state<string[]>(untrack(() => languages.slice(1)));
+    // Empty slots the user opened to add a language, not registered yet
+    let pending = $state<string[]>([]);
+    let busy = $state(false);
 
-    // Reactive validation errors
-    const errors = $derived($validationErrors);
-    const touched = $derived($touchedFields);
-    const showError = $derived(touched.has("languages") && errors.languages);
+    // Pending confirmation: a removal (no `to`) or a replacement (with `to`)
+    let confirming = $state<{ from: string; to?: string } | undefined>();
+    let confirmOpen = $state(false);
 
-    /**
-     * Handle primary language change
-     */
-    function handlePrimaryChange(value: string) {
-        primaryLanguage = value;
-        updateLanguages();
-    }
+    // Bumping this remounts the selects, discarding a cancelled pick
+    let resetKey = $state(0);
 
-    /**
-     * Handle secondary language change
-     */
-    function handleSecondaryChange(index: number, value: string) {
-        secondaryLanguages = secondaryLanguages.map((lang, i) => (i === index ? value : lang));
-        updateLanguages();
-    }
+    // TODO(api): `locales` has no order and no primary — this is just the first
+    // one the API returns. Needs a writable `primaryLocale` to mean anything.
+    const primary = $derived(languages[0]);
+    const secondaries = $derived(languages.slice(1));
 
-    /**
-     * Add a new secondary language slot
-     */
-    function addSecondaryLanguage() {
-        secondaryLanguages = [...secondaryLanguages, ""];
-    }
-
-    /**
-     * Remove a secondary language
-     */
-    function removeSecondaryLanguage(index: number) {
-        secondaryLanguages = secondaryLanguages.filter((_, i) => i !== index);
-        updateLanguages();
+    function isLanguageTaken(code: string): boolean {
+        return languages.includes(code) || pending.includes(code);
     }
 
     /**
-     * Update parent component with all languages
+     * Register the language picked in an empty slot
      */
-    function updateLanguages() {
-        const allLanguages = [
-            primaryLanguage,
-            ...secondaryLanguages.filter((lang) => lang !== ""),
-        ].filter(Boolean);
+    async function handlePendingChange(index: number, value: string) {
+        if (!value || busy) return;
 
-        onChange(allLanguages);
-    }
+        pending = pending.map((lang, i) => (i === index ? value : lang));
 
-    /**
-     * Handle blur event for validation
-     */
-    function handleBlur() {
-        markFieldAsTouched("languages");
-    }
-
-    function isLanguageDisabled(code: string, currentValue: string): boolean {
-        const selectedLanguages = [primaryLanguage, ...secondaryLanguages];
-        return selectedLanguages.includes(code) && code !== currentValue;
-    }
-
-    function getSupportedLocales(): LanguageOption[] {
-        const supportedLanguages = [];
-        const letters = "abcdefghijklmnopqrstuvwxyz";
-
-        function isLanguageCodeSupported(code: string) {
-            const locale = new Intl.Locale(code);
-            return locale.maximize().region !== undefined;
+        busy = true;
+        try {
+            await onAdd(value);
+            pending = pending.filter((_, i) => i !== index);
+        } finally {
+            busy = false;
         }
+    }
 
-        // ISO 639-1 (2-letter)
-        for (let i = 0; i < letters.length; i++) {
-            for (let j = 0; j < letters.length; j++) {
-                const code = letters[i] + letters[j];
-                if (isLanguageCodeSupported(code)) {
-                    const langDisplayName = getLanguageDisplayName(code);
-                    if (langDisplayName)
-                        supportedLanguages.push({ code: code, name: langDisplayName });
-                }
+    function addPendingSlot() {
+        pending = [...pending, ""];
+    }
+
+    function removePendingSlot(index: number) {
+        pending = pending.filter((_, i) => i !== index);
+    }
+
+    function askRemoval(language: string) {
+        confirming = { from: language };
+        confirmOpen = true;
+    }
+
+    /**
+     * Changing a registered language means moving its content to the new one
+     * and dropping the old one, so it goes through confirmation too
+     */
+    function askReplacement(from: string, to: string) {
+        if (!to || to === from) return;
+
+        confirming = { from, to };
+        confirmOpen = true;
+    }
+
+    // Dialog dismissed (Cancel or the X) without going through with it
+    $effect(() => {
+        if (!confirmOpen && confirming) {
+            confirming = undefined;
+            resetKey += 1;
+        }
+    });
+
+    /**
+     * Apply the confirmed removal or replacement
+     */
+    async function handleConfirmation() {
+        const pendingChange = confirming;
+        confirmOpen = false;
+        confirming = undefined;
+
+        // A removal without a language would delete the whole Project
+        if (!pendingChange?.from || busy) return;
+
+        busy = true;
+        try {
+            if (pendingChange.to) {
+                await onReplace(pendingChange.from, pendingChange.to);
+            } else {
+                await onRemove(pendingChange.from);
             }
+        } finally {
+            busy = false;
+            resetKey += 1;
         }
-
-        return supportedLanguages;
     }
 </script>
 
 <div class="space-y-4">
     <!-- Primary Language -->
-    <Select
-        bind:value={primaryLanguage}
-        id="primary-language-{primaryLanguage}"
-        labelText={$t("pages.project.edit.configuration.languages.primaryLabel")}
-        required={true}
-        error={showError ? errors.languages : undefined}
-        onBlur={handleBlur}
-        onChange={handlePrimaryChange}
-    >
-        <option value="">{$t("common.select")}</option>
-        {#each availableLanguages as lang}
-            <option value={lang.code} disabled={isLanguageDisabled(lang.code, primaryLanguage)}
-                >{lang.name}</option
-            >
-        {/each}
-    </Select>
+    {#key resetKey}
+        <Select
+            value={primary}
+            id="primary-language"
+            class="cursor-pointer"
+            labelText={$t("pages.project.edit.configuration.languages.primaryLabel")}
+            required={true}
+            disabled={busy}
+            onChange={(value) => askReplacement(primary, value)}
+        >
+            {#each availableLanguages as lang}
+                <option value={lang.code} disabled={isLanguageTaken(lang.code)}>{lang.name}</option>
+            {/each}
+        </Select>
+    {/key}
 
-    <!-- Secondary Languages -->
-    {#each secondaryLanguages as secondary, index}
+    <!-- Registered Secondary Languages -->
+    {#each secondaries as secondary (secondary)}
         <div class="flex gap-2">
             <div class="flex-1">
-                <Select
-                    bind:value={secondaryLanguages[index]}
-                    id="secondary-language-{index}-{secondary}"
-                    labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
-                    onChange={(value) => handleSecondaryChange(index, value)}
-                >
-                    <option value="">{$t("common.select")}</option>
-                    {#each availableLanguages as lang}
-                        <option
-                            value={lang.code}
-                            disabled={isLanguageDisabled(lang.code, secondaryLanguages[index])}
-                            >{lang.name}</option
-                        >
-                    {/each}
-                </Select>
+                {#key resetKey}
+                    <Select
+                        value={secondary}
+                        id="secondary-language-{secondary}"
+                        class="cursor-pointer"
+                        labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
+                        disabled={busy}
+                        onChange={(value) => askReplacement(secondary, value)}
+                    >
+                        {#each availableLanguages as lang}
+                            <option value={lang.code} disabled={isLanguageTaken(lang.code)}
+                                >{lang.name}</option
+                            >
+                        {/each}
+                    </Select>
+                {/key}
             </div>
-            <div class="flex items-end pb-2">
+            <div class="flex items-center">
                 <button
                     type="button"
-                    onclick={() => removeSecondaryLanguage(index)}
-                    data-testid="language-remove-btn-{index}"
-                    class="hover:bg-light-muted text-secondary hover:text-tertiary rounded-lg p-2 transition-colors"
+                    onclick={() => askRemoval(secondary)}
+                    disabled={busy || secondary === current}
+                    data-testid="language-remove-btn-{secondary}"
+                    class="text-secondary cursor-pointer rounded-lg p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label={$t("common.remove")}
+                    title={secondary === current
+                        ? $t("pages.project.edit.configuration.languages.removeCurrent")
+                        : $t("common.remove")}
                 >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
+                    <Close class="size-4" />
                 </button>
             </div>
         </div>
     {/each}
 
-    <!-- Add Secondary Language Button -->
+    <!-- Slots for languages not registered yet -->
+    {#each pending as slot, index}
+        <div class="flex gap-2">
+            <div class="flex-1">
+                <Select
+                    value={slot}
+                    id="pending-language-{index}"
+                    class="cursor-pointer"
+                    labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
+                    disabled={busy}
+                    onChange={(value) => handlePendingChange(index, value)}
+                >
+                    <option value="">{$t("common.select")}</option>
+                    {#each availableLanguages as lang}
+                        <option value={lang.code} disabled={isLanguageTaken(lang.code)}
+                            >{lang.name}</option
+                        >
+                    {/each}
+                </Select>
+            </div>
+            <div class="flex items-center">
+                <button
+                    type="button"
+                    onclick={() => removePendingSlot(index)}
+                    disabled={busy}
+                    data-testid="language-cancel-btn-{index}"
+                    class="text-secondary cursor-pointer rounded-lg p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
+                    aria-label={$t("common.cancel")}
+                >
+                    <Close class="size-4" />
+                </button>
+            </div>
+        </div>
+    {/each}
+
+    <!-- Add Language Button -->
     <button
         type="button"
-        onclick={addSecondaryLanguage}
+        onclick={addPendingSlot}
+        disabled={busy || pending.length > 0}
         data-testid="language-add-btn"
-        class="text-secondary hover:text-tertiary flex items-center gap-2 text-base font-bold transition-colors"
+        class="text-secondary flex cursor-pointer items-center gap-2 text-base font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
-        </svg>
+        <PlusIcon class="size-5" />
         {$t("pages.project.edit.configuration.languages.addButton")}
     </button>
 </div>
+
+<DeleteModal
+    variant={confirming?.to ? "configuration.languages.replace" : "configuration.languages"}
+    bind:open={confirmOpen}
+    onclick={handleConfirmation}
+/>

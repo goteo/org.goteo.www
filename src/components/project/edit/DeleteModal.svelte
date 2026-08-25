@@ -11,7 +11,12 @@
         onclick,
     }: {
         open: boolean;
-        variant: "rewards" | "collaborations" | "budget";
+        variant:
+            | "rewards"
+            | "collaborations"
+            | "budget"
+            | "configuration.languages"
+            | "configuration.languages.replace";
         onclick: () => void;
     } = $props();
 </script>
