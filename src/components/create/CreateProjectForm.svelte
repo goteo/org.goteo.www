@@ -9,6 +9,7 @@
         apiCategoriesIdOrSlugGetUrl,
         apiProjectsPost,
     } from "../../openapi/client";
+    import { client } from "../../openapi/client/client.gen";
     import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
     import { getValidationParams } from "../../utils/validation";
     import {
@@ -25,7 +26,6 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
-    import { client } from "../../openapi/client/client.gen";
 
     let { categories }: { categories: Category[] } = $props();
 
