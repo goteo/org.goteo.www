@@ -1612,13 +1612,13 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * URL to an image resource to be displayed as header.
-     */
-    cover?: string;
-    /**
      * List of Categories.
      */
     categories: Array<string>;
+    /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory?: Territory;
     /**
      * Deadlines and important Project dates.
      */
@@ -1639,13 +1639,13 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * URL to an image resource to be displayed as header.
-     */
-    cover?: string;
-    /**
      * List of Categories.
      */
     categories: Array<string>;
+    /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory?: TerritoryJsonld;
     /**
      * Deadlines and important Project dates.
      */
@@ -2423,7 +2423,7 @@ export type Territory = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country?: string | null;
+    country: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).
@@ -2453,7 +2453,7 @@ export type TerritoryJsonld = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country?: string | null;
+    country: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).
