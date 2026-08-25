@@ -4,6 +4,7 @@
     import { t } from "../../i18n/store";
     import { type Category, type ApiProjectsPostData, type Territory } from "../../openapi/client";
     import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
+    import { getValidationParams } from "../../utils/validation";
     import {
         zCreateProjectForm,
         zProjectCampaignRelease,
@@ -18,7 +19,6 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
-    import { getValidationParams } from "../../utils/validation";
 
     let { categories }: { categories: Category[] } = $props();
 

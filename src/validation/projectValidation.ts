@@ -19,7 +19,7 @@ export const zCreateProjectForm = zProjectProjectCreationDto.superRefine((form, 
         return;
     }
 
-    const release = zProjectCampaignRelease.safeParse(new Date(form.calendar?.release!));
+    const release = zProjectCampaignRelease.safeParse(new Date(form.calendar.release));
 
     if (!release.success) {
         for (const issue of release.error.issues) {
