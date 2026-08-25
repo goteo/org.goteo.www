@@ -8,31 +8,31 @@
         selected = $bindable([]),
         selectedIds = $bindable([]),
         max,
-        onchange,
+        onChange,
         error = undefined,
     }: {
         options: Category[];
         selected?: Category[];
         selectedIds?: (number | string)[];
         max?: number;
-        onchange?: (selected: Category[], option: Category) => void;
+        onChange?: (selected: Category[], option: Category) => void;
         error?: string;
     } = $props();
 
     function isSelected(option: Category): boolean {
-        return selectedIds.includes(option.id);
+        return selectedIds.includes(option.id!);
     }
 
     function handleClick(option: Category): void {
         if (isSelected(option)) {
             selectedIds = selectedIds.filter((id) => id !== option.id);
         } else {
-            selectedIds = selectedIds.concat(option.id);
+            selectedIds = selectedIds.concat(option.id!);
         }
 
-        selected = options.filter((option) => selectedIds.includes(option.id));
+        selected = options.filter((option) => selectedIds.includes(option.id!));
 
-        onchange?.(selected, option);
+        onChange?.(selected, option);
     }
 
     function calcTagType(option: Category) {
