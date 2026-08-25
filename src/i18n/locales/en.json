@@ -35,6 +35,16 @@
       }
     },
     "validation": {
+      "_invalid_type": "",
+      "_too_big": "",
+      "too_small": "\"{{ value }}\" is too short: {{ min }} or more characters expected.",
+      "invalid_format": "\"{{ value }}\" has an invalid format: it does not match the regex pattern `{{ pattern }}`.",
+      "_not_multiple_of": "",
+      "_unrecognized_keys": "",
+      "_invalid_union": "",
+      "_invalid_key": "",
+      "_invalid_element": "",
+      "_invalid_value": "",
       "missingRequiredFields": "One or more required fields are empty",
       "project": {
         "terms": {
@@ -629,6 +639,13 @@
     "project": {
       "edit": {
         "title": "Editing project: {{ project }}",
+        "validation": {
+          "titleBadFormat": "The title must contain at least one letter."
+        },
+        "header": {
+          "titlePlaceholder": "Project title",
+          "unsentChanges": "There are unsent changes"
+        },
         "tabs": {
           "configuration": "Configuration",
           "campaign": "Campaign information",
@@ -646,6 +663,11 @@
             "primaryLabel": "Main content language",
             "secondaryLabel": "Secondary content language",
             "addButton": "Add language"
+          },
+          "release": {
+            "title": "Campaign launch date",
+            "subtitle": "Please note that crowdfunding campaigns have a minimum duration of 40 days",
+            "passed": "This project has already launched as a campaign and its launch date cannot be changed"
           },
           "rounds": {
             "title": "Choose the rounds your campaign will have",
@@ -872,17 +894,6 @@
           },
           "continue": "Next step",
           "locationPlaceholder": "E.g.: Calle Gran Vía 28, Madrid"
-        },
-        "errors": {
-          "session": {
-            "title": "Session expired"
-          },
-          "storage": {
-            "title": "Storage error",
-            "save_failed": "Changes could not be saved",
-            "quota_exceeded": "Local storage full",
-            "close": "Close"
-          }
         }
       },
       "create": {
