@@ -877,8 +877,8 @@ export const zProjectProjectCreationDto = z.object({
     title: z.string().min(3).regex(/^(.*[a-zA-Z]{1,}.*)$/),
     subtitle: z.string(),
     categories: z.array(z.string()).min(1).max(2),
-    territory: zTerritory.optional(),
-    calendar: zProjectCalendar.optional(),
+    territory: zTerritory,
+    calendar: zProjectCalendar,
     status: z.enum([
         'in_draft',
         'to_campaign_review',
@@ -1005,8 +1005,8 @@ export const zProjectProjectCreationDtoJsonld = z.object({
     title: z.string().min(3).regex(/^(.*[a-zA-Z]{1,}.*)$/),
     subtitle: z.string(),
     categories: z.array(z.string()).min(1).max(2),
-    territory: zTerritoryJsonld.optional(),
-    calendar: zProjectCalendarJsonld.optional(),
+    territory: zTerritoryJsonld,
+    calendar: zProjectCalendarJsonld,
     status: z.enum([
         'in_draft',
         'to_campaign_review',

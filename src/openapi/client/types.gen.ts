@@ -1618,11 +1618,11 @@ export type ProjectProjectCreationDto = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory?: Territory;
+    territory: Territory;
     /**
      * Deadlines and important Project dates.
      */
-    calendar?: ProjectCalendar;
+    calendar: ProjectCalendar;
     readonly status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1645,11 +1645,11 @@ export type ProjectProjectCreationDtoJsonld = {
     /**
      * ISO 3166 data about the Project's territory of interest.
      */
-    territory?: TerritoryJsonld;
+    territory: TerritoryJsonld;
     /**
      * Deadlines and important Project dates.
      */
-    calendar?: ProjectCalendarJsonld;
+    calendar: ProjectCalendarJsonld;
     readonly status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 

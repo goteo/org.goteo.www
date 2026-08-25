@@ -24,7 +24,7 @@ export function validate<T>(value: unknown, schema: z.ZodType<T>): ValidationErr
     }));
 }
 
-function getValidationParams(issue: z.core.$ZodIssue): Record<string, string | number> | undefined {
+export function getValidationParams(issue: z.core.$ZodIssue): Record<string, string | number> | undefined {
     switch (issue.code) {
         case "too_small":
             return { min: Number(issue.minimum) };

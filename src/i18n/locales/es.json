@@ -919,7 +919,8 @@
         },
         "release": {
           "title": "Fecha de salida a campaña",
-          "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
+          "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)",
+          "label": "Fecha de salida aproximada"
         },
         "terms": {
           "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
@@ -928,7 +929,10 @@
         "submitting": "Enviando…",
         "submitSuccess": "Proyecto creado",
         "validation": {
-          "titleBadFormat": "El título debe contener al menos una letra."
+          "titleBadFormat": "El título debe contener al menos una letra.",
+          "categoriesNotEnough": "Debes seleccionar al menos {{ min }} categoría(s).",
+          "territoryMissing": "Debes especificar un lugar.",
+          "releaseMissing": "Debes especificar una fecha de salida aproximada"
         }
       },
       "view": {

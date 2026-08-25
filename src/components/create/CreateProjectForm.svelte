@@ -2,7 +2,7 @@
     import { twJoin } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
-    import { type Category, type ApiProjectsPostData } from "../../openapi/client";
+    import { type Category, type ApiProjectsPostData, type Territory } from "../../openapi/client";
     import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
     import {
         zCreateProjectForm,
@@ -18,13 +18,17 @@
     import Title from "../library/typography/Title.svelte";
 
     import type z from "zod";
+    import { getValidationParams } from "../../utils/validation";
 
     let { categories }: { categories: Category[] } = $props();
 
-    let form: ApiProjectsPostData["body"] = $state({
+    let form: Partial<ApiProjectsPostData["body"]> = $state({
         title: "",
         subtitle: "",
         categories: [],
+        calendar: {
+            release: CAMPAIGN_MIN_START_DATE.toISOString(),
+        },
     });
 
     let validation: Partial<Record<keyof typeof form, z.core.$ZodIssue[]>> = $state({});
@@ -51,7 +55,28 @@
             return $t("pages.project.create.validation.titleBadFormat");
         }
 
-        return $t(`system.validation.${issue.code}`);
+        if (issue.code === "too_small" && field === "categories") {
+            return $t("pages.project.create.validation.categoriesNotEnough", {
+                min: String(issue.minimum),
+            });
+        }
+
+        if (issue.code === "invalid_type" && field === "territory") {
+            return $t("pages.project.create.validation.territoryMissing");
+        }
+
+        if (issue.code === "invalid_type" && field === "calendar") {
+            return $t("pages.project.create.validation.releaseMissing");
+        }
+
+        return $t(`system.validation.${issue.code}`, {
+            value: String(form[field]),
+            ...getValidationParams(issue),
+        });
+    }
+
+    function hasError(field: keyof typeof form) {
+        return validation[field] && validation[field].length > 0;
     }
 
     function handleRelease(release: Date) {
@@ -60,6 +85,12 @@
         const result = zProjectCampaignRelease.safeParse(new Date(release));
 
         validation["calendar"] = result.error?.issues ?? [];
+    }
+
+    function handleTerritory(territory: Territory) {
+        form.territory = territory;
+
+        validate("territory");
     }
 
     function handleSubmit(e: SubmitEvent) {
@@ -119,8 +150,17 @@
             <Title level={2} variant="subsection">
                 {$t("pages.project.create.categories.title")}
             </Title>
-            <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("pages.project.create.categories.subtitle")}
+            <p
+                class={twJoin(
+                    "transition-all duration-300 ease-in-out",
+                    hasError("categories") ? "text-tertiary" : "text-black",
+                )}
+            >
+                {#if hasError("categories")}
+                    {getValidationMessage("categories")}
+                {:else}
+                    {$t("pages.project.create.address.subtitle")}
+                {/if}
             </p>
             <CategorySelect max={2} options={categories} />
         </div>
@@ -131,7 +171,11 @@
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.address.subtitle")}
             </p>
-            <TerritoryInput placeholder={$t("pages.project.create.address.placeholder")} />
+            <TerritoryInput
+                placeholder={$t("pages.project.create.address.placeholder")}
+                onInput={handleTerritory}
+                error={getValidationMessage("territory")}
+            />
         </div>
         <div class="flex flex-col gap-4">
             <Title level={2} variant="subsection">
@@ -143,7 +187,9 @@
             <DateInput
                 min={CAMPAIGN_MIN_START_DATE}
                 max={CAMPAIGN_MAX_END_DATE}
-                value={CAMPAIGN_MIN_START_DATE}
+                value={new Date(form.calendar?.release!)}
+                helperText={$t("pages.project.create.release.label")}
+                required
                 onInput={handleRelease}
                 error={getValidationMessage("calendar")}
             />
