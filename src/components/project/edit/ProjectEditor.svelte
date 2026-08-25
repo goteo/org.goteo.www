@@ -17,7 +17,6 @@
     import { t } from "../../../i18n/store";
     import { apiProjectsIdPatch } from "../../../openapi/client";
     import { zProjectProjectUpdationDto } from "../../../openapi/client/zod.gen";
-    import { iso639_1Codes } from "../../../utils/lang.types";
     import { validate } from "../../../utils/validation";
     import LanguagesDropdown from "../../header/LanguagesDropdown.svelte";
     import EditIcon from "../../icons/actions/Edit.svelte";
@@ -132,7 +131,7 @@
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-4">
                 <LanguagesDropdown
-                    languages={iso639_1Codes}
+                    languages={$draft.latest.locales ?? [$draft.lang]}
                     selected={$draft.lang}
                     onSelect={onLangChange}
                 />
