@@ -28,7 +28,7 @@
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >
-    <div class="flex flex-col gap-4">
+    <div class="flex flex-col gap-2">
         <Title
             level={3}
             variant="subsection"
@@ -50,7 +50,9 @@
         </Title>
 
         {#if reward.description}
-            <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
+            <div
+                class="marked-content line-clamp-6 max-h-[11.2em] overflow-hidden mask-[linear-gradient(to_bottom,black_80%,transparent)] text-sm whitespace-pre-line text-gray-800"
+            >
                 {#await renderMarkdown(reward.description) then description}
                     {@html description}
                 {/await}

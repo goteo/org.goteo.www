@@ -33,7 +33,7 @@
 </script>
 
 <li
-    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-8 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-grey flex basis-1/3 flex-col items-center justify-between gap-4 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
     class:opacity-50={!isAvailable}
     class:cursor-not-allowed={!isAvailable}
 >
@@ -50,7 +50,9 @@
         </Title>
 
         {#if reward.description}
-            <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
+            <div
+                class="marked-content line-clamp-6 max-h-[11.2em] overflow-hidden mask-[linear-gradient(to_bottom,black_80%,transparent)] text-sm whitespace-pre-line text-gray-800"
+            >
                 {#await renderMarkdown(reward.description) then description}
                     {@html description}
                 {/await}
