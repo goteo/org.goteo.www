@@ -131,7 +131,7 @@
             <!-- Right section: Action Buttons -->
             <div class="flex shrink-0 items-center gap-4">
                 <LanguagesDropdown
-                    languages={$draft.latest.locales ?? [$draft.lang]}
+                    languages={$draft.languages}
                     selected={$draft.lang}
                     onSelect={onLangChange}
                 />
