@@ -7,7 +7,6 @@
     import { t } from "../../../i18n/store";
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
@@ -19,17 +18,16 @@
 
     import type { Project, ProjectReward } from "../../../openapi/client";
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
+    import MoneyInput from "../../library/inputs/MoneyInput.svelte";
 
     let {
         open = $bindable(false),
-        showToast = $bindable(false),
         project,
         reward,
         onSave,
         onDelete,
     }: {
         open: boolean;
-        showToast: boolean;
         project: Project;
         reward: ProjectReward | null;
         onSave: (data: ProjectReward | null) => void;
@@ -112,17 +110,6 @@
         role="presentation"
         onclick={(e) => e.stopPropagation()}
     >
-        {#if Object.keys($validationErrors).length === 1}
-            {#each Object.values($validationErrors) as validationError}
-                <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
-                    {$t(validationError)}
-                </Toast>
-            {/each}
-        {:else if Object.keys($validationErrors).length >= 2}
-            <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
-                {$t("system.validation.missingRequiredFields")}
-            </Toast>
-        {/if}
         <Title level={2} variant="subsection">
             {$t("pages.project.edit.rewards.modal.title")}
         </Title>
@@ -146,13 +133,11 @@
                 error={descriptionError}
                 onBlur={() => (formTouched = true)}
             />
-            <TextInput
-                bind:value={moneyAmount}
-                type="number"
+            <MoneyInput
+                amount={moneyAmount}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
-                placeholder={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
+                helperText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
                 error={moneyError}
-                onBlur={() => (formTouched = true)}
             />
             <div class="flex flex-col gap-6">
                 <FileUpload onUpload={(file) => (cover = file)} />

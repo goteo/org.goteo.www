@@ -61,7 +61,6 @@
     }
 
     function emit(next: MoneyInput) {
-        console.log(next);
         amount = next.amount;
         currency = next.currency;
         onInput?.(next);

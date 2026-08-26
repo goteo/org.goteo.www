@@ -3,12 +3,6 @@
     import DeleteModal from "./DeleteModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
-    import {
-        addReward,
-        deleteReward,
-        updateReward,
-        validationErrors,
-    } from "../../../stores/drafts/projectDraft";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import InfinityIcon from "../../icons/Infinity.svelte";

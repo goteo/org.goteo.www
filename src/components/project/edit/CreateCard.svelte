@@ -1,8 +1,6 @@
 <script lang="ts">
     import { twJoin } from "tailwind-merge";
 
-    import BudgetModal from "./BudgetModal.svelte";
-    import CollabsModal from "./CollabsModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
@@ -16,11 +14,10 @@
         project: Project;
         title: string;
         description: string;
-        onclick: () => void;
         variant: "reward" | "collab" | "budget";
-        open: boolean;
-        showToast: boolean;
-        onSave: (data: any, files?: any) => void;
+        open?: boolean;
+        onClick?: () => void;
+        onSave?: (data: any, files?: any) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
@@ -30,10 +27,9 @@
         project,
         title,
         description,
-        onclick,
+        onClick,
         variant,
         open = $bindable(false),
-        showToast = $bindable(false),
         onSave,
         defaultDeadline,
         disabled = false,
@@ -43,11 +39,9 @@
     let showDisabledToast = $state(false);
 
     function handleClick() {
-        if (disabled) {
-            showDisabledToast = true;
-            return;
-        }
-        onclick();
+        open = true;
+
+        onClick?.();
     }
 </script>
 
@@ -99,9 +93,9 @@
 {/if}
 
 {#if !disabled && variant === "reward"}
-    <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />
-{:else if !disabled && variant === "collab"}
-    <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
+    <RewardsModal bind:open onSave={(data) => onSave?.(data)} reward={null} {project} />
+<!-- {:else if !disabled && variant === "collab"}
+    <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
 {:else if !disabled && variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} {defaultDeadline} />
+    <BudgetModal bind:open onSave={() => onSave?.()} budgetItem={null} {defaultDeadline} /> -->
 {/if}
