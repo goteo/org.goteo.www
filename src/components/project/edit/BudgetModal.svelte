@@ -5,7 +5,7 @@
     import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
-    import { defaultCurrency, getUnit } from "../../../utils/currencies";
+    import { DEFAULT_CURRENCY, getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
@@ -81,8 +81,8 @@
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,
             money: {
-                amount: Number(amount) * getUnit(defaultCurrency()),
-                currency: defaultCurrency(),
+                amount: Number(amount) * getUnit(DEFAULT_CURRENCY),
+                currency: DEFAULT_CURRENCY,
             },
             type: selectedBudgetType!,
         });
