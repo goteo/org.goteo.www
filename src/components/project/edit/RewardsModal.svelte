@@ -7,10 +7,8 @@
     import { t } from "../../../i18n/store";
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
-    import { getUnit } from "../../../utils/currencies";
-    import { toUnitsNumber } from "../../../utils/money";
+    import { DEFAULT_CURRENCY } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
-    import Toast from "../../library/feedback/Toast.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
@@ -37,36 +35,12 @@
     let title = $state(untrack(() => reward?.title ?? ""));
     let description = $state(untrack(() => reward?.description ?? ""));
 
-    let moneyAmount = $state(
-        untrack(() => (reward?.money.amount ? toUnitsNumber(reward.money) : 0)),
-    );
+    let money = $state(untrack(() => reward?.money || { amount: 0, currency: DEFAULT_CURRENCY }));
     let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
     let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
     let cover = $state<UploadedObject>();
 
     let openDeleteModal = $state(false);
-
-    let formTouched = $state(false);
-
-    const isFormValid = $derived(
-        title.trim() !== "" && description.trim() !== "" && moneyAmount > 0,
-    );
-
-    const titleError = $derived(
-        formTouched && title.trim() === ""
-            ? $t("pages.project.edit.rewards.modal.validation.title")
-            : undefined,
-    );
-    const descriptionError = $derived(
-        formTouched && description.trim() === ""
-            ? $t("pages.project.edit.rewards.modal.validation.description")
-            : undefined,
-    );
-    const moneyError = $derived(
-        formTouched && moneyAmount <= 0
-            ? $t("pages.project.edit.rewards.modal.validation.amount")
-            : undefined,
-    );
 
     function handleSaveOrCreate() {
         const projectIri = client.buildUrl({
@@ -74,17 +48,12 @@
             path: { idOrSlug: project.slug },
         });
 
-        const currency = reward?.money.currency || import.meta.env.PUBLIC_DEFAULT_CURRENCY;
-
         onSave({
             project: projectIri,
             title,
             description,
             cover: cover?.url,
-            money: {
-                amount: Math.round(moneyAmount * getUnit(currency)),
-                currency: currency,
-            },
+            money: money,
             isFinite: unlimited ? false : true,
             unitsTotal: unlimited ? null : rewardCount,
         });
@@ -121,23 +90,18 @@
                 bind:value={title}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.title")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
-                error={titleError}
-                onBlur={() => (formTouched = true)}
             />
             <TextArea
-                id="reward-description"
                 bind:value={description}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.description")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.description")}
                 rows={5}
-                error={descriptionError}
-                onBlur={() => (formTouched = true)}
             />
             <MoneyInput
-                amount={moneyAmount}
+                amount={money.amount}
+                currency={money.currency}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
                 helperText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
-                error={moneyError}
             />
             <div class="flex flex-col gap-6">
                 <FileUpload onUpload={(file) => (cover = file)} />
@@ -145,7 +109,7 @@
             </div>
         </div>
         <div class="flex items-center justify-end gap-4">
-            {#if reward !== null && onDelete}
+            {#if reward && onDelete}
                 <Button kind="secondary" onclick={() => (openDeleteModal = true)} class="w-fit">
                     {$t("common.remove")}
                 </Button>
@@ -155,7 +119,7 @@
                     onclick={() => handleDeleteClick()}
                 />
             {/if}
-            <Button onclick={() => handleSaveOrCreate()} disabled={!isFormValid} class="w-fit">
+            <Button onclick={() => handleSaveOrCreate()} class="w-fit">
                 {$t("common.continue")}
             </Button>
         </div>
