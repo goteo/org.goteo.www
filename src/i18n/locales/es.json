@@ -663,18 +663,7 @@
             "primaryLabel": "Idioma principal del contenido",
             "secondaryLabel": "Idioma secundario del contenido",
             "addButton": "Añadir idioma",
-            "deleteModal": {
-              "title": "¿Eliminar este idioma de la campaña?",
-              "description": "Se borrará todo el contenido de la campaña escrito en este idioma. Esta acción no se puede deshacer."
-            },
-            "error": "No se ha podido guardar el cambio de idiomas. Inténtalo de nuevo.",
-            "removeCurrent": "No puedes eliminar el idioma que estás editando. Cambia de idioma en la barra superior.",
-            "replace": {
-              "deleteModal": {
-                "title": "¿Cambiar el idioma del contenido?",
-                "description": "El contenido escrito en el idioma anterior pasará al nuevo y el anterior se eliminará de la campaña. Esta acción no se puede deshacer."
-              }
-            }
+            "removeCurrent": "No puedes eliminar el idioma que estás editando. Cambia de idioma en la barra superior."
           },
           "release": {
             "title": "Fecha de salida a campaña",
