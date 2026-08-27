@@ -110,7 +110,7 @@
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
                 error={fieldErrors.startsAt &&
                     $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
-                    onInput={handleDateSelect}
+                onInput={handleDateSelect}
             />
 
             <DateInput
