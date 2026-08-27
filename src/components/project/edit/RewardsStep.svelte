@@ -10,7 +10,6 @@
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
-
     let { draft }: { draft: ProjectDraftStore } = $props();
 
     let rewards = withoutCache(() =>
