@@ -13,6 +13,7 @@ import HomeBanner from "../../components/home/HomeBanner.svelte";
 // import Stories from "../../components/home/Stories.svelte";
 // import Resources from "../../components/home/Resources.astro";
 import { isSupportedLocale } from "../../i18n/locales";
+import { bannerRepository } from "../../repositories/banners";
 
 const { locale } = Astro.params;
 
@@ -21,21 +22,27 @@ if (locale && !isSupportedLocale(locale)) {
 }
 
 const { t, lang } = Astro.locals;
+
+const activeBanners = await bannerRepository.getActive();
 ---
 
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
     <App client:load locale={lang} class="mb-20 gap-18">
         <Hero />
-        <div class="wrapper">
-            <HomeBanner
-                title={t("pages.home.banner.title")}
-                description={t("pages.home.banner.description")}
-                ctaText={t("pages.home.banner.ctaText")}
-                ctaLink={"/about"}
-                closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
-                client:load
-            />
-        </div>
+        {activeBanners.length > 0 && (
+            <div class="wrapper flex flex-col gap-4">
+                {activeBanners.map((banner) => (
+                    <HomeBanner
+                        title={banner.title}
+                        description={banner.content}
+                        ctaText={banner.ctaText}
+                        ctaLink={banner.ctaLink}
+                        closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
+                        client:load
+                    />
+                ))}
+            </div>
+        )}
         <Campaigns />
         <Blog />
         <Stats />
