@@ -1,5 +1,4 @@
 <script lang="ts">
-    import CreateCard from "./CreateCard.svelte";
     import DeleteModal from "./DeleteModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
@@ -16,35 +15,23 @@
     let {
         project,
         reward,
-        index,
-        loading = $bindable(false),
     }: {
         project: Project;
         reward: ProjectReward;
-        index?: number;
-        loading: boolean;
     } = $props();
 
     let openModal = $state(false);
     let openDeleteModal = $state(false);
-    let showModalErrorToast = $state(false);
 
     function handleSaveReward(data: ProjectReward | null) {
         if (!data) return;
         let errors;
-
-        if (index !== undefined) {
-            errors = updateReward(index, data);
-        } else {
-            errors = addReward(data);
-        }
 
         if (errors === undefined) {
             errors = {};
         }
 
         if (Object.keys(errors).length > 0) {
-            showModalErrorToast = true;
             return;
         }
 
@@ -52,9 +39,6 @@
     }
 
     function handleDeleteReward() {
-        if (index === undefined) return;
-
-        deleteReward(index);
         openModal = false;
         openDeleteModal = false;
     }
@@ -128,10 +112,9 @@
         {$t("common.edit")}
     </Button>
     <RewardsModal
-        bind:open={openModal}
-        bind:showToast={showModalErrorToast}
         {project}
         {reward}
+        bind:open={openModal}
         onSave={handleSaveReward}
         onDelete={handleDeleteReward}
     />
