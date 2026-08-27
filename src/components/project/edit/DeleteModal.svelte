@@ -8,12 +8,16 @@
     let {
         open = $bindable(false),
         variant,
+        keyPrefix,
         onclick,
     }: {
         open: boolean;
-        variant: "rewards" | "collaborations" | "budget";
+        variant?: "rewards" | "collaborations" | "budget";
+        keyPrefix?: string;
         onclick: () => void;
     } = $props();
+
+    const prefix = $derived(keyPrefix ?? `pages.project.edit.${variant}.deleteModal`);
 </script>
 
 <Modal
@@ -26,11 +30,11 @@
 >
     {#snippet header()}
         <Title level={2} variant="subsection">
-            {$t(`pages.project.edit.${variant}.deleteModal.title`)}
+            {$t(`${prefix}.title`)}
         </Title>
     {/snippet}
     <p class="text-content text-base font-normal">
-        {$t(`pages.project.edit.${variant}.deleteModal.description`)}
+        {$t(`${prefix}.description`)}
     </p>
     {#snippet footer()}
         <Button kind="ghost" onclick={() => (open = false)} class="w-fit"

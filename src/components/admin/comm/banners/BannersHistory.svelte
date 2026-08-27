@@ -1,21 +1,27 @@
 <script lang="ts">
+    import { actions } from "astro:actions";
     import { Modal, TableBodyCell } from "flowbite-svelte";
 
     import { locale, t } from "../../../../i18n/store";
     import { formatDate } from "../../../../utils/dates";
     import HomeBanner from "../../../home/HomeBanner.svelte";
+    import Trash from "../../../icons/actions/Trash.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
     import DataTable from "../../../library/tables/DataTable.svelte";
     import Title from "../../../library/typography/Title.svelte";
+    import DeleteModal from "../../../project/edit/DeleteModal.svelte";
 
     import type { BannerRecord } from "../../../../repositories/banners";
     import type { DataTableHeader } from "../../../library/tables/DataTable.svelte";
 
     interface Props {
         rows: BannerRecord[];
+        onError?: (message: string) => void;
     }
 
-    let { rows }: Props = $props();
+    let { rows, onError }: Props = $props();
+
+    let list = $state(rows);
 
     const headers: DataTableHeader[] = [
         { key: "pages.admin.comm.banners.history.headers.title", sortable: false },
@@ -25,19 +31,22 @@
             sortable: false,
         },
         { key: "pages.admin.comm.banners.history.headers.endAt", sortable: false },
-        { key: "", sortable: false, class: "w-25" },
+        { key: "", sortable: false, class: "w-35" },
     ];
 
     const itemsPerPage = 10;
     let currentPage = $state(1);
 
     const paginatedRows = $derived(
-        rows.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
+        list.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage),
     );
 
     let isLoading = $state(false);
     let isModalOpen = $state(false);
     let selectedRow = $state<BannerRecord | null>(null);
+
+    let isDeleteModalOpen = $state(false);
+    let rowToDelete = $state<BannerRecord | null>(null);
 
     function openModal(row: BannerRecord) {
         selectedRow = row;
@@ -47,6 +56,37 @@
     function closeModal() {
         isModalOpen = false;
         selectedRow = null;
+    }
+
+    function openDeleteModal(row: BannerRecord) {
+        rowToDelete = row;
+        isDeleteModalOpen = true;
+    }
+
+    async function confirmDelete() {
+        const banner = rowToDelete;
+
+        if (!banner) return;
+
+        const formData = new FormData();
+        formData.set("id", String(banner.id));
+
+        const { error } = await actions.deleteBanner(formData);
+
+        isDeleteModalOpen = false;
+        rowToDelete = null;
+
+        if (error) {
+            onError?.(error.message);
+            return;
+        }
+
+        list = list.filter((b) => b.id !== banner.id);
+
+        // Deleting the last row of the last page would leave an empty table.
+        if (currentPage > 1 && (currentPage - 1) * itemsPerPage >= list.length) {
+            currentPage -= 1;
+        }
     }
 </script>
 
@@ -63,7 +103,7 @@
     {isLoading}
     emptyMessage="pages.admin.comm.banners.history.noData"
     {currentPage}
-    totalItems={rows.length}
+    totalItems={list.length}
     {itemsPerPage}
     paginationPrefix="common.pagination"
     onPageChange={(page) => (currentPage = page)}
@@ -83,13 +123,25 @@
         <TableBodyCell class="border-variant1 border-t border-b p-4">
             {formatDate(row.endsAt, $locale)}
         </TableBodyCell>
-        <TableBodyCell class="border-variant1 w-25 rounded-r-md border-t border-r border-b p-4">
-            <button class="flex cursor-pointer items-center gap-2" onclick={() => openModal(row)}>
-                <span class="text-secondary self-center text-center underline">
-                    {$t("pages.admin.comm.banners.history.actions.view")}
-                </span>
-                <Chevron direction="right" class="size-4" />
-            </button>
+        <TableBodyCell class="border-variant1 w-35 rounded-r-md border-t border-r border-b p-4">
+            <div class="flex items-center gap-4">
+                <button
+                    class="flex cursor-pointer items-center gap-2"
+                    onclick={() => openModal(row)}
+                >
+                    <span class="text-secondary self-center text-center underline">
+                        {$t("pages.admin.comm.banners.history.actions.view")}
+                    </span>
+                    <Chevron direction="right" class="size-4" />
+                </button>
+                <button
+                    class="text-secondary cursor-pointer transition-transform duration-200 hover:scale-110"
+                    aria-label={$t("common.delete")}
+                    onclick={() => openDeleteModal(row)}
+                >
+                    <Trash class="size-5" />
+                </button>
+            </div>
         </TableBodyCell>
     {/snippet}
 </DataTable>
@@ -127,3 +179,9 @@
         />
     {/if}
 </Modal>
+
+<DeleteModal
+    bind:open={isDeleteModalOpen}
+    keyPrefix="pages.admin.comm.banners.history.deleteModal"
+    onclick={confirmDelete}
+/>

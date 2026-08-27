@@ -1795,6 +1795,10 @@
             "modal": {
               "title": "Anuncio publicado el {{date}}",
               "description": "Aquí puedes ver como fue el anuncio"
+            },
+            "deleteModal": {
+              "title": "¿Borrar este anuncio?",
+              "description": "El anuncio se eliminará de forma permanente y desaparecerá del histórico. Esta acción no se puede deshacer."
             }
           }
         }
