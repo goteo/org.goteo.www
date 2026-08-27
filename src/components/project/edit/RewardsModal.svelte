@@ -32,31 +32,30 @@
         onDelete?: () => void;
     } = $props();
 
-    let title = $state(untrack(() => reward?.title ?? ""));
-    let description = $state(untrack(() => reward?.description ?? ""));
+    let draft: ProjectReward = $derived.by(() => {
+        if (reward) {
+            return reward;
+        }
 
-    let money = $state(untrack(() => reward?.money || { amount: 0, currency: DEFAULT_CURRENCY }));
-    let rewardCount = $state(untrack(() => reward?.unitsTotal ?? 1));
-    let unlimited = $state(untrack(() => (!reward?.isFinite ? true : false)));
-    let cover = $state<UploadedObject>();
+        return {
+            project: client.buildUrl({
+                url: apiProjectsIdOrSlugGetUrl,
+                path: { idOrSlug: project.id },
+            }),
+            title: "",
+            description: "",
+            cover: "",
+            money: { amount: 0, currency: DEFAULT_CURRENCY },
+            isFinite: true,
+            unitsTotal: 1,
+        };
+    });
 
     let openDeleteModal = $state(false);
 
     function handleSaveOrCreate() {
-        const projectIri = client.buildUrl({
-            url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug: project.slug },
-        });
-
-        onSave({
-            project: projectIri,
-            title,
-            description,
-            cover: cover?.url,
-            money: money,
-            isFinite: unlimited ? false : true,
-            unitsTotal: unlimited ? null : rewardCount,
-        });
+        console.log(draft);
+        onSave(draft);
     }
 
     function handleDeleteClick() {
@@ -87,25 +86,26 @@
         </p>
         <div class="flex flex-col gap-4 pt-2">
             <TextInput
-                bind:value={title}
+                bind:value={draft.title}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.title")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
             />
             <TextArea
-                bind:value={description}
+                bind:value={draft.description!}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.description")}
                 placeholder={$t("pages.project.edit.rewards.modal.placeholders.description")}
                 rows={5}
             />
             <MoneyInput
-                amount={money.amount}
-                currency={money.currency}
+                amount={draft.money.amount}
+                currency={draft.money.currency}
                 labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
                 helperText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
+                onInput={(money) => (draft.money = money)}
             />
             <div class="flex flex-col gap-6">
-                <FileUpload onUpload={(file) => (cover = file)} />
-                <RewardItemsSelector bind:value={rewardCount} bind:unlimited />
+                <FileUpload onUpload={(file) => (draft.cover = file.url)} />
+                <RewardItemsSelector bind:units={draft.unitsTotal!} bind:limited={draft.isFinite} />
             </div>
         </div>
         <div class="flex items-center justify-end gap-4">
