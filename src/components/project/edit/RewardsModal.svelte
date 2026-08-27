@@ -10,13 +10,13 @@
     import { DEFAULT_CURRENCY } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import MoneyInput from "../../library/inputs/MoneyInput.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
     import type { UploadedObject } from "../../../utils/media/objectStorage.types";
-    import MoneyInput from "../../library/inputs/MoneyInput.svelte";
 
     let {
         open = $bindable(false),
@@ -45,7 +45,7 @@
     function handleSaveOrCreate() {
         const projectIri = client.buildUrl({
             url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug: project.id },
+            path: { idOrSlug: project.slug },
         });
 
         onSave({

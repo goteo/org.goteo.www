@@ -1,14 +1,15 @@
 <script lang="ts">
+    import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
+    import { apiProjectRewardsGetCollection } from "../../../openapi/client";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
     import Title from "../../library/typography/Title.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
-    import { apiProjectRewardsGetCollection, type ProjectReward } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import { withoutCache } from "../../../openapi/cacheInterceptor";
-    import CreateCard from "./CreateCard.svelte";
+
 
     let { draft }: { draft: ProjectDraftStore } = $props();
 

@@ -1,8 +1,8 @@
 import CampaignInfoStep from "./CampaignInfoStep.svelte";
 import ConfigurationStep from "./ConfigurationStep.svelte";
+import RewardsStep from "./RewardsStep.svelte";
 
 import type { Component } from "svelte";
-import RewardsStep from "./RewardsStep.svelte";
 
 export type ProjectEditorStep = {
     id: string;
