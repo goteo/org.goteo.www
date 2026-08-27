@@ -23,6 +23,11 @@
 
     let fieldErrors: FieldErrors = $state({});
 
+    function handleDateSelect(date: Date) {
+        const now = new Date();
+        date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+    }
+
     async function submit() {
         fieldErrors = {};
 
@@ -105,6 +110,7 @@
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
                 error={fieldErrors.startsAt &&
                     $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
+                    onInput={handleDateSelect}
             />
 
             <DateInput
@@ -113,6 +119,7 @@
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
                 error={fieldErrors.endsAt &&
                     $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
+                onInput={handleDateSelect}
             />
         </div>
     </div>
