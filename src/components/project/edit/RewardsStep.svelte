@@ -45,9 +45,9 @@
                 {reward.id}
             {/each}
             <CreateCard
+                variant="reward"
                 title={$t("pages.project.edit.rewards.add.title")}
                 description={$t("pages.project.edit.rewards.add.description")}
-                variant="reward"
                 project={$draft.actual}
             />
         </Grid>

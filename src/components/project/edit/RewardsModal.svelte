@@ -27,7 +27,7 @@
     }: {
         open: boolean;
         project: Project;
-        reward: ProjectReward | null;
+        reward?: ProjectReward;
         onSave: (data: ProjectReward | null) => void;
         onDelete?: () => void;
     } = $props();
@@ -45,7 +45,7 @@
     function handleSaveOrCreate() {
         const projectIri = client.buildUrl({
             url: apiProjectsIdOrSlugGetUrl,
-            path: { idOrSlug: project.slug },
+            path: { idOrSlug: project.id },
         });
 
         onSave({

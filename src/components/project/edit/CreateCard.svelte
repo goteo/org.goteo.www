@@ -93,7 +93,7 @@
 {/if}
 
 {#if !disabled && variant === "reward"}
-    <RewardsModal bind:open onSave={(data) => onSave?.(data)} reward={null} {project} />
+    <RewardsModal bind:open onSave={(data) => onSave?.(data)} {project} />
 <!-- {:else if !disabled && variant === "collab"}
     <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
 {:else if !disabled && variant === "budget"}
