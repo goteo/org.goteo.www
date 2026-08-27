@@ -46,6 +46,34 @@ class BannerRepository {
             );
     }
 
+    public async getActive(): Promise<BannerRecord[]> {
+        const now = Date.now();
+        return await this.db
+            .prepare(
+                `SELECT
+                    title,
+                    content,
+                    cta_text AS ctaText,
+                    cta_link AS ctaLink,
+                    starts_at AS startsAt,
+                    ends_at AS endsAt,
+                    date_created AS dateCreated
+             FROM banners
+             WHERE starts_at <= ? AND ends_at >= ?
+             ORDER BY date_created DESC`,
+            )
+            .bind(now, now)
+            .all<BannerRecord>()
+            .then((data) =>
+                data.results.map((r) => ({
+                    ...r,
+                    startsAt: new Date(r.startsAt),
+                    endsAt: new Date(r.endsAt),
+                    dateCreated: new Date(r.dateCreated),
+                })),
+            );
+    }
+
     public async create(banner: BannerRecord): Promise<BannerRecord> {
         const result = await this.db
             .prepare(
