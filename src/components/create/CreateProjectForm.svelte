@@ -1,255 +1,151 @@
 <script lang="ts">
-    import { onDestroy } from "svelte";
+    import { twJoin } from "tailwind-merge";
 
-    import { t } from "../../i18n/store";
+    import { locale, t } from "../../i18n/store";
     import {
-        apiProjectsPost,
-        apiProjectsIdPatch,
         type Category,
-        type ProjectProjectCreationDto,
+        type ApiProjectsPostData,
+        type Territory,
+        apiCategoriesIdOrSlugGetUrl,
+        apiProjectsPost,
     } from "../../openapi/client";
     import { client } from "../../openapi/client/client.gen";
-    import { apiCategoriesIdOrSlugGetUrl } from "../../openapi/client/operation-paths.gen";
+    import { CAMPAIGN_MAX_END_DATE, CAMPAIGN_MIN_START_DATE } from "../../utils/dates";
+    import { getValidationParams } from "../../utils/validation";
     import {
-        validateCreateForm,
-        validateField,
-        type ValidationErrors,
-    } from "../../stores/drafts/draftValidation";
-    import {
-        createDraft,
-        currentDraft,
-        markFieldAsTouched,
-        touchedFields,
-        updateProject,
-        isCreateFormValid,
-        project,
-        validationErrors,
-        type CreateProjectForm,
-    } from "../../stores/drafts/projectDraft";
-    import { maxEndDate } from "../../utils/campaign";
-    import { getDefaultCurrency } from "../../utils/consts";
-    import { formatCurrency } from "../../utils/currencies";
+        zCreateProjectForm,
+        zProjectCampaignRelease,
+    } from "../../validation/projectValidation";
     import Button from "../library/buttons/Button.svelte";
     import BaseCard from "../library/cards/BaseCard.svelte";
-    import AddressAutocomplete from "../library/inputs/AddressAutocomplete.svelte";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
     import DateInput from "../library/inputs/DateInput.svelte";
+    import TerritoryInput from "../library/inputs/TerritoryInput.svelte";
+    import TextArea from "../library/inputs/TextArea.svelte";
     import TextInput from "../library/inputs/TextInput.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    let releaseDate = $state($project.release ? new Date($project.release) : new Date());
+    import type z from "zod";
 
     let { categories }: { categories: Category[] } = $props();
 
-    // Track if form has been submitted once (for showing all errors)
-    let submitted = $state(false);
+    let form: Partial<ApiProjectsPostData["body"]> = $state({
+        title: "",
+        subtitle: "",
+        categories: [],
+        calendar: {
+            release: CAMPAIGN_MIN_START_DATE.toISOString(),
+        },
+    });
 
-    // Loading state for form submission
-    let isSubmitting = $state(false);
+    let validation: Partial<Record<keyof typeof form, z.core.$ZodIssue[]>> = $state({});
+    let isValid = $derived(Object.values(validation).every((issues) => !issues?.length));
 
-    // API error message
-    let apiError: string | null = $state(null);
+    function validate(field: keyof typeof form) {
+        const result = zCreateProjectForm.shape[field].safeParse(form[field]);
 
-    // Success state
-    let submitSuccess = $state(false);
+        validation[field] = result.error?.issues;
+    }
 
-    // Debounce timer for real-time validation
-    let debounceTimer: ReturnType<typeof setTimeout> | null = null;
+    function hasError(field: keyof typeof form) {
+        return validation[field] && validation[field].length > 0;
+    }
 
-    function handleFieldBlur(fieldName: keyof CreateProjectForm) {
-        if (!$currentDraft) return;
+    function getValidationMessage(field: keyof typeof form) {
+        const issue = validation[field]?.[0];
 
-        markFieldAsTouched(fieldName);
-        const error = validateField(fieldName, $currentDraft.createProject[fieldName]);
+        if (!issue) {
+            return "";
+        }
 
-        validationErrors.update((errors: ValidationErrors) => {
-            if (error) {
-                return {
-                    ...errors,
-                    [fieldName]: error,
-                };
-            }
+        if (issue.code === "custom") {
+            return $t(issue.message, issue.params);
+        }
 
-            const { [fieldName]: _, ...rest } = errors;
+        if (issue.code === "invalid_format" && field === "title") {
+            return $t("pages.project.create.validation.titleBadFormat");
+        }
 
-            return rest;
+        if (issue.code === "too_small" && field === "categories") {
+            return $t("pages.project.create.validation.categoriesNotEnough", {
+                min: String(issue.minimum),
+            });
+        }
+
+        if (issue.code === "invalid_type" && field === "territory") {
+            return $t("pages.project.create.validation.territoryMissing");
+        }
+
+        if (issue.code === "invalid_type" && field === "calendar") {
+            return $t("pages.project.create.validation.releaseMissing");
+        }
+
+        return $t(`system.validation.${issue.code}`, {
+            value: String(form[field]),
+            ...getValidationParams(issue),
         });
     }
 
-    /**
-     * Handles field value changes with type-safe updates.
-     * Uses generic typing to ensure type safety without bypassing TypeScript checks.
-     */
-    function handleFieldChange<K extends keyof CreateProjectForm>(
-        fieldName: K,
-        value: CreateProjectForm[K],
-    ) {
-        // Update the draft value with proper typing
-        updateProject({ [fieldName]: value });
-
-        // Only validate on change if field has been touched
-        if ($touchedFields.has(fieldName) || submitted) {
-            // Debounce validation
-            if (debounceTimer) clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                const error = validateField(fieldName, value);
-
-                validationErrors.update((errors: ValidationErrors) => {
-                    if (error) {
-                        return {
-                            ...errors,
-                            [fieldName]: error,
-                        };
-                    }
-
-                    const { [fieldName]: _, ...rest } = errors;
-
-                    return rest;
-                });
-            }, 300);
-        }
-    }
-
-    // Cleanup debounce timer on component unmount to prevent memory leaks
-    onDestroy(() => {
-        if (debounceTimer) {
-            clearTimeout(debounceTimer);
-            debounceTimer = null;
-        }
-    });
-
-    function handleCategoryChange(selected: Category[]) {
-        const categoryIris = selected.map((s) => {
-            return client.buildUrl({ url: apiCategoriesIdOrSlugGetUrl, path: { idOrSlug: s.id } });
+    function handleCategories(categories: Category[]) {
+        form.categories = categories.map((c) => {
+            return client.buildUrl({
+                url: apiCategoriesIdOrSlugGetUrl,
+                path: { idOrSlug: String(c.id) },
+            });
         });
 
-        handleFieldChange("categories", categoryIris);
+        validate("categories");
     }
 
-    async function handleSubmit() {
-        submitted = true;
-        apiError = null;
+    function handleTerritory(territory: Territory) {
+        form.territory = territory;
 
-        const errors = validateCreateForm($project);
+        validate("territory");
+    }
 
-        // Validate entire form
-        const isValid = Object.keys(errors).length === 0;
+    function handleRelease(release: Date) {
+        form.calendar = { ...form.calendar, release: release.toISOString() };
 
-        if (!isValid) {
-            // Scroll to error summary
-            const errorSummary = document.querySelector('[role="alert"]');
-            if (errorSummary) {
-                errorSummary.scrollIntoView({ behavior: "smooth", block: "start" });
-            } else {
-                // If no error summary, focus first invalid field
-                const firstError = Object.keys($validationErrors)[0];
-                if (firstError) {
-                    const element = document.querySelector(`[name="${firstError}"]`);
-                    if (element instanceof HTMLElement) {
-                        element.focus();
-                    }
-                }
+        const result = zProjectCampaignRelease.safeParse(new Date(release));
+
+        validation["calendar"] = result.error?.issues ?? [];
+    }
+
+    async function handleSubmit(e: SubmitEvent) {
+        e.preventDefault();
+
+        validation = {};
+
+        const result = zCreateProjectForm.safeParse(form);
+
+        if (!result.success) {
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as keyof typeof form;
+
+                validation[field] = [...(validation[field] ?? []), issue];
             }
+
             return;
         }
 
-        if (!$currentDraft) {
-            apiError = "Draft not initialized";
+        const { data: project, error } = await apiProjectsPost({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $locale },
+            // @ts-expect-error form is declared as Partial, but at this point has been validated
+            body: form,
+        });
+
+        if (error) {
+            console.error(error);
             return;
         }
 
-        // Submit to API
-        isSubmitting = true;
-
-        try {
-            const { data, error } = await apiProjectsPost({
-                baseUrl: "/api/relay",
-                body: {
-                    title: $currentDraft.createProject.title,
-                    subtitle: $currentDraft.createProject.subtitle,
-                    categories: $currentDraft.createProject.categories,
-                    calendar: { release: $currentDraft.createProject.release ?? null },
-                },
-            });
-
-            if (error) {
-                if ("violations" in error && error.violations) {
-                    error.violations.forEach((violation) => {
-                        const field = violation.propertyPath as keyof ProjectProjectCreationDto;
-                        if (field) {
-                            $validationErrors[field] = violation.message || "Invalid value";
-                        }
-                    });
-                    return;
-                } else {
-                    apiError = "An unexpected error occurred. Please try again.";
-                    return;
-                }
-            } else if (data) {
-                const address = $currentDraft.createProject.address;
-                const territory = $currentDraft.createProject.territory;
-
-                if (address && territory) {
-                    await apiProjectsIdPatch({
-                        baseUrl: "/api/relay",
-                        path: { id: String(data.id) },
-                        body: {
-                            territory: {
-                                ...territory,
-                                address,
-                            },
-                        },
-                    });
-                }
-
-                submitSuccess = true;
-                updateProject({
-                    title: $currentDraft.createProject.title,
-                    subtitle: $currentDraft.createProject.subtitle,
-                    categories: $currentDraft.createProject.categories,
-                    release: $currentDraft.createProject.release,
-                    address: $currentDraft.createProject.address,
-                    territory: $currentDraft.createProject.territory,
-                });
-                currentDraft.update((d) => (d ? { ...d, status: "project-created" } : d));
-
-                // Redirect to project page
-                window.location.href = `/project/${data.id}/edit`;
-            }
-        } catch {
-            // Handle unexpected errors
-            apiError = "An unexpected error occurred. Please try again.";
-        } finally {
-            isSubmitting = false;
-        }
+        window.location.href = `/project/${project.id}/edit`;
     }
-
-    // Helper to check if field should show error
-    function shouldShowError(fieldName: string): boolean {
-        return (submitted || $touchedFields.has(fieldName)) && !!$validationErrors[fieldName];
-    }
-
-    // Calculate minimum date (14 days from now) for date input
-    function getMinDate(): Date {
-        const minDate = new Date();
-        minDate.setDate(minDate.getDate() + 14);
-        return minDate;
-    }
-
-    $effect(() => {
-        if (!$currentDraft) {
-            createDraft({
-                title: "",
-                subtitle: "",
-                categories: [],
-                release: undefined,
-            });
-        }
-    });
 </script>
 
 <section class="wrapper md:flex md:flex-row">
-    <div class="mb-20 flex max-w-167 flex-col gap-10">
+    <form class="mb-20 flex max-w-167 flex-col gap-10" onsubmit={handleSubmit}>
         <div class="flex flex-col gap-4">
             <Title level={1} variant="section">
                 {$t("pages.project.create.title")}
@@ -258,92 +154,47 @@
                 {$t("pages.project.create.subtitle")}
             </p>
         </div>
-        {#if submitted && Object.keys($validationErrors).length > 0}
-            <div
-                role="alert"
-                aria-live="polite"
-                class="rounded-md border-l-4 border-red-500 bg-red-50 p-4"
-            >
-                <p class="mb-2 text-lg font-semibold text-red-800">
-                    {$t("system.validation.errors.summary.title")}
-                </p>
-                <ul class="list-inside list-disc space-y-1">
-                    {#each Object.entries($validationErrors) as [field, error]}
-                        <li class="text-sm text-red-700">
-                            <a
-                                href={`#${field}`}
-                                class="underline hover:text-red-900"
-                                onclick={(e) => {
-                                    e.preventDefault();
-                                    const element = document.querySelector(`[name="${field}"]`);
-                                    if (element instanceof HTMLElement) {
-                                        element.focus();
-                                        element.scrollIntoView({
-                                            behavior: "smooth",
-                                            block: "center",
-                                        });
-                                    }
-                                }}
-                            >
-                                {$t(error)}
-                            </a>
-                        </li>
-                    {/each}
-                </ul>
-            </div>
-        {/if}
+
         <div class="flex flex-col gap-4">
             <Title level={2} variant="subsection">
                 {$t("pages.project.create.description.title")}
             </Title>
             <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("pages.project.create.description.subtitle")}
+                {$t("pages.project.create.description.description")}
             </p>
             <TextInput
-                name="title"
-                placeholder={$t("pages.project.create.description.titlePrompt")}
-                bind:value={$project.title}
-                error={shouldShowError("title") ? $t($validationErrors.title) : undefined}
-                onBlur={() => handleFieldBlur("title")}
-                onInput={(e) => handleFieldChange("title", (e.target as HTMLInputElement).value)}
+                bind:value={form.title}
+                onInput={() => validate("title")}
+                helperText={$t("pages.project.create.description.titlePrompt")}
+                placeholder={$t("pages.project.create.description.titlePlaceholder")}
+                error={getValidationMessage("title")}
+                required
             />
             <div class="relative">
-                <textarea
-                    id="subtitle"
-                    name="subtitle"
-                    placeholder={$t("pages.project.create.description.subtitlePrompt")}
-                    class="h-60 w-full resize-none rounded-md border p-4 {shouldShowError(
-                        'subtitle',
-                    )
-                        ? 'border-red-500'
-                        : 'border-[#855a96]'}"
-                    bind:value={$project.subtitle}
-                    onblur={() => handleFieldBlur("subtitle")}
-                    oninput={(e) =>
-                        handleFieldChange("subtitle", (e.target as HTMLTextAreaElement).value)}
-                    aria-invalid={shouldShowError("subtitle")}
-                    aria-describedby={shouldShowError("subtitle") ? "subtitle-error" : undefined}
-                ></textarea>
-                {#if shouldShowError("subtitle")}
-                    <p id="subtitle-error" class="mt-1 ml-4 text-xs text-red-600" role="alert">
-                        {$t($validationErrors.subtitle)}
-                    </p>
-                {/if}
+                <TextArea
+                    bind:value={form.subtitle}
+                    helperText={$t("pages.project.create.description.subtitlePrompt")}
+                    placeholder={$t("pages.project.create.description.subtitlePlaceholder")}
+                />
             </div>
         </div>
         <div class="flex flex-col gap-4">
             <Title level={2} variant="subsection">
                 {$t("pages.project.create.categories.title")}
             </Title>
-            <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("pages.project.create.categories.subtitle")}
+            <p
+                class={twJoin(
+                    "transition-all duration-300 ease-in-out",
+                    hasError("categories") ? "text-tertiary" : "text-black",
+                )}
+            >
+                {#if hasError("categories")}
+                    {getValidationMessage("categories")}
+                {:else}
+                    {$t("pages.project.create.categories.subtitle")}
+                {/if}
             </p>
-            <CategorySelect
-                max={2}
-                options={categories}
-                onchange={handleCategoryChange}
-                error={shouldShowError("categories") ? $t($validationErrors.categories) : undefined}
-            />
+            <CategorySelect max={2} options={categories} onChange={handleCategories} />
         </div>
         <div class="flex flex-col gap-4">
             <Title level={2} variant="subsection">
@@ -352,16 +203,10 @@
             <p class="text-black transition-all duration-300 ease-in-out">
                 {$t("pages.project.create.address.subtitle")}
             </p>
-            <AddressAutocomplete
-                name="address"
+            <TerritoryInput
                 placeholder={$t("pages.project.create.address.placeholder")}
-                value={$project.address ?? ""}
-                error={shouldShowError("address") ? $t($validationErrors.address) : undefined}
-                onAddressChange={(address, territory) => {
-                    handleFieldChange("address", address);
-                    handleFieldChange("territory", territory);
-                }}
-                onBlur={() => handleFieldBlur("address")}
+                onInput={handleTerritory}
+                error={getValidationMessage("territory")}
             />
         </div>
         <div class="flex flex-col gap-4">
@@ -372,35 +217,19 @@
                 {$t("pages.project.create.release.subtitle")}
             </p>
             <DateInput
-                name="release"
-                bind:value={releaseDate}
-                min={getMinDate()}
-                max={maxEndDate}
-                error={shouldShowError("release") ? $t($validationErrors.release) : undefined}
-                onBlur={() => handleFieldBlur("release")}
-                onInput={(date: any) => handleFieldChange("release", date)}
+                min={CAMPAIGN_MIN_START_DATE}
+                max={CAMPAIGN_MAX_END_DATE}
+                value={new Date(form.calendar?.release!)}
+                helperText={$t("pages.project.create.release.label")}
+                required
+                onInput={handleRelease}
+                error={getValidationMessage("calendar")}
             />
         </div>
-        {#if apiError}
-            <div role="alert" class="rounded-md border-l-4 border-red-500 bg-red-50 p-4">
-                <p class="text-sm text-red-800">{apiError}</p>
-            </div>
-        {/if}
-        {#if submitSuccess}
-            <div role="status" class="rounded-md border-l-4 border-green-500 bg-green-50 p-4">
-                <p class="text-sm font-semibold text-green-800">
-                    {$t("pages.project.create.submitSuccess")}
-                </p>
-            </div>
-        {/if}
-        <p>
-            <Button size="md" disabled={!$isCreateFormValid || isSubmitting} onclick={handleSubmit}>
-                {isSubmitting
-                    ? $t("pages.project.create.submitting")
-                    : $t("pages.project.create.submit")}
-            </Button>
-        </p>
-    </div>
+        <Button type="submit" disabled={!isValid}>
+            {$t("pages.project.create.submit")}
+        </Button>
+    </form>
     <div class="ml-auto">
         <BaseCard
             class="border-grey flex h-full max-h-126.5 w-full max-w-109.25 flex-col bg-white"
@@ -410,26 +239,15 @@
                 level={2}
                 variant="section"
                 color="secondary"
-                class="mb-2 {!$currentDraft?.createProject.title ? 'opacity-24' : ''}"
+                class={twJoin("mb-2", !form.title && "opacity-24")}
             >
-                {$currentDraft?.createProject.title ||
-                    $t("pages.project.create.description.titlePlaceholder")}
+                {form.title || $t("pages.project.create.description.titlePlaceholder")}
             </Title>
             <p
-                class="text-content overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
+                class="text-content w-full overflow-hidden text-base font-normal text-ellipsis whitespace-nowrap"
             >
-                {$currentDraft?.createProject.subtitle ||
-                    $t("pages.project.create.description.subtitlePlaceholder")}
+                {form.subtitle || $t("pages.project.create.description.subtitlePlaceholder")}
             </p>
-            <div class="mt-auto">
-                <p class="text-sm text-black">{$t("pages.project.create.budgetPreview")}</p>
-                <p class="text-secondary text-3xl font-bold">
-                    {formatCurrency(
-                        $currentDraft?.wizardForm.budget?.minimum?.money?.amount || 0,
-                        getDefaultCurrency(),
-                    )}
-                </p>
-            </div>
         </BaseCard>
     </div>
 </section>

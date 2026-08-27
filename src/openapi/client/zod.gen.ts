@@ -590,37 +590,6 @@ export const zProjectCalendar = z.object({
     optimum: z.iso.datetime().nullish()
 });
 
-/**
- * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
- */
-export const zProjectProjectCreationDto = z.object({
-    title: z.string().regex(/^(.*[a-zA-Z]{1,}.*)$/),
-    subtitle: z.string(),
-    cover: z.url().optional(),
-    categories: z.array(z.string()).min(1).max(2),
-    calendar: zProjectCalendar.optional(),
-    status: z.enum([
-        'in_draft',
-        'to_campaign_review',
-        'in_campaign_review',
-        'in_campaign_review.to_change',
-        'in_campaign_review.to_review',
-        'campaign_review.rejected',
-        'to_campaign',
-        'in_campaign',
-        'campaign.failed',
-        'campaign.cancelled',
-        'to_funding_review',
-        'in_funding_review',
-        'in_funding_review.to_change',
-        'in_funding_review.to_review',
-        'funding_review.rejected',
-        'to_funding',
-        'in_funding',
-        'funding.paid'
-    ]).readonly().optional().default('in_draft')
-});
-
 export const zProjectCalendarJsonld = z.object({
     '@context': z.union([
         z.string(),
@@ -634,37 +603,6 @@ export const zProjectCalendarJsonld = z.object({
     release: z.iso.datetime().nullable(),
     minimum: z.iso.datetime().nullish(),
     optimum: z.iso.datetime().nullish()
-});
-
-/**
- * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
- */
-export const zProjectProjectCreationDtoJsonld = z.object({
-    title: z.string().regex(/^(.*[a-zA-Z]{1,}.*)$/),
-    subtitle: z.string(),
-    cover: z.url().optional(),
-    categories: z.array(z.string()).min(1).max(2),
-    calendar: zProjectCalendarJsonld.optional(),
-    status: z.enum([
-        'in_draft',
-        'to_campaign_review',
-        'in_campaign_review',
-        'in_campaign_review.to_change',
-        'in_campaign_review.to_review',
-        'campaign_review.rejected',
-        'to_campaign',
-        'in_campaign',
-        'campaign.failed',
-        'campaign.cancelled',
-        'to_funding_review',
-        'in_funding_review',
-        'in_funding_review.to_change',
-        'in_funding_review.to_review',
-        'funding_review.rejected',
-        'to_funding',
-        'in_funding',
-        'funding.paid'
-    ]).readonly().optional().default('in_draft')
 });
 
 /**
@@ -893,7 +831,7 @@ export const zProjectVideoJsonld = z.object({
 });
 
 export const zTerritory = z.object({
-    country: z.string().nullish(),
+    country: z.string().nullable(),
     subLvl1: z.string().nullish(),
     subLvl2: z.string().nullish(),
     address: z.string().nullish()
@@ -930,6 +868,37 @@ export const zMatchCall = z.object({
         'to_closed',
         'closed'
     ]).optional().default('in_editing')
+});
+
+/**
+ * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
+ */
+export const zProjectProjectCreationDto = z.object({
+    title: z.string().min(3).regex(/^(.*[a-zA-Z]{1,}.*)$/),
+    subtitle: z.string(),
+    categories: z.array(z.string()).min(1).max(2),
+    territory: zTerritory,
+    calendar: zProjectCalendar,
+    status: z.enum([
+        'in_draft',
+        'to_campaign_review',
+        'in_campaign_review',
+        'in_campaign_review.to_change',
+        'in_campaign_review.to_review',
+        'campaign_review.rejected',
+        'to_campaign',
+        'in_campaign',
+        'campaign.failed',
+        'campaign.cancelled',
+        'to_funding_review',
+        'in_funding_review',
+        'in_funding_review.to_change',
+        'in_funding_review.to_review',
+        'funding_review.rejected',
+        'to_funding',
+        'in_funding',
+        'funding.paid'
+    ]).readonly().optional().default('in_draft')
 });
 
 /**
@@ -981,7 +950,7 @@ export const zTerritoryJsonld = z.object({
     ]).optional(),
     '@id': z.string().readonly().optional(),
     '@type': z.string().readonly().optional(),
-    country: z.string().nullish(),
+    country: z.string().nullable(),
     subLvl1: z.string().nullish(),
     subLvl2: z.string().nullish(),
     address: z.string().nullish()
@@ -1027,6 +996,37 @@ export const zMatchCallJsonld = z.object({
         'to_closed',
         'closed'
     ]).optional().default('in_editing')
+});
+
+/**
+ * Projects describe a User-owned, community-led event that is to be discovered, developed and funded by the community.
+ */
+export const zProjectProjectCreationDtoJsonld = z.object({
+    title: z.string().min(3).regex(/^(.*[a-zA-Z]{1,}.*)$/),
+    subtitle: z.string(),
+    categories: z.array(z.string()).min(1).max(2),
+    territory: zTerritoryJsonld,
+    calendar: zProjectCalendarJsonld,
+    status: z.enum([
+        'in_draft',
+        'to_campaign_review',
+        'in_campaign_review',
+        'in_campaign_review.to_change',
+        'in_campaign_review.to_review',
+        'campaign_review.rejected',
+        'to_campaign',
+        'in_campaign',
+        'campaign.failed',
+        'campaign.cancelled',
+        'to_funding_review',
+        'in_funding_review',
+        'in_funding_review.to_change',
+        'in_funding_review.to_review',
+        'funding_review.rejected',
+        'to_funding',
+        'in_funding',
+        'funding.paid'
+    ]).readonly().optional().default('in_draft')
 });
 
 /**

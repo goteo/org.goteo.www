@@ -24,7 +24,6 @@
         clearable?: boolean;
         onClear?: () => void;
         singleSelect?: boolean;
-        inputName?: string;
         onInputBlur?: (e?: FocusEvent) => void;
         /** Build the list with selected options at the top. */
         label?: string;
@@ -46,7 +45,6 @@
         clearable = false,
         onClear = undefined,
         singleSelect = false,
-        inputName = undefined,
         onInputBlur = undefined,
         label = undefined,
         selectedFirst = false,
@@ -122,7 +120,6 @@
             <input
                 class="max-h-6 w-full border-0 bg-white p-0 text-base/6 font-normal text-black ring-0 placeholder:opacity-48"
                 type="text"
-                name={inputName}
                 placeholder={searchPlaceholder}
                 bind:value={searchValue}
                 oninput={(e) => onSearch?.(e.currentTarget.value)}
@@ -131,16 +128,18 @@
                     if (!isOpen) isOpen = true;
                 }}
             />
-            {#if clearable && searchValue}
-                <button
-                    type="button"
-                    class="absolute right-14 shrink-0 hover:cursor-pointer hover:opacity-75"
-                    onclick={handleClear}
-                >
-                    <Close width="20" height="20" />
-                </button>
-            {/if}
-            <SearchIcon class="absolute right-4" width="32" height="32" />
+            <div class="absolute right-4 flex flex-row gap-1 bg-white">
+                {#if clearable && searchValue}
+                    <button
+                        type="button"
+                        class="shrink-0 hover:cursor-pointer hover:opacity-75"
+                        onclick={handleClear}
+                    >
+                        <Close width="20" height="20" />
+                    </button>
+                {/if}
+                <SearchIcon width="32" height="32" />
+            </div>
         </div>
     {:else}
         <button

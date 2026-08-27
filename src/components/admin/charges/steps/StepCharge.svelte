@@ -299,8 +299,7 @@
             labelText={$t("pages.admin.charges.headers.amount")}
             helperText={$t("pages.admin.charges.create.fields.amountHelper")}
             required={true}
-            onInput={(e) =>
-                onAmountInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
+            onInput={(value) => onAmountInput(value.toString())}
             onBlur={onAmountBlur}
         />
         <Select

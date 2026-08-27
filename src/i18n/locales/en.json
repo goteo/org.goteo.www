@@ -35,13 +35,24 @@
       }
     },
     "validation": {
+      "_invalid_type": "",
+      "_too_big": "",
+      "too_small": "\"{{ value }}\" is too short: {{ min }} or more characters expected.",
+      "invalid_format": "\"{{ value }}\" has an invalid format: it does not match the regex pattern `{{ pattern }}`.",
+      "_not_multiple_of": "",
+      "_unrecognized_keys": "",
+      "_invalid_union": "",
+      "_invalid_key": "",
+      "_invalid_element": "",
+      "_invalid_value": "",
       "missingRequiredFields": "One or more required fields are empty",
       "project": {
         "terms": {
           "required": "You must accept the promoter conditions and the call terms"
         },
         "release": {
-          "max": "The start date is too late: the campaign cannot extend beyond the platform deadline"
+          "min": "The launch date cannot be before {{ min }}",
+          "max": "The launch date cannot be after {{ max }}"
         }
       },
       "errors": {
@@ -629,6 +640,13 @@
     "project": {
       "edit": {
         "title": "Editing project: {{ project }}",
+        "validation": {
+          "titleBadFormat": "The title must contain at least one letter."
+        },
+        "header": {
+          "titlePlaceholder": "Project title",
+          "unsentChanges": "There are unsent changes"
+        },
         "tabs": {
           "configuration": "Configuration",
           "campaign": "Campaign information",
@@ -646,6 +664,11 @@
             "primaryLabel": "Main content language",
             "secondaryLabel": "Secondary content language",
             "addButton": "Add language"
+          },
+          "release": {
+            "title": "Campaign launch date",
+            "subtitle": "Please note that crowdfunding campaigns have a minimum duration of 40 days",
+            "passed": "This project has already launched as a campaign and its launch date cannot be changed"
           },
           "rounds": {
             "title": "Choose the rounds your campaign will have",
@@ -872,54 +895,45 @@
           },
           "continue": "Next step",
           "locationPlaceholder": "E.g.: Calle Gran Vía 28, Madrid"
-        },
-        "errors": {
-          "session": {
-            "title": "Session expired"
-          },
-          "storage": {
-            "title": "Storage error",
-            "save_failed": "Changes could not be saved",
-            "quota_exceeded": "Local storage full",
-            "close": "Close"
-          }
         }
       },
       "create": {
-        "title": "Propose a campaign",
-        "subtitle": "Briefly describe the project and the crowdfunding campaign.",
-        "budgetPreview": "Money needed",
+        "title": "Create a project",
+        "subtitle": "Briefly describe your crowdfunding project.",
         "description": {
           "title": "Briefly describe your proposal",
-          "titlePrompt": "Enter your campaign name",
-          "titlePlaceholder": "Campaign name",
-          "subtitle": "Enter your campaign name and briefly describe the project you will carry out if you obtain funding.",
+          "description": "Enter the name of your project and briefly describe what you will do if you secure funding.",
+          "titlePrompt": "Enter the name of your project",
+          "titlePlaceholder": "My project",
           "subtitlePrompt": "Briefly describe your project.",
-          "subtitlePlaceholder": "No description"
+          "subtitlePlaceholder": "A project to make the world a little bit better"
         },
         "categories": {
-          "title": "Which category fits your campaign?",
+          "title": "Which category fits your project?",
           "subtitle": "(You can choose a maximum of 2)"
         },
         "address": {
           "title": "What is the project address?",
           "subtitle": "Search for and select the project's full address. This helps us locate your initiative.",
-          "placeholder": "E.g.: Calle Gran Vía 28, Madrid"
-        },
-        "budget": {
-          "title": "How much money do you need?",
-          "subtitle": "Select the amount you need to carry out your project."
+          "placeholder": "Forn de l'Olivera 22, Palma"
         },
         "release": {
           "title": "Campaign launch date",
-          "subtitle": "(Please note that crowdfunding campaigns have a minimum duration of 40 days)"
+          "subtitle": "(Please note that crowdfunding campaigns have a minimum duration of 40 days)",
+          "label": "Approximate launch date"
         },
         "terms": {
           "label": "I accept the promoter conditions and the call terms"
         },
-        "submit": "Propose campaign",
+        "submit": "Create project",
         "submitting": "Submitting…",
-        "submitSuccess": "Campaign proposed successfully!"
+        "submitSuccess": "Project created",
+        "validation": {
+          "titleBadFormat": "The title must contain at least one letter.",
+          "categoriesNotEnough": "You must select at least {{ min }} category(ies).",
+          "territoryMissing": "You must specify a location.",
+          "releaseMissing": "You must specify an approximate launch date"
+        }
       },
       "view": {
         "owner": "Crowdfunding campaign by {{ owner }}",
