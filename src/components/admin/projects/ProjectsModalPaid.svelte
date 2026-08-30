@@ -10,15 +10,13 @@
         open = $bindable(false),
         paidValue = $bindable(""),
         maxAchieved = "",
-        currency = "EUR",
         onsave,
-    } = $props<{
+    }: {
         open: boolean;
         paidValue: string;
         maxAchieved?: string;
-        currency?: string;
         onsave?: (paidValue: string) => void;
-    }>();
+    } = $props();
 
     let mode = $state<"total" | "partial">("total");
 
@@ -28,18 +26,6 @@
         }
     });
 
-    function getCurrencySymbol(curr: string): string {
-        try {
-            const parts = new Intl.NumberFormat("es-ES", {
-                style: "currency",
-                currency: curr,
-            }).formatToParts(0);
-            return parts.find((part) => part.type === "currency")?.value || curr;
-        } catch {
-            return "€";
-        }
-    }
-
     function setTotal() {
         mode = "total";
         paidValue = maxAchieved;
@@ -48,7 +34,6 @@
     function setPartial() {
         mode = "partial";
         paidValue = "";
-        paidValue = getCurrencySymbol(currency);
     }
 </script>
 
