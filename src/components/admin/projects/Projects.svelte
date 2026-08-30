@@ -80,7 +80,6 @@
     let maxAchievedValue = $state("");
     let annotationText = $state("");
     let selectedProjectId = $state(0);
-    let currentCurrency = $state("EUR");
 
     let projectSlides = $derived([
         { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
@@ -93,7 +92,7 @@
      */
     async function fetchTotalEarned(ids: number[]) {
         if (ids.length === 0) {
-            totalEarned = formatCurrency(0, currentCurrency);
+            totalEarned = formatCurrency(0, import.meta.env.PUBLIC_DEFAULT_CURRENCY);
             return;
         }
         try {
@@ -112,7 +111,7 @@
 
             if (data) {
                 const total = data.amount ?? 0;
-                const currency = data.currency ?? currentCurrency;
+                const currency = data.currency ?? import.meta.env.PUBLIC_DEFAULT_CURRENCY;
                 totalEarned = formatCurrency(total, currency);
             }
         } catch (e) {
@@ -326,10 +325,6 @@
         selectedProjectId = project.id;
         paidValue = project.paid !== "—" ? project.paid : "";
         maxAchievedValue = project.achieved !== "—" ? project.achieved : "";
-        const accounting = project.accounting
-            ? accountingsCache.get(project.accounting)
-            : undefined;
-        currentCurrency = accounting?.balance?.currency ?? "EUR";
         paidModalOpen = true;
     }
 
@@ -407,7 +402,6 @@
 <ProjectsModalPaid
     bind:open={paidModalOpen}
     bind:paidValue
-    currency={currentCurrency}
     maxAchieved={maxAchievedValue}
     onsave={handleSavePaid}
 />
