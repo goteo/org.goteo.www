@@ -5,13 +5,14 @@
         apiGatewayChargesGetCollection,
         type GatewayCharge,
     } from "../../../openapi/client/index.ts";
+    import { formatCurrency } from "../../../utils/currencies";
     import DetailsRow, { type DetailsField } from "../DetailsRow.svelte";
 
     import type { UserRow } from "./UsersTable.svelte";
 
     let { user }: { user: UserRow } = $props();
 
-    let totalCollected = $state<number | string>("—");
+    let totalCollected = $state<string>("—");
     let recentCharges = $state<GatewayCharge[]>([]);
 
     $effect(() => {
@@ -25,7 +26,7 @@
             baseUrl: "/api/relay",
             query: { "checkout.origin": accounting, status: "in_charge" },
         });
-        totalCollected = totalsData?.money?.amount ? totalsData.money.amount / 100 : 0;
+        totalCollected = totalsData?.money ? formatCurrency(totalsData.money) : "—";
 
         const { data: chargesData } = await apiGatewayChargesGetCollection({
             baseUrl: "/api/relay",
@@ -77,10 +78,7 @@
             {#each recentCharges as charge}
                 <div class="flex justify-between rounded border bg-gray-50 p-2 text-sm">
                     <span>{charge.title}</span>
-                    <span class="font-semibold">
-                        {charge.money?.amount ? charge.money.amount / 100 : 0}
-                        {charge.money?.currency}
-                    </span>
+                    <span class="font-semibold">{formatCurrency(charge.money)}</span>
                 </div>
             {:else}
                 <p class="text-sm text-gray-400">
