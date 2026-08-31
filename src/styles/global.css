@@ -86,6 +86,10 @@ body.grid {
     width: 100%;
 }
 
+astro-island {
+    display: contents;
+}
+
 .no-scroll {
     overflow: hidden !important;
 }

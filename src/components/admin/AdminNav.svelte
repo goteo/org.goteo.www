@@ -24,7 +24,9 @@
     });
 
     function isActive(path: string): boolean {
-        return pathname === path || pathname.startsWith(path + "/");
+        return [path, `/${$locale}${path}`].some(
+            (target) => pathname === target || pathname.startsWith(target + "/"),
+        );
     }
 </script>
 
