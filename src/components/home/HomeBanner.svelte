@@ -24,9 +24,7 @@
 
 {#if visible}
     <div class="wrapper">
-        <div
-            class="bg-secondary relative overflow-hidden rounded-3xl p-4 text-white sm:p-6 md:p-8"
-        >
+        <div class="bg-secondary relative overflow-hidden rounded-3xl p-4 text-white sm:p-6 md:p-8">
             <div class="pointer-events-none absolute inset-0 z-0">
                 <img
                     src="/images/home/banner-home.svg"
