@@ -1289,7 +1289,8 @@
         "charges": "Cobros",
         "projects": "Proyectos",
         "users": "Usuarios",
-        "comm": "Comunicación"
+        "comm": "Comunicación",
+        "home": "Portada"
       },
       "sidebar": {
         "aria": {
@@ -1746,6 +1747,39 @@
               "type": "Tipo",
               "territory": "Ubicación",
               "active": "Activo"
+            }
+          }
+        }
+      },
+      "home": {
+        "tabs": {
+          "highlights": "P. Destacados"
+        },
+        "highlights": {
+          "title": "Proyectos destacados",
+          "description": "Elige qué proyectos se muestran destacados en la portada.",
+          "type": {
+            "title": "Tipo de proyectos destacados",
+            "label": "Tipo de proyectos",
+            "recent": "Más recientes"
+          },
+          "grid": {
+            "title": "Selecciona la cuadrícula",
+            "option": "Cuadrícula de {{ layout }}"
+          },
+          "projects": {
+            "title": "Selecciona los proyectos",
+            "description": "Recuerda que los proyectos se irán colocando de arriba a abajo y de izquierda a derecha.",
+            "slot": "Proyecto {{ number }}",
+            "empty": "Busca un proyecto y destácalo en portada",
+            "add": "Añade proyecto",
+            "change": "Cambia a otro proyecto",
+            "position": "Este proyecto en la posición {{ number }}",
+            "modal": {
+              "title": "Añade Proyecto",
+              "description": "Busca y añade el proyecto que quieres destacar",
+              "search": "Busca un proyecto",
+              "submit": "Añadir"
             }
           }
         }
