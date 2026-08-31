@@ -23,7 +23,13 @@ if (locale && !isSupportedLocale(locale)) {
 
 const { t, lang } = Astro.locals;
 
-const activeBanners = await bannerRepository.getActive();
+const closedBanners = (Astro.cookies.get("goteo-banners-closed")?.value ?? "")
+    .split(",")
+    .filter(Boolean);
+
+const activeBanners = (await bannerRepository.getActive()).filter(
+    (banner) => !closedBanners.includes(String(banner.id)),
+);
 ---
 
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
@@ -34,6 +40,7 @@ const activeBanners = await bannerRepository.getActive();
                 <div class="wrapper flex flex-col gap-4">
                     {activeBanners.map((banner) => (
                         <HomeBanner
+                            id={banner.id}
                             title={banner.title}
                             description={banner.content}
                             ctaText={banner.ctaText}

@@ -8,6 +8,7 @@
         title: "Library/HomeBanner",
         tags: ["autodocs"],
         args: {
+            id: 1,
             title: "Discover the best campaigns",
             description:
                 "Join thousands of investors and find the perfect opportunity for your portfolio.",
@@ -23,6 +24,7 @@
 <Story
     name="LongContent"
     args={{
+        id: 2,
         title: "Invest in the future: find the campaigns that match your goals and values",
         description:
             "Our platform connects you with vetted investment opportunities across multiple sectors. Start with as little as €100 and build a diversified portfolio tailored to your financial goals.",
