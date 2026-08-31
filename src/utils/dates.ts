@@ -11,6 +11,27 @@ export function formatDate(date: Date, locale: Locale) {
 }
 
 /**
+ * The first instant of the day for the given date (midnight, 00:00).
+ * @param date The date to normalize
+ * @returns A new Date set to the start of the given day
+ */
+export function startOfDay(date: Date): Date {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+/**
+ * The last instant of the day for the given date (23:59:59.999).
+ * Derived from the start of the following day rather than hardcoding the end-of-day time.
+ * @param date The date to normalize
+ * @returns A new Date set to the end of the given day
+ */
+export function endOfDay(date: Date): Date {
+    // Start of the next day, minus a single millisecond
+    const nextDay = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1);
+    return new Date(nextDay.getTime() - 1);
+}
+
+/**
  * Get a date `n` ms from now
  * @param offset Milliseconds since now until future date
  * @returns {Date}

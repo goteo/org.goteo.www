@@ -2,7 +2,7 @@
     import { actions } from "astro:actions";
 
     import { locale, t } from "../../../../i18n/store";
-    import { formatDate } from "../../../../utils/dates";
+    import { endOfDay, formatDate, startOfDay } from "../../../../utils/dates";
     import ActionableButton from "../../../library/buttons/ActionableButton.svelte";
     import DateInput from "../../../library/inputs/DateInput.svelte";
     import TextArea from "../../../library/inputs/TextArea.svelte";
@@ -23,9 +23,20 @@
 
     let fieldErrors: FieldErrors = $state({});
 
-    function handleDateSelect(date: Date) {
+    function normalizeDate(field: "startsAt" | "endsAt", date: Date) {
         const now = new Date();
-        date.setHours(now.getHours(), now.getMinutes(), now.getSeconds(), now.getMilliseconds());
+        const isToday =
+            date.getFullYear() === now.getFullYear() &&
+            date.getMonth() === now.getMonth() &&
+            date.getDate() === now.getDate();
+
+        // Ends always run to the end of their day. Start dates run from their
+        // midnight, except when the day is today the current time is used so it
+        // passes the "no earlier than now" validation. DateInput binds the same
+        // object, so the normalized time is applied in place.
+        const normalized = field === "endsAt" ? endOfDay(date) : isToday ? now : startOfDay(date);
+
+        date.setTime(normalized.getTime());
     }
 
     async function submit() {
@@ -110,7 +121,7 @@
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
                 error={fieldErrors.startsAt &&
                     $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
-                onInput={handleDateSelect}
+                onInput={(date) => normalizeDate("startsAt", date)}
             />
 
             <DateInput
@@ -119,7 +130,7 @@
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
                 error={fieldErrors.endsAt &&
                     $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
-                onInput={handleDateSelect}
+                onInput={(date) => normalizeDate("endsAt", date)}
             />
         </div>
     </div>
