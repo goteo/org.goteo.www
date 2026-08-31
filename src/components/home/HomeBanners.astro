@@ -1,0 +1,28 @@
+---
+import HomeBanner from "./HomeBanner.svelte";
+import type { BannerRecord } from "../../repositories/banners";
+
+interface Props {
+    banners: BannerRecord[];
+}
+
+const { banners } = Astro.props;
+const { t } = Astro.locals;
+---
+
+{
+    banners.length > 0 && (
+        <section class="wrapper flex flex-col gap-4">
+            {banners.map((banner) => (
+                <HomeBanner
+                    title={banner.title}
+                    description={banner.content}
+                    ctaText={banner.ctaText}
+                    ctaLink={banner.ctaLink}
+                    closeAriaLabel={t("pages.home.banner.closeAriaLabel")}
+                    client:load
+                />
+            ))}
+        </section>
+    )
+}
