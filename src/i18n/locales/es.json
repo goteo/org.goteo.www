@@ -1750,7 +1750,10 @@
               "email": "Email",
               "type": "Tipo",
               "territory": "Ubicación",
-              "active": "Activo"
+              "active": "Activo",
+              "totalCollected": "Total cobrado",
+              "recentCharges": "Últimos cobros",
+              "noRecentCharges": "No se encontraron cobros recientes"
             }
           }
         }
