@@ -2,7 +2,6 @@
     import { Modal } from "flowbite-svelte";
     import { untrack } from "svelte";
 
-    import DeleteModal from "./DeleteModal.svelte";
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
     import { client } from "../../../openapi/client/client.gen";
@@ -11,6 +10,7 @@
     import { getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
@@ -165,7 +165,8 @@
                     {$t("common.remove")}
                 </Button>
                 <DeleteModal
-                    variant="rewards"
+                    title={$t("pages.project.edit.rewards.deleteModal.title")}
+                    description={$t("pages.project.edit.rewards.deleteModal.description")}
                     bind:open={openDeleteModal}
                     onclick={() => handleDeleteClick()}
                 />

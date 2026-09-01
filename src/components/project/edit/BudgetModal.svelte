@@ -2,12 +2,12 @@
     import { Modal } from "flowbite-svelte";
     import { untrack } from "svelte";
 
-    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { defaultCurrency, getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
@@ -175,7 +175,8 @@
                     {$t("common.remove")}
                 </Button>
                 <DeleteModal
-                    variant="budget"
+                    title={$t("pages.project.edit.budget.deleteModal.title")}
+                    description={$t("pages.project.edit.budget.deleteModal.description")}
                     bind:open={openDeleteModal}
                     onclick={() => handleDeleteClick()}
                 />

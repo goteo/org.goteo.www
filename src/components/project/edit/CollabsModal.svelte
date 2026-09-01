@@ -2,11 +2,11 @@
     import { Modal } from "flowbite-svelte";
     import { untrack } from "svelte";
 
-    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Title from "../../library/typography/Title.svelte";
 
@@ -105,7 +105,8 @@
                     {$t("common.remove")}
                 </Button>
                 <DeleteModal
-                    variant="collaborations"
+                    title={$t("pages.project.edit.collaborations.deleteModal.title")}
+                    description={$t("pages.project.edit.collaborations.deleteModal.description")}
                     bind:open={openDeleteModal}
                     onclick={() => handleDeleteClick()}
                 />
