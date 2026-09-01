@@ -7,9 +7,9 @@
     import HomeBanner from "../../../home/HomeBanner.svelte";
     import Trash from "../../../icons/actions/Trash.svelte";
     import Chevron from "../../../icons/navigation/Chevron.svelte";
+    import DeleteModal from "../../../library/feedback/DeleteModal.svelte";
     import DataTable from "../../../library/tables/DataTable.svelte";
     import Title from "../../../library/typography/Title.svelte";
-    import DeleteModal from "../../../project/edit/DeleteModal.svelte";
 
     import type { BannerRecord } from "../../../../repositories/banners";
     import type { DataTableHeader } from "../../../library/tables/DataTable.svelte";
@@ -182,6 +182,7 @@
 
 <DeleteModal
     bind:open={isDeleteModalOpen}
-    keyPrefix="pages.admin.comm.banners.history.deleteModal"
+    title={$t("pages.admin.comm.banners.history.deleteModal.title")}
+    description={$t("pages.admin.comm.banners.history.deleteModal.description")}
     onclick={confirmDelete}
 />
