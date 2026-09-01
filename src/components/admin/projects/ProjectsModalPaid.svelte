@@ -2,44 +2,82 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
+    import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
 
     let {
         open = $bindable(false),
         paidValue = $bindable(""),
-        paidMatchfundingValue = $bindable(""),
+        maxAchieved = "",
         onsave,
-    } = $props<{
+    }: {
         open: boolean;
         paidValue: string;
-        paidMatchfundingValue: string;
-        onsave?: (paidValue: string, paidMatchfundingValue: string) => void;
-    }>();
+        maxAchieved?: string;
+        onsave?: (paidValue: string) => void;
+    } = $props();
+
+    let mode = $state<"total" | "partial">("total");
+
+    $effect(() => {
+        if (open && mode === "total") {
+            paidValue = maxAchieved;
+        }
+    });
+
+    function setTotal() {
+        mode = "total";
+        paidValue = maxAchieved;
+    }
+
+    function setPartial() {
+        mode = "partial";
+        paidValue = "";
+    }
 </script>
 
 <Modal
     bind:open
     title={$t("pages.admin.projects.modals.paid.title")}
-    closeBtnClass="top-4 end-4 bg-transparent text-secondary hover:bg-transparent hover:text-secondary focus:ring-0 shadow-none"
-    class="max-w-lg"
+    dismissable={false}
+    class="relative max-w-lg"
 >
+    <button
+        type="button"
+        class="text-secondary absolute inset-e-4 top-4 cursor-pointer bg-transparent p-1 shadow-none hover:opacity-80 focus:ring-0"
+        onclick={() => (open = false)}
+        aria-label={$t("common.close")}
+    >
+        <Close width="24" height="24" />
+    </button>
+
     <div class="flex flex-col gap-6">
         <p class="text-content text-sm">
             {$t("pages.admin.projects.modals.paid.description")}
         </p>
-        <div class="flex gap-4">
-            <TextInput
-                bind:value={paidValue}
-                labelText={$t("pages.admin.projects.modals.paid.input")}
-            />
-            <TextInput
-                bind:value={paidMatchfundingValue}
-                labelText={$t("pages.admin.projects.modals.paid.matchfunding")}
-            />
+
+        <div class="flex gap-2">
+            <Button kind={mode === "total" ? "primary" : "secondary"} size="sm" onclick={setTotal}>
+                {$t("pages.admin.projects.modals.paid.total")}
+            </Button>
+            <Button
+                kind={mode === "partial" ? "primary" : "secondary"}
+                size="sm"
+                onclick={setPartial}
+            >
+                {$t("pages.admin.projects.modals.paid.partial")}
+            </Button>
         </div>
+
+        <TextInput
+            bind:value={paidValue}
+            labelText={$t("pages.admin.projects.modals.paid.inputLabel")}
+            disabled={mode === "total"}
+        />
+
         <div class="flex justify-end">
-            <Button kind="primary" onclick={() => onsave?.(paidValue, paidMatchfundingValue)}>
+            <Button kind="primary" onclick={() => onsave?.(paidValue)}>
                 {$t("pages.admin.projects.modals.paid.save")}
             </Button>
         </div>

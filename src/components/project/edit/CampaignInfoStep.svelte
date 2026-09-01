@@ -14,11 +14,12 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import MediaUploader from "./MediaUploader.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
+    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
     import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import ImageUploadModal from "../../library/inputs/ImageUploadModal.svelte";
     import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import Title from "../../library/typography/Title.svelte";
 
@@ -31,6 +32,8 @@
     }
 
     let { draft, onContinue }: CampaignInfoStepProps = $props();
+
+    let showUploadModal = $state(false);
 
     function handleContinue() {}
 
@@ -101,10 +104,23 @@
             </div>
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <MediaUploader onUpload={handleImageUpload} />
+                <Button
+                    kind="secondary"
+                    size="md"
+                    onclick={() => (showUploadModal = true)}
+                    class="h-fit"
+                >
+                    <UploadIcon />
+                    {$t("pages.project.edit.campaignInfo.media.addImage")}
+                </Button>
 
                 <VideoUrlInput video={$draft.latest.video?.src} onChange={handleVideoChange} />
             </div>
+
+            <ImageUploadModal
+                bind:open={showUploadModal}
+                onConfirm={(files) => files[0] && handleImageUpload(files[0])}
+            />
 
             {#if $draft.latest.cover}
                 {@const cover = $draft.latest.cover}
