@@ -126,6 +126,7 @@
                     data-testid="language-cancel-btn"
                     class="text-secondary cursor-pointer rounded-lg p-2 transition-colors"
                     aria-label={$t("common.cancel")}
+                    title={$t("common.cancel")}
                 >
                     <Close class="size-4" />
                 </button>
@@ -141,6 +142,6 @@
         class="text-secondary flex cursor-pointer items-center gap-2 text-base font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
         <PlusIcon class="size-5" />
-        {$t("pages.project.edit.configuration.languages.addButton")}
+        {$t("common.add")}
     </button>
 </div>

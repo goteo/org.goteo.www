@@ -117,16 +117,22 @@ export class ProjectDraftRepository {
         const plainProject = structuredClone(actual);
         const key = generateKey(actor, plainProject, lang);
 
-        const siblings = await this.siblingsOf(key);
-
         const existing = await this.get(key);
         if (existing) {
             // Remote project might have changed, so we overwrite to avoid drift
-            const current: ProjectDraft = { ...existing, actual: plainProject };
-            this.update(current);
+            const languages = [...new Set([...existing.languages, ...(actual.locales ?? [])])];
+            const current: ProjectDraft = { ...existing, actual: plainProject, languages };
+            await this.update(current);
+
+            // Locales added remotely must reach every languaged sibling of this Draft
+            if (languages.length !== existing.languages.length) {
+                await this.setLanguages(current, languages);
+            }
 
             return current;
         }
+
+        const siblings = await this.siblingsOf(key);
 
         const language =
             lang || actual.locales?.[0] || get(locale) || import.meta.env.PUBLIC_DEFAULT_LANGUAGE;

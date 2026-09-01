@@ -272,6 +272,7 @@
     "donate": "Donar",
     "donateAmount": "Dona {{ amount }}",
     "save": "Guardar",
+    "add": "Añadir",
     "edit": "Editar",
     "delete": "Borrar",
     "continue": "Continuar",
@@ -662,7 +663,6 @@
             "description": "Cuáles son los idiomas en los que publicarás el contenido de  la campaña",
             "primaryLabel": "Idioma principal del contenido",
             "secondaryLabel": "Idioma secundario del contenido",
-            "addButton": "Añadir idioma",
             "removeCurrent": "No puedes eliminar el idioma que estás editando. Cambia de idioma en la barra superior."
           },
           "release": {
