@@ -8,7 +8,7 @@ import Stats from "../../components/home/Stats.astro";
 import FeaturedPromoters from "../../components/home/FeaturedPromoters.astro";
 import Blog from "../../components/home/Blog.astro";
 import Matchfunding from "../../components/home/Matchfunding.astro";
-import Banners from "../../components/home/HomeBanners.astro";
+import Banners from "../../components/home/HomeBanners.svelte";
 // Disabled sections, re-enable the import along with the component below:
 // import Stories from "../../components/home/Stories.svelte";
 // import Resources from "../../components/home/Resources.astro";
@@ -29,7 +29,7 @@ const activeBanners = await bannerRepository.getActive();
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
     <App client:load locale={lang} class="mb-20 gap-18">
         <Hero />
-        <Banners banners={activeBanners} />
+        <Banners banners={activeBanners} client:load />
         <Campaigns />
         <Blog />
         <Stats />
