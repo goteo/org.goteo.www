@@ -63,7 +63,7 @@ Implements active/inactive pill states matching Figma design
             bind:selected
             selectedIds={selected.map((s) => s.id!)}
             options={categories}
-            onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
+            onChange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
         />
     {/await}
 

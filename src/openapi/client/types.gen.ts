@@ -1612,17 +1612,17 @@ export type ProjectProjectCreationDto = {
      */
     subtitle: string;
     /**
-     * URL to an image resource to be displayed as header.
-     */
-    cover?: string;
-    /**
      * List of Categories.
      */
     categories: Array<string>;
     /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory: Territory;
+    /**
      * Deadlines and important Project dates.
      */
-    calendar?: ProjectCalendar;
+    calendar: ProjectCalendar;
     readonly status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -1639,17 +1639,17 @@ export type ProjectProjectCreationDtoJsonld = {
      */
     subtitle: string;
     /**
-     * URL to an image resource to be displayed as header.
-     */
-    cover?: string;
-    /**
      * List of Categories.
      */
     categories: Array<string>;
     /**
+     * ISO 3166 data about the Project's territory of interest.
+     */
+    territory: TerritoryJsonld;
+    /**
      * Deadlines and important Project dates.
      */
-    calendar?: ProjectCalendarJsonld;
+    calendar: ProjectCalendarJsonld;
     readonly status?: 'in_draft' | 'to_campaign_review' | 'in_campaign_review' | 'in_campaign_review.to_change' | 'in_campaign_review.to_review' | 'campaign_review.rejected' | 'to_campaign' | 'in_campaign' | 'campaign.failed' | 'campaign.cancelled' | 'to_funding_review' | 'in_funding_review' | 'in_funding_review.to_change' | 'in_funding_review.to_review' | 'funding_review.rejected' | 'to_funding' | 'in_funding' | 'funding.paid';
 };
 
@@ -2423,7 +2423,7 @@ export type Territory = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country?: string | null;
+    country: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).
@@ -2453,7 +2453,7 @@ export type TerritoryJsonld = {
      * ISO 3166-1 alpha-2 two-letter country code.\
      * e.g: ES (Spain).
      */
-    country?: string | null;
+    country: string | null;
     /**
      * ISO 3166-2 first level subdivision code.\
      * e.g: ES-AN (Andalucía, Spain).

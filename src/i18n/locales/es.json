@@ -51,7 +51,8 @@
           "required": "Debes aceptar las condiciones del impulsor y las bases de la convocatoria"
         },
         "release": {
-          "max": "La fecha de inicio es demasiado tardía: la campaña no puede extenderse más allá de la fecha límite de la plataforma"
+          "min": "La fecha de salida no puede ser antes de {{ min }}",
+          "max": "La fecha de salida no puede ser después de {{ max }}"
         }
       },
       "errors": {
@@ -190,7 +191,24 @@
       },
       "status": {
         "all": "Todos los estados",
+        "in_draft": "Borrador",
+        "to_campaign_review": "Pendiente de enviar a revisión",
+        "in_campaign_review": "En revisión",
+        "in_campaign_review_to_change": "En revisión: requiere cambios",
+        "in_campaign_review_to_review": "En revisión: pendiente de revisar",
+        "campaign_review_rejected": "Rechazado en revisión",
+        "to_campaign": "Lista para campaña",
         "in_campaign": "En campaña",
+        "campaign_failed": "Campaña fallida",
+        "campaign_cancelled": "Campaña cancelada",
+        "to_funding_review": "Pendiente de revisión de financiación",
+        "in_funding_review": "En revisión de financiación",
+        "in_funding_review_to_change": "En revisión de financiación: requiere cambios",
+        "in_funding_review_to_review": "En revisión de financiación: pendiente de revisar",
+        "funding_review_rejected": "Rechazado en revisión de financiación",
+        "to_funding": "Pendiente de financiación",
+        "in_funding": "En financiación",
+        "funding_paid": "Financiación pagada",
         "funded": "Financiados",
         "archived": "Archivados"
       }
@@ -241,6 +259,11 @@
         "placeholder": "Busca tu proyecto"
       }
     },
+    "imageUploadModal": {
+      "title": "Sube tus imágenes",
+      "description": "Añade imágenes o vídeos aquí. El formato idóneo para Goteo es {{ size }}",
+      "dropzone": "Arrastra tus archivos aquí o <u>haz clic para seleccionarlos.</u>"
+    },
     "richTextEditor": {
       "toolbar": "Barra de formato de texto",
       "fontSize": "Tamaño de letra",
@@ -277,6 +300,7 @@
     "delete": "Borrar",
     "continue": "Continuar",
     "back": "Volver",
+    "close": "Cerrar",
     "learnMore": "Saber más",
     "cancel": "Cancelar",
     "publish": "Publicar",
@@ -898,40 +922,42 @@
         }
       },
       "create": {
-        "title": "Propón una campaña",
-        "subtitle": "Describe brevemete el proyecto y la campaña de crowdfunding.",
-        "budgetPreview": "Dinero necesario",
+        "title": "Crea un proyecto",
+        "subtitle": "Describe brevemete tu proyecto de crowdfunding.",
         "description": {
           "title": "Describe brevemente tu propuesta",
-          "titlePrompt": "Indica el nombre de tu campaña",
-          "titlePlaceholder": "Nombre de campaña",
-          "subtitle": "Indica el nombre de tu campaña y describe brevemente el proyecto que realizarás si consigues la financiación.",
+          "description": "Indica el nombre de tu proyecto y describe brevemente lo que realizarás si consigues la financiación.",
+          "titlePrompt": "Indica el nombre de tu proyecto",
+          "titlePlaceholder": "Mi proyecto",
           "subtitlePrompt": "Indica brevemente la descripción de tu proyecto.",
-          "subtitlePlaceholder": "Sin descripción"
+          "subtitlePlaceholder": "Un proyecto para hacer el mundo un poquito mejor"
         },
         "categories": {
-          "title": "¿Qué categoría se ajusta a tu campaña?",
+          "title": "¿Qué categoría se ajusta a tu proyecto?",
           "subtitle": "(Puedes elegir un máximo de 2)"
         },
         "address": {
           "title": "¿Cuál es la dirección del proyecto?",
           "subtitle": "Busca y selecciona la dirección completa del proyecto. Esto nos ayuda a ubicar tu iniciativa.",
-          "placeholder": "Ej: Calle Gran Vía 28, Madrid"
-        },
-        "budget": {
-          "title": "¿Cuánto dinero necesitas?",
-          "subtitle": "Selecciona la cantidad que necesites para llevar a cabo tu proyecto."
+          "placeholder": "Forn de l'Olivera 22, Palma"
         },
         "release": {
-          "title": "Fecha salida de campaña",
-          "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)"
+          "title": "Fecha de salida a campaña",
+          "subtitle": "(Ten en cuenta que las campañas de crowdfunding tienen una duración mínima de 40 días)",
+          "label": "Fecha de salida aproximada"
         },
         "terms": {
           "label": "Acepto las condiciones del impulsor y las bases de la convocatoria"
         },
-        "submit": "Proponer campaña",
+        "submit": "Crear proyecto",
         "submitting": "Enviando…",
-        "submitSuccess": "¡Campaña propuesta correctamente!"
+        "submitSuccess": "Proyecto creado",
+        "validation": {
+          "titleBadFormat": "El título debe contener al menos una letra.",
+          "categoriesNotEnough": "Debes seleccionar al menos {{ min }} categoría(s).",
+          "territoryMissing": "Debes especificar un lugar.",
+          "releaseMissing": "Debes especificar una fecha de salida aproximada"
+        }
       },
       "view": {
         "owner": "Campaña de crowdfunding impulsada por {{ owner }}",
@@ -1527,10 +1553,8 @@
         "description": "Busca proyectos y gestiónalos de la manera más rápida posible gracias al buscador",
         "lastProjects": "Listado de campañas:",
         "totalizers": {
-          "selected": "Campañas seleccionadas:",
-          "totalEarned": "Total conseguido:",
-          "totalPaid": "Total pagado:",
-          "totalUnpaid": "Falta por pagar:"
+          "selected": "proyectos seleccionadas:",
+          "totalEarned": "Total conseguido:"
         },
         "filters": {
           "search": {
@@ -1544,29 +1568,6 @@
               "completed": "Completada",
               "active": "Activa",
               "failed": "Fallida"
-            }
-          },
-          "status": {
-            "title": "Estado de proyecto",
-            "options": {
-              "in_draft": "Borrador",
-              "to_campaign_review": "Pendiente revisión campaña",
-              "in_campaign_review": "En revisión campaña",
-              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
-              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
-              "campaign_review_rejected": "Campaña rechazada",
-              "to_campaign": "Pendiente campaña",
-              "in_campaign": "En campaña",
-              "campaign_failed": "Campaña fallida",
-              "campaign_cancelled": "Campaña cancelada",
-              "to_funding_review": "Pendiente revisión cobro",
-              "in_funding_review": "En revisión cobro",
-              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
-              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
-              "funding_review_rejected": "Cobro rechazado",
-              "to_funding": "Pendiente cobro",
-              "in_funding": "En cobro",
-              "funding_paid": "Cobro pagado"
             }
           },
           "dateRange": {
@@ -1590,32 +1591,11 @@
           "headers": {
             "name": "Proyecto",
             "promoter": "Impulsor",
-            "contractNumber": "Número de contrato",
             "achieved": "Conseguido",
             "paid": "Pagado",
             "process": "Estado"
           },
           "rows": {
-            "status": {
-              "in_draft": "Borrador",
-              "to_campaign_review": "Pendiente revisión campaña",
-              "in_campaign_review": "En revisión campaña",
-              "in_campaign_review_to_change": "Revisión campaña: requiere cambios",
-              "in_campaign_review_to_review": "Revisión campaña: pendiente revisar",
-              "campaign_review_rejected": "Campaña rechazada",
-              "to_campaign": "Pendiente campaña",
-              "in_campaign": "En campaña",
-              "campaign_failed": "Campaña fallida",
-              "campaign_cancelled": "Campaña cancelada",
-              "to_funding_review": "Pendiente revisión cobro",
-              "in_funding_review": "En revisión cobro",
-              "in_funding_review_to_change": "Revisión cobro: requiere cambios",
-              "in_funding_review_to_review": "Revisión cobro: pendiente revisar",
-              "funding_review_rejected": "Cobro rechazado",
-              "to_funding": "Pendiente cobro",
-              "in_funding": "En cobro",
-              "funding_paid": "Cobro pagado"
-            },
             "details": {
               "datePublished": "Publicado",
               "dateEnd1": "Fin primera ronda",
@@ -1623,17 +1603,14 @@
               "minOptim": "Mínimo - Óptimo",
               "email": "Email",
               "phone": "Teléfono",
-              "contractExpiry": "Vencimiento del contrato",
               "remaining": "Falta por pagar",
               "btns": {
                 "changeStatus": "Cambiar cuentas",
-                "createContract": "Formulario de contrato",
                 "promoter": "Impulsor",
                 "contributions": "Aportes",
                 "donors": "Donantes de campaña",
                 "financialReport": "Informe financiación",
                 "certificates": "Certificados",
-                "contractPdf": "Contrato PDF",
                 "annotations": "Anotaciones"
               }
             },
@@ -1644,7 +1621,9 @@
           "paid": {
             "title": "Pagado",
             "description": "Esta cantidad refleja el total de lo aportado a la campaña por todos los medios de pago posibles.",
-            "input": "Pago",
+            "total": "Total",
+            "partial": "Parcial",
+            "inputLabel": "Pago",
             "matchfunding": "Pago matchfunding",
             "save": "Guardar"
           },
@@ -1743,7 +1722,10 @@
               "email": "Email",
               "type": "Tipo",
               "territory": "Ubicación",
-              "active": "Activo"
+              "active": "Activo",
+              "totalCollected": "Total cobrado",
+              "recentCharges": "Últimos cobros",
+              "noRecentCharges": "No se encontraron cobros recientes"
             }
           }
         }

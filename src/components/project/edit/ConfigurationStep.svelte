@@ -155,7 +155,7 @@
                     max={2}
                     {options}
                     bind:selectedIds={categories}
-                    onchange={handleCategoryChange}
+                    onChange={handleCategoryChange}
                 />
             </div>
         {/if}
