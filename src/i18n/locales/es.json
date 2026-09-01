@@ -242,6 +242,11 @@
         "placeholder": "Busca tu proyecto"
       }
     },
+    "imageUploadModal": {
+      "title": "Sube tus imágenes",
+      "description": "Añade imágenes o vídeos aquí. El formato idóneo para Goteo es {{ size }}",
+      "dropzone": "Arrastra tus archivos aquí o <u>haz clic para seleccionarlos.</u>"
+    },
     "richTextEditor": {
       "toolbar": "Barra de formato de texto",
       "fontSize": "Tamaño de letra",
