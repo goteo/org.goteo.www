@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 
 export interface BannerRecord {
+    id: number;
     title: string;
     content: string;
     ctaText: string;
@@ -21,6 +22,7 @@ class BannerRepository {
         return await this.db
             .prepare(
                 `SELECT
+                    id,
                     title,
                     content,
                     cta_text AS ctaText,
@@ -33,21 +35,17 @@ class BannerRepository {
             )
             .all<BannerRecord>()
             .then((data) =>
-                data.results.map((r) => {
-                    console.log(r);
-
-                    return {
-                        ...r,
-                        startsAt: new Date(r.startsAt),
-                        endsAt: new Date(r.endsAt),
-                        dateCreated: new Date(r.dateCreated),
-                    };
-                }),
+                data.results.map((r) => ({
+                    ...r,
+                    startsAt: new Date(r.startsAt),
+                    endsAt: new Date(r.endsAt),
+                    dateCreated: new Date(r.dateCreated),
+                })),
             );
     }
 
-    public async create(banner: BannerRecord): Promise<BannerRecord> {
-        const result = await this.db
+    public async create(banner: Omit<BannerRecord, "id">): Promise<void> {
+        await this.db
             .prepare(
                 `INSERT INTO banners (title, content, cta_text, cta_link, starts_at, ends_at, date_created)
              VALUES (?, ?, ?, ?, ?, ?, ?)`,
@@ -62,10 +60,10 @@ class BannerRepository {
                 banner.dateCreated.getTime(),
             )
             .run();
+    }
 
-        console.log(result);
-
-        return banner;
+    public async delete(id: number): Promise<void> {
+        await this.db.prepare(`DELETE FROM banners WHERE id = ?`).bind(id).run();
     }
 }
 

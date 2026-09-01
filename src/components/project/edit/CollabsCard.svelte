@@ -1,7 +1,6 @@
 <script lang="ts">
     import CollabsModal from "./CollabsModal.svelte";
     import CreateCard from "./CreateCard.svelte";
-    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import {
         addCollaboration,
@@ -12,6 +11,7 @@
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectCollaboration } from "../../../openapi/client";
@@ -124,7 +124,8 @@
             onDelete={handleDeleteCollab}
         />
         <DeleteModal
-            variant="collaborations"
+            title={$t("pages.project.edit.collaborations.deleteModal.title")}
+            description={$t("pages.project.edit.collaborations.deleteModal.description")}
             bind:open={openDeleteModal}
             onclick={handleDeleteCollab}
         />

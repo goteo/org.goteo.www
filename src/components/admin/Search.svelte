@@ -83,7 +83,7 @@
         if (showUsers) {
             fetches.push(
                 apiUsersGetCollection({
-                    query: { handle: trimmed },
+                    query: { q: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
             );
@@ -225,7 +225,7 @@
                                         <div class="mt-1 line-clamp-2 text-sm text-gray-600">
                                             {item.data.subtitle}
                                         </div>
-                                    {:else if item.data.description}
+                                    {:else if "description" in item.data && item.data.description}
                                         <div class="mt-1 line-clamp-2 text-sm text-gray-600">
                                             {item.data.description}
                                         </div>

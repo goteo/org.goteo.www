@@ -42,7 +42,7 @@
 
     let filters: UsersQuery = $state(initialParams.filters ?? {});
     let searchValue = $state(
-        typeof initialParams.filters.handle === "string" ? initialParams.filters.handle : "",
+        typeof initialParams.filters.q === "string" ? initialParams.filters.q : "",
     );
 
     let userRows = $state<UserRow[]>([]);
@@ -143,6 +143,7 @@
                     active: user.active ?? false,
                     roles: user.roles ?? [],
                     territory: user.territory?.country ?? "—",
+                    accounting: user.accounting ?? "—",
                 };
             });
         } finally {
@@ -184,12 +185,12 @@
 
         if (value.length >= 4 || value.length === 0) {
             if (value) {
-                filters = { ...filters, handle: value };
+                filters = { ...filters, q: value };
                 table.currentPage = 1;
                 reloadUsers(true);
                 return;
             } else {
-                const { handle, ...rest } = filters;
+                const { q, ...rest } = filters;
                 filters = rest;
             }
             table.currentPage = 1;
@@ -219,7 +220,7 @@
         onApplyFilters: handleApplyFilters,
         searchPlaceholder: $t("pages.admin.users.filters.search.placeholder"),
         onSelectUser: (u: User) => {
-            filters = { ...filters, handle: u.handle };
+            filters = { ...filters, q: u.handle };
             table.currentPage = 1;
             reloadUsers();
         },

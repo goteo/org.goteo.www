@@ -39,6 +39,12 @@
     {#if currentSubtab === "fields"}
         <BannersForm />
     {:else if currentSubtab === "history"}
-        <BannersHistory rows={banners} />
+        <BannersHistory
+            rows={banners}
+            onError={(message) => {
+                errorMessage = message;
+                showError = true;
+            }}
+        />
     {/if}
 </div>

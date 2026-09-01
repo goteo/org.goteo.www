@@ -1,5 +1,4 @@
 <script lang="ts">
-    import DeleteModal from "./DeleteModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import { formatCurrency } from "../../../utils/currencies";
@@ -8,6 +7,7 @@
     import Close from "../../icons/navigation/Close.svelte";
     import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
@@ -85,38 +85,70 @@
                 {/await}
             </div>
         {/if}
-    </div>
 
-    <div class="mt-auto flex w-full justify-between">
-        {#if reward.isFinite}
-            <div class="text-secondary flex items-center justify-between gap-1 text-base font-bold">
-                <UnitIcon />
-                <span>
-                    {#if reward.unitsTotal === 1}
-                        {$t("domain.project.reward.unitsTotal.single")}
-                    {:else}
-                        {@html $t("domain.project.reward.unitsTotal.multiple", {
-                            units: String(reward.unitsTotal),
-                        })}
-                    {/if}
-                </span>
-            </div>
-        {:else}
-            <div class="text-secondary flex items-center justify-between font-bold">
-                <UnitIcon />
-                <InfinityIcon width="32" height="32" />
-            </div>
-        {/if}
+        <div class="flex flex-col">
+            <Title
+                level={3}
+                variant="subsection"
+                color="secondary"
+                truncate={2}
+                class="w-full text-left"
+            >
+                <div>
+                    {@html $t("domain.project.reward.byAtLeast", {
+                        amount: formatCurrency(reward.money.amount, reward.money.currency),
+                    })}
+                </div>
+                {reward.title}
+            </Title>
+
+            {#if reward.description}
+                <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
+                    {#await renderMarkdown(reward.description) then description}
+                        {@html description}
+                    {/await}
+                </div>
+            {/if}
+        </div>
+
+        <div class="mt-auto flex w-full justify-between">
+            {#if reward.isFinite}
+                <div
+                    class="text-secondary flex items-center justify-between gap-1 text-base font-bold"
+                >
+                    <UnitIcon />
+                    <span>
+                        {#if reward.unitsTotal === 1}
+                            {$t("domain.project.reward.unitsTotal.single")}
+                        {:else}
+                            {@html $t("domain.project.reward.unitsTotal.multiple", {
+                                units: String(reward.unitsTotal),
+                            })}
+                        {/if}
+                    </span>
+                </div>
+            {:else}
+                <div class="text-secondary flex items-center justify-between font-bold">
+                    <UnitIcon />
+                    <InfinityIcon width="32" height="32" />
+                </div>
+            {/if}
+        </div>
+        <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
+            {$t("common.edit")}
+        </Button>
+        <RewardsModal
+            bind:open={openModal}
+            {project}
+            {reward}
+            onSave={handleSaveReward}
+            onDelete={handleDeleteReward}
+        />
+        <DeleteModal
+            title={$t("pages.project.edit.rewards.deleteModal.title")}
+            description={$t("pages.project.edit.rewards.deleteModal.description")}
+            bind:open={openDeleteModal}
+            onclick={handleDeleteReward}
+        />
     </div>
-    <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-        {$t("common.edit")}
-    </Button>
-    <RewardsModal
-        {project}
-        {reward}
-        bind:open={openModal}
-        onSave={handleSaveReward}
-        onDelete={handleDeleteReward}
-    />
-    <DeleteModal variant="rewards" bind:open={openDeleteModal} onclick={handleDeleteReward} />
 </div>

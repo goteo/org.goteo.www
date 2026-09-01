@@ -191,7 +191,24 @@
       },
       "status": {
         "all": "All statuses",
+        "in_draft": "Draft",
+        "to_campaign_review": "Pending submission for review",
+        "in_campaign_review": "Under review",
+        "in_campaign_review_to_change": "Under review: changes required",
+        "in_campaign_review_to_review": "Under review: pending review",
+        "campaign_review_rejected": "Rejected during review",
+        "to_campaign": "Ready for campaign",
         "in_campaign": "In campaign",
+        "campaign_failed": "Failed campaign",
+        "campaign_cancelled": "Cancelled campaign",
+        "to_funding_review": "Pending funding review",
+        "in_funding_review": "Under funding review",
+        "in_funding_review_to_change": "Under funding review: changes required",
+        "in_funding_review_to_review": "Under funding review: pending review",
+        "funding_review_rejected": "Rejected during funding review",
+        "to_funding": "Pending funding",
+        "in_funding": "In funding",
+        "funding_paid": "Funding paid",
         "funded": "Funded",
         "archived": "Archived"
       }
@@ -242,6 +259,11 @@
         "placeholder": "Search for your project"
       }
     },
+    "imageUploadModal": {
+      "title": "Upload your images",
+      "description": "Add images or videos here. The ideal format for Goteo is {{ size }}",
+      "dropzone": "Drag your files here or <u>click to select them.</u>"
+    },
     "richTextEditor": {
       "toolbar": "Text formatting toolbar",
       "fontSize": "Font size",
@@ -273,10 +295,12 @@
     "donate": "Donate",
     "donateAmount": "Donate {{ amount }}",
     "save": "Save",
+    "add": "Add",
     "edit": "Edit",
     "delete": "Delete",
     "continue": "Continue",
     "back": "Back",
+    "close": "Close",
     "learnMore": "Learn more",
     "cancel": "Cancel",
     "publish": "Publish",
@@ -663,7 +687,7 @@
             "description": "What languages will you publish the campaign content in",
             "primaryLabel": "Main content language",
             "secondaryLabel": "Secondary content language",
-            "addButton": "Add language"
+            "removeCurrent": "You cannot delete the language you are editing. Change the language in the top bar."
           },
           "release": {
             "title": "Campaign launch date",
@@ -1529,10 +1553,8 @@
         "description": "Search for projects and manage them as quickly as possible thanks to the search tool",
         "lastProjects": "Campaign list:",
         "totalizers": {
-          "selected": "Selected campaigns:",
-          "totalEarned": "Total raised:",
-          "totalPaid": "Total paid:",
-          "totalUnpaid": "Pending payment:"
+          "selected": "selected projects:",
+          "totalEarned": "Total raised:"
         },
         "filters": {
           "search": {
@@ -1546,29 +1568,6 @@
               "completed": "Completed",
               "active": "Active",
               "failed": "Failed"
-            }
-          },
-          "status": {
-            "title": "Project status",
-            "options": {
-              "in_draft": "Draft",
-              "to_campaign_review": "Pending campaign review",
-              "in_campaign_review": "In campaign review",
-              "in_campaign_review_to_change": "Campaign review: changes required",
-              "in_campaign_review_to_review": "Campaign review: pending review",
-              "campaign_review_rejected": "Campaign rejected",
-              "to_campaign": "Pending campaign",
-              "in_campaign": "In campaign",
-              "campaign_failed": "Failed campaign",
-              "campaign_cancelled": "Campaign cancelled",
-              "to_funding_review": "Pending payment review",
-              "in_funding_review": "In payment review",
-              "in_funding_review_to_change": "Funding review: changes required",
-              "in_funding_review_to_review": "Funding review: pending review",
-              "funding_review_rejected": "Funding rejected",
-              "to_funding": "Pending payment",
-              "in_funding": "In payment",
-              "funding_paid": "Payment paid"
             }
           },
           "dateRange": {
@@ -1592,32 +1591,11 @@
           "headers": {
             "name": "Project",
             "promoter": "Promoter",
-            "contractNumber": "Contract number",
             "achieved": "Raised",
             "paid": "Paid",
             "process": "Status"
           },
           "rows": {
-            "status": {
-              "in_draft": "Draft",
-              "to_campaign_review": "Pending campaign review",
-              "in_campaign_review": "In campaign review",
-              "in_campaign_review_to_change": "Campaign review: changes required",
-              "in_campaign_review_to_review": "Campaign review: pending review",
-              "campaign_review_rejected": "Campaign rejected",
-              "to_campaign": "Pending campaign",
-              "in_campaign": "In campaign",
-              "campaign_failed": "Failed campaign",
-              "campaign_cancelled": "Campaign cancelled",
-              "to_funding_review": "Pending payment review",
-              "in_funding_review": "In payment review",
-              "in_funding_review_to_change": "Funding review: changes required",
-              "in_funding_review_to_review": "Funding review: pending review",
-              "funding_review_rejected": "Payment rejected",
-              "to_funding": "Pending payment",
-              "in_funding": "In payment",
-              "funding_paid": "Payment paid"
-            },
             "details": {
               "datePublished": "Published",
               "dateEnd1": "End of first round",
@@ -1625,17 +1603,14 @@
               "minOptim": "Minimum - Optimum",
               "email": "Email",
               "phone": "Phone",
-              "contractExpiry": "Contract expiry",
               "remaining": "Pending payment",
               "btns": {
                 "changeStatus": "Change accounts",
-                "createContract": "Contract form",
                 "promoter": "Promoter",
                 "contributions": "Contributions",
                 "donors": "Campaign donors",
                 "financialReport": "Funding report",
                 "certificates": "Certificates",
-                "contractPdf": "Contract PDF",
                 "annotations": "Annotations"
               }
             },
@@ -1646,7 +1621,9 @@
           "paid": {
             "title": "Paid",
             "description": "This amount reflects the total contributed to the campaign through all possible payment methods.",
-            "input": "Payment",
+            "total": "Total",
+            "partial": "Partial",
+            "inputLabel": "Payment",
             "matchfunding": "Matchfunding payment",
             "save": "Save"
           },
@@ -1745,7 +1722,10 @@
               "email": "Email",
               "type": "Type",
               "territory": "Location",
-              "active": "Active"
+              "active": "Active",
+              "totalCollected": "Total collected",
+              "recentCharges": "Recent charges",
+              "noRecentCharges": "No recent charges found"
             }
           }
         }

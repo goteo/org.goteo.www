@@ -90,9 +90,9 @@
             <div
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
-                class="border-grey flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="border-grey flex basis-1/3 flex-col justify-between rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
-                <div class="flex flex-col gap-6">
+                <div class="flex flex-col gap-3">
                     <Title
                         level={3}
                         variant="subsection"
@@ -102,7 +102,7 @@
                     >
                         {$t("pages.project.view.rewards.donationFree.title")}
                     </Title>
-                    <p class="text-sm whitespace-pre-line text-gray-800">
+                    <p class="text-content text-base whitespace-pre-line">
                         {$t("pages.project.view.rewards.donationFree.description")}
                     </p>
                 </div>

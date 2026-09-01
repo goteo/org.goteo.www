@@ -13,14 +13,20 @@
     let {
         accept = ["image/png", "image/jpeg", "video/mp4", "video/quicktime"],
         files = $bindable<UploadedObject[]>([]),
+        multiple = true,
         onUpload,
         ariaLabel = "Upload files",
+        placeholder,
+        dropzoneClass = "",
         class: className = "",
     } = $props<{
         accept?: string[];
         files?: UploadedObject[];
-        onUpload: (file: UploadedObject) => void;
+        multiple?: boolean;
+        onUpload?: (file: UploadedObject) => void;
         ariaLabel?: string;
+        placeholder?: string;
+        dropzoneClass?: ClassNameValue;
         class?: ClassNameValue;
     }>();
 
@@ -30,6 +36,8 @@
     let deleting = $state<Set<string>>(new Set());
 
     const maxSize = import.meta.env.PUBLIC_DEFAULT_MAXSIZE;
+
+    const inputId = $props.id();
 
     const mimeExtensions: Record<string, string> = {
         "image/png": ".png",
@@ -83,6 +91,7 @@
 
             files = [...files, uploaded];
             error = null;
+            onUpload?.(uploaded);
         } catch (err) {
             error = err instanceof Error ? err.message : "Upload failed";
             console.error("File upload error:", err);
@@ -100,9 +109,8 @@
 
         const validFiles = Array.from(fileList).filter(validate);
 
-        for (const file of validFiles) {
+        for (const file of multiple ? validFiles : validFiles.slice(0, 1)) {
             await uploadFile(file);
-            onUpload?.(file);
         }
     }
 
@@ -136,7 +144,7 @@
                 await fetch("/api/upload/delete", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ key: file.key }),
+                    body: JSON.stringify({ keyOrUrl: file.key }),
                 });
             } catch (err) {
                 console.error("Failed to delete file from bucket:", err);
@@ -178,18 +186,22 @@
     >
         <input
             type="file"
-            multiple
+            {multiple}
             class="hidden"
-            id="fileInput"
+            id={inputId}
             accept={accept.join(",")}
             aria-label={ariaLabel}
             onchange={onInputChange}
         />
 
-        <label for="fileInput" class="flex h-32 cursor-pointer flex-col justify-center gap-2">
+        <label
+            for={inputId}
+            class={twMerge("flex h-32 cursor-pointer flex-col justify-center gap-2", dropzoneClass)}
+        >
             <UploadFileIcon class="size-10 self-center" />
+            <!-- Text comes from i18n only, so inline markup (e.g. <u>) is safe to render -->
             <p class="text-content overflow-hidden text-base font-normal text-ellipsis">
-                {$t("pages.project.edit.rewards.modal.placeholders.files")}
+                {@html placeholder ?? $t("pages.project.edit.rewards.modal.placeholders.files")}
             </p>
         </label>
 

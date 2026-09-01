@@ -35,3 +35,24 @@ export const createBanner = defineAction({
         await bannerRepository.create({ ...input, dateCreated: new Date() });
     },
 });
+
+export const deleteBanner = defineAction({
+    accept: "form",
+    input: z.object({
+        id: z.coerce.number().int().positive(),
+    }),
+    handler: async (input, context) => {
+        const { session, t } = context.locals;
+
+        // Actions are posted to /_actions/*, which the /admin firewall rule does not
+        // match, so the role has to be checked here.
+        if (!session?.user.roles?.includes("ROLE_ADMIN")) {
+            throw new ActionError({
+                code: "FORBIDDEN",
+                message: t("pages.admin.comm.banners.errors.forbidden"),
+            });
+        }
+
+        await bannerRepository.delete(input.id);
+    },
+});

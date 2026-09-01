@@ -9,11 +9,13 @@
         apiProjectsIdPatch,
         apiAccountingsIdGet,
         apiUsersIdOrHandleGet,
+        apiProjectSupportsmoneyTotalGetCollection,
+        apiProjectsIdOrSlugGetUrl,
+        apiProjectsGetCollectionUrl,
         type Project,
         type Accounting,
         type User,
     } from "../../../openapi/client/index.ts";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen.ts";
     import { useAdminTableState } from "../../../utils/adminTableState.svelte";
     import { formatCurrency } from "../../../utils/currencies";
     import { extractId } from "../../../utils/extractId";
@@ -53,11 +55,8 @@
     const table = useAdminTableState<ProjectSortKey>(initialSort);
 
     let filters: ProjectsQuery = $state(initialParams.filters);
-    let searchValue = $state(
-        typeof initialParams.filters.title === "string" ? initialParams.filters.title : "",
-    );
-
     let projectRows = $state<ProjectRow[]>([]);
+    let totalEarned = $state("—");
 
     let accountingsCache = $state(new Map<string, Accounting>());
     let ownersCache = $state(new Map<string, User>());
@@ -73,20 +72,52 @@
         }
         return map;
     });
+
     let annotationsCache = $state(new Map<number, string>());
     let paidModalOpen = $state(false);
     let annotationsModalOpen = $state(false);
     let paidValue = $state("");
-    let paidMatchfundingValue = $state("");
+    let maxAchievedValue = $state("");
     let annotationText = $state("");
     let selectedProjectId = $state(0);
 
     let projectSlides = $derived([
         { title: $t("pages.admin.projects.totalizers.selected"), amount: table.totalItems },
-        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalPaid"), amount: "—" },
-        { title: $t("pages.admin.projects.totalizers.totalUnpaid"), amount: "—" },
+        { title: $t("pages.admin.projects.totalizers.totalEarned"), amount: totalEarned },
     ]);
+
+    /**
+     * Fetches the total money earned for a given list of project IDs.
+     * @param ids - Array of project IDs
+     */
+    async function fetchTotalEarned(ids: number[]) {
+        if (ids.length === 0) {
+            totalEarned = formatCurrency(0, import.meta.env.PUBLIC_DEFAULT_CURRENCY);
+            return;
+        }
+        try {
+            const { data, error } = await apiProjectSupportsmoneyTotalGetCollection({
+                query: {
+                    "project[]": ids.map((id) =>
+                        apiProjectsIdOrSlugGetUrl.replace("{idOrSlug}", String(id)),
+                    ),
+                },
+            });
+
+            if (error) {
+                console.error("Failed to fetch money total:", error);
+                return;
+            }
+
+            if (data) {
+                const total = data.amount ?? 0;
+                const currency = data.currency ?? import.meta.env.PUBLIC_DEFAULT_CURRENCY;
+                totalEarned = formatCurrency(total, currency);
+            }
+        } catch (e) {
+            console.error("Failed to fetch money total", e);
+        }
+    }
 
     function buildProjectsQuery(
         filters: ProjectsQuery,
@@ -159,6 +190,9 @@
             const loadedProjects = toCollectionItems<Project>(collection);
             table.totalItems = getCollectionTotalItems(collection, response);
 
+            const projectIds = loadedProjects.map((p) => p.id).filter(Boolean) as number[];
+            fetchTotalEarned(projectIds);
+
             const uniqueAccountingIris = [
                 ...new Set(loadedProjects.map((p) => p.accounting).filter(Boolean)),
             ] as string[];
@@ -215,7 +249,6 @@
                     name: project.title,
                     slug: project.slug ?? "",
                     promoter: owner?.displayName ?? owner?.email ?? "—",
-                    contractNumber: "—",
                     achieved: balance ? formatCurrency(balance.amount, balance.currency) : "—",
                     paid: "—",
                     paidMatchfunding: "—",
@@ -224,7 +257,6 @@
                     dateEnd1: calendar?.minimum ?? "—",
                     dateEnd2: calendar?.optimum ?? "—",
                     minOptim: "—",
-                    contractExpiry: "—",
                     remaining: "—",
                     annotationsCount: 0,
                     annotations: "",
@@ -268,22 +300,6 @@
         );
     });
 
-    function handleSearch(value: string): void {
-        if (value.length >= 4 || value.length === 0) {
-            if (value) {
-                filters = { ...filters, title: value };
-                table.currentPage = 1;
-                reloadProjects(true);
-                return;
-            } else {
-                const { ...rest } = filters;
-                filters = rest;
-            }
-            table.currentPage = 1;
-            reloadProjects();
-        }
-    }
-
     async function handleApplyFilters(newFilters: ProjectsQuery): Promise<void> {
         filters = { ...filters, ...newFilters };
         table.currentPage = 1;
@@ -308,7 +324,7 @@
         e.stopPropagation();
         selectedProjectId = project.id;
         paidValue = project.paid !== "—" ? project.paid : "";
-        paidMatchfundingValue = project.paidMatchfunding !== "—" ? project.paidMatchfunding : "";
+        maxAchievedValue = project.achieved !== "—" ? project.achieved : "";
         paidModalOpen = true;
     }
 
@@ -386,7 +402,7 @@
 <ProjectsModalPaid
     bind:open={paidModalOpen}
     bind:paidValue
-    bind:paidMatchfundingValue
+    maxAchieved={maxAchievedValue}
     onsave={handleSavePaid}
 />
 <ProjectsModalAnnotations
