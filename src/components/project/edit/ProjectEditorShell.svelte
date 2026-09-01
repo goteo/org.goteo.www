@@ -41,18 +41,14 @@
 
     let editor = $derived.by(async (): Promise<ProjectDraftStore | undefined> => {
         if (project) {
-            let actual = $state.snapshot(project);
+            const { data } = await withoutCache(() =>
+                apiProjectsIdOrSlugGet({
+                    path: { idOrSlug: String(project.id) },
+                    headers: { "Accept-Language": language },
+                }),
+            );
 
-            if (project.locales?.includes(language)) {
-                const { data } = await withoutCache(() =>
-                    apiProjectsIdOrSlugGet({
-                        path: { idOrSlug: String(project.id) },
-                        headers: { "Accept-Language": language },
-                    }),
-                );
-
-                actual = data!;
-            }
+            const actual = data ?? $state.snapshot(project);
 
             const draft = await draftsRepository.getOrCreateFor(actor, actual, language);
 

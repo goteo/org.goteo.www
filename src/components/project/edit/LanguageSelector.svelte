@@ -1,29 +1,9 @@
-<!--
-    Language Selector Component
-
-    Allows users to select one primary language and optionally add secondary languages.
-
-    Features:
-    - Primary language dropdown (required)
-    - Add secondary languages with "Añadir outro" button
-    - Remove secondary languages
-    - Excludes already-selected languages from dropdowns
-    - Validation on blur
-
-    Design System:
-    - Uses Select component from library
-    - Error states with red border and message
--->
 <script lang="ts">
-    import { untrack } from "svelte";
-
     import { t } from "../../../i18n/store";
-    import {
-        touchedFields,
-        markFieldAsTouched,
-        validationErrors,
-    } from "../../../stores/drafts/projectDraft";
     import { getLanguageDisplayName } from "../../../utils/lang";
+    import { iso639_1Codes } from "../../../utils/lang.types";
+    import PlusIcon from "../../icons/actions/PlusIcon.svelte";
+    import Close from "../../icons/navigation/Close.svelte";
     import Select from "../../library/inputs/Select.svelte";
 
     interface LanguageOption {
@@ -33,179 +13,135 @@
 
     interface LanguageSelectorProps {
         languages: string[];
+        current: string;
         onChange: (languages: string[]) => void;
     }
 
-    let { languages = [], onChange }: LanguageSelectorProps = $props();
+    let { languages = [], current, onChange }: LanguageSelectorProps = $props();
 
-    // Available languages - using translations
-    const availableLanguages: LanguageOption[] = getSupportedLocales();
+    const availableLanguages: LanguageOption[] = iso639_1Codes
+        .map((code) => ({ code, name: getLanguageDisplayName(code) }))
+        .filter((lang): lang is LanguageOption => lang.name !== undefined);
 
-    // Local state for language selection, seeded once from the prop
-    let primaryLanguage = $state(untrack(() => languages[0] || ""));
-    let secondaryLanguages = $state<string[]>(untrack(() => languages.slice(1)));
+    let pending = $state(false);
 
-    // Reactive validation errors
-    const errors = $derived($validationErrors);
-    const touched = $derived($touchedFields);
-    const showError = $derived(touched.has("languages") && errors.languages);
+    const primary = $derived(languages[0]);
+    const secondaries = $derived(languages.slice(1));
 
-    /**
-     * Handle primary language change
-     */
-    function handlePrimaryChange(value: string) {
-        primaryLanguage = value;
-        updateLanguages();
+    function isLanguageTaken(code: string): boolean {
+        return languages.includes(code);
     }
 
-    /**
-     * Handle secondary language change
-     */
-    function handleSecondaryChange(index: number, value: string) {
-        secondaryLanguages = secondaryLanguages.map((lang, i) => (i === index ? value : lang));
-        updateLanguages();
+    function replace(from: string, to: string) {
+        if (!to || to === from || languages.includes(to)) return;
+
+        onChange(languages.map((language) => (language === from ? to : language)));
     }
 
-    /**
-     * Add a new secondary language slot
-     */
-    function addSecondaryLanguage() {
-        secondaryLanguages = [...secondaryLanguages, ""];
+    function remove(language: string) {
+        if (language === current) return;
+
+        onChange(languages.filter((other) => other !== language));
     }
 
-    /**
-     * Remove a secondary language
-     */
-    function removeSecondaryLanguage(index: number) {
-        secondaryLanguages = secondaryLanguages.filter((_, i) => i !== index);
-        updateLanguages();
-    }
+    function add(language: string) {
+        if (!language || languages.includes(language)) return;
 
-    /**
-     * Update parent component with all languages
-     */
-    function updateLanguages() {
-        const allLanguages = [
-            primaryLanguage,
-            ...secondaryLanguages.filter((lang) => lang !== ""),
-        ].filter(Boolean);
-
-        onChange(allLanguages);
-    }
-
-    /**
-     * Handle blur event for validation
-     */
-    function handleBlur() {
-        markFieldAsTouched("languages");
-    }
-
-    function isLanguageDisabled(code: string, currentValue: string): boolean {
-        const selectedLanguages = [primaryLanguage, ...secondaryLanguages];
-        return selectedLanguages.includes(code) && code !== currentValue;
-    }
-
-    function getSupportedLocales(): LanguageOption[] {
-        const supportedLanguages = [];
-        const letters = "abcdefghijklmnopqrstuvwxyz";
-
-        function isLanguageCodeSupported(code: string) {
-            const locale = new Intl.Locale(code);
-            return locale.maximize().region !== undefined;
-        }
-
-        // ISO 639-1 (2-letter)
-        for (let i = 0; i < letters.length; i++) {
-            for (let j = 0; j < letters.length; j++) {
-                const code = letters[i] + letters[j];
-                if (isLanguageCodeSupported(code)) {
-                    const langDisplayName = getLanguageDisplayName(code);
-                    if (langDisplayName)
-                        supportedLanguages.push({ code: code, name: langDisplayName });
-                }
-            }
-        }
-
-        return supportedLanguages;
+        pending = false;
+        onChange([...languages, language]);
     }
 </script>
 
 <div class="space-y-4">
-    <!-- Primary Language -->
     <Select
-        bind:value={primaryLanguage}
-        id="primary-language-{primaryLanguage}"
+        value={primary}
+        id="primary-language"
+        class="cursor-pointer"
         labelText={$t("pages.project.edit.configuration.languages.primaryLabel")}
         required={true}
-        error={showError ? errors.languages : undefined}
-        onBlur={handleBlur}
-        onChange={handlePrimaryChange}
+        onChange={(value) => replace(primary, value)}
     >
-        <option value="">{$t("common.select")}</option>
         {#each availableLanguages as lang}
-            <option value={lang.code} disabled={isLanguageDisabled(lang.code, primaryLanguage)}
-                >{lang.name}</option
-            >
+            <option value={lang.code} disabled={isLanguageTaken(lang.code)}>{lang.name}</option>
         {/each}
     </Select>
 
-    <!-- Secondary Languages -->
-    {#each secondaryLanguages as secondary, index}
+    {#each secondaries as secondary (secondary)}
         <div class="flex gap-2">
             <div class="flex-1">
                 <Select
-                    bind:value={secondaryLanguages[index]}
-                    id="secondary-language-{index}-{secondary}"
+                    value={secondary}
+                    id="secondary-language-{secondary}"
+                    class="cursor-pointer"
                     labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
-                    onChange={(value) => handleSecondaryChange(index, value)}
+                    onChange={(value) => replace(secondary, value)}
                 >
-                    <option value="">{$t("common.select")}</option>
                     {#each availableLanguages as lang}
-                        <option
-                            value={lang.code}
-                            disabled={isLanguageDisabled(lang.code, secondaryLanguages[index])}
+                        <option value={lang.code} disabled={isLanguageTaken(lang.code)}
                             >{lang.name}</option
                         >
                     {/each}
                 </Select>
             </div>
-            <div class="flex items-end pb-2">
+            <div class="flex items-center">
                 <button
                     type="button"
-                    onclick={() => removeSecondaryLanguage(index)}
-                    data-testid="language-remove-btn-{index}"
-                    class="hover:bg-light-muted text-secondary hover:text-tertiary rounded-lg p-2 transition-colors"
+                    onclick={() => remove(secondary)}
+                    disabled={secondary === current}
+                    data-testid="language-remove-btn-{secondary}"
+                    class="text-secondary cursor-pointer rounded-lg p-2 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label={$t("common.remove")}
+                    title={secondary === current
+                        ? $t("pages.project.edit.configuration.languages.removeCurrent")
+                        : $t("common.remove")}
                 >
-                    <svg
-                        class="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        stroke-width="2"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    </svg>
+                    <Close class="size-4" />
                 </button>
             </div>
         </div>
     {/each}
 
-    <!-- Add Secondary Language Button -->
+    {#if pending}
+        <div class="flex gap-2">
+            <div class="flex-1">
+                <Select
+                    value=""
+                    id="pending-language"
+                    class="cursor-pointer"
+                    labelText={$t("pages.project.edit.configuration.languages.secondaryLabel")}
+                    onChange={add}
+                >
+                    <option value="">{$t("common.select")}</option>
+                    {#each availableLanguages as lang}
+                        <option value={lang.code} disabled={isLanguageTaken(lang.code)}
+                            >{lang.name}</option
+                        >
+                    {/each}
+                </Select>
+            </div>
+            <div class="flex items-center">
+                <button
+                    type="button"
+                    onclick={() => (pending = false)}
+                    data-testid="language-cancel-btn"
+                    class="text-secondary cursor-pointer rounded-lg p-2 transition-colors"
+                    aria-label={$t("common.cancel")}
+                    title={$t("common.cancel")}
+                >
+                    <Close class="size-4" />
+                </button>
+            </div>
+        </div>
+    {/if}
+
     <button
         type="button"
-        onclick={addSecondaryLanguage}
+        onclick={() => (pending = true)}
+        disabled={pending}
         data-testid="language-add-btn"
-        class="text-secondary hover:text-tertiary flex items-center gap-2 text-base font-bold transition-colors"
+        class="text-secondary flex cursor-pointer items-center gap-2 text-base font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
-        <svg class="size-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 8v8m-4-4h8" />
-        </svg>
-        {$t("pages.project.edit.configuration.languages.addButton")}
+        <PlusIcon class="size-5" />
+        {$t("common.add")}
     </button>
 </div>
