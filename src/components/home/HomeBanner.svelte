@@ -7,7 +7,8 @@
     const CLOSED_BANNERS_COOKIE = "goteo-banners-closed";
 
     interface Props {
-        id: number;
+        /** Omit to render a throwaway preview: closing it won't persist a dismissal. */
+        id?: number;
         title: string;
         description: string;
         ctaText: string;
@@ -23,9 +24,11 @@
     function handleClose() {
         visible = false;
 
-        const closed = (getCookie(CLOSED_BANNERS_COOKIE) ?? "").split(",").filter(Boolean);
-        if (!closed.includes(String(id))) {
-            setCookie(CLOSED_BANNERS_COOKIE, [...closed, id].join(","));
+        if (id !== undefined) {
+            const closed = (getCookie(CLOSED_BANNERS_COOKIE) ?? "").split(",").filter(Boolean);
+            if (!closed.includes(String(id))) {
+                setCookie(CLOSED_BANNERS_COOKIE, [...closed, id].join(","));
+            }
         }
 
         if (onClose) onClose();

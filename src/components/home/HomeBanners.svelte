@@ -13,8 +13,9 @@
 
 {#if banners.length > 0}
     <section class="wrapper flex flex-col gap-4">
-        {#each banners as banner}
+        {#each banners as banner (banner.id)}
             <HomeBanner
+                id={banner.id}
                 title={banner.title}
                 description={banner.content}
                 ctaText={banner.ctaText}
