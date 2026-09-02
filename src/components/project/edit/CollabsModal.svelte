@@ -2,11 +2,11 @@
     import { Modal } from "flowbite-svelte";
     import { untrack } from "svelte";
 
-    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen";
     import { validationErrors } from "../../../stores/drafts/projectDraft";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Title from "../../library/typography/Title.svelte";
 
@@ -56,7 +56,7 @@
     bind:open
     onclose={() => validationErrors.set({})}
     closeBtnClass="top-7 end-7 cursor-pointer bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 mx-2 flex w-full max-w-225 -translate-x-1/2 -translate-y-1/2 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px] sm:mx-4 lg:mx-0"
+    class="fixed top-1/2 left-1/2 mx-2 flex w-full max-w-225 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px] sm:mx-4 lg:mx-0"
     bodyClass="p-0"
 >
     <!--
@@ -105,7 +105,8 @@
                     {$t("common.remove")}
                 </Button>
                 <DeleteModal
-                    variant="collaborations"
+                    title={$t("pages.project.edit.collaborations.deleteModal.title")}
+                    description={$t("pages.project.edit.collaborations.deleteModal.description")}
                     bind:open={openDeleteModal}
                     onclick={() => handleDeleteClick()}
                 />

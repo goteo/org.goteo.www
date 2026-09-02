@@ -1,7 +1,6 @@
 <script lang="ts">
     import BudgetModal from "./BudgetModal.svelte";
     import CreateCard from "./CreateCard.svelte";
-    import DeleteModal from "./DeleteModal.svelte";
     import { t } from "../../../i18n/store";
     import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen";
     import {
@@ -14,6 +13,7 @@
     import { formatCurrency } from "../../../utils/currencies";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectBudgetItem } from "../../../openapi/client";
@@ -170,7 +170,8 @@
             onDelete={handleDeleteBudgetItem}
         />
         <DeleteModal
-            variant="budget"
+            title={$t("pages.project.edit.budget.deleteModal.title")}
+            description={$t("pages.project.edit.budget.deleteModal.description")}
             bind:open={openDeleteModal}
             onclick={() => handleDeleteBudgetItem(item.deadline)}
         />

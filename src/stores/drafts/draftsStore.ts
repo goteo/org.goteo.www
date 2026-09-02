@@ -20,6 +20,7 @@ export interface ProjectDraftStore extends Readable<ProjectDraftState> {
     setDraft(draft: ProjectDraft): void;
     update(update: Partial<ProjectDraft>): void;
     patch(patch: ProjectDraft["patch"]): void;
+    setLanguages(languages: string[]): void;
 }
 
 function merge(actual: Project, patch: ProjectDraft["patch"]): Project {
@@ -42,6 +43,7 @@ export function createProjectDraftStore(draft: ProjectDraft): ProjectDraftStore 
 
     const state = derived(draftState, ($draftState): ProjectDraftState => ({
         ...$draftState,
+        languages: $draftState.languages ?? [$draftState.lang],
         latest: merge($draftState.actual, $draftState.patch),
         isDirty: Object.entries($draftState.patch).length > 0,
     }));
@@ -76,6 +78,20 @@ export function createProjectDraftStore(draft: ProjectDraft): ProjectDraftStore 
                 };
 
                 void draftsRepository.update(next);
+
+                return next;
+            });
+        },
+
+        setLanguages(languages) {
+            draftState.update((draft) => {
+                const next = {
+                    ...draft,
+                    languages,
+                    dateUpdated: new Date().toISOString(),
+                };
+
+                void draftsRepository.setLanguages(next, languages);
 
                 return next;
             });
