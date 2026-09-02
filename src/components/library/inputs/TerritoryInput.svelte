@@ -1,3 +1,11 @@
+<script lang="ts" module>
+    export type Territories = {
+        countries: string[];
+        subLvl1: string[];
+        subLvl2: string[];
+    };
+</script>
+
 <script lang="ts">
     import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
@@ -11,6 +19,10 @@
     import type { Territory } from "../../../openapi/client";
     import type { DropdownOption } from "../dropdown/dropdown.types";
 
+    interface TerritoryOption extends DropdownOption {
+        result: NominatimResult;
+    }
+
     interface Props {
         class?: ClassNameValue;
         value?: string;
@@ -19,6 +31,9 @@
         error?: string;
         onInput?: (territory: Territory) => void;
         onBlur?: () => void;
+        multiple?: boolean;
+        selectedTerritory?: Territories;
+        onTerritoryChange?: (territories: Territories) => void;
     }
 
     let {
@@ -29,46 +44,115 @@
         error = undefined,
         onInput = undefined,
         onBlur = undefined,
+        multiple = false,
+        selectedTerritory = undefined,
+        onTerritoryChange = undefined,
     }: Props = $props();
 
-    let results: NominatimResult[] = $state([]);
-    let selected: DropdownOption[] = $state([]);
+    let options: TerritoryOption[] = $state([]);
+    let selected: TerritoryOption[] = $state([]);
 
-    let searchTimer: ReturnType<typeof setTimeout> | null = null;
+    let searchTimer: ReturnType<typeof setTimeout> | undefined;
 
-    const options = $derived(
-        results.map((result) => ({
-            id: result.osm_id.toString(),
-            label: result.display_name,
-            selected: selected.some((s) => s.id === result.osm_id.toString()),
-        })),
-    );
+    let lastIncoming = "";
+
+    $effect(() => {
+        if (!multiple || !selectedTerritory) return;
+
+        const all = [
+            ...(selectedTerritory.countries || []),
+            ...(selectedTerritory.subLvl1 || []),
+            ...(selectedTerritory.subLvl2 || []),
+        ].filter(Boolean);
+
+        const signature = [...all].sort().join("|");
+
+        if (signature === lastIncoming) return;
+
+        lastIncoming = signature;
+
+        if (all.length === 0) {
+            selected = [];
+            return;
+        }
+
+        (async () => {
+            const results = await Promise.all(
+                all.map((code) => searchPlace(code, 1).then((r) => r?.[0])),
+            );
+
+            selected = results.filter(Boolean).map((result) => ({
+                id: result.osm_id.toString(),
+                label: result.display_name,
+                selected: true,
+                result,
+            }));
+        })();
+    });
 
     function handleSearch(searchText: string) {
-        if (searchTimer) clearTimeout(searchTimer);
+        clearTimeout(searchTimer);
 
         if (!searchText || searchText.length < 2) {
-            results = [];
+            options = multiple ? [...selected] : [];
             return;
         }
 
         searchTimer = setTimeout(async () => {
-            results = await searchPlace(searchText, 6);
+            const selectedIds = new Set(selected.map((s) => s.id));
+            const results = await searchPlace(searchText, 6);
+
+            options = results.map((result) => ({
+                id: result.osm_id.toString(),
+                label: result.display_name,
+                selected: selectedIds.has(result.osm_id.toString()),
+                result,
+            }));
         }, 300);
     }
 
-    function handleSelect(option: DropdownOption) {
-        const result = results.find((r) => r.osm_id.toString() === option.id);
-        if (!result) return;
+    function handleChange(option: DropdownOption) {
+        if (!multiple) {
+            const result = (option as TerritoryOption).result;
+            if (!result) return;
 
-        value = result.display_name;
-        const territory = extractTerritory(result);
-        onInput?.(territory);
+            value = result.display_name;
+            onInput?.(extractTerritory(result));
+            return;
+        }
+
+        const countries = new Set<string>();
+        const subLvl1 = new Set<string>();
+        const subLvl2 = new Set<string>();
+
+        for (const item of selected) {
+            const { country, subLvl1: lvl1, subLvl2: lvl2 } = extractTerritory(item.result);
+
+            if (lvl2) {
+                subLvl2.add(lvl2);
+                continue;
+            }
+
+            if (lvl1) {
+                subLvl1.add(lvl1);
+                continue;
+            }
+
+            if (country) {
+                countries.add(country);
+            }
+        }
+
+        onTerritoryChange?.({
+            countries: [...countries],
+            subLvl1: [...subLvl1],
+            subLvl2: [...subLvl2],
+        });
     }
 
     function handleClear() {
         value = "";
-        results = [];
+        options = [];
         selected = [];
         onInput?.({
             country: null,
@@ -81,23 +165,24 @@
 
 <div class={twMerge("relative w-full", classes)}>
     <DropdownMenu
-        variant="basic"
+        class={multiple ? "border" : undefined}
+        variant={multiple ? "multiselect" : "basic"}
         hasSearch
         searchClasses={error && "border-tertiary border"}
-        singleSelect
-        clearable
+        singleSelect={!multiple}
+        clearable={!multiple}
         bind:searchValue={value}
         searchPlaceholder={placeholder}
-        {options}
+        bind:options
         bind:selected
         onSearch={handleSearch}
-        onChange={handleSelect}
+        onChange={handleChange}
         onClear={handleClear}
         onInputBlur={() => onBlur?.()}
     />
-    <p class={twJoin("mt-1 ml-4 text-xs", !error && "text-content", error && "text-tertiary")}>
-        {#if error || helperText}
+    {#if error || helperText}
+        <p class={twJoin("mt-1 ml-4 text-xs", error ? "text-tertiary" : "text-content")}>
             {error || helperText}
-        {/if}
-    </p>
+        </p>
+    {/if}
 </div>

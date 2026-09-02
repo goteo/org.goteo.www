@@ -11,11 +11,11 @@ Integrated with searchStore for state management and URL synchronization
     import SearchButton from "./SearchButton.svelte";
     import SearchInput from "./SearchInput.svelte";
     import StatusFilter from "./StatusFilter.svelte";
-    import TerritoryFilter from "./TerritoryFilter.svelte";
     import { t } from "../../i18n/store";
     import { searchStore, searchFilters, type SearchFilters } from "../../stores/searchStore";
     import FilterIcon from "../icons/filters/FilterIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import TerritoryInput from "../library/inputs/TerritoryInput.svelte";
     import Title from "../library/typography/Title.svelte";
 
     interface Props {
@@ -116,7 +116,8 @@ Integrated with searchStore for state management and URL synchronization
                     <Title level={3} variant="field" class="font-body mb-2">
                         {$t("pages.search.filters.territoryLabel")}
                     </Title>
-                    <TerritoryFilter
+                    <TerritoryInput
+                        multiple
                         selectedTerritory={{
                             countries: $searchFilters["territory.country[]"] || [],
                             subLvl1: $searchFilters["territory.subLvl1[]"] || [],
