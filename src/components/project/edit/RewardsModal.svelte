@@ -1,6 +1,5 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
-    import { untrack } from "svelte";
 
     import RewardItemsSelector from "./RewardItemsSelector.svelte";
     import { t } from "../../../i18n/store";
@@ -15,23 +14,25 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { Project, ProjectReward } from "../../../openapi/client";
+    import type { ProjectReward } from "../../../openapi/client";
+    import { zApiProjectRewardsPostBody } from "../../../openapi/client/zod.gen";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     let {
         open = $bindable(false),
-        project,
+        draft,
         reward,
         onSave,
         onDelete,
     }: {
         open: boolean;
-        project: Project;
+        draft: ProjectDraftStore;
         reward?: ProjectReward;
-        onSave: (data: ProjectReward | null) => void;
+        onSave?: (reward: ProjectReward) => void;
         onDelete?: () => void;
     } = $props();
 
-    let draft: ProjectReward = $derived.by(() => {
+    let data: ProjectReward = $derived.by(() => {
         if (reward) {
             return reward;
         }
@@ -39,7 +40,7 @@
         return {
             project: client.buildUrl({
                 url: apiProjectsIdOrSlugGetUrl,
-                path: { idOrSlug: project.id },
+                path: { idOrSlug: $draft.actual.id },
             }),
             title: "",
             description: "",
@@ -50,12 +51,57 @@
         };
     });
 
-    let openDeleteModal = $state(false);
+    let validation: Partial<Record<keyof typeof data, string>> = $state({});
 
-    function handleSaveOrCreate() {
-        console.log(draft);
-        onSave(draft);
+    function getValidationMessage(field: keyof typeof data): string {
+        if (!validation[field]) {
+            return "";
+        }
+
+        return $t(validation[field]);
     }
+
+    function handleSubmit(event: SubmitEvent) {
+        event.preventDefault();
+
+        const result = zApiProjectRewardsPostBody
+            .superRefine((data, ctx) => {
+                if (data.title.length < 1) {
+                    ctx.addIssue({
+                        code: "custom",
+                        path: ["title"],
+                        message: "system.validation.requiredField",
+                    });
+                }
+
+                if (!data.description || data.description?.length < 1) {
+                    ctx.addIssue({
+                        code: "custom",
+                        path: ["description"],
+                        message: "system.validation.requiredField",
+                    });
+                }
+            })
+            .safeParse(data);
+
+        console.log(result);
+
+        if (result.success) {
+            onSave?.(data);
+            return;
+        }
+
+        for (const issue of result.error.issues) {
+            if (issue.code === "too_small" && issue.path[0] === "money") {
+                validation["money"] = "pages.project.edit.rewards.validation.amount";
+                continue;
+            }
+
+            validation[issue.path[0] as keyof typeof data] = issue.message;
+        }
+    }
+
+    let openDeleteModal = $state(false);
 
     function handleDeleteClick() {
         if (reward) {
@@ -72,11 +118,7 @@
     class="fixed top-1/2 left-1/2 mx-2 flex w-full max-w-225 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px] sm:mx-4 lg:mx-0"
     bodyClass="p-0"
 >
-    <div
-        class="flex flex-col gap-8 rounded-3xl bg-white p-6 shadow-lg"
-        role="presentation"
-        onclick={(e) => e.stopPropagation()}
-    >
+    <form class="flex flex-col gap-8 rounded-3xl bg-white p-6 shadow-lg" onsubmit={handleSubmit}>
         <Title level={2} variant="subsection">
             {$t("pages.project.edit.rewards.modal.title")}
         </Title>
@@ -85,26 +127,31 @@
         </p>
         <div class="flex flex-col gap-4 pt-2">
             <TextInput
-                bind:value={draft.title}
-                labelText={$t("pages.project.edit.rewards.modal.placeholders.title")}
-                placeholder={$t("pages.project.edit.rewards.modal.placeholders.title")}
+                bind:value={data.title}
+                labelText={$t("pages.project.edit.rewards.modal.form.titleLabel")}
+                helperText={$t("pages.project.edit.rewards.modal.form.titleHelper")}
+                placeholder={$t("pages.project.edit.rewards.modal.form.titlePlaceholder")}
+                error={getValidationMessage("title")}
             />
             <TextArea
-                bind:value={draft.description!}
-                labelText={$t("pages.project.edit.rewards.modal.placeholders.description")}
-                placeholder={$t("pages.project.edit.rewards.modal.placeholders.description")}
+                bind:value={data.description!}
+                labelText={$t("pages.project.edit.rewards.modal.form.descriptionLabel")}
+                helperText={$t("pages.project.edit.rewards.modal.form.descriptionHelper")}
+                placeholder={$t("pages.project.edit.rewards.modal.form.descriptionPlaceholder")}
                 rows={5}
+                error={getValidationMessage("description")}
             />
             <MoneyInput
-                amount={draft.money.amount}
-                currency={draft.money.currency}
-                labelText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
-                helperText={$t("pages.project.edit.rewards.modal.placeholders.moneyAmount")}
-                onInput={(money) => (draft.money = money)}
+                amount={data.money.amount}
+                currency={data.money.currency}
+                labelText={$t("pages.project.edit.rewards.modal.form.moneyLabel")}
+                helperText={$t("pages.project.edit.rewards.modal.form.moneyHelper")}
+                onInput={(money) => (data.money = money)}
+                error={getValidationMessage("money")}
             />
             <div class="flex flex-col gap-6">
-                <FileUpload onUpload={(file) => (draft.cover = file.url)} />
-                <RewardItemsSelector bind:units={draft.unitsTotal!} bind:limited={draft.isFinite} />
+                <FileUpload onUpload={(file) => (data.cover = file.url)} />
+                <RewardItemsSelector bind:units={data.unitsTotal!} bind:limited={data.isFinite} />
             </div>
         </div>
         <div class="flex items-center justify-end gap-4">
@@ -119,9 +166,9 @@
                     onclick={() => handleDeleteClick()}
                 />
             {/if}
-            <Button onclick={() => handleSaveOrCreate()} class="w-fit">
-                {$t("common.continue")}
+            <Button type="submit" class="w-fit">
+                {$t("common.save")}
             </Button>
         </div>
-    </div>
+    </form>
 </Modal>

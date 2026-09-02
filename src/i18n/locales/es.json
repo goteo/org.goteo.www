@@ -774,10 +774,15 @@
             "title": "Añade recompensas",
             "description": "Describe la recompensa que ofreces",
             "unitsExisting": "Número de unidades existentes",
-            "placeholders": {
-              "title": "Título de la recompensa",
-              "description": "Descripción de la recompensa",
-              "moneyAmount": "Precio",
+            "form": {
+              "titleLabel": "Título de la recompensa",
+              "titlePlaceholder": "Camiseta personalizada",
+              "titleHelper": "El título se mostrará en todas las tarjetas de esta recompensa",
+              "descriptionLabel": "Descripción de la recompensa",
+              "descriptionPlaceholder": "Una camiseta de algodón con el logo del proyecto sublimado en el pecho.",
+              "descriptionHelper": "La descripción puede contener texto enriquecido, pero se recortará en tarjetas pequeñas",
+              "moneyLabel": "Precio",
+              "moneyHelper": "Indica la donación mínima a realizar para reclamar esta recompensa",
               "files": "Haz click o arrastra aquí tu archivo para subirlo"
             },
             "validation": {
