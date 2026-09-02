@@ -5,6 +5,7 @@
     import { t } from "../../../i18n/store";
     import { client } from "../../../openapi/client/client.gen";
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
+    import { zApiProjectRewardsPostBody } from "../../../openapi/client/zod.gen";
     import { DEFAULT_CURRENCY } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
@@ -15,7 +16,6 @@
     import Title from "../../library/typography/Title.svelte";
 
     import type { ProjectReward } from "../../../openapi/client";
-    import { zApiProjectRewardsPostBody } from "../../../openapi/client/zod.gen";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     let {
