@@ -8,29 +8,27 @@
     import Toast from "../../library/feedback/Toast.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { Project } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     interface Props {
-        project: Project;
+        draft: ProjectDraftStore;
         title: string;
         description: string;
         variant: "reward" | "collab" | "budget";
         open?: boolean;
         onClick?: () => void;
-        onSave?: (data: any, files?: any) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
     }
 
     let {
-        project,
+        draft,
         title,
         description,
         onClick,
         variant,
         open = $bindable(false),
-        onSave,
         defaultDeadline,
         disabled = false,
         disabledMessage = "",
@@ -93,7 +91,7 @@
 {/if}
 
 {#if !disabled && variant === "reward"}
-    <RewardsModal bind:open onSave={(data) => onSave?.(data)} {project} />
+    <RewardsModal bind:open {draft} />
     <!-- {:else if !disabled && variant === "collab"}
     <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
 {:else if !disabled && variant === "budget"}
