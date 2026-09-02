@@ -27,7 +27,7 @@
         "expectedUrl": "No es una URL"
       },
       "date": {
-        "greaterThan": "La fecha debe ser igual o mayor que el {{ date }}"
+        "greaterThan": "La fecha debe ser mayor que el {{ date }}"
       },
       "file": {
         "maxAllowedSize": "Tamaño máximo permitido {{ size }}",
