@@ -44,7 +44,7 @@
             }),
             title: "",
             description: "",
-            cover: "",
+            cover: undefined,
             money: { amount: 0, currency: DEFAULT_CURRENCY },
             isFinite: true,
             unitsTotal: 1,
@@ -84,7 +84,7 @@
             })
             .safeParse(data);
 
-        console.log(result);
+        console.log(result, data);
 
         if (result.success) {
             onSave?.(data);
@@ -150,7 +150,13 @@
                 error={getValidationMessage("money")}
             />
             <div class="flex flex-col gap-6">
-                <FileUpload onUpload={(file) => (data.cover = file.url)} />
+                <FileUpload
+                    onUpload={(file) => (data.cover = file.url)}
+                    labelText={$t("pages.project.edit.rewards.modal.form.coverLabel")}
+                    placeholder={$t("pages.project.edit.rewards.modal.form.coverPlaceholder")}
+                    helperText={$t("pages.project.edit.rewards.modal.form.coverHelper")}
+                    error={getValidationMessage("cover")}
+                />
                 <RewardItemsSelector bind:units={data.unitsTotal!} bind:limited={data.isFinite} />
             </div>
         </div>

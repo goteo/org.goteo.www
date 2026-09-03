@@ -19,6 +19,7 @@
         placeholder,
         error,
         helperText,
+        labelText,
         dropzoneClass = "",
         class: className = "",
     } = $props<{
@@ -30,6 +31,7 @@
         placeholder?: string;
         error?: string;
         helperText?: string;
+        labelText?: string;
         dropzoneClass?: ClassNameValue;
         class?: ClassNameValue;
     }>();
@@ -174,9 +176,19 @@
     }
 </script>
 
-<div class={twMerge("flex flex-col gap-4", className)}>
+<div class={twMerge("relative flex flex-col gap-4", className)}>
+    <label
+        for={inputId}
+        class={twJoin(
+            "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
+            error && "text-tertiary",
+        )}
+    >
+        {labelText}
+    </label>
     <!-- Drop Zone -->
     <div
+        id={inputId}
         role="button"
         tabindex="0"
         class={twMerge(
@@ -300,6 +312,8 @@
     </div>
 
     {#if error || helperText}
-        <p class="text-tertiary text-sm">{error || helperText}</p>
+        <p class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}>
+            {error || helperText}
+        </p>
     {/if}
 </div>

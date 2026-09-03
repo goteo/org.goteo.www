@@ -783,7 +783,9 @@
               "descriptionHelper": "La descripción puede contener texto enriquecido, pero se recortará en tarjetas pequeñas",
               "moneyLabel": "Precio",
               "moneyHelper": "Indica la donación mínima a realizar para reclamar esta recompensa",
-              "files": "Haz click o arrastra aquí tu archivo para subirlo"
+              "coverLabel": "Portada",
+              "coverPlaceholder": "Haz click o arrastra aquí tu archivo para subirlo",
+              "coverHelper": "Este archivo será la portada de tu recompensa"
             },
             "validation": {
               "title": "El título no puede estar vacío",
