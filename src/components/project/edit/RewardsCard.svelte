@@ -1,6 +1,5 @@
 <script lang="ts">
     import CreateCard from "./CreateCard.svelte";
-    import DeleteModal from "./DeleteModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import {
@@ -15,6 +14,7 @@
     import Close from "../../icons/navigation/Close.svelte";
     import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
@@ -160,6 +160,11 @@
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
         />
-        <DeleteModal variant="rewards" bind:open={openDeleteModal} onclick={handleDeleteReward} />
+        <DeleteModal
+            title={$t("pages.project.edit.rewards.deleteModal.title")}
+            description={$t("pages.project.edit.rewards.deleteModal.description")}
+            bind:open={openDeleteModal}
+            onclick={handleDeleteReward}
+        />
     </div>
 {/if}

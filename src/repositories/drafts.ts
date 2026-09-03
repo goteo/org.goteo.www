@@ -37,6 +37,11 @@ export interface ProjectDraft {
     lang: string;
 
     /**
+     * ISO 639-1 language codes declared for the Project's content.
+     */
+    languages: string[];
+
+    /**
      * ISO format datetime string for Draft's creation.
      */
     dateCreated: string;
@@ -115,25 +120,51 @@ export class ProjectDraftRepository {
         const existing = await this.get(key);
         if (existing) {
             // Remote project might have changed, so we overwrite to avoid drift
-            const current: ProjectDraft = { ...existing, actual: plainProject };
-            this.update(current);
+            const languages = [...new Set([...existing.languages, ...(actual.locales ?? [])])];
+            const current: ProjectDraft = { ...existing, actual: plainProject, languages };
+            await this.update(current);
+
+            // Locales added remotely must reach every languaged sibling of this Draft
+            if (languages.length !== existing.languages.length) {
+                await this.setLanguages(current, languages);
+            }
 
             return current;
         }
+
+        const siblings = await this.siblingsOf(key);
+
+        const language =
+            lang || actual.locales?.[0] || get(locale) || import.meta.env.PUBLIC_DEFAULT_LANGUAGE;
 
         return await this.create({
             key,
             actor: buildUserIri(actor),
             actual: plainProject,
             patch: {},
-            lang:
-                lang ||
-                actual.locales?.[0] ||
-                get(locale) ||
-                import.meta.env.PUBLIC_DEFAULT_LANGUAGE,
+            lang: language,
+            languages: siblings[0]?.languages ?? actual.locales ?? [language],
             dateCreated: new Date().toISOString(),
             dateUpdated: new Date().toISOString(),
         });
+    }
+
+    private async siblingsOf(key: string) {
+        const [prefix] = key.split(";lang:");
+
+        return getDb().drafts.where("key").startsWith(`${prefix};`).toArray();
+    }
+
+    public async setLanguages(draft: ProjectDraft, languages: string[]) {
+        const siblings = await this.siblingsOf(draft.key);
+
+        await getDb().drafts.bulkPut(
+            siblings.map((sibling) => ({
+                ...sibling,
+                languages,
+                dateUpdated: new Date().toISOString(),
+            })),
+        );
     }
 
     public async update(draft: Partial<ProjectDraft>) {
