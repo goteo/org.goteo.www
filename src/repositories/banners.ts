@@ -36,8 +36,6 @@ class BannerRepository {
             .all<BannerRecord>()
             .then((data) =>
                 data.results.map((r) => {
-                    console.log(r);
-
                     return {
                         ...r,
                         startsAt: new Date(r.startsAt),
@@ -93,8 +91,6 @@ class BannerRepository {
                 banner.dateCreated.getTime(),
             )
             .run();
-
-        console.log(result);
 
         return banner;
     }
