@@ -7,41 +7,57 @@
     import Close from "../../icons/navigation/Close.svelte";
     import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { ProjectReward } from "../../../openapi/client";
+    import { apiProjectRewardsIdDelete, apiProjectRewardsIdPatch, type ProjectReward } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
 
     let {
         draft,
         reward,
+        onSave,
+        onDelete,
     }: {
         draft: ProjectDraftStore;
         reward: ProjectReward;
+        onSave?: (reward: ProjectReward) => void;
+        onDelete?: (reward: ProjectReward) => void;
     } = $props();
 
     let openModal = $state(false);
     let openDeleteModal = $state(false);
 
-    function handleSaveReward(data: ProjectReward | null) {
-        if (!data) return;
-        let errors;
+    async function handleSave(newReward: ProjectReward) {
+        const { error } = await apiProjectRewardsIdPatch({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $draft.lang },
+            path: { id: String(reward.id) },
+            body: newReward,
+        });
 
-        if (errors === undefined) {
-            errors = {};
-        }
-
-        if (Object.keys(errors).length > 0) {
+        if (!error) {
+            openModal = false;
+            onSave?.(newReward);
             return;
         }
 
-        openModal = false;
+        console.error(error);
     }
 
-    function handleDeleteReward() {
-        openModal = false;
-        openDeleteModal = false;
+    async function handleDelete(reward: ProjectReward) {
+        const { error } = await apiProjectRewardsIdDelete({
+            baseUrl: "/api/relay",
+            path: { id: String(reward.id) },
+        });
+
+        if (!error) {
+            openModal = false;
+            onDelete?.(reward);
+            return;
+        }
+
+        console.error(error);
     }
 </script>
 
@@ -119,15 +135,15 @@
             bind:open={openModal}
             {draft}
             {reward}
-            onSave={handleSaveReward}
-            onDelete={handleDeleteReward}
+            onSave={handleSave}
+            onDelete={handleDelete}
         />
 
         <DeleteModal
             title={$t("pages.project.edit.rewards.deleteModal.title")}
             description={$t("pages.project.edit.rewards.deleteModal.description")}
             bind:open={openDeleteModal}
-            onclick={handleDeleteReward}
+            onclick={() => handleDelete(reward)}
         />
     </div>
 </div>

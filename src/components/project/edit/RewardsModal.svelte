@@ -29,7 +29,7 @@
         draft: ProjectDraftStore;
         reward?: ProjectReward;
         onSave?: (reward: ProjectReward) => void;
-        onDelete?: () => void;
+        onDelete?: (reward: ProjectReward) => void;
     } = $props();
 
     let data: ProjectReward = $derived.by(() => {
@@ -140,7 +140,7 @@
 
     function handleDeleteClick() {
         if (reward) {
-            onDelete?.();
+            onDelete?.(reward);
             openDeleteModal = false;
             open = false;
         }

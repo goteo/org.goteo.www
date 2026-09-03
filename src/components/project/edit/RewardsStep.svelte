@@ -51,7 +51,7 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:then rewards}
             {#each rewards as reward, index}
-                <RewardsCard {draft} {reward} />
+                <RewardsCard {draft} {reward} onSave={reloadRewards} onDelete={reloadRewards} />
             {/each}
         {/await}
         <CreateCard
