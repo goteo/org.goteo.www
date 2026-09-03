@@ -92,6 +92,10 @@ class BannerRepository {
             )
             .run();
 
+        if (result.error) {
+            console.error(result);
+        }
+
         return banner;
     }
 
