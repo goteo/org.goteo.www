@@ -10,13 +10,14 @@
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { Project, ProjectReward } from "../../../openapi/client";
+    import type { ProjectReward } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     let {
-        project,
+        draft,
         reward,
     }: {
-        project: Project;
+        draft: ProjectDraftStore;
         reward: ProjectReward;
     } = $props();
 
@@ -139,7 +140,7 @@
         </Button>
         <RewardsModal
             bind:open={openModal}
-            {project}
+            {draft}
             {reward}
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
