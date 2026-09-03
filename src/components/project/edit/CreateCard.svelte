@@ -3,6 +3,12 @@
 
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
+    import {
+        apiProjectRewardsPost,
+        type ProjectBudgetItem,
+        type ProjectCollaboration,
+        type ProjectReward,
+    } from "../../../openapi/client";
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
@@ -17,6 +23,7 @@
         variant: "reward" | "collab" | "budget";
         open?: boolean;
         onClick?: () => void;
+        onSave?: (data: ProjectCollaboration | ProjectBudgetItem | ProjectReward) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
@@ -27,6 +34,7 @@
         title,
         description,
         onClick,
+        onSave,
         variant,
         open = $bindable(false),
         defaultDeadline,
@@ -40,6 +48,22 @@
         open = true;
 
         onClick?.();
+    }
+
+    async function handleReward(newReward: ProjectReward) {
+        const { error } = await apiProjectRewardsPost({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $draft.lang },
+            body: newReward,
+        });
+
+        if (!error) {
+            open = false;
+            onSave?.(newReward);
+            return;
+        }
+
+        console.error(error);
     }
 </script>
 
@@ -91,7 +115,7 @@
 {/if}
 
 {#if !disabled && variant === "reward"}
-    <RewardsModal bind:open {draft} />
+    <RewardsModal bind:open {draft} onSave={handleReward} />
     <!-- {:else if !disabled && variant === "collab"}
     <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
 {:else if !disabled && variant === "budget"}

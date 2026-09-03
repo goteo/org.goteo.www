@@ -10,13 +10,13 @@
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
+    import CurrencyInput from "../../library/inputs/MoneyInput.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { MoneyInput, ProjectReward } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import CurrencyInput from "../../library/inputs/MoneyInput.svelte";
 
     let {
         open = $bindable(false),

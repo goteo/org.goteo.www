@@ -12,20 +12,28 @@
 
     let { draft }: { draft: ProjectDraftStore } = $props();
 
-    let rewards = withoutCache(() =>
-        apiProjectRewardsGetCollection({
-            baseUrl: "/api/relay",
-            headers: { "Accept-Language": $draft.lang },
-            query: { project: String($draft.actual.id) },
-        }).then(({ data, error }) => {
-            if (error || !data) {
-                console.error(error);
-                return [];
-            }
+    let rewards = $state(loadRewards());
 
-            return data;
-        }),
-    );
+    function loadRewards() {
+        return withoutCache(() =>
+            apiProjectRewardsGetCollection({
+                baseUrl: "/api/relay",
+                headers: { "Accept-Language": $draft.lang },
+                query: { project: String($draft.actual.id) },
+            }).then(({ data, error }) => {
+                if (error || !data) {
+                    console.error(error);
+                    return [];
+                }
+
+                return data;
+            }),
+        );
+    }
+
+    function reloadRewards() {
+        rewards = loadRewards();
+    }
 </script>
 
 <div class="w-full space-y-10">
@@ -37,21 +45,22 @@
             {$t("pages.project.edit.rewards.subtitle")}
         </p>
     </div>
-    {#await rewards}
-        <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
-    {:then rewards}
-        <Grid>
+    <Grid>
+        {#await rewards}
+            <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
+        {:then rewards}
             {#each rewards as reward, index}
                 {reward.id}
             {/each}
-            <CreateCard
-                {draft}
-                variant="reward"
-                title={$t("pages.project.edit.rewards.add.title")}
-                description={$t("pages.project.edit.rewards.add.description")}
-            />
-        </Grid>
-    {/await}
+        {/await}
+        <CreateCard
+            {draft}
+            variant="reward"
+            title={$t("pages.project.edit.rewards.add.title")}
+            description={$t("pages.project.edit.rewards.add.description")}
+            onSave={reloadRewards}
+        />
+    </Grid>
 
     <!-- Continue Button -->
     <div class="flex justify-start">
