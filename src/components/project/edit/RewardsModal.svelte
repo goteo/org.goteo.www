@@ -83,7 +83,11 @@
     }
 
     function handleMoney(newMoney: MoneyInput) {
-        const result = zApiProjectRewardsPostBody.shape.money.safeParse(newMoney);
+        const result = zApiProjectRewardsPostBody.shape.money.safeParse(newMoney, { error: (issue) => {
+            if (issue.code === "too_small") {
+                return "pages.project.edit.rewards.validation.amount"
+            }
+        } });
 
         if (result.success) {
             data.money = newMoney;

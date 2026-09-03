@@ -786,11 +786,6 @@
               "coverLabel": "Portada",
               "coverPlaceholder": "Haz click o arrastra aquí tu archivo para subirlo",
               "coverHelper": "Este archivo será la portada de tu recompensa"
-            },
-            "validation": {
-              "title": "El título no puede estar vacío",
-              "description": "La descripción no puede estar vacía",
-              "amount": "El importe debe ser mayor que cero"
             }
           },
           "deleteModal": {
