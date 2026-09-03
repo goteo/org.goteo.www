@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
     import { uploadImage } from "../../../utils/media/imageUpload";
@@ -17,6 +17,8 @@
         onUpload,
         ariaLabel = "Upload files",
         placeholder,
+        error,
+        helperText,
         dropzoneClass = "",
         class: className = "",
     } = $props<{
@@ -26,12 +28,13 @@
         onUpload?: (file: UploadedObject) => void;
         ariaLabel?: string;
         placeholder?: string;
+        error?: string;
+        helperText?: string;
         dropzoneClass?: ClassNameValue;
         class?: ClassNameValue;
     }>();
 
     let isDragging = $state(false);
-    let error = $state<string | null>(null);
     let uploading = $state<Map<string, number>>(new Map());
     let deleting = $state<Set<string>>(new Set());
 
@@ -179,6 +182,7 @@
         class={twMerge(
             "w-full rounded-lg border border-dashed p-4 text-center transition",
             isDragging ? "border-secondary/60" : "border-secondary",
+            error && "border-tertiary",
         )}
         ondragover={onDragOver}
         ondragleave={onDragLeave}
@@ -198,10 +202,15 @@
             for={inputId}
             class={twMerge("flex h-32 cursor-pointer flex-col justify-center gap-2", dropzoneClass)}
         >
-            <UploadFileIcon class="size-10 self-center" />
+            <UploadFileIcon class={twJoin("size-10 self-center", error && "text-tertiary")} />
             <!-- Text comes from i18n only, so inline markup (e.g. <u>) is safe to render -->
-            <p class="text-content overflow-hidden text-base font-normal text-ellipsis">
-                {@html placeholder ?? $t("pages.project.edit.rewards.modal.placeholders.files")}
+            <p
+                class={twJoin(
+                    "text-content overflow-hidden text-base font-normal text-ellipsis",
+                    error && "text-tertiary",
+                )}
+            >
+                {@html placeholder}
             </p>
         </label>
 
@@ -290,7 +299,7 @@
         </span>
     </div>
 
-    {#if error}
-        <p class="mt-2 text-sm text-red-500">{error}</p>
+    {#if error || helperText}
+        <p class="text-tertiary text-sm">{error || helperText}</p>
     {/if}
 </div>
