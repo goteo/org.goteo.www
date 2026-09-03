@@ -4,6 +4,7 @@
     import { getCookie, setCookie } from "../../utils/cookies";
 
     import type { BannerRecord } from "../../repositories/banners";
+    import { onMount } from "svelte";
 
     const CLOSED_BANNERS_COOKIE = "goteo-banners-closed";
 
@@ -15,8 +16,16 @@
 
     let closed = $state<string[]>([]);
 
+    function getClosed() {
+        return (getCookie(CLOSED_BANNERS_COOKIE) ?? "").split(",").filter(Boolean);
+    }
+
+    onMount(() => {
+        closed = getClosed();
+    })
+
     $effect(() => {
-        closed = (getCookie(CLOSED_BANNERS_COOKIE) ?? "").split(",").filter(Boolean);
+        closed = getClosed();
     });
 
     let visibleBanners = $derived(banners.filter((banner) => !closed.includes(String(banner.id))));
