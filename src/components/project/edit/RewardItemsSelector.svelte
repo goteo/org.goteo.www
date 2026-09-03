@@ -15,7 +15,7 @@
         min?: number;
     } = $props();
 
-    let isInfinite: boolean = $state(!limited);
+    let isInfinite: boolean = $derived(!limited);
     $effect(() => {
         limited = !isInfinite;
         units = isInfinite ? 0 : units;

@@ -1,17 +1,21 @@
 <script lang="ts">
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
+    import {
+        apiProjectRewardsIdDelete,
+        apiProjectRewardsIdPatch,
+        type ProjectReward,
+    } from "../../../openapi/client";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
     import InfinityIcon from "../../icons/Infinity.svelte";
     import Close from "../../icons/navigation/Close.svelte";
     import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import { apiProjectRewardsIdDelete, apiProjectRewardsIdPatch, type ProjectReward } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
 
     let {
         draft,

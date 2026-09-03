@@ -7,6 +7,7 @@
     import { apiProjectsIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
     import { zApiProjectRewardsPostBody } from "../../../openapi/client/zod.gen";
     import { DEFAULT_CURRENCY } from "../../../utils/currencies";
+    import { zCreateRewardForm, zUpdateRewardForm } from "../../../validation/rewardValidation";
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
@@ -32,9 +33,12 @@
         onDelete?: (reward: ProjectReward) => void;
     } = $props();
 
+    let isFinite = $derived(reward?.isFinite || false);
+    let unitsTotal = $derived(reward?.unitsTotal || 0);
+
     let data: ProjectReward = $derived.by(() => {
         if (reward) {
-            return reward;
+            return { ...reward, isFinite, unitsTotal };
         }
 
         return {
@@ -46,8 +50,8 @@
             description: "",
             cover: undefined,
             money: { amount: 0, currency: DEFAULT_CURRENCY },
-            isFinite: true,
-            unitsTotal: 1,
+            isFinite,
+            unitsTotal,
         };
     });
 
@@ -83,11 +87,13 @@
     }
 
     function handleMoney(newMoney: MoneyInput) {
-        const result = zApiProjectRewardsPostBody.shape.money.safeParse(newMoney, { error: (issue) => {
-            if (issue.code === "too_small") {
-                return "pages.project.edit.rewards.validation.amount"
-            }
-        } });
+        const result = zApiProjectRewardsPostBody.shape.money.safeParse(newMoney, {
+            error: (issue) => {
+                if (issue.code === "too_small") {
+                    return "pages.project.edit.rewards.validation.amount";
+                }
+            },
+        });
 
         if (result.success) {
             data.money = newMoney;
@@ -101,25 +107,8 @@
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
 
-        const result = zApiProjectRewardsPostBody
-            .superRefine((data, ctx) => {
-                if (data.title.length < 1) {
-                    ctx.addIssue({
-                        code: "custom",
-                        path: ["title"],
-                        message: "system.validation.requiredField",
-                    });
-                }
-
-                if (!data.description || data.description?.length < 1) {
-                    ctx.addIssue({
-                        code: "custom",
-                        path: ["description"],
-                        message: "system.validation.requiredField",
-                    });
-                }
-            })
-            .safeParse(data);
+        const rewardValidation = reward ? zUpdateRewardForm : zCreateRewardForm;
+        const result = rewardValidation.safeParse(data);
 
         if (result.success) {
             onSave?.(data);
@@ -194,7 +183,7 @@
                     helperText={$t("pages.project.edit.rewards.modal.form.coverHelper")}
                     error={getValidationMessage("cover")}
                 />
-                <RewardItemsSelector bind:units={data.unitsTotal!} bind:limited={data.isFinite} />
+                <RewardItemsSelector bind:units={unitsTotal} bind:limited={isFinite} />
             </div>
         </div>
         <div class="flex items-center justify-end gap-4">
