@@ -10,13 +10,13 @@
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
-    import MoneyInput from "../../library/inputs/MoneyInput.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { ProjectReward } from "../../../openapi/client";
+    import type { MoneyInput, ProjectReward } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import CurrencyInput from "../../library/inputs/MoneyInput.svelte";
 
     let {
         open = $bindable(false),
@@ -61,6 +61,39 @@
         return $t(validation[field]);
     }
 
+    function handleTitle(newTitle: string) {
+        const result = zApiProjectRewardsPostBody.shape.title.safeParse(newTitle);
+
+        if (result.success) {
+            validation["title"] = "";
+            return;
+        }
+        validation["title"] = result.error.issues[0].message;
+    }
+
+    function handleDescription(newDescription: string) {
+        const result = zApiProjectRewardsPostBody.shape.description.safeParse(newDescription);
+
+        if (result.success) {
+            validation["description"] = "";
+            return;
+        }
+
+        validation["description"] = result.error.issues[0].message;
+    }
+
+    function handleMoney(newMoney: MoneyInput) {
+        const result = zApiProjectRewardsPostBody.shape.money.safeParse(newMoney);
+
+        if (result.success) {
+            data.money = newMoney;
+            validation["money"] = "";
+            return;
+        }
+
+        validation["money"] = result.error.issues[0].message;
+    }
+
     function handleSubmit(event: SubmitEvent) {
         event.preventDefault();
 
@@ -83,8 +116,6 @@
                 }
             })
             .safeParse(data);
-
-        console.log(result, data);
 
         if (result.success) {
             onSave?.(data);
@@ -132,21 +163,23 @@
                 helperText={$t("pages.project.edit.rewards.modal.form.titleHelper")}
                 placeholder={$t("pages.project.edit.rewards.modal.form.titlePlaceholder")}
                 error={getValidationMessage("title")}
+                onInput={(title) => handleTitle(String(title))}
             />
             <TextArea
+                rows={5}
                 bind:value={data.description!}
                 labelText={$t("pages.project.edit.rewards.modal.form.descriptionLabel")}
                 helperText={$t("pages.project.edit.rewards.modal.form.descriptionHelper")}
                 placeholder={$t("pages.project.edit.rewards.modal.form.descriptionPlaceholder")}
-                rows={5}
                 error={getValidationMessage("description")}
+                onInput={handleDescription}
             />
-            <MoneyInput
+            <CurrencyInput
                 amount={data.money.amount}
                 currency={data.money.currency}
                 labelText={$t("pages.project.edit.rewards.modal.form.moneyLabel")}
                 helperText={$t("pages.project.edit.rewards.modal.form.moneyHelper")}
-                onInput={(money) => (data.money = money)}
+                onInput={handleMoney}
                 error={getValidationMessage("money")}
             />
             <div class="flex flex-col gap-6">
