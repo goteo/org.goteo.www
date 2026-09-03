@@ -191,7 +191,24 @@
       },
       "status": {
         "all": "Tots els estats",
+        "in_draft": "Esborrany",
+        "to_campaign_review": "Pendent d'enviar a revisió",
+        "in_campaign_review": "En revisió",
+        "in_campaign_review_to_change": "En revisió: requereix canvis",
+        "in_campaign_review_to_review": "En revisió: pendent de revisar",
+        "campaign_review_rejected": "Rebutjat en revisió",
+        "to_campaign": "A punt per a la campanya",
         "in_campaign": "En campanya",
+        "campaign_failed": "Campanya fallida",
+        "campaign_cancelled": "Campanya cancel·lada",
+        "to_funding_review": "Pendent de revisió de finançament",
+        "in_funding_review": "En revisió de finançament",
+        "in_funding_review_to_change": "En revisió de finançament: requereix canvis",
+        "in_funding_review_to_review": "En revisió de finançament: pendent de revisar",
+        "funding_review_rejected": "Rebutjat en revisió de finançament",
+        "to_funding": "Pendent de finançament",
+        "in_funding": "En finançament",
+        "funding_paid": "Finançament pagat",
         "funded": "Finançats",
         "archived": "Arxivats"
       }
@@ -242,6 +259,11 @@
         "placeholder": "Busca el teu projecte"
       }
     },
+    "imageUploadModal": {
+      "title": "Puja les teves imatges",
+      "description": "Afegeix imatges o vídeos aquí. El format idoni per a Goteo és {{ size }}",
+      "dropzone": "Arrossega els teus fitxers aquí o <u>fes clic per seleccionar-los.</u>"
+    },
     "richTextEditor": {
       "toolbar": "Barra de format de text",
       "fontSize": "Mida de la lletra",
@@ -273,10 +295,12 @@
     "donate": "Dona",
     "donateAmount": "Dona {{ amount }}",
     "save": "Desa",
+    "add": "Afegeix",
     "edit": "Edita",
     "delete": "Esborrar",
     "continue": "Continua",
     "back": "Tornar",
+    "close": "Tanca",
     "learnMore": "Saber més",
     "cancel": "Cancel·lar",
     "publish": "Publica",
@@ -663,7 +687,7 @@
             "description": "Quins són els idiomes en què publicaràs el contingut de la campanya",
             "primaryLabel": "Idioma principal del contingut",
             "secondaryLabel": "Idioma secundari del contingut",
-            "addButton": "Afegir idioma"
+            "removeCurrent": "No pots suprimir l’idioma que estàs editant. Canvia d’idioma a la barra superior."
           },
           "release": {
             "title": "Data de sortida a campanya",
@@ -1529,10 +1553,8 @@
         "description": "Busca projectes i gestiona'ls de la manera més ràpida possible gràcies al cercador",
         "lastProjects": "Llistat de campanyes:",
         "totalizers": {
-          "selected": "Campanyes seleccionades:",
-          "totalEarned": "Total aconseguit:",
-          "totalPaid": "Total pagat:",
-          "totalUnpaid": "Falta per pagar:"
+          "selected": "projectes seleccionats:",
+          "totalEarned": "Total aconseguit:"
         },
         "filters": {
           "search": {
@@ -1546,29 +1568,6 @@
               "completed": "Completada",
               "active": "Activa",
               "failed": "Fallida"
-            }
-          },
-          "status": {
-            "title": "Estat del projecte",
-            "options": {
-              "in_draft": "Esborrany",
-              "to_campaign_review": "Pendent de revisió de campanya",
-              "in_campaign_review": "En revisió de campanya",
-              "in_campaign_review_to_change": "Revisió de la campanya: requereix canvis",
-              "in_campaign_review_to_review": "Revisió de la campanya: pendent de revisió",
-              "campaign_review_rejected": "Campanya rebutjada",
-              "to_campaign": "Pendent de campanya",
-              "in_campaign": "En campanya",
-              "campaign_failed": "Campanya fallida",
-              "campaign_cancelled": "Campanya cancel·lada",
-              "to_funding_review": "Pendent de revisió de cobrament",
-              "in_funding_review": "En revisió de cobrament",
-              "in_funding_review_to_change": "Revisió del cobrament: requereix canvis",
-              "in_funding_review_to_review": "Revisió del cobrament: pendent de revisió",
-              "funding_review_rejected": "Cobrament rebutjat",
-              "to_funding": "Pendent de cobrament",
-              "in_funding": "En cobrament",
-              "funding_paid": "Cobrament pagat"
             }
           },
           "dateRange": {
@@ -1592,32 +1591,11 @@
           "headers": {
             "name": "Projecte",
             "promoter": "Impulsor",
-            "contractNumber": "Número de contracte",
             "achieved": "Aconseguit",
             "paid": "Pagat",
             "process": "Estat"
           },
           "rows": {
-            "status": {
-              "in_draft": "Esborrany",
-              "to_campaign_review": "Pendent de revisió de campanya",
-              "in_campaign_review": "En revisió de campanya",
-              "in_campaign_review_to_change": "Revisió de la campanya: requereix canvis",
-              "in_campaign_review_to_review": "Revisió de la campanya: pendent de revisió",
-              "campaign_review_rejected": "Campanya rebutjada",
-              "to_campaign": "Pendent de campanya",
-              "in_campaign": "En campanya",
-              "campaign_failed": "Campanya fallida",
-              "campaign_cancelled": "Campanya cancel·lada",
-              "to_funding_review": "Pendent de revisió de cobrament",
-              "in_funding_review": "En revisió de cobrament",
-              "in_funding_review_to_change": "Revisió del cobrament: requereix canvis",
-              "in_funding_review_to_review": "Revisió del cobrament: pendent de revisió",
-              "funding_review_rejected": "Cobrament rebutjat",
-              "to_funding": "Pendent de cobrament",
-              "in_funding": "En cobrament",
-              "funding_paid": "Cobrament pagat"
-            },
             "details": {
               "datePublished": "Publicat",
               "dateEnd1": "Fi primera ronda",
@@ -1625,17 +1603,14 @@
               "minOptim": "Mínim - Òptim",
               "email": "Correu electrònic",
               "phone": "Telèfon",
-              "contractExpiry": "Venciment del contracte",
               "remaining": "Falta per pagar",
               "btns": {
                 "changeStatus": "Canviar comptes",
-                "createContract": "Formulari de contracte",
                 "promoter": "Impulsor",
                 "contributions": "Aportacions",
                 "donors": "Donants de campanya",
                 "financialReport": "Informe de finançament",
                 "certificates": "Certificats",
-                "contractPdf": "Contracte PDF",
                 "annotations": "Anotacions"
               }
             },
@@ -1646,7 +1621,9 @@
           "paid": {
             "title": "Pagat",
             "description": "Aquesta quantitat reflecteix el total de l'aportat a la campanya per tots els mitjans de pagament possibles.",
-            "input": "Pagament",
+            "total": "Total",
+            "partial": "Parcial",
+            "inputLabel": "Pagament",
             "matchfunding": "Pagament matchfunding",
             "save": "Desa"
           },
@@ -1745,7 +1722,10 @@
               "email": "Correu electrònic",
               "type": "Tipus",
               "territory": "Ubicació",
-              "active": "Actiu"
+              "active": "Actiu",
+              "totalCollected": "Total cobrat",
+              "recentCharges": "Últims cobraments",
+              "noRecentCharges": "No s'han trobat cobraments recents"
             }
           }
         }
@@ -1795,6 +1775,10 @@
             "modal": {
               "title": "Anunci publicat el {{date}}",
               "description": "Aquí pots veure com era l'anunci"
+            },
+            "deleteModal": {
+              "title": "Voleu suprimir aquest anunci?",
+              "description": "L'anunci se suprimirà permanentment i desapareixerà de l'historial. Aquesta acció no es pot desfer."
             }
           }
         }

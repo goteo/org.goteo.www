@@ -94,6 +94,10 @@ class BannerRepository {
 
         return banner;
     }
+
+    public async delete(id: number): Promise<void> {
+        await this.db.prepare(`DELETE FROM banners WHERE id = ?`).bind(id).run();
+    }
 }
 
 export const bannerRepository = new BannerRepository(env.DB);

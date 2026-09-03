@@ -2,16 +2,18 @@
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
-    import Button from "../../library/buttons/Button.svelte";
-    import Title from "../../library/typography/Title.svelte";
+    import Button from "../buttons/Button.svelte";
+    import Title from "../typography/Title.svelte";
 
     let {
         open = $bindable(false),
-        variant,
+        title,
+        description,
         onclick,
     }: {
         open: boolean;
-        variant: "rewards" | "collaborations" | "budget";
+        title: string;
+        description: string;
         onclick: () => void;
     } = $props();
 </script>
@@ -26,11 +28,11 @@
 >
     {#snippet header()}
         <Title level={2} variant="subsection">
-            {$t(`pages.project.edit.${variant}.deleteModal.title`)}
+            {title}
         </Title>
     {/snippet}
     <p class="text-content text-base font-normal">
-        {$t(`pages.project.edit.${variant}.deleteModal.description`)}
+        {description}
     </p>
     {#snippet footer()}
         <Button kind="ghost" onclick={() => (open = false)} class="w-fit"
