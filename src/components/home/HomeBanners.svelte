@@ -1,10 +1,11 @@
 <script lang="ts">
+    import { onMount } from "svelte";
+
     import HomeBanner from "./HomeBanner.svelte";
     import { t } from "../../i18n/store";
     import { getCookie, setCookie } from "../../utils/cookies";
 
     import type { BannerRecord } from "../../repositories/banners";
-    import { onMount } from "svelte";
 
     const CLOSED_BANNERS_COOKIE = "goteo-banners-closed";
 
@@ -22,7 +23,7 @@
 
     onMount(() => {
         closed = getClosed();
-    })
+    });
 
     $effect(() => {
         closed = getClosed();
