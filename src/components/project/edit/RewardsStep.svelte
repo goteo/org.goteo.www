@@ -1,5 +1,6 @@
 <script lang="ts">
     import CreateCard from "./CreateCard.svelte";
+    import RewardsCard from "./RewardsCard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiProjectRewardsGetCollection } from "../../../openapi/client";
@@ -50,7 +51,7 @@
             <LoadingSpinner size="lg" class="col-span-3 mx-auto my-10" />
         {:then rewards}
             {#each rewards as reward, index}
-                {reward.id}
+                <RewardsCard {draft} {reward} />
             {/each}
         {/await}
         <CreateCard

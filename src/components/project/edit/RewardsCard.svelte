@@ -63,7 +63,7 @@
         </div>
     {/if}
 
-    <div class="flex flex-col">
+    <div class="flex h-full flex-col gap-4">
         <Title
             level={3}
             variant="subsection"
@@ -73,7 +73,7 @@
         >
             <div>
                 {@html $t("domain.project.reward.byAtLeast", {
-                    amount: formatCurrency(reward.money.amount, reward.money.currency),
+                    amount: formatCurrency(reward.money),
                 })}
             </div>
             {reward.title}
@@ -86,31 +86,6 @@
                 {/await}
             </div>
         {/if}
-
-        <div class="flex flex-col">
-            <Title
-                level={3}
-                variant="subsection"
-                color="secondary"
-                truncate={2}
-                class="w-full text-left"
-            >
-                <div>
-                    {@html $t("domain.project.reward.byAtLeast", {
-                        amount: formatCurrency(reward.money.amount, reward.money.currency),
-                    })}
-                </div>
-                {reward.title}
-            </Title>
-
-            {#if reward.description}
-                <div class="marked-content line-clamp-7 text-sm whitespace-pre-line text-gray-800">
-                    {#await renderMarkdown(reward.description) then description}
-                        {@html description}
-                    {/await}
-                </div>
-            {/if}
-        </div>
 
         <div class="mt-auto flex w-full justify-between">
             {#if reward.isFinite}
@@ -135,9 +110,11 @@
                 </div>
             {/if}
         </div>
-        <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
+
+        <Button kind="secondary" class="w-full self-end" onclick={() => (openModal = true)}>
             {$t("common.edit")}
         </Button>
+
         <RewardsModal
             bind:open={openModal}
             {draft}
@@ -145,6 +122,7 @@
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
         />
+
         <DeleteModal
             title={$t("pages.project.edit.rewards.deleteModal.title")}
             description={$t("pages.project.edit.rewards.deleteModal.description")}
