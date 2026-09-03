@@ -1775,6 +1775,10 @@
             "modal": {
               "title": "Announcement published on {{date}}",
               "description": "Here you can see what the announcement looked like"
+            },
+            "deleteModal": {
+              "title": "Delete this announcement?",
+              "description": "The announcement will be permanently deleted and disappear from the history. This action cannot be undone."
             }
           }
         }
