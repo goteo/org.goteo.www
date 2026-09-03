@@ -1,6 +1,7 @@
 import { env } from "cloudflare:workers";
 
 export interface BannerRecord {
+    id: number;
     title: string;
     content: string;
     ctaText: string;
@@ -21,6 +22,7 @@ class BannerRepository {
         return await this.db
             .prepare(
                 `SELECT
+                    id,
                     title,
                     content,
                     cta_text AS ctaText,
@@ -34,8 +36,6 @@ class BannerRepository {
             .all<BannerRecord>()
             .then((data) =>
                 data.results.map((r) => {
-                    console.log(r);
-
                     return {
                         ...r,
                         startsAt: new Date(r.startsAt),
@@ -51,6 +51,7 @@ class BannerRepository {
         return await this.db
             .prepare(
                 `SELECT
+                    id,
                     title,
                     content,
                     cta_text AS ctaText,
@@ -74,7 +75,7 @@ class BannerRepository {
             );
     }
 
-    public async create(banner: BannerRecord): Promise<BannerRecord> {
+    public async create(banner: Omit<BannerRecord, "id">): Promise<Omit<BannerRecord, "id">> {
         const result = await this.db
             .prepare(
                 `INSERT INTO banners (title, content, cta_text, cta_link, starts_at, ends_at, date_created)
@@ -90,8 +91,6 @@ class BannerRepository {
                 banner.dateCreated.getTime(),
             )
             .run();
-
-        console.log(result);
 
         return banner;
     }

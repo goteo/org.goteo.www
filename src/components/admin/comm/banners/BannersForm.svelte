@@ -23,7 +23,15 @@
 
     let fieldErrors: FieldErrors = $state({});
 
-    function normalizeDate(field: "startsAt" | "endsAt", date: Date) {
+    let startsAt = $state(new Date());
+    let endsAt = $state(new Date());
+
+    /**
+     * Normalize a date field to the human expected true datetime
+     * @param field
+     * @param date
+     */
+    function normalizeDate(field: "startsAt" | "endsAt", date: Date): Date {
         const now = new Date();
         const isToday =
             date.getFullYear() === now.getFullYear() &&
@@ -37,6 +45,8 @@
         const normalized = field === "endsAt" ? endOfDay(date) : isToday ? now : startOfDay(date);
 
         date.setTime(normalized.getTime());
+
+        return date;
     }
 
     async function submit() {
@@ -116,21 +126,23 @@
 
         <div class="flex gap-6">
             <DateInput
+                bind:value={startsAt}
                 class="flex-1"
                 name="startsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.startDatePlaceholder")}
                 error={fieldErrors.startsAt &&
                     $t(fieldErrors.startsAt, { date: formatDate(new Date(), $locale) })}
-                onInput={(date) => normalizeDate("startsAt", date)}
+                onInput={(date) => (startsAt = normalizeDate("startsAt", date))}
             />
 
             <DateInput
+                bind:value={endsAt}
                 class="flex-1"
                 name="endsAt"
                 placeholder={$t("pages.admin.comm.banners.fields.endDatePlaceholder")}
                 error={fieldErrors.endsAt &&
                     $t(fieldErrors.endsAt, { date: formatDate(new Date(), $locale) })}
-                onInput={(date) => normalizeDate("endsAt", date)}
+                onInput={(date) => (endsAt = normalizeDate("endsAt", date))}
             />
         </div>
     </div>
