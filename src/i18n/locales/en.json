@@ -27,7 +27,7 @@
         "expectedUrl": "Not a URL"
       },
       "date": {
-        "greaterThan": "The date must be greater than {{ date }}"
+        "greaterThan": "The date must be later than {{ date }}"
       },
       "file": {
         "maxAllowedSize": "Maximum allowed size {{ size }}",
