@@ -537,6 +537,60 @@
           "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
           "invalidEmail": "El correo electrónico no es válido."
         }
+      },
+      "register": {
+        "form": {
+          "btnSubmit": "Continuar",
+          "userType": {
+            "individual": "Persona física",
+            "organization": "Persona jurídica (empresas)"
+          },
+          "termsCheckbox": "Acepto los {{ privacy }}términos de privacidad{{ _privacy }} y la {{ terms }}política de cookies{{ _terms }}",
+          "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros {{ terms }}términos de uso{{ _terms }}, {{ privacy }}política de privacidad{{ _privacy }} y {{ cookies }}política de cookies{{ _cookies }}",
+          "validation": {
+            "password": {
+              "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+            },
+            "required": "Este campo es obligatorio"
+          },
+          "emailHelper": "Email que usarás para acceder"
+        },
+        "individual": {
+          "firstName": "Nombre",
+          "lastName": "Apellidos",
+          "email": "Correo electrónico",
+          "password": "Contraseña",
+          "taxId": {
+            "msgDeduction": "Deseo desgravar esta donación. Proporcione el NIF para la Agencia Tributaria. Solo aplica dentro de España.",
+            "label": "NIF*"
+          },
+          "firstNameHelper": "Tu nombre",
+          "lastNameHelper": "Tus apellidos",
+          "dniHelper": "Requerido para la desgravación fiscal"
+        },
+        "organization": {
+          "legalName": "Razón social",
+          "taxId": "CIF*",
+          "description": "Dinos quien eres para que puedas apechugar",
+          "loginBtnLabel": "Inicia sesión con tu cuenta",
+          "representative": {
+            "title": "Datos del representante de la empresa."
+          },
+          "cifHelper": "*Con el CIF avisaremos a la agencia tributaria para tu declaración de la renta.",
+          "legalNameHelper": "Nombre de la empresa"
+        },
+        "error": {
+          "incompletePersonFields": "Por favor, rellena tu nombre y apellidos.",
+          "incompleteOrgFields": "Por favor, rellena los datos de la entidad.",
+          "unexpectedRegistration": "Error al crear la cuenta. Por favor, inténtalo de nuevo más tarde.",
+          "requireTerms": "Debes aceptar las condiciones para continuar."
+        },
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Regístrate o",
+        "loginBtnLabel": "Entra con tu cuenta",
+        "existUserInfo": "Si ya eres usuario de Goteo identifícate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+        "otherAccessMethods": "o accede con"
       }
     },
     "home": {

@@ -23,7 +23,7 @@
         name = "email",
         id = "email",
         label,
-        errorMessage = $t("pages.login.error.invalidEmail"),
+        errorMessage = $t("pages.checkout.login.error.invalidEmail"),
         isValid = $bindable(true),
         validate = true,
     }: Props = $props();
