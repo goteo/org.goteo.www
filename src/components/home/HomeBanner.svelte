@@ -1,14 +1,9 @@
 <script lang="ts">
-    import { getCookie, setCookie } from "../../utils/cookies";
     import Close from "../icons/navigation/Close.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    const CLOSED_BANNERS_COOKIE = "goteo-banners-closed";
-
     interface Props {
-        /** Omit to render a throwaway preview: closing it won't persist a dismissal. */
-        id?: number;
         title: string;
         description: string;
         ctaText: string;
@@ -17,21 +12,13 @@
         onClose?: () => void;
     }
 
-    let { id, title, description, ctaText, ctaLink, closeAriaLabel, onClose }: Props = $props();
+    let { title, description, ctaText, ctaLink, closeAriaLabel, onClose }: Props = $props();
 
     let visible = $state(true);
 
     function handleClose() {
         visible = false;
-
-        if (id !== undefined) {
-            const closed = (getCookie(CLOSED_BANNERS_COOKIE) ?? "").split(",").filter(Boolean);
-            if (!closed.includes(String(id))) {
-                setCookie(CLOSED_BANNERS_COOKIE, [...closed, id].join(","));
-            }
-        }
-
-        if (onClose) onClose();
+        onClose?.();
     }
 </script>
 

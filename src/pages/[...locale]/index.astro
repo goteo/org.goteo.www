@@ -23,13 +23,7 @@ if (locale && !isSupportedLocale(locale)) {
 
 const { t, lang } = Astro.locals;
 
-const closedBanners = (Astro.cookies.get("goteo-banners-closed")?.value ?? "")
-    .split(",")
-    .filter(Boolean);
-
-const activeBanners = (await bannerRepository.getActive()).filter(
-    (banner) => !closedBanners.includes(String(banner.id)),
-);
+const activeBanners = await bannerRepository.getActive();
 ---
 
 <Layout title={t("pages.index.title")} description={t("pages.metadata.description")}>
