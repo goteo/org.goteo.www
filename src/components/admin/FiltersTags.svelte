@@ -3,8 +3,8 @@
     import { t } from "../../i18n/store";
     import { formatDate } from "../../utils/dates";
     import { getAllFilterSubjects } from "../../utils/filterComposer";
-    import AccountingOwnerBadge from "./AccountingOwnerBadge.svelte";
     import CloseIcon from "../icons/navigation/Close.svelte";
+    import AccountingOwnerBadge from "../library/tags/AccountingOwnerBadge.svelte";
     import Tag from "../library/tags/Tag.svelte";
     import Title from "../library/typography/Title.svelte";
 
@@ -213,7 +213,7 @@
         <Tag variant="bold">
             {#if tag.values}
                 {`${tag.values.from} - ${tag.values.to}`}
-            {:else if tag.title === "target" || tag.title === "checkout.origin"}
+            {:else if subjectByParam.get(tag.title.replace(/\[\]$/, ""))?.display === "accountingOwner"}
                 <AccountingOwnerBadge accountingIri={tag.value ?? ""} class="text-xs" />
             {:else}
                 {tag.value}
