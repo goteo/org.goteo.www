@@ -26,7 +26,7 @@
         disabled?: boolean;
         class?: ClassNameValue;
         rows?: number;
-        onInput?: (event: Event) => void;
+        onInput?: (text: string) => void;
         onBlur?: (event?: FocusEvent) => void;
         onFocus?: (event?: FocusEvent) => void;
     } = $props();
@@ -56,7 +56,7 @@
         {rows}
         onblur={onBlur}
         onfocus={onFocus}
-        oninput={onInput}
+        oninput={() => onInput?.(value)}
         bind:value
         class={twMerge(
             "border-secondary text-content min-h-30 w-full resize-none rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400 focus:ring-0",

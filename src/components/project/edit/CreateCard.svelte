@@ -1,40 +1,42 @@
 <script lang="ts">
     import { twJoin } from "tailwind-merge";
 
-    import BudgetModal from "./BudgetModal.svelte";
-    import CollabsModal from "./CollabsModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
+    import {
+        apiProjectRewardsPost,
+        type ProjectBudgetItem,
+        type ProjectCollaboration,
+        type ProjectReward,
+    } from "../../../openapi/client";
     import MoreAndLess from "../../icons/filters/MoreAndLess.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Toast from "../../library/feedback/Toast.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { Project } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     interface Props {
-        project: Project;
+        draft: ProjectDraftStore;
         title: string;
         description: string;
-        onclick: () => void;
         variant: "reward" | "collab" | "budget";
-        open: boolean;
-        showToast: boolean;
-        onSave: (data: any, files?: any) => void;
+        open?: boolean;
+        onClick?: () => void;
+        onSave?: (data: ProjectCollaboration | ProjectBudgetItem | ProjectReward) => void;
         defaultDeadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
     }
 
     let {
-        project,
+        draft,
         title,
         description,
-        onclick,
+        onClick,
+        onSave,
         variant,
         open = $bindable(false),
-        showToast = $bindable(false),
-        onSave,
         defaultDeadline,
         disabled = false,
         disabledMessage = "",
@@ -43,11 +45,25 @@
     let showDisabledToast = $state(false);
 
     function handleClick() {
-        if (disabled) {
-            showDisabledToast = true;
+        open = true;
+
+        onClick?.();
+    }
+
+    async function handleReward(newReward: ProjectReward) {
+        const { error } = await apiProjectRewardsPost({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $draft.lang },
+            body: newReward,
+        });
+
+        if (!error) {
+            open = false;
+            onSave?.(newReward);
             return;
         }
-        onclick();
+
+        console.error(error);
     }
 </script>
 
@@ -99,9 +115,9 @@
 {/if}
 
 {#if !disabled && variant === "reward"}
-    <RewardsModal bind:open bind:showToast {onSave} reward={null} {project} />
-{:else if !disabled && variant === "collab"}
-    <CollabsModal bind:open bind:showToast {onSave} collab={null} {project} />
+    <RewardsModal bind:open {draft} onSave={handleReward} />
+    <!-- {:else if !disabled && variant === "collab"}
+    <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
 {:else if !disabled && variant === "budget"}
-    <BudgetModal bind:open bind:showToast {onSave} budgetItem={null} {defaultDeadline} />
+    <BudgetModal bind:open onSave={() => onSave?.()} budgetItem={null} {defaultDeadline} /> -->
 {/if}

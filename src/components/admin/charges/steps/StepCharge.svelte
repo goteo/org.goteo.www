@@ -8,7 +8,7 @@
     } from "../../../../openapi/client";
     import { client } from "../../../../openapi/client/client.gen";
     import { apiGatewaysIdGetUrl } from "../../../../openapi/client/operation-paths.gen";
-    import { defaultCurrency, formatCurrency, parseCurrency } from "../../../../utils/currencies";
+    import { DEFAULT_CURRENCY, formatCurrency, parseCurrency } from "../../../../utils/currencies";
     import { highlightMatch } from "../../../../utils/highlights";
     import { toCollectionItems } from "../../../../utils/hydra";
     import SearchIcon from "../../../icons/actions/Search.svelte";
@@ -42,7 +42,7 @@
             : "",
     );
 
-    const CURRENCIES = [defaultCurrency()];
+    const CURRENCIES = [DEFAULT_CURRENCY];
 
     async function loadGateways() {
         gatewaysLoading = true;
