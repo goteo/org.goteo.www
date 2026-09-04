@@ -3,10 +3,20 @@ import Layout from "../../../../layouts/Layout.astro";
 import App from "../../../../layouts/App.svelte";
 import WithSidebar from "../../../../layouts/WithSidebar.svelte";
 import Highlights from "../../../../components/admin/home/Highlights.svelte";
+import { highlightRepository } from "../../../../repositories/highlights";
 
 const { t, lang, session } = Astro.locals;
 const activePath = "/admin/home/highlights";
 const navItems = [{ label: "pages.admin.home.tabs.highlights", href: activePath }];
+
+const { highlight, slots } = await highlightRepository.get();
+
+const config = {
+    highlight: highlight
+        ? { ...highlight, dateCreated: highlight.dateCreated.toISOString(), dateUpdated: highlight.dateUpdated.toISOString() }
+        : null,
+    slots: slots.map((s) => ({ position: s.position, projectSlug: s.projectSlug })),
+};
 ---
 
 <Layout
@@ -15,7 +25,7 @@ const navItems = [{ label: "pages.admin.home.tabs.highlights", href: activePath 
 >
     <App client:load locale={lang} session={session} admin>
         <WithSidebar client:load {navItems} {activePath}>
-            <Highlights client:load />
+            <Highlights client:load {config} />
         </WithSidebar>
     </App>
 </Layout>
