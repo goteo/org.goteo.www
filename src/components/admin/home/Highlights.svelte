@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { actions } from "astro:actions";
     import { Modal } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
@@ -8,7 +9,26 @@
     import Select from "../../library/inputs/Select.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    // Each layout is a list of rows; every entry is the slot width in a 6-column grid.
+    import type { DropdownOption } from "../../library/dropdown/dropdown.types";
+
+    interface SlotAssignment {
+        position: number;
+        projectSlug: string;
+        projectTitle: string;
+    }
+
+    interface Props {
+        config: {
+            highlight: {
+                type: string;
+                layout: string;
+            } | null;
+            slots: { position: number; projectSlug: string }[];
+        };
+    }
+
+    let { config }: Props = $props();
+
     const LAYOUTS = [
         {
             id: "2x3",
@@ -40,12 +60,83 @@
         },
     ];
 
-    let type = $state("recent");
-    let layout = $state("2x3");
+    let type = $state(config.highlight?.type ?? "recent");
+    let layout = $state(config.highlight?.layout ?? "2x3");
     let addOpen = $state(false);
     let projectQuery = $state("");
+    let searchOptions = $state<DropdownOption[]>([]);
+    let selectedOption = $state<DropdownOption[]>([]);
+    let editingSlotIndex = $state<number | null>(null);
 
-    let slots = $derived(LAYOUTS.find((l) => l.id === layout)?.rows.flat() ?? []);
+    let slotAssignments = $state<SlotAssignment[]>(
+        config.slots.map((s) => ({
+            position: s.position,
+            projectSlug: s.projectSlug,
+            projectTitle: s.projectSlug,
+        })),
+    );
+
+    let slotCount = $derived(LAYOUTS.find((l) => l.id === layout)?.rows.flat().length ?? 0);
+
+    let slots = $derived(
+        Array.from({ length: slotCount }, (_, i) => {
+            const assignment = slotAssignments.find((a) => a.position === i);
+            return {
+                position: i,
+                projectSlug: assignment?.projectSlug ?? null,
+                projectTitle: assignment?.projectTitle ?? null,
+            };
+        }),
+    );
+
+    async function handleSearch(query: string) {
+        if (!query || query.length < 2) {
+            searchOptions = [];
+            return;
+        }
+        const { data } = await actions.searchProjects({ query });
+        if (data && typeof data === "object" && "data" in data) {
+            searchOptions = (data.data as { slug: string; title: string }[]).map((p) => ({
+                id: p.slug,
+                label: p.title,
+                selected: false,
+            }));
+        }
+    }
+
+    function handleAddProject(slotIndex: number) {
+        editingSlotIndex = slotIndex;
+        projectQuery = "";
+        searchOptions = [];
+        selectedOption = [];
+        addOpen = true;
+    }
+
+    function handleConfirmAdd() {
+        if (editingSlotIndex === null || selectedOption.length === 0) return;
+        const chosen = selectedOption[0];
+        slotAssignments = [
+            ...slotAssignments.filter((a) => a.position !== editingSlotIndex),
+            {
+                position: editingSlotIndex,
+                projectSlug: chosen.id,
+                projectTitle: chosen.label,
+            },
+        ];
+        addOpen = false;
+        editingSlotIndex = null;
+    }
+
+    function handleRemoveProject(slotIndex: number) {
+        slotAssignments = slotAssignments.filter((a) => a.position !== slotIndex);
+    }
+
+    async function handleSave() {
+        const slugs = slotAssignments
+            .sort((a, b) => a.position - b.position)
+            .map((a) => a.projectSlug);
+        await actions.saveHighlights({ type, layout, slots: slugs });
+    }
 </script>
 
 <div class="flex flex-col gap-10">
@@ -54,7 +145,9 @@
             <Title level={2} variant="headline">{$t("pages.admin.home.highlights.title")}</Title>
             <p class="text-content text-base">{$t("pages.admin.home.highlights.description")}</p>
         </div>
-        <Button size="sm" class="shrink-0">{$t("common.save")}</Button>
+        <Button size="sm" class="shrink-0" onclick={handleSave}>
+            {$t("common.save")}
+        </Button>
     </header>
 
     <section class="flex flex-col gap-4">
@@ -119,19 +212,33 @@
             </p>
         </div>
         <div class="grid gap-4 md:grid-cols-2">
-            {#each slots as _, index (index)}
+            {#each slots as slot, index (index)}
                 <div class="border-grey flex flex-col items-start gap-2 rounded-2xl border p-4">
                     <p class="text-secondary font-bold">
                         {$t("pages.admin.home.highlights.projects.slot", {
                             number: String(index + 1).padStart(2, "0"),
                         })}
                     </p>
-                    <p class="text-content text-body-small">
-                        {$t("pages.admin.home.highlights.projects.empty")}
-                    </p>
-                    <Button kind="secondary" size="sm" onclick={() => (addOpen = true)}>
-                        {$t("pages.admin.home.highlights.projects.add")}
-                    </Button>
+                    {#if slot.projectSlug}
+                        <p class="text-content text-body-small font-medium">
+                            {slot.projectTitle}
+                        </p>
+                        <div class="flex gap-2">
+                            <Button kind="secondary" size="sm" onclick={() => handleAddProject(index)}>
+                                {$t("pages.admin.home.highlights.projects.replace")}
+                            </Button>
+                            <Button kind="ghost" size="sm" onclick={() => handleRemoveProject(index)}>
+                                {$t("pages.admin.home.highlights.projects.remove")}
+                            </Button>
+                        </div>
+                    {:else}
+                        <p class="text-content text-body-small">
+                            {$t("pages.admin.home.highlights.projects.empty")}
+                        </p>
+                        <Button kind="secondary" size="sm" onclick={() => handleAddProject(index)}>
+                            {$t("pages.admin.home.highlights.projects.add")}
+                        </Button>
+                    {/if}
                 </div>
             {/each}
         </div>
@@ -168,8 +275,10 @@
                 hasSearch
                 singleSelect
                 clearable
-                options={[]}
+                options={searchOptions}
+                bind:selected={selectedOption}
                 bind:searchValue={projectQuery}
+                onSearch={handleSearch}
                 searchClasses="rounded-3xl border-secondary shadow-none"
                 searchPlaceholder={$t("pages.admin.home.highlights.projects.modal.search")}
             />
@@ -179,7 +288,7 @@
         <Button kind="ghost" onclick={() => (addOpen = false)} class="w-fit">
             {$t("common.cancel")}
         </Button>
-        <Button onclick={() => (addOpen = false)} class="w-fit">
+        <Button onclick={handleConfirmAdd} class="w-fit">
             {$t("pages.admin.home.highlights.projects.modal.submit")}
         </Button>
     {/snippet}
