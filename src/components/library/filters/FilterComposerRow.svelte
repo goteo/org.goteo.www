@@ -1,21 +1,14 @@
 <script lang="ts">
-    import { clickOutside } from "flowbite-svelte";
-
     import { t } from "../../../i18n/store";
-    import AccountingOwnerBadge from "../../admin/AccountingOwnerBadge.svelte";
     import Close from "../../icons/navigation/Close.svelte";
     import TerritoryFilter from "../../search/TerritoryFilter.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
     import TextInput from "../inputs/TextInput.svelte";
+    import AccountingOwnerBadge from "../tags/AccountingOwnerBadge.svelte";
 
-    import type {
-        FilterSubject,
-        FilterOperator,
-        FilterOption,
-    } from "../../../utils/filterComposer";
-    import { suggestAccounting } from "../../../utils/filterSuggestions";
+    import type { FilterSubject, FilterOperator } from "../../../utils/filterComposer";
     import type { DropdownOption } from "../dropdown/dropdown.types";
 
     interface Props {
@@ -34,122 +27,61 @@
         onremove,
     }: Props = $props();
 
-    let compatibleOperators = $derived(
-        subjects.find((s) => s.key === subjectKey)?.compatibleOperators ?? [],
-    );
+    type Territories = { countries: string[]; subLvl1: string[]; subLvl2: string[] };
 
     let currentSubject = $derived(subjects.find((s) => s.key === subjectKey));
-    let isAccountingSubject = $derived(currentSubject?.suggest === suggestAccounting);
+    let compatibleOperators = $derived(currentSubject?.compatibleOperators ?? []);
 
-    let dropdownOptions = $state<DropdownOption[]>([]);
+    /** `equals` on a subject that takes a single value — the dropdown closes on pick. */
+    let singleSelect = $derived(operator === "equals" && !currentSubject?.allowsMultipleEquals);
+
     let dropdownSelected = $state<DropdownOption[]>([]);
-    let showStaticDropdown = $state(false);
-    let showSuggestSearch = $state(false);
-    let showTerritoryDropdown = $state(false);
+    let suggestOptions = $state<DropdownOption[]>([]);
+
+    let staticOptions = $derived(
+        currentSubject?.options?.map((option) => ({
+            id: option.value,
+            label: $t(option.label),
+            selected: false,
+        })) ?? [],
+    );
+    let dropdownOptions = $derived(currentSubject?.suggest ? suggestOptions : staticOptions);
 
     let previousSubjectKey = $state("");
-    let territoryInit = $state<{
-        countries: string[];
-        subLvl1: string[];
-        subLvl2: string[];
-    }>({ countries: [], subLvl1: [], subLvl2: [] });
 
     $effect(() => {
         if (subjectKey === previousSubjectKey) return;
         previousSubjectKey = subjectKey;
         operator = "";
         referent = "";
-
-        const subject = subjects.find((s) => s.key === subjectKey);
-        if (!subject) {
-            dropdownOptions = [];
-            dropdownSelected = [];
-            territoryInit = { countries: [], subLvl1: [], subLvl2: [] };
-            return;
-        }
-
-        if (subject.serialize) {
-            territoryInit = parseTerritoryRef(referent as string);
-            showTerritoryDropdown = true;
-            dropdownOptions = [];
-            dropdownSelected = [];
-            return;
-        }
-
-        if (!subject.options) {
-            dropdownOptions = [];
-            dropdownSelected = [];
-            return;
-        }
-        dropdownOptions = subject.options.map((o) => ({
-            id: o.value,
-            label: $t(o.label),
-            selected: false,
-        }));
         dropdownSelected = [];
+        suggestOptions = [];
     });
 
-    function handleStaticChange(option: DropdownOption) {
-        const current = Array.isArray(referent) ? referent : [];
-        const updated = option.selected
-            ? [...current, option.id]
-            : current.filter((id) => id !== option.id);
-        referent = updated;
-        if (updated.length === 0) {
-            showStaticDropdown = true;
-        }
-    }
+    let searchTimer: ReturnType<typeof setTimeout> | null = null;
 
-    async function handleSuggest(q: string) {
-        if (!currentSubject?.suggest) return;
-        if (!q) {
-            dropdownOptions = [...dropdownSelected];
+    function handleSuggest(query: string) {
+        if (searchTimer) clearTimeout(searchTimer);
+
+        if (!query) {
+            suggestOptions = [...dropdownSelected];
             return;
         }
-        const results: FilterOption[] = await currentSubject.suggest(q);
-        dropdownOptions = results.map((r) => ({
-            id: r.value,
-            label: r.label,
-            selected: dropdownSelected.some((s) => s.id === r.value),
-        }));
+
+        searchTimer = setTimeout(async () => {
+            const results = (await currentSubject?.suggest?.(query)) ?? [];
+            suggestOptions = results.map((result) => ({
+                id: result.value,
+                label: result.label,
+                selected: false,
+            }));
+        }, 300);
     }
 
-    function handleSuggestChange(option: DropdownOption) {
-        if (operator === "equals" && !currentSubject?.allowsMultipleEquals) {
-            if (option.selected) {
-                dropdownSelected = [option];
-                referent = option.id;
-                showSuggestSearch = false;
-            } else {
-                dropdownSelected = [];
-                referent = "";
-                showSuggestSearch = true;
-            }
-        } else {
-            const current = Array.isArray(referent) ? referent : [];
-            const updated = option.selected
-                ? [...current, option.id]
-                : current.filter((id) => id !== option.id);
-            referent = updated;
-            if (updated.length === 0) {
-                showSuggestSearch = true;
-            }
-        }
-    }
-
-    function handleClearSuggestTag() {
-        dropdownSelected = [];
-        referent = "";
-        showSuggestSearch = true;
-    }
-
-    function handleRemoveTag(item: DropdownOption) {
-        dropdownSelected = dropdownSelected.filter((s) => s.id !== item.id);
-        referent = (referent as string[]).filter((id) => id !== item.id);
-        if (dropdownSelected.length === 0) {
-            showStaticDropdown = true;
-            showSuggestSearch = true;
-        }
+    function syncReferent() {
+        referent = singleSelect
+            ? (dropdownSelected[0]?.id ?? "")
+            : dropdownSelected.map((option) => option.id);
     }
 
     function subjectLabel(key: string): string {
@@ -160,43 +92,14 @@
         return $t(`domain.filterComposer.operator.${op}`);
     }
 
-    function handleTerritoryChange(t: {
-        countries: string[];
-        subLvl1: string[];
-        subLvl2: string[];
-    }) {
-        referent = JSON.stringify(t);
-        const hasSelection = t.countries.length > 0 || t.subLvl1.length > 0 || t.subLvl2.length > 0;
-        if (hasSelection) {
-            showTerritoryDropdown = false;
-        }
-    }
-
-    function getTerritoryCodes(raw: string): string[] {
-        try {
-            const t = JSON.parse(raw);
-            return [...(t.countries || []), ...(t.subLvl1 || []), ...(t.subLvl2 || [])];
-        } catch {
-            return [];
-        }
-    }
-    function parseTerritoryRef(raw: string): {
-        countries: string[];
-        subLvl1: string[];
-        subLvl2: string[];
-    } {
-        try {
-            const parsed = JSON.parse(raw);
-            return {
-                countries: parsed.countries || [],
-                subLvl1: parsed.subLvl1 || [],
-                subLvl2: parsed.subLvl2 || [],
-            };
-        } catch {
-            return { countries: [], subLvl1: [], subLvl2: [] };
-        }
+    function handleTerritoryChange(territories: Territories) {
+        referent = JSON.stringify(territories);
     }
 </script>
+
+{#snippet accountingChip(option: DropdownOption)}
+    <AccountingOwnerBadge accountingIri={option.id} class="text-xs" />
+{/snippet}
 
 <div class="flex items-center gap-3">
     <div class="flex-1">
@@ -222,52 +125,21 @@
     </div>
 
     <div class="flex-1">
-        {#if currentSubject?.options && operator && subjectKey && (operator === "is_any_of" || (operator === "equals" && currentSubject.allowsMultipleEquals))}
-            {#if !showStaticDropdown && dropdownSelected.length > 0}
-                <div
-                    class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => {
-                        setTimeout(() => (showStaticDropdown = true));
-                    }}
-                    role="button"
-                    tabindex="0"
-                    onkeydown={(e) => e.key === "Enter" && (showStaticDropdown = true)}
-                >
-                    {#each dropdownSelected as item}
-                        <span
-                            class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
-                        >
-                            {@html item.label}
-                            <button
-                                type="button"
-                                class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                                onclick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveTag(item);
-                                }}
-                            >
-                                <Close width="12" height="12" />
-                            </button>
-                        </span>
-                    {/each}
-                </div>
-            {:else}
-                <div use:clickOutside={() => (showStaticDropdown = false)}>
-                    <DropdownMenu
-                        searchClasses="border-secondary"
-                        variant="multiselect"
-                        options={dropdownOptions}
-                        bind:selected={dropdownSelected}
-                        onChange={handleStaticChange}
-                        label={$t("domain.filterComposer.referentPlaceholder")}
-                        bind:isOpen={showStaticDropdown}
-                    />
-                </div>
-            {/if}
-        {:else if currentSubject?.options && operator === "equals" && subjectKey}
+        {#if currentSubject?.serialize && operator}
+            <TerritoryFilter onTerritoryChange={handleTerritoryChange} />
+        {:else if currentSubject?.options && operator && !singleSelect}
+            <DropdownMenu
+                chips
+                searchClasses="border-secondary"
+                variant="multiselect"
+                options={dropdownOptions}
+                bind:selected={dropdownSelected}
+                onChange={syncReferent}
+                label={$t("domain.filterComposer.referentPlaceholder")}
+            />
+        {:else if currentSubject?.options && operator === "equals"}
             <Select
                 bind:value={referent as string}
-                disabled={!operator}
                 labelText={$t("domain.filterComposer.referentPlaceholder")}
             >
                 <option value="">{$t("domain.filterComposer.referentPlaceholder")}</option>
@@ -275,122 +147,19 @@
                     <option value={opt.value}>{$t(opt.label)}</option>
                 {/each}
             </Select>
-        {:else if currentSubject?.suggest && subjectKey && operator === "equals" && !currentSubject.allowsMultipleEquals}
-            {#if referent && !Array.isArray(referent) && !showSuggestSearch}
-                <div
-                    class="border-secondary flex items-center justify-between rounded-lg border bg-white p-4"
-                >
-                    <button
-                        type="button"
-                        class="text-secondary cursor-pointer text-sm hover:underline"
-                        onclick={handleClearSuggestTag}
-                    >
-                        {#if isAccountingSubject && typeof referent === "string"}
-                            <AccountingOwnerBadge accountingIri={referent} class="text-sm" />
-                        {:else}
-                            {dropdownSelected[0]?.label ?? referent}
-                        {/if}
-                    </button>
-                    <button
-                        type="button"
-                        onclick={handleClearSuggestTag}
-                        class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                        aria-label={$t("domain.filterComposer.removeFilter")}
-                    >
-                        <Close width="16" height="16" />
-                    </button>
-                </div>
-            {:else}
-                <DropdownMenu
-                    searchClasses="border-secondary"
-                    variant="multiselect"
-                    options={dropdownOptions}
-                    bind:selected={dropdownSelected}
-                    hasSearch
-                    onSearch={handleSuggest}
-                    onChange={handleSuggestChange}
-                />
-            {/if}
-        {:else if currentSubject?.suggest && subjectKey && operator && (operator !== "equals" || currentSubject.allowsMultipleEquals)}
-            {#if !showSuggestSearch && dropdownSelected.length > 0}
-                <div
-                    class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => {
-                        setTimeout(() => (showSuggestSearch = true));
-                    }}
-                    role="button"
-                    tabindex="0"
-                    onkeydown={(e) => e.key === "Enter" && (showSuggestSearch = true)}
-                >
-                    {#each dropdownSelected as item}
-                        <span
-                            class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
-                        >
-                            {#if isAccountingSubject}
-                                <AccountingOwnerBadge accountingIri={item.id} class="text-xs" />
-                            {:else}
-                                {@html item.label}
-                            {/if}
-                            <button
-                                type="button"
-                                class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                                onclick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveTag(item);
-                                }}
-                            >
-                                <Close width="12" height="12" />
-                            </button>
-                        </span>
-                    {/each}
-                </div>
-            {:else}
-                <div use:clickOutside={() => (showSuggestSearch = false)}>
-                    <DropdownMenu
-                        searchClasses="border-secondary"
-                        variant="multiselect"
-                        options={dropdownOptions}
-                        bind:selected={dropdownSelected}
-                        hasSearch
-                        onSearch={handleSuggest}
-                        onChange={handleSuggestChange}
-                        bind:isOpen={showSuggestSearch}
-                    />
-                </div>
-            {/if}
-        {:else if currentSubject?.serialize && subjectKey && operator}
-            {#if !showTerritoryDropdown}
-                {@const codes = getTerritoryCodes(referent as string)}
-                {#if codes.length > 0}
-                    <div
-                        class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                        onclick={() => {
-                            setTimeout(() => (showTerritoryDropdown = true));
-                        }}
-                        role="button"
-                        tabindex="0"
-                        onkeydown={(e) => e.key === "Enter" && (showTerritoryDropdown = true)}
-                    >
-                        {#each codes as code}
-                            <span
-                                class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
-                            >
-                                {code}
-                            </span>
-                        {/each}
-                    </div>
-                {:else}
-                    <TerritoryFilter
-                        selectedTerritory={territoryInit}
-                        onTerritoryChange={handleTerritoryChange}
-                    />
-                {/if}
-            {:else}
-                <TerritoryFilter
-                    selectedTerritory={territoryInit}
-                    onTerritoryChange={handleTerritoryChange}
-                />
-            {/if}
+        {:else if currentSubject?.suggest && operator}
+            <DropdownMenu
+                chips
+                hasSearch
+                searchClasses="border-secondary"
+                variant={singleSelect ? "basic" : "multiselect"}
+                {singleSelect}
+                options={dropdownOptions}
+                bind:selected={dropdownSelected}
+                onSearch={handleSuggest}
+                onChange={syncReferent}
+                chip={currentSubject.display === "accountingOwner" ? accountingChip : undefined}
+            />
         {:else if currentSubject?.type === "date"}
             <DateInput
                 value={typeof referent === "string" && referent ? new Date(referent) : new Date()}

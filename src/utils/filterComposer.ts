@@ -53,6 +53,8 @@ export interface FilterSubject {
     suggest?: (q: string) => Promise<FilterOption[]>;
     serialize?: (referent: unknown) => Record<string, string | string[]>;
     allowsMultipleEquals?: boolean;
+    /** Renders the referent with a dedicated component instead of its raw label. */
+    display?: "accountingOwner";
 }
 
 const gatewayChargeStatuses: FilterOption[] = [
@@ -189,6 +191,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         resources: ["gateway_charges"],
         suggest: suggestAccounting,
         allowsMultipleEquals: true,
+        display: "accountingOwner",
     },
     origin: {
         key: "checkout.origin",
@@ -197,6 +200,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         resources: ["gateway_charges"],
         suggest: suggestAccounting,
         allowsMultipleEquals: true,
+        display: "accountingOwner",
     },
     currency: {
         key: "currency",

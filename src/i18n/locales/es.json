@@ -72,6 +72,9 @@
         "placeholder": "Buscar..."
       }
     },
+    "dropdown": {
+      "removeOption": "Quitar"
+    },
     "filterComposer": {
       "title": "Filtros personalizados",
       "addFilter": "Añadir filtro",
