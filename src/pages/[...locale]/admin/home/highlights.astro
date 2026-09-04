@@ -1,0 +1,21 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import App from "../../../../layouts/App.svelte";
+import WithSidebar from "../../../../layouts/WithSidebar.svelte";
+import Highlights from "../../../../components/admin/home/Highlights.svelte";
+
+const { t, lang, session } = Astro.locals;
+const activePath = "/admin/home/highlights";
+const navItems = [{ label: "pages.admin.home.tabs.highlights", href: activePath }];
+---
+
+<Layout
+    title={t("pages.admin.home.highlights.title")}
+    description={t("pages.metadata.description")}
+>
+    <App client:load locale={lang} session={session} admin>
+        <WithSidebar client:load {navItems} {activePath}>
+            <Highlights client:load />
+        </WithSidebar>
+    </App>
+</Layout>
