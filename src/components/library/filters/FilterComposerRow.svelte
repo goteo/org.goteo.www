@@ -2,6 +2,7 @@
     import { clickOutside } from "flowbite-svelte";
 
     import { t } from "../../../i18n/store";
+    import AccountingOwnerBadge from "../../admin/AccountingOwnerBadge.svelte";
     import Close from "../../icons/navigation/Close.svelte";
     import TerritoryFilter from "../../search/TerritoryFilter.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
@@ -14,6 +15,7 @@
         FilterOperator,
         FilterOption,
     } from "../../../utils/filterComposer";
+    import { suggestAccounting } from "../../../utils/filterSuggestions";
     import type { DropdownOption } from "../dropdown/dropdown.types";
 
     interface Props {
@@ -37,6 +39,7 @@
     );
 
     let currentSubject = $derived(subjects.find((s) => s.key === subjectKey));
+    let isAccountingSubject = $derived(currentSubject?.suggest === suggestAccounting);
 
     let dropdownOptions = $state<DropdownOption[]>([]);
     let dropdownSelected = $state<DropdownOption[]>([]);
@@ -282,7 +285,11 @@
                         class="text-secondary cursor-pointer text-sm hover:underline"
                         onclick={handleClearSuggestTag}
                     >
-                        {dropdownSelected[0]?.label ?? referent}
+                        {#if isAccountingSubject && typeof referent === "string"}
+                            <AccountingOwnerBadge accountingIri={referent} class="text-sm" />
+                        {:else}
+                            {dropdownSelected[0]?.label ?? referent}
+                        {/if}
                     </button>
                     <button
                         type="button"
@@ -319,7 +326,11 @@
                         <span
                             class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
                         >
-                            {@html item.label}
+                            {#if isAccountingSubject}
+                                <AccountingOwnerBadge accountingIri={item.id} class="text-xs" />
+                            {:else}
+                                {@html item.label}
+                            {/if}
                             <button
                                 type="button"
                                 class="text-tertiary hover:text-tertiary/80 cursor-pointer"

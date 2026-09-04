@@ -3,8 +3,6 @@
     import type { DataTableHeader, SortOption } from "../../library/tables/DataTable.svelte";
 
     export type ExtendedCharge = GatewayCharge & {
-        targetDisplayName?: string;
-        originDisplayName?: string;
         checkoutOrigin?: string;
         paymentGateway?: string;
         platformLinks?: GatewayLink[];
@@ -80,6 +78,7 @@
 <script lang="ts">
     import { TableBodyCell } from "flowbite-svelte";
 
+    import AccountingOwnerBadge from "../AccountingOwnerBadge.svelte";
     import ChargesDetailsRow from "./ChargesDetailsRow.svelte";
     import { t } from "../../../i18n/store";
     import { ADMIN_ITEMS_PER_PAGE_OPTIONS } from "../../../utils/adminTable";
@@ -197,7 +196,7 @@
         <TableBodyCell
             class="border-variant1 max-w-80 truncate rounded-l-md border-t border-b border-l p-4"
         >
-            {charge.targetDisplayName}
+            <AccountingOwnerBadge accountingIri={charge.target} class="text-sm" />
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
             {charge.money.amount && charge.money.currency
@@ -205,7 +204,7 @@
                 : "—"}
         </TableBodyCell>
         <TableBodyCell class="border-variant1 truncate border-t border-b p-4">
-            {charge.originDisplayName}
+            <AccountingOwnerBadge accountingIri={charge.checkoutOrigin ?? ""} class="text-sm" />
         </TableBodyCell>
         <TableBodyCell class="border-variant1 border-t border-b p-4">
             {resolvePaymentGatewayLabel(charge.paymentGateway)}
