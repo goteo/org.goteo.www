@@ -1753,6 +1753,8 @@
             "slot": "Proyecto {{ number }}",
             "empty": "Busca un proyecto y destácalo en portada",
             "add": "Añade proyecto",
+            "replace": "Cambiar proyecto",
+            "remove": "Quitar",
             "change": "Cambia a otro proyecto",
             "position": "Este proyecto en la posición {{ number }}",
             "modal": {
