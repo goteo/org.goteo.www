@@ -1313,12 +1313,36 @@
         "charges": "Cobros",
         "projects": "Proyectos",
         "users": "Usuarios",
-        "comm": "Comunicación"
+        "comm": "Comunicación",
+        "home": "Portada"
       },
       "sidebar": {
         "aria": {
           "close": "Cerrar menú",
           "open": "Abrir menú de administración"
+        }
+      },
+      "home": {
+        "tabs": {
+          "hero": "Hero"
+        },
+        "hero": {
+          "title": "Hero",
+          "description": "El inicio de la portada, lo más importante.",
+          "fields": {
+            "textsTitle": "Textos del bloque",
+            "titlePlaceholder": "Titular del bloque",
+            "contentPlaceholder": "Breve texto introductorio",
+            "primaryCtaPlaceholder": "Call to action primario",
+            "secondaryCtaPlaceholder": "Call to action secundario",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programar la subida del bloque",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "mediaTitle": "Hora de subir las imágenes",
+            "mediaLabel": "Imagen 01",
+            "mediaHint": "Sube una imagen o vídeo",
+            "mediaAdd": "Añade imagen"
+          }
         }
       },
       "charges": {
