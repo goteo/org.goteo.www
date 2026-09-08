@@ -2004,6 +2004,63 @@ export type ProjectCollaborationJsonld = {
 };
 
 /**
+ * ProjectCollaborationsCandidacies represent one User's willingness to fill in for a ProjectCollaboration.
+ */
+export type ProjectCollaborationCandidacy = {
+    readonly id?: number;
+    /**
+     * The ProjectCollaboration to which this candidacy is applying to.
+     */
+    collaboration: string;
+    /**
+     * The User applying to fill for the ProjectCollaboration.
+     */
+    user: string;
+    /**
+     * Information about this candidacy.
+     */
+    description: string;
+    /**
+     * Life-cycle status of the candidacy.
+     */
+    status: 'to_review' | 'in_review' | 'rejected' | 'approved';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
+ * ProjectCollaborationsCandidacies represent one User's willingness to fill in for a ProjectCollaboration.
+ */
+export type ProjectCollaborationCandidacyJsonld = {
+    readonly '@context'?: string | {
+        '@vocab': string;
+        hydra: 'http://www.w3.org/ns/hydra/core#';
+        [key: string]: unknown;
+    };
+    readonly '@id'?: string;
+    readonly '@type'?: string;
+    readonly id?: number;
+    /**
+     * The ProjectCollaboration to which this candidacy is applying to.
+     */
+    collaboration: string;
+    /**
+     * The User applying to fill for the ProjectCollaboration.
+     */
+    user: string;
+    /**
+     * Information about this candidacy.
+     */
+    description: string;
+    /**
+     * Life-cycle status of the candidacy.
+     */
+    status: 'to_review' | 'in_review' | 'rejected' | 'approved';
+    readonly dateCreated?: string;
+    readonly dateUpdated?: string;
+};
+
+/**
  * A ProjectReward is something the Project owner wishes to give in exchange for contributions to their Project.
  */
 export type ProjectReward = {
@@ -4523,6 +4580,10 @@ export type ApiProjectBudgetItemsGetCollectionData = {
         itemsPerPage?: number;
         project?: string;
         'project[]'?: Array<string>;
+        type?: string;
+        'type[]'?: Array<string>;
+        deadline?: string;
+        'deadline[]'?: Array<string>;
     };
     url: '/v4/project_budget_items';
 };
@@ -4839,6 +4900,181 @@ export type ApiProjectCollaborationsIdPatchResponses = {
 };
 
 export type ApiProjectCollaborationsIdPatchResponse = ApiProjectCollaborationsIdPatchResponses[keyof ApiProjectCollaborationsIdPatchResponses];
+
+export type ApiProjectCollaborationCandidaciesGetCollectionData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * The collection page number
+         */
+        page?: number;
+        /**
+         * The number of items per page
+         */
+        itemsPerPage?: number;
+        collaboration?: string;
+        'collaboration[]'?: Array<string>;
+        user?: string;
+        'user[]'?: Array<string>;
+        description?: string;
+        status?: string;
+        'status[]'?: Array<string>;
+        'dateCreated[before]'?: string;
+        'dateCreated[strictly_before]'?: string;
+        'dateCreated[after]'?: string;
+        'dateCreated[strictly_after]'?: string;
+        'dateUpdated[before]'?: string;
+        'dateUpdated[strictly_before]'?: string;
+        'dateUpdated[after]'?: string;
+        'dateUpdated[strictly_after]'?: string;
+        'order[dateCreated]'?: 'asc' | 'desc';
+        'order[dateUpdated]'?: 'asc' | 'desc';
+    };
+    url: '/v4/project_collaboration_candidacies';
+};
+
+export type ApiProjectCollaborationCandidaciesGetCollectionResponses = {
+    /**
+     * ProjectCollaborationCandidacy collection
+     */
+    200: Array<ProjectCollaborationCandidacy>;
+};
+
+export type ApiProjectCollaborationCandidaciesGetCollectionResponse = ApiProjectCollaborationCandidaciesGetCollectionResponses[keyof ApiProjectCollaborationCandidaciesGetCollectionResponses];
+
+export type ApiProjectCollaborationCandidaciesPostData = {
+    /**
+     * The new ProjectCollaborationCandidacy resource
+     */
+    body: ProjectCollaborationCandidacy;
+    path?: never;
+    query?: never;
+    url: '/v4/project_collaboration_candidacies';
+};
+
+export type ApiProjectCollaborationCandidaciesPostErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectCollaborationCandidaciesPostError = ApiProjectCollaborationCandidaciesPostErrors[keyof ApiProjectCollaborationCandidaciesPostErrors];
+
+export type ApiProjectCollaborationCandidaciesPostResponses = {
+    /**
+     * ProjectCollaborationCandidacy resource created
+     */
+    201: ProjectCollaborationCandidacy;
+};
+
+export type ApiProjectCollaborationCandidaciesPostResponse = ApiProjectCollaborationCandidaciesPostResponses[keyof ApiProjectCollaborationCandidaciesPostResponses];
+
+export type ApiProjectCollaborationCandidaciesIdDeleteData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectCollaborationCandidacy identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaboration_candidacies/{id}';
+};
+
+export type ApiProjectCollaborationCandidaciesIdDeleteErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectCollaborationCandidaciesIdDeleteError = ApiProjectCollaborationCandidaciesIdDeleteErrors[keyof ApiProjectCollaborationCandidaciesIdDeleteErrors];
+
+export type ApiProjectCollaborationCandidaciesIdDeleteResponses = {
+    /**
+     * ProjectCollaborationCandidacy resource deleted
+     */
+    204: void;
+};
+
+export type ApiProjectCollaborationCandidaciesIdDeleteResponse = ApiProjectCollaborationCandidaciesIdDeleteResponses[keyof ApiProjectCollaborationCandidaciesIdDeleteResponses];
+
+export type ApiProjectCollaborationCandidaciesIdGetData = {
+    body?: never;
+    path: {
+        /**
+         * ProjectCollaborationCandidacy identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaboration_candidacies/{id}';
+};
+
+export type ApiProjectCollaborationCandidaciesIdGetErrors = {
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+};
+
+export type ApiProjectCollaborationCandidaciesIdGetError = ApiProjectCollaborationCandidaciesIdGetErrors[keyof ApiProjectCollaborationCandidaciesIdGetErrors];
+
+export type ApiProjectCollaborationCandidaciesIdGetResponses = {
+    /**
+     * ProjectCollaborationCandidacy resource
+     */
+    200: ProjectCollaborationCandidacy;
+};
+
+export type ApiProjectCollaborationCandidaciesIdGetResponse = ApiProjectCollaborationCandidaciesIdGetResponses[keyof ApiProjectCollaborationCandidaciesIdGetResponses];
+
+export type ApiProjectCollaborationCandidaciesIdPatchData = {
+    /**
+     * The updated ProjectCollaborationCandidacy resource
+     */
+    body: ProjectCollaborationCandidacy;
+    path: {
+        /**
+         * ProjectCollaborationCandidacy identifier
+         */
+        id: string;
+    };
+    query?: never;
+    url: '/v4/project_collaboration_candidacies/{id}';
+};
+
+export type ApiProjectCollaborationCandidaciesIdPatchErrors = {
+    /**
+     * Invalid input
+     */
+    400: ErrorJsonld;
+    /**
+     * Not found
+     */
+    404: ErrorJsonld;
+    /**
+     * An error occurred
+     */
+    422: ConstraintViolationJsonldJsonld;
+};
+
+export type ApiProjectCollaborationCandidaciesIdPatchError = ApiProjectCollaborationCandidaciesIdPatchErrors[keyof ApiProjectCollaborationCandidaciesIdPatchErrors];
+
+export type ApiProjectCollaborationCandidaciesIdPatchResponses = {
+    /**
+     * ProjectCollaborationCandidacy resource updated
+     */
+    200: ProjectCollaborationCandidacy;
+};
+
+export type ApiProjectCollaborationCandidaciesIdPatchResponse = ApiProjectCollaborationCandidaciesIdPatchResponses[keyof ApiProjectCollaborationCandidaciesIdPatchResponses];
 
 export type ApiProjectRewardsGetCollectionData = {
     body?: never;
