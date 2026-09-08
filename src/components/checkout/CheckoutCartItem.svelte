@@ -22,13 +22,17 @@
 </script>
 
 <div
-    class="bg-white border-grey flex w-full items-center gap-6 rounded-4xl border p-4 shadow-sm md:gap-7 md:p-5"
+    class="border-grey flex w-full items-center gap-6 rounded-4xl border bg-white p-4 shadow-sm md:gap-7 md:p-5"
 >
     <div
         class="border-grey flex h-24 w-24 shrink-0 items-center justify-center overflow-hidden rounded-[23.5px] border bg-orange-200 md:h-39.75 md:w-39.75"
     >
         {#if item.cover}
-            <img src={item.cover} alt={item.reward?.title ?? item.title} class="h-full w-full object-cover" />
+            <img
+                src={item.cover}
+                alt={item.reward?.title ?? item.title}
+                class="h-full w-full object-cover"
+            />
         {:else}
             <span class="text-xl md:text-2xl">🙂</span>
         {/if}
