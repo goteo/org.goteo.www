@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
 
     import MatchfundingCallCard from "./MatchfundingCallCard.svelte";
@@ -25,12 +24,6 @@
 
     let { lang, user }: Props = $props();
 
-    // Create a client instance configured to use the API relay
-    // This ensures all authenticated requests go through the server-side proxy
-    const relayClient = createClient({
-        baseUrl: "/api/relay",
-    });
-
     let matchfundingCalls = $state<MatchfundingCall[]>([]);
     let loading = $state(true);
     let error = $state(false);
@@ -46,7 +39,7 @@
 
             // Fetch match calls for this user (filtered by manager ID)
             const { data: callsData, error: callsError } = await apiMatchCallsGetCollection({
-                client: relayClient,
+                baseUrl: "/api/relay",
                 query: {
                     "managers.id": user.id,
                     itemsPerPage: 30,
@@ -82,13 +75,13 @@
                                 ] = await Promise.all([
                                     // Fetch accounting data for donation amount
                                     apiAccountingsIdGet({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         path: { id: accountingId },
                                         headers,
                                     }),
                                     // Fetch participating projects via ProjectSupport (filtered by call's accounting ID)
                                     apiProjectSupportsGetCollection({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         query: {
                                             "origin.id": accountingId,
                                             itemsPerPage: 100,
@@ -97,7 +90,7 @@
                                     }),
                                     // Fetch successful projects (accepted submissions)
                                     apiMatchCallSubmissionsGetCollection({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         query: {
                                             "call.id": call.id,
                                             itemsPerPage: 100,
