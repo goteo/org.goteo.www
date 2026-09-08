@@ -54,6 +54,7 @@
             recipient: reward.project,
             recipientDisplayName: project.title,
             target: project.accounting!,
+            cover: project.cover,
             money: {
                 amount: numericAmount * getUnit(reward.money?.currency),
                 currency: reward.money.currency,

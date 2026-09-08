@@ -13,6 +13,11 @@ export interface CheckoutItem extends GatewayCharge {
     key: string;
     kind: "free" | "reward" | "tip";
     quantity: number;
+    /**
+     * URL to the project's cover image, captured when the item was added to
+     * the cart. Only present when there is an associated project.
+     */
+    cover?: string;
 
     /**
      * `target` references the Accounting that will receive the money\

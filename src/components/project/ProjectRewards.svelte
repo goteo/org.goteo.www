@@ -70,6 +70,7 @@
             recipient: accounting?.owner!,
             recipientDisplayName: project.title,
             target: project.accounting!,
+            cover: project.cover,
             money: {
                 amount: numericAmount * getUnit(accounting?.currency),
                 currency: accounting?.currency!,
