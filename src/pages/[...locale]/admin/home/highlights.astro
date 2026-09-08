@@ -13,7 +13,11 @@ const { highlight, slots } = await highlightRepository.get();
 
 const config = {
     highlight: highlight
-        ? { ...highlight, dateCreated: highlight.dateCreated.toISOString(), dateUpdated: highlight.dateUpdated.toISOString() }
+        ? {
+              ...highlight,
+              dateCreated: highlight.dateCreated.toISOString(),
+              dateUpdated: highlight.dateUpdated.toISOString(),
+          }
         : null,
     slots: slots.map((s) => ({ position: s.position, projectSlug: s.projectSlug })),
 };

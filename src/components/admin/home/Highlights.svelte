@@ -224,10 +224,18 @@
                             {slot.projectTitle}
                         </p>
                         <div class="flex gap-2">
-                            <Button kind="secondary" size="sm" onclick={() => handleAddProject(index)}>
+                            <Button
+                                kind="secondary"
+                                size="sm"
+                                onclick={() => handleAddProject(index)}
+                            >
                                 {$t("pages.admin.home.highlights.projects.replace")}
                             </Button>
-                            <Button kind="ghost" size="sm" onclick={() => handleRemoveProject(index)}>
+                            <Button
+                                kind="ghost"
+                                size="sm"
+                                onclick={() => handleRemoveProject(index)}
+                            >
                                 {$t("pages.admin.home.highlights.projects.remove")}
                             </Button>
                         </div>

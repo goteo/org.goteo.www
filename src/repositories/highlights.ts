@@ -22,7 +22,10 @@ class HighlightRepository {
         this.db = db;
     }
 
-    public async get(): Promise<{ highlight: HighlightRecord | null; slots: HighlightSlotRecord[] }> {
+    public async get(): Promise<{
+        highlight: HighlightRecord | null;
+        slots: HighlightSlotRecord[];
+    }> {
         const highlight = await this.db
             .prepare(
                 `SELECT
