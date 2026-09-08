@@ -2,7 +2,12 @@
 import CampaignCard from "./CampaignCard.svelte";
 import type { Campaign } from "../../types/campaign";
 import Arrow from "../../components/icons/navigation/Arrow.svelte";
-import { apiAccountingsIdGet, apiProjectsGetCollection, type Money } from "../../openapi/client";
+import {
+    apiAccountingsIdGet,
+    apiProjectsIdOrSlugGet,
+    type Money,
+    type Project,
+} from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
 import Grid from "../library/layout/Grid.svelte";
 import Button from "../library/buttons/Button.svelte";
@@ -11,20 +16,15 @@ import { highlightRepository } from "../../repositories/highlights";
 
 const { t } = Astro.locals;
 
-const { highlight, slots } = await highlightRepository.get();
+const data = await highlightRepository.get();
 
-if (!highlight || slots.length === 0) {
+if (!data || data.slots.length === 0) {
     return;
 }
 
-const slugs = slots.sort((a, b) => a.position - b.position).map((s) => s.projectSlug);
+const { highlight, slots } = data;
 
-const { data: projects } = await apiProjectsGetCollection({
-    headers: { "Accept-Language": getLanguage(Astro) },
-    query: {
-        "slug[]": slugs,
-    },
-});
+const projectIds = slots.sort((a, b) => a.position - b.position).map((s) => s.projectId);
 
 const LAYOUT_SIZES: Record<string, ("large" | "small")[]> = {
     "2x3": ["large", "small", "small", "small", "small", "small"],
@@ -35,14 +35,23 @@ const LAYOUT_SIZES: Record<string, ("large" | "small")[]> = {
 
 const sizeMap = LAYOUT_SIZES[highlight.layout] ?? LAYOUT_SIZES["2x3"];
 
-const projectBySlug = new Map((projects || []).map((p) => [p.slug, p]));
+const resolved = (
+    await Promise.all(
+        projectIds.map(async (projectId, index) => {
+            const { data: project } = await apiProjectsIdOrSlugGet({
+                path: { idOrSlug: String(projectId) },
+                headers: { "Accept-Language": getLanguage(Astro) },
+            });
 
-const existingSlugs = slugs.filter((slug) => projectBySlug.has(slug));
+            if (!project) return null;
+
+            return { project, index };
+        }),
+    )
+).filter((r): r is { project: Project; index: number } => r !== null);
 
 const campaigns = await Promise.all(
-    existingSlugs.map(async (slug, index) => {
-        const project = projectBySlug.get(slug)!;
-
+    resolved.map(async ({ project, index }) => {
         const { data: accounting } = await apiAccountingsIdGet({
             path: { id: extractId(project.accounting)! },
         });

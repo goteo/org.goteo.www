@@ -2,6 +2,7 @@
     import { actions } from "astro:actions";
     import { Modal } from "flowbite-svelte";
 
+    import { apiProjectsGetCollection } from "../../../openapi/client/sdk.gen";
     import { t } from "../../../i18n/store";
     import Button from "../../library/buttons/Button.svelte";
     import DropdownMenu from "../../library/dropdown/DropdownMenu.svelte";
@@ -11,19 +12,13 @@
 
     import type { DropdownOption } from "../../library/dropdown/dropdown.types";
 
-    interface SlotAssignment {
-        position: number;
-        projectSlug: string;
-        projectTitle: string;
-    }
-
     interface Props {
         config: {
             highlight: {
                 type: string;
                 layout: string;
             } | null;
-            slots: { position: number; projectSlug: string }[];
+            slots: { position: number; projectId: number }[];
         };
     }
 
@@ -68,11 +63,11 @@
     let selectedOption = $state<DropdownOption[]>([]);
     let editingSlotIndex = $state<number | null>(null);
 
-    let slotAssignments = $state<SlotAssignment[]>(
+    let slotAssignments = $state<{ position: number; projectId: number; projectTitle: string }[]>(
         config.slots.map((s) => ({
             position: s.position,
-            projectSlug: s.projectSlug,
-            projectTitle: s.projectSlug,
+            projectId: s.projectId,
+            projectTitle: String(s.projectId),
         })),
     );
 
@@ -83,7 +78,7 @@
             const assignment = slotAssignments.find((a) => a.position === i);
             return {
                 position: i,
-                projectSlug: assignment?.projectSlug ?? null,
+                projectId: assignment?.projectId ?? null,
                 projectTitle: assignment?.projectTitle ?? null,
             };
         }),
@@ -94,14 +89,16 @@
             searchOptions = [];
             return;
         }
-        const { data } = await actions.searchProjects({ query });
-        if (data && typeof data === "object" && "data" in data) {
-            searchOptions = (data.data as { slug: string; title: string }[]).map((p) => ({
-                id: p.slug,
-                label: p.title,
-                selected: false,
-            }));
-        }
+        const { data } = await apiProjectsGetCollection({
+            baseUrl: "/api/relay",
+            headers: { Accept: "application/ld+json" },
+            query: { title: query, page: 1, itemsPerPage: 10 },
+        });
+        searchOptions = (data ?? []).map((p) => ({
+            id: String(p.id),
+            label: p.title ?? p.slug ?? "",
+            selected: false,
+        }));
     }
 
     function handleAddProject(slotIndex: number) {
@@ -119,7 +116,7 @@
             ...slotAssignments.filter((a) => a.position !== editingSlotIndex),
             {
                 position: editingSlotIndex,
-                projectSlug: chosen.id,
+                projectId: Number(chosen.id),
                 projectTitle: chosen.label,
             },
         ];
@@ -132,10 +129,10 @@
     }
 
     async function handleSave() {
-        const slugs = slotAssignments
+        const projectIds = slotAssignments
             .sort((a, b) => a.position - b.position)
-            .map((a) => a.projectSlug);
-        await actions.saveHighlights({ type, layout, slots: slugs });
+            .map((a) => a.projectId);
+        await actions.saveHighlights({ type, layout, slots: projectIds });
     }
 </script>
 
@@ -219,7 +216,7 @@
                             number: String(index + 1).padStart(2, "0"),
                         })}
                     </p>
-                    {#if slot.projectSlug}
+                    {#if slot.projectId}
                         <p class="text-content text-body-small font-medium">
                             {slot.projectTitle}
                         </p>

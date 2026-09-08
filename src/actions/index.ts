@@ -1,5 +1,5 @@
 import { createBanner, deleteBanner } from "./banners";
-import { deleteHighlights, saveHighlights, searchProjects } from "./highlights";
+import { deleteHighlights, saveHighlights } from "./highlights";
 import { payment } from "./payment";
 import { register } from "./register";
 
@@ -10,5 +10,4 @@ export const server = {
     deleteBanner,
     saveHighlights,
     deleteHighlights,
-    searchProjects,
 };

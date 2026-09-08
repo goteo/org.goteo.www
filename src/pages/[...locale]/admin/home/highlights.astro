@@ -9,17 +9,16 @@ const { t, lang, session } = Astro.locals;
 const activePath = "/admin/home/highlights";
 const navItems = [{ label: "pages.admin.home.tabs.highlights", href: activePath }];
 
-const { highlight, slots } = await highlightRepository.get();
+const data = await highlightRepository.get();
 
 const config = {
-    highlight: highlight
+    highlight: data
         ? {
-              ...highlight,
-              dateCreated: highlight.dateCreated.toISOString(),
-              dateUpdated: highlight.dateUpdated.toISOString(),
+              type: data.highlight.type,
+              layout: data.highlight.layout,
           }
         : null,
-    slots: slots.map((s) => ({ position: s.position, projectSlug: s.projectSlug })),
+    slots: data ? data.slots.map((s) => ({ position: s.position, projectId: s.projectId })) : [],
 };
 ---
 

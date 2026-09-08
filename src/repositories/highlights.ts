@@ -12,7 +12,12 @@ export interface HighlightSlotRecord {
     id: number;
     highlightId: number;
     position: number;
-    projectSlug: string;
+    projectId: number;
+}
+
+export interface HighlightWithSlots {
+    highlight: HighlightRecord;
+    slots: HighlightSlotRecord[];
 }
 
 class HighlightRepository {
@@ -22,10 +27,7 @@ class HighlightRepository {
         this.db = db;
     }
 
-    public async get(): Promise<{
-        highlight: HighlightRecord | null;
-        slots: HighlightSlotRecord[];
-    }> {
+    private async fetchHighlightWithSlots(id: number): Promise<HighlightWithSlots | null> {
         const highlight = await this.db
             .prepare(
                 `SELECT
@@ -35,8 +37,9 @@ class HighlightRepository {
                     date_created AS dateCreated,
                     date_updated AS dateUpdated
                  FROM highlights
-                 WHERE id = 1`,
+                 WHERE id = ?`,
             )
+            .bind(id)
             .first<HighlightRecord>()
             .then((r) =>
                 r
@@ -48,58 +51,133 @@ class HighlightRepository {
                     : null,
             );
 
-        if (!highlight) {
-            return { highlight: null, slots: [] };
-        }
+        if (!highlight) return null;
 
-        const slots = await this.db
+        const slots = await this.loadSlots(highlight.id);
+
+        return { highlight, slots };
+    }
+
+    private async loadSlots(highlightId: number): Promise<HighlightSlotRecord[]> {
+        return await this.db
             .prepare(
                 `SELECT
                     id,
                     highlight_id AS highlightId,
                     position,
-                    project_slug AS projectSlug
+                    project_id AS projectId
                  FROM highlight_slots
                  WHERE highlight_id = ?
                  ORDER BY position ASC`,
             )
-            .bind(highlight.id)
+            .bind(highlightId)
             .all<HighlightSlotRecord>()
             .then((data) => data.results);
-
-        return { highlight, slots };
     }
 
-    public async save(type: string, layout: string, projectSlugs: string[]): Promise<void> {
+    /**
+     * Returns the given highlight (by id) or, when no id is provided, the most
+     * recent one. Returns null when there are no highlights at all.
+     */
+    public async get(id?: number): Promise<HighlightWithSlots | null> {
+        let highlightId = id;
+
+        if (highlightId === undefined) {
+            highlightId = await this.db
+                .prepare(`SELECT id FROM highlights ORDER BY id DESC LIMIT 1`)
+                .first<{ id: number }>()
+                .then((r) => r?.id);
+        }
+
+        if (highlightId === undefined) {
+            return null;
+        }
+
+        return this.fetchHighlightWithSlots(highlightId);
+    }
+
+    /**
+     * Creates a new highlight snapshot (with its slots) and returns it, keeping
+     * a historical record of every save for retrospective analysis and rollbacks.
+     */
+    public async save(type: string, layout: string, projectIds: number[]): Promise<HighlightWithSlots> {
         const now = Date.now();
 
-        await this.db
+        const result = await this.db
             .prepare(
-                `INSERT INTO highlights (id, type, layout, date_created, date_updated)
-                 VALUES (1, ?, ?, ?, ?)
-                 ON CONFLICT(id) DO UPDATE SET
-                    type = excluded.type,
-                    layout = excluded.layout,
-                    date_updated = excluded.date_updated`,
+                `INSERT INTO highlights (type, layout, date_created, date_updated)
+                 VALUES (?, ?, ?, ?)`,
             )
             .bind(type, layout, now, now)
             .run();
 
-        await this.db.prepare(`DELETE FROM highlight_slots WHERE highlight_id = 1`).run();
+        const highlightId = result.meta.last_row_id;
 
-        if (projectSlugs.length > 0) {
+        if (projectIds.length > 0) {
             const stmt = this.db.prepare(
-                `INSERT INTO highlight_slots (highlight_id, position, project_slug)
-                 VALUES (1, ?, ?)`,
+                `INSERT INTO highlight_slots (highlight_id, position, project_id)
+                 VALUES (?, ?, ?)`,
             );
 
-            const batch = projectSlugs.map((slug, index) => stmt.bind(index, slug));
+            const batch = projectIds.map((projectId, index) =>
+                stmt.bind(highlightId, index, projectId),
+            );
             await this.db.batch(batch);
+        }
+
+        return (await this.fetchHighlightWithSlots(highlightId))!;
+    }
+
+    /**
+     * Deletes the given highlight (by id) or, when no id is provided, the most
+     * recent one. Its slots are removed via the ON DELETE CASCADE.
+     */
+    public async delete(id?: number): Promise<void> {
+        let highlightId = id;
+
+        if (highlightId === undefined) {
+            highlightId = await this.db
+                .prepare(`SELECT id FROM highlights ORDER BY id DESC LIMIT 1`)
+                .first<{ id: number }>()
+                .then((r) => r?.id);
+        }
+
+        if (highlightId !== undefined) {
+            await this.db.prepare(`DELETE FROM highlights WHERE id = ?`).bind(highlightId).run();
         }
     }
 
-    public async delete(): Promise<void> {
-        await this.db.prepare(`DELETE FROM highlights WHERE id = 1`).run();
+    /**
+     * Lists every highlight snapshot with its slots, newest first, for
+     * retrospective analysis.
+     */
+    public async getHistory(): Promise<HighlightWithSlots[]> {
+        const highlights = await this.db
+            .prepare(
+                `SELECT
+                    id,
+                    type,
+                    layout,
+                    date_created AS dateCreated,
+                    date_updated AS dateUpdated
+                 FROM highlights
+                 ORDER BY id DESC`,
+            )
+            .all<HighlightRecord>()
+            .then((data) =>
+                data.results.map((r) => ({
+                    ...r,
+                    dateCreated: new Date(r.dateCreated),
+                    dateUpdated: new Date(r.dateUpdated),
+                })),
+            );
+
+        return Promise.all(
+            highlights.map(async (highlight) => ({
+                highlight,
+                slots: await this.loadSlots(highlight.id),
+            })),
+        );
     }
 }
 
