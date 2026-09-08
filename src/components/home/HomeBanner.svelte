@@ -18,7 +18,7 @@
 
     function handleClose() {
         visible = false;
-        if (onClose) onClose();
+        onClose?.();
     }
 </script>
 
@@ -67,7 +67,7 @@
                 <button
                     onclick={handleClose}
                     aria-label={closeAriaLabel}
-                    class="flex h-12 w-12 items-center justify-center rounded-full transition-colors hover:bg-white/10"
+                    class="flex size-12 shrink-0 items-center justify-center rounded-full transition-colors hover:bg-white/10"
                 >
                     <Close class="text-purple-soft h-6 w-6" />
                 </button>
