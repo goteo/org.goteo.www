@@ -1,6 +1,7 @@
 <script lang="ts">
     import { twJoin } from "tailwind-merge";
 
+    import BudgetModal from "./BudgetModal.svelte";
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import {
@@ -24,7 +25,7 @@
         open?: boolean;
         onClick?: () => void;
         onSave?: (data: ProjectCollaboration | ProjectBudgetItem | ProjectReward) => void;
-        defaultDeadline?: "minimum" | "optimum";
+        deadline?: "minimum" | "optimum";
         disabled?: boolean;
         disabledMessage?: string;
     }
@@ -37,7 +38,7 @@
         onSave,
         variant,
         open = $bindable(false),
-        defaultDeadline,
+        deadline,
         disabled = false,
         disabledMessage = "",
     }: Props = $props();
@@ -97,8 +98,8 @@
         {:else if variant === "collab"}
             {$t("pages.project.edit.collaborations.add.button")}
         {:else if variant === "budget"}
-            {defaultDeadline
-                ? $t(`pages.project.edit.budget.add.${defaultDeadline}.button`)
+            {deadline
+                ? $t(`pages.project.edit.budget.add.${deadline}.button`)
                 : $t("pages.project.edit.budget.add.button")}
         {/if}
     </Button>
@@ -117,7 +118,7 @@
 {#if !disabled && variant === "reward"}
     <RewardsModal bind:open {draft} onSave={handleReward} />
     <!-- {:else if !disabled && variant === "collab"}
-    <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} />
+    <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} /> -->
 {:else if !disabled && variant === "budget"}
-    <BudgetModal bind:open onSave={() => onSave?.()} budgetItem={null} {defaultDeadline} /> -->
+    <BudgetModal bind:open {draft} {deadline} />
 {/if}

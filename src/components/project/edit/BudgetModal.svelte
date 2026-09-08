@@ -3,44 +3,43 @@
     import { untrack } from "svelte";
 
     import { t } from "../../../i18n/store";
-    import { validationErrors } from "../../../stores/drafts/projectDraft";
     import { DEFAULT_CURRENCY, getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
-    import Toast from "../../library/feedback/Toast.svelte";
     import Select from "../../library/inputs/Select.svelte";
     import TextArea from "../../library/inputs/TextArea.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
     import type { ProjectBudgetItem } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     let {
         open = $bindable(false),
-        showToast = $bindable(false),
-        budgetItem,
-        defaultDeadline,
+        draft,
+        item,
+        deadline,
         onSave,
         onDelete,
     }: {
         open: boolean;
-        showToast: boolean;
-        budgetItem: ProjectBudgetItem | null;
-        defaultDeadline?: "minimum" | "optimum";
-        onSave: (data: ProjectBudgetItem | null) => void;
+        draft: ProjectDraftStore;
+        item?: ProjectBudgetItem;
+        deadline?: "minimum" | "optimum";
+        onSave?: (data: ProjectBudgetItem) => void;
         onDelete?: (deadline: "minimum" | "optimum") => void;
     } = $props();
 
-    let selectedBudgetTitle = $state(untrack(() => budgetItem?.title ?? ""));
+    let selectedBudgetTitle = $state(untrack(() => item?.title ?? ""));
     let selectedBudgetType: "infrastructure" | "material" | "task" | undefined = $state(
-        untrack(() => budgetItem?.type),
+        untrack(() => item?.type),
     );
-    let amount = $state(untrack(() => (budgetItem?.money ? toUnitsNumber(budgetItem.money) : 0)));
+    let amount = $state(untrack(() => (item?.money ? toUnitsNumber(item.money) : 0)));
     let selectedBudgetDeadline: "minimum" | "optimum" | undefined = $state(
-        untrack(() => budgetItem?.deadline || defaultDeadline),
+        untrack(() => item?.deadline || deadline),
     );
-    let selectedBudgetDescription = $state(untrack(() => budgetItem?.description ?? ""));
+    let selectedBudgetDescription = $state(untrack(() => item?.description ?? ""));
 
     let openDeleteModal = $state(false);
 
@@ -76,7 +75,7 @@
     );
 
     function handleSaveOrCreate() {
-        onSave({
+        onSave?.({
             title: selectedBudgetTitle,
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,
@@ -89,8 +88,8 @@
     }
 
     function handleDeleteClick() {
-        if (budgetItem) {
-            onDelete?.(budgetItem.deadline);
+        if (item) {
+            onDelete?.(item.deadline);
             openDeleteModal = false;
             open = false;
         }
@@ -115,17 +114,6 @@
         aria-label={$t("pages.project.edit.budget.modal.title")}
         tabindex="-1"
     >
-        {#if Object.keys($validationErrors).length === 1}
-            {#each Object.values($validationErrors) as validationError}
-                <Toast class="absolute z-999 self-center" variant="error" bind:showToast>
-                    {$t(validationError)}
-                </Toast>
-            {/each}
-        {:else if Object.keys($validationErrors).length >= 2}
-            <Toast class="absolute z-999 self-end" variant="error" bind:showToast>
-                {$t("system.validation.missingRequiredFields")}
-            </Toast>
-        {/if}
         <Title level={2} variant="subsection">
             {$t("pages.project.edit.budget.modal.title")}
         </Title>
@@ -170,7 +158,7 @@
             />
         </div>
         <div class="flex items-center justify-end gap-4">
-            {#if budgetItem !== null && onDelete}
+            {#if item !== null && onDelete}
                 <Button kind="secondary" onclick={() => (openDeleteModal = true)} class="w-fit">
                     {$t("common.remove")}
                 </Button>
