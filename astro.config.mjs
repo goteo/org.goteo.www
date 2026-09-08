@@ -236,7 +236,19 @@ export default defineConfig({
                 "@astrojs/cloudflare/cache/provider",
                 "@astrojs/svelte/server.js",
                 "astro/actions/runtime/entrypoints/route.js",
+                "astro/app/manifest",
                 "astro/assets/services/noop",
+                /**
+                 * Same problem from the other side: these are imported by Svelte components,
+                 * which the SSR scanner reaches through Astro's virtual entries and therefore
+                 * misses. Each one was being discovered on the first rendered page, and the
+                 * three reloads that followed took workerd down with the error above.
+                 */
+                "dexie",
+                "dinero.js",
+                "dinero.js/currencies",
+                "flowbite-svelte",
+                "tailwind-merge",
             ],
             exclude: [
                 /**
