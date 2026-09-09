@@ -14,8 +14,11 @@ export interface CheckoutItem extends GatewayCharge {
     kind: "free" | "reward" | "tip";
     quantity: number;
     /**
-     * URL to the project's cover image, captured when the item was added to
-     * the cart. Only present when there is an associated project.
+     * URL to the cover image, captured when the item was added to the cart.
+     * Prefers the Reward's cover (1:1). When the item has no associated
+     * Reward, the owning Project's cover (16:9) is used instead, and clients
+     * must center it via CSS. Absent both, clients should fall back to a
+     * placeholder.
      */
     cover?: string;
 

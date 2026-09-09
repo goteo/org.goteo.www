@@ -31,7 +31,7 @@
             <img
                 src={item.cover}
                 alt={item.reward?.title ?? item.title}
-                class="h-full w-full object-cover"
+                class="h-full w-full object-cover object-center"
             />
         {:else}
             <span class="text-xl md:text-2xl">🙂</span>
