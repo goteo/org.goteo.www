@@ -100,7 +100,11 @@ class HighlightRepository {
      * Creates a new highlight snapshot (with its slots) and returns it, keeping
      * a historical record of every save for retrospective analysis and rollbacks.
      */
-    public async save(type: string, layout: string, projectIds: number[]): Promise<HighlightWithSlots> {
+    public async save(
+        type: string,
+        layout: string,
+        projectIds: number[],
+    ): Promise<HighlightWithSlots> {
         const now = Date.now();
 
         const result = await this.db
