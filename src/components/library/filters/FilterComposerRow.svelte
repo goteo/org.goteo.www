@@ -5,15 +5,13 @@
     import Close from "../../icons/navigation/Close.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
+    import ResourceSearch from "../inputs/ResourceSearch.svelte";
     import Select from "../inputs/Select.svelte";
     import TerritoryInput from "../inputs/TerritoryInput.svelte";
     import TextInput from "../inputs/TextInput.svelte";
 
-    import type {
-        FilterSubject,
-        FilterOperator,
-        FilterOption,
-    } from "../../../utils/filterComposer";
+    import type { FilterSubject, FilterOperator } from "../../../utils/filterComposer";
+    import type { SearchResultItem } from "../../../utils/resourceSearch";
     import type { DropdownOption } from "../dropdown/dropdown.types";
 
     interface Props {
@@ -40,9 +38,13 @@
 
     let dropdownOptions = $state<DropdownOption[]>([]);
     let dropdownSelected = $state<DropdownOption[]>([]);
+    let suggestSelected = $state<SearchResultItem[]>([]);
     let showStaticDropdown = $state(false);
-    let showSuggestSearch = $state(false);
-    let showTerritoryDropdown = $state(false);
+
+    /** The suggest control is multi unless the subject only allows a single "equals". */
+    const suggestIsMultiple = $derived(
+        operator !== "equals" || !!currentSubject?.allowsMultipleEquals,
+    );
 
     let previousSubjectKey = $state("");
     let territoryInit = $state<{
@@ -57,6 +59,8 @@
         operator = "";
         referent = "";
 
+        suggestSelected = [];
+
         const subject = subjects.find((s) => s.key === subjectKey);
         if (!subject) {
             dropdownOptions = [];
@@ -67,7 +71,6 @@
 
         if (subject.serialize) {
             territoryInit = parseTerritoryRef(referent as string);
-            showTerritoryDropdown = true;
             dropdownOptions = [];
             dropdownSelected = [];
             return;
@@ -97,47 +100,8 @@
         }
     }
 
-    async function handleSuggest(q: string) {
-        if (!currentSubject?.suggest) return;
-        if (!q) {
-            dropdownOptions = [...dropdownSelected];
-            return;
-        }
-        const results: FilterOption[] = await currentSubject.suggest(q);
-        dropdownOptions = results.map((r) => ({
-            id: r.value,
-            label: r.label,
-            selected: dropdownSelected.some((s) => s.id === r.value),
-        }));
-    }
-
-    function handleSuggestChange(option: DropdownOption) {
-        if (operator === "equals" && !currentSubject?.allowsMultipleEquals) {
-            if (option.selected) {
-                dropdownSelected = [option];
-                referent = option.id;
-                showSuggestSearch = false;
-            } else {
-                dropdownSelected = [];
-                referent = "";
-                showSuggestSearch = true;
-            }
-        } else {
-            const current = Array.isArray(referent) ? referent : [];
-            const updated = option.selected
-                ? [...current, option.id]
-                : current.filter((id) => id !== option.id);
-            referent = updated;
-            if (updated.length === 0) {
-                showSuggestSearch = true;
-            }
-        }
-    }
-
-    function handleClearSuggestTag() {
-        dropdownSelected = [];
-        referent = "";
-        showSuggestSearch = true;
+    function handleSuggestChange(items: SearchResultItem[]) {
+        referent = suggestIsMultiple ? items.map((item) => item.value) : (items[0]?.value ?? "");
     }
 
     function handleRemoveTag(item: DropdownOption) {
@@ -145,7 +109,6 @@
         referent = (referent as string[]).filter((id) => id !== item.id);
         if (dropdownSelected.length === 0) {
             showStaticDropdown = true;
-            showSuggestSearch = true;
         }
     }
 
@@ -163,20 +126,8 @@
         subLvl2: string[];
     }) {
         referent = JSON.stringify(t);
-        const hasSelection = t.countries.length > 0 || t.subLvl1.length > 0 || t.subLvl2.length > 0;
-        if (hasSelection) {
-            showTerritoryDropdown = false;
-        }
     }
 
-    function getTerritoryCodes(raw: string): string[] {
-        try {
-            const t = JSON.parse(raw);
-            return [...(t.countries || []), ...(t.subLvl1 || []), ...(t.subLvl2 || [])];
-        } catch {
-            return [];
-        }
-    }
     function parseTerritoryRef(raw: string): {
         countries: string[];
         subLvl1: string[];
@@ -272,116 +223,23 @@
                     <option value={opt.value}>{$t(opt.label)}</option>
                 {/each}
             </Select>
-        {:else if currentSubject?.suggest && subjectKey && operator === "equals" && !currentSubject.allowsMultipleEquals}
-            {#if referent && !Array.isArray(referent) && !showSuggestSearch}
-                <div
-                    class="border-secondary flex items-center justify-between rounded-lg border bg-white p-4"
-                >
-                    <button
-                        type="button"
-                        class="text-secondary cursor-pointer text-sm hover:underline"
-                        onclick={handleClearSuggestTag}
-                    >
-                        {dropdownSelected[0]?.label ?? referent}
-                    </button>
-                    <button
-                        type="button"
-                        onclick={handleClearSuggestTag}
-                        class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                        aria-label={$t("domain.filterComposer.removeFilter")}
-                    >
-                        <Close width="16" height="16" />
-                    </button>
-                </div>
-            {:else}
-                <DropdownMenu
-                    searchClasses="border-secondary"
-                    variant="multiselect"
-                    options={dropdownOptions}
-                    bind:selected={dropdownSelected}
-                    hasSearch
-                    onSearch={handleSuggest}
-                    onChange={handleSuggestChange}
-                />
-            {/if}
-        {:else if currentSubject?.suggest && subjectKey && operator && (operator !== "equals" || currentSubject.allowsMultipleEquals)}
-            {#if !showSuggestSearch && dropdownSelected.length > 0}
-                <div
-                    class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                    onclick={() => {
-                        setTimeout(() => (showSuggestSearch = true));
-                    }}
-                    role="button"
-                    tabindex="0"
-                    onkeydown={(e) => e.key === "Enter" && (showSuggestSearch = true)}
-                >
-                    {#each dropdownSelected as item}
-                        <span
-                            class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
-                        >
-                            {@html item.label}
-                            <button
-                                type="button"
-                                class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                                onclick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveTag(item);
-                                }}
-                            >
-                                <Close width="12" height="12" />
-                            </button>
-                        </span>
-                    {/each}
-                </div>
-            {:else}
-                <div use:clickOutside={() => (showSuggestSearch = false)}>
-                    <DropdownMenu
-                        searchClasses="border-secondary"
-                        variant="multiselect"
-                        options={dropdownOptions}
-                        bind:selected={dropdownSelected}
-                        hasSearch
-                        onSearch={handleSuggest}
-                        onChange={handleSuggestChange}
-                        bind:isOpen={showSuggestSearch}
-                    />
-                </div>
-            {/if}
+        {:else if currentSubject?.suggest && subjectKey && operator}
+            <ResourceSearch
+                search={currentSubject.suggest}
+                multiple={suggestIsMultiple}
+                bind:selected={suggestSelected}
+                label={$t("domain.filterComposer.referentPlaceholder")}
+                placeholder={$t("domain.filterComposer.referentPlaceholder")}
+                highlight={false}
+                onChange={handleSuggestChange}
+                onClear={() => (referent = suggestIsMultiple ? [] : "")}
+            />
         {:else if currentSubject?.serialize && subjectKey && operator}
-            {#if !showTerritoryDropdown}
-                {@const codes = getTerritoryCodes(referent as string)}
-                {#if codes.length > 0}
-                    <div
-                        class="border-secondary flex min-h-14 cursor-pointer flex-wrap items-center gap-2 rounded-lg border bg-white p-3"
-                        onclick={() => {
-                            setTimeout(() => (showTerritoryDropdown = true));
-                        }}
-                        role="button"
-                        tabindex="0"
-                        onkeydown={(e) => e.key === "Enter" && (showTerritoryDropdown = true)}
-                    >
-                        {#each codes as code}
-                            <span
-                                class="bg-tertiary/10 border-secondary inline-flex items-center gap-1 rounded-lg border px-3 py-1 text-sm"
-                            >
-                                {code}
-                            </span>
-                        {/each}
-                    </div>
-                {:else}
-                    <TerritoryInput
-                        multiple
-                        selectedTerritory={territoryInit}
-                        onTerritoryChange={handleTerritoryChange}
-                    />
-                {/if}
-            {:else}
-                <TerritoryInput
-                    multiple
-                    selectedTerritory={territoryInit}
-                    onTerritoryChange={handleTerritoryChange}
-                />
-            {/if}
+            <TerritoryInput
+                multiple
+                selectedTerritory={territoryInit}
+                onTerritoryChange={handleTerritoryChange}
+            />
         {:else if currentSubject?.type === "date"}
             <DateInput
                 value={typeof referent === "string" && referent ? new Date(referent) : new Date()}
