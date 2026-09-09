@@ -68,12 +68,12 @@
             classes,
         )}
     />
-    {#if error || helperText}
-        <span
-            id={`helper-${finalId}`}
-            class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
-        >
+    <span
+        id={`helper-${finalId}`}
+        class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+    >
+        {#if error || helperText}
             {error || helperText}
-        </span>
-    {/if}
+        {/if}
+    </span>
 </div>
