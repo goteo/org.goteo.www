@@ -70,7 +70,9 @@
     "search": {
       "bar": {
         "placeholder": "Buscar..."
-      }
+      },
+      "noResults": "No se han encontrado resultados",
+      "removeItem": "Quitar {{ label }}"
     },
     "filterComposer": {
       "title": "Filtros personalizados",

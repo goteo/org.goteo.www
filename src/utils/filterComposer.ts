@@ -3,18 +3,19 @@ import { get } from "svelte/store";
 import { getDefaultLanguage } from "./consts";
 import { currencySymbols } from "./currencyData";
 import {
-    suggestGateways,
-    suggestAccounting,
-    suggestOwner,
-    suggestCategories,
-    suggestProjects,
-    suggestProjectsBySubtitle,
-    suggestProjectsByDescription,
-    suggestProjectsBySlug,
-    suggestUserHandle,
-    suggestUserEmail,
-} from "./filterSuggestions";
+    searchAccountings,
+    searchCategories,
+    searchGateways,
+    searchProjectsByDescription,
+    searchProjectsBySlug,
+    searchProjectsBySubtitle,
+    searchProjectsByTitle,
+    searchUsersByEmail,
+    searchUsersByHandle,
+} from "./searchers";
 import { locale } from "../i18n/store";
+
+import type { ResourceSearcher } from "./resourceSearch";
 
 export interface FilterRow {
     id: string;
@@ -50,7 +51,7 @@ export interface FilterSubject {
     compatibleOperators: FilterOperator[];
     resources: FilterResource[];
     options?: FilterOption[];
-    suggest?: (q: string) => Promise<FilterOption[]>;
+    suggest?: ResourceSearcher;
     serialize?: (referent: unknown) => Record<string, string | string[]>;
     allowsMultipleEquals?: boolean;
 }
@@ -101,21 +102,21 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["projects"],
-        suggest: suggestProjects,
+        suggest: searchProjectsByTitle,
     },
     subtitle: {
         key: "subtitle",
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["projects"],
-        suggest: suggestProjectsBySubtitle,
+        suggest: searchProjectsBySubtitle,
     },
     description: {
         key: "description",
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["projects"],
-        suggest: suggestProjectsByDescription,
+        suggest: searchProjectsByDescription,
     },
     projectStatus: {
         key: "projectStatus",
@@ -140,7 +141,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
-        suggest: suggestCategories,
+        suggest: searchCategories,
         allowsMultipleEquals: true,
     },
     owner: {
@@ -148,7 +149,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
-        suggest: suggestOwner,
+        suggest: searchUsersByHandle,
         allowsMultipleEquals: true,
     },
     slug: {
@@ -156,7 +157,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["projects"],
-        suggest: suggestProjectsBySlug,
+        suggest: searchProjectsBySlug,
         allowsMultipleEquals: true,
     },
     budgetAmount: {
@@ -171,7 +172,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
-        suggest: suggestGateways,
+        suggest: searchGateways,
         allowsMultipleEquals: true,
     },
     type: {
@@ -187,7 +188,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
-        suggest: suggestAccounting,
+        suggest: searchAccountings,
         allowsMultipleEquals: true,
     },
     origin: {
@@ -195,7 +196,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals", "is_any_of"],
         resources: ["gateway_charges"],
-        suggest: suggestAccounting,
+        suggest: searchAccountings,
         allowsMultipleEquals: true,
     },
     currency: {
@@ -231,14 +232,14 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["users"],
-        suggest: suggestUserHandle,
+        suggest: searchUsersByHandle,
     },
     email: {
         key: "email",
         type: "string",
         compatibleOperators: ["equals"],
         resources: ["users"],
-        suggest: suggestUserEmail,
+        suggest: searchUsersByEmail,
     },
     userType: {
         key: "userType",
