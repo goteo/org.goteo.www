@@ -1313,7 +1313,8 @@
         "charges": "Cobraments",
         "projects": "Projectes",
         "users": "Usuaris",
-        "comm": "Comunicació"
+        "comm": "Comunicació",
+        "home": "Inici"
       },
       "sidebar": {
         "aria": {
@@ -1726,6 +1727,41 @@
               "totalCollected": "Total cobrat",
               "recentCharges": "Últims cobraments",
               "noRecentCharges": "No s'han trobat cobraments recents"
+            }
+          }
+        }
+      },
+      "home": {
+        "tabs": {
+          "highlights": "P. destacats"
+        },
+        "highlights": {
+          "title": "Projectes destacats",
+          "description": "Tria quins projectes es mostren destacats a la portada.",
+          "type": {
+            "title": "Tipus de projectes destacats",
+            "label": "Tipus de projectes",
+            "recent": "Més recents"
+          },
+          "grid": {
+            "title": "Selecciona la quadrícula",
+            "option": "Quadrícula de {{ layout }}"
+          },
+          "projects": {
+            "title": "Selecciona els projectes",
+            "description": "Recorda que els projectes s'aniran col·locant de dalt a baix i d'esquerra a dreta.",
+            "slot": "Projecte {{ number }}",
+            "empty": "Cerca un projecte i destaca'l a la portada",
+            "add": "Afegeix un projecte",
+            "replace": "Canvia el projecte",
+            "remove": "Treu",
+            "change": "Canvia a un altre projecte",
+            "position": "Aquest projecte a la posició {{ number }}",
+            "modal": {
+              "title": "Afegeix un projecte",
+              "description": "Cerca i afegeix el projecte que vols destacar",
+              "search": "Cerca un projecte",
+              "submit": "Afegir"
             }
           }
         }
