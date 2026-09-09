@@ -287,6 +287,28 @@
 </div>
 
 <style>
+    :global(.tiptap) {
+        font-family: var(--font-body);
+        font-size: 16px;
+        font-weight: 400;
+        color: var(--color-content);
+        line-height: 24px;
+    }
+
+    :global(.tiptap p) {
+        margin: 0;
+        margin-bottom: var(--text-lg);
+    }
+
+    :global(.tiptap p:last-child) {
+        margin-bottom: 0;
+    }
+
+    :global(.tiptap strong) {
+        font-weight: var(--font-weight-bold);
+        color: var(--color-black);
+    }
+
     :global(.tiptap p.is-editor-empty:first-child::before) {
         color: var(--color-content);
         content: attr(data-placeholder);

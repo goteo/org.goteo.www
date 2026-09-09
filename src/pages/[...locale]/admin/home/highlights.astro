@@ -1,0 +1,34 @@
+---
+import Layout from "../../../../layouts/Layout.astro";
+import App from "../../../../layouts/App.svelte";
+import WithSidebar from "../../../../layouts/WithSidebar.svelte";
+import Highlights from "../../../../components/admin/home/Highlights.svelte";
+import { highlightRepository } from "../../../../repositories/highlights";
+
+const { t, lang, session } = Astro.locals;
+const activePath = "/admin/home/highlights";
+const navItems = [{ label: "pages.admin.home.tabs.highlights", href: activePath }];
+
+const data = await highlightRepository.get();
+
+const config = {
+    highlight: data
+        ? {
+              type: data.highlight.type,
+              layout: data.highlight.layout,
+          }
+        : null,
+    slots: data ? data.slots.map((s) => ({ position: s.position, projectId: s.projectId })) : [],
+};
+---
+
+<Layout
+    title={t("pages.admin.home.highlights.title")}
+    description={t("pages.metadata.description")}
+>
+    <App client:load locale={lang} session={session} admin>
+        <WithSidebar client:load {navItems} {activePath}>
+            <Highlights client:load {config} />
+        </WithSidebar>
+    </App>
+</Layout>

@@ -4,10 +4,10 @@
     import { t } from "../../../i18n/store";
     import AccountingOwnerBadge from "../../admin/AccountingOwnerBadge.svelte";
     import Close from "../../icons/navigation/Close.svelte";
-    import TerritoryFilter from "../../search/TerritoryFilter.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
+    import TerritoryInput from "../inputs/TerritoryInput.svelte";
     import TextInput from "../inputs/TextInput.svelte";
 
     import type {
@@ -380,13 +380,15 @@
                         {/each}
                     </div>
                 {:else}
-                    <TerritoryFilter
+                    <TerritoryInput
+                        multiple
                         selectedTerritory={territoryInit}
                         onTerritoryChange={handleTerritoryChange}
                     />
                 {/if}
             {:else}
-                <TerritoryFilter
+                <TerritoryInput
+                    multiple
                     selectedTerritory={territoryInit}
                     onTerritoryChange={handleTerritoryChange}
                 />
