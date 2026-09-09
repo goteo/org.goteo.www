@@ -1025,7 +1025,6 @@
           "title": "Selecciona tus recompensas",
           "headline": "Selecciona tu recompensa",
           "thanksMessage": "Gracias por cooperar",
-          "ivaMessage": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
           "addToCart": "Añadir al carro y continuar",
           "unavailable": "No hay recompensas disponibles.",
           "loading": "Cargando recompensas...",

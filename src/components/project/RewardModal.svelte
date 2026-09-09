@@ -88,7 +88,7 @@
             {@html $t(
                 "domain.project.reward.byAtLeastOrMore",
                 {
-                    amount: `${formatCurrency(reward.money)}`,
+                    amount: formatCurrency(reward.money),
                 },
                 { allowHTML: true },
             )}
@@ -100,19 +100,10 @@
 {/snippet}
 
 {#snippet description()}
-    <div class="marked-content flex min-w-0 flex-1 flex-col gap-2">
+    <div class="marked-content flex min-w-0 flex-1 flex-col">
         {#await renderMarkdown(reward.description!) then content}
             {@html content}
         {/await}
-        <p class="mb-8">
-            {@html $t(
-                "pages.project.view.rewards.ivaMessage",
-                {
-                    link: `<a class="font-bold" href="${window.location.origin}${link}" target="_blank">${window.location.origin}${link}</a>`,
-                },
-                { allowHTML: true },
-            )}
-        </p>
     </div>
 {/snippet}
 
@@ -121,6 +112,7 @@
         <p class="text-secondary text-sm font-medium">
             {$t("pages.project.view.rewards.donationFree.additionalDonation")}
         </p>
+        <!-- TO-DO: Change this input to dedicated CurrencyInput -->
         <TextInput
             labelText={$t("domain.project.reward.donation")}
             type="text"

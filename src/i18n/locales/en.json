@@ -1024,7 +1024,6 @@
           "title": "Select your rewards",
           "headline": "Select your reward",
           "thanksMessage": "Thank you for cooperating",
-          "ivaMessage": "Remember that each contribution has a tax deduction between 35% and 80%! Calculate it here: {{link}}",
           "addToCart": "Add to cart and continue",
           "unavailable": "There are no rewards available.",
           "loading": "Loading rewards...",
