@@ -551,7 +551,8 @@
             "password": {
               "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
             },
-            "required": "Este campo es obligatorio"
+            "required": "Este campo es obligatorio",
+            "emailInvalid": "El email introducido no es válido"
           },
           "emailHelper": "Email que usarás para acceder"
         },
@@ -566,7 +567,7 @@
           },
           "firstNameHelper": "Tu nombre",
           "lastNameHelper": "Tus apellidos",
-          "dniHelper": "Requerido para la desgravación fiscal"
+          "taxIdHelper": "Requerido para la desgravación fiscal"
         },
         "organization": {
           "legalName": "Razón social",
@@ -576,12 +577,10 @@
           "representative": {
             "title": "Datos del representante de la empresa."
           },
-          "cifHelper": "*Con el CIF avisaremos a la agencia tributaria para tu declaración de la renta.",
+          "taxIdHelper": "*Con el CIF avisaremos a la agencia tributaria para tu declaración de la renta.",
           "legalNameHelper": "Nombre de la empresa"
         },
         "error": {
-          "incompletePersonFields": "Por favor, rellena tu nombre y apellidos.",
-          "incompleteOrgFields": "Por favor, rellena los datos de la entidad.",
           "unexpectedRegistration": "Error al crear la cuenta. Por favor, inténtalo de nuevo más tarde.",
           "requireTerms": "Debes aceptar las condiciones para continuar."
         },
@@ -1972,3 +1971,4 @@
     }
   }
 }
+

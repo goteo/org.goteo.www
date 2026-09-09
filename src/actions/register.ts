@@ -1,5 +1,4 @@
 import { ActionError, defineAction } from "astro:actions";
-import { z } from "zod";
 
 import { passwordGrant } from "../auth/grant.ts";
 import { buildSession, setSession } from "../auth/session.ts";
@@ -8,42 +7,16 @@ import {
     apiUsersIdpersonPatch,
     apiUsersIdorganizationPatch,
 } from "../openapi/client/index.ts";
+import { zRegisterForm } from "../validation/registerValidation.ts";
 
 export const register = defineAction({
     accept: "form",
-    input: z.object({
-        type: z.enum(["individual", "organization"]),
-        identifier: z.string(),
-        password: z.string().min(8),
-        firstname: z.string(),
-        lastname: z.string(),
-        dni: z.string().optional(),
-        razonSocial: z.string().optional(),
-        cif: z.string().optional(),
-    }),
+    input: zRegisterForm,
     handler: async (input, context) => {
         const { t } = context.locals;
 
         try {
-            const { identifier, password, firstname, lastname, dni, razonSocial, cif } = input;
-
-            if (input.type === "individual") {
-                if (!firstname.trim() || !lastname.trim()) {
-                    throw new ActionError({
-                        code: "BAD_REQUEST",
-                        message: t("pages.checkout.register.error.incompletePersonFields"),
-                    });
-                }
-            }
-
-            if (input.type === "organization") {
-                if (!razonSocial?.trim() || !cif?.trim() || !firstname.trim() || !lastname.trim()) {
-                    throw new ActionError({
-                        code: "BAD_REQUEST",
-                        message: t("pages.checkout.register.error.incompleteOrgFields"),
-                    });
-                }
-            }
+            const { identifier, password, firstname, lastname, taxId, legalName } = input;
 
             const createUserResponse = await apiUsersPost({
                 body: {
@@ -68,7 +41,7 @@ export const register = defineAction({
                     path: { id: userId },
                     headers: auth.asHttpHeaders,
                     body: {
-                        taxId: dni ?? "",
+                        taxId: taxId ?? "",
                         firstName: firstname,
                         lastName: lastname,
                     },
@@ -87,8 +60,8 @@ export const register = defineAction({
                     path: { id: userId },
                     headers: auth.asHttpHeaders,
                     body: {
-                        taxId: cif ?? "",
-                        legalName: razonSocial ?? "",
+                        taxId: taxId ?? "",
+                        legalName: legalName ?? "",
                     },
                 });
             }

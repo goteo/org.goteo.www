@@ -2,7 +2,10 @@
     import { actions, isInputError } from "astro:actions";
     import { navigate } from "astro:transitions/client";
 
+
     import { t } from "../../i18n/store";
+    import { getValidationParams } from "../../utils/validation";
+    import { zRegisterForm } from "../../validation/registerValidation";
     import Toast from "../library/feedback/Toast.svelte";
     import Checkbox from "../library/inputs/Checkbox.svelte";
     import PasswordInput from "../library/inputs/PasswordInput.svelte";
@@ -11,15 +14,19 @@
     import Thtml from "../library/typography/Thtml.svelte";
     import Title from "../library/typography/Title.svelte";
 
-    type FieldName =
-        | "type"
-        | "identifier"
-        | "password"
-        | "firstname"
-        | "lastname"
-        | "dni"
-        | "razonSocial"
-        | "cif";
+    import type z from "zod";
+
+    type FieldName = keyof typeof zRegisterForm.shape;
+
+    interface RegisterForm {
+        type: "individual" | "organization";
+        identifier: string;
+        password: string;
+        firstname: string;
+        lastname: string;
+        taxId: string;
+        legalName: string;
+    }
 
     interface Props {
         callback?: string;
@@ -31,93 +38,133 @@
         callback ? `/checkout/login?callback=${encodeURIComponent(callback)}` : "/checkout/login",
     );
 
-    let userType = $state("individual");
-    let showDniField = $state(false);
+    let form: RegisterForm = $state({
+        type: "individual",
+        identifier: "",
+        password: "",
+        firstname: "",
+        lastname: "",
+        taxId: "",
+        legalName: "",
+    });
+
+    let showTaxIdField = $state(false);
     let acceptTerms = $state(false);
     let isSubmitting = $state(false);
 
     let subtitle = $derived(
-        userType === "individual"
+        form.type === "individual"
             ? $t("pages.checkout.register.description")
             : $t("pages.checkout.register.organization.description"),
     );
 
     let loginBtnLabel = $derived(
-        userType === "individual"
+        form.type === "individual"
             ? $t("pages.checkout.register.loginBtnLabel")
             : $t("pages.checkout.register.organization.loginBtnLabel"),
     );
 
-    let firstname = $state("");
-    let lastname = $state("");
-    let identifier = $state("");
-    let password = $state("");
-    let dni = $state("");
-    let razonSocial = $state("");
-    let cif = $state("");
-
-    let fieldErrors = $state<Partial<Record<FieldName | "_checks" | "_form", string>>>({});
+    let validation = $state<Partial<Record<FieldName, z.core.$ZodIssue[]>>>({});
+    let checksError = $state("");
+    let formError = $state("");
     let showFormToast = $state(false);
     let showChecksToast = $state(false);
+
+    function validate(field: FieldName) {
+        const result = zRegisterForm.shape[field].safeParse(form[field]);
+
+        validation[field] = result.error?.issues;
+    }
+
+    function getValidationMessage(field: FieldName) {
+        const issue = validation[field]?.[0];
+
+        if (!issue) {
+            return "";
+        }
+
+        if (issue.code === "custom") {
+            return $t(issue.message, issue.params);
+        }
+
+        if (issue.code === "too_small" && field === "password") {
+            return $t("pages.checkout.register.form.validation.password.minLength");
+        }
+
+        if (issue.code === "invalid_format" && field === "identifier") {
+            return $t("pages.checkout.register.form.validation.emailInvalid");
+        }
+
+        return $t(`system.validation.${issue.code}`, {
+            value: String(form[field]),
+            ...getValidationParams(issue),
+        });
+    }
 
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
 
-        const errors: Partial<Record<FieldName, string>> = {};
-        const requiredText = $t("pages.checkout.register.form.validation.required");
+        validation = {};
+        showFormToast = false;
+        showChecksToast = false;
 
-        if (!firstname.trim()) errors.firstname = requiredText;
-        if (!lastname.trim()) errors.lastname = requiredText;
-        if (!identifier.trim()) errors.identifier = requiredText;
-        if (!password) errors.password = requiredText;
-        else if (password.length < 8) {
-            errors.password = $t("pages.checkout.register.form.validation.password.minLength");
+        const result = zRegisterForm.safeParse({
+            type: form.type,
+            identifier: form.identifier,
+            password: form.password,
+            firstname: form.firstname,
+            lastname: form.lastname,
+            taxId: form.type === "organization" || showTaxIdField ? form.taxId : undefined,
+            legalName: form.type === "organization" ? form.legalName : undefined,
+        });
+
+        if (!result.success) {
+            for (const issue of result.error.issues) {
+                const field = issue.path[0] as FieldName;
+
+                validation[field] = [...(validation[field] ?? []), issue];
+            }
         }
 
-        if (userType === "organization") {
-            if (!razonSocial.trim()) errors.razonSocial = requiredText;
-            if (!cif.trim()) errors.cif = requiredText;
+        if (form.type === "individual" && showTaxIdField && !form.taxId.trim()) {
+            validation.taxId = [
+                {
+                    code: "custom",
+                    path: ["taxId"],
+                    message: "pages.checkout.register.form.validation.required",
+                } as z.core.$ZodIssue,
+            ];
         }
 
-        if (userType === "individual" && showDniField && !dni.trim()) {
-            errors.dni = requiredText;
-        }
-
-        if (Object.keys(errors).length > 0) {
-            fieldErrors = errors;
+        if (Object.values(validation).some((issues) => issues?.length)) {
             return;
         }
 
         if (!acceptTerms) {
-            fieldErrors = { _checks: $t("pages.checkout.register.error.requireTerms") };
+            checksError = $t("pages.checkout.register.error.requireTerms");
             showChecksToast = true;
             return;
         }
 
         isSubmitting = true;
-        fieldErrors = {};
-        showFormToast = false;
-        showChecksToast = false;
+        formError = "";
 
-        const form = e.currentTarget as HTMLFormElement;
-        const { error } = await actions.register(new FormData(form));
+        const formElement = e.currentTarget as HTMLFormElement;
+        const { error } = await actions.register(new FormData(formElement));
 
         isSubmitting = false;
 
         if (error) {
             if (isInputError(error)) {
-                const issues: Partial<Record<FieldName, string>> = {};
                 for (const issue of error.issues) {
                     const field = String(issue.path?.[0] ?? "") as FieldName;
-                    if (field && !issues[field]) {
-                        issues[field] = issue.message;
-                    }
+
+                    validation[field] = [...(validation[field] ?? []), issue];
                 }
-                fieldErrors = issues;
                 return;
             }
 
-            fieldErrors = { _form: error.message };
+            formError = error.message;
             showFormToast = true;
             return;
         }
@@ -162,14 +209,14 @@
             <RadioButton
                 name="type"
                 value="individual"
-                bind:group={userType}
+                bind:group={form.type}
                 label={$t("pages.checkout.register.form.userType.individual")}
                 class="h-6 w-6 tabular-nums"
             />
             <RadioButton
                 name="type"
                 value="organization"
-                bind:group={userType}
+                bind:group={form.type}
                 label={$t("pages.checkout.register.form.userType.organization")}
                 class="h-6 w-6 tabular-nums"
             />
@@ -177,14 +224,15 @@
 
         <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
             <div class="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
-                {#if userType === "individual"}
+                {#if form.type === "individual"}
                     <TextInput
                         type="text"
                         name="firstname"
                         placeholder={$t("pages.checkout.register.individual.firstName")}
                         helperText={$t("pages.checkout.register.individual.firstNameHelper")}
-                        error={fieldErrors.firstname}
-                        bind:value={firstname}
+                        error={getValidationMessage("firstname")}
+                        bind:value={form.firstname}
+                        onInput={() => validate("firstname")}
                         disabled={isSubmitting}
                         required
                     />
@@ -193,8 +241,9 @@
                         name="lastname"
                         placeholder={$t("pages.checkout.register.individual.lastName")}
                         helperText={$t("pages.checkout.register.individual.lastNameHelper")}
-                        error={fieldErrors.lastname}
-                        bind:value={lastname}
+                        error={getValidationMessage("lastname")}
+                        bind:value={form.lastname}
+                        onInput={() => validate("lastname")}
                         disabled={isSubmitting}
                         required
                     />
@@ -204,9 +253,10 @@
                             name="identifier"
                             placeholder={$t("pages.checkout.register.individual.email")}
                             helperText={$t("pages.checkout.register.form.emailHelper")}
-                            error={fieldErrors.identifier}
+                            error={getValidationMessage("identifier")}
                             class="h-14"
-                            bind:value={identifier}
+                            bind:value={form.identifier}
+                            onInput={() => validate("identifier")}
                             disabled={isSubmitting}
                             required
                         />
@@ -217,9 +267,10 @@
                         helperText={$t(
                             "pages.checkout.register.form.validation.password.minLength",
                         )}
-                        error={fieldErrors.password}
+                        error={getValidationMessage("password")}
                         class="md:col-span-2"
-                        bind:value={password}
+                        bind:value={form.password}
+                        onInput={() => validate("password")}
                         disabled={isSubmitting}
                         required
                     />
@@ -227,12 +278,13 @@
                     <div class="md:col-span-2">
                         <TextInput
                             type="text"
-                            name="razonSocial"
+                            name="legalName"
                             placeholder={$t("pages.checkout.register.organization.legalName")}
                             helperText={$t("pages.checkout.register.organization.legalNameHelper")}
-                            error={fieldErrors.razonSocial}
+                            error={getValidationMessage("legalName")}
                             class="h-14"
-                            bind:value={razonSocial}
+                            bind:value={form.legalName}
+                            onInput={() => validate("legalName")}
                             disabled={isSubmitting}
                             required
                         />
@@ -243,9 +295,10 @@
                             name="identifier"
                             placeholder={$t("pages.checkout.register.individual.email")}
                             helperText={$t("pages.checkout.register.form.emailHelper")}
-                            error={fieldErrors.identifier}
+                            error={getValidationMessage("identifier")}
                             class="h-14"
-                            bind:value={identifier}
+                            bind:value={form.identifier}
+                            onInput={() => validate("identifier")}
                             disabled={isSubmitting}
                             required
                         />
@@ -256,21 +309,23 @@
                         helperText={$t(
                             "pages.checkout.register.form.validation.password.minLength",
                         )}
-                        error={fieldErrors.password}
+                        error={getValidationMessage("password")}
                         class="md:col-span-2"
-                        bind:value={password}
+                        bind:value={form.password}
+                        onInput={() => validate("password")}
                         disabled={isSubmitting}
                         required
                     />
                     <div class="md:col-span-2">
                         <TextInput
                             type="text"
-                            name="cif"
+                            name="taxId"
                             placeholder={$t("pages.checkout.register.organization.taxId")}
-                            helperText={$t("pages.checkout.register.organization.cifHelper")}
-                            error={fieldErrors.cif}
+                            helperText={$t("pages.checkout.register.organization.taxIdHelper")}
+                            error={getValidationMessage("taxId")}
                             class="h-14"
-                            bind:value={cif}
+                            bind:value={form.taxId}
+                            onInput={() => validate("taxId")}
                             disabled={isSubmitting}
                             required
                         />
@@ -285,8 +340,9 @@
                         name="firstname"
                         placeholder={$t("pages.checkout.register.individual.firstName")}
                         helperText={$t("pages.checkout.register.individual.firstNameHelper")}
-                        error={fieldErrors.firstname}
-                        bind:value={firstname}
+                        error={getValidationMessage("firstname")}
+                        bind:value={form.firstname}
+                        onInput={() => validate("firstname")}
                         disabled={isSubmitting}
                         required
                     />
@@ -295,33 +351,35 @@
                         name="lastname"
                         placeholder={$t("pages.checkout.register.individual.lastName")}
                         helperText={$t("pages.checkout.register.individual.lastNameHelper")}
-                        error={fieldErrors.lastname}
-                        bind:value={lastname}
+                        error={getValidationMessage("lastname")}
+                        bind:value={form.lastname}
+                        onInput={() => validate("lastname")}
                         disabled={isSubmitting}
                         required
                     />
                 {/if}
             </div>
 
-            {#if userType === "individual"}
+            {#if form.type === "individual"}
                 <div class="flex max-w-121 flex-initial flex-col items-start gap-5 self-stretch">
                     <Checkbox
                         id="tax-deduction"
-                        bind:checked={showDniField}
+                        bind:checked={showTaxIdField}
                         label={$t("pages.checkout.register.individual.taxId.msgDeduction")}
                         disabled={isSubmitting}
                     />
-                    {#if showDniField}
+                    {#if showTaxIdField}
                         <div class="w-full">
                             <TextInput
                                 type="text"
-                                name="dni"
+                                name="taxId"
                                 placeholder={$t("pages.checkout.register.individual.taxId.label")}
-                                helperText={$t("pages.checkout.register.individual.dniHelper")}
-                                error={fieldErrors.dni}
+                                helperText={$t("pages.checkout.register.individual.taxIdHelper")}
+                                error={getValidationMessage("taxId")}
                                 disabled={isSubmitting}
                                 required
-                                bind:value={dni}
+                                bind:value={form.taxId}
+                                onInput={() => validate("taxId")}
                             />
                         </div>
                     {/if}
@@ -348,12 +406,12 @@
 
             {#if showChecksToast}
                 <Toast variant="error" bind:showToast={showChecksToast} class="w-full">
-                    {fieldErrors._checks}
+                    {checksError}
                 </Toast>
             {/if}
             {#if showFormToast}
                 <Toast variant="error" bind:showToast={showFormToast} class="w-full">
-                    {fieldErrors._form}
+                    {formError}
                 </Toast>
             {/if}
         </div>
