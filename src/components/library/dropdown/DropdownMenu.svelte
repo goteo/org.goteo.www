@@ -143,7 +143,7 @@
                     <button
                         type="button"
                         class="text-tertiary hover:text-tertiary/80 cursor-pointer"
-                        aria-label={$t("domain.dropdown.removeOption")}
+                        aria-label={$t("common.remove")}
                         onclick={(e) => {
                             e.stopPropagation();
                             handleItemChange({ ...option, selected: false });
