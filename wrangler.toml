@@ -1,4 +1,4 @@
-name = "goteo-v4-frontend"
+name = "goteov4web-app"
 main = "@astrojs/cloudflare/entrypoints/server"
 compatibility_date = "2025-06-26"
 compatibility_flags = ["nodejs_compat"]
@@ -31,6 +31,7 @@ enabled = true
 # ============================================================================
 
 [env.testing]
+name = "goteov4web-app-testing"
 
 routes = [
     { pattern = "testing.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
@@ -48,6 +49,7 @@ migrations_dir = "db/migrations"
 # ============================================================================
 
 [env.staging]
+name = "goteov4web-app-staging"
 
 routes = [
     { pattern = "staging.v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
@@ -65,6 +67,7 @@ migrations_dir = "db/migrations"
 # ============================================================================
 
 [env.prod]
+name = "goteov4web-app-prod"
 
 routes = [
     { pattern = "v4.goteo.org", zone_name = "goteo.org", custom_domain = true },
