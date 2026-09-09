@@ -2,7 +2,6 @@
     import { actions, isInputError } from "astro:actions";
     import { navigate } from "astro:transitions/client";
 
-
     import { t } from "../../i18n/store";
     import { getValidationParams } from "../../utils/validation";
     import { zRegisterForm } from "../../validation/registerValidation";
