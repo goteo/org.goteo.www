@@ -27,7 +27,7 @@
         "expectedUrl": "Not a URL"
       },
       "date": {
-        "greaterThan": "The date must be greater than {{ date }}"
+        "greaterThan": "The date must be later than {{ date }}"
       },
       "file": {
         "maxAllowedSize": "Maximum allowed size {{ size }}",
@@ -1313,7 +1313,8 @@
         "charges": "Charges",
         "projects": "Projects",
         "users": "Users",
-        "comm": "Communication"
+        "comm": "Communication",
+        "home": "Homepage"
       },
       "sidebar": {
         "aria": {
@@ -1730,6 +1731,41 @@
           }
         }
       },
+      "home": {
+        "tabs": {
+          "highlights": "Featured Projects"
+        },
+        "highlights": {
+          "title": "Featured projects",
+          "description": "Choose which projects are featured on the homepage.",
+          "type": {
+            "title": "Featured project type",
+            "label": "Project type",
+            "recent": "Most recent"
+          },
+          "grid": {
+            "title": "Select the grid",
+            "option": "{{ layout }} grid"
+          },
+          "projects": {
+            "title": "Select the projects",
+            "description": "Remember that projects will be placed from top to bottom and from left to right.",
+            "slot": "Project {{ number }}",
+            "empty": "Search for a project and feature it on the homepage",
+            "add": "Add project",
+            "replace": "Change project",
+            "remove": "Remove",
+            "change": "Change to another project",
+            "position": "This project in position {{ number }}",
+            "modal": {
+              "title": "Add Project",
+              "description": "Search for and add the project you want to feature",
+              "search": "Search for a project",
+              "submit": "Add"
+            }
+          }
+        }
+      },
       "comm": {
         "title": "Communication",
         "description": "Manage platform communication",
@@ -1775,6 +1811,10 @@
             "modal": {
               "title": "Announcement published on {{date}}",
               "description": "Here you can see what the announcement looked like"
+            },
+            "deleteModal": {
+              "title": "Delete this announcement?",
+              "description": "The announcement will be permanently deleted and disappear from the history. This action cannot be undone."
             }
           }
         }

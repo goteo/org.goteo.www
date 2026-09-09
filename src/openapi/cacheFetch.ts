@@ -1,4 +1,4 @@
-import type { RequestOptions } from "@hey-api/client-fetch";
+import type { RequestOptions } from "./client/client";
 
 export const CACHE_NAME = "goteo-v4-api";
 
@@ -59,7 +59,7 @@ export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
 
         const originalFetch = opts.fetch ?? globalThis.fetch;
 
-        opts.fetch = async (req: Request) => {
+        opts.fetch = (async (req: Request) => {
             /**
              * Authenticated responses never go near this cache.
              *
@@ -116,7 +116,7 @@ export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
             }
 
             return response;
-        };
+        }) as typeof opts.fetch;
 
         return request;
     };

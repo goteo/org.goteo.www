@@ -3,10 +3,10 @@
     import { currentDraft, updateProject } from "../../../stores/drafts/projectDraft";
     import Close from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import AddressAutocomplete from "../../library/inputs/AddressAutocomplete.svelte";
     import Checkbox from "../../library/inputs/Checkbox.svelte";
     import FileUpload from "../../library/inputs/FileUpload.svelte";
     import RadioButton from "../../library/inputs/RadioButton.svelte";
+    import TerritoryInput from "../../library/inputs/TerritoryInput.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import ToggleSwitch from "../../library/inputs/ToggleSwitch.svelte";
     import Title from "../../library/typography/Title.svelte";
@@ -173,12 +173,11 @@
                 {$t("pages.project.edit.aboutYou.location")}
             </Title>
             <p class="text-content text-base">{$t("pages.project.edit.aboutYou.locationHelper")}</p>
-            <AddressAutocomplete
-                name="address"
+            <TerritoryInput
                 placeholder={$t("pages.project.edit.aboutYou.locationPlaceholder")}
                 value={$currentDraft?.createProject.address ?? ""}
-                onAddressChange={(address, territory) => {
-                    updateProject({ address, territory });
+                onInput={(territory) => {
+                    updateProject({ address: territory.address ?? "", territory });
                 }}
             />
         </div>

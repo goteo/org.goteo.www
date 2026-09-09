@@ -1,10 +1,10 @@
 <script lang="ts">
     import { t } from "../../../i18n/store";
     import Close from "../../icons/navigation/Close.svelte";
-    import TerritoryFilter from "../../search/TerritoryFilter.svelte";
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
+    import TerritoryInput from "../inputs/TerritoryInput.svelte";
     import TextInput from "../inputs/TextInput.svelte";
     import AccountingOwnerBadge from "../tags/AccountingOwnerBadge.svelte";
 
@@ -126,7 +126,7 @@
 
     <div class="flex-1">
         {#if currentSubject?.serialize && operator}
-            <TerritoryFilter onTerritoryChange={handleTerritoryChange} />
+            <TerritoryInput multiple onTerritoryChange={handleTerritoryChange} />
         {:else if currentSubject?.options && operator && !singleSelect}
             <DropdownMenu
                 chips
