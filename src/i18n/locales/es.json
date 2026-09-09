@@ -540,7 +540,6 @@
       },
       "register": {
         "form": {
-          "btnSubmit": "Continuar",
           "userType": {
             "individual": "Persona física",
             "organization": "Persona jurídica (empresas)"
