@@ -1313,7 +1313,8 @@
         "charges": "Charges",
         "projects": "Projects",
         "users": "Users",
-        "comm": "Communication"
+        "comm": "Communication",
+        "home": "Homepage"
       },
       "sidebar": {
         "aria": {
@@ -1726,6 +1727,41 @@
               "totalCollected": "Total collected",
               "recentCharges": "Recent charges",
               "noRecentCharges": "No recent charges found"
+            }
+          }
+        }
+      },
+      "home": {
+        "tabs": {
+          "highlights": "Featured Projects"
+        },
+        "highlights": {
+          "title": "Featured projects",
+          "description": "Choose which projects are featured on the homepage.",
+          "type": {
+            "title": "Featured project type",
+            "label": "Project type",
+            "recent": "Most recent"
+          },
+          "grid": {
+            "title": "Select the grid",
+            "option": "{{ layout }} grid"
+          },
+          "projects": {
+            "title": "Select the projects",
+            "description": "Remember that projects will be placed from top to bottom and from left to right.",
+            "slot": "Project {{ number }}",
+            "empty": "Search for a project and feature it on the homepage",
+            "add": "Add project",
+            "replace": "Change project",
+            "remove": "Remove",
+            "change": "Change to another project",
+            "position": "This project in position {{ number }}",
+            "modal": {
+              "title": "Add Project",
+              "description": "Search for and add the project you want to feature",
+              "search": "Search for a project",
+              "submit": "Add"
             }
           }
         }
