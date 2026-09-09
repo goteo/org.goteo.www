@@ -10,6 +10,6 @@ CREATE TABLE IF NOT EXISTS highlight_slots (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     highlight_id  INTEGER NOT NULL REFERENCES highlights(id) ON DELETE CASCADE,
     position      INTEGER NOT NULL,
-    project_id    INTEGER NOT NULL,
+    project_id    TEXT NOT NULL,
     UNIQUE(highlight_id, position)
 );
