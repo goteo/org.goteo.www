@@ -1866,9 +1866,35 @@
         "createNew": "Crear un proyecto"
       },
       "ownedProjects": {
-        "title": "Tus Proyectos Activos",
+        "title": "Tus Proyectos",
+        "tabs": {
+          "draft": "Borradores",
+          "inReview": "En revisión",
+          "active": "Activos",
+          "archived": "Archivados"
+        },
         "messageToDonatorsButton": "Mensaje a donantes",
-        "uploadNewsButton": "Subir novedad"
+        "uploadNewsButton": "Subir novedad",
+        "card": {
+          "tags": {
+            "draft": "Borrador",
+            "readyToPublish": "Listo para publicar",
+            "reviewing": "Revisando",
+            "pendingReview": "Pendiente de revisión",
+            "needsChanges": "Requiere cambios",
+            "rejected": "Rechazado",
+            "campaignFailed": "Campaña fallida",
+            "campaignCancelled": "Campaña cancelada",
+            "fundingPaid": "Financiación concluida"
+          },
+          "actions": {
+            "manage": "Gestiona el proyecto",
+            "edit": "Editar proyecto",
+            "advisory": "Ir a asesoría",
+            "publish": "Publica tu proyecto",
+            "view": "Ver proyecto"
+          }
+        }
       },
       "donatedProjects": {
         "title": "Proyectos activos donde donaste"
