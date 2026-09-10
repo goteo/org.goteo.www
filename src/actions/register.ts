@@ -18,15 +18,19 @@ export const register = defineAction({
         try {
             const { identifier, password, firstname, lastname, taxId, legalName } = input;
 
-            const createUserResponse = await apiUsersPost({
+            const { data: user, error } = await apiUsersPost({
                 body: {
                     email: identifier,
                     password,
                     type: input.type,
                 },
             });
-            const userId = String(createUserResponse.data?.id ?? "");
 
+            if (error) {
+                throw error;
+            }
+
+            const userId = String(user.id);
             const auth = await passwordGrant({ identifier, password });
 
             if (!auth.access_token) {
@@ -41,7 +45,7 @@ export const register = defineAction({
                     path: { id: userId },
                     headers: auth.asHttpHeaders,
                     body: {
-                        taxId: taxId ?? "",
+                        taxId: taxId,
                         firstName: firstname,
                         lastName: lastname,
                     },
@@ -60,8 +64,8 @@ export const register = defineAction({
                     path: { id: userId },
                     headers: auth.asHttpHeaders,
                     body: {
-                        taxId: taxId ?? "",
-                        legalName: legalName ?? "",
+                        taxId: taxId!,
+                        legalName: legalName!,
                     },
                 });
             }
@@ -71,7 +75,8 @@ export const register = defineAction({
 
             return { success: true };
         } catch (error) {
-            console.error("🚨 Error al registrar:", JSON.stringify(error, null, 2));
+            console.error("User register error:", error);
+
             throw new ActionError({
                 code: "BAD_REQUEST",
                 message: t("pages.checkout.register.error.unexpectedRegistration"),
