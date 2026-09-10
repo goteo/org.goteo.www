@@ -1,3 +1,4 @@
+import { extractId } from "./extractId";
 import {
     apiAccountingsIdGet,
     apiProjectsIdOrSlugGet,
@@ -9,7 +10,6 @@ import {
     apiTipjarsGetCollectionUrl,
     apiUsersGetCollectionUrl,
 } from "../openapi/client/operation-paths.gen";
-import { extractId } from "./extractId";
 
 export type OwnerKind = "user" | "project" | "tipjar";
 

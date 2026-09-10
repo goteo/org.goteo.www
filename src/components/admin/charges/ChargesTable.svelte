@@ -78,13 +78,13 @@
 <script lang="ts">
     import { TableBodyCell } from "flowbite-svelte";
 
-    import AccountingOwnerBadge from "../AccountingOwnerBadge.svelte";
     import ChargesDetailsRow from "./ChargesDetailsRow.svelte";
     import { t } from "../../../i18n/store";
     import { ADMIN_ITEMS_PER_PAGE_OPTIONS } from "../../../utils/adminTable";
     import { formatCurrency } from "../../../utils/currencies";
     import Chevron from "../../icons/navigation/Chevron.svelte";
     import DataTable from "../../library/tables/DataTable.svelte";
+    import AccountingOwnerBadge from "../../library/tags/AccountingOwnerBadge.svelte";
 
     let {
         charges = [],
