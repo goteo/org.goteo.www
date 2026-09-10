@@ -180,6 +180,7 @@
       "reward": {
         "byAtLeast": "By {{ amount }}",
         "byAtLeastOrMore": "For {{ amount }} or more",
+        "donation": "Donation",
         "unitsTotal": {
           "single": "There is 1 unit",
           "multiple": "There are {{ units }} units"
@@ -537,6 +538,58 @@
           "unexpectedLogin": "Error logging in. Please try again later.",
           "invalidEmail": "The email address is not valid."
         }
+      },
+      "register": {
+        "form": {
+          "userType": {
+            "individual": "Natural person",
+            "organization": "Legal person (companies)"
+          },
+          "termsCheckbox": "I accept the {{ privacy }}privacy terms{{ _privacy }} and the {{ terms }}cookie policy{{ _terms }}",
+          "policiesCheckbox": "By registering, I confirm that I accept your {{ terms }}terms of use{{ _terms }}, {{ privacy }}privacy policy{{ _privacy }} and {{ cookies }}cookie policy{{ _cookies }}",
+          "validation": {
+            "password": {
+              "minLength": "*Password must be at least 8 characters long"
+            },
+            "required": "This field is required",
+            "emailInvalid": "The email address entered is not valid"
+          },
+          "emailHelper": "Email address you will use to log in"
+        },
+        "individual": {
+          "firstName": "First name",
+          "lastName": "Last name",
+          "email": "Email",
+          "password": "Password",
+          "taxId": {
+            "msgDeduction": "I would like to deduct this donation from my taxes. Please provide your NIF for the Tax Agency. Only applies within Spain.",
+            "label": "Tax ID*"
+          },
+          "firstNameHelper": "Your first name",
+          "lastNameHelper": "Your last name",
+          "taxIdHelper": "Required for tax deduction"
+        },
+        "organization": {
+          "legalName": "Corporate name",
+          "taxId": "ID*",
+          "description": "Tell us who you are so you can proceed",
+          "loginBtnLabel": "Log in with your account",
+          "representative": {
+            "title": "Company representative details."
+          },
+          "taxIdHelper": "*With the CIF, we will notify the Tax Agency for your income tax return.",
+          "legalNameHelper": "Company name"
+        },
+        "error": {
+          "unexpectedRegistration": "Error creating the account. Please try again later.",
+          "requireTerms": "You must accept the terms and conditions to continue."
+        },
+        "title": "Tell us your personal details",
+        "description": "We need to know who you are before you pay.",
+        "registerOr": "Register or",
+        "loginBtnLabel": "Log in with your account",
+        "existUserInfo": "If you are already a Goteo user, sign in. You will be able to use your wallet to make these donations.",
+        "otherAccessMethods": "or sign in with"
       }
     },
     "home": {
@@ -1030,7 +1083,8 @@
           "donationFree": {
             "title": "I waive an individual reward; I just want to help the project",
             "description": "In this space, you can donate the amount you consider appropriate without receiving a reward in return. Every contribution, big or small, makes a difference and brings us closer to the goal.",
-            "placeholder": "Select the contribution, e.g. €20"
+            "placeholder": "Select the contribution, e.g. €20",
+            "additionalDonation": "You can add more money to your donation for this reward"
           },
           "error": {
             "amount": "Please enter a valid amount",
