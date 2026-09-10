@@ -180,6 +180,7 @@
       "reward": {
         "byAtLeast": "Por {{ amount }}",
         "byAtLeastOrMore": "Por {{ amount }} o más",
+        "donation": "Donación",
         "unitsTotal": {
           "single": "Hay una unidad",
           "multiple": "Hay {{ units }} unidades"
@@ -1076,14 +1077,14 @@
           "title": "Selecciona tus recompensas",
           "headline": "Selecciona tu recompensa",
           "thanksMessage": "Gracias por cooperar",
-          "ivaMessage": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
           "addToCart": "Añadir al carro y continuar",
           "unavailable": "No hay recompensas disponibles.",
           "loading": "Cargando recompensas...",
           "donationFree": {
             "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
             "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
-            "placeholder": "Seleccione el aporte  Ej.20€"
+            "placeholder": "Seleccione el aporte  Ej.20€",
+            "additionalDonation": "Puedes añadir más dinero a tu donación para esta recompensa"
           },
           "error": {
             "amount": "Por favor, ingresa una monto válido",

@@ -1024,7 +1024,6 @@
           "title": "Selecciona les teves recompenses",
           "headline": "Selecciona la teva recompensa",
           "thanksMessage": "Gràcies per cooperar",
-          "ivaMessage": "Recorda que cada aportació té una desgravació fiscal entre el 35 i el 80%! Calcula-ho aquí: {{link}}",
           "addToCart": "Afegir al carro i continuar",
           "unavailable": "No hi ha recompenses disponibles.",
           "loading": "Carregant recompenses...",
