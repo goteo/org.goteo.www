@@ -180,6 +180,7 @@
       "reward": {
         "byAtLeast": "Per {{ amount }}",
         "byAtLeastOrMore": "Per {{ amount }} o més",
+        "donation": "Donació",
         "unitsTotal": {
           "single": "Hi ha una unitat",
           "multiple": "Hi ha {{ units }} unitats"
@@ -411,6 +412,9 @@
         "description": "Pàgina de checkout"
       },
       "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
+      "decrement": "Reducir cantidad",
+      "increment": "Aumentar cantidad",
+      "remove": "Eliminar del carrito",
       "reward": {
         "claimed": "{{ units }} persones ja han reclamat aquesta recompensa",
         "unclaimed": "Encara ningú ha reclamat aquesta recompensa. Fes-ho tu primer!"
@@ -537,6 +541,58 @@
           "unexpectedLogin": "Error en iniciar sessió. Si us plau, intenta-ho de nou més tard.",
           "invalidEmail": "El correu electrònic no és vàlid."
         }
+      },
+      "register": {
+        "form": {
+          "userType": {
+            "individual": "Persona física",
+            "organization": "Persona jurídica (empreses)"
+          },
+          "termsCheckbox": "Accepto els {{ privacy }}termes de privacitat{{ _privacy }} i la {{ terms }}política de cookies{{ _terms }}",
+          "policiesCheckbox": "En registrar-me confirmo la meva acceptació dels vostres {{ terms }}termes d'ús{{ _terms }}, {{ privacy }}política de privacitat{{ _privacy }} i {{ cookies }}política de cookies{{ _cookies }}",
+          "validation": {
+            "password": {
+              "minLength": "*Requisits de la contrasenya: ha de tenir 8 caràcters"
+            },
+            "required": "Aquest camp és obligatori",
+            "emailInvalid": "L'adreça electrònica introduïda no és vàlida"
+          },
+          "emailHelper": "Adreça electrònica que faràs servir per accedir"
+        },
+        "individual": {
+          "firstName": "Nom",
+          "lastName": "Cognoms",
+          "email": "Correu electrònic",
+          "password": "Contrasenya",
+          "taxId": {
+            "msgDeduction": "Vull desgravar aquesta donació. Proporciona el NIF per a l'Agència Tributària. Només s'aplica dins d'Espanya.",
+            "label": "NIF*"
+          },
+          "firstNameHelper": "El teu nom",
+          "lastNameHelper": "Els teus cognoms",
+          "taxIdHelper": "Requerit per a la desgravació fiscal"
+        },
+        "organization": {
+          "legalName": "Raó social",
+          "taxId": "CIF*",
+          "description": "Digues-nos qui ets perquè puguis assumir la responsabilitat",
+          "loginBtnLabel": "Inicia sessió amb el teu compte",
+          "representative": {
+            "title": "Dades del representant de l'empresa."
+          },
+          "taxIdHelper": "*Amb el CIF avisarem l'Agència Tributària per a la teva declaració de la renda.",
+          "legalNameHelper": "Nom de l'empresa"
+        },
+        "error": {
+          "unexpectedRegistration": "Error en crear el compte. Si us plau, torna-ho a intentar més tard.",
+          "requireTerms": "Has d'acceptar les condicions per continuar."
+        },
+        "title": "Indica'ns les teves dades personals",
+        "description": "Necessitem saber qui ets abans de pagar.",
+        "registerOr": "Registra't o",
+        "loginBtnLabel": "Entra amb el teu compte",
+        "existUserInfo": "Si ja ets usuari de Goteo, identifica't. Podràs fer servir el teu moneder per realitzar aquestes donacions.",
+        "otherAccessMethods": "o accedeix amb"
       }
     },
     "home": {
@@ -1024,14 +1080,14 @@
           "title": "Selecciona les teves recompenses",
           "headline": "Selecciona la teva recompensa",
           "thanksMessage": "Gràcies per cooperar",
-          "ivaMessage": "Recorda que cada aportació té una desgravació fiscal entre el 35 i el 80%! Calcula-ho aquí: {{link}}",
           "addToCart": "Afegir al carro i continuar",
           "unavailable": "No hi ha recompenses disponibles.",
           "loading": "Carregant recompenses...",
           "donationFree": {
             "title": "Renuncio a una recompensa individual, només vull ajudar el projecte",
             "description": "En aquest espai pots donar la quantitat que consideris sense obtenir recompensa a canvi. Cada aportació, gran o petita, marca la diferència i ens acosta a la meta.",
-            "placeholder": "Selecciona l'aportació  Ex. 20 €"
+            "placeholder": "Selecciona l'aportació  Ex. 20 €",
+            "additionalDonation": "Pots afegir més diners a la teva donació per a aquesta recompensa"
           },
           "error": {
             "amount": "Si us plau, introdueix un import vàlid",
@@ -1313,12 +1369,73 @@
         "charges": "Cobraments",
         "projects": "Projectes",
         "users": "Usuaris",
-        "comm": "Comunicació"
+        "comm": "Comunicació",
+        "home": "Inici"
       },
       "sidebar": {
         "aria": {
           "close": "Tanca el menú",
           "open": "Obre el menú d'administració"
+        }
+      },
+      "home": {
+        "tabs": {
+          "hero": "Hero",
+          "highlights": "P. destacats"
+        },
+        "hero": {
+          "title": "Hero",
+          "description": "El inicio de la portada, lo más importante.",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar el hero de la portada",
+            "invalidUrl": "La URL del enlace no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
+          "fields": {
+            "textsTitle": "Textos del bloque",
+            "titlePlaceholder": "Titular del bloque",
+            "contentPlaceholder": "Breve texto introductorio",
+            "primaryCtaPlaceholder": "Call to action primario",
+            "secondaryCtaPlaceholder": "Call to action secundario",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programar la subida del bloque",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin",
+            "mediaTitle": "Hora de subir las imágenes",
+            "mediaLabel": "Imagen 01",
+            "mediaHint": "Sube una imagen o vídeo",
+            "mediaAdd": "Añade imagen"
+          }
+        },
+        "highlights": {
+          "title": "Projectes destacats",
+          "description": "Tria quins projectes es mostren destacats a la portada.",
+          "type": {
+            "title": "Tipus de projectes destacats",
+            "label": "Tipus de projectes",
+            "recent": "Més recents"
+          },
+          "grid": {
+            "title": "Selecciona la quadrícula",
+            "option": "Quadrícula de {{ layout }}"
+          },
+          "projects": {
+            "title": "Selecciona els projectes",
+            "description": "Recorda que els projectes s'aniran col·locant de dalt a baix i d'esquerra a dreta.",
+            "slot": "Projecte {{ number }}",
+            "empty": "Cerca un projecte i destaca'l a la portada",
+            "add": "Afegeix un projecte",
+            "replace": "Canvia el projecte",
+            "remove": "Treu",
+            "change": "Canvia a un altre projecte",
+            "position": "Aquest projecte a la posició {{ number }}",
+            "modal": {
+              "title": "Afegeix un projecte",
+              "description": "Cerca i afegeix el projecte que vols destacar",
+              "search": "Cerca un projecte",
+              "submit": "Afegir"
+            }
+          }
         }
       },
       "charges": {
@@ -1827,14 +1944,6 @@
     },
     "metadata": {
       "description": "Pàgina d'inici"
-    },
-    "hero": {
-      "title": "Finança el canvi que el món necessita",
-      "description": "Comencem una nova etapa amb la mateixa brúixola que ens ha guiat des del principi: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!",
-      "buttons": {
-        "discover": "Descobreix campanyes",
-        "impulse": "Impulsa un projecte"
-      }
     },
     "me": {
       "page": {
