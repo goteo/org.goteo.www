@@ -147,7 +147,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                 <div class="flex items-center gap-2 md:gap-4">
                     <!-- Status Tag (owned projects section) -->
                     {#if ownedConfig?.tagLabel}
-                        <Tag >
+                        <Tag>
                             {ownedConfig.tagLabel}
                         </Tag>
                     {/if}
@@ -190,10 +190,10 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <!-- Obtained Amount -->
                         <div class="flex items-start justify-between">
                             <div class="flex flex-col gap-1">
-                                <span class="text-black text-base"
+                                <span class="text-base text-black"
                                     >{$t("pages.home.campaigns.obtained")}</span
                                 >
-                                <span class="text-black text-double leading-10 font-bold">
+                                <span class="text-double leading-10 font-bold text-black">
                                     {#if obtained}
                                         {formatCurrency(obtained)}
                                     {:else}
@@ -206,17 +206,17 @@ Converted from CampaignCard.astro to maintain exact functionality
                             <!-- Remaining to Goal -->
                             <div class="flex flex-col gap-2 text-right">
                                 {#if campaign.optimum && hasReachedMinimum}
-                                    <span class="text-black text-base">
+                                    <span class="text-base text-black">
                                         {$t("pages.home.campaigns.optimum")}
                                     </span>
-                                    <span class="text-black text-2xl font-bold">
+                                    <span class="text-2xl font-bold text-black">
                                         {formatCurrency(campaign.optimum)}
                                     </span>
                                 {:else}
-                                    <span class="text-black text-base">
+                                    <span class="text-base text-black">
                                         {$t("pages.home.campaigns.minimum")}
                                     </span>
-                                    <span class="text-black text-2xl font-bold">
+                                    <span class="text-2xl font-bold text-black">
                                         {formatCurrency(campaign.minimum)}
                                     </span>
                                 {/if}
