@@ -14,7 +14,10 @@ import {
     suggestUserHandle,
     suggestUserEmail,
 } from "./filterSuggestions";
+import TerritoryReferentInput from "../components/library/filters/TerritoryReferentInput.svelte";
 import { locale } from "../i18n/store";
+
+import type { Component } from "svelte";
 
 export interface FilterRow {
     id: string;
@@ -55,6 +58,7 @@ export interface FilterSubject {
     allowsMultipleEquals?: boolean;
     /** Renders the referent with a dedicated component instead of its raw label. */
     display?: "accountingOwner";
+    component?: Component<any>;
 }
 
 const gatewayChargeStatuses: FilterOption[] = [
@@ -279,6 +283,7 @@ const filterSubjects: Record<string, FilterSubject> = {
         type: "string",
         compatibleOperators: ["is_any_of"],
         resources: ["projects", "users"],
+        component: TerritoryReferentInput as Component<any>,
         serialize(referent) {
             const t = JSON.parse(referent as string);
             const result: Record<string, string[]> = {};
