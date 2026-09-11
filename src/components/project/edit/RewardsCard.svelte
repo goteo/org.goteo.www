@@ -13,6 +13,7 @@
     import UnitIcon from "../../icons/UnitIcon.svelte";
     import Button from "../../library/buttons/Button.svelte";
     import Reward from "../../library/cards/Reward.svelte";
+    import DeleteModal from "../../library/feedback/DeleteModal.svelte";
 
     import type { Project, ProjectReward } from "../../../openapi/client";
 
@@ -124,6 +125,11 @@
             onSave={handleSaveReward}
             onDelete={handleDeleteReward}
         />
-        <DeleteModal variant="rewards" bind:open={openDeleteModal} onclick={handleDeleteReward} />
+        <DeleteModal
+            title={$t("pages.project.edit.rewards.deleteModal.title")}
+            description={$t("pages.project.edit.rewards.deleteModal.description")}
+            bind:open={openDeleteModal}
+            onclick={handleDeleteReward}
+        />
     </Reward>
 {/if}

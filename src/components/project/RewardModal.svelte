@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
     import { onMount } from "svelte";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
     import { cart, checkoutReady } from "../../stores/checkoutsStore";
@@ -11,10 +12,9 @@
     import UnitIcon from "../icons/UnitIcon.svelte";
     import UserIcon from "../icons/user/User.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import TextInput from "../library/inputs/TextInput.svelte";
 
     let {
         open = $bindable(false),
@@ -167,7 +167,7 @@
 <Modal
     bind:open
     closeBtnClass="cursor-pointer top-7 end-12 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-225 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="backdrop:bg-overlay fixed top-1/2 left-1/2 w-full max-w-225 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:backdrop-blur-[5px]"
     bodyClass="p-0"
 >
     <div
