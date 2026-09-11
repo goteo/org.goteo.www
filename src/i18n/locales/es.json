@@ -412,6 +412,9 @@
         "description": "Página de checkout"
       },
       "subtitle": "Te mostramos las que has seleccionado, pulsa el botón \"continuar\" para pagar.",
+      "decrement": "Reducir cantidad",
+      "increment": "Aumentar cantidad",
+      "remove": "Eliminar del carrito",
       "reward": {
         "claimed": "{{ units }} personas ya han reclamado esta recompensa",
         "unclaimed": "Aún nadie ha reclamado esta recompensa. ¡Hazlo tú primero!"
