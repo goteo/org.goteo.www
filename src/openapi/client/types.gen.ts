@@ -1829,7 +1829,7 @@ export type ProjectJsonld = {
  */
 export type ProjectBudgetItem = {
     readonly id?: number;
-    project?: string;
+    project: string;
     /**
      * The type of need this item solves.
      */
@@ -1870,7 +1870,7 @@ export type ProjectBudgetItemJsonld = {
     readonly '@id'?: string;
     readonly '@type'?: string;
     readonly id?: number;
-    project?: string;
+    project: string;
     /**
      * The type of need this item solves.
      */

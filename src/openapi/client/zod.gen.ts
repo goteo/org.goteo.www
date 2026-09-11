@@ -542,7 +542,7 @@ export const zPingJsonld = z.object({
  */
 export const zProjectBudgetItem = z.object({
     id: z.int().readonly().optional(),
-    project: z.string().optional(),
+    project: z.string(),
     type: z.enum([
         'infrastructure',
         'material',
@@ -571,7 +571,7 @@ export const zProjectBudgetItemJsonld = z.object({
     '@id': z.string().readonly().optional(),
     '@type': z.string().readonly().optional(),
     id: z.int().readonly().optional(),
-    project: z.string().optional(),
+    project: z.string(),
     type: z.enum([
         'infrastructure',
         'material',
