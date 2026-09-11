@@ -2,12 +2,16 @@ import { ActionError, defineAction } from "astro:actions";
 import { z } from "zod";
 
 import { homeHeroRepository } from "../repositories/homeHero";
-import { endOfDay } from "../utils/dates";
+import { endOfDay, startOfDay } from "../utils/dates";
 
 // Astro turns any empty form field into null unless the validator is optional,
 // so every field the admin may leave blank has to be declared as such.
 const optionalText = z.string().optional();
 const optionalUrl = z.url("pages.admin.home.hero.errors.invalidUrl").optional();
+
+const scheduledDate = z.coerce
+    .date()
+    .refine((date) => date >= startOfDay(new Date()), "system.constraint.date.greaterThan");
 
 export const createHomeHero = defineAction({
     accept: "form",
@@ -20,8 +24,8 @@ export const createHomeHero = defineAction({
         secondaryCtaLink: optionalUrl,
         mediaUrl: optionalUrl,
         mediaType: optionalText,
-        startsAt: z.coerce.date(),
-        endsAt: z.coerce.date(),
+        startsAt: scheduledDate,
+        endsAt: scheduledDate,
     }),
     handler: async (input, context) => {
         const { session, t } = context.locals;
