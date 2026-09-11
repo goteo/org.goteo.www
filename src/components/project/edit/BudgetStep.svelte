@@ -2,7 +2,7 @@
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
-    import { apiProjectBudgetItemsGetCollection } from "../../../openapi/client";
+    import { apiProjectBudgetItemsGetCollection, type MoneyInput } from "../../../openapi/client";
     import { formatCurrency } from "../../../utils/currencies";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
@@ -10,6 +10,7 @@
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import { addMoney } from "../../../utils/money";
 
     let {
         draft,
@@ -18,7 +19,28 @@
     } = $props();
 
     let minBudgetItems = $state(loadMinBudgetItems());
+    let minBudgetMoney = $derived.by(async () => {
+        return minBudgetItems.then((items) => {
+            let minTotal = items[0].money;
+            items.slice(1).forEach((item) => {
+                minTotal = addMoney(item.money, minTotal) as MoneyInput;
+            });
+
+            return minTotal;
+        });
+    });
+
     let optBudgetItems = $state(loadOptBudgetItems());
+    let optBudgetMoney = $derived.by(async () => {
+        return optBudgetItems.then((items) => {
+            let optTotal = items[0].money;
+            items.slice(1).forEach((item) => {
+                optTotal = addMoney(item.money, optTotal) as MoneyInput;
+            });
+
+            return optTotal;
+        });
+    });
 
     async function loadMinBudgetItems() {
         return withoutCache(() =>
@@ -56,6 +78,7 @@
 
     function reloadBudgetItems() {
         minBudgetItems = loadMinBudgetItems();
+        optBudgetItems = loadOptBudgetItems();
     }
 </script>
 
@@ -76,10 +99,9 @@
             </span>
             <span class="text-secondary text-3xl font-bold">
                 {$t("domain.project.budget.minimum")}:
-                {formatCurrency(
-                    $draft.actual.budget?.minimum?.money?.amount,
-                    $draft.actual.budget?.minimum?.money?.currency,
-                )}
+                {#await minBudgetMoney then minBudgetMoney}
+                    {formatCurrency(minBudgetMoney)}
+                {/await}
             </span>
         </div>
         <p class="text-content -mt-2 text-sm">
@@ -90,7 +112,7 @@
         {:then minBudgetItems}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    {item.title}
+                    {item.title}: {formatCurrency(item.money)}
                 {/each}
                 <CreateCard
                     title={$t(`pages.project.edit.budget.add.minimum.title`)}
@@ -112,10 +134,9 @@
             </span>
             <span class="text-secondary text-3xl font-bold">
                 {$t("domain.project.budget.optimum")}:
-                {formatCurrency(
-                    $draft.actual.budget?.optimum?.money?.amount,
-                    $draft.actual.budget?.optimum?.money?.currency,
-                )}
+                {#await optBudgetMoney then optBudgetMoney}
+                    {formatCurrency(optBudgetMoney)}
+                {/await}
             </span>
         </div>
         <p class="text-content -mt-2 text-sm">
