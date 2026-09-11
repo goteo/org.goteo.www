@@ -4,7 +4,6 @@
     import DropdownMenu from "../dropdown/DropdownMenu.svelte";
     import DateInput from "../inputs/DateInput.svelte";
     import Select from "../inputs/Select.svelte";
-    import TerritoryInput from "../inputs/TerritoryInput.svelte";
     import TextInput from "../inputs/TextInput.svelte";
     import AccountingOwnerBadge from "../tags/AccountingOwnerBadge.svelte";
 
@@ -26,8 +25,6 @@
         referent = $bindable("" as string | number | Date | string[]),
         onremove,
     }: Props = $props();
-
-    type Territories = { countries: string[]; subLvl1: string[]; subLvl2: string[] };
 
     let currentSubject = $derived(subjects.find((s) => s.key === subjectKey));
     let compatibleOperators = $derived(currentSubject?.compatibleOperators ?? []);
@@ -91,10 +88,6 @@
     function operatorLabel(op: FilterOperator): string {
         return $t(`domain.filterComposer.operator.${op}`);
     }
-
-    function handleTerritoryChange(territories: Territories) {
-        referent = JSON.stringify(territories);
-    }
 </script>
 
 {#snippet accountingChip(option: DropdownOption)}
@@ -125,8 +118,12 @@
     </div>
 
     <div class="flex-1">
-        {#if currentSubject?.serialize && operator}
-            <TerritoryInput multiple onTerritoryChange={handleTerritoryChange} />
+        {#if currentSubject?.component && operator}
+            <currentSubject.component
+                value={referent as string}
+                onChange={(value: string) => (referent = value)}
+                labelText={$t("domain.filterComposer.referentPlaceholder")}
+            />
         {:else if currentSubject?.options && operator && !singleSelect}
             <DropdownMenu
                 chips
