@@ -412,6 +412,9 @@
         "description": "Pàgina de checkout"
       },
       "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
+      "decrement": "Reducir cantidad",
+      "increment": "Aumentar cantidad",
+      "remove": "Eliminar del carrito",
       "reward": {
         "claimed": "{{ units }} persones ja han reclamat aquesta recompensa",
         "unclaimed": "Encara ningú ha reclamat aquesta recompensa. Fes-ho tu primer!"
@@ -1375,6 +1378,66 @@
           "open": "Obre el menú d'administració"
         }
       },
+      "home": {
+        "tabs": {
+          "hero": "Hero",
+          "highlights": "P. destacats"
+        },
+        "hero": {
+          "title": "Hero",
+          "description": "El inicio de la portada, lo más importante.",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar el hero de la portada",
+            "invalidUrl": "La URL del enlace no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
+          "fields": {
+            "textsTitle": "Textos del bloque",
+            "titlePlaceholder": "Titular del bloque",
+            "contentPlaceholder": "Breve texto introductorio",
+            "primaryCtaPlaceholder": "Call to action primario",
+            "secondaryCtaPlaceholder": "Call to action secundario",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programar la subida del bloque",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin",
+            "mediaTitle": "Hora de subir las imágenes",
+            "mediaLabel": "Imagen 01",
+            "mediaHint": "Sube una imagen o vídeo",
+            "mediaAdd": "Añade imagen"
+          }
+        },
+        "highlights": {
+          "title": "Projectes destacats",
+          "description": "Tria quins projectes es mostren destacats a la portada.",
+          "type": {
+            "title": "Tipus de projectes destacats",
+            "label": "Tipus de projectes",
+            "recent": "Més recents"
+          },
+          "grid": {
+            "title": "Selecciona la quadrícula",
+            "option": "Quadrícula de {{ layout }}"
+          },
+          "projects": {
+            "title": "Selecciona els projectes",
+            "description": "Recorda que els projectes s'aniran col·locant de dalt a baix i d'esquerra a dreta.",
+            "slot": "Projecte {{ number }}",
+            "empty": "Cerca un projecte i destaca'l a la portada",
+            "add": "Afegeix un projecte",
+            "replace": "Canvia el projecte",
+            "remove": "Treu",
+            "change": "Canvia a un altre projecte",
+            "position": "Aquest projecte a la posició {{ number }}",
+            "modal": {
+              "title": "Afegeix un projecte",
+              "description": "Cerca i afegeix el projecte que vols destacar",
+              "search": "Cerca un projecte",
+              "submit": "Afegir"
+            }
+          }
+        }
+      },
       "charges": {
         "title": "Cobraments",
         "description": "Aquí tens els últims cobraments, pots ordenar-los i filtrar-los com vulguis.",
@@ -1784,41 +1847,6 @@
           }
         }
       },
-      "home": {
-        "tabs": {
-          "highlights": "P. destacats"
-        },
-        "highlights": {
-          "title": "Projectes destacats",
-          "description": "Tria quins projectes es mostren destacats a la portada.",
-          "type": {
-            "title": "Tipus de projectes destacats",
-            "label": "Tipus de projectes",
-            "recent": "Més recents"
-          },
-          "grid": {
-            "title": "Selecciona la quadrícula",
-            "option": "Quadrícula de {{ layout }}"
-          },
-          "projects": {
-            "title": "Selecciona els projectes",
-            "description": "Recorda que els projectes s'aniran col·locant de dalt a baix i d'esquerra a dreta.",
-            "slot": "Projecte {{ number }}",
-            "empty": "Cerca un projecte i destaca'l a la portada",
-            "add": "Afegeix un projecte",
-            "replace": "Canvia el projecte",
-            "remove": "Treu",
-            "change": "Canvia a un altre projecte",
-            "position": "Aquest projecte a la posició {{ number }}",
-            "modal": {
-              "title": "Afegeix un projecte",
-              "description": "Cerca i afegeix el projecte que vols destacar",
-              "search": "Cerca un projecte",
-              "submit": "Afegir"
-            }
-          }
-        }
-      },
       "comm": {
         "title": "Comunicació",
         "description": "Administra la comunicació de la plataforma",
@@ -1916,14 +1944,6 @@
     },
     "metadata": {
       "description": "Pàgina d'inici"
-    },
-    "hero": {
-      "title": "Finança el canvi que el món necessita",
-      "description": "Comencem una nova etapa amb la mateixa brúixola que ens ha guiat des del principi: impulsar projectes que transformin el món des de la justícia social, la participació democràtica i la defensa dels drets humans i dels ecosistemes. Uneix-te a una comunitat que transforma realitats. Sigues part de la solució!",
-      "buttons": {
-        "discover": "Descobreix campanyes",
-        "impulse": "Impulsa un projecte"
-      }
     },
     "me": {
       "page": {
