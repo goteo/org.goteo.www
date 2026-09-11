@@ -1858,14 +1858,6 @@
     "metadata": {
       "description": "Página de inicio"
     },
-    "hero": {
-      "title": "Financia el cambio que el mundo necesita",
-      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!",
-      "buttons": {
-        "discover": "Descubre campañas",
-        "impulse": "Impulsa un proyecto"
-      }
-    },
     "me": {
       "page": {
         "title": "Actividad",
