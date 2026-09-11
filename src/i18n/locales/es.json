@@ -1870,6 +1870,7 @@
         "tabs": {
           "draft": "Borradores",
           "inReview": "En revisión",
+          "funding": "En financiación",
           "active": "Activos",
           "archived": "Archivados"
         },
@@ -1892,7 +1893,9 @@
             "edit": "Editar proyecto",
             "advisory": "Ir a asesoría",
             "publish": "Publica tu proyecto",
-            "view": "Ver proyecto"
+            "view": "Ver proyecto",
+            "sendToReview": "Enviar a revisión",
+            "viewReview": "Ver revisión"
           }
         }
       },

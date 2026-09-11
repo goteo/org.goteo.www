@@ -114,14 +114,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                 style="background-image: url('{campaign.image}')"
             >
                 <!-- Tags Overlay (top-left) -->
-                <div class="absolute top-4 left-4 flex gap-2 flex-wrap">
-                    <!-- Status Tag (owned projects section) -->
-                    {#if ownedConfig?.tagLabel}
-                        <Tag>
-                            {ownedConfig.tagLabel}
-                        </Tag>
-                    {/if}
-
+                <div class="absolute top-4 left-4 flex flex-wrap gap-2">
                     <!-- Matchfunding Tag (conditional) -->
                     {#if campaign.hasMatchfunding}
                         <Tag>
@@ -141,7 +134,7 @@ Converted from CampaignCard.astro to maintain exact functionality
                 </div>
 
                 <!-- Status Badge (top-right) -->
-                {#if !ownedConfig && campaign.status === "in_campaign"}
+                {#if campaign.status === "in_campaign"}
                     <div class="absolute top-4 right-4">
                         <CampaignStatusBadge text={statusBadgeText} />
                     </div>
@@ -152,26 +145,32 @@ Converted from CampaignCard.astro to maintain exact functionality
             <div class="flex flex-col gap-4 md:gap-6">
                 <!-- Days Remaining & Category -->
                 <div class="flex items-center gap-2 md:gap-4">
+                    <!-- Status Tag (owned projects section) -->
+                    {#if ownedConfig?.tagLabel}
+                        <Tag >
+                            {ownedConfig.tagLabel}
+                        </Tag>
+                    {/if}
                     <!-- Days Remaining -->
                     {#if campaign.daysRemaining !== undefined}
-                        <div class="flex items-center gap-2">
+                        <Tag variant="bold">
                             <Clock />
                             <span class="text-sm text-black">
                                 {$t("pages.home.campaigns.daysRemaining", {
                                     days: campaign.daysRemaining,
                                 })}
                             </span>
-                        </div>
+                        </Tag>
                     {/if}
 
                     <!-- Category (display only first) -->
                     {#if firstCategory()}
-                        <div class="flex items-center gap-2">
+                        <Tag variant="bold">
                             <Clock />
                             <span class="text-sm text-black">
                                 {$t(`categories.${firstCategory()}`)}
                             </span>
-                        </div>
+                        </Tag>
                     {/if}
                 </div>
 
@@ -191,31 +190,33 @@ Converted from CampaignCard.astro to maintain exact functionality
                         <!-- Obtained Amount -->
                         <div class="flex items-start justify-between">
                             <div class="flex flex-col gap-1">
-                                <span class="text-secondary text-base"
+                                <span class="text-black text-base"
                                     >{$t("pages.home.campaigns.obtained")}</span
                                 >
-                                <span class="text-secondary text-2xl font-bold">
+                                <span class="text-black text-double leading-10 font-bold">
                                     {#if obtained}
                                         {formatCurrency(obtained)}
                                     {:else}
-                                        <span class="text-content text-sm">{$t("system.loading")}</span>
+                                        <span class="text-content text-sm"
+                                            >{$t("system.loading")}</span
+                                        >
                                     {/if}
                                 </span>
                             </div>
                             <!-- Remaining to Goal -->
-                            <div class="flex flex-col gap-1 text-right">
+                            <div class="flex flex-col gap-2 text-right">
                                 {#if campaign.optimum && hasReachedMinimum}
-                                    <span class="text-secondary text-base">
+                                    <span class="text-black text-base">
                                         {$t("pages.home.campaigns.optimum")}
                                     </span>
-                                    <span class="text-secondary text-2xl font-bold">
+                                    <span class="text-black text-2xl font-bold">
                                         {formatCurrency(campaign.optimum)}
                                     </span>
                                 {:else}
-                                    <span class="text-secondary text-base">
+                                    <span class="text-black text-base">
                                         {$t("pages.home.campaigns.minimum")}
                                     </span>
-                                    <span class="text-secondary text-2xl font-bold">
+                                    <span class="text-black text-2xl font-bold">
                                         {formatCurrency(campaign.minimum)}
                                     </span>
                                 {/if}
