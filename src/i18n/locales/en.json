@@ -412,6 +412,9 @@
         "description": "Checkout page"
       },
       "subtitle": "We'll show you the ones you've selected; click the \"continue\" button to pay.",
+      "decrement": "Reducir cantidad",
+      "increment": "Aumentar cantidad",
+      "remove": "Eliminar del carrito",
       "reward": {
         "claimed": "{{ units }} people have already claimed this reward",
         "unclaimed": "No one has claimed this reward yet. Be the first!"
@@ -1375,6 +1378,66 @@
           "open": "Open admin menu"
         }
       },
+      "home": {
+        "tabs": {
+          "hero": "Hero",
+          "highlights": "Featured Projects"
+        },
+        "hero": {
+          "title": "Hero",
+          "description": "El inicio de la portada, lo más importante.",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar el hero de la portada",
+            "invalidUrl": "La URL del enlace no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
+          "fields": {
+            "textsTitle": "Textos del bloque",
+            "titlePlaceholder": "Titular del bloque",
+            "contentPlaceholder": "Breve texto introductorio",
+            "primaryCtaPlaceholder": "Call to action primario",
+            "secondaryCtaPlaceholder": "Call to action secundario",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Programar la subida del bloque",
+            "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin",
+            "mediaTitle": "Hora de subir las imágenes",
+            "mediaLabel": "Imagen 01",
+            "mediaHint": "Sube una imagen o vídeo",
+            "mediaAdd": "Añade imagen"
+          }
+        },
+        "highlights": {
+          "title": "Featured projects",
+          "description": "Choose which projects are featured on the homepage.",
+          "type": {
+            "title": "Featured project type",
+            "label": "Project type",
+            "recent": "Most recent"
+          },
+          "grid": {
+            "title": "Select the grid",
+            "option": "{{ layout }} grid"
+          },
+          "projects": {
+            "title": "Select the projects",
+            "description": "Remember that projects will be placed from top to bottom and from left to right.",
+            "slot": "Project {{ number }}",
+            "empty": "Search for a project and feature it on the homepage",
+            "add": "Add project",
+            "replace": "Change project",
+            "remove": "Remove",
+            "change": "Change to another project",
+            "position": "This project in position {{ number }}",
+            "modal": {
+              "title": "Add Project",
+              "description": "Search for and add the project you want to feature",
+              "search": "Search for a project",
+              "submit": "Add"
+            }
+          }
+        }
+      },
       "charges": {
         "title": "Charges",
         "description": "Here are the latest charges; you can sort and filter them however you like.",
@@ -1784,41 +1847,6 @@
           }
         }
       },
-      "home": {
-        "tabs": {
-          "highlights": "Featured Projects"
-        },
-        "highlights": {
-          "title": "Featured projects",
-          "description": "Choose which projects are featured on the homepage.",
-          "type": {
-            "title": "Featured project type",
-            "label": "Project type",
-            "recent": "Most recent"
-          },
-          "grid": {
-            "title": "Select the grid",
-            "option": "{{ layout }} grid"
-          },
-          "projects": {
-            "title": "Select the projects",
-            "description": "Remember that projects will be placed from top to bottom and from left to right.",
-            "slot": "Project {{ number }}",
-            "empty": "Search for a project and feature it on the homepage",
-            "add": "Add project",
-            "replace": "Change project",
-            "remove": "Remove",
-            "change": "Change to another project",
-            "position": "This project in position {{ number }}",
-            "modal": {
-              "title": "Add Project",
-              "description": "Search for and add the project you want to feature",
-              "search": "Search for a project",
-              "submit": "Add"
-            }
-          }
-        }
-      },
       "comm": {
         "title": "Communication",
         "description": "Manage platform communication",
@@ -1916,14 +1944,6 @@
     },
     "metadata": {
       "description": "Home page"
-    },
-    "hero": {
-      "title": "Fund the change the world needs",
-      "description": "We are starting a new stage with the same compass that has guided us from the beginning: promoting projects that transform the world through social justice, democratic participation, and the defense of human rights and ecosystems. Join a community that transforms realities. Be part of the solution!",
-      "buttons": {
-        "discover": "Discover campaigns",
-        "impulse": "Promote a project"
-      }
     },
     "me": {
       "page": {
