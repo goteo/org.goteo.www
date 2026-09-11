@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../../i18n/store";
     import { formatCurrency } from "../../../utils/currencies";
@@ -97,7 +97,7 @@
         </div>
     {/if}
 
-    <div class="mt-auto flex w-full flex-col gap-4">
+    <div class={twJoin("flex w-full flex-col gap-4", variant !== "full" && "mt-auto")}>
         {@render children()}
     </div>
 </svelte:element>
