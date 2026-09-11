@@ -13,6 +13,7 @@
     import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
+    import TextInput from "../library/inputs/TextInput.svelte";
 
     let {
         lang = $bindable(),
@@ -86,11 +87,11 @@
         <Title level={2} variant="headline" color="secondary">
             {$t("pages.project.view.rewards.title")}
         </Title>
-        <Grid>
+        <Grid class="grid-cols-1 sm:grid-cols-2">
             <div
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
-                class="border-grey flex basis-1/3 flex-col justify-between rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="border-grey bg-purple-soft flex basis-1/3 flex-col justify-between rounded-4xl border p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
                 <div class="flex flex-col gap-3">
                     <Title
@@ -107,11 +108,11 @@
                     </p>
                 </div>
                 <div class="flex flex-col gap-6">
-                    <input
-                        type="text"
-                        class="w-full rounded border border-gray-300 p-2"
-                        placeholder={$t("pages.project.view.rewards.donationFree.placeholder")}
+                    <TextInput
+                        type="number"
                         bind:value={freeAmount}
+                        placeholder={$t("pages.project.view.rewards.donationFree.placeholder")}
+                        class=""
                     />
                     <Button
                         kind="secondary"

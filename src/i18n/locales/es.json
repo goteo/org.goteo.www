@@ -180,6 +180,7 @@
       "reward": {
         "byAtLeast": "Por {{ amount }}",
         "byAtLeastOrMore": "Por {{ amount }} o más",
+        "donation": "Donación",
         "unitsTotal": {
           "single": "Hay una unidad",
           "multiple": "Hay {{ units }} unidades"
@@ -537,6 +538,58 @@
           "unexpectedLogin": "Error al iniciar sesión. Por favor, inténtalo de nuevo más tarde.",
           "invalidEmail": "El correo electrónico no es válido."
         }
+      },
+      "register": {
+        "form": {
+          "userType": {
+            "individual": "Persona física",
+            "organization": "Persona jurídica (empresas)"
+          },
+          "termsCheckbox": "Acepto los {{ privacy }}términos de privacidad{{ _privacy }} y la {{ terms }}política de cookies{{ _terms }}",
+          "policiesCheckbox": "Al registrarme confirmo mi aceptación de vuestros {{ terms }}términos de uso{{ _terms }}, {{ privacy }}política de privacidad{{ _privacy }} y {{ cookies }}política de cookies{{ _cookies }}",
+          "validation": {
+            "password": {
+              "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
+            },
+            "required": "Este campo es obligatorio",
+            "emailInvalid": "El email introducido no es válido"
+          },
+          "emailHelper": "Email que usarás para acceder"
+        },
+        "individual": {
+          "firstName": "Nombre",
+          "lastName": "Apellidos",
+          "email": "Correo electrónico",
+          "password": "Contraseña",
+          "taxId": {
+            "msgDeduction": "Deseo desgravar esta donación. Proporcione el NIF para la Agencia Tributaria. Solo aplica dentro de España.",
+            "label": "NIF*"
+          },
+          "firstNameHelper": "Tu nombre",
+          "lastNameHelper": "Tus apellidos",
+          "taxIdHelper": "Requerido para la desgravación fiscal"
+        },
+        "organization": {
+          "legalName": "Razón social",
+          "taxId": "CIF*",
+          "description": "Dinos quien eres para que puedas apechugar",
+          "loginBtnLabel": "Inicia sesión con tu cuenta",
+          "representative": {
+            "title": "Datos del representante de la empresa."
+          },
+          "taxIdHelper": "*Con el CIF avisaremos a la agencia tributaria para tu declaración de la renta.",
+          "legalNameHelper": "Nombre de la empresa"
+        },
+        "error": {
+          "unexpectedRegistration": "Error al crear la cuenta. Por favor, inténtalo de nuevo más tarde.",
+          "requireTerms": "Debes aceptar las condiciones para continuar."
+        },
+        "title": "Indícanos tus datos personales",
+        "description": "Necesitamos saber quién eres antes de pagar.",
+        "registerOr": "Regístrate o",
+        "loginBtnLabel": "Entra con tu cuenta",
+        "existUserInfo": "Si ya eres usuario de Goteo identifícate. Podrás hacer uso de tu monedero para realizar estas donaciones.",
+        "otherAccessMethods": "o accede con"
       }
     },
     "home": {
@@ -1024,14 +1077,14 @@
           "title": "Selecciona tus recompensas",
           "headline": "Selecciona tu recompensa",
           "thanksMessage": "Gracias por cooperar",
-          "ivaMessage": "¡Recuerda que cada aportación tiene una desgravación fiscal entre el 35 y 80%! Calcula aquí: {{link}}",
           "addToCart": "Añadir al carro y continuar",
           "unavailable": "No hay recompensas disponibles.",
           "loading": "Cargando recompensas...",
           "donationFree": {
             "title": "Renuncio a una recompensa individual, solo quiero ayudar al proyecto",
             "description": "En este espacio puedes donar la cantidad que consideres sin obtener recompensa a cambio. Cada aportación, grande o pequeña, marca la diferencia y nos acerca a la meta.",
-            "placeholder": "Seleccione el aporte  Ej.20€"
+            "placeholder": "Seleccione el aporte  Ej.20€",
+            "additionalDonation": "Puedes añadir más dinero a tu donación para esta recompensa"
           },
           "error": {
             "amount": "Por favor, ingresa una monto válido",
@@ -1756,6 +1809,41 @@
               "totalCollected": "Total cobrado",
               "recentCharges": "Últimos cobros",
               "noRecentCharges": "No se encontraron cobros recientes"
+            }
+          }
+        }
+      },
+      "home": {
+        "tabs": {
+          "highlights": "P. Destacados"
+        },
+        "highlights": {
+          "title": "Proyectos destacados",
+          "description": "Elige qué proyectos se muestran destacados en la portada.",
+          "type": {
+            "title": "Tipo de proyectos destacados",
+            "label": "Tipo de proyectos",
+            "recent": "Más recientes"
+          },
+          "grid": {
+            "title": "Selecciona la cuadrícula",
+            "option": "Cuadrícula de {{ layout }}"
+          },
+          "projects": {
+            "title": "Selecciona los proyectos",
+            "description": "Recuerda que los proyectos se irán colocando de arriba a abajo y de izquierda a derecha.",
+            "slot": "Proyecto {{ number }}",
+            "empty": "Busca un proyecto y destácalo en portada",
+            "add": "Añade proyecto",
+            "replace": "Cambiar proyecto",
+            "remove": "Quitar",
+            "change": "Cambia a otro proyecto",
+            "position": "Este proyecto en la posición {{ number }}",
+            "modal": {
+              "title": "Añade Proyecto",
+              "description": "Busca y añade el proyecto que quieres destacar",
+              "search": "Busca un proyecto",
+              "submit": "Añadir"
             }
           }
         }

@@ -15,6 +15,7 @@
         { path: "/admin/users", key: "pages.admin.nav.users" },
         { path: "/admin/comm", key: "pages.admin.nav.comm" },
         { path: "/admin/home", key: "pages.admin.nav.home" },
+        { path: "/admin/home/highlights", key: "pages.admin.nav.home" },
     ];
 
     let pathname = $state("");
@@ -24,7 +25,9 @@
     });
 
     function isActive(path: string): boolean {
-        return pathname === path || pathname.startsWith(path + "/");
+        return [path, `/${$locale}${path}`].some(
+            (target) => pathname === target || pathname.startsWith(target + "/"),
+        );
     }
 </script>
 
