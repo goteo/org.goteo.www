@@ -1329,6 +1329,11 @@
         "hero": {
           "title": "Hero",
           "description": "El inicio de la portada, lo más importante.",
+          "errors": {
+            "forbidden": "No tienes permisos para gestionar el hero de la portada",
+            "invalidUrl": "La URL del enlace no es válida",
+            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+          },
           "fields": {
             "textsTitle": "Textos del bloque",
             "titlePlaceholder": "Titular del bloque",
@@ -1338,6 +1343,7 @@
             "urlPlaceholder": "URL",
             "scheduleTitle": "Programar la subida del bloque",
             "startDatePlaceholder": "Indica la fecha de inicio",
+            "endDatePlaceholder": "Indica la fecha de fin",
             "mediaTitle": "Hora de subir las imágenes",
             "mediaLabel": "Imagen 01",
             "mediaHint": "Sube una imagen o vídeo",
@@ -1851,14 +1857,6 @@
     },
     "metadata": {
       "description": "Página de inicio"
-    },
-    "hero": {
-      "title": "Financia el cambio que el mundo necesita",
-      "description": "Arrancamos una nueva etapa con la misma brújula que nos ha guiado desde el principio: impulsar proyectos que transformen el mundo desde la justicia social, la participación democrática y la defensa de los derechos humanos y de los ecosistemas. Únete a una comunidad que transforma realidades. ¡Sé parte de la solución!",
-      "buttons": {
-        "discover": "Descubre campañas",
-        "impulse": "Impulsa un proyecto"
-      }
     },
     "me": {
       "page": {
