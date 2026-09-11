@@ -12,8 +12,9 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { ProjectBudgetItem } from "../../../openapi/client";
+    import { apiProjectsIdOrSlugGetUrl, type ProjectBudgetItem } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import { client } from "../../../openapi/client/client.gen";
 
     let {
         open = $bindable(false),
@@ -75,7 +76,13 @@
     );
 
     function handleSaveOrCreate() {
+        const project = client.buildUrl({
+            url: apiProjectsIdOrSlugGetUrl,
+            path: { idOrSlug: $draft.actual.id },
+        });
+
         onSave?.({
+            project: project,
             title: selectedBudgetTitle,
             description: selectedBudgetDescription,
             deadline: selectedBudgetDeadline!,

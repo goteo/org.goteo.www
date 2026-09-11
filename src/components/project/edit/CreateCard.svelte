@@ -5,6 +5,7 @@
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
     import {
+        apiProjectBudgetItemsPost,
         apiProjectRewardsPost,
         type ProjectBudgetItem,
         type ProjectCollaboration,
@@ -66,6 +67,22 @@
 
         console.error(error);
     }
+
+    async function handleBudgetItem(newBudgetItem: ProjectBudgetItem) {
+        const { error } = await apiProjectBudgetItemsPost({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $draft.lang },
+            body: newBudgetItem,
+        });
+
+        if (!error) {
+            open = false;
+            onSave?.(newBudgetItem);
+            return;
+        }
+
+        console.error(error);
+    }
 </script>
 
 <div
@@ -120,5 +137,5 @@
     <!-- {:else if !disabled && variant === "collab"}
     <CollabsModal bind:open onSave={() => onSave?.()} collab={null} {project} /> -->
 {:else if !disabled && variant === "budget"}
-    <BudgetModal bind:open {draft} {deadline} />
+    <BudgetModal bind:open {draft} {deadline} onSave={handleBudgetItem} />
 {/if}
