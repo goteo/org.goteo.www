@@ -1378,7 +1378,12 @@
           "open": "Abrir menú de administración"
         }
       },
+      "landing": {
+        "title": "Administración",
+        "subtitle": "Accede rápidamente a las distintas secciones de gestión de la plataforma."
+      },
       "home": {
+        "description": "Elige qué se muestra en la portada.",
         "tabs": {
           "hero": "Hero",
           "highlights": "P. Destacados"
