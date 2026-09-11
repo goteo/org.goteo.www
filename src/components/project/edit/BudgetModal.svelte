@@ -3,6 +3,8 @@
     import { untrack } from "svelte";
 
     import { t } from "../../../i18n/store";
+    import { apiProjectsIdOrSlugGetUrl, type ProjectBudgetItem } from "../../../openapi/client";
+    import { client } from "../../../openapi/client/client.gen";
     import { DEFAULT_CURRENCY, getUnit } from "../../../utils/currencies";
     import { toUnitsNumber } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
@@ -12,9 +14,7 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import { apiProjectsIdOrSlugGetUrl, type ProjectBudgetItem } from "../../../openapi/client";
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import { client } from "../../../openapi/client/client.gen";
 
     let {
         open = $bindable(false),
@@ -28,8 +28,8 @@
         draft: ProjectDraftStore;
         item?: ProjectBudgetItem;
         deadline?: "minimum" | "optimum";
-        onSave?: (data: ProjectBudgetItem) => void;
-        onDelete?: (deadline: "minimum" | "optimum") => void;
+        onSave?: (newItem: ProjectBudgetItem) => void;
+        onDelete?: (item: ProjectBudgetItem) => void;
     } = $props();
 
     let selectedBudgetTitle = $state(untrack(() => item?.title ?? ""));
@@ -96,7 +96,7 @@
 
     function handleDeleteClick() {
         if (item) {
-            onDelete?.(item.deadline);
+            onDelete?.(item);
             openDeleteModal = false;
             open = false;
         }

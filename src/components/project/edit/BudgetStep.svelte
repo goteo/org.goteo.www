@@ -1,16 +1,17 @@
 <script lang="ts">
+    import AdminBudgetCard from "./AdminBudgetCard.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiProjectBudgetItemsGetCollection, type MoneyInput } from "../../../openapi/client";
     import { formatCurrency } from "../../../utils/currencies";
+    import { addMoney } from "../../../utils/money";
     import Button from "../../library/buttons/Button.svelte";
     import Grid from "../../library/layout/Grid.svelte";
     import Title from "../../library/typography/Title.svelte";
     import LoadingSpinner from "../../search/LoadingSpinner.svelte";
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import { addMoney } from "../../../utils/money";
 
     let {
         draft,
@@ -112,7 +113,12 @@
         {:then minBudgetItems}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    {item.title}: {formatCurrency(item.money)}
+                    <AdminBudgetCard
+                        {item}
+                        {draft}
+                        onSave={reloadBudgetItems}
+                        onDelete={reloadBudgetItems}
+                    />
                 {/each}
                 <CreateCard
                     title={$t(`pages.project.edit.budget.add.minimum.title`)}

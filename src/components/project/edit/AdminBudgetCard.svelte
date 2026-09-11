@@ -1,14 +1,11 @@
 <script lang="ts">
     import BudgetModal from "./BudgetModal.svelte";
-    import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
-    import { apiProjectsGetCollectionUrl } from "../../../openapi/client/operation-paths.gen";
     import {
-        addBudgetItem,
-        deleteBudgetItem,
-        updateBudgetItem,
-        validationErrors,
-    } from "../../../stores/drafts/projectDraft";
+        apiProjectBudgetItemsIdDelete,
+        apiProjectBudgetItemsIdPatch,
+        type ProjectBudgetItem,
+    } from "../../../openapi/client";
     import { budgetTypeClasses } from "../../../utils/budgetColors";
     import { formatCurrency } from "../../../utils/currencies";
     import Close from "../../icons/navigation/Close.svelte";
@@ -16,164 +13,112 @@
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
     import Title from "../../library/typography/Title.svelte";
 
-    import type { Project, ProjectBudgetItem } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     let {
-        project,
+        draft,
         item,
-        index,
-        loading = $bindable(false),
-        isCreateCard = false,
-        defaultDeadline,
-        hasMinimumItems = true,
-        disabled = false,
-        disabledMessage = "",
+        onSave,
+        onDelete,
     }: {
-        project: Project;
-        item: ProjectBudgetItem | null;
-        index?: number;
-        loading: boolean;
-        isCreateCard?: boolean;
-        defaultDeadline?: "minimum" | "optimum";
-        hasMinimumItems?: boolean;
-        disabled?: boolean;
-        disabledMessage?: string;
+        draft: ProjectDraftStore;
+        item: ProjectBudgetItem;
+        onSave?: (item: ProjectBudgetItem) => void;
+        onDelete?: (item: ProjectBudgetItem) => void;
     } = $props();
 
     let openModal = $state(false);
     let openDeleteModal = $state(false);
-    let showModalErrorToast = $state(false);
 
-    function handleSaveBudgetItem(data: ProjectBudgetItem | null) {
-        if (!data) return;
+    async function handleSave(newItem: ProjectBudgetItem) {
+        const { error } = await apiProjectBudgetItemsIdPatch({
+            baseUrl: "/api/relay",
+            headers: { "Content-Language": $draft.lang },
+            path: { id: String(item.id) },
+            body: newItem,
+        });
 
-        if (!hasMinimumItems && data.deadline === "optimum") {
-            validationErrors.set({
-                minimumRequired: "pages.project.edit.budget.validation.minimumRequiredFirst",
-            });
-            showModalErrorToast = true;
+        if (!error) {
+            openModal = false;
+            onSave?.(newItem);
             return;
         }
 
-        const projectIri = apiProjectsGetCollectionUrl + "/" + (project.slug ?? project.id);
-        const budgetItem = {
-            ...data,
-            project: item?.project ?? projectIri,
-        };
-        let errors;
-
-        if (index !== undefined) {
-            errors = updateBudgetItem(index, budgetItem, item?.deadline);
-        } else {
-            errors = addBudgetItem(budgetItem);
-        }
-
-        if (errors === undefined) {
-            errors = {};
-        }
-
-        if (Object.keys(errors).length > 0) {
-            validationErrors.set(errors);
-            showModalErrorToast = true;
-            return;
-        }
-
-        validationErrors.set({});
-        openModal = false;
+        console.error(error);
     }
 
-    function handleDeleteBudgetItem(deadline: "minimum" | "optimum" | undefined) {
-        if (index === undefined || !deadline) return;
+    async function handleDelete(item: ProjectBudgetItem) {
+        const { error } = await apiProjectBudgetItemsIdDelete({
+            baseUrl: "/api/relay",
+            path: { id: String(item.id) },
+        });
 
-        deleteBudgetItem(index, deadline);
-        openModal = false;
-        openDeleteModal = false;
-        validationErrors.set({});
+        if (!error) {
+            openModal = false;
+            onDelete?.(item);
+            return;
+        }
+
+        console.error(error);
     }
 </script>
 
-{#if isCreateCard}
-    <CreateCard
-        title={defaultDeadline
-            ? $t(`pages.project.edit.budget.add.${defaultDeadline}.title`)
-            : $t("pages.project.edit.budget.add.title")}
-        description={defaultDeadline
-            ? $t(`pages.project.edit.budget.add.${defaultDeadline}.description`)
-            : $t("pages.project.edit.budget.add.description")}
-        variant="budget"
-        {project}
-        onSave={handleSaveBudgetItem}
-        onclick={() => (openModal = true)}
-        bind:open={openModal}
-        bind:showToast={showModalErrorToast}
-        {defaultDeadline}
-        {disabled}
-        {disabledMessage}
-    />
-{:else if item}
-    <div
-        class="border-grey relative flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
+<div
+    class="border-grey relative flex w-full flex-col justify-between gap-4 rounded-4xl border bg-white p-6 font-bold shadow-sm"
+>
+    <button
+        type="button"
+        aria-label={$t("common.delete")}
+        class="text-secondary absolute top-6 right-6 cursor-pointer transition-transform hover:scale-110"
+        onclick={() => (openDeleteModal = true)}
     >
-        <button
-            type="button"
-            aria-label={$t("common.delete")}
-            class="text-secondary absolute top-6 right-6 cursor-pointer transition-transform hover:scale-110"
-            onclick={() => (openDeleteModal = true)}
-        >
-            <Close class="size-5" />
-        </button>
-        <div class="flex flex-col gap-4">
-            <div class="flex items-center gap-2">
-                <span
-                    class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline ===
-                    'minimum'
-                        ? 'bg-secondary text-white'
-                        : 'border-secondary text-secondary border'}"
-                >
-                    {item.deadline === "minimum"
-                        ? $t("domain.project.budget.minimum")
-                        : $t("domain.project.budget.optimum")}
-                </span>
-            </div>
-            <Title level={2} variant="subsection" color="secondary" truncate={1}>
-                {item.title}
-            </Title>
-            <p class="text-content line-clamp-3 font-normal">
-                {item.description}
-            </p>
+        <Close class="size-5" />
+    </button>
+    <div class="flex flex-col gap-4">
+        <div class="flex items-center gap-2">
+            <span
+                class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium {item.deadline ===
+                'minimum'
+                    ? 'bg-secondary text-white'
+                    : 'border-secondary text-secondary border'}"
+            >
+                {item.deadline === "minimum"
+                    ? $t("domain.project.budget.minimum")
+                    : $t("domain.project.budget.optimum")}
+            </span>
         </div>
-        <div class="mt-auto flex flex-row items-center justify-between">
-            <p class="text-2xl text-black">
-                {formatCurrency(item.money.amount, item.money.currency)}
-            </p>
-            <div class="flex items-center gap-2">
-                <div
-                    class="inline-block h-2.5 w-5 rounded-lg {budgetTypeClasses[
-                        item.type as ProjectBudgetItem['type']
-                    ]}"
-                ></div>
-                <span class="text-content text-sm">
-                    {$t(`domain.project.budget.type.${item.type}`)}
-                </span>
-            </div>
-        </div>
-
-        <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
-            {$t("common.edit")}
-        </Button>
-
-        <BudgetModal
-            budgetItem={item}
-            bind:showToast={showModalErrorToast}
-            bind:open={openModal}
-            onSave={handleSaveBudgetItem}
-            onDelete={handleDeleteBudgetItem}
-        />
-        <DeleteModal
-            title={$t("pages.project.edit.budget.deleteModal.title")}
-            description={$t("pages.project.edit.budget.deleteModal.description")}
-            bind:open={openDeleteModal}
-            onclick={() => handleDeleteBudgetItem(item.deadline)}
-        />
+        <Title level={2} variant="subsection" color="secondary" truncate={1}>
+            {item.title}
+        </Title>
+        <p class="text-content line-clamp-3 font-normal">
+            {item.description}
+        </p>
     </div>
-{/if}
+    <div class="mt-auto flex flex-row items-center justify-between">
+        <p class="text-2xl text-black">
+            {formatCurrency(item.money.amount, item.money.currency)}
+        </p>
+        <div class="flex items-center gap-2">
+            <div
+                class="inline-block h-2.5 w-5 rounded-lg {budgetTypeClasses[
+                    item.type as ProjectBudgetItem['type']
+                ]}"
+            ></div>
+            <span class="text-content text-sm">
+                {$t(`domain.project.budget.type.${item.type}`)}
+            </span>
+        </div>
+    </div>
+
+    <Button kind="secondary" class="w-full" onclick={() => (openModal = true)}>
+        {$t("common.edit")}
+    </Button>
+
+    <BudgetModal {draft} {item} bind:open={openModal} onSave={handleSave} onDelete={handleDelete} />
+    <DeleteModal
+        bind:open={openDeleteModal}
+        title={$t("pages.project.edit.budget.deleteModal.title")}
+        description={$t("pages.project.edit.budget.deleteModal.description")}
+        onclick={() => handleDelete(item)}
+    />
+</div>

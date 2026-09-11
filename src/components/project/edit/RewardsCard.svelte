@@ -1,6 +1,11 @@
 <script lang="ts">
     import RewardsModal from "./RewardsModal.svelte";
     import { t } from "../../../i18n/store";
+    import {
+        apiProjectRewardsIdDelete,
+        apiProjectRewardsIdPatch,
+        type ProjectReward,
+    } from "../../../openapi/client";
     import InfinityIcon from "../../icons/Infinity.svelte";
     import Close from "../../icons/navigation/Close.svelte";
     import UnitIcon from "../../icons/UnitIcon.svelte";
@@ -9,11 +14,6 @@
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
 
     import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
-    import {
-        apiProjectRewardsIdDelete,
-        apiProjectRewardsIdPatch,
-        type ProjectReward,
-    } from "../../../openapi/client";
 
     let {
         draft,
