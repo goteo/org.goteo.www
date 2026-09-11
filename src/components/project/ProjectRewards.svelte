@@ -9,11 +9,11 @@
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import Button from "../library/buttons/Button.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
     import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
-    import TextInput from "../library/inputs/TextInput.svelte";
 
     let {
         lang = $bindable(),

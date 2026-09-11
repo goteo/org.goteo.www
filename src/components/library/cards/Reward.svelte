@@ -1,13 +1,13 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import type { Snippet } from "svelte";
 
-    import Title from "../typography/Title.svelte";
     import { t } from "../../../i18n/store";
     import { formatCurrency } from "../../../utils/currencies";
     import { renderMarkdown } from "../../../utils/renderMarkdown";
+    import Title from "../typography/Title.svelte";
 
     import type { ProjectReward } from "../../../openapi/client";
+    import type { Snippet } from "svelte";
 
     let {
         reward,

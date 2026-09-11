@@ -1,6 +1,7 @@
 <script lang="ts">
     import { Modal } from "flowbite-svelte";
     import { onMount } from "svelte";
+    import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import { t } from "../../i18n/store";
     import { cart, checkoutReady } from "../../stores/checkoutsStore";
@@ -11,10 +12,9 @@
     import UnitIcon from "../icons/UnitIcon.svelte";
     import UserIcon from "../icons/user/User.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
 
     import type { Project, ProjectReward } from "../../openapi/client";
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
-    import TextInput from "../library/inputs/TextInput.svelte";
 
     let {
         open = $bindable(false),
