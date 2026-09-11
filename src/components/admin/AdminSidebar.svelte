@@ -60,7 +60,7 @@
         <Chevron direction={hoverOpen ? "left" : "right"} width="20" height="20" />
     </div>
 
-    <nav class="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto">
+    <nav class="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-x-hidden overflow-y-auto">
         {#each navItems as item}
             <a href={`/${$locale}${item.href}`} class={navItemClass(item) || ""}>
                 {#if hoverOpen}
@@ -97,7 +97,7 @@
         class="bg-purple-soft fixed top-(--sticky-top) left-0 z-40 flex h-[calc(100vh-var(--sticky-top)-1rem)] w-56.75 flex-col gap-2 rounded-r-2xl py-10 pr-10 pl-5 shadow-xl lg:hidden"
         transition:slide={{ duration: 300, axis: "x" }}
     >
-        <nav class="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto">
+        <nav class="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-x-hidden overflow-y-auto">
             {#each navItems as item}
                 <a
                     href={`/${$locale}${item.href}`}

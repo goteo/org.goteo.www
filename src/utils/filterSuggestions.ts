@@ -30,59 +30,40 @@ export async function suggestGateways(q: string): Promise<FilterOption[]> {
         }));
 }
 
-let suggestAccountingTimer: ReturnType<typeof setTimeout> | undefined;
-
 export async function suggestAccounting(q: string): Promise<FilterOption[]> {
-    return new Promise((resolve) => {
-        if (suggestAccountingTimer) {
-            clearTimeout(suggestAccountingTimer);
-        }
+    const trimmed = q.trim();
+    if (trimmed.length < 2) return [];
 
-        const trimmed = q.trim();
+    const [tipjars, users, projects] = await Promise.all([
+        apiTipjarsGetCollection({ query: { name: trimmed, itemsPerPage: 1 } }),
+        apiUsersGetCollection({ query: { q: trimmed, itemsPerPage: 5 } }),
+        apiProjectsGetCollection({ query: { title: trimmed, itemsPerPage: 4 } }),
+    ]);
 
-        if (trimmed.length < 2) {
-            return resolve([]);
-        }
+    const options: FilterOption[] = [];
 
-        suggestAccountingTimer = setTimeout(async () => {
-            const [tipjars, users, projects] = await Promise.all([
-                apiTipjarsGetCollection({
-                    query: { name: trimmed, itemsPerPage: 1 },
-                }),
-                apiUsersGetCollection({
-                    query: { q: trimmed, itemsPerPage: 5 },
-                }),
-                apiProjectsGetCollection({
-                    query: { title: trimmed, itemsPerPage: 4 },
-                }),
-            ]);
+    for (const t of tipjars.data ?? []) {
+        options.push({
+            value: t.accounting!,
+            label: `<strong>${t.name}</strong> (tipjar)`,
+        });
+    }
 
-            const options: FilterOption[] = [];
+    for (const u of users.data ?? []) {
+        options.push({
+            value: u.accounting!,
+            label: `<strong>${u.handle}</strong> (user: ${u.email})`,
+        });
+    }
 
-            for (const t of tipjars.data ?? []) {
-                options.push({
-                    value: t.accounting!,
-                    label: `<strong>${t.name}</strong> (tipjar)`,
-                });
-            }
+    for (const p of projects.data ?? []) {
+        options.push({
+            value: p.accounting!,
+            label: `<strong>${p.slug}</strong> (project: ${p.title})`,
+        });
+    }
 
-            for (const u of users.data ?? []) {
-                options.push({
-                    value: u.accounting!,
-                    label: `<strong>${u.handle}</strong> (user: ${u.email})`,
-                });
-            }
-
-            for (const p of projects.data ?? []) {
-                options.push({
-                    value: p.accounting!,
-                    label: `<strong>${p.slug}</strong> (project: ${p.title})`,
-                });
-            }
-
-            return resolve(options);
-        }, 260);
-    });
+    return options;
 }
 
 export async function suggestOwner(q: string): Promise<FilterOption[]> {

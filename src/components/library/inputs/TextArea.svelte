@@ -42,7 +42,6 @@
             class={twJoin(
                 "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
                 error && "text-tertiary",
-                disabled && "opacity-70",
             )}
         >
             {labelText}
