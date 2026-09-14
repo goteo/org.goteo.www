@@ -556,9 +556,12 @@
               "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
             },
             "required": "Este campo es obligatorio",
-            "emailInvalid": "El email introducido no es válido"
+            "emailInvalid": "El email introducido no es válido",
+            "taxIdInvalid": "El número no tiene un formato válido para el país seleccionado"
           },
-          "emailHelper": "Email que usarás para acceder"
+          "emailHelper": "Email que usarás para acceder",
+          "taxIdCountry": "País emisor del documento",
+          "taxIdCountryHelper": "País que emitió tu identificación fiscal, no tu país de residencia"
         },
         "individual": {
           "firstName": "Nombre",
