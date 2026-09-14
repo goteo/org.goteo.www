@@ -333,7 +333,8 @@
     "header": {
       "search": "Buscar",
       "createProject": "Crea tu proyecto",
-      "goToProfile": "Ir a Perfil"
+      "goToProfile": "Ir a Perfil",
+      "admin": "Administración"
     },
     "footer": {
       "funding": {
