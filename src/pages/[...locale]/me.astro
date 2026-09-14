@@ -59,7 +59,7 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
                         {
                             label: t("pages.me.cta.discover.button"),
                             href: lang === "es" ? "/projects" : `/${lang}/projects`,
-                            variant: "primary",
+                            kind: "secondary",
                         },
                     ]}
                     client:load
@@ -72,12 +72,12 @@ const period = Astro.url.searchParams.get("period") || new Date().getFullYear().
                         {
                             label: t("pages.me.cta.matchfunding.learnMore"),
                             href: lang === "es" ? "/matchfunding" : `/${lang}/matchfunding`,
-                            variant: "secondary",
+                            kind: "secondary",
                         },
                         {
                             label: t("pages.me.cta.matchfunding.becomeMatcher"),
                             href: lang === "es" ? "/matcher" : `/${lang}/matcher`,
-                            variant: "primary",
+                            kind: "primary",
                         },
                     ]}
                     client:load
