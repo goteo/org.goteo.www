@@ -2,8 +2,8 @@
     import { onMount, tick, type Snippet } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import ArrowSliderIcon from "../../icons/navigation/ArrowSliderIcon.svelte";
     import { t } from "../../../i18n/store";
+    import ArrowSliderIcon from "../../icons/navigation/ArrowSliderIcon.svelte";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";

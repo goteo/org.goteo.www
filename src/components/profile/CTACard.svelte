@@ -22,8 +22,9 @@
      * ```
      */
 
-    import Title from "../library/typography/Title.svelte";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
+
     import type { HTMLAnchorAttributes } from "svelte/elements";
 
     interface ButtonConfig {
@@ -67,11 +68,7 @@
 >
     <!-- Content -->
     <div class="flex flex-col gap-4">
-        <Title
-            level={2}
-            variant="section"
-            class="leading-tight text-inherit"
-        >
+        <Title level={2} variant="section" class="leading-tight text-inherit">
             {title}
         </Title>
         <p class="text-sm leading-tight md:text-base md:leading-normal">

@@ -5,17 +5,17 @@
     import { t } from "../../i18n/store";
     import { apiProjectsGetCollection } from "../../openapi/client/sdk.gen.ts";
     import { toCollectionItems } from "../../utils/hydra.ts";
-    import Carousel from "../library/layout/Carousel.svelte";
-    import Title from "../library/typography/Title.svelte";
-
-    import type { Project, User } from "../../openapi/client/types.gen.ts";
     import { tabStatusGroups, statusCardConfig } from "../../utils/ownedProjectCards";
-    import type { Campaign } from "../../types/campaign";
     import CampaignCard, {
         type OwnedCardActionView,
         type OwnedCardConfig,
     } from "../home/CampaignCard.svelte";
+    import Carousel from "../library/layout/Carousel.svelte";
     import Tabs from "../library/layout/Tabs.svelte";
+    import Title from "../library/typography/Title.svelte";
+
+    import type { Project, User } from "../../openapi/client/types.gen.ts";
+    import type { Campaign } from "../../types/campaign";
 
     interface Props {
         lang: string;

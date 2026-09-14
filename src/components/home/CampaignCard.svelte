@@ -13,13 +13,12 @@ Converted from CampaignCard.astro to maintain exact functionality
     import { extractId } from "../../utils/extractId";
     import { gte } from "../../utils/money";
     import CampaignStatusBadge from "../home/CampaignStatusBadge.svelte";
-    import Button from "../library/buttons/Button.svelte";
     import Flames from "../icons/status/Flames.svelte";
+    import Button from "../library/buttons/Button.svelte";
     import Tag from "../library/tags/Tag.svelte";
     import Title from "../library/typography/Title.svelte";
 
     import type { Campaign, CampaignSize } from "../../types/campaign";
-
     import type { OwnedCardAction } from "../../utils/ownedProjectCards";
 
     export interface OwnedCardActionView {
