@@ -70,8 +70,7 @@
         <Title
             level={2}
             variant="section"
-            class="leading-tight"
-            style="display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;"
+            class="leading-tight text-inherit"
         >
             {title}
         </Title>
