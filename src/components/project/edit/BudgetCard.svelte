@@ -31,7 +31,7 @@
     let openDeleteModal = $state(false);
 
     async function handleSave(newItem: ProjectBudgetItem) {
-        const { error } = await apiProjectBudgetItemsIdPatch({
+        const { data, error } = await apiProjectBudgetItemsIdPatch({
             baseUrl: "/api/relay",
             headers: { "Content-Language": $draft.lang },
             path: { id: String(item.id) },
@@ -39,6 +39,7 @@
         });
 
         if (!error) {
+            item = data;
             openModal = false;
             onSave?.(newItem);
             return;

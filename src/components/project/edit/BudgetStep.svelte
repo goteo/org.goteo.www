@@ -1,5 +1,5 @@
 <script lang="ts">
-    import AdminBudgetCard from "./AdminBudgetCard.svelte";
+    import BudgetCard from "./BudgetCard.svelte";
     import CreateCard from "./CreateCard.svelte";
     import { t } from "../../../i18n/store";
     import { withoutCache } from "../../../openapi/cacheInterceptor";
@@ -113,7 +113,7 @@
         {:then minBudgetItems}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each minBudgetItems as item, index}
-                    <AdminBudgetCard
+                    <BudgetCard
                         {item}
                         {draft}
                         onSave={reloadBudgetItems}
@@ -153,7 +153,12 @@
         {:then optBudgetItems}
             <Grid class="grid-cols-1 sm:grid-cols-2">
                 {#each optBudgetItems as item, i}
-                    {item.title}
+                    <BudgetCard
+                        {item}
+                        {draft}
+                        onSave={reloadBudgetItems}
+                        onDelete={reloadBudgetItems}
+                    />
                 {/each}
                 <CreateCard
                     title={$t(`pages.project.edit.budget.add.optimum.title`)}
