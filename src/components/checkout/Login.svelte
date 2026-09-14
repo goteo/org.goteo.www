@@ -19,7 +19,7 @@
         e.preventDefault();
 
         if (!acceptTerms) {
-            errorMessage = $t("system.validation.missingRequiredFields");
+            errorMessage = $t("system.validation.requiredFields");
             return;
         }
 

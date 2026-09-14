@@ -37,7 +37,7 @@
     const finalId = $derived(id ?? generatedId);
 </script>
 
-<div class={twMerge("relative", disabled && "opacity-50")}>
+<div class={twJoin("relative", disabled && "opacity-50")}>
     {#if labelText}
         <label
             for={finalId}
