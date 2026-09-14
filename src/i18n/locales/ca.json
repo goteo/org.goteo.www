@@ -1978,9 +1978,45 @@
         "createNew": "Crear un projecte"
       },
       "ownedProjects": {
-        "title": "Els teus projectes actius",
+        "title": "Els teus projectes",
+        "tabs": {
+          "draft": "Esborranys",
+          "inReview": "En revisió",
+          "funding": "En finançament",
+          "active": "Actius",
+          "archived": "Arxivats"
+        },
         "messageToDonatorsButton": "Missatge a donants",
-        "uploadNewsButton": "Pujar novetat"
+        "uploadNewsButton": "Pujar novetat",
+        "card": {
+          "tags": {
+            "draft": "Esborrany",
+            "readyToPublish": "A punt per publicar",
+            "reviewing": "En revisió",
+            "pendingReview": "Pendent de revisió",
+            "needsChanges": "Requereix canvis",
+            "rejected": "Rebutjat",
+            "campaignFailed": "Campanya fallida",
+            "campaignCancelled": "Campanya cancel·lada",
+            "fundingPaid": "Finançament conclòs"
+          },
+          "actions": {
+            "manage": "Gestiona el projecte",
+            "edit": "Edita el projecte",
+            "advisory": "Ves a assessorament",
+            "publish": "Publica el teu projecte",
+            "view": "Veure el projecte",
+            "sendToReview": "Enviar a revisió",
+            "viewReview": "Veure la revisió"
+          }
+        },
+        "emptyTab": {
+          "active": "No hi ha projectes actius",
+          "review": "No hi ha projectes en revisió",
+          "funding": "No hi ha projectes en finançament",
+          "draft": "No hi ha projectes en esborrany",
+          "archived": "No hi ha projectes arxivats"
+        }
       },
       "donatedProjects": {
         "title": "Projectes actius on has donat"
