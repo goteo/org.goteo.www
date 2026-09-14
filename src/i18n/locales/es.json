@@ -2006,6 +2006,13 @@
             "sendToReview": "Enviar a revisión",
             "viewReview": "Ver revisión"
           }
+        },
+        "emptyTab": {
+          "active": "No hay proyectos activos",
+          "review": "No hay proyectos en revisión",
+          "funding": "No hay proyectos en financiación",
+          "draft": "No hay proyectos en borrador",
+          "archived": "No hay proyectos archivados"
         }
       },
       "donatedProjects": {

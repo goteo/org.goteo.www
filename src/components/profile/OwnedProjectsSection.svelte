@@ -121,8 +121,8 @@
         </Title>
         <Tabs {tabs} activeTab="active" alignment="left" />
 
-        {#snippet ownedProjectsCarousel(projects: Campaign[])}
-            <Carousel itemsPerGroup={3} gap={24} showDots={false}>
+        {#snippet ownedProjectsCarousel(projects: Campaign[], emptyMessage?: string)}
+            <Carousel itemsPerGroup={3} gap={24} showDots={false} {emptyMessage}>
                 {#each projects as campaign, index (campaign.id)}
                     {@const config = statusCardConfig(campaign.status)}
                     {@const ownedConfig: OwnedCardConfig | undefined = config && {
@@ -140,23 +140,38 @@
         {/snippet}
 
         <div data-tab-content="active">
-            {@render ownedProjectsCarousel(projectsForTab("active"))}
+            {@render ownedProjectsCarousel(
+                projectsForTab("active"),
+                $t("pages.me.ownedProjects.emptyTab.active"),
+            )}
         </div>
 
         <div data-tab-content="review" style="display:none">
-            {@render ownedProjectsCarousel(projectsForTab("review"))}
+            {@render ownedProjectsCarousel(
+                projectsForTab("review"),
+                $t("pages.me.ownedProjects.emptyTab.review"),
+            )}
         </div>
 
         <div data-tab-content="funding" style="display:none">
-            {@render ownedProjectsCarousel(projectsForTab("funding"))}
+            {@render ownedProjectsCarousel(
+                projectsForTab("funding"),
+                $t("pages.me.ownedProjects.emptyTab.funding"),
+            )}
         </div>
 
         <div data-tab-content="draft" style="display:none">
-            {@render ownedProjectsCarousel(projectsForTab("draft"))}
+            {@render ownedProjectsCarousel(
+                projectsForTab("draft"),
+                $t("pages.me.ownedProjects.emptyTab.draft"),
+            )}
         </div>
 
         <div data-tab-content="archived" style="display:none">
-            {@render ownedProjectsCarousel(projectsForTab("archived"))}
+            {@render ownedProjectsCarousel(
+                projectsForTab("archived"),
+                $t("pages.me.ownedProjects.emptyTab.archived"),
+            )}
         </div>
     </div>
 {/if}
