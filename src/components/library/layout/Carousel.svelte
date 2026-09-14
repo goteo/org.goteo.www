@@ -3,6 +3,7 @@
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import ArrowSliderIcon from "../../icons/navigation/ArrowSliderIcon.svelte";
+    import { t } from "../../../i18n/store";
 
     // Browser check for SSR compatibility
     const browser = typeof window !== "undefined";
@@ -22,6 +23,7 @@
         children = null,
         activeCard = $bindable(0),
         active,
+        emptyMessage = $t("common.noData"),
     }: {
         itemsPerGroup: number;
         gap: number;
@@ -37,6 +39,7 @@
         children?: any;
         activeCard?: number;
         active?: Snippet;
+        emptyMessage?: string;
     } = $props();
 
     const wrapperClasses = $derived(twMerge("relative w-full", classes));
@@ -54,6 +57,9 @@
     let isAtStart = $state(true);
     let isAtEnd = $state(false);
     let isScrollable = $state(false);
+    // Optimistically true so SSR renders the carousel; the real item count is
+    // known after mount via observeVisibility.
+    let hasItems = $state(true);
 
     let isDragging = $state(false);
     let startX = $state(0);
@@ -153,6 +159,7 @@
 
             totalGroups = Math.ceil(actualChildren.length / itemsPerGroup);
             totalItems = actualChildren.length;
+            hasItems = actualChildren.length > 0;
             updateNavForShort();
         } catch (error) {
             console.warn("Carousel: Error observing visibility:", error);
@@ -336,64 +343,70 @@
 </script>
 
 <div class={wrapperClasses}>
-    <button
-        onclick={() => scroll("left")}
-        class={twMerge(navButtonClasses, "-left-4")}
-        style:top={navButtonTop}
-        disabled={isAtStart}
-        aria-label="Scroll left"
-    >
-        <ArrowSliderIcon direction="left" />
-    </button>
-
-    <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-    <div
-        bind:this={container}
-        role="region"
-        aria-label="Carousel"
-        class="hide-scrollbar flex w-full scroll-smooth select-none"
-        class:overflow-x-auto={!disableDrag}
-        class:overflow-x-hidden={disableDrag}
-        class:cursor-grab={isScrollable && !isDragging && !disableDrag}
-        class:cursor-default={!isScrollable || disableDrag}
-        class:cursor-grabbing={isDragging && isScrollable && !disableDrag}
-        style="gap: {gap}px"
-        onmousedown={(e) => handleStart(e.pageX)}
-        onmousemove={(e) => handleMove(e.pageX, e)}
-        onmouseup={endDrag}
-        onmouseleave={endDrag}
-        ontouchstart={(e) => handleStart(e.touches[0].pageX)}
-        ontouchmove={(e) => handleMove(e.touches[0].pageX, e)}
-        ontouchend={endDrag}
-    >
-        {#if children}
-            {@render children()}
-            {@render active?.()}
-        {/if}
-    </div>
-
-    <button
-        onclick={() => scroll("right")}
-        class={twMerge(navButtonClasses, "-right-4")}
-        style:top={navButtonTop}
-        disabled={isAtEnd}
-        aria-label="Scroll right"
-    >
-        <ArrowSliderIcon />
-    </button>
-
-    {#if showDots && getPositionCount() > 1}
-        <div class="mt-4 flex justify-center gap-2">
-            {#each Array(getPositionCount()) as _, i}
-                <button
-                    onclick={() => scrollToGroup(i)}
-                    class="h-2 w-2 rounded-full transition-all"
-                    class:bg-indigo-500={i === activeCard}
-                    class:bg-gray-300={i !== activeCard}
-                    aria-label={`Go to group ${i + 1}`}
-                ></button>
-            {/each}
+    {#if emptyMessage && mounted && !hasItems}
+        <div class="flex w-full flex-col items-center py-12 text-center">
+            <span class="text-content text-base">{emptyMessage}</span>
         </div>
+    {:else}
+        <button
+            onclick={() => scroll("left")}
+            class={twMerge(navButtonClasses, "-left-4")}
+            style:top={navButtonTop}
+            disabled={isAtStart}
+            aria-label="Scroll left"
+        >
+            <ArrowSliderIcon direction="left" />
+        </button>
+
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+        <div
+            bind:this={container}
+            role="region"
+            aria-label="Carousel"
+            class="hide-scrollbar flex w-full scroll-smooth select-none"
+            class:overflow-x-auto={!disableDrag}
+            class:overflow-x-hidden={disableDrag}
+            class:cursor-grab={isScrollable && !isDragging && !disableDrag}
+            class:cursor-default={!isScrollable || disableDrag}
+            class:cursor-grabbing={isDragging && isScrollable && !disableDrag}
+            style="gap: {gap}px"
+            onmousedown={(e) => handleStart(e.pageX)}
+            onmousemove={(e) => handleMove(e.pageX, e)}
+            onmouseup={endDrag}
+            onmouseleave={endDrag}
+            ontouchstart={(e) => handleStart(e.touches[0].pageX)}
+            ontouchmove={(e) => handleMove(e.touches[0].pageX, e)}
+            ontouchend={endDrag}
+        >
+            {#if children}
+                {@render children()}
+                {@render active?.()}
+            {/if}
+        </div>
+
+        <button
+            onclick={() => scroll("right")}
+            class={twMerge(navButtonClasses, "-right-4")}
+            style:top={navButtonTop}
+            disabled={isAtEnd}
+            aria-label="Scroll right"
+        >
+            <ArrowSliderIcon />
+        </button>
+
+        {#if showDots && getPositionCount() > 1}
+            <div class="mt-4 flex justify-center gap-2">
+                {#each Array(getPositionCount()) as _, i}
+                    <button
+                        onclick={() => scrollToGroup(i)}
+                        class="h-2 w-2 rounded-full transition-all"
+                        class:bg-indigo-500={i === activeCard}
+                        class:bg-gray-300={i !== activeCard}
+                        aria-label={`Go to group ${i + 1}`}
+                    ></button>
+                {/each}
+            </div>
+        {/if}
     {/if}
 </div>
 
