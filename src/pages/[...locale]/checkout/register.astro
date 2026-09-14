@@ -1,12 +1,12 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../layouts/App.svelte";
+import ContinueButton from "../../../components/checkout/ContinueButton.svelte";
 import Register from "../../../components/checkout/Register.svelte";
 import Summary from "../../../components/checkout/Summary.svelte";
 import Steps from "../../../components/checkout/Steps.svelte";
 import BackButton from "../../../components/library/buttons/BackButton.svelte";
 import Card from "../../../components/library/cards/Card.svelte";
-import Button from "../../../components/library/buttons/Button.svelte";
 
 const { t, lang, session } = Astro.locals;
 
@@ -40,9 +40,7 @@ if (session) {
                         </div>
                     </div>
                     <div class="flex w-full flex-col items-start">
-                        <Button type="submit" form="register" class="w-fit">
-                            {t("common.continue")}
-                        </Button>
+                        <ContinueButton client:load form="register" />
                     </div>
                 </Card>
             </div>
