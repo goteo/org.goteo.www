@@ -1978,9 +1978,45 @@
         "createNew": "Create a project"
       },
       "ownedProjects": {
-        "title": "Your Active Projects",
+        "title": "Your Projects",
+        "tabs": {
+          "draft": "Drafts",
+          "inReview": "In Review",
+          "funding": "In Funding",
+          "active": "Active",
+          "archived": "Archived"
+        },
         "messageToDonatorsButton": "Message to donors",
-        "uploadNewsButton": "Upload update"
+        "uploadNewsButton": "Upload update",
+        "card": {
+          "tags": {
+            "draft": "Draft",
+            "readyToPublish": "Ready to Publish",
+            "reviewing": "Under Review",
+            "pendingReview": "Pending Review",
+            "needsChanges": "Requires Changes",
+            "rejected": "Rejected",
+            "campaignFailed": "Failed Campaign",
+            "campaignCancelled": "Cancelled Campaign",
+            "fundingPaid": "Funding Completed"
+          },
+          "actions": {
+            "manage": "Manage Project",
+            "edit": "Edit Project",
+            "advisory": "Go to Advisory",
+            "publish": "Publish Your Project",
+            "view": "View Project",
+            "sendToReview": "Send for Review",
+            "viewReview": "View Review"
+          }
+        },
+        "emptyTab": {
+          "active": "No active projects",
+          "review": "No projects in review",
+          "funding": "No projects in funding",
+          "draft": "No draft projects",
+          "archived": "No archived projects"
+        }
       },
       "donatedProjects": {
         "title": "Active projects you donated to"
