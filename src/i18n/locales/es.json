@@ -73,6 +73,9 @@
         "placeholder": "Buscar..."
       }
     },
+    "carousel": {
+      "empty": "No hay artículos para mostrar"
+    },
     "filterComposer": {
       "title": "Filtros personalizados",
       "addFilter": "Añadir filtro",

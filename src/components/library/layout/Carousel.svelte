@@ -24,7 +24,7 @@
         children = null,
         activeCard = $bindable(0),
         active,
-        emptyMessage = $t("common.noData"),
+        emptyMessage = $t("domain.carousel.empty"),
     }: {
         itemsPerGroup: number;
         gap: number;
