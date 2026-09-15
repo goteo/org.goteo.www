@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { zUserUserSignupDto } from "../openapi/client/zod.gen";
+import { getDefaultCountry } from "../utils/consts";
 import { isValidTaxId } from "../utils/taxId";
 
 const zRequiredField = () =>
@@ -8,7 +9,7 @@ const zRequiredField = () =>
         error: "pages.checkout.register.form.validation.required",
     });
 
-export function taxIdIssue(
+function taxIdIssue(
     country: string,
     type: "individual" | "organization",
     value: string,
@@ -36,7 +37,7 @@ export const zRegisterForm = zUserUserSignupDto
         firstname: zRequiredField(),
         lastname: zRequiredField(),
         taxId: z.string().optional(),
-        taxIdCountry: z.string().length(2).default("ES"),
+        taxIdCountry: z.string().length(2).default(getDefaultCountry()),
         legalName: z.string().optional(),
     })
     .superRefine((data, ctx) => {

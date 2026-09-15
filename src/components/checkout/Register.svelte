@@ -4,8 +4,9 @@
     import iso3166 from "iso-3166-2";
 
     import { locale, t } from "../../i18n/store";
+    import { getDefaultCountry } from "../../utils/consts";
     import { getValidationParams } from "../../utils/validation";
-    import { taxIdIssue, zRegisterForm } from "../../validation/registerValidation";
+    import { zRegisterForm } from "../../validation/registerValidation";
     import Toast from "../library/feedback/Toast.svelte";
     import Checkbox from "../library/inputs/Checkbox.svelte";
     import PasswordInput from "../library/inputs/PasswordInput.svelte";
@@ -47,7 +48,7 @@
         firstname: "",
         lastname: "",
         taxId: "",
-        taxIdCountry: "ES",
+        taxIdCountry: getDefaultCountry(),
         legalName: "",
     });
 
@@ -82,15 +83,17 @@
     let showChecksToast = $state(false);
 
     function validate(field: FieldName) {
+        // taxId validity depends on country and type, so it is checked by the schema refinement
+        if (field === "taxId") {
+            const result = zRegisterForm.safeParse(form);
+
+            validation.taxId = result.error?.issues.filter((issue) => issue.path[0] === "taxId");
+            return;
+        }
+
         const result = zRegisterForm.shape[field].safeParse(form[field]);
 
         validation[field] = result.error?.issues;
-
-        if (field === "taxId") {
-            const issue = taxIdIssue(form.taxIdCountry, form.type, form.taxId);
-
-            validation.taxId = issue && [issue];
-        }
     }
 
     function getValidationMessage(field: FieldName) {
