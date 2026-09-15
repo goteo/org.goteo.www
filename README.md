@@ -222,6 +222,7 @@ Full list lives in [`.env.example`](.env.example). Grouped by purpose:
 | `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                                        |
 | `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                                        |
 | `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                                                    |
+| `PUBLIC_DEFAULT_COUNTRY`                      |          | Fallback ISO 3166-1 alpha-2 country (default `ES`), e.g. preselected tax id country   |
 | `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)                                    |
 | `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                                            |
 | `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                                                 |
