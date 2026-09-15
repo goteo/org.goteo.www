@@ -1,20 +1,13 @@
 <script lang="ts">
     import { get } from "svelte/store";
 
-    import {
-        apiProjectRewardClaimsPost,
-        type GatewayCharge,
-    } from "../../openapi/client";
+    import { apiProjectRewardClaimsPost, type GatewayCharge } from "../../openapi/client";
     import { client } from "../../openapi/client/client.gen";
     import {
         apiGatewayChargesIdGetUrl,
         apiProjectRewardsIdGetUrl,
     } from "../../openapi/client/operation-paths.gen";
-    import {
-        cart,
-        clearForUser,
-        type CheckoutItem,
-    } from "../../stores/checkoutsStore";
+    import { cart, clearForUser, type CheckoutItem } from "../../stores/checkoutsStore";
 
     let {
         userId,
