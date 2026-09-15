@@ -38,14 +38,15 @@
       "_invalid_type": "",
       "_too_big": "",
       "too_small": "\"{{ value }}\" is too short: {{ min }} or more characters expected.",
-      "invalid_format": "\"{{ value }}\" has an invalid format: it does not match the regex pattern `{{ pattern }}`.",
+      "invalid_format": "\"{{ value }}\" is incorrectly formatted: it does not match the `{{ format }}` format.",
       "_not_multiple_of": "",
       "_unrecognized_keys": "",
       "_invalid_union": "",
       "_invalid_key": "",
       "_invalid_element": "",
       "_invalid_value": "",
-      "missingRequiredFields": "One or more required fields are empty",
+      "requiredField": "This field is required",
+      "requiredFields": "One or more required fields are empty",
       "project": {
         "terms": {
           "required": "You must accept the promoter conditions and the call terms"
@@ -180,6 +181,7 @@
       "reward": {
         "byAtLeast": "By {{ amount }}",
         "byAtLeastOrMore": "For {{ amount }} or more",
+        "donation": "Donation",
         "unitsTotal": {
           "single": "There is 1 unit",
           "multiple": "There are {{ units }} units"
@@ -411,6 +413,9 @@
         "description": "Checkout page"
       },
       "subtitle": "We'll show you the ones you've selected; click the \"continue\" button to pay.",
+      "decrement": "Reduce quantity",
+      "increment": "Increase quantity",
+      "remove": "Remove from cart",
       "reward": {
         "claimed": "{{ units }} people have already claimed this reward",
         "unclaimed": "No one has claimed this reward yet. Be the first!"
@@ -537,6 +542,58 @@
           "unexpectedLogin": "Error logging in. Please try again later.",
           "invalidEmail": "The email address is not valid."
         }
+      },
+      "register": {
+        "form": {
+          "userType": {
+            "individual": "Natural person",
+            "organization": "Legal person (companies)"
+          },
+          "termsCheckbox": "I accept the {{ privacy }}privacy terms{{ _privacy }} and the {{ terms }}cookie policy{{ _terms }}",
+          "policiesCheckbox": "By registering, I confirm that I accept your {{ terms }}terms of use{{ _terms }}, {{ privacy }}privacy policy{{ _privacy }} and {{ cookies }}cookie policy{{ _cookies }}",
+          "validation": {
+            "password": {
+              "minLength": "*Password must be at least 8 characters long"
+            },
+            "required": "This field is required",
+            "emailInvalid": "The email address entered is not valid"
+          },
+          "emailHelper": "Email address you will use to log in"
+        },
+        "individual": {
+          "firstName": "First name",
+          "lastName": "Last name",
+          "email": "Email",
+          "password": "Password",
+          "taxId": {
+            "msgDeduction": "I would like to deduct this donation from my taxes. Please provide your NIF for the Tax Agency. Only applies within Spain.",
+            "label": "Tax ID*"
+          },
+          "firstNameHelper": "Your first name",
+          "lastNameHelper": "Your last name",
+          "taxIdHelper": "Required for tax deduction"
+        },
+        "organization": {
+          "legalName": "Corporate name",
+          "taxId": "ID*",
+          "description": "Tell us who you are so you can proceed",
+          "loginBtnLabel": "Log in with your account",
+          "representative": {
+            "title": "Company representative details."
+          },
+          "taxIdHelper": "*With the CIF, we will notify the Tax Agency for your income tax return.",
+          "legalNameHelper": "Company name"
+        },
+        "error": {
+          "unexpectedRegistration": "Error creating the account. Please try again later.",
+          "requireTerms": "You must accept the terms and conditions to continue."
+        },
+        "title": "Tell us your personal details",
+        "description": "We need to know who you are before you pay.",
+        "registerOr": "Register or",
+        "loginBtnLabel": "Log in with your account",
+        "existUserInfo": "If you are already a Goteo user, sign in. You will be able to use your wallet to make these donations.",
+        "otherAccessMethods": "or sign in with"
       }
     },
     "home": {
@@ -773,16 +830,18 @@
             "title": "Add rewards",
             "description": "Describe the reward you offer",
             "unitsExisting": "Number of existing units",
-            "placeholders": {
-              "title": "Reward title",
-              "description": "Reward description",
-              "moneyAmount": "Price",
-              "files": "Click or drag your file here to upload"
-            },
-            "validation": {
-              "title": "The title cannot be empty",
-              "description": "The description cannot be empty",
-              "amount": "The amount must be greater than zero"
+            "form": {
+              "titleLabel": "Reward title",
+              "titlePlaceholder": "Custom T-shirt",
+              "titleHelper": "The title will be displayed on all cards for this reward",
+              "descriptionLabel": "Reward description",
+              "descriptionPlaceholder": "A cotton T-shirt with the project logo sublimated on the chest.",
+              "descriptionHelper": "The description can contain rich text, but it will be truncated on small cards",
+              "moneyLabel": "Price",
+              "moneyHelper": "Enter the minimum donation required to claim this reward",
+              "coverLabel": "Cover",
+              "coverPlaceholder": "Click or drag your file here to upload",
+              "coverHelper": "This file will be the cover for your reward"
             }
           },
           "deleteModal": {
@@ -1024,14 +1083,14 @@
           "title": "Select your rewards",
           "headline": "Select your reward",
           "thanksMessage": "Thank you for cooperating",
-          "ivaMessage": "Remember that each contribution has a tax deduction between 35% and 80%! Calculate it here: {{link}}",
           "addToCart": "Add to cart and continue",
           "unavailable": "There are no rewards available.",
           "loading": "Loading rewards...",
           "donationFree": {
             "title": "I waive an individual reward; I just want to help the project",
             "description": "In this space, you can donate the amount you consider appropriate without receiving a reward in return. Every contribution, big or small, makes a difference and brings us closer to the goal.",
-            "placeholder": "Select the contribution, e.g. €20"
+            "placeholder": "Select the contribution, e.g. €20",
+            "additionalDonation": "You can add more money to your donation for this reward"
           },
           "error": {
             "amount": "Please enter a valid amount",
@@ -1320,6 +1379,66 @@
         "aria": {
           "close": "Close menu",
           "open": "Open admin menu"
+        }
+      },
+      "home": {
+        "tabs": {
+          "hero": "Hero",
+          "highlights": "Featured Projects"
+        },
+        "hero": {
+          "title": "Hero",
+          "description": "The top of the homepage, the most important part.",
+          "errors": {
+            "forbidden": "You don't have permission to manage the homepage hero",
+            "invalidUrl": "The link URL is not valid",
+            "invalidDateRange": "The end date cannot be earlier than the start date"
+          },
+          "fields": {
+            "textsTitle": "Block texts",
+            "titlePlaceholder": "Block headline",
+            "contentPlaceholder": "Brief introductory text",
+            "primaryCtaPlaceholder": "Primary call to action",
+            "secondaryCtaPlaceholder": "Secondary call to action",
+            "urlPlaceholder": "URL",
+            "scheduleTitle": "Schedule the block to go live",
+            "startDatePlaceholder": "Enter the start date",
+            "endDatePlaceholder": "Enter the end date",
+            "mediaTitle": "Time to upload the images",
+            "mediaLabel": "Image 01",
+            "mediaHint": "Upload an image or video",
+            "mediaAdd": "Add image"
+          }
+        },
+        "highlights": {
+          "title": "Featured projects",
+          "description": "Choose which projects are featured on the homepage.",
+          "type": {
+            "title": "Featured project type",
+            "label": "Project type",
+            "recent": "Most recent"
+          },
+          "grid": {
+            "title": "Select the grid",
+            "option": "{{ layout }} grid"
+          },
+          "projects": {
+            "title": "Select the projects",
+            "description": "Remember that projects will be placed from top to bottom and from left to right.",
+            "slot": "Project {{ number }}",
+            "empty": "Search for a project and feature it on the homepage",
+            "add": "Add project",
+            "replace": "Change project",
+            "remove": "Remove",
+            "change": "Change to another project",
+            "position": "This project in position {{ number }}",
+            "modal": {
+              "title": "Add Project",
+              "description": "Search for and add the project you want to feature",
+              "search": "Search for a project",
+              "submit": "Add"
+            }
+          }
         }
       },
       "charges": {
@@ -1731,41 +1850,6 @@
           }
         }
       },
-      "home": {
-        "tabs": {
-          "highlights": "Featured Projects"
-        },
-        "highlights": {
-          "title": "Featured projects",
-          "description": "Choose which projects are featured on the homepage.",
-          "type": {
-            "title": "Featured project type",
-            "label": "Project type",
-            "recent": "Most recent"
-          },
-          "grid": {
-            "title": "Select the grid",
-            "option": "{{ layout }} grid"
-          },
-          "projects": {
-            "title": "Select the projects",
-            "description": "Remember that projects will be placed from top to bottom and from left to right.",
-            "slot": "Project {{ number }}",
-            "empty": "Search for a project and feature it on the homepage",
-            "add": "Add project",
-            "replace": "Change project",
-            "remove": "Remove",
-            "change": "Change to another project",
-            "position": "This project in position {{ number }}",
-            "modal": {
-              "title": "Add Project",
-              "description": "Search for and add the project you want to feature",
-              "search": "Search for a project",
-              "submit": "Add"
-            }
-          }
-        }
-      },
       "comm": {
         "title": "Communication",
         "description": "Manage platform communication",
@@ -1863,14 +1947,6 @@
     },
     "metadata": {
       "description": "Home page"
-    },
-    "hero": {
-      "title": "Fund the change the world needs",
-      "description": "We are starting a new stage with the same compass that has guided us from the beginning: promoting projects that transform the world through social justice, democratic participation, and the defense of human rights and ecosystems. Join a community that transforms realities. Be part of the solution!",
-      "buttons": {
-        "discover": "Discover campaigns",
-        "impulse": "Promote a project"
-      }
     },
     "me": {
       "page": {

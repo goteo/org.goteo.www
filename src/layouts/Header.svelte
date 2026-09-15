@@ -40,6 +40,7 @@
         >
             <div
                 class="flex flex-col"
+                id="header-measure"
                 {@attach (el) => {
                     const observer = new ResizeObserver(() => {
                         document.documentElement.style.setProperty(

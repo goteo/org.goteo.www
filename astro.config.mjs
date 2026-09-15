@@ -65,6 +65,7 @@ const routeRules = Object.fromEntries(
 export default defineConfig({
     integrations: [svelte()],
     output: "server",
+    session: false,
 
     adapter: cloudflare({
         imageService: "passthrough",
