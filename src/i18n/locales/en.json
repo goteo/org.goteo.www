@@ -38,14 +38,15 @@
       "_invalid_type": "",
       "_too_big": "",
       "too_small": "\"{{ value }}\" is too short: {{ min }} or more characters expected.",
-      "invalid_format": "\"{{ value }}\" has an invalid format: it does not match the regex pattern `{{ pattern }}`.",
+      "invalid_format": "\"{{ value }}\" is incorrectly formatted: it does not match the `{{ format }}` format.",
       "_not_multiple_of": "",
       "_unrecognized_keys": "",
       "_invalid_union": "",
       "_invalid_key": "",
       "_invalid_element": "",
       "_invalid_value": "",
-      "missingRequiredFields": "One or more required fields are empty",
+      "requiredField": "This field is required",
+      "requiredFields": "One or more required fields are empty",
       "project": {
         "terms": {
           "required": "You must accept the promoter conditions and the call terms"
@@ -412,9 +413,9 @@
         "description": "Checkout page"
       },
       "subtitle": "We'll show you the ones you've selected; click the \"continue\" button to pay.",
-      "decrement": "Reducir cantidad",
-      "increment": "Aumentar cantidad",
-      "remove": "Eliminar del carrito",
+      "decrement": "Reduce quantity",
+      "increment": "Increase quantity",
+      "remove": "Remove from cart",
       "reward": {
         "claimed": "{{ units }} people have already claimed this reward",
         "unclaimed": "No one has claimed this reward yet. Be the first!"
@@ -829,16 +830,18 @@
             "title": "Add rewards",
             "description": "Describe the reward you offer",
             "unitsExisting": "Number of existing units",
-            "placeholders": {
-              "title": "Reward title",
-              "description": "Reward description",
-              "moneyAmount": "Price",
-              "files": "Click or drag your file here to upload"
-            },
-            "validation": {
-              "title": "The title cannot be empty",
-              "description": "The description cannot be empty",
-              "amount": "The amount must be greater than zero"
+            "form": {
+              "titleLabel": "Reward title",
+              "titlePlaceholder": "Custom T-shirt",
+              "titleHelper": "The title will be displayed on all cards for this reward",
+              "descriptionLabel": "Reward description",
+              "descriptionPlaceholder": "A cotton T-shirt with the project logo sublimated on the chest.",
+              "descriptionHelper": "The description can contain rich text, but it will be truncated on small cards",
+              "moneyLabel": "Price",
+              "moneyHelper": "Enter the minimum donation required to claim this reward",
+              "coverLabel": "Cover",
+              "coverPlaceholder": "Click or drag your file here to upload",
+              "coverHelper": "This file will be the cover for your reward"
             }
           },
           "deleteModal": {
@@ -1385,26 +1388,26 @@
         },
         "hero": {
           "title": "Hero",
-          "description": "El inicio de la portada, lo más importante.",
+          "description": "The top of the homepage, the most important part.",
           "errors": {
-            "forbidden": "No tienes permisos para gestionar el hero de la portada",
-            "invalidUrl": "La URL del enlace no es válida",
-            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+            "forbidden": "You don't have permission to manage the homepage hero",
+            "invalidUrl": "The link URL is not valid",
+            "invalidDateRange": "The end date cannot be earlier than the start date"
           },
           "fields": {
-            "textsTitle": "Textos del bloque",
-            "titlePlaceholder": "Titular del bloque",
-            "contentPlaceholder": "Breve texto introductorio",
-            "primaryCtaPlaceholder": "Call to action primario",
-            "secondaryCtaPlaceholder": "Call to action secundario",
+            "textsTitle": "Block texts",
+            "titlePlaceholder": "Block headline",
+            "contentPlaceholder": "Brief introductory text",
+            "primaryCtaPlaceholder": "Primary call to action",
+            "secondaryCtaPlaceholder": "Secondary call to action",
             "urlPlaceholder": "URL",
-            "scheduleTitle": "Programar la subida del bloque",
-            "startDatePlaceholder": "Indica la fecha de inicio",
-            "endDatePlaceholder": "Indica la fecha de fin",
-            "mediaTitle": "Hora de subir las imágenes",
-            "mediaLabel": "Imagen 01",
-            "mediaHint": "Sube una imagen o vídeo",
-            "mediaAdd": "Añade imagen"
+            "scheduleTitle": "Schedule the block to go live",
+            "startDatePlaceholder": "Enter the start date",
+            "endDatePlaceholder": "Enter the end date",
+            "mediaTitle": "Time to upload the images",
+            "mediaLabel": "Image 01",
+            "mediaHint": "Upload an image or video",
+            "mediaAdd": "Add image"
           }
         },
         "highlights": {
@@ -1975,9 +1978,45 @@
         "createNew": "Create a project"
       },
       "ownedProjects": {
-        "title": "Your Active Projects",
+        "title": "Your Projects",
+        "tabs": {
+          "draft": "Drafts",
+          "inReview": "In Review",
+          "funding": "In Funding",
+          "active": "Active",
+          "archived": "Archived"
+        },
         "messageToDonatorsButton": "Message to donors",
-        "uploadNewsButton": "Upload update"
+        "uploadNewsButton": "Upload update",
+        "card": {
+          "tags": {
+            "draft": "Draft",
+            "readyToPublish": "Ready to Publish",
+            "reviewing": "Under Review",
+            "pendingReview": "Pending Review",
+            "needsChanges": "Requires Changes",
+            "rejected": "Rejected",
+            "campaignFailed": "Failed Campaign",
+            "campaignCancelled": "Cancelled Campaign",
+            "fundingPaid": "Funding Completed"
+          },
+          "actions": {
+            "manage": "Manage Project",
+            "edit": "Edit Project",
+            "advisory": "Go to Advisory",
+            "publish": "Publish Your Project",
+            "view": "View Project",
+            "sendToReview": "Send for Review",
+            "viewReview": "View Review"
+          }
+        },
+        "emptyTab": {
+          "active": "No active projects",
+          "review": "No projects in review",
+          "funding": "No projects in funding",
+          "draft": "No draft projects",
+          "archived": "No archived projects"
+        }
       },
       "donatedProjects": {
         "title": "Active projects you donated to"

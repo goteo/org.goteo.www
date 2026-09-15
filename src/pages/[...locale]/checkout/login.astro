@@ -1,6 +1,7 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
 import App from "../../../layouts/App.svelte";
+import ContinueButton from "../../../components/checkout/ContinueButton.svelte";
 import Login from "../../../components/checkout/Login.svelte";
 import Summary from "../../../components/checkout/Summary.svelte";
 import Steps from "../../../components/checkout/Steps.svelte";
@@ -39,13 +40,7 @@ if (session) {
                         </div>
                     </div>
                     <div class="flex w-full flex-col items-start">
-                        <button
-                            type="button"
-                            onclick="document.querySelector('form')?.requestSubmit()"
-                            class="bg-primary text-secondary flex w-fit cursor-pointer items-center justify-center gap-2 rounded-3xl px-6 py-4 text-sm leading-4 font-bold"
-                        >
-                            {t("common.continue")}
-                        </button>
+                        <ContinueButton client:load form="login" />
                     </div>
                 </Card>
             </div>

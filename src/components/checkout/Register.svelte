@@ -124,6 +124,15 @@
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault();
 
+        const formElement = e.currentTarget as HTMLFormElement;
+        try {
+            await submit(formElement);
+        } finally {
+            formElement.dispatchEvent(new Event("checkout:settled"));
+        }
+    };
+
+    const submit = async (formElement: HTMLFormElement) => {
         validation = {};
         showFormToast = false;
         showChecksToast = false;
@@ -170,7 +179,6 @@
         isSubmitting = true;
         formError = "";
 
-        const formElement = e.currentTarget as HTMLFormElement;
         const { error } = await actions.register(new FormData(formElement));
 
         isSubmitting = false;
