@@ -334,7 +334,8 @@
     "header": {
       "search": "Cercar",
       "createProject": "Crea el teu projecte",
-      "goToProfile": "Anar al perfil"
+      "goToProfile": "Anar al perfil",
+      "admin": "Administració"
     },
     "footer": {
       "funding": {
@@ -556,9 +557,12 @@
               "minLength": "*Requisits de la contrasenya: ha de tenir 8 caràcters"
             },
             "required": "Aquest camp és obligatori",
-            "emailInvalid": "L'adreça electrònica introduïda no és vàlida"
+            "emailInvalid": "L'adreça electrònica introduïda no és vàlida",
+            "taxIdInvalid": "El número no té un format vàlid per al país seleccionat"
           },
-          "emailHelper": "Adreça electrònica que faràs servir per accedir"
+          "emailHelper": "Adreça electrònica que faràs servir per accedir",
+          "taxIdCountry": "País emissor del document",
+          "taxIdCountryHelper": "País que va emetre la teva identificació fiscal"
         },
         "individual": {
           "firstName": "Nom",
@@ -1381,7 +1385,12 @@
           "open": "Obre el menú d'administració"
         }
       },
+      "landing": {
+        "title": "Administració",
+        "subtitle": "Accedeix ràpidament a les diferents seccions de gestió de la plataforma."
+      },
       "home": {
+        "description": "Tria què es mostra a la portada.",
         "tabs": {
           "hero": "Heroi",
           "highlights": "P. destacats"
