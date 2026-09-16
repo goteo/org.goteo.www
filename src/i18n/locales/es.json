@@ -1406,7 +1406,7 @@
             "endDatePlaceholder": "Indica la fecha de fin",
             "mediaTitle": "Hora de subir las imágenes",
             "mediaLabel": "Imagen 01",
-            "mediaHint": "Sube una imagen o vídeo",
+            "mediaHint": "Sube una imagen o vídeo (opcional)",
             "mediaAdd": "Añade imagen"
           }
         },

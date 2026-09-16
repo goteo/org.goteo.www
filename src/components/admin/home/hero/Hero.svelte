@@ -54,10 +54,32 @@
         media = files[0];
     }
 
+    function validate(data: FormData): boolean {
+        const errors: FieldErrors = {};
+
+        if (!String(data.get("title") ?? "").trim()) {
+            errors.title = "system.constraint.text.notEmpty";
+        }
+
+        if (!String(data.get("content") ?? "").trim()) {
+            errors.content = "system.constraint.text.notEmpty";
+        }
+
+        fieldErrors = errors;
+
+        return Object.keys(errors).length === 0;
+    }
+
     async function submit() {
         fieldErrors = {};
 
-        const { error } = await actions.createHomeHero(new FormData(formElement));
+        const data = new FormData(formElement);
+
+        if (!validate(data)) {
+            return;
+        }
+
+        const { error } = await actions.createHomeHero(data);
 
         if (error) {
             if (!isInputError(error)) {
@@ -183,9 +205,27 @@
                 {/if}
             {/if}
 
-            <Button kind="secondary" size="sm" class="w-fit" onclick={() => (isUploadOpen = true)}>
-                {$t("pages.admin.home.hero.fields.mediaAdd")}
-            </Button>
+            <div class="flex flex-wrap gap-4">
+                <Button
+                    kind="secondary"
+                    size="sm"
+                    class="w-fit"
+                    onclick={() => (isUploadOpen = true)}
+                >
+                    {$t("pages.admin.home.hero.fields.mediaAdd")}
+                </Button>
+
+                {#if media}
+                    <Button
+                        kind="ghost"
+                        size="sm"
+                        class="w-fit"
+                        onclick={() => (media = undefined)}
+                    >
+                        {$t("common.remove")}
+                    </Button>
+                {/if}
+            </div>
         </div>
 
         <input type="hidden" name="mediaUrl" value={media?.url ?? ""} />

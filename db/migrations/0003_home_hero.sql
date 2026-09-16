@@ -15,30 +15,3 @@ CREATE TABLE
         ends_at INTEGER NOT NULL,
         date_created INTEGER NOT NULL
     );
-
--- Default hero (image only) until an admin schedules one;
-INSERT INTO
-    home_hero (
-        title,
-        content,
-        media_url,
-        media_type,
-        starts_at,
-        ends_at,
-        date_created
-    )
-SELECT
-    '',
-    '',
-    '/images/home/hero.png',
-    'image/png',
-    0,
-    253402300799000,
-    0 -- ends 9999-12-31
-WHERE
-    NOT EXISTS (
-        SELECT
-            1
-        FROM
-            home_hero
-    );
