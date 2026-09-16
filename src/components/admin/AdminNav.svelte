@@ -1,9 +1,8 @@
 <script lang="ts">
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
-    import { locale, t } from "../../i18n/store";
-
     import { ADMIN_SECTIONS } from "./adminSections";
+    import { locale, t } from "../../i18n/store";
 
     interface Props {
         class?: ClassNameValue;

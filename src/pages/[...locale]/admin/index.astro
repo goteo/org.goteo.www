@@ -35,7 +35,7 @@ const sections = ADMIN_SECTIONS.map((section) => ({
                 <ul class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {
                         sections.map((section) => (
-                            <li class="border-grey bg-white flex flex-col rounded-4xl border shadow-sm transition-shadow hover:shadow-md">
+                            <li class="border-grey flex flex-col rounded-4xl border bg-white shadow-sm transition-shadow hover:shadow-md">
                                 <a
                                     href={section.href}
                                     class={twMerge(
