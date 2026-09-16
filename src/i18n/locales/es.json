@@ -334,7 +334,8 @@
     "header": {
       "search": "Buscar",
       "createProject": "Crea tu proyecto",
-      "goToProfile": "Ir a Perfil"
+      "goToProfile": "Ir a Perfil",
+      "admin": "Administración"
     },
     "footer": {
       "funding": {
@@ -1384,7 +1385,12 @@
           "open": "Abrir menú de administración"
         }
       },
+      "landing": {
+        "title": "Administración",
+        "subtitle": "Accede rápidamente a las distintas secciones de gestión de la plataforma."
+      },
       "home": {
+        "description": "Elige qué se muestra en la portada.",
         "tabs": {
           "hero": "Hero",
           "highlights": "P. Destacados"
