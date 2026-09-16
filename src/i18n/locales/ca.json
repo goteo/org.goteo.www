@@ -38,14 +38,15 @@
       "_invalid_type": "",
       "_too_big": "",
       "too_small": "\"{{ value }}\" és massa curt: s'esperen {{ min }} caràcters o més.",
-      "invalid_format": "\"{{ value }}\" té un format incorrecte: no s'ajusta al patró regex `{{ pattern }}`.",
+      "invalid_format": "\"{{ value }}\" té un format incorrecte: no s'ajusta al format `{{ format }}`.",
       "_not_multiple_of": "",
       "_unrecognized_keys": "",
       "_invalid_union": "",
       "_invalid_key": "",
       "_invalid_element": "",
       "_invalid_value": "",
-      "missingRequiredFields": "Un o més camps obligatoris estan buits",
+      "requiredField": "Aquest camp és obligatori",
+      "requiredFields": "Un o més camps obligatoris estan buits",
       "project": {
         "terms": {
           "required": "Has d'acceptar les condicions de l'impulsor i les bases de la convocatòria"
@@ -412,9 +413,9 @@
         "description": "Pàgina de checkout"
       },
       "subtitle": "Et mostrem les que has seleccionat, prem el botó \"continuar\" per pagar.",
-      "decrement": "Reducir cantidad",
-      "increment": "Aumentar cantidad",
-      "remove": "Eliminar del carrito",
+      "decrement": "Redueix la quantitat",
+      "increment": "Augmenta la quantitat",
+      "remove": "Elimina del carretó",
       "reward": {
         "claimed": "{{ units }} persones ja han reclamat aquesta recompensa",
         "unclaimed": "Encara ningú ha reclamat aquesta recompensa. Fes-ho tu primer!"
@@ -829,16 +830,18 @@
             "title": "Afegeix recompenses",
             "description": "Descriu la recompensa que ofereixes",
             "unitsExisting": "Nombre d'unitats existents",
-            "placeholders": {
-              "title": "Títol de la recompensa",
-              "description": "Descripció de la recompensa",
-              "moneyAmount": "Preu",
-              "files": "Fes clic o arrossega aquí el teu fitxer per pujar-lo"
-            },
-            "validation": {
-              "title": "El títol no pot estar buit",
-              "description": "La descripció no pot estar buida",
-              "amount": "L'import ha de ser superior a zero"
+            "form": {
+              "titleLabel": "Títol de la recompensa",
+              "titlePlaceholder": "Samarreta personalitzada",
+              "titleHelper": "El títol es mostrarà a totes les targetes d'aquesta recompensa",
+              "descriptionLabel": "Descripció de la recompensa",
+              "descriptionPlaceholder": "Una samarreta de cotó amb el logotip del projecte sublimat al pit.",
+              "descriptionHelper": "La descripció pot contenir text enriquit, però es retallarà en targetes petites",
+              "moneyLabel": "Preu",
+              "moneyHelper": "Indica la donació mínima que cal fer per reclamar aquesta recompensa",
+              "coverLabel": "Portada",
+              "coverPlaceholder": "Fes clic o arrossega aquí el teu fitxer per pujar-lo",
+              "coverHelper": "Aquest fitxer serà la portada de la teva recompensa"
             }
           },
           "deleteModal": {
@@ -1380,31 +1383,31 @@
       },
       "home": {
         "tabs": {
-          "hero": "Hero",
+          "hero": "Heroi",
           "highlights": "P. destacats"
         },
         "hero": {
-          "title": "Hero",
-          "description": "El inicio de la portada, lo más importante.",
+          "title": "Heroi",
+          "description": "L'inici de la portada, el més important.",
           "errors": {
-            "forbidden": "No tienes permisos para gestionar el hero de la portada",
-            "invalidUrl": "La URL del enlace no es válida",
-            "invalidDateRange": "La fecha de fin no puede ser anterior a la de inicio"
+            "forbidden": "No tens permisos per gestionar el bloc hero de la portada",
+            "invalidUrl": "L'URL de l'enllaç no és vàlid",
+            "invalidDateRange": "La data de fi no pot ser anterior a la d'inici"
           },
           "fields": {
-            "textsTitle": "Textos del bloque",
-            "titlePlaceholder": "Titular del bloque",
-            "contentPlaceholder": "Breve texto introductorio",
-            "primaryCtaPlaceholder": "Call to action primario",
-            "secondaryCtaPlaceholder": "Call to action secundario",
+            "textsTitle": "Textos del bloc",
+            "titlePlaceholder": "Titular del bloc",
+            "contentPlaceholder": "Text introductori breu",
+            "primaryCtaPlaceholder": "Crida a l'acció primària",
+            "secondaryCtaPlaceholder": "Crida a l'acció secundària",
             "urlPlaceholder": "URL",
-            "scheduleTitle": "Programar la subida del bloque",
-            "startDatePlaceholder": "Indica la fecha de inicio",
-            "endDatePlaceholder": "Indica la fecha de fin",
-            "mediaTitle": "Hora de subir las imágenes",
-            "mediaLabel": "Imagen 01",
-            "mediaHint": "Sube una imagen o vídeo",
-            "mediaAdd": "Añade imagen"
+            "scheduleTitle": "Programa la pujada del bloc",
+            "startDatePlaceholder": "Indica la data d'inici",
+            "endDatePlaceholder": "Indica la data de fi",
+            "mediaTitle": "Hora de pujar les imatges",
+            "mediaLabel": "Imatge 01",
+            "mediaHint": "Puja una imatge o un vídeo",
+            "mediaAdd": "Afegeix una imatge"
           }
         },
         "highlights": {
@@ -1975,9 +1978,45 @@
         "createNew": "Crear un projecte"
       },
       "ownedProjects": {
-        "title": "Els teus projectes actius",
+        "title": "Els teus projectes",
+        "tabs": {
+          "draft": "Esborranys",
+          "inReview": "En revisió",
+          "funding": "En finançament",
+          "active": "Actius",
+          "archived": "Arxivats"
+        },
         "messageToDonatorsButton": "Missatge a donants",
-        "uploadNewsButton": "Pujar novetat"
+        "uploadNewsButton": "Pujar novetat",
+        "card": {
+          "tags": {
+            "draft": "Esborrany",
+            "readyToPublish": "A punt per publicar",
+            "reviewing": "En revisió",
+            "pendingReview": "Pendent de revisió",
+            "needsChanges": "Requereix canvis",
+            "rejected": "Rebutjat",
+            "campaignFailed": "Campanya fallida",
+            "campaignCancelled": "Campanya cancel·lada",
+            "fundingPaid": "Finançament conclòs"
+          },
+          "actions": {
+            "manage": "Gestiona el projecte",
+            "edit": "Edita el projecte",
+            "advisory": "Ves a assessorament",
+            "publish": "Publica el teu projecte",
+            "view": "Veure el projecte",
+            "sendToReview": "Enviar a revisió",
+            "viewReview": "Veure la revisió"
+          }
+        },
+        "emptyTab": {
+          "active": "No hi ha projectes actius",
+          "review": "No hi ha projectes en revisió",
+          "funding": "No hi ha projectes en finançament",
+          "draft": "No hi ha projectes en esborrany",
+          "archived": "No hi ha projectes arxivats"
+        }
       },
       "donatedProjects": {
         "title": "Projectes actius on has donat"
