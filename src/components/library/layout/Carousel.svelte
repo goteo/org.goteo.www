@@ -269,7 +269,7 @@
     let intersectionObs: IntersectionObserver | undefined;
     let resizeObs: ResizeObserver | undefined;
     let mutationObs: MutationObserver | undefined;
-    let mounted = false;
+    let mounted = $state(false);
     let programmaticScroll = false;
     let programmaticScrollTimeout: ReturnType<typeof setTimeout> | undefined;
 
