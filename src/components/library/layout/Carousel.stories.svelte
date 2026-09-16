@@ -76,6 +76,6 @@
     {/each}
 </Story>
 
-<Story name="Empty"></Story>
+<Story name="Empty" args={{ emptyMessage: "No items to display" }}></Story>
 
 <Story name="EmptyCustomMessage" args={{ emptyMessage: "Nothing here yet" }}></Story>
