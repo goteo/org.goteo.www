@@ -50,9 +50,6 @@ export const createHomeHero = defineAction({
             });
         }
 
-        // Without a new upload the hero keeps showing whatever media is live now.
-        const previous = input.mediaUrl ? null : await homeHeroRepository.getActive();
-
         await homeHeroRepository.create({
             title: input.title,
             content: input.content,
@@ -60,8 +57,8 @@ export const createHomeHero = defineAction({
             primaryCtaLink: input.primaryCtaLink || null,
             secondaryCtaText: input.secondaryCtaText || null,
             secondaryCtaLink: input.secondaryCtaLink || null,
-            mediaUrl: input.mediaUrl || previous?.mediaUrl || null,
-            mediaType: input.mediaType || previous?.mediaType || null,
+            mediaUrl: input.mediaUrl || null,
+            mediaType: input.mediaType || null,
             startsAt: input.startsAt,
             endsAt,
             dateCreated: new Date(),
