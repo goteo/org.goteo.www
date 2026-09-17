@@ -334,7 +334,8 @@
     "header": {
       "search": "Buscar",
       "createProject": "Crea tu proyecto",
-      "goToProfile": "Ir a Perfil"
+      "goToProfile": "Ir a Perfil",
+      "admin": "Administración"
     },
     "footer": {
       "funding": {
@@ -556,9 +557,12 @@
               "minLength": "*Requisitos de la contraseña: debe tener 8 caracteres"
             },
             "required": "Este campo es obligatorio",
-            "emailInvalid": "El email introducido no es válido"
+            "emailInvalid": "El email introducido no es válido",
+            "taxIdInvalid": "El número no tiene un formato válido para el país seleccionado"
           },
-          "emailHelper": "Email que usarás para acceder"
+          "emailHelper": "Email que usarás para acceder",
+          "taxIdCountry": "País emisor del documento",
+          "taxIdCountryHelper": "País que emitió tu identificación fiscal"
         },
         "individual": {
           "firstName": "Nombre",
@@ -1381,7 +1385,12 @@
           "open": "Abrir menú de administración"
         }
       },
+      "landing": {
+        "title": "Administración",
+        "subtitle": "Accede rápidamente a las distintas secciones de gestión de la plataforma."
+      },
       "home": {
+        "description": "Elige qué se muestra en la portada.",
         "tabs": {
           "hero": "Hero",
           "highlights": "P. Destacados"
