@@ -73,6 +73,9 @@
         "placeholder": "Search..."
       }
     },
+    "carousel": {
+      "empty": "No items to display"
+    },
     "filterComposer": {
       "title": "Custom filters",
       "addFilter": "Add filter",
