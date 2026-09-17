@@ -8,7 +8,7 @@
     import { zCreateCollabForm, zUpdateCollabForm } from "../../../validation/collabValidation";
     import Button from "../../library/buttons/Button.svelte";
     import DeleteModal from "../../library/feedback/DeleteModal.svelte";
-    import TextArea from "../../library/inputs/TextArea.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
     import TextInput from "../../library/inputs/TextInput.svelte";
     import Title from "../../library/typography/Title.svelte";
 
@@ -47,6 +47,8 @@
 
     let validation: Partial<Record<keyof typeof data, string>> = $state({});
 
+    const descriptionError = $derived(getValidationMessage("description"));
+
     function getValidationMessage(field: keyof typeof data): string {
         if (!validation[field]) {
             return "";
@@ -66,6 +68,8 @@
     }
 
     function handleDescription(newDescription: string) {
+        data.description = newDescription;
+
         const result =
             zApiProjectCollaborationsPostBody.shape.description.safeParse(newDescription);
 
@@ -117,7 +121,7 @@
         <p class="text-content line-clamp-1 overflow-hidden text-base font-normal text-ellipsis">
             {$t("pages.project.edit.collaborations.modal.description")}
         </p>
-        <div class="flex flex-col gap-4 pt-2">
+        <div class="flex flex-col gap-10 pt-2">
             <TextInput
                 bind:value={data.title}
                 labelText={$t("pages.project.edit.collaborations.modal.form.titleLabel")}
@@ -126,17 +130,23 @@
                 error={getValidationMessage("title")}
                 onInput={(title) => handleTitle(String(title))}
             />
-            <TextArea
-                rows={5}
-                bind:value={data.description!}
-                labelText={$t("pages.project.edit.collaborations.modal.form.descriptionLabel")}
-                helperText={$t("pages.project.edit.collaborations.modal.form.descriptionHelper")}
-                placeholder={$t(
-                    "pages.project.edit.collaborations.modal.form.descriptionPlaceholder",
-                )}
-                error={getValidationMessage("description")}
-                onInput={handleDescription}
-            />
+            <div class="flex flex-col gap-1">
+                <RichTextEditor
+                    id="description"
+                    format="markdown"
+                    value={data.description}
+                    onChange={handleDescription}
+                    placeholder={$t(
+                        "pages.project.edit.collaborations.modal.form.descriptionPlaceholder",
+                    )}
+                    labelText={$t("pages.project.edit.collaborations.modal.form.descriptionLabel")}
+                    error={descriptionError}
+                    ariaDescribedBy="description-helper"
+                />
+                <p class="text-content ml-4 text-xs" id="description-helper">
+                    {$t("pages.project.edit.collaborations.modal.form.descriptionHelper")}
+                </p>
+            </div>
         </div>
         <div class="flex items-center justify-end gap-4">
             {#if collab && onDelete}
