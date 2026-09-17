@@ -73,6 +73,9 @@
         "placeholder": "Cercar..."
       }
     },
+    "carousel": {
+      "empty": "No hi ha articles per mostrar"
+    },
     "filterComposer": {
       "title": "Filtres personalitzats",
       "addFilter": "Afegir filtre",
