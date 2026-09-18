@@ -147,7 +147,7 @@
                             title={$t("common.remove")}
                             action={() => handleImageRemove(cover)}
                             autoreset={1500}
-                            class="bg-variant1/90 disabled:bg-variant1/90 absolute top-2 right-2 z-10 size-8 rounded-full p-0 shadow-lg backdrop-blur-sm transition-all duration-200 hover:ring-1 hover:ring-secondary hover:ring-offset-2 hover:outline-none"
+                            class="bg-variant1/90 disabled:bg-variant1/90 hover:ring-secondary absolute top-2 right-2 z-10 size-8 rounded-full p-0 shadow-lg backdrop-blur-sm transition-all duration-200 hover:ring-1 hover:ring-offset-2 hover:outline-none"
                         >
                             <CloseIcon width="16" height="16" class="text-secondary" />
                             {#snippet actionedChildren()}
