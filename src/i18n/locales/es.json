@@ -873,6 +873,14 @@
           "modal": {
             "title": "Añade colaboraciones",
             "description": "Indica el tipo de colaboración que necesitas",
+            "form": {
+              "titleLabel": "Título de la colaboración",
+              "titlePlaceholder": "Título de la colaboración",
+              "titleHelper": "El título se mostrará en todas las tarjetas de esta colaboración",
+              "descriptionLabel": "Descripción de la colaboración",
+              "descriptionPlaceholder": "Descripción de la colaboración",
+              "descriptionHelper": "La descripción puede contener texto enriquecido, pero se truncará en las tarjetas pequeñas"
+            },
             "placeholders": {
               "title": "Título de la colaboración",
               "description": "Descripción de la colaboración"
