@@ -34,10 +34,7 @@
     let { lang, period, user }: Props = $props();
 
     let summary = $state<ProjectsSummary | undefined>(undefined);
-    let projectsPromise = $state<Promise<ProjectsSummary | undefined>>(
-        Promise.resolve(undefined),
-    );
-
+    let projectsPromise = $state<Promise<ProjectsSummary | undefined>>(Promise.resolve(undefined));
 
     // Determine if this card has data
     const hasData = $derived(!!(summary && summary.count > 0));
@@ -228,12 +225,11 @@
                         <span class="text-tertiary text-sm italic">
                             {project.title}
                         </span>
-                        {/if}
-                    </li>
-                {/each}
-            {/if}
-        </BaseActivityCard>
-
+                    {/if}
+                </li>
+            {/each}
+        {/if}
+    </BaseActivityCard>
 {:catch projectsError}
     <div class="border-grey flex min-h-96 items-center justify-center rounded-4xl border bg-white">
         <p class="text-tertiary font-semibold">{projectsError.message}</p>

@@ -36,8 +36,9 @@
     let { lang, period, user }: Props = $props();
 
     let summary = $state<DonationsSummary | undefined>(undefined);
-    let donationsPromise
- = $state<Promise<DonationsSummary | undefined>>(Promise.resolve(undefined));
+    let donationsPromise = $state<Promise<DonationsSummary | undefined>>(
+        Promise.resolve(undefined),
+    );
 
     const fallbackProjectTitle = $derived(lang === "es" ? "Proyecto" : "Project");
 
@@ -90,10 +91,10 @@
                 console.warn("money_total endpoint failed, will calculate manually:", err);
             }
 
-                if (supportsError) {
-                    console.error("Failed to fetch contributions:", supportsError);
-                    throw new Error("Failed to load donation data");
-                }
+            if (supportsError) {
+                console.error("Failed to fetch contributions:", supportsError);
+                throw new Error("Failed to load donation data");
+            }
 
             const contributions = toCollectionItems<ProjectSupport>(supportsResponse);
             const contributionsCount = Array.isArray(supportsResponse)
@@ -311,4 +312,3 @@
         <p class="text-tertiary font-semibold">{donationsError}</p>
     </div>
 {/await}
-
