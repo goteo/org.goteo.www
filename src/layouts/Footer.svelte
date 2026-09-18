@@ -6,6 +6,7 @@
     import Instagram from "../components/icons/social/Instagram.svelte";
     import Linkedin from "../components/icons/social/Linkedin.svelte";
     import X from "../components/icons/social/X.svelte";
+    import Title from "../components/library/typography/Title.svelte";
     import { t } from "../i18n/store";
 </script>
 
@@ -21,12 +22,14 @@
             >
                 <!-- Funding Partners -->
                 <div class="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
-                    <h3
+                    <Title
+                        level={3}
+                        variant="field"
+                        color="secondary"
                         id="funding-partners-heading"
-                        class="text-secondary text-sm font-bold sm:text-base"
                     >
-                        {$t("footer.funding.title")}
-                    </h3>
+                        {$t("common.footer.funding.title")}
+                    </Title>
                     <div
                         class="flex items-center gap-4"
                         role="list"
@@ -51,9 +54,9 @@
 
                 <!-- Part Of Section -->
                 <div class="flex flex-col gap-3 md:flex-row md:items-center md:gap-4">
-                    <h3 class="text-secondary text-sm font-medium sm:text-base">
-                        {$t("footer.funding.partOf")}
-                    </h3>
+                    <Title level={3} variant="field" color="secondary" weight="medium">
+                        {$t("common.footer.funding.partOf")}
+                    </Title>
                     <div
                         class="flex items-center gap-2 sm:gap-3"
                         role="list"
@@ -113,23 +116,23 @@
 
                         <!-- Collaborate -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {$t("footer.navigation.collaborate.title")}
-                            </h4>
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
+                                {$t("common.footer.navigation.collaborate.title")}
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/create-project">
-                                        {$t("footer.navigation.collaborate.createProject")}
+                                        {$t("common.footer.navigation.collaborate.createProject")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/matchfunding">
-                                        {$t("footer.navigation.collaborate.matchfunding")}
+                                        {$t("common.footer.navigation.collaborate.matchfunding")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/workshops">
-                                        {$t("footer.navigation.collaborate.workshops")}
+                                        {$t("common.footer.navigation.collaborate.workshops")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -137,23 +140,23 @@
 
                         <!-- Help -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {$t("footer.navigation.help.title")}
-                            </h4>
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
+                                {$t("common.footer.navigation.help.title")}
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/faqs">
-                                        {$t("footer.navigation.help.faqs")}
+                                        {$t("common.footer.navigation.help.faqs")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/contact">
-                                        {$t("footer.navigation.help.contact")}
+                                        {$t("common.footer.navigation.help.contact")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/tax-calculator">
-                                        {$t("footer.navigation.help.taxCalculator")}
+                                        {$t("common.footer.navigation.help.taxCalculator")}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -161,28 +164,30 @@
 
                         <!-- About Goteo -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {$t("footer.navigation.aboutGoteo.title")}
-                            </h4>
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
+                                {$t("common.footer.navigation.aboutGoteo.title")}
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/about">
-                                        {$t("footer.navigation.aboutGoteo.whoWeAre")}
+                                        {$t("common.footer.navigation.aboutGoteo.whoWeAre")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/benefits">
-                                        {$t("footer.navigation.aboutGoteo.goteoBenefits")}
+                                        {$t("common.footer.navigation.aboutGoteo.goteoBenefits")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/impact">
-                                        {$t("footer.navigation.aboutGoteo.foundationImpact")}
+                                        {$t("common.footer.navigation.aboutGoteo.foundationImpact")}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/platoniq">
-                                        {$t("footer.navigation.aboutGoteo.platoniqFoundation")}
+                                        {$t(
+                                            "common.footer.navigation.aboutGoteo.platoniqFoundation",
+                                        )}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -190,28 +195,38 @@
 
                         <!-- For Users -->
                         <div class="space-y-2">
-                            <h4 class="text-purple-soft text-sm leading-6 font-bold sm:text-base">
-                                {$t("footer.navigation.forUsers.title")}
-                            </h4>
+                            <Title level={4} variant="field" color="purple-soft" class="leading-6">
+                                {$t("common.footer.navigation.forUsers.title")}
+                            </Title>
                             <ul class="space-y-1 text-xs leading-5 sm:text-sm sm:leading-6">
                                 <li>
                                     <FooterLink href="/wallet">
-                                        {$t("footer.navigation.forUsers.rechargeWallet")}
+                                        {$t("common.footer.navigation.forUsers.rechargeWallet")}
                                     </FooterLink>
                                 </li>
+                                <!-- GOTEO-OC-DONATION-CERTIFICATE: "Descarga certificado" link is exclusive to
+                                     the donation-certificate feature of Goteo under Fundación Platoniq, hidden
+                                     in the open-core. Re-enable when a feature toggle exists. Do not delete.
                                 <li>
                                     <FooterLink href="/certificate">
-                                        {$t("footer.navigation.forUsers.downloadCertificate")}
+                                        {$t(
+                                            "common.footer.navigation.forUsers.downloadCertificate",
+                                        )}
                                     </FooterLink>
                                 </li>
+                                -->
                                 <li>
                                     <FooterLink href="/funds">
-                                        {$t("footer.navigation.forUsers.accessComplementaryFunds")}
+                                        {$t(
+                                            "common.footer.navigation.forUsers.accessComplementaryFunds",
+                                        )}
                                     </FooterLink>
                                 </li>
                                 <li>
                                     <FooterLink href="/program">
-                                        {$t("footer.navigation.forUsers.designFundingProgram")}
+                                        {$t(
+                                            "common.footer.navigation.forUsers.designFundingProgram",
+                                        )}
                                     </FooterLink>
                                 </li>
                             </ul>
@@ -249,16 +264,16 @@
                     >
                         <h3 id="footer-bottom-heading" class="sr-only">Legal and Social Links</h3>
                         <FooterLink href="/terms" class="text-xs leading-4 font-medium">
-                            {$t("footer.legal.termsOfUse")}
+                            {$t("common.footer.legal.termsOfUse")}
                         </FooterLink>
                         <FooterLink href="/privacy" class="text-xs leading-4 font-medium">
-                            {$t("footer.legal.privacyPolicy")}
+                            {$t("common.footer.legal.privacyPolicy")}
                         </FooterLink>
                         <FooterLink href="/licenses" class="text-xs leading-4 font-medium">
-                            {$t("footer.legal.licenses")}
+                            {$t("common.footer.legal.licenses")}
                         </FooterLink>
                         <FooterLink href="/stats" class="text-xs leading-4 font-medium">
-                            {$t("footer.legal.stats")}
+                            {$t("common.footer.legal.stats")}
                         </FooterLink>
                     </nav>
 
@@ -316,7 +331,7 @@
                                 loading="lazy"
                             />
                             <div class="text-xs leading-normal font-light sm:text-sm">
-                                {$t("footer.platoniq.foundation")}
+                                {$t("common.footer.platoniq.foundation")}
                             </div>
                         </div>
                     </div>

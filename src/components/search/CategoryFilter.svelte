@@ -7,17 +7,17 @@ Implements active/inactive pill states matching Figma design
     import { locale, t } from "../../i18n/store";
     import {
         apiCategoriesGetCollection,
-        apiCategoriesIdGet,
+        apiCategoriesIdOrSlugGet,
         type Category,
     } from "../../openapi/client";
     import { extractId } from "../../utils/extractId";
     import CategorySelect from "../library/inputs/CategorySelect.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     interface Props {
         selectedCategories?: string[];
         onCategoryChange?: (categories: string[]) => void;
         showLabel?: boolean;
-        "data-testid"?: string;
     }
 
     let { selectedCategories = [], onCategoryChange, showLabel = true }: Props = $props();
@@ -42,9 +42,9 @@ Implements active/inactive pill states matching Figma design
     }
 
     async function getCategory(iri: string): Promise<Category> {
-        const { data: category } = await apiCategoriesIdGet({
+        const { data: category } = await apiCategoriesIdOrSlugGet({
             headers: { "Accept-Language": $locale },
-            path: { id: extractId(iri) || iri },
+            path: { idOrSlug: extractId(iri) || iri },
         });
 
         return category!;
@@ -53,17 +53,17 @@ Implements active/inactive pill states matching Figma design
 
 <div class="w-full">
     {#if showLabel}
-        <h3 class="font-body mb-6 text-base font-bold text-black">
+        <Title level={3} variant="field" class="font-body mb-6">
             {$t("pages.search.filters.categoryLabel")}
-        </h3>
+        </Title>
     {/if}
 
     {#await categories then categories}
         <CategorySelect
             bind:selected
-            selectedIds={selected.map((s) => s.id)}
+            selectedIds={selected.map((s) => s.id!)}
             options={categories}
-            onchange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
+            onChange={(selected) => onCategoryChange?.(selected.map((o) => `${o.id}`))}
         />
     {/await}
 

@@ -4,7 +4,7 @@ import { getSession, isExpired } from "../../../auth/session";
 
 const wantsCallback = Astro.url.searchParams.get("callback");
 if (wantsCallback) {
-    Astro.cookies.delete("callback");
+    Astro.cookies.delete("callback", { path: "/" });
     Astro.cookies.set("callback", wantsCallback, { path: "/" });
 }
 
@@ -23,8 +23,13 @@ oauth2Authorize.searchParams.set("scope", "email");
 const csrf = new CSRF();
 const csrfToken = csrf.create(import.meta.env.OAUTH2_CLIENT_SECRET);
 
-Astro.cookies.delete("oauth-csrf");
-Astro.cookies.set("oauth-csrf", csrfToken);
+Astro.cookies.delete("oauth-csrf", { path: "/" });
+Astro.cookies.set("oauth-csrf", csrfToken, {
+    path: "/",
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+});
 oauth2Authorize.searchParams.set("state", csrfToken);
 
 return Astro.redirect(oauth2Authorize);

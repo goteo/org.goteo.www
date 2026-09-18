@@ -1,3 +1,7 @@
+// This config runs in Node, outside Astro, so nothing has loaded `.env` yet. It must come
+// before the import below: `consts.ts` reads the environment as it is evaluated.
+import "dotenv/config";
+
 import { defineConfig } from "@hey-api/openapi-ts";
 import { defaultPlugins } from "@hey-api/openapi-ts";
 
@@ -20,7 +24,17 @@ export default defineConfig({
         {
             name: "@hey-api/typescript",
             enums: "javascript",
-            readOnlyWriteOnlyBehavior: "off",
+        },
+        {
+            name: "zod",
+            requests: true,
         },
     ],
+    parser: {
+        transforms: {
+            readWrite: {
+                enabled: false,
+            },
+        },
+    },
 });

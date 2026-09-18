@@ -3,126 +3,199 @@
 
     First step of the project setup wizard.
     Handles:
+    - Campaign content languages
     - Categories (up to 2)
+    - Campaign release date
     - Funding rounds (1 or 2)
 
     Validation:
     - Funding rounds defaults to 1
 -->
 <script lang="ts">
-    import { onMount } from "svelte";
-
+    import LanguageSelector from "./LanguageSelector.svelte";
     import RoundSelector from "./RoundSelector.svelte";
     import CategorySelect from "../../../components/library/inputs/CategorySelect.svelte";
+    import DateInput from "../../../components/library/inputs/DateInput.svelte";
     import { locale, t } from "../../../i18n/store";
+    import { withoutCache } from "../../../openapi/cacheInterceptor";
     import { apiCategoriesGetCollection } from "../../../openapi/client";
     import { client } from "../../../openapi/client/client.gen";
-    import { apiCategoriesIdGetUrl } from "../../../openapi/client/paths.gen";
-    import {
-        currentDraft,
-        navigateToStep,
-        updateConfiguration,
-        updateProject,
-    } from "../../../stores/drafts/projectDraft";
+    import { apiCategoriesIdOrSlugGetUrl } from "../../../openapi/client/operation-paths.gen";
+    import { extractId } from "../../../utils/extractId";
     import { toCollectionItems } from "../../../utils/hydra";
     import Button from "../../library/buttons/Button.svelte";
+    import Title from "../../library/typography/Title.svelte";
 
     import type { Category, Project } from "../../../openapi/client";
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
 
     interface ConfigurationStepProps {
-        project?: Project;
+        draft: ProjectDraftStore;
         onContinue?: () => void;
     }
 
-    let { project, onContinue }: ConfigurationStepProps = $props();
-    let allCategories = $state<Category[]>([]);
-    let selectedCategoryIds = $state<(number | string)[]>(
-        (project?.categories ?? []).map((iri: string) => iri.split("/").pop() ?? ""),
-    );
-
-    onMount(async () => {
-        const { data } = await apiCategoriesGetCollection({
-            baseUrl: "/api/relay",
-            headers: { "Accept-Language": $locale },
-        });
-        allCategories = toCollectionItems<Category>(data);
-    });
-
-    let projectDeadline = $derived(
-        $currentDraft?.wizardForm.configuration.projectDeadline ?? "minimum",
-    );
+    let { draft, onContinue }: ConfigurationStepProps = $props();
 
     /**
      * Handle Continue button
      * Simple navigation to next step (2) - validation happens on save/submit
      */
     function handleContinue() {
-        navigateToStep(2);
+        // navigateToStep(2);
         if (onContinue) {
             onContinue();
         }
     }
 
+    function handleLanguagesChange(languages: string[]) {
+        draft.setLanguages(languages);
+    }
+
+    let allCategories = $derived.by(async () => {
+        const { data } = await withoutCache(() =>
+            apiCategoriesGetCollection({
+                baseUrl: "/api/relay",
+                headers: { "Accept-Language": $locale },
+            }),
+        );
+
+        return toCollectionItems<Category>(data);
+    });
+
+    let categories = $derived($draft.latest.categories.map((c) => extractId(c)!));
+
+    function handleCategoryChange(selected: Category[]) {
+        draft.patch({
+            categories: selected.map((s) => {
+                return client.buildUrl({
+                    url: apiCategoriesIdOrSlugGetUrl,
+                    path: { idOrSlug: s.id },
+                });
+            }),
+        });
+    }
+
+    let release = $derived(new Date($draft.latest.calendar?.release || new Date()));
+
+    const releaseDisabled = $derived.by(() => {
+        return !["in_draft", "in_campaign_review.to_change"].includes($draft.latest.status!);
+    });
+
+    const releaseMinimum = $derived.by(() => {
+        if (releaseDisabled) {
+            return;
+        }
+
+        const dateMin = new Date();
+        dateMin.setDate(dateMin.getDate() + 14);
+
+        return dateMin;
+    });
+
+    /**
+     * Handle release date change
+     */
+    function handleReleaseChange(date: Date) {
+        draft.patch({ calendar: { release: date.toISOString() } });
+    }
+
+    let deadline = $derived($draft.latest.deadline || "minimum");
+
     /**
      * Handle funding rounds change
      */
-    function handleRoundsChange(projectDeadline: "minimum" | "optimum") {
-        updateConfiguration({ projectDeadline });
-    }
-
-    /**
-     * Handle category selection change
-     *
-     */
-    function handleCategoryChange(selected: Category[]) {
-        const categoryIris = selected.map((s) => {
-            return client.buildUrl({ url: apiCategoriesIdGetUrl, path: { id: s.id } });
-        });
-
-        updateProject({ categories: categoryIris });
+    function handleRoundsChange(deadline: Project["deadline"]) {
+        draft.patch({ deadline });
     }
 </script>
 
 <div class="space-y-8">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-[2.5rem]/12 font-bold text-black">
+        <Title level={1} variant="headline">
             {$t("pages.project.edit.configuration.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base font-normal">
             {$t("pages.project.edit.configuration.subtitle")}
         </p>
     </div>
 
-    <!-- Categories Section -->
+    <!-- Languages Section -->
     <div class="space-y-4">
         <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-black">
-                {$t("pages.project.create.categories.title")}
-            </h2>
-            <p class="text-black transition-all duration-300 ease-in-out">
-                {$t("pages.project.create.categories.subtitle")}
+            <Title level={2} variant="subsection">
+                {$t("pages.project.edit.configuration.languages.title")}
+            </Title>
+            <p class="text-content text-base font-normal">
+                {$t("pages.project.edit.configuration.languages.description")}
             </p>
         </div>
-        <CategorySelect
-            max={2}
-            options={allCategories}
-            bind:selectedIds={selectedCategoryIds}
-            onchange={handleCategoryChange}
+        <div class="max-w-167">
+            <LanguageSelector
+                languages={$draft.languages}
+                current={$draft.lang}
+                onChange={handleLanguagesChange}
+            />
+        </div>
+    </div>
+
+    <!-- Categories Section -->
+    {#await allCategories then options}
+        {#if options.length > 0}
+            <div class="space-y-4">
+                <div class="space-y-4">
+                    <Title level={2} variant="subsection">
+                        {$t("pages.project.create.categories.title")}
+                    </Title>
+                    <p class="text-black transition-all duration-300 ease-in-out">
+                        {$t("pages.project.create.categories.subtitle")}
+                    </p>
+                </div>
+                <CategorySelect
+                    max={2}
+                    {options}
+                    bind:selectedIds={categories}
+                    onChange={handleCategoryChange}
+                />
+            </div>
+        {/if}
+    {/await}
+
+    <!-- Release Date Section -->
+    <div class="space-y-4">
+        <div class="space-y-4">
+            <Title level={2} variant="subsection">
+                {$t("pages.project.edit.configuration.release.title")}
+            </Title>
+            <p class="text-content text-base font-normal">
+                {#if releaseDisabled}
+                    {$t("pages.project.edit.configuration.release.passed")}
+                {:else}
+                    {$t("pages.project.edit.configuration.release.subtitle")}
+                {/if}
+            </p>
+        </div>
+        <DateInput
+            name="release"
+            class="max-w-167"
+            bind:value={release}
+            min={releaseMinimum}
+            disabled={releaseDisabled}
+            onInput={handleReleaseChange}
         />
     </div>
 
     <!-- Funding Rounds Section -->
     <div class="space-y-6">
         <div class="space-y-4">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t("pages.project.edit.configuration.rounds.title")}
-            </h2>
+            </Title>
             <p class="text-content text-base font-normal">
                 {$t("pages.project.edit.configuration.rounds.description")}
             </p>
         </div>
-        <RoundSelector bind:deadline={projectDeadline} onChange={handleRoundsChange} />
+        <RoundSelector bind:deadline onChange={handleRoundsChange} />
     </div>
 
     <!-- Continue Button -->

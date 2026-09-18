@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { onMount, untrack } from "svelte";
 
     import { t } from "../../../i18n/store.ts";
     import LineIcon from "../../icons/LineIcon.svelte";
@@ -27,7 +27,8 @@
         content,
     }: Props = $props();
 
-    let isCollapsed = $state(isInitiallyCollapsed);
+    // Seeds the local state once; later toggles are owned by this component.
+    let isCollapsed = $state(untrack(() => isInitiallyCollapsed));
 
     function toggleCollapse() {
         isCollapsed = !isCollapsed;

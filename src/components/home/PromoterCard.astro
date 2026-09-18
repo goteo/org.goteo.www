@@ -1,6 +1,5 @@
 ---
 import type { Promoter } from "../../types/promoter";
-import ShareIcon from "../icons/actions/Share.svelte";
 
 export interface Props {
     promoter: Promoter;
@@ -71,6 +70,7 @@ const { t } = Astro.locals;
     </div>
 
     <!-- Share button -->
+    <!-- Re-add `import ShareIcon from "../icons/actions/Share.svelte"` when enabling this. -->
     <!-- <button
         class="bg-white border-grey absolute top-[325px] right-6 flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:bg-white hover:shadow-lg"
         aria-label={t("pages.home.featuredPromoters.shareProfile", { name: promoter.name })}

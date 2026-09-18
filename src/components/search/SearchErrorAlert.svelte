@@ -43,9 +43,9 @@ Displays basic error messages with retry functionality
 
             <!-- Error Content -->
             <div class="min-w-0 flex-1">
-                <h3 class="text-sm font-medium text-red-800">
+                <span class="text-sm font-medium text-red-800">
                     {$t("pages.search.error.title")}
-                </h3>
+                </span>
                 <p class="mt-1 text-sm text-red-700">
                     {error}
                 </p>

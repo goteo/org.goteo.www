@@ -19,7 +19,8 @@ const defaultOptions: RedirectOptions = {
 
 export function goto(target: URL | string, options: RedirectOptions = defaultOptions): Response {
     const status = options.type === "permanent" ? 301 : 302;
-    const query = options.query ? "?" + options.query.toString() : "";
+    const params = options.query ? new URLSearchParams(options.query).toString() : "";
+    const query = params ? `?${params}` : "";
 
     return new Response(null, { status, headers: { Location: target + query } });
 }

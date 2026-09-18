@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Snippet } from "svelte";
 
@@ -51,13 +52,15 @@
 
         /**
          * Secondary action button label translation key
+         * Optional: hidden when empty (used to disable the donation-certificate button in the open-core).
          */
-        secondaryActionLabel: string;
+        secondaryActionLabel?: string;
 
         /**
          * Secondary action button href
+         * Optional: hidden when empty (used to disable the donation-certificate button in the open-core).
          */
-        secondaryActionHref: string;
+        secondaryActionHref?: string;
 
         /**
          * Whether the card is in empty state
@@ -126,9 +129,9 @@
 
         <!-- Content - centered and takes up available space -->
         <div class="relative z-10 flex grow flex-col items-center justify-center gap-1 text-center">
-            <h2 class="text-2xl font-bold text-black">
+            <Title level={2} variant="subsection">
                 {$t(titleKey)}
-            </h2>
+            </Title>
             {#if emptyMessageKey}
                 <p class="text-content text-base">
                     {$t(emptyMessageKey)}
@@ -195,9 +198,9 @@
 
         <!-- Recent items list -->
         <div class="relative z-10 mb-4 flex min-h-30 flex-grow flex-col gap-3">
-            <h3 class="text-base font-bold text-black">
+            <Title level={3} variant="field">
                 {$t(recentTitleKey)}
-            </h3>
+            </Title>
             <ul class="flex flex-col gap-2">
                 {@render children?.()}
             </ul>
@@ -211,12 +214,14 @@
             >
                 <span class="truncate whitespace-nowrap">{$t(primaryActionLabel)}</span>
             </a>
+            <!-- GOTEO-OC-DONATION-CERTIFICATE: secondary action (donation certificate) hidden in the
+                 open-core; re-enable with the button when the feature toggle exists. Do not delete.
             <a
                 href={secondaryActionHref}
                 class="bg-variant1 text-secondary focus:ring-secondary flex grow items-center justify-center gap-2 overflow-hidden rounded-3xl px-6 py-3 text-sm font-bold no-underline transition-opacity hover:opacity-90 focus:ring-2 focus:outline-none md:py-4 md:text-base"
             >
                 <span class="truncate whitespace-nowrap">{$t(secondaryActionLabel)}</span>
-            </a>
+            </a> -->
         </div>
     </div>
 {/if}

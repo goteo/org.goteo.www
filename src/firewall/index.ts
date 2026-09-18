@@ -46,7 +46,9 @@ function matchesPath(pathname: string, path: string): boolean {
 
     // Dynamic regex route
     if (isValidRegex(path)) {
-        return getRegex(path).test(pathname);
+        if (getRegex(path).test(pathname)) {
+            return true;
+        }
     }
 
     // Nested routes

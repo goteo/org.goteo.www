@@ -10,10 +10,16 @@ import {
     updateCollaboration,
     updateReward,
 } from "./projectSubmissionApi";
+import { richTextToMarkdown } from "./richText";
 import { validateDraftToPublish } from "../stores/drafts/draftValidation";
 
 import type { Session } from "../auth/types";
-import type { ProjectBudgetItem, ProjectCollaboration, ProjectReward } from "../openapi/client";
+import type {
+    ProjectBudgetItem,
+    ProjectCollaboration,
+    ProjectProjectUpdationDto,
+    ProjectReward,
+} from "../openapi/client";
 import type { Draft, ProjectDraftResources } from "../stores/drafts/projectDraft";
 
 export class PublishValidationError extends Error {
@@ -139,14 +145,7 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
         },
     };
 
-    const description = [
-        wizard.campaignInfo.objectives,
-        wizard.campaignInfo.legacy,
-        wizard.campaignInfo.targetAudience,
-        wizard.campaignInfo.team,
-    ]
-        .filter(Boolean)
-        .join("\n\n");
+    const firstImage = wizard.campaignInfo.images[0];
 
     const result = await patchProject(
         projectId,
@@ -155,9 +154,14 @@ export async function publishDraft(draft: Draft, session: Session, projectId: st
             subtitle: draft.createProject.subtitle,
             categories: draft.createProject.categories,
             video: wizard.campaignInfo.video,
-            description,
-            deadline: wizard.configuration.projectDeadline,
-        },
+            descBrief: richTextToMarkdown(wizard.campaignInfo.brief),
+            descAbout: richTextToMarkdown(wizard.campaignInfo.about),
+            descGoal: richTextToMarkdown(wizard.campaignInfo.goal),
+            descTeam: richTextToMarkdown(wizard.campaignInfo.team),
+            deadline: wizard.configuration.deadline,
+            territory: draft.createProject.territory,
+            cover: firstImage?.url ?? "",
+        } as ProjectProjectUpdationDto & { cover?: string },
         session,
     );
 

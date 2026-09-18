@@ -3,14 +3,14 @@
 
     import ProjectCommunityAnonymous from "./ProjectCommunityAnonymous.svelte";
     import ProjectCommunityMatchfunding from "./ProjectCommunityMatchfunding.svelte";
-    import ProjectCommunityMatchfundingModal from "./ProjectCommunityMatchfundingModal.svelte";
     import ProjectCommunityMessage from "./ProjectCommunityMessage.svelte";
-    import ProjectCommunitySponsorModal from "./ProjectCommunitySponsorModal.svelte";
     import { t } from "../../i18n/store";
     import { apiProjectSupportsGetCollection } from "../../openapi/client/index";
+    import { formatCurrency } from "../../utils/currencies";
     import ActionableButton from "../library/buttons/ActionableButton.svelte";
     import Loader from "../library/feedback/Loader.svelte";
     import Grid from "../library/layout/Grid.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Accounting, Project, ProjectSupport } from "../../openapi/client/index";
 
@@ -68,7 +68,7 @@
             ? groupedItems.default
             : groupedItems.default?.slice(
                   0,
-                  PAGE_SIZE - 2 + Math.max(0, (currentPage - 1) * PAGE_SIZE),
+                  PAGE_SIZE - 1 + Math.max(0, (currentPage - 1) * PAGE_SIZE),
               ),
     );
 
@@ -93,9 +93,9 @@
             <Loader />
         </div>
     {:else}
-        <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
+        <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
             {$t("pages.project.view.tabs.community.content.title")}
-        </h2>
+        </Title>
         <div class="flex flex-col gap-6">
             {#if hasMatchfunding}
                 <Grid
@@ -115,12 +115,10 @@
             {#if groupedItems.default?.length}
                 <Grid class="grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {#if !hasMatchfunding}
-                        <div class="row-span-2 h-full">
-                            <ProjectCommunityAnonymous
-                                {project}
-                                currency={accounting.balance?.currency!}
-                            />
-                        </div>
+                        <ProjectCommunityAnonymous
+                            {project}
+                            currency={accounting.balance?.currency!}
+                        />
                     {/if}
                     {#each visibleDefaultItems as item (item.id)}
                         <ProjectCommunityMessage
@@ -145,15 +143,38 @@
 
 <Modal
     bind:open={openModal}
-    closeBtnClass="top-4 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
-    headerClass="py-2"
+    closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary  rounded-4xl hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
+    class="backdrop:bg-overlay fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 divide-y-0 bg-transparent backdrop:backdrop-blur-[5px]"
+    bodyClass="p-0"
 >
     {#if selectedProjectSupport}
-        {#if selectedProjectSupport.matchfunding}
-            <ProjectCommunityMatchfundingModal item={selectedProjectSupport} />
-        {:else}
-            <ProjectCommunitySponsorModal item={selectedProjectSupport} />
-        {/if}
+        <div
+            class="flex cursor-pointer flex-col gap-4 rounded-3xl bg-white p-8 shadow-lg"
+            onclick={(e) => e.stopPropagation()}
+            role="presentation"
+        >
+            <div class="flex flex-row items-center justify-between gap-4">
+                <div>
+                    <div class="flex h-16 w-16 items-center justify-center rounded-lg">😀</div>
+                </div>
+                <div class="flex flex-col items-end">
+                    <div class="font-bold text-black">
+                        {$t("pages.project.view.tabs.community.contribution")}
+                    </div>
+                    <p class="text-2xl font-bold text-black">
+                        {formatCurrency(
+                            selectedProjectSupport.money?.amount ?? 0,
+                            selectedProjectSupport.money?.currency ?? "undefined",
+                        )}
+                    </p>
+                </div>
+            </div>
+            <div class="text-2xl font-bold text-black">
+                {selectedProjectSupport.displayName}
+            </div>
+            <div class="text-content text-sm">
+                {selectedProjectSupport.message}
+            </div>
+        </div>
     {/if}
 </Modal>

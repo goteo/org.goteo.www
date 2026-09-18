@@ -9,7 +9,7 @@
         text?: string;
     }
 
-    let { class: classes = "", text = $t("global.btn.back") }: Props = $props();
+    let { class: classes = "", text = $t("common.back") }: Props = $props();
 
     function goBack() {
         window.history.back();

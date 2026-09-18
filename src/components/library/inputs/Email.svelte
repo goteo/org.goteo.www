@@ -11,7 +11,7 @@
         name?: string;
         id?: string;
         label?: string;
-        errorMessage?: string;
+        error?: string;
         isValid?: boolean;
         validate?: boolean;
     }
@@ -19,11 +19,11 @@
     let {
         class: classes = "",
         value = $bindable(""),
-        placeholder = $t("login.form.email"),
+        placeholder,
         name = "email",
         id = "email",
-        label = undefined,
-        errorMessage = $t("login.error.invalidEmail"),
+        label,
+        error = $t("pages.checkout.login.error.invalidEmail"),
         isValid = $bindable(true),
         validate = true,
     }: Props = $props();
@@ -79,7 +79,7 @@
 
     {#if !isValid}
         <span class="text-tertiary mt-1 pl-4 text-sm">
-            {errorMessage}
+            {error}
         </span>
     {/if}
 </div>

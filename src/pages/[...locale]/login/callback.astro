@@ -6,27 +6,27 @@ import { authorizationCode } from "../../../auth/grant";
 const code = Astro.url.searchParams.get("code");
 if (code === null) {
     console.error("Visited OAuth2 login callback without code");
-    return Astro.redirect("/error");
+    return Astro.redirect("/500");
 }
 
 const csrfToken = Astro.url.searchParams.get("state");
 if (csrfToken === null) {
     console.error("Visited OAuth2 login callback without CSRF token");
-    return Astro.redirect("/error");
+    return Astro.redirect("/500");
 }
 
 const csrfCookie = Astro.cookies.get("oauth-csrf");
 if (!csrfCookie || csrfToken !== csrfCookie.value) {
     console.error("The OAuth2 CSRF cookie was not present or mismatched");
-    return Astro.redirect("/error");
+    return Astro.redirect("/500");
 } else {
-    Astro.cookies.delete("oauth-csrf");
+    Astro.cookies.delete("oauth-csrf", { path: "/" });
 }
 
 const csrf = new CSRF();
 if (!csrf.verify(import.meta.env.OAUTH2_CLIENT_SECRET, csrfToken)) {
     console.error(`Could not verify CSRF token: ${csrfToken}`);
-    return Astro.redirect("/error");
+    return Astro.redirect("/500");
 }
 
 const oauth = await authorizationCode({
@@ -38,7 +38,7 @@ const session = await buildSession(oauth);
 setSession(Astro.cookies, session);
 
 const withCallback = Astro.cookies.get("callback");
-Astro.cookies.delete("callback");
+Astro.cookies.delete("callback", { path: "/" });
 
 return Astro.redirect(withCallback?.value || "/");
 ---

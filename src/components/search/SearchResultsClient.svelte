@@ -15,6 +15,7 @@ Manages real-time filtering of campaigns without page reloads
         searchError,
         searchResults,
         isSearching,
+        isLoadingMore,
         hasSearchResults,
         hasActualSearchResults,
         isEmpty,
@@ -200,14 +201,25 @@ Manages real-time filtering of campaigns without page reloads
 
         <!-- Results Grid (keep visible during load more) -->
         {#if campaigns.length > 0}
-            <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {#each campaigns as campaign}
-                    <!-- Render campaign cards using the Svelte CampaignCard component -->
-                    <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
-                        <CampaignCard size={campaign.size!} {campaign} />
+            <div class="relative">
+                <!-- Overlay spinner while re-searching (filters/input changed), not on load more -->
+                {#if $isSearching && !$isLoadingMore}
+                    <div
+                        class="absolute inset-0 z-10 flex items-start justify-center rounded-2xl bg-white/60 pt-12 backdrop-blur-[1px]"
+                        data-testid="results-loading-overlay"
+                    >
+                        <LoadingSpinner />
                     </div>
-                {/each}
-            </Grid>
+                {/if}
+                <Grid class="auto-rows-fr grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {#each campaigns as campaign}
+                        <!-- Render campaign cards using the Svelte CampaignCard component -->
+                        <div class="campaign-card-wrapper" data-campaign-id={campaign.id}>
+                            <CampaignCard size={campaign.size!} {campaign} />
+                        </div>
+                    {/each}
+                </Grid>
+            </div>
         {/if}
     </div>
 
@@ -227,9 +239,9 @@ Manages real-time filtering of campaigns without page reloads
         <!-- Empty State -->
         <div class="flex flex-col items-center py-12 text-center" data-testid="search-empty">
             <SearchIcon class="mb-4 h-16 w-16 text-gray-400" />
-            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+            <span class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.empty.title")}
-            </h3>
+            </span>
             <p class="mb-6 text-gray-600">
                 {$t("pages.search.empty.description")}
             </p>
@@ -242,9 +254,9 @@ Manages real-time filtering of campaigns without page reloads
     {#if !$hasSearchResults && !$isEmpty && !$isSearching && !isTransforming}
         <!-- Initial State - No data available -->
         <div class="py-12 text-center">
-            <h3 class="mb-2 text-xl font-semibold text-gray-900">
+            <span class="mb-2 text-xl font-semibold text-gray-900">
                 {$t("pages.search.initial.title")}
-            </h3>
+            </span>
             <p class="text-gray-600">{$t("pages.search.initial.description")}</p>
         </div>
     {/if}

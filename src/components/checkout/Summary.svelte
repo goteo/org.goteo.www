@@ -1,12 +1,28 @@
 <script lang="ts">
     import WarningIcon from "../../components/icons/status/Warning.svelte";
     import { t } from "../../i18n/store";
-    import { cartAmount, cartByRecipient } from "../../stores/cart";
+    import { cartAmount, cartByRecipient } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
+    import { multiplyMoney, sumMoney } from "../../utils/money";
     import CollapsibleBox from "../library/layout/CollapsibleBox.svelte";
     import Thtml from "../library/typography/Thtml.svelte";
+    import Title from "../library/typography/Title.svelte";
 
-    let { hasError = false }: { hasError?: boolean } = $props();
+    import type { Money } from "../../openapi/client";
+
+    interface Props {
+        hasError?: boolean;
+        /**
+         * Overrides the cart total. Once a payment is settled the cart is no
+         * longer the source of truth — and is about to be cleared — so the
+         * caller passes the total actually charged.
+         */
+        total?: Money;
+    }
+
+    let { hasError = false, total }: Props = $props();
+
+    const displayTotal = $derived(total ?? $cartAmount);
 
     const recipients = $derived(
         Object.entries($cartByRecipient).sort((a, b) => {
@@ -25,8 +41,12 @@
         buttonTextHide={$t("pages.checkout.summary.hideDetails")}
     >
         {#snippet header()}
-            <h2
-                class={`lg:text-double flex items-center gap-2 text-base font-semibold ${hasError ? "text-tertiary" : "text-secondary"}`}
+            <Title
+                level={2}
+                variant="subsection"
+                color={hasError ? "default" : "secondary"}
+                class={`flex items-center gap-2 ${hasError ? "text-tertiary lg:text-double" : "lg:text-double"}`}
+                weight="semibold"
             >
                 {#if hasError}
                     <span class="h-6 w-6">
@@ -34,20 +54,21 @@
                     </span>
                 {/if}
                 {$t("pages.checkout.summary.total.title")}
-            </h2>
+            </Title>
             <p
                 class={`text-double leading-tight font-bold lg:text-[3.5rem] ${hasError ? "text-tertiary" : "text-secondary"}`}
             >
-                {formatCurrency($cartAmount)}
+                {formatCurrency(displayTotal)}
             </p>
         {/snippet}
 
         {#snippet content()}
-            <hr class="bg-secondary h-px border-none" />
-            <div>
+            <hr class="bg-secondary my-0 h-px border-none" />
+
+            <div class="flex flex-col gap-2 pt-4">
                 {#each recipients as [_, items]}
                     {@const name = items[0].recipientDisplayName}
-                    {@const amount = items.reduce((sum, i) => sum + i.money.amount * i.quantity, 0)}
+                    {@const amount = sumMoney(items.map((i) => multiplyMoney(i.money, i.quantity)))}
                     <p>
                         <Thtml
                             key="pages.checkout.summary.toRecipient"

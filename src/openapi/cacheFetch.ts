@@ -1,10 +1,23 @@
-import type { RequestOptions } from "@hey-api/client-fetch";
+import type { RequestOptions } from "./client/client";
 
 export const CACHE_NAME = "goteo-v4-api";
 
-const DEFAULT_MAX_AGE_MS = 10_000;
+const DEFAULT_MAX_AGE = import.meta.env.PUBLIC_CSCACHE_TTL;
 
-function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AGE_MS): boolean {
+/**
+ * Whether a response may be written to the cache at all.
+ *
+ * Cache Storage is not the HTTP cache: `cache.put()` stores whatever it is handed and never
+ * consults the response's own directives. Anything marked `no-store` or `private` is meant
+ * for one reader on one occasion, so honouring those here is what keeps that promise.
+ */
+function isStorable(response: Response): boolean {
+    const cacheControl = response.headers.get("Cache-Control")?.toLowerCase() ?? "";
+
+    return !cacheControl.includes("no-store") && !cacheControl.includes("private");
+}
+
+function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AGE): boolean {
     const cacheControl = cached.headers.get("Cache-Control")?.toLowerCase() ?? "";
 
     if (
@@ -16,7 +29,7 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
     }
 
     const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
-    const maxAge = maxAgeMatch ? parseInt(maxAgeMatch[1], 10) * 1000 : defaultMaxAgeMs;
+    const maxAge = (maxAgeMatch ? parseInt(maxAgeMatch[1], 10) : defaultMaxAgeMs) * 1000;
 
     if (!maxAgeMatch) {
         const expires = cached.headers.get("Expires");
@@ -40,10 +53,29 @@ function isStaleCache(cached: Response, defaultMaxAgeMs: number = DEFAULT_MAX_AG
 
 export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
     return async (request: Request, opts: RequestOptions): Promise<Request> => {
+        if (import.meta.env.PUBLIC_CSCACHE !== "true") {
+            return request;
+        }
+
         const originalFetch = opts.fetch ?? globalThis.fetch;
 
-        opts.fetch = async (req: Request) => {
-            if (req.method !== "GET") return originalFetch(req);
+        opts.fetch = (async (req: Request) => {
+            /**
+             * Authenticated responses never go near this cache.
+             *
+             * `cache.match()` keys on the URL — request headers only enter the key when the
+             * stored response says so through `Vary`. Two people asking the same URL with
+             * different bearer tokens therefore land on the same entry, and whoever asks
+             * second reads what the first one fetched. The cache is also shared by everyone
+             * using the browser profile, so it outlives a logout.
+             *
+             * Skipping the cache entirely costs a ten-second dedupe window (see
+             * `DEFAULT_MAX_AGE_MS`) and leaves the `ETag` revalidation to the network, which
+             * is a small price for not keeping one reader's data where another can reach it.
+             */
+            if (req.method !== "GET" || req.headers.has("Authorization")) {
+                return originalFetch(req);
+            }
 
             const cache = await caches.open(cacheName);
             const cached = await cache.match(req);
@@ -67,16 +99,24 @@ export function createBrowserCacheInterceptor(cacheName: string = CACHE_NAME) {
                     ...cached,
                     headers: response.headers,
                 });
-                await cache.put(req, updated.clone());
+
+                // The revalidation may be the moment the resource turns private. Drop what we
+                // hold rather than refreshing it, so the entry does not outlive its welcome.
+                if (isStorable(updated)) {
+                    await cache.put(req, updated.clone());
+                } else {
+                    await cache.delete(req);
+                }
+
                 return updated;
             }
 
-            if (response.ok) {
+            if (response.ok && isStorable(response)) {
                 await cache.put(req, response.clone());
             }
 
             return response;
-        };
+        }) as typeof opts.fetch;
 
         return request;
     };

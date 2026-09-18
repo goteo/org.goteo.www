@@ -42,7 +42,7 @@ Supports: primary (Aplicar filtros), secondary (Buscar), ghost (Cerrar filtros)
     };
 
     // Width classes
-    const widthClasses = fullWidth ? "w-full" : "";
+    const widthClasses = $derived(fullWidth ? "w-full" : "");
 
     // Combine all classes
     const buttonClasses = $derived(

@@ -25,8 +25,8 @@ export type TranslationOptions = {
  * Hook to retrieve a translation function based on the selected language, supporting interpolation and optional HTML escaping.
  *
  * @template T - The key of the language within the `labels` object.
- * @param {T} lang - The language code to use for translations.
- * @returns {(key: string, vars?: Record<string, string | number>, options?: TranslationOptions) => string} - A function that takes a translation key, optional interpolation variables, and optional settings.
+ * @param lang - The language code to use for translations.
+ * @returns A function that takes a translation key, optional interpolation variables, and optional settings.
  */
 export function useTranslations<T extends string>(lang: T) {
     return (

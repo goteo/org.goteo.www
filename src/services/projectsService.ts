@@ -1,4 +1,5 @@
 import { apiProjectsGetCollection } from "../openapi/client/sdk.gen";
+import { constrainToPublicStatuses } from "../utils/projectStatus";
 
 import type { AuthError } from "../openapi/api";
 import type { Project } from "../openapi/client/types.gen";
@@ -26,9 +27,14 @@ export class ProjectsService {
         hasNextPage: boolean;
     }> {
         try {
+            const { status, "status[]": statuses, ...restFilters } = filters ?? {};
             const response = await apiProjectsGetCollection({
                 query: {
-                    ...filters,
+                    ...restFilters,
+                    "status[]": constrainToPublicStatuses([
+                        ...(statuses ?? []),
+                        ...(status ? [status] : []),
+                    ]),
                     page: options?.page || 1,
                     itemsPerPage: options?.limit || 20,
                 },
@@ -54,6 +60,16 @@ export class ProjectsService {
                 hasNextPage,
             };
         } catch (error) {
+            // Re-throw aborted requests as-is so callers can detect cancellation.
+            // The fetch client may not preserve the DOMException name, so also
+            // check the signal directly.
+            if (
+                options?.abortSignal?.aborted ||
+                (error instanceof Error && error.name === "AbortError")
+            ) {
+                throw new DOMException("Aborted", "AbortError");
+            }
+
             // Re-throw auth errors as-is for component handling
             if (error && typeof error === "object" && "type" in error) {
                 throw error as AuthError;
@@ -61,10 +77,10 @@ export class ProjectsService {
 
             // Wrap other errors with context
             if (error instanceof Error) {
-                throw new Error(`Project search failed: ${error.message}`);
+                throw new Error(`Project search failed: ${error.message}`, { cause: error });
             }
 
-            throw new Error("Project search failed");
+            throw new Error("Project search failed", { cause: error });
         }
     }
 

@@ -8,6 +8,7 @@
     import { t } from "../../i18n/store";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import ArrowSliderIcon from "../icons/navigation/ArrowSliderIcon.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Project, Accounting } from "../../openapi/client/index";
 
@@ -15,11 +16,11 @@
         lang = $bindable(),
         project = $bindable(),
         accounting,
-    } = $props<{
+    }: {
         lang: string;
         project: Project;
         accounting: Accounting;
-    }>();
+    } = $props();
 
     let activeTab = $state("project");
     let tabsContainer: HTMLDivElement;
@@ -27,7 +28,7 @@
     let canScrollRight = $state(true);
 
     const tabs = [
-        { id: "project", label: $t("pages.project.view.tabs.project") },
+        { id: "project", label: $t("pages.project.view.tabs.project.title") },
         { id: "rewards", label: $t("pages.project.view.tabs.rewards") },
         { id: "budget", label: $t("pages.project.view.tabs.budget.title") },
         { id: "updates", label: $t("pages.project.view.tabs.updates.title") },
@@ -83,10 +84,9 @@
 
     <div
         bind:this={tabsContainer}
-        class="wrapper no-scrollbar mx-8 flex overflow-x-auto lg:mx-0 lg:space-x-6"
+        class="wrapper mx-8 flex scrollbar-none overflow-x-auto [-ms-overflow-style:none] lg:mx-0 lg:space-x-6 [&::-webkit-scrollbar]:hidden"
         role="tablist"
         aria-label="Project tabs"
-        style="scrollbar-width: none;"
         onscroll={updateScrollButtons}
     >
         {#each tabs as tab}
@@ -113,16 +113,6 @@
     >
         <ArrowSliderIcon direction="right" />
     </button>
-    <style>
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-
     <div class="bg-variant1 flex w-full justify-center py-10 lg:py-20">
         <div class="wrapper flex items-center justify-center">
             {#if activeTab === "rewards"}
@@ -142,7 +132,25 @@
                     class="marked-content flex w-full max-w-4xl flex-col gap-6 overflow-hidden"
                     style="overflow-wrap: break-word; word-wrap: break-word; word-break: break-word;"
                 >
-                    {#await renderMarkdown(project.description) then content}
+                    {#await renderMarkdown(project.descBrief!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descAbout")}
+                    </Title>
+                    {#await renderMarkdown(project.descAbout!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descGoal")}
+                    </Title>
+                    {#await renderMarkdown(project.descGoal!) then content}
+                        {@html content}
+                    {/await}
+                    <Title level={2} variant="section" class="color-secondary font-bold">
+                        {$t("pages.project.view.tabs.project.descTeam")}
+                    </Title>
+                    {#await renderMarkdown(project.descTeam!) then content}
                         {@html content}
                     {/await}
                 </div>

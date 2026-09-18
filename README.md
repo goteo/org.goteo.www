@@ -1,12 +1,12 @@
 # Goteo v4 Web
 
-Frontend for the [Goteo](https://goteo.org) crowdfunding platform — built on Astro 5 + Svelte 5 + TailwindCSS 4, deployed on Cloudflare Workers.
+Frontend for the [Goteo](https://goteo.org) crowdfunding platform — built on Astro 7 + Svelte 5 + TailwindCSS 4, deployed on Cloudflare Workers.
 
 > **NOTE**: This application is a client of the [Goteo v4 API](https://github.com/goteo/org.goteo.api). You need a running v4 API instance and an OAuth client registered in it before this web app will work.
 
 ## Installation
 
-This application requires [Node.js](https://nodejs.org/en/download) (v20 or later) and the [pnpm](https://pnpm.io/installation) package manager. It also needs a reachable [Goteo v4 API](https://github.com/goteo/org.goteo.api) instance to connect to.
+This application requires [Node.js](https://nodejs.org/en/download) (v22.12 or later) and the [pnpm](https://pnpm.io/installation) package manager. It also needs a reachable [Goteo v4 API](https://github.com/goteo/org.goteo.api) instance to connect to.
 
 ### 1. Clone or download this repository.
 
@@ -51,30 +51,21 @@ pnpm dev
 
 The app should be live at [http://localhost:4321](http://localhost:4321).
 
-To run the app the same way it runs in production (on the Cloudflare Workers runtime), use the Wrangler dev server instead:
-
-```shell
-pnpm dev:worker
-```
+The dev server runs on the Cloudflare Workers runtime (`workerd`), the same one used in production, with bindings read from [`wrangler.toml`](wrangler.toml). No separate command is needed to reproduce the production runtime locally.
 
 ### Other commands
 
-| Command                | Action                                                  |
-| :--------------------- | :------------------------------------------------------ |
-| `pnpm install`         | Install dependencies                                    |
-| `pnpm dev`             | Dev server at `localhost:4321`                          |
-| `pnpm dev:worker`      | Build + Wrangler Workers dev server at `localhost:4321` |
-| `pnpm build`           | Build for production                                    |
-| `pnpm preview`         | Preview production build locally                        |
-| `pnpm format`          | ESLint fix + Prettier write                             |
-| `pnpm check`           | Prettier format check                                   |
-| `pnpm openapi`         | Regenerate OpenAPI SDK from live API spec               |
-| `pnpm storybook`       | Storybook dev server at `localhost:6006`                |
-| `pnpm build-storybook` | Build Storybook static output                           |
-| `pnpm cypress:open`    | Cypress E2E interactive                                 |
-| `pnpm cypress:run`     | Cypress E2E headless                                    |
-| `pnpm test:e2e`        | Start dev server + run Cypress headless                 |
-| `pnpm test:e2e:ci`     | CI E2E against Workers preview build                    |
+| Command                | Action                                           |
+| :--------------------- | :----------------------------------------------- |
+| `pnpm install`         | Install dependencies                             |
+| `pnpm dev`             | Dev server at `localhost:4321` (Workers runtime) |
+| `pnpm build`           | Build for production                             |
+| `pnpm preview`         | Preview production build locally                 |
+| `pnpm format`          | ESLint fix + Prettier write                      |
+| `pnpm check`           | Prettier format check                            |
+| `pnpm openapi`         | Regenerate OpenAPI SDK from live API spec        |
+| `pnpm storybook`       | Storybook dev server at `localhost:6006`         |
+| `pnpm build-storybook` | Build Storybook static output                    |
 
 ### Regenerating the API SDK
 
@@ -88,19 +79,6 @@ This fetches the spec from `$PUBLIC_API_URL/$PUBLIC_API_VERSION/docs.json`. Comm
 
 ## Testing
 
-End-to-end tests use [Cypress](https://www.cypress.io/).
-
-```shell
-# Interactive runner
-pnpm cypress:open
-
-# Headless run against an already-running dev server
-pnpm cypress:run
-
-# Start the dev server and run the headless suite in one command
-pnpm test:e2e
-```
-
 Component and unit tests run on [Vitest](https://vitest.dev/) through the Storybook test addon — launch Storybook to develop and visually check components:
 
 ```shell
@@ -111,7 +89,6 @@ pnpm storybook
 
 ```shell
 pnpm format         # Fix formatting (ESLint + Prettier)
-pnpm cypress:run    # E2E must pass
 ```
 
 ## Debugging
@@ -134,9 +111,9 @@ The generated SDK is out of date. Regenerate it (API must be running):
 pnpm openapi
 ```
 
-### 3. The app works with `pnpm dev` but breaks with `pnpm dev:worker`.
+### 3. Errors about missing Node.js modules (`fs`, `path`, `os`, `child_process`, …).
 
-`pnpm dev:worker` runs on the Cloudflare Workers runtime, which has no Node.js APIs (`fs`, `path`, `os`, `child_process`, …). Runtime code must use Web APIs (`fetch`, `crypto`, `URL`, `Cache`) instead. Move any Node-only logic to build-time code.
+The dev server and production both run on the Cloudflare Workers runtime, which has no Node.js APIs. Runtime code (pages, components, services) must use Web APIs (`fetch`, `crypto`, `URL`, `Cache`) instead. Move any Node-only logic to build-time code (config files, scripts, plugins), where it is still allowed.
 
 ---
 
@@ -144,7 +121,7 @@ pnpm openapi
 
 | Layer      | Technology                                  |
 | ---------- | ------------------------------------------- |
-| Framework  | Astro 5                                     |
+| Framework  | Astro 7                                     |
 | UI         | Svelte 5 (runes), TailwindCSS 4             |
 | Language   | TypeScript 5                                |
 | Runtime    | Cloudflare Workers (also supports Node)     |
@@ -227,6 +204,7 @@ Full list lives in [`.env.example`](.env.example). Grouped by purpose:
 | `OAUTH2_CLIENT_ID` / `OAUTH2_CLIENT_SECRET`   |    ✅    | OAuth client credentials registered in the API                                        |
 | `PUBLIC_DEFAULT_CURRENCY`                     |          | Fallback currency (e.g. `EUR`)                                                        |
 | `PUBLIC_DEFAULT_LANGUAGE`                     |          | Fallback locale (`es`, `en`, `ca`)                                                    |
+| `PUBLIC_DEFAULT_COUNTRY`                      |          | Fallback ISO 3166-1 alpha-2 country (default `ES`), e.g. preselected tax id country   |
 | `PUBLIC_DEFAULT_MAXSIZE`                      |          | Max upload size in bytes (default `8388608` = 8MB)                                    |
 | `PUBLIC_TIPPING_TIPJAR_ID`                    |          | Tipjar ID — leave empty to disable tipping                                            |
 | `PUBLIC_TIPPING_DEFAULT_AMOUNT`               |          | Pre-filled tip amount                                                                 |
@@ -243,5 +221,4 @@ Full list lives in [`.env.example`](.env.example). Grouped by purpose:
 | -------------------- | ----------------- | --------------------------------- |
 | `deploy.yml`         | Push to `main`    | Deploy to Cloudflare (production) |
 | `deploy.yml`         | Push to `develop` | Deploy to Cloudflare (staging)    |
-| `cypress-tests.yml`  | PR / push         | Cypress E2E headless              |
 | `prettier-check.yml` | PR / push         | Prettier format check             |

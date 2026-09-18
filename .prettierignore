@@ -4,6 +4,8 @@ dist/
 
 # generated types
 .astro/
+worker-configuration.d.ts
+src/openapi/client/
 
 # dependencies
 node_modules/
@@ -21,9 +23,6 @@ pnpm-debug.log*
 
 # macOS-specific files
 .DS_Store
-
-#openapi
-src/openapi/client/
 
 # Others
 pnpm-lock.yaml

@@ -8,10 +8,9 @@ Follows accessibility best practices with proper ARIA attributes
 
     interface Props extends HTMLAttributes<HTMLDivElement> {
         size?: "sm" | "md" | "lg";
-        color?: string;
     }
 
-    let { size = "md", color = "currentColor", class: className = "", ...props }: Props = $props();
+    let { size = "md", class: className = "", ...props }: Props = $props();
 
     // Size mappings
     const sizeClasses = {

@@ -22,6 +22,8 @@
     - Transition: 200ms ease
 -->
 <script lang="ts">
+    import { untrack } from "svelte";
+
     import type { Snippet, Component } from "svelte";
 
     interface Tab {
@@ -46,7 +48,10 @@
         useDataAttributes = true,
     }: Props = $props();
 
-    let currentTab = $state(activeTab);
+    // `activeTab` names the tab to open with, not the tab currently open — from then on the
+    // selection belongs to this component. Reading it untracked says so, and stops a later
+    // change to the prop from yanking the tab out from under whoever is clicking around.
+    let currentTab = $state(untrack(() => activeTab));
 
     function handleTabClick(tabId: string) {
         currentTab = tabId;
@@ -83,10 +88,10 @@
     <div class="flex cursor-pointer items-center gap-0">
         {#each tabs as tab}
             <button
-                class="box-border flex items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 transition-all duration-200 {currentTab ===
+                class="box-border flex cursor-pointer items-center justify-center gap-2 overflow-visible rounded-tl-lg rounded-tr-lg border-b-2 px-6 py-2 transition-all duration-200 {currentTab ===
                 tab.id
                     ? 'border-primary text-secondary'
-                    : 'border-variant1 text-tertiary'}"
+                    : 'border-variant1 text-content'}"
                 onclick={() => handleTabClick(tab.id)}
                 data-tab={tab.id}
             >

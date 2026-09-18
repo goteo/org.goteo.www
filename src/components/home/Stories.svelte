@@ -1,5 +1,6 @@
 <script lang="ts">
     import { t } from "../../i18n/store";
+    import Title from "../library/typography/Title.svelte";
 </script>
 
 <section class="wrapper py-16">
@@ -11,16 +12,14 @@
             <!-- Text Content -->
             <div class="flex min-h-87 max-w-132.25 flex-col gap-4">
                 <!-- Main Headline -->
-                <h2
-                    class="text-secondary text-2xl leading-tight font-bold md:text-[2.5rem] md:leading-12"
-                >
+                <Title level={2} variant="section" color="secondary" class="leading-tight">
                     {$t("pages.home.stories.title")}
-                </h2>
+                </Title>
 
                 <!-- Subtitle -->
-                <h3 class="text-secondary text-lg leading-8 font-bold md:text-2xl md:leading-8">
+                <Title level={3} variant="subsection" color="secondary">
                     {$t("pages.home.stories.subtitle")}
-                </h3>
+                </Title>
 
                 <!-- Description -->
                 <div class="text-content flex-1 text-sm leading-6 md:text-base md:leading-6">

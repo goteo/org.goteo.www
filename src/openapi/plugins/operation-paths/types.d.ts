@@ -1,8 +1,7 @@
-export interface Config {
-    name: "operation-paths";
+import type { DefinePlugin, Plugin } from "@hey-api/openapi-ts";
 
-    /**
-     * @default 'operation-paths'
-     */
-    output?: string;
-}
+export type UserConfig = Plugin.Name<"operation-paths"> & Plugin.Hooks & Plugin.UserExports;
+
+export type Config = Plugin.Name<"operation-paths"> & Plugin.Hooks & Plugin.Exports;
+
+export type OperationPathsPlugin = DefinePlugin<UserConfig, Config>;

@@ -3,14 +3,9 @@ import CampaignCard from "./CampaignCard.svelte";
 import Carousel from "../library/layout/Carousel.svelte";
 import CampaignsTabsNav from "./CampaignsTabsNav.svelte";
 import type { Campaign } from "../../types/campaign";
-import {
-    apiProjectsGetCollection,
-    type Accounting,
-    type ApiAccountingsIdGetData,
-    type Money,
-} from "../../openapi/client";
 import { getLanguage } from "../../middleware/utils";
-import { client } from "../../openapi/client/client.gen";
+import { apiAccountingsIdGet, apiProjectsGetCollection, type Money } from "../../openapi/client";
+import { extractId } from "../../utils/extractId";
 
 const { t } = Astro.locals;
 const chosenProjects = {
@@ -32,13 +27,14 @@ const { data: projects } = await apiProjectsGetCollection({
 
 const campaigns: Campaign[] = await Promise.all(
     projects!.map(async (project) => {
-        const { data: accounting } = (await client.get({
-            url: client.buildUrl({ url: project.accounting! }),
-        })) as { data: Accounting };
+        const { data: accounting } = await apiAccountingsIdGet({
+            path: { id: extractId(project.accounting) },
+        });
 
         return {
+            ...project,
             size: "small",
-            id: project.slug!,
+            slug: project.slug!,
             title: project.title!,
             image:
                 chosenProjects[project.slug! as keyof typeof chosenProjects] ||
@@ -46,7 +42,7 @@ const campaigns: Campaign[] = await Promise.all(
             minimum: project.budget?.minimum?.money!,
             optimum: project.budget?.optimum?.money,
             obtained: accounting!.balance as Money,
-        };
+        } satisfies Campaign;
     }),
 );
 
@@ -62,15 +58,15 @@ const displayCampaigns = campaigns.slice(0, 4); // Show first 4 campaigns
 
     <!-- Tab Navigation using shared Tabs component -->
     <div class="mx-auto">
-        <CampaignsTabsNav client:load />
+        <CampaignsTabsNav client:visible />
     </div>
 
     <!-- Campaigns Carousel -->
     <div>
-        <Carousel client:load itemsPerGroup={3} gap={24} showDots={false}>
+        <Carousel client:visible itemsPerGroup={3} gap={24} showDots={false}>
             {
                 displayCampaigns.map((campaign) => (
-                    <CampaignCard size="small" campaign={campaign} client:load />
+                    <CampaignCard size="small" campaign={campaign} client:visible />
                 ))
             }
         </Carousel>

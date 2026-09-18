@@ -1,17 +1,10 @@
 <script lang="ts">
-    import { derived } from "svelte/store";
-
     import { t } from "../../i18n/store";
-    import { cart } from "../../stores/cart";
+    import { cartAmount as total } from "../../stores/checkoutsStore";
     import { formatCurrency } from "../../utils/currencies";
-
-    const total = derived(cart, ($cart) => {
-        if (!$cart?.items) return 0;
-        return $cart.items.reduce((sum, item) => sum + item.amount * item.quantity, 0);
-    });
+    import { subtractMoney } from "../../utils/money";
 
     export let accounting;
-    export let defaultCurrency;
 </script>
 
 <div class="flex flex-col items-center gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -19,16 +12,14 @@
         <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.currentBalance")}</span
         >
         <p class="text-secondary text-double font-bold">
-            {formatCurrency(accounting.balance.amount, accounting.balance.currency)}
+            {formatCurrency(accounting.balance)}
         </p>
     </div>
 
     <div class="text-center sm:text-left">
-        <span class="block text-sm text-gray-600"
-            >{$t("payment.wallet-confirmation.amountToUse")}
-        </span>
+        <span class="block text-sm text-gray-600">{$t("pages.checkout.wallet.amountToUse")} </span>
         <p id="cart-total" class="text-double font-bold text-red-500">
-            {formatCurrency($total, defaultCurrency)}
+            {formatCurrency($total)}
         </p>
     </div>
 
@@ -37,7 +28,7 @@
             >{$t("pages.checkout.wallet.remainingBalance")}
         </span>
         <p id="cart-difference" class="text-secondary text-double font-bold">
-            {formatCurrency(accounting.balance.amount - $total, accounting.balance.currency)}
+            {formatCurrency(subtractMoney(accounting.balance, $total))}
         </p>
     </div>
 </div>

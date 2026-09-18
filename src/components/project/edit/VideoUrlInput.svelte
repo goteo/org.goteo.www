@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { untrack } from "svelte";
     import { twMerge, type ClassNameValue } from "tailwind-merge";
 
     import CloseIcon from "../../../components/icons/navigation/Close.svelte";
@@ -8,16 +9,17 @@
     import TextInput from "../../library/inputs/TextInput.svelte";
 
     interface VideoUrlInputProps {
-        video?: string;
-        onChange: (video: string | null) => void;
+        video?: string | null;
+        onChange?: (video?: string) => void;
         class?: ClassNameValue;
     }
 
     let { video, onChange, class: className = "" }: VideoUrlInputProps = $props();
 
-    let videoUrl = $state(video || "");
+    // Seed the field once; the input owns it afterwards.
+    let videoUrl = $state(untrack(() => video || ""));
     let validationError = $state("");
-    let showInput = $state(!!video);
+    let showInput = $state(untrack(() => !!video));
 
     function isValidUrl(url: string): boolean {
         try {
@@ -33,24 +35,24 @@
 
         if (!url.trim()) {
             validationError = "";
-            onChange(null);
+            onChange?.();
             return;
         }
 
         if (!isValidUrl(url)) {
-            validationError = $t("wizard.validation.campaign_info.video.invalid_url");
+            validationError = $t("pages.project.edit.campaignInfo.video.validation.invalid_url");
             return;
         }
 
         validationError = "";
-        onChange(url);
+        onChange?.(url);
     }
 
     function handleRemove() {
         videoUrl = "";
         validationError = "";
         showInput = false;
-        onChange(null);
+        onChange?.();
     }
 
     function handleShowInput() {
@@ -72,10 +74,8 @@
                 onclick={handleShowInput}
                 aria-label={$t("pages.project.edit.campaignInfo.media.addVideo")}
             >
-                {#snippet children()}
-                    <VideoIcon />
-                    {$t("pages.project.edit.campaignInfo.media.addVideo")}
-                {/snippet}
+                <VideoIcon />
+                {$t("pages.project.edit.campaignInfo.media.addVideo")}
             </Button>
 
             {#if showInput}
@@ -85,7 +85,7 @@
                     placeholder={$t("pages.project.edit.campaignInfo.media.videoPlaceholder")}
                     bind:value={videoUrl}
                     error={validationError}
-                    onInput={(e) => handleUrlChange((e.target as HTMLInputElement).value)}
+                    onInput={(value) => handleUrlChange(value.toString())}
                 />
             {/if}
         </div>
@@ -103,13 +103,11 @@
                 aria-label={$t("pages.project.edit.campaignInfo.media.removeVideo")}
                 class="border-secondary text-secondary hover:bg-light-surface self-start border-2 bg-white"
             >
-                {#snippet children()}
-                    <span class="h-4 w-4">
-                        <CloseIcon />
-                    </span>
+                <span class="h-4 w-4">
+                    <CloseIcon />
+                </span>
 
-                    {$t("pages.project.edit.campaignInfo.media.removeVideo")}
-                {/snippet}
+                {$t("pages.project.edit.campaignInfo.media.removeVideo")}
             </Button>
         </div>
     {/if}

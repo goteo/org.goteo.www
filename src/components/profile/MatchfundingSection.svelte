@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { createClient } from "@hey-api/client-fetch";
     import { onMount } from "svelte";
 
     import MatchfundingCallCard from "./MatchfundingCallCard.svelte";
@@ -13,6 +12,7 @@
     import { extractId } from "../../utils/extractId";
     import { toCollectionItems } from "../../utils/hydra.ts";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { MatchCall, MatchCallSubmission, User } from "../../openapi/client/types.gen.ts";
     import type { MatchfundingCall } from "../../types/me-page";
@@ -23,12 +23,6 @@
     }
 
     let { lang, user }: Props = $props();
-
-    // Create a client instance configured to use the API relay
-    // This ensures all authenticated requests go through the server-side proxy
-    const relayClient = createClient({
-        baseUrl: "/api/relay",
-    });
 
     let matchfundingCalls = $state<MatchfundingCall[]>([]);
     let loading = $state(true);
@@ -45,7 +39,7 @@
 
             // Fetch match calls for this user (filtered by manager ID)
             const { data: callsData, error: callsError } = await apiMatchCallsGetCollection({
-                client: relayClient,
+                baseUrl: "/api/relay",
                 query: {
                     "managers.id": user.id,
                     itemsPerPage: 30,
@@ -81,13 +75,13 @@
                                 ] = await Promise.all([
                                     // Fetch accounting data for donation amount
                                     apiAccountingsIdGet({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         path: { id: accountingId },
                                         headers,
                                     }),
                                     // Fetch participating projects via ProjectSupport (filtered by call's accounting ID)
                                     apiProjectSupportsGetCollection({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         query: {
                                             "origin.id": accountingId,
                                             itemsPerPage: 100,
@@ -96,7 +90,7 @@
                                     }),
                                     // Fetch successful projects (accepted submissions)
                                     apiMatchCallSubmissionsGetCollection({
-                                        client: relayClient,
+                                        baseUrl: "/api/relay",
                                         query: {
                                             "call.id": call.id,
                                             itemsPerPage: 100,
@@ -163,28 +157,28 @@
 {#if loading}
     <!-- Loading State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
-        </h2>
+        <Title level={2} variant="subsection">
+            {$t("pages.me.matchfunding.section.title")}
+        </Title>
         <!-- Single hero card skeleton matching actual dimensions -->
         <div class="bg-grey h-64 w-full animate-pulse rounded-4xl md:h-80 lg:h-96"></div>
     </div>
 {:else if error}
     <!-- Error State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
-        </h2>
+        <Title level={2} variant="subsection">
+            {$t("pages.me.matchfunding.section.title")}
+        </Title>
         <p class="text-content text-base leading-normal">
-            {$t("me.matchfunding.section.error")}
+            {$t("pages.me.matchfunding.section.error")}
         </p>
     </div>
 {:else if matchfundingCalls.length > 0}
     <!-- Filled State -->
     <div class="flex flex-col gap-6">
-        <h2 class="text-2xl font-bold text-black md:text-3xl">
-            {$t("me.matchfunding.section.title")}
-        </h2>
+        <Title level={2} variant="subsection">
+            {$t("pages.me.matchfunding.section.title")}
+        </Title>
         <Carousel itemsPerGroup={1} gap={24} showDots={false}>
             {#each matchfundingCalls as call (call.id)}
                 <MatchfundingCallCard {lang} {call} />

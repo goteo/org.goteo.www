@@ -1,0 +1,13 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import App from "../../../layouts/App.svelte";
+import AdminUsers from "../../../components/admin/users/Users.svelte";
+
+const { t, lang, session } = Astro.locals;
+---
+
+<Layout title={t("pages.admin.users.title")} description={t("pages.metadata.description")}>
+    <App client:load locale={lang} session={session} admin>
+        <AdminUsers client:load />
+    </App>
+</Layout>

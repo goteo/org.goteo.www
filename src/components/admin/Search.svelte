@@ -1,4 +1,5 @@
 <script lang="ts">
+    import SearchCategoryLabel from "./SearchCategoryLabel.svelte";
     import { t } from "../../i18n/store";
     import {
         apiProjectsGetCollection,
@@ -8,6 +9,7 @@
     import { highlightMatch } from "../../utils/highlights";
     import SearchIcon from "../icons/actions/Search.svelte";
     import CloseIcon from "../icons/navigation/Close.svelte";
+    import Spinner from "../icons/status/Spinner.svelte";
 
     import type { ProjectJsonld, TipjarJsonld, UserJsonld } from "../../openapi/client/index";
 
@@ -23,21 +25,31 @@
 
     let {
         onSelectTarget,
-        initialQuery = "",
-    }: { onSelectTarget: (accounting: string) => void; initialQuery?: string } = $props();
+        searchPlaceholder,
+        onSelectProject,
+        onSelectUser,
+        resource,
+    }: {
+        onSelectTarget?: (accounting: string) => void;
+        searchPlaceholder?: string;
+        onSelectProject?: (project: ProjectJsonld) => void;
+        onSelectUser?: (user: UserJsonld) => void;
+        resource?: "projects" | "gateway_charges" | "users";
+    } = $props();
 
-    let query = $state(initialQuery);
+    let query = $state("");
     let results = $state<ResultItem[]>([]);
     let totalItems = $state(0);
     let searched = $state(false);
+    let isLoading = $state(false);
 
     let debounceTimeout: ReturnType<typeof setTimeout>;
 
-    $effect(() => {
-        if (initialQuery && initialQuery.length >= 4) {
-            fetchResults(initialQuery);
-        }
-    });
+    const showProjects = $derived(
+        !resource || resource === "gateway_charges" || resource === "projects",
+    );
+    const showTipjars = $derived(!resource || resource === "gateway_charges");
+    const showUsers = $derived(!resource || resource === "gateway_charges" || resource === "users");
 
     async function fetchResults(text: string) {
         const trimmed = text.trim();
@@ -49,32 +61,63 @@
         }
 
         searched = true;
+        isLoading = true;
 
-        const [{ data: projectDataRaw }, { data: tipjarDataRaw }, { data: userDataRaw }] =
-            await Promise.all([
+        const fetches: Promise<any>[] = [];
+        if (showProjects) {
+            fetches.push(
                 apiProjectsGetCollection({
                     query: { title: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
+            );
+        }
+        if (showTipjars) {
+            fetches.push(
                 apiTipjarsGetCollection({
                     query: { name: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
+            );
+        }
+        if (showUsers) {
+            fetches.push(
                 apiUsersGetCollection({
-                    query: { handle: trimmed },
+                    query: { q: trimmed },
                     headers: { Accept: "application/ld+json" },
                 }),
-            ]);
+            );
+        }
 
-        const projectData = projectDataRaw as unknown as CollectionResponse<ProjectJsonld>;
-        const tipjarData = tipjarDataRaw as unknown as CollectionResponse<TipjarJsonld>;
-        const userData = userDataRaw as unknown as CollectionResponse<UserJsonld>;
+        const responses = await Promise.all(fetches);
 
-        const projectItems = projectData.member;
-        const tipjarItems = tipjarData.member;
-        const userItems = userData.member;
+        let idx = 0;
+        let projectItems: ProjectJsonld[] = [];
+        let tipjarItems: TipjarJsonld[] = [];
+        let userItems: UserJsonld[] = [];
+        let total = 0;
 
-        totalItems = projectData.totalItems + tipjarData.totalItems + userData.totalItems;
+        if (showProjects) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<ProjectJsonld>;
+            projectItems = data.member;
+            total += data.totalItems;
+        }
+        if (showTipjars) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<TipjarJsonld>;
+            tipjarItems = data.member;
+            total += data.totalItems;
+        }
+        if (showUsers) {
+            const raw = responses[idx++] as any;
+            const data = raw.data as unknown as CollectionResponse<UserJsonld>;
+            userItems = data.member;
+            total += data.totalItems;
+        }
+
+        totalItems = total;
+        isLoading = false;
 
         results = [
             ...projectItems.map((p): ResultItem => ({ type: "project", data: p })),
@@ -89,8 +132,8 @@
         if (!text.trim()) {
             results = [];
             totalItems = 0;
-            onSelectTarget("");
             searched = false;
+            isLoading = false;
             return;
         }
 
@@ -109,8 +152,9 @@
                 bind:value={query}
                 oninput={(e) =>
                     handleInput(e.target instanceof HTMLInputElement ? e.target.value : "")}
-                placeholder={$t("pages.admin.charges.filters.search.placeholder")}
-                class="border-secondary w-full rounded-3xl border p-4"
+                placeholder={searchPlaceholder ??
+                    $t("pages.admin.charges.filters.search.placeholder")}
+                class="border-secondary w-full rounded-3xl border p-4 focus:ring-0"
                 minlength="4"
             />
             {#if query}
@@ -122,6 +166,7 @@
                         results = [];
                         totalItems = 0;
                         searched = false;
+                        isLoading = false;
                     }}
                 >
                     <CloseIcon />
@@ -135,31 +180,38 @@
     </div>
 
     {#if searched}
-        <div class="absolute top-full z-10 my-8 w-full space-y-4 rounded-lg bg-gray-200 p-4">
-            <p class="text-sm text-gray-500">
-                {@html $t(
-                    "pages.admin.charges.filters.search.resultsFound",
-                    {
-                        totalItems: totalItems,
-                        query: `<span class="font-bold">${query}</span>`,
-                    },
-                    { allowHTML: true },
-                )}
-            </p>
+        <div
+            class="absolute top-full z-10 my-8 max-h-96 w-full space-y-4 overflow-y-auto rounded-lg bg-gray-200 p-4"
+        >
+            {#if isLoading}
+                <div class="flex justify-center py-6">
+                    <Spinner />
+                </div>
+            {:else if results.length > 0}
+                <p class="text-sm text-gray-500">
+                    {@html $t(
+                        "pages.admin.charges.filters.search.resultsFound",
+                        {
+                            totalItems: totalItems,
+                            query: `<span class="font-bold">${query}</span>`,
+                        },
+                        { allowHTML: true },
+                    )}
+                </p>
 
-            {#if results.length > 0}
                 {#if results.some((r) => r.type === "project")}
                     <div>
-                        <h3 class="mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mb-2">
                             {$t("domain.charges.entityLabels.projects")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "project") as item}
                                 <button
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectProject?.(item.data);
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -173,7 +225,7 @@
                                         <div class="mt-1 line-clamp-2 text-sm text-gray-600">
                                             {item.data.subtitle}
                                         </div>
-                                    {:else if item.data.description}
+                                    {:else if "description" in item.data && item.data.description}
                                         <div class="mt-1 line-clamp-2 text-sm text-gray-600">
                                             {item.data.description}
                                         </div>
@@ -186,16 +238,16 @@
 
                 {#if results.some((r) => r.type === "tipjar")}
                     <div>
-                        <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mt-6 mb-2">
                             {$t("domain.charges.entityLabels.tipjars")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "tipjar") as item}
                                 <button
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;
@@ -209,8 +261,7 @@
                                         )}
                                     </div>
                                     <div class="mt-1 text-sm text-gray-500 italic">
-                                        {$t("domain.charges.entityLabels.tipjar-id")}: {item.data
-                                            .id}
+                                        {$t("domain.charges.entityLabels.tipjarId")}: {item.data.id}
                                     </div>
                                 </button>
                             {/each}
@@ -220,16 +271,17 @@
 
                 {#if results.some((r) => r.type === "user")}
                     <div>
-                        <h3 class="mt-6 mb-2 text-sm font-bold text-gray-700 uppercase">
+                        <SearchCategoryLabel class="mt-6 mb-2">
                             {$t("domain.charges.entityLabels.users")}
-                        </h3>
+                        </SearchCategoryLabel>
                         <div class="flex flex-col gap-2">
                             {#each results.filter((r) => r.type === "user") as item}
                                 <button
                                     type="button"
                                     class="w-full cursor-pointer rounded-lg border bg-white p-4 text-left shadow transition hover:shadow-md"
                                     onclick={() => {
-                                        onSelectTarget(item.data.accounting ?? "");
+                                        onSelectUser?.(item.data);
+                                        onSelectTarget?.(item.data.accounting ?? "");
                                         query = "";
                                         results = [];
                                         totalItems = 0;

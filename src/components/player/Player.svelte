@@ -6,9 +6,9 @@
 
     let {
         src,
-        title = $t("project.video.title"),
+        title = $t("pages.project.view.video.title"),
         thumbnails = "",
-        poster = { src: "", alt: $t("project.video.poster") },
+        poster = { src: "", alt: $t("pages.project.view.video.poster") },
     } = $props<{
         src: string;
         title?: string;
@@ -28,7 +28,7 @@
     let isLoading = $state(false);
     let iframeEl: HTMLIFrameElement | null = $state(null);
 
-    const previewImage = poster.src || thumbnails;
+    let previewImage = $derived(poster.src || thumbnails);
 
     $effect(() => {
         noVideoSrc = !src;
@@ -62,7 +62,7 @@
             });
 
             return `https://www.youtube.com/embed/${videoId}?${params.toString()}`;
-        } catch (err) {
+        } catch {
             console.warn("Invalid YouTube URL", original);
             return original;
         }
@@ -183,12 +183,12 @@
     <div
         class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
-        {$t("project.video.not-found")}
+        {$t("pages.project.view.video.not-found")}
     </div>
 {:else}
     <div
         class="flex h-full items-center justify-center rounded-lg bg-gray-100 p-4 text-sm text-gray-600"
     >
-        {$t("project.video.not-supported")}
+        {$t("pages.project.view.video.not-supported")}
     </div>
 {/if}

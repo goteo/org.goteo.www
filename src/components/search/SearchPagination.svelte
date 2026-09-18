@@ -7,7 +7,6 @@ Previous/Next navigation for search results
     import { searchStore, currentPage, hasNextPage, hasPrevPage } from "../../stores/searchStore";
 
     interface Props {
-        maxVisiblePages?: number;
         showSummary?: boolean;
         class?: string;
     }

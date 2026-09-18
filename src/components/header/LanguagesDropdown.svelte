@@ -5,7 +5,19 @@
     import LanguageIcon from "../icons/LanguageIcon.svelte";
     import Chevron from "../icons/navigation/Chevron.svelte";
 
-    let { languages, selected, onSelect } = $props();
+    interface LanguagesDropdownProps {
+        /**
+         * List of available ISO 639-1 language codes for selection
+         */
+        languages: string[];
+        /**
+         * Language code of the selected language
+         */
+        selected: string;
+        onSelect?: (language: string) => void;
+    }
+
+    let { languages, selected, onSelect }: LanguagesDropdownProps = $props();
 
     let open = $state(false);
 
@@ -13,7 +25,7 @@
         open = false;
         selected = code;
 
-        onSelect(code);
+        onSelect?.(code);
     }
     function toggleDropdown() {
         open = !open;
@@ -37,14 +49,15 @@
     </button>
 
     {#if open}
-        <div class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-md">
+        <div
+            class="absolute z-10 mt-1 max-h-96 w-full overflow-scroll rounded-md border border-gray-200 bg-white shadow-md"
+        >
             {#each languages as lang (lang)}
                 <button
                     type="button"
                     class="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-gray-100"
                     onclick={() => selectLanguage(lang)}
                 >
-                    <LanguageIcon />
                     {getLanguageDisplayName(lang)}
                 </button>
             {/each}

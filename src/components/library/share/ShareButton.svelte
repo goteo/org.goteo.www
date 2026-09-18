@@ -33,18 +33,18 @@
 
     const modalTitle = $derived(
         variant === "blog"
-            ? $t("blog.share.modal.title")
+            ? $t("pages.blog.share.modal.title")
             : variant === "profile"
-              ? $t("profile.shareModal.title")
-              : $t("project.share.modal.title"),
+              ? $t("pages.profile.shareModal.title")
+              : $t("pages.project.view.share.modal.title"),
     );
 
     const modalDescription = $derived(
         variant === "blog"
-            ? $t("blog.share.modal.description")
+            ? $t("pages.blog.share.modal.description")
             : variant === "profile"
               ? ""
-              : $t("project.share.modal.description"),
+              : $t("pages.project.view.share.modal.description"),
     );
 </script>
 
@@ -56,13 +56,13 @@
     )}
 >
     <ShareIcon />
-    {$t("project.actions.share")}
+    {$t("common.share")}
 </button>
 
 <Modal
     bind:open={openModal}
     closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent cursor-pointer"
-    class="fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+    class="backdrop:bg-overlay fixed top-1/2 left-1/2 w-full max-w-118.75 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:backdrop-blur-[5px]"
     title={modalTitle}
     headerClass="py-2 text-secondary text-2xl"
 >

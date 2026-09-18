@@ -4,8 +4,8 @@
     Second step of the project setup wizard.
     Handles:
     - Presentation media (images and video)
-    - Campaign objectives (rich text)
-    - Project legacy (rich text)
+    - Campaign desc-brief (rich text)
+    - Project desc-about (rich text)
     - Target audience (rich text)
     - Team information (rich text)
 
@@ -14,129 +14,79 @@
     - All rich text fields have minimum character requirements
 -->
 <script lang="ts">
-    import MediaUploader from "./MediaUploader.svelte";
-    import RichTextEditor from "./RichTextEditor.svelte";
     import VideoUrlInput from "./VideoUrlInput.svelte";
     import { t } from "../../../i18n/store";
-    import { validateCampaignInfo } from "../../../stores/drafts/draftValidation";
-    import {
-        currentDraft,
-        navigateToStep,
-        updateCampaignInfo,
-        type MediaImage,
-    } from "../../../stores/drafts/projectDraft";
+    import UploadIcon from "../../icons/actions/UploadIcon.svelte";
+    import CloseIcon from "../../icons/navigation/Close.svelte";
     import Button from "../../library/buttons/Button.svelte";
-    import Grid from "../../library/layout/Grid.svelte";
+    import ImageUploadModal from "../../library/inputs/ImageUploadModal.svelte";
+    import RichTextEditor from "../../library/inputs/RichTextEditor.svelte";
+    import Title from "../../library/typography/Title.svelte";
+
+    import type { ProjectDraftStore } from "../../../stores/drafts/draftsStore";
+    import type { UploadedObject } from "../../../utils/media/objectStorage.types";
 
     interface CampaignInfoStepProps {
+        draft: ProjectDraftStore;
         onContinue?: () => void;
     }
 
-    let { onContinue }: CampaignInfoStepProps = $props();
+    let { draft, onContinue }: CampaignInfoStepProps = $props();
 
-    // Reactive values from store
-    const campaignInfo = $derived(
-        $currentDraft?.wizardForm.campaignInfo ?? {
-            images: [],
-            video: undefined,
-            objectives: "",
-            legacy: "",
-            targetAudience: "",
-            team: "",
-        },
-    );
+    let showUploadModal = $state(false);
 
-    /**
-     * Handle Continue button
-     * Simple navigation to next step - validation happens on save/submit
-     */
-    function handleContinue() {
-        if (!$currentDraft) return;
-        const errors = validateCampaignInfo($currentDraft.wizardForm);
+    function handleContinue() {}
 
-        if (Object.keys(errors).length === 0) {
-            navigateToStep(3);
-            if (onContinue) {
-                onContinue();
-            }
-        } else {
-            const firstErrorField = Object.keys(errors)[0];
-            const element = document.querySelector(`[data-field="${firstErrorField}"]`);
-            element?.scrollIntoView({ behavior: "smooth", block: "center" });
+    function handleImageUpload(image: UploadedObject) {
+        draft.patch({ cover: image.url });
+    }
 
-            console.warn("Validation errors:", errors);
+    async function handleImageRemove(url: string) {
+        try {
+            await fetch("/api/upload/delete", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ keyOrUrl: url }),
+            });
+
+            draft.patch({ cover: undefined });
+        } catch (err) {
+            console.error("Failed to delete image from bucket:", err);
         }
     }
 
-    /**
-     * Handle image upload
-     */
-    function handleImageUpload(image: MediaImage) {
-        if (!campaignInfo) return;
-        updateCampaignInfo({
-            images: [...campaignInfo.images, image],
-        });
+    function handleVideoChange(video?: string) {
+        draft.patch({ video: video });
     }
 
-    /**
-     * Handle image removal
-     */
-    function handleImageRemove(id: string) {
-        updateCampaignInfo({
-            images: campaignInfo.images.filter((img) => img.id !== id),
-        });
+    function handleBriefChange(doc: string) {
+        draft.patch({ descBrief: doc });
     }
 
-    /**
-     * Handle video change
-     */
-    function handleVideoChange(video: string | null) {
-        updateCampaignInfo({
-            video: video ?? "",
-        });
+    function handleAboutChange(doc: string) {
+        draft.patch({ descAbout: doc });
     }
 
-    /**
-     * Handle objectives change
-     */
-    function handleObjectivesChange(html: string) {
-        updateCampaignInfo({
-            objectives: html,
-        });
+    function handleGoalChange(doc: string) {
+        draft.patch({ descGoal: doc });
     }
 
-    /**
-     * Handle legacy change
-     */
-    function handleLegacyChange(html: string) {
-        updateCampaignInfo({
-            legacy: html,
-        });
+    function handleTeamChange(doc: string) {
+        draft.patch({ descTeam: doc });
     }
 
-    /**
-     * Handle target audience change
-     */
-    function handleTargetAudienceChange(html: string) {
-        updateCampaignInfo({
-            targetAudience: html,
-        });
-    }
-
-    /**
-     * Handle team change
-     */
-    function handleTeamChange(html: string) {
-        updateCampaignInfo({ team: html });
+    function handleCommunicationStrategyChange(doc: string) {
+        // TO-DO: Add descStart to Project resource
+        // draft.patch({ descStrat: doc });
     }
 </script>
 
 <div class="w-auto max-w-167 space-y-10">
     <!-- Page Header -->
     <div class="space-y-4">
-        <h1 class="text-3xl leading-12 font-bold text-black lg:text-[2.5rem]">
+        <Title level={1} variant="section">
             {$t("pages.project.edit.campaignInfo.title")}
-        </h1>
+        </Title>
         <p class="text-content text-base">{$t("pages.project.edit.campaignInfo.subtitle")}</p>
     </div>
 
@@ -144,125 +94,185 @@
         <!-- Media Section -->
         <section data-field="media" class="space-y-4">
             <div>
-                <h2 class="mb-1 text-2xl font-bold text-black">
+                <Title level={2} variant="subsection" class="mb-1">
                     {$t("pages.project.edit.campaignInfo.media.title")}
                     <span aria-label="required">*</span>
-                </h2>
+                </Title>
                 <p class="text-content text-base">
                     {$t("pages.project.edit.campaignInfo.media.description")}
                 </p>
             </div>
 
-            <Grid class="grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4">
-                <MediaUploader
-                    images={campaignInfo.images}
-                    onUpload={handleImageUpload}
-                    onRemove={handleImageRemove}
-                />
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Button
+                    kind="secondary"
+                    size="md"
+                    onclick={() => (showUploadModal = true)}
+                    class="h-fit"
+                >
+                    <UploadIcon />
+                    {$t("pages.project.edit.campaignInfo.media.addImage")}
+                </Button>
 
-                <VideoUrlInput video={campaignInfo.video} onChange={handleVideoChange} />
-            </Grid>
+                <VideoUrlInput video={$draft.latest.video?.src} onChange={handleVideoChange} />
+            </div>
+
+            <ImageUploadModal
+                bind:open={showUploadModal}
+                onConfirm={(files) => files[0] && handleImageUpload(files[0])}
+            />
+
+            {#if $draft.latest.cover}
+                {@const cover = $draft.latest.cover}
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2" role="list">
+                    <div
+                        class="group relative aspect-4/3 overflow-hidden rounded-lg"
+                        role="listitem"
+                    >
+                        <img src={cover} class="h-full w-full object-cover" />
+
+                        <button
+                            type="button"
+                            title={$t("common.remove")}
+                            onclick={() => handleImageRemove(cover)}
+                            class="bg-variant1/90 hover:ring-secondary absolute top-2 right-2 z-10 flex size-8 cursor-pointer items-center justify-center rounded-full shadow-lg backdrop-blur-sm transition-all duration-200 hover:ring-1 hover:ring-offset-2 hover:outline-none"
+                        >
+                            <CloseIcon width="16" height="16" class="text-secondary" />
+                        </button>
+
+                        <div
+                            class="bg-variant1/90 text-secondary absolute right-0 bottom-0 left-0 px-2 py-1 text-xs"
+                        >
+                            <!-- TO-D0: Add util function to format displayable file size strings -->
+                            <!-- {formatFileSize(image.size)} -->
+                        </div>
+                    </div>
+                </div>
+            {/if}
         </section>
 
-        <!-- Objectives Section -->
-        <section data-field="objectives" class="space-y-4">
+        <!-- Description: Brief Section -->
+        <section data-field="desc-brief" class="space-y-4">
             <div>
-                <label for="objectives" class="mb-1 block text-2xl font-bold text-black">
+                <label for="desc-brief" class="mb-1 block text-2xl font-bold text-black">
                     {$t("pages.project.edit.campaignInfo.goals.title")}
                     <span aria-label="required">*</span>
                 </label>
-                <p class="text-content text-base" id="objectives-help">
+                <p class="text-content text-base" id="desc-brief-help">
                     {$t("pages.project.edit.campaignInfo.goals.description")}
                 </p>
             </div>
 
             <RichTextEditor
-                id="objectives"
-                value={campaignInfo.objectives}
-                onChange={handleObjectivesChange}
+                id="desc-brief"
+                format="markdown"
+                value={$draft.latest.descBrief || ""}
+                onChange={handleBriefChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
-                ariaDescribedBy="objectives-help"
+                ariaDescribedBy="desc-brief-help"
+                minLength={20}
             />
         </section>
 
-        <!-- Legacy Section -->
-        <section data-field="legacy" class="space-y-4">
+        <!-- Description: About Section -->
+        <section data-field="desc-about" class="space-y-4">
             <div>
-                <label for="legacy" class="mb-1 block text-2xl font-bold text-black">
+                <label for="about" class="mb-1 block text-2xl font-bold text-black">
                     {$t("pages.project.edit.campaignInfo.legacy.title")}
                     <span aria-label="required">*</span>
                 </label>
-                <p class="text-content text-base" id="legacy-help">
+                <p class="text-content text-base" id="desc-about-help">
                     {$t("pages.project.edit.campaignInfo.legacy.description")}
                 </p>
             </div>
 
             <RichTextEditor
-                id="legacy"
-                value={campaignInfo.legacy}
-                onChange={handleLegacyChange}
+                id="about"
+                format="markdown"
+                value={$draft.latest.descAbout || ""}
+                onChange={handleAboutChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
-                ariaDescribedBy="legacy-help"
+                ariaDescribedBy="desc-about-help"
+                minLength={20}
             />
         </section>
 
-        <!-- Target Audience Section -->
-        <section data-field="targetAudience" class="space-y-4">
+        <!-- Description: Goal Section -->
+        <section data-field="desc-goal" class="space-y-4">
             <div>
-                <label for="target-audience" class="mb-1 block text-2xl font-bold text-black">
+                <label for="desc-goal" class="mb-1 block text-2xl font-bold text-black">
                     {$t("pages.project.edit.campaignInfo.target.title")}
                     <span aria-label="required">*</span>
                 </label>
-                <p class="text-content text-base" id="target-help">
+                <p class="text-content text-base" id="desc-goal-help">
                     {$t("pages.project.edit.campaignInfo.target.description")}
                 </p>
             </div>
 
             <RichTextEditor
-                id="target-audience"
-                value={campaignInfo.targetAudience}
-                onChange={handleTargetAudienceChange}
+                id="desc-goal"
+                format="markdown"
+                value={$draft.latest.descGoal || ""}
+                onChange={handleGoalChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={30}
-                maxLength={5000}
-                ariaDescribedBy="target-help"
+                ariaDescribedBy="desc-goal-help"
+                minLength={20}
             />
         </section>
 
-        <!-- Team Section -->
-        <section data-field="team" class="space-y-4">
+        <!-- Description: Team Section -->
+        <section data-field="desc-team" class="space-y-4">
             <div>
-                <label for="team" class="mb-1 block text-2xl font-bold text-black">
+                <label for="desc-team" class="mb-1 block text-2xl font-bold text-black">
                     {$t("pages.project.edit.campaignInfo.team.title")}
                     <span aria-label="required">*</span>
                 </label>
-                <p class="text-content text-base" id="team-help">
+                <p class="text-content text-base" id="desc-team-help">
                     {$t("pages.project.edit.campaignInfo.team.description")}
                 </p>
             </div>
 
             <RichTextEditor
                 id="team"
-                value={campaignInfo.team}
+                format="markdown"
+                value={$draft.latest.descTeam || ""}
                 onChange={handleTeamChange}
                 placeholder={$t("common.textPlaceholder")}
-                minLength={50}
-                maxLength={5000}
-                ariaDescribedBy="team-help"
+                ariaDescribedBy="desc-team-help"
+                minLength={20}
             />
         </section>
+
+        <!-- TO-DO: Uncomment when the strategy field is added to project description -->
+        <!-- Description: Strategy Section -->
+        <!-- <section data-field="desc-strat" class="space-y-4">
+            <div>
+                <label
+                    for="desc-strat"
+                    class="mb-1 block text-2xl font-bold text-black"
+                >
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.title")}
+                </label>
+                <p class="text-content text-base" id="desc-strat-help">
+                    {$t("pages.project.edit.campaignInfo.communicationStrategy.description")}
+                </p>
+            </div>
+
+            <RichTextEditor
+                id="desc-strat"
+                value={markdownToRichText($draft.latest.descStrat || "")}
+                onChange={handleCommunicationStrategyChange}
+                placeholder={$t("common.textPlaceholder")}
+                ariaDescribedBy="desc-strat-help"
+                minLength={20}
+            />
+        </section> -->
     </div>
 
     <!-- Continue Button -->
     <div class="flex justify-start pt-4">
         <Button kind="secondary" size="md" onclick={handleContinue}>
-            {#snippet children()}
-                {$t("pages.project.edit.campaignInfo.continue")}
-            {/snippet}
+            {$t("pages.project.edit.campaignInfo.continue")}
         </Button>
     </div>
 </div>

@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { cartCount } from "../../stores/cart";
+    import { cartCount } from "../../stores/checkoutsStore";
     import Bag from "../icons/commerce/Bag.svelte";
 </script>
 
 <a href="/checkout">
-    <Bag items={$cartCount > 1 ? $cartCount : undefined} />
+    <Bag items={$cartCount > 0 ? $cartCount : undefined} />
 </a>

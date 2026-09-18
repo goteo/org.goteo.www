@@ -1,14 +1,11 @@
 ---
 import WalletInfo from "./WalletInfo.svelte";
 
-const { t } = Astro.locals;
 const { accounting } = Astro.props;
-
-const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 ---
 
 <section>
-    <WalletInfo client:load {accounting} {defaultCurrency} />
+    <WalletInfo client:load {accounting} />
 
     <form
         id="payment"
@@ -18,15 +15,6 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
     >
         <input type="hidden" name="paymentMethod" value="wallet" />
         <input type="hidden" name="cartData" id="cartData" />
-
-        <!-- TODO: Merge with Btn "Continuar" -->
-        <button
-            id="submit-button"
-            class="bg-primary text-secondary cursor-pointer rounded-3xl px-6 py-4 font-bold"
-            type="submit"
-        >
-            {t("common.continue")}
-        </button>
     </form>
 
     <div id="payment-error-content" class="mt-4 text-center text-red-500"></div>
@@ -34,6 +22,8 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
 
 <script>
     import { actions, isInputError } from "astro:actions";
+
+    import { cart } from "../../stores/checkoutsStore";
 
     document.addEventListener("DOMContentLoaded", () => {
         const form = document.getElementById("payment");
@@ -43,15 +33,9 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
         if (!(form instanceof HTMLFormElement) || !(cartDataInput instanceof HTMLInputElement))
             return;
 
-        const cartData = localStorage.getItem("cart");
-        if (cartData) {
-            try {
-                JSON.parse(cartData);
-                cartDataInput.value = cartData;
-            } catch (e) {
-                console.error("Error parsing cart data:", e);
-            }
-        }
+        cart.subscribe((state) => {
+            cartDataInput.value = JSON.stringify(state);
+        });
 
         form.addEventListener("submit", async (event) => {
             event.preventDefault();
@@ -68,10 +52,11 @@ const defaultCurrency = import.meta.env.PUBLIC_DEFAULT_CURRENCY;
                 }
 
                 console.log("No returnUrl found in the response");
-                return;
             }
 
-            if (errorContent) {
+            form.dispatchEvent(new Event("checkout:settled"));
+
+            if (error && errorContent) {
                 errorContent.innerHTML = "";
 
                 if (isInputError(error)) {

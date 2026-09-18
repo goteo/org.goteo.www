@@ -2,8 +2,7 @@ import { defineAction, ActionError } from "astro:actions";
 
 import { apiGatewayCheckoutsPost, type GatewayCharge } from "../openapi/client";
 import { client } from "../openapi/client/client.gen";
-import { apiGatewaysNameGetUrl } from "../openapi/client/paths.gen";
-import { Unauthorized } from "../utils/responses";
+import { apiGatewaysIdGetUrl } from "../openapi/client/operation-paths.gen";
 
 export const payment = defineAction({
     accept: "form",
@@ -11,7 +10,10 @@ export const payment = defineAction({
         const { t, session } = context.locals;
 
         if (!session) {
-            return Unauthorized;
+            throw new ActionError({
+                code: "UNAUTHORIZED",
+                message: t("system.error.unauthorized"),
+            });
         }
 
         try {
@@ -44,22 +46,24 @@ export const payment = defineAction({
             }
 
             const charges: GatewayCharge[] = Object.values(cart.items);
+            const payload = {
+                origin: session.user.accounting!,
+                gateway: client.buildUrl({
+                    url: apiGatewaysIdGetUrl,
+                    path: { id: paymentMethod },
+                }),
+                returnUrl: `${context.url.origin}/checkout/verify`,
+                charges,
+            };
 
-            const response = await apiGatewayCheckoutsPost({
+            const { data, error } = await apiGatewayCheckoutsPost({
                 headers: session.token.asHttpHeaders,
-                body: {
-                    origin: session.user.accounting!,
-                    gateway: client.buildUrl({
-                        url: apiGatewaysNameGetUrl,
-                        path: { name: paymentMethod },
-                    }),
-                    returnUrl: `${context.url.origin}/checkout/verify`,
-                    charges,
-                },
+                body: payload,
             });
 
-            if (response.error) {
-                console.log(response);
+            if (error) {
+                console.error(error);
+                console.log(payload);
 
                 throw new ActionError({
                     code: "BAD_REQUEST",
@@ -67,7 +71,7 @@ export const payment = defineAction({
                 });
             }
 
-            return { success: true, checkout: response.data };
+            return { success: true, checkout: data };
         } catch (err) {
             console.error(err);
 

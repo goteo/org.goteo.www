@@ -3,9 +3,10 @@
 
     import { t } from "../../i18n/store";
     import { apiTipjarsIdGet } from "../../openapi/client";
-    import { cart, cartByRecipient, type CartItem } from "../../stores/cart";
+    import { cart, cartByRecipient, type CheckoutItem } from "../../stores/checkoutsStore";
     import { getUnit } from "../../utils/currencies";
     import * as tipping from "../../utils/tipping";
+    import Title from "../library/typography/Title.svelte";
 
     let amount = $state(tipping.defaultAmount / getUnit());
     let hasError = $state(false);
@@ -23,7 +24,7 @@
         };
     }
 
-    async function getTip(): Promise<Omit<CartItem, "key">> {
+    async function getTip(): Promise<Omit<CheckoutItem, "key">> {
         if ($cartByRecipient[tipping.tipjarIri]) {
             return $cartByRecipient[tipping.tipjarIri][0];
         }
@@ -64,11 +65,11 @@
 
     function toggleTip() {
         if (!isChecked) {
-            if ($cartByRecipient[tipping.tipjarIri].length < 1) {
+            const tip = $cartByRecipient[tipping.tipjarIri]?.[0];
+            if (!tip) {
                 return;
             }
 
-            const tip = $cartByRecipient[tipping.tipjarIri][0];
             cart.removeItem(tip.key);
         } else {
             setTip(amount * getUnit());
@@ -78,9 +79,9 @@
 
 <div class="flex w-auto flex-col gap-4">
     <div class="flex flex-col gap-2">
-        <h2 class="text-2xl font-bold text-black">
+        <Title level={2} variant="subsection">
             {$t("pages.checkout.tipjar.community")}
-        </h2>
+        </Title>
 
         <input
             class="w-full rounded border border-gray-300 p-2
@@ -110,7 +111,7 @@
                 type="checkbox"
                 class="accent-primary h-6 w-6 rounded"
                 bind:checked={isChecked}
-                onchange={(e) => toggleTip()}
+                onchange={() => toggleTip()}
             />
             <label for="donation-checkbox" class="text-secondary">
                 {$t("pages.checkout.tipjar.checkboxLabel")}

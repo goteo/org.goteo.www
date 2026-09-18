@@ -29,16 +29,16 @@
 
 {#if hasData}
     <BaseActivityCard
-        titleKey="me.matchfunding.card.title"
-        leftStatLabel="me.matchfunding.card.calls"
+        titleKey="pages.me.matchfunding.card.title"
+        leftStatLabel="pages.me.matchfunding.card.calls"
         leftStatValue={data?.totalCalls ?? 0}
-        rightStatLabel="me.matchfunding.card.donated"
+        rightStatLabel="pages.me.matchfunding.card.donated"
         rightStatValue={formattedTotal}
-        recentTitleKey="me.matchfunding.card.recent"
+        recentTitleKey="pages.me.matchfunding.card.recent"
         illustrationPath="/images/profile/ilustration-matchfunding.png"
-        primaryActionLabel="me.matchfunding.card.viewAll"
+        primaryActionLabel="pages.me.matchfunding.card.viewAll"
         primaryActionHref={lang === "es" ? "/me/matchfunding" : `/${lang}/me/matchfunding`}
-        secondaryActionLabel="me.matchfunding.card.create"
+        secondaryActionLabel="pages.me.matchfunding.card.create"
         secondaryActionHref={lang === "es" ? "/matchfunding/new" : `/${lang}/matchfunding/new`}
         isEmpty={false}
     >

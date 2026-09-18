@@ -1,162 +1,168 @@
 <script lang="ts">
-    import Search from "./Search.svelte";
-    import Bullet from "../../components/icons/Bullet.svelte";
+    import AdminSearch from "./Search.svelte";
     import { t } from "../../i18n/store";
-    import { type ApiGatewayChargesGetCollectionData } from "../../openapi/client/index";
+    import Bullet from "../icons/Bullet.svelte";
     import FiltersIcon from "../icons/filters/Filters.svelte";
+    import ActionableButton, {
+        type ActionableState,
+    } from "../library/buttons/ActionableButton.svelte";
     import Button from "../library/buttons/Button.svelte";
-    import DateInput from "../library/inputs/DateInput.svelte";
-    import Grid from "../library/layout/Grid.svelte";
+    import FilterComposer from "../library/filters/FilterComposer.svelte";
+
+    import type { FilterResource } from "../../utils/filterComposer";
+
+    const APPLY_AUTORESET_MS = 2000;
 
     let {
+        resource,
         filters,
         onApplyFilters,
-        paymentMethodOptions,
-        chargeStatusOptions,
-        rangeAmountOptions,
-        initialSearchQuery = "",
-    } = $props<{
-        filters: ApiGatewayChargesGetCollectionData["query"];
-        onApplyFilters: (filters: any) => void;
-        paymentMethodOptions: [string, string][];
-        chargeStatusOptions: [string, string][];
-        rangeAmountOptions: [string, string][];
-        initialSearchQuery?: string;
-    }>();
+        searchPlaceholder,
+        onSelectTarget,
+        onSelectProject,
+        onSelectUser,
+    }: {
+        resource: FilterResource;
+        filters: any;
+        onApplyFilters: (filters: any) => Promise<void> | void;
+        searchPlaceholder?: string;
+        onSelectTarget?: (accounting: string) => void;
+        onSelectProject?: (project: any) => void;
+        onSelectUser?: (user: any) => void;
+    } = $props();
 
-    let showFilters = $state(false);
+    let showFilterComposer = $state(false);
+    let composerParams = $state<Record<string, string | string[]>>({});
+    let previousComposerKeys = $state<string[]>([]);
+    let previousComposerParams = $state("");
 
-    let selectedPaymentMethod = $state("");
-    let selectedChargeStatus = $state("");
-    let selectedRangeAmount = $state("");
-    let dateFrom = $state("");
-    let dateTo = $state("");
+    let applyButtonState = $state<ActionableState>("actionable");
 
-    function handleSubmit(event: SubmitEvent) {
-        event.preventDefault();
-        if (dateFrom && dateTo && new Date(dateFrom) > new Date(dateTo)) {
-            alert($t("pages.admin.charges.filters.dateRange.errors.invalidRange"));
-            return;
-        }
-
-        onApplyFilters({
-            ...filters,
-            "checkout.gateway": selectedPaymentMethod || undefined,
-            status: selectedChargeStatus || undefined,
-            "money.amount[gte]": selectedRangeAmount || undefined,
-            "dateCreated[after]": dateFrom
-                ? new Date(new Date(dateFrom).getTime()).toISOString()
-                : undefined,
-            "dateCreated[before]": dateTo
-                ? new Date(new Date(dateTo).getTime()).toISOString()
-                : undefined,
-        });
+    function handleComposerParamsChange(params: Record<string, string | string[]>) {
+        composerParams = params;
     }
 
-    function handleSelectTarget(accounting: string) {
-        onApplyFilters({ target: accounting });
+    async function applyComposerFilters() {
+        if (applyButtonState !== "actionable") return;
+
+        const result = { ...filters };
+        const allComposerKeys = new Set([...previousComposerKeys, ...Object.keys(composerParams)]);
+
+        for (const key of allComposerKeys) {
+            result[key] = undefined;
+        }
+        for (const [key, value] of Object.entries(composerParams)) {
+            result[key] = value;
+        }
+
+        previousComposerKeys = Object.keys(composerParams);
+
+        applyButtonState = "loading";
+        try {
+            await onApplyFilters(result);
+        } finally {
+            applyButtonState = "actioned";
+            setTimeout(() => {
+                if (applyButtonState === "actioned") {
+                    applyButtonState = "actionable";
+                }
+            }, APPLY_AUTORESET_MS);
+        }
+    }
+
+    function hasActiveFilters() {
+        if (!filters) return false;
+        const keys = Object.keys(filters);
+        return keys.some((k) => filters[k] !== undefined && filters[k] !== "");
+    }
+
+    let autoApplyTimeout: ReturnType<typeof setTimeout>;
+
+    function scheduleApply() {
+        clearTimeout(autoApplyTimeout);
+        autoApplyTimeout = setTimeout(applyComposerFilters, 400);
     }
 
     $effect(() => {
-        if (typeof filters["checkout.gateway"] === "undefined") selectedPaymentMethod = "";
-        if (typeof filters.status === "undefined") selectedChargeStatus = "";
-        if (typeof filters["money.amount[gte]"] === "undefined") selectedRangeAmount = "";
-        if (typeof filters["money.amount[between]"] === "undefined") selectedRangeAmount = "";
-
-        if (typeof filters["dateCreated[after]"] === "undefined") dateFrom = "";
-        if (typeof filters["dateCreated[before]"] === "undefined") dateTo = "";
+        const serialized = JSON.stringify(composerParams);
+        if (previousComposerParams && serialized !== previousComposerParams) {
+            scheduleApply();
+        }
+        previousComposerParams = serialized;
     });
 </script>
 
 <div
-    class="border-variant1 relative flex flex-col gap-10 rounded-[40px] border px-8 pt-6 pb-8 shadow-[0px_1px_3px_0px_#0000001A]"
+    class="border-variant1 relative flex flex-col rounded-[40px] border bg-white p-8 shadow-[0px_1px_3px_0px_#0000001A]"
 >
-    <div class=" flex items-center justify-between gap-4">
-        <Search onSelectTarget={handleSelectTarget} initialQuery={initialSearchQuery} />
+    <div class="flex items-center gap-4">
+        {#if onSelectTarget || onSelectProject || onSelectUser}
+            <AdminSearch
+                {searchPlaceholder}
+                {onSelectTarget}
+                {onSelectProject}
+                {onSelectUser}
+                {resource}
+            />
+        {/if}
 
-        <div class="flex items-center gap-3">
-            <Button
-                type="button"
-                kind="ghost"
-                onclick={() => (showFilters = !showFilters)}
-                class="relative text-nowrap"
-            >
-                <span class="relative">
-                    <FiltersIcon />
-                    {#if selectedPaymentMethod !== "" || selectedChargeStatus !== "" || selectedRangeAmount !== "" || dateFrom !== "" || dateTo !== ""}
-                        <span class="absolute -top-1 -right-1">
-                            <Bullet />
-                        </span>
-                    {/if}
-                </span>
-                {#if showFilters}
-                    {$t("pages.admin.charges.filters.btns.closeFilters")}
-                {:else}
-                    {$t("pages.admin.charges.filters.btns.openFilters")}
+        <Button
+            type="button"
+            kind="ghost"
+            onclick={() => (showFilterComposer = !showFilterComposer)}
+            class="shrink-0 text-nowrap"
+        >
+            <span class="relative">
+                <FiltersIcon />
+                {#if hasActiveFilters()}
+                    <Bullet class="absolute top-0 right-0" size={6} />
                 {/if}
-            </Button>
-        </div>
+            </span>
+            {#if showFilterComposer}
+                {$t("pages.admin.filter.btns.closeFilters")}
+            {:else}
+                {$t("pages.admin.filter.btns.openFilters")}
+            {/if}
+        </Button>
     </div>
 
-    {#if showFilters}
-        <form onsubmit={handleSubmit} class="flex flex-col gap-6">
-            <Grid class="grid-cols-3 gap-4">
-                <select
-                    class="border-secondary w-full rounded-lg border p-4"
-                    bind:value={selectedPaymentMethod}
-                >
-                    <option value="" disabled selected
-                        >{$t("pages.admin.charges.filters.paymentMethod.title")}</option
+    <div class="filter-panel" class:open={showFilterComposer}>
+        <div class="filter-panel-inner">
+            <div class="flex flex-col gap-4 pt-5">
+                <FilterComposer {resource} onParamsChange={handleComposerParamsChange} />
+
+                <div class="flex justify-end">
+                    <ActionableButton
+                        type="button"
+                        kind="primary"
+                        class="w-fit"
+                        action={applyComposerFilters}
+                        bind:state={applyButtonState}
+                        autoreset={APPLY_AUTORESET_MS}
                     >
-                    {#each paymentMethodOptions as [value, label]}
-                        <option {value}>{label}</option>
-                    {/each}
-                </select>
-
-                <select
-                    class="border-secondary w-full rounded-lg border p-4"
-                    bind:value={selectedChargeStatus}
-                >
-                    <option value="" disabled
-                        >{$t("pages.admin.charges.filters.chargeStatus.title")}</option
-                    >
-                    {#each chargeStatusOptions as [value, label]}
-                        <option {value}>{label}</option>
-                    {/each}
-                </select>
-
-                <select
-                    class="border-secondary w-full rounded-lg border p-4"
-                    bind:value={selectedRangeAmount}
-                >
-                    <option value="" disabled
-                        >{$t("pages.admin.charges.filters.rangeAmount.title")}</option
-                    >
-                    {#each rangeAmountOptions as [value, label]}
-                        <option {value}>{label}</option>
-                    {/each}
-                </select>
-
-                <DateInput
-                    id="dateFrom"
-                    labelText={$t("pages.admin.charges.filters.dateRange.initDate")}
-                    value={dateFrom ? new Date(dateFrom) : new Date(NaN)}
-                    onInput={(date) => (dateFrom = date)}
-                />
-
-                <DateInput
-                    id="dateTo"
-                    labelText={$t("pages.admin.charges.filters.dateRange.endDate")}
-                    value={dateTo ? new Date(dateTo) : new Date(NaN)}
-                    onInput={(date) => (dateTo = date)}
-                />
-            </Grid>
-
-            <div class="col-span-3 flex justify-end">
-                <Button type="submit" kind="primary">
-                    {$t("pages.admin.charges.filters.btns.apply")}
-                </Button>
+                        {$t("pages.admin.filter.btns.apply")}
+                    </ActionableButton>
+                </div>
             </div>
-        </form>
-    {/if}
+        </div>
+    </div>
 </div>
+
+<style>
+    .filter-panel {
+        display: grid;
+        grid-template-rows: 0fr;
+        overflow: hidden;
+        transition: grid-template-rows 0.25s ease;
+    }
+
+    .filter-panel.open {
+        grid-template-rows: 1fr;
+        overflow: visible;
+    }
+
+    .filter-panel-inner {
+        min-height: 0;
+        overflow: visible;
+    }
+</style>

@@ -5,7 +5,6 @@ import pluginJs from "@eslint/js";
 import importPlugin from "eslint-plugin-import";
 import globals from "globals";
 import tseslint from "typescript-eslint";
-import cypressPlugin from "eslint-plugin-cypress";
 import sveltePlugin from "eslint-plugin-svelte";
 import unusedImportsPlugin from "eslint-plugin-unused-imports";
 import svelteConfig from "./svelte.config.js";
@@ -18,6 +17,11 @@ export default [
     ...sveltePlugin.configs.recommended,
     { files: ["**/*.{js,mjs,cjs,ts}"] },
     { languageOptions: { globals: globals.browser } },
+    // Root config files run in Node at build time, not in the browser.
+    {
+        files: ["*.config.{js,mjs,cjs,ts}"],
+        languageOptions: { globals: globals.node },
+    },
     {
         ignores: [
             "node_modules/**",
@@ -34,6 +38,8 @@ export default [
             ".github/**",
             "env.d.ts",
             "storybook-static/**",
+            "graphify-out/**",
+            "worker-configuration.d.ts",
         ],
     },
     {
@@ -61,32 +67,18 @@ export default [
             ],
             "@typescript-eslint/no-explicit-any": "off",
             "unused-imports/no-unused-imports": "error",
-        },
-    },
-    // Cypress configuration
-    {
-        files: ["cypress/**/*.{js,mjs,cjs,ts}"],
-        plugins: {
-            cypress: cypressPlugin,
-        },
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                cy: "readonly",
-                Cypress: "readonly",
-                describe: "readonly",
-                context: "readonly",
-                beforeEach: "readonly",
-                afterEach: "readonly",
-                it: "readonly",
-                expect: "readonly",
-                assert: "readonly",
-            },
-        },
-        rules: {
-            ...cypressPlugin.configs.recommended.rules,
-            "@typescript-eslint/no-unused-expressions": "off",
-            "cypress/no-unnecessary-waiting": "off",
+            // An `_` prefix marks a binding that exists only to satisfy a
+            // signature or a destructuring position — never a leftover.
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                },
+            ],
         },
     },
     // Svelte module scripts
@@ -131,7 +123,16 @@ export default [
             ],
             "no-unsafe-finally": "off",
             "unused-imports/no-unused-imports": "error",
-            "@typescript-eslint/no-unused-vars": "warn",
+            "@typescript-eslint/no-unused-vars": [
+                "warn",
+                {
+                    args: "all",
+                    argsIgnorePattern: "^_",
+                    varsIgnorePattern: "^_",
+                    caughtErrorsIgnorePattern: "^_",
+                    destructuredArrayIgnorePattern: "^_",
+                },
+            ],
             "@typescript-eslint/no-unused-expressions": "off",
             "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
             "svelte/require-each-key": "off",
@@ -140,6 +141,9 @@ export default [
             "svelte/prefer-svelte-reactivity": "off",
             "svelte/no-unused-props": "warn",
             "svelte/no-useless-children-snippet": "warn",
+            // False positives on $bindable/$props defaults used only in the template:
+            // the core rule analyses the JS AST and can't see Svelte template usage.
+            "no-useless-assignment": "off",
         },
     },
     ...storybook.configs["flat/recommended"],

@@ -9,6 +9,7 @@
     import { extractId } from "../../utils/extractId.ts";
     import { renderMarkdown } from "../../utils/renderMarkdown";
     import Button from "../library/buttons/Button.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { User } from "../../openapi/client/types.gen.ts";
     import type { MouseEventHandler } from "svelte/elements";
@@ -117,9 +118,7 @@
             {#if update.date}
                 {formatDate(new Date(update.date), $locale)}
             {/if}
-            <div class="pt-0.5">
-                <Bullet />
-            </div>
+            <Bullet size={3} />
         </div>
         {#if update.cover}
             <img
@@ -135,9 +134,9 @@
     </div>
     <div class="flex min-h-0 flex-1 flex-col justify-between gap-6">
         <div class={twMerge("flex flex-col", contentGroupStyles[type])}>
-            <h2 class={twMerge("text-secondary font-bold", titleStyles[type])}>
+            <Title level={2} variant="subsection" color="secondary" class={titleStyles[type]}>
                 {update.title}
-            </h2>
+            </Title>
             {#if update.subtitle || update.body}
                 <div class="flex flex-col gap-2 leading-5">
                     <p class="line-clamp-2 text-base font-bold text-black">{update.subtitle}</p>

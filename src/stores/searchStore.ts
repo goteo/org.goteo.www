@@ -20,6 +20,7 @@ export interface SearchState {
     itemsPerPage: number;
     hasNextPage: boolean;
     hasPrevPage: boolean;
+    isLoadingMore: boolean;
     currentAbortController?: AbortController;
 }
 
@@ -31,7 +32,7 @@ function getInitialState(): SearchState {
     return {
         filters: {
             page: 1,
-            itemsPerPage: 20,
+            itemsPerPage: 18,
         },
         results: [],
         isLoading: false,
@@ -42,9 +43,10 @@ function getInitialState(): SearchState {
         lastSearchTime: 0,
         // Pagination state
         currentPage: 1,
-        itemsPerPage: 20,
+        itemsPerPage: 18,
         hasNextPage: false,
         hasPrevPage: false,
+        isLoadingMore: false,
         currentAbortController: undefined,
     };
 }
@@ -76,7 +78,7 @@ function loadInitialState(): SearchState {
     if (state.filters) {
         state.filters = parseSearchParamsFilters(urlParams);
 
-        if (Object.entries(state.filters).length > 0) {
+        if ([...urlParams.keys()].length > 0) {
             state.hasSearched = true;
         }
     }
@@ -102,6 +104,7 @@ function createSearchStore() {
             update((state) => ({
                 ...state,
                 isLoading: true,
+                isLoadingMore: false,
                 hasError: false,
                 errorMessage: "",
                 currentAbortController: abortController,
@@ -130,17 +133,18 @@ function createSearchStore() {
                 }));
             }
         } catch (error) {
-            console.error(error);
-            // Only set error if request wasn't cancelled
-            if (!(error instanceof Error) || error.name !== "AbortError") {
-                update((state) => ({
-                    ...state,
-                    isLoading: false,
-                    hasError: true,
-                    errorMessage: error instanceof Error ? error.message : "Search failed",
-                    currentAbortController: undefined,
-                }));
+            // Ignore cancelled requests — a new search aborted this one
+            if (error instanceof Error && error.name === "AbortError") {
+                return;
             }
+            console.error(error);
+            update((state) => ({
+                ...state,
+                isLoading: false,
+                hasError: true,
+                errorMessage: error instanceof Error ? error.message : "Search failed",
+                currentAbortController: undefined,
+            }));
         }
     };
 
@@ -225,7 +229,7 @@ function createSearchStore() {
                 ...state,
                 filters: {
                     page: 1,
-                    itemsPerPage: 20,
+                    itemsPerPage: 18,
                 },
             })),
 
@@ -282,11 +286,7 @@ function createSearchStore() {
                 hasPrevPage: pagination?.hasPrev || false,
                 hasSearched:
                     totalCount > 0 ||
-                    !!(
-                        filters?.title ||
-                        filters?.status ||
-                        (filters?.["categories[]"]?.length ?? 0) > 0
-                    ),
+                    !!(filters?.title || (filters?.["categories[]"]?.length ?? 0) > 0),
                 isLoading: false,
                 hasError: false,
                 errorMessage: "",
@@ -390,6 +390,7 @@ function createSearchStore() {
                 update((state) => ({
                     ...state,
                     isLoading: true,
+                    isLoadingMore: true,
                     hasError: false,
                     errorMessage: "",
                     currentAbortController: abortController,
@@ -413,6 +414,7 @@ function createSearchStore() {
                         hasNextPage: response.hasNextPage,
                         hasPrevPage,
                         isLoading: false,
+                        isLoadingMore: false,
                         hasSearched: true,
                         lastSearchTime: Date.now(),
                         currentAbortController: undefined,
@@ -425,6 +427,7 @@ function createSearchStore() {
                     update((state) => ({
                         ...state,
                         isLoading: false,
+                        isLoadingMore: false,
                         hasError: true,
                         errorMessage:
                             error instanceof Error ? error.message : "Failed to load more results",
@@ -449,6 +452,9 @@ export const searchFilters = derived(searchStore, ($searchStore) => $searchStore
 export const searchResults = derived(searchStore, ($searchStore) => $searchStore.results);
 
 export const isSearching = derived(searchStore, ($searchStore) => $searchStore.isLoading);
+
+// True only while appending more results (Load more) — not during a fresh search
+export const isLoadingMore = derived(searchStore, ($searchStore) => $searchStore.isLoadingMore);
 
 export const searchError = derived(searchStore, ($searchStore) =>
     $searchStore.hasError ? $searchStore.errorMessage : null,
@@ -478,8 +484,12 @@ export const resultCount = derived(searchStore, ($searchStore) => $searchStore.t
 
 // Derived store to check if any filters are active
 export const hasActiveFilters = derived(searchStore, ($searchStore) => {
-    const { filters } = $searchStore;
-    return !!(filters?.title || filters?.status || (filters?.["categories[]"]?.length ?? 0) > 0);
+    const paginationKeys = ["page", "itemsPerPage"];
+    return Object.entries($searchStore.filters ?? {}).some(
+        ([key, value]) =>
+            !paginationKeys.includes(key) &&
+            (Array.isArray(value) ? value.length > 0 : value != null && value !== ""),
+    );
 });
 
 // Pagination derived stores

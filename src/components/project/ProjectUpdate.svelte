@@ -11,6 +11,7 @@
     import AlertIcon from "../icons/status/AlertIcon.svelte";
     import Button from "../library/buttons/Button.svelte";
     import Carousel from "../library/layout/Carousel.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { Project, ProjectUpdate } from "../../openapi/client/index";
 
@@ -22,7 +23,7 @@
         project: Project;
     } = $props();
 
-    const projectId = project.id!.toString();
+    const projectId = $derived(project.id!.toString());
 
     let projectUpdates: ProjectUpdate[] = $state([]);
 
@@ -104,9 +105,9 @@
 </script>
 
 <div class="flex flex-col gap-10">
-    <h2 class="text-secondary line-clamp-2 flex max-w-2xl text-4xl font-bold">
+    <Title level={2} variant="headline" color="secondary" truncate={2} class="flex max-w-2xl">
         {$t("pages.project.view.tabs.updates.content.title")}
-    </h2>
+    </Title>
     <Carousel
         bind:activeCard
         gap={24}
@@ -147,7 +148,7 @@
     <Modal
         bind:open={openModal}
         closeBtnClass="top-7 end-7 bg-transparent text-secondary hover:bg-transparent hover:text-secondary hover:scale-110 transition-transform duration-200 transform focus:ring-0 shadow-none dark:text-secondary dark:hover:text-secondary dark:hover:bg-transparent"
-        class="fixed top-1/2 left-1/2 w-full max-w-200 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:bg-[#878282B2] backdrop:backdrop-blur-[5px]"
+        class="backdrop:bg-overlay fixed top-1/2 left-1/2 w-full max-w-200 -translate-x-1/2 -translate-y-1/2 rounded-3xl bg-white p-6 shadow-lg backdrop:backdrop-blur-[5px]"
     >
         {#if selected}
             {#if shouldShowHeader(selected.date)}
@@ -156,9 +157,9 @@
                     {$t("pages.project.view.tabs.updates.modalTitle")}
                 </div>
             {/if}
-            <h3 class="text-secondary text-3xl font-bold">
+            <Title level={3} variant="section" color="secondary">
                 {selected?.title}
-            </h3>
+            </Title>
             <div class="marked-content text-content flex flex-col gap-4">
                 {#await renderMarkdown(selected.body) then content}
                     {@html content}

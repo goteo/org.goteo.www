@@ -35,21 +35,24 @@
     );
 </script>
 
+<!-- GOTEO-OC-DONATION-CERTIFICATE: secondary action "Solicitar certificado" is exclusive to the
+     donation-certificate feature of Goteo under Fundación Platoniq, hidden in the open-core.
+     Re-enable when a feature toggle exists. Do not delete.
+     <BaseActivityCard ... secondaryActionLabel="pages.me.donations.certificate"
+        secondaryActionHref="#" ... /> -->
 <BaseActivityCard
-    titleKey="me.donations.title"
-    leftStatLabel="me.donations.count"
+    titleKey="pages.me.donations.title"
+    leftStatLabel="pages.me.donations.count"
     leftStatValue={donationsData?.count ?? 0}
-    rightStatLabel="me.donations.total"
+    rightStatLabel="pages.me.donations.total"
     rightStatValue={formattedTotal}
-    recentTitleKey="me.donations.recent"
+    recentTitleKey="pages.me.donations.recent"
     illustrationPath="/images/profile/ilustration-donations.png"
-    primaryActionLabel="me.donations.viewAll"
+    primaryActionLabel="pages.me.donations.viewAll"
     primaryActionHref={lang === "es" ? "/me/donations" : `/${lang}/me/donations`}
-    secondaryActionLabel="me.donations.certificate"
-    secondaryActionHref="#"
     isEmpty={!hasData}
-    emptyMessageKey="me.donations.empty"
-    emptyCtaLabel="me.donations.explore"
+    emptyMessageKey="pages.me.donations.empty"
+    emptyCtaLabel="pages.me.donations.explore"
     emptyCtaLink={lang === "es" ? "/discover" : `/${lang}/discover`}
 >
     {#if donationsData?.recentDonations}

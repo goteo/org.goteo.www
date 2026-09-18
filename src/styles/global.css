@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@fontsource/karla";
 @import "svelte-range-slider-pips/dist/range-slider-pips.css";
 
 @plugin "flowbite/plugin";
@@ -10,8 +9,9 @@
 @source "../pages/**/*.{astro,svelte}";
 @source "../layouts/**/*.{astro,svelte}";
 @source "../components/**/*.{astro,svelte}";
-@source "../node_modules/flowbite-svelte/dist";
-@source "../node_modules/flowbite-svelte-icons/dist";
+@source "../../node_modules/flowbite";
+@source "../../node_modules/flowbite-svelte";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
     /* Light Theme (default) */
@@ -27,6 +27,9 @@
     --color-purple-soft: #faf9ff;
     --color-purple-med: #f6f5ff;
 
+    /* Scrim tras diálogos y modales: gris cálido al 70% */
+    --color-overlay: #878282b2;
+
     --color-variant1: #e6e5f7;
     --color-variant2: #99ffcc;
     --color-variant3: #72d8ff;
@@ -37,7 +40,8 @@
     --color-semantic-notification: #c2eeff;
     --color-semantic-warning: #ffffc2;
 
-    --font-body: "Karla", sans-serif;
+    /* Declared by the `<Font>` component in Layout.astro; already carries its own fallbacks. */
+    --font-body: var(--font-karla);
     --text-body-small: 0.875rem;
     --text-double: 2rem;
 }
@@ -83,6 +87,10 @@ body.grid {
     margin: 0 auto;
     padding: 0 calc(var(--spacing) * 10);
     width: 100%;
+}
+
+astro-island {
+    display: contents;
 }
 
 .no-scroll {

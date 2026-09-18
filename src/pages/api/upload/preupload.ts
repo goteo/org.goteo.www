@@ -1,7 +1,11 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
-import { STORAGE_ALLOWEDTYPES, STORAGE_PREFIX_TEMP, client } from "../../../utils/objectStorage";
+import { createClient, generateStorageKey } from "../../../utils/media/objectStorage";
+import {
+    STORAGE_ALLOWEDTYPES,
+    STORAGE_PREFIX_TEMP,
+} from "../../../utils/media/objectStorage.types";
 import { Unauthorized } from "../../../utils/responses";
 
 import type { APIRoute } from "astro";
@@ -17,7 +21,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const { session } = locals;
     if (!session) return Unauthorized;
 
-    const { contentType } = await request.json();
+    const { contentType } = (await request.json()) as { contentType?: string };
     if (!contentType) {
         return json({ error: `Missing key "contentType" in request body` }, 400);
     }
@@ -29,7 +33,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         );
     }
 
-    const tempKey = `${STORAGE_PREFIX_TEMP}/${session.user.id}/${crypto.randomUUID()}`;
+    const tempKey = generateStorageKey(STORAGE_PREFIX_TEMP, session.user.id!);
 
     try {
         const command = new PutObjectCommand({
@@ -38,6 +42,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
             ContentType: contentType,
         });
 
+        const client = createClient();
         const signedUrl = await getSignedUrl(client, command, {
             expiresIn: 120,
         });
@@ -46,9 +51,10 @@ export const POST: APIRoute = async ({ request, locals }) => {
     } catch (err: any) {
         console.error(err);
 
-        return json(
-            { error: `Bucket responded with error code "${err.Code}"` },
-            err["$metadata"].httpStatusCode || 500,
-        );
+        const message = err?.Code
+            ? `Bucket responded with error code "${err.Code}"`
+            : err?.message || "Unknown upload error";
+
+        return json({ error: message }, err?.$metadata?.httpStatusCode || 500);
     }
 };

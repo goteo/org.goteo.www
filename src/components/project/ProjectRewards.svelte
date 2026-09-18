@@ -5,11 +5,13 @@
         apiAccountingsIdGet,
         apiProjectRewardsGetCollection,
     } from "../../openapi/client/index";
-    import { cart } from "../../stores/cart";
+    import { cart, checkoutReady } from "../../stores/checkoutsStore";
     import { getUnit } from "../../utils/currencies";
     import { extractId } from "../../utils/extractId";
     import Button from "../library/buttons/Button.svelte";
+    import TextInput from "../library/inputs/TextInput.svelte";
     import Grid from "../library/layout/Grid.svelte";
+    import Title from "../library/typography/Title.svelte";
 
     import type { ProjectReward, Project } from "../../openapi/client/index";
 
@@ -21,7 +23,7 @@
         project: Project;
     } = $props();
 
-    const projectId = project.id!.toString();
+    let projectId = $derived(project.id!.toString());
 
     let rewards: ProjectReward[] = $state([]);
 
@@ -69,41 +71,48 @@
             recipient: accounting?.owner!,
             recipientDisplayName: project.title,
             target: project.accounting!,
+            cover: project.cover,
             money: {
                 amount: numericAmount * getUnit(accounting?.currency),
                 currency: accounting?.currency!,
             },
         });
 
+        await checkoutReady();
         window.location.href = "/checkout";
     }
 </script>
 
 <section>
     <div class="flex flex-col gap-12">
-        <h2 class="text-secondary text-4xl font-bold">
+        <Title level={2} variant="headline" color="secondary">
             {$t("pages.project.view.rewards.title")}
-        </h2>
-        <Grid>
+        </Title>
+        <Grid class="grid-cols-1 sm:grid-cols-2">
             <div
                 class:opacity-50={!isAvailable}
                 class:cursor-not-allowed={!isAvailable}
-                class="border-grey flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border bg-[#FFF] p-6 shadow-[0px_1px_3px_0px_#0000001A]"
+                class="border-grey bg-purple-soft flex basis-1/3 flex-col justify-between gap-6 rounded-4xl border p-6 shadow-[0px_1px_3px_0px_#0000001A]"
             >
-                <div class="flex flex-col gap-6">
-                    <h3 class="text-secondary w-full text-left text-2xl font-semibold">
+                <div class="flex flex-col gap-3">
+                    <Title
+                        level={3}
+                        variant="subsection"
+                        color="secondary"
+                        weight="bold"
+                        class="w-full text-left"
+                    >
                         {$t("pages.project.view.rewards.donationFree.title")}
-                    </h3>
-                    <p class="text-sm whitespace-pre-line text-gray-800">
+                    </Title>
+                    <p class="text-content text-base whitespace-pre-line">
                         {$t("pages.project.view.rewards.donationFree.description")}
                     </p>
                 </div>
-                <div class="flex flex-col gap-6">
-                    <input
-                        type="text"
-                        class="w-full rounded border border-gray-300 p-2"
-                        placeholder={$t("pages.project.view.rewards.donationFree.placeholder")}
+                <div class="mt-auto flex flex-col">
+                    <TextInput
+                        type="number"
                         bind:value={freeAmount}
+                        placeholder={$t("pages.project.view.rewards.donationFree.placeholder")}
                     />
                     <Button
                         kind="secondary"

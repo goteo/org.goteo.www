@@ -4,23 +4,29 @@
     import type { Snippet } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
 
-    const id = $props.id();
-
     interface Props extends Omit<HTMLInputAttributes, "class"> {
+        id?: string;
         checked?: boolean;
         label?: string;
         class?: ClassNameValue;
         children?: Snippet;
     }
 
-    let { checked = $bindable(false), label, class: classes, children, ...rest }: Props = $props();
+    let {
+        id = crypto.randomUUID(),
+        checked = $bindable(false),
+        label,
+        class: classes,
+        children,
+        ...rest
+    }: Props = $props();
 </script>
 
 <label for={id} class={twMerge("flex cursor-pointer items-center gap-4", classes)}>
-    <input {id} bind:checked type="checkbox" class="sr-only" {...rest} />
+    <input {id} bind:checked type="checkbox" class="peer sr-only" {...rest} />
     <div
-        class="flex h-6 w-6 shrink-0 items-center justify-center rounded-[5px] border-[1.5px] transition-colors
-        {checked ? 'border-primary bg-primary' : 'border-secondary bg-white'}"
+        class="peer-focus-visible:outline-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-[5px] border-[1.5px] transition-colors peer-focus-visible:ring-2 peer-focus-visible:outline-offset-2
+        {checked ? 'border-primary bg-primary' : 'border-secondary bg-transparent'}"
     >
         <svg
             viewBox="0 0 12 10"

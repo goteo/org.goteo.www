@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { twMerge, type ClassNameValue } from "tailwind-merge";
+    import { twJoin, twMerge, type ClassNameValue } from "tailwind-merge";
 
     let {
         value = $bindable<string | number>(""),
@@ -28,35 +28,24 @@
         labelText?: string;
         helperText?: string;
         error?: string;
-        onInput?: (event: Event) => void;
+        onInput?: (value: string | number) => void;
         onBlur?: (event?: FocusEvent) => void;
         onFocus?: (event?: FocusEvent) => void;
     } = $props();
 
     const generatedId = $props.id();
     const finalId = $derived(id ?? generatedId);
-
-    const inputClasses = $derived(
-        twMerge(
-            "border-secondary w-full rounded-lg border bg-white p-4 text-base text-content placeholder:text-gray-400 transition-all outline-none focus:ring-0",
-            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
-            disabled && "cursor-not-allowed",
-            classes,
-        ),
-    );
-
-    const labelClasses = $derived(
-        twMerge(
-            "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
-            error && "text-tertiary",
-            disabled && "opacity-70",
-        ),
-    );
 </script>
 
-<div class={twMerge("relative", disabled && "opacity-50")}>
+<div class={twJoin("relative", disabled && "opacity-50")}>
     {#if labelText}
-        <label for={finalId} class={labelClasses}>
+        <label
+            for={finalId}
+            class={twJoin(
+                "text-secondary absolute top-0 left-4 -translate-y-1/2 transform bg-white px-1 text-sm font-medium transition-all",
+                error && "text-tertiary",
+            )}
+        >
             {labelText}
         </label>
     {/if}
@@ -65,17 +54,25 @@
         id={finalId}
         onblur={onBlur}
         onfocus={onFocus}
-        oninput={onInput}
+        oninput={() => onInput?.(value)}
         {name}
         {type}
         {required}
         {disabled}
         {placeholder}
-        class={inputClasses}
+        class={twMerge(
+            "border-secondary text-content focus-within:ring-secondary w-full rounded-lg border bg-white p-4 text-base transition-all outline-none placeholder:text-gray-400",
+            error && "border-tertiary text-tertiary placeholder:text-tertiary/60",
+            disabled && "cursor-not-allowed",
+            classes,
+        )}
     />
-    {#if helperText && !error}
-        <span id={`helper-${finalId}`} class="ml-4 text-xs text-gray-500">
-            {helperText}
-        </span>
-    {/if}
+    <span
+        id={`helper-${finalId}`}
+        class={twJoin("ml-4 text-xs", error && "text-tertiary", helperText && "text-gray-500")}
+    >
+        {#if error || helperText}
+            {error || helperText}
+        {/if}
+    </span>
 </div>
