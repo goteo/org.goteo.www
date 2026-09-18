@@ -72,6 +72,21 @@
         return true;
     }
 
+    let inputEl = $state<HTMLInputElement>();
+
+    function openPicker(e: MouseEvent) {
+        const target = e.target as HTMLElement | null;
+        if (target?.closest("label, button, a, input, [role='listitem']")) return;
+        inputEl?.click();
+    }
+
+    function onKeyDown(e: KeyboardEvent) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            inputEl?.click();
+        }
+    }
+
     async function uploadFile(file: File) {
         uploading = new Map(uploading).set(file.name, 0);
 
@@ -188,7 +203,6 @@
     </label>
     <!-- Drop Zone -->
     <div
-        id={inputId}
         role="button"
         tabindex="0"
         class={twMerge(
@@ -199,8 +213,11 @@
         ondragover={onDragOver}
         ondragleave={onDragLeave}
         ondrop={onDrop}
+        onclick={openPicker}
+        onkeydown={onKeyDown}
     >
         <input
+            bind:this={inputEl}
             type="file"
             {multiple}
             class="hidden"
